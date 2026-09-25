@@ -1,0 +1,299 @@
+/* =========================================================
+   sidebar.css — Ruta de Aprendizaje (BEM)
+   ========================================================= */
+
+.sidebar {
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding: var(--space-5) var(--space-4);
+  background: var(--color-surface);
+  border-right: 1px solid var(--color-border);
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
+}
+
+/* ---------- Cabecera y marca ---------- */
+.sidebar__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.brand__logo {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 14px;
+  color: #fff;
+}
+
+.brand__name {
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: -0.01em;
+}
+
+/* ---------- Indicador de progreso circular ---------- */
+.progress {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  align-items: center;
+  column-gap: var(--space-4);
+  padding: var(--space-4);
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+/* El anillo y el porcentaje comparten la misma celda (superpuestos) */
+.progress__ring,
+.progress__value {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.progress__ring {
+  width: 64px;
+  height: 64px;
+  transform: rotate(-90deg); /* el trazo empieza arriba, no a la derecha */
+}
+
+.progress__track,
+.progress__bar {
+  fill: none;
+  stroke-width: 3.2;
+}
+
+.progress__track {
+  stroke: var(--color-border);
+}
+
+/* pathLength="100" permite expresar el progreso directamente en % */
+.progress__bar {
+  stroke: var(--color-accent);
+  stroke-linecap: round;
+  stroke-dasharray: 100;
+  stroke-dashoffset: calc(100 - var(--progress, 0));
+  transition: stroke-dashoffset 600ms ease;
+}
+
+.progress__value {
+  justify-self: center;
+  font-weight: 700;
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+}
+
+.progress__text {
+  display: flex;
+  flex-direction: column;
+}
+
+.progress__label {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.progress__module {
+  font-weight: 600;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+/* ---------- Ruta y módulos expandibles ---------- */
+.path__title {
+  margin-bottom: var(--space-3);
+  padding-inline: var(--space-2);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.module + .module {
+  margin-top: var(--space-1);
+}
+
+.module__summary {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  list-style: none;          /* oculta el triángulo nativo (Firefox) */
+  font-weight: 600;
+  transition: background var(--transition);
+}
+
+.module__summary::-webkit-details-marker {
+  display: none;             /* oculta el triángulo nativo (Chrome/Safari) */
+}
+
+/* Chevron propio que gira al abrir */
+.module__summary::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-right: 2px solid var(--color-text-muted);
+  border-bottom: 2px solid var(--color-text-muted);
+  transform: rotate(-45deg);
+  transition: transform var(--transition);
+  flex-shrink: 0;
+}
+
+.module[open] > .module__summary::before {
+  transform: rotate(45deg);
+}
+
+.module__summary:hover {
+  background: var(--color-surface-2);
+}
+
+.module__name {
+  flex: 1;
+}
+
+.module__count {
+  padding: 0 var(--space-2);
+  border-radius: 999px;
+  background: var(--color-surface-2);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Lecciones ---------- */
+.lessons {
+  list-style: none;
+  padding: var(--space-1) 0 var(--space-2) var(--space-4);
+  margin-left: var(--space-2);
+  border-left: 1px solid var(--color-border);
+}
+
+.lesson {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 6px var(--space-3);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  color: var(--color-text-muted);
+  transition: background var(--transition), color var(--transition);
+}
+
+a.lesson:hover {
+  background: var(--color-surface-2);
+  color: var(--color-text);
+}
+
+.lesson__name {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Icono de estado: círculo base */
+.lesson__icon {
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 2px solid var(--color-text-faint);
+  font-size: 10px;
+  line-height: 1;
+}
+
+/* Completado: círculo verde relleno con ✓ */
+.lesson[data-status="completed"] .lesson__icon {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-bg);
+}
+
+.lesson[data-status="completed"] .lesson__icon::after {
+  content: "✓";
+  font-weight: 700;
+}
+
+/* Activo: resaltado + barra verde lateral + punto pulsante */
+.lesson[data-status="active"] {
+  background: var(--color-primary-soft);
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.lesson[data-status="active"]::before {
+  content: "";
+  position: absolute;
+  left: calc(-1 * var(--space-4) - 1px); /* se alinea sobre el borde de .lessons */
+  top: 6px;
+  bottom: 6px;
+  width: 3px;
+  border-radius: 2px;
+  background: var(--color-accent);
+}
+
+.lesson[data-status="active"] .lesson__icon {
+  border-color: var(--color-accent);
+}
+
+.lesson[data-status="active"] .lesson__icon::after {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-accent);
+}
+
+.lesson__badge {
+  padding: 1px var(--space-2);
+  border-radius: 999px;
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Bloqueado: atenuado y sin interacción */
+.lesson[data-status="locked"] {
+  color: var(--color-text-faint);
+  cursor: not-allowed;
+}
+
+.lesson[data-status="locked"] .lesson__icon {
+  border-style: dashed;
+}
+
+/* ---------- Responsive: la barra pasa arriba ---------- */
+@media (max-width: 900px) {
+  .sidebar {
+    position: static;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--color-border);
+  }
+}

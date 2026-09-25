@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python Learning Dashboard</title>
+  <meta name="description" content="Dashboard interactivo para aprender Python paso a paso, de principiante a avanzado.">
+  <meta name="theme-color" content="#0b1220">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/sidebar.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Saltar al contenido</a>
+
+  <div class="app">
+    <!-- ============ BARRA LATERAL: RUTA DE APRENDIZAJE ============ -->
+    <aside class="sidebar">
+      <header class="sidebar__header">
+        <div class="brand">
+          <span class="brand__logo" aria-hidden="true">Py</span>
+          <span class="brand__name">Python Learning</span>
+        </div>
+
+        <div class="progress"
+             role="progressbar"
+             aria-label="Progreso del módulo Fundamentos"
+             aria-valuemin="0" aria-valuemax="100" aria-valuenow="75"
+             style="--progress: 75">
+          <svg class="progress__ring" viewBox="0 0 36 36" aria-hidden="true">
+            <circle class="progress__track" cx="18" cy="18" r="15.9" pathLength="100" />
+            <circle class="progress__bar"   cx="18" cy="18" r="15.9" pathLength="100" />
+          </svg>
+          <span class="progress__value">75%</span>
+          <div class="progress__text">
+            <span class="progress__label">Módulo actual</span>
+            <span class="progress__module">Fundamentos · 3/4</span>
+          </div>
+        </div>
+      </header>
+
+      <nav class="path" aria-label="Ruta de aprendizaje">
+        <h2 class="path__title">Ruta de Aprendizaje</h2>
+
+        <!-- Fundamentos -->
+        <details class="module" open>
+          <summary class="module__summary">
+            <span class="module__name">Fundamentos</span>
+            <span class="module__count">3/4</span>
+          </summary>
+          <ol class="lessons">
+            <li><a class="lesson" href="#/fundamentos/variables" data-status="completed">
+              <span class="lesson__icon" aria-hidden="true"></span>
+              <span class="lesson__name">Variables y print()</span>
+              <span class="visually-hidden">(Completado)</span>
+            </a></li>
+            <li><a class="lesson" href="#/fundamentos/tipos" data-status="completed">
+              <span class="lesson__icon" aria-hidden="true"></span>
+              <span class="lesson__name">Tipos de datos</span>
+              <span class="visually-hidden">(Completado)</span>
+            </a></li>
+            <li><a class="lesson" href="#/fundamentos/operadores" data-status="completed">
+              <span class="lesson__icon" aria-hidden="true"></span>
+              <span class="lesson__name">Operadores</span>
+              <span class="visually-hidden">(Completado)</span>
+            </a></li>
+            <li><a class="lesson" href="#/fundamentos/input" data-status="active" aria-current="page">
+              <span class="lesson__icon" aria-hidden="true"></span>
+              <span class="lesson__name">Entrada con input()</span>
+              <span class="lesson__badge">En curso</span>
+            </a></li>
+          </ol>
+        </details>
+
+        <!-- Nivel Intermedio -->
+        <details class="module">
+          <summary class="module__summary">
+            <span class="module__name">Nivel Intermedio</span>
+            <span class="module__count">0/4</span>
+          </summary>
+          <ol class="lessons">
+            <li><a class="lesson" href="#/intermedio/condicionales" data-status="available">
+              <span class="lesson__icon" aria-hidden="true"></span>
+              <span class="lesson__name">Condicionales</span>
+            </a></li>
+            <li><span class="lesson" data-status="locked">
+              <span class="lesson__icon" aria-hidden="true"></span>
+              <span class="lesson__name">Bucles for y while</span>
+              <span class="visually-hidden">(Bloqueado)</span>
+            </span></li>
+            <li><span class="lesson" data-status="locked">
+              <span class="lesson__icon" aria-hidden="true"></span>
+              <span class="lesson__name">Funciones</span>
+              <span class="visually-hidden">(Bloqueado)</span>
+            </span></li>
+            <li><span class="lesson" data-status="locked">
+              <span class="lesson__icon" aria-hidden="true"></span>
+              <span class="lesson__name">Listas y diccionarios</span>
+              <span class="visually-hidden">(Bloqueado)</span>
+            </span></li>
+          </ol>
+        </details>
+
+        <!-- Avanzado -->
+        <details class="module">
+          <summary class="module__summary">
+            <span class="module__name">Avanzado</span>
+            <span class="module__count">0/4</span>
+          </summary>
+          <ol class="lessons">
+            <li><span class="lesson" data-status="locked"><span class="lesson__icon" aria-hidden="true"></span><span class="lesson__name">Programación orientada a objetos</span><span class="visually-hidden">(Bloqueado)</span></span></li>
+            <li><span class="lesson" data-status="locked"><span class="lesson__icon" aria-hidden="true"></span><span class="lesson__name">Excepciones</span><span class="visually-hidden">(Bloqueado)</span></span></li>
+            <li><span class="lesson" data-status="locked"><span class="lesson__icon" aria-hidden="true"></span><span class="lesson__name">Archivos</span><span class="visually-hidden">(Bloqueado)</span></span></li>
+            <li><span class="lesson" data-status="locked"><span class="lesson__icon" aria-hidden="true"></span><span class="lesson__name">Módulos y paquetes</span><span class="visually-hidden">(Bloqueado)</span></span></li>
+          </ol>
+        </details>
+
+        <!-- Especialización -->
+        <details class="module">
+          <summary class="module__summary">
+            <span class="module__name">Especialización</span>
+            <span class="module__count">0/3</span>
+          </summary>
+          <ol class="lessons">
+            <li><span class="lesson" data-status="locked"><span class="lesson__icon" aria-hidden="true"></span><span class="lesson__name">Testing con pytest</span><span class="visually-hidden">(Bloqueado)</span></span></li>
+            <li><span class="lesson" data-status="locked"><span class="lesson__icon" aria-hidden="true"></span><span class="lesson__name">Automatización</span><span class="visually-hidden">(Bloqueado)</span></span></li>
+            <li><span class="lesson" data-status="locked"><span class="lesson__icon" aria-hidden="true"></span><span class="lesson__name">APIs web con Flask</span><span class="visually-hidden">(Bloqueado)</span></span></li>
+          </ol>
+        </details>
+      </nav>
+    </aside>
+
+    <!-- ============ CONTENIDO PRINCIPAL (se estiliza en el Paso 2) ============ -->
+    <main id="main" class="main" tabindex="-1">
+      <header class="lesson-header">
+        <p class="lesson-header__crumb">Fundamentos</p>
+        <h1 class="lesson-header__title">Entrada con input()</h1>
+      </header>
+
+      <div class="tabs" role="tablist" aria-label="Secciones de la lección">
+        <button class="tabs__tab" role="tab" id="tab-theory" aria-controls="panel-theory" aria-selected="true">Teoría y Ejemplos</button>
+        <button class="tabs__tab" role="tab" id="tab-practice" aria-controls="panel-practice" aria-selected="false" tabindex="-1">Práctica y Ejercicio</button>
+      </div>
+
+      <section class="panel" role="tabpanel" id="panel-theory" aria-labelledby="tab-theory">
+        <!-- Teoría + bloques de código + botones "Copiar" / "Abrir en PyCharm" (Paso 2) -->
+      </section>
+      <section class="panel" role="tabpanel" id="panel-practice" aria-labelledby="tab-practice" hidden>
+        <!-- Enunciado del ejercicio (Paso 2) -->
+      </section>
+
+      <section class="console" aria-labelledby="console-title">
+        <h2 id="console-title">Consola Interactiva</h2>
+        <!-- Editor + botón Ejecutar + salida (Paso 4, con Pyodide) -->
+      </section>
+    </main>
+  </div>
+
+  <!-- ============ ASISTENTE ROBOT (Paso 5) ============ -->
+  <aside class="assistant" aria-label="Asistente de aprendizaje">
+    <!-- Burbuja + sugerencias dinámicas según la lección -->
+  </aside>
+
+  <!-- Scripts (se añaden en pasos posteriores) -->
+  <!-- <script src="js/lessons.js" defer></script> -->
+  <!-- <script src="js/app.js" defer></script> -->
+</body>
+</html>

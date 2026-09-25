@@ -1,0 +1,141 @@
+/* =========================================================
+   base.css — tokens de diseño, reset y layout general
+   ========================================================= */
+
+:root {
+  /* Superficies: azules profundos y grises carbón */
+  --color-bg:        #0b1220;
+  --color-surface:   #111a2e;
+  --color-surface-2: #172238;
+  --color-code-bg:   #0a0f1a;
+  --color-border:    #24324d;
+
+  /* Texto */
+  --color-text:       #e6ebf5;
+  --color-text-muted: #9aa7bf;   /* contraste ≈ 7:1 sobre --color-surface */
+  --color-text-faint: #6b7890;   /* solo para elementos no esenciales */
+
+  /* Acentos */
+  --color-accent:       #22c55e; /* verde vibrante: progreso, completado */
+  --color-accent-soft:  rgb(34 197 94 / 0.14);
+  --color-primary:      #3b82f6; /* azul: foco, enlaces */
+  --color-primary-soft: rgb(59 130 246 / 0.16);
+
+  /* Tipografía */
+  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+
+  /* Espaciado, radios y layout */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --sidebar-width: 300px;
+
+  --transition: 150ms ease;
+
+  color-scheme: dark;
+}
+
+/* ---------- Reset mínimo ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, p, ol, ul {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+/* Foco visible solo con teclado, coherente en toda la app */
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* ---------- Utilidades de accesibilidad ---------- */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.skip-link {
+  position: absolute;
+  top: var(--space-2);
+  left: var(--space-2);
+  z-index: 100;
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-primary);
+  color: #fff;
+  border-radius: var(--radius-sm);
+  transform: translateY(-150%);
+}
+
+.skip-link:focus {
+  transform: none;
+}
+
+/* ---------- Layout principal ---------- */
+.app {
+  display: grid;
+  grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+  min-height: 100dvh;
+}
+
+.main {
+  padding: var(--space-6);
+  min-width: 0; /* evita desbordes con bloques de código largos */
+}
+
+.main:focus {
+  outline: none;
+}
+
+@media (max-width: 900px) {
+  .app {
+    grid-template-columns: 1fr;
+  }
+
+  .main {
+    padding: var(--space-4);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}

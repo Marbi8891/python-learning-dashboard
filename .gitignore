@@ -1,0 +1,16 @@
+# PyCharm / JetBrains
+.idea/
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Secretos y datos locales del backend
+.env
+*.db
+
+# Sistema operativo
+Thumbs.db
+.DS_Store
