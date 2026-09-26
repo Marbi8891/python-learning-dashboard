@@ -21,6 +21,10 @@ npm run test:e2e        # la primera vez: npm ci && npx playwright install chrom
 
 Edita `frontend/data/lessons.json`. El bloque `course` es la ficha del curso y cada módulo lleva un `summary`. Cada lección necesita `theory`, `example_code`, `exercise`, `starter`, `checks`, `assistant`, `sources`, `quiz` (3 preguntas de 4 opciones, con `explain`) y `challenge`. `tests/test_content.py` comprueba que el ejemplo se ejecuta y que la plantilla **no** supera los tests. Comprueba tú mismo que tu solución los supera, pero **no la subas al repositorio** (ver ADR-0004).
 
+## Añadir o cambiar preguntas del PCAP
+
+Edita `frontend/data/pcap.json`. Cada pregunta necesita `q` y `explain` en español e inglés, opciones (texto plano solo si es código o una salida, igual en los dos idiomas) y un `check`: código Python que **demuestra** la respuesta (`tests/test_pcap.py` lo ejecuta con `__output__` y `__error__` del fragmento). Las preguntas deben ser originales: nunca copiadas de exámenes reales ni de «dumps».
+
 ## Criterios de calidad
 
 - Python: PEP 8 (comprobado con ruff), nombres descriptivos, sin configuración escrita en el código.

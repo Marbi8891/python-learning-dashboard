@@ -51,7 +51,7 @@ test("registro, sincronización del progreso local, cierre e inicio de sesión",
   await dialog(page).locator("#login-form").getByLabel("Contraseña").fill(PASSWORD);
   await dialog(page).getByRole("button", { name: "Entrar" }).click();
   await expect(page.locator("#account-label")).toHaveText("Ana");
-  await expect(page.locator(".module[data-module=fundamentos] .module__count")).toHaveText("2/4");
+  await expect(page.locator(".module[data-module=fundamentos] .module__count")).toHaveText("2/8");
 });
 
 test("errores de validación y credenciales en español", async ({ page }) => {

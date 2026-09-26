@@ -3,11 +3,11 @@ const { test, expect, openLesson } = require("./fixtures");
 test("la portada lleva a la primera lección pendiente y la barra lateral navega", async ({ page }) => {
   await openLesson(page);
   await expect(page).toHaveURL(/#\/inicio$/);
-  await expect(page.locator("#home-title")).toContainText("de cero a profesional");
+  await expect(page.locator("#home-title")).toContainText("Prepara el PCAP");
   await page.getByRole("link", { name: "Empezar la primera lección →" }).click();
   await expect(page).toHaveURL(/#\/leccion\/variables$/);
   await expect(page.locator("#lesson-title")).toHaveText("Variables y print()");
-  await expect(page.locator(".lesson[data-slug]")).toHaveCount(15);
+  await expect(page.locator(".lesson[data-slug]")).toHaveCount(27);
 
   await page.locator(".lesson[data-slug=tipos]").click();
   await expect(page).toHaveURL(/#\/leccion\/tipos$/);
@@ -51,15 +51,15 @@ test("marcar como completada actualiza el progreso y persiste", async ({ page })
   await expect(page.locator(".lesson[data-slug=operadores]")).toHaveAttribute("data-status", "locked");
   await page.getByRole("tab", { name: "Práctica y Ejercicio" }).click();
   await page.getByRole("button", { name: "Marcar como completada" }).click();
-  await expect(page.locator("#progress-value")).toHaveText("25%");
-  await expect(page.locator("#progress")).toHaveAttribute("aria-valuenow", "25");
+  await expect(page.locator("#progress-value")).toHaveText("13%");
+  await expect(page.locator("#progress")).toHaveAttribute("aria-valuenow", "13");
 
   await page.reload();
   await page.locator(".lesson[data-slug]").first().waitFor({ state: "attached" });
   await expect(page.locator(".lesson[data-slug=variables]")).toHaveAttribute("data-status", "active");
   await page.locator(".lesson[data-slug=tipos]").click();
   await expect(page.locator(".lesson[data-slug=variables]")).toHaveAttribute("data-status", "completed");
-  await expect(page.locator(".module[data-module=fundamentos] .module__count")).toHaveText("1/4");
+  await expect(page.locator(".module[data-module=fundamentos] .module__count")).toHaveText("1/8");
 });
 
 test("copiar y «Abrir en PyCharm» muestran la guía y la descarga", async ({ page, context }) => {

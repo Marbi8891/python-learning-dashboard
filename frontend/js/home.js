@@ -36,14 +36,15 @@ function lessonStatus(slug, nextSlug) {
 function renderCta(content, next, done, total) {
   if (done === 0 && game.read.length === 0) {
     return `<a class="btn btn--primary btn--lg" href="#/leccion/${next.slug}">Empezar la primera lección →</a>
-      <span class="course-hero__note">Empieza ahora: unos 15 minutos por lección</span>`;
+      <a class="btn btn--ghost btn--lg" href="#/pcap">Ver el examen PCAP</a>
+      <span class="course-hero__note">Unos 15 minutos por lección</span>`;
   }
   if (done === total) {
     return `<a class="btn btn--primary btn--lg" href="#/leccion/${content.order[0]}">Repasar desde el principio</a>
-      <a class="btn btn--ghost btn--lg" href="#/perfil">Ver mi aprendizaje</a>`;
+      <a class="btn btn--ghost btn--lg" href="#/pcap">Hacer un simulacro</a>`;
   }
   return `<a class="btn btn--primary btn--lg" href="#/leccion/${next.slug}">Continuar: ${escapeHtml(next.title)} →</a>
-    <a class="btn btn--ghost btn--lg" href="#/perfil">Mi aprendizaje</a>`;
+    <a class="btn btn--ghost btn--lg" href="#/pcap">Examen PCAP</a>`;
 }
 
 function renderProgress(done, total) {
@@ -126,7 +127,7 @@ export function renderHome(content, nextSlug) {
         <div><dt>Nivel</dt><dd>${escapeHtml(course.level)}</dd></div>
         <div><dt>Duración estimada</dt><dd>≈ ${formatDuration(totals.minutes)}</dd></div>
         <div><dt>Lecciones</dt><dd>${totals.lessons}</dd></div>
-        <div><dt>Práctica</dt><dd>${totals.questions} preguntas · ${totals.challenges} retos</dd></div>
+        <div><dt>Examen</dt><dd>${escapeHtml(course.exam)}</dd></div>
       </dl>
     </header>
 

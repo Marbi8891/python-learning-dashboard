@@ -5,7 +5,14 @@ const { test, expect, openLesson } = require("./fixtures");
 
 async function audit(page) {
   // Espera a que acaben las animaciones de entrada: a media transición el contraste es menor
-  await page.waitForFunction(() => document.getAnimations().every((a) => a.playState !== "running"));
+  // y a que se vayan los avisos (toast), que se auditan a medio desvanecer
+  await page.waitForFunction(
+    () =>
+      !document.querySelector("#toast.toast--visible") &&
+      document.getAnimations().every((a) => a.playState !== "running"),
+    null,
+    { timeout: 20_000 },
+  );
   const results = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"]).analyze();
   const summary = results.violations.map((v) => `${v.id} (${v.impact}): ${v.nodes.map((n) => n.target).join(", ")}`);
   expect(summary, summary.join("\n")).toEqual([]);
@@ -87,3 +94,30 @@ test("tema claro con error explicado y diálogo de aspecto sin infracciones", as
   await page.getByRole("button", { name: "Aspecto" }).click();
   await audit(page);
 });
+
+for (const colorScheme of ["light", "dark"]) {
+  test.describe(`zona PCAP en modo ${colorScheme}`, () => {
+    test.use({ colorScheme });
+    test("panel, simulacro, resultado, práctica y fichas sin infracciones", async ({ page }) => {
+      await page.goto("/#/pcap");
+      await expect(page.locator(".readiness")).toBeVisible();
+      await audit(page);
+      await page.getByRole("link", { name: "Hacer un simulacro →" }).click();
+      await page.getByRole("button", { name: "Empezar el simulacro" }).click();
+      await page.locator(".exam-q input").first().check();
+      await audit(page);
+      await page.locator(".exam-form").getByRole("button", { name: "Siguiente →" }).click();
+      await page.locator(".exam-nav").getByRole("button", { name: "Terminar examen" }).click();
+      await page.getByRole("button", { name: "Sí, terminar" }).click();
+      await page.locator(".review-item summary").first().click();
+      await audit(page);
+      await page.goto("/#/pcap/practica/excepciones");
+      await page.locator(".exam-q input").first().check();
+      await page.getByRole("button", { name: "Comprobar" }).click();
+      await audit(page);
+      await page.goto("/#/pcap/fichas");
+      await page.getByRole("button", { name: "Ver respuesta" }).click();
+      await audit(page);
+    });
+  });
+}

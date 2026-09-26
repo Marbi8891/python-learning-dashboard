@@ -5,20 +5,21 @@
 ![Cobertura backend](https://img.shields.io/badge/cobertura%20backend-100%25-brightgreen)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
-Dashboard interactivo para aprender Python de principiante a avanzado: 15 lecciones con teoría propia y fuentes enlazadas, **consola de Python en el navegador**, **ejercicios corregidos automáticamente**, asistente por lección y cuenta opcional para sincronizar el progreso.
+Academia web para **preparar el examen PCAP** (Certified Associate in Python Programming, PCAP-31-03): 27 lecciones con teoría propia y fuentes enlazadas, **consola de Python en el navegador**, **ejercicios corregidos automáticamente**, **simulacros de examen cronometrados** y cuenta opcional para sincronizar el progreso.
 
 **Demo:** https://marbi8891.github.io/python-learning-dashboard/
 
 ## Funcionalidades
 
-- **Ruta de aprendizaje:** 4 módulos y 15 lecciones, con progreso por módulo y un orden recomendado.
+- **Temario del PCAP:** un módulo de bases (nivel PCEP) y uno por cada bloque oficial del examen (Módulos y paquetes, Excepciones, Strings, POO, Miscelánea), más un extra «Después del PCAP». 27 lecciones.
+- **Zona de examen:** simulacro de 40 preguntas en 65 minutos con el reparto oficial del temario, práctica por bloque con corrección al momento, 48 fichas de repaso y panel de preparación por bloque. 126 preguntas originales, en español o en inglés (como el examen), cada una con una comprobación en Python que demuestra su respuesta.
 - **Teoría y ejemplos:** explicaciones propias, código con resaltado de sintaxis y botones «Copiar», «Probar en la consola» y «Abrir en PyCharm» (copia el código, guía los pasos y permite descargar el `.py`).
 - **Consola interactiva:** Python 3.14 real ([Pyodide](https://pyodide.org)) en un Web Worker. Admite `input()`, muestra los errores con la línea exacta y corta los bucles infinitos a los 10 s.
 - **Ejercicios corregidos:** cada lección tiene plantilla y tests. Superarlos completa la lección.
 - **Asistente:** preguntas frecuentes, pista del ejercicio y «Siguiente tema», adaptados a cada lección.
-- **Mini-quiz:** 3 preguntas por lección (45 en total) que explican por qué cada respuesta es correcta o no.
+- **Mini-quiz:** 3 preguntas por lección (81 en total) que explican por qué cada respuesta es correcta o no.
 - **Retos extra:** uno por lección, de ★ a ★★★ (FizzBuzz, carrito de la compra, renombrador de fotos…), con tests automáticos.
-- **XP, niveles y racha:** 7 niveles de «Novato/a» a «Leyenda de Python», bonus por acertar a la primera, 13 logros con su vitrina y confeti (desactivado si el sistema pide reducir el movimiento).
+- **XP, niveles y racha:** 7 niveles de «Novato/a» a «Leyenda de Python», bonus por acertar a la primera, XP por la preparación del examen, 20 logros (7 de ellos del PCAP) con su vitrina y confeti (desactivado si el sistema pide reducir el movimiento).
 - **Cuenta (opcional):** registro, login, progreso sincronizado entre dispositivos, recuperación de contraseña y RGPD (descargar los datos y borrar la cuenta).
 - **Estética de academia:** diseño editorial (tinta, marfil y dorado, titulares en serif), portada con la ficha del curso y temario, y página «Mi aprendizaje» con cifras, actividad, logros e historial.
 - **Pensado para el alumno:** portada con «Continuar donde lo dejaste», guía Aprende → Practica → Comprueba en cada lección, consola al lado en pantallas anchas y errores de Python explicados en español.
@@ -47,10 +48,12 @@ Decisiones documentadas:
 - [ADR-0006 Experiencia del alumno](docs/adr/0006-experiencia-del-alumno.md)
 - [ADR-0007 Estética editorial](docs/adr/0007-estetica-editorial.md)
 - [ADR-0008 Backend en Render y base de datos en Neon](docs/adr/0008-backend-render-neon.md)
+- [ADR-0009 Enfoque en el examen PCAP](docs/adr/0009-enfoque-pcap.md)
 
 ```
 ├── frontend/
 │   ├── data/lessons.json   Contenido: teoría, ejemplos, ejercicios, quiz, retos y asistente (fuente única)
+│   ├── data/pcap.json      Banco de preguntas del examen, fichas y formato oficial del PCAP
 │   ├── py/runner.py        Motor que ejecuta y corrige el código (navegador y CI)
 │   ├── js/                 app, consola, Worker de Pyodide, quiz, juego, asistente, cuenta, API
 │   ├── css/  fonts/  vendor/
@@ -103,7 +106,7 @@ JWT_SECRET=<valor> docker compose up --build
 
 | Suite | Comando | Qué cubre |
 |---|---|---|
-| Backend | `cd backend && python -m pytest --cov=app` | API, seguridad, RGPD, migraciones y contenido (100 % de cobertura) |
+| Backend | `cd backend && python -m pytest --cov=app` | API, seguridad, RGPD, migraciones, contenido y banco del PCAP (cada respuesta se comprueba ejecutando Python; 100 % de cobertura) |
 | End-to-end | `npm ci && npx playwright install chromium && npm run test:e2e` | La app completa con el backend real, la consola Python y la auditoría WCAG |
 | Calidad | `cd backend && ruff check . ../e2e && ruff format --check . ../e2e` | Estilo PEP 8 y formato |
 

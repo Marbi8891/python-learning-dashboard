@@ -52,6 +52,13 @@ def seed(db: Session, data_file: Path | None = None) -> int:
             db.add(lesson)
             count += 1
 
+    # Módulos que ya no están en el contenido (se reorganizó el temario): sus lecciones
+    # se han movido arriba, así que quedan vacíos y se eliminan.
+    current = {m_data["slug"] for m_data in data["modules"]}
+    for slug, module in modules.items():
+        if slug not in current and not module.lessons:
+            db.delete(module)
+
     db.commit()
     return count
 

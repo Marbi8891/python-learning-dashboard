@@ -1,5 +1,7 @@
 """Tests de la API de lecciones con una base de datos SQLite en memoria."""
 
+import json
+
 from sqlalchemy import event
 from sqlalchemy.orm import sessionmaker
 
@@ -20,13 +22,17 @@ def test_health_reports_email_when_smtp_is_configured(client, monkeypatch):
 
 def test_modules_are_ordered_with_lessons(client):
     modules = client.get("/api/modules").json()
+    # Temario organizado por los bloques del examen PCAP (ver ADR-0009)
     assert [m["slug"] for m in modules] == [
         "fundamentos",
-        "intermedio",
-        "avanzado",
+        "modulos",
+        "excepciones",
+        "strings",
+        "poo",
+        "miscelanea",
         "especializacion",
     ]
-    assert [lesson["slug"] for lesson in modules[0]["lessons"]] == [
+    assert [lesson["slug"] for lesson in modules[0]["lessons"]][:4] == [
         "variables",
         "tipos",
         "operadores",
@@ -73,4 +79,29 @@ def test_seed_is_idempotent(client):
     with sessionmaker(bind=client.engine)() as db:
         seed(db)  # segunda ejecución: no debe duplicar nada
     modules = client.get("/api/modules").json()
-    assert sum(len(m["lessons"]) for m in modules) == 15
+    assert sum(len(m["lessons"]) for m in modules) == 27
+
+
+def test_seed_moves_lessons_and_removes_empty_modules(client, tmp_path):
+    """Reorganizar el temario conserva las lecciones (y su progreso) y borra los módulos vacíos."""
+    data = {
+        "modules": [
+            {
+                "slug": "nuevo",
+                "title": "Nuevo",
+                "lessons": [
+                    {"slug": slug, "title": slug}
+                    for slug in ("variables", "pytest", "automatizacion", "flask")
+                ],
+            },
+        ]
+    }
+    path = tmp_path / "lessons.json"
+    path.write_text(json.dumps(data), encoding="utf-8")
+    with sessionmaker(bind=client.engine)() as db:
+        seed(db, path)
+    modules = client.get("/api/modules").json()
+    slugs = {m["slug"] for m in modules}
+    assert "nuevo" in slugs and "fundamentos" in slugs  # fundamentos aún tiene otras lecciones
+    assert client.get("/api/lessons/variables").json()["module_slug"] == "nuevo"
+    assert "especializacion" not in slugs  # se quedó sin lecciones

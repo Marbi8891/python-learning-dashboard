@@ -20,7 +20,7 @@ os.environ.update(
     CORS_ORIGINS='["http://localhost:5500"]',
     FRONTEND_URL="http://localhost:5500",
     AUTH_RATE_LIMIT_PER_MINUTE="1000",
-    # SMTP "configurado" para probar la recuperación; el envío falla en segundo plano y solo se registra
+    # SMTP "configurado" para probar la recuperación: el envío falla en segundo plano y se registra
     SMTP_HOST="127.0.0.1",
     SMTP_PORT="9",
 )

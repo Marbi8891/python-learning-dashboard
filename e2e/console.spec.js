@@ -99,6 +99,6 @@ test("superar los tests completa la lección", async ({ page }) => {
   await page.locator("#console-editor").fill("resultado = 6 * 7");
   await page.getByRole("button", { name: "Comprobar solución" }).click();
   await expect(page.locator("#check-result")).toHaveAttribute("data-passed", "true");
-  await expect(page.locator("#progress-value")).toHaveText("25%");
+  await expect(page.locator("#progress-value")).toHaveText("13%");
   await expect(page.getByRole("button", { name: "Marcar como pendiente" })).toBeVisible();
 });

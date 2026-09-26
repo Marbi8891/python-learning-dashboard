@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Python Learning Dashboard</title>
-  <meta name="description" content="Dashboard interactivo para aprender Python paso a paso, de principiante a avanzado, con consola y ejercicios corregidos.">
+  <title>Python Learning Dashboard · Prepara el PCAP</title>
+  <meta name="description" content="Prepara el examen PCAP de Python: temario completo, consola de Python en el navegador, ejercicios corregidos y simulacros de examen.">
   <meta name="theme-color" content="#0c0d10">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
 
@@ -17,6 +17,7 @@
   <link rel="stylesheet" href="css/game.css">
   <link rel="stylesheet" href="css/ux.css">
   <link rel="stylesheet" href="css/academy.css">
+  <link rel="stylesheet" href="css/pcap.css">
   <link rel="preload" href="fonts/fraunces-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
 
   <!-- Tema y tamaño de letra antes de pintar la página (sin parpadeo) -->
@@ -63,6 +64,10 @@
             <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 11l8-6 8 6v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
             El curso
           </a>
+          <a href="#/pcap" data-view="pcap">
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M9 4h6M12 4v3M5 13a7 7 0 1 0 14 0a7 7 0 1 0 -14 0M12 13l3-2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            Examen PCAP
+          </a>
           <a href="#/perfil" data-view="profile">
             <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
             Mi aprendizaje
@@ -99,7 +104,7 @@
         <p class="xp__next" id="xp-next"></p>
         <div class="xp__footer">
           <span class="xp__streak" id="xp-streak">Racha: 0 días</span>
-          <button class="xp__badges" id="badges-button" type="button">Logros <span id="badges-count">0/13</span></button>
+          <button class="xp__badges" id="badges-button" type="button">Logros <span id="badges-count">0/20</span></button>
         </div>
       </section>
         </div>
@@ -123,6 +128,9 @@
     <main id="main" class="main" tabindex="-1">
       <!-- ============ INICIO ============ -->
       <section class="page home" id="home-view" aria-labelledby="home-title" hidden></section>
+
+      <!-- ============ EXAMEN PCAP ============ -->
+      <section class="page pcap" id="pcap-view" aria-labelledby="pcap-title" hidden></section>
 
       <!-- ============ MI APRENDIZAJE ============ -->
       <section class="page profile" id="profile-view" aria-labelledby="profile-title" hidden></section>

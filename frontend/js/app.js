@@ -30,6 +30,7 @@ import {
 } from "./game.js";
 import { renderHome } from "./home.js";
 import { escapeHtml, renderMarkdown } from "./markdown.js";
+import { openPcap } from "./pcap.js";
 import { initPrefs } from "./prefs.js";
 import { badgesHtml, renderProfile } from "./profile.js";
 import { setQuizLesson } from "./quiz.js";
@@ -42,6 +43,7 @@ const ROUTE_PREFIX = "#/leccion/";
 const RESET_ROUTE = "#/restablecer";
 const HOME_ROUTE = "#/inicio";
 const PROFILE_ROUTE = "#/perfil";
+const PCAP_ROUTE = "#/pcap";
 const mobile = window.matchMedia("(max-width: 900px)");
 
 const content = {
@@ -50,7 +52,7 @@ const content = {
   lessons: new Map(), // slug -> { ...lesson, module, index }
   order: [], // slugs en el orden de la ruta
   current: null, // lección abierta (o la siguiente recomendada, en el inicio)
-  view: "home", // "home" | "profile" | "lesson"
+  view: "home", // "home" | "profile" | "pcap" | "lesson"
 };
 
 const $ = (selector) => document.querySelector(selector);
@@ -353,12 +355,14 @@ function renderGuide() {
 function refreshProgressViews() {
   renderGuide();
   const view = VIEWS[content.view];
-  if (view) $(view.element).innerHTML = view.render();
+  if (view?.render) $(view.element).innerHTML = view.render();
 }
 
 const VIEWS = {
   home: { element: "#home-view", title: "Python Learning Dashboard", focus: "#home-title", render: () => renderHome(content, defaultSlug()) },
   profile: { element: "#profile-view", title: "Mi aprendizaje · Python Learning Dashboard", focus: "#profile-title", render: () => renderProfile(content) },
+  // La zona PCAP se pinta sola (openPcap): tiene simulacros en curso que no se deben repintar
+  pcap: { element: "#pcap-view", title: "Examen PCAP · Python Learning Dashboard", focus: null, render: null },
 };
 
 /** Muestra una vista de página completa (portada o perfil) en lugar de la lección. */
@@ -368,12 +372,12 @@ function showPage(name, { moveFocus = true } = {}) {
   content.current = defaultSlug();
   $("#lesson-view").hidden = true;
   for (const [key, other] of Object.entries(VIEWS)) $(other.element).hidden = key !== name;
-  $(view.element).innerHTML = view.render();
+  if (view.render) $(view.element).innerHTML = view.render();
   document.title = view.title;
   updateSidebar();
   updateSiteNav();
   if (mobile.matches) setMenu(false);
-  if (moveFocus) $(view.focus).focus();
+  if (moveFocus && view.focus) $(view.focus).focus();
   window.scrollTo({ top: 0 });
 }
 
@@ -531,6 +535,11 @@ function navigate({ moveFocus = true } = {}) {
 
   if (location.hash === PROFILE_ROUTE) {
     showPage("profile", { moveFocus });
+    return;
+  }
+  if (location.hash.startsWith(PCAP_ROUTE)) {
+    showPage("pcap", { moveFocus: false });
+    openPcap(location.hash, content.modules, { moveFocus });
     return;
   }
   if (!location.hash.startsWith(ROUTE_PREFIX)) {

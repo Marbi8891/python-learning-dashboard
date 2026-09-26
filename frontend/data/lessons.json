@@ -1,18 +1,19 @@
 {
   "course": {
-    "title": "Python, de cero a profesional",
-    "tagline": "Aprende a programar escribiendo código real desde la primera lección: sin instalar nada, a tu ritmo y con corrección automática.",
-    "level": "Desde cero",
+    "title": "Prepara el PCAP, de cero a certificado",
+    "tagline": "Todo el temario del PCAP-31-03 con teoría propia, código que ejecutas aquí mismo, ejercicios corregidos al momento y simulacros como el examen real.",
+    "level": "Desde cero hasta PCAP",
+    "exam": "PCAP-31-03 · 40 preguntas · 65 min",
     "outcomes": [
-      "Escribir programas con variables, condiciones, bucles y funciones",
-      "Organizar datos con listas y diccionarios",
-      "Diseñar clases y objetos (programación orientada a objetos)",
-      "Controlar errores con excepciones y trabajar con archivos",
-      "Probar tu código de forma automática con pytest",
-      "Automatizar tareas y crear una API web con Flask"
+      "Importar y crear módulos y paquetes; usar math, random y platform",
+      "Controlar errores con la jerarquía de excepciones y excepciones propias",
+      "Dominar strings: Unicode, slicing y sus métodos",
+      "Diseñar clases con herencia múltiple, MRO e introspección",
+      "Escribir comprensiones, lambdas, closures y generadores",
+      "Trabajar con archivos de texto y binarios y aprobar el simulacro con margen"
     ],
     "requirements": [
-      "Ningún conocimiento previo de programación",
+      "Ningún conocimiento previo: el primer módulo repasa las bases (nivel PCEP)",
       "Un navegador actualizado: Python se ejecuta dentro de la página",
       "Opcional: PyCharm, para practicar también en tu ordenador"
     ]
@@ -20,8 +21,8 @@
   "modules": [
     {
       "slug": "fundamentos",
-      "title": "Fundamentos",
-      "summary": "Tus primeros programas: guardar datos, operar con ellos y conversar con el usuario.",
+      "title": "Bases de Python",
+      "summary": "Repaso de lo que el PCAP da por sabido (nivel PCEP): variables, tipos, control de flujo, funciones y colecciones.",
       "lessons": [
         {
           "slug": "variables",
@@ -411,14 +412,7 @@
             "hint": "Formatea con 1 decimal usando f\"{valor:.1f}\".",
             "stdin": "100"
           }
-        }
-      ]
-    },
-    {
-      "slug": "intermedio",
-      "title": "Nivel Intermedio",
-      "summary": "Toma decisiones, repite tareas y organiza tu código en funciones y colecciones.",
-      "lessons": [
+        },
         {
           "slug": "condicionales",
           "title": "Condicionales",
@@ -829,9 +823,809 @@
       ]
     },
     {
-      "slug": "avanzado",
-      "title": "Avanzado",
-      "summary": "Programa como un profesional: objetos, errores controlados, archivos y módulos.",
+      "slug": "modulos",
+      "title": "Módulos y paquetes",
+      "summary": "Bloque 1 del PCAP (12 %): formas de import, math, random, platform, paquetes, __name__ y sys.path.",
+      "lessons": [
+        {
+          "slug": "modulos",
+          "title": "Módulos y paquetes",
+          "theory": "Un **módulo** es un archivo `.py`; un **paquete** es una carpeta de módulos. Sirven para organizar el código: cada archivo, una responsabilidad.\n\nFormas de importar:\n- `import math` y luego `math.sqrt(16)`.\n- `from math import sqrt` y luego `sqrt(16)`.\n- Evita `from modulo import *`: no se sabe de dónde viene cada nombre.\n\n`if __name__ == \"__main__\":` hace que un bloque se ejecute solo cuando lanzas ese archivo directamente, no cuando otro lo importa. Úsalo en todos tus scripts.\n\nLa **biblioteca estándar** ya incluye mucho: `math`, `random`, `datetime`, `pathlib`, `json`, `csv`...\n\nLas librerías externas se instalan con `pip` desde PyPI, siempre dentro de un **entorno virtual** (`venv`), para que cada proyecto tenga sus propias versiones. Sus dependencias se anotan en `requirements.txt`.\n\nEn PyCharm: **Settings → Project → Python Interpreter → +** para instalar paquetes, o `pip install` en la terminal integrada (`Alt+F12`) con el `venv` activo.",
+          "example_code": "# archivo: utilidades.py\ndef formatear_euros(valor: float) -> str:\n    return f\"{valor:,.2f} €\".replace(\",\", \"X\").replace(\".\", \",\").replace(\"X\", \".\")\n\n\nif __name__ == \"__main__\":\n    print(formatear_euros(1234567.891))  # 1.234.567,89 €\n\n# archivo: main.py (en la misma carpeta)\n# from utilidades import formatear_euros\n# print(formatear_euros(49.99))",
+          "exercise": "Separa la **lógica** de la **entrada/salida** de la calculadora de propinas:\n- `calcular_total(importe, porcentaje)`: devuelve el total con propina.\n- `repartir(total, personas)`: devuelve lo que paga cada persona.\n- Todo lo que use `input()` y `print()` va dentro de `if __name__ == \"__main__\":`.\n\nEn PyCharm lo repartirías en `calculos.py` y `main.py`; en la consola va todo en un archivo. La comprobación **importa** tu código: si algo se ejecuta fuera del bloque `__main__`, fallará.",
+          "sources": [
+            {
+              "title": "Tutorial oficial — 6. Módulos",
+              "url": "https://docs.python.org/es/3/tutorial/modules.html"
+            },
+            {
+              "title": "Tutorial oficial — 12. Entornos virtuales y paquetes",
+              "url": "https://docs.python.org/es/3/tutorial/venv.html"
+            }
+          ],
+          "starter": "def calcular_total(importe: float, porcentaje: float) -> float:\n    ...\n\n\ndef repartir(total: float, personas: int) -> float:\n    ...\n\n\nif __name__ == \"__main__\":\n    importe = float(input(\"Importe: \"))\n    # completa el programa\n",
+          "exercise_stdin": "100\n10\n4",
+          "example_stdin": "",
+          "checks": [
+            {
+              "stdin": "",
+              "test": "assert abs(calcular_total(100, 10) - 110) < 1e-9, \"calcular_total(100, 10) debe devolver 110\"\nassert abs(calcular_total(59.9, 15) - 68.885) < 1e-9, \"calcular_total(59.9, 15) debe devolver 68.885\"\nassert abs(repartir(110, 4) - 27.5) < 1e-9, \"repartir(110, 4) debe devolver 27.5\"\nassert 'if __name__ == \"__main__\"' in __code__ or \"if __name__ == '__main__'\" in __code__, \"Falta el bloque if __name__ == \\\"__main__\\\":\"\nassert __output__ == \"\", \"Al importar tu código no debe mostrarse nada: mete los print() e input() dentro del bloque __main__\"\n"
+            }
+          ],
+          "assistant": {
+            "hint": "Las funciones solo calculan y devuelven con return. Las llamadas a input() y print() van todas dentro del if __name__ == \"__main__\":.",
+            "faq": [
+              {
+                "q": "¿Para qué sirve if __name__ == \"__main__\"?",
+                "a": "Ese bloque solo se ejecuta cuando lanzas el archivo directamente. Si otro archivo lo **importa**, no se ejecuta, así puedes reutilizar sus funciones sin efectos secundarios."
+              },
+              {
+                "q": "¿Qué es un entorno virtual?",
+                "a": "Una instalación de Python aislada para cada proyecto (`.venv`), con sus propias librerías y versiones. Evita que un proyecto rompa a otro al actualizar paquetes."
+              }
+            ]
+          },
+          "example_in_browser": true,
+          "quiz": [
+            {
+              "q": "Si `utilidades.py` se importa desde otro archivo, ¿qué vale `__name__` dentro de él?",
+              "options": [
+                "`\"__main__\"`",
+                "`\"utilidades\"`",
+                "`None`",
+                "`\"import\"`"
+              ],
+              "answer": 1,
+              "explain": "Al importarlo, `__name__` es el nombre del módulo (`\"utilidades\"`). Solo vale `\"__main__\"` cuando ejecutas ese archivo directamente."
+            },
+            {
+              "q": "¿Por qué conviene evitar `from modulo import *`?",
+              "options": [
+                "Es más lento",
+                "No se sabe de dónde viene cada nombre y puede pisar variables",
+                "Solo funciona con la biblioteca estándar",
+                "No importa nada"
+              ],
+              "answer": 1,
+              "explain": "Importa todos los nombres a ciegas: puede sobrescribir los tuyos y hace el código difícil de leer. Mejor `import modulo` o importar nombres concretos."
+            },
+            {
+              "q": "¿Para qué sirve un entorno virtual (`venv`)?",
+              "options": [
+                "Para ejecutar Python más rápido",
+                "Para que cada proyecto tenga sus propias librerías y versiones",
+                "Para programar sin Internet",
+                "Para usar varias versiones de Windows"
+              ],
+              "answer": 1,
+              "explain": "Cada proyecto aísla sus dependencias: actualizar una librería en un proyecto no rompe otro. Las dependencias se anotan en `requirements.txt`."
+            }
+          ],
+          "challenge": {
+            "title": "Tu propio módulo de estadística",
+            "stars": 2,
+            "exercise": "Crea las funciones `media(datos)`, `mediana(datos)` y `moda(datos)` **sin usar el módulo `statistics`**:\n- Las tres lanzan `ValueError` si la lista está vacía.\n- La mediana con cantidad par de datos es la media de los dos centrales.\n- Si hay varias modas, devuelve la menor.\n\nDeja las pruebas dentro de `if __name__ == \"__main__\":`.",
+            "starter": "def media(datos: list[float]) -> float:\n    ...\n\n\ndef mediana(datos: list[float]) -> float:\n    ...\n\n\ndef moda(datos: list[float]) -> float:\n    ...\n\n\nif __name__ == \"__main__\":\n    print(media([1, 2, 3]), mediana([3, 1, 2]), moda([1, 2, 2]))\n",
+            "checks": [
+              {
+                "stdin": "",
+                "test": "assert \"statistics\" not in __code__, \"Resuélvelo sin el módulo statistics\"\nassert media([1, 2, 3, 4]) == 2.5 and mediana([5, 1, 3]) == 3, \"media o mediana fallan con casos simples\"\nassert mediana([4, 1, 3, 2]) == 2.5, \"Con cantidad par, la mediana es la media de los dos centrales (sin olvidar ordenar)\"\nassert moda([3, 1, 3, 1, 2]) == 1, \"Si hay empate de modas (1 y 3), devuelve la menor\"\nfor funcion in (media, mediana, moda):\n    try:\n        funcion([])\n    except ValueError:\n        pass\n    else:\n        raise AssertionError(f\"{funcion.__name__}([]) debe lanzar ValueError\")\nassert __output__ == \"\", \"Las pruebas deben ir dentro del bloque if __name__ == \\\"__main__\\\":\"\n"
+              }
+            ],
+            "hint": "Para la mediana, ordena con sorted(). Para la moda, cuenta con un diccionario y elige min() entre las que tienen el máximo de apariciones.",
+            "stdin": ""
+          }
+        },
+        {
+          "slug": "math-random-platform",
+          "title": "math, random y platform",
+          "theory": "La biblioteca estándar trae módulos que el examen PCAP da por conocidos.\n\n**`math`** (funciones matemáticas):\n- `ceil(x)` redondea hacia **arriba** y `floor(x)` hacia **abajo**; ambas devuelven `int`. Ojo con los negativos: `ceil(-2.5)` es `-2` y `floor(-2.5)` es `-3`.\n- `trunc(x)` **corta** la parte decimal (redondea hacia el cero): `trunc(-2.5)` es `-2`, `trunc(2.5)` es `2`.\n- `factorial(n)` solo admite enteros no negativos y devuelve `int`: `factorial(4)` es `24`.\n- `sqrt(x)` y `hypot(x, y)` devuelven siempre `float`: `sqrt(16)` es `4.0` e `hypot(3, 4)` (la hipotenusa, `sqrt(x*x + y*y)`) es `5.0`.\n\n**`random`** (números *pseudo*aleatorios):\n- `random()` devuelve un `float` en el intervalo **[0.0, 1.0)**: puede salir 0.0, nunca 1.0.\n- `seed(valor)` fija la semilla del generador: con la misma semilla se obtiene **la misma secuencia**, lo que hace los resultados reproducibles. Sin argumento usa la hora o el sistema operativo.\n- `choice(secuencia)` devuelve **un** elemento; con una secuencia vacía lanza `IndexError`.\n- `sample(secuencia, k)` devuelve una **lista nueva** con `k` elementos **distintos** (sin repetir posiciones) y no modifica el original; si `k` es mayor que la longitud, lanza `ValueError`.\n\n**`platform`** (información del sistema; los valores **cambian según la máquina**):\n- `platform()`: cadena descriptiva del sistema; `system()`: nombre del SO (`'Linux'`, `'Windows'`, `'Darwin'`…); `version()`: versión del SO; `machine()`: tipo de máquina (`'x86_64'`, `'arm64'`…); `processor()`: nombre del procesador (puede ser `''`).\n- `python_implementation()`: `'CPython'`, `'PyPy'`…; `python_version_tuple()`: **tupla de tres cadenas** (`('3', '12', '4')`), no de enteros.\n\nTodas las funciones de `platform` devuelven `str` salvo `python_version_tuple()`, que devuelve `tuple`.",
+          "example_code": "import math\nimport random\nimport platform\n\nx = -2.5\nprint(\"ceil:\", math.ceil(x), \"| floor:\", math.floor(x), \"| trunc:\", math.trunc(x))\nprint(\"factorial(5) =\", math.factorial(5))\nprint(\"sqrt(16) =\", math.sqrt(16), \"| hypot(3, 4) =\", math.hypot(3, 4))\n\n# Misma semilla -> misma secuencia (reproducible)\nrandom.seed(7)\nprimera = [random.randint(1, 6) for _ in range(5)]\nrandom.seed(7)\nsegunda = [random.randint(1, 6) for _ in range(5)]\nprint(\"¿Secuencias iguales con la misma semilla?\", primera == segunda)\n\ncolores = [\"rojo\", \"verde\", \"azul\", \"negro\"]\nprint(\"choice ->\", random.choice(colores) in colores)\nmuestra = random.sample(colores, 3)\nprint(\"sample -> 3 distintos:\", len(set(muestra)) == 3, \"| original intacto:\", colores)\n\n# Los valores dependen de la máquina: mira sus tipos\nprint(\"system():\", type(platform.system()).__name__)\nprint(\"python_implementation():\", platform.python_implementation())\nprint(\"python_version_tuple():\", platform.python_version_tuple())\n",
+          "example_stdin": "",
+          "example_in_browser": true,
+          "exercise": "Escribe la función `redondeos(x)`, que devuelva una **tupla** `(techo, suelo, truncado)` con los resultados de `math.ceil`, `math.floor` y `math.trunc` aplicados a `x`.\n\nEjemplos:\n- `redondeos(2.5)` → `(3, 2, 2)`\n- `redondeos(-2.5)` → `(-2, -3, -2)`\n\nDespués, escribe `hipotenusa(a, b)`, que devuelva la hipotenusa de un triángulo rectángulo usando `math.hypot`.\n\nFíjate en los negativos: es justo lo que más cae en el examen.",
+          "starter": "import math\n\n\ndef redondeos(x: float) -> tuple[int, int, int]:\n    # Devuelve (ceil, floor, trunc) de x\n    ...\n\n\ndef hipotenusa(a: float, b: float) -> float:\n    ...\n\n\nprint(redondeos(-2.5))\nprint(hipotenusa(3, 4))\n",
+          "exercise_stdin": "",
+          "checks": [
+            {
+              "stdin": "",
+              "test": "assert redondeos(2.5) == (3, 2, 2), f\"redondeos(2.5) debería ser (3, 2, 2) y es {redondeos(2.5)!r}\"\nassert redondeos(-2.5) == (-2, -3, -2), f\"Con negativos: redondeos(-2.5) debería ser (-2, -3, -2) y es {redondeos(-2.5)!r}\"\nassert redondeos(4) == (4, 4, 4), \"Con un entero, los tres redondeos dan el mismo número\"\nassert all(type(v) is int for v in redondeos(-0.3)), \"ceil, floor y trunc devuelven int\"\nassert isinstance(redondeos(1.2), tuple), \"Devuelve una tupla, no una lista\"\nassert hipotenusa(3, 4) == 5.0, \"hipotenusa(3, 4) debería ser 5.0\"\nassert \"hypot\" in __code__, \"Usa math.hypot para la hipotenusa\"\nassert \"math.\" in __code__ or \"from math import\" in __code__, \"Usa las funciones del módulo math\"\n"
+            }
+          ],
+          "assistant": {
+            "hint": "Importa math y devuelve math.ceil(x), math.floor(x), math.trunc(x) separados por comas (eso ya es una tupla). Para la hipotenusa: return math.hypot(a, b).",
+            "faq": [
+              {
+                "q": "¿Qué diferencia hay entre `floor` y `trunc`?",
+                "a": "Con positivos coinciden. Con negativos no: `floor(-2.5)` baja a `-3` (hacia menos infinito) y `trunc(-2.5)` corta los decimales y se queda en `-2` (hacia el cero)."
+              },
+              {
+                "q": "¿Por qué `sqrt(16)` da `4.0` y no `4`?",
+                "a": "`math.sqrt` y `math.hypot` **siempre** devuelven `float`, aunque el resultado sea exacto. En cambio `ceil`, `floor`, `trunc` y `factorial` devuelven `int`."
+              },
+              {
+                "q": "¿Por qué el examen no pregunta qué número sale tras `seed(…)`?",
+                "a": "Porque lo que garantiza `seed()` es la **reproducibilidad** (misma semilla → misma secuencia en la misma versión de Python), no un valor concreto. Lo mismo con `platform`: pregunta por tipos y significado, no por valores de una máquina."
+              }
+            ]
+          },
+          "sources": [
+            {
+              "title": "math — Funciones matemáticas",
+              "url": "https://docs.python.org/es/3/library/math.html"
+            },
+            {
+              "title": "random — Generar números pseudoaleatorios",
+              "url": "https://docs.python.org/es/3/library/random.html"
+            },
+            {
+              "title": "platform — Acceso a los datos identificativos de la plataforma subyacente",
+              "url": "https://docs.python.org/es/3/library/platform.html"
+            }
+          ],
+          "quiz": [
+            {
+              "q": "¿Qué muestra este código?",
+              "code": "import math\nprint(math.floor(-1.5), math.trunc(-1.5))",
+              "options": [
+                "`-1 -1`",
+                "`-2 -1`",
+                "`-2 -2`",
+                "`-1.5 -1`"
+              ],
+              "answer": 1,
+              "explain": "`floor` redondea hacia abajo (hacia menos infinito): `-2`. `trunc` corta los decimales (hacia el cero): `-1`. Ambas devuelven `int`."
+            },
+            {
+              "q": "¿Qué garantiza llamar a `random.seed(42)` antes de generar números?",
+              "options": [
+                "Que el primer número será 42",
+                "Que la secuencia generada será la misma cada vez que se use esa semilla",
+                "Que los números nunca se repetirán",
+                "Que los números serán criptográficamente seguros"
+              ],
+              "answer": 1,
+              "explain": "La semilla fija el estado inicial del generador: misma semilla → misma secuencia. No fija un valor concreto, no evita repeticiones y `random` **no** es apto para criptografía (para eso existe `secrets`)."
+            },
+            {
+              "q": "¿Qué devuelve `platform.python_version_tuple()`?",
+              "options": [
+                "Una cadena como `'3.12.4'`",
+                "Una tupla de tres enteros",
+                "Una tupla de tres cadenas",
+                "Una lista de cadenas"
+              ],
+              "answer": 2,
+              "explain": "Devuelve algo como `('3', '12', '4')`: una **tupla de cadenas**. La cadena `'3.12.4'` la da `platform.python_version()`."
+            }
+          ],
+          "challenge": {
+            "title": "Sorteo reproducible",
+            "stars": 2,
+            "exercise": "Escribe `sorteo(participantes, premios, semilla)`, que elija **al azar y sin repetir** `premios` ganadores de la lista `participantes` usando `random.sample`.\n\nRequisitos:\n- Debe ser **reproducible**: llama a `random.seed(semilla)` antes de elegir, de modo que con la misma semilla salgan siempre los mismos ganadores.\n- No debe modificar la lista original.\n- Si hay más premios que participantes, deja que `random.sample` lance su `ValueError` (no lo captures).\n\nEjemplo: `sorteo([\"Ana\", \"Luis\", \"Eva\", \"Omar\"], 2, 99)` devuelve una lista de 2 nombres distintos, y la misma llamada devuelve siempre la misma lista.",
+            "starter": "import random\n\n\ndef sorteo(participantes: list[str], premios: int, semilla: int) -> list[str]:\n    ...\n\n\nprint(sorteo([\"Ana\", \"Luis\", \"Eva\", \"Omar\"], 2, 99))\n",
+            "stdin": "",
+            "checks": [
+              {
+                "stdin": "",
+                "test": "import random as _r\ngente = [\"Ana\", \"Luis\", \"Eva\", \"Omar\", \"Sara\"]\ncopia = list(gente)\ng1 = sorteo(gente, 3, 2024)\nassert isinstance(g1, list) and len(g1) == 3, \"Devuelve una lista con tantos ganadores como premios\"\nassert len(set(g1)) == 3 and set(g1) <= set(gente), \"Los ganadores son participantes distintos\"\nassert gente == copia, \"No modifiques la lista de participantes\"\nassert sorteo(gente, 3, 2024) == g1, \"Con la misma semilla deben salir los mismos ganadores\"\n_r.seed(2024)\nassert g1 == _r.sample(gente, 3), \"Usa random.seed(semilla) y después random.sample(participantes, premios)\"\ntry:\n    sorteo([\"Ana\"], 2, 1)\n    lanzo = False\nexcept ValueError:\n    lanzo = True\nassert lanzo, \"Con más premios que participantes, random.sample debe lanzar ValueError\"\n"
+              }
+            ],
+            "hint": "Dentro de la función: primero random.seed(semilla) y después return random.sample(participantes, premios). sample ya devuelve una lista nueva sin tocar la original."
+          }
+        },
+        {
+          "slug": "paquetes",
+          "title": "Paquetes, __name__ y sys.path",
+          "theory": "**Formas de importar** (todas cargan el módulo entero; cambia qué nombre queda disponible):\n- `import math` → usas `math.sqrt(9)`.\n- `import math as m` → usas `m.sqrt(9)`; el nombre `math` **no** queda definido (`NameError`).\n- `from math import sqrt, pi` → usas `sqrt(9)` directamente; `math` no queda definido.\n- `from math import *` → importa todos los nombres **públicos**. Si el módulo define `__all__`, importa **solo** los que aparecen en esa lista; si no, todos los que **no empiezan por `_`**.\n\n**Variables privadas**: un nombre como `_x` es privado solo **por convención**. `import *` no lo trae, pero `modulo._x` funciona perfectamente.\n\n**Paquetes**: un paquete es una carpeta con módulos (y subpaquetes); tradicionalmente lleva un `__init__.py`, que se ejecuta al importar el paquete. La jerarquía de paquetes **reproduce el árbol de directorios**: `extra/good/best/tau.py` se importa con `import extra.good.best.tau` y se usa con el nombre **completamente cualificado** `extra.good.best.tau.fun()`, o más corto con `from extra.good.best import tau` o `import extra.good.best.tau as t`.\n\n**`__name__`**: vale `\"__main__\"` en el archivo que ejecutas y el nombre del módulo (`\"extra.good.best.tau\"`) cuando se importa. Por eso `if __name__ == \"__main__\":` separa pruebas del código reutilizable.\n\n**Cómo se busca un módulo**: primero en `sys.modules` (un módulo se ejecuta **una sola vez**, en la primera importación), después entre los módulos integrados y por último en las carpetas de **`sys.path`**, una lista de cadenas (carpeta del script, `PYTHONPATH`, biblioteca estándar, `site-packages`… e incluso archivos `.zip`) que puedes modificar con `sys.path.append(...)`.\n\n**`__pycache__`**: al importar un módulo, Python guarda su bytecode compilado en `__pycache__/modulo.cpython-312.pyc` y lo reutiliza mientras el `.py` no cambie. El script principal no se guarda ahí.\n\n**`dir(modulo)`** devuelve la lista ordenada de nombres que contiene (incluidos los que empiezan por `_`).\n\nEn la consola del navegador puedes crear carpetas y archivos `.py` con `open()`. Tras crearlos, llama a `importlib.invalidate_caches()` y asegúrate de que el directorio actual (`os.getcwd()`) está en `sys.path`.",
+          "example_code": "import importlib\nimport os\nimport sys\n\n# 1) Creamos este árbol de directorios en la carpeta actual:\n#    saludos/\n#    ├── __init__.py\n#    └── formal.py\nos.makedirs(\"saludos\", exist_ok=True)\nwith open(\"saludos/__init__.py\", \"w\") as f:\n    f.write('print(\"  (se ejecuta saludos/__init__.py)\")\\n')\nwith open(\"saludos/formal.py\", \"w\") as f:\n    f.write(\n        '__all__ = [\"saludar\"]\\n'\n        '\\n'\n        'def saludar(nombre):\\n'\n        '    return \"Buenos días, \" + nombre\\n'\n        '\\n'\n        'def _interno():\\n'\n        '    return \"privado por convención\"\\n'\n        '\\n'\n        'print(\"  __name__ dentro de formal.py:\", __name__)\\n'\n    )\n\n# 2) Que Python busque también en la carpeta actual\nif os.getcwd() not in sys.path:\n    sys.path.insert(0, os.getcwd())\nimportlib.invalidate_caches()\n# (solo para poder re-ejecutar el ejemplo: olvida importaciones anteriores)\nfor nombre in [n for n in sys.modules if n.split(\".\")[0] == \"saludos\"]:\n    del sys.modules[nombre]\n\nprint(\"Primera importación:\")\nimport saludos.formal\nprint(\"Segunda importación (no imprime nada, ya está en sys.modules):\")\nimport saludos.formal\n\nprint(saludos.formal.saludar(\"Ana\"))        # nombre completamente cualificado\nprint(saludos.formal._interno())            # \"privado\" solo por convención\nprint(\"__name__ aquí:\", __name__)\nprint(\"__all__ de formal:\", saludos.formal.__all__)\nprint(\"¿'saludar' en dir()?\", \"saludar\" in dir(saludos.formal))\n",
+          "example_stdin": "",
+          "example_in_browser": true,
+          "exercise": "Escribe la función `nombres_publicos(modulo)`, que devuelva la **lista ordenada** de nombres que importaría `from modulo import *`:\n- Si el módulo tiene el atributo `__all__`, devuelve `sorted(modulo.__all__)`.\n- Si no lo tiene, devuelve los nombres de `dir(modulo)` que **no empiezan por `_`** (ya ordenados).\n\nEjemplo: `\"sqrt\" in nombres_publicos(math)` es `True` y `\"__name__\" in nombres_publicos(math)` es `False`.\n\nPista para probar: `hasattr(objeto, \"nombre\")` dice si un objeto tiene un atributo.",
+          "starter": "import math\n\n\ndef nombres_publicos(modulo) -> list[str]:\n    # ¿Tiene __all__? Si no, filtra dir(modulo)\n    ...\n\n\npublicos = nombres_publicos(math)\nprint(len(publicos), \"nombres públicos en math\")\nprint(\"sqrt\" in publicos, \"__name__\" in publicos)\n",
+          "exercise_stdin": "",
+          "checks": [
+            {
+              "stdin": "",
+              "test": "import math as _math\nimport types as _types\nr = nombres_publicos(_math)\nassert isinstance(r, list), \"Devuelve una lista\"\nassert \"sqrt\" in r and \"floor\" in r, \"sqrt y floor son públicos en math\"\nassert not any(n.startswith(\"_\") for n in r), \"Sin __all__, los nombres que empiezan por _ no se importan con *\"\nassert r == sorted(r), \"La lista debe estar ordenada\"\nm = _types.ModuleType(\"prueba\")\nm.a, m._b, m.c = 1, 2, 3\nassert nombres_publicos(m) == [\"a\", \"c\"], f\"Módulo con a, _b y c sin __all__: se esperaba ['a', 'c'] y sale {nombres_publicos(m)!r}\"\nm.__all__ = [\"c\", \"_b\"]\nassert nombres_publicos(m) == [\"_b\", \"c\"], \"Si hay __all__, manda __all__ (aunque incluya nombres con _)\"\nassert \"dir(\" in __code__, \"Usa dir() para obtener los nombres del módulo\"\n"
+            }
+          ],
+          "assistant": {
+            "hint": "if hasattr(modulo, \"__all__\"): return sorted(modulo.__all__). Si no, una lista por comprensión sobre dir(modulo) quedándote con los nombres que no empiezan por \"_\".",
+            "faq": [
+              {
+                "q": "¿Es obligatorio `__init__.py` en un paquete?",
+                "a": "Desde Python 3.3 existen los *namespace packages*, que funcionan sin él. Pero el examen y la práctica habitual lo tratan como la marca de un paquete normal: se ejecuta al importarlo y sirve para inicializarlo o definir `__all__`."
+              },
+              {
+                "q": "Si importo un módulo dos veces, ¿se ejecuta dos veces?",
+                "a": "No. La primera importación lo ejecuta y lo guarda en `sys.modules`; las siguientes reutilizan ese objeto. Para volver a cargarlo a propósito existe `importlib.reload(modulo)`."
+              },
+              {
+                "q": "¿Qué pasa con los nombres que empiezan por `_` si no hay `__all__`?",
+                "a": "`from modulo import *` no los importa, pero siguen siendo accesibles con `modulo._nombre`. En Python la privacidad de módulo es solo una convención."
+              }
+            ]
+          },
+          "sources": [
+            {
+              "title": "Tutorial oficial — 6. Módulos",
+              "url": "https://docs.python.org/es/3/tutorial/modules.html"
+            },
+            {
+              "title": "El sistema de importación",
+              "url": "https://docs.python.org/es/3/reference/import.html"
+            },
+            {
+              "title": "sys.path",
+              "url": "https://docs.python.org/es/3/library/sys.html#sys.path"
+            },
+            {
+              "title": "importlib — La implementación de import",
+              "url": "https://docs.python.org/es/3/library/importlib.html"
+            }
+          ],
+          "quiz": [
+            {
+              "q": "`utiles.py` contiene `print(__name__)`. ¿Qué muestra al ejecutar `import utiles` desde `main.py`?",
+              "options": [
+                "`__main__`",
+                "`utiles`",
+                "`main`",
+                "`utiles.py`"
+              ],
+              "answer": 1,
+              "explain": "Cuando un módulo se **importa**, su `__name__` es el nombre del módulo (`utiles`). Solo vale `__main__` en el archivo que se ejecuta directamente."
+            },
+            {
+              "q": "El módulo `m` define `__all__ = ['a']`, además de `a`, `b` y `_c`. ¿Qué nombres trae `from m import *`?",
+              "options": [
+                "`a`, `b` y `_c`",
+                "`a` y `b`",
+                "Solo `a`",
+                "Ninguno: `__all__` bloquea el `import *`"
+              ],
+              "answer": 2,
+              "explain": "Si existe `__all__`, `import *` importa **exactamente** esa lista. Sin `__all__` importaría `a` y `b` (los que no empiezan por `_`)."
+            },
+            {
+              "q": "¿Qué es `sys.path`?",
+              "options": [
+                "Una tupla de solo lectura",
+                "Una lista de cadenas con las carpetas donde se buscan los módulos",
+                "El diccionario de módulos ya cargados",
+                "La variable PATH del sistema operativo"
+              ],
+              "answer": 1,
+              "explain": "`sys.path` es una **lista** de rutas (cadenas) que se recorre en orden al importar; se puede modificar en tiempo de ejecución. El diccionario de módulos cargados es `sys.modules`."
+            }
+          ],
+          "challenge": {
+            "title": "Paquete anidado de precios",
+            "stars": 3,
+            "exercise": "Crea desde código un **paquete anidado** en el directorio actual y úsalo:\n\n```\ntienda/\n├── __init__.py\n└── precios/\n    ├── __init__.py\n    └── iva.py\n```\n\n- `iva.py` define `TIPO = 0.21` y la función `con_iva(importe)`, que devuelve `round(importe * (1 + TIPO), 2)`.\n- Los dos `__init__.py` pueden estar vacíos.\n- Luego importa la función con `from tienda.precios.iva import con_iva` y guarda en `resultado` el valor de `con_iva(100)`.\n\nLa plantilla ya añade la carpeta actual a `sys.path`, limpia importaciones anteriores y llama a `importlib.invalidate_caches()`: tú crea las carpetas (`os.makedirs`) y los archivos (`open(..., \"w\")`).",
+            "starter": "import importlib\nimport os\nimport sys\n\n# 1) Crea las carpetas y los tres archivos .py aquí\n\n\n# 2) Preparación (no la toques)\nif os.getcwd() not in sys.path:\n    sys.path.insert(0, os.getcwd())\nimportlib.invalidate_caches()\nfor nombre in [n for n in sys.modules if n.split(\".\")[0] == \"tienda\"]:\n    del sys.modules[nombre]\n\n# 3) Importa con_iva desde tienda.precios.iva y calcula resultado = con_iva(100)\n",
+            "stdin": "",
+            "checks": [
+              {
+                "stdin": "",
+                "test": "import os as _os\nimport sys as _sys\nassert _os.path.isfile(\"tienda/__init__.py\"), \"Falta tienda/__init__.py\"\nassert _os.path.isfile(\"tienda/precios/__init__.py\"), \"Falta tienda/precios/__init__.py\"\nassert _os.path.isfile(\"tienda/precios/iva.py\"), \"Falta tienda/precios/iva.py\"\nassert resultado == 121.0, f\"con_iva(100) debería ser 121.0 y resultado vale {resultado!r}\"\nassert \"tienda.precios.iva\" in _sys.modules, \"Importa el módulo con su nombre cualificado: tienda.precios.iva\"\n_mod = _sys.modules[\"tienda.precios.iva\"]\nassert _mod.__name__ == \"tienda.precios.iva\", \"El __name__ de un módulo importado es su nombre completo\"\nassert _mod.TIPO == 0.21, \"iva.py debe definir TIPO = 0.21\"\nassert con_iva(10) == 12.1, \"con_iva(10) debería ser 12.1\"\nassert \"from tienda.precios.iva import con_iva\" in __code__, \"Importa con: from tienda.precios.iva import con_iva\"\n"
+              }
+            ],
+            "hint": "os.makedirs(\"tienda/precios\", exist_ok=True) crea las dos carpetas. Escribe cada archivo con with open(ruta, \"w\") as f: f.write(texto). En el paso 3: from tienda.precios.iva import con_iva y resultado = con_iva(100)."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "excepciones",
+      "title": "Excepciones",
+      "summary": "Bloque 2 del PCAP (14 %): try/except/else/finally, jerarquía de excepciones, assert y excepciones propias.",
+      "lessons": [
+        {
+          "slug": "excepciones",
+          "title": "Excepciones",
+          "theory": "Una **excepción** es un error que ocurre durante la ejecución: `ValueError`, `ZeroDivisionError`, `KeyError`, `FileNotFoundError`... Si nadie la captura, el programa se detiene y muestra el *traceback*. Léelo de abajo arriba: la última línea dice qué pasó y las de encima, dónde.\n\nPara controlarla se usa `try` / `except`:\n- `try`: el código que puede fallar.\n- `except TipoDeError`: qué hacer si falla. Captura **excepciones concretas**; un `except:` sin tipo esconde errores que deberías ver.\n- `else`: se ejecuta solo si no hubo error.\n- `finally`: se ejecuta siempre, haya error o no. Sirve para liberar recursos.\n\nCon `raise` lanzas tus propias excepciones cuando un dato no es válido. Así fallas pronto y con un mensaje claro.\n\nEl patrón típico es validar la entrada del usuario con un `while True` que solo termina (`break`) cuando la conversión funciona.",
+          "example_code": "def pedir_entero(mensaje: str) -> int:\n    while True:\n        try:\n            return int(input(mensaje))\n        except ValueError:\n            print(\"Eso no es un número entero. Inténtalo de nuevo.\")\n\n\ndividendo = pedir_entero(\"Dividendo: \")\ndivisor = pedir_entero(\"Divisor: \")\ntry:\n    print(f\"Resultado: {dividendo / divisor:.2f}\")\nexcept ZeroDivisionError:\n    print(\"No se puede dividir entre cero\")",
+          "exercise": "Crea la función `pedir_nota()`, que pida una nota hasta que el usuario introduzca un número **entre 0 y 10** y la devuelva como `float`.\n\nDebe mostrar un mensaje distinto en cada caso:\n- Si no es un número (`ValueError` al convertir).\n- Si está fuera de rango: lánzalo tú con `raise ValueError(...)` y captúralo.\n\nAl final del programa, guarda el resultado: `nota = pedir_nota()` y muéstralo. La comprobación introduce `abc`, `15` y `7.5`.",
+          "sources": [
+            {
+              "title": "Tutorial oficial — 8. Errores y excepciones",
+              "url": "https://docs.python.org/es/3/tutorial/errors.html"
+            },
+            {
+              "title": "Excepciones incorporadas",
+              "url": "https://docs.python.org/es/3/library/exceptions.html"
+            }
+          ],
+          "starter": "def pedir_nota() -> float:\n    # Pide la nota en un bucle while hasta que sea válida y devuélvela\n    ...\n\n\nnota = pedir_nota()\nprint(f\"Nota registrada: {nota}\")\n",
+          "exercise_stdin": "abc\n15\n7.5",
+          "example_stdin": "diez\n10\n0",
+          "checks": [
+            {
+              "stdin": "abc\n15\n7.5",
+              "test": "assert nota == 7.5, f\"Con las entradas abc, 15 y 7.5, la nota debería ser 7.5 y es {nota!r}\"\nassert \"raise\" in __code__, \"Lanza tú el error de fuera de rango con raise\"\nassert \"except\" in __code__, \"Captura los errores con try/except\"\nlineas = [l for l in __output__.splitlines() if l.strip()]\nassert len(lineas) >= 3, \"Muestra un mensaje por cada entrada no válida y al final la nota\"\n"
+            },
+            {
+              "stdin": "-1\n10",
+              "test": "assert nota == 10, \"10 es una nota válida (el rango incluye 0 y 10)\"\n"
+            }
+          ],
+          "assistant": {
+            "hint": "Dentro del while: try → convierte con float(input(...)); si no está entre 0 y 10, raise ValueError(\"fuera de rango\"); return nota. En except ValueError, muestra el mensaje del error.",
+            "faq": [
+              {
+                "q": "¿Por qué no usar except: sin tipo?",
+                "a": "Porque captura **todo**, incluso errores de programación que deberías ver. Captura solo lo que esperas (`except ValueError:`) y deja que lo demás falle con su mensaje."
+              },
+              {
+                "q": "¿Cómo leo un traceback?",
+                "a": "De **abajo arriba**: la última línea dice qué error ocurrió; las de encima, en qué línea y dentro de qué función."
+              }
+            ]
+          },
+          "example_in_browser": true,
+          "quiz": [
+            {
+              "q": "¿Qué muestra este código?",
+              "options": [
+                "`a`",
+                "`a b`",
+                "`a c`",
+                "`a b c`"
+              ],
+              "answer": 2,
+              "explain": "`int(\"x\")` lanza `ValueError`, así que **se salta el resto del `try`** (`b` no se imprime), se ejecuta el `except` (`c`)… y el programa continúa.",
+              "code": "try:\n    print(\"a\", end=\" \")\n    int(\"x\")\n    print(\"b\", end=\" \")\nexcept ValueError:\n    print(\"c\")"
+            },
+            {
+              "q": "¿Cuándo se ejecuta el bloque `finally`?",
+              "options": [
+                "Solo si no hay error",
+                "Solo si hay error",
+                "Siempre",
+                "Nunca, está obsoleto"
+              ],
+              "answer": 2,
+              "explain": "`finally` se ejecuta **siempre**, haya error o no. Se usa para liberar recursos (cerrar archivos, conexiones…)."
+            },
+            {
+              "q": "¿Por qué es mala idea usar `except:` sin tipo?",
+              "options": [
+                "Es más lento",
+                "Captura también errores de programación que deberías ver",
+                "No funciona en Python 3",
+                "Obliga a usar `finally`"
+              ],
+              "answer": 1,
+              "explain": "Un `except:` desnudo atrapa **todo** (incluso errores de escritura o Ctrl+C) y esconde los fallos. Captura solo lo que esperas: `except ValueError:`."
+            }
+          ],
+          "challenge": {
+            "title": "Convertidor a prueba de balas",
+            "stars": 2,
+            "exercise": "Escribe `a_numeros(textos)`: recibe una lista de textos y devuelve una lista con los que se pueden convertir a `float`, **ignorando** los demás (sin que el programa se detenga).\n\nEjemplo: `a_numeros([\"3\", \"dos\", \"4.5\", \"\", \"1e3\"])` → `[3.0, 4.5, 1000.0]`.",
+            "starter": "def a_numeros(textos: list[str]) -> list[float]:\n    ...\n\n\nprint(a_numeros([\"3\", \"dos\", \"4.5\", \"\", \"1e3\"]))\n",
+            "checks": [
+              {
+                "stdin": "",
+                "test": "assert a_numeros([\"3\", \"dos\", \"4.5\", \"\", \"1e3\"]) == [3.0, 4.5, 1000.0], \"El ejemplo del enunciado no da [3.0, 4.5, 1000.0]\"\nassert a_numeros([]) == [], \"Con una lista vacía debe devolver []\"\nassert a_numeros([\" 7 \", \"-2\", \"abc\"]) == [7.0, -2.0], \"float() admite espacios alrededor y negativos\"\nassert \"except ValueError\" in __code__, \"Captura el error concreto: except ValueError\"\n"
+              }
+            ],
+            "hint": "Recorre la lista y, dentro de un try, añade float(texto) al resultado; en except ValueError, simplemente continúa.",
+            "stdin": ""
+          }
+        },
+        {
+          "slug": "jerarquia-excepciones",
+          "title": "Jerarquía de excepciones y excepciones propias",
+          "theory": "Todas las excepciones son **clases** que heredan de `BaseException`. De ella cuelgan directamente `SystemExit`, `KeyboardInterrupt` y `Exception`, la madre de las que se capturan normalmente: `ArithmeticError` (→ `ZeroDivisionError`, `OverflowError`), `LookupError` (→ `IndexError`, `KeyError`), `ValueError`, `TypeError`, `AssertionError`, `ImportError` (→ `ModuleNotFoundError`)… Por eso `except Exception` **no** captura `sys.exit()` ni Ctrl+C.\n\nUn `except` captura su clase **y todas sus subclases**. Python prueba los `except` de arriba abajo y **el primero que coincide gana**: si `except ArithmeticError` va antes que `except ZeroDivisionError`, el segundo nunca se ejecuta (no es un error de sintaxis). El `except:` sin tipo debe ir el **último**; si no, `SyntaxError`. Para tratar varias igual, usa una tupla: `except (ValueError, TypeError) as e:`.\n\nLa excepción es un **objeto**: `e.args` es la tupla de argumentos del constructor y `str(e)` devuelve el único argumento, la tupla como texto si hay varios, o `''` si no hay ninguno.\n\n- `raise ValueError(\"msg\")` o `raise ex` lanzan; `raise ValueError` (la clase) la crea sin argumentos.\n- `raise` a secas dentro de un `except` **re-lanza** la excepción actual; fuera de un `except` provoca `RuntimeError`.\n- `raise NuevoError(...) from e` encadena: `e` queda en `__cause__`.\n- `assert condición, mensaje` lanza `AssertionError(mensaje)` si la condición es falsa.\n\n**Excepciones propias**: hereda de `Exception` (o de una subclase) y llama a `super().__init__(mensaje)` para que `args` y `str(e)` funcionen.\n\nOrden de ejecución: `try` → `except` (si falla) o `else` (si no) → `finally` **siempre**, incluso cuando el `try` hace `return`.",
+          "example_code": "class TemperaturaInvalida(ValueError):\n    def __init__(self, grados):\n        super().__init__(f\"{grados} ºC está por debajo del cero absoluto\")\n        self.grados = grados\n\n\ndef leer_temperatura(texto):\n    grados = float(texto)          # puede lanzar ValueError o TypeError\n    if grados < -273.15:\n        raise TemperaturaInvalida(grados)\n    return grados\n\n\nfor dato in [\"21.5\", \"-300\", \"calor\", None]:\n    try:\n        t = leer_temperatura(dato)\n    except TemperaturaInvalida as e:      # la subclase, ANTES que su madre\n        print(\"Propia:\", e, \"| args:\", e.args)\n    except (ValueError, TypeError) as e:  # tupla de excepciones\n        print(type(e).__name__, \"con\", repr(dato))\n    else:\n        print(\"Correcta:\", t)\n    finally:\n        print(\"  (finally se ejecuta siempre)\")\n\nprint(issubclass(ZeroDivisionError, ArithmeticError), issubclass(KeyError, LookupError))\nprint(issubclass(KeyboardInterrupt, Exception))\n\ntry:\n    try:\n        {}[\"clave\"]\n    except KeyError:\n        print(\"Registro el error y lo re-lanzo\")\n        raise\nexcept LookupError as e:\n    print(\"Capturado fuera:\", repr(e))\n",
+          "exercise": "Simula un cajero con una **excepción propia**:\n\n1. Crea `SaldoInsuficiente`, subclase de `Exception`. Su `__init__(self, saldo, importe)` debe llamar a `super().__init__(...)` con el mensaje `\"Saldo insuficiente: {saldo} < {importe}\"` y guardar `self.saldo` y `self.importe`.\n2. Crea `retirar(saldo, importe)`, que devuelva el saldo restante y:\n   - lance `ValueError(\"importe no válido\")` si `importe <= 0`;\n   - lance `SaldoInsuficiente(saldo, importe)` si `importe > saldo`.\n3. Crea `operar(saldo, importe)`, que llame a `retirar` y devuelva un texto: el saldo restante como `\"OK: 70\"`, `\"Error: \" + str(e)` si es `SaldoInsuficiente` y `\"Rechazado\"` si es `ValueError`.\n\nEjemplo: `operar(100, 30)` → `\"OK: 70\"`; `operar(50, 80)` → `\"Error: Saldo insuficiente: 50 < 80\"`; `operar(50, -5)` → `\"Rechazado\"`.",
+          "sources": [
+            {
+              "title": "Excepciones incorporadas — Jerarquía de excepciones",
+              "url": "https://docs.python.org/es/3/library/exceptions.html#exception-hierarchy"
+            },
+            {
+              "title": "Tutorial oficial — 8. Errores y excepciones",
+              "url": "https://docs.python.org/es/3/tutorial/errors.html"
+            },
+            {
+              "title": "Referencia del lenguaje — La sentencia try",
+              "url": "https://docs.python.org/es/3/reference/compound_stmts.html#the-try-statement"
+            },
+            {
+              "title": "Referencia del lenguaje — Las sentencias raise y assert",
+              "url": "https://docs.python.org/es/3/reference/simple_stmts.html#the-raise-statement"
+            }
+          ],
+          "starter": "class SaldoInsuficiente(Exception):\n    def __init__(self, saldo, importe):\n        # Llama a super().__init__(mensaje) y guarda los atributos\n        pass\n\n\ndef retirar(saldo, importe):\n    # Lanza ValueError o SaldoInsuficiente cuando toque; si no, devuelve el saldo restante\n    ...\n\n\ndef operar(saldo, importe):\n    # Llama a retirar() dentro de try y captura cada excepción por separado\n    ...\n\n\nprint(operar(100, 30))\nprint(operar(50, 80))\nprint(operar(50, -5))\n",
+          "exercise_stdin": "",
+          "example_stdin": "",
+          "checks": [
+            {
+              "stdin": "",
+              "test": "assert isinstance(SaldoInsuficiente, type) and issubclass(SaldoInsuficiente, Exception), \"SaldoInsuficiente debe ser una clase que herede de Exception\"\nassert \"super().__init__\" in __code__, \"Llama a super().__init__(mensaje) dentro de __init__\"\nassert retirar(100, 30) == 70, \"retirar(100, 30) debería devolver 70\"\nassert retirar(80, 80) == 0, \"Retirar todo el saldo está permitido: retirar(80, 80) debería devolver 0\"\ntry:\n    retirar(50, 80)\nexcept SaldoInsuficiente as e:\n    assert e.saldo == 50 and e.importe == 80, \"Guarda self.saldo y self.importe en la excepción\"\n    assert str(e) == \"Saldo insuficiente: 50 < 80\", f\"str(e) debería ser 'Saldo insuficiente: 50 < 80' y es {str(e)!r}\"\n    assert e.args == (\"Saldo insuficiente: 50 < 80\",), \"e.args debe contener solo el mensaje (pásalo a super().__init__)\"\nelse:\n    raise AssertionError(\"retirar(50, 80) debería lanzar SaldoInsuficiente\")\nfor malo in (0, -5):\n    try:\n        retirar(50, malo)\n    except SaldoInsuficiente:\n        raise AssertionError(f\"Con importe {malo} se lanza ValueError, no SaldoInsuficiente\")\n    except ValueError:\n        pass\n    else:\n        raise AssertionError(f\"retirar(50, {malo}) debería lanzar ValueError\")\n"
+            },
+            {
+              "stdin": "",
+              "test": "assert operar(100, 30) == \"OK: 70\", f\"operar(100, 30) debería ser 'OK: 70' y es {operar(100, 30)!r}\"\nassert operar(50, 80) == \"Error: Saldo insuficiente: 50 < 80\", f\"operar(50, 80) devuelve {operar(50, 80)!r}\"\nassert operar(50, -5) == \"Rechazado\", f\"operar(50, -5) debería ser 'Rechazado' y es {operar(50, -5)!r}\"\nassert operar(10, 0) == \"Rechazado\", \"Un importe 0 también se rechaza\"\nassert \"except SaldoInsuficiente\" in __code__, \"Captura tu excepción propia con except SaldoInsuficiente\"\n"
+            }
+          ],
+          "assistant": {
+            "hint": "En __init__: super().__init__(f\"Saldo insuficiente: {saldo} < {importe}\") y luego self.saldo = saldo, self.importe = importe. En operar, pon except SaldoInsuficiente ANTES de except ValueError (o, al menos, que no se tapen) y devuelve el texto de cada caso.",
+            "faq": [
+              {
+                "q": "¿Por qué hay que llamar a super().__init__()?",
+                "a": "Porque es `Exception.__init__` quien guarda el mensaje en `args`, y `str(e)` se construye a partir de `args`. Si no lo llamas, `args` contiene los argumentos crudos del constructor (aquí `(50, 80)`) y `str(e)` no muestra tu mensaje."
+              },
+              {
+                "q": "¿De qué clase debo heredar mis excepciones?",
+                "a": "De `Exception` o de una subclase suya con sentido (`ValueError`, por ejemplo). Nunca de `BaseException`: esa rama está reservada para `SystemExit`, `KeyboardInterrupt` y similares, y un `except Exception` no la capturaría."
+              },
+              {
+                "q": "Si pongo except Exception antes que except ZeroDivisionError, ¿da error?",
+                "a": "No. Es código válido, pero el segundo `except` es **inalcanzable**: el primero que coincide gana y `ZeroDivisionError` ya es un `Exception`. Pon siempre las clases **más concretas primero**."
+              }
+            ]
+          },
+          "example_in_browser": true,
+          "quiz": [
+            {
+              "q": "¿Qué muestra este código?",
+              "options": [
+                "`key`",
+                "`lookup`",
+                "`key` y después `lookup`",
+                "Un `SyntaxError` por el orden de los `except`"
+              ],
+              "answer": 1,
+              "explain": "`KeyError` es subclase de `LookupError`. Los `except` se prueban en orden y **el primero que coincide gana**, así que se imprime `lookup` y el segundo `except` nunca se usa. No es un error de sintaxis (solo lo sería un `except:` sin tipo que no fuera el último).",
+              "code": "d = {\"a\": 1}\ntry:\n    print(d[\"b\"])\nexcept LookupError:\n    print(\"lookup\")\nexcept KeyError:\n    print(\"key\")"
+            },
+            {
+              "q": "¿Qué hace `raise` sin argumentos dentro de un bloque `except`?",
+              "options": [
+                "Lanza un `RuntimeError`",
+                "Vuelve a lanzar la excepción que se está tratando",
+                "Termina el programa sin mostrar nada",
+                "Lanza una `Exception` vacía"
+              ],
+              "answer": 1,
+              "explain": "Dentro de un `except`, `raise` a secas **re-lanza** la excepción actual para que la trate un nivel superior. Solo fuera de un `except` (sin excepción activa) provoca `RuntimeError`."
+            },
+            {
+              "q": "¿Qué ocurre al ejecutar este código?",
+              "options": [
+                "No muestra nada",
+                "Lanza `ValueError(\"negativo\")`",
+                "Lanza `AssertionError(\"negativo\")`",
+                "Muestra `False`"
+              ],
+              "answer": 2,
+              "explain": "`assert` comprueba la condición: si es falsa, lanza `AssertionError` con el mensaje que va tras la coma como argumento. No lanza `ValueError` ni imprime nada.",
+              "code": "x = -1\nassert x > 0, \"negativo\""
+            }
+          ],
+          "challenge": {
+            "title": "Clasificador de errores",
+            "stars": 2,
+            "exercise": "Escribe `clasificar(funcion)`: llama a `funcion()` (sin argumentos) y devuelve un texto según lo que ocurra:\n- `\"ok\"` si no lanza nada;\n- `\"busqueda\"` si lanza cualquier `LookupError` (`IndexError`, `KeyError`…);\n- `\"aritmetica\"` si lanza cualquier `ArithmeticError` (`ZeroDivisionError`, `OverflowError`…);\n- `\"otra: NombreDeLaClase\"` para cualquier otra subclase de `Exception` (p. ej. `\"otra: ValueError\"`).\n\nCaptura por **familias** (clases base), no enumerando cada error, y cuida el **orden** de los `except`.\n\nEjemplo: `clasificar(lambda: [][0])` → `\"busqueda\"`; `clasificar(lambda: 1 / 0)` → `\"aritmetica\"`; `clasificar(lambda: int(\"x\"))` → `\"otra: ValueError\"`.",
+            "starter": "def clasificar(funcion) -> str:\n    ...\n\n\nprint(clasificar(lambda: [][0]))\nprint(clasificar(lambda: 1 / 0))\nprint(clasificar(lambda: int(\"x\")))\nprint(clasificar(lambda: 42))\n",
+            "checks": [
+              {
+                "stdin": "",
+                "test": "assert clasificar(lambda: [][0]) == \"busqueda\", \"IndexError es un LookupError\"\nassert clasificar(lambda: {}[\"k\"]) == \"busqueda\", \"KeyError también es un LookupError\"\nassert clasificar(lambda: 1 / 0) == \"aritmetica\", \"ZeroDivisionError es un ArithmeticError\"\nassert clasificar(lambda: 2.0 ** 5000) == \"aritmetica\", \"OverflowError también es un ArithmeticError\"\nassert clasificar(lambda: int(\"x\")) == \"otra: ValueError\", f\"int('x') debería dar 'otra: ValueError' y da {clasificar(lambda: int('x'))!r}\"\nassert clasificar(lambda: None + 1) == \"otra: TypeError\", \"Para otras excepciones devuelve 'otra: ' + el nombre de la clase\"\nassert clasificar(lambda: 42) == \"ok\", \"Si no hay excepción, devuelve 'ok'\"\nassert \"LookupError\" in __code__ and \"ArithmeticError\" in __code__, \"Captura las familias: except LookupError y except ArithmeticError\"\n"
+              }
+            ],
+            "hint": "Usa try/except con except LookupError, luego except ArithmeticError y por último except Exception as e (la más general al final). type(e).__name__ te da el nombre de la clase. Si no hay excepción, devuelve \"ok\" (en un else o tras el try).",
+            "stdin": ""
+          }
+        }
+      ]
+    },
+    {
+      "slug": "strings",
+      "title": "Strings",
+      "summary": "Bloque 3 del PCAP (18 %): Unicode y UTF-8, índices y slicing, comparación y métodos de string.",
+      "lessons": [
+        {
+          "slug": "unicode",
+          "title": "Caracteres, ASCII y Unicode",
+          "theory": "Para el ordenador un carácter es un **número**. **ASCII** asigna números del 0 al 127 a las letras inglesas, dígitos y signos: `'A'` es 65, `'a'` es 97 y `'0'` es 48. Se queda corto para `ñ`, `á` o el árabe, así que nació **Unicode**: un catálogo universal en el que cada carácter tiene un **code point** (punto de código), escrito como `U+00F1` para la `ñ`. Los 128 primeros coinciden con ASCII.\n\n**UTF-8** es la forma más habitual de guardar esos code points en bytes: usa de 1 a 4 bytes por carácter y es compatible con ASCII. En Python 3 los `str` son Unicode: `len(\"ñ\")` es 1, pero `len(\"ñ\".encode(\"utf-8\"))` es 2 bytes.\n\nDos funciones convierten entre carácter y número:\n- `ord(c)`: code point de **un solo** carácter (`ord(\"a\")` → 97). Con una cadena de longitud distinta de 1 lanza `TypeError`.\n- `chr(n)`: carácter de ese code point (`chr(65)` → `'A'`). Fuera de rango, `ValueError`.\n\nLas **secuencias de escape** empiezan por `\\`: `\\n` (salto de línea), `\\t` (tabulador), `\\\\` (barra), `\\'` y `\\\"` (comillas), `\\u00f1` (carácter por su code point). Cada una cuenta como **un** carácter: `len(\"a\\nb\")` es 3.\n\nComo las letras son números, se pueden comparar: `\"a\" > \"Z\"` es `True` (97 > 90). Truco de examen: `ord(\"a\") - ord(\"A\")` es 32, la distancia entre minúsculas y mayúsculas.",
+          "example_code": "for c in \"Aa0ñ€\":\n    print(c, ord(c), hex(ord(c)), len(c.encode(\"utf-8\")), \"byte(s)\")\n\nprint(chr(72) + chr(105))          # Hi\nprint(\"\\u00f1\" == \"ñ\")             # True: escape Unicode\nprint(len(\"a\\tb\\n\"))                # 4: cada escape es 1 carácter\nprint(chr(ord(\"c\") - 32))          # C: de minúscula a mayúscula\n",
+          "example_stdin": "",
+          "example_in_browser": true,
+          "exercise": "Crea dos funciones:\n- `codigos(texto)`: devuelve la **lista** de code points de cada carácter. `codigos(\"Añ\")` → `[65, 241]`.\n- `desde_codigos(numeros)`: hace lo contrario y devuelve el **texto**. `desde_codigos([72, 111, 108, 97])` → `\"Hola\"`.\n\nUsa `ord()` y `chr()`.",
+          "starter": "def codigos(texto: str) -> list[int]:\n    # Recorre el texto y guarda ord() de cada carácter\n    ...\n\n\ndef desde_codigos(numeros: list[int]) -> str:\n    # Convierte cada número con chr() y únelos\n    ...\n\n\nprint(codigos(\"Añ\"))\nprint(desde_codigos([72, 111, 108, 97]))\n",
+          "exercise_stdin": "",
+          "checks": [
+            {
+              "stdin": "",
+              "test": "assert codigos(\"Añ\") == [65, 241], f\"codigos('Añ') debería ser [65, 241] y es {codigos('Añ')!r}\"\nassert codigos(\"\") == [], \"Con un texto vacío, codigos debe devolver []\"\nassert desde_codigos([72, 111, 108, 97]) == \"Hola\", \"desde_codigos([72, 111, 108, 97]) debería ser 'Hola'\"\nassert desde_codigos([]) == \"\", \"Con una lista vacía, desde_codigos debe devolver ''\"\nassert desde_codigos(codigos(\"Dakhla 2026 ñ€\")) == \"Dakhla 2026 ñ€\", \"Las dos funciones deben ser inversas\"\nassert \"ord(\" in __code__ and \"chr(\" in __code__, \"Usa ord() y chr()\"\n"
+            }
+          ],
+          "assistant": {
+            "hint": "codigos: [ord(c) for c in texto]. desde_codigos: \"\".join(chr(n) for n in numeros).",
+            "faq": [
+              {
+                "q": "¿Por qué `ord(\"ab\")` da error?",
+                "a": "`ord()` solo acepta **un** carácter (una cadena de longitud 1). Con más o con ninguno lanza `TypeError`."
+              },
+              {
+                "q": "¿Unicode y UTF-8 son lo mismo?",
+                "a": "No. **Unicode** es el catálogo que da un número (code point) a cada carácter; **UTF-8** es una forma de guardar esos números en bytes (de 1 a 4 por carácter)."
+              },
+              {
+                "q": "¿Por qué `\"Z\" < \"a\"` es `True`?",
+                "a": "Porque se comparan los code points: `ord(\"Z\")` es 90 y `ord(\"a\")` es 97. Todas las mayúsculas ASCII van antes que las minúsculas."
+              }
+            ]
+          },
+          "sources": [
+            {
+              "title": "Unicode HOWTO (documentación oficial)",
+              "url": "https://docs.python.org/es/3/howto/unicode.html"
+            },
+            {
+              "title": "Funciones incorporadas: ord() y chr()",
+              "url": "https://docs.python.org/es/3/library/functions.html#ord"
+            },
+            {
+              "title": "Literales de cadena y secuencias de escape",
+              "url": "https://docs.python.org/es/3/reference/lexical_analysis.html#string-and-bytes-literals"
+            }
+          ],
+          "quiz": [
+            {
+              "q": "¿Qué muestra este código?",
+              "options": [
+                "`98`",
+                "`b`",
+                "`B`",
+                "Se lanza `TypeError`"
+              ],
+              "answer": 2,
+              "explain": "`ord(\"b\")` es 98; al restar 32 queda 66, y `chr(66)` es `'B'`. Entre una minúscula ASCII y su mayúscula hay 32 posiciones.",
+              "code": "print(chr(ord(\"b\") - 32))"
+            },
+            {
+              "q": "¿Cuánto vale `len(\"a\\\\nb\")`?",
+              "options": [
+                "`3`",
+                "`4`",
+                "`5`",
+                "`2`"
+              ],
+              "answer": 1,
+              "explain": "`\\\\` es **un** carácter (la barra). La cadena es `a`, `\\`, `n`, `b`: 4 caracteres. Sin la doble barra, `\"a\\nb\"` tendría 3."
+            },
+            {
+              "q": "¿Qué afirmación sobre UTF-8 es correcta?",
+              "options": [
+                "Usa siempre 2 bytes por carácter",
+                "Usa de 1 a 4 bytes y es compatible con ASCII",
+                "Solo sirve para caracteres ingleses",
+                "Es lo mismo que Unicode"
+              ],
+              "answer": 1,
+              "explain": "UTF-8 es una **codificación** de longitud variable (1 a 4 bytes). Los caracteres ASCII ocupan 1 byte igual que en ASCII; `ñ` ocupa 2 y `€`, 3."
+            }
+          ],
+          "challenge": {
+            "title": "Cifrado César",
+            "stars": 2,
+            "exercise": "Escribe `cifrar(texto, n)`: desplaza cada **letra minúscula** `a`-`z` `n` posiciones en el alfabeto, **dando la vuelta** al llegar a la `z`. El resto de caracteres (mayúsculas, espacios, signos) no cambia.\n\nEjemplos: `cifrar(\"abc xyz\", 3)` → `\"def abc\"`; `cifrar(\"hola!\", -1)` → `\"gnkz!\"`.\n\nPista: `ord(c) - ord(\"a\")` da la posición (0-25) y `%` 26 da la vuelta.",
+            "starter": "def cifrar(texto: str, n: int) -> str:\n    ...\n\n\nprint(cifrar(\"abc xyz\", 3))\n",
+            "stdin": "",
+            "checks": [
+              {
+                "stdin": "",
+                "test": "assert cifrar(\"abc xyz\", 3) == \"def abc\", f\"cifrar('abc xyz', 3) debería ser 'def abc' y es {cifrar('abc xyz', 3)!r}\"\nassert cifrar(\"hola!\", -1) == \"gnkz!\", \"Con n negativo también debe dar la vuelta: 'hola!' → 'gnkz!'\"\nassert cifrar(\"Hola Mundo\", 26) == \"Hola Mundo\", \"Desplazar 26 deja el texto igual\"\nassert cifrar(\"ABC ñ 123\", 5) == \"ABC ñ 123\", \"Solo cambian las minúsculas a-z\"\nassert cifrar(cifrar(\"secreto\", 7), -7) == \"secreto\", \"Cifrar con n y luego con -n devuelve el original\"\n"
+              }
+            ],
+            "hint": "Para cada c: si \"a\" <= c <= \"z\", calcula chr((ord(c) - ord(\"a\") + n) % 26 + ord(\"a\")); si no, déjalo igual."
+          }
+        },
+        {
+          "slug": "cadenas",
+          "title": "Cadenas: índices, slicing y comparación",
+          "theory": "Un `str` es una **secuencia** de caracteres. Con `s[i]` lees uno: el primero es `s[0]` y el último `s[-1]`. Un índice fuera de rango lanza `IndexError`.\n\nEl **slicing** `s[inicio:fin:paso]` devuelve una cadena nueva desde `inicio` hasta `fin` **sin incluirlo**. Nunca da error: los límites fuera de rango se recortan (`\"hola\"[2:100]` → `'la'`, `\"hola\"[10:]` → `''`). Con **paso negativo** se recorre al revés y los valores por defecto se invierten: `s[::-1]` da la vuelta a la cadena y `\"abcdef\"[4:1:-1]` → `'edc'`. Si el sentido no cuadra, sale vacía: `\"abcdef\"[1:4:-1]` → `''`.\n\nLas cadenas son **inmutables**: `s[0] = \"H\"` lanza `TypeError`. Para \"cambiarlas\" creas otra: `s = \"H\" + s[1:]`.\n\nOperaciones básicas:\n- `for c in s:` recorre carácter a carácter; `len(s)` da la longitud y `str(x)` convierte a texto.\n- `+` concatena y `*` repite: `\"ab\" * 3` → `'ababab'`; `\"ab\" * 0` → `''`. `\"a\" + 1` es `TypeError`.\n- `in` / `not in` buscan **subcadenas**: `\"la\" in \"hola\"` es `True`, y `\"\" in s` siempre es `True`.\n\n**Comparación**: `==` y `<` comparan carácter a carácter por code point (orden lexicográfico). `\"Zeta\" < \"alfa\"` es `True` (mayúsculas antes), `\"10\" < \"9\"` es `True` (se compara `'1'` con `'9'`) y un prefijo es menor: `\"sol\" < \"solar\"`. Con números: `\"1\" == 1` es `False` (tipos distintos) pero `\"1\" < 1` lanza `TypeError`.",
+          "example_code": "s = \"Programar\"\nprint(s[0], s[-1], len(s))          # P r 9\nprint(s[3:6], s[:3], s[6:])          # gra Pro mar\nprint(s[::2], s[::-1])               # Pormr ramargorP\nprint(repr(s[20:]), s[5:1:-1])        # '' argo\nprint(\"ab\" * 3 + \"!\", \"gram\" in s)  # ababab! True\nprint(\"Zeta\" < \"alfa\", \"10\" < \"9\")  # True True\nprint(\"7\" == 7)                      # False\ntry:\n    s[0] = \"p\"\nexcept TypeError:\n    print(\"Las cadenas son inmutables\")\n",
+          "example_stdin": "",
+          "example_in_browser": true,
+          "exercise": "Crea `es_palindromo(texto)`, que devuelva `True` si el texto se lee igual al derecho que al revés, **ignorando mayúsculas y espacios**.\n\nEjemplos: `es_palindromo(\"Anita lava la tina\")` → `True`; `es_palindromo(\"Python\")` → `False`.\n\nUsa slicing con paso negativo (`[::-1]`) para dar la vuelta a la cadena.",
+          "starter": "def es_palindromo(texto: str) -> bool:\n    # 1) quita espacios y pasa a minúsculas  2) compáralo con su versión al revés\n    ...\n\n\nprint(es_palindromo(\"Anita lava la tina\"))\n",
+          "exercise_stdin": "",
+          "checks": [
+            {
+              "stdin": "",
+              "test": "assert es_palindromo(\"Anita lava la tina\") is True, \"'Anita lava la tina' es un palíndromo (ignora espacios y mayúsculas)\"\nassert es_palindromo(\"Python\") is False, \"'Python' no es un palíndromo\"\nassert es_palindromo(\"Reconocer\") is True, \"'Reconocer' es un palíndromo aunque empiece por mayúscula\"\nassert es_palindromo(\"ab\") is False, \"'ab' no es un palíndromo\"\nassert es_palindromo(\"\") is True, \"Una cadena vacía se lee igual en los dos sentidos\"\nassert \"[::-1]\" in __code__, \"Usa slicing con paso negativo: [::-1]\"\n"
+            }
+          ],
+          "assistant": {
+            "hint": "limpio = texto.replace(\" \", \"\").lower() y después return limpio == limpio[::-1].",
+            "faq": [
+              {
+                "q": "¿Por qué `s[1:4:-1]` sale vacío?",
+                "a": "Con paso negativo el slice avanza hacia la **izquierda**, así que el inicio debe estar a la derecha del fin. De 1 no se llega a 4 yendo hacia atrás: resultado `''`, sin error."
+              },
+              {
+                "q": "¿Por qué `s[100]` da error y `s[100:]` no?",
+                "a": "El índice simple debe existir (`IndexError` si no). El slicing recorta los límites al tamaño de la cadena y, si no queda nada, devuelve `''`."
+              },
+              {
+                "q": "¿Por qué `\"1\" == 1` no da error y `\"1\" < 1` sí?",
+                "a": "`==` entre tipos distintos simplemente devuelve `False`. Para `<`, `>`, `<=`, `>=` Python no sabe ordenar un `str` frente a un `int` y lanza `TypeError`."
+              }
+            ]
+          },
+          "sources": [
+            {
+              "title": "Tutorial oficial — 3.1.2. Cadenas de caracteres",
+              "url": "https://docs.python.org/es/3/tutorial/introduction.html#text"
+            },
+            {
+              "title": "Tipos secuencia: operaciones comunes",
+              "url": "https://docs.python.org/es/3/library/stdtypes.html#common-sequence-operations"
+            },
+            {
+              "title": "Comparaciones de valores",
+              "url": "https://docs.python.org/es/3/reference/expressions.html#value-comparisons"
+            }
+          ],
+          "quiz": [
+            {
+              "q": "¿Qué muestra este código?",
+              "options": [
+                "`fdb`",
+                "`fedcb`",
+                "`''` (vacío)",
+                "`bdf`"
+              ],
+              "answer": 0,
+              "explain": "Empieza en el índice 5 (`f`) y va de 2 en 2 hacia atrás: 5, 3, 1 → `f`, `d`, `b`. El 0 no se incluye porque es el límite `fin`.",
+              "code": "s = \"abcdefg\"\nprint(s[5:0:-2])"
+            },
+            {
+              "q": "¿Qué ocurre al ejecutar `s = \"sol\"` y después `s[0] = \"S\"`?",
+              "options": [
+                "`s` pasa a valer `\"Sol\"`",
+                "Se lanza `TypeError`",
+                "Se lanza `IndexError`",
+                "No pasa nada"
+              ],
+              "answer": 1,
+              "explain": "Las cadenas son **inmutables**: no se puede asignar a una posición. Se crea otra: `s = \"S\" + s[1:]`."
+            },
+            {
+              "q": "¿Qué devuelve `\"10\" < \"9\"`?",
+              "options": [
+                "`True`",
+                "`False`",
+                "Lanza `TypeError`",
+                "Lanza `ValueError`"
+              ],
+              "answer": 0,
+              "explain": "Son **cadenas**: se comparan carácter a carácter. `'1'` (49) es menor que `'9'` (57), así que es `True` aunque 10 > 9 como números."
+            }
+          ],
+          "challenge": {
+            "title": "Enmascarar un número",
+            "stars": 1,
+            "exercise": "Escribe `enmascarar(numero)`: recibe un texto y devuelve otro de la **misma longitud** en el que todos los caracteres salvo los **4 últimos** se sustituyen por `*`. Si tiene 4 caracteres o menos, se devuelve tal cual.\n\nEjemplo: `enmascarar(\"1234567890\")` → `\"******7890\"`.\n\nUsa slicing y el operador `*` de repetición.",
+            "starter": "def enmascarar(numero: str) -> str:\n    ...\n\n\nprint(enmascarar(\"1234567890\"))\n",
+            "stdin": "",
+            "checks": [
+              {
+                "stdin": "",
+                "test": "assert enmascarar(\"1234567890\") == \"******7890\", f\"enmascarar('1234567890') debería ser '******7890' y es {enmascarar('1234567890')!r}\"\nassert enmascarar(\"abcd\") == \"abcd\", \"Con 4 caracteres se devuelve igual\"\nassert enmascarar(\"ab\") == \"ab\", \"Con menos de 4 caracteres se devuelve igual\"\nassert enmascarar(\"\") == \"\", \"Con una cadena vacía se devuelve ''\"\nassert enmascarar(\"12345\") == \"*2345\", \"Con 5 caracteres solo se tapa el primero\"\n"
+              }
+            ],
+            "hint": "\"*\" * (len(numero) - 4) + numero[-4:]. Ojo: si len < 4, numero[-4:] es la cadena entera y \"*\" * negativo da \"\"."
+          }
+        },
+        {
+          "slug": "metodos-string",
+          "title": "Métodos de string",
+          "theory": "Como los `str` son inmutables, **todos sus métodos devuelven una cadena nueva** (o un número, o un `bool`); el original no cambia. `s.upper()` sin asignar el resultado no hace nada útil.\n\n**Mayúsculas**: `upper()`, `lower()`, `swapcase()` (invierte), `capitalize()` (primera en mayúscula y **el resto en minúscula**: `\"hOLA mUNDO\"` → `'Hola mundo'`) y `title()` (primera de **cada palabra**).\n\n**Buscar**: `find(sub)` y `rfind(sub)` devuelven la posición de la primera / última aparición o **-1**; `index(sub)` hace lo mismo pero lanza **`ValueError`** si no la encuentra. `count(sub)` cuenta apariciones **sin solaparse** (`\"aaaa\".count(\"aa\")` → 2). `startswith()` y `endswith()` aceptan también una tupla.\n\n**Limpiar y cambiar**: `strip()`, `lstrip()`, `rstrip()` quitan espacios, o el **conjunto** de caracteres que pases (`\"xxhixx\".strip(\"x\")` → `'hi'`). `replace(viejo, nuevo[, n])` sustituye (todas o `n`). `center(ancho[, relleno])` centra.\n\n**Partir y unir**: `split()` sin argumento separa por espacios en blanco y descarta vacíos; con separador, conserva los vacíos (`\"a,,b\".split(\",\")` → `['a', '', 'b']`). `\"-\".join(lista)` une y exige que todos sean `str` (con números, `TypeError`).\n\n**Comprobar**: `isalpha()`, `isdigit()`, `isalnum()`, `isspace()`, `islower()`, `isupper()`. Con cadena vacía devuelven `False`; `\"-5\".isdigit()` y `\"2.5\".isdigit()` también.\n\n**Ordenar**: `sorted(s)` devuelve una **lista** de caracteres (`sorted(\"cab\")` → `['a', 'b', 'c']`). `lista.sort()` ordena la lista en su sitio y devuelve `None`; los `str` no tienen `sort()`.",
+          "example_code": "frase = \"  el gato y el perro  \"\nlimpia = frase.strip()\nprint(repr(limpia))\nprint(limpia.title(), \"|\", limpia.capitalize(), \"|\", limpia.upper())\nprint(limpia.find(\"el\"), limpia.rfind(\"el\"), limpia.find(\"loro\"), limpia.count(\"el\"))\npalabras = limpia.split()\nprint(palabras)\nprint(\"-\".join(palabras))\nprint(limpia.replace(\"el\", \"un\", 1))\nprint(\"abc123\".isalnum(), \"abc\".isalpha(), \"12\".isdigit(), \"\".isalpha())\nprint(\"PCAP\".center(10, \"*\"))\nprint(sorted(\"python\"), \"python\".startswith((\"py\", \"ja\")))\ntry:\n    limpia.index(\"loro\")\nexcept ValueError:\n    print(\"index() lanza ValueError; find() devuelve -1\")\n",
+          "example_stdin": "",
+          "example_in_browser": true,
+          "exercise": "Crea `normalizar_nombre(texto)`, que limpie un nombre escrito de cualquier manera:\n- quita los espacios de los extremos y los repetidos entre palabras;\n- cada palabra, con la primera letra en mayúscula y el resto en minúscula.\n\nEjemplo: `normalizar_nombre(\"  aNA   maría  LÓPEZ \")` → `\"Ana María López\"`.\n\nUsa `split()`, `capitalize()` y `join()`.",
+          "starter": "def normalizar_nombre(texto: str) -> str:\n    # split() sin argumento descarta los espacios sobrantes\n    return texto\n\n\nprint(normalizar_nombre(\"  aNA   maría  LÓPEZ \"))\n",
+          "exercise_stdin": "",
+          "checks": [
+            {
+              "stdin": "",
+              "test": "r = normalizar_nombre(\"  aNA   maría  LÓPEZ \")\nassert r == \"Ana María López\", f\"Debería devolver 'Ana María López' y devuelve {r!r}\"\nassert normalizar_nombre(\"pedro\") == \"Pedro\", \"Una sola palabra: 'pedro' → 'Pedro'\"\nassert normalizar_nombre(\"   \") == \"\", \"Si solo hay espacios, devuelve ''\"\nassert normalizar_nombre(\"JOSÉ\\tluis\") == \"José Luis\", \"split() sin argumento también separa por tabuladores\"\nassert \".join(\" in __code__, \"Une las palabras con join()\"\n"
+            }
+          ],
+          "assistant": {
+            "hint": "palabras = texto.split(); después \" \".join(p.capitalize() for p in palabras).",
+            "faq": [
+              {
+                "q": "¿Por qué no uso `title()` directamente?",
+                "a": "Funcionaría aquí, pero `title()` también pone mayúscula tras un apóstrofo o un número (`\"o'neil\".title()` → `\"O'Neil\"`, `\"3d\".title()` → `\"3D\"`). Con `split()` + `capitalize()` controlas mejor qué es una palabra."
+              },
+              {
+                "q": "¿Qué diferencia hay entre `split()` y `split(\" \")`?",
+                "a": "`split()` separa por cualquier espacio en blanco (espacios, tabuladores, saltos de línea) y descarta los vacíos. `split(\" \")` corta en cada espacio y deja cadenas vacías si hay varios seguidos."
+              },
+              {
+                "q": "¿`find()` o `index()`?",
+                "a": "Hacen lo mismo cuando encuentran la subcadena. Si no está, `find()` devuelve **-1** y `index()` lanza **`ValueError`**. Ojo: -1 es un índice válido (el último carácter), así que compruébalo antes de usarlo."
+              }
+            ]
+          },
+          "sources": [
+            {
+              "title": "Métodos de las cadenas de caracteres",
+              "url": "https://docs.python.org/es/3/library/stdtypes.html#string-methods"
+            },
+            {
+              "title": "Cómo ordenar (sorted y list.sort)",
+              "url": "https://docs.python.org/es/3/howto/sorting.html"
+            }
+          ],
+          "quiz": [
+            {
+              "q": "¿Qué muestra este código?",
+              "options": [
+                "`-1 1`",
+                "Se lanza `ValueError`",
+                "`-1` y luego se lanza `ValueError`",
+                "`None 1`"
+              ],
+              "answer": 2,
+              "explain": "`find(\"z\")` no encuentra nada y devuelve **-1**, que se imprime. Después `index(\"z\")` lanza `ValueError` antes de terminar el segundo `print`.",
+              "code": "s = \"banana\"\nprint(s.find(\"z\"))\nprint(s.index(\"z\"), s.index(\"a\"))"
+            },
+            {
+              "q": "¿Qué devuelve `\"hOLA mUNDO\".capitalize()`?",
+              "options": [
+                "`'HOLA mUNDO'`",
+                "`'Hola mundo'`",
+                "`'Hola Mundo'`",
+                "`'hOLA mUNDO'`"
+              ],
+              "answer": 1,
+              "explain": "`capitalize()` pone en mayúscula la primera letra y **en minúscula todas las demás**. `'Hola Mundo'` sería `title()`."
+            },
+            {
+              "q": "¿Qué vale `r` tras `letras = list(\"cab\")` y `r = letras.sort()`?",
+              "options": [
+                "`['a', 'b', 'c']`",
+                "`'abc'`",
+                "`None`",
+                "Se lanza `AttributeError`"
+              ],
+              "answer": 2,
+              "explain": "`list.sort()` ordena la lista **en su sitio** y devuelve `None`. Para obtener una lista nueva ordenada usa `sorted()`."
+            }
+          ],
+          "challenge": {
+            "title": "Validador de contraseñas",
+            "stars": 2,
+            "exercise": "Escribe `es_valida(clave)`, que devuelva `True` solo si la contraseña:\n- tiene **8 caracteres o más**;\n- no contiene espacios en blanco;\n- tiene al menos una **mayúscula**, una **minúscula** y un **dígito**.\n\nUsa los métodos `isupper()`, `islower()`, `isdigit()` e `isspace()` sobre cada carácter.",
+            "starter": "def es_valida(clave: str) -> bool:\n    ...\n\n\nprint(es_valida(\"Pcap2026ok\"))\n",
+            "stdin": "",
+            "checks": [
+              {
+                "stdin": "",
+                "test": "assert es_valida(\"Pcap2026ok\") is True, \"'Pcap2026ok' cumple todas las reglas\"\nassert es_valida(\"Ab1\") is False, \"'Ab1' es demasiado corta\"\nassert es_valida(\"pcap2026ok\") is False, \"Sin mayúsculas no es válida\"\nassert es_valida(\"PCAP2026OK\") is False, \"Sin minúsculas no es válida\"\nassert es_valida(\"PcapPython\") is False, \"Sin dígitos no es válida\"\nassert es_valida(\"Pcap 2026ok\") is False, \"Con espacios no es válida\"\nassert es_valida(\"Ñandú#2026\") is True, \"Los símbolos y las letras no ASCII están permitidos\"\n"
+              }
+            ],
+            "hint": "Usa any(): any(c.isupper() for c in clave), igual con islower e isdigit, y not any(c.isspace() for c in clave)."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "poo",
+      "title": "Programación orientada a objetos",
+      "summary": "Bloque 4 del PCAP (34 %, el que más pesa): clases, variables de clase e instancia, herencia múltiple, MRO e introspección.",
       "lessons": [
         {
           "slug": "poo",
@@ -928,97 +1722,496 @@
           }
         },
         {
-          "slug": "excepciones",
-          "title": "Excepciones",
-          "theory": "Una **excepción** es un error que ocurre durante la ejecución: `ValueError`, `ZeroDivisionError`, `KeyError`, `FileNotFoundError`... Si nadie la captura, el programa se detiene y muestra el *traceback*. Léelo de abajo arriba: la última línea dice qué pasó y las de encima, dónde.\n\nPara controlarla se usa `try` / `except`:\n- `try`: el código que puede fallar.\n- `except TipoDeError`: qué hacer si falla. Captura **excepciones concretas**; un `except:` sin tipo esconde errores que deberías ver.\n- `else`: se ejecuta solo si no hubo error.\n- `finally`: se ejecuta siempre, haya error o no. Sirve para liberar recursos.\n\nCon `raise` lanzas tus propias excepciones cuando un dato no es válido. Así fallas pronto y con un mensaje claro.\n\nEl patrón típico es validar la entrada del usuario con un `while True` que solo termina (`break`) cuando la conversión funciona.",
-          "example_code": "def pedir_entero(mensaje: str) -> int:\n    while True:\n        try:\n            return int(input(mensaje))\n        except ValueError:\n            print(\"Eso no es un número entero. Inténtalo de nuevo.\")\n\n\ndividendo = pedir_entero(\"Dividendo: \")\ndivisor = pedir_entero(\"Divisor: \")\ntry:\n    print(f\"Resultado: {dividendo / divisor:.2f}\")\nexcept ZeroDivisionError:\n    print(\"No se puede dividir entre cero\")",
-          "exercise": "Crea la función `pedir_nota()`, que pida una nota hasta que el usuario introduzca un número **entre 0 y 10** y la devuelva como `float`.\n\nDebe mostrar un mensaje distinto en cada caso:\n- Si no es un número (`ValueError` al convertir).\n- Si está fuera de rango: lánzalo tú con `raise ValueError(...)` y captúralo.\n\nAl final del programa, guarda el resultado: `nota = pedir_nota()` y muéstralo. La comprobación introduce `abc`, `15` y `7.5`.",
-          "sources": [
-            {
-              "title": "Tutorial oficial — 8. Errores y excepciones",
-              "url": "https://docs.python.org/es/3/tutorial/errors.html"
-            },
-            {
-              "title": "Excepciones incorporadas",
-              "url": "https://docs.python.org/es/3/library/exceptions.html"
-            }
-          ],
-          "starter": "def pedir_nota() -> float:\n    # Pide la nota en un bucle while hasta que sea válida y devuélvela\n    ...\n\n\nnota = pedir_nota()\nprint(f\"Nota registrada: {nota}\")\n",
-          "exercise_stdin": "abc\n15\n7.5",
-          "example_stdin": "diez\n10\n0",
+          "slug": "atributos-clase",
+          "title": "Variables de clase, de instancia y privadas",
+          "theory": "Un objeto guarda sus datos en **atributos**. Hay dos tipos y el examen PCAP los mezcla a propósito:\n\n- **Variable de instancia:** se crea con `self.nombre = ...` (normalmente en `__init__`). Cada objeto tiene la suya.\n- **Variable de clase:** se declara en el cuerpo de la clase, fuera de los métodos (`total = 0`). Existe **una sola vez** y la comparten todas las instancias.\n\nAl **leer** `obj.x`, Python busca primero en el objeto y, si no está, en su clase (y luego en las superclases). Pero al **asignar** `obj.x = 5` siempre se crea o cambia un atributo **de ese objeto**, que *tapa* al de la clase. Por eso, para modificar una variable de clase se escribe `Clase.x += 1`, no `self.x += 1`. Ojo con las variables de clase **mutables** (`items = []`): `self.items.append(...)` no asigna, modifica la lista compartida.\n\nA un objeto se le pueden **añadir atributos en cualquier momento** (`p.color = 'rojo'`); solo los tendrá ese objeto.\n\n`obj.__dict__` es un diccionario con las variables **de instancia** (en orden de creación). `Clase.__dict__` contiene las variables de clase y los métodos (más claves internas como `__module__`).\n\n**Componentes privados:** un nombre que empieza por dos guiones bajos y no termina en ellos (`__saldo`) sufre *name mangling*: dentro de la clase `Cuenta` se guarda como `_Cuenta__saldo`. Desde fuera, `c.__saldo` lanza `AttributeError`, pero `c._Cuenta__saldo` funciona. Vale igual para variables de instancia, de clase y métodos. Un solo guion bajo (`_saldo`) es solo una convención.",
+          "example_code": "class Cuenta:\n    abiertas = 0                # variable de clase (compartida)\n\n    def __init__(self, titular, saldo):\n        Cuenta.abiertas += 1\n        self.titular = titular  # variable de instancia\n        self.__saldo = saldo    # privada -> _Cuenta__saldo\n\n\na = Cuenta(\"Ana\", 100)\nb = Cuenta(\"Luis\", 50)\nb.vip = True                    # atributo añadido solo a b\n\nprint(Cuenta.abiertas, a.abiertas)   # 2 2\nprint(a.__dict__)                    # {'titular': 'Ana', '_Cuenta__saldo': 100}\nprint(b.__dict__)\nprint(a._Cuenta__saldo)              # 100\na.abiertas = 99                      # crea un atributo en a, no cambia la clase\nprint(Cuenta.abiertas, a.abiertas)   # 2 99\n",
+          "example_stdin": "",
+          "example_in_browser": true,
+          "exercise": "Crea la clase `Socio`:\n1. Una **variable de clase** `total` que empieza en `0` y cuenta cuántos socios se han creado.\n2. `__init__(self, nombre)`: incrementa `Socio.total`, guarda `nombre` como variable de instancia y guarda en el atributo **privado** `__numero` el valor de `Socio.total` tras incrementarlo (el primer socio es el 1, el segundo el 2…).\n3. Un método `numero()` que devuelva ese número privado.\n\nCrea dos socios y muestra sus números.",
+          "starter": "class Socio:\n    ...\n\n\n# Crea aquí dos socios y muestra sus números\n",
+          "exercise_stdin": "",
           "checks": [
             {
-              "stdin": "abc\n15\n7.5",
-              "test": "assert nota == 7.5, f\"Con las entradas abc, 15 y 7.5, la nota debería ser 7.5 y es {nota!r}\"\nassert \"raise\" in __code__, \"Lanza tú el error de fuera de rango con raise\"\nassert \"except\" in __code__, \"Captura los errores con try/except\"\nlineas = [l for l in __output__.splitlines() if l.strip()]\nassert len(lineas) >= 3, \"Muestra un mensaje por cada entrada no válida y al final la nota\"\n"
-            },
-            {
-              "stdin": "-1\n10",
-              "test": "assert nota == 10, \"10 es una nota válida (el rango incluye 0 y 10)\"\n"
+              "stdin": "",
+              "test": "assert \"Socio\" in globals(), \"Falta la clase Socio\"\nassert \"total\" in Socio.__dict__, \"total debe ser una variable de clase (declárala en el cuerpo de la clase)\"\nt0 = Socio.total\na = Socio(\"Ana\")\nb = Socio(\"Luis\")\nassert Socio.total == t0 + 2, \"Cada socio nuevo debe incrementar Socio.total en 1\"\nassert \"total\" not in a.__dict__, \"No uses self.total += 1: crea una variable de instancia. Usa Socio.total += 1\"\nassert a.nombre == \"Ana\", \"nombre debe ser una variable de instancia\"\nassert \"_Socio__numero\" in a.__dict__, \"Guarda el número en el atributo privado self.__numero\"\nassert not hasattr(a, \"__numero\"), \"El atributo debe ser privado (dos guiones bajos delante)\"\nassert a.numero() == t0 + 1 and b.numero() == t0 + 2, \"numero() debe devolver 1 para el primer socio, 2 para el segundo…\"\n"
             }
           ],
           "assistant": {
-            "hint": "Dentro del while: try → convierte con float(input(...)); si no está entre 0 y 10, raise ValueError(\"fuera de rango\"); return nota. En except ValueError, muestra el mensaje del error.",
+            "hint": "Declara total = 0 fuera de los métodos. En __init__: Socio.total += 1, luego self.nombre = nombre y self.__numero = Socio.total. numero() devuelve self.__numero.",
             "faq": [
               {
-                "q": "¿Por qué no usar except: sin tipo?",
-                "a": "Porque captura **todo**, incluso errores de programación que deberías ver. Captura solo lo que esperas (`except ValueError:`) y deja que lo demás falle con su mensaje."
+                "q": "¿Por qué no vale `self.total += 1`?",
+                "a": "Porque equivale a `self.total = self.total + 1`: lee la variable de clase, pero **asigna** en el objeto, creando una variable de instancia nueva. `Socio.total` no cambia."
               },
               {
-                "q": "¿Cómo leo un traceback?",
-                "a": "De **abajo arriba**: la última línea dice qué error ocurrió; las de encima, en qué línea y dentro de qué función."
+                "q": "Si es privado, ¿por qué `numero()` sí puede leerlo?",
+                "a": "Dentro de la clase, `self.__numero` se traduce automáticamente a `self._Socio__numero`. El *mangling* solo \"molesta\" desde fuera de la clase."
               }
             ]
           },
-          "example_in_browser": true,
+          "sources": [
+            {
+              "title": "Tutorial oficial — 9.3.5 Variables de clase y de instancia",
+              "url": "https://docs.python.org/es/3/tutorial/classes.html#class-and-instance-variables"
+            },
+            {
+              "title": "Tutorial oficial — 9.6 Variables privadas",
+              "url": "https://docs.python.org/es/3/tutorial/classes.html#private-variables"
+            },
+            {
+              "title": "Referencia — Modelo de datos",
+              "url": "https://docs.python.org/es/3/reference/datamodel.html"
+            }
+          ],
           "quiz": [
             {
               "q": "¿Qué muestra este código?",
+              "code": "class A:\n    n = 0\n\na = A()\nb = A()\na.n = 7\nprint(A.n, b.n)",
               "options": [
-                "`a`",
-                "`a b`",
-                "`a c`",
-                "`a b c`"
-              ],
-              "answer": 2,
-              "explain": "`int(\"x\")` lanza `ValueError`, así que **se salta el resto del `try`** (`b` no se imprime), se ejecuta el `except` (`c`)… y el programa continúa.",
-              "code": "try:\n    print(\"a\", end=\" \")\n    int(\"x\")\n    print(\"b\", end=\" \")\nexcept ValueError:\n    print(\"c\")"
-            },
-            {
-              "q": "¿Cuándo se ejecuta el bloque `finally`?",
-              "options": [
-                "Solo si no hay error",
-                "Solo si hay error",
-                "Siempre",
-                "Nunca, está obsoleto"
-              ],
-              "answer": 2,
-              "explain": "`finally` se ejecuta **siempre**, haya error o no. Se usa para liberar recursos (cerrar archivos, conexiones…)."
-            },
-            {
-              "q": "¿Por qué es mala idea usar `except:` sin tipo?",
-              "options": [
-                "Es más lento",
-                "Captura también errores de programación que deberías ver",
-                "No funciona en Python 3",
-                "Obliga a usar `finally`"
+                "`7 7`",
+                "`0 0`",
+                "`0 7`",
+                "Un error"
               ],
               "answer": 1,
-              "explain": "Un `except:` desnudo atrapa **todo** (incluso errores de escritura o Ctrl+C) y esconde los fallos. Captura solo lo que esperas: `except ValueError:`."
+              "explain": "`a.n = 7` crea una variable **de instancia** en `a` que tapa a la de la clase. `A.n` y `b.n` siguen leyendo la variable de clase, que vale 0."
+            },
+            {
+              "q": "Dentro de `class Banco:` se escribe `self.__clave = 1`. ¿Con qué nombre queda guardado en el objeto?",
+              "options": [
+                "`__clave`",
+                "`_clave`",
+                "`_Banco__clave`",
+                "`Banco.__clave`"
+              ],
+              "answer": 2,
+              "explain": "Es el *name mangling*: los nombres con dos guiones bajos delante se guardan como `_NombreClase__nombre`."
+            },
+            {
+              "q": "¿Qué contiene `obj.__dict__`?",
+              "options": [
+                "Todos los métodos de la clase",
+                "Las variables de instancia de ese objeto",
+                "Las variables de clase y de instancia",
+                "Los nombres de las superclases"
+              ],
+              "answer": 1,
+              "explain": "El `__dict__` de un objeto solo tiene sus **variables de instancia**. Las de clase y los métodos están en `Clase.__dict__`."
             }
           ],
           "challenge": {
-            "title": "Convertidor a prueba de balas",
+            "title": "La estantería compartida",
             "stars": 2,
-            "exercise": "Escribe `a_numeros(textos)`: recibe una lista de textos y devuelve una lista con los que se pueden convertir a `float`, **ignorando** los demás (sin que el programa se detenga).\n\nEjemplo: `a_numeros([\"3\", \"dos\", \"4.5\", \"\", \"1e3\"])` → `[3.0, 4.5, 1000.0]`.",
-            "starter": "def a_numeros(textos: list[str]) -> list[float]:\n    ...\n\n\nprint(a_numeros([\"3\", \"dos\", \"4.5\", \"\", \"1e3\"]))\n",
+            "exercise": "Esta clase tiene un fallo típico de examen: todas las estanterías comparten la misma lista de libros.\n\nArréglala para que:\n- Cada estantería tenga **su propia** lista `libros` (variable de instancia).\n- La variable de clase `registro` siga siendo **una sola lista compartida** con todos los títulos colocados en cualquier estantería, en orden.\n- `poner(titulo)` añada el título a las dos listas.",
+            "starter": "class Estanteria:\n    libros = []\n    registro = []\n\n    def poner(self, titulo):\n        self.libros.append(titulo)\n        self.registro.append(titulo)\n",
+            "stdin": "",
             "checks": [
               {
                 "stdin": "",
-                "test": "assert a_numeros([\"3\", \"dos\", \"4.5\", \"\", \"1e3\"]) == [3.0, 4.5, 1000.0], \"El ejemplo del enunciado no da [3.0, 4.5, 1000.0]\"\nassert a_numeros([]) == [], \"Con una lista vacía debe devolver []\"\nassert a_numeros([\" 7 \", \"-2\", \"abc\"]) == [7.0, -2.0], \"float() admite espacios alrededor y negativos\"\nassert \"except ValueError\" in __code__, \"Captura el error concreto: except ValueError\"\n"
+                "test": "n0 = len(Estanteria.registro)\ne1 = Estanteria()\ne2 = Estanteria()\ne1.poner(\"Dune\")\ne2.poner(\"Momo\")\ne1.poner(\"Ubik\")\nassert e1.libros == [\"Dune\", \"Ubik\"], f\"e1 debería tener ['Dune', 'Ubik'] y tiene {e1.libros}\"\nassert e2.libros == [\"Momo\"], f\"e2 debería tener ['Momo'] y tiene {e2.libros}\"\nassert \"libros\" in e1.__dict__, \"libros debe ser una variable de instancia (créala en __init__)\"\nassert \"registro\" not in e1.__dict__, \"registro debe seguir siendo una variable de clase\"\nassert Estanteria.registro[n0:] == [\"Dune\", \"Momo\", \"Ubik\"], \"registro debe acumular todos los títulos en orden\"\n"
               }
             ],
-            "hint": "Recorre la lista y, dentro de un try, añade float(texto) al resultado; en except ValueError, simplemente continúa.",
-            "stdin": ""
+            "hint": "Añade un __init__ que haga self.libros = []. Deja registro = [] en el cuerpo de la clase: append no asigna, así que modifica la lista compartida."
+          }
+        },
+        {
+          "slug": "herencia",
+          "title": "Herencia simple, múltiple y MRO",
+          "theory": "Con `class Hija(Padre):` la **subclase** hereda atributos y métodos de la **superclase**. Si no pones padre, hereda de `object`.\n\n- **Sobrescritura (overriding):** si la subclase define un método con el mismo nombre, se usa el suyo. Los métodos del padre que llaman a `self.metodo()` también usarán la versión de la hija: eso es el **polimorfismo**.\n- **Constructores:** si la subclase no define `__init__`, hereda el del padre (con sus parámetros). Si lo define, el del padre **no se ejecuta solo**: hay que llamarlo con `super().__init__(...)` (sin `self`) o con `Padre.__init__(self, ...)` (con `self`). Si no, faltarán los atributos que crea el padre.\n- `isinstance(obj, Clase)` es `True` si el objeto es de esa clase **o de una subclase**. `issubclass(B, A)` compara clases; una clase es subclase de sí misma.\n- `is` / `is not` comparan **identidad** (el mismo objeto); `==` compara **valor** (usa `__eq__`).\n- Sobrescribir `__str__` (que debe devolver un `str`) cambia lo que muestran `print()` y `str()`.\n\n**Herencia múltiple:** `class D(B, C):`. Para buscar un atributo, Python sigue el **MRO** (*Method Resolution Order*), visible en `D.__mro__` o `D.mro()`: primero la propia clase y luego los padres **de izquierda a derecha**, sin visitar una clase común hasta haber visto todas sus subclases. En el **diamante** `A ← B, C ← D`, el orden es `D, B, C, A, object`. `super()` sigue ese mismo MRO, no \"el padre\" literal. Si el orden es imposible (p. ej. `class C(A, B)` con `B(A)`), Python lanza `TypeError` al crear la clase.",
+          "example_code": "class Empleado:\n    def __init__(self, nombre):\n        self.nombre = nombre\n\n    def sueldo(self):\n        return 1500\n\n    def __str__(self):\n        return f\"{self.nombre} cobra {self.sueldo()}\"   # polimorfismo\n\n\nclass Jefe(Empleado):\n    def __init__(self, nombre, plus):\n        super().__init__(nombre)      # sin esto no existiría self.nombre\n        self.plus = plus\n\n    def sueldo(self):                 # sobrescritura\n        return super().sueldo() + self.plus\n\n\nfor e in [Empleado(\"Ana\"), Jefe(\"Eva\", 800)]:\n    print(e)\n\nprint(isinstance(Jefe(\"X\", 1), Empleado), issubclass(Empleado, Jefe))\n\n\nclass A: pass\nclass B(A): pass\nclass C(A): pass\nclass D(B, C): pass\n\nprint([k.__name__ for k in D.__mro__])   # ['D', 'B', 'C', 'A', 'object']\n",
+          "example_stdin": "",
+          "example_in_browser": true,
+          "exercise": "Ya tienes la clase `Figura`, con `area()` y un `__str__` que muestra `\"nombre: área\"` con 2 decimales.\n\n1. Crea `Rectangulo(ancho, alto)`, subclase de `Figura`: llama a `super().__init__(\"Rectángulo\")` y sobrescribe `area()`.\n2. Crea `Circulo(radio)`, subclase de `Figura`, con nombre `\"Círculo\"` y área `math.pi * radio ** 2`.\n3. **No** redefinas `__str__` en las subclases: deben usar el heredado.\n4. Recorre una lista con un rectángulo y un círculo e imprime cada figura.",
+          "starter": "import math\n\n\nclass Figura:\n    def __init__(self, nombre):\n        self.nombre = nombre\n\n    def area(self):\n        return 0\n\n    def __str__(self):\n        return f\"{self.nombre}: {self.area():.2f}\"\n\n\nclass Rectangulo(Figura):\n    pass\n\n\nclass Circulo(Figura):\n    pass\n",
+          "exercise_stdin": "",
+          "checks": [
+            {
+              "stdin": "",
+              "test": "r = Rectangulo(2, 3)\nc = Circulo(1)\nassert issubclass(Rectangulo, Figura) and issubclass(Circulo, Figura), \"Las dos clases deben heredar de Figura\"\nassert r.area() == 6, f\"El área de un rectángulo 2x3 es 6 (da {r.area()})\"\nassert abs(c.area() - math.pi) < 1e-9, \"El área de un círculo de radio 1 es pi\"\nassert str(r) == \"Rectángulo: 6.00\", f\"str(Rectangulo(2, 3)) debe ser 'Rectángulo: 6.00' y es {str(r)!r}\"\nassert str(Circulo(2)) == \"Círculo: 12.57\", \"str(Circulo(2)) debe ser 'Círculo: 12.57'\"\nassert \"__str__\" not in Rectangulo.__dict__ and \"__str__\" not in Circulo.__dict__, \"No redefinas __str__: usa el heredado de Figura\"\nassert \"super()\" in __code__, \"Llama al constructor del padre con super().__init__(...)\"\nassert \"Rectángulo: \" in __output__ and \"Círculo: \" in __output__, \"Imprime las dos figuras con print()\"\n"
+            }
+          ],
+          "assistant": {
+            "hint": "En Rectangulo: def __init__(self, ancho, alto): super().__init__(\"Rectángulo\"); guarda ancho y alto; def area(self): return self.ancho * self.alto. Luego for f in [...]: print(f).",
+            "faq": [
+              {
+                "q": "¿Por qué `__str__` de `Figura` muestra el área correcta si no sabe qué figura es?",
+                "a": "Porque llama a `self.area()` y `self` es el rectángulo o el círculo: Python busca `area` primero en la clase del objeto. Eso es polimorfismo."
+              },
+              {
+                "q": "¿`super().__init__(...)` o `Figura.__init__(self, ...)`?",
+                "a": "Las dos funcionan en herencia simple. `super()` no lleva `self` y sigue el MRO, así que es la opción correcta en herencia múltiple. Con el nombre de la clase **sí** hay que pasar `self`."
+              }
+            ]
+          },
+          "sources": [
+            {
+              "title": "Tutorial oficial — 9.5 Herencia",
+              "url": "https://docs.python.org/es/3/tutorial/classes.html#inheritance"
+            },
+            {
+              "title": "Tutorial oficial — 9.5.1 Herencia múltiple",
+              "url": "https://docs.python.org/es/3/tutorial/classes.html#multiple-inheritance"
+            },
+            {
+              "title": "Funciones incorporadas — super()",
+              "url": "https://docs.python.org/es/3/library/functions.html#super"
+            },
+            {
+              "title": "The Python 2.3 Method Resolution Order (MRO)",
+              "url": "https://docs.python.org/3/howto/mro.html"
+            }
+          ],
+          "quiz": [
+            {
+              "q": "¿Qué muestra este código?",
+              "code": "class A:\n    def __init__(self):\n        self.x = 1\n\nclass B(A):\n    def __init__(self):\n        self.y = 2\n\nprint(hasattr(B(), \"x\"))",
+              "options": [
+                "`True`",
+                "`False`",
+                "`1`",
+                "Un error"
+              ],
+              "answer": 1,
+              "explain": "`B` define su propio `__init__` y no llama al de `A`, así que `self.x` nunca se crea. `hasattr` devuelve `False` (no lanza error)."
+            },
+            {
+              "q": "Con `class A`, `class B(A)`, `class C(A)` y `class D(B, C)`, ¿cuál es `D.__mro__`?",
+              "options": [
+                "`D, B, A, C, object`",
+                "`D, B, C, A, object`",
+                "`D, C, B, A, object`",
+                "`D, A, B, C, object`"
+              ],
+              "answer": 1,
+              "explain": "Los padres se recorren de izquierda a derecha, y `A` (común a `B` y `C`) va después de ambos: `D, B, C, A, object`."
+            },
+            {
+              "q": "¿Qué diferencia hay entre `a is b` y `a == b`?",
+              "options": [
+                "Ninguna",
+                "`is` compara identidad (mismo objeto); `==` compara valor",
+                "`is` compara valor; `==` compara identidad",
+                "`is` solo funciona con números"
+              ],
+              "answer": 1,
+              "explain": "`is` es `True` solo si las dos variables apuntan al **mismo** objeto. `==` llama a `__eq__`; sin redefinirlo, en objetos propios se comporta como `is`."
+            }
+          ],
+          "challenge": {
+            "title": "El diamante cooperativo",
+            "stars": 3,
+            "exercise": "Construye un diamante de herencia:\n- `A` con el método `quien()` que devuelve `\"A\"`.\n- `B(A)` y `C(A)`: `quien()` devuelve su letra **más** lo que devuelva `super().quien()`.\n- `D(B, C)`: igual, `\"D\" + super().quien()`.\n\nAsí `D().quien()` debe devolver `\"DBCA\"`: cada `super()` sigue el MRO de `D`.\n\nGuarda además en la variable `orden` la lista con los **nombres** de las clases de `D.__mro__`.",
+            "starter": "class A:\n    pass\n\n\nclass B(A):\n    pass\n\n\nclass C(A):\n    pass\n\n\nclass D(B, C):\n    pass\n\n\norden = []\nprint(orden)\n",
+            "stdin": "",
+            "checks": [
+              {
+                "stdin": "",
+                "test": "assert A().quien() == \"A\", \"A().quien() debe devolver 'A'\"\nassert B().quien() == \"BA\", \"B().quien() debe devolver 'BA'\"\nassert C().quien() == \"CA\", \"C().quien() debe devolver 'CA'\"\nassert D().quien() == \"DBCA\", f\"D().quien() debe devolver 'DBCA' y devuelve {D().quien()!r}\"\nassert D.__bases__ == (B, C), \"D debe heredar de B y C, en ese orden\"\nassert orden == [\"D\", \"B\", \"C\", \"A\", \"object\"], \"orden debe ser la lista de nombres de D.__mro__\"\nassert __code__.count(\"super()\") >= 3, \"Usa super() en B, C y D\"\n"
+              }
+            ],
+            "hint": "En B: def quien(self): return \"B\" + super().quien(). Fíjate en que el super() de B, llamado desde un objeto D, va a C (no a A). Para orden: [k.__name__ for k in D.__mro__]."
+          }
+        },
+        {
+          "slug": "introspeccion",
+          "title": "Introspección y métodos especiales",
+          "theory": "La **introspección** es la capacidad de un programa de examinar sus propios objetos en tiempo de ejecución. En PCAP caen estas herramientas:\n\n- `hasattr(obj, \"nombre\")` devuelve `True` o `False` (nunca lanza error). Aplicado a una **clase** solo ve variables de clase y métodos; las variables de instancia creadas en `__init__` **no** existen en la clase: `hasattr(Clase, \"x\")` es `False` aunque `hasattr(Clase(), \"x\")` sea `True`.\n- `Clase.__name__`: el nombre de la clase como `str`. Los objetos normales **no** tienen `__name__`: usa `type(obj).__name__` u `obj.__class__.__name__`.\n- `Clase.__module__`: nombre del módulo donde se definió; si el archivo se ejecuta directamente, `\"__main__\"`.\n- `Clase.__bases__`: **tupla** con las superclases **directas**, en el orden escrito. Una clase sin padre explícito tiene `(object,)`. Para el orden completo de búsqueda, `Clase.__mro__`.\n- `obj.__dict__` y `Clase.__dict__`: los atributos propios de cada uno.\n- `getattr(obj, \"nombre\", valor_por_defecto)` y `setattr(obj, \"nombre\", valor)` leen y escriben atributos a partir de un texto.\n\n**Métodos especiales** (*dunder*, con dos guiones bajos a cada lado): Python los llama por ti. `__init__` al crear, `__str__` en `print()`/`str()`, `__repr__` en la consola y dentro de listas, `__len__` en `len()`, `__eq__` en `==`, `__lt__` en `<`, `__add__` en `+`. Así tus clases se comportan como tipos nativos.",
+          "example_code": "class Animal:\n    patas = 4\n\n\nclass Perro(Animal):\n    def __init__(self, nombre):\n        self.nombre = nombre\n\n    def __str__(self):\n        return f\"Perro {self.nombre}\"\n\n    def __eq__(self, otro):\n        return isinstance(otro, Perro) and self.nombre == otro.nombre\n\n\np = Perro(\"Toby\")\nprint(type(p).__name__, Perro.__module__)\nprint([c.__name__ for c in Perro.__bases__], Animal.__bases__)\nprint(hasattr(p, \"nombre\"), hasattr(Perro, \"nombre\"), hasattr(Perro, \"patas\"))\nprint(p.__dict__, getattr(p, \"edad\", \"sin edad\"))\nprint(p, p == Perro(\"Toby\"), p is Perro(\"Toby\"))\n",
+          "example_stdin": "",
+          "example_in_browser": true,
+          "exercise": "Escribe la función `describir(obj)`, que devuelva un texto con:\n- el nombre de la clase del objeto,\n- entre paréntesis, los nombres de sus **superclases directas** separados por `\", \"`,\n- y después `\" con \"` y los nombres de sus variables de instancia (en orden de creación) separados por `\", \"`, o `\" sin atributos\"` si no tiene.\n\nEjemplos: `\"Perro(Animal) con nombre, edad\"` y `\"Vacio(object) sin atributos\"`.\n\nPruébala con un par de objetos.",
+          "starter": "def describir(obj):\n    ...\n\n\nclass Animal:\n    pass\n\n\nclass Perro(Animal):\n    def __init__(self, nombre, edad):\n        self.nombre = nombre\n        self.edad = edad\n\n\nprint(describir(Perro(\"Toby\", 3)))\n",
+          "exercise_stdin": "",
+          "checks": [
+            {
+              "stdin": "",
+              "test": "class _Animal:\n    pass\nclass _Perro(_Animal):\n    def __init__(self):\n        self.nombre = 'x'\n        self.edad = 3\nclass _Vacio:\n    pass\nclass _Mixto(_Perro, _Vacio):\n    pass\nassert describir(_Perro()) == \"_Perro(_Animal) con nombre, edad\", f\"Esperado '_Perro(_Animal) con nombre, edad', recibido {describir(_Perro())!r}\"\nassert describir(_Vacio()) == \"_Vacio(object) sin atributos\", \"Una clase sin padre explícito hereda de object; sin variables de instancia -> ' sin atributos'\"\nassert describir(_Mixto()) == \"_Mixto(_Perro, _Vacio) con nombre, edad\", \"Con herencia múltiple, lista las superclases directas en orden\"\nv = _Vacio()\nv.color = 'rojo'\nassert describir(v) == \"_Vacio(object) con color\", \"Cuenta también los atributos añadidos dinámicamente\"\nassert \"__bases__\" in __code__, \"Usa la propiedad __bases__\"\n"
+            }
+          ],
+          "assistant": {
+            "hint": "clase = type(obj); padres = \", \".join(b.__name__ for b in clase.__bases__); atributos = list(obj.__dict__). Monta el texto con una f-string y un if para el caso vacío.",
+            "faq": [
+              {
+                "q": "¿Por qué `obj.__name__` da `AttributeError`?",
+                "a": "Porque `__name__` es de las clases (y funciones y módulos), no de sus instancias. Pasa por la clase: `type(obj).__name__`."
+              },
+              {
+                "q": "¿`__bases__` incluye a los abuelos?",
+                "a": "No, solo las superclases **directas**. Para la cadena completa, en orden de búsqueda, usa `__mro__`."
+              }
+            ]
+          },
+          "sources": [
+            {
+              "title": "Tipos incorporados — Atributos especiales",
+              "url": "https://docs.python.org/es/3/library/stdtypes.html#special-attributes"
+            },
+            {
+              "title": "Funciones incorporadas — hasattr(), getattr(), setattr()",
+              "url": "https://docs.python.org/es/3/library/functions.html#hasattr"
+            },
+            {
+              "title": "Referencia — Nombres de métodos especiales",
+              "url": "https://docs.python.org/es/3/reference/datamodel.html#special-method-names"
+            }
+          ],
+          "quiz": [
+            {
+              "q": "¿Qué muestra este código?",
+              "code": "class K:\n    def __init__(self):\n        self.v = 1\n\nprint(hasattr(K(), \"v\"), hasattr(K, \"v\"))",
+              "options": [
+                "`True True`",
+                "`True False`",
+                "`False True`",
+                "`False False`"
+              ],
+              "answer": 1,
+              "explain": "`v` se crea en `__init__`, así que solo existe en cada **objeto**. La clase `K` no tiene ese atributo."
+            },
+            {
+              "q": "¿Qué devuelve `C.__bases__` si `class C(A, B): pass`?",
+              "options": [
+                "`(A, B)`",
+                "`(C, A, B, object)`",
+                "`[A, B]`",
+                "`(A, B, object)`"
+              ],
+              "answer": 0,
+              "explain": "`__bases__` es una **tupla** con las superclases directas en el orden en que se escribieron. `object` solo aparecería si fuera el padre directo."
+            },
+            {
+              "q": "¿Qué método especial usa `print(obj)`?",
+              "options": [
+                "`__init__`",
+                "`__print__`",
+                "`__str__`",
+                "`__len__`"
+              ],
+              "answer": 2,
+              "explain": "`print()` convierte el objeto con `str()`, que llama a `__str__` (y si no existe, a `__repr__`). `__print__` no existe."
+            }
+          ],
+          "challenge": {
+            "title": "Vectores con operadores",
+            "stars": 2,
+            "exercise": "Crea la clase `Vector(x, y)` con métodos especiales para que:\n- `Vector(1, 2) + Vector(3, 4)` devuelva un **nuevo** `Vector(4, 6)` (`__add__`).\n- `==` compare las coordenadas (`__eq__`).\n- `str(Vector(1, 2))` y `print()` muestren `Vector(1, 2)` (`__str__`).\n- `len(v)` devuelva `2`, el número de coordenadas (`__len__`).",
+            "starter": "class Vector:\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n",
+            "stdin": "",
+            "checks": [
+              {
+                "stdin": "",
+                "test": "a = Vector(1, 2)\nb = Vector(3, 4)\ns = a + b\nassert isinstance(s, Vector), \"a + b debe devolver un Vector\"\nassert s is not a and s is not b, \"a + b debe crear un vector nuevo, no modificar a ni b\"\nassert (s.x, s.y) == (4, 6) and (a.x, a.y) == (1, 2), \"Vector(1, 2) + Vector(3, 4) es Vector(4, 6)\"\nassert Vector(1, 2) == Vector(1, 2), \"Dos vectores con las mismas coordenadas deben ser iguales con ==\"\nassert Vector(1, 2) != Vector(2, 1), \"Vector(1, 2) y Vector(2, 1) no son iguales\"\nassert str(Vector(1, 2)) == \"Vector(1, 2)\", f\"str debe dar 'Vector(1, 2)' y da {str(Vector(1, 2))!r}\"\nassert len(a) == 2, \"len(v) debe devolver 2\"\n"
+              }
+            ],
+            "hint": "__add__(self, otro) devuelve Vector(self.x + otro.x, self.y + otro.y); __eq__ compara (self.x, self.y) == (otro.x, otro.y); __len__ devuelve 2."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "miscelanea",
+      "title": "Miscelánea",
+      "summary": "Bloque 5 del PCAP (22 %): comprensiones, lambda, map y filter, closures, generadores y archivos.",
+      "lessons": [
+        {
+          "slug": "comprensiones-lambda",
+          "title": "Comprensiones, lambda, map y filter",
+          "theory": "Una **comprensión de lista** crea una lista en una sola expresión: `[expresión for x in iterable if condición]`.\n\n- El `if` **del final** filtra: solo entran los elementos que cumplen la condición. `[x for x in range(6) if x % 2]` → `[1, 3, 5]`.\n- Si quieres **elegir un valor** para cada elemento, usa la expresión condicional **delante** del `for`: `[x if x > 0 else 0 for x in datos]`. Escribir `if ... else` al final es un `SyntaxError`.\n- **Anidadas**: con varios `for` seguidos, el primero es el bucle exterior: `[a + b for a in \"xy\" for b in \"12\"]` → `['x1', 'x2', 'y1', 'y2']`. Una comprensión **dentro** de otra crea listas de listas: `[[0] * 3 for _ in range(2)]`.\n\nUna **lambda** es una función anónima de **una sola expresión**, cuyo valor se devuelve solo (no lleva `return`): `lambda x, y=2: x ** y`. Admite valores por defecto y puedes llamarla sin guardarla: `(lambda x: x * 2)(5)`.\n\nLas funciones son objetos, así que puedes pasarlas como argumento: `def aplicar(f, v): return f(v)` → `aplicar(lambda n: n + 1, 4)`.\n\n- `map(f, it1, it2...)` aplica `f` a cada elemento; con varios iterables, `f` recibe uno de cada y **se para en el más corto**.\n- `filter(f, it)` conserva los elementos para los que `f` devuelve un valor verdadero; `filter(None, it)` quita los falsos (`0`, `\"\"`, `None`...).\n\nAmbas devuelven un **iterador**, no una lista: conviértelo con `list()`. Un iterador **se agota**: la segunda vez que lo recorres ya está vacío.",
+          "example_code": "numeros = [4, -2, 7, 0, 9, -5]\n\npositivos = [n for n in numeros if n > 0]            # if final: filtra\nsin_negativos = [n if n > 0 else 0 for n in numeros]  # if/else delante: elige valor\ntabla = [[f * c for c in range(1, 4)] for f in range(1, 4)]\nprint(positivos)\nprint(sin_negativos)\nprint(tabla)\n\ndef aplicar(funcion, valor):\n    return funcion(valor)\n\nprint(aplicar(lambda x: x * 10, 3))\ndobles = map(lambda n: n * 2, numeros)\nprint(list(dobles))\nprint(list(dobles))  # el iterador ya está agotado\nprint(list(filter(lambda n: n % 2 == 0, numeros)))\nprint(list(map(lambda a, b: a + b, [1, 2, 3], [10, 20])))",
+          "example_stdin": "",
+          "example_in_browser": true,
+          "exercise": "Practica los tres estilos:\n- `cuadrados_pares(numeros)`: devuelve, con una **comprensión de lista**, los cuadrados de los números **pares**. `cuadrados_pares([1, 2, 3, 4])` → `[4, 16]`.\n- `aplicar_a_todos(funcion, datos)`: devuelve una **lista** con `funcion` aplicada a cada dato, usando `map()`.\n- Crea la variable `positivos` con los valores de `valores` mayores que 0, usando `filter()` y una `lambda`, convertida en lista.\n\nAl final, muestra `aplicar_a_todos(lambda s: s.upper(), [\"a\", \"b\"])`.",
+          "starter": "def cuadrados_pares(numeros: list[int]) -> list[int]:\n    ...\n\n\ndef aplicar_a_todos(funcion, datos: list) -> list:\n    ...\n\n\nvalores = [3, -1, 0, 7, -5]\npositivos = ...\n\nprint(aplicar_a_todos(lambda s: s.upper(), [\"a\", \"b\"]))\n",
+          "exercise_stdin": "",
+          "checks": [
+            {
+              "stdin": "",
+              "test": "assert cuadrados_pares([1, 2, 3, 4]) == [4, 16], f\"cuadrados_pares([1, 2, 3, 4]) debería dar [4, 16] y da {cuadrados_pares([1, 2, 3, 4])!r}\"\nassert cuadrados_pares([]) == [], \"Con una lista vacía debe devolver []\"\nassert cuadrados_pares([-2, 5]) == [4], \"-2 también es par: su cuadrado es 4\"\nr = aplicar_a_todos(lambda x: x * 2, [1, 2, 3])\nassert r == [2, 4, 6], f\"aplicar_a_todos(lambda x: x * 2, [1, 2, 3]) debería dar [2, 4, 6] y da {r!r}\"\nassert isinstance(r, list), \"aplicar_a_todos debe devolver una lista: map() devuelve un iterador, conviértelo con list()\"\nassert positivos == [3, 7], f\"positivos debería ser [3, 7] y es {positivos!r}\"\nassert \"map(\" in __code__, \"Usa map() en aplicar_a_todos\"\nassert \"filter(\" in __code__ and \"lambda\" in __code__, \"Crea positivos con filter() y una lambda\"\nassert \" for \" in __code__, \"Usa una comprensión de lista en cuadrados_pares\"\nassert \"['A', 'B']\" in __output__, \"Muestra el resultado de aplicar_a_todos con s.upper()\"\n"
+            }
+          ],
+          "assistant": {
+            "hint": "cuadrados_pares: return [n ** 2 for n in numeros if n % 2 == 0]. aplicar_a_todos: return list(map(funcion, datos)). positivos = list(filter(lambda n: n > 0, valores)).",
+            "faq": [
+              {
+                "q": "¿Dónde va el if en una comprensión?",
+                "a": "Si **filtra** (quita elementos), va al final: `[x for x in d if x > 0]`. Si **elige un valor** para cada elemento, es una expresión condicional y va delante del `for`: `[x if x > 0 else 0 for x in d]`."
+              },
+              {
+                "q": "¿Por qué print(map(...)) no muestra la lista?",
+                "a": "`map()` y `filter()` devuelven un **iterador** que calcula los valores cuando se recorren. Usa `list(map(...))` para verlos. Recuerda que, una vez recorrido, el iterador queda vacío."
+              },
+              {
+                "q": "¿Cuándo uso lambda y cuándo def?",
+                "a": "`lambda` para funciones cortas de una expresión que pasas como argumento (`key=`, `map`, `filter`). Si necesitas varias instrucciones, un nombre claro o documentación, usa `def`."
+              }
+            ]
+          },
+          "sources": [
+            {
+              "title": "Tutorial oficial — 5.1.3 Comprensión de listas",
+              "url": "https://docs.python.org/es/3/tutorial/datastructures.html#list-comprehensions"
+            },
+            {
+              "title": "Tutorial oficial — 4.9.6 Expresiones lambda",
+              "url": "https://docs.python.org/es/3/tutorial/controlflow.html#lambda-expressions"
+            },
+            {
+              "title": "Funciones incorporadas: map() y filter()",
+              "url": "https://docs.python.org/es/3/library/functions.html#map"
+            }
+          ],
+          "quiz": [
+            {
+              "q": "¿Qué muestra este código?",
+              "code": "print([x * 10 for x in range(4) if x % 2 == 0])",
+              "options": [
+                "`[0, 20]`",
+                "`[10, 30]`",
+                "`[0, 10, 20, 30]`",
+                "`[0, 2]`"
+              ],
+              "answer": 0,
+              "explain": "`range(4)` da 0, 1, 2, 3; el `if` final deja solo los pares (0 y 2) y la expresión los multiplica por 10."
+            },
+            {
+              "q": "¿Qué devuelve `list(map(lambda a, b: a - b, [10, 20, 30], [1, 2]))`?",
+              "options": [
+                "`[9, 18]`",
+                "`[9, 18, 30]`",
+                "Se lanza `TypeError`",
+                "`[9, 18, 28]`"
+              ],
+              "answer": 0,
+              "explain": "Con varios iterables, `map()` toma un elemento de cada uno y **se detiene en el más corto**: solo hay dos parejas."
+            },
+            {
+              "q": "¿Cuál de estas lambdas es válida?",
+              "options": [
+                "`lambda x: return x + 1`",
+                "`lambda x=1, y=2: x + y`",
+                "`lambda x: x += 1`",
+                "`lambda (x): x`"
+              ],
+              "answer": 1,
+              "explain": "Una lambda contiene **una expresión** (sin `return` ni asignaciones) y admite valores por defecto. Los paréntesis alrededor de los parámetros no están permitidos."
+            }
+          ],
+          "challenge": {
+            "title": "Matrices en una línea",
+            "stars": 2,
+            "exercise": "Usando **comprensiones anidadas** (sin bucles `for` normales ni `zip`):\n- `transponer(matriz)`: cambia filas por columnas. `transponer([[1, 2, 3], [4, 5, 6]])` → `[[1, 4], [2, 5], [3, 6]]`.\n- `aplanar(matriz)`: devuelve todos los elementos en una sola lista, fila a fila. `aplanar([[1, 2], [3]])` → `[1, 2, 3]`.",
+            "starter": "def transponer(matriz: list[list[int]]) -> list[list[int]]:\n    ...\n\n\ndef aplanar(matriz: list[list[int]]) -> list[int]:\n    ...\n\n\nprint(transponer([[1, 2, 3], [4, 5, 6]]))\nprint(aplanar([[1, 2], [3]]))\n",
+            "stdin": "",
+            "checks": [
+              {
+                "stdin": "",
+                "test": "assert transponer([[1, 2, 3], [4, 5, 6]]) == [[1, 4], [2, 5], [3, 6]], \"La traspuesta del ejemplo debe ser [[1, 4], [2, 5], [3, 6]]\"\nassert transponer([[7]]) == [[7]], \"Una matriz 1x1 es su propia traspuesta\"\nassert aplanar([[1, 2], [3]]) == [1, 2, 3], \"aplanar([[1, 2], [3]]) debe dar [1, 2, 3]\"\nassert aplanar([[], [4, 5]]) == [4, 5], \"Las filas vacías no aportan elementos\"\nassert \"zip(\" not in __code__, \"Resuélvelo sin zip(): usa comprensiones anidadas\"\nassert not any(l.lstrip().startswith(\"for \") for l in __code__.splitlines()), \"Sin bucles for normales: usa comprensiones\"\n"
+              }
+            ],
+            "hint": "Traspuesta: [[fila[c] for fila in matriz] for c in range(len(matriz[0]))]. Aplanar: [x for fila in matriz for x in fila] (el primer for es el exterior)."
+          }
+        },
+        {
+          "slug": "closures",
+          "title": "Closures y generadores",
+          "theory": "Una función puede definirse **dentro** de otra. La interior ve las variables de la exterior (regla **LEGB**: Local, Enclosing, Global, Built-in).\n\nUn **closure** es una función interior que **recuerda** esas variables aunque la exterior ya haya terminado:\n\n`def multiplicador(k): return lambda x: x * k` → `doble = multiplicador(2)`; `doble(7)` → `14`.\n\n¿Para qué? Para crear funciones configuradas (fábricas de funciones) y guardar **estado privado** sin variables globales ni clases.\n\n- Leer una variable exterior es automático. Para **reasignarla** hace falta `nonlocal nombre`; sin él, `total += 1` la convierte en local y lanza `UnboundLocalError`.\n- `global` hace lo mismo con variables del módulo.\n- Trampa típica: el closure guarda la **variable**, no su valor. `[lambda: i for i in range(3)]` devuelve tres funciones que dan `2`. Se arregla con un valor por defecto: `lambda i=i: i`.\n\nUn **generador** es una función con `yield`. Al llamarla no se ejecuta: devuelve un objeto generador. Cada `next(gen)` avanza hasta el siguiente `yield`, entrega el valor y **pausa** la función conservando su estado. Cuando termina, `next()` lanza `StopIteration` (el `for` la captura solo).\n\n- `iter(iterable)` obtiene un **iterador** de una lista, cadena, etc.; `next()` le pide elementos uno a uno.\n- Una expresión generadora `(x * x for x in datos)` es como una comprensión pero perezosa.\n- Generadores e iteradores **se agotan**: solo se recorren una vez.",
+          "example_code": "def crear_saludo(saludo):\n    def saludar(nombre):\n        return f\"{saludo}, {nombre}\"\n    return saludar\n\nhola = crear_saludo(\"Hola\")\nprint(hola(\"Ana\"))  # recuerda saludo aunque crear_saludo ya terminó\n\ndef crear_hucha():\n    total = 0\n    def meter(cantidad):\n        nonlocal total\n        total += cantidad\n        return total\n    return meter\n\nhucha = crear_hucha()\nhucha(5)\nprint(\"En la hucha:\", hucha(10))\n\ndef pares_hasta(n):\n    for x in range(0, n + 1, 2):\n        yield x\n\ngen = pares_hasta(6)\nprint(next(gen), next(gen))\nprint(list(gen))   # lo que queda\nprint(list(gen))   # agotado\n\nit = iter(\"abc\")\nprint(next(it), next(it))",
+          "example_stdin": "",
+          "example_in_browser": true,
+          "exercise": "- Escribe `crear_contador()`: devuelve una función que, cada vez que se llama, suma 1 a un contador **interno** y devuelve el nuevo valor. Usa `nonlocal`. Cada contador creado debe ser independiente.\n- Escribe el generador `cuenta_atras(n)`: produce con `yield` los números de `n` a 1.\n\nAl final, crea `c = crear_contador()`, llámalo dos veces mostrando el resultado, y muestra `list(cuenta_atras(3))`.",
+          "starter": "def crear_contador():\n    cuenta = 0\n    # define aquí la función interior y devuélvela\n    ...\n\n\ndef cuenta_atras(n: int):\n    ...\n\n\nc = crear_contador()\n# llama a c() dos veces y muestra list(cuenta_atras(3))\n",
+          "exercise_stdin": "",
+          "checks": [
+            {
+              "stdin": "",
+              "test": "a = crear_contador()\nassert callable(a), \"crear_contador() debe devolver una función\"\nassert a() == 1 and a() == 2 and a() == 3, \"Cada llamada debe devolver 1, 2, 3...\"\nb = crear_contador()\nassert b() == 1, \"Cada contador nuevo empieza desde 0: no uses una variable global\"\nassert \"nonlocal\" in __code__, \"Usa nonlocal para modificar la variable de la función exterior\"\ng = cuenta_atras(3)\nassert hasattr(g, \"__next__\"), \"cuenta_atras debe ser un generador (usa yield)\"\nassert list(g) == [3, 2, 1], \"list(cuenta_atras(3)) debe ser [3, 2, 1]\"\nassert list(cuenta_atras(0)) == [], \"cuenta_atras(0) no produce nada\"\nassert \"[3, 2, 1]\" in __output__, \"Muestra list(cuenta_atras(3))\"\n"
+            }
+          ],
+          "assistant": {
+            "hint": "Dentro de crear_contador: def siguiente(): nonlocal cuenta; cuenta += 1; return cuenta — y return siguiente (sin paréntesis). En cuenta_atras: for i in range(n, 0, -1): yield i.",
+            "faq": [
+              {
+                "q": "¿Por qué sin nonlocal da UnboundLocalError?",
+                "a": "Si una función **asigna** una variable (`cuenta += 1` es una asignación), Python la trata como **local** en toda la función. Al leerla antes de darle valor, falla. `nonlocal cuenta` indica que es la de la función exterior."
+              },
+              {
+                "q": "¿Qué diferencia hay entre return y yield?",
+                "a": "`return` termina la función y devuelve un valor. `yield` entrega un valor y **pausa** la función; el siguiente `next()` la reanuda justo después. Una función con `yield` devuelve un generador al llamarla."
+              },
+              {
+                "q": "¿Por qué return siguiente y no return siguiente()?",
+                "a": "Quieres devolver **la función** para llamarla más tarde. Con paréntesis la ejecutarías ahora y devolverías su resultado (un número)."
+              }
+            ]
+          },
+          "sources": [
+            {
+              "title": "Tutorial oficial — 9.2 Ámbitos y espacios de nombres",
+              "url": "https://docs.python.org/es/3/tutorial/classes.html#python-scopes-and-namespaces"
+            },
+            {
+              "title": "Referencia — La sentencia nonlocal",
+              "url": "https://docs.python.org/es/3/reference/simple_stmts.html#the-nonlocal-statement"
+            },
+            {
+              "title": "Tutorial oficial — 9.9 Generadores",
+              "url": "https://docs.python.org/es/3/tutorial/classes.html#generators"
+            },
+            {
+              "title": "Funciones incorporadas: iter() y next()",
+              "url": "https://docs.python.org/es/3/library/functions.html#iter"
+            }
+          ],
+          "quiz": [
+            {
+              "q": "¿Qué muestra este código?",
+              "code": "def potencia(e):\n    def calcular(b):\n        return b ** e\n    return calcular\n\ncubo = potencia(3)\nprint(cubo(2))",
+              "options": [
+                "`8`",
+                "`9`",
+                "`6`",
+                "Error: `e` ya no existe"
+              ],
+              "answer": 0,
+              "explain": "`calcular` es un closure: recuerda `e = 3` aunque `potencia` ya haya terminado. 2 ** 3 = 8."
+            },
+            {
+              "q": "¿Qué ocurre al llamar a `next()` sobre un generador que ya no tiene más `yield`?",
+              "options": [
+                "Devuelve `None`",
+                "Vuelve a empezar",
+                "Se lanza `StopIteration`",
+                "Devuelve el último valor otra vez"
+              ],
+              "answer": 2,
+              "explain": "Un generador agotado lanza `StopIteration`. El bucle `for` la captura por ti; con `next()` manual la ves."
+            },
+            {
+              "q": "¿Para qué sirve `nonlocal`?",
+              "options": [
+                "Para declarar una variable global",
+                "Para poder reasignar una variable de la función que contiene a la actual",
+                "Para leer una variable de la función exterior (sin él no se puede)",
+                "Para que una variable no se pueda modificar"
+              ],
+              "answer": 1,
+              "explain": "Leer variables exteriores funciona siempre; `nonlocal` hace falta para **reasignarlas** desde la función interior."
+            }
+          ],
+          "challenge": {
+            "title": "Fibonacci bajo demanda",
+            "stars": 2,
+            "exercise": "- Escribe el generador **infinito** `fibonacci()`, que produce 0, 1, 1, 2, 3, 5, 8...\n- Escribe `primeros(iterador, n)`, que devuelve una lista con los `n` primeros valores pidiéndolos con `next()` (no uses `itertools`). Si el iterador se acaba antes, devuelve los que haya (captura `StopIteration`).\n\n`primeros(fibonacci(), 7)` → `[0, 1, 1, 2, 3, 5, 8]`; `primeros(iter([1, 2]), 5)` → `[1, 2]`.",
+            "starter": "def fibonacci():\n    ...\n\n\ndef primeros(iterador, n: int) -> list:\n    ...\n\n\nprint(primeros(fibonacci(), 7))\n",
+            "stdin": "",
+            "checks": [
+              {
+                "stdin": "",
+                "test": "assert primeros(fibonacci(), 7) == [0, 1, 1, 2, 3, 5, 8], \"primeros(fibonacci(), 7) debe dar [0, 1, 1, 2, 3, 5, 8]\"\nassert primeros(fibonacci(), 0) == [], \"Con n = 0 debe devolver []\"\nassert primeros(fibonacci(), 50)[-1] == 7778742049, \"El generador debe poder producir muchos valores\"\nassert primeros(iter([1, 2]), 5) == [1, 2], \"Si el iterador se agota, devuelve lo que haya\"\nassert \"yield\" in __code__ and \"next(\" in __code__, \"Usa yield en fibonacci y next() en primeros\"\nassert \"itertools\" not in __code__, \"Resuélvelo sin itertools\"\n"
+              }
+            ],
+            "hint": "fibonacci: a, b = 0, 1; while True: yield a; a, b = b, a + b. primeros: bucle for _ in range(n) con resultado.append(next(iterador)) dentro de try/except StopIteration: break."
           }
         },
         {
@@ -1119,100 +2312,112 @@
           }
         },
         {
-          "slug": "modulos",
-          "title": "Módulos y paquetes",
-          "theory": "Un **módulo** es un archivo `.py`; un **paquete** es una carpeta de módulos. Sirven para organizar el código: cada archivo, una responsabilidad.\n\nFormas de importar:\n- `import math` y luego `math.sqrt(16)`.\n- `from math import sqrt` y luego `sqrt(16)`.\n- Evita `from modulo import *`: no se sabe de dónde viene cada nombre.\n\n`if __name__ == \"__main__\":` hace que un bloque se ejecute solo cuando lanzas ese archivo directamente, no cuando otro lo importa. Úsalo en todos tus scripts.\n\nLa **biblioteca estándar** ya incluye mucho: `math`, `random`, `datetime`, `pathlib`, `json`, `csv`...\n\nLas librerías externas se instalan con `pip` desde PyPI, siempre dentro de un **entorno virtual** (`venv`), para que cada proyecto tenga sus propias versiones. Sus dependencias se anotan en `requirements.txt`.\n\nEn PyCharm: **Settings → Project → Python Interpreter → +** para instalar paquetes, o `pip install` en la terminal integrada (`Alt+F12`) con el `venv` activo.",
-          "example_code": "# archivo: utilidades.py\ndef formatear_euros(valor: float) -> str:\n    return f\"{valor:,.2f} €\".replace(\",\", \"X\").replace(\".\", \",\").replace(\"X\", \".\")\n\n\nif __name__ == \"__main__\":\n    print(formatear_euros(1234567.891))  # 1.234.567,89 €\n\n# archivo: main.py (en la misma carpeta)\n# from utilidades import formatear_euros\n# print(formatear_euros(49.99))",
-          "exercise": "Separa la **lógica** de la **entrada/salida** de la calculadora de propinas:\n- `calcular_total(importe, porcentaje)`: devuelve el total con propina.\n- `repartir(total, personas)`: devuelve lo que paga cada persona.\n- Todo lo que use `input()` y `print()` va dentro de `if __name__ == \"__main__\":`.\n\nEn PyCharm lo repartirías en `calculos.py` y `main.py`; en la consola va todo en un archivo. La comprobación **importa** tu código: si algo se ejecuta fuera del bloque `__main__`, fallará.",
-          "sources": [
-            {
-              "title": "Tutorial oficial — 6. Módulos",
-              "url": "https://docs.python.org/es/3/tutorial/modules.html"
-            },
-            {
-              "title": "Tutorial oficial — 12. Entornos virtuales y paquetes",
-              "url": "https://docs.python.org/es/3/tutorial/venv.html"
-            }
-          ],
-          "starter": "def calcular_total(importe: float, porcentaje: float) -> float:\n    ...\n\n\ndef repartir(total: float, personas: int) -> float:\n    ...\n\n\nif __name__ == \"__main__\":\n    importe = float(input(\"Importe: \"))\n    # completa el programa\n",
-          "exercise_stdin": "100\n10\n4",
+          "slug": "archivos-binarios",
+          "title": "Modos de E/S, binarios y errno",
+          "theory": "`open(ruta, modo)` devuelve un **objeto archivo** (*handle* o *stream*), el intermediario entre tu programa y el archivo físico. Hay que cerrarlo con `close()`, o mejor usar `with`, que lo cierra solo.\n\n**Modos**: `r` leer (por defecto; debe existir), `w` escribir (crea o **vacía**), `a` añadir al final, `x` crear en exclusiva (falla si existe). Con `+` se lee y escribe (`r+`, `w+`, `a+`). Con `t` (por defecto) el modo es **texto**: lees y escribes `str`, con codificación y saltos de línea. Con `b` es **binario** (`rb`, `wb`): lees y escribes `bytes`, sin transformar nada.\n\n**Lectura**: `read()` lo lee todo y `read(n)` hasta `n` caracteres (o bytes); `readline()` una línea con su `\\n`; `readlines()` una lista de líneas (`readlines(n)` para cuando superan unos `n` caracteres). Al final del archivo, `read()` y `readline()` devuelven `''` (o `b''`). `write(dato)` devuelve cuántos caracteres o bytes escribió.\n\n**Binario**: `bytearray(n)` crea un búfer **mutable** de `n` bytes a cero. `f.readinto(bufer)` lo rellena y devuelve cuántos bytes leyó (puede ser menos que su tamaño).\n\n**Streams predefinidos**: `sys.stdin`, `sys.stdout` y `sys.stderr` ya están abiertos al arrancar el programa. `print()` escribe en `sys.stdout`; `print(\"x\", file=sys.stderr)` envía a la salida de errores.\n\n**errno**: los fallos de E/S lanzan `OSError` (o una subclase) con el atributo `errno`, que se compara con constantes del módulo `errno`: `ENOENT` no existe el archivo, `EACCES` permiso denegado, `EEXIST` ya existe, `EISDIR` es un directorio, `EBADF` descriptor no válido, `EMFILE` demasiados archivos abiertos, `ENOSPC` sin espacio, `EFBIG` archivo demasiado grande, `EROFS` sistema de solo lectura. `os.strerror(código)` da el texto del error.",
+          "example_code": "import errno\nimport sys\n\nwith open(\"notas.txt\", \"w\", encoding=\"utf-8\") as f:\n    print(\"Caracteres escritos:\", f.write(\"uno\\ndos\\ntres\\n\"))\n\nwith open(\"notas.txt\", encoding=\"utf-8\") as f:\n    print(repr(f.readline()))   # 'uno\\n'\n    print(f.readlines())        # el resto, en una lista\n    print(repr(f.readline()))   # '' → fin del archivo\n\nwith open(\"datos.bin\", \"wb\") as f:\n    f.write(bytes([72, 111, 108, 97]))\n\nbufer = bytearray(6)\nwith open(\"datos.bin\", \"rb\") as f:\n    leidos = f.readinto(bufer)\nprint(leidos, bufer)\n\ntry:\n    open(\"no_existe.txt\")\nexcept OSError as e:\n    if e.errno == errno.ENOENT:\n        sys.stdout.write(\"No existe el archivo\\n\")\n    else:\n        raise",
           "example_stdin": "",
+          "example_in_browser": true,
+          "exercise": "Escribe `copiar_binario(origen, destino, tam=4)`, que copie un archivo **en modo binario** por bloques:\n- Crea un búfer con `bytearray(tam)`.\n- Llénalo con `readinto()` en un bucle hasta que devuelva 0.\n- Escribe en el destino **solo** los bytes leídos en cada vuelta (el último bloque puede ser más corto).\n- Devuelve el total de bytes copiados.\n\nPruébalo creando `original.bin` con `bytes(range(10))` y copiándolo a `copia.bin`. Muestra el total.",
+          "starter": "def copiar_binario(origen: str, destino: str, tam: int = 4) -> int:\n    ...\n\n\nwith open(\"original.bin\", \"wb\") as f:\n    f.write(bytes(range(10)))\n\nprint(\"Bytes copiados:\", copiar_binario(\"original.bin\", \"copia.bin\"))\n",
+          "exercise_stdin": "",
           "checks": [
             {
               "stdin": "",
-              "test": "assert abs(calcular_total(100, 10) - 110) < 1e-9, \"calcular_total(100, 10) debe devolver 110\"\nassert abs(calcular_total(59.9, 15) - 68.885) < 1e-9, \"calcular_total(59.9, 15) debe devolver 68.885\"\nassert abs(repartir(110, 4) - 27.5) < 1e-9, \"repartir(110, 4) debe devolver 27.5\"\nassert 'if __name__ == \"__main__\"' in __code__ or \"if __name__ == '__main__'\" in __code__, \"Falta el bloque if __name__ == \\\"__main__\\\":\"\nassert __output__ == \"\", \"Al importar tu código no debe mostrarse nada: mete los print() e input() dentro del bloque __main__\"\n"
+              "test": "datos = bytes(range(10))\nwith open(\"prueba_origen.bin\", \"wb\") as f:\n    f.write(datos)\ntotal = copiar_binario(\"prueba_origen.bin\", \"prueba_copia.bin\")\nassert total == 10, f\"Deberías copiar 10 bytes y devuelves {total!r}\"\nwith open(\"prueba_copia.bin\", \"rb\") as f:\n    copia = f.read()\nassert copia == datos, f\"La copia no es idéntica: {copia!r}. ¿Escribes solo los bytes leídos (bufer[:n])?\"\ngrande = bytes(range(256)) * 3\nwith open(\"prueba_grande.bin\", \"wb\") as f:\n    f.write(grande)\nassert copiar_binario(\"prueba_grande.bin\", \"prueba_grande2.bin\", 100) == 768, \"Con tam=100 deben copiarse 768 bytes\"\nwith open(\"prueba_grande2.bin\", \"rb\") as f:\n    assert f.read() == grande, \"La copia con tam=100 no coincide con el original\"\nassert \"bytearray(\" in __code__ and \"readinto(\" in __code__, \"Usa bytearray() y readinto()\"\nassert \"rb\" in __code__ and \"wb\" in __code__, \"Abre los archivos en modo binario (rb / wb)\"\nassert \"10\" in __output__, \"Muestra el total de bytes copiados\"\n"
             }
           ],
           "assistant": {
-            "hint": "Las funciones solo calculan y devuelven con return. Las llamadas a input() y print() van todas dentro del if __name__ == \"__main__\":.",
+            "hint": "Abre los dos archivos con with (\"rb\" y \"wb\"). En un while True: n = entrada.readinto(bufer); si n == 0, break; salida.write(bufer[:n]); total += n.",
             "faq": [
               {
-                "q": "¿Para qué sirve if __name__ == \"__main__\"?",
-                "a": "Ese bloque solo se ejecuta cuando lanzas el archivo directamente. Si otro archivo lo **importa**, no se ejecuta, así puedes reutilizar sus funciones sin efectos secundarios."
+                "q": "¿Qué diferencia hay entre bytes y bytearray?",
+                "a": "Los dos son secuencias de enteros de 0 a 255. `bytes` es **inmutable**; `bytearray` es **mutable**, por eso `readinto()` puede rellenarlo sin crear objetos nuevos en cada lectura."
               },
               {
-                "q": "¿Qué es un entorno virtual?",
-                "a": "Una instalación de Python aislada para cada proyecto (`.venv`), con sus propias librerías y versiones. Evita que un proyecto rompa a otro al actualizar paquetes."
+                "q": "¿Por qué escribir bufer[:n] y no bufer?",
+                "a": "En la última vuelta `readinto()` puede leer menos bytes que el tamaño del búfer; el resto conserva datos de la vuelta anterior. Si escribes el búfer entero, la copia tendrá bytes de más."
+              },
+              {
+                "q": "¿Por qué comparar e.errno con errno.ENOENT y no con un número?",
+                "a": "El valor numérico puede cambiar entre sistemas operativos; el nombre simbólico siempre significa lo mismo (no existe el archivo o directorio)."
               }
             ]
           },
-          "example_in_browser": true,
+          "sources": [
+            {
+              "title": "Funciones incorporadas: open()",
+              "url": "https://docs.python.org/es/3/library/functions.html#open"
+            },
+            {
+              "title": "Módulo io — E/S de texto y binaria",
+              "url": "https://docs.python.org/es/3/library/io.html"
+            },
+            {
+              "title": "Módulo errno — Símbolos estándar del sistema errno",
+              "url": "https://docs.python.org/es/3/library/errno.html"
+            },
+            {
+              "title": "Módulo sys — stdin, stdout y stderr",
+              "url": "https://docs.python.org/es/3/library/sys.html#sys.stdin"
+            }
+          ],
           "quiz": [
             {
-              "q": "Si `utilidades.py` se importa desde otro archivo, ¿qué vale `__name__` dentro de él?",
+              "q": "¿Qué modo abre un archivo para escribir **solo si no existe** (y falla si ya existe)?",
               "options": [
-                "`\"__main__\"`",
-                "`\"utilidades\"`",
+                "`\"w\"`",
+                "`\"a\"`",
+                "`\"x\"`",
+                "`\"r+\"`"
+              ],
+              "answer": 2,
+              "explain": "`\"x\"` es creación exclusiva: si el archivo existe lanza `FileExistsError` (errno `EEXIST`). `\"w\"` lo vaciaría y `\"a\"` añadiría al final."
+            },
+            {
+              "q": "¿Qué devuelve `f.readline()` cuando ya se ha llegado al final de un archivo de texto?",
+              "options": [
                 "`None`",
-                "`\"import\"`"
+                "`''` (cadena vacía)",
+                "`'\\n'`",
+                "Lanza `EOFError`"
               ],
               "answer": 1,
-              "explain": "Al importarlo, `__name__` es el nombre del módulo (`\"utilidades\"`). Solo vale `\"__main__\"` cuando ejecutas ese archivo directamente."
+              "explain": "Al final del archivo `readline()` (y `read()`) devuelven cadena vacía. Una línea en blanco devolvería `'\\n'`, así que no se confunden."
             },
             {
-              "q": "¿Por qué conviene evitar `from modulo import *`?",
+              "q": "¿Qué significa `errno.EACCES`?",
               "options": [
-                "Es más lento",
-                "No se sabe de dónde viene cada nombre y puede pisar variables",
-                "Solo funciona con la biblioteca estándar",
-                "No importa nada"
+                "El archivo no existe",
+                "Permiso denegado",
+                "El archivo ya existe",
+                "Disco lleno"
               ],
               "answer": 1,
-              "explain": "Importa todos los nombres a ciegas: puede sobrescribir los tuyos y hace el código difícil de leer. Mejor `import modulo` o importar nombres concretos."
-            },
-            {
-              "q": "¿Para qué sirve un entorno virtual (`venv`)?",
-              "options": [
-                "Para ejecutar Python más rápido",
-                "Para que cada proyecto tenga sus propias librerías y versiones",
-                "Para programar sin Internet",
-                "Para usar varias versiones de Windows"
-              ],
-              "answer": 1,
-              "explain": "Cada proyecto aísla sus dependencias: actualizar una librería en un proyecto no rompe otro. Las dependencias se anotan en `requirements.txt`."
+              "explain": "`EACCES` es *permission denied* (Python lanza `PermissionError`). No existe es `ENOENT`, ya existe es `EEXIST` y sin espacio es `ENOSPC`."
             }
           ],
           "challenge": {
-            "title": "Tu propio módulo de estadística",
+            "title": "Diagnóstico con errno",
             "stars": 2,
-            "exercise": "Crea las funciones `media(datos)`, `mediana(datos)` y `moda(datos)` **sin usar el módulo `statistics`**:\n- Las tres lanzan `ValueError` si la lista está vacía.\n- La mediana con cantidad par de datos es la media de los dos centrales.\n- Si hay varias modas, devuelve la menor.\n\nDeja las pruebas dentro de `if __name__ == \"__main__\":`.",
-            "starter": "def media(datos: list[float]) -> float:\n    ...\n\n\ndef mediana(datos: list[float]) -> float:\n    ...\n\n\ndef moda(datos: list[float]) -> float:\n    ...\n\n\nif __name__ == \"__main__\":\n    print(media([1, 2, 3]), mediana([3, 1, 2]), moda([1, 2, 2]))\n",
+            "exercise": "Escribe `diagnosticar(ruta, modo)`: intenta abrir el archivo con `open(ruta, modo)` y cerrarlo, y devuelve:\n- `\"ok\"` si se abrió bien.\n- `\"no existe\"` si falló con `errno.ENOENT`.\n- `\"ya existe\"` si falló con `errno.EEXIST`.\n- `\"otro\"` para cualquier otro `OSError`.\n\nCaptura `OSError` (no sus subclases por separado) y compara su atributo `errno` con las constantes del módulo `errno`.",
+            "starter": "import errno\n\n\ndef diagnosticar(ruta: str, modo: str) -> str:\n    ...\n\n\nprint(diagnosticar(\"fantasma.txt\", \"r\"))\n",
+            "stdin": "",
             "checks": [
               {
                 "stdin": "",
-                "test": "assert \"statistics\" not in __code__, \"Resuélvelo sin el módulo statistics\"\nassert media([1, 2, 3, 4]) == 2.5 and mediana([5, 1, 3]) == 3, \"media o mediana fallan con casos simples\"\nassert mediana([4, 1, 3, 2]) == 2.5, \"Con cantidad par, la mediana es la media de los dos centrales (sin olvidar ordenar)\"\nassert moda([3, 1, 3, 1, 2]) == 1, \"Si hay empate de modas (1 y 3), devuelve la menor\"\nfor funcion in (media, mediana, moda):\n    try:\n        funcion([])\n    except ValueError:\n        pass\n    else:\n        raise AssertionError(f\"{funcion.__name__}([]) debe lanzar ValueError\")\nassert __output__ == \"\", \"Las pruebas deben ir dentro del bloque if __name__ == \\\"__main__\\\":\"\n"
+                "test": "assert diagnosticar(\"reto_fantasma.txt\", \"r\") == \"no existe\", \"Abrir para leer un archivo inexistente debe dar 'no existe'\"\nassert diagnosticar(\"reto_nuevo.txt\", \"w\") == \"ok\", \"Abrir en modo 'w' un archivo nuevo debe dar 'ok'\"\nassert diagnosticar(\"reto_nuevo.txt\", \"x\") == \"ya existe\", \"El modo 'x' sobre un archivo existente debe dar 'ya existe'\"\nassert diagnosticar(\"reto_nuevo.txt\", \"r\") == \"ok\", \"Leer un archivo que existe debe dar 'ok'\"\nassert \"errno.ENOENT\" in __code__ and \"errno.EEXIST\" in __code__, \"Compara con errno.ENOENT y errno.EEXIST\"\nassert \"except OSError\" in __code__, \"Captura OSError y consulta su atributo errno\"\n"
               }
             ],
-            "hint": "Para la mediana, ordena con sorted(). Para la moda, cuenta con un diccionario y elige min() entre las que tienen el máximo de apariciones.",
-            "stdin": ""
+            "hint": "try: with open(ruta, modo): pass; return \"ok\" — except OSError as e: if e.errno == errno.ENOENT: return \"no existe\"; elif e.errno == errno.EEXIST: ..."
           }
         }
       ]
     },
     {
       "slug": "especializacion",
-      "title": "Especialización",
-      "summary": "Lleva Python al mundo real: tests, automatización y APIs web.",
+      "title": "Después del PCAP",
+      "summary": "Opcional, fuera del examen: tests con pytest, automatización y APIs web con Flask.",
       "lessons": [
         {
           "slug": "pytest",

@@ -4,6 +4,18 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
 
 ## [Unreleased]
 
+## [0.9.0] - 2026-09-27
+
+### Añadido
+- La web se enfoca en preparar el examen **PCAP-31-03** (ADR-0009): el temario se organiza por los 5 bloques oficiales, más un módulo de bases (nivel PCEP) y un extra fuera del examen.
+- 12 lecciones nuevas: math, random y platform; paquetes, `__name__` y `sys.path`; jerarquía de excepciones y excepciones propias; Unicode; slicing y comparación de cadenas; métodos de string; variables de clase e instancia; herencia múltiple y MRO; introspección; comprensiones y lambda; closures y generadores; modos de E/S, binarios y errno.
+- Zona **Examen PCAP** (`#/pcap`): simulacro de 40 preguntas y 65 minutos con el reparto oficial, práctica por bloque con corrección inmediata, 48 fichas de repaso y panel de preparación por bloque.
+- Banco de 126 preguntas originales en español e inglés (a elegir), 18 % de «elige dos». Cada respuesta se demuestra con código que ejecutan los tests.
+- Gamificación del examen: XP por preguntas acertadas y simulacros aprobados, racha de aciertos en la práctica y 7 logros nuevos («Primer simulacro», «Aprobado», «Con nota», «Bloque dominado», «En racha», «Memoria de elefante», «Listo para el PCAP»).
+
+### Cambiado
+- La carga de contenido elimina los módulos que se quedan sin lecciones al reorganizar el temario (conserva lecciones y progreso).
+
 ## [0.8.0] - 2026-09-26
 
 ### Añadido

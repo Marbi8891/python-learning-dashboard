@@ -78,7 +78,7 @@ test("logros de la consola: primer programa y cazador de bugs", async ({ page })
   const dialog = page.locator("#badges-dialog");
   await expect(dialog.locator('.badge[data-unlocked="true"]')).toHaveCount(2);
   await expect(dialog.locator('.badge[data-unlocked="true"]').filter({ hasText: "Cazador/a de bugs" })).toBeVisible();
-  await expect(page.locator("#badges-count")).toHaveText("2/13");
+  await expect(page.locator("#badges-count")).toHaveText("2/20");
 });
 
 test("reto extra: se supera, suma XP según estrellas y lo celebra", async ({ page }) => {

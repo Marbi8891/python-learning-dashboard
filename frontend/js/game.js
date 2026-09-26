@@ -5,10 +5,21 @@
    repetir una acción nunca da puntos dobles y el total siempre es coherente.
    Se guarda en este navegador (ver ADR-0005). */
 
+import { examsPassed, pcap, questionsMastered } from "./pcap-store.js";
 import { state as store, subscribe as onStore } from "./store.js";
 
 const KEY = "pld:game";
-const XP = { lesson: 50, quizPerQuestion: 10, quizPerfectBonus: 10, firstTry: 20, perStar: 30 };
+const XP = {
+  lesson: 50,
+  quizPerQuestion: 10,
+  quizPerfectBonus: 10,
+  firstTry: 20,
+  perStar: 30,
+  // Preparación del PCAP (ver ADR-0009)
+  pcapQuestion: 5, // por cada pregunta tipo examen distinta acertada alguna vez
+  examPassed: 50, // por simulacro aprobado, hasta MAX_PASSED_EXAMS
+};
+const MAX_PASSED_EXAMS = 4;
 
 export const LEVELS = [
   { xp: 0, name: "Novato/a" },
@@ -72,7 +83,8 @@ export function xpTotal() {
   const stars = lessons
     .filter((l) => game.challenges.includes(l.slug))
     .reduce((sum, l) => sum + l.challenge.stars * XP.perStar, 0);
-  return store.completed.size * XP.lesson + quiz + game.firstTry.length * XP.firstTry + stars;
+  const exam = questionsMastered() * XP.pcapQuestion + Math.min(examsPassed(), MAX_PASSED_EXAMS) * XP.examPassed;
+  return store.completed.size * XP.lesson + quiz + game.firstTry.length * XP.firstTry + stars + exam;
 }
 
 export function levelInfo(xp = xpTotal()) {
@@ -120,11 +132,19 @@ export const BADGES = [
     goal: "Supera un reto de dificultad ★★★",
     test: () => lessons.some((l) => l.challenge.stars === 3 && game.challenges.includes(l.slug)),
   },
-  { id: "base-solida", icon: "F", name: "Base sólida", goal: "Completa el módulo Fundamentos", test: () => moduleDone("fundamentos") },
-  { id: "medio-camino", icon: "½", name: "Medio camino", goal: "Completa 8 lecciones", test: () => store.completed.size >= 8 },
-  { id: "graduado", icon: "⚑", name: "Graduado/a", goal: "Completa las 15 lecciones", test: () => lessons.length > 0 && store.completed.size >= lessons.length },
+  { id: "base-solida", icon: "B", name: "Base sólida", goal: "Completa el módulo Bases de Python", test: () => moduleDone("fundamentos") },
+  { id: "medio-camino", icon: "½", name: "Medio camino", goal: "Completa la mitad de las lecciones", test: () => lessons.length > 0 && store.completed.size >= Math.ceil(lessons.length / 2) },
+  { id: "graduado", icon: "⚑", name: "Graduado/a", goal: "Completa todas las lecciones", test: () => lessons.length > 0 && store.completed.size >= lessons.length },
   { id: "constancia", icon: "3", name: "Constancia", goal: "Estudia 3 días seguidos", test: () => streak() >= 3 },
   { id: "imparable", icon: "7", name: "Imparable", goal: "Estudia 7 días seguidos", test: () => streak() >= 7 },
+  // Preparación del PCAP
+  { id: "primer-simulacro", icon: "⏱", name: "Primer simulacro", goal: "Termina un simulacro del PCAP", test: () => pcap.exams.length >= 1 },
+  { id: "aprobado", icon: "70", name: "Aprobado", goal: "Aprueba un simulacro (70 % o más)", test: () => examsPassed() >= 1 },
+  { id: "con-nota", icon: "85", name: "Con nota", goal: "Saca un 85 % o más en un simulacro", test: () => examsPassed(85) >= 1 },
+  { id: "bloque-dominado", icon: "◆", name: "Bloque dominado", goal: "Acierta el 90 % de un bloque del examen (mínimo 10 preguntas)", test: () => pcap.flags.mastered },
+  { id: "racha-10", icon: "×10", name: "En racha", goal: "Encadena 10 aciertos seguidos en la práctica", test: () => pcap.bestCombo >= 10 },
+  { id: "memoria", icon: "▤", name: "Memoria de elefante", goal: "Marca como sabidas todas las fichas de repaso", test: () => pcap.flags.allCards },
+  { id: "listo-pcap", icon: "✈", name: "Listo para el PCAP", goal: "Cumple los criterios del panel de preparación", test: () => pcap.flags.ready },
 ];
 
 /* ---------- Eventos ---------- */
@@ -148,6 +168,12 @@ function commit(events = []) {
 
 function activity() {
   add(game.days, today());
+}
+
+/** Actividad en la preparación del PCAP (práctica, simulacros, fichas). */
+export function recordPcap(events = []) {
+  activity();
+  commit(events);
 }
 
 /** El alumno ha leído la teoría (paso 1 de la guía). No da XP: es solo orientación. */

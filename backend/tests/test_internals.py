@@ -134,7 +134,7 @@ def test_mark_completed_survives_concurrent_insert(client):
 def test_seed_script_entry_point(client, monkeypatch, capsys):
     monkeypatch.setattr(database, "SessionLocal", sessionmaker(bind=client.engine))
     runpy.run_path(seed.__file__, run_name="__main__")
-    assert "Seed completado: 15 lecciones" in capsys.readouterr().out
+    assert "Seed completado: 27 lecciones" in capsys.readouterr().out
 
 
 def test_postgres_engine_survives_idle_connections():
