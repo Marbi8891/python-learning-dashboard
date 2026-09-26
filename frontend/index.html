@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Python Learning Dashboard</title>
   <meta name="description" content="Dashboard interactivo para aprender Python paso a paso, de principiante a avanzado, con consola y ejercicios corregidos.">
-  <meta name="theme-color" content="#0b1220">
+  <meta name="theme-color" content="#0c0d10">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
 
   <link rel="stylesheet" href="vendor/highlight/atom-one-dark.min.css">
@@ -16,6 +16,8 @@
   <link rel="stylesheet" href="css/widgets.css">
   <link rel="stylesheet" href="css/game.css">
   <link rel="stylesheet" href="css/ux.css">
+  <link rel="stylesheet" href="css/academy.css">
+  <link rel="preload" href="fonts/fraunces-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
 
   <!-- Tema y tamaño de letra antes de pintar la página (sin parpadeo) -->
   <script>
@@ -48,10 +50,24 @@
     <!-- ============ BARRA LATERAL: RUTA DE APRENDIZAJE ============ -->
     <aside class="sidebar" id="sidebar">
       <header class="sidebar__header">
-        <a class="brand" href="#/inicio" aria-label="Python Learning: ir al inicio">
+        <a class="brand" href="#/inicio" aria-label="Python Learning Dashboard: ir al inicio">
           <span class="brand__logo" aria-hidden="true">Py</span>
-          <span class="brand__name">Python Learning</span>
+          <span class="brand__text">
+            <span class="brand__name">Python Learning</span>
+            <span class="brand__tag">Dashboard</span>
+          </span>
         </a>
+
+        <nav class="site-nav" aria-label="Secciones">
+          <a href="#/inicio" data-view="home">
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 11l8-6 8 6v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+            El curso
+          </a>
+          <a href="#/perfil" data-view="profile">
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            Mi aprendizaje
+          </a>
+        </nav>
 
         <button class="account-button" id="account-button" type="button" hidden>
           <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
@@ -106,7 +122,10 @@
     <!-- ============ CONTENIDO PRINCIPAL ============ -->
     <main id="main" class="main" tabindex="-1">
       <!-- ============ INICIO ============ -->
-      <section class="home" id="home-view" aria-labelledby="home-title" hidden></section>
+      <section class="page home" id="home-view" aria-labelledby="home-title" hidden></section>
+
+      <!-- ============ MI APRENDIZAJE ============ -->
+      <section class="page profile" id="profile-view" aria-labelledby="profile-title" hidden></section>
 
       <!-- ============ LECCIÓN: contenido | consola ============ -->
       <div class="workspace" id="lesson-view">
@@ -114,6 +133,7 @@
       <header class="lesson-header">
         <p class="lesson-header__crumb" id="lesson-crumb"></p>
         <h1 class="lesson-header__title" id="lesson-title" tabindex="-1">Cargando lección…</h1>
+        <p class="lesson-header__meta" id="lesson-meta"></p>
       </header>
 
       <nav class="guide" aria-label="Pasos de la lección">
@@ -176,7 +196,7 @@
     <button class="assistant__toggle" id="assistant-toggle" type="button" aria-controls="assistant-panel" aria-expanded="false">
       <svg viewBox="0 0 32 32" width="30" height="30" aria-hidden="true">
         <rect x="6" y="10" width="20" height="16" rx="5" fill="currentColor"/>
-        <circle cx="12.5" cy="18" r="2.2" fill="#0b1220"/><circle cx="19.5" cy="18" r="2.2" fill="#0b1220"/>
+        <circle cx="12.5" cy="18" r="2.2" style="fill: var(--color-primary-strong)"/><circle cx="19.5" cy="18" r="2.2" style="fill: var(--color-primary-strong)"/>
         <path d="M16 10V5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="16" cy="4.5" r="2" fill="currentColor"/>
       </svg>
       <span class="visually-hidden">Abrir asistente</span>

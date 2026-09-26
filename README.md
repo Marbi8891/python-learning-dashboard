@@ -20,6 +20,7 @@ Dashboard interactivo para aprender Python de principiante a avanzado: 15 leccio
 - **Retos extra:** uno por lección, de ★ a ★★★ (FizzBuzz, carrito de la compra, renombrador de fotos…), con tests automáticos.
 - **XP, niveles y racha:** 7 niveles de «Novato/a» a «Leyenda de Python», bonus por acertar a la primera, 13 logros con su vitrina y confeti (desactivado si el sistema pide reducir el movimiento).
 - **Cuenta (opcional):** registro, login, progreso sincronizado entre dispositivos, recuperación de contraseña y RGPD (descargar los datos y borrar la cuenta).
+- **Estética de academia:** diseño editorial (tinta, marfil y dorado, titulares en serif), portada con la ficha del curso y temario, y página «Mi aprendizaje» con cifras, actividad, logros e historial.
 - **Pensado para el alumno:** portada con «Continuar donde lo dejaste», guía Aprende → Practica → Comprueba en cada lección, consola al lado en pantallas anchas y errores de Python explicados en español.
 - **Tema y letra:** claro, oscuro o automático, y tres tamaños de letra.
 - **Accesible y adaptable:** WCAG 2.1 AA verificado automáticamente en los dos temas, navegable con teclado y con menú móvil.
@@ -44,6 +45,7 @@ Decisiones documentadas:
 - [ADR-0004 Consola, corrección y privacidad](docs/adr/0004-consola-ejercicios-y-privacidad.md)
 - [ADR-0005 Gamificación](docs/adr/0005-gamificacion.md)
 - [ADR-0006 Experiencia del alumno](docs/adr/0006-experiencia-del-alumno.md)
+- [ADR-0007 Estética editorial](docs/adr/0007-estetica-editorial.md)
 
 ```
 ├── frontend/
@@ -131,4 +133,4 @@ Guía completa en **[docs/DEPLOY.md](docs/DEPLOY.md)**: GitHub Pages, backend en
 
 ## Contribuir y licencia
 
-Consulta [CONTRIBUTING.md](CONTRIBUTING.md) y [SECURITY.md](SECURITY.md). Licencia [MIT](LICENSE). Las fuentes tipográficas y highlight.js incluyen sus propias licencias en `frontend/fonts/` y `frontend/vendor/`.
+Consulta [CONTRIBUTING.md](CONTRIBUTING.md) y [SECURITY.md](SECURITY.md). Licencia [MIT](LICENSE). Las fuentes tipográficas (Inter, JetBrains Mono y Fraunces, OFL) y highlight.js incluyen sus propias licencias en `frontend/fonts/` y `frontend/vendor/`.

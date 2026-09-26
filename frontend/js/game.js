@@ -59,7 +59,7 @@ const add = (list, value) => {
   if (!list.includes(value)) list.push(value);
 };
 
-const today = (date = new Date()) =>
+export const today = (date = new Date()) =>
   `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
 
 /* ---------- Cálculos ---------- */
@@ -186,10 +186,11 @@ export function recordQuiz(slug, correct) {
   activity();
   const previous = game.quiz[slug] ?? 0;
   const events = [];
-  if (correct > previous) {
+  // Se guarda aunque sea 0/3: el quiz cuenta como hecho (guía y perfil)
+  if (game.quiz[slug] === undefined || correct > previous) {
     game.quiz[slug] = correct;
     const gained = (correct - previous) * XP.quizPerQuestion + (correct === 3 ? XP.quizPerfectBonus : 0);
-    events.push(`+${gained} XP en el quiz`);
+    if (gained > 0) events.push(`+${gained} XP en el quiz`);
   }
   commit(events);
 }

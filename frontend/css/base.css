@@ -9,49 +9,57 @@
 @font-face { font-family: "Inter"; font-weight: 700; font-display: swap; src: url("../fonts/inter-latin-700-normal.woff2") format("woff2"); }
 @font-face { font-family: "JetBrains Mono"; font-weight: 400; font-display: swap; src: url("../fonts/jetbrains-mono-latin-400-normal.woff2") format("woff2"); }
 @font-face { font-family: "JetBrains Mono"; font-weight: 500; font-display: swap; src: url("../fonts/jetbrains-mono-latin-500-normal.woff2") format("woff2"); }
+/* Serif editorial para titulares (Fraunces, licencia OFL) */
+@font-face { font-family: "Fraunces"; font-weight: 500; font-display: swap; src: url("../fonts/fraunces-latin-500-normal.woff2") format("woff2"); }
+@font-face { font-family: "Fraunces"; font-weight: 500; font-style: italic; font-display: swap; src: url("../fonts/fraunces-latin-500-italic.woff2") format("woff2"); }
 
+/* Estética editorial (ADR-0007): tinta casi negra, marfil, dorado para lo
+   importante y verde para el progreso. Contrastes WCAG AA calculados. */
 :root {
-  /* Superficies: azules profundos y grises carbón */
-  --color-bg:        #0b1220;
-  --color-surface:   #111a2e;
-  --color-surface-2: #172238;
-  --color-code-bg:   #0a0f1a;
-  --color-border:    #24324d;
+  /* Superficies */
+  --color-bg:        #0c0d10;
+  --color-surface:   #14161b;
+  --color-surface-2: #1b1e25;
+  --color-code-bg:   #0a0b0e;
+  --color-border:    #2a2d35;
 
   /* Texto */
-  --color-text:       #e6ebf5;
-  --color-text-muted: #9aa7bf;   /* contraste ≈ 7:1 sobre --color-surface */
-  --color-text-faint: #8390a8;   /* contraste 5,4:1 sobre --color-surface */
+  --color-text:       #eeeae2; /* 15:1 sobre --color-surface */
+  --color-text-muted: #a9a498; /* 7,3:1 */
+  --color-text-faint: #8f8a7f; /* 4,9:1 sobre --color-surface-2 */
 
-  /* Acentos */
-  --color-accent:       #22c55e; /* verde vibrante: progreso, completado */
-  --color-accent-soft:  rgb(34 197 94 / 0.14);
-  --color-primary:      #3b82f6; /* azul: foco, enlaces */
-  --color-primary-soft: rgb(59 130 246 / 0.16);
-  --color-primary-strong: #2563eb; /* fondo de botones con texto blanco: 5,2:1 */
-  --color-danger:       #f87171;
+  /* Acentos: dorado (acción principal, foco) y verde (progreso, completado) */
+  --color-accent:        #4fd18b;
+  --color-accent-soft:   rgb(79 209 139 / 0.12);
+  --color-accent-hover:  #6fdca1;
+  --color-on-accent:     #06210f;
+  --color-primary:       #d4af6a;
+  --color-primary-soft:  rgb(212 175 106 / 0.12);
+  --color-primary-strong: #d4af6a; /* fondo de botones principales */
+  --color-primary-hover: #e2c283;
+  --color-on-primary:    #1a1407;  /* texto sobre dorado: 8,8:1 */
+  --color-danger:        #f87171;
   --color-danger-strong: #dc2626;
-  --color-primary-hover: #1d4ed8;
-  --color-on-accent:    #06210f; /* texto sobre botones verdes */
-  --color-accent-hover: #1fb053;
 
   /* Colores de texto que cambian con el tema */
-  --color-strong:      #ffffff;
-  --color-link:        #8fb8ff;
-  --color-code-inline: #7ee2a8;
-  --color-gold:        #facc15;
-  --color-streak:      #fdba74;
-  --color-hint:        #fde68a;
-  --color-input-bg:    #0a0f1a;
+  --color-strong:      #fbf8f1;
+  --color-link:        #e3c48a;
+  --color-code-inline: #86e0b0;
+  --color-gold:        #e3c48a;
+  --color-streak:      #f4a66a;
+  --color-hint:        #f1d98f;
+  --color-input-bg:    #0a0b0e;
   /* El código siempre va sobre fondo oscuro (como en PyCharm), en los dos temas */
   --color-code-text:   #e6ebf5;
-  --shadow:            rgb(0 0 0 / 0.45);
+  --shadow:            rgb(0 0 0 / 0.5);
+  --hairline:          linear-gradient(90deg, transparent, rgb(212 175 106 / 0.45), transparent);
 
   /* Tamaño de letra del área de estudio (preferencia del alumno) */
   --ui-zoom: 1;
 
   /* Tipografía */
   --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Fraunces", Georgia, "Times New Roman", serif;
   --font-mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
 
   /* Espaciado, radios y layout */
@@ -61,45 +69,48 @@
   --space-4: 16px;
   --space-5: 24px;
   --space-6: 32px;
+  --space-7: 48px;
   --radius-sm: 6px;
-  --radius-md: 10px;
+  --radius-md: 12px;
   --sidebar-width: 300px;
 
-  --transition: 150ms ease;
+  --transition: 180ms ease;
 
   color-scheme: dark;
 }
 
-/* ---------- Tema claro (contrastes WCAG AA calculados) ---------- */
+/* ---------- Tema claro: papel crema y tinta (contrastes WCAG AA calculados) ---------- */
 :root[data-theme="light"] {
-  --color-bg:        #f5f7fb;
-  --color-surface:   #ffffff;
-  --color-surface-2: #eef2f8;
-  --color-border:    #d5dce8;
+  --color-bg:        #f7f4ec;
+  --color-surface:   #fffdf8;
+  --color-surface-2: #f1ece0;
+  --color-border:    #e2dccd;
 
-  --color-text:       #111827; /* 17,7:1 */
-  --color-text-muted: #4b5563; /* 7,6:1 */
-  --color-text-faint: #5b6474; /* ≥ 5:1 sobre las tarjetas */
+  --color-text:       #1b1a17; /* 17:1 */
+  --color-text-muted: #57534a; /* 7,5:1 */
+  --color-text-faint: #686357; /* ≥ 5:1 */
 
   --color-accent:        #166534;
   --color-accent-soft:   rgb(22 101 52 / 0.1);
   --color-accent-hover:  #14532d;
   --color-on-accent:     #ffffff;
-  --color-primary:       #2563eb;
-  --color-primary-soft:  rgb(37 99 235 / 0.1);
-  --color-primary-strong: #1d4ed8;
-  --color-primary-hover: #1e40af;
+  --color-primary:       #7a5a10;
+  --color-primary-soft:  rgb(122 90 16 / 0.1);
+  --color-primary-strong: #1b1a17; /* botones principales en tinta */
+  --color-primary-hover: #3a372f;
+  --color-on-primary:    #fbf8f1;
   --color-danger:        #b91c1c;
   --color-danger-strong: #b91c1c;
 
-  --color-strong:      #0b1220;
-  --color-link:        #1d4ed8;
-  --color-code-inline: #047857;
-  --color-gold:        #854d0e;
-  --color-streak:      #c2410c;
-  --color-hint:        #92400e;
+  --color-strong:      #0c0d10;
+  --color-link:        #7a5a10;
+  --color-code-inline: #0f6b4a;
+  --color-gold:        #7a5a10;
+  --color-streak:      #b4410c;
+  --color-hint:        #7c4a03;
   --color-input-bg:    #ffffff;
-  --shadow:            rgb(15 23 42 / 0.15);
+  --shadow:            rgb(60 50 30 / 0.12);
+  --hairline:          linear-gradient(90deg, transparent, rgb(122 90 16 / 0.35), transparent);
 
   color-scheme: light;
 }
@@ -172,7 +183,7 @@ button {
   z-index: 100;
   padding: var(--space-2) var(--space-3);
   background: var(--color-primary-strong);
-  color: #fff;
+  color: var(--color-on-primary);
   border-radius: var(--radius-sm);
   transform: translateY(-150%);
 }

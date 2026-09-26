@@ -15,6 +15,7 @@ import {
   setLesson as setConsoleLesson,
   setRunListener,
 } from "./console.js";
+import { lessonMinutes, stars } from "./course.js";
 import {
   BADGES,
   game,
@@ -30,6 +31,7 @@ import {
 import { renderHome } from "./home.js";
 import { escapeHtml, renderMarkdown } from "./markdown.js";
 import { initPrefs } from "./prefs.js";
+import { badgesHtml, renderProfile } from "./profile.js";
 import { setQuizLesson } from "./quiz.js";
 import { recordAttempt, restoreSession, setCompleted, state, subscribe } from "./store.js";
 
@@ -39,14 +41,16 @@ const DATA_URL = "data/lessons.json";
 const ROUTE_PREFIX = "#/leccion/";
 const RESET_ROUTE = "#/restablecer";
 const HOME_ROUTE = "#/inicio";
+const PROFILE_ROUTE = "#/perfil";
 const mobile = window.matchMedia("(max-width: 900px)");
 
 const content = {
+  course: null, // ficha del curso (título, qué aprenderás, requisitos)
   modules: [],
   lessons: new Map(), // slug -> { ...lesson, module, index }
   order: [], // slugs en el orden de la ruta
   current: null, // lección abierta (o la siguiente recomendada, en el inicio)
-  view: "home", // "home" | "lesson"
+  view: "home", // "home" | "profile" | "lesson"
 };
 
 const $ = (selector) => document.querySelector(selector);
@@ -176,8 +180,15 @@ function renderLesson(lesson) {
   const next = lessonAt(lesson.index + 1);
 
   document.title = `${lesson.title} · Python Learning Dashboard`;
-  $("#lesson-crumb").textContent = lesson.module.title;
+  const moduleNumber = content.modules.indexOf(lesson.module) + 1;
+  const star = stars(lesson.challenge.stars);
+  $("#lesson-crumb").textContent = `Módulo ${moduleNumber} · ${lesson.module.title} — Lección ${lesson.index + 1} de ${content.order.length}`;
   $("#lesson-title").textContent = lesson.title;
+  $("#lesson-meta").innerHTML = `
+    <span>≈ ${lessonMinutes(lesson)} min</span>
+    <span>Ejercicio con corrección automática</span>
+    <span>Quiz de ${lesson.quiz.length} preguntas</span>
+    <span>Reto <span aria-hidden="true">${star.visual}</span><span class="visually-hidden">de ${star.label}</span></span>`;
 
   $("#panel-theory").innerHTML = `
     <div class="prose">${renderMarkdown(lesson.theory)}</div>
@@ -341,20 +352,36 @@ function renderGuide() {
 
 function refreshProgressViews() {
   renderGuide();
-  if (content.view === "home") $("#home-view").innerHTML = renderHome(content, defaultSlug());
+  const view = VIEWS[content.view];
+  if (view) $(view.element).innerHTML = view.render();
 }
 
-function showHome({ moveFocus = true } = {}) {
-  content.view = "home";
+const VIEWS = {
+  home: { element: "#home-view", title: "Python Learning Dashboard", focus: "#home-title", render: () => renderHome(content, defaultSlug()) },
+  profile: { element: "#profile-view", title: "Mi aprendizaje · Python Learning Dashboard", focus: "#profile-title", render: () => renderProfile(content) },
+};
+
+/** Muestra una vista de página completa (portada o perfil) en lugar de la lección. */
+function showPage(name, { moveFocus = true } = {}) {
+  const view = VIEWS[name];
+  content.view = name;
   content.current = defaultSlug();
   $("#lesson-view").hidden = true;
-  $("#home-view").hidden = false;
-  $("#home-view").innerHTML = renderHome(content, content.current);
-  document.title = "Python Learning Dashboard";
+  for (const [key, other] of Object.entries(VIEWS)) $(other.element).hidden = key !== name;
+  $(view.element).innerHTML = view.render();
+  document.title = view.title;
   updateSidebar();
+  updateSiteNav();
   if (mobile.matches) setMenu(false);
-  if (moveFocus) $("#home-title").focus();
+  if (moveFocus) $(view.focus).focus();
   window.scrollTo({ top: 0 });
+}
+
+function updateSiteNav() {
+  for (const link of document.querySelectorAll(".site-nav a")) {
+    if (link.dataset.view === content.view) link.setAttribute("aria-current", "page");
+    else link.removeAttribute("aria-current");
+  }
 }
 
 function initTabs() {
@@ -502,9 +529,13 @@ function navigate({ moveFocus = true } = {}) {
     if (token) openPasswordReset(token);
   }
 
+  if (location.hash === PROFILE_ROUTE) {
+    showPage("profile", { moveFocus });
+    return;
+  }
   if (!location.hash.startsWith(ROUTE_PREFIX)) {
     if (location.hash !== HOME_ROUTE) history.replaceState(null, "", HOME_ROUTE);
-    showHome({ moveFocus });
+    showPage("home", { moveFocus });
     return;
   }
 
@@ -513,8 +544,9 @@ function navigate({ moveFocus = true } = {}) {
   if (location.hash !== `${ROUTE_PREFIX}${slug}`) history.replaceState(null, "", `${ROUTE_PREFIX}${slug}`);
 
   content.view = "lesson";
-  $("#home-view").hidden = true;
+  for (const view of Object.values(VIEWS)) $(view.element).hidden = true;
   $("#lesson-view").hidden = false;
+  updateSiteNav();
   content.current = slug;
   const lesson = currentLesson();
   renderLesson(lesson);
@@ -546,18 +578,7 @@ function updateGameCard() {
 }
 
 function renderBadges() {
-  $("#badges-list").innerHTML = BADGES.map((badge) => {
-    const unlocked = game.badges.includes(badge.id);
-    return `
-      <li class="badge" data-unlocked="${unlocked}">
-        <span class="badge__icon" aria-hidden="true">${escapeHtml(badge.icon)}</span>
-        <span class="badge__text">
-          <strong>${escapeHtml(badge.name)}</strong>
-          <span>${escapeHtml(badge.goal)}</span>
-          <span class="visually-hidden">${unlocked ? "(Conseguido)" : "(Pendiente)"}</span>
-        </span>
-      </li>`;
-  }).join("");
+  $("#badges-list").innerHTML = badgesHtml();
 }
 
 function initGameUi() {
@@ -613,7 +634,9 @@ async function init() {
   try {
     const response = await fetch(DATA_URL);
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    content.modules = (await response.json()).modules;
+    const data = await response.json();
+    content.course = data.course;
+    content.modules = data.modules;
   } catch (error) {
     console.error("Error cargando las lecciones:", error);
     showLoadError();

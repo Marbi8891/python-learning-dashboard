@@ -40,7 +40,7 @@
   font-family: var(--font-mono);
   font-weight: 600;
   font-size: 14px;
-  color: #fff;
+  color: var(--color-on-primary);
 }
 
 .brand__name {

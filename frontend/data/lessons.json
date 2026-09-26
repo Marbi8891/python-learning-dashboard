@@ -1,8 +1,27 @@
 {
+  "course": {
+    "title": "Python, de cero a profesional",
+    "tagline": "Aprende a programar escribiendo código real desde la primera lección: sin instalar nada, a tu ritmo y con corrección automática.",
+    "level": "Desde cero",
+    "outcomes": [
+      "Escribir programas con variables, condiciones, bucles y funciones",
+      "Organizar datos con listas y diccionarios",
+      "Diseñar clases y objetos (programación orientada a objetos)",
+      "Controlar errores con excepciones y trabajar con archivos",
+      "Probar tu código de forma automática con pytest",
+      "Automatizar tareas y crear una API web con Flask"
+    ],
+    "requirements": [
+      "Ningún conocimiento previo de programación",
+      "Un navegador actualizado: Python se ejecuta dentro de la página",
+      "Opcional: PyCharm, para practicar también en tu ordenador"
+    ]
+  },
   "modules": [
     {
       "slug": "fundamentos",
       "title": "Fundamentos",
+      "summary": "Tus primeros programas: guardar datos, operar con ellos y conversar con el usuario.",
       "lessons": [
         {
           "slug": "variables",
@@ -398,6 +417,7 @@
     {
       "slug": "intermedio",
       "title": "Nivel Intermedio",
+      "summary": "Toma decisiones, repite tareas y organiza tu código en funciones y colecciones.",
       "lessons": [
         {
           "slug": "condicionales",
@@ -811,6 +831,7 @@
     {
       "slug": "avanzado",
       "title": "Avanzado",
+      "summary": "Programa como un profesional: objetos, errores controlados, archivos y módulos.",
       "lessons": [
         {
           "slug": "poo",
@@ -1191,6 +1212,7 @@
     {
       "slug": "especializacion",
       "title": "Especialización",
+      "summary": "Lleva Python al mundo real: tests, automatización y APIs web.",
       "lessons": [
         {
           "slug": "pytest",

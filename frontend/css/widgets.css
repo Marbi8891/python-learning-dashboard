@@ -50,7 +50,7 @@
   border: none;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
-  color: #fff;
+  color: var(--color-on-primary);
   box-shadow: 0 10px 30px var(--shadow);
   cursor: pointer;
   transition: transform var(--transition);
@@ -125,7 +125,7 @@
 .assistant__msg--user {
   align-self: flex-end;
   background: var(--color-primary-strong);
-  color: #fff;
+  color: var(--color-on-primary);
   border-bottom-right-radius: 2px;
 }
 

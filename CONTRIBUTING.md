@@ -19,7 +19,7 @@ npm run test:e2e        # la primera vez: npm ci && npx playwright install chrom
 
 ## Añadir o cambiar una lección
 
-Edita `frontend/data/lessons.json`. Cada lección necesita `theory`, `example_code`, `exercise`, `starter`, `checks`, `assistant`, `sources`, `quiz` (3 preguntas de 4 opciones, con `explain`) y `challenge`. `tests/test_content.py` comprueba que el ejemplo se ejecuta y que la plantilla **no** supera los tests. Comprueba tú mismo que tu solución los supera, pero **no la subas al repositorio** (ver ADR-0004).
+Edita `frontend/data/lessons.json`. El bloque `course` es la ficha del curso y cada módulo lleva un `summary`. Cada lección necesita `theory`, `example_code`, `exercise`, `starter`, `checks`, `assistant`, `sources`, `quiz` (3 preguntas de 4 opciones, con `explain`) y `challenge`. `tests/test_content.py` comprueba que el ejemplo se ejecuta y que la plantilla **no** supera los tests. Comprueba tú mismo que tu solución los supera, pero **no la subas al repositorio** (ver ADR-0004).
 
 ## Criterios de calidad
 

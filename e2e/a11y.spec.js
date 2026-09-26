@@ -4,6 +4,8 @@ const AxeBuilder = require("@axe-core/playwright").default;
 const { test, expect, openLesson } = require("./fixtures");
 
 async function audit(page) {
+  // Espera a que acaben las animaciones de entrada: a media transición el contraste es menor
+  await page.waitForFunction(() => document.getAnimations().every((a) => a.playState !== "running"));
   const results = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"]).analyze();
   const summary = results.violations.map((v) => `${v.id} (${v.impact}): ${v.nodes.map((n) => n.target).join(", ")}`);
   expect(summary, summary.join("\n")).toEqual([]);
@@ -56,11 +58,23 @@ test("política de privacidad sin infracciones", async ({ page }) => {
   await audit(page);
 });
 
-test("portada sin infracciones", async ({ page }) => {
-  await openLesson(page);
-  await expect(page.locator("#home-title")).toBeVisible();
-  await audit(page);
-});
+for (const colorScheme of ["light", "dark"]) {
+  test.describe(`portada y perfil en modo ${colorScheme}`, () => {
+    test.use({ colorScheme });
+    test("portada con temario y «Mi aprendizaje» sin infracciones", async ({ page }) => {
+      await openLesson(page, "variables");
+      await page.getByRole("tab", { name: "Práctica y Ejercicio" }).click();
+      await page.getByRole("button", { name: "Marcar como completada" }).click();
+      await page.getByRole("link", { name: "El curso" }).click();
+      await expect(page.locator("#home-title")).toBeVisible();
+      for (const module of await page.locator(".syllabus__module").all()) await module.evaluate((d) => (d.open = true));
+      await audit(page);
+      await page.getByRole("link", { name: "Mi aprendizaje" }).first().click();
+      await expect(page.locator("#profile-title")).toBeVisible();
+      await audit(page);
+    });
+  });
+}
 
 test("tema claro con error explicado y diálogo de aspecto sin infracciones", async ({ page }) => {
   test.setTimeout(120_000);

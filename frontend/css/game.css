@@ -180,7 +180,7 @@
   height: 24px;
   border-radius: 50%;
   background: var(--color-primary-strong);
-  color: #fff;
+  color: var(--color-on-primary);
   font-size: 13px;
 }
 

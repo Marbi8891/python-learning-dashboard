@@ -189,7 +189,7 @@ kbd {
 
 .btn--primary {
   background: var(--color-primary-strong);
-  color: #fff;
+  color: var(--color-on-primary);
 }
 
 .btn--primary:hover {

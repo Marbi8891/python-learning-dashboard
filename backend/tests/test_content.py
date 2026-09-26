@@ -139,3 +139,12 @@ def test_check_exercise_explains_errors():
     result = runner.check_exercise("print(x)", [{"test": "assert True"}])
     assert not result["passed"]
     assert result["hint"]["title"] == "`x` no existe (todavía)"
+
+
+def test_course_sheet_is_complete():
+    data = json.loads(DEFAULT_LESSONS_FILE.read_text(encoding="utf-8"))
+    course = data["course"]
+    assert course["title"] and course["tagline"] and course["level"]
+    assert len(course["outcomes"]) >= 3
+    assert course["requirements"]
+    assert all(module["summary"] for module in data["modules"])

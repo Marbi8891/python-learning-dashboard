@@ -4,6 +4,19 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
 
 ## [Unreleased]
 
+## [0.7.0] - 2026-09-26
+
+### Añadido
+- Estética editorial de academia: tinta, marfil y dorado, titulares en serif (Fraunces, alojada en el sitio) y tema claro en papel crema (ADR-0007).
+- Portada como ficha del curso: nivel, duración estimada, qué aprenderás, temario desplegable con el estado de cada lección, qué incluye y requisitos.
+- «Mi aprendizaje» (`#/perfil`): nivel, cifras, progreso por módulo, actividad de 12 semanas, logros e historial por lección.
+- Cabecera de lección con módulo, número de lección, duración, quiz y dificultad del reto.
+- Navegación «El curso» / «Mi aprendizaje» en la barra lateral y nuevo favicon.
+- Tests: ficha del curso y perfil (e2e), auditoría WCAG de portada y perfil en los dos temas, datos del curso (backend).
+
+### Corregido
+- Un quiz con 0 aciertos no se registraba y la guía no pasaba al paso siguiente.
+
 ## [0.6.0] - 2026-09-26
 
 ### Añadido
