@@ -21,19 +21,27 @@ El script crea el repositorio, activa Pages (vía GitHub Actions) y sube el cód
 
 URL final: `https://marbi8891.github.io/python-learning-dashboard/`
 
-## 2. Backend en Render (Blueprint)
+## 2. Base de datos en Neon
+
+La base de datos gratuita de Render caduca a los 30 días, así que se usa Neon: PostgreSQL con plan gratuito permanente (0,5 GB) y servidores en la UE (ver [ADR-0008](adr/0008-backend-render-neon.md)).
+
+1. Crea una cuenta en [neon.com](https://neon.com) (puedes entrar con GitHub).
+2. **New project** → nombre `pld`, **región AWS Europe Central 1 (Frankfurt)**, PostgreSQL 16 o superior.
+3. En **Connect**, copia la cadena de conexión (`postgresql://...neon.tech/...?sslmode=require`). Es una contraseña: no la subas al repositorio.
+
+## 3. Backend en Render (Blueprint)
 
 1. Crea una cuenta en [render.com](https://render.com) e inicia sesión con GitHub.
-2. **New → Blueprint** → elige el repositorio. Render lee `render.yaml` y crea:
-   - `pld-api`: el backend, construido con `backend/Dockerfile`.
-   - `pld-db`: PostgreSQL. `DATABASE_URL` se conecta sola.
-   - `JWT_SECRET`: Render lo genera automáticamente.
-3. Espera al primer despliegue. Al arrancar, el contenedor migra la base de datos y carga las lecciones.
+2. **New → Blueprint** → elige el repositorio. Render lee `render.yaml` y te pide los valores secretos:
+   - `DATABASE_URL`: pega la cadena de conexión de Neon.
+   - `SMTP_*`: déjalos vacíos por ahora (ver el paso 5).
+   - `JWT_SECRET` lo genera Render.
+3. Espera al primer despliegue (unos minutos). Al arrancar, el contenedor crea las tablas en Neon y carga las lecciones.
 4. Comprueba `https://<tu-servicio>.onrender.com/api/health` → `{"status":"ok"}`.
 
-> VERIFY: revisa las condiciones actuales del plan gratuito de Render. El servicio web gratuito se suspende tras un rato sin uso (la primera petición tarda cerca de un minuto) y la base de datos gratuita caduca pasado un tiempo. Para uso real, pasa la base de datos a un plan de pago o usa otro proveedor.
+Plan gratuito de Render: el servicio se duerme tras 15 min sin tráfico y la primera petición tarda cerca de un minuto en despertarlo.
 
-## 3. Conectar el frontend con el backend
+## 4. Conectar el frontend con el backend
 
 Edita `frontend/config.js`:
 
@@ -45,7 +53,7 @@ Publica de nuevo con `deploy.ps1`. Aparecerá el botón «Iniciar sesión».
 
 Si cambias el dominio del frontend, actualiza en el backend `CORS_ORIGINS` y `FRONTEND_URL`.
 
-## 4. Emails de recuperación de contraseña
+## 5. Emails de recuperación de contraseña
 
 Sin SMTP, el enlace de recuperación solo se escribe en los logs del servidor, así que en producción **hace falta configurarlo**. En Render → `pld-api` → Environment, rellena:
 
@@ -53,10 +61,11 @@ Sin SMTP, el enlace de recuperación solo se escribe en los logs del servidor, a
 
 Sirve cualquier proveedor con SMTP y STARTTLS, por ejemplo el de tu dominio o un servicio de email transaccional.
 
-## 5. Antes de abrirlo a usuarios reales (NEEDS_HUMAN)
+## 6. Antes de abrirlo a usuarios reales
 
-- [ ] Completa en `frontend/privacidad.html` los campos marcados en amarillo: responsable, NIF, email de contacto, proveedor de alojamiento y de email.
-- [ ] Si el alojamiento está fuera de la UE, revisa la base de la transferencia internacional.
+- [x] Responsable, contacto y proveedores (Render y Neon, Frankfurt) en `frontend/privacidad.html`.
+- [ ] Revisa y acepta los acuerdos de tratamiento de datos (DPA) de Render y Neon desde sus paneles o webs.
+- [ ] Al activar el SMTP, añade el proveedor de email a la política.
 - [ ] Recomendado: que alguien con conocimientos de RGPD revise la política.
 
 ## Alternativa: servidor propio (por ejemplo, Oracle Cloud)

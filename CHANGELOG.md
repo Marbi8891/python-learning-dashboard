@@ -4,6 +4,15 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
 
 ## [Unreleased]
 
+## [0.7.1] - 2026-09-26
+
+### Cambiado
+- Despliegue del backend: API en Render (Frankfurt) y PostgreSQL en Neon (plan gratuito permanente, UE) en lugar de la base de datos gratuita de Render, que caduca a los 30 días (ADR-0008).
+- Política de privacidad completada: responsable, contacto y proveedores.
+
+### Corregido
+- Las conexiones a PostgreSQL se comprueban antes de usarse (`pool_pre_ping`): evita errores tras un rato sin uso cuando la base de datos se suspende.
+
 ## [0.7.0] - 2026-09-26
 
 ### Añadido

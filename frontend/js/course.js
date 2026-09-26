@@ -11,7 +11,7 @@ export function lessonMinutes(lesson) {
 }
 
 /** Minutos estimados de un reto opcional según su dificultad. */
-export const challengeMinutes = (lesson) => lesson.challenge.stars * MINUTES.perStar;
+const challengeMinutes = (lesson) => lesson.challenge.stars * MINUTES.perStar;
 
 /** "3 h 45 min", "50 min"... */
 export function formatDuration(minutes) {

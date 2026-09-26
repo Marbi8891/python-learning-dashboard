@@ -46,6 +46,7 @@ Decisiones documentadas:
 - [ADR-0005 Gamificación](docs/adr/0005-gamificacion.md)
 - [ADR-0006 Experiencia del alumno](docs/adr/0006-experiencia-del-alumno.md)
 - [ADR-0007 Estética editorial](docs/adr/0007-estetica-editorial.md)
+- [ADR-0008 Backend en Render y base de datos en Neon](docs/adr/0008-backend-render-neon.md)
 
 ```
 ├── frontend/

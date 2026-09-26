@@ -36,19 +36,6 @@
 }
 
 /* ---------- Marca y navegación de la barra lateral ---------- */
-.brand__logo {
-  width: 40px;
-  height: 40px;
-  border: 1.5px solid var(--color-primary);
-  border-radius: 8px;
-  background: var(--color-surface-2);
-  color: var(--color-primary);
-  font-family: var(--font-display);
-  font-style: italic;
-  font-size: 17px;
-  font-weight: 500;
-}
-
 .brand__text {
   display: grid;
   line-height: 1.15;
@@ -103,16 +90,6 @@
   box-shadow: 0 1px 0 rgb(255 255 255 / 0.15) inset, 0 6px 20px -8px var(--shadow);
 }
 
-.btn--lg {
-  padding: 13px 24px;
-}
-
-/* ---------- Asistente ---------- */
-.assistant__toggle {
-  background: var(--color-primary-strong);
-  color: var(--color-on-primary);
-}
-
 /* ---------- Cabecera de lección ---------- */
 .lesson-header {
   position: relative;
@@ -149,10 +126,6 @@
   border: 1px solid var(--color-border);
   border-radius: 999px;
   background: var(--color-surface);
-}
-
-.tabs__tab[aria-selected="true"]::after {
-  background: var(--color-primary);
 }
 
 /* ---------- Páginas completas (portada y perfil) ---------- */

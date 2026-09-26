@@ -135,3 +135,14 @@ def test_seed_script_entry_point(client, monkeypatch, capsys):
     monkeypatch.setattr(database, "SessionLocal", sessionmaker(bind=client.engine))
     runpy.run_path(seed.__file__, run_name="__main__")
     assert "Seed completado: 15 lecciones" in capsys.readouterr().out
+
+
+def test_postgres_engine_survives_idle_connections():
+    # Neon suspende la base de datos sin uso: las conexiones del pool se comprueban antes de usarse
+    url = Settings(
+        database_url="postgresql://u:p@ep-x.eu-central-1.aws.neon.tech/pld?sslmode=require"
+    ).database_url
+    engine = database._make_engine(url)
+    assert engine.pool._pre_ping is True
+    assert engine.pool._recycle == 300
+    assert engine.dialect.driver == "psycopg"

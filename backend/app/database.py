@@ -13,9 +13,12 @@ class Base(DeclarativeBase):
 
 
 def _make_engine(url: str):
-    # SQLite necesita este ajuste para usarse desde los hilos de FastAPI
-    connect_args = {"check_same_thread": False} if url.startswith("sqlite") else {}
-    return create_engine(url, connect_args=connect_args)
+    if url.startswith("sqlite"):
+        # SQLite necesita este ajuste para usarse desde los hilos de FastAPI
+        return create_engine(url, connect_args={"check_same_thread": False})
+    # PostgreSQL gestionado (Neon) suspende la base de datos sin uso y cierra las conexiones:
+    # pre_ping descarta las conexiones muertas antes de usarlas en vez de devolver un error 500.
+    return create_engine(url, pool_pre_ping=True, pool_recycle=300)
 
 
 engine = _make_engine(get_settings().database_url)
