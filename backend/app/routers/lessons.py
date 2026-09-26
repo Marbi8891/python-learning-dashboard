@@ -34,13 +34,4 @@ def get_lesson(slug: str, db: Session = Depends(get_db)) -> LessonDetail:
         theory=lesson.theory,
         example_code=lesson.example_code,
         exercise=lesson.exercise,
-        sources=lesson.sources,
-        starter=lesson.starter,
-        example_stdin=lesson.example_stdin,
-        exercise_stdin=lesson.exercise_stdin,
-        example_in_browser=lesson.example_in_browser,
-        checks=lesson.checks,
-        assistant=lesson.assistant,
-        quiz=lesson.quiz,
-        challenge=lesson.challenge or None,
     )

@@ -1,6 +1,6 @@
 [project]
 name = "python-learning-dashboard-api"
-version = "0.5.0"
+version = "0.1.0"
 description = "API del Python Learning Dashboard"
 requires-python = ">=3.11"
 
@@ -16,7 +16,3 @@ ignore = ["B008"]  # Depends() en argumentos por defecto es el patrón de FastAP
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["."]
-filterwarnings = [
-    # Aviso interno de starlette sobre su cliente de tests; no afecta a la API
-    "ignore:Using .httpx. with .starlette.testclient.:UserWarning",
-]

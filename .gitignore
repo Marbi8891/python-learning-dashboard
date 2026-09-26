@@ -6,7 +6,6 @@
 __pycache__/
 *.pyc
 .pytest_cache/
-.ruff_cache/
 
 # Secretos y datos locales del backend
 .env
@@ -15,12 +14,3 @@ __pycache__/
 # Sistema operativo
 Thumbs.db
 .DS_Store
-
-# Node (tests end-to-end)
-node_modules/
-test-results/
-playwright-report/
-
-# Versión local para Windows (Iniciar-Dashboard.bat)
-.venv-local/
-backend/.local-secret

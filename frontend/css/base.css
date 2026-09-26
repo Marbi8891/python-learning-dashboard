@@ -2,14 +2,6 @@
    base.css — tokens de diseño, reset y layout general
    ========================================================= */
 
-/* Fuentes alojadas en el propio sitio (sin peticiones a terceros: RGPD) */
-@font-face { font-family: "Inter"; font-weight: 400; font-display: swap; src: url("../fonts/inter-latin-400-normal.woff2") format("woff2"); }
-@font-face { font-family: "Inter"; font-weight: 500; font-display: swap; src: url("../fonts/inter-latin-500-normal.woff2") format("woff2"); }
-@font-face { font-family: "Inter"; font-weight: 600; font-display: swap; src: url("../fonts/inter-latin-600-normal.woff2") format("woff2"); }
-@font-face { font-family: "Inter"; font-weight: 700; font-display: swap; src: url("../fonts/inter-latin-700-normal.woff2") format("woff2"); }
-@font-face { font-family: "JetBrains Mono"; font-weight: 400; font-display: swap; src: url("../fonts/jetbrains-mono-latin-400-normal.woff2") format("woff2"); }
-@font-face { font-family: "JetBrains Mono"; font-weight: 500; font-display: swap; src: url("../fonts/jetbrains-mono-latin-500-normal.woff2") format("woff2"); }
-
 :root {
   /* Superficies: azules profundos y grises carbón */
   --color-bg:        #0b1220;
@@ -21,16 +13,13 @@
   /* Texto */
   --color-text:       #e6ebf5;
   --color-text-muted: #9aa7bf;   /* contraste ≈ 7:1 sobre --color-surface */
-  --color-text-faint: #8390a8;   /* contraste 5,4:1 sobre --color-surface */
+  --color-text-faint: #6b7890;   /* solo para elementos no esenciales */
 
   /* Acentos */
   --color-accent:       #22c55e; /* verde vibrante: progreso, completado */
   --color-accent-soft:  rgb(34 197 94 / 0.14);
   --color-primary:      #3b82f6; /* azul: foco, enlaces */
   --color-primary-soft: rgb(59 130 246 / 0.16);
-  --color-primary-strong: #2563eb; /* fondo de botones con texto blanco: 5,2:1 */
-  --color-danger:       #f87171;
-  --color-danger-strong: #dc2626;
 
   /* Tipografía */
   --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -90,11 +79,6 @@ button {
   outline-offset: 2px;
 }
 
-/* El atributo hidden siempre gana, aunque una clase defina display (p. ej. .btn) */
-[hidden] {
-  display: none !important;
-}
-
 /* ---------- Utilidades de accesibilidad ---------- */
 .visually-hidden {
   position: absolute;
@@ -111,7 +95,7 @@ button {
   left: var(--space-2);
   z-index: 100;
   padding: var(--space-2) var(--space-3);
-  background: var(--color-primary-strong);
+  background: var(--color-primary);
   color: #fff;
   border-radius: var(--radius-sm);
   transform: translateY(-150%);
@@ -130,13 +114,7 @@ button {
 
 .main {
   padding: var(--space-6);
-  padding-bottom: 120px; /* espacio para el botón del asistente */
   min-width: 0; /* evita desbordes con bloques de código largos */
-}
-
-/* Barra superior: solo en móvil */
-.topbar {
-  display: none;
 }
 
 .main:focus {
@@ -150,35 +128,6 @@ button {
 
   .main {
     padding: var(--space-4);
-    padding-bottom: 110px;
-  }
-
-  .topbar {
-    position: sticky;
-    top: 0;
-    z-index: 30;
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-    padding: var(--space-2) var(--space-4);
-    background: var(--color-surface);
-    border-bottom: 1px solid var(--color-border);
-  }
-
-  .topbar__menu {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2);
-    padding: var(--space-2) var(--space-3);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-sm);
-    background: var(--color-surface-2);
-    font-weight: 600;
-    cursor: pointer;
-  }
-
-  .topbar__brand {
-    font-weight: 700;
   }
 }
 

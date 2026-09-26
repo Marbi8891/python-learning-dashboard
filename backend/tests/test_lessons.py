@@ -1,9 +1,38 @@
 """Tests de la API de lecciones con una base de datos SQLite en memoria."""
 
-from sqlalchemy import event
+import pytest
+from fastapi.testclient import TestClient
+from sqlalchemy import create_engine, event
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.pool import StaticPool
 
+from app.database import Base, get_db
+from app.main import app
 from app.seed import seed
+
+
+@pytest.fixture
+def client():
+    engine = create_engine(
+        "sqlite://",
+        connect_args={"check_same_thread": False},
+        poolclass=StaticPool,  # la misma conexión en memoria para todo el test
+    )
+    Base.metadata.create_all(engine)
+    testing_session = sessionmaker(bind=engine, expire_on_commit=False)
+
+    with testing_session() as db:
+        seed(db)
+
+    def override_get_db():
+        with testing_session() as db:
+            yield db
+
+    app.dependency_overrides[get_db] = override_get_db
+    with TestClient(app) as test_client:
+        test_client.engine = engine
+        yield test_client
+    app.dependency_overrides.clear()
 
 
 def test_health(client):
@@ -40,22 +69,6 @@ def test_lesson_detail(client):
     assert lesson["title"] == "Variables y print()"
     assert lesson["module_slug"] == "fundamentos"
     assert "print(" in lesson["example_code"]
-    assert len(lesson["quiz"]) == 3 and lesson["quiz"][0]["options"]
-    assert lesson["challenge"]["title"] == "Tarjeta de presentación"
-
-
-def test_every_lesson_has_content_and_sources(client):
-    modules = client.get("/api/modules").json()
-    for module in modules:
-        for summary in module["lessons"]:
-            lesson = client.get(f"/api/lessons/{summary['slug']}").json()
-            assert lesson["theory"] and lesson["example_code"] and lesson["exercise"]
-            assert lesson["sources"], f"{summary['slug']} no cita ninguna fuente"
-            assert all(s["url"].startswith("https://") for s in lesson["sources"])
-            assert lesson["starter"] and lesson["checks"], (
-                f"{summary['slug']} sin ejercicio corregible"
-            )
-            assert lesson["assistant"]["hint"] and len(lesson["assistant"]["faq"]) >= 2
 
 
 def test_unknown_lesson_returns_404(client):
