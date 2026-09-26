@@ -43,7 +43,7 @@ Plan gratuito de Render: el servicio se duerme tras 15 min sin tráfico y la pri
 
 ## 4. Conectar el frontend con el backend
 
-Edita `frontend/config.js`:
+Ya está hecho para `https://pld-api.onrender.com`. Si tu servicio tiene otra URL, edita `frontend/config.js`:
 
 ```js
 window.PLD_CONFIG = Object.assign({ apiUrl: "https://<tu-servicio>.onrender.com" }, window.PLD_CONFIG);
@@ -55,7 +55,7 @@ Si cambias el dominio del frontend, actualiza en el backend `CORS_ORIGINS` y `FR
 
 ## 5. Emails de recuperación de contraseña
 
-Sin SMTP, el enlace de recuperación solo se escribe en los logs del servidor, así que en producción **hace falta configurarlo**. En Render → `pld-api` → Environment, rellena:
+Sin SMTP, el enlace de recuperación solo se escribe en los logs del servidor y la web muestra el email de contacto (`contactEmail` en `frontend/config.js`) en lugar del formulario. Para que los alumnos recuperen la contraseña solos, configúralo. En Render → `pld-api` → Environment, rellena:
 
 `SMTP_HOST`, `SMTP_PORT` (587), `SMTP_USER`, `SMTP_PASSWORD` y `SMTP_FROM`.
 

@@ -110,3 +110,28 @@ test("recuperar contraseña: solicitud y enlace no válido", async ({ page }) =>
   await page.locator("#reset-form").getByRole("button", { name: "Guardar contraseña" }).click();
   await expect(page.locator("#account-message")).toContainText("no es válido o ha caducado");
 });
+
+test("sin email en el servidor, la recuperación ofrece el contacto", async ({ page }) => {
+  await page.route("**/api/health", (route) => route.fulfill({ json: { status: "ok", email: false } }));
+  await openLesson(page);
+  await page.getByRole("button", { name: "Iniciar sesión" }).click();
+  await dialog(page).getByRole("link", { name: "¿Has olvidado tu contraseña?" }).click();
+  const form = page.locator("#forgot-form");
+  await expect(form).toContainText("La recuperación por email aún no está activa");
+  await expect(form.getByRole("link", { name: /@/ })).toHaveAttribute("href", /^mailto:/);
+  await expect(form.getByRole("button", { name: "Enviar enlace" })).toBeHidden();
+});
+
+test("un servidor lento avisa de que se está despertando", async ({ page }) => {
+  await page.route("**/api/auth/login", async (route) => {
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+    await route.continue();
+  });
+  await openLesson(page);
+  await page.getByRole("button", { name: "Iniciar sesión" }).click();
+  await page.locator("#login-form").getByLabel("Email").fill("nadie@example.com");
+  await page.locator("#login-form").getByLabel("Contraseña").fill(PASSWORD);
+  await page.locator("#login-form").getByRole("button", { name: "Entrar" }).click();
+  await expect(page.locator("#account-message")).toContainText("El servidor se está despertando");
+  await expect(page.locator("#account-message")).not.toContainText("despertando", { timeout: 15_000 });
+});

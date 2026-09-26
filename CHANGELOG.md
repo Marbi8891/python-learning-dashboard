@@ -4,6 +4,14 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
 
 ## [Unreleased]
 
+## [0.8.0] - 2026-09-26
+
+### Añadido
+- La web publicada se conecta a la API en producción (`https://pld-api.onrender.com`): cuentas, progreso sincronizado y RGPD. En localhost sigue usando la API local.
+- Al cargar la página se despierta el servidor (el plan gratuito se duerme sin uso) y, si una petición tarda, se avisa de que puede tardar hasta un minuto.
+- `/api/health` indica si hay email configurado. Sin SMTP, «¿Has olvidado tu contraseña?» ofrece el email de contacto en lugar de un enlace que nunca llegaría.
+- Dependencias `@aws-sdk/client-s3`, `@aws-sdk/s3-request-presigner` y `dotenv` para Object Storage de Neon (S3). Aún no las usa ningún código.
+
 ## [0.7.1] - 2026-09-26
 
 ### Cambiado

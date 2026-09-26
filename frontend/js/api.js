@@ -8,6 +8,14 @@ export const apiEnabled = Boolean(API_URL);
 
 const TOKEN_KEY = "pld:token";
 
+/** Despierta el servidor (el plan gratuito se duerme sin uso) y lee sus capacidades.
+    Se lanza al cargar la página para que el alumno no espere al iniciar sesión. */
+export const serverInfo = apiEnabled
+  ? fetch(`${API_URL}/api/health`)
+      .then((response) => response.json())
+      .catch(() => null)
+  : Promise.resolve(null);
+
 export class ApiError extends Error {
   constructor(status, message) {
     super(message);

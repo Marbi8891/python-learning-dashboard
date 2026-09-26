@@ -3,13 +3,19 @@
 from sqlalchemy import event
 from sqlalchemy.orm import sessionmaker
 
+from app.config import get_settings
 from app.seed import seed
 
 
 def test_health(client):
     response = client.get("/api/health")
     assert response.status_code == 200
-    assert response.json() == {"status": "ok"}
+    assert response.json() == {"status": "ok", "email": False}
+
+
+def test_health_reports_email_when_smtp_is_configured(client, monkeypatch):
+    monkeypatch.setattr(get_settings(), "smtp_host", "smtp.example.com")
+    assert client.get("/api/health").json()["email"] is True
 
 
 def test_modules_are_ordered_with_lessons(client):

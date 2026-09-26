@@ -1,6 +1,6 @@
 /* Diálogo de cuenta: login, registro, recuperación, perfil, exportación y borrado. */
 
-import { apiEnabled, request } from "./api.js";
+import { apiEnabled, request, serverInfo } from "./api.js";
 import { endSession, startSession, state, subscribe } from "./store.js";
 
 const $ = (selector) => document.querySelector(selector);
@@ -25,17 +25,38 @@ function setMessage(text, kind = "error") {
   box.hidden = !text;
 }
 
+const SLOW_MS = 4000;
+
 async function submitting(form, action) {
   const button = form.querySelector("button[type=submit]");
   button.disabled = true;
   setMessage("Conectando con el servidor…", "info");
+  // El servidor gratuito se duerme sin uso y tarda hasta un minuto en despertar
+  const slow = setTimeout(
+    () => setMessage("El servidor se está despertando: la primera vez puede tardar hasta un minuto. No cierres esta ventana.", "info"),
+    SLOW_MS,
+  );
   try {
     await action(new FormData(form));
   } catch (error) {
     setMessage(error.message);
   } finally {
+    clearTimeout(slow);
     button.disabled = false;
   }
+}
+
+/** Sin SMTP en el servidor no se pueden enviar enlaces: se ofrece el contacto en su lugar. */
+async function setupPasswordRecovery() {
+  const info = await serverInfo;
+  if (!info || info.email) return;
+  const contact = window.PLD_CONFIG?.contactEmail;
+  const form = $("#forgot-form");
+  form.querySelector("label").hidden = true;
+  form.querySelector("button[type=submit]").hidden = true;
+  form.querySelector("p").innerHTML = contact
+    ? `La recuperación por email aún no está activa. Escribe desde el email de tu cuenta a <a href="mailto:${contact}">${contact}</a> y te enviaremos un enlace para elegir otra contraseña.`
+    : "La recuperación por email aún no está activa.";
 }
 
 async function login(email, password) {
@@ -78,6 +99,7 @@ export function openPasswordReset(token) {
 export function initAccount({ toast }) {
   showToast = toast;
   renderAccountButton();
+  setupPasswordRecovery();
   subscribe((change) => {
     if (change.type !== "user") return;
     renderAccountButton();

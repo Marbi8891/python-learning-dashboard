@@ -27,7 +27,7 @@ async def lifespan(_: FastAPI):
     yield
 
 
-app = FastAPI(title="Python Learning Dashboard API", version="0.7.1", lifespan=lifespan)
+app = FastAPI(title="Python Learning Dashboard API", version="0.8.0", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
@@ -41,8 +41,9 @@ for router in (lessons.router, auth.router, account.router, progress.router, att
 
 
 @app.get("/api/health", tags=["sistema"])
-def health() -> dict[str, str]:
-    return {"status": "ok"}
+def health() -> dict[str, str | bool]:
+    # "email": el frontend solo ofrece la recuperación por email si hay SMTP configurado
+    return {"status": "ok", "email": bool(get_settings().smtp_host)}
 
 
 if get_settings().serve_frontend:

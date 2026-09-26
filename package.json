@@ -1,6 +1,6 @@
 {
   "name": "python-learning-dashboard",
-  "version": "0.7.1",
+  "version": "0.8.0",
   "private": true,
   "description": "Tests end-to-end del Python Learning Dashboard (frontend + backend reales)",
   "scripts": {
@@ -10,5 +10,10 @@
   "devDependencies": {
     "@axe-core/playwright": "4.10.2",
     "@playwright/test": "1.56.0"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.1141.0",
+    "@aws-sdk/s3-request-presigner": "^3.1141.0",
+    "dotenv": "^18.0.4"
   }
 }
