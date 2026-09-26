@@ -93,3 +93,49 @@ def test_challenge_starter_does_not_pass(lesson, tmp_path, monkeypatch):
         compile(case["test"], "<tests>", "exec")
     monkeypatch.chdir(tmp_path)
     assert not runner.check_exercise(challenge["starter"], challenge["checks"])["passed"]
+
+
+@pytest.mark.parametrize(
+    ("code", "stdin", "title", "line"),
+    [
+        ("if True:\nprint(1)", "", "Problema de sangría", 2),
+        ("print('hola'", "", "Falta cerrar algo", 1),
+        ("x = 1\nif x > 0\n    print(x)", "", "Faltan los dos puntos", 2),
+        ("x = 1\nif x = 1:\n    pass", "", "¿Querías comparar?", 2),
+        ("print('a' 'b' 1)", "", "¿Falta una coma?", 1),
+        ("x = 1\ndef f():\n    x += 1\nf()", "", "Variable usada antes de darle valor", 3),
+        ("x = 1\nprint(nombre)", "", "`nombre` no existe (todavía)", 2),
+        ("edad = 30\nprint('Edad: ' + edad)", "", "Mezclas tipos que no se combinan", 2),
+        ("print = 3\nprint(1)", "", "Eso no es una función", 2),
+        ("def f(a, b):\n    pass\nf(1)", "", "Faltan datos al llamar a la función", 3),
+        ("def f(a):\n    pass\nf(1, 2)", "", "Sobran datos al llamar a la función", 3),
+        ("len(5)", "", "Operación no válida para ese tipo de dato", 1),
+        ("edad = int(input())", "hola", "Ese texto no es un número", 1),
+        ("import math\nmath.sqrt(-1)", "", "Valor no válido", 2),
+        ("print(1 / 0)", "", "División entre cero", 1),
+        ("[1, 2][5]", "", "Esa posición no existe", 1),
+        ("{'a': 1}['b']", "", "Esa clave no está en el diccionario", 1),
+        ("'hola'.append('!')", "", "Ese valor no tiene ese método", 1),
+        ("input()", "", "Faltan datos en «Entrada»", 1),
+        ("import modulo_que_no_existe_pld", "", "Paquete no disponible aquí", 1),
+        ("def f():\n    return f()\nf()", "", "Una función se llama a sí misma sin fin", 2),
+        ("open('no-existe.txt')", "", "No se encuentra el archivo", 1),
+    ],
+)
+def test_errors_are_explained_in_spanish(code, stdin, title, line, tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    hint = runner.run_code(code, stdin)["hint"]
+    assert hint["title"] == title
+    assert hint["text"]
+    assert hint["line"] == line
+
+
+def test_unexplained_errors_have_no_hint():
+    assert runner.run_code("raise RuntimeError('x')")["hint"] is None
+    assert runner.run_code("print(1)")["hint"] is None
+
+
+def test_check_exercise_explains_errors():
+    result = runner.check_exercise("print(x)", [{"test": "assert True"}])
+    assert not result["passed"]
+    assert result["hint"]["title"] == "`x` no existe (todavía)"

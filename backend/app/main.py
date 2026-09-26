@@ -27,7 +27,7 @@ async def lifespan(_: FastAPI):
     yield
 
 
-app = FastAPI(title="Python Learning Dashboard API", version="0.5.0", lifespan=lifespan)
+app = FastAPI(title="Python Learning Dashboard API", version="0.6.0", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,

@@ -20,7 +20,9 @@ Dashboard interactivo para aprender Python de principiante a avanzado: 15 leccio
 - **Retos extra:** uno por lección, de ★ a ★★★ (FizzBuzz, carrito de la compra, renombrador de fotos…), con tests automáticos.
 - **XP, niveles y racha:** 7 niveles de «Novato/a» a «Leyenda de Python», bonus por acertar a la primera, 13 logros con su vitrina y confeti (desactivado si el sistema pide reducir el movimiento).
 - **Cuenta (opcional):** registro, login, progreso sincronizado entre dispositivos, recuperación de contraseña y RGPD (descargar los datos y borrar la cuenta).
-- **Accesible y adaptable:** WCAG 2.1 AA verificado automáticamente, navegable con teclado y con menú móvil.
+- **Pensado para el alumno:** portada con «Continuar donde lo dejaste», guía Aprende → Practica → Comprueba en cada lección, consola al lado en pantallas anchas y errores de Python explicados en español.
+- **Tema y letra:** claro, oscuro o automático, y tres tamaños de letra.
+- **Accesible y adaptable:** WCAG 2.1 AA verificado automáticamente en los dos temas, navegable con teclado y con menú móvil.
 
 ## Usarlo en tu PC (Windows)
 
@@ -41,6 +43,7 @@ Decisiones documentadas:
 - [ADR-0003 Autenticación y ejercicios](docs/adr/0003-autenticacion-y-ejercicios.md)
 - [ADR-0004 Consola, corrección y privacidad](docs/adr/0004-consola-ejercicios-y-privacidad.md)
 - [ADR-0005 Gamificación](docs/adr/0005-gamificacion.md)
+- [ADR-0006 Experiencia del alumno](docs/adr/0006-experiencia-del-alumno.md)
 
 ```
 ├── frontend/
@@ -103,7 +106,7 @@ JWT_SECRET=<valor> docker compose up --build
 
 La CI ejecuta todo en cada push, incluidas las migraciones contra PostgreSQL 16.
 
-## API (v0.3)
+## API
 
 | Método | Ruta | Auth | Descripción |
 |---|---|---|---|

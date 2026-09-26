@@ -2,9 +2,6 @@
    content.css — cabecera, pestañas, teoría, código, práctica
    ========================================================= */
 
-.main {
-  max-width: 920px;
-}
 
 /* ---------- Cabecera de lección ---------- */
 .lesson-header {
@@ -93,7 +90,7 @@
 }
 
 .prose strong {
-  color: #fff;
+  color: var(--color-strong);
 }
 
 .prose code,
@@ -104,7 +101,7 @@
   border: 1px solid var(--color-border);
   font-family: var(--font-mono);
   font-size: 0.88em;
-  color: #7ee2a8;
+  color: var(--color-code-inline);
 }
 
 kbd {
@@ -196,16 +193,16 @@ kbd {
 }
 
 .btn--primary:hover {
-  background: #1d4ed8;
+  background: var(--color-primary-hover);
 }
 
 .btn--success {
   background: var(--color-accent);
-  color: #06210f;
+  color: var(--color-on-accent);
 }
 
 .btn--success:hover {
-  background: #1fb053;
+  background: var(--color-accent-hover);
 }
 
 .btn--ghost {
@@ -241,7 +238,7 @@ kbd {
 
 .hint a,
 .sources a {
-  color: #8fb8ff;
+  color: var(--color-link);
   text-decoration: underline;
   text-underline-offset: 2px;
 }
@@ -307,7 +304,7 @@ kbd {
   border-radius: var(--radius-md);
   background: var(--color-surface-2);
   border: 1px solid var(--color-accent);
-  box-shadow: 0 10px 30px rgb(0 0 0 / 0.4);
+  box-shadow: 0 10px 30px var(--shadow);
   font-weight: 600;
   opacity: 0;
   pointer-events: none;

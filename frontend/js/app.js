@@ -22,11 +22,14 @@ import {
   levelInfo,
   recordChallenge,
   recordExercise,
+  recordRead,
   recordRun,
   streak,
   subscribe as onGame,
 } from "./game.js";
+import { renderHome } from "./home.js";
 import { escapeHtml, renderMarkdown } from "./markdown.js";
+import { initPrefs } from "./prefs.js";
 import { setQuizLesson } from "./quiz.js";
 import { recordAttempt, restoreSession, setCompleted, state, subscribe } from "./store.js";
 
@@ -35,13 +38,15 @@ hljs.registerLanguage("python", python);
 const DATA_URL = "data/lessons.json";
 const ROUTE_PREFIX = "#/leccion/";
 const RESET_ROUTE = "#/restablecer";
+const HOME_ROUTE = "#/inicio";
 const mobile = window.matchMedia("(max-width: 900px)");
 
 const content = {
   modules: [],
   lessons: new Map(), // slug -> { ...lesson, module, index }
   order: [], // slugs en el orden de la ruta
-  current: null,
+  current: null, // lección abierta (o la siguiente recomendada, en el inicio)
+  view: "home", // "home" | "lesson"
 };
 
 const $ = (selector) => document.querySelector(selector);
@@ -115,7 +120,7 @@ function updateSidebar() {
     const lesson = content.lessons.get(link.dataset.slug);
     const previous = lessonAt(lesson.index - 1);
     let status = "available";
-    if (lesson.slug === content.current) status = "active";
+    if (lesson.slug === content.current && content.view === "lesson") status = "active";
     else if (state.completed.has(lesson.slug)) status = "completed";
     // Bloqueo orientativo: se puede abrir igualmente, pero se recomienda seguir el orden
     else if (previous && !state.completed.has(previous.slug)) status = "locked";
@@ -257,6 +262,8 @@ function updateCompleteButton() {
 
 /* ---------- Pestañas (patrón ARIA tabs) ---------- */
 
+let activeTab = "theory";
+
 function selectTab(tab, { focus = false } = {}) {
   for (const t of document.querySelectorAll('[role="tab"]')) {
     const selected = t === tab;
@@ -264,7 +271,90 @@ function selectTab(tab, { focus = false } = {}) {
     t.tabIndex = selected ? 0 : -1;
     document.getElementById(t.getAttribute("aria-controls")).hidden = !selected;
   }
+  activeTab = tab.id.replace("tab-", "");
+  // Ir a practicar o al quiz cuenta como haber visto la teoría
+  if (activeTab !== "theory" && content.current) recordRead(content.current);
   if (focus) tab.focus();
+  renderGuide();
+}
+
+function openTab(name) {
+  selectTab($(`#tab-${name}`));
+  document.getElementById(`panel-${name}`).focus({ preventScroll: true });
+  $("#lesson-title").scrollIntoView({ block: "start", behavior: "smooth" });
+}
+
+/* ---------- Guía de la lección: Aprende → Practica → Comprueba ---------- */
+
+function lessonSteps(slug) {
+  const practiced = state.completed.has(slug);
+  return [
+    { key: "learn", label: "Aprende", done: practiced || game.read.includes(slug) },
+    { key: "practice", label: "Practica", done: practiced },
+    { key: "quiz", label: "Comprueba", done: game.quiz[slug] !== undefined },
+  ];
+}
+
+function nextAction() {
+  const slug = content.current;
+  const pending = lessonSteps(slug).find((step) => !step.done)?.key ?? "done";
+  const next = lessonAt(currentLesson().index + 1);
+  switch (pending) {
+    case "learn":
+      return { label: "Ya lo he leído: a practicar →", run: () => openTab("practice") };
+    case "practice":
+      return activeTab === "practice"
+        ? {
+            label: "Cargar la plantilla y empezar →",
+            run: () => {
+              loadStarter();
+              $("#console-editor").scrollIntoView({ block: "center", behavior: "smooth" });
+            },
+          }
+        : { label: "Ir al ejercicio →", run: () => openTab("practice") };
+    case "quiz":
+      return { label: "Hacer el mini-quiz →", run: () => openTab("quiz") };
+    default:
+      return next
+        ? { label: `Siguiente lección: ${next.title} →`, run: () => goTo(next.slug) }
+        : { label: "¡Curso completado! Ver mis logros", run: () => $("#badges-button").click() };
+  }
+}
+
+function renderGuide() {
+  if (!content.current || content.view !== "lesson") return;
+  const steps = lessonSteps(content.current);
+  const current = steps.findIndex((step) => !step.done);
+  $("#guide-steps").innerHTML = steps
+    .map((step, i) => {
+      const status = step.done ? "done" : i === current ? "current" : "todo";
+      const note = step.done ? " (hecho)" : i === current ? " (paso actual)" : "";
+      return `<li class="step" data-state="${status}"${i === current ? ' aria-current="step"' : ""}>
+        <span class="step__dot" aria-hidden="true">${step.done ? "✓" : i + 1}</span>${step.label}<span class="visually-hidden">${note}</span>
+      </li>`;
+    })
+    .join("");
+  $("#next-step").textContent = nextAction().label;
+}
+
+/* ---------- Inicio ---------- */
+
+function refreshProgressViews() {
+  renderGuide();
+  if (content.view === "home") $("#home-view").innerHTML = renderHome(content, defaultSlug());
+}
+
+function showHome({ moveFocus = true } = {}) {
+  content.view = "home";
+  content.current = defaultSlug();
+  $("#lesson-view").hidden = true;
+  $("#home-view").hidden = false;
+  $("#home-view").innerHTML = renderHome(content, content.current);
+  document.title = "Python Learning Dashboard";
+  updateSidebar();
+  if (mobile.matches) setMenu(false);
+  if (moveFocus) $("#home-title").focus();
+  window.scrollTo({ top: 0 });
 }
 
 function initTabs() {
@@ -408,15 +498,23 @@ function goTo(slug) {
 function navigate({ moveFocus = true } = {}) {
   if (location.hash.startsWith(RESET_ROUTE)) {
     const token = new URLSearchParams(location.hash.split("?")[1] ?? "").get("token");
-    history.replaceState(null, "", `${ROUTE_PREFIX}${defaultSlug()}`);
+    history.replaceState(null, "", HOME_ROUTE);
     if (token) openPasswordReset(token);
   }
 
+  if (!location.hash.startsWith(ROUTE_PREFIX)) {
+    if (location.hash !== HOME_ROUTE) history.replaceState(null, "", HOME_ROUTE);
+    showHome({ moveFocus });
+    return;
+  }
+
   const requested = decodeURIComponent(location.hash.slice(ROUTE_PREFIX.length));
-  const slug =
-    location.hash.startsWith(ROUTE_PREFIX) && content.lessons.has(requested) ? requested : defaultSlug();
+  const slug = content.lessons.has(requested) ? requested : defaultSlug();
   if (location.hash !== `${ROUTE_PREFIX}${slug}`) history.replaceState(null, "", `${ROUTE_PREFIX}${slug}`);
 
+  content.view = "lesson";
+  $("#home-view").hidden = true;
+  $("#lesson-view").hidden = false;
   content.current = slug;
   const lesson = currentLesson();
   renderLesson(lesson);
@@ -426,6 +524,7 @@ function navigate({ moveFocus = true } = {}) {
   setQuizLesson(lesson);
   updateChallengeDone();
   setAssistantLesson(lesson, lessonAt(lesson.index + 1), goTo);
+  renderGuide();
   if (mobile.matches) setMenu(false);
   if (moveFocus) $("#lesson-title").focus();
   window.scrollTo({ top: 0 });
@@ -465,6 +564,7 @@ function initGameUi() {
   onGame(({ events, unlocked, levelUp, level }) => {
     updateGameCard();
     updateChallengeDone();
+    refreshProgressViews();
     if ($("#badges-dialog").open) renderBadges();
     for (const message of events) showToast(message);
     for (const badge of unlocked) showToast(`Logro desbloqueado: ${badge.name}`);
@@ -508,6 +608,7 @@ async function init() {
   initConsole();
   initAssistant();
   initAccount({ toast: showToast });
+  initPrefs();
 
   try {
     const response = await fetch(DATA_URL);
@@ -528,7 +629,9 @@ async function init() {
   subscribe(() => {
     updateSidebar();
     updateCompleteButton();
+    refreshProgressViews();
   });
+  $("#next-step").addEventListener("click", () => nextAction().run());
   restoreSession();
 }
 

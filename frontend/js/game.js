@@ -26,6 +26,7 @@ const listeners = new Set();
 function empty() {
   return {
     quiz: {}, // slug -> mejor número de aciertos
+    read: [], // lecciones cuya teoría el alumno ha marcado como leída
     passed: [], // ejercicios superados
     tried: [], // ejercicios comprobados al menos una vez
     firstTry: [], // ejercicios superados en el primer intento
@@ -147,6 +148,14 @@ function commit(events = []) {
 
 function activity() {
   add(game.days, today());
+}
+
+/** El alumno ha leído la teoría (paso 1 de la guía). No da XP: es solo orientación. */
+export function recordRead(slug) {
+  if (game.read.includes(slug)) return;
+  add(game.read, slug);
+  activity();
+  commit();
 }
 
 export function recordRun(ok) {

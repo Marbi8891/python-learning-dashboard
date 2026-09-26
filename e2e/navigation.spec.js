@@ -1,7 +1,10 @@
 const { test, expect, openLesson } = require("./fixtures");
 
-test("carga la primera lección pendiente y navega por la barra lateral", async ({ page }) => {
+test("la portada lleva a la primera lección pendiente y la barra lateral navega", async ({ page }) => {
   await openLesson(page);
+  await expect(page).toHaveURL(/#\/inicio$/);
+  await expect(page.locator("#home-title")).toContainText("Aprende Python paso a paso");
+  await page.getByRole("link", { name: "Empezar la primera lección →" }).click();
   await expect(page).toHaveURL(/#\/leccion\/variables$/);
   await expect(page.locator("#lesson-title")).toHaveText("Variables y print()");
   await expect(page.locator(".lesson[data-slug]")).toHaveCount(15);

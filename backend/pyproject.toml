@@ -1,6 +1,6 @@
 [project]
 name = "python-learning-dashboard-api"
-version = "0.5.0"
+version = "0.6.0"
 description = "API del Python Learning Dashboard"
 requires-python = ">=3.11"
 

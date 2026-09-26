@@ -51,7 +51,7 @@
   border-radius: 50%;
   background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
   color: #fff;
-  box-shadow: 0 10px 30px rgb(0 0 0 / 0.45);
+  box-shadow: 0 10px 30px var(--shadow);
   cursor: pointer;
   transition: transform var(--transition);
 }
@@ -68,7 +68,7 @@
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   background: var(--color-surface);
-  box-shadow: 0 20px 50px rgb(0 0 0 / 0.5);
+  box-shadow: 0 20px 50px var(--shadow);
   overflow: hidden;
 }
 
@@ -113,7 +113,7 @@
 .assistant__msg code {
   font-family: var(--font-mono);
   font-size: 0.9em;
-  color: #7ee2a8;
+  color: var(--color-code-inline);
 }
 
 .assistant__msg--bot {
@@ -153,7 +153,7 @@
 
 .chip--next {
   border-color: var(--color-accent);
-  color: #7ee2a8;
+  color: var(--color-code-inline);
 }
 
 .assistant__note {
@@ -237,7 +237,7 @@
   padding: 10px var(--space-3);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
-  background: var(--color-code-bg);
+  background: var(--color-input-bg);
   color: var(--color-text);
   font: inherit;
   font-weight: 400;
@@ -255,7 +255,7 @@
 }
 
 .account__form a {
-  color: #8fb8ff;
+  color: var(--color-link);
   text-decoration: underline;
 }
 

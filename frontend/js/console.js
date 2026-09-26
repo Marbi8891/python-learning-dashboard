@@ -1,6 +1,6 @@
 /* Consola interactiva y comprobación de ejercicios. */
 
-import { escapeHtml } from "./markdown.js";
+import { escapeHtml, renderInline } from "./markdown.js";
 import { PythonRunner, TimeoutError } from "./python-runner.js";
 
 const $ = (selector) => document.querySelector(selector);
@@ -49,22 +49,29 @@ function saveDraft() {
   }
 }
 
-function explain(error) {
-  if (!error) return "";
-  if (error.includes("EOFError")) {
-    return "\nPista: tu programa pide datos con input(). Escríbelos en «Entrada», uno por línea.";
-  }
-  if (error.includes("ModuleNotFoundError")) {
-    return "\nPista: ese paquete no está disponible en el navegador. Ejecuta este código en PyCharm.";
-  }
-  return "";
+/** Explicación en español del error (la genera runner.py) con botón para ir a la línea. */
+export function renderHint(hint) {
+  if (!hint) return "";
+  const line = hint.line
+    ? `<button type="button" class="error-help__line" data-go-line="${hint.line}">Ir a la línea ${hint.line}</button>`
+    : "";
+  return `<span class="error-help" role="note"><strong>${renderInline(hint.title)}</strong>${renderInline(hint.text)}<br>${line}</span>`;
 }
 
-function showOutput({ output = "", error = null }) {
+/** Selecciona una línea del editor (para señalar dónde está el error). */
+function goToLine(number) {
+  const editor = $("#console-editor");
+  const lines = editor.value.split("\n");
+  const start = lines.slice(0, number - 1).reduce((sum, text) => sum + text.length + 1, 0);
+  editor.focus();
+  editor.setSelectionRange(start, start + (lines[number - 1] ?? "").length);
+}
+
+function showOutput({ output = "", error = null, hint = null }) {
   const box = $("#console-output");
   const parts = [];
   if (output) parts.push(`<span>${escapeHtml(output)}</span>`);
-  if (error) parts.push(`<span class="console__error">${escapeHtml(error + explain(error))}</span>`);
+  if (error) parts.push(`<span class="console__error">${escapeHtml(error)}</span>${renderHint(hint)}`);
   box.innerHTML = parts.join("") || '<span class="console__muted">(El programa no ha mostrado nada)</span>';
 }
 
@@ -105,7 +112,7 @@ export function checkCode({ checks, button, box, onResult }) {
     box.innerHTML = `
       <p class="check__title">${result.passed ? "✓ ¡Correcto!" : "✗ Todavía no"}${where}</p>
       <p>${escapeHtml(result.message)}</p>
-      ${result.error ? `<pre class="console__error">${escapeHtml(result.error)}</pre>` : ""}`;
+      ${result.error ? `<pre class="console__error">${escapeHtml(result.error)}</pre>${renderHint(result.hint)}` : ""}`;
     box.focus();
     await onResult(result, code);
   });
@@ -164,6 +171,11 @@ export function initConsole() {
   editor.addEventListener("input", saveDraft);
 
   $("#console-run").addEventListener("click", runConsole);
+  // «Ir a la línea N» funciona tanto en la salida como en el resultado de la comprobación
+  document.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-go-line]");
+    if (button) goToLine(Number(button.dataset.goLine));
+  });
   $("#console-example").addEventListener("click", loadExample);
   $("#console-clear").addEventListener("click", () => {
     $("#console-output").innerHTML = "";

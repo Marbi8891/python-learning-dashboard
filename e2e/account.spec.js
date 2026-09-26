@@ -105,7 +105,7 @@ test("recuperar contraseña: solicitud y enlace no válido", async ({ page }) =>
 
   await page.goto(`/#/restablecer?token=${"x".repeat(43)}`);
   await expect(dialog(page)).toBeVisible();
-  await expect(page).toHaveURL(/#\/leccion\//); // el token no se queda en la URL
+  await expect(page).toHaveURL(/#\/inicio$/); // el token no se queda en la URL
   await page.locator("#reset-form").getByLabel(/Nueva contraseña/).fill("nueva-contraseña-456");
   await page.locator("#reset-form").getByRole("button", { name: "Guardar contraseña" }).click();
   await expect(page.locator("#account-message")).toContainText("no es válido o ha caducado");

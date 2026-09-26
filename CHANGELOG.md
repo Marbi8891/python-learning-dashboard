@@ -4,6 +4,20 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-09-26
+
+### Añadido
+- Portada con «Continuar donde lo dejaste», resumen del progreso y tarjetas por módulo.
+- Guía en cada lección (Aprende → Practica → Comprueba) con un botón «Siguiente paso».
+- Errores de Python explicados en español, con botón «Ir a la línea» (22 casos probados).
+- Tema claro, oscuro o automático y tres tamaños de letra, recordados en el navegador.
+- Tests: explicación de errores (backend); portada, guía, errores, apariencia, consola al lado y auditoría WCAG en los dos temas (e2e).
+
+### Cambiado
+- En pantallas de 1280 px o más, la consola queda fija al lado de la lección.
+- La barra lateral agrupa el progreso y los XP en una sola tarjeta.
+- Los colores salen de variables de tema (ADR-0006).
+
 ## [0.5.0] - 2026-09-26
 
 ### Añadido
