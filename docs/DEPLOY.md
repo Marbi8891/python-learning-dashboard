@@ -55,17 +55,39 @@ Si cambias el dominio del frontend, actualiza en el backend `CORS_ORIGINS` y `FR
 
 ## 5. Emails de recuperación de contraseña
 
-Sin SMTP, el enlace de recuperación solo se escribe en los logs del servidor y la web muestra el email de contacto (`contactEmail` en `frontend/config.js`) en lugar del formulario. Para que los alumnos recuperen la contraseña solos, configúralo. En Render → `pld-api` → Environment, rellena:
+Sin SMTP, el enlace de recuperación solo se escribe en los logs del servidor y la web muestra el email de contacto (`contactEmail` en `frontend/config.js`) en lugar del formulario. Cuando configuras el SMTP, `/api/health` devuelve `"email": true` y la web muestra el formulario sola: no hay que tocar el código.
 
-`SMTP_HOST`, `SMTP_PORT` (587), `SMTP_USER`, `SMTP_PASSWORD` y `SMTP_FROM`.
+### Opción A: Gmail (la más rápida)
 
-Sirve cualquier proveedor con SMTP y STARTTLS, por ejemplo el de tu dominio o un servicio de email transaccional.
+1. En tu cuenta de Google activa la **verificación en dos pasos** (Seguridad → Verificación en dos pasos).
+2. Crea una **contraseña de aplicación**: Seguridad → Contraseñas de aplicaciones → nombre «Python Learning». Google muestra 16 letras: cópialas (sin espacios). Es una contraseña: no la guardes en el repositorio.
+3. En Render → `pld-api` → **Environment**:
+
+| Variable | Valor |
+|---|---|
+| `SMTP_HOST` | `smtp.gmail.com` |
+| `SMTP_PORT` | `587` |
+| `SMTP_USER` | tu dirección de Gmail |
+| `SMTP_PASSWORD` | la contraseña de aplicación |
+| `SMTP_FROM` | `Python Learning <tu dirección de Gmail>` |
+
+4. **Save, rebuild and deploy**. Comprueba `https://pld-api.onrender.com/api/health` → `"email": true`.
+
+VERIFY: Gmail limita los envíos diarios de una cuenta personal (del orden de cientos). Para un proyecto de clase sobra; para uso real, mejor la opción B.
+
+### Opción B: servicio de email transaccional (Brevo, Mailjet…)
+
+Crea una cuenta, verifica el remitente y copia sus datos SMTP (servidor, puerto 587, usuario y clave SMTP) en las mismas variables.
+
+### Después de activarlo (RGPD)
+
+Actualiza en `frontend/privacidad.html` la línea «Emails de recuperación de contraseña» con el proveedor elegido (Google o el servicio que uses) y publica.
 
 ## 6. Antes de abrirlo a usuarios reales
 
 - [x] Responsable, contacto y proveedores (Render y Neon, Frankfurt) en `frontend/privacidad.html`.
 - [ ] Revisa y acepta los acuerdos de tratamiento de datos (DPA) de Render y Neon desde sus paneles o webs.
-- [ ] Al activar el SMTP, añade el proveedor de email a la política.
+- [ ] Al activar el SMTP, añade el proveedor de email a la política (sección 5).
 - [ ] Recomendado: que alguien con conocimientos de RGPD revise la política.
 
 ## Alternativa: servidor propio (por ejemplo, Oracle Cloud)

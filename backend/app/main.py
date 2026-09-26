@@ -15,7 +15,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import get_settings
 from app.local_site import mount_frontend
-from app.routers import account, attempts, auth, lessons, progress
+from app.routers import account, attempts, auth, lessons, pcap, progress
 from app.security import get_jwt_secret
 
 logging.basicConfig(level=logging.INFO)
@@ -27,7 +27,7 @@ async def lifespan(_: FastAPI):
     yield
 
 
-app = FastAPI(title="Python Learning Dashboard API", version="0.9.0", lifespan=lifespan)
+app = FastAPI(title="Python Learning Dashboard API", version="1.0.0", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
@@ -36,7 +36,14 @@ app.add_middleware(
     allow_headers=["Authorization", "Content-Type"],
 )
 
-for router in (lessons.router, auth.router, account.router, progress.router, attempts.router):
+for router in (
+    lessons.router,
+    auth.router,
+    account.router,
+    progress.router,
+    attempts.router,
+    pcap.router,
+):
     app.include_router(router)
 
 

@@ -74,7 +74,8 @@
         "es": "`ceil` redondea hacia arriba (hacia +∞): `-2.1` → `-2`. `floor` redondea hacia abajo (hacia −∞): `-2.1` → `-3`. Las demás opciones confunden la dirección con los negativos.",
         "en": "`ceil` rounds up (towards +∞): `-2.1` → `-2`. `floor` rounds down (towards −∞): `-2.1` → `-3`. The other options mix up the direction for negative numbers."
       },
-      "check": "assert __error__ is None\nassert __output__ == options[answer[0]] + '\\n', __output__"
+      "check": "assert __error__ is None\nassert __output__ == options[answer[0]] + '\\n', __output__",
+      "lesson": "math-random-platform"
     },
     {
       "id": "mod-02",
@@ -97,7 +98,8 @@
         "es": "`trunc(-3.7)` corta los decimales (hacia el cero): `-3`. `floor(-3.7)` baja hasta `-4`. Suma: `-7`, un `int` (ambas funciones devuelven `int`, por eso no puede ser `-7.4`).",
         "en": "`trunc(-3.7)` drops the fractional part (towards zero): `-3`. `floor(-3.7)` goes down to `-4`. The sum is `-7`, an `int` (both functions return `int`, so it cannot be `-7.4`)."
       },
-      "check": "assert __error__ is None\nassert __output__ == options[answer[0]] + '\\n', __output__"
+      "check": "assert __error__ is None\nassert __output__ == options[answer[0]] + '\\n', __output__",
+      "lesson": "math-random-platform"
     },
     {
       "id": "mod-03",
@@ -120,7 +122,8 @@
         "es": "`sqrt` e `hypot` devuelven siempre `float` (`4.0`, `5.0`); `factorial` devuelve `int` (`24`).",
         "en": "`sqrt` and `hypot` always return a `float` (`4.0`, `5.0`); `factorial` returns an `int` (`24`)."
       },
-      "check": "assert __error__ is None\nassert __output__ == options[answer[0]] + '\\n', __output__"
+      "check": "assert __error__ is None\nassert __output__ == options[answer[0]] + '\\n', __output__",
+      "lesson": "math-random-platform"
     },
     {
       "id": "mod-04",
@@ -142,7 +145,8 @@
         "es": "Solo `from math import sqrt` añade el nombre `sqrt` al espacio de nombres actual. `import math` e `import math as m` obligan a escribir `math.sqrt` o `m.sqrt`, e `import math.sqrt` falla porque `math` no es un paquete (`ModuleNotFoundError`).",
         "en": "Only `from math import sqrt` binds the name `sqrt` in the current namespace. `import math` and `import math as m` require `math.sqrt` or `m.sqrt`, and `import math.sqrt` fails because `math` is not a package (`ModuleNotFoundError`)."
       },
-      "check": "def works(stmt):\n    ns = {}\n    try:\n        exec(stmt + '\\nsqrt(9)', ns)\n        return True\n    except Exception:\n        return False\nassert [works(o) for o in options] == [i in answer for i in range(len(options))]"
+      "check": "def works(stmt):\n    ns = {}\n    try:\n        exec(stmt + '\\nsqrt(9)', ns)\n        return True\n    except Exception:\n        return False\nassert [works(o) for o in options] == [i in answer for i in range(len(options))]",
+      "lesson": "modulos"
     },
     {
       "id": "mod-05",
@@ -177,7 +181,8 @@
         "es": "`import math as m` solo crea el nombre `m`; el nombre `math` no existe. La primera línea imprime `2` y la segunda lanza `NameError` (no `AttributeError`, porque el fallo está en el nombre, no en un atributo).",
         "en": "`import math as m` only binds the name `m`; the name `math` is not defined. The first print outputs `2` and the second raises `NameError` (not `AttributeError`, since the missing thing is a name, not an attribute)."
       },
-      "check": "assert __output__ == '2\\n'\nassert __error__ == 'NameError'\nassert answer == [1]"
+      "check": "assert __output__ == '2\\n'\nassert __error__ == 'NameError'\nassert answer == [1]",
+      "lesson": "paquetes"
     },
     {
       "id": "mod-06",
@@ -211,7 +216,8 @@
         "es": "`random()` devuelve un `float` mayor o igual que 0.0 y **estrictamente menor** que 1.0: el 0.0 es posible, el 1.0 no.",
         "en": "`random()` returns a `float` greater than or equal to 0.0 and **strictly less** than 1.0: 0.0 is possible, 1.0 is not."
       },
-      "check": "import random\nvals = [random.random() for _ in range(20000)]\nassert all(type(v) is float and 0.0 <= v < 1.0 for v in vals)\nassert answer == [0]"
+      "check": "import random\nvals = [random.random() for _ in range(20000)]\nassert all(type(v) is float and 0.0 <= v < 1.0 for v in vals)\nassert answer == [0]",
+      "lesson": "math-random-platform"
     },
     {
       "id": "mod-07",
@@ -246,7 +252,8 @@
         "es": "La semilla hace la secuencia reproducible y `sample` elige sin repetir posiciones, devolviendo una lista. `choice` con una secuencia vacía lanza `IndexError` (no devuelve `None`) y `sample` con `k` mayor que la población lanza `ValueError`.",
         "en": "The seed makes the sequence reproducible, and `sample` picks without repeating positions, returning a list. `choice` on an empty sequence raises `IndexError` (it does not return `None`), and `sample` with `k` larger than the population raises `ValueError`."
       },
-      "check": "import random\nrandom.seed(10); a = [random.random() for _ in range(5)]\nrandom.seed(10); b = [random.random() for _ in range(5)]\nassert a == b\ns = random.sample(range(10), 3)\nassert isinstance(s, list) and len(set(s)) == 3\ntry:\n    random.choice([]); ok = False\nexcept IndexError:\n    ok = True\nassert ok\ntry:\n    random.sample([1, 2], 5); ok = False\nexcept ValueError:\n    ok = True\nassert ok\nassert sorted(answer) == [1, 3]"
+      "check": "import random\nrandom.seed(10); a = [random.random() for _ in range(5)]\nrandom.seed(10); b = [random.random() for _ in range(5)]\nassert a == b\ns = random.sample(range(10), 3)\nassert isinstance(s, list) and len(set(s)) == 3\ntry:\n    random.choice([]); ok = False\nexcept IndexError:\n    ok = True\nassert ok\ntry:\n    random.sample([1, 2], 5); ok = False\nexcept ValueError:\n    ok = True\nassert ok\nassert sorted(answer) == [1, 3]",
+      "lesson": "math-random-platform"
     },
     {
       "id": "mod-08",
@@ -269,7 +276,8 @@
         "es": "`sample` devuelve una **lista nueva** con los elementos en orden aleatorio y **no modifica** la original: `sorted(res)` coincide con `nums` y `nums` sigue teniendo 4 elementos.",
         "en": "`sample` returns a **new list** with the elements in random order and **does not modify** the original: `sorted(res)` equals `nums`, and `nums` still has 4 elements."
       },
-      "check": "assert __error__ is None\nassert __output__ == options[answer[0]] + '\\n', __output__"
+      "check": "assert __error__ is None\nassert __output__ == options[answer[0]] + '\\n', __output__",
+      "lesson": "math-random-platform"
     },
     {
       "id": "mod-09",
@@ -291,7 +299,8 @@
         "es": "`python_version_tuple()` devuelve la versión de Python como tupla de cadenas (mayor, menor, parche). `version()` es la versión del sistema operativo, `python_implementation()` el intérprete (`'CPython'`…) y `machine()` el tipo de máquina: las tres devuelven `str`.",
         "en": "`python_version_tuple()` returns the Python version as a tuple of strings (major, minor, patch). `version()` is the OS version, `python_implementation()` the interpreter (`'CPython'`…) and `machine()` the machine type: all three return a `str`."
       },
-      "check": "import platform\nfns = [platform.python_version_tuple, platform.version, platform.python_implementation, platform.machine]\nassert [isinstance(f(), tuple) for f in fns] == [i in answer for i in range(4)]\nt = platform.python_version_tuple()\nassert len(t) == 3 and all(isinstance(x, str) for x in t)"
+      "check": "import platform\nfns = [platform.python_version_tuple, platform.version, platform.python_implementation, platform.machine]\nassert [isinstance(f(), tuple) for f in fns] == [i in answer for i in range(4)]\nt = platform.python_version_tuple()\nassert len(t) == 3 and all(isinstance(x, str) for x in t)",
+      "lesson": "math-random-platform"
     },
     {
       "id": "mod-10",
@@ -314,7 +323,8 @@
         "es": "`system()` y `machine()` devuelven `str` (aunque su valor dependa de la máquina y `machine()` pueda ser `''`). `python_version_tuple()` devuelve una tupla y `dir()` una lista.",
         "en": "`system()` and `machine()` return a `str` (their values depend on the machine, and `machine()` may even be `''`). `python_version_tuple()` returns a tuple and `dir()` returns a list."
       },
-      "check": "import platform\nassert [isinstance(eval(o), str) for o in options] == [i in answer for i in range(len(options))]"
+      "check": "import platform\nassert [isinstance(eval(o), str) for o in options] == [i in answer for i in range(len(options))]",
+      "lesson": "math-random-platform"
     },
     {
       "id": "mod-11",
@@ -337,7 +347,8 @@
         "es": "`import email.mime.text` importa el subpaquete anidado y hay que usarlo con su nombre **completamente cualificado**. El `__name__` de un módulo importado es su nombre completo con puntos, no solo la última parte; `__main__` solo lo tiene el script que se ejecuta.",
         "en": "`import email.mime.text` imports the nested module, which must then be accessed by its **fully qualified** name. The `__name__` of an imported module is its full dotted name, not just its last component; only the script being run is named `__main__`."
       },
-      "check": "assert __error__ is None\nassert __output__ == options[answer[0]] + '\\n', __output__"
+      "check": "assert __error__ is None\nassert __output__ == options[answer[0]] + '\\n', __output__",
+      "lesson": "paquetes"
     },
     {
       "id": "mod-12",
@@ -366,7 +377,8 @@
         "es": "Como `tools.py` define `__all__ = ['a']`, `from tools import *` importa **solo** `a`. Se imprime `1` y `print(b)` lanza `NameError`. No hay `ImportError`: `import *` no falla por los nombres que no importa.",
         "en": "Since `tools.py` defines `__all__ = ['a']`, `from tools import *` imports **only** `a`. `1` is printed and `print(b)` raises `NameError`. There is no `ImportError`: `import *` does not fail because of the names it skips."
       },
-      "check": "import importlib, io, os, sys, tempfile, contextlib\nd = tempfile.mkdtemp()\nwith open(os.path.join(d, 'tools.py'), 'w') as f:\n    f.write(\"__all__ = ['a']\\na = 1\\nb = 2\\n_c = 3\\n\")\nsys.path.insert(0, d)\nsys.modules.pop('tools', None)\nimportlib.invalidate_caches()\nns, out, err = {}, io.StringIO(), None\ntry:\n    with contextlib.redirect_stdout(out):\n        exec(\"from tools import *\\nprint(a, end=' ')\\nprint(b)\", ns)\nexcept Exception as e:\n    err = type(e).__name__\nfinally:\n    sys.path.remove(d)\n    sys.modules.pop('tools', None)\nassert out.getvalue() == '1 ' and err == 'NameError'\nassert answer == [1]"
+      "check": "import importlib, io, os, sys, tempfile, contextlib\nd = tempfile.mkdtemp()\nwith open(os.path.join(d, 'tools.py'), 'w') as f:\n    f.write(\"__all__ = ['a']\\na = 1\\nb = 2\\n_c = 3\\n\")\nsys.path.insert(0, d)\nsys.modules.pop('tools', None)\nimportlib.invalidate_caches()\nns, out, err = {}, io.StringIO(), None\ntry:\n    with contextlib.redirect_stdout(out):\n        exec(\"from tools import *\\nprint(a, end=' ')\\nprint(b)\", ns)\nexcept Exception as e:\n    err = type(e).__name__\nfinally:\n    sys.path.remove(d)\n    sys.modules.pop('tools', None)\nassert out.getvalue() == '1 ' and err == 'NameError'\nassert answer == [1]",
+      "lesson": "paquetes"
     },
     {
       "id": "mod-13",
@@ -402,7 +414,8 @@
         "es": "Sin `__all__`, `import *` trae los nombres que no empiezan por `_`: `x` sí, `_y` no. Pero la privacidad es solo una convención: `m._y` es accesible y vale `2`; no hay `AttributeError`.",
         "en": "Without `__all__`, `import *` brings in the names that do not start with `_`: `x` yes, `_y` no. But privacy is only a convention: `m._y` is accessible and equals `2`; no `AttributeError` is raised."
       },
-      "check": "import importlib, os, sys, tempfile\nd = tempfile.mkdtemp()\nwith open(os.path.join(d, 'm.py'), 'w') as f:\n    f.write('x = 1\\n_y = 2\\n')\nsys.path.insert(0, d)\nsys.modules.pop('m', None)\nimportlib.invalidate_caches()\ntry:\n    ns = {}\n    exec('from m import *', ns)\n    assert 'x' in ns and '_y' not in ns\n    import m\n    assert m._y == 2\nfinally:\n    sys.path.remove(d)\n    sys.modules.pop('m', None)\nassert sorted(answer) == [0, 2]"
+      "check": "import importlib, os, sys, tempfile\nd = tempfile.mkdtemp()\nwith open(os.path.join(d, 'm.py'), 'w') as f:\n    f.write('x = 1\\n_y = 2\\n')\nsys.path.insert(0, d)\nsys.modules.pop('m', None)\nimportlib.invalidate_caches()\ntry:\n    ns = {}\n    exec('from m import *', ns)\n    assert 'x' in ns and '_y' not in ns\n    import m\n    assert m._y == 2\nfinally:\n    sys.path.remove(d)\n    sys.modules.pop('m', None)\nassert sorted(answer) == [0, 2]",
+      "lesson": "paquetes"
     },
     {
       "id": "mod-14",
@@ -436,7 +449,8 @@
         "es": "`sys.path` es una **lista** de rutas que el sistema de importación recorre en orden; puedes hacer `sys.path.append(...)`. El diccionario de módulos cargados es `sys.modules`, y el PATH del SO está en `os.environ`.",
         "en": "`sys.path` is a **list** of paths that the import system searches in order; you can call `sys.path.append(...)`. The dictionary of loaded modules is `sys.modules`, and the OS PATH lives in `os.environ`."
       },
-      "check": "import sys\nassert isinstance(sys.path, list) and all(isinstance(p, str) for p in sys.path)\nsys.path.append('carpeta_extra'); assert sys.path[-1] == 'carpeta_extra'; sys.path.pop()\nassert isinstance(sys.modules, dict)\nassert answer == [3]"
+      "check": "import sys\nassert isinstance(sys.path, list) and all(isinstance(p, str) for p in sys.path)\nsys.path.append('carpeta_extra'); assert sys.path[-1] == 'carpeta_extra'; sys.path.pop()\nassert isinstance(sys.modules, dict)\nassert answer == [3]",
+      "lesson": "paquetes"
     },
     {
       "id": "mod-15",
@@ -470,7 +484,8 @@
         "es": "Al importar un módulo, Python guarda su bytecode en `__pycache__/nombre.cpython-XY.pyc` y lo reutiliza mientras el `.py` no cambie. El script principal que ejecutas no se guarda ahí.",
         "en": "When a module is imported, Python stores its bytecode in `__pycache__/name.cpython-XY.pyc` and reuses it while the `.py` file is unchanged. The main script you run is not cached there."
       },
-      "check": "import importlib.util, os, sys, tempfile\np = importlib.util.cache_from_source(os.path.join('pkg', 'mod.py'))\nassert os.path.basename(os.path.dirname(p)) == '__pycache__' and p.endswith('.pyc')\nd = tempfile.mkdtemp()\nwith open(os.path.join(d, 'mod15.py'), 'w') as f:\n    f.write('X = 1\\n')\nsys.path.insert(0, d)\nimportlib.invalidate_caches()\ntry:\n    import mod15\n    if not sys.dont_write_bytecode:\n        assert any(n.endswith('.pyc') for n in os.listdir(os.path.join(d, '__pycache__')))\nfinally:\n    sys.path.remove(d)\n    sys.modules.pop('mod15', None)\nassert answer == [0]"
+      "check": "import importlib.util, os, sys, tempfile\np = importlib.util.cache_from_source(os.path.join('pkg', 'mod.py'))\nassert os.path.basename(os.path.dirname(p)) == '__pycache__' and p.endswith('.pyc')\nd = tempfile.mkdtemp()\nwith open(os.path.join(d, 'mod15.py'), 'w') as f:\n    f.write('X = 1\\n')\nsys.path.insert(0, d)\nimportlib.invalidate_caches()\ntry:\n    import mod15\n    if not sys.dont_write_bytecode:\n        assert any(n.endswith('.pyc') for n in os.listdir(os.path.join(d, '__pycache__')))\nfinally:\n    sys.path.remove(d)\n    sys.modules.pop('mod15', None)\nassert answer == [0]",
+      "lesson": "paquetes"
     },
     {
       "id": "mod-16",
@@ -493,7 +508,8 @@
         "es": "`dir(modulo)` devuelve una **lista** ordenada con **todos** los nombres del módulo, incluidos los especiales como `__name__` (no filtra los que empiezan por `_`).",
         "en": "`dir(module)` returns a sorted **list** of **all** the names in the module, including special ones such as `__name__` (it does not filter out names starting with `_`)."
       },
-      "check": "assert __error__ is None\nassert __output__ == options[answer[0]] + '\\n', __output__"
+      "check": "assert __error__ is None\nassert __output__ == options[answer[0]] + '\\n', __output__",
+      "lesson": "paquetes"
     },
     {
       "id": "exc-01",
@@ -522,7 +538,8 @@
         "es": "Los `except` se prueban en orden y el primero que coincide gana. `ZeroDivisionError` es subclase de `Exception`, así que entra en el primero e imprime `general`; el segundo es inalcanzable pero válido (no es error de sintaxis). Solo se ejecuta un `except`.",
         "en": "except clauses are tested top to bottom and the first match wins. ZeroDivisionError is a subclass of Exception, so the first handler runs and prints `general`; the second one is unreachable but legal (no syntax error). Only one handler runs."
       },
-      "check": "assert __error__ is None\nassert __output__ == 'general\\n'\nassert options[answer[0]] == 'general'"
+      "check": "assert __error__ is None\nassert __output__ == 'general\\n'\nassert options[answer[0]] == 'general'",
+      "lesson": "jerarquia-excepciones"
     },
     {
       "id": "exc-02",
@@ -544,7 +561,8 @@
         "es": "`KeyboardInterrupt` (como `SystemExit`) hereda directamente de `BaseException`, para que un `except Exception` no impida parar el programa con Ctrl+C. Las otras tres derivan de `Exception`.",
         "en": "KeyboardInterrupt (like SystemExit) derives directly from BaseException, so that `except Exception` does not stop Ctrl+C from ending the program. The other three derive from Exception."
       },
-      "check": "assert not issubclass(KeyboardInterrupt, Exception)\nassert KeyboardInterrupt.__bases__ == (BaseException,)\nwrong = [o for o in options if not issubclass(eval(o), Exception)]\nassert wrong == [options[i] for i in answer]"
+      "check": "assert not issubclass(KeyboardInterrupt, Exception)\nassert KeyboardInterrupt.__bases__ == (BaseException,)\nwrong = [o for o in options if not issubclass(eval(o), Exception)]\nassert wrong == [options[i] for i in answer]",
+      "lesson": "jerarquia-excepciones"
     },
     {
       "id": "exc-03",
@@ -568,7 +586,8 @@
         "es": "`LookupError` agrupa los errores de búsqueda: `IndexError` (posición inexistente en una secuencia) y `KeyError` (clave inexistente en un diccionario). `ValueError`, `ArithmeticError` y `TypeError` cuelgan directamente de `Exception`.",
         "en": "LookupError groups lookup failures: IndexError (missing position in a sequence) and KeyError (missing key in a dictionary). ValueError, ArithmeticError and TypeError derive directly from Exception."
       },
-      "check": "found = [o for o in options if LookupError in eval(o).__bases__]\nassert found == [options[i] for i in answer] == ['IndexError', 'KeyError']"
+      "check": "found = [o for o in options if LookupError in eval(o).__bases__]\nassert found == [options[i] for i in answer] == ['IndexError', 'KeyError']",
+      "lesson": "jerarquia-excepciones"
     },
     {
       "id": "exc-04",
@@ -594,7 +613,8 @@
         "es": "`raise ex` lanza el objeto ya creado. `e.args` es la tupla de argumentos del constructor, `('bad', 42)`, así que `e.args[1] + 1` vale `43`. No hay error: `42` es un entero.",
         "en": "`raise ex` raises the existing object. `e.args` is the tuple of constructor arguments, ('bad', 42), so `e.args[1] + 1` is 43. No error occurs: 42 is an int."
       },
-      "check": "assert __error__ is None\nassert __output__ == '43\\n'\nassert options[answer[0]] == '43'"
+      "check": "assert __error__ is None\nassert __output__ == '43\\n'\nassert options[answer[0]] == '43'",
+      "lesson": "jerarquia-excepciones"
     },
     {
       "id": "exc-05",
@@ -617,7 +637,8 @@
         "es": "Con un solo argumento, `str(e)` devuelve ese argumento; con varios, devuelve la **tupla** `args` convertida a texto: `('x', 'y')`. El nombre de la clase no aparece en `str(e)`.",
         "en": "With a single argument, str(e) returns that argument; with several, it returns the args **tuple** as a string: ('x', 'y'). The class name is not part of str(e)."
       },
-      "check": "assert __error__ is None\nassert __output__ == \"('x', 'y')\\n\"\nassert options[answer[0]] + '\\n' == __output__"
+      "check": "assert __error__ is None\nassert __output__ == \"('x', 'y')\\n\"\nassert options[answer[0]] + '\\n' == __output__",
+      "lesson": "jerarquia-excepciones"
     },
     {
       "id": "exc-06",
@@ -640,7 +661,8 @@
         "es": "`f(2)` no falla: se ejecuta `else` (`L`) y luego `finally` (`F`). `f(0)` lanza `ZeroDivisionError`: se ejecuta `except` (`E`) y luego `finally` (`F`). `finally` va siempre al final y se ejecuta en ambos casos.",
         "en": "f(2) does not fail: `else` runs (L), then `finally` (F). f(0) raises ZeroDivisionError: `except` runs (E), then `finally` (F). `finally` always runs last, in both cases."
       },
-      "check": "assert __error__ is None\nassert __output__ == 'LFEF\\n'\nassert options[answer[0]] == 'LFEF'"
+      "check": "assert __error__ is None\nassert __output__ == 'LFEF\\n'\nassert options[answer[0]] == 'LFEF'",
+      "lesson": "excepciones"
     },
     {
       "id": "exc-07",
@@ -675,7 +697,8 @@
         "es": "El `return` del `try` prepara el valor, pero antes de salir de la función se ejecuta `finally`, que imprime `finally`. Después la función devuelve `\"try\"` y el `print` exterior lo muestra.",
         "en": "The `return` in `try` sets the value, but `finally` runs before the function actually exits, printing `finally`. Then the function returns \"try\" and the outer print shows it."
       },
-      "check": "assert __error__ is None\nassert __output__ == 'finally\\ntry\\n'\nassert answer == [1]"
+      "check": "assert __error__ is None\nassert __output__ == 'finally\\ntry\\n'\nassert answer == [1]",
+      "lesson": "jerarquia-excepciones"
     },
     {
       "id": "exc-08",
@@ -710,7 +733,8 @@
         "es": "`raise` sin argumentos dentro del `except` re-lanza el mismo `IndexError`. El `try` exterior lo captura porque `IndexError` es subclase de `LookupError`, así que se imprime `inner` y después `outer`.",
         "en": "A bare `raise` inside `except` re-raises the same IndexError. The outer try catches it because IndexError is a subclass of LookupError, so `inner` and then `outer` are printed."
       },
-      "check": "assert __error__ is None\nassert __output__ == 'inner\\nouter\\n'\nassert answer == [0]"
+      "check": "assert __error__ is None\nassert __output__ == 'inner\\nouter\\n'\nassert answer == [0]",
+      "lesson": "jerarquia-excepciones"
     },
     {
       "id": "exc-09",
@@ -736,7 +760,8 @@
         "es": "`raise` sin argumentos es sintácticamente válido en cualquier sitio, pero si no hay ninguna excepción activa que re-lanzar, Python lanza `RuntimeError`. Como es subclase de `Exception`, se captura y se imprime su nombre.",
         "en": "A bare `raise` is syntactically valid anywhere, but when there is no active exception to re-raise, Python raises RuntimeError. It is a subclass of Exception, so it is caught and its name is printed."
       },
-      "check": "assert __error__ is None\nassert __output__ == 'RuntimeError\\n'\nassert options[answer[0]] == 'RuntimeError'"
+      "check": "assert __error__ is None\nassert __output__ == 'RuntimeError\\n'\nassert options[answer[0]] == 'RuntimeError'",
+      "lesson": "jerarquia-excepciones"
     },
     {
       "id": "exc-10",
@@ -775,7 +800,8 @@
         "es": "`assert cond, msg` equivale a `if not cond: raise AssertionError(msg)`. Con una condición verdadera no hace nada (no imprime). Lanza `AssertionError`, no `ValueError`, y `AssertionError` sí deriva de `Exception`.",
         "en": "`assert cond, msg` is equivalent to `if not cond: raise AssertionError(msg)`. With a true condition it does nothing (it prints nothing). It raises AssertionError, not ValueError, and AssertionError does derive from Exception."
       },
-      "check": "import io, contextlib\nbuf = io.StringIO()\nwith contextlib.redirect_stdout(buf):\n    assert 1 == 1, 'ok'\nassert buf.getvalue() == ''\ncaught = None\ntry:\n    assert 1 == 2, 'msg'\nexcept AssertionError as e:\n    caught = e\nassert caught is not None and caught.args == ('msg',)\nassert not isinstance(caught, ValueError)\nassert issubclass(AssertionError, Exception)\nassert sorted(answer) == [0, 2]"
+      "check": "import io, contextlib\nbuf = io.StringIO()\nwith contextlib.redirect_stdout(buf):\n    assert 1 == 1, 'ok'\nassert buf.getvalue() == ''\ncaught = None\ntry:\n    assert 1 == 2, 'msg'\nexcept AssertionError as e:\n    caught = e\nassert caught is not None and caught.args == ('msg',)\nassert not isinstance(caught, ValueError)\nassert issubclass(AssertionError, Exception)\nassert sorted(answer) == [0, 2]",
+      "lesson": "jerarquia-excepciones"
     },
     {
       "id": "exc-11",
@@ -798,7 +824,8 @@
         "es": "`super().__init__(\"code=7\")` deja `args == ('code=7',)`, así que `print(e)` muestra `code=7`; `e.code` es el atributo propio, `7`. `except Exception` la captura porque `AppError` hereda de `Exception`. El nombre de la clase no aparece en `str(e)`.",
         "en": "super().__init__(\"code=7\") sets args to ('code=7',), so print(e) shows `code=7`; e.code is the custom attribute, 7. `except Exception` catches it because AppError inherits from Exception. The class name is not part of str(e)."
       },
-      "check": "assert __error__ is None\nassert __output__ == 'code=7 7\\n'\nassert options[answer[0]] == 'code=7 7'"
+      "check": "assert __error__ is None\nassert __output__ == 'code=7 7\\n'\nassert options[answer[0]] == 'code=7 7'",
+      "lesson": "jerarquia-excepciones"
     },
     {
       "id": "exc-12",
@@ -824,7 +851,8 @@
         "es": "Aunque `__init__` no llama a `super().__init__()`, `BaseException` guarda los argumentos del constructor en `args` al crear el objeto, así que `e.args` es `(5,)`. Aun así, llamar a `super().__init__()` es la práctica correcta para controlar el mensaje.",
         "en": "Even though __init__ does not call super().__init__(), BaseException stores the constructor arguments in args when the object is created, so e.args is (5,). Calling super().__init__() is still the right practice to control the message."
       },
-      "check": "assert __error__ is None\nassert __output__ == '(5,)\\n'\nassert options[answer[0]] == '(5,)'"
+      "check": "assert __error__ is None\nassert __output__ == '(5,)\\n'\nassert options[answer[0]] == '(5,)'",
+      "lesson": "jerarquia-excepciones"
     },
     {
       "id": "exc-13",
@@ -847,7 +875,8 @@
         "es": "`int(None)` lanza `TypeError` (el argumento no es de un tipo convertible; `ValueError` sería para un texto no numérico como `int('x')`). La tupla captura cualquiera de las dos y `e` es el objeto concreto lanzado.",
         "en": "int(None) raises TypeError (the argument has an unsupported type; ValueError would be for a non-numeric string such as int('x')). The tuple catches either one, and e is the actual exception object."
       },
-      "check": "assert __error__ is None\nassert __output__ == 'TypeError\\n'\nassert options[answer[0]] == 'TypeError'"
+      "check": "assert __error__ is None\nassert __output__ == 'TypeError\\n'\nassert options[answer[0]] == 'TypeError'",
+      "lesson": "jerarquia-excepciones"
     },
     {
       "id": "exc-14",
@@ -871,7 +900,8 @@
         "es": "`1 / 0` lanza `ZeroDivisionError`, que hereda de `ArithmeticError`, que hereda de `Exception`. Un `except` captura la clase y sus subclases. `OverflowError` es «hermana» de `ZeroDivisionError` (no su madre), y `LookupError` y `ValueError` son otras ramas.",
         "en": "1 / 0 raises ZeroDivisionError, which inherits from ArithmeticError, which inherits from Exception. An except clause catches the class and its subclasses. OverflowError is a sibling of ZeroDivisionError (not its parent); LookupError and ValueError are other branches."
       },
-      "check": "def catches(name):\n    try:\n        1 / 0\n    except eval(name):\n        return True\n    except ZeroDivisionError:\n        return False\nassert [o for o in options if catches(o)] == [options[i] for i in answer] == ['ArithmeticError', 'Exception']"
+      "check": "def catches(name):\n    try:\n        1 / 0\n    except eval(name):\n        return True\n    except ZeroDivisionError:\n        return False\nassert [o for o in options if catches(o)] == [options[i] for i in answer] == ['ArithmeticError', 'Exception']",
+      "lesson": "jerarquia-excepciones"
     },
     {
       "id": "exc-15",
@@ -897,7 +927,8 @@
         "es": "Importar un módulo inexistente lanza `ModuleNotFoundError`, subclase de `ImportError`; por eso `except ImportError` la captura, pero `type(e)` sigue siendo la clase concreta.",
         "en": "Importing a missing module raises ModuleNotFoundError, a subclass of ImportError; that is why `except ImportError` catches it, but type(e) is still the concrete class."
       },
-      "check": "assert __error__ is None\nassert __output__ == 'ModuleNotFoundError\\n'\nassert issubclass(ModuleNotFoundError, ImportError)\nassert options[answer[0]] == 'ModuleNotFoundError'"
+      "check": "assert __error__ is None\nassert __output__ == 'ModuleNotFoundError\\n'\nassert issubclass(ModuleNotFoundError, ImportError)\nassert options[answer[0]] == 'ModuleNotFoundError'",
+      "lesson": "jerarquia-excepciones"
     },
     {
       "id": "exc-16",
@@ -920,7 +951,8 @@
         "es": "`raise NuevoError(...) from e` encadena excepciones: la nueva (`RuntimeError`) guarda la original en su atributo `__cause__`. Por eso `err.__cause__` es el `KeyError` inicial.",
         "en": "`raise NewError(...) from e` chains exceptions: the new one (RuntimeError) stores the original in its __cause__ attribute. So err.__cause__ is the original KeyError."
       },
-      "check": "assert __error__ is None\nassert __output__ == 'KeyError\\n'\nassert options[answer[0]] == 'KeyError'"
+      "check": "assert __error__ is None\nassert __output__ == 'KeyError\\n'\nassert options[answer[0]] == 'KeyError'",
+      "lesson": "jerarquia-excepciones"
     },
     {
       "id": "exc-17",
@@ -946,7 +978,8 @@
         "es": "Un `except:` sin tipo captura todo, así que Python exige que sea el último; si no, el código ni siquiera compila (`SyntaxError`) y no se imprime nada, aunque el `try` no fallara. Distinto es poner una clase base antes que una derivada: eso es válido pero la deja inalcanzable.",
         "en": "A bare `except:` catches everything, so Python requires it to be the last handler; otherwise the code does not even compile (SyntaxError) and nothing is printed, even though the try block would not fail. Putting a base class before a derived one is different: legal, but it makes the latter unreachable."
       },
-      "check": "assert __error__ == 'SyntaxError'\nassert __output__ == ''\nassert answer == [3]"
+      "check": "assert __error__ == 'SyntaxError'\nassert __output__ == ''\nassert answer == [3]",
+      "lesson": "jerarquia-excepciones"
     },
     {
       "id": "exc-18",
@@ -972,7 +1005,8 @@
         "es": "`sys.exit(3)` lanza `SystemExit(3)`, que hereda directamente de `BaseException` y no de `Exception`. Por eso el primer `except` no la captura, pero el segundo sí, e imprime `B 3`. Como se captura, el programa no termina.",
         "en": "sys.exit(3) raises SystemExit(3), which derives directly from BaseException, not from Exception. So the first handler does not catch it, but the second one does and prints `B 3`. Since it is caught, the program does not end."
       },
-      "check": "assert __error__ is None\nassert __output__ == 'B 3\\n'\nassert not issubclass(SystemExit, Exception)\nassert options[answer[0]] == 'B 3'"
+      "check": "assert __error__ is None\nassert __output__ == 'B 3\\n'\nassert not issubclass(SystemExit, Exception)\nassert options[answer[0]] == 'B 3'",
+      "lesson": "jerarquia-excepciones"
     },
     {
       "id": "str-01",
@@ -998,7 +1032,8 @@
         "es": "`ord(\"a\")` es 97 y `ord(\"A\")` es 65: la diferencia es 32. Es la distancia fija entre minúsculas y mayúsculas en ASCII. 26 es el número de letras, no la distancia entre códigos.",
         "en": "`ord(\"a\")` is 97 and `ord(\"A\")` is 65, so the difference is 32 — the fixed gap between lowercase and uppercase ASCII letters. 26 is the number of letters, not the code distance."
       },
-      "check": "assert __output__ == '32\\n'\nassert ord('a') - ord('A') == 32"
+      "check": "assert __output__ == '32\\n'\nassert ord('a') - ord('A') == 32",
+      "lesson": "unicode"
     },
     {
       "id": "str-02",
@@ -1021,7 +1056,8 @@
         "es": "Los índices negativos cuentan desde el final: `s[-1]` es `n` y `s[-2]` es `o`.",
         "en": "Negative indices count from the end: `s[-1]` is `n` and `s[-2]` is `o`."
       },
-      "check": "assert __output__ == 'o\\n'"
+      "check": "assert __output__ == 'o\\n'",
+      "lesson": "cadenas"
     },
     {
       "id": "str-03",
@@ -1047,7 +1083,8 @@
         "es": "Paso -2 desde el índice 6 (`g`): 6, 4, 2 → `g`, `e`, `c`. El índice 1 es el límite y no se incluye. No sale vacío porque el inicio está a la derecha del fin, como exige el paso negativo.",
         "en": "Step -2 starting at index 6 (`g`): 6, 4, 2 → `g`, `e`, `c`. Index 1 is the stop bound and is excluded. The result is not empty because start is to the right of stop, as a negative step requires."
       },
-      "check": "assert __output__ == 'gec\\n'"
+      "check": "assert __output__ == 'gec\\n'",
+      "lesson": "cadenas"
     },
     {
       "id": "str-04",
@@ -1073,7 +1110,8 @@
         "es": "El slicing nunca lanza `IndexError`: los límites se recortan. `s[10:]` es `''` (longitud 0) y `s[2:100]` llega hasta el final: `llo`.",
         "en": "Slicing never raises `IndexError`; out-of-range bounds are clipped. `s[10:]` is `''` (length 0) and `s[2:100]` runs to the end: `llo`."
       },
-      "check": "assert __output__ == '0 llo\\n' and __error__ is None"
+      "check": "assert __output__ == '0 llo\\n' and __error__ is None",
+      "lesson": "cadenas"
     },
     {
       "id": "str-05",
@@ -1102,7 +1140,8 @@
         "es": "Las cadenas son inmutables: asignar a `s[0]` lanza `TypeError` y el `print` no llega a ejecutarse. Para cambiarla hay que crear otra: `s = \"T\" + s[1:]`.",
         "en": "Strings are immutable: assigning to `s[0]` raises `TypeError`, so `print` never runs. To change it you must build a new string: `s = \"T\" + s[1:]`."
       },
-      "check": "assert __error__ == 'TypeError' and __output__ == ''"
+      "check": "assert __error__ == 'TypeError' and __output__ == ''",
+      "lesson": "cadenas"
     },
     {
       "id": "str-06",
@@ -1126,7 +1165,8 @@
         "es": "Se compara carácter a carácter por code point. `'c' < 'd'` y `'Z'` (90) `< 'a'` (97): verdaderas. `'10' > '9'` es falsa porque `'1' < '9'`; `'1' == 1` es `False` (tipos distintos); y un prefijo es **menor** que la cadena más larga.",
         "en": "Strings compare character by character by code point. `'c' < 'd'` and `'Z'` (90) `< 'a'` (97) are true. `'10' > '9'` is false because `'1' < '9'`; `'1' == 1` is `False` (different types); and a prefix is **less** than the longer string."
       },
-      "check": "res = [eval(o) for o in options]\nassert res == [True, True, False, False, False]\nassert sorted(i for i, r in enumerate(res) if r) == sorted(answer)"
+      "check": "res = [eval(o) for o in options]\nassert res == [True, True, False, False, False]\nassert sorted(i for i, r in enumerate(res) if r) == sorted(answer)",
+      "lesson": "cadenas"
     },
     {
       "id": "str-07",
@@ -1155,7 +1195,8 @@
         "es": "`\"5\" == 5` compara tipos distintos y da `False` sin error, así que se imprime. Pero `\"5\" < 6` no tiene sentido entre `str` e `int` y lanza `TypeError`.",
         "en": "`\"5\" == 5` compares different types and simply returns `False`, which is printed. However, `\"5\" < 6` is not defined between `str` and `int`, so it raises `TypeError`."
       },
-      "check": "assert __output__.startswith('False') and __error__ == 'TypeError'"
+      "check": "assert __output__.startswith('False') and __error__ == 'TypeError'",
+      "lesson": "cadenas"
     },
     {
       "id": "str-08",
@@ -1181,7 +1222,8 @@
         "es": "`find` devuelve la primera posición (1), `rfind` la última (3) y, si no encuentra la subcadena, **-1** (no `None` ni una excepción).",
         "en": "`find` returns the lowest index (1), `rfind` the highest (3), and when the substring is missing it returns **-1** — not `None` and not an exception."
       },
-      "check": "assert __output__ == '1 3 -1\\n'"
+      "check": "assert __output__ == '1 3 -1\\n'",
+      "lesson": "metodos-string"
     },
     {
       "id": "str-09",
@@ -1210,7 +1252,8 @@
         "es": "A diferencia de `find()`, `index()` lanza `ValueError` cuando la subcadena no existe. No es `IndexError`: el problema no es una posición fuera de rango.",
         "en": "Unlike `find()`, `index()` raises `ValueError` when the substring is not found. It is not `IndexError`, since no position is out of range."
       },
-      "check": "assert __error__ == 'ValueError' and __output__ == ''"
+      "check": "assert __error__ == 'ValueError' and __output__ == ''",
+      "lesson": "metodos-string"
     },
     {
       "id": "str-10",
@@ -1233,7 +1276,8 @@
         "es": "`count()` cuenta apariciones **sin solaparse**: tras encontrar `ana` en la posición 1 sigue buscando desde la 4 (`na`), así que solo hay 1.",
         "en": "`count()` counts **non-overlapping** occurrences: after matching `ana` at index 1 it resumes at index 4 (`na`), so the result is 1."
       },
-      "check": "assert __output__ == '1\\n'"
+      "check": "assert __output__ == '1\\n'",
+      "lesson": "metodos-string"
     },
     {
       "id": "str-11",
@@ -1256,7 +1300,8 @@
         "es": "Con un separador explícito, `split()` conserva las cadenas vacías entre separadores consecutivos. Solo `split()` sin argumentos las descarta.",
         "en": "With an explicit separator, `split()` keeps the empty strings between consecutive separators. Only `split()` with no arguments drops them."
       },
-      "check": "assert __output__ == \"['a', 'b', '', 'c']\\n\""
+      "check": "assert __output__ == \"['a', 'b', '', 'c']\\n\"",
+      "lesson": "metodos-string"
     },
     {
       "id": "str-12",
@@ -1280,7 +1325,8 @@
         "es": "`join()` exige que todos los elementos sean `str` (`TypeError` con enteros) e `index()` lanza `ValueError` si no encuentra. `find()` devuelve -1, el slicing fuera de rango da `''` y `replace()` sin coincidencias devuelve la cadena igual.",
         "en": "`join()` requires every item to be a `str` (`TypeError` with ints), and `index()` raises `ValueError` when nothing is found. `find()` returns -1, an out-of-range slice gives `''`, and `replace()` with no match returns the string unchanged."
       },
-      "check": "def raises(expr):\n    try:\n        eval(expr)\n        return False\n    except Exception:\n        return True\nres = [raises(o) for o in options]\nassert res == [True, True, False, False, False]\nassert sorted(i for i, r in enumerate(res) if r) == sorted(answer)"
+      "check": "def raises(expr):\n    try:\n        eval(expr)\n        return False\n    except Exception:\n        return True\nres = [raises(o) for o in options]\nassert res == [True, True, False, False, False]\nassert sorted(i for i, r in enumerate(res) if r) == sorted(answer)",
+      "lesson": "metodos-string"
     },
     {
       "id": "str-13",
@@ -1303,7 +1349,8 @@
         "es": "`rstrip()` solo quita los espacios de la **derecha**; los de la izquierda se quedan. Para quitar ambos lados se usa `strip()`.",
         "en": "`rstrip()` removes whitespace only from the **right** end; the leading spaces stay. `strip()` would remove both sides."
       },
-      "check": "assert __output__ == '  hi|\\n'"
+      "check": "assert __output__ == '  hi|\\n'",
+      "lesson": "metodos-string"
     },
     {
       "id": "str-14",
@@ -1326,7 +1373,8 @@
         "es": "El argumento de `strip()` es un **conjunto de caracteres**, no una subcadena: quita cualquier `x` o `y` de ambos extremos hasta encontrar otro carácter (`h` a la izquierda, `i` a la derecha).",
         "en": "The argument to `strip()` is a **set of characters**, not a substring: it removes any `x` or `y` from both ends until another character is met (`h` on the left, `i` on the right)."
       },
-      "check": "assert __output__ == 'hi\\n'"
+      "check": "assert __output__ == 'hi\\n'",
+      "lesson": "metodos-string"
     },
     {
       "id": "str-15",
@@ -1349,7 +1397,8 @@
         "es": "`capitalize()` pone en mayúscula solo el **primer** carácter de la cadena (y el resto en minúscula); `title()` pone en mayúscula la primera letra de **cada palabra**.",
         "en": "`capitalize()` uppercases only the **first** character of the whole string (and lowercases the rest); `title()` uppercases the first letter of **every word**."
       },
-      "check": "assert __output__ == 'Hello world Hello World\\n'"
+      "check": "assert __output__ == 'Hello world Hello World\\n'",
+      "lesson": "metodos-string"
     },
     {
       "id": "str-16",
@@ -1372,7 +1421,8 @@
         "es": "Un `str` de Python cuenta **caracteres** (code points): `ñ` es 1. Codificado en UTF-8 ocupa 2 **bytes**, porque su code point (U+00F1) es mayor que 127.",
         "en": "A Python `str` counts **characters** (code points): `ñ` has length 1. Encoded in UTF-8 it takes 2 **bytes**, because its code point (U+00F1) is above 127."
       },
-      "check": "assert __output__ == '1 2\\n'"
+      "check": "assert __output__ == '1 2\\n'",
+      "lesson": "unicode"
     },
     {
       "id": "str-17",
@@ -1396,7 +1446,8 @@
         "es": "`isalnum()` acepta letras y dígitos mezclados, e `isspace()` acepta espacios, tabuladores y saltos de línea. Con cadena vacía los `is*()` dan `False`, el punto no es un dígito y `isupper()` exige que no haya minúsculas.",
         "en": "`isalnum()` accepts mixed letters and digits, and `isspace()` accepts spaces, tabs and newlines. The `is*()` methods return `False` for an empty string, a dot is not a digit, and `isupper()` requires no lowercase letters."
       },
-      "check": "res = [eval(o) for o in options]\nassert res == [False, True, False, True, False]\nassert sorted(i for i, r in enumerate(res) if r) == sorted(answer)"
+      "check": "res = [eval(o) for o in options]\nassert res == [False, True, False, True, False]\nassert sorted(i for i, r in enumerate(res) if r) == sorted(answer)",
+      "lesson": "metodos-string"
     },
     {
       "id": "str-18",
@@ -1422,7 +1473,8 @@
         "es": "`sorted()` acepta cualquier iterable y siempre devuelve una **lista** nueva; con una cadena, una lista de caracteres. La cadena original no cambia (es inmutable).",
         "en": "`sorted()` accepts any iterable and always returns a new **list** — for a string, a list of characters. The original string is unchanged (it is immutable)."
       },
-      "check": "assert __output__ == \"['c', 'b', 'a'] abc\\n\""
+      "check": "assert __output__ == \"['c', 'b', 'a'] abc\\n\"",
+      "lesson": "metodos-string"
     },
     {
       "id": "str-19",
@@ -1445,7 +1497,8 @@
         "es": "`list.sort()` ordena en su sitio y devuelve `None`. Tras ordenar, `'Apple'` va primero porque `'A'` (65) es menor que `'b'` (98) y `'c'` (99).",
         "en": "`list.sort()` sorts in place and returns `None`. After sorting, `'Apple'` comes first because `'A'` (65) is less than `'b'` (98) and `'c'` (99)."
       },
-      "check": "assert __output__ == 'None Apple\\n'"
+      "check": "assert __output__ == 'None Apple\\n'",
+      "lesson": "metodos-string"
     },
     {
       "id": "str-20",
@@ -1468,7 +1521,8 @@
         "es": "Cada secuencia de escape es **un** carácter: `a`, `\\t`, `b`, `\\\\` (una barra) y `n` suman 5. Ojo: `\\\\n` no es un salto de línea, es una barra seguida de `n`.",
         "en": "Each escape sequence is **one** character: `a`, `\\t`, `b`, `\\\\` (a single backslash) and `n` make 5. Note that `\\\\n` is not a newline but a backslash followed by `n`."
       },
-      "check": "assert __output__ == '5\\n'"
+      "check": "assert __output__ == '5\\n'",
+      "lesson": "unicode"
     },
     {
       "id": "str-21",
@@ -1492,7 +1546,8 @@
         "es": "Con paso -1 y sin fin, el slice llega hasta el principio: desde el índice 2 (`c`), igual que desde -3, da `cba`. `s[2:0:-1]` excluye el índice 0 (`cb`), `s[:3:-1]` empieza por el final (`e`) y `s[-1:-4:-1]` da `edc`.",
         "en": "With step -1 and no stop, the slice runs to the beginning: starting at index 2 (`c`), or equivalently -3, gives `cba`. `s[2:0:-1]` excludes index 0 (`cb`), `s[:3:-1]` starts at the end (`e`), and `s[-1:-4:-1]` gives `edc`."
       },
-      "check": "s = 'abcde'\nres = [eval(o) for o in options]\nassert res == ['cba', 'cb', 'cba', 'e', 'edc']\nassert sorted(i for i, r in enumerate(res) if r == 'cba') == sorted(answer)"
+      "check": "s = 'abcde'\nres = [eval(o) for o in options]\nassert res == ['cba', 'cb', 'cba', 'e', 'edc']\nassert sorted(i for i, r in enumerate(res) if r == 'cba') == sorted(answer)",
+      "lesson": "cadenas"
     },
     {
       "id": "str-22",
@@ -1515,7 +1570,8 @@
         "es": "`in` busca subcadenas: `\"ab\"` está en `\"cab\"`. La cadena vacía está contenida en cualquier cadena. Y `in` distingue mayúsculas, así que `\"AB\"` no está en `\"abc\"`.",
         "en": "`in` tests for substrings: `\"ab\"` occurs in `\"cab\"`. The empty string is contained in every string. And `in` is case-sensitive, so `\"AB\"` is not in `\"abc\"`."
       },
-      "check": "assert __output__ == 'True True True\\n'"
+      "check": "assert __output__ == 'True True True\\n'",
+      "lesson": "cadenas"
     },
     {
       "id": "oop-01",
@@ -1538,7 +1594,8 @@
         "es": "`n` es una variable de clase: solo hay una, compartida. Cada constructor hace `A.n += 1`, así que tras dos objetos vale 2; `a.n` no tiene variable propia y lee la de la clase. \"1 2\" supondría una copia por objeto.",
         "en": "`n` is a class variable: there is only one, shared by all instances. Each constructor runs `A.n += 1`, so after two objects it is 2; `a.n` has no instance variable of its own and reads the class one. \"1 2\" would assume a per-object copy."
       },
-      "check": "assert __output__ == options[answer[0]] + '\\n', __output__"
+      "check": "assert __output__ == options[answer[0]] + '\\n', __output__",
+      "lesson": "atributos-clase"
     },
     {
       "id": "oop-02",
@@ -1561,7 +1618,8 @@
         "es": "`a.v = 5` crea una variable de instancia en `a` que tapa la de la clase. Después `A.v = 3` cambia la variable de clase, que es la que ve `b`. Por eso: `5 3`.",
         "en": "`a.v = 5` creates an instance variable in `a` that shadows the class variable. Then `A.v = 3` changes the class variable, which is what `b` sees. Hence `5 3`."
       },
-      "check": "assert __output__ == options[answer[0]] + '\\n', __output__"
+      "check": "assert __output__ == options[answer[0]] + '\\n', __output__",
+      "lesson": "atributos-clase"
     },
     {
       "id": "oop-03",
@@ -1587,7 +1645,8 @@
         "es": "`items` es una lista **de clase**. `self.items.append(x)` no asigna: modifica la única lista compartida, así que ambas cajas añaden a la misma lista y su longitud es 2.",
         "en": "`items` is a **class-level** list. `self.items.append(x)` does not assign anything: it mutates the single shared list, so both boxes append to the same list and its length is 2."
       },
-      "check": "assert __output__ == options[answer[0]] + '\\n', __output__"
+      "check": "assert __output__ == options[answer[0]] + '\\n', __output__",
+      "lesson": "atributos-clase"
     },
     {
       "id": "oop-04",
@@ -1610,7 +1669,8 @@
         "es": "El `__dict__` de un objeto solo contiene sus variables de instancia, en orden de creación: `y` (en `__init__`) y `z` (añadida después). `x` es de la clase y está en `P.__dict__`.",
         "en": "An object's `__dict__` holds only its instance variables, in creation order: `y` (set in `__init__`) and `z` (added later). `x` belongs to the class and lives in `P.__dict__`."
       },
-      "check": "assert __output__ == options[answer[0]] + '\\n', __output__"
+      "check": "assert __output__ == options[answer[0]] + '\\n', __output__",
+      "lesson": "atributos-clase"
     },
     {
       "id": "oop-05",
@@ -1639,7 +1699,8 @@
         "es": "Por el *name mangling*, el atributo se guarda como `_Safe__key`. Desde fuera de la clase, `s.__key` no existe y se lanza `AttributeError` (no `NameError`, porque el nombre `s` sí existe).",
         "en": "Because of name mangling, the attribute is stored as `_Safe__key`. Outside the class, `s.__key` does not exist, so `AttributeError` is raised (not `NameError`, since the name `s` itself exists)."
       },
-      "check": "assert __error__ == 'AttributeError'\nassert 'AttributeError' in options[answer[0]]"
+      "check": "assert __error__ == 'AttributeError'\nassert 'AttributeError' in options[answer[0]]",
+      "lesson": "atributos-clase"
     },
     {
       "id": "oop-06",
@@ -1665,7 +1726,8 @@
         "es": "El atributo privado `__key` se guarda como `_Safe__key`; usando ese nombre sí se puede leer desde fuera. La privacidad en Python es solo un cambio de nombre.",
         "en": "The private attribute `__key` is stored as `_Safe__key`; using that name it can be read from outside. Privacy in Python is just name mangling."
       },
-      "check": "assert __output__ == options[answer[0]] + '\\n', __output__"
+      "check": "assert __output__ == options[answer[0]] + '\\n', __output__",
+      "lesson": "atributos-clase"
     },
     {
       "id": "oop-07",
@@ -1691,7 +1753,8 @@
         "es": "El *mangling* se aplica según la clase donde está escrito el código: dentro de `A`, `self.__x` es `self._A__x`. La `__x` de `B` se guarda como `_B__x`, así que no la sobrescribe. Resultado: 1.",
         "en": "Mangling depends on the class where the code is written: inside `A`, `self.__x` becomes `self._A__x`. `B`'s `__x` is stored as `_B__x`, so it does not override it. Result: 1."
       },
-      "check": "assert __output__ == options[answer[0]] + '\\n', __output__"
+      "check": "assert __output__ == options[answer[0]] + '\\n', __output__",
+      "lesson": "atributos-clase"
     },
     {
       "id": "oop-08",
@@ -1716,7 +1779,8 @@
         "es": "Los dos nombres privados se transforman: la variable de clase queda como `_T__a` en `T.__dict__` y la de instancia como `_T__b` en `t.__dict__`. Los nombres sin transformar no existen, y `_T__a` no está en el `__dict__` del objeto porque es de la clase.",
         "en": "Both private names are mangled: the class variable becomes `_T__a` in `T.__dict__` and the instance variable becomes `_T__b` in `t.__dict__`. The unmangled names don't exist, and `_T__a` is not in the object's `__dict__` because it belongs to the class."
       },
-      "check": "class T:\n    __a = 1\n    def __init__(self):\n        self.__b = 2\nt = T()\nres = [bool(eval(o)) for o in options]\nassert [i for i, r in enumerate(res) if r] == sorted(answer), res"
+      "check": "class T:\n    __a = 1\n    def __init__(self):\n        self.__b = 2\nt = T()\nres = [bool(eval(o)) for o in options]\nassert [i for i, r in enumerate(res) if r] == sorted(answer), res",
+      "lesson": "atributos-clase"
     },
     {
       "id": "oop-09",
@@ -1742,7 +1806,8 @@
         "es": "Se pueden añadir atributos a un objeto en cualquier momento, pero solo los tiene ese objeto. `q` no tiene `x`, y `hasattr` devuelve `False` sin lanzar error.",
         "en": "Attributes can be added to an object at any time, but only that object gets them. `q` has no `x`, and `hasattr` returns `False` without raising an error."
       },
-      "check": "assert __output__ == options[answer[0]] + '\\n', __output__"
+      "check": "assert __output__ == options[answer[0]] + '\\n', __output__",
+      "lesson": "introspeccion"
     },
     {
       "id": "oop-10",
@@ -1765,7 +1830,8 @@
         "es": "`a` es variable de clase: la ven la clase y sus objetos. `b` se crea en `__init__`, así que solo existe en los objetos: `hasattr(K, 'b')` es `False`.",
         "en": "`a` is a class variable: both the class and its instances see it. `b` is created in `__init__`, so it exists only in instances: `hasattr(K, 'b')` is `False`."
       },
-      "check": "assert __output__ == options[answer[0]] + '\\n', __output__"
+      "check": "assert __output__ == options[answer[0]] + '\\n', __output__",
+      "lesson": "introspeccion"
     },
     {
       "id": "oop-11",
@@ -1788,7 +1854,8 @@
         "es": "`e.__class__` es la clase `Engine` y su `__name__` es el texto `'Engine'`, sin el módulo. `<class ...>` sería lo que muestra `print(Engine)`.",
         "en": "`e.__class__` is the class `Engine`, and its `__name__` is the string `'Engine'`, without the module. `<class ...>` is what `print(Engine)` would show."
       },
-      "check": "assert __output__ == options[answer[0]] + '\\n', __output__"
+      "check": "assert __output__ == options[answer[0]] + '\\n', __output__",
+      "lesson": "introspeccion"
     },
     {
       "id": "oop-12",
@@ -1814,7 +1881,8 @@
         "es": "`__name__` es un atributo de las clases, no de sus instancias. Para obtener el nombre desde un objeto hay que usar `type(obj).__name__` o `obj.__class__.__name__`.",
         "en": "`__name__` is an attribute of classes, not of their instances. To get the name from an object, use `type(obj).__name__` or `obj.__class__.__name__`."
       },
-      "check": "assert __error__ == 'AttributeError'\nassert 'AttributeError' in options[answer[0]]"
+      "check": "assert __error__ == 'AttributeError'\nassert 'AttributeError' in options[answer[0]]",
+      "lesson": "introspeccion"
     },
     {
       "id": "oop-13",
@@ -1837,7 +1905,8 @@
         "es": "`__module__` guarda el nombre del módulo donde se definió la clase. Un archivo ejecutado directamente se llama `__main__`; si se importara, sería el nombre del archivo.",
         "en": "`__module__` holds the name of the module where the class was defined. A file run directly is named `__main__`; if it were imported, it would be the file's name."
       },
-      "check": "assert __output__ == options[answer[0]] + '\\n', __output__"
+      "check": "assert __output__ == options[answer[0]] + '\\n', __output__",
+      "lesson": "introspeccion"
     },
     {
       "id": "oop-14",
@@ -1860,7 +1929,8 @@
         "es": "`__bases__` contiene solo las superclases **directas**, en el orden escrito. No incluye la propia clase ni `object` (eso sería `__mro__`).",
         "en": "`__bases__` contains only the **direct** superclasses, in the order written. It includes neither the class itself nor `object` (that would be `__mro__`)."
       },
-      "check": "assert __output__ == options[answer[0]] + '\\n', __output__"
+      "check": "assert __output__ == options[answer[0]] + '\\n', __output__",
+      "lesson": "introspeccion"
     },
     {
       "id": "oop-15",
@@ -1886,7 +1956,8 @@
         "es": "Una clase sin padre explícito hereda de `object`, así que `__bases__` es `(object,)`: una tupla de longitud 1, no vacía.",
         "en": "A class with no explicit parent inherits from `object`, so `__bases__` is `(object,)`: a tuple of length 1, not empty."
       },
-      "check": "assert __output__ == options[answer[0]] + '\\n', __output__"
+      "check": "assert __output__ == options[answer[0]] + '\\n', __output__",
+      "lesson": "introspeccion"
     },
     {
       "id": "oop-16",
@@ -1909,7 +1980,8 @@
         "es": "Un objeto de una subclase también es instancia de la superclase (un `B` es un `A`), pero no al revés.",
         "en": "An object of a subclass is also an instance of the superclass (a `B` is an `A`), but not the other way round."
       },
-      "check": "assert __output__ == options[answer[0]] + '\\n', __output__"
+      "check": "assert __output__ == options[answer[0]] + '\\n', __output__",
+      "lesson": "herencia"
     },
     {
       "id": "oop-17",
@@ -1934,7 +2006,8 @@
         "es": "`D` hereda de `A` a través de `B`, y un objeto `D()` es instancia de `C`. `isinstance(D, C)` es falso porque `D` es una **clase**, no un objeto de `C`; la herencia no va hacia arriba (`A` no es subclase de `D`).",
         "en": "`D` inherits from `A` through `B`, and a `D()` object is an instance of `C`. `isinstance(D, C)` is false because `D` is a **class**, not an object of `C`; inheritance does not go upwards (`A` is not a subclass of `D`)."
       },
-      "check": "class A:\n    pass\nclass B(A):\n    pass\nclass C:\n    pass\nclass D(B, C):\n    pass\nres = [bool(eval(o)) for o in options]\nassert [i for i, r in enumerate(res) if r] == sorted(answer), res"
+      "check": "class A:\n    pass\nclass B(A):\n    pass\nclass C:\n    pass\nclass D(B, C):\n    pass\nres = [bool(eval(o)) for o in options]\nassert [i for i, r in enumerate(res) if r] == sorted(answer), res",
+      "lesson": "herencia"
     },
     {
       "id": "oop-18",
@@ -1960,7 +2033,8 @@
         "es": "`obj.f()` usa el método sobrescrito de `B`. `A.f(obj)` llama explícitamente a la versión de `A`, pasando el objeto como `self`.",
         "en": "`obj.f()` uses `B`'s overriding method. `A.f(obj)` explicitly calls `A`'s version, passing the object as `self`."
       },
-      "check": "assert __output__ == options[answer[0]] + '\\n', __output__"
+      "check": "assert __output__ == options[answer[0]] + '\\n', __output__",
+      "lesson": "herencia"
     },
     {
       "id": "oop-19",
@@ -1986,7 +2060,8 @@
         "es": "`hello` está en `A`, pero `self` es un objeto `B`, así que `self.name()` busca primero en `B`. Es polimorfismo: el método heredado llama a la versión sobrescrita.",
         "en": "`hello` lives in `A`, but `self` is a `B` object, so `self.name()` is looked up in `B` first. That is polymorphism: the inherited method calls the overriding version."
       },
-      "check": "assert __output__ == options[answer[0]] + '\\n', __output__"
+      "check": "assert __output__ == options[answer[0]] + '\\n', __output__",
+      "lesson": "herencia"
     },
     {
       "id": "oop-20",
@@ -2015,7 +2090,8 @@
         "es": "`B` define su propio constructor y no llama al de `A` (ni con `super().__init__()`), así que `self.x` nunca se crea y leerlo lanza `AttributeError`.",
         "en": "`B` defines its own constructor and never calls `A`'s (e.g. via `super().__init__()`), so `self.x` is never created and reading it raises `AttributeError`."
       },
-      "check": "assert __error__ == 'AttributeError'\nassert 'AttributeError' in options[answer[0]]"
+      "check": "assert __error__ == 'AttributeError'\nassert 'AttributeError' in options[answer[0]]",
+      "lesson": "herencia"
     },
     {
       "id": "oop-21",
@@ -2044,7 +2120,8 @@
         "es": "`B` no define `__init__`, así que hereda el de `A`, con su parámetro `v`. `B(5)` funciona y guarda 5.",
         "en": "`B` does not define `__init__`, so it inherits `A`'s, including its `v` parameter. `B(5)` works and stores 5."
       },
-      "check": "assert __output__ == options[answer[0]] + '\\n', __output__"
+      "check": "assert __output__ == options[answer[0]] + '\\n', __output__",
+      "lesson": "herencia"
     },
     {
       "id": "oop-22",
@@ -2073,7 +2150,8 @@
         "es": "El constructor heredado de `A` exige el argumento `v`. Llamar a `B()` sin él lanza `TypeError` antes de llegar al `print`.",
         "en": "The constructor inherited from `A` requires the `v` argument. Calling `B()` without it raises `TypeError` before the `print` is reached."
       },
-      "check": "assert __error__ == 'TypeError'\nassert 'TypeError' in options[answer[0]]"
+      "check": "assert __error__ == 'TypeError'\nassert 'TypeError' in options[answer[0]]",
+      "lesson": "herencia"
     },
     {
       "id": "oop-23",
@@ -2099,7 +2177,8 @@
         "es": "`super().__init__()` ejecuta primero el constructor de `A`, que crea la lista con `'A'`; después `B` añade `'B'`.",
         "en": "`super().__init__()` first runs `A`'s constructor, which creates the list with `'A'`; then `B` appends `'B'`."
       },
-      "check": "assert __output__ == options[answer[0]] + '\\n', __output__"
+      "check": "assert __output__ == options[answer[0]] + '\\n', __output__",
+      "lesson": "herencia"
     },
     {
       "id": "oop-24",
@@ -2125,7 +2204,8 @@
         "es": "El MRO de `D` es `D, B, C, A, object`. `B` no define `f`, y `C` va **antes** que `A`, así que se usa `C.f`. Una búsqueda \"en profundidad\" ingenua daría `A`, pero Python no deja la clase común para antes de sus subclases.",
         "en": "`D`'s MRO is `D, B, C, A, object`. `B` does not define `f`, and `C` comes **before** `A`, so `C.f` is used. A naive depth-first search would give `A`, but Python never visits the common base before all its subclasses."
       },
-      "check": "assert __output__ == options[answer[0]] + '\\n', __output__"
+      "check": "assert __output__ == options[answer[0]] + '\\n', __output__",
+      "lesson": "herencia"
     },
     {
       "id": "oop-25",
@@ -2148,7 +2228,8 @@
         "es": "El MRO de `D(C, B)` es `D, C, B, A, object`. Cada `super()` pasa a la **siguiente clase del MRO del objeto**, no al padre literal: el `super()` de `C` llega a `B`, no a `A`. Resultado: `DCBA`.",
         "en": "The MRO of `D(C, B)` is `D, C, B, A, object`. Each `super()` moves to the **next class in the object's MRO**, not to the literal parent: `C`'s `super()` reaches `B`, not `A`. Result: `DCBA`."
       },
-      "check": "assert __output__ == options[answer[0]] + '\\n', __output__"
+      "check": "assert __output__ == options[answer[0]] + '\\n', __output__",
+      "lesson": "herencia"
     },
     {
       "id": "oop-26",
@@ -2180,7 +2261,8 @@
         "es": "`C(A, B)` pide buscar en `A` antes que en `B`, pero `B` es subclase de `A` y debe ir antes. No existe un MRO coherente, así que Python lanza `TypeError` al crear la clase y `print` no llega a ejecutarse. `class C(B, A)` sí funcionaría.",
         "en": "`C(A, B)` asks for `A` to be searched before `B`, but `B` is a subclass of `A` and must come first. No consistent MRO exists, so Python raises `TypeError` when creating the class and `print` never runs. `class C(B, A)` would work."
       },
-      "check": "assert __error__ == 'TypeError'\nassert 'TypeError' in options[answer[0]]"
+      "check": "assert __error__ == 'TypeError'\nassert 'TypeError' in options[answer[0]]",
+      "lesson": "herencia"
     },
     {
       "id": "oop-27",
@@ -2203,7 +2285,8 @@
         "es": "`__mro__` empieza por la propia clase y termina siempre en `object`, siguiendo la cadena de herencia: `C, B, A, object`.",
         "en": "`__mro__` starts with the class itself and always ends with `object`, following the inheritance chain: `C, B, A, object`."
       },
-      "check": "assert __output__ == options[answer[0]] + '\\n', __output__"
+      "check": "assert __output__ == options[answer[0]] + '\\n', __output__",
+      "lesson": "herencia"
     },
     {
       "id": "oop-28",
@@ -2228,7 +2311,8 @@
         "es": "`==` usa `__eq__`, que compara `v`: `a == b` es `True`. `is` compara identidad: `c = a` no copia, las dos variables apuntan al mismo objeto, así que `c is a` es `True`; `a` y `b` son objetos distintos.",
         "en": "`==` uses `__eq__`, which compares `v`: `a == b` is `True`. `is` compares identity: `c = a` makes no copy, both names refer to the same object, so `c is a` is `True`; `a` and `b` are different objects."
       },
-      "check": "class P:\n    def __init__(self, v):\n        self.v = v\n    def __eq__(self, other):\n        return self.v == other.v\na = P(1)\nb = P(1)\nc = a\nres = [bool(eval(o)) for o in options]\nassert [i for i, r in enumerate(res) if r] == sorted(answer), res"
+      "check": "class P:\n    def __init__(self, v):\n        self.v = v\n    def __eq__(self, other):\n        return self.v == other.v\na = P(1)\nb = P(1)\nc = a\nres = [bool(eval(o)) for o in options]\nassert [i for i, r in enumerate(res) if r] == sorted(answer), res",
+      "lesson": "herencia"
     },
     {
       "id": "oop-29",
@@ -2254,7 +2338,8 @@
         "es": "`print()` convierte el objeto con `str()`, que llama al `__str__` sobrescrito. Sin él, se vería la representación por defecto `<__main__.Book object at ...>`.",
         "en": "`print()` converts the object with `str()`, which calls the overridden `__str__`. Without it, the default `<__main__.Book object at ...>` representation would be shown."
       },
-      "check": "assert __output__ == options[answer[0]] + '\\n', __output__"
+      "check": "assert __output__ == options[answer[0]] + '\\n', __output__",
+      "lesson": "poo"
     },
     {
       "id": "oop-30",
@@ -2280,7 +2365,8 @@
         "es": "`__str__` debe devolver un `str`. Devolver un `int` hace que `str()` (y por tanto `print()`) lance `TypeError`.",
         "en": "`__str__` must return a `str`. Returning an `int` makes `str()` (and therefore `print()`) raise `TypeError`."
       },
-      "check": "assert __error__ == 'TypeError'\nassert 'TypeError' in options[answer[0]]"
+      "check": "assert __error__ == 'TypeError'\nassert 'TypeError' in options[answer[0]]",
+      "lesson": "herencia"
     },
     {
       "id": "oop-31",
@@ -2306,7 +2392,8 @@
         "es": "Polimorfismo: cada objeto responde a `sound()` con el método de su clase. `Fish` no lo sobrescribe, así que usa el de `Animal`.",
         "en": "Polymorphism: each object answers `sound()` with its own class's method. `Fish` does not override it, so it uses `Animal`'s."
       },
-      "check": "assert __output__ == options[answer[0]] + '\\n', __output__"
+      "check": "assert __output__ == options[answer[0]] + '\\n', __output__",
+      "lesson": "herencia"
     },
     {
       "id": "oop-32",
@@ -2331,7 +2418,8 @@
         "es": "`A.__init__(self)` llama al constructor del padre (con `self` explícito), así que el objeto tiene `a` y `b` en su `__dict__`. Son variables de instancia: la clase `B` no las tiene. Y un `B` también es instancia de `A`.",
         "en": "`A.__init__(self)` calls the parent constructor (with an explicit `self`), so the object has both `a` and `b` in its `__dict__`. They are instance variables: class `B` does not have them. And a `B` is also an instance of `A`."
       },
-      "check": "class A:\n    def __init__(self):\n        self.a = 1\nclass B(A):\n    def __init__(self):\n        A.__init__(self)\n        self.b = 2\nobj = B()\nres = [bool(eval(o)) for o in options]\nassert [i for i, r in enumerate(res) if r] == sorted(answer), res"
+      "check": "class A:\n    def __init__(self):\n        self.a = 1\nclass B(A):\n    def __init__(self):\n        A.__init__(self)\n        self.b = 2\nobj = B()\nres = [bool(eval(o)) for o in options]\nassert [i for i, r in enumerate(res) if r] == sorted(answer), res",
+      "lesson": "herencia"
     },
     {
       "id": "oop-33",
@@ -2356,7 +2444,8 @@
         "es": "Con `super()` el objeto ya va implícito: `super().__init__(x)`. Con el nombre de la clase hay que pasar `self`: `A.__init__(self, x)`. Pasar `self` a `super()` o no pasarlo a `A` desplaza los argumentos (`TypeError`), y `super` sin paréntesis es la clase, no un proxy.",
         "en": "With `super()` the object is already implicit: `super().__init__(x)`. With the class name, `self` must be passed: `A.__init__(self, x)`. Passing `self` to `super()`, or omitting it with `A`, shifts the arguments (`TypeError`), and `super` without parentheses is the class itself, not a proxy."
       },
-      "check": "ok = []\nfor line in options:\n    src = 'class A:\\n    def __init__(self, x):\\n        self.x = x\\n'\n    src += 'class B(A):\\n    def __init__(self, x):\\n        ' + line + '\\n'\n    ns = {}\n    try:\n        exec(src, ns)\n        ok.append(ns['B'](5).x == 5)\n    except Exception:\n        ok.append(False)\nassert [i for i, r in enumerate(ok) if r] == sorted(answer), ok"
+      "check": "ok = []\nfor line in options:\n    src = 'class A:\\n    def __init__(self, x):\\n        self.x = x\\n'\n    src += 'class B(A):\\n    def __init__(self, x):\\n        ' + line + '\\n'\n    ns = {}\n    try:\n        exec(src, ns)\n        ok.append(ns['B'](5).x == 5)\n    except Exception:\n        ok.append(False)\nassert [i for i, r in enumerate(ok) if r] == sorted(answer), ok",
+      "lesson": "herencia"
     },
     {
       "id": "oop-34",
@@ -2381,7 +2470,8 @@
         "es": "`self.total += 1` equivale a `self.total = self.total + 1`: lee la variable de clase (0) pero **asigna** en el objeto. Cada objeto acaba con su propia `total` = 1 y `C.total` sigue en 0.",
         "en": "`self.total += 1` means `self.total = self.total + 1`: it reads the class variable (0) but **assigns** on the object. Each object ends up with its own `total` = 1, and `C.total` stays 0."
       },
-      "check": "class C:\n    total = 0\n    def __init__(self):\n        self.total += 1\na = C()\nb = C()\nres = [bool(eval(o)) for o in options]\nassert [i for i, r in enumerate(res) if r] == sorted(answer), res"
+      "check": "class C:\n    total = 0\n    def __init__(self):\n        self.total += 1\na = C()\nb = C()\nres = [bool(eval(o)) for o in options]\nassert [i for i, r in enumerate(res) if r] == sorted(answer), res",
+      "lesson": "atributos-clase"
     },
     {
       "id": "oop-35",
@@ -2407,7 +2497,8 @@
         "es": "`len(obj)` llama al método especial `__len__`, que devuelve 3; más 1, 4. Sin `__len__`, `len()` lanzaría `TypeError`.",
         "en": "`len(obj)` calls the special method `__len__`, which returns 3; plus 1 gives 4. Without `__len__`, `len()` would raise `TypeError`."
       },
-      "check": "assert __output__ == options[answer[0]] + '\\n', __output__"
+      "check": "assert __output__ == options[answer[0]] + '\\n', __output__",
+      "lesson": "introspeccion"
     },
     {
       "id": "oop-36",
@@ -2431,7 +2522,8 @@
         "es": "`__name__` y `__bases__` son propios de las clases. `a.__module__` y `a.__class__` funcionan (se leen a través de la clase) y el objeto tiene su propio `__dict__`.",
         "en": "`__name__` and `__bases__` belong to classes only. `a.__module__` and `a.__class__` work (they are looked up through the class), and the object has its own `__dict__`."
       },
-      "check": "class A:\n    pass\na = A()\nres = [hasattr(A, o) and not hasattr(a, o) for o in options]\nassert [i for i, r in enumerate(res) if r] == sorted(answer), res"
+      "check": "class A:\n    pass\na = A()\nres = [hasattr(A, o) and not hasattr(a, o) for o in options]\nassert [i for i, r in enumerate(res) if r] == sorted(answer), res",
+      "lesson": "introspeccion"
     },
     {
       "id": "oop-37",
@@ -2457,7 +2549,8 @@
         "es": "`a.x = 2` crea una variable de instancia que tapa la de clase; `del a.x` borra solo esa variable de instancia. Al leer `a.x` de nuevo, Python la encuentra en la clase: 1.",
         "en": "`a.x = 2` creates an instance variable that shadows the class one; `del a.x` deletes only that instance variable. Reading `a.x` again finds it in the class: 1."
       },
-      "check": "assert __output__ == options[answer[0]] + '\\n', __output__"
+      "check": "assert __output__ == options[answer[0]] + '\\n', __output__",
+      "lesson": "atributos-clase"
     },
     {
       "id": "oop-38",
@@ -2486,7 +2579,8 @@
         "es": "Al llamar a un método desde un objeto, Python le pasa el objeto como primer argumento. `f` no declara ningún parámetro (le falta `self`), así que recibe un argumento que no espera: `TypeError`.",
         "en": "When a method is called on an object, Python passes the object as the first argument. `f` declares no parameters (it lacks `self`), so it receives an unexpected argument: `TypeError`."
       },
-      "check": "assert __error__ == 'TypeError'\nassert 'TypeError' in options[answer[0]]"
+      "check": "assert __error__ == 'TypeError'\nassert 'TypeError' in options[answer[0]]",
+      "lesson": "poo"
     },
     {
       "id": "oop-39",
@@ -2512,7 +2606,8 @@
         "es": "`B` hereda el `__str__` de `A`, pero dentro de él `self.tag()` se resuelve en la clase del objeto: para `B()` se usa el `tag` sobrescrito. El prefijo `A:` es un texto fijo, no el nombre de la clase.",
         "en": "`B` inherits `A`'s `__str__`, but inside it `self.tag()` is resolved on the object's class: for `B()` the overriding `tag` is used. The `A:` prefix is a fixed string, not the class name."
       },
-      "check": "assert __output__ == options[answer[0]] + '\\n', __output__"
+      "check": "assert __output__ == options[answer[0]] + '\\n', __output__",
+      "lesson": "herencia"
     },
     {
       "id": "oop-40",
@@ -2535,7 +2630,8 @@
         "es": "Sin un `__eq__` propio, `==` entre objetos se comporta como `is`: `a` y `b` son objetos distintos, así que `a == b` es `False` y `a is not b` es `True`. Sus atributos sí son iguales (`1 == 1`).",
         "en": "Without a custom `__eq__`, `==` between objects behaves like `is`: `a` and `b` are distinct objects, so `a == b` is `False` and `a is not b` is `True`. Their attributes are equal, though (`1 == 1`)."
       },
-      "check": "assert __output__ == options[answer[0]] + '\\n', __output__"
+      "check": "assert __output__ == options[answer[0]] + '\\n', __output__",
+      "lesson": "herencia"
     },
     {
       "id": "oop-41",
@@ -2558,7 +2654,8 @@
         "es": "`D` hereda el `__init__` de `B` (primero en su MRO `D, B, C, A`). El `super()` de `B` sigue el MRO del objeto y llega a `C`, no a `A`; el de `C` llega a `A`. Cada constructor se ejecuta una sola vez: `BCA`.",
         "en": "`D` inherits `B`'s `__init__` (first in its MRO `D, B, C, A`). `B`'s `super()` follows the object's MRO and reaches `C`, not `A`; `C`'s reaches `A`. Each constructor runs exactly once: `BCA`."
       },
-      "check": "assert __output__ == options[answer[0]] + '\\n', __output__"
+      "check": "assert __output__ == options[answer[0]] + '\\n', __output__",
+      "lesson": "herencia"
     },
     {
       "id": "oop-42",
@@ -2581,7 +2678,8 @@
         "es": "Los métodos son atributos de la clase. `speed` se añadió solo al objeto, así que la clase no lo tiene. `color` se añadió a la **clase** después de crear `s`, y aun así `s` lo ve, porque la búsqueda pasa por la clase en cada acceso.",
         "en": "Methods are class attributes. `speed` was added only to the object, so the class lacks it. `color` was added to the **class** after `s` was created, and `s` still sees it, because every lookup goes through the class."
       },
-      "check": "assert __output__ == options[answer[0]] + '\\n', __output__"
+      "check": "assert __output__ == options[answer[0]] + '\\n', __output__",
+      "lesson": "introspeccion"
     },
     {
       "id": "oop-43",
@@ -2607,7 +2705,8 @@
         "es": "`a.x` es un atributo propio de `a` y tapa al de la clase: 1. `b` no tiene `x`, así que `b.x += 1` lee `Q.x` (5) y crea en `b` un atributo propio con 6; `Q.x` sigue siendo 5.",
         "en": "`a.x` is `a`'s own attribute and shadows the class one: 1. `b` has no `x`, so `b.x += 1` reads `Q.x` (5) and creates an own attribute on `b` with 6; `Q.x` stays 5."
       },
-      "check": "assert __output__ == options[answer[0]] + '\\n', __output__"
+      "check": "assert __output__ == options[answer[0]] + '\\n', __output__",
+      "lesson": "atributos-clase"
     },
     {
       "id": "oop-44",
@@ -2632,7 +2731,8 @@
         "es": "Con herencia múltiple, `c` es instancia de `C`, `A`, `B` y `object`. Con una tupla, `isinstance` basta con que coincida una clase (`B`). `A` no es subclase de `C`, `C` no hereda de `int` ni `str`, y `type(c)` es exactamente `C`, no `A`.",
         "en": "With multiple inheritance, `c` is an instance of `C`, `A`, `B` and `object`. With a tuple, `isinstance` needs just one match (`B`). `A` is not a subclass of `C`, `C` inherits from neither `int` nor `str`, and `type(c)` is exactly `C`, not `A`."
       },
-      "check": "class A:\n    pass\nclass B:\n    pass\nclass C(A, B):\n    pass\nc = C()\nres = [bool(eval(o)) for o in options]\nassert [i for i, r in enumerate(res) if r] == sorted(answer), res"
+      "check": "class A:\n    pass\nclass B:\n    pass\nclass C(A, B):\n    pass\nc = C()\nres = [bool(eval(o)) for o in options]\nassert [i for i, r in enumerate(res) if r] == sorted(answer), res",
+      "lesson": "herencia"
     },
     {
       "id": "misc-01",
@@ -2655,7 +2755,8 @@
         "es": "`range(5)` da 0-4; el `if x % 2` deja solo los impares (1 y 3), que se multiplican por 2.",
         "en": "`range(5)` yields 0-4; `if x % 2` keeps only the odd values (1 and 3), which are then doubled."
       },
-      "check": "assert __output__ == '[2, 6]\\n'"
+      "check": "assert __output__ == '[2, 6]\\n'",
+      "lesson": "comprensiones-lambda"
     },
     {
       "id": "misc-02",
@@ -2681,7 +2782,8 @@
         "es": "El `if/else` delante del `for` es una expresión condicional: no filtra, elige un valor para **cada** elemento.",
         "en": "An `if/else` placed before `for` is a conditional expression: it does not filter, it picks a value for **every** element."
       },
-      "check": "assert __output__ == '[0, 0, 0, 3, 4]\\n'"
+      "check": "assert __output__ == '[0, 0, 0, 3, 4]\\n'",
+      "lesson": "comprensiones-lambda"
     },
     {
       "id": "misc-03",
@@ -2704,7 +2806,8 @@
         "es": "La comprensión exterior recorre `i` (2 filas) y la interior `j` (3 columnas): fila 0 → todo ceros, fila 1 → 0, 1, 2.",
         "en": "The outer comprehension iterates over `i` (2 rows) and the inner one over `j` (3 columns): row 0 is all zeros, row 1 is 0, 1, 2."
       },
-      "check": "assert __output__ == '[[0, 0, 0], [0, 1, 2]]\\n'"
+      "check": "assert __output__ == '[[0, 0, 0], [0, 1, 2]]\\n'",
+      "lesson": "comprensiones-lambda"
     },
     {
       "id": "misc-04",
@@ -2727,7 +2830,8 @@
         "es": "Con dos `for` en la misma comprensión, el **primero** es el bucle exterior: para cada letra se recorren todos los dígitos. Se obtiene una lista plana.",
         "en": "With two `for` clauses in one comprehension, the **first** one is the outer loop: for each letter all digits are visited. The result is a flat list."
       },
-      "check": "assert __output__ == \"['x1', 'x2', 'y1', 'y2']\\n\""
+      "check": "assert __output__ == \"['x1', 'x2', 'y1', 'y2']\\n\"",
+      "lesson": "comprensiones-lambda"
     },
     {
       "id": "misc-05",
@@ -2753,7 +2857,8 @@
         "es": "Un `if` al final de la comprensión solo puede filtrar; no admite `else`. Para elegir valor hay que escribir `x if x else 0` **antes** del `for`.",
         "en": "A trailing `if` in a comprehension can only filter and cannot take `else`. To choose a value, write `x if x else 0` **before** the `for`."
       },
-      "check": "assert __error__ == 'SyntaxError'"
+      "check": "assert __error__ == 'SyntaxError'",
+      "lesson": "comprensiones-lambda"
     },
     {
       "id": "misc-06",
@@ -2776,7 +2881,8 @@
         "es": "`f(3)` usa el valor por defecto `y=2` → 3² = 9; `f(2, 3)` → 2³ = 8.",
         "en": "`f(3)` uses the default `y=2` → 3² = 9; `f(2, 3)` → 2³ = 8."
       },
-      "check": "assert __output__ == '9 8\\n'"
+      "check": "assert __output__ == '9 8\\n'",
+      "lesson": "comprensiones-lambda"
     },
     {
       "id": "misc-07",
@@ -2802,7 +2908,8 @@
         "es": "`twice` aplica la función dos veces: (1 + 3) + 3 = 7. Pasar una lambda como argumento es perfectamente válido.",
         "en": "`twice` applies the function two times: (1 + 3) + 3 = 7. Passing a lambda as an argument is perfectly valid."
       },
-      "check": "assert __output__ == '7\\n'"
+      "check": "assert __output__ == '7\\n'",
+      "lesson": "comprensiones-lambda"
     },
     {
       "id": "misc-08",
@@ -2828,7 +2935,8 @@
         "es": "`map()` con dos iterables pasa un elemento de cada uno a la lambda y se detiene en el más corto: 1·4 y 2·5.",
         "en": "`map()` with two iterables passes one element from each to the lambda and stops at the shortest: 1·4 and 2·5."
       },
-      "check": "assert __output__ == '[4, 10]\\n'"
+      "check": "assert __output__ == '[4, 10]\\n'",
+      "lesson": "comprensiones-lambda"
     },
     {
       "id": "misc-09",
@@ -2851,7 +2959,8 @@
         "es": "`filter()` conserva los elementos para los que la lambda devuelve `True` (longitud mayor que 2). No devuelve booleanos.",
         "en": "`filter()` keeps the items for which the lambda returns `True` (length greater than 2). It does not return booleans."
       },
-      "check": "assert __output__ == \"['abc', 'abcd']\\n\""
+      "check": "assert __output__ == \"['abc', 'abcd']\\n\"",
+      "lesson": "comprensiones-lambda"
     },
     {
       "id": "misc-10",
@@ -2877,7 +2986,8 @@
         "es": "`map()` devuelve un iterador: el primer `list()` lo consume entero y el segundo lo encuentra vacío.",
         "en": "`map()` returns an iterator: the first `list()` consumes it completely, so the second one finds it empty."
       },
-      "check": "assert __output__ == \"['A', 'B'] []\\n\""
+      "check": "assert __output__ == \"['A', 'B'] []\\n\"",
+      "lesson": "comprensiones-lambda"
     },
     {
       "id": "misc-11",
@@ -2916,7 +3026,8 @@
         "es": "Una lambda es una expresión única cuyo valor se devuelve solo, y admite valores por defecto. Se puede llamar directamente `(lambda x: x)(3)`, no admite `return` y puede tener varios parámetros.",
         "en": "A lambda is a single expression whose value is returned implicitly, and it accepts default values. It can be called directly `(lambda x: x)(3)`, cannot contain `return` and may take several parameters."
       },
-      "check": "assert (lambda x=1: x)() == 1\nassert (lambda x: x * 2)(3) == 6\nassert (lambda a, b: a + b)(1, 2) == 3\nfor bad in ['lambda x: return x', 'lambda x: y = x']:\n    try:\n        compile(bad, '<t>', 'eval')\n        raise AssertionError(bad)\n    except SyntaxError:\n        pass\nassert answer == [0, 2]"
+      "check": "assert (lambda x=1: x)() == 1\nassert (lambda x: x * 2)(3) == 6\nassert (lambda a, b: a + b)(1, 2) == 3\nfor bad in ['lambda x: return x', 'lambda x: y = x']:\n    try:\n        compile(bad, '<t>', 'eval')\n        raise AssertionError(bad)\n    except SyntaxError:\n        pass\nassert answer == [0, 2]",
+      "lesson": "comprensiones-lambda"
     },
     {
       "id": "misc-12",
@@ -2942,7 +3053,8 @@
         "es": "`inner` es un closure: recuerda `n = 5` aunque `outer` ya haya terminado. 10 + 5 = 15.",
         "en": "`inner` is a closure: it remembers `n = 5` even after `outer` has returned. 10 + 5 = 15."
       },
-      "check": "assert __output__ == '15\\n'"
+      "check": "assert __output__ == '15\\n'",
+      "lesson": "closures"
     },
     {
       "id": "misc-13",
@@ -2965,7 +3077,8 @@
         "es": "Gracias a `nonlocal`, `total` se comparte entre llamadas: la primera deja 2 y la segunda suma 3 → 5.",
         "en": "Thanks to `nonlocal`, `total` persists between calls: the first call leaves 2 and the second adds 3 → 5."
       },
-      "check": "assert __output__ == '5\\n'"
+      "check": "assert __output__ == '5\\n'",
+      "lesson": "closures"
     },
     {
       "id": "misc-14",
@@ -2991,7 +3104,8 @@
         "es": "`count += 1` es una asignación, así que `count` es **local** en `inc` y se lee antes de tener valor. Faltaría `nonlocal count`.",
         "en": "`count += 1` is an assignment, so `count` is **local** to `inc` and is read before it has a value. `nonlocal count` is missing."
       },
-      "check": "assert __error__ == 'UnboundLocalError'"
+      "check": "assert __error__ == 'UnboundLocalError'",
+      "lesson": "closures"
     },
     {
       "id": "misc-15",
@@ -3017,7 +3131,8 @@
         "es": "Las lambdas guardan la **variable** `i`, no su valor en cada vuelta. Cuando se llaman, `i` ya vale 2. Se arreglaría con `lambda i=i: i`.",
         "en": "The lambdas capture the **variable** `i`, not its value at each iteration. When they are called, `i` is already 2. `lambda i=i: i` would fix it."
       },
-      "check": "assert __output__ == '[2, 2, 2]\\n'"
+      "check": "assert __output__ == '[2, 2, 2]\\n'",
+      "lesson": "closures"
     },
     {
       "id": "misc-16",
@@ -3040,7 +3155,8 @@
         "es": "`g` busca `x` en el ámbito envolvente (`f`), donde vale 2. La asignación dentro de `f` crea una variable local y no toca la global, que sigue valiendo 1.",
         "en": "`g` looks up `x` in the enclosing scope (`f`), where it is 2. The assignment inside `f` creates a local variable and leaves the global one unchanged at 1."
       },
-      "check": "assert __output__ == '2 1\\n'"
+      "check": "assert __output__ == '2 1\\n'",
+      "lesson": "closures"
     },
     {
       "id": "misc-17",
@@ -3063,7 +3179,8 @@
         "es": "Cada `next()` reanuda el generador hasta el siguiente `yield`: primero 1, luego 2.",
         "en": "Each `next()` resumes the generator up to the next `yield`: first 1, then 2."
       },
-      "check": "assert __output__ == '1 2\\n'"
+      "check": "assert __output__ == '1 2\\n'",
+      "lesson": "closures"
     },
     {
       "id": "misc-18",
@@ -3089,7 +3206,8 @@
         "es": "El generador solo tiene un `yield`. El segundo `next()` no encuentra más valores y lanza `StopIteration`; no devuelve `None` ni vuelve a empezar.",
         "en": "The generator has a single `yield`. The second `next()` finds no more values and raises `StopIteration`; it neither returns `None` nor restarts."
       },
-      "check": "assert __output__ == 'a\\n' and __error__ == 'StopIteration'"
+      "check": "assert __output__ == 'a\\n' and __error__ == 'StopIteration'",
+      "lesson": "closures"
     },
     {
       "id": "misc-19",
@@ -3115,7 +3233,8 @@
         "es": "`iter()` crea un iterador sobre la lista; `next()` consume el 10 y `list()` recoge lo que queda.",
         "en": "`iter()` creates an iterator over the list; `next()` consumes 10 and `list()` collects the rest."
       },
-      "check": "assert __output__ == '[20, 30]\\n'"
+      "check": "assert __output__ == '[20, 30]\\n'",
+      "lesson": "closures"
     },
     {
       "id": "misc-20",
@@ -3142,7 +3261,8 @@
         "es": "Los paréntesis crean una expresión generadora y llamar a una función con `yield` devuelve un generador. Los corchetes crean una lista, las llaves un conjunto e `iter()` sobre una lista da un iterador de lista, que no es un generador.",
         "en": "Parentheses create a generator expression, and calling a function containing `yield` returns a generator. Brackets create a list, braces a set, and `iter()` on a list gives a list iterator, which is not a generator."
       },
-      "check": "import types\ndef g():\n    yield 0\nassert isinstance((x for x in range(3)), types.GeneratorType)\nassert isinstance(g(), types.GeneratorType)\nassert not isinstance([x for x in range(3)], types.GeneratorType)\nassert not isinstance({x for x in range(3)}, types.GeneratorType)\nassert not isinstance(iter([0, 1, 2]), types.GeneratorType)\nassert answer == [0, 3]"
+      "check": "import types\ndef g():\n    yield 0\nassert isinstance((x for x in range(3)), types.GeneratorType)\nassert isinstance(g(), types.GeneratorType)\nassert not isinstance([x for x in range(3)], types.GeneratorType)\nassert not isinstance({x for x in range(3)}, types.GeneratorType)\nassert not isinstance(iter([0, 1, 2]), types.GeneratorType)\nassert answer == [0, 3]",
+      "lesson": "closures"
     },
     {
       "id": "misc-21",
@@ -3166,7 +3286,8 @@
         "es": "El `+` añade la operación que falta: `r+` lee y escribe (el archivo debe existir) y `w+` escribe y lee (vaciándolo). `a` y `x` solo escriben; `rb` solo lee.",
         "en": "The `+` adds the missing operation: `r+` reads and writes (the file must exist) and `w+` writes and reads (truncating it). `a` and `x` are write-only; `rb` is read-only."
       },
-      "check": "import os, tempfile\nd = tempfile.mkdtemp()\nres = {}\nfor i, m in enumerate([\"r+\", \"w+\", \"a\", \"x\", \"rb\"]):\n    p = os.path.join(d, f\"f{i}\")\n    if m != \"x\":\n        open(p, \"w\").close()\n    with open(p, m) as f:\n        res[i] = f.readable() and f.writable()\nassert sorted(i for i, ok in res.items() if ok) == answer"
+      "check": "import os, tempfile\nd = tempfile.mkdtemp()\nres = {}\nfor i, m in enumerate([\"r+\", \"w+\", \"a\", \"x\", \"rb\"]):\n    p = os.path.join(d, f\"f{i}\")\n    if m != \"x\":\n        open(p, \"w\").close()\n    with open(p, m) as f:\n        res[i] = f.readable() and f.writable()\nassert sorted(i for i, ok in res.items() if ok) == answer",
+      "lesson": "archivos-binarios"
     },
     {
       "id": "misc-22",
@@ -3189,7 +3310,8 @@
         "es": "`readline()` ya consumió la primera línea; `readlines()` devuelve el **resto** como lista, conservando el `\\n` de cada línea.",
         "en": "`readline()` has already consumed the first line; `readlines()` returns the **remaining** lines as a list, each keeping its `\\n`."
       },
-      "check": "assert __output__ == \"['dos\\\\n', 'tres\\\\n']\\n\""
+      "check": "assert __output__ == \"['dos\\\\n', 'tres\\\\n']\\n\"",
+      "lesson": "archivos-binarios"
     },
     {
       "id": "misc-23",
@@ -3212,7 +3334,8 @@
         "es": "`write()` devuelve el número de bytes escritos (3). En modo `rb`, `read(2)` devuelve un objeto `bytes`, que se imprime con el prefijo `b`.",
         "en": "`write()` returns the number of bytes written (3). In `rb` mode, `read(2)` returns a `bytes` object, which is printed with the `b` prefix."
       },
-      "check": "assert __output__ == \"3\\nb'AB'\\n\""
+      "check": "assert __output__ == \"3\\nb'AB'\\n\"",
+      "lesson": "archivos-binarios"
     },
     {
       "id": "misc-24",
@@ -3235,7 +3358,8 @@
         "es": "`bytearray(4)` crea 4 bytes a cero. `readinto()` copia los 3 bytes del archivo en él y devuelve 3; el cuarto sigue a cero y el tamaño no cambia.",
         "en": "`bytearray(4)` creates 4 zero bytes. `readinto()` copies the file's 3 bytes into it and returns 3; the fourth byte stays zero and the size does not change."
       },
-      "check": "assert __output__ == \"3 bytearray(b'xyz\\\\x00')\\n\""
+      "check": "assert __output__ == \"3 bytearray(b'xyz\\\\x00')\\n\"",
+      "lesson": "archivos-binarios"
     },
     {
       "id": "misc-25",
@@ -3274,7 +3398,8 @@
         "es": "`ENOENT` = no existe (`FileNotFoundError`) y `EACCES` = permiso denegado (`PermissionError`). `EEXIST` significa que **ya existe**, `EBADF` es un descriptor de archivo no válido y `EISDIR` que la ruta es un directorio (disco lleno es `ENOSPC`).",
         "en": "`ENOENT` = no such file (`FileNotFoundError`) and `EACCES` = permission denied (`PermissionError`). `EEXIST` means the file **already exists**, `EBADF` is a bad file descriptor and `EISDIR` means the path is a directory (disk full is `ENOSPC`)."
       },
-      "check": "import errno\nassert type(OSError(errno.ENOENT, 'x')) is FileNotFoundError\nassert type(OSError(errno.EACCES, 'x')) is PermissionError\nassert type(OSError(errno.EEXIST, 'x')) is FileExistsError\nassert type(OSError(errno.EISDIR, 'x')) is IsADirectoryError\nassert errno.EISDIR != errno.ENOSPC and errno.EEXIST != errno.ENOENT\nassert answer == [0, 1]"
+      "check": "import errno\nassert type(OSError(errno.ENOENT, 'x')) is FileNotFoundError\nassert type(OSError(errno.EACCES, 'x')) is PermissionError\nassert type(OSError(errno.EEXIST, 'x')) is FileExistsError\nassert type(OSError(errno.EISDIR, 'x')) is IsADirectoryError\nassert errno.EISDIR != errno.ENOSPC and errno.EEXIST != errno.ENOENT\nassert answer == [0, 1]",
+      "lesson": "archivos-binarios"
     },
     {
       "id": "misc-26",
@@ -3313,7 +3438,8 @@
         "es": "Los tres streams los abre Python al arrancar, en modo texto. `print()` usa `sys.stdout` salvo que se indique otro destino con `file=`, por ejemplo `sys.stderr`.",
         "en": "Python opens the three streams at startup, in text mode. `print()` uses `sys.stdout` unless another target is given with `file=`, such as `sys.stderr`."
       },
-      "check": "import contextlib, io, sys\nout, err = io.StringIO(), io.StringIO()\nwith contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):\n    print('a')\n    print('b', file=sys.stderr)\nassert out.getvalue() == 'a\\n' and err.getvalue() == 'b\\n'\nassert isinstance(sys.__stdout__, io.TextIOBase) and not sys.__stdout__.closed\nassert answer == [0, 2]"
+      "check": "import contextlib, io, sys\nout, err = io.StringIO(), io.StringIO()\nwith contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):\n    print('a')\n    print('b', file=sys.stderr)\nassert out.getvalue() == 'a\\n' and err.getvalue() == 'b\\n'\nassert isinstance(sys.__stdout__, io.TextIOBase) and not sys.__stdout__.closed\nassert answer == [0, 2]",
+      "lesson": "archivos-binarios"
     }
   ],
   "cards": [
@@ -3328,7 +3454,8 @@
         "es": "`import m` → `m.f()`; `import m as x` → `x.f()` (y `m` no existe); `from m import f` → `f()`; `from m import *` → todos los nombres públicos (o los de `__all__`).",
         "en": "`import m` → `m.f()`; `import m as x` → `x.f()` (and `m` is not defined); `from m import f` → `f()`; `from m import *` → all public names (or those listed in `__all__`)."
       },
-      "code": "import math as m\nfrom math import sqrt\nprint(m.pi > 3, sqrt(25))"
+      "code": "import math as m\nfrom math import sqrt\nprint(m.pi > 3, sqrt(25))",
+      "lesson": "paquetes"
     },
     {
       "id": "mod-f02",
@@ -3340,7 +3467,8 @@
       "back": {
         "es": "Con su nombre completamente cualificado: `import extra.good.best.tau` y luego `extra.good.best.tau.fun()`. Más corto: `from extra.good.best import tau` o `import extra.good.best.tau as t`.",
         "en": "By its fully qualified name: `import extra.good.best.tau`, then `extra.good.best.tau.fun()`. Shorter: `from extra.good.best import tau` or `import extra.good.best.tau as t`."
-      }
+      },
+      "lesson": "paquetes"
     },
     {
       "id": "mod-f03",
@@ -3353,7 +3481,8 @@
         "es": "`dir(modulo)` devuelve una lista ordenada con todos sus nombres (también los `_x` y `__x__`). `sys.path` es la lista de carpetas donde se buscan los módulos; se puede ampliar con `sys.path.append(ruta)`.",
         "en": "`dir(module)` returns a sorted list of all its names (including `_x` and `__x__`). `sys.path` is the list of directories searched for modules; extend it with `sys.path.append(path)`."
       },
-      "code": "import sys, math\nprint(type(dir(math)).__name__, type(sys.path).__name__)"
+      "code": "import sys, math\nprint(type(dir(math)).__name__, type(sys.path).__name__)",
+      "lesson": "paquetes"
     },
     {
       "id": "mod-f04",
@@ -3366,7 +3495,8 @@
         "es": "`ceil(-2.5)` → `-2` (hacia arriba), `floor(-2.5)` → `-3` (hacia abajo), `trunc(-2.5)` → `-2` (hacia el cero). Las tres devuelven `int`; `sqrt` e `hypot` devuelven `float`.",
         "en": "`ceil(-2.5)` → `-2` (up), `floor(-2.5)` → `-3` (down), `trunc(-2.5)` → `-2` (towards zero). All three return an `int`; `sqrt` and `hypot` return a `float`."
       },
-      "code": "import math\nprint(math.ceil(-2.5), math.floor(-2.5), math.trunc(-2.5))"
+      "code": "import math\nprint(math.ceil(-2.5), math.floor(-2.5), math.trunc(-2.5))",
+      "lesson": "math-random-platform"
     },
     {
       "id": "mod-f05",
@@ -3379,7 +3509,8 @@
         "es": "`random()` → float en [0.0, 1.0). `seed(s)` → misma semilla, misma secuencia. `choice(seq)` → un elemento (`IndexError` si está vacía). `sample(seq, k)` → lista nueva de `k` elementos distintos (`ValueError` si `k` > `len`).",
         "en": "`random()` → float in [0.0, 1.0). `seed(s)` → same seed, same sequence. `choice(seq)` → one element (`IndexError` if empty). `sample(seq, k)` → new list of `k` distinct elements (`ValueError` if `k` > `len`)."
       },
-      "code": "import random\nrandom.seed(1); a = random.random()\nrandom.seed(1); b = random.random()\nprint(a == b)"
+      "code": "import random\nrandom.seed(1); a = random.random()\nrandom.seed(1); b = random.random()\nprint(a == b)",
+      "lesson": "math-random-platform"
     },
     {
       "id": "mod-f06",
@@ -3392,7 +3523,8 @@
         "es": "Todas devuelven `str` (`platform()`, `system()`, `version()`, `machine()`, `processor()`, `python_implementation()`), cuyo valor depende de la máquina; `processor()` puede ser `''`. La excepción: `python_version_tuple()` devuelve una tupla de cadenas.",
         "en": "They all return a `str` (`platform()`, `system()`, `version()`, `machine()`, `processor()`, `python_implementation()`) whose value depends on the machine; `processor()` may be `''`. The exception: `python_version_tuple()` returns a tuple of strings."
       },
-      "code": "import platform\nprint(type(platform.system()).__name__, type(platform.python_version_tuple()).__name__)"
+      "code": "import platform\nprint(type(platform.system()).__name__, type(platform.python_version_tuple()).__name__)",
+      "lesson": "math-random-platform"
     },
     {
       "id": "mod-f07",
@@ -3405,7 +3537,8 @@
         "es": "`__name__` vale `'__main__'` en el script ejecutado y el nombre del módulo al importarlo. `__init__.py` marca un paquete y se ejecuta al importarlo. `__pycache__` guarda el bytecode `.pyc` de los módulos importados.",
         "en": "`__name__` is `'__main__'` in the script being run and the module's name when it is imported. `__init__.py` marks a package and runs when the package is imported. `__pycache__` stores the `.pyc` bytecode of imported modules."
       },
-      "code": "print(__name__)"
+      "code": "print(__name__)",
+      "lesson": "paquetes"
     },
     {
       "id": "mod-f08",
@@ -3417,7 +3550,8 @@
       "back": {
         "es": "Si existe `__all__`, `from m import *` importa exactamente esos nombres. Si no, importa los que no empiezan por `_`. Aun así, `m._x` sigue siendo accesible: la privacidad es solo una convención.",
         "en": "If `__all__` exists, `from m import *` imports exactly those names. Otherwise it imports the names that do not start with `_`. Even so, `m._x` is still accessible: privacy is only a convention."
-      }
+      },
+      "lesson": "paquetes"
     },
     {
       "id": "exc-f01",
@@ -3430,7 +3564,8 @@
         "es": "`Exception`, `SystemExit`, `KeyboardInterrupt` (y `GeneratorExit`). Por eso `except Exception` no captura `sys.exit()` ni Ctrl+C.",
         "en": "`Exception`, `SystemExit`, `KeyboardInterrupt` (and `GeneratorExit`). That is why `except Exception` does not catch `sys.exit()` or Ctrl+C."
       },
-      "code": "print(issubclass(SystemExit, Exception), issubclass(KeyboardInterrupt, BaseException))"
+      "code": "print(issubclass(SystemExit, Exception), issubclass(KeyboardInterrupt, BaseException))",
+      "lesson": "jerarquia-excepciones"
     },
     {
       "id": "exc-f02",
@@ -3443,7 +3578,8 @@
         "es": "`IndexError` y `KeyError` → `LookupError`; `ZeroDivisionError` (y `OverflowError`) → `ArithmeticError`; `ModuleNotFoundError` → `ImportError`. Todas acaban en `Exception`.",
         "en": "`IndexError` and `KeyError` → `LookupError`; `ZeroDivisionError` (and `OverflowError`) → `ArithmeticError`; `ModuleNotFoundError` → `ImportError`. All of them end in `Exception`."
       },
-      "code": "for c in (IndexError, KeyError, ZeroDivisionError, ModuleNotFoundError):\n    print(c.__name__, '->', c.__bases__[0].__name__)"
+      "code": "for c in (IndexError, KeyError, ZeroDivisionError, ModuleNotFoundError):\n    print(c.__name__, '->', c.__bases__[0].__name__)",
+      "lesson": "jerarquia-excepciones"
     },
     {
       "id": "exc-f03",
@@ -3456,7 +3592,8 @@
         "es": "De arriba abajo; se ejecuta solo el primero que coincide (la clase o una subclase). Pon las clases concretas antes que las generales, y el `except:` sin tipo el último (si no, `SyntaxError`).",
         "en": "Top to bottom; only the first matching one runs (the class or a subclass). Put specific classes before general ones, and the bare `except:` last (otherwise, `SyntaxError`)."
       },
-      "code": "try:\n    [][0]\nexcept LookupError:\n    print('LookupError gana')\nexcept IndexError:\n    print('nunca se llega aquí')"
+      "code": "try:\n    [][0]\nexcept LookupError:\n    print('LookupError gana')\nexcept IndexError:\n    print('nunca se llega aquí')",
+      "lesson": "jerarquia-excepciones"
     },
     {
       "id": "exc-f04",
@@ -3469,7 +3606,8 @@
         "es": "`e.args` es la tupla de argumentos del constructor. `str(e)` es el único argumento, la tupla como texto si hay varios, o `''` si no hay ninguno.",
         "en": "`e.args` is the tuple of constructor arguments. `str(e)` is the single argument, the tuple as text if there are several, or `''` if there are none."
       },
-      "code": "for e in (ValueError('a'), ValueError('a', 1), ValueError()):\n    print(e.args, repr(str(e)))"
+      "code": "for e in (ValueError('a'), ValueError('a', 1), ValueError()):\n    print(e.args, repr(str(e)))",
+      "lesson": "jerarquia-excepciones"
     },
     {
       "id": "exc-f05",
@@ -3482,7 +3620,8 @@
         "es": "Dentro de un `except`, re-lanza la excepción que se está tratando. Fuera de un `except` (sin excepción activa), lanza `RuntimeError`.",
         "en": "Inside an `except` block, it re-raises the exception being handled. Outside one (no active exception), it raises `RuntimeError`."
       },
-      "code": "try:\n    try:\n        1 / 0\n    except ZeroDivisionError:\n        print('lo trato y lo re-lanzo')\n        raise\nexcept ArithmeticError as e:\n    print('capturado fuera:', type(e).__name__)"
+      "code": "try:\n    try:\n        1 / 0\n    except ZeroDivisionError:\n        print('lo trato y lo re-lanzo')\n        raise\nexcept ArithmeticError as e:\n    print('capturado fuera:', type(e).__name__)",
+      "lesson": "jerarquia-excepciones"
     },
     {
       "id": "exc-f06",
@@ -3495,7 +3634,8 @@
         "es": "`else`, solo si el `try` no lanzó nada. `finally`, siempre y en último lugar, incluso si hay `return`, `break` o una excepción sin capturar.",
         "en": "`else` only if the `try` block raised nothing. `finally` always, and last, even with `return`, `break` or an uncaught exception."
       },
-      "code": "def f():\n    try:\n        return 'try'\n    finally:\n        print('finally antes de salir')\n\nprint(f())"
+      "code": "def f():\n    try:\n        return 'try'\n    finally:\n        print('finally antes de salir')\n\nprint(f())",
+      "lesson": "jerarquia-excepciones"
     },
     {
       "id": "exc-f07",
@@ -3508,7 +3648,8 @@
         "es": "Con una clase que herede de `Exception` (o de una subclase) y que en su `__init__` llame a `super().__init__(mensaje)`; así `args` y `str(e)` funcionan.",
         "en": "With a class that inherits from `Exception` (or a subclass) and calls `super().__init__(message)` in its `__init__`, so `args` and `str(e)` work."
       },
-      "code": "class NotaInvalida(ValueError):\n    def __init__(self, nota):\n        super().__init__(f'nota fuera de rango: {nota}')\n        self.nota = nota\n\ntry:\n    raise NotaInvalida(12)\nexcept ValueError as e:\n    print(e, e.nota)"
+      "code": "class NotaInvalida(ValueError):\n    def __init__(self, nota):\n        super().__init__(f'nota fuera de rango: {nota}')\n        self.nota = nota\n\ntry:\n    raise NotaInvalida(12)\nexcept ValueError as e:\n    print(e, e.nota)",
+      "lesson": "jerarquia-excepciones"
     },
     {
       "id": "exc-f08",
@@ -3522,7 +3663,8 @@
         "en": "If the condition is false, it raises `AssertionError(message)`; if true, it does nothing. Use it to check internal assumptions, not to validate user input."
       },
       "code": "saldo = -5\nassert saldo >= 0, 'el saldo no puede ser negativo'",
-      "raises": true
+      "raises": true,
+      "lesson": "jerarquia-excepciones"
     },
     {
       "id": "str-f01",
@@ -3535,7 +3677,8 @@
         "es": "`ord(c)` devuelve el code point de un carácter (`ord('A')` → 65) y `chr(n)` el carácter de un code point (`chr(97)` → `'a'`). Son inversas.",
         "en": "`ord(c)` returns the code point of a single character (`ord('A')` → 65) and `chr(n)` returns the character for a code point (`chr(97)` → `'a'`). They are inverses."
       },
-      "code": "print(ord(\"A\"), chr(97), chr(ord(\"z\")))"
+      "code": "print(ord(\"A\"), chr(97), chr(ord(\"z\")))",
+      "lesson": "unicode"
     },
     {
       "id": "str-f02",
@@ -3548,7 +3691,8 @@
         "es": "Unicode asigna un code point a cada carácter; UTF-8 es una codificación que guarda esos code points en 1 a 4 bytes y es compatible con ASCII (0-127).",
         "en": "Unicode assigns a code point to every character; UTF-8 is an encoding that stores those code points in 1 to 4 bytes and is backward-compatible with ASCII (0-127)."
       },
-      "code": "print(len(\"€\"), len(\"€\".encode(\"utf-8\")))"
+      "code": "print(len(\"€\"), len(\"€\".encode(\"utf-8\")))",
+      "lesson": "unicode"
     },
     {
       "id": "str-f03",
@@ -3562,7 +3706,8 @@
         "en": "`find()` and `rfind()` return -1; `index()` raises `ValueError`."
       },
       "code": "print(\"abc\".find(\"z\"))\n\"abc\".index(\"z\")",
-      "raises": true
+      "raises": true,
+      "lesson": "metodos-string"
     },
     {
       "id": "str-f04",
@@ -3575,7 +3720,8 @@
         "es": "`s[99]` lanza `IndexError`; `s[99:]` o `s[2:99]` no fallan: el slicing recorta los límites y puede devolver `''`.",
         "en": "`s[99]` raises `IndexError`; `s[99:]` or `s[2:99]` never fail — slicing clips the bounds and may return `''`."
       },
-      "code": "s = \"hola\"\nprint(repr(s[99:]), s[2:99])"
+      "code": "s = \"hola\"\nprint(repr(s[99:]), s[2:99])",
+      "lesson": "cadenas"
     },
     {
       "id": "str-f05",
@@ -3589,7 +3735,8 @@
         "en": "No: `str` objects are immutable and `s[0] = 'x'` raises `TypeError`. Build a new string instead: `s = 'x' + s[1:]`."
       },
       "code": "s = \"hola\"\ns[0] = \"H\"",
-      "raises": true
+      "raises": true,
+      "lesson": "cadenas"
     },
     {
       "id": "str-f06",
@@ -3603,7 +3750,8 @@
         "en": "`==` between `str` and `int` simply returns `False`; `<`, `>`, `<=` and `>=` raise `TypeError`."
       },
       "code": "print(\"1\" == 1)\nprint(\"1\" < 1)",
-      "raises": true
+      "raises": true,
+      "lesson": "cadenas"
     },
     {
       "id": "str-f07",
@@ -3616,7 +3764,8 @@
         "es": "Sin argumento separa por cualquier espacio en blanco y descarta vacíos; con separador, deja cadenas vacías entre separadores seguidos.",
         "en": "With no argument it splits on any whitespace run and drops empty strings; with a separator it keeps empty strings between consecutive separators."
       },
-      "code": "print(\"a  b\".split(), \"a  b\".split(\" \"))"
+      "code": "print(\"a  b\".split(), \"a  b\".split(\" \"))",
+      "lesson": "metodos-string"
     },
     {
       "id": "str-f08",
@@ -3629,7 +3778,8 @@
         "es": "Cualquier combinación de los caracteres `a` y `b` en ambos extremos: el argumento es un conjunto de caracteres, no una subcadena.",
         "en": "Any combination of the characters `a` and `b` from both ends: the argument is a set of characters, not a substring."
       },
-      "code": "print(\"abbaXYab\".strip(\"ab\"))"
+      "code": "print(\"abbaXYab\".strip(\"ab\"))",
+      "lesson": "metodos-string"
     },
     {
       "id": "str-f09",
@@ -3642,7 +3792,8 @@
         "es": "`sorted()` devuelve una lista nueva (con un `str`, una lista de caracteres); `lista.sort()` ordena en su sitio y devuelve `None`. Los `str` no tienen `sort()`.",
         "en": "`sorted()` returns a new list (for a `str`, a list of characters); `list.sort()` sorts in place and returns `None`. Strings have no `sort()` method."
       },
-      "code": "print(sorted(\"cab\"))\nletras = [\"c\", \"a\"]\nprint(letras.sort(), letras)"
+      "code": "print(sorted(\"cab\"))\nletras = [\"c\", \"a\"]\nprint(letras.sort(), letras)",
+      "lesson": "metodos-string"
     },
     {
       "id": "str-f10",
@@ -3655,7 +3806,8 @@
         "es": "`False`: `''.isalpha()`, `''.isdigit()`, `''.isspace()`… Además `'-5'.isdigit()` y `'2.5'.isdigit()` también son `False`.",
         "en": "`False`: `''.isalpha()`, `''.isdigit()`, `''.isspace()`… Also, `'-5'.isdigit()` and `'2.5'.isdigit()` are `False`."
       },
-      "code": "print(\"\".isalpha(), \"\".isdigit(), \"-5\".isdigit(), \"25\".isdigit())"
+      "code": "print(\"\".isalpha(), \"\".isdigit(), \"-5\".isdigit(), \"25\".isdigit())",
+      "lesson": "metodos-string"
     },
     {
       "id": "oop-f01",
@@ -3668,7 +3820,8 @@
         "es": "La de clase se declara en el cuerpo de la clase y la comparten todas las instancias. La de instancia se crea con `self.x = ...` y cada objeto tiene la suya.",
         "en": "A class variable is declared in the class body and shared by all instances. An instance variable is created with `self.x = ...` and each object has its own."
       },
-      "code": "class A:\n    compartida = 0\n    def __init__(self):\n        self.propia = 1"
+      "code": "class A:\n    compartida = 0\n    def __init__(self):\n        self.propia = 1",
+      "lesson": "atributos-clase"
     },
     {
       "id": "oop-f02",
@@ -3680,7 +3833,8 @@
       "back": {
         "es": "Se crea una variable de instancia `x` en `obj` que tapa la de la clase. La variable de clase no cambia; para cambiarla usa `Clase.x = 5`.",
         "en": "A new instance variable `x` is created on `obj`, shadowing the class one. The class variable is unchanged; to change it use `Class.x = 5`."
-      }
+      },
+      "lesson": "atributos-clase"
     },
     {
       "id": "oop-f03",
@@ -3692,7 +3846,8 @@
       "back": {
         "es": "El del objeto contiene solo sus variables de instancia (en orden de creación). El de la clase contiene variables de clase, métodos y claves internas como `__module__`.",
         "en": "The object's holds only its instance variables (in creation order). The class's holds class variables, methods and internal keys such as `__module__`."
-      }
+      },
+      "lesson": "atributos-clase"
     },
     {
       "id": "oop-f04",
@@ -3705,7 +3860,8 @@
         "es": "Dentro de `class C`, un nombre `__x` (dos guiones bajos delante, no detrás) se guarda como `_C__x`. Desde fuera, `obj.__x` lanza `AttributeError`, pero `obj._C__x` funciona.",
         "en": "Inside `class C`, a name `__x` (two leading underscores, no trailing ones) is stored as `_C__x`. From outside, `obj.__x` raises `AttributeError`, but `obj._C__x` works."
       },
-      "code": "class C:\n    def __init__(self):\n        self.__x = 1\nprint(C()._C__x)"
+      "code": "class C:\n    def __init__(self):\n        self.__x = 1\nprint(C()._C__x)",
+      "lesson": "atributos-clase"
     },
     {
       "id": "oop-f05",
@@ -3718,7 +3874,8 @@
         "es": "Devuelve `True`/`False`, nunca lanza error. Una variable de instancia creada en `__init__` da `True` en el objeto y `False` en la clase.",
         "en": "It returns `True`/`False` and never raises. An instance variable created in `__init__` gives `True` on the object and `False` on the class."
       },
-      "code": "class K:\n    def __init__(self):\n        self.v = 1\nprint(hasattr(K(), 'v'), hasattr(K, 'v'))"
+      "code": "class K:\n    def __init__(self):\n        self.v = 1\nprint(hasattr(K(), 'v'), hasattr(K, 'v'))",
+      "lesson": "introspeccion"
     },
     {
       "id": "oop-f06",
@@ -3730,7 +3887,8 @@
       "back": {
         "es": "Nombre de la clase (`str`), módulo donde se definió (`'__main__'` si se ejecuta directamente) y tupla de superclases directas. Un objeto normal no tiene `__name__` ni `__bases__`: usa `type(obj)`.",
         "en": "The class name (`str`), the module where it was defined (`'__main__'` if run directly) and the tuple of direct superclasses. A plain object has no `__name__` or `__bases__`: use `type(obj)`."
-      }
+      },
+      "lesson": "introspeccion"
     },
     {
       "id": "oop-f07",
@@ -3743,7 +3901,8 @@
         "es": "`(object,)`: toda clase sin padre explícito hereda de `object`.",
         "en": "`(object,)`: every class without an explicit parent inherits from `object`."
       },
-      "code": "class A:\n    pass\nprint(A.__bases__)"
+      "code": "class A:\n    pass\nprint(A.__bases__)",
+      "lesson": "introspeccion"
     },
     {
       "id": "oop-f08",
@@ -3755,7 +3914,8 @@
       "back": {
         "es": "Si la subclase no define `__init__`, hereda el del padre. Si lo define, el del padre no se llama solo: usa `super().__init__(...)` o `Padre.__init__(self, ...)`.",
         "en": "If the subclass defines no `__init__`, it inherits the parent's. If it does, the parent's is not called automatically: use `super().__init__(...)` or `Parent.__init__(self, ...)`."
-      }
+      },
+      "lesson": "herencia"
     },
     {
       "id": "oop-f09",
@@ -3768,7 +3928,8 @@
         "es": "`D, B, C, A, object`: padres de izquierda a derecha y la base común solo después de todas sus subclases. Se consulta con `D.__mro__` o `D.mro()`.",
         "en": "`D, B, C, A, object`: parents left to right, and the common base only after all its subclasses. Inspect it with `D.__mro__` or `D.mro()`."
       },
-      "code": "class A: pass\nclass B(A): pass\nclass C(A): pass\nclass D(B, C): pass\nprint([k.__name__ for k in D.__mro__])"
+      "code": "class A: pass\nclass B(A): pass\nclass C(A): pass\nclass D(B, C): pass\nprint([k.__name__ for k in D.__mro__])",
+      "lesson": "herencia"
     },
     {
       "id": "oop-f10",
@@ -3782,7 +3943,8 @@
         "en": "If the requested order contradicts the hierarchy (e.g. `class C(A, B)` where `B` is a subclass of `A`), Python raises `TypeError` when the class is defined."
       },
       "code": "class A: pass\nclass B(A): pass\nclass C(A, B): pass",
-      "raises": true
+      "raises": true,
+      "lesson": "herencia"
     },
     {
       "id": "oop-f11",
@@ -3794,7 +3956,8 @@
       "back": {
         "es": "`is` compara identidad (el mismo objeto en memoria); `==` compara valor mediante `__eq__`. Sin `__eq__` propio, dos objetos distintos nunca son `==`.",
         "en": "`is` compares identity (the very same object); `==` compares value via `__eq__`. Without a custom `__eq__`, two distinct objects are never `==`."
-      }
+      },
+      "lesson": "herencia"
     },
     {
       "id": "oop-f12",
@@ -3807,7 +3970,8 @@
         "es": "`isinstance(obj, C)` comprueba un **objeto** (incluye subclases); `issubclass(B, C)` comprueba dos **clases**, y toda clase es subclase de sí misma.",
         "en": "`isinstance(obj, C)` checks an **object** (subclasses included); `issubclass(B, C)` checks two **classes**, and every class is a subclass of itself."
       },
-      "code": "class A: pass\nclass B(A): pass\nprint(isinstance(B(), A), issubclass(B, B), issubclass(A, B))"
+      "code": "class A: pass\nclass B(A): pass\nprint(isinstance(B(), A), issubclass(B, B), issubclass(A, B))",
+      "lesson": "herencia"
     },
     {
       "id": "misc-f01",
@@ -3820,7 +3984,8 @@
         "es": "Detrás, para **filtrar** (`[x for x in d if x > 0]`). Delante, con `else` obligatorio, para **elegir el valor** de cada elemento (`[x if x > 0 else 0 for x in d]`).",
         "en": "After it, to **filter** (`[x for x in d if x > 0]`). Before it, with a mandatory `else`, to **choose the value** of each element (`[x if x > 0 else 0 for x in d]`)."
       },
-      "code": "d = [3, -1, 2]\nprint([x for x in d if x > 0])\nprint([x if x > 0 else 0 for x in d])"
+      "code": "d = [3, -1, 2]\nprint([x for x in d if x > 0])\nprint([x if x > 0 else 0 for x in d])",
+      "lesson": "comprensiones-lambda"
     },
     {
       "id": "misc-f02",
@@ -3833,7 +3998,8 @@
         "es": "Como bucles anidados escritos de arriba abajo: el **primer** `for` es el exterior. El resultado es una lista plana.",
         "en": "Like nested loops written top to bottom: the **first** `for` is the outer loop. The result is a flat list."
       },
-      "code": "print([(f, c) for f in range(2) for c in 'ab'])"
+      "code": "print([(f, c) for f in range(2) for c in 'ab'])",
+      "lesson": "comprensiones-lambda"
     },
     {
       "id": "misc-f03",
@@ -3846,7 +4012,8 @@
         "es": "Solo puede contener **una expresión** (sin `return`, sin asignaciones, sin bloques). Sí admite varios parámetros, valores por defecto y llamarse directamente.",
         "en": "It can only contain **one expression** (no `return`, no assignments, no blocks). It does allow several parameters, default values and being called directly."
       },
-      "code": "print((lambda a, b=10: a + b)(5))"
+      "code": "print((lambda a, b=10: a + b)(5))",
+      "lesson": "comprensiones-lambda"
     },
     {
       "id": "misc-f04",
@@ -3859,7 +4026,8 @@
         "es": "Un **iterador** perezoso, no una lista. Usa `list()` para ver los valores; una vez recorrido, queda vacío. `map()` con varios iterables se para en el más corto.",
         "en": "A lazy **iterator**, not a list. Use `list()` to see the values; once consumed, it is empty. `map()` with several iterables stops at the shortest one."
       },
-      "code": "m = map(abs, [-1, -2])\nprint(list(m), list(m))\nprint(list(filter(None, [0, 1, '', 'a'])))"
+      "code": "m = map(abs, [-1, -2])\nprint(list(m), list(m))\nprint(list(filter(None, [0, 1, '', 'a'])))",
+      "lesson": "comprensiones-lambda"
     },
     {
       "id": "misc-f05",
@@ -3872,7 +4040,8 @@
         "es": "Una función interior que **recuerda** variables de la función que la creó aunque esta ya haya terminado. Sirve para fábricas de funciones y para guardar estado sin globales.",
         "en": "An inner function that **remembers** variables from the function that created it, even after that function has returned. It is used for function factories and to keep state without globals."
       },
-      "code": "def por(k):\n    return lambda x: x * k\n\ntriple = por(3)\nprint(triple(5))"
+      "code": "def por(k):\n    return lambda x: x * k\n\ntriple = por(3)\nprint(triple(5))",
+      "lesson": "closures"
     },
     {
       "id": "misc-f06",
@@ -3884,7 +4053,8 @@
       "back": {
         "es": "Para **reasignar** (`=`, `+=`) desde una función interior una variable de la función que la contiene. Para solo leerla no hace falta. Sin él se lanza `UnboundLocalError`.",
         "en": "To **rebind** (`=`, `+=`) a variable of the enclosing function from an inner function. Just reading it does not need it. Without it, `UnboundLocalError` is raised."
-      }
+      },
+      "lesson": "closures"
     },
     {
       "id": "misc-f07",
@@ -3897,7 +4067,8 @@
         "es": "Los closures capturan la **variable**, no su valor (*late binding*). Al llamarlas, `i` vale 2. Se arregla con un valor por defecto: `lambda i=i: i`.",
         "en": "Closures capture the **variable**, not its value (late binding). When called, `i` is 2. A default value fixes it: `lambda i=i: i`."
       },
-      "code": "print([f() for f in [lambda: i for i in range(3)]])\nprint([f() for f in [lambda i=i: i for i in range(3)]])"
+      "code": "print([f() for f in [lambda: i for i in range(3)]])\nprint([f() for f in [lambda i=i: i for i in range(3)]])",
+      "lesson": "closures"
     },
     {
       "id": "misc-f08",
@@ -3911,7 +4082,8 @@
         "en": "It raises `StopIteration`. A `for` loop catches it automatically; `next(gen, default)` returns `default` instead."
       },
       "code": "def g():\n    yield 1\n\nit = g()\nprint(next(it), next(it, 'fin'))\nnext(it)",
-      "raises": true
+      "raises": true,
+      "lesson": "closures"
     },
     {
       "id": "misc-f09",
@@ -3923,7 +4095,8 @@
       "back": {
         "es": "`r` leer (debe existir) · `w` escribir vaciando · `a` añadir al final · `x` crear, falla si existe · `+` lectura y escritura · `b` binario (`bytes`) · `t` texto (`str`, por defecto).",
         "en": "`r` read (must exist) · `w` write, truncating · `a` append · `x` create, fails if it exists · `+` read and write · `b` binary (`bytes`) · `t` text (`str`, default)."
-      }
+      },
+      "lesson": "archivos-binarios"
     },
     {
       "id": "misc-f10",
@@ -3936,7 +4109,8 @@
         "es": "`ENOENT`: no existe el archivo o directorio. `EACCES`: permiso denegado. `EEXIST`: ya existe. `EISDIR`: es un directorio. Se comparan con `excepcion.errno`.",
         "en": "`ENOENT`: no such file or directory. `EACCES`: permission denied. `EEXIST`: file exists. `EISDIR`: is a directory. Compare them with `exception.errno`."
       },
-      "code": "import errno\n\ntry:\n    open('no_hay.txt')\nexcept OSError as e:\n    print(e.errno == errno.ENOENT)"
+      "code": "import errno\n\ntry:\n    open('no_hay.txt')\nexcept OSError as e:\n    print(e.errno == errno.ENOENT)",
+      "lesson": "archivos-binarios"
     }
   ]
 }

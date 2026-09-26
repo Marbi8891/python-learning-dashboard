@@ -112,3 +112,20 @@ class PasswordResetToken(Base):
     expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
     used_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class PcapState(Base):
+    """Preparación del examen PCAP (simulacros, aciertos, fichas, plan). Ver ADR-0010.
+
+    Un documento JSON por usuario: el navegador lo fusiona con su copia local y lo guarda entero.
+    """
+
+    __tablename__ = "pcap_states"
+
+    user_id: Mapped[int] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), primary_key=True
+    )
+    data: Mapped[dict] = mapped_column(JSON)
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )

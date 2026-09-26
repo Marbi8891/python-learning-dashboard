@@ -20,7 +20,9 @@ Academia web para **preparar el examen PCAP** (Certified Associate in Python Pro
 - **Mini-quiz:** 3 preguntas por lección (81 en total) que explican por qué cada respuesta es correcta o no.
 - **Retos extra:** uno por lección, de ★ a ★★★ (FizzBuzz, carrito de la compra, renombrador de fotos…), con tests automáticos.
 - **XP, niveles y racha:** 7 niveles de «Novato/a» a «Leyenda de Python», bonus por acertar a la primera, XP por la preparación del examen, 20 logros (7 de ellos del PCAP) con su vitrina y confeti (desactivado si el sistema pide reducir el movimiento).
-- **Cuenta (opcional):** registro, login, progreso sincronizado entre dispositivos, recuperación de contraseña y RGPD (descargar los datos y borrar la cuenta).
+- **Estudio guiado:** repaso espaciado de preguntas y fichas, plan semanal a partir de la fecha del examen y, en cada fallo, enlace a la lección que lo explica.
+- **Cuenta (opcional):** registro, login, progreso y preparación del examen sincronizados entre dispositivos, recuperación de contraseña y RGPD (descargar los datos y borrar la cuenta).
+- **Certificado de finalización** imprimible (no oficial) y **app instalable** que funciona sin conexión.
 - **Estética de academia:** diseño editorial (tinta, marfil y dorado, titulares en serif), portada con la ficha del curso y temario, y página «Mi aprendizaje» con cifras, actividad, logros e historial.
 - **Pensado para el alumno:** portada con «Continuar donde lo dejaste», guía Aprende → Practica → Comprueba en cada lección, consola al lado en pantallas anchas y errores de Python explicados en español.
 - **Tema y letra:** claro, oscuro o automático, y tres tamaños de letra.
@@ -49,6 +51,7 @@ Decisiones documentadas:
 - [ADR-0007 Estética editorial](docs/adr/0007-estetica-editorial.md)
 - [ADR-0008 Backend en Render y base de datos en Neon](docs/adr/0008-backend-render-neon.md)
 - [ADR-0009 Enfoque en el examen PCAP](docs/adr/0009-enfoque-pcap.md)
+- [ADR-0010 Estudio guiado, sincronización y PWA](docs/adr/0010-estudio-guiado-y-pwa.md)
 
 ```
 ├── frontend/
@@ -130,6 +133,7 @@ La CI ejecuta todo en cada push, incluidas las migraciones contra PostgreSQL 16.
 | PUT / DELETE | `/api/progress/{slug}` | ✔ | Marcar o desmarcar |
 | POST | `/api/progress/import` | ✔ | Fusionar el progreso del navegador |
 | POST / GET | `/api/lessons/{slug}/attempts` | ✔ | Registrar un intento o ver los últimos 20 |
+| GET / PUT | `/api/pcap-state` | ✔ | Preparación del PCAP (simulacros, aciertos, fichas, repaso y plan) |
 
 ## Publicar
 

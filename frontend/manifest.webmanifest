@@ -1,0 +1,17 @@
+{
+  "name": "Python Learning Dashboard · Prepara el PCAP",
+  "short_name": "PCAP Python",
+  "description": "Prepara el examen PCAP de Python: lecciones, consola de Python, ejercicios corregidos y simulacros.",
+  "lang": "es",
+  "start_url": "./#/inicio",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0c0d10",
+  "theme_color": "#0c0d10",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "favicon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}

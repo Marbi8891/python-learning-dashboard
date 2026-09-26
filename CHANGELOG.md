@@ -4,6 +4,23 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-09-27
+
+### Añadido
+- **Preparación del PCAP en la cuenta:** simulacros, aciertos, fichas, repaso y plan se guardan en el servidor (`GET/PUT /api/pcap-state`, migración 4) y se fusionan al iniciar sesión en otro dispositivo. Incluido en «Descargar mis datos» y en el borrado de cuenta (ADR-0010).
+- **Del fallo a la teoría:** cada pregunta y ficha enlaza a la lección que la explica. Al fallar, «Repasar la teoría» y «Practicar el bloque».
+- **Repaso espaciado** (cajas de Leitner: 1, 3, 7, 14 y 30 días) de preguntas y fichas, con «Repaso de hoy» en el panel.
+- **Plan de estudio:** con la fecha del examen, tareas de la semana (lecciones, bloques a practicar según lo que más puntos resta, repaso diario y simulacros).
+- **Certificado de finalización** (no oficial) imprimible o en PDF, al completar las lecciones del examen y aprobar un simulacro.
+- **PWA:** instalable en el móvil y usable sin conexión tras la primera visita; Pyodide queda guardado en el navegador.
+- Guía para activar los emails de recuperación con Gmail (contraseña de aplicación) o un servicio transaccional.
+
+### Cambiado
+- Acciones de GitHub en sus versiones con Node 24 (checkout v7, setup-python v7, setup-node v5, upload-artifact v7, configure-pages v6, upload-pages-artifact v5, deploy-pages v5).
+
+### Corregido
+- Una línea demasiado larga en `e2e/start_backend.py` hacía fallar el lint de la CI desde la 0.8.0.
+
 ## [0.9.0] - 2026-09-27
 
 ### Añadido

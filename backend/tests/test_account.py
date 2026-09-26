@@ -3,7 +3,7 @@
 import logging
 import re
 
-from app.models import ExerciseAttempt, LessonProgress, User
+from app.models import ExerciseAttempt, LessonProgress, PcapState, User
 from tests.conftest import PASSWORD, login, register
 
 
@@ -48,13 +48,14 @@ def test_delete_account_removes_everything(client, auth_headers):
     client.post(
         "/api/lessons/tipos/attempts", json={"code": "x", "passed": True}, headers=auth_headers
     )
+    client.put("/api/pcap-state", json={"data": {"bestCombo": 3}}, headers=auth_headers)
     response = client.post(
         "/api/users/me/delete", json={"password": PASSWORD}, headers=auth_headers
     )
     assert response.status_code == 204
     assert client.get("/api/users/me", headers=auth_headers).status_code == 401
     with client.engine.connect() as conn:
-        for model in (User, LessonProgress, ExerciseAttempt):
+        for model in (User, LessonProgress, ExerciseAttempt, PcapState):
             count = conn.exec_driver_sql(f"SELECT COUNT(*) FROM {model.__tablename__}").scalar_one()
             assert count == 0, f"Quedan filas en {model.__tablename__}"
     # El email vuelve a estar libre

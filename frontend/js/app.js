@@ -20,6 +20,7 @@ import {
   BADGES,
   game,
   initGame,
+  refreshGame,
   levelInfo,
   recordChallenge,
   recordExercise,
@@ -30,7 +31,9 @@ import {
 } from "./game.js";
 import { renderHome } from "./home.js";
 import { escapeHtml, renderMarkdown } from "./markdown.js";
-import { openPcap } from "./pcap.js";
+import { renderCertificate, saveCertificateName } from "./certificate.js";
+import { openPcap, refreshPcap } from "./pcap.js";
+import { initPcapSync } from "./pcap-sync.js";
 import { initPrefs } from "./prefs.js";
 import { badgesHtml, renderProfile } from "./profile.js";
 import { setQuizLesson } from "./quiz.js";
@@ -44,6 +47,7 @@ const RESET_ROUTE = "#/restablecer";
 const HOME_ROUTE = "#/inicio";
 const PROFILE_ROUTE = "#/perfil";
 const PCAP_ROUTE = "#/pcap";
+const CERTIFICATE_ROUTE = "#/certificado";
 const mobile = window.matchMedia("(max-width: 900px)");
 
 const content = {
@@ -361,6 +365,7 @@ function refreshProgressViews() {
 const VIEWS = {
   home: { element: "#home-view", title: "Python Learning Dashboard", focus: "#home-title", render: () => renderHome(content, defaultSlug()) },
   profile: { element: "#profile-view", title: "Mi aprendizaje · Python Learning Dashboard", focus: "#profile-title", render: () => renderProfile(content) },
+  certificate: { element: "#certificate-view", title: "Certificado · Python Learning Dashboard", focus: "#certificate-title", render: () => renderCertificate(content) },
   // La zona PCAP se pinta sola (openPcap): tiene simulacros en curso que no se deben repintar
   pcap: { element: "#pcap-view", title: "Examen PCAP · Python Learning Dashboard", focus: null, render: null },
 };
@@ -483,6 +488,9 @@ function initActions() {
           onResult: onChallengeResult,
         });
         break;
+      case "print-certificate":
+        window.print();
+        break;
       case "toggle-complete": {
         const done = !state.completed.has(slug);
         await setCompleted(slug, done);
@@ -535,6 +543,10 @@ function navigate({ moveFocus = true } = {}) {
 
   if (location.hash === PROFILE_ROUTE) {
     showPage("profile", { moveFocus });
+    return;
+  }
+  if (location.hash === CERTIFICATE_ROUTE) {
+    showPage("certificate", { moveFocus });
     return;
   }
   if (location.hash.startsWith(PCAP_ROUTE)) {
@@ -631,7 +643,14 @@ function showLoadError() {
     </div>`;
 }
 
+/** PWA: la web se puede instalar y funciona sin conexión tras la primera visita (ADR-0010). */
+function registerServiceWorker() {
+  if (!window.PLD_CONFIG?.serviceWorker || !("serviceWorker" in navigator)) return;
+  navigator.serviceWorker.register("sw.js").catch((error) => console.warn("Sin modo sin conexión:", error.message));
+}
+
 async function init() {
+  registerServiceWorker();
   initTabs();
   initActions();
   initMobileMenu();
@@ -664,6 +683,15 @@ async function init() {
     refreshProgressViews();
   });
   $("#next-step").addEventListener("click", () => nextAction().run());
+  $("#certificate-view").addEventListener("submit", (event) => {
+    event.preventDefault();
+    saveCertificateName(event.target.elements["cert-name"].value.trim());
+    showPage("certificate");
+  });
+  initPcapSync(() => {
+    refreshGame();
+    refreshPcap();
+  });
   restoreSession();
 }
 

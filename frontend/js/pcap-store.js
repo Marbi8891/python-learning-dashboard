@@ -11,13 +11,20 @@ function empty() {
     known: [], // fichas marcadas como sabidas
     bestCombo: 0, // mejor racha de aciertos seguidos en la práctica
     flags: { mastered: false, ready: false, allCards: false },
+    srs: {}, // repaso espaciado: id de pregunta o ficha -> { box: 1-5, due: "AAAA-MM-DD", last: ISO }
+    plan: { examDate: null }, // fecha prevista del examen ("AAAA-MM-DD")
   };
 }
 
 function load() {
   try {
     const saved = JSON.parse(localStorage.getItem(KEY));
-    return { ...empty(), ...saved, flags: { ...empty().flags, ...saved?.flags } };
+    return {
+      ...empty(),
+      ...saved,
+      flags: { ...empty().flags, ...saved?.flags },
+      plan: { ...empty().plan, ...saved?.plan },
+    };
   } catch {
     return empty();
   }
@@ -25,18 +32,67 @@ function load() {
 
 export const pcap = load();
 
+const saveListeners = new Set();
+
+/** Avisa de cada guardado (la sincronización con la cuenta lo usa). */
+export const onPcapSave = (listener) => saveListeners.add(listener);
+
 export function savePcap() {
   try {
     localStorage.setItem(KEY, JSON.stringify(pcap));
   } catch {
     // sin almacenamiento: dura hasta recargar
   }
+  for (const listener of saveListeners) listener();
 }
+
+/* ---------- Repaso espaciado (cajas de Leitner) ---------- */
+
+const INTERVAL_DAYS = [0, 1, 3, 7, 14, 30]; // días hasta el siguiente repaso según la caja
+const MAX_BOX = INTERVAL_DAYS.length - 1;
+
+export const isoDay = (date = new Date()) =>
+  `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+
+function addDays(days, from = new Date()) {
+  const date = new Date(from);
+  date.setDate(date.getDate() + days);
+  return isoDay(date);
+}
+
+/** Acierto: sube de caja y el repaso se aleja. Fallo: vuelve a la caja 1 (repaso mañana). */
+export function review(id, ok) {
+  const box = ok ? Math.min((pcap.srs[id]?.box ?? 0) + 1, MAX_BOX) : 1;
+  pcap.srs[id] = { box, due: addDays(INTERVAL_DAYS[box]), last: new Date().toISOString() };
+}
+
+/** Ids que toca repasar hoy (o que se quedaron atrasados). */
+export const dueIds = (ids, today = isoDay()) => ids.filter((id) => pcap.srs[id] && pcap.srs[id].due <= today);
 
 export function recordAnswer(id, ok) {
   const history = (pcap.answers[id] ??= []);
   history.push(ok);
   if (history.length > 5) history.shift();
+  review(id, ok);
+}
+
+/* ---------- Fusión con la copia guardada en la cuenta ---------- */
+
+const later = (a, b) => ((a?.last ?? "") >= (b?.last ?? "") ? a : b);
+
+/** Combina el estado de la cuenta con el local sin perder nada de ninguno de los dos. */
+export function mergePcap(remote = {}) {
+  const base = { ...empty(), ...remote };
+  for (const [id, history] of Object.entries(base.answers)) {
+    if (!pcap.answers[id] || history.length > pcap.answers[id].length) pcap.answers[id] = history;
+  }
+  const exams = new Map([...base.exams, ...pcap.exams].map((exam) => [exam.date, exam]));
+  pcap.exams = [...exams.values()].sort((a, b) => a.date.localeCompare(b.date)).slice(-30);
+  pcap.known = [...new Set([...pcap.known, ...base.known])];
+  pcap.bestCombo = Math.max(pcap.bestCombo, base.bestCombo);
+  for (const flag of Object.keys(pcap.flags)) pcap.flags[flag] ||= Boolean(base.flags?.[flag]);
+  for (const [id, item] of Object.entries(base.srs)) pcap.srs[id] = later(pcap.srs[id], item);
+  pcap.plan.examDate ??= base.plan?.examDate ?? null;
 }
 
 /** Preguntas distintas acertadas alguna vez (base de los XP del PCAP). */

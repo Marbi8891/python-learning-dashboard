@@ -121,3 +121,21 @@ for (const colorScheme of ["light", "dark"]) {
     });
   });
 }
+
+test("plan de estudio, repaso de hoy y certificado sin infracciones", async ({ page }) => {
+  await page.addInitScript(() =>
+    localStorage.setItem(
+      "pld:pcap",
+      JSON.stringify({
+        plan: { examDate: "2099-01-01" },
+        srs: { "oop-01": { box: 1, due: "2026-01-01", last: "2026-01-01T00:00:00Z" } },
+      }),
+    ),
+  );
+  await page.goto("/#/pcap");
+  await expect(page.locator(".plan-tasks")).toBeVisible();
+  await audit(page);
+  await page.goto("/#/certificado");
+  await expect(page.locator(".cert-requirements")).toBeVisible();
+  await audit(page);
+});

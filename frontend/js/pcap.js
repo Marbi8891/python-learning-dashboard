@@ -4,12 +4,15 @@
 import hljs from "../vendor/highlight/core.min.js";
 import { recordPcap } from "./game.js";
 import { escapeHtml, renderInline } from "./markdown.js";
-import { blockStats, pcap, readiness, recordAnswer, savePcap } from "./pcap-store.js";
+import { blockStats, dueIds, isoDay, pcap, readiness, recordAnswer, review, savePcap } from "./pcap-store.js";
+import { state as progress } from "./store.js";
 
 const DATA_URL = "data/pcap.json";
 const PRACTICE_SIZE = 10;
 const READY = { readiness: 80, blockRate: 0.6, blockAnswered: 5, lastExam: 75 };
 const MASTERED = { answered: 10, rate: 0.9 };
+const REVIEW_SIZE = 15;
+const OUT_OF_EXAM = "especializacion"; // módulo «Después del PCAP»: no cuenta para el plan
 
 const $ = (selector) => document.querySelector(selector);
 const root = () => $("#pcap-view");
@@ -17,6 +20,8 @@ const root = () => $("#pcap-view");
 let data = null;
 let loading = null;
 let lessonsByBlock = {};
+let lessonTitles = {};
+let examLessons = []; // lecciones que entran en el examen, en orden
 let session = null; // simulacro, práctica o fichas en curso
 let ticker = null;
 
@@ -86,6 +91,68 @@ function commit(events = []) {
 }
 
 /* ---------- Panel ---------- */
+
+const DAY_MS = 86_400_000;
+const longDate = (day) => new Date(`${day}T00:00`).toLocaleDateString("es-ES", { day: "numeric", month: "long", year: "numeric" });
+
+function renderToday() {
+  const questions = dueQuestions().length;
+  const cards = dueCards().length;
+  return `
+    <section class="course-section" aria-labelledby="pcap-today-title">
+      <h2 class="section-title" id="pcap-today-title">Repaso de hoy</h2>
+      <ul class="today-list">
+        <li class="today"><strong>${questions}</strong><span>${questions === 1 ? "pregunta" : "preguntas"} para repasar</span>
+          ${questions ? `<a class="btn btn--primary" href="#/pcap/repaso">Repasar preguntas</a>` : ""}</li>
+        <li class="today"><strong>${cards}</strong><span>${cards === 1 ? "ficha" : "fichas"} para repasar</span>
+          ${cards ? `<a class="btn btn--ghost" href="#/pcap/fichas/repaso">Repasar fichas</a>` : ""}</li>
+      </ul>
+      <p class="readiness__note">Repaso espaciado: lo que fallas vuelve al día siguiente y lo que aciertas, cada vez más tarde (1, 3, 7, 14 y 30 días).</p>
+    </section>`;
+}
+
+function renderPlan(stats) {
+  const date = pcap.plan.examDate;
+  const form = `
+    <form class="plan-form" id="plan-form">
+      <label>Fecha de tu examen <input type="date" name="exam-date" min="${isoDay()}" value="${date ?? ""}" required></label>
+      <button class="btn btn--ghost" type="submit">Guardar fecha</button>
+      ${date ? `<button class="btn btn--ghost" type="button" data-pcap="clear-date">Quitar fecha</button>` : ""}
+    </form>`;
+  const section = (body) => `
+    <section class="course-section" aria-labelledby="pcap-plan-title">
+      <h2 class="section-title" id="pcap-plan-title">Tu plan de estudio</h2>
+      ${body}${form}
+    </section>`;
+  if (!date) return section(`<p class="plan-intro">Pon la fecha de tu examen y te reparto el trabajo por semanas según tus bloques más flojos.</p>`);
+
+  const days = Math.round((new Date(`${date}T00:00`) - new Date(`${isoDay()}T00:00`)) / DAY_MS);
+  if (days < 0) return section(`<p class="plan-intro">La fecha (${longDate(date)}) ya ha pasado. Si vas a volver a presentarte, pon la nueva.</p>`);
+
+  const weeks = Math.max(1, Math.ceil(days / 7));
+  const pending = examLessons.filter((slug) => !progress.completed.has(slug));
+  const perWeek = Math.min(pending.length, Math.ceil(pending.length / weeks));
+  // Primero los bloques donde más puntos se pierden: lo que falta por acertar × peso en el examen
+  const loss = (b) => (1 - (stats[b.slug].rate ?? 0)) * b.weight;
+  const focus = [...data.exam.blocks].sort((a, b) => loss(b) - loss(a)).slice(0, 2);
+  const recentExams = pcap.exams.filter((e) => Date.now() - new Date(e.date) < 7 * DAY_MS).length;
+  const examTarget = weeks <= 1 ? 2 : weeks <= 3 || !pending.length ? 1 : 0;
+  const due = dueQuestions().length + dueCards().length;
+
+  const tasks = [
+    pending.length
+      ? `Completa <strong>${perWeek} ${perWeek === 1 ? "lección" : "lecciones"}</strong> esta semana (te quedan ${pending.length}). Siguiente: <a href="#/leccion/${pending[0]}">${escapeHtml(lessonTitles[pending[0]])}</a>.`
+      : "Has completado todas las lecciones del examen. Céntrate en practicar y en los simulacros.",
+    `Practica <strong>${focus.map((b) => `<a href="#/pcap/practica/${b.slug}">${escapeHtml(b.title.es)}</a>`).join(" y ")}</strong>: dos tandas de cada uno. Son los bloques donde más puntos puedes ganar.`,
+    `Haz el repaso diario${due ? `: hoy tienes ${due} pendientes` : ""}.`,
+    examTarget
+      ? `Haz <strong>${examTarget} ${examTarget === 1 ? "simulacro" : "simulacros"}</strong> esta semana (llevas ${recentExams}).`
+      : "Los simulacros, cuando termines las lecciones o falten 3 semanas.",
+  ];
+  return section(`
+    <p class="plan-intro">Quedan <strong>${days} ${days === 1 ? "día" : "días"}</strong> para tu examen del ${longDate(date)}. Esta semana:</p>
+    <ol class="plan-tasks">${tasks.map((task) => `<li>${task}</li>`).join("")}</ol>`);
+}
 
 function renderPanel() {
   const { stats, score, lastExam, weak, ready } = status();
@@ -157,6 +224,9 @@ function renderPanel() {
       <ul class="block-list">${blocks}</ul>
     </section>
 
+    ${renderToday()}
+    ${renderPlan(stats)}
+
     <section class="course-section" aria-labelledby="pcap-history-title">
       <h2 class="section-title" id="pcap-history-title">Simulacros</h2>
       ${
@@ -195,10 +265,19 @@ function questionHtml(q, chosen, { number, reveal = false } = {}) {
       <div class="quiz__options">${options}</div>
       ${
         reveal
-          ? `<div class="quiz__feedback" tabindex="-1"><p class="quiz__verdict">${result === "ok" ? "¡Correcto!" : "No es correcta."}</p><p>${md(t(q.explain))}</p></div>`
+          ? `<div class="quiz__feedback" tabindex="-1"><p class="quiz__verdict">${result === "ok" ? "¡Correcto!" : "No es correcta."}</p><p>${md(t(q.explain))}</p>
+              ${result === "ko" ? studyLinks(q) : ""}</div>`
           : ""
       }
     </fieldset>`;
+}
+
+/** Del fallo a la teoría: la lección que lo explica y una tanda de práctica de su bloque. */
+function studyLinks(item) {
+  const lesson = lessonTitles[item.lesson];
+  return `<p class="study-links">
+    ${lesson ? `<a href="#/leccion/${item.lesson}">Repasar la teoría: ${escapeHtml(lesson)}</a>` : ""}
+    <a href="#/pcap/practica/${item.block}">Practicar ${escapeHtml(block(item.block).title.es)}</a></p>`;
 }
 
 function chosenFrom(form) {
@@ -376,15 +455,31 @@ function renderExamResult() {
 
 /* ---------- Práctica por bloque ---------- */
 
+const dueQuestions = () => {
+  const due = new Set(dueIds(data.questions.map((q) => q.id)));
+  return data.questions.filter((q) => due.has(q.id));
+};
+const dueCards = () => {
+  const due = new Set(dueIds(data.cards.map((c) => c.id)));
+  return data.cards.filter((c) => due.has(c.id));
+};
+
+/** @param {string} slug bloque, o "repaso" para las preguntas que toca repasar hoy */
 function startPractice(slug) {
-  const pool = data.questions.filter((q) => q.block === slug);
-  const fresh = shuffle(pool.filter((q) => !pcap.answers[q.id]));
-  const failed = shuffle(pool.filter((q) => pcap.answers[q.id]?.at(-1) === false));
-  const rest = shuffle(pool.filter((q) => pcap.answers[q.id]?.at(-1) === true));
+  let items;
+  if (slug === "repaso") {
+    items = shuffle(dueQuestions()).slice(0, REVIEW_SIZE);
+  } else {
+    const pool = data.questions.filter((q) => q.block === slug);
+    const fresh = shuffle(pool.filter((q) => !pcap.answers[q.id]));
+    const failed = shuffle(pool.filter((q) => pcap.answers[q.id]?.at(-1) === false));
+    const rest = shuffle(pool.filter((q) => pcap.answers[q.id]?.at(-1) === true));
+    items = [...failed, ...fresh, ...rest].slice(0, PRACTICE_SIZE);
+  }
   session = {
     kind: "practice",
     block: slug,
-    items: [...failed, ...fresh, ...rest].slice(0, PRACTICE_SIZE).map((q) => ({ q, chosen: [] })),
+    items: items.map((q) => ({ q, chosen: [] })),
     index: 0,
     checked: false,
     correct: 0,
@@ -394,13 +489,21 @@ function startPractice(slug) {
 }
 
 function renderPractice() {
-  const b = block(session.block);
+  const name = session.block === "repaso" ? "Repaso de hoy" : block(session.block).title.es;
   const head = `
     <div class="exam-bar">
-      <span class="exam-bar__title" id="pcap-title" tabindex="-1">Práctica · ${escapeHtml(b.title.es)}</span>
+      <span class="exam-bar__title" id="pcap-title" tabindex="-1">${session.block === "repaso" ? "" : "Práctica · "}${escapeHtml(name)}</span>
       <span>Pregunta ${Math.min(session.index + 1, session.items.length)} de ${session.items.length}</span>
       <span class="combo" data-hot="${session.combo >= 3}" aria-live="polite">Racha: ${session.combo}</span>
     </div>`;
+  if (!session.items.length) {
+    return `${head}
+      <section class="course-section practice-end">
+        <h2 class="section-title">Nada que repasar hoy</h2>
+        <p>Las preguntas vuelven aquí cuando toca repasarlas: al día siguiente si fallas y cada vez más espaciadas si aciertas.</p>
+        <a class="btn btn--ghost" href="#/pcap">Volver al panel</a>
+      </section>`;
+  }
   if (session.index >= session.items.length) {
     const gained = (Object.values(pcap.answers).filter((h) => h.includes(true)).length - session.masteredBefore) * 5;
     return `${head}
@@ -408,7 +511,7 @@ function renderPractice() {
         <h2 class="section-title">${session.correct} de ${session.items.length} correctas</h2>
         <p>${gained ? `+${gained} XP por preguntas nuevas acertadas. ` : ""}Tu mejor racha: ${pcap.bestCombo} aciertos seguidos.</p>
         <div class="course-hero__cta">
-          <button class="btn btn--primary" type="button" data-pcap="again">Otra tanda de ${escapeHtml(b.title.es)}</button>
+          ${session.block === "repaso" ? "" : `<button class="btn btn--primary" type="button" data-pcap="again">Otra tanda de ${escapeHtml(name)}</button>`}
           <a class="btn btn--ghost" href="#/pcap">Volver al panel</a>
         </div>
       </section>`;
@@ -446,8 +549,9 @@ function checkPractice() {
 
 /* ---------- Fichas ---------- */
 
+/** @param {string|null} slug bloque, "repaso" (las que tocan hoy) o null (todas) */
 function startCards(slug) {
-  const deck = data.cards.filter((c) => !slug || c.block === slug);
+  const deck = slug === "repaso" ? dueCards() : data.cards.filter((c) => !slug || c.block === slug);
   session = {
     kind: "cards",
     block: slug,
@@ -459,12 +563,21 @@ function startCards(slug) {
 
 function renderCards() {
   const known = data.cards.filter((c) => pcap.known.includes(c.id)).length;
-  const chips = [["", "Todas"], ...data.exam.blocks.map((b) => [b.slug, b.title.es])]
+  const chips = [["", "Todas"], ["repaso", `Para hoy (${dueCards().length})`], ...data.exam.blocks.map((b) => [b.slug, b.title.es])]
     .map(
       ([slug, title]) =>
         `<a class="chip"${(session.block ?? "") === slug ? ' aria-current="page"' : ""} href="#/pcap/fichas${slug ? `/${slug}` : ""}">${escapeHtml(title)}</a>`,
     )
     .join("");
+  if (!session.deck.length) {
+    return `
+    <header class="profile-hero">
+      <p class="eyebrow"><a href="#/pcap">Examen PCAP</a> · Fichas</p>
+      <h1 class="profile-hero__title" id="pcap-title" tabindex="-1">Fichas de repaso</h1>
+      <nav class="chips" aria-label="Filtrar fichas por bloque">${chips}</nav>
+    </header>
+    <p class="empty-state">No te toca repasar ninguna ficha hoy.</p>`;
+  }
   const card = session.deck[session.index % session.deck.length];
   const isKnown = pcap.known.includes(card.id);
   return `
@@ -480,7 +593,8 @@ function renderCards() {
         <h2 class="flashcard__front">${md(t(card.front))}</h2>
         ${
           session.flipped
-            ? `<div class="flashcard__back" id="card-back" tabindex="-1"><p>${md(t(card.back))}</p>${code(card.code)}</div>`
+            ? `<div class="flashcard__back" id="card-back" tabindex="-1"><p>${md(t(card.back))}</p>${code(card.code)}
+                ${lessonTitles[card.lesson] ? `<p class="study-links"><a href="#/leccion/${card.lesson}">Lección: ${escapeHtml(lessonTitles[card.lesson])}</a></p>` : ""}</div>`
             : ""
         }
         <div class="exam-actions">
@@ -499,15 +613,16 @@ function renderCards() {
 /* ---------- Render y eventos ---------- */
 
 function render(route, { focus = false } = {}) {
-  const [, , view, arg] = route.split("/"); // "#/pcap/<view>/<arg>"
+  let [, , view, arg] = route.split("/"); // "#/pcap/<view>/<arg>"
   let html;
   if (view === "simulacro") {
     html = session?.kind !== "exam" ? renderExamIntro() : session.result ? renderExamResult() : renderExamQuestion();
-  } else if (view === "practica" && block(arg)) {
+  } else if (view === "repaso" || (view === "practica" && block(arg))) {
+    arg = view === "repaso" ? "repaso" : arg;
     if (session?.kind !== "practice" || session.block !== arg) startPractice(arg);
     html = renderPractice();
   } else if (view === "fichas") {
-    const slug = block(arg) ? arg : null;
+    const slug = block(arg) || arg === "repaso" ? arg : null;
     if (session?.kind !== "cards" || session.block !== slug) startCards(slug);
     html = renderCards();
   } else {
@@ -547,6 +662,10 @@ function onClick(event) {
       return undefined;
     case "finish":
       return finishExam();
+    case "clear-date":
+      pcap.plan.examDate = null;
+      commit();
+      return rerender(false);
     case "check":
       checkPractice();
       render(location.hash);
@@ -568,6 +687,7 @@ function onClick(event) {
       const known = target.dataset.pcap === "card-known";
       pcap.known = pcap.known.filter((id) => id !== card.id);
       if (known) pcap.known.push(card.id);
+      review(card.id, known);
       commit();
       session.index += 1;
       session.flipped = false;
@@ -576,6 +696,15 @@ function onClick(event) {
     default:
       return undefined;
   }
+}
+
+function onSubmit(event) {
+  if (event.target.id !== "plan-form") return;
+  event.preventDefault();
+  pcap.plan.examDate = event.target.elements["exam-date"].value || null;
+  commit();
+  render(location.hash);
+  $("#pcap-plan-title")?.scrollIntoView({ block: "start" });
 }
 
 function onChange(event) {
@@ -627,9 +756,19 @@ export async function openPcap(route, modules, { moveFocus = true } = {}) {
       return;
     }
     lessonsByBlock = Object.fromEntries(modules.map((m) => [m.slug, m.lessons[0]?.slug]));
+    lessonTitles = Object.fromEntries(modules.flatMap((m) => m.lessons.map((l) => [l.slug, l.title])));
+    examLessons = modules.filter((m) => m.slug !== OUT_OF_EXAM).flatMap((m) => m.lessons.map((l) => l.slug));
     root().addEventListener("click", onClick);
     root().addEventListener("change", onChange);
+    root().addEventListener("submit", onSubmit);
   }
   if (!location.hash.startsWith("#/pcap")) return; // el alumno se fue mientras cargaba
   render(route, { focus: moveFocus });
+}
+
+/** Repinta la zona PCAP si está a la vista (p. ej. al llegar la copia de la cuenta),
+    salvo durante un simulacro, que no se toca. */
+export function refreshPcap() {
+  const examRunning = session?.kind === "exam" && !session.result;
+  if (data && location.hash.startsWith("#/pcap") && !examRunning) render(location.hash);
 }

@@ -1,5 +1,6 @@
 /* «Mi aprendizaje»: nivel, estadísticas, progreso por módulo, actividad, logros e historial por lección. */
 
+import { certificateStatus } from "./certificate.js";
 import { stars } from "./course.js";
 import { BADGES, game, levelInfo, streak, today } from "./game.js";
 import { escapeHtml } from "./markdown.js";
@@ -133,6 +134,13 @@ export function renderProfile(content) {
         ${activityHtml()}
       </section>
     </div>
+
+    <section class="course-section" aria-labelledby="profile-cert-title">
+      <h2 class="section-title" id="profile-cert-title">Certificado</h2>
+      ${certificateStatus(content).ok
+        ? `<p>Has completado el temario y aprobado un simulacro. <a class="btn btn--primary" href="#/certificado">Ver mi certificado</a></p>`
+        : `<p class="empty-state">Completa todas las lecciones del examen y aprueba un simulacro para conseguir tu certificado de finalización. <a href="#/certificado">Ver requisitos</a></p>`}
+    </section>
 
     <section class="course-section" aria-labelledby="profile-badges-title">
       <div class="section-head">

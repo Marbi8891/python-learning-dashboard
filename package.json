@@ -1,6 +1,6 @@
 {
   "name": "python-learning-dashboard",
-  "version": "0.9.0",
+  "version": "1.0.0",
   "private": true,
   "description": "Tests end-to-end del Python Learning Dashboard (frontend + backend reales)",
   "scripts": {

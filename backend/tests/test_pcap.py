@@ -110,3 +110,12 @@ def test_shared_options_are_code_not_english_prose():
         for option in q["options"]:
             if isinstance(option, str):
                 assert not any(word in option.lower() for word in prose), f"{q['id']}: {option!r}"
+
+
+def test_every_question_and_card_links_to_a_lesson_of_its_block():
+    modules = {
+        module["slug"]: {lesson["slug"] for lesson in module["lessons"]}
+        for module in json.loads(DEFAULT_LESSONS_FILE.read_text(encoding="utf-8"))["modules"]
+    }
+    for item in QUESTIONS + PCAP["cards"]:
+        assert item["lesson"] in modules[item["block"]], item["id"]

@@ -1,5 +1,6 @@
 """Esquemas de entrada/salida de la API (lo que ve el frontend)."""
 
+import json
 from datetime import datetime
 from typing import Annotated
 
@@ -160,6 +161,27 @@ class AttemptOut(BaseModel):
     created_at: datetime
 
 
+# ---------- Preparación del PCAP ----------
+
+MAX_PCAP_STATE_BYTES = 200_000  # ~1000 simulacros y todas las respuestas caben de sobra
+
+
+class PcapStateIn(BaseModel):
+    data: dict
+
+    @field_validator("data")
+    @classmethod
+    def not_too_big(cls, data: dict) -> dict:
+        if len(json.dumps(data)) > MAX_PCAP_STATE_BYTES:
+            raise ValueError("Los datos de preparación son demasiado grandes")
+        return data
+
+
+class PcapStateOut(BaseModel):
+    data: dict
+    updated_at: datetime | None
+
+
 # ---------- Exportación de datos (RGPD, derecho de acceso y portabilidad) ----------
 
 
@@ -168,4 +190,5 @@ class UserExport(BaseModel):
     privacy_accepted_at: datetime | None
     progress: list[ProgressItem]
     attempts: list[dict]
+    pcap: dict | None = None
     exported_at: datetime

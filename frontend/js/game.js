@@ -170,6 +170,11 @@ function activity() {
   add(game.days, today());
 }
 
+/** Recalcula XP y logros sin registrar actividad (p. ej. al llegar datos de la cuenta). */
+export function refreshGame() {
+  commit();
+}
+
 /** Actividad en la preparación del PCAP (práctica, simulacros, fichas). */
 export function recordPcap(events = []) {
   activity();
