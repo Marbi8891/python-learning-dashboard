@@ -1,0 +1,42 @@
+# Todo el proyecto en local con PostgreSQL:
+#   JWT_SECRET=<valor> docker compose up --build
+# Frontend: http://localhost:5500 · API: http://localhost:8000/docs
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: pld
+      POSTGRES_PASSWORD: pld
+      POSTGRES_DB: pld
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pld"]
+      interval: 5s
+      retries: 10
+
+  api:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    environment:
+      DATABASE_URL: postgresql+psycopg://pld:pld@db:5432/pld
+      JWT_SECRET: ${JWT_SECRET:?Define JWT_SECRET (mínimo 32 caracteres)}
+      CORS_ORIGINS: '["http://localhost:5500"]'
+      FRONTEND_URL: http://localhost:5500
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  web:
+    image: python:3.12-slim
+    command: python -m http.server 5500 --directory /srv
+    volumes:
+      - ./frontend:/srv:ro
+    ports:
+      - "5500:5500"
+
+volumes:
+  db-data:

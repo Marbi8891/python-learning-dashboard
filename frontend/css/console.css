@@ -1,0 +1,164 @@
+/* =========================================================
+   console.css — consola interactiva y resultado de ejercicios
+   ========================================================= */
+
+.console {
+  margin-top: var(--space-6);
+  padding: var(--space-5);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.console__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+
+.console__title {
+  font-size: 18px;
+}
+
+.console__status {
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.console__status[data-status="ready"] {
+  color: var(--color-accent);
+}
+
+.console__status[data-status="error"] {
+  color: var(--color-danger);
+}
+
+.console__label {
+  display: block;
+  margin: var(--space-3) 0 var(--space-1);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.console__editor,
+.console__stdin textarea {
+  display: block;
+  width: 100%;
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-code-bg);
+  color: var(--color-text);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1.6;
+  tab-size: 4;
+  resize: vertical;
+}
+
+.console__editor {
+  min-height: 200px;
+}
+
+.console__help {
+  margin-top: var(--space-1);
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.console__stdin {
+  margin-top: var(--space-3);
+}
+
+.console__stdin summary {
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-2);
+}
+
+.console__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+
+.console__output {
+  min-height: 80px;
+  max-height: 360px;
+  margin: 0;
+  padding: var(--space-3);
+  overflow: auto;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  background: #05080f;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.console__error {
+  color: #fca5a5;
+}
+
+.console__muted {
+  color: var(--color-text-muted);
+}
+
+/* ---------- Resultado de "Comprobar solución" ---------- */
+.practice-note {
+  margin-top: var(--space-4);
+  color: var(--color-text-muted);
+}
+
+.practice-note a {
+  color: #8fb8ff;
+  text-decoration: underline;
+}
+
+.practice-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.check {
+  margin-top: var(--space-4);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  border-left-width: 4px;
+}
+
+.check[data-passed="true"] {
+  border-color: var(--color-accent);
+  background: var(--color-accent-soft);
+}
+
+.check[data-passed="false"] {
+  border-color: var(--color-danger);
+  background: rgb(248 113 113 / 0.1);
+}
+
+.check > * + * {
+  margin-top: var(--space-2);
+}
+
+.check__title {
+  font-weight: 700;
+}
+
+.check pre {
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  white-space: pre-wrap;
+}

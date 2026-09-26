@@ -1,0 +1,281 @@
+/* =========================================================
+   widgets.css — asistente, diálogo de cuenta y botones extra
+   ========================================================= */
+
+.btn--danger {
+  background: var(--color-danger-strong);
+  color: #fff;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+.icon-button {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.icon-button:hover {
+  background: var(--color-surface-2);
+  color: var(--color-text);
+}
+
+/* ---------- Asistente ---------- */
+.assistant {
+  position: fixed;
+  right: var(--space-5);
+  bottom: var(--space-5);
+  z-index: 35;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-3);
+}
+
+.assistant__toggle {
+  display: grid;
+  place-items: center;
+  width: 60px;
+  height: 60px;
+  border: none;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  color: #fff;
+  box-shadow: 0 10px 30px rgb(0 0 0 / 0.45);
+  cursor: pointer;
+  transition: transform var(--transition);
+}
+
+.assistant__toggle:hover {
+  transform: scale(1.06);
+}
+
+.assistant__panel {
+  display: flex;
+  flex-direction: column;
+  width: min(380px, calc(100vw - 32px));
+  max-height: min(560px, calc(100dvh - 120px));
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  box-shadow: 0 20px 50px rgb(0 0 0 / 0.5);
+  overflow: hidden;
+}
+
+.assistant__panel[hidden] {
+  display: none;
+}
+
+.assistant__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface-2);
+}
+
+.assistant__head h2 {
+  font-size: 16px;
+}
+
+.assistant__messages {
+  flex: 1;
+  overflow-y: auto;
+  list-style: none;
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.assistant__msg {
+  max-width: 88%;
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  font-size: 14px;
+}
+
+.assistant__msg > * + * {
+  margin-top: var(--space-2);
+}
+
+.assistant__msg code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  color: #7ee2a8;
+}
+
+.assistant__msg--bot {
+  align-self: flex-start;
+  background: var(--color-surface-2);
+  border-bottom-left-radius: 2px;
+}
+
+.assistant__msg--user {
+  align-self: flex-end;
+  background: var(--color-primary-strong);
+  color: #fff;
+  border-bottom-right-radius: 2px;
+}
+
+.assistant__suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border-top: 1px solid var(--color-border);
+}
+
+.chip {
+  padding: 6px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: var(--color-surface-2);
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.chip:hover {
+  border-color: var(--color-primary);
+}
+
+.chip--next {
+  border-color: var(--color-accent);
+  color: #7ee2a8;
+}
+
+.assistant__note {
+  padding: 0 var(--space-4) var(--space-3);
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+@media (max-width: 900px) {
+  .assistant {
+    right: var(--space-4);
+    bottom: var(--space-4);
+  }
+}
+
+/* ---------- Diálogo de cuenta ---------- */
+.account {
+  width: min(420px, calc(100vw - 32px));
+  padding: 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+
+.account::backdrop {
+  background: rgb(0 0 0 / 0.6);
+}
+
+.account__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.account__head h2 {
+  font-size: 18px;
+}
+
+.account__message {
+  margin: var(--space-4) var(--space-5) 0;
+  padding: var(--space-3);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  background: rgb(248 113 113 / 0.12);
+  border: 1px solid var(--color-danger);
+}
+
+.account__message[data-kind="success"] {
+  background: var(--color-accent-soft);
+  border-color: var(--color-accent);
+}
+
+.account__message[data-kind="info"] {
+  background: var(--color-primary-soft);
+  border-color: var(--color-primary);
+}
+
+.account__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-5);
+}
+
+.account__form[hidden] {
+  display: none;
+}
+
+.account__form label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.account__form input:not([type="checkbox"]) {
+  padding: 10px var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-code-bg);
+  color: var(--color-text);
+  font: inherit;
+  font-weight: 400;
+}
+
+.account__form .account__check {
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--space-2);
+  font-weight: 400;
+}
+
+.account__check input {
+  margin-top: 4px;
+}
+
+.account__form a {
+  color: #8fb8ff;
+  text-decoration: underline;
+}
+
+.account__muted {
+  color: var(--color-text-muted);
+  font-size: 14px;
+}
+
+.account__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.account__danger summary {
+  cursor: pointer;
+  color: var(--color-danger);
+  font-weight: 600;
+}
+
+.account__danger .account__form {
+  padding: var(--space-3) 0 0;
+}

@@ -1,0 +1,14 @@
+{
+  "name": "python-learning-dashboard",
+  "version": "0.5.0",
+  "private": true,
+  "description": "Tests end-to-end del Python Learning Dashboard (frontend + backend reales)",
+  "scripts": {
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.10.2",
+    "@playwright/test": "1.56.0"
+  }
+}

@@ -1,0 +1,1477 @@
+{
+  "modules": [
+    {
+      "slug": "fundamentos",
+      "title": "Fundamentos",
+      "lessons": [
+        {
+          "slug": "variables",
+          "title": "Variables y print()",
+          "theory": "Una **variable** es un nombre que apunta a un valor guardado en memoria. Piensa en ella como una etiqueta pegada a una caja: la caja es el valor y la etiqueta, el nombre.\n\nEl signo `=` **no** significa \"igual\": significa **asignar**. Python evalúa primero lo que hay a la derecha y después le pone a ese resultado el nombre de la izquierda. Por eso `contador = contador + 1` tiene sentido.\n\nLa función `print()` muestra valores en la consola. Admite varios argumentos separados por comas y dos parámetros útiles: `sep` (separador entre argumentos) y `end` (lo que se añade al final, por defecto un salto de línea).\n\nPara combinar texto y variables, usa **f-strings**: una `f` delante de las comillas y las variables entre llaves, como `f\"Hola, {nombre}\"`.\n\nReglas de nombres (PEP 8):\n- `snake_case`: minúsculas y palabras separadas por `_`.\n- Nombres descriptivos: `precio_total`, no `pt`.\n- No pueden empezar por número ni tener espacios o guiones.\n- Python distingue mayúsculas: `edad` y `Edad` son variables distintas.",
+          "example_code": "nombre = \"Carlos\"\nedad = 30\n\nprint(f\"{nombre} tiene {edad} años\")\nprint(\"DAW\", \"DAM\", \"ASIR\", sep=\" | \")\n\nedad = edad + 1  # reasignación: evalúa la derecha y guarda el resultado\nprint(f\"El año que viene tendrá {edad}\")",
+          "exercise": "Crea las variables `producto` (texto), `precio` (con decimales), `cantidad` (entero) y `en_stock` (booleano).\n\nCalcula `total = precio * cantidad` y muestra un ticket con f-strings: una línea por dato, incluida una que empiece por `Total`.\n\n**Extra:** imprime `type(total)`. ¿Es el tipo que esperabas?",
+          "sources": [
+            {
+              "title": "Tutorial oficial — 3. Una introducción informal a Python",
+              "url": "https://docs.python.org/es/3/tutorial/introduction.html"
+            },
+            {
+              "title": "Función print()",
+              "url": "https://docs.python.org/es/3/library/functions.html#print"
+            },
+            {
+              "title": "Python para todos (PY4E), cap. 2",
+              "url": "https://es.py4e.com/book"
+            },
+            {
+              "title": "PEP 8 — Guía de estilo",
+              "url": "https://peps.python.org/pep-0008/"
+            }
+          ],
+          "starter": "# Ticket de compra\nproducto = ...\nprecio = ...\ncantidad = ...\nen_stock = ...\n\ntotal = ...\n\nprint(\"===== TICKET =====\")\n",
+          "exercise_stdin": "",
+          "example_stdin": "",
+          "checks": [
+            {
+              "stdin": "",
+              "test": "assert isinstance(producto, str) and producto.strip(), \"producto debe ser un texto no vacío\"\nassert isinstance(precio, float), \"precio debe ser un float (con punto decimal, por ejemplo 49.99)\"\nassert isinstance(cantidad, int) and not isinstance(cantidad, bool), \"cantidad debe ser un número entero\"\nassert isinstance(en_stock, bool), \"en_stock debe ser True o False\"\nassert abs(total - precio * cantidad) < 1e-9, \"total debe ser precio * cantidad\"\nassert producto in __output__, \"El ticket debe mostrar el nombre del producto\"\nassert \"Total\" in __output__, \"El ticket debe mostrar una línea con «Total»\"\n"
+            }
+          ],
+          "assistant": {
+            "hint": "Los decimales se escriben con punto (49.99) y los booleanos con mayúscula (True/False). Para mezclar texto y variables usa una f-string: f\"Total: {…}\".",
+            "faq": [
+              {
+                "q": "¿Qué diferencia hay entre = y ==?",
+                "a": "`=` **asigna**: guarda un valor con un nombre (`edad = 30`). `==` **compara**: pregunta si dos valores son iguales y devuelve `True` o `False` (`edad == 30`)."
+              },
+              {
+                "q": "¿Por qué usar f-strings?",
+                "a": "Son la forma más legible de combinar texto y variables: `f\"{nombre} tiene {edad} años\"`. Además permiten dar formato, por ejemplo `f\"{precio:.2f}\"` muestra 2 decimales."
+              }
+            ]
+          },
+          "example_in_browser": true,
+          "quiz": [
+            {
+              "q": "¿Qué muestra este código?",
+              "options": [
+                "`8`",
+                "`35`",
+                "`3 5`",
+                "Un error"
+              ],
+              "answer": 1,
+              "explain": "Las dos variables contienen **texto** (van entre comillas), así que `+` los **une**: `\"3\" + \"5\"` → `\"35\"`.",
+              "code": "a = \"3\"\nb = \"5\"\nprint(a + b)"
+            },
+            {
+              "q": "¿Cuál de estos nombres de variable sigue la guía de estilo PEP 8?",
+              "options": [
+                "`precioFinal`",
+                "`PrecioFinal`",
+                "`precio_final`",
+                "`precio-final`"
+              ],
+              "answer": 2,
+              "explain": "PEP 8 usa `snake_case` para variables: minúsculas y palabras separadas por `_`. `precio-final` ni siquiera es válido: Python lo leería como una resta."
+            },
+            {
+              "q": "¿Qué muestra este código?",
+              "options": [
+                "`1-2-3`",
+                "`1 2 3`",
+                "`123`",
+                "`1-2-3-`"
+              ],
+              "answer": 0,
+              "explain": "`sep` es el texto que `print()` pone **entre** los argumentos. Por defecto es un espacio; aquí lo cambiamos por `-`.",
+              "code": "print(1, 2, 3, sep=\"-\")"
+            }
+          ],
+          "challenge": {
+            "title": "Tarjeta de presentación",
+            "stars": 1,
+            "exercise": "Crea `nombre` (texto), `edad` (entero) y `ciudad` (texto). Construye la variable `ficha` con **una sola f-string** que quede exactamente así (con tus datos):\n\n`Nombre: Ana | Edad: 21 | Ciudad: Leganés`\n\nY muéstrala con `print()`.",
+            "starter": "nombre = ...\nedad = ...\nciudad = ...\n\nficha = ...\nprint(ficha)\n",
+            "checks": [
+              {
+                "stdin": "",
+                "test": "assert isinstance(nombre, str) and nombre and isinstance(ciudad, str) and ciudad, \"nombre y ciudad deben ser textos no vacíos\"\nassert isinstance(edad, int) and not isinstance(edad, bool), \"edad debe ser un entero\"\nesperada = f\"Nombre: {nombre} | Edad: {edad} | Ciudad: {ciudad}\"\nassert ficha == esperada, f\"ficha debería ser exactamente: {esperada!r}\"\nassert esperada in __output__, \"Muestra la ficha con print()\"\nassert 'f\"' in __code__ or \"f'\" in __code__, \"Construye la ficha con una f-string\"\n"
+              }
+            ],
+            "hint": "Una f-string admite varias variables: f\"Nombre: {nombre} | ...\". Fíjate en los espacios alrededor de la barra |.",
+            "stdin": ""
+          }
+        },
+        {
+          "slug": "tipos",
+          "title": "Tipos de datos",
+          "theory": "Cada valor en Python tiene un **tipo**, que determina qué operaciones admite. Los cuatro básicos son:\n- `int`: números enteros, sin límite de tamaño (`42`, `-7`).\n- `float`: números decimales, con **punto** y no coma (`3.14`).\n- `str`: texto entre comillas simples o dobles (`\"hola\"`).\n- `bool`: `True` o `False`, con mayúscula inicial.\n\nPython tiene **tipado dinámico**: no declaras el tipo, lo deduce del valor, y una variable puede apuntar después a un valor de otro tipo. Pero también es **fuertemente tipado**: `\"5\" + 3` da un `TypeError`, porque no mezcla tipos por su cuenta.\n\n`type(valor)` te dice el tipo. Para convertir entre tipos usa `int()`, `float()`, `str()` y `bool()`. Si la conversión no tiene sentido, como `int(\"hola\")`, obtienes un `ValueError`.\n\nCuidado con los `float`: se guardan en binario y algunos decimales no son exactos. `0.1 + 0.2` da `0.30000000000000004`. Para dinero se usa el módulo `decimal`.",
+          "example_code": "precio_texto = \"19.99\"\nprecio = float(precio_texto)\n\nprint(type(precio_texto), type(precio))\nprint(precio * 3)\nprint(int(\"42\") + 8)\nprint(0.1 + 0.2)  # 0.30000000000000004: limitación del float",
+          "exercise": "Tienes `edad_texto = \"27\"` y `altura_texto = \"1.75\"`.\n\nCrea `edad` (int) y `altura` (float) convirtiendo esos textos, y muestra: `Dentro de 10 años tendrás 37 y medirás 1.75 m`.\n\nDespués prueba en la consola qué ocurre con `int(altura_texto)` y lee el error completo.",
+          "sources": [
+            {
+              "title": "Tipos incorporados (int, float, str, bool)",
+              "url": "https://docs.python.org/es/3/library/stdtypes.html"
+            },
+            {
+              "title": "Tutorial oficial — 15. Aritmética de coma flotante",
+              "url": "https://docs.python.org/es/3/tutorial/floatingpoint.html"
+            },
+            {
+              "title": "Python para todos (PY4E), cap. 2",
+              "url": "https://es.py4e.com/book"
+            }
+          ],
+          "starter": "edad_texto = \"27\"\naltura_texto = \"1.75\"\n\nedad = ...\naltura = ...\n\n# Muestra el mensaje aquí\n",
+          "exercise_stdin": "",
+          "example_stdin": "",
+          "checks": [
+            {
+              "stdin": "",
+              "test": "assert isinstance(edad, int) and not isinstance(edad, bool) and edad == 27, \"edad debe ser el int 27: convierte edad_texto con int()\"\nassert isinstance(altura, float) and altura == 1.75, \"altura debe ser el float 1.75: convierte altura_texto con float()\"\nassert \"37\" in __output__, \"El mensaje debe mostrar la edad dentro de 10 años (37), calculada con edad + 10\"\nassert \"1.75\" in __output__, \"El mensaje debe mostrar la altura (1.75)\"\nassert \"edad + 10\" in __code__.replace(\"edad+10\", \"edad + 10\"), \"Calcula la edad futura con edad + 10, no la escribas a mano\"\n"
+            }
+          ],
+          "assistant": {
+            "hint": "int(\"27\") convierte texto en entero y float(\"1.75\") en decimal. La edad futura se calcula: edad + 10.",
+            "faq": [
+              {
+                "q": "¿Por qué \"5\" + 3 da error?",
+                "a": "Python es **fuertemente tipado**: no mezcla texto y números por su cuenta. Decide tú: `int(\"5\") + 3` da `8` y `\"5\" + str(3)` da `\"53\"`."
+              },
+              {
+                "q": "¿Por qué 0.1 + 0.2 no da 0.3?",
+                "a": "Los `float` se guardan en binario y 0.1 no tiene representación exacta, igual que 1/3 en decimal. Para dinero usa el módulo `decimal`, o redondea al mostrar: `f\"{valor:.2f}\"`."
+              }
+            ]
+          },
+          "example_in_browser": true,
+          "quiz": [
+            {
+              "q": "¿Qué devuelve `type(3.0)`?",
+              "options": [
+                "`<class 'int'>`",
+                "`<class 'float'>`",
+                "`<class 'str'>`",
+                "`<class 'number'>`"
+              ],
+              "answer": 1,
+              "explain": "Cualquier número escrito con punto decimal es un `float`, aunque su parte decimal sea 0."
+            },
+            {
+              "q": "¿Qué ocurre al ejecutar `int(\"7.5\")`?",
+              "options": [
+                "Devuelve `7`",
+                "Devuelve `8`",
+                "Devuelve `7.5`",
+                "Lanza `ValueError`"
+              ],
+              "answer": 3,
+              "explain": "`int()` solo convierte textos que representan un **entero**. Para `\"7.5\"` primero habría que pasar por `float()`: `int(float(\"7.5\"))` → `7`."
+            },
+            {
+              "q": "¿Qué muestra este código?",
+              "options": [
+                "`True`",
+                "`False`",
+                "`0`",
+                "Un error"
+              ],
+              "answer": 1,
+              "explain": "Un texto con contenido cuenta como verdadero, pero la **cadena vacía** `\"\"` es *falsy*: `bool(\"\")` → `False`. En cambio `bool(\" \")` (un espacio) es `True`.",
+              "code": "print(bool(\"\"))"
+            }
+          ],
+          "challenge": {
+            "title": "Media de notas en texto",
+            "stars": 1,
+            "exercise": "Tienes las notas como texto: `n1 = \"7.5\"`, `n2 = \"8\"` y `n3 = \"6.25\"`.\n\nCalcula `media` como **float redondeado a 2 decimales** con `round()` y muéstrala con el formato `Media: 7.25`.",
+            "starter": "n1 = \"7.5\"\nn2 = \"8\"\nn3 = \"6.25\"\n\nmedia = ...\n",
+            "checks": [
+              {
+                "stdin": "",
+                "test": "assert isinstance(media, float), \"media debe ser un float\"\nassert media == 7.25, f\"La media de 7.5, 8 y 6.25 es 7.25 y has obtenido {media}\"\nassert \"round(\" in __code__, \"Redondea con round(valor, 2)\"\nassert \"Media: 7.25\" in __output__, \"Muestra el resultado como «Media: 7.25»\"\n"
+              }
+            ],
+            "hint": "Convierte cada texto con float(), súmalos, divide entre 3 y aplica round(resultado, 2).",
+            "stdin": ""
+          }
+        },
+        {
+          "slug": "operadores",
+          "title": "Operadores",
+          "theory": "**Aritméticos:** `+`, `-`, `*`, `/` (división real, siempre devuelve `float`), `//` (división entera), `%` (resto o módulo) y `**` (potencia).\n\n`//` y `%` van juntos: `17 // 5` es `3` y `17 % 5` es `2`, porque 17 = 5 × 3 + 2. Se usan para repartir, convertir unidades (segundos a minutos) o saber si un número es par (`n % 2 == 0`).\n\n**Comparación:** `==`, `!=`, `<`, `>`, `<=`, `>=`. Siempre devuelven un `bool`. No confundas `=` (asignar) con `==` (comparar).\n\n**Lógicos:** `and`, `or` y `not`. Python evalúa en **cortocircuito**: en `a and b`, si `a` es falso, `b` ni se evalúa.\n\n**Asignación compuesta:** `x += 1` equivale a `x = x + 1`. También existen `-=`, `*=`, `/=`, etc.\n\n**Precedencia:** `**` va primero; después `*`, `/`, `//` y `%`; luego `+` y `-`; después las comparaciones y al final los lógicos. Ante la duda, usa paréntesis: el código se lee mejor.",
+          "example_code": "segundos = 3725\nhoras = segundos // 3600\nminutos = (segundos % 3600) // 60\nresto = segundos % 60\nprint(f\"{horas} h {minutos} min {resto} s\")\n\nedad = 20\ntiene_carnet = True\nprint(edad >= 18 and tiene_carnet)",
+          "exercise": "Con `total_segundos = 100000`, calcula `dias`, `horas`, `minutos` y `segundos` usando solo `//` y `%`, y muéstralos.\n\nDespués guarda en `dias_par` si el número de días es par (debe ser un booleano).",
+          "sources": [
+            {
+              "title": "Tutorial oficial — 3.1.1 Números",
+              "url": "https://docs.python.org/es/3/tutorial/introduction.html#numbers"
+            },
+            {
+              "title": "Referencia — Precedencia de operadores",
+              "url": "https://docs.python.org/es/3/reference/expressions.html#operator-precedence"
+            },
+            {
+              "title": "Python para todos (PY4E), cap. 2",
+              "url": "https://es.py4e.com/book"
+            }
+          ],
+          "starter": "total_segundos = 100000\n\ndias = ...\nhoras = ...\nminutos = ...\nsegundos = ...\n\ndias_par = ...\n\nprint(dias, horas, minutos, segundos, dias_par)\n",
+          "exercise_stdin": "",
+          "example_stdin": "",
+          "checks": [
+            {
+              "stdin": "",
+              "test": "assert all(isinstance(v, int) for v in (dias, horas, minutos, segundos)), \"Usa // y % para obtener números enteros\"\nassert \"//\" in __code__ and \"%\" in __code__, \"Resuélvelo con los operadores // y %\"\nassert dias * 86400 + horas * 3600 + minutos * 60 + segundos == total_segundos, \"La suma de días, horas, minutos y segundos no da total_segundos\"\nassert horas < 24 and minutos < 60 and segundos < 60, \"Cada unidad debe ser menor que la siguiente: horas < 24, minutos < 60, segundos < 60\"\nassert isinstance(dias_par, bool), \"dias_par debe ser un booleano: el resultado de una comparación\"\nassert dias_par == (dias % 2 == 0), \"dias_par no es correcto: un número es par si su resto entre 2 es 0\"\n"
+            }
+          ],
+          "assistant": {
+            "hint": "Un día tiene 86400 segundos. total // 86400 da los días; total % 86400 da los segundos que sobran para calcular las horas, y así sucesivamente.",
+            "faq": [
+              {
+                "q": "¿Qué diferencia hay entre / y //?",
+                "a": "`/` es la división real y siempre devuelve `float` (`7 / 2` → `3.5`). `//` es la división entera (`7 // 2` → `3`)."
+              },
+              {
+                "q": "¿Para qué sirve %?",
+                "a": "Devuelve el **resto** de la división: `17 % 5` → `2`. Sirve para saber si un número es par (`n % 2 == 0`) o para convertir unidades junto con `//`."
+              }
+            ]
+          },
+          "example_in_browser": true,
+          "quiz": [
+            {
+              "q": "¿Qué muestra este código?",
+              "options": [
+                "`3.5`",
+                "`3`",
+                "`4`",
+                "`1`"
+              ],
+              "answer": 1,
+              "explain": "`//` es la **división entera**: se queda con la parte entera del cociente. `7 / 2` daría `3.5` y `7 % 2` daría `1`.",
+              "code": "print(7 // 2)"
+            },
+            {
+              "q": "¿Cuál es el resultado de `2 + 3 * 4`?",
+              "options": [
+                "`20`",
+                "`14`",
+                "`24`",
+                "`9`"
+              ],
+              "answer": 1,
+              "explain": "La multiplicación tiene **más precedencia** que la suma: primero `3 * 4 = 12` y luego `2 + 12 = 14`. Si quieres sumar primero, usa paréntesis: `(2 + 3) * 4`."
+            },
+            {
+              "q": "¿Qué expresión comprueba si `n` es par?",
+              "options": [
+                "`n / 2 == 0`",
+                "`n % 2 == 0`",
+                "`n // 2 == 0`",
+                "`n % 2 == 1`"
+              ],
+              "answer": 1,
+              "explain": "Un número es par si el **resto** de dividirlo entre 2 es 0, y el resto se calcula con `%`. `n % 2 == 1` comprobaría que es impar (y falla con negativos en otros lenguajes)."
+            }
+          ],
+          "challenge": {
+            "title": "Cambio en monedas",
+            "stars": 2,
+            "exercise": "Una máquina debe devolver `centimos = 1987` usando el **mínimo número de monedas** de 200, 100, 50, 20, 10, 5, 2 y 1 céntimos.\n\nGuarda en el diccionario `monedas` cuántas se usan de cada una: `{200: ..., 100: ..., 50: ..., ...}`. Usa `//` y `%`.",
+            "starter": "centimos = 1987\n\nmonedas = {}\n# Calcula cuántas monedas de cada valor hacen falta\n\nprint(monedas)\n",
+            "checks": [
+              {
+                "stdin": "",
+                "test": "valores = [200, 100, 50, 20, 10, 5, 2, 1]\nassert isinstance(monedas, dict) and set(monedas) == set(valores), \"monedas debe tener una clave por cada valor: 200, 100, 50, 20, 10, 5, 2 y 1\"\nassert sum(v * n for v, n in monedas.items()) == centimos, \"La suma de las monedas no da 1987 céntimos\"\nassert monedas == {200: 9, 100: 1, 50: 1, 20: 1, 10: 1, 5: 1, 2: 1, 1: 0}, \"No es el mínimo de monedas: empieza siempre por la moneda más grande posible\"\n"
+              }
+            ],
+            "hint": "Recorre los valores de mayor a menor: monedas[v] = resto // v y después resto = resto % v.",
+            "stdin": ""
+          }
+        },
+        {
+          "slug": "input",
+          "title": "Entrada con input()",
+          "theory": "`input()` pausa el programa, muestra el mensaje que le pases y espera a que el usuario escriba algo y pulse Enter.\n\nLo más importante: **`input()` siempre devuelve un `str`**, aunque el usuario escriba un número. Si necesitas operar con él, conviértelo: `int(input(\"Edad: \"))`.\n\nSi el usuario escribe algo que no se puede convertir (por ejemplo, \"veinte\"), el programa se detendrá con un `ValueError`. Más adelante, en la lección de Excepciones, aprenderás a controlarlo.\n\nEl método `.strip()` elimina los espacios que sobran al principio y al final. Es buena costumbre usarlo con textos introducidos por el usuario.\n\nEn PyCharm, la entrada se escribe en la ventana **Run**, en la parte inferior. Haz clic en ella antes de escribir.",
+          "example_code": "nombre = input(\"¿Cómo te llamas? \").strip()\nanio_nacimiento = int(input(\"¿En qué año naciste? \"))\n\nedad = 2026 - anio_nacimiento\nprint(f\"{nombre}, este año cumples {edad} años\")",
+          "exercise": "Crea una calculadora de propinas:\n1. Pide el importe de la cuenta (con decimales).\n2. Pide el porcentaje de propina.\n3. Pide entre cuántas personas se divide.\n\nMuestra el total con propina y lo que paga cada persona, con 2 decimales. Pista: `f\"{valor:.2f}\"`.\n\nPara probarlo en la consola, escribe en **Entrada** los datos, uno por línea: `100`, `10` y `4`.",
+          "sources": [
+            {
+              "title": "Función input()",
+              "url": "https://docs.python.org/es/3/library/functions.html#input"
+            },
+            {
+              "title": "Tutorial oficial — 7.1 Formateo elegante de la salida",
+              "url": "https://docs.python.org/es/3/tutorial/inputoutput.html#fancier-output-formatting"
+            },
+            {
+              "title": "Python para todos (PY4E), cap. 2",
+              "url": "https://es.py4e.com/book"
+            }
+          ],
+          "starter": "importe = float(input(\"Importe de la cuenta: \"))\n# Pide el porcentaje de propina y el número de personas\n\n# Calcula el total con propina y lo que paga cada persona\n\n",
+          "exercise_stdin": "100\n10\n4",
+          "example_stdin": "Carlos\n1996",
+          "checks": [
+            {
+              "stdin": "100\n10\n4",
+              "test": "assert __code__.count(\"input(\") >= 3, \"Pide los tres datos con input()\"\nassert \"110.00\" in __output__, \"Con 100 € y un 10 % de propina, el total mostrado debe ser 110.00\"\nassert \"27.50\" in __output__, \"Entre 4 personas, cada una debe pagar 27.50\"\n"
+            },
+            {
+              "stdin": "80\n15\n3",
+              "test": "assert \"92.00\" in __output__, \"Con 80 € y un 15 % de propina, el total debe ser 92.00\"\nassert \"30.67\" in __output__, \"Entre 3 personas, cada una debe pagar 30.67 (2 decimales)\"\n"
+            }
+          ],
+          "assistant": {
+            "hint": "input() siempre devuelve texto: conviértelo con float() o int(). El total es importe * (1 + porcentaje / 100).",
+            "faq": [
+              {
+                "q": "¿Por qué input() me devuelve texto aunque escriba un número?",
+                "a": "Porque `input()` **siempre** devuelve un `str`. Si necesitas operar, conviértelo: `int(input(\"Edad: \"))` o `float(input(\"Precio: \"))`."
+              },
+              {
+                "q": "¿Dónde escribo los datos en la consola?",
+                "a": "En el cuadro **Entrada**, una línea por cada `input()`. En PyCharm se escriben en la ventana **Run**, en la parte inferior."
+              }
+            ]
+          },
+          "example_in_browser": true,
+          "quiz": [
+            {
+              "q": "Si el usuario escribe `5`, ¿qué muestra este código?",
+              "options": [
+                "`10`",
+                "`55`",
+                "`5 5`",
+                "Un error"
+              ],
+              "answer": 1,
+              "explain": "`input()` **siempre devuelve texto**. `\"5\" * 2` repite la cadena: `\"55\"`. Para obtener `10` habría que convertir: `int(input()) * 2`.",
+              "code": "x = input()\nprint(x * 2)"
+            },
+            {
+              "q": "¿Qué hace `.strip()` con el texto `\"  Ana  \"`?",
+              "options": [
+                "Lo pasa a mayúsculas",
+                "Quita los espacios del principio y del final",
+                "Quita todos los espacios",
+                "Lo divide en palabras"
+              ],
+              "answer": 1,
+              "explain": "`strip()` elimina los espacios (y saltos de línea) de los **extremos**. Los espacios de en medio se quedan: `\"  Ana Pérez \".strip()` → `\"Ana Pérez\"`."
+            },
+            {
+              "q": "¿Qué muestra `print(f\"{3.14159:.2f}\")`?",
+              "options": [
+                "`3.14`",
+                "`3.1`",
+                "`3.15`",
+                "`3.14159`"
+              ],
+              "answer": 0,
+              "explain": "`:.2f` formatea el número con **2 decimales**, redondeando: `3.14159` → `3.14`. Es la forma habitual de mostrar precios."
+            }
+          ],
+          "challenge": {
+            "title": "Conversor de temperaturas",
+            "stars": 1,
+            "exercise": "Pide una temperatura en grados Celsius y muestra su equivalencia en Fahrenheit y Kelvin **con 1 decimal**:\n\n`100 °C = 212.0 °F = 373.1 K`\n\nFórmulas: F = C × 9/5 + 32 y K = C + 273.15. Prueba en la consola con `100` en «Entrada».",
+            "starter": "celsius = float(input(\"Grados Celsius: \"))\n",
+            "checks": [
+              {
+                "stdin": "100",
+                "test": "assert \"212.0\" in __output__ and \"373.1\" in __output__, \"Con 100 °C deben salir 212.0 °F y 373.1 K (1 decimal)\"\n"
+              },
+              {
+                "stdin": "-40",
+                "test": "assert \"-40.0\" in __output__ and \"233.1\" in __output__, \"Con -40 °C deben salir -40.0 °F y 233.1 K\"\n"
+              }
+            ],
+            "hint": "Formatea con 1 decimal usando f\"{valor:.1f}\".",
+            "stdin": "100"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "intermedio",
+      "title": "Nivel Intermedio",
+      "lessons": [
+        {
+          "slug": "condicionales",
+          "title": "Condicionales",
+          "theory": "Los condicionales permiten que el programa tome decisiones. La estructura es `if`, opcionalmente uno o varios `elif`, y opcionalmente un `else`.\n\nPython usa la **indentación** (4 espacios) para saber qué código pertenece a cada bloque. No hay llaves: si la indentación está mal, el programa falla o hace otra cosa.\n\nSolo se ejecuta **el primer** bloque cuya condición sea verdadera. Por eso, cuando las condiciones se solapan, el orden importa: pon primero las más restrictivas.\n\n**Valores \"falsy\":** en una condición, `0`, `0.0`, `\"\"` (texto vacío), `[]`, `{}` y `None` cuentan como falso. Por eso `if nombre:` comprueba si el texto no está vacío.\n\nPython permite encadenar comparaciones: `18 <= edad < 65` es más legible que `edad >= 18 and edad < 65`.\n\nPara asignaciones simples existe la **expresión condicional**: `estado = \"mayor\" if edad >= 18 else \"menor\"`.",
+          "example_code": "nota = float(input(\"Nota (0-10): \"))\n\nif not 0 <= nota <= 10:\n    print(\"Nota no válida\")\nelif nota >= 9:\n    print(\"Sobresaliente\")\nelif nota >= 7:\n    print(\"Notable\")\nelif nota >= 5:\n    print(\"Aprobado\")\nelse:\n    print(\"Suspenso\")",
+          "exercise": "Pide un año con `input()` y guarda en la variable `bisiesto` si es **bisiesto** (`True` o `False`). Después muestra un mensaje.\n\nUn año es bisiesto si es divisible entre 4, excepto los divisibles entre 100, salvo que también lo sean entre 400.\n\nLa comprobación prueba 2024 (sí), 1900 (no), 2000 (sí) y 2023 (no).",
+          "sources": [
+            {
+              "title": "Tutorial oficial — 4.1 La sentencia if",
+              "url": "https://docs.python.org/es/3/tutorial/controlflow.html#if-statements"
+            },
+            {
+              "title": "Python para todos (PY4E), cap. 3",
+              "url": "https://es.py4e.com/book"
+            }
+          ],
+          "starter": "anio = int(input(\"Año: \"))\n\nbisiesto = ...\n\n",
+          "exercise_stdin": "2024",
+          "example_stdin": "7.5",
+          "checks": [
+            {
+              "stdin": "2024",
+              "test": "assert bisiesto is True, \"2024 es divisible entre 4 y no entre 100: debería ser bisiesto\"\n"
+            },
+            {
+              "stdin": "1900",
+              "test": "assert bisiesto is False, \"1900 es divisible entre 100 pero no entre 400: NO es bisiesto\"\n"
+            },
+            {
+              "stdin": "2000",
+              "test": "assert bisiesto is True, \"2000 es divisible entre 400: SÍ es bisiesto\"\n"
+            },
+            {
+              "stdin": "2023",
+              "test": "assert bisiesto is False, \"2023 no es divisible entre 4: no es bisiesto\"\n"
+            }
+          ],
+          "assistant": {
+            "hint": "Piensa primero en la regla más restrictiva (divisible entre 400) y después en las demás. Puedes resolverlo con if/elif/else o con una sola expresión usando and, or y %.",
+            "faq": [
+              {
+                "q": "¿Por qué importa el orden de los elif?",
+                "a": "Python ejecuta **solo el primer** bloque cuya condición sea verdadera. Si pones antes una condición más general, las más concretas nunca llegarán a comprobarse."
+              },
+              {
+                "q": "¿Qué valores cuentan como falso?",
+                "a": "`0`, `0.0`, `\"\"` (texto vacío), `[]`, `{}` y `None`. Por eso `if nombre:` comprueba si el texto no está vacío."
+              }
+            ]
+          },
+          "example_in_browser": true,
+          "quiz": [
+            {
+              "q": "Con `nota = 8`, ¿qué muestra este código?",
+              "options": [
+                "`Aprobado`",
+                "`Notable`",
+                "`Aprobado` y `Notable`",
+                "Nada"
+              ],
+              "answer": 0,
+              "explain": "Python ejecuta **solo el primer** bloque cuya condición es verdadera. Como `8 >= 5` se cumple primero, nunca llega a mirar el `elif`. Por eso las condiciones más restrictivas van antes.",
+              "code": "nota = 8\nif nota >= 5:\n    print(\"Aprobado\")\nelif nota >= 7:\n    print(\"Notable\")"
+            },
+            {
+              "q": "¿Cuál de estos valores es *falsy* (cuenta como falso en un `if`)?",
+              "options": [
+                "`\"0\"`",
+                "`[0]`",
+                "`0`",
+                "`\"False\"`"
+              ],
+              "answer": 2,
+              "explain": "El número `0` es *falsy*. Pero `\"0\"` y `\"False\"` son textos **no vacíos** y `[0]` es una lista con un elemento: los tres cuentan como verdaderos."
+            },
+            {
+              "q": "¿Qué valor tiene `estado`?",
+              "options": [
+                "`\"mayor\"`",
+                "`\"menor\"`",
+                "`True`",
+                "Da error"
+              ],
+              "answer": 1,
+              "explain": "Es una **expresión condicional**: `valor_si_true if condición else valor_si_false`. Como `16 >= 18` es falso, se asigna `\"menor\"`.",
+              "code": "edad = 16\nestado = \"mayor\" if edad >= 18 else \"menor\""
+            }
+          ],
+          "challenge": {
+            "title": "Piedra, papel o tijera",
+            "stars": 2,
+            "exercise": "Pide la jugada de dos jugadores (`piedra`, `papel` o `tijera`, sin importar mayúsculas ni espacios) y guarda en `resultado`:\n- `\"1\"` si gana el jugador 1, `\"2\"` si gana el 2, `\"empate\"` si coinciden.\n- `\"invalido\"` si alguna jugada no existe.\n\nMuestra un mensaje con el resultado.",
+            "starter": "j1 = input(\"Jugador 1: \").strip().lower()\nj2 = input(\"Jugador 2: \").strip().lower()\n\nresultado = ...\n",
+            "checks": [
+              {
+                "stdin": "piedra\ntijera",
+                "test": "assert resultado == \"1\", \"piedra gana a tijera: resultado debe ser \\\"1\\\"\"\n"
+              },
+              {
+                "stdin": "Piedra \npapel",
+                "test": "assert resultado == \"2\", \"papel gana a piedra (y hay que ignorar mayúsculas y espacios)\"\n"
+              },
+              {
+                "stdin": "tijera\ntijera",
+                "test": "assert resultado == \"empate\", \"Misma jugada: empate\"\n"
+              },
+              {
+                "stdin": "tijera\npapel",
+                "test": "assert resultado == \"1\", \"tijera gana a papel\"\n"
+              },
+              {
+                "stdin": "lagarto\npapel",
+                "test": "assert resultado == \"invalido\", \"lagarto no es una jugada válida: resultado debe ser \\\"invalido\\\"\"\n"
+              }
+            ],
+            "hint": "Primero comprueba si alguna jugada no es válida; después el empate; y para ver quién gana, piensa qué le gana a cada jugada.",
+            "stdin": "piedra\ntijera"
+          }
+        },
+        {
+          "slug": "bucles",
+          "title": "Bucles for y while",
+          "theory": "Un bucle repite un bloque de código.\n\n**`for`** recorre los elementos de una secuencia (una lista, un texto, un `range`...). Úsalo cuando sabes sobre qué vas a iterar.\n\n`range(inicio, fin, paso)` genera números **sin incluir `fin`**: `range(1, 6)` da 1, 2, 3, 4 y 5.\n\n**`while`** repite **mientras** una condición sea verdadera. Úsalo cuando no sabes cuántas vueltas habrá, por ejemplo hasta que el usuario escriba algo válido. Asegúrate de que la condición llegue a ser falsa, o tendrás un bucle infinito (en PyCharm lo paras con el botón rojo ■ o con `Ctrl+F2`).\n\nControles:\n- `break`: sale del bucle inmediatamente.\n- `continue`: salta a la siguiente vuelta.\n\n`enumerate(secuencia)` te da a la vez el índice y el elemento, sin tener que llevar un contador a mano.",
+          "example_code": "for numero in range(1, 6):\n    print(f\"{numero} x 7 = {numero * 7}\")\n\nfrutas = [\"manzana\", \"pera\", \"kiwi\"]\nfor posicion, fruta in enumerate(frutas, start=1):\n    print(posicion, fruta)\n\nintentos = 0\nwhile intentos < 3:\n    intentos += 1\n    print(f\"Intento {intentos}\")",
+          "exercise": "Crea el juego **\"Adivina el número\"** con `secreto = 37`:\n- Pide números con un `while` hasta que el usuario acierte.\n- Después de cada fallo, di si el secreto es **mayor** o **menor**.\n- Guarda en `intentos` cuántos números ha probado y muéstralo al acertar.\n\nMantén `secreto = 37`: la comprobación prueba las entradas 50, 20, 37 (3 intentos) y 37 (1 intento).",
+          "sources": [
+            {
+              "title": "Tutorial oficial — 4.2 La sentencia for",
+              "url": "https://docs.python.org/es/3/tutorial/controlflow.html#for-statements"
+            },
+            {
+              "title": "Tutorial oficial — 4.3 La función range()",
+              "url": "https://docs.python.org/es/3/tutorial/controlflow.html#the-range-function"
+            },
+            {
+              "title": "Python para todos (PY4E), cap. 5",
+              "url": "https://es.py4e.com/book"
+            }
+          ],
+          "starter": "secreto = 37\nintentos = 0\n\n# Tu bucle while aquí\n\n",
+          "exercise_stdin": "50\n20\n37",
+          "example_stdin": "",
+          "checks": [
+            {
+              "stdin": "50\n20\n37",
+              "test": "assert \"while\" in __code__, \"Usa un bucle while\"\nassert intentos == 3, f\"Con 50, 20 y 37 deberían contarse 3 intentos, no {intentos}\"\nsalida = __output__.lower()\nassert \"menor\" in salida and \"mayor\" in salida, \"Tras cada fallo indica si el secreto es mayor o menor\"\n"
+            },
+            {
+              "stdin": "37",
+              "test": "assert intentos == 1, \"Si acierta a la primera, intentos debe ser 1\"\n"
+            }
+          ],
+          "assistant": {
+            "hint": "Una estructura típica: while True: pide el número, suma 1 a intentos, y si acierta usa break; si no, compara con < o >.",
+            "faq": [
+              {
+                "q": "¿Cuándo uso for y cuándo while?",
+                "a": "`for` cuando sabes **sobre qué** iteras (una lista, un `range`). `while` cuando repites **hasta que** pase algo y no sabes cuántas vueltas habrá."
+              },
+              {
+                "q": "Mi programa no termina, ¿qué hago?",
+                "a": "Es un bucle infinito: la condición del `while` nunca llega a ser falsa. En la consola se corta solo a los 10 segundos; en PyCharm pulsa el botón rojo ■ (`Ctrl+F2`). Revisa que algo dentro del bucle cambie la condición."
+              }
+            ]
+          },
+          "example_in_browser": true,
+          "quiz": [
+            {
+              "q": "¿Qué números genera `range(2, 10, 3)`?",
+              "options": [
+                "`2, 5, 8`",
+                "`2, 5, 8, 11`",
+                "`3, 6, 9`",
+                "`2, 3, 4… 10`"
+              ],
+              "answer": 0,
+              "explain": "`range(inicio, fin, paso)` empieza en 2 y suma 3 cada vez **sin llegar** a 10: 2, 5, 8."
+            },
+            {
+              "q": "¿Cuántas veces se imprime `hola`?",
+              "options": [
+                "0",
+                "3",
+                "4",
+                "Infinitas"
+              ],
+              "answer": 1,
+              "explain": "`i` toma 0, 1 y 2; cuando vale 3, la condición `i < 3` es falsa y el bucle termina. Si olvidaras `i += 1`, sería un bucle infinito.",
+              "code": "i = 0\nwhile i < 3:\n    print(\"hola\")\n    i += 1"
+            },
+            {
+              "q": "¿Qué muestra este código?",
+              "options": [
+                "`0 1 2 3 4`",
+                "`0 1 3 4`",
+                "`0 1`",
+                "`2`"
+              ],
+              "answer": 1,
+              "explain": "`continue` salta **al inicio de la siguiente vuelta**, así que el 2 no se imprime; el bucle sigue con 3 y 4. `break` sí habría terminado el bucle.",
+              "code": "for n in range(5):\n    if n == 2:\n        continue\n    print(n, end=\" \")"
+            }
+          ],
+          "challenge": {
+            "title": "FizzBuzz",
+            "stars": 1,
+            "exercise": "El clásico de las entrevistas. Pide un número `n` y muestra los números del 1 al `n`, uno por línea, pero:\n- Si es múltiplo de 3, muestra `Fizz`.\n- Si es múltiplo de 5, muestra `Buzz`.\n- Si es múltiplo de 3 y de 5, muestra `FizzBuzz`.",
+            "starter": "n = int(input(\"Hasta: \"))\n",
+            "checks": [
+              {
+                "stdin": "15",
+                "test": "lineas = [l.strip() for l in __output__.replace(\"Hasta: \", \"\").splitlines() if l.strip()]\nesperado = [\"1\", \"2\", \"Fizz\", \"4\", \"Buzz\", \"Fizz\", \"7\", \"8\", \"Fizz\", \"Buzz\", \"11\", \"Fizz\", \"13\", \"14\", \"FizzBuzz\"]\nassert lineas == esperado, f\"Con n = 15 la salida debería ser {esperado} y es {lineas}\"\n"
+              }
+            ],
+            "hint": "Comprueba primero el caso de «múltiplo de 3 y de 5» (n % 15 == 0): si lo dejas para el final, nunca se ejecutará.",
+            "stdin": "15"
+          }
+        },
+        {
+          "slug": "funciones",
+          "title": "Funciones",
+          "theory": "Una **función** es un bloque de código con nombre que puedes reutilizar. Se define con `def`, recibe **parámetros** y puede devolver un resultado con `return`.\n\nPor qué usarlas:\n- Evitan repetir código (principio **DRY**: *Don't Repeat Yourself*).\n- Dividen un problema grande en piezas pequeñas.\n- Se pueden probar por separado.\n\nDiferencia clave: `print()` **muestra** un valor en pantalla; `return` lo **devuelve** para que otro código lo use. Una función sin `return` devuelve `None`.\n\nParámetros:\n- **Por defecto:** `def saludar(nombre, saludo=\"Hola\")`.\n- **Por nombre al llamar:** `saludar(saludo=\"Buenas\", nombre=\"Ana\")`.\n\nLas variables creadas dentro de una función son **locales**: no existen fuera de ella.\n\nBuenas prácticas: nombres con verbo (`calcular_iva`), una sola responsabilidad por función, y un *docstring* (texto entre triples comillas) que explique qué hace. Los *type hints* (`precio: float -> float`) documentan los tipos, aunque Python no los obliga.",
+          "example_code": "def calcular_total(precio: float, cantidad: int, iva: float = 0.21) -> float:\n    \"\"\"Devuelve el total con IVA incluido.\"\"\"\n    subtotal = precio * cantidad\n    return subtotal * (1 + iva)\n\n\ntotal = calcular_total(49.99, 3)\nprint(f\"Total: {total:.2f} €\")\nprint(f\"Con IVA reducido: {calcular_total(10, 2, iva=0.10):.2f} €\")",
+          "exercise": "Escribe estas tres funciones con *docstring* y *type hints*:\n1. `es_par(numero)`: devuelve `True` o `False`.\n2. `celsius_a_fahrenheit(grados)`: aplica F = C × 9/5 + 32.\n3. `maximo(a, b, c)`: devuelve el mayor de los tres **sin usar `max()`**.\n\nPruébalas llamándolas con varios valores e imprimiendo el resultado.",
+          "sources": [
+            {
+              "title": "Tutorial oficial — 4.8 Definiendo funciones",
+              "url": "https://docs.python.org/es/3/tutorial/controlflow.html#defining-functions"
+            },
+            {
+              "title": "Tutorial oficial — 4.9 Más sobre definición de funciones",
+              "url": "https://docs.python.org/es/3/tutorial/controlflow.html#more-on-defining-functions"
+            },
+            {
+              "title": "Python para todos (PY4E), cap. 4",
+              "url": "https://es.py4e.com/book"
+            }
+          ],
+          "starter": "def es_par(numero: int) -> bool:\n    \"\"\"Escribe aquí qué hace la función.\"\"\"\n    ...\n\n\ndef celsius_a_fahrenheit(grados: float) -> float:\n    \"\"\"Escribe aquí qué hace la función.\"\"\"\n    ...\n\n\ndef maximo(a: float, b: float, c: float) -> float:\n    \"\"\"Escribe aquí qué hace la función.\"\"\"\n    ...\n\n\nprint(es_par(4), celsius_a_fahrenheit(100), maximo(1, 5, 3))\n",
+          "exercise_stdin": "",
+          "example_stdin": "",
+          "checks": [
+            {
+              "stdin": "",
+              "test": "assert es_par(4) is True and es_par(7) is False and es_par(0) is True and es_par(-2) is True, \"es_par no devuelve el valor correcto (prueba con 4, 7, 0 y -2)\"\nassert abs(celsius_a_fahrenheit(100) - 212) < 1e-9, \"100 °C deben ser 212 °F\"\nassert abs(celsius_a_fahrenheit(-40) + 40) < 1e-9, \"-40 °C deben ser -40 °F\"\nassert maximo(1, 5, 3) == 5 and maximo(9, 2, 4) == 9 and maximo(1, 2, 8) == 8, \"maximo no devuelve el mayor (prueba con el mayor en cada posición)\"\nassert maximo(-1, -5, -3) == -1 and maximo(4, 4, 2) == 4, \"maximo falla con negativos o con valores repetidos\"\nassert \"max(\" not in __code__, \"No uses max(): resuélvelo con if/elif\"\nassert all(f.__doc__ and \"Escribe aquí\" not in f.__doc__ for f in (es_par, celsius_a_fahrenheit, maximo)), \"Escribe un docstring propio en cada función\"\n"
+            }
+          ],
+          "assistant": {
+            "hint": "Una función devuelve su resultado con return, no con print. Para maximo, compara a con b y c, y después b con c.",
+            "faq": [
+              {
+                "q": "¿Qué diferencia hay entre print y return?",
+                "a": "`print()` **muestra** un valor en pantalla. `return` lo **devuelve** para que otro código lo use. Una función sin `return` devuelve `None`."
+              },
+              {
+                "q": "¿Para qué sirven los type hints?",
+                "a": "Documentan qué tipos espera y devuelve la función (`precio: float -> float`). Python no los obliga, pero PyCharm los usa para avisarte de errores y autocompletar."
+              }
+            ]
+          },
+          "example_in_browser": true,
+          "quiz": [
+            {
+              "q": "¿Qué muestra este código?",
+              "options": [
+                "`6`",
+                "`None`",
+                "`3` y después `None`",
+                "Un error"
+              ],
+              "answer": 2,
+              "explain": "La función **imprime** 3 pero no tiene `return`, así que devuelve `None`. El `print` de fuera muestra ese `None`. Diferencia clave entre mostrar y devolver.",
+              "code": "def doble(x):\n    print(x)\n\nprint(doble(3))"
+            },
+            {
+              "q": "Con `def saludar(nombre, saludo=\"Hola\")`, ¿cuál de estas llamadas es **incorrecta**?",
+              "options": [
+                "`saludar(\"Ana\")`",
+                "`saludar(\"Ana\", \"Buenas\")`",
+                "`saludar(saludo=\"Hey\", nombre=\"Ana\")`",
+                "`saludar()`"
+              ],
+              "answer": 3,
+              "explain": "`nombre` no tiene valor por defecto, así que es **obligatorio**. `saludar()` da `TypeError: missing 1 required positional argument`."
+            },
+            {
+              "q": "¿Qué muestra este código?",
+              "options": [
+                "`10`",
+                "`5`",
+                "Un error",
+                "`None`"
+              ],
+              "answer": 1,
+              "explain": "La `x = 10` de dentro es una variable **local** de la función: no cambia la `x` de fuera, que sigue valiendo 5.",
+              "code": "x = 5\n\ndef cambiar():\n    x = 10\n\ncambiar()\nprint(x)"
+            }
+          ],
+          "challenge": {
+            "title": "¿Contraseña segura?",
+            "stars": 2,
+            "exercise": "Escribe `es_segura(contrasena)`, que devuelva `True` solo si la contraseña:\n- tiene **al menos 8** caracteres,\n- contiene al menos una **mayúscula**, una **minúscula** y un **número**.\n\nPistas: los métodos `.isupper()`, `.islower()` e `.isdigit()` funcionan con cada carácter.",
+            "starter": "def es_segura(contrasena: str) -> bool:\n    \"\"\"Indica si la contraseña cumple la política de seguridad.\"\"\"\n    ...\n\n\nprint(es_segura(\"Python2026\"), es_segura(\"python\"))\n",
+            "checks": [
+              {
+                "stdin": "",
+                "test": "casos = {\"Python2026\": True, \"python2026\": False, \"PYTHON2026\": False, \"Pythonista\": False, \"Py2026\": False, \"Abcdefg1\": True, \"\": False, \"Aa1Aa1Aa1\": True}\nfor pw, esperado in casos.items():\n    assert es_segura(pw) is esperado, f\"es_segura({pw!r}) debería devolver {esperado}\"\n"
+              }
+            ],
+            "hint": "Usa any() con un generador: any(c.isupper() for c in contrasena). Combina las cuatro condiciones con and.",
+            "stdin": ""
+          }
+        },
+        {
+          "slug": "colecciones",
+          "title": "Listas y diccionarios",
+          "theory": "**Listas** (`list`): colecciones **ordenadas** y **modificables**, escritas entre corchetes: `notas = [7, 5.5, 9]`.\n- Se accede por índice empezando en 0: `notas[0]`. Con índices negativos se cuenta desde el final: `notas[-1]` es el último.\n- *Slicing*: `notas[1:3]` devuelve los elementos 1 y 2.\n- Métodos habituales: `.append()`, `.remove()`, `.sort()`. Y `len(lista)` da su tamaño.\n\n**Diccionarios** (`dict`): parejas **clave → valor**, entre llaves: `alumno = {\"nombre\": \"Ana\", \"edad\": 21}`.\n- Se accede por clave: `alumno[\"nombre\"]`. Si la clave no existe, da `KeyError`; `alumno.get(\"email\")` devuelve `None` en su lugar.\n- Para recorrerlos: `for clave, valor in alumno.items():`.\n- Buscar por clave es muy rápido, aunque el diccionario sea enorme.\n\n**Tuplas** (`tuple`): como las listas pero **inmutables**, entre paréntesis: `punto = (3, 4)`.\n\n**Comprensión de listas:** crea una lista a partir de otra en una sola línea: `cuadrados = [n ** 2 for n in range(5)]`.",
+          "example_code": "notas = [7.5, 4.0, 9.2, 6.8]\nnotas.append(8.1)\naprobadas = [n for n in notas if n >= 5]\nprint(f\"Media: {sum(notas) / len(notas):.2f}\")\nprint(f\"Aprobadas: {aprobadas}\")\n\nalumno = {\"nombre\": \"Ana\", \"ciclo\": \"DAW\", \"curso\": 1}\nalumno[\"curso\"] = 2\nfor clave, valor in alumno.items():\n    print(f\"{clave}: {valor}\")",
+          "exercise": "Tienes `frase = \"el perro y el gato y el raton\"`.\n\nUsa `frase.split()` para obtener la lista de palabras y construye un diccionario `contador` con **cuántas veces aparece cada palabra**: `{\"el\": 3, \"perro\": 1, \"y\": 2, ...}`.\n\nPista: `contador.get(palabra, 0) + 1`.",
+          "sources": [
+            {
+              "title": "Tutorial oficial — 5. Estructuras de datos",
+              "url": "https://docs.python.org/es/3/tutorial/datastructures.html"
+            },
+            {
+              "title": "Python para todos (PY4E), cap. 8",
+              "url": "https://es.py4e.com/book"
+            },
+            {
+              "title": "Python para todos (PY4E), cap. 9",
+              "url": "https://es.py4e.com/book"
+            }
+          ],
+          "starter": "frase = \"el perro y el gato y el raton\"\ncontador = {}\n\nfor palabra in frase.split():\n    ...\n\nprint(contador)\n",
+          "exercise_stdin": "",
+          "example_stdin": "",
+          "checks": [
+            {
+              "stdin": "",
+              "test": "assert isinstance(contador, dict), \"contador debe ser un diccionario\"\nesperado = {\"el\": 3, \"perro\": 1, \"y\": 2, \"gato\": 1, \"raton\": 1}\nassert contador == esperado, f\"contador debería ser {esperado} y es {contador}\"\nassert \"Counter\" not in __code__, \"Hazlo a mano con un diccionario, sin collections.Counter\"\n"
+            }
+          ],
+          "assistant": {
+            "hint": "Dentro del for, actualiza el contador de la palabra: toma el valor actual (o 0 si no existe) y súmale 1.",
+            "faq": [
+              {
+                "q": "¿Lista, tupla o diccionario?",
+                "a": "**Lista**: elementos en orden que cambian. **Tupla**: datos fijos que no deben cambiar. **Diccionario**: buscar un valor por su clave (`alumno[\"nombre\"]`)."
+              },
+              {
+                "q": "¿Por qué da KeyError?",
+                "a": "Has pedido una clave que no existe en el diccionario. Usa `diccionario.get(clave)`, que devuelve `None`, o `diccionario.get(clave, valor_por_defecto)`."
+              }
+            ]
+          },
+          "example_in_browser": true,
+          "quiz": [
+            {
+              "q": "¿Qué muestra `print(letras[-1])` si `letras = [\"a\", \"b\", \"c\"]`?",
+              "options": [
+                "`a`",
+                "`c`",
+                "`-1`",
+                "Un error"
+              ],
+              "answer": 1,
+              "explain": "Los índices negativos cuentan **desde el final**: `-1` es el último elemento, `-2` el penúltimo…"
+            },
+            {
+              "q": "¿Qué muestra este código?",
+              "options": [
+                "`[1, 2]`",
+                "`[1, 2, 3]`",
+                "`None`",
+                "Un error"
+              ],
+              "answer": 1,
+              "explain": "`b = a` **no copia** la lista: las dos variables apuntan a la **misma** lista, así que el cambio se ve desde `a`. Para copiarla: `b = a.copy()`.",
+              "code": "a = [1, 2]\nb = a\nb.append(3)\nprint(a)"
+            },
+            {
+              "q": "¿Qué devuelve `datos.get(\"edad\", 0)` si `datos = {\"nombre\": \"Ana\"}`?",
+              "options": [
+                "`None`",
+                "`0`",
+                "`KeyError`",
+                "`\"edad\"`"
+              ],
+              "answer": 1,
+              "explain": "`get()` devuelve el valor por defecto que le pases (aquí `0`) cuando la clave no existe, en lugar de lanzar `KeyError` como `datos[\"edad\"]`."
+            }
+          ],
+          "challenge": {
+            "title": "Boletín de notas",
+            "stars": 2,
+            "exercise": "Tienes un diccionario con las notas de cada alumno:\n\n`notas = {\"Ana\": [8, 9, 7.5], \"Luis\": [5, 6.5, 7], \"Marta\": [9.5, 9, 10]}`\n\nCrea `medias` (alumno → media **redondeada a 2 decimales**) y guarda en `mejor` el nombre del alumno con la media más alta.",
+            "starter": "notas = {\"Ana\": [8, 9, 7.5], \"Luis\": [5, 6.5, 7], \"Marta\": [9.5, 9, 10]}\n\nmedias = {}\nmejor = ...\n",
+            "checks": [
+              {
+                "stdin": "",
+                "test": "assert medias == {\"Ana\": 8.17, \"Luis\": 6.17, \"Marta\": 9.5}, f\"medias no es correcto: {medias}\"\nassert mejor == \"Marta\", f\"La mejor media es la de Marta, no {mejor!r}\"\n"
+              }
+            ],
+            "hint": "Recorre notas.items(); la media es sum(lista) / len(lista). Para el mejor, max(medias, key=medias.get) devuelve la clave con el valor más alto.",
+            "stdin": ""
+          }
+        }
+      ]
+    },
+    {
+      "slug": "avanzado",
+      "title": "Avanzado",
+      "lessons": [
+        {
+          "slug": "poo",
+          "title": "Programación orientada a objetos",
+          "theory": "La **programación orientada a objetos (POO)** agrupa en una misma unidad los **datos** (atributos) y el **comportamiento** (métodos) que van juntos.\n\n- Una **clase** es la plantilla; un **objeto** o instancia es cada ejemplar creado con ella. `Producto` es la clase; `teclado = Producto(\"Teclado\", 49.99)` es un objeto.\n- `__init__` es el método que se ejecuta al crear el objeto y le da sus atributos iniciales.\n- `self` es el propio objeto. Todos los métodos lo reciben como primer parámetro.\n\nLos cuatro pilares:\n- **Encapsulación:** el objeto protege su estado. Por convención, un atributo que empieza por `_` es interno.\n- **Herencia:** `class Portatil(Producto):` reutiliza y amplía una clase. `super()` llama al método del padre.\n- **Polimorfismo:** objetos distintos responden al mismo método, cada uno a su manera.\n- **Abstracción:** expones qué hace el objeto y ocultas cómo lo hace.\n\n`__str__` define cómo se muestra el objeto con `print()`. Para clases que solo guardan datos, `@dataclass` genera `__init__` y otros métodos automáticamente.",
+          "example_code": "class CuentaBancaria:\n    def __init__(self, titular: str, saldo: float = 0.0):\n        self.titular = titular\n        self._saldo = saldo\n\n    def ingresar(self, importe: float) -> None:\n        if importe <= 0:\n            raise ValueError(\"El importe debe ser positivo\")\n        self._saldo += importe\n\n    def __str__(self) -> str:\n        return f\"{self.titular}: {self._saldo:.2f} €\"\n\n\ncuenta = CuentaBancaria(\"Ana\")\ncuenta.ingresar(150)\nprint(cuenta)",
+          "exercise": "Amplía `CuentaBancaria` (el saldo se guarda en `self._saldo`):\n1. Añade `retirar(importe)`: resta el importe y lanza `ValueError` si no hay saldo suficiente, sin cambiar el saldo.\n2. Crea la subclase `CuentaAhorro(titular, saldo, interes)` con el método `aplicar_interes()`, que suma al saldo el interés (0.05 = 5 %).\n3. Crea dos cuentas, opera con ellas y muéstralas con `print()`.",
+          "sources": [
+            {
+              "title": "Tutorial oficial — 9. Clases",
+              "url": "https://docs.python.org/es/3/tutorial/classes.html"
+            },
+            {
+              "title": "Módulo dataclasses",
+              "url": "https://docs.python.org/es/3/library/dataclasses.html"
+            },
+            {
+              "title": "Python para todos (PY4E), cap. 14",
+              "url": "https://es.py4e.com/book"
+            }
+          ],
+          "starter": "class CuentaBancaria:\n    def __init__(self, titular: str, saldo: float = 0.0):\n        self.titular = titular\n        self._saldo = saldo\n\n    def ingresar(self, importe: float) -> None:\n        if importe <= 0:\n            raise ValueError(\"El importe debe ser positivo\")\n        self._saldo += importe\n\n    def retirar(self, importe: float) -> None:\n        ...\n\n    def __str__(self) -> str:\n        return f\"{self.titular}: {self._saldo:.2f} €\"\n\n\n# Crea aquí la clase CuentaAhorro\n\n",
+          "exercise_stdin": "",
+          "example_stdin": "",
+          "checks": [
+            {
+              "stdin": "",
+              "test": "c = CuentaBancaria(\"Test\", 100)\nc.retirar(30)\nassert abs(c._saldo - 70) < 1e-9, \"retirar debe restar el importe del saldo\"\ntry:\n    c.retirar(1000)\nexcept ValueError:\n    pass\nelse:\n    raise AssertionError(\"retirar debe lanzar ValueError si no hay saldo suficiente\")\nassert abs(c._saldo - 70) < 1e-9, \"Un retiro fallido no debe cambiar el saldo\"\nassert \"CuentaAhorro\" in dir() or \"CuentaAhorro\" in globals(), \"Falta la clase CuentaAhorro\"\nassert issubclass(CuentaAhorro, CuentaBancaria), \"CuentaAhorro debe heredar de CuentaBancaria\"\na = CuentaAhorro(\"Ahorro\", 1000, 0.05)\na.aplicar_interes()\nassert abs(a._saldo - 1050) < 1e-6, \"aplicar_interes con 1000 € al 5 % debe dejar el saldo en 1050 €\"\na.retirar(50)\nassert abs(a._saldo - 1000) < 1e-6, \"CuentaAhorro debe poder usar retirar() heredado\"\n"
+            }
+          ],
+          "assistant": {
+            "hint": "En retirar, comprueba primero si importe > self._saldo y lanza el error con raise ValueError(...). En CuentaAhorro, llama a super().__init__(titular, saldo) y guarda interes.",
+            "faq": [
+              {
+                "q": "¿Qué es self?",
+                "a": "Es el propio objeto sobre el que se llama el método. En `cuenta.ingresar(10)`, dentro de `ingresar`, `self` es `cuenta`."
+              },
+              {
+                "q": "¿Para qué sirve super()?",
+                "a": "Llama al método de la clase padre. En `__init__` de una subclase, `super().__init__(...)` reutiliza la inicialización del padre en vez de copiarla."
+              }
+            ]
+          },
+          "example_in_browser": true,
+          "quiz": [
+            {
+              "q": "¿Qué es `self` dentro de un método?",
+              "options": [
+                "La clase",
+                "El propio objeto sobre el que se llama el método",
+                "Una palabra reservada obligatoria que no se usa",
+                "El objeto padre"
+              ],
+              "answer": 1,
+              "explain": "En `cuenta.ingresar(10)`, Python llama a `ingresar(cuenta, 10)`: `self` es `cuenta`. Por eso con `self.saldo` accedes a los datos de ese objeto concreto."
+            },
+            {
+              "q": "¿Qué muestra este código?",
+              "options": [
+                "`Guau`",
+                "`...`",
+                "`Animal`",
+                "Un error"
+              ],
+              "answer": 0,
+              "explain": "`Perro` hereda de `Animal` pero **sobrescribe** `sonido()`. Python busca primero el método en la clase del objeto: eso es el polimorfismo.",
+              "code": "class Animal:\n    def sonido(self):\n        return \"...\"\n\nclass Perro(Animal):\n    def sonido(self):\n        return \"Guau\"\n\nprint(Perro().sonido())"
+            },
+            {
+              "q": "¿Para qué sirve `__str__`?",
+              "options": [
+                "Para crear el objeto",
+                "Para definir cómo se muestra el objeto con `print()`",
+                "Para comparar objetos",
+                "Para borrar el objeto"
+              ],
+              "answer": 1,
+              "explain": "`__str__` devuelve el texto que usa `print(objeto)` y `str(objeto)`. Sin él verías algo como `<__main__.Cuenta object at 0x…>`."
+            }
+          ],
+          "challenge": {
+            "title": "Carrito de la compra",
+            "stars": 3,
+            "exercise": "Crea dos clases:\n- `Producto(nombre, precio)`.\n- `Carrito` con:\n  - `agregar(producto, cantidad=1)`: si el producto ya está, suma la cantidad.\n  - `eliminar(nombre)`: quita el producto; lanza `KeyError` si no está.\n  - `total()`: importe total redondeado a 2 decimales.\n  - `len(carrito)`: número total de **unidades** (implementa `__len__`).",
+            "starter": "class Producto:\n    ...\n\n\nclass Carrito:\n    def __init__(self):\n        self.lineas = {}  # nombre -> [producto, cantidad]\n",
+            "checks": [
+              {
+                "stdin": "",
+                "test": "c = Carrito()\nteclado = Producto(\"Teclado\", 49.99)\nraton = Producto(\"Ratón\", 15.5)\nc.agregar(teclado)\nc.agregar(raton, 2)\nc.agregar(teclado)\nassert len(c) == 4, f\"Hay 2 teclados y 2 ratones: len(carrito) debe ser 4 (es {len(c)})\"\nassert c.total() == 130.98, f\"El total debería ser 130.98 y es {c.total()}\"\nc.eliminar(\"Ratón\")\nassert len(c) == 2 and c.total() == 99.98, \"Tras eliminar los ratones quedan 2 teclados (99.98)\"\ntry:\n    c.eliminar(\"Monitor\")\nexcept KeyError:\n    pass\nelse:\n    raise AssertionError(\"eliminar() debe lanzar KeyError si el producto no está en el carrito\")\nassert Carrito().total() == 0, \"Un carrito vacío debe tener total 0\"\n"
+              }
+            ],
+            "hint": "Guarda en self.lineas el producto y su cantidad por nombre. __len__ debe devolver la suma de cantidades, no el número de productos distintos.",
+            "stdin": ""
+          }
+        },
+        {
+          "slug": "excepciones",
+          "title": "Excepciones",
+          "theory": "Una **excepción** es un error que ocurre durante la ejecución: `ValueError`, `ZeroDivisionError`, `KeyError`, `FileNotFoundError`... Si nadie la captura, el programa se detiene y muestra el *traceback*. Léelo de abajo arriba: la última línea dice qué pasó y las de encima, dónde.\n\nPara controlarla se usa `try` / `except`:\n- `try`: el código que puede fallar.\n- `except TipoDeError`: qué hacer si falla. Captura **excepciones concretas**; un `except:` sin tipo esconde errores que deberías ver.\n- `else`: se ejecuta solo si no hubo error.\n- `finally`: se ejecuta siempre, haya error o no. Sirve para liberar recursos.\n\nCon `raise` lanzas tus propias excepciones cuando un dato no es válido. Así fallas pronto y con un mensaje claro.\n\nEl patrón típico es validar la entrada del usuario con un `while True` que solo termina (`break`) cuando la conversión funciona.",
+          "example_code": "def pedir_entero(mensaje: str) -> int:\n    while True:\n        try:\n            return int(input(mensaje))\n        except ValueError:\n            print(\"Eso no es un número entero. Inténtalo de nuevo.\")\n\n\ndividendo = pedir_entero(\"Dividendo: \")\ndivisor = pedir_entero(\"Divisor: \")\ntry:\n    print(f\"Resultado: {dividendo / divisor:.2f}\")\nexcept ZeroDivisionError:\n    print(\"No se puede dividir entre cero\")",
+          "exercise": "Crea la función `pedir_nota()`, que pida una nota hasta que el usuario introduzca un número **entre 0 y 10** y la devuelva como `float`.\n\nDebe mostrar un mensaje distinto en cada caso:\n- Si no es un número (`ValueError` al convertir).\n- Si está fuera de rango: lánzalo tú con `raise ValueError(...)` y captúralo.\n\nAl final del programa, guarda el resultado: `nota = pedir_nota()` y muéstralo. La comprobación introduce `abc`, `15` y `7.5`.",
+          "sources": [
+            {
+              "title": "Tutorial oficial — 8. Errores y excepciones",
+              "url": "https://docs.python.org/es/3/tutorial/errors.html"
+            },
+            {
+              "title": "Excepciones incorporadas",
+              "url": "https://docs.python.org/es/3/library/exceptions.html"
+            }
+          ],
+          "starter": "def pedir_nota() -> float:\n    # Pide la nota en un bucle while hasta que sea válida y devuélvela\n    ...\n\n\nnota = pedir_nota()\nprint(f\"Nota registrada: {nota}\")\n",
+          "exercise_stdin": "abc\n15\n7.5",
+          "example_stdin": "diez\n10\n0",
+          "checks": [
+            {
+              "stdin": "abc\n15\n7.5",
+              "test": "assert nota == 7.5, f\"Con las entradas abc, 15 y 7.5, la nota debería ser 7.5 y es {nota!r}\"\nassert \"raise\" in __code__, \"Lanza tú el error de fuera de rango con raise\"\nassert \"except\" in __code__, \"Captura los errores con try/except\"\nlineas = [l for l in __output__.splitlines() if l.strip()]\nassert len(lineas) >= 3, \"Muestra un mensaje por cada entrada no válida y al final la nota\"\n"
+            },
+            {
+              "stdin": "-1\n10",
+              "test": "assert nota == 10, \"10 es una nota válida (el rango incluye 0 y 10)\"\n"
+            }
+          ],
+          "assistant": {
+            "hint": "Dentro del while: try → convierte con float(input(...)); si no está entre 0 y 10, raise ValueError(\"fuera de rango\"); return nota. En except ValueError, muestra el mensaje del error.",
+            "faq": [
+              {
+                "q": "¿Por qué no usar except: sin tipo?",
+                "a": "Porque captura **todo**, incluso errores de programación que deberías ver. Captura solo lo que esperas (`except ValueError:`) y deja que lo demás falle con su mensaje."
+              },
+              {
+                "q": "¿Cómo leo un traceback?",
+                "a": "De **abajo arriba**: la última línea dice qué error ocurrió; las de encima, en qué línea y dentro de qué función."
+              }
+            ]
+          },
+          "example_in_browser": true,
+          "quiz": [
+            {
+              "q": "¿Qué muestra este código?",
+              "options": [
+                "`a`",
+                "`a b`",
+                "`a c`",
+                "`a b c`"
+              ],
+              "answer": 2,
+              "explain": "`int(\"x\")` lanza `ValueError`, así que **se salta el resto del `try`** (`b` no se imprime), se ejecuta el `except` (`c`)… y el programa continúa.",
+              "code": "try:\n    print(\"a\", end=\" \")\n    int(\"x\")\n    print(\"b\", end=\" \")\nexcept ValueError:\n    print(\"c\")"
+            },
+            {
+              "q": "¿Cuándo se ejecuta el bloque `finally`?",
+              "options": [
+                "Solo si no hay error",
+                "Solo si hay error",
+                "Siempre",
+                "Nunca, está obsoleto"
+              ],
+              "answer": 2,
+              "explain": "`finally` se ejecuta **siempre**, haya error o no. Se usa para liberar recursos (cerrar archivos, conexiones…)."
+            },
+            {
+              "q": "¿Por qué es mala idea usar `except:` sin tipo?",
+              "options": [
+                "Es más lento",
+                "Captura también errores de programación que deberías ver",
+                "No funciona en Python 3",
+                "Obliga a usar `finally`"
+              ],
+              "answer": 1,
+              "explain": "Un `except:` desnudo atrapa **todo** (incluso errores de escritura o Ctrl+C) y esconde los fallos. Captura solo lo que esperas: `except ValueError:`."
+            }
+          ],
+          "challenge": {
+            "title": "Convertidor a prueba de balas",
+            "stars": 2,
+            "exercise": "Escribe `a_numeros(textos)`: recibe una lista de textos y devuelve una lista con los que se pueden convertir a `float`, **ignorando** los demás (sin que el programa se detenga).\n\nEjemplo: `a_numeros([\"3\", \"dos\", \"4.5\", \"\", \"1e3\"])` → `[3.0, 4.5, 1000.0]`.",
+            "starter": "def a_numeros(textos: list[str]) -> list[float]:\n    ...\n\n\nprint(a_numeros([\"3\", \"dos\", \"4.5\", \"\", \"1e3\"]))\n",
+            "checks": [
+              {
+                "stdin": "",
+                "test": "assert a_numeros([\"3\", \"dos\", \"4.5\", \"\", \"1e3\"]) == [3.0, 4.5, 1000.0], \"El ejemplo del enunciado no da [3.0, 4.5, 1000.0]\"\nassert a_numeros([]) == [], \"Con una lista vacía debe devolver []\"\nassert a_numeros([\" 7 \", \"-2\", \"abc\"]) == [7.0, -2.0], \"float() admite espacios alrededor y negativos\"\nassert \"except ValueError\" in __code__, \"Captura el error concreto: except ValueError\"\n"
+              }
+            ],
+            "hint": "Recorre la lista y, dentro de un try, añade float(texto) al resultado; en except ValueError, simplemente continúa.",
+            "stdin": ""
+          }
+        },
+        {
+          "slug": "archivos",
+          "title": "Archivos",
+          "theory": "Para trabajar con archivos se usa `open(ruta, modo, encoding=\"utf-8\")` siempre dentro de un bloque `with`. El `with` cierra el archivo automáticamente aunque ocurra un error.\n\nModos:\n- `\"r\"`: leer (el archivo debe existir).\n- `\"w\"`: escribir. **Borra** el contenido anterior.\n- `\"a\"`: añadir al final.\n\nIndica siempre `encoding=\"utf-8\"`. Sin él, en Windows las tildes y la ñ pueden guardarse mal.\n\nPara leer:\n- `archivo.read()`: todo el contenido de golpe.\n- `for linea in archivo:`: línea a línea, sin cargarlo entero en memoria. Es lo adecuado para archivos grandes.\n\nPara las rutas, `pathlib.Path` es la forma moderna: funciona igual en Windows y Linux. Además, `Path(\"datos.txt\").read_text(encoding=\"utf-8\")` lee un archivo en una sola línea.\n\nPara datos estructurados:\n- `csv`: tablas.\n- `json`: datos anidados. `json.dump()` guarda y `json.load()` carga.",
+          "example_code": "import json\nfrom pathlib import Path\n\ntareas = [{\"titulo\": \"Estudiar Python\", \"hecha\": False}]\nruta = Path(\"tareas.json\")\n\nwith ruta.open(\"w\", encoding=\"utf-8\") as archivo:\n    json.dump(tareas, archivo, ensure_ascii=False, indent=2)\n\nwith ruta.open(encoding=\"utf-8\") as archivo:\n    cargadas = json.load(archivo)\nprint(cargadas)",
+          "exercise": "Crea una mini **agenda de contactos** con dos funciones:\n- `cargar_contactos(ruta)`: devuelve la lista guardada en ese JSON, o `[]` si el archivo no existe (captura `FileNotFoundError`).\n- `guardar_contactos(ruta, contactos)`: guarda la lista en JSON con `encoding=\"utf-8\"`.\n\nDespués, con ellas: carga `contactos.json`, pide un nombre y un teléfono, añade el contacto y guarda. La comprobación introduce `Ana` y `600000000`.",
+          "sources": [
+            {
+              "title": "Tutorial oficial — 7.2 Leyendo y escribiendo archivos",
+              "url": "https://docs.python.org/es/3/tutorial/inputoutput.html#reading-and-writing-files"
+            },
+            {
+              "title": "Módulo pathlib",
+              "url": "https://docs.python.org/es/3/library/pathlib.html"
+            },
+            {
+              "title": "Módulo json",
+              "url": "https://docs.python.org/es/3/library/json.html"
+            },
+            {
+              "title": "Python para todos (PY4E), cap. 7",
+              "url": "https://es.py4e.com/book"
+            }
+          ],
+          "starter": "import json\n\n\ndef cargar_contactos(ruta: str) -> list:\n    ...\n\n\ndef guardar_contactos(ruta: str, contactos: list) -> None:\n    ...\n\n\ncontactos = cargar_contactos(\"contactos.json\")\n# Pide nombre y teléfono, añádelos y guarda\n\n",
+          "exercise_stdin": "Ana\n600000000",
+          "example_stdin": "",
+          "checks": [
+            {
+              "stdin": "Ana\n600000000",
+              "test": "import os, tempfile\nruta = os.path.join(tempfile.mkdtemp(), \"prueba.json\")\nassert cargar_contactos(ruta) == [], \"Si el archivo no existe, cargar_contactos debe devolver []\"\ndatos = [{\"nombre\": \"Ñandú\", \"telefono\": \"600111222\"}]\nguardar_contactos(ruta, datos)\nassert os.path.exists(ruta), \"guardar_contactos debe crear el archivo\"\nassert cargar_contactos(ruta) == datos, \"Lo que guardas debe cargarse exactamente igual (revisa encoding y json)\"\nassert \"with\" in __code__, \"Abre los archivos con with para que se cierren solos\"\nassert any(\"Ana\" in str(c) for c in cargar_contactos(\"contactos.json\")), \"El programa debe guardar el contacto introducido en contactos.json\"\n"
+            }
+          ],
+          "assistant": {
+            "hint": "Lectura: with open(ruta, encoding=\"utf-8\") as f: return json.load(f). Escritura: modo \"w\" y json.dump(contactos, f, ensure_ascii=False).",
+            "faq": [
+              {
+                "q": "¿Por qué usar with para abrir archivos?",
+                "a": "`with` cierra el archivo automáticamente al terminar el bloque, **aunque ocurra un error**. Sin él puedes perder datos o dejar el archivo bloqueado."
+              },
+              {
+                "q": "¿Por qué indicar encoding=\"utf-8\"?",
+                "a": "Sin él, Windows puede usar otra codificación y las tildes o la ñ se guardan mal. Con `utf-8` el archivo se lee igual en cualquier sistema."
+              }
+            ]
+          },
+          "example_in_browser": true,
+          "quiz": [
+            {
+              "q": "¿Qué hace el modo `\"w\"` al abrir un archivo que ya existe?",
+              "options": [
+                "Añade al final",
+                "Lo borra y escribe desde cero",
+                "Da error",
+                "Solo lo lee"
+              ],
+              "answer": 1,
+              "explain": "`\"w\"` **vacía** el archivo antes de escribir. Para añadir al final sin perder lo anterior se usa `\"a\"`."
+            },
+            {
+              "q": "¿Por qué se recomienda `with open(...) as f:`?",
+              "options": [
+                "Es más rápido",
+                "Cierra el archivo automáticamente, aunque haya un error",
+                "Es obligatorio en Python 3",
+                "Permite abrir varios archivos"
+              ],
+              "answer": 1,
+              "explain": "El bloque `with` garantiza que el archivo se cierra al salir, pase lo que pase. Sin él, un error a mitad podría dejarlo abierto y perder datos."
+            },
+            {
+              "q": "¿Qué devuelve `Path(\"fotos/playa.jpg\").suffix`?",
+              "options": [
+                "`\"playa\"`",
+                "`\".jpg\"`",
+                "`\"jpg\"`",
+                "`\"fotos\"`"
+              ],
+              "answer": 1,
+              "explain": "`suffix` es la extensión **con el punto**. `stem` sería `\"playa\"` y `name` sería `\"playa.jpg\"`."
+            }
+          ],
+          "challenge": {
+            "title": "Las palabras más usadas",
+            "stars": 3,
+            "exercise": "Escribe `mas_frecuentes(ruta, n)`: lee un archivo de texto (UTF-8) y devuelve una lista con las `n` palabras más repetidas como tuplas `(palabra, veces)`:\n- En **minúsculas** y sin los signos `.,;:!?¿¡`.\n- Ordenadas de más a menos veces; si empatan, **alfabéticamente**.",
+            "starter": "def mas_frecuentes(ruta: str, n: int) -> list[tuple[str, int]]:\n    ...\n",
+            "checks": [
+              {
+                "stdin": "",
+                "test": "import os, tempfile\nruta = os.path.join(tempfile.mkdtemp(), \"texto.txt\")\nwith open(ruta, \"w\", encoding=\"utf-8\") as f:\n    f.write(\"¡Hola, mundo! El mundo es grande.\\nHola otra vez: el MUNDO.\")\nresultado = mas_frecuentes(ruta, 3)\nassert resultado == [(\"mundo\", 3), (\"el\", 2), (\"hola\", 2)], f\"Resultado esperado [('mundo', 3), ('el', 2), ('hola', 2)] y es {resultado}\"\nassert mas_frecuentes(ruta, 1) == [(\"mundo\", 3)], \"Con n = 1 solo debe devolver la más frecuente\"\n"
+              }
+            ],
+            "hint": "Quita los signos con texto.translate(str.maketrans(\"\", \"\", \".,;:!?¿¡\")), cuenta con un diccionario y ordena con sorted(..., key=lambda par: (-par[1], par[0])).",
+            "stdin": ""
+          }
+        },
+        {
+          "slug": "modulos",
+          "title": "Módulos y paquetes",
+          "theory": "Un **módulo** es un archivo `.py`; un **paquete** es una carpeta de módulos. Sirven para organizar el código: cada archivo, una responsabilidad.\n\nFormas de importar:\n- `import math` y luego `math.sqrt(16)`.\n- `from math import sqrt` y luego `sqrt(16)`.\n- Evita `from modulo import *`: no se sabe de dónde viene cada nombre.\n\n`if __name__ == \"__main__\":` hace que un bloque se ejecute solo cuando lanzas ese archivo directamente, no cuando otro lo importa. Úsalo en todos tus scripts.\n\nLa **biblioteca estándar** ya incluye mucho: `math`, `random`, `datetime`, `pathlib`, `json`, `csv`...\n\nLas librerías externas se instalan con `pip` desde PyPI, siempre dentro de un **entorno virtual** (`venv`), para que cada proyecto tenga sus propias versiones. Sus dependencias se anotan en `requirements.txt`.\n\nEn PyCharm: **Settings → Project → Python Interpreter → +** para instalar paquetes, o `pip install` en la terminal integrada (`Alt+F12`) con el `venv` activo.",
+          "example_code": "# archivo: utilidades.py\ndef formatear_euros(valor: float) -> str:\n    return f\"{valor:,.2f} €\".replace(\",\", \"X\").replace(\".\", \",\").replace(\"X\", \".\")\n\n\nif __name__ == \"__main__\":\n    print(formatear_euros(1234567.891))  # 1.234.567,89 €\n\n# archivo: main.py (en la misma carpeta)\n# from utilidades import formatear_euros\n# print(formatear_euros(49.99))",
+          "exercise": "Separa la **lógica** de la **entrada/salida** de la calculadora de propinas:\n- `calcular_total(importe, porcentaje)`: devuelve el total con propina.\n- `repartir(total, personas)`: devuelve lo que paga cada persona.\n- Todo lo que use `input()` y `print()` va dentro de `if __name__ == \"__main__\":`.\n\nEn PyCharm lo repartirías en `calculos.py` y `main.py`; en la consola va todo en un archivo. La comprobación **importa** tu código: si algo se ejecuta fuera del bloque `__main__`, fallará.",
+          "sources": [
+            {
+              "title": "Tutorial oficial — 6. Módulos",
+              "url": "https://docs.python.org/es/3/tutorial/modules.html"
+            },
+            {
+              "title": "Tutorial oficial — 12. Entornos virtuales y paquetes",
+              "url": "https://docs.python.org/es/3/tutorial/venv.html"
+            }
+          ],
+          "starter": "def calcular_total(importe: float, porcentaje: float) -> float:\n    ...\n\n\ndef repartir(total: float, personas: int) -> float:\n    ...\n\n\nif __name__ == \"__main__\":\n    importe = float(input(\"Importe: \"))\n    # completa el programa\n",
+          "exercise_stdin": "100\n10\n4",
+          "example_stdin": "",
+          "checks": [
+            {
+              "stdin": "",
+              "test": "assert abs(calcular_total(100, 10) - 110) < 1e-9, \"calcular_total(100, 10) debe devolver 110\"\nassert abs(calcular_total(59.9, 15) - 68.885) < 1e-9, \"calcular_total(59.9, 15) debe devolver 68.885\"\nassert abs(repartir(110, 4) - 27.5) < 1e-9, \"repartir(110, 4) debe devolver 27.5\"\nassert 'if __name__ == \"__main__\"' in __code__ or \"if __name__ == '__main__'\" in __code__, \"Falta el bloque if __name__ == \\\"__main__\\\":\"\nassert __output__ == \"\", \"Al importar tu código no debe mostrarse nada: mete los print() e input() dentro del bloque __main__\"\n"
+            }
+          ],
+          "assistant": {
+            "hint": "Las funciones solo calculan y devuelven con return. Las llamadas a input() y print() van todas dentro del if __name__ == \"__main__\":.",
+            "faq": [
+              {
+                "q": "¿Para qué sirve if __name__ == \"__main__\"?",
+                "a": "Ese bloque solo se ejecuta cuando lanzas el archivo directamente. Si otro archivo lo **importa**, no se ejecuta, así puedes reutilizar sus funciones sin efectos secundarios."
+              },
+              {
+                "q": "¿Qué es un entorno virtual?",
+                "a": "Una instalación de Python aislada para cada proyecto (`.venv`), con sus propias librerías y versiones. Evita que un proyecto rompa a otro al actualizar paquetes."
+              }
+            ]
+          },
+          "example_in_browser": true,
+          "quiz": [
+            {
+              "q": "Si `utilidades.py` se importa desde otro archivo, ¿qué vale `__name__` dentro de él?",
+              "options": [
+                "`\"__main__\"`",
+                "`\"utilidades\"`",
+                "`None`",
+                "`\"import\"`"
+              ],
+              "answer": 1,
+              "explain": "Al importarlo, `__name__` es el nombre del módulo (`\"utilidades\"`). Solo vale `\"__main__\"` cuando ejecutas ese archivo directamente."
+            },
+            {
+              "q": "¿Por qué conviene evitar `from modulo import *`?",
+              "options": [
+                "Es más lento",
+                "No se sabe de dónde viene cada nombre y puede pisar variables",
+                "Solo funciona con la biblioteca estándar",
+                "No importa nada"
+              ],
+              "answer": 1,
+              "explain": "Importa todos los nombres a ciegas: puede sobrescribir los tuyos y hace el código difícil de leer. Mejor `import modulo` o importar nombres concretos."
+            },
+            {
+              "q": "¿Para qué sirve un entorno virtual (`venv`)?",
+              "options": [
+                "Para ejecutar Python más rápido",
+                "Para que cada proyecto tenga sus propias librerías y versiones",
+                "Para programar sin Internet",
+                "Para usar varias versiones de Windows"
+              ],
+              "answer": 1,
+              "explain": "Cada proyecto aísla sus dependencias: actualizar una librería en un proyecto no rompe otro. Las dependencias se anotan en `requirements.txt`."
+            }
+          ],
+          "challenge": {
+            "title": "Tu propio módulo de estadística",
+            "stars": 2,
+            "exercise": "Crea las funciones `media(datos)`, `mediana(datos)` y `moda(datos)` **sin usar el módulo `statistics`**:\n- Las tres lanzan `ValueError` si la lista está vacía.\n- La mediana con cantidad par de datos es la media de los dos centrales.\n- Si hay varias modas, devuelve la menor.\n\nDeja las pruebas dentro de `if __name__ == \"__main__\":`.",
+            "starter": "def media(datos: list[float]) -> float:\n    ...\n\n\ndef mediana(datos: list[float]) -> float:\n    ...\n\n\ndef moda(datos: list[float]) -> float:\n    ...\n\n\nif __name__ == \"__main__\":\n    print(media([1, 2, 3]), mediana([3, 1, 2]), moda([1, 2, 2]))\n",
+            "checks": [
+              {
+                "stdin": "",
+                "test": "assert \"statistics\" not in __code__, \"Resuélvelo sin el módulo statistics\"\nassert media([1, 2, 3, 4]) == 2.5 and mediana([5, 1, 3]) == 3, \"media o mediana fallan con casos simples\"\nassert mediana([4, 1, 3, 2]) == 2.5, \"Con cantidad par, la mediana es la media de los dos centrales (sin olvidar ordenar)\"\nassert moda([3, 1, 3, 1, 2]) == 1, \"Si hay empate de modas (1 y 3), devuelve la menor\"\nfor funcion in (media, mediana, moda):\n    try:\n        funcion([])\n    except ValueError:\n        pass\n    else:\n        raise AssertionError(f\"{funcion.__name__}([]) debe lanzar ValueError\")\nassert __output__ == \"\", \"Las pruebas deben ir dentro del bloque if __name__ == \\\"__main__\\\":\"\n"
+              }
+            ],
+            "hint": "Para la mediana, ordena con sorted(). Para la moda, cuenta con un diccionario y elige min() entre las que tienen el máximo de apariciones.",
+            "stdin": ""
+          }
+        }
+      ]
+    },
+    {
+      "slug": "especializacion",
+      "title": "Especialización",
+      "lessons": [
+        {
+          "slug": "pytest",
+          "title": "Testing con pytest",
+          "theory": "Un **test** es código que comprueba automáticamente que otro código funciona. Te permite cambiar cosas sin miedo: si algo se rompe, un test falla y te avisa.\n\n**pytest** es la herramienta estándar de facto:\n- Los archivos de test se llaman `test_*.py`.\n- Las funciones de test empiezan por `test_`.\n- Se comprueba con `assert`: `assert sumar(2, 3) == 5`.\n\nEstructura recomendada, **AAA**:\n- **Arrange:** preparar los datos.\n- **Act:** ejecutar la función.\n- **Assert:** comprobar el resultado.\n\nBuenas prácticas:\n- Prueba el caso normal, los límites (0, vacío, negativos) y los errores. Para los errores: `with pytest.raises(ValueError):`.\n- Cada test debe ser independiente de los demás.\n- Las funciones puras, sin `input()` ni `print()`, son las más fáciles de probar. Otro motivo más para separar lógica y entrada/salida.\n\nEn PyCharm: instala `pytest` en el `venv` y selecciona **Settings → Tools → Python Integrated Tools → Default test runner: pytest**. Aparecerá un ▶ verde junto a cada test.",
+          "example_code": "# archivo: test_calculos.py\nimport pytest\n\n\ndef dividir(a: float, b: float) -> float:\n    if b == 0:\n        raise ValueError(\"División entre cero\")\n    return a / b\n\n\ndef test_division_normal():\n    assert dividir(10, 4) == 2.5\n\n\ndef test_division_entre_cero_lanza_error():\n    with pytest.raises(ValueError):\n        dividir(1, 0)",
+          "exercise": "Escribe **al menos 3 funciones de test** (`test_...`) para las funciones de la plantilla, usando solo `assert`.\n\nLa comprobación hace dos cosas:\n1. Tus tests deben **pasar** con las funciones correctas.\n2. Tus tests deben **detectar errores**: sustituye cada función por una versión con un fallo y al menos uno de tus tests tiene que fallar.\n\nEn la consola del navegador no está instalado pytest; en PyCharm ejecutarías estos mismos tests con `pytest -v`.",
+          "sources": [
+            {
+              "title": "Documentación de pytest — Get started",
+              "url": "https://docs.pytest.org/en/stable/getting-started.html"
+            },
+            {
+              "title": "Módulo unittest (alternativa de la biblioteca estándar)",
+              "url": "https://docs.python.org/es/3/library/unittest.html"
+            }
+          ],
+          "starter": "def es_par(numero: int) -> bool:\n    return numero % 2 == 0\n\n\ndef celsius_a_fahrenheit(grados: float) -> float:\n    return grados * 9 / 5 + 32\n\n\ndef maximo(a: float, b: float, c: float) -> float:\n    if a >= b and a >= c:\n        return a\n    if b >= c:\n        return b\n    return c\n\n\ndef test_es_par():\n    assert es_par(4)\n\n\n# Escribe aquí más tests: incluye casos límite (0, negativos, valores repetidos)\n",
+          "exercise_stdin": "",
+          "example_stdin": "",
+          "checks": [
+            {
+              "stdin": "",
+              "test": "tests = [v for k, v in list(globals().items()) if k.startswith(\"test_\") and callable(v)]\nassert len(tests) >= 3, f\"Escribe al menos 3 funciones test_ (tienes {len(tests)})\"\nfor t in tests:\n    t()\noriginales = {\"es_par\": es_par, \"celsius_a_fahrenheit\": celsius_a_fahrenheit, \"maximo\": maximo}\nmutantes = {\n    \"es_par\": lambda n: n % 2 == 1,\n    \"celsius_a_fahrenheit\": lambda c: c * 9 / 5,\n    \"maximo\": lambda a, b, c: a if a > b else b,\n}\nfor nombre, mutante in mutantes.items():\n    globals()[nombre] = mutante\n    detectado = False\n    for t in tests:\n        try:\n            t()\n        except Exception:\n            detectado = True\n    globals()[nombre] = originales[nombre]\n    assert detectado, f\"Ningún test detecta un fallo en {nombre}: añade asserts que lo comprueben mejor\"\n"
+            }
+          ],
+          "assistant": {
+            "hint": "Un buen test prueba el caso normal y los límites. Para maximo, prueba que el mayor esté en cada una de las tres posiciones.",
+            "faq": [
+              {
+                "q": "¿Qué es un caso límite?",
+                "a": "Un valor en el borde de lo esperado: 0, números negativos, textos vacíos, listas de un elemento, valores repetidos... Es donde suelen esconderse los errores."
+              },
+              {
+                "q": "¿Por qué separar la lógica de input() y print()?",
+                "a": "Las funciones que solo reciben datos y devuelven un resultado se prueban con un `assert`. Si piden datos o imprimen, probarlas es mucho más difícil."
+              }
+            ]
+          },
+          "example_in_browser": false,
+          "quiz": [
+            {
+              "q": "¿Qué nombre debe tener una función para que pytest la detecte como test?",
+              "options": [
+                "`prueba_suma`",
+                "`test_suma`",
+                "`suma_test`",
+                "`TestSuma`"
+              ],
+              "answer": 1,
+              "explain": "pytest busca funciones que **empiezan** por `test_` dentro de archivos `test_*.py`."
+            },
+            {
+              "q": "¿Qué es un «caso límite»?",
+              "options": [
+                "Un test muy largo",
+                "Un valor en el borde de lo esperado (0, vacío, negativos…)",
+                "Un test que siempre falla",
+                "El último test del archivo"
+              ],
+              "answer": 1,
+              "explain": "Es donde suelen esconderse los errores: listas vacías, 0, números negativos, valores repetidos, textos con espacios…"
+            },
+            {
+              "q": "¿Qué hace `with pytest.raises(ValueError):`?",
+              "options": [
+                "Lanza un ValueError",
+                "El test pasa solo si el código de dentro lanza ValueError",
+                "Ignora los ValueError",
+                "Convierte el error en aviso"
+              ],
+              "answer": 1,
+              "explain": "Sirve para comprobar que tu código **falla como debe**: si dentro no se lanza `ValueError`, el test falla."
+            }
+          ],
+          "challenge": {
+            "title": "Cazamutantes de la mediana",
+            "stars": 2,
+            "exercise": "Escribe **al menos 3 tests** para la función `mediana` de la plantilla. Tus tests deben detectar estas versiones erróneas:\n- una que **no ordena** los datos,\n- una que con cantidad **par** devuelve solo un valor central,\n- una que falla con **un solo** elemento.",
+            "starter": "def mediana(datos):\n    ordenados = sorted(datos)\n    mitad = len(ordenados) // 2\n    if len(ordenados) % 2 == 0:\n        return (ordenados[mitad - 1] + ordenados[mitad]) / 2\n    return ordenados[mitad]\n\n\ndef test_mediana_impar():\n    assert mediana([1, 2, 3]) == 2\n",
+            "checks": [
+              {
+                "stdin": "",
+                "test": "tests = [v for k, v in list(globals().items()) if k.startswith(\"test_\") and callable(v)]\nassert len(tests) >= 3, f\"Escribe al menos 3 funciones test_ (tienes {len(tests)})\"\nfor t in tests:\n    t()\noriginal = mediana\ndef sin_ordenar(d):\n    m = len(d) // 2\n    return (d[m - 1] + d[m]) / 2 if len(d) % 2 == 0 else d[m]\ndef par_mal(d):\n    o = sorted(d)\n    return o[len(o) // 2]\ndef uno_mal(d):\n    if len(d) == 1:\n        return 0\n    return original(d)\nfor nombre, mutante in {\"no ordena\": sin_ordenar, \"par\": par_mal, \"un elemento\": uno_mal}.items():\n    globals()[\"mediana\"] = mutante\n    detectado = False\n    for t in tests:\n        try:\n            t()\n        except Exception:\n            detectado = True\n    globals()[\"mediana\"] = original\n    assert detectado, f\"Ningún test detecta el mutante «{nombre}»: añade un caso que lo pruebe\"\n"
+              }
+            ],
+            "hint": "Necesitas un caso desordenado ([3, 1, 2]), uno con cantidad par ([1, 2, 3, 4] → 2.5) y uno de un solo elemento ([7] → 7).",
+            "stdin": ""
+          }
+        },
+        {
+          "slug": "automatizacion",
+          "title": "Automatización",
+          "theory": "Uno de los usos más rentables de Python es automatizar tareas repetitivas: ordenar archivos, renombrar lotes, procesar hojas de cálculo, generar informes...\n\nHerramientas de la biblioteca estándar:\n- `pathlib`: recorrer carpetas. `Path.iterdir()`, `.glob(\"*.pdf\")`, `.suffix` y `.stem`.\n- `shutil`: copiar y mover archivos (`shutil.move`, `shutil.copy2`).\n- `datetime`: fechas en nombres de archivos e informes.\n- `csv`: leer y escribir tablas compatibles con Excel.\n- `argparse`: convertir tu script en un comando con opciones.\n\nReglas de oro de un script de automatización:\n1. **Modo simulación primero** (*dry-run*): muestra qué haría antes de hacerlo.\n2. **Nunca sobrescribas** sin comprobar si el destino existe.\n3. **Registra** lo que hace, con `print` o el módulo `logging`.\n4. Prueba en una **carpeta de copia**, nunca en tus archivos reales la primera vez.",
+          "example_code": "from pathlib import Path\nimport shutil\n\nCARPETA = Path(\"descargas_demo\")  # en tu PC: Path.home() / \"Downloads\"\nCARPETA.mkdir(exist_ok=True)\nfor nombre in (\"factura.pdf\", \"foto.jpg\", \"notas.txt\"):\n    (CARPETA / nombre).touch()  # archivos de ejemplo\n\nDESTINOS = {\".pdf\": \"Documentos\", \".jpg\": \"Imagenes\", \".png\": \"Imagenes\"}\nSIMULAR = True  # cambia a False solo cuando la simulación sea correcta\n\nfor archivo in CARPETA.iterdir():\n    subcarpeta = DESTINOS.get(archivo.suffix.lower())\n    if archivo.is_file() and subcarpeta:\n        destino = CARPETA / subcarpeta / archivo.name\n        print(f\"{archivo.name} -> {subcarpeta}/\")\n        if not SIMULAR and not destino.exists():\n            destino.parent.mkdir(exist_ok=True)\n            shutil.move(archivo, destino)",
+          "exercise": "Crea `informe_csv(carpeta, salida)`: genera un CSV con una fila por cada **archivo** de `carpeta` y estas columnas exactas:\n\n`nombre`, `extension`, `tamano_kb`, `modificado`\n\nPistas: `archivo.stat().st_size` (bytes) y `datetime.fromtimestamp(archivo.stat().st_mtime)`. Usa `csv.DictWriter` con `newline=\"\"` y `encoding=\"utf-8\"`.",
+          "sources": [
+            {
+              "title": "Módulo pathlib",
+              "url": "https://docs.python.org/es/3/library/pathlib.html"
+            },
+            {
+              "title": "Módulo shutil",
+              "url": "https://docs.python.org/es/3/library/shutil.html"
+            },
+            {
+              "title": "Módulo csv",
+              "url": "https://docs.python.org/es/3/library/csv.html"
+            },
+            {
+              "title": "Automate the Boring Stuff with Python (inglés, gratis online)",
+              "url": "https://automatetheboringstuff.com/"
+            }
+          ],
+          "starter": "import csv\nfrom datetime import datetime\nfrom pathlib import Path\n\n\ndef informe_csv(carpeta: str, salida: str) -> None:\n    ...\n",
+          "exercise_stdin": "",
+          "example_stdin": "",
+          "checks": [
+            {
+              "stdin": "",
+              "test": "import csv, tempfile\nfrom pathlib import Path\nbase = Path(tempfile.mkdtemp())\n(base / \"factura.pdf\").write_bytes(b\"x\" * 2048)\n(base / \"notas.txt\").write_text(\"hola\", encoding=\"utf-8\")\n(base / \"subcarpeta\").mkdir()\nsalida = base / \"informe.csv\"\ninforme_csv(str(base), str(salida))\nassert salida.exists(), \"informe_csv debe crear el archivo de salida\"\nwith salida.open(encoding=\"utf-8\", newline=\"\") as f:\n    filas = list(csv.DictReader(f))\nassert filas and list(filas[0].keys()) == [\"nombre\", \"extension\", \"tamano_kb\", \"modificado\"], \"Las columnas deben ser exactamente: nombre, extension, tamano_kb, modificado\"\nnombres = sorted(f[\"nombre\"] for f in filas)\nassert nombres == [\"factura.pdf\", \"notas.txt\"], f\"Debe haber una fila por archivo (sin carpetas ni el propio informe); hay: {nombres}\"\nfactura = next(f for f in filas if f[\"nombre\"] == \"factura.pdf\")\nassert factura[\"extension\"] == \".pdf\", \"La extensión de factura.pdf debe ser .pdf\"\nassert abs(float(factura[\"tamano_kb\"]) - 2.0) < 0.01, \"factura.pdf ocupa 2048 bytes: tamano_kb debe ser 2.0\"\n"
+            }
+          ],
+          "assistant": {
+            "hint": "Recorre Path(carpeta).iterdir(), quédate solo con archivo.is_file() y excluye el propio archivo de salida. KB = bytes / 1024.",
+            "faq": [
+              {
+                "q": "¿Por qué simular antes de mover archivos?",
+                "a": "Porque un script que mueve o borra archivos puede hacer mucho daño en segundos. Primero muestra qué **haría** (*dry-run*) y solo después ejecútalo de verdad."
+              },
+              {
+                "q": "¿Por qué newline=\"\" al escribir un CSV?",
+                "a": "El módulo `csv` gestiona él mismo los saltos de línea. Sin `newline=\"\"`, en Windows aparecen líneas en blanco entre filas."
+              }
+            ]
+          },
+          "example_in_browser": true,
+          "quiz": [
+            {
+              "q": "¿Qué es un *dry-run* (modo simulación)?",
+              "options": [
+                "Ejecutar sin Internet",
+                "Mostrar lo que el script haría sin hacerlo de verdad",
+                "Ejecutarlo dos veces",
+                "Borrar archivos temporales"
+              ],
+              "answer": 1,
+              "explain": "Antes de mover o borrar archivos, se muestra qué **pasaría**. Así detectas errores sin consecuencias."
+            },
+            {
+              "q": "¿Qué devuelve `Path(\"informe.pdf\").stem`?",
+              "options": [
+                "`\"informe.pdf\"`",
+                "`\".pdf\"`",
+                "`\"informe\"`",
+                "`\"pdf\"`"
+              ],
+              "answer": 2,
+              "explain": "`stem` es el nombre **sin** la extensión. Muy útil para renombrar: `f\"{archivo.stem}_copia{archivo.suffix}\"`."
+            },
+            {
+              "q": "¿Por qué se escribe `newline=\"\"` al crear un CSV?",
+              "options": [
+                "Para que no tenga saltos de línea",
+                "Para evitar líneas en blanco extra entre filas en Windows",
+                "Para que se abra en Excel",
+                "Es obligatorio en todos los archivos"
+              ],
+              "answer": 1,
+              "explain": "El módulo `csv` gestiona él mismo los saltos de línea; sin `newline=\"\"`, en Windows aparece una línea vacía entre cada fila."
+            }
+          ],
+          "challenge": {
+            "title": "Renombrador de fotos",
+            "stars": 3,
+            "exercise": "Escribe `renombrar_fotos(carpeta, prefijo, simular=True)`:\n- Toma los archivos `.jpg` (en mayúsculas o minúsculas) de la carpeta, **ordenados por nombre**, excepto los que ya empiezan por `prefijo_` (así se puede ejecutar varias veces sin estropear nada).\n- Les asigna `prefijo_001.jpg`, `prefijo_002.jpg`…\n- Devuelve la lista de parejas `(nombre_viejo, nombre_nuevo)`.\n- Con `simular=True` **no toca nada**. Con `simular=False` renombra, pero **nunca sobrescribe** un archivo existente (lo salta).",
+            "starter": "from pathlib import Path\n\n\ndef renombrar_fotos(carpeta: str, prefijo: str, simular: bool = True) -> list[tuple[str, str]]:\n    ...\n",
+            "checks": [
+              {
+                "stdin": "",
+                "test": "import tempfile\nfrom pathlib import Path\nbase = Path(tempfile.mkdtemp())\nfor nombre in (\"b.jpg\", \"a.JPG\", \"notas.txt\", \"c.jpg\"):\n    (base / nombre).write_text(nombre)\nplan = renombrar_fotos(str(base), \"viaje\")\nassert plan == [(\"a.JPG\", \"viaje_001.jpg\"), (\"b.jpg\", \"viaje_002.jpg\"), (\"c.jpg\", \"viaje_003.jpg\")], f\"El plan no es correcto: {plan}\"\nassert sorted(p.name for p in base.iterdir()) == [\"a.JPG\", \"b.jpg\", \"c.jpg\", \"notas.txt\"], \"En modo simulación no se debe renombrar nada\"\n(base / \"viaje_002.jpg\").write_text(\"ya existía\")\nrenombrar_fotos(str(base), \"viaje\", simular=False)\nnombres = sorted(p.name for p in base.iterdir())\nassert \"viaje_001.jpg\" in nombres and \"viaje_003.jpg\" in nombres, \"Con simular=False deben renombrarse los archivos\"\nassert (base / \"viaje_002.jpg\").read_text() == \"ya existía\", \"¡Has sobrescrito un archivo existente!\"\nassert \"b.jpg\" in nombres, \"Si el destino existe, el archivo original debe quedarse sin renombrar\"\n"
+              }
+            ],
+            "hint": "Filtra con p.suffix.lower() == \".jpg\" y not p.name.startswith(f\"{prefijo}_\"), y ordena con sorted(). f\"{prefijo}_{i:03d}.jpg\" rellena con ceros.",
+            "stdin": ""
+          }
+        },
+        {
+          "slug": "flask",
+          "title": "APIs web con Flask",
+          "theory": "Una **API web** es un programa que responde a peticiones HTTP, normalmente con datos en formato **JSON**. Es lo que conecta un frontend, como este dashboard, con un backend.\n\nConceptos HTTP clave:\n- **Métodos:** `GET` (leer), `POST` (crear), `PUT`/`PATCH` (modificar) y `DELETE` (borrar).\n- **Códigos de estado:** `200` OK, `201` creado, `400` petición incorrecta, `404` no encontrado y `500` error del servidor.\n- **Ruta:** la URL del recurso, como `/api/tareas/3`.\n\n**Flask** es un microframework: mínimo y fácil de entender, ideal para aprender. Defines rutas con el decorador `@app.get(...)` y devuelves diccionarios, que Flask convierte a JSON automáticamente.\n\nAlternativa: el backend de este mismo proyecto usa **FastAPI**. Es muy parecido, pero además valida los datos con *type hints* y genera documentación automática en `/docs`.\n\nSeguridad desde el principio: valida toda entrada, no muestres errores internos al usuario y guarda los secretos en variables de entorno, nunca en el código.",
+          "example_code": "# pip install flask\nfrom flask import Flask, abort\n\napp = Flask(__name__)\nTAREAS = {1: {\"id\": 1, \"titulo\": \"Estudiar Python\", \"hecha\": False}}\n\n\n@app.get(\"/api/tareas\")\ndef listar_tareas():\n    return list(TAREAS.values())\n\n\n@app.get(\"/api/tareas/<int:tarea_id>\")\ndef obtener_tarea(tarea_id: int):\n    if tarea_id not in TAREAS:\n        abort(404)\n    return TAREAS[tarea_id]\n\n\nif __name__ == \"__main__\":\n    app.run(debug=True)  # http://127.0.0.1:5000/api/tareas",
+          "exercise": "La lógica de un endpoint se puede separar del framework y probarse sin servidor. Crea `crear_tarea(tareas, datos)`:\n- `tareas`: diccionario `{id: tarea}` con las tareas existentes.\n- `datos`: el JSON recibido.\n- Si falta `titulo` o está vacío, devuelve `({\"error\": \"...\"}, 400)`.\n- Si no, crea la tarea con `id` siguiente al mayor existente, `titulo` sin espacios sobrantes y `hecha: False`, la guarda en `tareas` y devuelve `(tarea, 201)`.\n\nDespués, en PyCharm, conéctala a Flask con `@app.post(\"/api/tareas\")`.",
+          "sources": [
+            {
+              "title": "Flask — Quickstart",
+              "url": "https://flask.palletsprojects.com/en/stable/quickstart/"
+            },
+            {
+              "title": "MDN — Códigos de estado HTTP",
+              "url": "https://developer.mozilla.org/es/docs/Web/HTTP/Status"
+            },
+            {
+              "title": "FastAPI — Tutorial",
+              "url": "https://fastapi.tiangolo.com/es/tutorial/"
+            }
+          ],
+          "starter": "def crear_tarea(tareas: dict, datos: dict) -> tuple[dict, int]:\n    ...\n\n\nTAREAS = {1: {\"id\": 1, \"titulo\": \"Estudiar Python\", \"hecha\": False}}\nprint(crear_tarea(TAREAS, {\"titulo\": \"Practicar Flask\"}))\nprint(crear_tarea(TAREAS, {}))\n",
+          "exercise_stdin": "",
+          "example_stdin": "",
+          "checks": [
+            {
+              "stdin": "",
+              "test": "tareas = {1: {\"id\": 1, \"titulo\": \"A\", \"hecha\": False}, 5: {\"id\": 5, \"titulo\": \"B\", \"hecha\": True}}\ncuerpo, codigo = crear_tarea(tareas, {\"titulo\": \"  Nueva  \"})\nassert codigo == 201, \"Si los datos son válidos, el código debe ser 201\"\nassert cuerpo == {\"id\": 6, \"titulo\": \"Nueva\", \"hecha\": False}, f\"La tarea creada debería ser id 6, título «Nueva» y hecha False; es {cuerpo}\"\nassert tareas.get(6) == cuerpo, \"La tarea nueva debe guardarse en el diccionario tareas\"\nfor malos in ({}, {\"titulo\": \"\"}, {\"titulo\": \"   \"}):\n    cuerpo, codigo = crear_tarea(tareas, malos)\n    assert codigo == 400, f\"Con {malos} el código debe ser 400\"\n    assert \"error\" in cuerpo, \"La respuesta de error debe incluir la clave error\"\nassert len(tareas) == 3, \"Una petición inválida no debe crear tareas\"\ncuerpo, codigo = crear_tarea({}, {\"titulo\": \"Primera\"})\nassert cuerpo[\"id\"] == 1, \"Si no hay tareas, el primer id debe ser 1\"\n"
+            }
+          ],
+          "assistant": {
+            "hint": "datos.get(\"titulo\", \"\").strip() te da el título limpio. El nuevo id es max(tareas, default=0) + 1.",
+            "faq": [
+              {
+                "q": "¿Qué significa cada código HTTP?",
+                "a": "`200` OK, `201` recurso creado, `400` petición incorrecta (datos no válidos), `401` sin autenticar, `404` no encontrado, `500` error del servidor."
+              },
+              {
+                "q": "¿Flask o FastAPI?",
+                "a": "Flask es mínimo y muy fácil para empezar. FastAPI (el que usa el backend de este proyecto) valida los datos con type hints y genera documentación automática en `/docs`."
+              }
+            ]
+          },
+          "example_in_browser": false,
+          "quiz": [
+            {
+              "q": "¿Qué código HTTP corresponde a «recurso creado»?",
+              "options": [
+                "`200`",
+                "`201`",
+                "`400`",
+                "`404`"
+              ],
+              "answer": 1,
+              "explain": "`201 Created` indica que la petición ha creado algo nuevo (típico de `POST`). `200` es un OK genérico."
+            },
+            {
+              "q": "¿Qué método HTTP se usa para **leer** datos?",
+              "options": [
+                "`POST`",
+                "`GET`",
+                "`DELETE`",
+                "`PUT`"
+              ],
+              "answer": 1,
+              "explain": "`GET` lee sin modificar nada. `POST` crea, `PUT`/`PATCH` modifican y `DELETE` borra."
+            },
+            {
+              "q": "Si el cliente envía un JSON sin un campo obligatorio, ¿qué código es el adecuado?",
+              "options": [
+                "`200`",
+                "`404`",
+                "`400`",
+                "`500`"
+              ],
+              "answer": 2,
+              "explain": "`400 Bad Request`: la petición es incorrecta por culpa del cliente. `500` sería un fallo del servidor, que nunca debería provocar un dato mal enviado."
+            }
+          ],
+          "challenge": {
+            "title": "Actualizar una tarea",
+            "stars": 2,
+            "exercise": "Crea `actualizar_tarea(tareas, tarea_id, datos)` (la lógica de un `PATCH /api/tareas/<id>`):\n- Si la tarea no existe → `({\"error\": ...}, 404)`.\n- Si viene `titulo` vacío o `hecha` que no es booleano → `({\"error\": ...}, 400)` **sin cambiar nada**.\n- Si no, actualiza solo los campos recibidos (`titulo` sin espacios sobrantes, `hecha`) y devuelve `(tarea, 200)`.",
+            "starter": "def actualizar_tarea(tareas: dict, tarea_id: int, datos: dict) -> tuple[dict, int]:\n    ...\n",
+            "checks": [
+              {
+                "stdin": "",
+                "test": "tareas = {1: {\"id\": 1, \"titulo\": \"Estudiar\", \"hecha\": False}}\ncuerpo, codigo = actualizar_tarea(tareas, 99, {\"hecha\": True})\nassert codigo == 404 and \"error\" in cuerpo, \"Si la tarea no existe: 404 con clave error\"\nfor malos in ({\"titulo\": \"  \"}, {\"hecha\": \"sí\"}, {\"hecha\": 1}):\n    cuerpo, codigo = actualizar_tarea(tareas, 1, malos)\n    assert codigo == 400, f\"Con {malos} el código debe ser 400\"\nassert tareas[1] == {\"id\": 1, \"titulo\": \"Estudiar\", \"hecha\": False}, \"Una petición inválida no debe cambiar la tarea\"\ncuerpo, codigo = actualizar_tarea(tareas, 1, {\"hecha\": True})\nassert codigo == 200 and cuerpo == {\"id\": 1, \"titulo\": \"Estudiar\", \"hecha\": True}, \"Solo debe cambiar hecha\"\ncuerpo, codigo = actualizar_tarea(tareas, 1, {\"titulo\": \"  Repasar  \"})\nassert cuerpo[\"titulo\"] == \"Repasar\" and cuerpo[\"hecha\"] is True, \"Solo debe cambiar el título (sin espacios sobrantes)\"\n"
+              }
+            ],
+            "hint": "Valida TODO antes de modificar nada. isinstance(valor, bool) distingue True de 1.",
+            "stdin": ""
+          }
+        }
+      ]
+    }
+  ]
+}

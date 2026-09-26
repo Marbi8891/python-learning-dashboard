@@ -1,0 +1,36 @@
+# Blueprint de Render: backend (Docker) + PostgreSQL.
+# Uso: render.com → New → Blueprint → elige este repositorio. Guía: docs/DEPLOY.md
+# VERIFY: revisa en render.com las condiciones actuales de los planes gratuitos
+# (el servicio web gratuito se suspende sin uso y la base de datos gratuita caduca).
+services:
+  - type: web
+    name: pld-api
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: .
+    plan: free
+    healthCheckPath: /api/health
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: pld-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CORS_ORIGINS
+        value: '["https://marbi8891.github.io"]'
+      - key: FRONTEND_URL
+        value: https://marbi8891.github.io/python-learning-dashboard
+      # Recuperación de contraseña por email: rellénalos en el panel de Render
+      - key: SMTP_HOST
+        sync: false
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASSWORD
+        sync: false
+      - key: SMTP_FROM
+        sync: false
+
+databases:
+  - name: pld-db
+    plan: free
