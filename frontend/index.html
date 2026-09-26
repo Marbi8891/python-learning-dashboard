@@ -4,170 +4,225 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Python Learning Dashboard</title>
-  <meta name="description" content="Dashboard interactivo para aprender Python paso a paso, de principiante a avanzado.">
+  <meta name="description" content="Dashboard interactivo para aprender Python paso a paso, de principiante a avanzado, con consola y ejercicios corregidos.">
   <meta name="theme-color" content="#0b1220">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-
+  <link rel="stylesheet" href="vendor/highlight/atom-one-dark.min.css">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/sidebar.css">
+  <link rel="stylesheet" href="css/content.css">
+  <link rel="stylesheet" href="css/console.css">
+  <link rel="stylesheet" href="css/widgets.css">
+  <link rel="stylesheet" href="css/game.css">
+
+  <script src="config.js"></script>
+  <script type="module" src="js/app.js"></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Saltar al contenido</a>
 
+  <!-- ============ BARRA SUPERIOR (solo móvil) ============ -->
+  <header class="topbar">
+    <button class="topbar__menu" id="menu-toggle" type="button" aria-controls="sidebar" aria-expanded="false">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <span>Lecciones</span>
+    </button>
+    <span class="topbar__brand">Python Learning</span>
+  </header>
+  <div class="sidebar-backdrop" id="sidebar-backdrop" aria-hidden="true"></div>
+
   <div class="app">
     <!-- ============ BARRA LATERAL: RUTA DE APRENDIZAJE ============ -->
-    <aside class="sidebar">
+    <aside class="sidebar" id="sidebar">
       <header class="sidebar__header">
         <div class="brand">
           <span class="brand__logo" aria-hidden="true">Py</span>
           <span class="brand__name">Python Learning</span>
         </div>
 
-        <div class="progress"
+        <button class="account-button" id="account-button" type="button" hidden>
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <span id="account-label">Iniciar sesión</span>
+        </button>
+
+        <div class="progress" id="progress"
              role="progressbar"
-             aria-label="Progreso del módulo Fundamentos"
-             aria-valuemin="0" aria-valuemax="100" aria-valuenow="75"
-             style="--progress: 75">
+             aria-label="Progreso del módulo actual"
+             aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"
+             style="--progress: 0">
           <svg class="progress__ring" viewBox="0 0 36 36" aria-hidden="true">
             <circle class="progress__track" cx="18" cy="18" r="15.9" pathLength="100" />
             <circle class="progress__bar"   cx="18" cy="18" r="15.9" pathLength="100" />
           </svg>
-          <span class="progress__value">75%</span>
+          <span class="progress__value" id="progress-value">0%</span>
           <div class="progress__text">
             <span class="progress__label">Módulo actual</span>
-            <span class="progress__module">Fundamentos · 3/4</span>
+            <span class="progress__module" id="progress-module">—</span>
           </div>
         </div>
       </header>
 
+      <section class="xp" aria-label="Tu progreso como programador/a">
+        <div class="xp__head">
+          <strong id="xp-level">Nivel 1 · Novato/a</strong>
+          <span class="xp__total" id="xp-total">0 XP</span>
+        </div>
+        <div class="xp__bar" id="xp-bar" role="progressbar" aria-label="Progreso hacia el siguiente nivel" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="--xp: 0%"></div>
+        <p class="xp__next" id="xp-next"></p>
+        <div class="xp__footer">
+          <span class="xp__streak" id="xp-streak">Racha: 0 días</span>
+          <button class="xp__badges" id="badges-button" type="button">Logros <span id="badges-count">0/13</span></button>
+        </div>
+      </section>
+
       <nav class="path" aria-label="Ruta de aprendizaje">
         <h2 class="path__title">Ruta de Aprendizaje</h2>
-
-        <!-- Fundamentos -->
-        <details class="module" open>
-          <summary class="module__summary">
-            <span class="module__name">Fundamentos</span>
-            <span class="module__count">3/4</span>
-          </summary>
-          <ol class="lessons">
-            <li><a class="lesson" href="#/fundamentos/variables" data-status="completed">
-              <span class="lesson__icon" aria-hidden="true"></span>
-              <span class="lesson__name">Variables y print()</span>
-              <span class="visually-hidden">(Completado)</span>
-            </a></li>
-            <li><a class="lesson" href="#/fundamentos/tipos" data-status="completed">
-              <span class="lesson__icon" aria-hidden="true"></span>
-              <span class="lesson__name">Tipos de datos</span>
-              <span class="visually-hidden">(Completado)</span>
-            </a></li>
-            <li><a class="lesson" href="#/fundamentos/operadores" data-status="completed">
-              <span class="lesson__icon" aria-hidden="true"></span>
-              <span class="lesson__name">Operadores</span>
-              <span class="visually-hidden">(Completado)</span>
-            </a></li>
-            <li><a class="lesson" href="#/fundamentos/input" data-status="active" aria-current="page">
-              <span class="lesson__icon" aria-hidden="true"></span>
-              <span class="lesson__name">Entrada con input()</span>
-              <span class="lesson__badge">En curso</span>
-            </a></li>
-          </ol>
-        </details>
-
-        <!-- Nivel Intermedio -->
-        <details class="module">
-          <summary class="module__summary">
-            <span class="module__name">Nivel Intermedio</span>
-            <span class="module__count">0/4</span>
-          </summary>
-          <ol class="lessons">
-            <li><a class="lesson" href="#/intermedio/condicionales" data-status="available">
-              <span class="lesson__icon" aria-hidden="true"></span>
-              <span class="lesson__name">Condicionales</span>
-            </a></li>
-            <li><span class="lesson" data-status="locked">
-              <span class="lesson__icon" aria-hidden="true"></span>
-              <span class="lesson__name">Bucles for y while</span>
-              <span class="visually-hidden">(Bloqueado)</span>
-            </span></li>
-            <li><span class="lesson" data-status="locked">
-              <span class="lesson__icon" aria-hidden="true"></span>
-              <span class="lesson__name">Funciones</span>
-              <span class="visually-hidden">(Bloqueado)</span>
-            </span></li>
-            <li><span class="lesson" data-status="locked">
-              <span class="lesson__icon" aria-hidden="true"></span>
-              <span class="lesson__name">Listas y diccionarios</span>
-              <span class="visually-hidden">(Bloqueado)</span>
-            </span></li>
-          </ol>
-        </details>
-
-        <!-- Avanzado -->
-        <details class="module">
-          <summary class="module__summary">
-            <span class="module__name">Avanzado</span>
-            <span class="module__count">0/4</span>
-          </summary>
-          <ol class="lessons">
-            <li><span class="lesson" data-status="locked"><span class="lesson__icon" aria-hidden="true"></span><span class="lesson__name">Programación orientada a objetos</span><span class="visually-hidden">(Bloqueado)</span></span></li>
-            <li><span class="lesson" data-status="locked"><span class="lesson__icon" aria-hidden="true"></span><span class="lesson__name">Excepciones</span><span class="visually-hidden">(Bloqueado)</span></span></li>
-            <li><span class="lesson" data-status="locked"><span class="lesson__icon" aria-hidden="true"></span><span class="lesson__name">Archivos</span><span class="visually-hidden">(Bloqueado)</span></span></li>
-            <li><span class="lesson" data-status="locked"><span class="lesson__icon" aria-hidden="true"></span><span class="lesson__name">Módulos y paquetes</span><span class="visually-hidden">(Bloqueado)</span></span></li>
-          </ol>
-        </details>
-
-        <!-- Especialización -->
-        <details class="module">
-          <summary class="module__summary">
-            <span class="module__name">Especialización</span>
-            <span class="module__count">0/3</span>
-          </summary>
-          <ol class="lessons">
-            <li><span class="lesson" data-status="locked"><span class="lesson__icon" aria-hidden="true"></span><span class="lesson__name">Testing con pytest</span><span class="visually-hidden">(Bloqueado)</span></span></li>
-            <li><span class="lesson" data-status="locked"><span class="lesson__icon" aria-hidden="true"></span><span class="lesson__name">Automatización</span><span class="visually-hidden">(Bloqueado)</span></span></li>
-            <li><span class="lesson" data-status="locked"><span class="lesson__icon" aria-hidden="true"></span><span class="lesson__name">APIs web con Flask</span><span class="visually-hidden">(Bloqueado)</span></span></li>
-          </ol>
-        </details>
+        <div id="modules"><!-- Se genera desde data/lessons.json --></div>
       </nav>
+
+      <footer class="sidebar__footer">
+        <a href="privacidad.html">Privacidad</a>
+      </footer>
     </aside>
 
-    <!-- ============ CONTENIDO PRINCIPAL (se estiliza en el Paso 2) ============ -->
+    <!-- ============ CONTENIDO PRINCIPAL ============ -->
     <main id="main" class="main" tabindex="-1">
       <header class="lesson-header">
-        <p class="lesson-header__crumb">Fundamentos</p>
-        <h1 class="lesson-header__title">Entrada con input()</h1>
+        <p class="lesson-header__crumb" id="lesson-crumb"></p>
+        <h1 class="lesson-header__title" id="lesson-title" tabindex="-1">Cargando lección…</h1>
       </header>
 
       <div class="tabs" role="tablist" aria-label="Secciones de la lección">
         <button class="tabs__tab" role="tab" id="tab-theory" aria-controls="panel-theory" aria-selected="true">Teoría y Ejemplos</button>
         <button class="tabs__tab" role="tab" id="tab-practice" aria-controls="panel-practice" aria-selected="false" tabindex="-1">Práctica y Ejercicio</button>
+        <button class="tabs__tab" role="tab" id="tab-quiz" aria-controls="panel-quiz" aria-selected="false" tabindex="-1">Quiz</button>
       </div>
 
-      <section class="panel" role="tabpanel" id="panel-theory" aria-labelledby="tab-theory">
-        <!-- Teoría + bloques de código + botones "Copiar" / "Abrir en PyCharm" (Paso 2) -->
-      </section>
-      <section class="panel" role="tabpanel" id="panel-practice" aria-labelledby="tab-practice" hidden>
-        <!-- Enunciado del ejercicio (Paso 2) -->
-      </section>
+      <section class="panel" role="tabpanel" id="panel-theory" aria-labelledby="tab-theory" tabindex="0"></section>
+      <section class="panel" role="tabpanel" id="panel-practice" aria-labelledby="tab-practice" tabindex="0" hidden></section>
+      <section class="panel" role="tabpanel" id="panel-quiz" aria-labelledby="tab-quiz" tabindex="0" hidden></section>
 
+      <!-- ============ CONSOLA INTERACTIVA ============ -->
       <section class="console" aria-labelledby="console-title">
-        <h2 id="console-title">Consola Interactiva</h2>
-        <!-- Editor + botón Ejecutar + salida (Paso 4, con Pyodide) -->
+        <div class="console__head">
+          <h2 class="console__title" id="console-title">Consola Interactiva</h2>
+          <span class="console__status" id="console-status" data-status="idle" aria-live="polite">Python se carga al ejecutar por primera vez</span>
+        </div>
+
+        <label class="console__label" for="console-editor">Código Python</label>
+        <textarea class="console__editor" id="console-editor" rows="10" spellcheck="false" autocapitalize="off" autocomplete="off" aria-describedby="console-help"></textarea>
+        <p class="console__help" id="console-help"><kbd>Tab</kbd> inserta 4 espacios · <kbd>Esc</kbd> y después <kbd>Tab</kbd> para salir del editor · <kbd>Ctrl</kbd>+<kbd>Enter</kbd> ejecuta</p>
+
+        <details class="console__stdin" id="console-stdin-box">
+          <summary>Entrada para <code>input()</code></summary>
+          <label class="visually-hidden" for="console-stdin">Entrada: una línea por cada input()</label>
+          <textarea id="console-stdin" rows="3" spellcheck="false" placeholder="Una línea por cada input()"></textarea>
+        </details>
+
+        <div class="console__actions">
+          <button class="btn btn--success" id="console-run" type="button">▶ Ejecutar</button>
+          <button class="btn btn--ghost" id="console-example" type="button">Cargar ejemplo</button>
+          <button class="btn btn--ghost" id="console-clear" type="button">Limpiar salida</button>
+        </div>
+
+        <p class="console__label" id="console-output-label">Salida</p>
+        <pre class="console__output" id="console-output" aria-labelledby="console-output-label" aria-live="polite" tabindex="0"></pre>
       </section>
     </main>
   </div>
 
-  <!-- ============ ASISTENTE ROBOT (Paso 5) ============ -->
-  <aside class="assistant" aria-label="Asistente de aprendizaje">
-    <!-- Burbuja + sugerencias dinámicas según la lección -->
-  </aside>
+  <!-- ============ ASISTENTE ============ -->
+  <div class="assistant">
+    <section class="assistant__panel" id="assistant-panel" aria-labelledby="assistant-title" hidden>
+      <header class="assistant__head">
+        <h2 id="assistant-title">Asistente</h2>
+        <button class="icon-button" id="assistant-close" type="button" aria-label="Cerrar asistente">✕</button>
+      </header>
+      <ol class="assistant__messages" id="assistant-messages" aria-live="polite"></ol>
+      <div class="assistant__suggestions" id="assistant-suggestions" role="group" aria-label="Preguntas sugeridas"></div>
+      <p class="assistant__note">Respuestas preparadas y revisadas para cada lección.</p>
+    </section>
+    <button class="assistant__toggle" id="assistant-toggle" type="button" aria-controls="assistant-panel" aria-expanded="false">
+      <svg viewBox="0 0 32 32" width="30" height="30" aria-hidden="true">
+        <rect x="6" y="10" width="20" height="16" rx="5" fill="currentColor"/>
+        <circle cx="12.5" cy="18" r="2.2" fill="#0b1220"/><circle cx="19.5" cy="18" r="2.2" fill="#0b1220"/>
+        <path d="M16 10V5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="16" cy="4.5" r="2" fill="currentColor"/>
+      </svg>
+      <span class="visually-hidden">Abrir asistente</span>
+    </button>
+  </div>
 
-  <!-- Scripts (se añaden en pasos posteriores) -->
-  <!-- <script src="js/lessons.js" defer></script> -->
-  <!-- <script src="js/app.js" defer></script> -->
+  <!-- ============ CUENTA ============ -->
+  <dialog class="account" id="account-dialog" aria-labelledby="account-title">
+    <header class="account__head">
+      <h2 id="account-title">Tu cuenta</h2>
+      <button class="icon-button" id="account-close" type="button" aria-label="Cerrar">✕</button>
+    </header>
+    <p class="account__message" id="account-message" role="alert" hidden></p>
+
+    <form class="account__form" id="login-form" data-view="login">
+      <h2 class="visually-hidden" data-title="Iniciar sesión">Iniciar sesión</h2>
+      <label>Email <input name="email" type="email" autocomplete="email" required></label>
+      <label>Contraseña <input name="password" type="password" autocomplete="current-password" required></label>
+      <button class="btn btn--primary" type="submit">Entrar</button>
+      <p><a href="#" data-go="forgot">¿Has olvidado tu contraseña?</a></p>
+      <p>¿No tienes cuenta? <a href="#" data-go="register">Crea una</a></p>
+    </form>
+
+    <form class="account__form" id="register-form" data-view="register" hidden>
+      <h2 class="visually-hidden" data-title="Crear cuenta">Crear cuenta</h2>
+      <label>Nombre <input name="display_name" autocomplete="nickname" maxlength="80" required></label>
+      <label>Email <input name="email" type="email" autocomplete="email" required></label>
+      <label>Contraseña (mínimo 8 caracteres) <input name="password" type="password" autocomplete="new-password" minlength="8" maxlength="128" required></label>
+      <label class="account__check"><input name="accept_privacy" type="checkbox" required> He leído y acepto la <a href="privacidad.html" target="_blank" rel="noopener">política de privacidad</a></label>
+      <button class="btn btn--primary" type="submit">Crear cuenta</button>
+      <p>¿Ya tienes cuenta? <a href="#" data-go="login">Inicia sesión</a></p>
+    </form>
+
+    <form class="account__form" id="forgot-form" data-view="forgot" hidden>
+      <h2 class="visually-hidden" data-title="Recuperar contraseña">Recuperar contraseña</h2>
+      <p>Te enviaremos un enlace para elegir una contraseña nueva.</p>
+      <label>Email <input name="email" type="email" autocomplete="email" required></label>
+      <button class="btn btn--primary" type="submit">Enviar enlace</button>
+      <p><a href="#" data-go="login">Volver</a></p>
+    </form>
+
+    <form class="account__form" id="reset-form" data-view="reset" hidden>
+      <h2 class="visually-hidden" data-title="Nueva contraseña">Nueva contraseña</h2>
+      <input type="hidden" name="token" id="reset-token">
+      <label>Nueva contraseña (mínimo 8 caracteres) <input name="new_password" type="password" autocomplete="new-password" minlength="8" maxlength="128" required></label>
+      <button class="btn btn--primary" type="submit">Guardar contraseña</button>
+    </form>
+
+    <div class="account__form" data-view="profile" hidden>
+      <h2 class="visually-hidden" data-title="Tu cuenta">Tu cuenta</h2>
+      <p><strong id="profile-name"></strong><br><span id="profile-email" class="account__muted"></span></p>
+      <p class="account__muted">Tu progreso y tus ejercicios se guardan en tu cuenta.</p>
+      <div class="account__buttons">
+        <button class="btn btn--ghost" id="export-button" type="button">Descargar mis datos (JSON)</button>
+        <button class="btn btn--ghost" id="logout-button" type="button">Cerrar sesión</button>
+      </div>
+      <details class="account__danger">
+        <summary>Eliminar mi cuenta</summary>
+        <form id="delete-form" class="account__form">
+          <p>Se borrarán tu cuenta, tu progreso y tus ejercicios. No se puede deshacer.</p>
+          <label>Confirma con tu contraseña <input name="password" type="password" autocomplete="current-password" required></label>
+          <button class="btn btn--danger" type="submit">Eliminar definitivamente</button>
+        </form>
+      </details>
+    </div>
+  </dialog>
+
+  <!-- ============ LOGROS ============ -->
+  <dialog class="account badges" id="badges-dialog" aria-labelledby="badges-title">
+    <header class="account__head">
+      <h2 id="badges-title">Tus logros</h2>
+      <button class="icon-button" id="badges-close" type="button" aria-label="Cerrar">✕</button>
+    </header>
+    <ul class="badges__list" id="badges-list" tabindex="0" aria-label="Logros"></ul>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 </body>
 </html>

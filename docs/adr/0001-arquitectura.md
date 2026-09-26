@@ -25,9 +25,9 @@ La web necesita backend para guardar progreso, gestionar usuarios, servir leccio
 ## Consecuencias y fases
 
 1. **Fase 1 (hecha):** esqueleto de la API y lecciones servidas por API (`/api/modules`, `/api/lessons/{slug}`), con tests y CI.
-2. **Fase 2:** usuarios y login (hash de contraseñas con Argon2 o bcrypt, JWT de corta duración, rate limiting en el login).
-3. **Fase 3:** progreso por usuario (`/api/progress`).
-4. **Fase 4 — corrección de ejercicios:**
+2. **Fase 2 (hecha):** usuarios y login. Ver ADR-0003.
+3. **Fase 3 (hecha):** progreso por usuario (`/api/progress`).
+4. **Fase 4 (hecha, ver ADR-0004) — corrección de ejercicios:**
    - Primero: los tests se ejecutan en el navegador con Pyodide y el backend solo registra el resultado.
    - Ejecutar código de usuarios en el servidor exige un sandbox aislado (contenedor sin red, límites de CPU, memoria y tiempo). Solo se hará si hace falta de verdad.
 

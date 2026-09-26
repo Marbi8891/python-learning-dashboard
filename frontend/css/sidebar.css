@@ -93,6 +93,11 @@
   transition: stroke-dashoffset 600ms ease;
 }
 
+/* A 0 % el extremo redondeado dibujaría un punto: se oculta la barra */
+.progress[aria-valuenow="0"] .progress__bar {
+  stroke: transparent;
+}
+
 .progress__value {
   justify-self: center;
   font-weight: 700;
@@ -269,6 +274,7 @@ a.lesson:hover {
 }
 
 .lesson__badge {
+  display: none; /* solo visible en la lección activa */
   padding: 1px var(--space-2);
   border-radius: 999px;
   background: var(--color-accent-soft);
@@ -278,22 +284,85 @@ a.lesson:hover {
   white-space: nowrap;
 }
 
-/* Bloqueado: atenuado y sin interacción */
+.lesson[data-status="active"] .lesson__badge {
+  display: inline-block;
+}
+
+/* Bloqueo orientativo: atenuado, pero se puede abrir */
 .lesson[data-status="locked"] {
   color: var(--color-text-faint);
-  cursor: not-allowed;
 }
 
 .lesson[data-status="locked"] .lesson__icon {
   border-style: dashed;
 }
 
-/* ---------- Responsive: la barra pasa arriba ---------- */
+/* ---------- Botón de cuenta y pie ---------- */
+.account-button {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-2);
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+}
+
+.account-button:hover {
+  border-color: var(--color-primary);
+}
+
+.account-button span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sidebar__footer {
+  margin-top: auto;
+  padding-inline: var(--space-2);
+  font-size: 13px;
+}
+
+.sidebar__footer a {
+  color: var(--color-text-muted);
+  text-decoration: underline;
+}
+
+/* ---------- Móvil: menú lateral deslizante ---------- */
 @media (max-width: 900px) {
   .sidebar {
-    position: static;
-    height: auto;
-    border-right: none;
-    border-bottom: 1px solid var(--color-border);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 50;
+    width: min(320px, 88vw);
+    height: 100dvh;
+    transform: translateX(-100%);
+    transition: transform 200ms ease;
+    box-shadow: 0 0 40px rgb(0 0 0 / 0.5);
+  }
+
+  .nav-open .sidebar {
+    transform: none;
+  }
+
+  .sidebar-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    background: rgb(0 0 0 / 0.55);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 200ms ease;
+  }
+
+  .nav-open .sidebar-backdrop {
+    opacity: 1;
+    pointer-events: auto;
   }
 }
