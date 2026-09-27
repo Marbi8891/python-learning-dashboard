@@ -8,7 +8,7 @@
    {
     "slug": "java-basico",
     "weight": 20,
-    "items": 10,
+    "items": 16,
     "title": {
      "es": "Fundamentos",
      "en": "Fundamentos"
@@ -17,7 +17,7 @@
    {
     "slug": "java-control",
     "weight": 25,
-    "items": 10,
+    "items": 16,
     "title": {
      "es": "Control de flujo",
      "en": "Control de flujo"
@@ -26,7 +26,7 @@
    {
     "slug": "java-poo",
     "weight": 25,
-    "items": 10,
+    "items": 16,
     "title": {
      "es": "Clases y objetos",
      "en": "Clases y objetos"
@@ -35,7 +35,7 @@
    {
     "slug": "java-herencia",
     "weight": 20,
-    "items": 10,
+    "items": 16,
     "title": {
      "es": "Herencia e interfaces",
      "en": "Herencia e interfaces"
@@ -44,7 +44,7 @@
    {
     "slug": "java-colecciones",
     "weight": 10,
-    "items": 10,
+    "items": 16,
     "title": {
      "es": "Colecciones y excepciones",
      "en": "Colecciones y excepciones"
@@ -169,6 +169,73 @@
    "lesson": "java-tipos"
   },
   {
+   "id": "java-p01",
+   "block": "java-basico",
+   "q": {
+    "es": "Completa el operador para calcular los minutos enteros de 125 segundos. Debe mostrar `2 min`.",
+    "en": "Completa el operador para calcular los minutos enteros de 125 segundos. Debe mostrar `2 min`."
+   },
+   "kind": "fill",
+   "code": "int total = 125;\nint minutos = total ___ 60;\nSystem.out.println(minutos + \" min\");",
+   "accept": [
+    "/"
+   ],
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "Entre dos `int`, `/` es la división entera: 125 / 60 = 2. Con `%` obtendrías los segundos que sobran (5). Solución: `/`.",
+    "en": "Entre dos `int`, `/` es la división entera: 125 / 60 = 2. Con `%` obtendrías los segundos que sobran (5). Solución: `/`."
+   },
+   "lesson": "java-tipos"
+  },
+  {
+   "id": "java-p02",
+   "block": "java-basico",
+   "q": {
+    "es": "Ordena las líneas para que el programa muestre `Media: 7.5`.",
+    "en": "Ordena las líneas para que el programa muestre `Media: 7.5`."
+   },
+   "kind": "order",
+   "code": "___",
+   "lines": [
+    "int a = 7;",
+    "int b = a + 1;",
+    "double media = (a + b) / 2.0;",
+    "System.out.println(\"Media: \" + media);"
+   ],
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "Una variable tiene que estar declarada antes de usarse: primero `a`, luego `b` (que usa `a`), después la media y al final se imprime.",
+    "en": "Una variable tiene que estar declarada antes de usarse: primero `a`, luego `b` (que usa `a`), después la media y al final se imprime."
+   },
+   "lesson": "java-tipos"
+  },
+  {
+   "id": "java-p03",
+   "block": "java-basico",
+   "q": {
+    "es": "Este programa debería mostrar `3.5`, pero no compila, falla o muestra otra cosa. ¿Qué línea tiene el error?",
+    "en": "Este programa debería mostrar `3.5`, pero no compila, falla o muestra otra cosa. ¿Qué línea tiene el error?"
+   },
+   "kind": "choice",
+   "code": null,
+   "options": [
+    "int a = 7;",
+    "int b = 2;",
+    "double r = a / b;",
+    "System.out.println(r);"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "`a / b` son dos enteros: la división es entera (3) y luego se guarda como 3.0. Hay que convertir un operando a double **antes** de dividir. Corrección: `double r = (double) a / b;`.",
+    "en": "`a / b` son dos enteros: la división es entera (3) y luego se guarda como 3.0. Hay que convertir un operando a double **antes** de dividir. Corrección: `double r = (double) a / b;`."
+   },
+   "lesson": "java-tipos"
+  },
+  {
    "id": "java-06",
    "block": "java-basico",
    "q": {
@@ -280,6 +347,73 @@
    "explain": {
     "es": "Compila (el texto podría venir del usuario), pero al ejecutar \"12a\" no es un número: lanza `NumberFormatException`.",
     "en": "Compila (el texto podría venir del usuario), pero al ejecutar \"12a\" no es un número: lanza `NumberFormatException`."
+   },
+   "lesson": "java-strings"
+  },
+  {
+   "id": "java-p04",
+   "block": "java-basico",
+   "q": {
+    "es": "Completa el método para comparar el **contenido** de los dos textos. Debe mostrar `true`.",
+    "en": "Completa el método para comparar el **contenido** de los dos textos. Debe mostrar `true`."
+   },
+   "kind": "fill",
+   "code": "String a = \"hola\";\nString b = new String(\"hola\");\nSystem.out.println(a.___(b));",
+   "accept": [
+    "equals",
+    "equalsIgnoreCase"
+   ],
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "`equals` compara el contenido; `==` compararía si son el mismo objeto y aquí daría false. Solución: `equals`.",
+    "en": "`equals` compara el contenido; `==` compararía si son el mismo objeto y aquí daría false. Solución: `equals`."
+   },
+   "lesson": "java-strings"
+  },
+  {
+   "id": "java-p05",
+   "block": "java-basico",
+   "q": {
+    "es": "Ordena las líneas para mostrar el usuario del email: `ana`.",
+    "en": "Ordena las líneas para mostrar el usuario del email: `ana`."
+   },
+   "kind": "order",
+   "code": "___",
+   "lines": [
+    "String email = \"ana@fp.es\";",
+    "int arroba = email.indexOf(\"@\");",
+    "String usuario = email.substring(0, arroba);",
+    "System.out.println(usuario);"
+   ],
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "Primero el texto, luego la posición de la arroba y con ella el `substring` hasta esa posición (sin incluirla).",
+    "en": "Primero el texto, luego la posición de la arroba y con ella el `substring` hasta esa posición (sin incluirla)."
+   },
+   "lesson": "java-strings"
+  },
+  {
+   "id": "java-p06",
+   "block": "java-basico",
+   "q": {
+    "es": "Este programa debería mostrar `JAVA`, pero no compila, falla o muestra otra cosa. ¿Qué línea tiene el error?",
+    "en": "Este programa debería mostrar `JAVA`, pero no compila, falla o muestra otra cosa. ¿Qué línea tiene el error?"
+   },
+   "kind": "choice",
+   "code": null,
+   "options": [
+    "String s = \"java\";",
+    "s.toUpperCase();",
+    "System.out.println(s);"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": {
+    "es": "Los String son inmutables: `toUpperCase()` devuelve un texto nuevo que hay que guardar. Corrección: `s = s.toUpperCase();`.",
+    "en": "Los String son inmutables: `toUpperCase()` devuelve un texto nuevo que hay que guardar. Corrección: `s = s.toUpperCase();`."
    },
    "lesson": "java-strings"
   },
@@ -399,6 +533,77 @@
    "lesson": "java-condicionales"
   },
   {
+   "id": "java-p07",
+   "block": "java-control",
+   "q": {
+    "es": "Completa la condición: aprueba quien tiene un 5 **o más**. Con nota 5 debe mostrar `Aprobado`.",
+    "en": "Completa la condición: aprueba quien tiene un 5 **o más**. Con nota 5 debe mostrar `Aprobado`."
+   },
+   "kind": "fill",
+   "code": "int nota = 5;\nif (nota ___ 5) {\n    System.out.println(\"Aprobado\");\n} else {\n    System.out.println(\"Suspenso\");\n}",
+   "accept": [
+    ">="
+   ],
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "`>=` incluye el 5. Con `>` un 5 saldría suspenso: es el error típico de los límites. Solución: `>=`.",
+    "en": "`>=` incluye el 5. Con `>` un 5 saldría suspenso: es el error típico de los límites. Solución: `>=`."
+   },
+   "lesson": "java-condicionales"
+  },
+  {
+   "id": "java-p08",
+   "block": "java-control",
+   "q": {
+    "es": "Ordena las líneas para que con n = 9 muestre `Fizz`.",
+    "en": "Ordena las líneas para que con n = 9 muestre `Fizz`."
+   },
+   "kind": "order",
+   "code": "___",
+   "lines": [
+    "int n = 9;",
+    "if (n % 15 == 0) {",
+    "    System.out.println(\"FizzBuzz\");",
+    "} else if (n % 3 == 0) {",
+    "    System.out.println(\"Fizz\");",
+    "} else {",
+    "    System.out.println(n);",
+    "}"
+   ],
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "Cada println va dentro de su rama y el caso más restrictivo (múltiplo de 15) va primero. 9 no es múltiplo de 15, pero sí de 3.",
+    "en": "Cada println va dentro de su rama y el caso más restrictivo (múltiplo de 15) va primero. 9 no es múltiplo de 15, pero sí de 3."
+   },
+   "lesson": "java-condicionales"
+  },
+  {
+   "id": "java-p09",
+   "block": "java-control",
+   "q": {
+    "es": "Este programa debería mostrar `cinco`, pero no compila, falla o muestra otra cosa. ¿Qué línea tiene el error?",
+    "en": "Este programa debería mostrar `cinco`, pero no compila, falla o muestra otra cosa. ¿Qué línea tiene el error?"
+   },
+   "kind": "choice",
+   "code": null,
+   "options": [
+    "int x = 5;",
+    "if (x = 5) {",
+    "    System.out.println(\"cinco\");",
+    "}"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": {
+    "es": "`=` asigna y `==` compara. Un if necesita un boolean, así que `x = 5` no compila. Corrección: `if (x == 5) {`.",
+    "en": "`=` asigna y `==` compara. Un if necesita un boolean, así que `x = 5` no compila. Corrección: `if (x == 5) {`."
+   },
+   "lesson": "java-condicionales"
+  },
+  {
    "id": "java-16",
    "block": "java-control",
    "q": {
@@ -514,6 +719,75 @@
    "lesson": "java-bucles-arrays"
   },
   {
+   "id": "java-p10",
+   "block": "java-control",
+   "q": {
+    "es": "Completa la condición del for para que muestre `0 1 2 3 4`.",
+    "en": "Completa la condición del for para que muestre `0 1 2 3 4`."
+   },
+   "kind": "fill",
+   "code": "for (int i = 0; ___; i++) {\n    System.out.print(i + \" \");\n}\nSystem.out.println();",
+   "accept": [
+    "i < 5",
+    "i <= 4"
+   ],
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "Empezando en 0, `i < 5` da cinco vueltas: 0, 1, 2, 3 y 4. Solución: `i < 5`.",
+    "en": "Empezando en 0, `i < 5` da cinco vueltas: 0, 1, 2, 3 y 4. Solución: `i < 5`."
+   },
+   "lesson": "java-bucles-arrays"
+  },
+  {
+   "id": "java-p11",
+   "block": "java-control",
+   "q": {
+    "es": "Ordena las líneas del bucle para que sume los elementos del array y muestre `15`.",
+    "en": "Ordena las líneas del bucle para que sume los elementos del array y muestre `15`."
+   },
+   "kind": "order",
+   "code": "int[] v = {3, 5, 7};\nint suma = 0;\n___\nSystem.out.println(suma);",
+   "lines": [
+    "for (int i = 0; i < v.length; i++) {",
+    "    suma += v[i];",
+    "}"
+   ],
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "El for abre el bloque, dentro se acumula cada elemento y la llave lo cierra. `i` solo existe dentro del bucle.",
+    "en": "El for abre el bloque, dentro se acumula cada elemento y la llave lo cierra. `i` solo existe dentro del bucle."
+   },
+   "lesson": "java-bucles-arrays"
+  },
+  {
+   "id": "java-p12",
+   "block": "java-control",
+   "q": {
+    "es": "Este programa debería mostrar `27`, pero no compila, falla o muestra otra cosa. ¿Qué línea tiene el error?",
+    "en": "Este programa debería mostrar `27`, pero no compila, falla o muestra otra cosa. ¿Qué línea tiene el error?"
+   },
+   "kind": "choice",
+   "code": null,
+   "options": [
+    "int[] v = {4, 8, 15};",
+    "int suma = 0;",
+    "for (int i = 0; i <= v.length; i++) {",
+    "    suma += v[i];",
+    "}",
+    "System.out.println(suma);"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "Los índices van de 0 a `length - 1`. Con `<=` se intenta leer `v[3]` y salta `ArrayIndexOutOfBoundsException`. Corrección: `for (int i = 0; i < v.length; i++) {`.",
+    "en": "Los índices van de 0 a `length - 1`. Con `<=` se intenta leer `v[3]` y salta `ArrayIndexOutOfBoundsException`. Corrección: `for (int i = 0; i < v.length; i++) {`."
+   },
+   "lesson": "java-bucles-arrays"
+  },
+  {
    "id": "java-21",
    "block": "java-poo",
    "q": {
@@ -625,6 +899,79 @@
    "explain": {
     "es": "Compila, pero `p` no apunta a ningún objeto: acceder a `p.x` lanza `NullPointerException`.",
     "en": "Compila, pero `p` no apunta a ningún objeto: acceder a `p.x` lanza `NullPointerException`."
+   },
+   "lesson": "java-clases"
+  },
+  {
+   "id": "java-p13",
+   "block": "java-poo",
+   "q": {
+    "es": "Completa el constructor para que guarde el nombre en el atributo. Debe mostrar `Ana`.",
+    "en": "Completa el constructor para que guarde el nombre en el atributo. Debe mostrar `Ana`."
+   },
+   "kind": "fill",
+   "code": "class Alumno {\n    String nombre;\n    Alumno(String nombre) {\n        ___ = nombre;\n    }\n}\n\nclass Main {\n    public static void main(String[] args) {\n        System.out.println(new Alumno(\"Ana\").nombre);\n    }\n}",
+   "accept": [
+    "this.nombre"
+   ],
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "Sin `this`, `nombre = nombre` asignaría el parámetro a sí mismo y el atributo se quedaría en null. Solución: `this.nombre`.",
+    "en": "Sin `this`, `nombre = nombre` asignaría el parámetro a sí mismo y el atributo se quedaría en null. Solución: `this.nombre`."
+   },
+   "lesson": "java-clases"
+  },
+  {
+   "id": "java-p14",
+   "block": "java-poo",
+   "q": {
+    "es": "Ordena las líneas del main para que muestre `13`.",
+    "en": "Ordena las líneas del main para que muestre `13`."
+   },
+   "kind": "order",
+   "code": "class Punto {\n    int x, y;\n    Punto(int x, int y) { this.x = x; this.y = y; }\n    int suma() { return x + y; }\n}\n\nclass Main {\n    public static void main(String[] args) {\n___\n    }\n}",
+   "lines": [
+    "        Punto p = new Punto(2, 3);",
+    "        p.x = 10;",
+    "        System.out.println(p.suma());"
+   ],
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "Primero se crea el objeto, luego se cambia su atributo x a 10 y al final se calcula la suma: 10 + 3.",
+    "en": "Primero se crea el objeto, luego se cambia su atributo x a 10 y al final se calcula la suma: 10 + 3."
+   },
+   "lesson": "java-clases"
+  },
+  {
+   "id": "java-p15",
+   "block": "java-poo",
+   "q": {
+    "es": "Este programa debería mostrar `1`, pero no compila, falla o muestra otra cosa. ¿Qué línea tiene el error?",
+    "en": "Este programa debería mostrar `1`, pero no compila, falla o muestra otra cosa. ¿Qué línea tiene el error?"
+   },
+   "kind": "choice",
+   "code": null,
+   "options": [
+    "class Contador {",
+    "    int valor;",
+    "    void sumar() { valor++; }",
+    "}",
+    "class Main {",
+    "    public static void main(String[] args) {",
+    "        Contador c = null;",
+    "        c.sumar();",
+    "        System.out.println(c.valor);",
+    "    }",
+    "}"
+   ],
+   "answer": [
+    6
+   ],
+   "explain": {
+    "es": "Una referencia a null no apunta a ningún objeto: `c.sumar()` lanza `NullPointerException`. Hay que crearlo con `new`. Corrección: `Contador c = new Contador();`.",
+    "en": "Una referencia a null no apunta a ningún objeto: `c.sumar()` lanza `NullPointerException`. Hay que crearlo con `new`. Corrección: `Contador c = new Contador();`."
    },
    "lesson": "java-clases"
   },
@@ -756,6 +1103,79 @@
    "lesson": "java-encapsulacion"
   },
   {
+   "id": "java-p16",
+   "block": "java-poo",
+   "q": {
+    "es": "Completa la declaración para que el contador sea **compartido** por todos los tickets. Debe mostrar `2`.",
+    "en": "Completa la declaración para que el contador sea **compartido** por todos los tickets. Debe mostrar `2`."
+   },
+   "kind": "fill",
+   "code": "class Ticket {\n    ___ int emitidos = 0;\n    Ticket() { emitidos++; }\n}\n\nclass Main {\n    public static void main(String[] args) {\n        new Ticket();\n        new Ticket();\n        System.out.println(Ticket.emitidos);\n    }\n}",
+   "accept": [
+    "static"
+   ],
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "Un atributo `static` pertenece a la clase: hay uno solo para todos los objetos y se usa como `Ticket.emitidos`. Solución: `static`.",
+    "en": "Un atributo `static` pertenece a la clase: hay uno solo para todos los objetos y se usa como `Ticket.emitidos`. Solución: `static`."
+   },
+   "lesson": "java-encapsulacion"
+  },
+  {
+   "id": "java-p17",
+   "block": "java-poo",
+   "q": {
+    "es": "Ordena las líneas del main para que muestre `100.0`.",
+    "en": "Ordena las líneas del main para que muestre `100.0`."
+   },
+   "kind": "order",
+   "code": "class Cuenta {\n    private double saldo;\n    public void ingresar(double cantidad) { if (cantidad > 0) saldo += cantidad; }\n    public double getSaldo() { return saldo; }\n}\n\nclass Main {\n    public static void main(String[] args) {\n___\n    }\n}",
+   "lines": [
+    "        Cuenta c = new Cuenta();",
+    "        c.ingresar(100);",
+    "        System.out.println(c.getSaldo());",
+    "        c.ingresar(50);"
+   ],
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "Se imprime después de ingresar 100 y antes del segundo ingreso: el orden de las sentencias es el orden en que ocurren las cosas.",
+    "en": "Se imprime después de ingresar 100 y antes del segundo ingreso: el orden de las sentencias es el orden en que ocurren las cosas."
+   },
+   "lesson": "java-encapsulacion"
+  },
+  {
+   "id": "java-p18",
+   "block": "java-poo",
+   "q": {
+    "es": "Este programa debería mostrar `0.0`, pero no compila, falla o muestra otra cosa. ¿Qué línea tiene el error?",
+    "en": "Este programa debería mostrar `0.0`, pero no compila, falla o muestra otra cosa. ¿Qué línea tiene el error?"
+   },
+   "kind": "choice",
+   "code": null,
+   "options": [
+    "class Cuenta {",
+    "    private double saldo;",
+    "    public double getSaldo() { return saldo; }",
+    "}",
+    "class Main {",
+    "    public static void main(String[] args) {",
+    "        Cuenta c = new Cuenta();",
+    "        System.out.println(c.saldo);",
+    "    }",
+    "}"
+   ],
+   "answer": [
+    7
+   ],
+   "explain": {
+    "es": "`saldo` es private: desde otra clase solo se puede leer con su getter. Corrección: `System.out.println(c.getSaldo());`.",
+    "en": "`saldo` es private: desde otra clase solo se puede leer con su getter. Corrección: `System.out.println(c.getSaldo());`."
+   },
+   "lesson": "java-encapsulacion"
+  },
+  {
    "id": "java-31",
    "block": "java-herencia",
    "q": {
@@ -867,6 +1287,82 @@
    "explain": {
     "es": "El casting compila (un Animal *podría* ser un Perro), pero al ejecutar el objeto es un Gato: `ClassCastException`. Se evita comprobando antes con `instanceof`.",
     "en": "El casting compila (un Animal *podría* ser un Perro), pero al ejecutar el objeto es un Gato: `ClassCastException`. Se evita comprobando antes con `instanceof`."
+   },
+   "lesson": "java-herencia"
+  },
+  {
+   "id": "java-p19",
+   "block": "java-herencia",
+   "q": {
+    "es": "Completa el constructor de Jefe para que llame al de Empleado. Debe mostrar `Ana`.",
+    "en": "Completa el constructor de Jefe para que llame al de Empleado. Debe mostrar `Ana`."
+   },
+   "kind": "fill",
+   "code": "class Empleado {\n    String nombre;\n    Empleado(String nombre) { this.nombre = nombre; }\n}\n\nclass Jefe extends Empleado {\n    Jefe(String nombre) {\n        ___;\n    }\n}\n\nclass Main {\n    public static void main(String[] args) {\n        System.out.println(new Jefe(\"Ana\").nombre);\n    }\n}",
+   "accept": [
+    "super(nombre)"
+   ],
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "Empleado no tiene constructor vacío, así que la subclase tiene que llamar a `super(…)` con el nombre, y en la primera línea. Solución: `super(nombre)`.",
+    "en": "Empleado no tiene constructor vacío, así que la subclase tiene que llamar a `super(…)` con el nombre, y en la primera línea. Solución: `super(nombre)`."
+   },
+   "lesson": "java-herencia"
+  },
+  {
+   "id": "java-p20",
+   "block": "java-herencia",
+   "q": {
+    "es": "Ordena las líneas para declarar la subclase. Debe mostrar `Guau`.",
+    "en": "Ordena las líneas para declarar la subclase. Debe mostrar `Guau`."
+   },
+   "kind": "order",
+   "code": "class Animal {\n    String sonido() { return \"...\"; }\n}\n___\nclass Main {\n    public static void main(String[] args) {\n        System.out.println(new Perro().sonido());\n    }\n}",
+   "lines": [
+    "class Perro extends Animal {",
+    "    @Override",
+    "    String sonido() { return \"Guau\"; }",
+    "}"
+   ],
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "La anotación va justo antes del método que sobrescribe, y el método, dentro de las llaves de la clase.",
+    "en": "La anotación va justo antes del método que sobrescribe, y el método, dentro de las llaves de la clase."
+   },
+   "lesson": "java-herencia"
+  },
+  {
+   "id": "java-p21",
+   "block": "java-herencia",
+   "q": {
+    "es": "Este programa debería mostrar `Guau`, pero no compila, falla o muestra otra cosa. ¿Qué línea tiene el error?",
+    "en": "Este programa debería mostrar `Guau`, pero no compila, falla o muestra otra cosa. ¿Qué línea tiene el error?"
+   },
+   "kind": "choice",
+   "code": null,
+   "options": [
+    "class Animal {",
+    "    String sonido() { return \"...\"; }",
+    "}",
+    "class Perro extends Animal {",
+    "    @Override",
+    "    String Sonido() { return \"Guau\"; }",
+    "}",
+    "class Main {",
+    "    public static void main(String[] args) {",
+    "        Animal a = new Perro();",
+    "        System.out.println(a.sonido());",
+    "    }",
+    "}"
+   ],
+   "answer": [
+    5
+   ],
+   "explain": {
+    "es": "`Sonido` con mayúscula es otro método: no sobrescribe nada y `@Override` hace que no compile. Por eso conviene ponerlo siempre. Corrección: `String sonido() { return \"Guau\"; }`.",
+    "en": "`Sonido` con mayúscula es otro método: no sobrescribe nada y `@Override` hace que no compile. Por eso conviene ponerlo siempre. Corrección: `String sonido() { return \"Guau\"; }`."
    },
    "lesson": "java-herencia"
   },
@@ -998,6 +1494,82 @@
    "lesson": "java-abstractas-interfaces"
   },
   {
+   "id": "java-p22",
+   "block": "java-herencia",
+   "q": {
+    "es": "Completa la palabra clave para que Robot cumpla el contrato de la interfaz. Debe mostrar `Hola`.",
+    "en": "Completa la palabra clave para que Robot cumpla el contrato de la interfaz. Debe mostrar `Hola`."
+   },
+   "kind": "fill",
+   "code": "interface Saludador {\n    String saludo();\n}\n\nclass Robot ___ Saludador {\n    public String saludo() { return \"Hola\"; }\n}\n\nclass Main {\n    public static void main(String[] args) {\n        System.out.println(new Robot().saludo());\n    }\n}",
+   "accept": [
+    "implements"
+   ],
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "Una clase **hereda** (`extends`) de otra clase e **implementa** (`implements`) interfaces. Solución: `implements`.",
+    "en": "Una clase **hereda** (`extends`) de otra clase e **implementa** (`implements`) interfaces. Solución: `implements`."
+   },
+   "lesson": "java-abstractas-interfaces"
+  },
+  {
+   "id": "java-p23",
+   "block": "java-herencia",
+   "q": {
+    "es": "Ordena las líneas para declarar la clase abstracta y su subclase. Debe mostrar `9.0`.",
+    "en": "Ordena las líneas para declarar la clase abstracta y su subclase. Debe mostrar `9.0`."
+   },
+   "kind": "order",
+   "code": "___\nclass Main {\n    public static void main(String[] args) {\n        Figura f = new Cuadrado();\n        System.out.println(f.area());\n    }\n}",
+   "lines": [
+    "abstract class Figura {",
+    "    abstract double area();",
+    "}",
+    "class Cuadrado extends Figura {",
+    "    double area() { return 9; }",
+    "}"
+   ],
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "Cada clase abre y cierra sus llaves; el método abstracto va dentro de Figura y su implementación, dentro de Cuadrado.",
+    "en": "Cada clase abre y cierra sus llaves; el método abstracto va dentro de Figura y su implementación, dentro de Cuadrado."
+   },
+   "lesson": "java-abstractas-interfaces"
+  },
+  {
+   "id": "java-p24",
+   "block": "java-herencia",
+   "q": {
+    "es": "Este programa debería mostrar `vuela`, pero no compila, falla o muestra otra cosa. ¿Qué línea tiene el error?",
+    "en": "Este programa debería mostrar `vuela`, pero no compila, falla o muestra otra cosa. ¿Qué línea tiene el error?"
+   },
+   "kind": "choice",
+   "code": null,
+   "options": [
+    "interface Volador {",
+    "    void volar();",
+    "}",
+    "class Pajaro implements Volador {",
+    "    void volar() { System.out.println(\"vuela\"); }",
+    "}",
+    "class Main {",
+    "    public static void main(String[] args) {",
+    "        new Pajaro().volar();",
+    "    }",
+    "}"
+   ],
+   "answer": [
+    4
+   ],
+   "explain": {
+    "es": "Los métodos de una interfaz son public; al implementarlos no se puede reducir su visibilidad. Corrección: `public void volar() { System.out.println(\"vuela\"); }`.",
+    "en": "Los métodos de una interfaz son public; al implementarlos no se puede reducir su visibilidad. Corrección: `public void volar() { System.out.println(\"vuela\"); }`."
+   },
+   "lesson": "java-abstractas-interfaces"
+  },
+  {
    "id": "java-41",
    "block": "java-colecciones",
    "q": {
@@ -1113,6 +1685,71 @@
    "lesson": "java-colecciones"
   },
   {
+   "id": "java-p25",
+   "block": "java-colecciones",
+   "q": {
+    "es": "Completa para mostrar cuántos elementos tiene la lista. Debe mostrar `2`.",
+    "en": "Completa para mostrar cuántos elementos tiene la lista. Debe mostrar `2`."
+   },
+   "kind": "fill",
+   "code": "List<Integer> n = new ArrayList<>();\nn.add(4);\nn.add(9);\nSystem.out.println(n.___);",
+   "accept": [
+    "size()"
+   ],
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "Las listas usan el método `size()`; los arrays, el atributo `length`; los String, el método `length()`. Solución: `size()`.",
+    "en": "Las listas usan el método `size()`; los arrays, el atributo `length`; los String, el método `length()`. Solución: `size()`."
+   },
+   "lesson": "java-colecciones"
+  },
+  {
+   "id": "java-p26",
+   "block": "java-colecciones",
+   "q": {
+    "es": "Ordena el bucle que cuenta las palabras. Debe mostrar `{a=2, b=1}`.",
+    "en": "Ordena el bucle que cuenta las palabras. Debe mostrar `{a=2, b=1}`."
+   },
+   "kind": "order",
+   "code": "Map<String, Integer> cuenta = new TreeMap<>();\n___\nSystem.out.println(cuenta);",
+   "lines": [
+    "for (String p : \"a b a\".split(\" \")) {",
+    "    cuenta.put(p, cuenta.getOrDefault(p, 0) + 1);",
+    "}"
+   ],
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "Para cada palabra, se suma 1 a su cuenta (0 si todavía no estaba).",
+    "en": "Para cada palabra, se suma 1 a su cuenta (0 si todavía no estaba)."
+   },
+   "lesson": "java-colecciones"
+  },
+  {
+   "id": "java-p27",
+   "block": "java-colecciones",
+   "q": {
+    "es": "Este programa debería mostrar `[1, 3]`, pero no compila, falla o muestra otra cosa. ¿Qué línea tiene el error?",
+    "en": "Este programa debería mostrar `[1, 3]`, pero no compila, falla o muestra otra cosa. ¿Qué línea tiene el error?"
+   },
+   "kind": "choice",
+   "code": null,
+   "options": [
+    "List<Integer> l = new ArrayList<>(List.of(1, 2, 3, 4));",
+    "for (Integer x : l) if (x % 2 == 0) l.remove(x);",
+    "System.out.println(l);"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": {
+    "es": "Borrar mientras se recorre con for-each lanza `ConcurrentModificationException`. `removeIf` hace el filtrado de forma segura. Corrección: `l.removeIf(x -> x % 2 == 0);`.",
+    "en": "Borrar mientras se recorre con for-each lanza `ConcurrentModificationException`. `removeIf` hace el filtrado de forma segura. Corrección: `l.removeIf(x -> x % 2 == 0);`."
+   },
+   "lesson": "java-colecciones"
+  },
+  {
    "id": "java-46",
    "block": "java-colecciones",
    "q": {
@@ -1224,6 +1861,82 @@
    "explain": {
     "es": "La excepción propia guarda el mensaje con `super(mensaje)` y el catch lo recupera con `getMessage()`. La resta de dos double da 30.0.",
     "en": "La excepción propia guarda el mensaje con `super(mensaje)` y el catch lo recupera con `getMessage()`. La resta de dos double da 30.0."
+   },
+   "lesson": "java-excepciones"
+  },
+  {
+   "id": "java-p28",
+   "block": "java-colecciones",
+   "q": {
+    "es": "Completa el tipo de excepción que hay que capturar. Debe mostrar el mensaje de error.",
+    "en": "Completa el tipo de excepción que hay que capturar. Debe mostrar el mensaje de error."
+   },
+   "kind": "fill",
+   "code": "try {\n    int r = 10 / 0;\n    System.out.println(r);\n} catch (___ e) {\n    System.out.println(\"No se puede dividir entre 0\");\n}",
+   "accept": [
+    "ArithmeticException",
+    "RuntimeException",
+    "Exception",
+    "Throwable"
+   ],
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "Dividir un entero entre 0 lanza `ArithmeticException`. Capturar una superclase (RuntimeException, Exception) también funciona, pero cuanto más específico, mejor. Solución: `ArithmeticException`.",
+    "en": "Dividir un entero entre 0 lanza `ArithmeticException`. Capturar una superclase (RuntimeException, Exception) también funciona, pero cuanto más específico, mejor. Solución: `ArithmeticException`."
+   },
+   "lesson": "java-excepciones"
+  },
+  {
+   "id": "java-p29",
+   "block": "java-colecciones",
+   "q": {
+    "es": "Ordena las líneas para que el programa capture el error y muestre su mensaje.",
+    "en": "Ordena las líneas para que el programa capture el error y muestre su mensaje."
+   },
+   "kind": "order",
+   "code": "___",
+   "lines": [
+    "try {",
+    "    int n = Integer.parseInt(\"x\");",
+    "    System.out.println(n * 2);",
+    "} catch (NumberFormatException e) {",
+    "    System.out.println(\"Error: \" + e.getMessage());",
+    "}"
+   ],
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "El código que puede fallar va dentro del try; el catch recibe la excepción `e` y solo existe dentro de su bloque.",
+    "en": "El código que puede fallar va dentro del try; el catch recibe la excepción `e` y solo existe dentro de su bloque."
+   },
+   "lesson": "java-excepciones"
+  },
+  {
+   "id": "java-p30",
+   "block": "java-colecciones",
+   "q": {
+    "es": "Este programa debería mostrar `edad negativa`, pero no compila, falla o muestra otra cosa. ¿Qué línea tiene el error?",
+    "en": "Este programa debería mostrar `edad negativa`, pero no compila, falla o muestra otra cosa. ¿Qué línea tiene el error?"
+   },
+   "kind": "choice",
+   "code": null,
+   "options": [
+    "class Main {",
+    "    static void validar(int edad) throws Exception {",
+    "        if (edad < 0) throw new Exception(\"edad negativa\");",
+    "    }",
+    "    public static void main(String[] args) {",
+    "        validar(-1);",
+    "    }",
+    "}"
+   ],
+   "answer": [
+    5
+   ],
+   "explain": {
+    "es": "`Exception` es comprobada: quien llama a `validar` tiene que capturarla (o declararla con throws). Si no, no compila. Corrección: `try { validar(-1); } catch (Exception e) { System.out.println(e.getMessage()); }`.",
+    "en": "`Exception` es comprobada: quien llama a `validar` tiene que capturarla (o declararla con throws). Si no, no compila. Corrección: `try { validar(-1); } catch (Exception e) { System.out.println(e.getMessage()); }`."
    },
    "lesson": "java-excepciones"
   }

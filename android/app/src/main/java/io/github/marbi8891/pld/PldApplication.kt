@@ -67,6 +67,7 @@ class AppModel(context: Context) {
         )
         val others = listOf(
             course(context, "sql", "SQL", "Bases de datos (DAW)", "Para probarlo, cópialo en tu gestor de bases de datos (MySQL Workbench, DBeaver…)."),
+            course(context, "js", "JavaScript", "Entorno cliente (DAW)", "Para probarlo, pégalo en la consola del navegador (F12) o guárdalo en un .js y ejecútalo con Node. El código del DOM necesita una página HTML."),
             course(context, "java", "Java", "Programación (DAW)", "Para probarlo, pégalo en tu IDE (IntelliJ, NetBeans…) o guárdalo en Main.java y ejecuta «java Main.java»."),
         )
         others.forEach { it.state.shareApp(pcap.state.app) }

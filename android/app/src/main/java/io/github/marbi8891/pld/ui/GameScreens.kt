@@ -45,6 +45,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.github.marbi8891.pld.AppModel
+import io.github.marbi8891.pld.pcap.Answer
 import io.github.marbi8891.pld.pcap.AppProgress
 import io.github.marbi8891.pld.pcap.DungeonRun
 import io.github.marbi8891.pld.pcap.DungeonRun.Phase
@@ -70,6 +71,11 @@ private val BOSSES = mapOf(
     "java-poo" to "El Forjador de Objetos",
     "java-herencia" to "El Patriarca Polimórfico",
     "java-colecciones" to "El Coleccionista de Excepciones",
+    "js-fundamentos" to "El Coercionador",
+    "js-funciones" to "El Guardián del Closure",
+    "js-datos" to "El Domador de Arrays",
+    "js-dom" to "El Árbol Viviente",
+    "js-asincronia" to "El Señor del Event Loop",
 )
 
 /* ---------------------------------------------------------------- Pestaña «Jugar» */
@@ -243,7 +249,7 @@ private fun Room(
     val buzz: (Boolean) -> Unit = { ok ->
         haptics.performHapticFeedback(if (ok) HapticFeedbackType.TextHandleMove else HapticFeedbackType.LongPress)
     }
-    var chosen by remember(run, run.floor, run.room) { mutableStateOf(setOf<Int>()) }
+    var response by remember(run, run.floor, run.room) { mutableStateOf(Answer()) }
     var secondsLeft by remember(run, run.floor, run.room) { mutableIntStateOf(DungeonRun.BOSS_SECONDS) }
 
     // Cronómetro del jefe: al llegar a cero cuenta como fallo
@@ -279,20 +285,7 @@ private fun Room(
         Text("Sala ${run.room + 1} de ${DungeonRun.ROOMS} · 🐛 Un bug salvaje aparece", color = palette.muted)
     }
 
-    QuestionView(
-        question,
-        lang,
-        chosen,
-        reveal = phase == Phase.FEEDBACK,
-        hidden = run.hidden,
-        onSelect = { option ->
-            chosen = when {
-                !question.multi -> setOf(option)
-                option in chosen -> chosen - option
-                else -> chosen + option
-            }
-        },
-    )
+    QuestionInput(question, lang, response, reveal = phase == Phase.FEEDBACK, hidden = run.hidden) { response = it }
 
     if (phase == Phase.ASK) {
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -304,7 +297,7 @@ private fun Room(
         Button(
             onClick = {
                 act {
-                    val ok = run.answer(chosen)
+                    val ok = run.answer(response)
                     model.update {
                         recordAnswer(question.id, ok)
                         if (ok) app.addXp(AppProgress.XP_PRACTICE)
@@ -312,7 +305,7 @@ private fun Room(
                     buzz(ok)
                 }
             },
-            enabled = chosen.size == question.answer.size,
+            enabled = question.isComplete(response),
             modifier = Modifier.fillMaxWidth(),
         ) { Text("⚔ Atacar") }
     } else {

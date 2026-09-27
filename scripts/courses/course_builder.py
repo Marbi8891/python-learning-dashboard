@@ -40,6 +40,15 @@ class Q:
     run: str | None = None  # lo que se ejecuta para comprobar (por defecto, `code`)
     expect: str | None = None  # salida esperada
     wrong: list[str] = field(default_factory=list)  # distractores de las preguntas de código
+    # Ejercicios de escribir código (ADR-0017)
+    kind: str = (
+        "choice"  # choice · fill (hueco ___) · order (ordenar líneas) · bug (línea con error)
+    )
+    accept: list[str] = field(default_factory=list)  # fill: respuestas válidas para el hueco
+    lines: list[str] = field(default_factory=list)  # order: líneas en el orden correcto
+    bug: int | None = None  # bug: índice de la línea con el error
+    fix: str | None = None  # bug: la línea corregida
+    target: str | None = None  # bug: lo que debería mostrar el programa corregido
 
 
 @dataclass
@@ -89,6 +98,74 @@ def resolve(q: Q, runner: Callable[[str], str]) -> tuple[list[str], int]:
     return options, options.index(q.expect)
 
 
+def _same(qid: str, expected: str | None, actual: str) -> None:
+    if actual != expected:
+        raise AssertionError(
+            f"{qid}: la salida real no es la esperada.\n"
+            f"--- esperada ---\n{expected}\n--- real ---\n{actual}"
+        )
+
+
+def practice(q: Q, runner: Callable[[str], str]) -> dict:
+    """Ejercicios de escribir código: se comprueba que la solución funciona y el error falla."""
+    code = q.code or ""
+    if q.kind == "fill":
+        assert "___" in code and q.accept, f"{q.id}: falta el hueco ___ o las respuestas"
+        for answer in q.accept:
+            _same(q.id, q.expect, runner(code.replace("___", answer)))
+        solution = f" Solución: `{q.accept[0]}`."
+        return {
+            "kind": "fill",
+            "code": code,
+            "accept": q.accept,
+            "options": [],
+            "answer": [],
+            "extra": solution,
+        }
+    if q.kind == "order":
+        context = code or "___"
+        assert "___" in context.splitlines() and len(q.lines) >= 3, (
+            f"{q.id}: contexto o líneas incorrectos"
+        )
+
+        def assemble(lines: list[str]) -> str:
+            return context.replace("___", "\n".join(lines))
+
+        _same(q.id, q.expect, runner(assemble(q.lines)))
+        # La solución tiene que ser única: intercambiar dos líneas vecinas no puede valer también
+        for i in range(len(q.lines) - 1):
+            swapped = [*q.lines]
+            swapped[i], swapped[i + 1] = swapped[i + 1], swapped[i]
+            if swapped != q.lines:
+                assert runner(assemble(swapped)) != q.expect, (
+                    f"{q.id}: también funciona intercambiando las líneas {i + 1} y {i + 2}"
+                )
+        return {
+            "kind": "order",
+            "code": code or None,
+            "lines": q.lines,
+            "options": [],
+            "answer": [],
+            "extra": "",
+        }
+    if q.kind == "bug":
+        lines = code.split("\n")
+        assert q.bug is not None and q.fix is not None and 0 <= q.bug < len(lines)
+        assert runner(code) != q.target, f"{q.id}: el código con el error ya da lo esperado"
+        fixed = [*lines]
+        fixed[q.bug] = q.fix
+        _same(q.id, q.target, runner("\n".join(fixed)))
+        solution = f" Corrección: `{q.fix.strip()}`."
+        return {
+            "kind": "choice",
+            "code": None,
+            "options": lines,
+            "answer": [q.bug],
+            "extra": solution,
+        }
+    raise ValueError(f"{q.id}: tipo desconocido {q.kind}")
+
+
 def build(
     course_id: str,
     blocks: list[Block],
@@ -117,6 +194,20 @@ def build(
             for q in lesson.questions:
                 assert q.id not in ids, f"id repetido: {q.id}"
                 ids.add(q.id)
+                if q.kind != "choice":
+                    entry = practice(q, runner)
+                    extra = entry.pop("extra")
+                    bank_questions.append(
+                        {
+                            "id": q.id,
+                            "block": block.slug,
+                            "q": {"es": q.q, "en": q.q},
+                            **entry,
+                            "explain": {"es": q.explain + extra, "en": q.explain + extra},
+                            "lesson": lesson.slug,
+                        }
+                    )
+                    continue
                 options, answer = resolve(q, runner)
                 bank_questions.append(
                     {

@@ -44,9 +44,16 @@ El autor quiere estudiar con la app otros lenguajes de DAW además de Python: SQ
 - Cada pregunta de código se **compila y ejecuta con `java`** (Java 17 en la CI, en modo «archivo fuente»). La salida esperada distingue tres casos: lo que imprime, «Error de compilación» y «Excepción: Nombre». Así las preguntas sobre errores también quedan comprobadas.
 - Los textos que imprimen los programas no llevan tildes, para que la salida sea idéntica con cualquier configuración regional.
 
+## Tercer curso: JavaScript (módulo Desarrollo Web en Entorno Cliente)
+
+- 5 bloques: fundamentos, funciones y ámbito, arrays y objetos, DOM y eventos, y asincronía. 10 lecciones, 50 preguntas y 20 del mini-quiz.
+- Las preguntas de código se **ejecutan con Node.js**. La salida esperada es lo que imprime `console.log`, o «Lanza NombreDelError» si el programa termina con un error.
+- Las preguntas imprimen textos y números, no arrays ni objetos sueltos, porque Node y la consola del navegador los muestran distinto.
+- El DOM, los eventos y `fetch` no existen en Node. Sus ejemplos solo se comprueban sintácticamente (`node --check`) y sus preguntas son teóricas.
+
 ## Consecuencias
 
-- **Cursos siguientes:** JavaScript, que se comprobará con Node en la CI, y HTML/CSS, con sobre todo preguntas teóricas y de lectura de código.
+- **Curso siguiente:** HTML/CSS, con sobre todo preguntas teóricas y de lectura de código.
 - **Pendiente:** ejecutar SQL dentro de la app (Android trae SQLite, así que es viable sin conexión). Irá en una entrega propia.
 - **ASSUMPTION:** la sincronización con la cuenta (entrega 7) necesitará guardar en el backend el estado de cada curso, no solo `pcap-state`.
 - **VERIFY:** la interfaz del selector solo se compila en la CI.

@@ -1,0 +1,1352 @@
+{
+ "exam": {
+  "code": "JS",
+  "questions": 0,
+  "minutes": 0,
+  "pass": 0,
+  "blocks": [
+   {
+    "slug": "js-fundamentos",
+    "weight": 20,
+    "items": 10,
+    "title": {
+     "es": "Fundamentos",
+     "en": "Fundamentos"
+    }
+   },
+   {
+    "slug": "js-funciones",
+    "weight": 20,
+    "items": 10,
+    "title": {
+     "es": "Funciones y ámbito",
+     "en": "Funciones y ámbito"
+    }
+   },
+   {
+    "slug": "js-datos",
+    "weight": 25,
+    "items": 10,
+    "title": {
+     "es": "Arrays y objetos",
+     "en": "Arrays y objetos"
+    }
+   },
+   {
+    "slug": "js-dom",
+    "weight": 20,
+    "items": 10,
+    "title": {
+     "es": "DOM y eventos",
+     "en": "DOM y eventos"
+    }
+   },
+   {
+    "slug": "js-asincronia",
+    "weight": 15,
+    "items": 10,
+    "title": {
+     "es": "Asincronía",
+     "en": "Asincronía"
+    }
+   }
+  ]
+ },
+ "questions": [
+  {
+   "id": "js-01",
+   "block": "js-fundamentos",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "console.log(typeof 42, typeof \"42\", typeof true, typeof undefined);",
+   "options": [
+    "int string boolean null",
+    "number number boolean undefined",
+    "number string boolean undefined",
+    "number string bool undefined"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "`typeof` devuelve el tipo del **valor**: \"42\" entre comillas es un string. No existe el tipo `int`: todos los números son `number`.",
+    "en": "`typeof` devuelve el tipo del **valor**: \"42\" entre comillas es un string. No existe el tipo `int`: todos los números son `number`."
+   },
+   "lesson": "js-variables"
+  },
+  {
+   "id": "js-02",
+   "block": "js-fundamentos",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "console.log(typeof null, typeof [], typeof function () {});",
+   "options": [
+    "null object function",
+    "object array object",
+    "object object function",
+    "null array function"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "Dos rarezas: `typeof null` es \"object\" (un error histórico del lenguaje) y los arrays también son \"object\". Para arrays se usa `Array.isArray`.",
+    "en": "Dos rarezas: `typeof null` es \"object\" (un error histórico del lenguaje) y los arrays también son \"object\". Para arrays se usa `Array.isArray`."
+   },
+   "lesson": "js-variables"
+  },
+  {
+   "id": "js-03",
+   "block": "js-fundamentos",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "const lista = [1, 2];\nlista.push(3);\nconsole.log(lista.length);",
+   "options": [
+    "Lanza SyntaxError",
+    "3",
+    "Lanza TypeError",
+    "2"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": {
+    "es": "`const` impide reasignar la variable, pero el array se puede modificar: `push` añade un tercer elemento.",
+    "en": "`const` impide reasignar la variable, pero el array se puede modificar: `push` añade un tercer elemento."
+   },
+   "lesson": "js-variables"
+  },
+  {
+   "id": "js-04",
+   "block": "js-fundamentos",
+   "q": {
+    "es": "¿Qué ocurre al ejecutar este código?",
+    "en": "¿Qué ocurre al ejecutar este código?"
+   },
+   "code": "const x = 1;\nx = 2;\nconsole.log(x);",
+   "options": [
+    "2",
+    "1",
+    "Lanza TypeError",
+    "Lanza SyntaxError"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "Reasignar una constante lanza `TypeError: Assignment to constant variable`. Si vas a cambiar el valor, usa `let`.",
+    "en": "Reasignar una constante lanza `TypeError: Assignment to constant variable`. Si vas a cambiar el valor, usa `let`."
+   },
+   "lesson": "js-variables"
+  },
+  {
+   "id": "js-05",
+   "block": "js-fundamentos",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "const nombre = \"Ana\", nota = 7;\nconsole.log(`${nombre} tiene un ${nota + 1}`);",
+   "options": [
+    "${nombre} tiene un ${nota + 1}",
+    "Ana tiene un 8",
+    "Ana tiene un nota + 1",
+    "Ana tiene un 71"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": {
+    "es": "Dentro de `${ }` va una **expresión** que se evalúa: `nota + 1` es 8 porque `nota` es un número.",
+    "en": "Dentro de `${ }` va una **expresión** que se evalúa: `nota + 1` es 8 porque `nota` es un número."
+   },
+   "lesson": "js-variables"
+  },
+  {
+   "id": "js-06",
+   "block": "js-fundamentos",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "console.log(5 == \"5\", 5 === \"5\");",
+   "options": [
+    "false false",
+    "true false",
+    "true true",
+    "false true"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": {
+    "es": "`==` convierte el texto a número antes de comparar; `===` no convierte y los tipos son distintos.",
+    "en": "`==` convierte el texto a número antes de comparar; `===` no convierte y los tipos son distintos."
+   },
+   "lesson": "js-coercion"
+  },
+  {
+   "id": "js-07",
+   "block": "js-fundamentos",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "console.log(\"5\" + 3, \"5\" - 3);",
+   "options": [
+    "8 NaN",
+    "53 53",
+    "53 2",
+    "8 2"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "Con un string, `+` concatena: \"53\". El `-` solo existe para números, así que convierte \"5\" a 5: 2.",
+    "en": "Con un string, `+` concatena: \"53\". El `-` solo existe para números, así que convierte \"5\" a 5: 2."
+   },
+   "lesson": "js-coercion"
+  },
+  {
+   "id": "js-08",
+   "block": "js-fundamentos",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "console.log(Boolean(\"\"), Boolean(\"0\"), Boolean([]), Boolean(0));",
+   "options": [
+    "true true true false",
+    "false false true false",
+    "false false false false",
+    "false true true false"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "Solo el texto vacío es falsy; \"0\" es un texto con un carácter. Un array, aunque esté vacío, es un objeto: truthy. El número 0 es falsy.",
+    "en": "Solo el texto vacío es falsy; \"0\" es un texto con un carácter. Un array, aunque esté vacío, es un objeto: truthy. El número 0 es falsy."
+   },
+   "lesson": "js-coercion"
+  },
+  {
+   "id": "js-09",
+   "block": "js-fundamentos",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "const edad = 0;\nconsole.log(edad || 18, edad ?? 18);",
+   "options": [
+    "0 0",
+    "0 18",
+    "18 0",
+    "18 18"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "`||` descarta cualquier falsy, también el 0. `??` solo sustituye null o undefined, así que respeta la edad 0.",
+    "en": "`||` descarta cualquier falsy, también el 0. `??` solo sustituye null o undefined, así que respeta la edad 0."
+   },
+   "lesson": "js-coercion"
+  },
+  {
+   "id": "js-10",
+   "block": "js-fundamentos",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "console.log(NaN === NaN, Number.isNaN(Number(\"abc\")));",
+   "options": [
+    "false true",
+    "true false",
+    "false false",
+    "true true"
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "NaN es el único valor distinto de sí mismo. `Number(\"abc\")` da NaN y `Number.isNaN` lo detecta.",
+    "en": "NaN es el único valor distinto de sí mismo. `Number(\"abc\")` da NaN y `Number.isNaN` lo detecta."
+   },
+   "lesson": "js-coercion"
+  },
+  {
+   "id": "js-11",
+   "block": "js-funciones",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "const saludar = (nombre = \"invitado\") => `Hola, ${nombre}`;\nconsole.log(saludar(), saludar(\"Ana\"));",
+   "options": [
+    "Lanza TypeError",
+    "Hola,  Hola, Ana",
+    "Hola, invitado Hola, Ana",
+    "Hola, undefined Hola, Ana"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "Sin argumento, el parámetro toma su valor por defecto. Una flecha sin llaves devuelve la expresión.",
+    "en": "Sin argumento, el parámetro toma su valor por defecto. Una flecha sin llaves devuelve la expresión."
+   },
+   "lesson": "js-funciones"
+  },
+  {
+   "id": "js-12",
+   "block": "js-funciones",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "console.log(doble(4));\n\nfunction doble(n) {\n  return n * 2;\n}",
+   "options": [
+    "undefined",
+    "8",
+    "Lanza ReferenceError",
+    "NaN"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": {
+    "es": "Las **declaraciones** de función se elevan (*hoisting*): existen desde el principio de su ámbito y se pueden llamar antes.",
+    "en": "Las **declaraciones** de función se elevan (*hoisting*): existen desde el principio de su ámbito y se pueden llamar antes."
+   },
+   "lesson": "js-funciones"
+  },
+  {
+   "id": "js-13",
+   "block": "js-funciones",
+   "q": {
+    "es": "¿Qué ocurre al ejecutar este código?",
+    "en": "¿Qué ocurre al ejecutar este código?"
+   },
+   "code": "console.log(triple(2));\n\nconst triple = (n) => n * 3;",
+   "options": [
+    "Lanza TypeError",
+    "undefined",
+    "Lanza ReferenceError",
+    "6"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "Una función guardada en un `const` no existe hasta su línea: usarla antes lanza `ReferenceError`.",
+    "en": "Una función guardada en un `const` no existe hasta su línea: usarla antes lanza `ReferenceError`."
+   },
+   "lesson": "js-funciones"
+  },
+  {
+   "id": "js-14",
+   "block": "js-funciones",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "function suma(...nums) {\n  return nums.reduce((a, b) => a + b, 0);\n}\nconsole.log(suma(1, 2, 3), suma());",
+   "options": [
+    "1 0",
+    "6 0",
+    "Lanza TypeError",
+    "6 undefined"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": {
+    "es": "`...nums` recoge todos los argumentos en un array (vacío si no hay ninguno). El 0 inicial de `reduce` evita el error con el array vacío.",
+    "en": "`...nums` recoge todos los argumentos en un array (vacío si no hay ninguno). El 0 inicial de `reduce` evita el error con el array vacío."
+   },
+   "lesson": "js-funciones"
+  },
+  {
+   "id": "js-15",
+   "block": "js-funciones",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "function area(base, altura) {\n  base * altura;\n}\nconsole.log(area(2, 3));",
+   "options": [
+    "null",
+    "6",
+    "undefined",
+    "Lanza SyntaxError"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "Calcula el producto, pero no lo **devuelve**. Una función sin `return` devuelve `undefined`.",
+    "en": "Calcula el producto, pero no lo **devuelve**. Una función sin `return` devuelve `undefined`."
+   },
+   "lesson": "js-funciones"
+  },
+  {
+   "id": "js-16",
+   "block": "js-funciones",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "for (var i = 0; i < 3; i++) {\n  setTimeout(() => console.log(i), 0);\n}",
+   "options": [
+    "0\n1\n2",
+    "3",
+    "3\n3\n3",
+    "2\n2\n2"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "Con `var` solo hay **una** `i` compartida. Cuando se ejecutan los setTimeout, el bucle ya ha terminado e `i` vale 3.",
+    "en": "Con `var` solo hay **una** `i` compartida. Cuando se ejecutan los setTimeout, el bucle ya ha terminado e `i` vale 3."
+   },
+   "lesson": "js-ambito"
+  },
+  {
+   "id": "js-17",
+   "block": "js-funciones",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "for (let i = 0; i < 3; i++) {\n  setTimeout(() => console.log(i), 0);\n}",
+   "options": [
+    "0",
+    "1\n2\n3",
+    "3\n3\n3",
+    "0\n1\n2"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "Con `let`, cada vuelta del bucle tiene su propia `i`, y cada función recuerda la suya.",
+    "en": "Con `let`, cada vuelta del bucle tiene su propia `i`, y cada función recuerda la suya."
+   },
+   "lesson": "js-ambito"
+  },
+  {
+   "id": "js-18",
+   "block": "js-funciones",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "function crearContador() {\n  let n = 0;\n  return () => ++n;\n}\nconst a = crearContador();\nconst b = crearContador();\na();\na();\nconsole.log(a(), b());",
+   "options": [
+    "1 1",
+    "3 1",
+    "2 1",
+    "3 3"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": {
+    "es": "Cada llamada a `crearContador` crea su propio `n`. `a` ya se ha usado dos veces, así que la tercera da 3; `b` empieza de cero.",
+    "en": "Cada llamada a `crearContador` crea su propio `n`. `a` ya se ha usado dos veces, así que la tercera da 3; `b` empieza de cero."
+   },
+   "lesson": "js-ambito"
+  },
+  {
+   "id": "js-19",
+   "block": "js-funciones",
+   "q": {
+    "es": "¿Qué ocurre al ejecutar este código?",
+    "en": "¿Qué ocurre al ejecutar este código?"
+   },
+   "code": "console.log(x);\nlet x = 5;",
+   "options": [
+    "5",
+    "Lanza ReferenceError",
+    "null",
+    "undefined"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": {
+    "es": "`x` está en la zona muerta temporal hasta su declaración: leerla antes lanza `ReferenceError`.",
+    "en": "`x` está en la zona muerta temporal hasta su declaración: leerla antes lanza `ReferenceError`."
+   },
+   "lesson": "js-ambito"
+  },
+  {
+   "id": "js-20",
+   "block": "js-funciones",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "console.log(y);\nvar y = 5;",
+   "options": [
+    "null",
+    "5",
+    "Lanza ReferenceError",
+    "undefined"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "La declaración `var y` se eleva, pero la asignación `= 5` se queda en su línea: en el console.log, y existe y vale undefined.",
+    "en": "La declaración `var y` se eleva, pero la asignación `= 5` se queda en su línea: en el console.log, y existe y vale undefined."
+   },
+   "lesson": "js-ambito"
+  },
+  {
+   "id": "js-21",
+   "block": "js-datos",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "const n = [1, 2, 3, 4];\nconsole.log(n.map((x) => x * 2).filter((x) => x > 4).join(\",\"));",
+   "options": [
+    "4,6,8",
+    "2,4,6,8",
+    "3,4",
+    "6,8"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "`map` da [2, 4, 6, 8] y `filter` se queda con los mayores que 4: 6 y 8.",
+    "en": "`map` da [2, 4, 6, 8] y `filter` se queda con los mayores que 4: 6 y 8."
+   },
+   "lesson": "js-arrays"
+  },
+  {
+   "id": "js-22",
+   "block": "js-datos",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "console.log([10, 9, 1, 100].sort().join(\" \"));",
+   "options": [
+    "100 10 9 1",
+    "9 10 100 1",
+    "1 9 10 100",
+    "1 10 100 9"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "Sin función de comparación, `sort` ordena como **texto**: \"10\" va antes que \"9\" porque '1' < '9'. Para números: `sort((a, b) => a - b)`.",
+    "en": "Sin función de comparación, `sort` ordena como **texto**: \"10\" va antes que \"9\" porque '1' < '9'. Para números: `sort((a, b) => a - b)`."
+   },
+   "lesson": "js-arrays"
+  },
+  {
+   "id": "js-23",
+   "block": "js-datos",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "const precios = [5, 10, 20];\nconsole.log(precios.reduce((total, p) => total + p, 0));",
+   "options": [
+    "51020",
+    "Lanza TypeError",
+    "35",
+    "0"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "`reduce` parte del valor inicial 0 y va sumando cada precio: 35.",
+    "en": "`reduce` parte del valor inicial 0 y va sumando cada precio: 35."
+   },
+   "lesson": "js-arrays"
+  },
+  {
+   "id": "js-24",
+   "block": "js-datos",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "const u = [\n  { n: \"Ana\", edad: 20 },\n  { n: \"Luis\", edad: 17 },\n  { n: \"Eva\", edad: 30 },\n];\nconsole.log(u.find((x) => x.edad > 18).n, u.filter((x) => x.edad > 18).length);",
+   "options": [
+    "Ana 2",
+    "Eva 2",
+    "Ana 3",
+    "Ana 1"
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "`find` devuelve el **primero** que cumple la condición (Ana); `filter` devuelve **todos** (Ana y Eva).",
+    "en": "`find` devuelve el **primero** que cumple la condición (Ana); `filter` devuelve **todos** (Ana y Eva)."
+   },
+   "lesson": "js-arrays"
+  },
+  {
+   "id": "js-25",
+   "block": "js-datos",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "const [a, , c, ...resto] = [1, 2, 3, 4, 5];\nconsole.log(a, c, resto.length);",
+   "options": [
+    "1 2 3",
+    "1 3 3",
+    "1 3 2",
+    "1 3 [4, 5]"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "El hueco entre comas salta el 2. `...resto` recoge lo que queda (4 y 5): longitud 2.",
+    "en": "El hueco entre comas salta el 2. `...resto` recoge lo que queda (4 y 5): longitud 2."
+   },
+   "lesson": "js-arrays"
+  },
+  {
+   "id": "js-26",
+   "block": "js-datos",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "const p = { nombre: \"Ana\", edad: 20 };\nconst { nombre, ciudad = \"Madrid\" } = p;\nconsole.log(nombre, ciudad);",
+   "options": [
+    "Lanza TypeError",
+    "undefined Madrid",
+    "Ana undefined",
+    "Ana Madrid"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "`ciudad` no existe en el objeto, así que toma el valor por defecto de la desestructuración.",
+    "en": "`ciudad` no existe en el objeto, así que toma el valor por defecto de la desestructuración."
+   },
+   "lesson": "js-objetos"
+  },
+  {
+   "id": "js-27",
+   "block": "js-datos",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "const a = { n: 1, datos: { x: 1 } };\nconst b = { ...a };\nb.n = 2;\nb.datos.x = 99;\nconsole.log(a.n, a.datos.x);",
+   "options": [
+    "2 99",
+    "1 99",
+    "2 1",
+    "1 1"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": {
+    "es": "La propagación hace una copia **superficial**: `n` se copia, pero `datos` sigue siendo el mismo objeto en los dos.",
+    "en": "La propagación hace una copia **superficial**: `n` se copia, pero `datos` sigue siendo el mismo objeto en los dos."
+   },
+   "lesson": "js-objetos"
+  },
+  {
+   "id": "js-28",
+   "block": "js-datos",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "const texto = JSON.stringify({ a: 1, b: [true, null] });\nconsole.log(texto, typeof texto);",
+   "options": [
+    "{\"a\":1,\"b\":[true,null]} string",
+    "[object Object] string",
+    "{ a: 1, b: [ true, null ] } object",
+    "{\"a\":1,\"b\":[true,null]} object"
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "`JSON.stringify` devuelve un **texto** con claves entre comillas dobles y sin espacios.",
+    "en": "`JSON.stringify` devuelve un **texto** con claves entre comillas dobles y sin espacios."
+   },
+   "lesson": "js-objetos"
+  },
+  {
+   "id": "js-29",
+   "block": "js-datos",
+   "q": {
+    "es": "¿Qué ocurre al ejecutar este código?",
+    "en": "¿Qué ocurre al ejecutar este código?"
+   },
+   "code": "const alumno = { nombre: \"Eva\" };\nconsole.log(alumno.direccion?.calle, alumno.direccion.calle);",
+   "options": [
+    "Lanza TypeError",
+    "Lanza ReferenceError",
+    "undefined",
+    "undefined undefined"
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "`alumno.direccion` es undefined. Con `?.` no falla, pero en el segundo acceso se lee `.calle` de undefined: `TypeError`. Los argumentos se evalúan antes de imprimir, así que no se imprime nada.",
+    "en": "`alumno.direccion` es undefined. Con `?.` no falla, pero en el segundo acceso se lee `.calle` de undefined: `TypeError`. Los argumentos se evalúan antes de imprimir, así que no se imprime nada."
+   },
+   "lesson": "js-objetos"
+  },
+  {
+   "id": "js-30",
+   "block": "js-datos",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "const notas = { ana: 8, luis: 5 };\nconsole.log(Object.keys(notas).join(\"+\"), Object.values(notas).reduce((a, b) => a + b));",
+   "options": [
+    "ana,luis 13",
+    "8+5 13",
+    "ana+luis 85",
+    "ana+luis 13"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "`Object.keys` da las claves y `Object.values` los valores, ambos como arrays.",
+    "en": "`Object.keys` da las claves y `Object.values` los valores, ambos como arrays."
+   },
+   "lesson": "js-objetos"
+  },
+  {
+   "id": "js-31",
+   "block": "js-dom",
+   "q": {
+    "es": "¿Qué diferencia hay entre `textContent` e `innerHTML`?",
+    "en": "¿Qué diferencia hay entre `textContent` e `innerHTML`?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "`textContent` trata el valor como texto; `innerHTML` lo interpreta como HTML (riesgo de XSS con datos del usuario)",
+     "en": "`textContent` trata el valor como texto; `innerHTML` lo interpreta como HTML (riesgo de XSS con datos del usuario)"
+    },
+    {
+     "es": "Ninguna, son sinónimos",
+     "en": "Ninguna, son sinónimos"
+    },
+    {
+     "es": "`innerHTML` solo sirve para leer",
+     "en": "`innerHTML` solo sirve para leer"
+    },
+    {
+     "es": "`textContent` borra los hijos y `innerHTML` no",
+     "en": "`textContent` borra los hijos y `innerHTML` no"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Si metes con innerHTML un texto escrito por el usuario, podría incluir `<img onerror=…>` y ejecutar código.",
+    "en": "Si metes con innerHTML un texto escrito por el usuario, podría incluir `<img onerror=…>` y ejecutar código."
+   },
+   "lesson": "js-dom"
+  },
+  {
+   "id": "js-32",
+   "block": "js-dom",
+   "q": {
+    "es": "Hay tres elementos con la clase `item`. ¿Qué devuelve `document.querySelector(\".item\")`?",
+    "en": "Hay tres elementos con la clase `item`. ¿Qué devuelve `document.querySelector(\".item\")`?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "El primero de ellos",
+     "en": "El primero de ellos"
+    },
+    {
+     "es": "Una lista con los tres",
+     "en": "Una lista con los tres"
+    },
+    {
+     "es": "El último",
+     "en": "El último"
+    },
+    {
+     "es": "null",
+     "en": "null"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "`querySelector` devuelve el primer elemento que coincide; para todos existe `querySelectorAll`.",
+    "en": "`querySelector` devuelve el primer elemento que coincide; para todos existe `querySelectorAll`."
+   },
+   "lesson": "js-dom"
+  },
+  {
+   "id": "js-33",
+   "block": "js-dom",
+   "q": {
+    "es": "¿Qué devuelve `document.querySelectorAll(\".item\")` si no hay ninguno?",
+    "en": "¿Qué devuelve `document.querySelectorAll(\".item\")` si no hay ninguno?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Una NodeList vacía",
+     "en": "Una NodeList vacía"
+    },
+    {
+     "es": "null",
+     "en": "null"
+    },
+    {
+     "es": "undefined",
+     "en": "undefined"
+    },
+    {
+     "es": "Lanza un error",
+     "en": "Lanza un error"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Por eso recorrerla con `forEach` nunca falla, mientras que `querySelector` sí puede devolver null.",
+    "en": "Por eso recorrerla con `forEach` nunca falla, mientras que `querySelector` sí puede devolver null."
+   },
+   "lesson": "js-dom"
+  },
+  {
+   "id": "js-34",
+   "block": "js-dom",
+   "q": {
+    "es": "¿Cómo añades la clase `activo` a un elemento sin quitarle las que ya tiene?",
+    "en": "¿Cómo añades la clase `activo` a un elemento sin quitarle las que ya tiene?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "`el.classList.add(\"activo\")`",
+     "en": "`el.classList.add(\"activo\")`"
+    },
+    {
+     "es": "`el.className = \"activo\"`",
+     "en": "`el.className = \"activo\"`"
+    },
+    {
+     "es": "`el.class = \"activo\"`",
+     "en": "`el.class = \"activo\"`"
+    },
+    {
+     "es": "`el.style = \"activo\"`",
+     "en": "`el.style = \"activo\"`"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "`className =` sustituye todas las clases por una sola.",
+    "en": "`className =` sustituye todas las clases por una sola."
+   },
+   "lesson": "js-dom"
+  },
+  {
+   "id": "js-35",
+   "block": "js-dom",
+   "q": {
+    "es": "Tu script está en el `<head>` y `document.querySelector(\"#menu\")` devuelve null, aunque el menú existe. ¿Causa más probable?",
+    "en": "Tu script está en el `<head>` y `document.querySelector(\"#menu\")` devuelve null, aunque el menú existe. ¿Causa más probable?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "El script se ejecuta antes de que exista el elemento: usa `defer` o ponlo al final del body",
+     "en": "El script se ejecuta antes de que exista el elemento: usa `defer` o ponlo al final del body"
+    },
+    {
+     "es": "El selector correcto es `menu` sin #",
+     "en": "El selector correcto es `menu` sin #"
+    },
+    {
+     "es": "querySelector no funciona con ids",
+     "en": "querySelector no funciona con ids"
+    },
+    {
+     "es": "Hay que recargar dos veces",
+     "en": "Hay que recargar dos veces"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "El navegador ejecuta el script en cuanto lo encuentra. Con `defer` espera a que el HTML esté completo.",
+    "en": "El navegador ejecuta el script en cuanto lo encuentra. Con `defer` espera a que el HTML esté completo."
+   },
+   "lesson": "js-dom"
+  },
+  {
+   "id": "js-36",
+   "block": "js-dom",
+   "q": {
+    "es": "¿Cómo se registra correctamente una función `saludar` para el click de un botón?",
+    "en": "¿Cómo se registra correctamente una función `saludar` para el click de un botón?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "`boton.addEventListener(\"click\", saludar)`",
+     "en": "`boton.addEventListener(\"click\", saludar)`"
+    },
+    {
+     "es": "`boton.addEventListener(\"click\", saludar())`",
+     "en": "`boton.addEventListener(\"click\", saludar())`"
+    },
+    {
+     "es": "`boton.click = saludar`",
+     "en": "`boton.click = saludar`"
+    },
+    {
+     "es": "`boton.addEventListener(saludar, \"click\")`",
+     "en": "`boton.addEventListener(saludar, \"click\")`"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Se pasa la función sin llamarla; el navegador la llamará en cada click.",
+    "en": "Se pasa la función sin llamarla; el navegador la llamará en cada click."
+   },
+   "lesson": "js-eventos"
+  },
+  {
+   "id": "js-37",
+   "block": "js-dom",
+   "q": {
+    "es": "¿Qué problema tiene `boton.addEventListener(\"click\", saludar());`?",
+    "en": "¿Qué problema tiene `boton.addEventListener(\"click\", saludar());`?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Ejecuta `saludar` al instante y registra su resultado (undefined), no la función",
+     "en": "Ejecuta `saludar` al instante y registra su resultado (undefined), no la función"
+    },
+    {
+     "es": "Ninguno, es equivalente",
+     "en": "Ninguno, es equivalente"
+    },
+    {
+     "es": "Solo funciona una vez",
+     "en": "Solo funciona una vez"
+    },
+    {
+     "es": "Da un error de sintaxis",
+     "en": "Da un error de sintaxis"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Los paréntesis **llaman** a la función. Si necesitas pasarle argumentos: `() => saludar(\"Ana\")`.",
+    "en": "Los paréntesis **llaman** a la función. Si necesitas pasarle argumentos: `() => saludar(\"Ana\")`."
+   },
+   "lesson": "js-eventos"
+  },
+  {
+   "id": "js-38",
+   "block": "js-dom",
+   "q": {
+    "es": "Al enviar un formulario, la página se recarga y pierdes lo que hace tu código. ¿Qué falta?",
+    "en": "Al enviar un formulario, la página se recarga y pierdes lo que hace tu código. ¿Qué falta?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "`event.preventDefault()` en el listener de `submit`",
+     "en": "`event.preventDefault()` en el listener de `submit`"
+    },
+    {
+     "es": "`event.stopPropagation()`",
+     "en": "`event.stopPropagation()`"
+    },
+    {
+     "es": "Poner `type=\"button\"` en todos los campos",
+     "en": "Poner `type=\"button\"` en todos los campos"
+    },
+    {
+     "es": "Un `return true`",
+     "en": "Un `return true`"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "`preventDefault` cancela la acción por defecto del navegador, que es enviar el formulario y recargar.",
+    "en": "`preventDefault` cancela la acción por defecto del navegador, que es enviar el formulario y recargar."
+   },
+   "lesson": "js-eventos"
+  },
+  {
+   "id": "js-39",
+   "block": "js-dom",
+   "q": {
+    "es": "Haces click en un `<button>` que está dentro de un `<div>`, y ambos tienen listener de click. ¿Qué ocurre?",
+    "en": "Haces click en un `<button>` que está dentro de un `<div>`, y ambos tienen listener de click. ¿Qué ocurre?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Se ejecuta primero el del botón y después el del div (burbujeo)",
+     "en": "Se ejecuta primero el del botón y después el del div (burbujeo)"
+    },
+    {
+     "es": "Solo el del botón",
+     "en": "Solo el del botón"
+    },
+    {
+     "es": "Solo el del div",
+     "en": "Solo el del div"
+    },
+    {
+     "es": "Primero el del div",
+     "en": "Primero el del div"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Los eventos suben por el árbol. `stopPropagation()` lo evitaría.",
+    "en": "Los eventos suben por el árbol. `stopPropagation()` lo evitaría."
+   },
+   "lesson": "js-eventos"
+  },
+  {
+   "id": "js-40",
+   "block": "js-dom",
+   "q": {
+    "es": "¿Qué es la delegación de eventos?",
+    "en": "¿Qué es la delegación de eventos?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Poner un único listener en el contenedor y usar `event.target` para saber qué hijo se pulsó",
+     "en": "Poner un único listener en el contenedor y usar `event.target` para saber qué hijo se pulsó"
+    },
+    {
+     "es": "Pasar un evento a otra función",
+     "en": "Pasar un evento a otra función"
+    },
+    {
+     "es": "Ejecutar un evento más tarde",
+     "en": "Ejecutar un evento más tarde"
+    },
+    {
+     "es": "Copiar un listener en cada elemento",
+     "en": "Copiar un listener en cada elemento"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Funciona también con los elementos que se añaden después y ahorra listeners.",
+    "en": "Funciona también con los elementos que se añaden después y ahorra listeners."
+   },
+   "lesson": "js-eventos"
+  },
+  {
+   "id": "js-41",
+   "block": "js-asincronia",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "console.log(\"A\");\nsetTimeout(() => console.log(\"B\"), 0);\nconsole.log(\"C\");",
+   "options": [
+    "B\nA\nC",
+    "A\nC\nB",
+    "A\nB\nC",
+    "C\nA\nB"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": {
+    "es": "El setTimeout, aunque sea de 0 ms, se ejecuta cuando termina todo el código síncrono.",
+    "en": "El setTimeout, aunque sea de 0 ms, se ejecuta cuando termina todo el código síncrono."
+   },
+   "lesson": "js-asincronia"
+  },
+  {
+   "id": "js-42",
+   "block": "js-asincronia",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "setTimeout(() => console.log(\"timeout\"), 0);\nPromise.resolve().then(() => console.log(\"promesa\"));\nconsole.log(\"sincrono\");",
+   "options": [
+    "timeout\npromesa\nsincrono",
+    "sincrono\npromesa\ntimeout",
+    "sincrono\ntimeout\npromesa",
+    "promesa\nsincrono\ntimeout"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": {
+    "es": "Primero el código síncrono; después las **microtareas** (el then de la promesa) y por último las tareas como setTimeout.",
+    "en": "Primero el código síncrono; después las **microtareas** (el then de la promesa) y por último las tareas como setTimeout."
+   },
+   "lesson": "js-asincronia"
+  },
+  {
+   "id": "js-43",
+   "block": "js-asincronia",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "async function f() {\n  return 5;\n}\nconsole.log(typeof f());\nf().then((v) => console.log(v));",
+   "options": [
+    "number\n5",
+    "5\n5",
+    "object\nundefined",
+    "object\n5"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "Una función async **siempre** devuelve una promesa (un objeto). El 5 se obtiene con `then` o con `await`.",
+    "en": "Una función async **siempre** devuelve una promesa (un objeto). El 5 se obtiene con `then` o con `await`."
+   },
+   "lesson": "js-asincronia"
+  },
+  {
+   "id": "js-44",
+   "block": "js-asincronia",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "const esperar = (ms) => new Promise((r) => setTimeout(r, ms));\n\nasync function main() {\n  console.log(1);\n  await esperar(10);\n  console.log(2);\n}\n\nmain();\nconsole.log(3);",
+   "options": [
+    "3\n1\n2",
+    "1\n2\n3",
+    "1\n3\n2",
+    "1\n3"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "`main` imprime 1 y se pausa en el await. Mientras tanto, el resto del programa imprime 3. Al terminar la espera, main continúa e imprime 2.",
+    "en": "`main` imprime 1 y se pausa en el await. Mientras tanto, el resto del programa imprime 3. Al terminar la espera, main continúa e imprime 2."
+   },
+   "lesson": "js-asincronia"
+  },
+  {
+   "id": "js-45",
+   "block": "js-asincronia",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "async function cargar() {\n  throw new Error(\"sin red\");\n}\ncargar().catch((e) => console.log(\"Fallo:\", e.message));\nconsole.log(\"sigue\");",
+   "options": [
+    "Fallo: sin red\nsigue",
+    "sigue\nFallo: sin red",
+    "sigue",
+    "Lanza Error"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": {
+    "es": "El error de una función async rechaza su promesa y el `catch` lo trata, pero de forma asíncrona: después del código síncrono.",
+    "en": "El error de una función async rechaza su promesa y el `catch` lo trata, pero de forma asíncrona: después del código síncrono."
+   },
+   "lesson": "js-asincronia"
+  },
+  {
+   "id": "js-46",
+   "block": "js-asincronia",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "const datos = JSON.parse('{\"precio\": \"12\", \"stock\": 3}');\nconsole.log(datos.precio + datos.stock);",
+   "options": [
+    "Lanza SyntaxError",
+    "15",
+    "NaN",
+    "123"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "`precio` llega como **texto** \"12\" y `+` concatena: \"123\". Hay que convertir: `Number(datos.precio)`.",
+    "en": "`precio` llega como **texto** \"12\" y `+` concatena: \"123\". Hay que convertir: `Number(datos.precio)`."
+   },
+   "lesson": "js-fetch-json"
+  },
+  {
+   "id": "js-47",
+   "block": "js-asincronia",
+   "q": {
+    "es": "¿Qué ocurre al ejecutar este código?",
+    "en": "¿Qué ocurre al ejecutar este código?"
+   },
+   "code": "console.log(JSON.parse(\"{nombre: 'Ana'}\").nombre);",
+   "options": [
+    "Ana",
+    "Lanza TypeError",
+    "Lanza SyntaxError",
+    "undefined"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "Es un objeto válido en JavaScript, pero no es JSON válido: JSON exige comillas dobles en claves y textos.",
+    "en": "Es un objeto válido en JavaScript, pero no es JSON válido: JSON exige comillas dobles en claves y textos."
+   },
+   "lesson": "js-fetch-json"
+  },
+  {
+   "id": "js-48",
+   "block": "js-asincronia",
+   "q": {
+    "es": "El servidor responde con un 404. ¿Qué hace la promesa de `fetch`?",
+    "en": "El servidor responde con un 404. ¿Qué hace la promesa de `fetch`?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Se cumple igualmente: hay que comprobar `respuesta.ok` o `respuesta.status`",
+     "en": "Se cumple igualmente: hay que comprobar `respuesta.ok` o `respuesta.status`"
+    },
+    {
+     "es": "Se rechaza y salta el catch",
+     "en": "Se rechaza y salta el catch"
+    },
+    {
+     "es": "Queda pendiente para siempre",
+     "en": "Queda pendiente para siempre"
+    },
+    {
+     "es": "Devuelve null",
+     "en": "Devuelve null"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "`fetch` solo rechaza por errores de red. Un 404 es una respuesta válida del servidor.",
+    "en": "`fetch` solo rechaza por errores de red. Un 404 es una respuesta válida del servidor."
+   },
+   "lesson": "js-fetch-json"
+  },
+  {
+   "id": "js-49",
+   "block": "js-asincronia",
+   "q": {
+    "es": "¿Por qué hace falta `await respuesta.json()`?",
+    "en": "¿Por qué hace falta `await respuesta.json()`?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Porque leer y convertir el cuerpo de la respuesta también es asíncrono y devuelve una promesa",
+     "en": "Porque leer y convertir el cuerpo de la respuesta también es asíncrono y devuelve una promesa"
+    },
+    {
+     "es": "No hace falta, `respuesta` ya es el objeto",
+     "en": "No hace falta, `respuesta` ya es el objeto"
+    },
+    {
+     "es": "Para convertir el objeto en texto",
+     "en": "Para convertir el objeto en texto"
+    },
+    {
+     "es": "Para reintentar la petición",
+     "en": "Para reintentar la petición"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "El cuerpo puede llegar en trozos; `json()` espera a tenerlo entero y lo convierte.",
+    "en": "El cuerpo puede llegar en trozos; `json()` espera a tenerlo entero y lo convierte."
+   },
+   "lesson": "js-fetch-json"
+  },
+  {
+   "id": "js-50",
+   "block": "js-asincronia",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "async function obtener(ok) {\n  if (!ok) throw new Error(\"HTTP 500\");\n  return { nombre: \"Ana\" };\n}\n\nasync function main() {\n  try {\n    const a = await obtener(true);\n    console.log(a.nombre);\n    await obtener(false);\n    console.log(\"no llega\");\n  } catch (e) {\n    console.log(e.message);\n  } finally {\n    console.log(\"fin\");\n  }\n}\n\nmain();",
+   "options": [
+    "Ana\nHTTP 500\nfin",
+    "Ana\nno llega\nfin",
+    "HTTP 500\nfin",
+    "Ana\nHTTP 500"
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "El `await` de una promesa rechazada lanza el error dentro del try: salta al catch sin ejecutar \"no llega\" y termina con el finally.",
+    "en": "El `await` de una promesa rechazada lanza el error dentro del try: salta al catch sin ejecutar \"no llega\" y termina con el finally."
+   },
+   "lesson": "js-fetch-json"
+  }
+ ],
+ "cards": []
+}

@@ -40,6 +40,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import io.github.marbi8891.pld.AppModel
 import io.github.marbi8891.pld.pcap.AppProgress
+import io.github.marbi8891.pld.pcap.Answer
+import io.github.marbi8891.pld.pcap.Kind
 import io.github.marbi8891.pld.pcap.Option
 import io.github.marbi8891.pld.pcap.Question
 
@@ -50,7 +52,7 @@ fun PracticeScreen(model: AppModel, blockSlug: String, onBack: () -> Unit, onThe
     var round by remember { mutableIntStateOf(0) }
     val items = remember(blockSlug, round) { model.pcap.practiceSet(model.bank, blockSlug) }
     var index by remember(blockSlug, round) { mutableIntStateOf(0) }
-    var chosen by remember(blockSlug, round, index) { mutableStateOf(setOf<Int>()) }
+    var response by remember(blockSlug, round, index) { mutableStateOf(Answer()) }
     var checked by remember(blockSlug, round, index) { mutableStateOf(false) }
     var message by remember(blockSlug, round, index) { mutableStateOf("") }
     var correct by remember(blockSlug, round) { mutableIntStateOf(0) }
@@ -104,25 +106,25 @@ fun PracticeScreen(model: AppModel, blockSlug: String, onBack: () -> Unit, onThe
                     number = index + 1,
                     total = items.size,
                     lang = lang,
-                    chosen = chosen,
+                    response = response,
                     checked = checked,
                     message = message,
                     model = model,
-                    onSelect = { option ->
-                        val question = items[index]
-                        chosen = when {
-                            !question.multi -> setOf(option)
-                            option in chosen -> chosen - option
-                            else -> chosen + option
-                        }
+                    onChange = {
+                        response = it
                         message = ""
                     },
                     onCheck = {
                         val question = items[index]
-                        if (chosen.size != question.answer.size) {
-                            message = if (question.multi) "Elige ${question.answer.size} respuestas." else "Elige una respuesta."
+                        if (!question.isComplete(response)) {
+                            message = when {
+                                question.kind == Kind.FILL -> "Escribe lo que va en el hueco."
+                                question.kind == Kind.ORDER -> "Coloca todas las líneas."
+                                question.multi -> "Elige ${question.answer.size} respuestas."
+                                else -> "Elige una respuesta."
+                            }
                         } else {
-                            val ok = question.isCorrect(chosen)
+                            val ok = question.isCorrect(response)
                             if (ok) correct++
                             combo = if (ok) combo + 1 else 0
                             val streak = combo
@@ -156,20 +158,20 @@ private fun QuestionStep(
     number: Int,
     total: Int,
     lang: String,
-    chosen: Set<Int>,
+    response: Answer,
     checked: Boolean,
     message: String,
     model: AppModel,
-    onSelect: (Int) -> Unit,
+    onChange: (Answer) -> Unit,
     onCheck: () -> Unit,
     onNext: () -> Unit,
     onTheory: (String) -> Unit,
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
         Text("Pregunta $number de $total", color = LocalPalette.current.muted)
-        QuestionView(question, lang, chosen, checked, onSelect = onSelect)
+        QuestionInput(question, lang, response, checked, onChange = onChange)
         if (checked) {
-            Feedback(question, lang, question.isCorrect(chosen), model, onTheory)
+            Feedback(question, lang, question.isCorrect(response), model, onTheory)
             Button(onClick = onNext, modifier = Modifier.fillMaxWidth()) {
                 Text(if (number < total) "Siguiente →" else "Ver resultado")
             }

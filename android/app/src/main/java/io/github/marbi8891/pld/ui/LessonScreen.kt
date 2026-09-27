@@ -35,6 +35,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import io.github.marbi8891.pld.AppModel
+import io.github.marbi8891.pld.pcap.Answer
 import io.github.marbi8891.pld.pcap.LessonRun
 import io.github.marbi8891.pld.pcap.PathNode
 
@@ -52,7 +53,7 @@ fun LessonScreen(
 ) {
     val lesson = remember(node.id) { LessonRun(model.questions(node).shuffled()) }
     var step by remember(node.id) { mutableIntStateOf(0) } // LessonRun no es observable: esto repinta
-    var chosen by remember(node.id, step) { mutableStateOf(setOf<Int>()) }
+    var response by remember(node.id, step) { mutableStateOf(Answer()) }
     var result by remember(node.id, step) { mutableStateOf<Boolean?>(null) } // null = sin comprobar
     val hearts = remember(model.revision) { model.pcap.app.heartsNow() }
     val lang = remember(model.revision) { model.pcap.lang }
@@ -100,13 +101,7 @@ fun LessonScreen(
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                 ) {
                     Text(unit.title, color = palette.muted, style = MaterialTheme.typography.labelLarge)
-                    QuestionView(question, lang, chosen, result != null) { option ->
-                        chosen = when {
-                            !question.multi -> setOf(option)
-                            option in chosen -> chosen - option
-                            else -> chosen + option
-                        }
-                    }
+                    QuestionInput(question, lang, response, result != null) { response = it }
                 }
 
                 // Barra inferior: «Comprobar» o el veredicto con la explicación y «Continuar»
@@ -114,7 +109,7 @@ fun LessonScreen(
                 if (verdict == null) {
                     Button(
                         onClick = {
-                            val ok = question.isCorrect(chosen)
+                            val ok = question.isCorrect(response)
                             result = ok
                             model.update {
                                 recordAnswer(question.id, ok)
@@ -122,7 +117,7 @@ fun LessonScreen(
                             }
                             haptics.performHapticFeedback(if (ok) HapticFeedbackType.TextHandleMove else HapticFeedbackType.LongPress)
                         },
-                        enabled = chosen.size == question.answer.size,
+                        enabled = question.isComplete(response),
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(16.dp),

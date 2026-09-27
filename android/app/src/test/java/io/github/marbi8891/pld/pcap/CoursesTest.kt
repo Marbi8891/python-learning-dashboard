@@ -18,7 +18,7 @@ class CoursesTest {
         val units = Course.build(bank, lessons)
     }
 
-    private val courses = listOf("sql", "java").map { Loaded(it) }
+    private val courses = listOf("sql", "js", "java").map { Loaded(it) }
 
     private val pcapBank = Bank.parse(File("../../frontend/data/pcap.json").readText())
     private val pcapUnits = Course.build(pcapBank, LessonIndex.parse(File("../../frontend/data/lessons.json").readText()))
@@ -31,7 +31,7 @@ class CoursesTest {
             assertEquals(10, c.units.size)
             assertEquals(c.bank.questions.size, c.units.sumOf { u -> u.nodes.sumOf { it.questionIds.size } })
             assertTrue(c.units.all { it.slug in c.content })
-            assertTrue(c.bank.questions.all { it.lesson in c.content && it.answer.single() in it.options.indices })
+            assertTrue(c.bank.questions.all { it.lesson in c.content && (it.kind != Kind.CHOICE || it.answer.single() in it.options.indices) })
         }
     }
 
@@ -63,5 +63,45 @@ class CoursesTest {
         assertEquals(10, pcap.app.totalXp())
         assertFalse(sql.toJson(withApp = false).has("app"))
         assertTrue(pcap.toJson().has("app"))
+    }
+
+    @Test
+    fun ejerciciosDeEscribirCodigo() {
+        // ADR-0017: completar el hueco, ordenar líneas y encontrar el error
+        val java = courses.first { it.bank.questions.any { q -> q.kind == Kind.FILL } }.bank
+        val fills = java.questions.filter { it.kind == Kind.FILL }
+        val orders = java.questions.filter { it.kind == Kind.ORDER }
+        assertEquals(10, fills.size)
+        assertEquals(10, orders.size)
+        fills.forEach { q ->
+            assertTrue(q.code!!.contains("___") && q.accept.isNotEmpty())
+            assertTrue(q.isCorrect(Answer(text = q.accept.first())))
+            // Los espacios y el punto y coma final no cuentan
+            assertTrue(q.isCorrect(Answer(text = "  " + q.accept.first().replace(" ", "") + ";")))
+            assertFalse(q.isCorrect(Answer(text = "")))
+            assertFalse(q.isComplete(Answer(text = "   ")))
+        }
+        orders.forEach { q ->
+            assertTrue(q.isCorrect(Answer(order = q.lines.indices.toList())))
+            assertFalse(q.isCorrect(Answer(order = q.lines.indices.reversed().toList())))
+            assertFalse(q.isComplete(Answer(order = listOf(0))))
+        }
+        // Encontrar el error: un test cuyas opciones son las líneas del programa
+        val bug = java.questions.first { it.id == "java-p03" }
+        assertEquals(Kind.CHOICE, bug.kind)
+        assertEquals("double r = a / b;", (bug.options[bug.answer.single()] as Option.Code).source)
+        // Los ejercicios de escribir no van al Bug Rush (es de sí/no)
+        assertTrue(RushGame.pool(java).none { it.kind != Kind.CHOICE })
+    }
+
+    @Test
+    fun laMazmorraCorrigeCualquierTipoDeEjercicio() {
+        val java = courses.first { it.bank.questions.any { q -> q.kind == Kind.FILL } }.bank
+        val fill = java.questions.first { it.kind == Kind.FILL }
+        val run = DungeonRun(listOf(DungeonRun.Floor("x", listOf(fill, fill, fill, fill))))
+        assertTrue(run.answer(Answer(text = fill.accept.first())))
+        run.next()
+        assertFalse(run.answer(Answer(text = "nada")))
+        assertEquals(DungeonRun.MAX_HP - 1, run.hp)
     }
 }

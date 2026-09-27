@@ -34,6 +34,7 @@ jobs:
         working-directory: .
         run: |
           python3 scripts/courses/sql_course.py --check
+          python3 scripts/courses/js_course.py --check
           python3 scripts/courses/java_course.py --check
       - name: Tests del dominio (banco, repaso espaciado, preparación, fusión)
         run: ./gradlew --no-daemon testDebugUnitTest

@@ -18,6 +18,15 @@ data class Block(val slug: String, val weight: Int, val items: Int, val title: T
 
 data class Exam(val code: String, val questions: Int, val minutes: Int, val pass: Int, val blocks: List<Block>)
 
+/**
+ * Tipo de ejercicio (ADR-0017). CHOICE es el test de siempre, y también «encontrar el error», en el que
+ * las opciones son las líneas del programa. FILL: escribir lo que falta en `___`. ORDER: ordenar líneas.
+ */
+enum class Kind { CHOICE, FILL, ORDER }
+
+/** Lo que ha respondido el alumno, según el tipo de ejercicio. */
+data class Answer(val selected: Set<Int> = emptySet(), val text: String = "", val order: List<Int> = emptyList())
+
 data class Question(
     val id: String,
     val block: String,
@@ -27,10 +36,34 @@ data class Question(
     val answer: List<Int>,
     val explain: Text,
     val lesson: String?,
+    val kind: Kind = Kind.CHOICE,
+    /** FILL: respuestas aceptadas para el hueco `___` del código. */
+    val accept: List<String> = emptyList(),
+    /** ORDER: líneas en el orden correcto; la app las muestra desordenadas. */
+    val lines: List<String> = emptyList(),
 ) {
     val multi: Boolean get() = answer.size > 1
 
     fun isCorrect(chosen: Collection<Int>): Boolean = chosen.size == answer.size && chosen.containsAll(answer)
+
+    fun isCorrect(response: Answer): Boolean = when (kind) {
+        Kind.CHOICE -> isCorrect(response.selected)
+        Kind.FILL -> normalize(response.text).let { typed -> typed.isNotEmpty() && accept.any { normalize(it) == typed } }
+        // Se comparan los textos: dos líneas iguales (como dos "}") son intercambiables
+        Kind.ORDER -> response.order.size == lines.size && response.order.map { lines[it] } == lines
+    }
+
+    /** Si ya se puede pulsar «Comprobar». */
+    fun isComplete(response: Answer): Boolean = when (kind) {
+        Kind.CHOICE -> response.selected.size == answer.size
+        Kind.FILL -> response.text.isNotBlank()
+        Kind.ORDER -> response.order.size == lines.size
+    }
+
+    companion object {
+        /** Los espacios y un punto y coma final no cuentan: `i<10;` vale igual que `i < 10`. */
+        fun normalize(code: String): String = code.filterNot { it.isWhitespace() }.removeSuffix(";")
+    }
 }
 
 data class Card(val id: String, val block: String, val front: Text, val back: Text, val code: String?, val lesson: String?)
@@ -68,6 +101,13 @@ data class Bank(val exam: Exam, val questions: List<Question>, val cards: List<C
                         answer = q.getJSONArray("answer").let { a -> (0 until a.length()).map { a.getInt(it) } },
                         explain = text(q.getJSONObject("explain")),
                         lesson = q.optStringOrNull("lesson"),
+                        kind = when (q.optString("kind")) {
+                            "fill" -> Kind.FILL
+                            "order" -> Kind.ORDER
+                            else -> Kind.CHOICE
+                        },
+                        accept = q.optJSONArray("accept").strings(),
+                        lines = q.optJSONArray("lines").strings(),
                     )
                 },
                 cards = root.getJSONArray("cards").objects().map { c ->
@@ -88,6 +128,8 @@ data class Bank(val exam: Exam, val questions: List<Question>, val cards: List<C
 }
 
 internal fun JSONArray.objects(): List<JSONObject> = (0 until length()).map { getJSONObject(it) }
+
+internal fun JSONArray?.strings(): List<String> = if (this == null) emptyList() else (0 until length()).map { getString(it) }
 
 internal fun JSONObject.optStringOrNull(name: String): String? =
     if (has(name) && !isNull(name)) getString(name) else null

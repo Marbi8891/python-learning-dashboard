@@ -1,0 +1,667 @@
+{
+ "modules": [
+  {
+   "slug": "js-fundamentos",
+   "title": "Fundamentos",
+   "summary": "Variables, tipos, comparaciones y conversiones.",
+   "lessons": [
+    {
+     "slug": "js-variables",
+     "title": "Variables y tipos",
+     "theory": "JavaScript es de **tipado dinámico**: el tipo va con el valor, no con la variable. Una misma variable puede guardar un número y después un texto.\n\n**Declarar variables:**\n- `const`: no se puede **reasignar**. Es la opción por defecto. Ojo: si guarda un array u objeto, su **contenido** sí puede cambiar (`lista.push(3)` funciona).\n- `let`: se puede reasignar. Tiene ámbito de **bloque** (`{ … }`).\n- `var`: la forma antigua, con ámbito de función y comportamientos sorprendentes. Evítala.\n- Declarar dos veces con `let` o `const` en el mismo ámbito es un `SyntaxError`, y reasignar un `const` lanza `TypeError`.\n\n**Tipos primitivos:** `number` (enteros y decimales son el mismo tipo), `string`, `boolean`, `undefined` (sin valor asignado), `null` (vacío a propósito), `bigint` y `symbol`. Todo lo demás es `object`: arrays, objetos, fechas…\n\n`typeof` dice el tipo, con dos rarezas históricas: `typeof null` es `\"object\"` y `typeof function(){}` es `\"function\"`. Para saber si algo es un array, usa `Array.isArray(x)`.\n\n**Plantillas de texto** con comillas invertidas: `` `Hola, ${nombre}` `` inserta cualquier expresión dentro de `${ }` y admite varias líneas.\n\nEn esta app el código se ejecuta con Node.js, que usa el mismo motor que Chrome.",
+     "example_code": "const nombre = \"Ana\";\nlet nota = 7;\nnota = nota + 1;\n\nconst modulos = [\"DWEC\", \"DWES\"];\nmodulos.push(\"DIW\");\n\nconsole.log(`${nombre} tiene un ${nota} en ${modulos.length} módulos`);\nconsole.log(typeof nombre, typeof nota, Array.isArray(modulos));",
+     "exercise": "Declara, con `const` o `let` según corresponda:\n\n- tu nombre;\n- tu edad (que cambiará el año que viene);\n- una lista con tres lenguajes.\n\nMuestra una frase con una plantilla de texto, suma 1 a la edad y vuelve a mostrarla.",
+     "starter": "const nombre = \"...\";\nlet edad = 20;\nconst lenguajes = [];\n\nconsole.log(`...`);\n",
+     "quiz": [
+      {
+       "q": "¿Qué ocurre al ejecutar este código?",
+       "options": [
+        "5",
+        "Lanza SyntaxError",
+        "Lanza TypeError",
+        "6"
+       ],
+       "answer": 1,
+       "explain": "No se puede declarar dos veces la misma variable con `let` en el mismo ámbito. Es un error de sintaxis: el programa ni siquiera empieza.",
+       "code": "let a = 5;\nlet a = 6;\nconsole.log(a);"
+      },
+      {
+       "q": "¿Qué declaración conviene usar por defecto en JavaScript moderno?",
+       "options": [
+        "`const`, y `let` solo si vas a reasignar",
+        "`var`, porque funciona en todas partes",
+        "`let` siempre",
+        "Ninguna: se puede asignar sin declarar"
+       ],
+       "answer": 0,
+       "explain": "`const` deja claro que la variable no cambia y evita reasignaciones accidentales. `var` tiene un ámbito confuso."
+      }
+     ],
+     "challenge": {
+      "title": "Ficha de alumno",
+      "stars": 1,
+      "exercise": "Crea un objeto con nombre, ciclo y notas, y muestra con una plantilla de varias líneas su nombre, su ciclo y cuántas notas tiene.",
+      "starter": "const alumno = { nombre: \"Ana\", ciclo: \"DAW\", notas: [7, 9] };\n\nconsole.log(`...`);\n",
+      "hint": "Las plantillas admiten saltos de línea reales y cualquier expresión: `${alumno.notas.length}`."
+     },
+     "assistant": {
+      "hint": "La edad cambia, así que va con `let`. La lista puede ser `const` aunque añadas elementos.",
+      "faq": [
+       {
+        "q": "Si `const` no se puede cambiar, ¿por qué puedo hacer push?",
+        "a": "`const` impide **reasignar** la variable (`lista = []`), no modificar el objeto al que apunta. Para congelar el contenido existe `Object.freeze`."
+       },
+       {
+        "q": "¿`undefined` o `null`?",
+        "a": "`undefined` lo pone JavaScript cuando algo no tiene valor. `null` lo pones tú para decir «vacío a propósito»."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "MDN Web Docs — JavaScript",
+       "url": "https://developer.mozilla.org/es/docs/Web/JavaScript"
+      },
+      {
+       "title": "javascript.info (tutorial moderno)",
+       "url": "https://es.javascript.info/"
+      }
+     ]
+    },
+    {
+     "slug": "js-coercion",
+     "title": "Comparaciones y conversiones",
+     "theory": "JavaScript **convierte tipos** automáticamente (*coerción*) en muchas operaciones, y ahí están sus trampas más famosas.\n\n**== frente a ===:**\n- `===` (igualdad estricta) compara tipo **y** valor: `5 === \"5\"` es `false`.\n- `==` convierte antes de comparar: `5 == \"5\"` es `true`, y también `0 == \"\"` o `null == undefined`.\n- Usa **siempre** `===` y `!==`.\n\n**El operador +:** si uno de los operandos es un string, **concatena**: `\"5\" + 3` es `\"53\"`. Los demás operadores aritméticos convierten a número: `\"5\" - 3` es `2`.\n\n**Valores falsy:** en un `if` se comportan como `false` seis valores: `false`, `0`, `\"\"`, `null`, `undefined` y `NaN`. **Todo lo demás es truthy**, incluidos `\"0\"`, `\"false\"`, `[]` y `{}`.\n\n**Valores por defecto:**\n- `a || b` devuelve `b` si `a` es **falsy**, así que `0 || 18` da `18`, a veces sin querer.\n- `a ?? b` (*nullish*) solo usa `b` si `a` es `null` o `undefined`: `0 ?? 18` da `0`.\n\n**NaN** (*Not a Number*) es el resultado de una operación numérica imposible: `Number(\"abc\")`. Es el único valor que no es igual a sí mismo (`NaN === NaN` es `false`). Se comprueba con `Number.isNaN(x)`.\n\nPara convertir a propósito: `Number(\"12\")`, `parseInt(\"12px\")` (lee hasta donde puede), `String(12)` y `Boolean(x)`.",
+     "example_code": "const entrada = \"12\";\nconst cantidad = Number(entrada);\n\nconsole.log(entrada + 1, cantidad + 1);\nconsole.log(entrada == 12, entrada === 12, cantidad === 12);\n\nconst descuento = 0;\nconsole.log(descuento || 10, descuento ?? 10);",
+     "exercise": "Un formulario te da los precios como texto: `const precios = [\"10\", \"5.5\", \"abc\", \"20\"];`.\n\nSuma solo los que sean números válidos, usando `Number` y `Number.isNaN`, y muestra el total.",
+     "starter": "const precios = [\"10\", \"5.5\", \"abc\", \"20\"];\nlet total = 0;\nfor (const p of precios) {\n  // ...\n}\nconsole.log(total);\n",
+     "quiz": [
+      {
+       "q": "¿Qué muestra este código?",
+       "options": [
+        "true true",
+        "false false",
+        "false true",
+        "true false"
+       ],
+       "answer": 3,
+       "explain": "Con `==` null y undefined se consideran iguales; con `===` son tipos distintos.",
+       "code": "console.log(null == undefined, null === undefined);"
+      },
+      {
+       "q": "¿Por qué se recomienda `===` en lugar de `==`?",
+       "options": [
+        "Porque `==` convierte los tipos antes de comparar y da resultados sorprendentes",
+        "Porque `==` está obsoleto y da error",
+        "Porque `===` es más rápido siempre",
+        "Porque `==` solo compara números"
+       ],
+       "answer": 0,
+       "explain": "Con `===` lo que ves es lo que comparas, sin conversiones ocultas."
+      }
+     ],
+     "challenge": {
+      "title": "Valor por defecto correcto",
+      "stars": 2,
+      "exercise": "Escribe `mostrarVolumen(v)`, que muestre 50 si no se le pasa volumen, pero respete un volumen de 0.",
+      "starter": "function mostrarVolumen(v) {\n  // ...\n}\nmostrarVolumen();\nmostrarVolumen(0);\n",
+      "hint": "Con `||` el 0 se convierte en 50; usa `??`."
+     },
+     "assistant": {
+      "hint": "Convierte cada texto con `Number(p)` y súmalo solo si `!Number.isNaN(n)`.",
+      "faq": [
+       {
+        "q": "¿Hay algún caso en que `==` sea útil?",
+        "a": "Solo `x == null`, que comprueba a la vez null y undefined. Aun así, muchos equipos lo prohíben por claridad."
+       },
+       {
+        "q": "¿`parseInt` o `Number`?",
+        "a": "`Number(\"12px\")` da NaN; `parseInt(\"12px\")` da 12 porque lee hasta donde puede. Para validar una entrada completa, `Number`."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "MDN Web Docs — JavaScript",
+       "url": "https://developer.mozilla.org/es/docs/Web/JavaScript"
+      },
+      {
+       "title": "javascript.info (tutorial moderno)",
+       "url": "https://es.javascript.info/"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "js-funciones",
+   "title": "Funciones y ámbito",
+   "summary": "Funciones, flechas, hoisting y closures.",
+   "lessons": [
+    {
+     "slug": "js-funciones",
+     "title": "Funciones",
+     "theory": "Hay tres formas habituales de crear funciones:\n\n- **Declaración:** `function doble(n) { return n * 2; }`. Se **eleva** (*hoisting*): puedes llamarla antes de la línea donde está escrita.\n- **Expresión:** `const doble = function (n) { return n * 2; };`. No se puede usar antes de su línea.\n- **Flecha:** `const doble = (n) => n * 2;`.\n  - Con una sola expresión, devuelve su valor sin escribir `return`.\n  - Si lleva llaves `{ }`, hace falta `return`.\n  - Para devolver un objeto hay que envolverlo en paréntesis: `() => ({ ok: true })`.\n\n**Parámetros:**\n- Si falta un argumento, vale `undefined`, salvo que tenga **valor por defecto**: `(nombre = \"invitado\") =>`.\n- `...nums` (parámetro *rest*) agrupa los argumentos que sobran en un array.\n\n**Sin `return`**, una función devuelve `undefined`.\n\n**Las funciones son valores:** se guardan en variables, se pasan como argumento (**callbacks**, como en `boton.addEventListener(\"click\", manejar)` o `lista.map(doble)`) y se devuelven desde otras funciones.",
+     "example_code": "function calcularIVA(precio, tipo = 0.21) {\n  return precio * tipo;\n}\n\nconst conIVA = (precio) => precio + calcularIVA(precio);\nconst sumar = (...importes) => importes.reduce((total, x) => total + x, 0);\n\nconsole.log(calcularIVA(100), conIVA(100));\nconsole.log(sumar(10, 20, 30));\nconsole.log([1, 2, 3].map((n) => n * 10).join(\" \"));",
+     "exercise": "Escribe `nota(puntos, total = 10)`, que devuelva la nota sobre 10 redondeada a un decimal.\n\nLuego escribe una versión flecha llamada `aprobado`, que diga si una nota es de 5 o más.",
+     "starter": "function nota(puntos, total = 10) {\n  // ...\n}\n\nconst aprobado = (n) => /* ... */;\n\nconsole.log(nota(7, 8), aprobado(nota(7, 8)));\n",
+     "quiz": [
+      {
+       "q": "¿Qué muestra este código?",
+       "options": [
+        "true",
+        "{\"ok\":true}",
+        "undefined",
+        "Lanza SyntaxError"
+       ],
+       "answer": 2,
+       "explain": "Las llaves se interpretan como el **cuerpo** de la función (y `ok:` como una etiqueta), así que no devuelve nada. Para devolver un objeto: `() => ({ ok: true })`.",
+       "code": "const f = () => { ok: true };\nconsole.log(f());"
+      },
+      {
+       "q": "¿Cómo se llama una función que se pasa como argumento a otra para que la llame después?",
+       "options": [
+        "Callback",
+        "Constructor",
+        "Promesa",
+        "Módulo"
+       ],
+       "answer": 0,
+       "explain": "Es la base de los eventos del DOM y de métodos como `map`, `filter` o `setTimeout`."
+      }
+     ],
+     "challenge": {
+      "title": "Fábrica de saludos",
+      "stars": 2,
+      "exercise": "Escribe `crearSaludo(saludo)`, que **devuelva una función**: `crearSaludo(\"Hola\")(\"Ana\")` debe dar `\"Hola, Ana\"`.",
+      "starter": "function crearSaludo(saludo) {\n  // return ...\n}\n\nconst hola = crearSaludo(\"Hola\");\nconsole.log(hola(\"Ana\"));\n",
+      "hint": "Devuelve una flecha: `return (nombre) => `${saludo}, ${nombre}`;`. La función interior recuerda `saludo` (es un *closure*)."
+     },
+     "assistant": {
+      "hint": "`Math.round(x * 10) / 10` redondea a un decimal.",
+      "faq": [
+       {
+        "q": "¿Declaración o flecha?",
+        "a": "Para funciones con nombre de primer nivel, cualquiera. Las flechas son cómodas como callbacks. Diferencia importante: las flechas no tienen su propio `this`."
+       },
+       {
+        "q": "¿Qué es un callback?",
+        "a": "Una función que pasas a otra para que la llame después: al pulsar un botón, al acabar una petición o para cada elemento de un array."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "MDN Web Docs — JavaScript",
+       "url": "https://developer.mozilla.org/es/docs/Web/JavaScript"
+      },
+      {
+       "title": "javascript.info (tutorial moderno)",
+       "url": "https://es.javascript.info/"
+      }
+     ]
+    },
+    {
+     "slug": "js-ambito",
+     "title": "Ámbito, hoisting y closures",
+     "theory": "El **ámbito** (*scope*) es la zona del código donde existe una variable.\n\n- `let` y `const` tienen ámbito de **bloque**: solo existen dentro de las llaves `{ }` donde se declaran (un `if`, un `for`…).\n- `var` tiene ámbito de **función**: se \"escapa\" de los bloques.\n\n**Hoisting:**\n- Las declaraciones `var` se elevan al principio de la función con valor `undefined`, así que usarlas antes de su línea da `undefined`, no un error.\n- `let` y `const` también se registran, pero quedan en la **zona muerta temporal** (TDZ): usarlas antes de su línea lanza `ReferenceError`. Es un comportamiento más seguro.\n\n**El clásico de los bucles:** con `var`, todas las vueltas comparten **la misma** variable. Si un `setTimeout` la lee después, ve el valor final. Con `let`, cada vuelta tiene su propia copia.\n\n**Closures:** una función **recuerda** las variables del ámbito donde se creó, aunque ese ámbito ya haya terminado. Sirve para crear estado privado:\n\n`function crearContador() { let n = 0; return () => ++n; }`\n\nCada llamada a `crearContador()` crea un `n` distinto, al que solo accede la función devuelta.",
+     "example_code": "function crearContador(inicio = 0) {\n  let cuenta = inicio;\n  return {\n    sumar: () => ++cuenta,\n    valor: () => cuenta,\n  };\n}\n\nconst visitas = crearContador();\nvisitas.sumar();\nvisitas.sumar();\nconsole.log(visitas.valor());\n\nfor (let i = 0; i < 3; i++) {\n  setTimeout(() => console.log(\"vuelta\", i), 0);\n}",
+     "exercise": "Crea `crearMonedero(saldoInicial)`, que devuelva un objeto con `ingresar(x)`, `gastar(x)` y `saldo()`.\n\nEl saldo no debe poder modificarse desde fuera, y `gastar` no debe permitir quedarse en negativo.",
+     "starter": "function crearMonedero(saldoInicial) {\n  let saldo = saldoInicial;\n  return {\n    // ...\n  };\n}\n",
+     "quiz": [
+      {
+       "q": "¿Qué muestra este código?",
+       "options": [
+        "number number",
+        "Lanza ReferenceError",
+        "undefined undefined",
+        "undefined number"
+       ],
+       "answer": 3,
+       "explain": "`let` no existe fuera del bloque; `var` se escapa. `typeof` de una variable inexistente da \"undefined\" sin lanzar error.",
+       "code": "if (true) {\n  let dentro = 1;\n  var fuera = 2;\n}\nconsole.log(typeof dentro, typeof fuera);"
+      },
+      {
+       "q": "¿Qué es un closure?",
+       "options": [
+        "Una función que recuerda las variables del ámbito donde se creó",
+        "Una función que se cierra sola al terminar",
+        "Un bloque try/catch",
+        "Una forma de declarar constantes"
+       ],
+       "answer": 0,
+       "explain": "Aunque la función exterior haya terminado, la interior sigue accediendo a sus variables."
+      }
+     ],
+     "challenge": {
+      "title": "Una sola vez",
+      "stars": 3,
+      "exercise": "Escribe `unaVez(fn)`, que devuelva una función que ejecute `fn` solo la **primera** vez que se la llame. Las demás veces devuelve el mismo resultado sin volver a ejecutarla.",
+      "starter": "function unaVez(fn) {\n  // ...\n}\n\nconst iniciar = unaVez(() => console.log(\"iniciado\"));\niniciar();\niniciar();\n",
+      "hint": "Guarda en el closure un booleano `hecho` y el `resultado` de la primera llamada."
+     },
+     "assistant": {
+      "hint": "El `let saldo` solo lo ven las funciones del objeto devuelto: es un closure.",
+      "faq": [
+       {
+        "q": "¿Por qué existe todavía `var`?",
+        "a": "Por compatibilidad con código antiguo. En código nuevo no hay motivo para usarla."
+       },
+       {
+        "q": "¿Los closures gastan memoria?",
+        "a": "Mantienen vivas las variables que usan mientras la función exista. Casi nunca es un problema; basta con no guardar referencias que ya no necesitas."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "MDN Web Docs — JavaScript",
+       "url": "https://developer.mozilla.org/es/docs/Web/JavaScript"
+      },
+      {
+       "title": "javascript.info (tutorial moderno)",
+       "url": "https://es.javascript.info/"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "js-datos",
+   "title": "Arrays y objetos",
+   "summary": "Métodos de arrays, objetos, desestructuración y JSON.",
+   "lessons": [
+    {
+     "slug": "js-arrays",
+     "title": "Arrays y sus métodos",
+     "theory": "Un **array** es una lista ordenada que crece sola: `const notas = [7, 5, 9];`.\n\n**Métodos que modifican el array:** `push` y `pop` (al final), `unshift` y `shift` (al principio), `splice`, `sort` y `reverse`.\n\n**Métodos que devuelven algo nuevo sin tocar el original:**\n- `map(fn)`: un array nuevo con el resultado de aplicar `fn` a cada elemento;\n- `filter(fn)`: los elementos que cumplen la condición;\n- `find(fn)`: el **primero** que la cumple, o `undefined`;\n- `some(fn)` y `every(fn)`: si alguno o todos la cumplen;\n- `reduce((acumulado, x) => …, inicial)`: reduce el array a un solo valor (suma, máximo, objeto…);\n- `includes(x)`, `indexOf(x)`, `slice(i, j)` y `join(\", \")`.\n\n**Trampa de `sort()`:** sin argumentos ordena como **texto**. `[10, 9, 1].sort()` da `[1, 10, 9]`. Para números: `sort((a, b) => a - b)`.\n\n**Desestructurar y propagar:**\n- `const [primero, segundo] = lista;` saca elementos a variables.\n- `[...a, ...b]` une arrays y `[...a]` hace una copia.\n- Los arrays son objetos: `const b = a` **no copia**, las dos variables apuntan al mismo array.\n\nRecorrer: `for (const x of lista)` o `lista.forEach(x => …)`.",
+     "example_code": "const alumnos = [\n  { nombre: \"Ana\", nota: 8 },\n  { nombre: \"Luis\", nota: 4 },\n  { nombre: \"Eva\", nota: 9 },\n];\n\nconst aprobados = alumnos.filter((a) => a.nota >= 5).map((a) => a.nombre);\nconst media = alumnos.reduce((total, a) => total + a.nota, 0) / alumnos.length;\n\nconsole.log(aprobados.join(\", \"));\nconsole.log(media.toFixed(2));\nconsole.log([10, 9, 1].sort((a, b) => a - b).join(\" \"));",
+     "exercise": "Con `const pedidos = [{ id: 1, total: 30 }, { id: 2, total: 120 }, { id: 3, total: 75 }];`:\n\n1. Obtén los ids de los pedidos de más de 50 €.\n2. Calcula el importe total con `reduce`.\n3. Ordénalos de mayor a menor total **sin modificar** el array original.",
+     "starter": "const pedidos = [{ id: 1, total: 30 }, { id: 2, total: 120 }, { id: 3, total: 75 }];\n\nconst grandes = pedidos.filter(/* ... */).map(/* ... */);\nconsole.log(grandes.join(\", \"));\n",
+     "quiz": [
+      {
+       "q": "¿Qué muestra este código?",
+       "options": [
+        "2",
+        "3",
+        "undefined",
+        "Lanza TypeError"
+       ],
+       "answer": 1,
+       "explain": "`b = a` no copia: las dos variables apuntan al mismo array. Para copiar, `[...a]`.",
+       "code": "const a = [1, 2];\nconst b = a;\nb.push(3);\nconsole.log(a.length);"
+      },
+      {
+       "q": "¿Qué método devuelve un array nuevo solo con los elementos que cumplen una condición?",
+       "options": [
+        "filter",
+        "find",
+        "map",
+        "forEach"
+       ],
+       "answer": 0,
+       "explain": "`find` devuelve solo el primero; `map` transforma todos; `forEach` no devuelve nada."
+      }
+     ],
+     "challenge": {
+      "title": "Agrupar por ciclo",
+      "stars": 3,
+      "exercise": "Con una lista de alumnos `{ nombre, ciclo }`, construye con `reduce` un objeto `{ DAW: [\"Ana\", …], DAM: [...] }`.",
+      "starter": "const alumnos = [{ nombre: \"Ana\", ciclo: \"DAW\" }, { nombre: \"Luis\", ciclo: \"DAM\" }, { nombre: \"Eva\", ciclo: \"DAW\" }];\n\nconst porCiclo = alumnos.reduce((grupos, a) => {\n  // ...\n  return grupos;\n}, {});\n",
+      "hint": "Dentro del reduce: `(grupos[a.ciclo] ??= []).push(a.nombre);`."
+     },
+     "assistant": {
+      "hint": "Para no modificar el original, ordena una copia: `[...pedidos].sort((a, b) => b.total - a.total)`.",
+      "faq": [
+       {
+        "q": "¿`forEach` o `map`?",
+        "a": "`map` devuelve un array nuevo con los resultados. `forEach` solo recorre, y siempre devuelve undefined: úsalo para efectos (pintar, registrar)."
+       },
+       {
+        "q": "¿Por qué no sirve `==` para comparar dos arrays?",
+        "a": "Compara si son **el mismo objeto**, no su contenido: `[1] === [1]` es false."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "MDN Web Docs — JavaScript",
+       "url": "https://developer.mozilla.org/es/docs/Web/JavaScript"
+      },
+      {
+       "title": "javascript.info (tutorial moderno)",
+       "url": "https://es.javascript.info/"
+      }
+     ]
+    },
+    {
+     "slug": "js-objetos",
+     "title": "Objetos y JSON",
+     "theory": "Un **objeto** agrupa pares clave: valor: `const alumno = { nombre: \"Ana\", nota: 8 };`.\n\n**Acceso:** `alumno.nombre`, o `alumno[\"nombre\"]` cuando la clave está en una variable. Una propiedad inexistente da `undefined`, pero leer una propiedad **de** `undefined` lanza `TypeError`. El **encadenamiento opcional** `alumno.direccion?.calle` devuelve undefined en lugar de fallar.\n\n**Métodos y `this`:** una función dentro del objeto es un método. `this` es el objeto que la llama (`alumno.saludar()`). Las funciones flecha no tienen su propio `this`: no las uses como métodos.\n\n**Desestructurar:**\n- `const { nombre, ciudad = \"Madrid\" } = alumno;` saca propiedades a variables, con valores por defecto.\n- `Object.keys`, `Object.values` y `Object.entries` dan arrays para recorrer un objeto.\n\n**Referencias y copias:**\n- Como los arrays, los objetos se asignan **por referencia**, y dos objetos con el mismo contenido no son `===`.\n- `{ ...obj }` hace una copia **superficial**: los objetos anidados siguen compartidos.\n- Para una copia profunda: `structuredClone(obj)`.\n\n**JSON** es el formato de texto con el que viajan los datos entre el navegador y un servidor:\n- `JSON.stringify(obj)` convierte un objeto en texto (se pierden las funciones y los `undefined`);\n- `JSON.parse(texto)` convierte el texto en un objeto;\n- el JSON exige **comillas dobles** en las claves y en los textos. Si no, `JSON.parse` lanza `SyntaxError`.",
+     "example_code": "const pedido = {\n  id: 7,\n  cliente: { nombre: \"Ana\", ciudad: \"Leganés\" },\n  lineas: [{ producto: \"Teclado\", precio: 25 }],\n  total() {\n    return this.lineas.reduce((t, l) => t + l.precio, 0);\n  },\n};\n\nconst { cliente: { nombre }, id } = pedido;\nconsole.log(id, nombre, pedido.total());\nconsole.log(pedido.envio?.fecha ?? \"sin fecha de envío\");\n\nconst texto = JSON.stringify({ id: pedido.id, total: pedido.total() });\nconsole.log(texto, JSON.parse(texto).total);",
+     "exercise": "Tienes `const producto = { nombre: \"Ratón\", precio: 15, etiquetas: [\"usb\"] };`:\n\n1. Crea una copia con `precio: 12` sin modificar el original.\n2. Recorre sus propiedades con `Object.entries` y muestra `clave = valor`.\n3. Conviértelo a JSON y de vuelta a objeto.",
+     "starter": "const producto = { nombre: \"Ratón\", precio: 15, etiquetas: [\"usb\"] };\n\nconst rebajado = { ...producto, /* ... */ };\nfor (const [clave, valor] of Object.entries(rebajado)) {\n  // ...\n}\n",
+     "quiz": [
+      {
+       "q": "¿Qué muestra este código?",
+       "options": [
+        "true true",
+        "false false",
+        "true false",
+        "false true"
+       ],
+       "answer": 3,
+       "explain": "Son dos objetos distintos en memoria, aunque su contenido sea igual. Sus textos JSON sí coinciden.",
+       "code": "const a = { x: 1 };\nconst b = { x: 1 };\nconsole.log(a === b, JSON.stringify(a) === JSON.stringify(b));"
+      },
+      {
+       "q": "¿Qué hace `JSON.parse`?",
+       "options": [
+        "Convierte un texto JSON en un valor de JavaScript",
+        "Convierte un objeto en texto",
+        "Valida un formulario",
+        "Descarga un archivo JSON"
+       ],
+       "answer": 0,
+       "explain": "Es la operación inversa de `JSON.stringify`."
+      }
+     ],
+     "challenge": {
+      "title": "Copia profunda",
+      "stars": 2,
+      "exercise": "Demuestra la diferencia entre `{ ...obj }` y `structuredClone(obj)` modificando un objeto anidado en cada copia.",
+      "starter": "const original = { nombre: \"Ana\", notas: { dwec: 7 } };\n\nconst superficial = { ...original };\nconst profunda = structuredClone(original);\n// ...\n",
+      "hint": "Cambia `notas.dwec` en cada copia y mira cuál de ellas afecta al original."
+     },
+     "assistant": {
+      "hint": "`{ ...producto, precio: 12 }` copia todo y sobrescribe el precio.",
+      "faq": [
+       {
+        "q": "¿Objeto o Map?",
+        "a": "Para datos con claves fijas (un alumno), objeto. Para diccionarios que cambian mucho, con claves que no son texto o donde importa el orden de inserción, `Map`."
+       },
+       {
+        "q": "¿Por qué `JSON.parse` falla con comillas simples?",
+        "a": "Porque el formato JSON es más estricto que JavaScript: claves y textos siempre con comillas dobles."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "MDN Web Docs — JavaScript",
+       "url": "https://developer.mozilla.org/es/docs/Web/JavaScript"
+      },
+      {
+       "title": "javascript.info (tutorial moderno)",
+       "url": "https://es.javascript.info/"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "js-dom",
+   "title": "DOM y eventos",
+   "summary": "Seleccionar y modificar la página y reaccionar al usuario.",
+   "lessons": [
+    {
+     "slug": "js-dom",
+     "title": "El DOM: leer y cambiar la página",
+     "theory": "El **DOM** (*Document Object Model*) es el árbol de objetos que el navegador crea a partir del HTML. Con JavaScript lo lees y lo modificas, y la página cambia al instante.\n\n**Seleccionar elementos:**\n- `document.querySelector(\".item\")`: el **primero** que coincide con el selector CSS, o `null`.\n- `document.querySelectorAll(\".item\")`: **todos**, en una `NodeList`, vacía si no hay ninguno. Se recorre con `forEach` o `for…of`.\n- `document.getElementById(\"menu\")`: por id, o `null`.\n\n**Leer y cambiar contenido:**\n- `el.textContent = \"…\"` pone **texto**: es seguro con datos del usuario.\n- `el.innerHTML = \"…\"` interpreta el texto como **HTML**. Con datos del usuario es un riesgo de **XSS**: podrían inyectar scripts.\n- Atributos: `el.src`, `el.value`, `el.getAttribute(\"href\")` y `el.dataset.id` (para `data-id`).\n\n**Estilos y clases:** `el.classList.add(\"activo\")`, `remove`, `toggle` y `contains`. Es mejor cambiar clases que tocar `el.style` directamente.\n\n**Crear y quitar:**\n- `const li = document.createElement(\"li\"); li.textContent = \"Nuevo\"; lista.append(li);`\n- `el.remove()` quita un elemento.\n\n**¿Cuándo se ejecuta tu script?** Si está en el `<head>` sin `defer`, se ejecuta **antes** de que existan los elementos del `<body>`, y `querySelector` devuelve `null`. Usa `<script src=\"app.js\" defer>` o ponlo al final del body.\n\nEste código solo funciona en el navegador. En la app las preguntas del DOM son de razonar, no de ejecutar.",
+     "example_code": "const lista = document.querySelector(\"#tareas\");\nconst tareas = [\"Repasar DOM\", \"Hacer el ejercicio\"];\n\nfor (const texto of tareas) {\n  const li = document.createElement(\"li\");\n  li.textContent = texto;\n  li.classList.add(\"tarea\");\n  lista.append(li);\n}\n\ndocument.querySelectorAll(\".tarea\").forEach((li, i) => {\n  li.dataset.posicion = String(i + 1);\n});",
+     "exercise": "Con este HTML: `<ul id=\"notas\"></ul>` y el array `const notas = [7, 4, 9];`\n\n1. Crea un `<li>` por nota con el texto `Nota: 7`.\n2. Añade la clase `suspenso` a las menores de 5.\n3. Escribe debajo un párrafo con la media.",
+     "starter": "const ul = document.querySelector(\"#notas\");\nconst notas = [7, 4, 9];\n\nfor (const n of notas) {\n  const li = document.createElement(\"li\");\n  // ...\n}\n",
+     "quiz": [
+      {
+       "q": "¿Qué devuelve `document.getElementById(\"no-existe\")`?",
+       "options": [
+        "null",
+        "undefined",
+        "Una lista vacía",
+        "Lanza un error"
+       ],
+       "answer": 0,
+       "explain": "Por eso conviene comprobarlo, o usar `?.`, antes de acceder a sus propiedades."
+      },
+      {
+       "q": "¿Cuál es la forma correcta de añadir un nuevo `<li>` a una lista?",
+       "options": [
+        "Crear el elemento con `document.createElement(\"li\")`, darle contenido y hacer `lista.append(li)`",
+        "`lista.li = \"texto\"`",
+        "`lista.push(\"<li>texto</li>\")`",
+        "`document.write(\"<li>\")`"
+       ],
+       "answer": 0,
+       "explain": "`document.write` está desaconsejado; los elementos se crean y se insertan en el árbol."
+      }
+     ],
+     "challenge": {
+      "title": "Lista filtrable",
+      "stars": 3,
+      "exercise": "Crea una lista de productos desde un array y un `<input>` que, al escribir, oculte los que no contienen el texto (con una clase `oculto`).",
+      "starter": "const productos = [\"Teclado\", \"Ratón\", \"Monitor\", \"Cable\"];\nconst ul = document.querySelector(\"#productos\");\nconst buscador = document.querySelector(\"#buscar\");\n\n// ...\n",
+      "hint": "En el evento `input`, recorre los `<li>` y usa `li.classList.toggle(\"oculto\", !li.textContent.toLowerCase().includes(texto))`."
+     },
+     "assistant": {
+      "hint": "`li.classList.toggle(\"suspenso\", n < 5)` añade o quita la clase según la condición.",
+      "faq": [
+       {
+        "q": "¿`append` o `appendChild`?",
+        "a": "`append` es más moderno: admite varios nodos y textos. `appendChild` solo un nodo. Los dos añaden al final."
+       },
+       {
+        "q": "¿Es mala práctica `innerHTML`?",
+        "a": "Para plantillas **tuyas** está bien. Con datos que vienen del usuario o de una API, usa `textContent` o crea los elementos para evitar XSS."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "MDN Web Docs — DOM",
+       "url": "https://developer.mozilla.org/es/docs/Web/API/Document_Object_Model"
+      },
+      {
+       "title": "javascript.info (tutorial moderno)",
+       "url": "https://es.javascript.info/"
+      }
+     ]
+    },
+    {
+     "slug": "js-eventos",
+     "title": "Eventos",
+     "theory": "Los **eventos** avisan de lo que pasa en la página: `click`, `input`, `submit`, `keydown`, `change`, `DOMContentLoaded`…\n\n`boton.addEventListener(\"click\", manejar)` registra una función que se ejecutará **cada vez** que ocurra el evento. Se pasa la **función**, no su resultado: `manejar`, sin paréntesis.\n\n**El objeto evento** llega como primer parámetro:\n- `event.target` es el elemento donde ocurrió;\n- `event.currentTarget` es el que tiene el listener;\n- `event.key` es la tecla pulsada;\n- `event.preventDefault()` cancela la acción por defecto, como enviar el formulario y recargar la página, o seguir un enlace.\n\n**Propagación (burbujeo):** un evento sube desde el elemento pulsado hasta sus antepasados. Si un botón y su `div` tienen listener de click, se ejecuta primero el del botón y después el del div. `event.stopPropagation()` corta la subida.\n\n**Delegación de eventos:** en vez de poner un listener en cada `<li>` (incluidos los que añadas después), pones **uno** en el `<ul>` y miras `event.target` para saber cuál se pulsó.\n\n**Formularios:** escucha `submit` en el `<form>`, no `click` en el botón: así también funciona con Enter. Lee los campos con `input.value` (siempre es texto) o con `new FormData(form)`.",
+     "example_code": "const form = document.querySelector(\"#alta\");\nconst lista = document.querySelector(\"#alumnos\");\n\nform.addEventListener(\"submit\", (event) => {\n  event.preventDefault();\n  const nombre = form.elements.nombre.value.trim();\n  if (!nombre) return;\n  const li = document.createElement(\"li\");\n  li.textContent = nombre;\n  lista.append(li);\n  form.reset();\n});\n\nlista.addEventListener(\"click\", (event) => {\n  if (event.target.matches(\"li\")) event.target.classList.toggle(\"seleccionado\");\n});",
+     "exercise": "Crea un contador con dos botones, `+` y `-`, y un `<span>` que muestre el valor.\n\n- El valor nunca baja de 0.\n- Con la tecla `r` se reinicia.",
+     "starter": "let valor = 0;\nconst span = document.querySelector(\"#valor\");\n\ndocument.querySelector(\"#mas\").addEventListener(\"click\", () => {\n  // ...\n});\n",
+     "quiz": [
+      {
+       "q": "Dentro de un listener puesto en un `<ul>`, ¿qué es `event.target` si se pulsa un `<li>`?",
+       "options": [
+        "El `<li>` pulsado",
+        "El `<ul>`",
+        "El documento",
+        "La función del listener"
+       ],
+       "answer": 0,
+       "explain": "`event.currentTarget` sería el `<ul>`, que es quien tiene el listener."
+      },
+      {
+       "q": "¿Por qué es mejor escuchar `submit` en el formulario que `click` en su botón?",
+       "options": [
+        "Porque también se dispara al pulsar Enter en un campo",
+        "Porque click no funciona en botones",
+        "Porque submit es más rápido",
+        "No hay diferencia"
+       ],
+       "answer": 0,
+       "explain": "El formulario se envía de varias formas; `submit` las recoge todas."
+      }
+     ],
+     "challenge": {
+      "title": "Lista de tareas con delegación",
+      "stars": 3,
+      "exercise": "Lista de tareas en la que cada `<li>` tiene un botón `×`. Con **un solo** listener en el `<ul>`, borra la tarea cuyo botón se pulse, también en las tareas añadidas después.",
+      "starter": "const ul = document.querySelector(\"#tareas\");\n\nul.addEventListener(\"click\", (event) => {\n  // ...\n});\n",
+      "hint": "`event.target.closest(\"li\")` sube hasta el `<li>` que contiene el botón pulsado."
+     },
+     "assistant": {
+      "hint": "Para la tecla, escucha `keydown` en `document` y comprueba `event.key === \"r\"`.",
+      "faq": [
+       {
+        "q": "¿`onclick` o `addEventListener`?",
+        "a": "`el.onclick = fn` solo admite una función, porque la siguiente la sustituye. `addEventListener` admite varias y más opciones. Evita `onclick=\"…\"` en el HTML: mezcla JavaScript y marcado."
+       },
+       {
+        "q": "¿Cómo quito un listener?",
+        "a": "Con `removeEventListener`, pasando **la misma** función. Por eso no funciona con funciones anónimas; si solo quieres que se ejecute una vez, usa `{ once: true }`."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "MDN Web Docs — DOM",
+       "url": "https://developer.mozilla.org/es/docs/Web/API/Document_Object_Model"
+      },
+      {
+       "title": "javascript.info (tutorial moderno)",
+       "url": "https://es.javascript.info/"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "js-asincronia",
+   "title": "Asincronía",
+   "summary": "Event loop, promesas, async/await y fetch.",
+   "lessons": [
+    {
+     "slug": "js-asincronia",
+     "title": "Asincronía: event loop, promesas y async/await",
+     "theory": "JavaScript ejecuta **un solo hilo**. Las tareas lentas (temporizadores, peticiones de red) no bloquean: se programan y su **callback** se ejecuta más tarde, cuando el hilo queda libre. El mecanismo que lo gestiona es el **event loop**.\n\n**Orden de ejecución:**\n1. Todo el código síncrono actual.\n2. Las **microtareas**: los `then` de las promesas y lo que sigue a un `await`.\n3. Las **tareas**, como los `setTimeout`, aunque sean de 0 ms.\n\nPor eso `setTimeout(fn, 0)` nunca se ejecuta \"ya\", sino cuando termina lo demás.\n\n**Promesas:** un objeto que representa un resultado futuro. Está pendiente y acaba **cumplida** (`then`) o **rechazada** (`catch`). `Promise.all([...])` espera a varias a la vez.\n\n**async/await:**\n- Una función `async` **siempre devuelve una promesa**.\n- Dentro de ella, `await promesa` pausa **esa función** (no el programa) hasta que la promesa se resuelve, y da su valor.\n- Los errores se capturan con `try/catch`, como en el código síncrono.\n- Si nadie captura un rechazo, el error queda sin tratar (*unhandled rejection*).",
+     "example_code": "const esperar = (ms) => new Promise((resolver) => setTimeout(resolver, ms));\n\nasync function cargarAlumnos() {\n  await esperar(50);\n  return [\"Ana\", \"Luis\"];\n}\n\nasync function main() {\n  console.log(\"Cargando...\");\n  const alumnos = await cargarAlumnos();\n  console.log(`Cargados: ${alumnos.join(\", \")}`);\n}\n\nmain();\nconsole.log(\"La interfaz sigue respondiendo\");",
+     "exercise": "Escribe `async function cronometro(n)`, que muestre `3`, `2`, `1` y `¡Ya!` con un segundo de pausa entre cada número, usando una función `esperar(ms)` basada en promesas.",
+     "starter": "const esperar = (ms) => new Promise((r) => setTimeout(r, ms));\n\nasync function cronometro(n) {\n  for (let i = n; i > 0; i--) {\n    // ...\n  }\n}\n\ncronometro(3);\n",
+     "quiz": [
+      {
+       "q": "¿Qué muestra este código?",
+       "options": [
+        "3-2-1",
+        "1-2-3",
+        "Lanza TypeError",
+        "1-3"
+       ],
+       "answer": 1,
+       "explain": "`Promise.all` espera a todas y mantiene el orden. Los valores que no son promesas se tratan como ya resueltos.",
+       "code": "Promise.all([Promise.resolve(1), 2, Promise.resolve(3)])\n  .then((valores) => console.log(valores.join(\"-\")));"
+      },
+      {
+       "q": "¿Qué hace `await` dentro de una función async?",
+       "options": [
+        "Pausa esa función hasta que la promesa se resuelve y devuelve su valor",
+        "Bloquea todo el programa",
+        "Convierte una función en síncrona",
+        "Repite la promesa hasta que funcione"
+       ],
+       "answer": 0,
+       "explain": "Solo se pausa la función; el event loop sigue atendiendo lo demás."
+      }
+     ],
+     "challenge": {
+      "title": "En paralelo",
+      "stars": 2,
+      "exercise": "Simula tres peticiones con `esperar` de 300, 100 y 200 ms. Espera a las tres con `Promise.all` y mide el tiempo total con `Date.now()`: ¿es la suma o el máximo?",
+      "starter": "const esperar = (ms, valor) => new Promise((r) => setTimeout(() => r(valor), ms));\n\nasync function main() {\n  const inicio = Date.now();\n  // const resultados = await Promise.all([...]);\n  console.log(Date.now() - inicio);\n}\n\nmain();\n",
+      "hint": "`Promise.all` lanza todas a la vez: tarda lo que la más lenta, unos 300 ms."
+     },
+     "assistant": {
+      "hint": "Dentro del bucle: `console.log(i); await esperar(1000);`.",
+      "faq": [
+       {
+        "q": "¿`await` bloquea la página?",
+        "a": "No: pausa solo la función async en la que está. El resto del programa y la interfaz siguen funcionando."
+       },
+       {
+        "q": "¿`then` o `await`?",
+        "a": "Hacen lo mismo. `await` se lee como código secuencial y facilita el try/catch; `then` es útil en cadenas cortas."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "MDN Web Docs — JavaScript",
+       "url": "https://developer.mozilla.org/es/docs/Web/JavaScript"
+      },
+      {
+       "title": "javascript.info (tutorial moderno)",
+       "url": "https://es.javascript.info/"
+      }
+     ]
+    },
+    {
+     "slug": "js-fetch-json",
+     "title": "fetch y JSON",
+     "theory": "`fetch(url)` hace peticiones HTTP desde el navegador y devuelve una **promesa** de una `Response`.\n\n```\nconst respuesta = await fetch(\"/api/alumnos\");\nif (!respuesta.ok) throw new Error(`HTTP ${respuesta.status}`);\nconst alumnos = await respuesta.json();\n```\n\n**Dos `await`:** uno espera la respuesta y otro lee y convierte el cuerpo (`json()`, `text()`), que también es asíncrono.\n\n**Trampa importante:** `fetch` **no** rechaza la promesa por un 404 o un 500. Solo falla por errores de **red** (sin conexión, CORS). Hay que comprobar `respuesta.ok`, que es cierto con los códigos 200-299, o `respuesta.status`.\n\n**Enviar datos (POST):**\n\n```\nawait fetch(\"/api/alumnos\", {\n  method: \"POST\",\n  headers: { \"Content-Type\": \"application/json\" },\n  body: JSON.stringify({ nombre: \"Ana\" }),\n});\n```\n\n**JSON al recibir:** los números que vienen como texto (`\"12\"`) siguen siendo texto: conviértelos con `Number`. Un JSON mal formado hace que `JSON.parse` o `respuesta.json()` lancen `SyntaxError`.\n\n**Manejo de errores:** envuelve las peticiones en `try/catch/finally`. En el `catch` muestra un mensaje al usuario; en el `finally`, quita el indicador de carga.\n\n**CORS:** el navegador bloquea las peticiones a otro dominio salvo que el servidor lo permita con sus cabeceras. Es una protección del navegador, no un fallo de tu código.",
+     "example_code": "async function cargarUsuario(id) {\n  const estado = document.querySelector(\"#estado\");\n  estado.textContent = \"Cargando...\";\n  try {\n    const respuesta = await fetch(`https://jsonplaceholder.typicode.com/users/${id}`);\n    if (!respuesta.ok) throw new Error(`HTTP ${respuesta.status}`);\n    const usuario = await respuesta.json();\n    estado.textContent = `Hola, ${usuario.name}`;\n  } catch (error) {\n    estado.textContent = `No se pudo cargar: ${error.message}`;\n  } finally {\n    document.querySelector(\"#spinner\").hidden = true;\n  }\n}\n\ncargarUsuario(1);",
+     "exercise": "Escribe `async function buscarPais(nombre)`, que pida `https://restcountries.com/v3.1/name/${nombre}` y muestre su capital y su población.\n\n- Si la respuesta no es `ok`, muestra \"País no encontrado\".\n- Si falla la red, \"Sin conexión\".",
+     "starter": "async function buscarPais(nombre) {\n  try {\n    const respuesta = await fetch(`https://restcountries.com/v3.1/name/${nombre}`);\n    // ...\n  } catch (error) {\n    // ...\n  }\n}\n",
+     "quiz": [
+      {
+       "q": "¿Qué muestra este código?",
+       "options": [
+        "Lanza TypeError",
+        "{\"a\":1}",
+        "{\"a\":1,\"b\":null,\"c\":null}",
+        "{\"a\":1,\"b\":undefined}"
+       ],
+       "answer": 1,
+       "explain": "JSON no tiene undefined ni funciones: `stringify` omite esas propiedades.",
+       "code": "console.log(JSON.stringify({ a: 1, b: undefined, c: () => 1 }));"
+      },
+      {
+       "q": "Al enviar un objeto en un POST con `fetch`, ¿qué cabecera indica que el cuerpo es JSON?",
+       "options": [
+        "`Content-Type: application/json`",
+        "`Accept: text/html`",
+        "`Authorization: JSON`",
+        "`Content-Length: json`"
+       ],
+       "answer": 0,
+       "explain": "Y el cuerpo se envía como texto con `JSON.stringify`."
+      }
+     ],
+     "challenge": {
+      "title": "Reintentos",
+      "stars": 3,
+      "exercise": "Escribe `fetchConReintentos(url, intentos = 3)`, que repita la petición si falla (por red o por un 5xx), esperando un poco más cada vez.",
+      "starter": "async function fetchConReintentos(url, intentos = 3) {\n  for (let i = 1; i <= intentos; i++) {\n    try {\n      // ...\n    } catch (error) {\n      // ...\n    }\n  }\n}\n",
+      "hint": "Si `respuesta.status >= 500`, lanza un error para que el catch lo trate como fallo; en el último intento, vuelve a lanzarlo."
+     },
+     "assistant": {
+      "hint": "El resultado es un array: `const [pais] = await respuesta.json();` y después `pais.capital[0]` y `pais.population`.",
+      "faq": [
+       {
+        "q": "¿`fetch` o `XMLHttpRequest`/jQuery?",
+        "a": "`fetch` es el estándar actual en todos los navegadores. XMLHttpRequest es la API antigua y jQuery.ajax, una capa sobre ella."
+       },
+       {
+        "q": "¿Por qué me da error de CORS si en Postman funciona?",
+        "a": "CORS lo aplica el **navegador** para protegerte. Postman no es un navegador. Lo soluciona el servidor, con la cabecera `Access-Control-Allow-Origin`."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "MDN Web Docs — JavaScript",
+       "url": "https://developer.mozilla.org/es/docs/Web/JavaScript"
+      },
+      {
+       "title": "javascript.info (tutorial moderno)",
+       "url": "https://es.javascript.info/"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

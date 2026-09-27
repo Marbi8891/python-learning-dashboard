@@ -79,6 +79,47 @@ def tq(id: str, q: str, options: list[str], answer: int, explain: str) -> Q:
     return Q(id=id, q=q, options=options, answer=answer, explain=explain)
 
 
+def fq(id: str, q: str, code: str, accept: list[str], expect: str, explain: str) -> Q:
+    """Completar el hueco `___` (ADR-0017): cada respuesta aceptada se prueba ejecutándola."""
+    return Q(
+        id=id,
+        q=q,
+        code=code.strip("\n"),
+        expect=expect,
+        explain=explain,
+        kind="fill",
+        accept=accept,
+    )
+
+
+def oq(id: str, q: str, lines: list[str], expect: str, explain: str, context: str = "___") -> Q:
+    """Ordenar líneas: en `context`, la línea `___` es donde van las líneas ordenadas."""
+    return Q(
+        id=id,
+        q=q,
+        code=context.strip("\n"),
+        expect=expect,
+        explain=explain,
+        kind="order",
+        lines=lines,
+    )
+
+
+def bq(id: str, code: str, bug: int, fix: str, target: str, explain: str) -> Q:
+    """Encontrar el error: las opciones son las líneas; se comprueba que la corrección da `target`."""
+    q = f"Este programa debería mostrar `{target}`, pero no compila, falla o muestra otra cosa. ¿Qué línea tiene el error?"
+    return Q(
+        id=id,
+        q=q,
+        code=code.strip("\n"),
+        explain=explain,
+        kind="bug",
+        bug=bug,
+        fix=fix,
+        target=target,
+    )
+
+
 QUE = "¿Qué muestra este código?"
 OCURRE = "¿Qué ocurre al compilar y ejecutar este código?"
 COMPILA = "Error de compilación"
@@ -1428,6 +1469,354 @@ En el main, pruébalo con `"25"`, `"abc"` y `"-3"` y captura cada error mostrand
     ],
     sources=[DOCS, API],
 )
+
+
+# ---------------------------------------------------------------- ejercicios de escribir código (ADR-0017)
+
+MAIN_PUNTO = """
+class Punto {
+    int x, y;
+    Punto(int x, int y) { this.x = x; this.y = y; }
+    int suma() { return x + y; }
+}
+
+class Main {
+    public static void main(String[] args) {
+___
+    }
+}
+"""
+
+MAIN_CUENTA = """
+class Cuenta {
+    private double saldo;
+    public void ingresar(double cantidad) { if (cantidad > 0) saldo += cantidad; }
+    public double getSaldo() { return saldo; }
+}
+
+class Main {
+    public static void main(String[] args) {
+___
+    }
+}
+"""
+
+L_TIPOS.questions += [
+    fq(
+        "java-p01",
+        "Completa el operador para calcular los minutos enteros de 125 segundos. Debe mostrar `2 min`.",
+        'int total = 125;\nint minutos = total ___ 60;\nSystem.out.println(minutos + " min");',
+        ["/"],
+        "2 min",
+        "Entre dos `int`, `/` es la división entera: 125 / 60 = 2. Con `%` obtendrías los segundos que sobran (5).",
+    ),
+    oq(
+        "java-p02",
+        "Ordena las líneas para que el programa muestre `Media: 7.5`.",
+        [
+            "int a = 7;",
+            "int b = a + 1;",
+            "double media = (a + b) / 2.0;",
+            'System.out.println("Media: " + media);',
+        ],
+        "Media: 7.5",
+        "Una variable tiene que estar declarada antes de usarse: primero `a`, luego `b` (que usa `a`), después la media y al final se imprime.",
+    ),
+    bq(
+        "java-p03",
+        "int a = 7;\nint b = 2;\ndouble r = a / b;\nSystem.out.println(r);",
+        2,
+        "double r = (double) a / b;",
+        "3.5",
+        "`a / b` son dos enteros: la división es entera (3) y luego se guarda como 3.0. Hay que convertir un operando a double **antes** de dividir.",
+    ),
+]
+
+L_STRINGS.questions += [
+    fq(
+        "java-p04",
+        "Completa el método para comparar el **contenido** de los dos textos. Debe mostrar `true`.",
+        'String a = "hola";\nString b = new String("hola");\nSystem.out.println(a.___(b));',
+        ["equals", "equalsIgnoreCase"],
+        "true",
+        "`equals` compara el contenido; `==` compararía si son el mismo objeto y aquí daría false.",
+    ),
+    oq(
+        "java-p05",
+        "Ordena las líneas para mostrar el usuario del email: `ana`.",
+        [
+            'String email = "ana@fp.es";',
+            'int arroba = email.indexOf("@");',
+            "String usuario = email.substring(0, arroba);",
+            "System.out.println(usuario);",
+        ],
+        "ana",
+        "Primero el texto, luego la posición de la arroba y con ella el `substring` hasta esa posición (sin incluirla).",
+    ),
+    bq(
+        "java-p06",
+        'String s = "java";\ns.toUpperCase();\nSystem.out.println(s);',
+        1,
+        "s = s.toUpperCase();",
+        "JAVA",
+        "Los String son inmutables: `toUpperCase()` devuelve un texto nuevo que hay que guardar.",
+    ),
+]
+
+L_CONTROL.questions += [
+    fq(
+        "java-p07",
+        "Completa la condición: aprueba quien tiene un 5 **o más**. Con nota 5 debe mostrar `Aprobado`.",
+        'int nota = 5;\nif (nota ___ 5) {\n    System.out.println("Aprobado");\n} else {\n    System.out.println("Suspenso");\n}',
+        [">="],
+        "Aprobado",
+        "`>=` incluye el 5. Con `>` un 5 saldría suspenso: es el error típico de los límites.",
+    ),
+    oq(
+        "java-p08",
+        "Ordena las líneas para que con n = 9 muestre `Fizz`.",
+        [
+            "int n = 9;",
+            "if (n % 15 == 0) {",
+            '    System.out.println("FizzBuzz");',
+            "} else if (n % 3 == 0) {",
+            '    System.out.println("Fizz");',
+            "} else {",
+            "    System.out.println(n);",
+            "}",
+        ],
+        "Fizz",
+        "Cada println va dentro de su rama y el caso más restrictivo (múltiplo de 15) va primero. 9 no es múltiplo de 15, pero sí de 3.",
+    ),
+    bq(
+        "java-p09",
+        'int x = 5;\nif (x = 5) {\n    System.out.println("cinco");\n}',
+        1,
+        "if (x == 5) {",
+        "cinco",
+        "`=` asigna y `==` compara. Un if necesita un boolean, así que `x = 5` no compila.",
+    ),
+]
+
+L_BUCLES.questions += [
+    fq(
+        "java-p10",
+        "Completa la condición del for para que muestre `0 1 2 3 4`.",
+        'for (int i = 0; ___; i++) {\n    System.out.print(i + " ");\n}\nSystem.out.println();',
+        ["i < 5", "i <= 4"],
+        "0 1 2 3 4",
+        "Empezando en 0, `i < 5` da cinco vueltas: 0, 1, 2, 3 y 4.",
+    ),
+    oq(
+        "java-p11",
+        "Ordena las líneas del bucle para que sume los elementos del array y muestre `15`.",
+        ["for (int i = 0; i < v.length; i++) {", "    suma += v[i];", "}"],
+        "15",
+        "El for abre el bloque, dentro se acumula cada elemento y la llave lo cierra. `i` solo existe dentro del bucle.",
+        context="int[] v = {3, 5, 7};\nint suma = 0;\n___\nSystem.out.println(suma);",
+    ),
+    bq(
+        "java-p12",
+        "int[] v = {4, 8, 15};\nint suma = 0;\nfor (int i = 0; i <= v.length; i++) {\n    suma += v[i];\n}\nSystem.out.println(suma);",
+        2,
+        "for (int i = 0; i < v.length; i++) {",
+        "27",
+        "Los índices van de 0 a `length - 1`. Con `<=` se intenta leer `v[3]` y salta `ArrayIndexOutOfBoundsException`.",
+    ),
+]
+
+L_CLASES.questions += [
+    fq(
+        "java-p13",
+        "Completa el constructor para que guarde el nombre en el atributo. Debe mostrar `Ana`.",
+        'class Alumno {\n    String nombre;\n    Alumno(String nombre) {\n        ___ = nombre;\n    }\n}\n\nclass Main {\n    public static void main(String[] args) {\n        System.out.println(new Alumno("Ana").nombre);\n    }\n}',
+        ["this.nombre"],
+        "Ana",
+        "Sin `this`, `nombre = nombre` asignaría el parámetro a sí mismo y el atributo se quedaría en null.",
+    ),
+    oq(
+        "java-p14",
+        "Ordena las líneas del main para que muestre `13`.",
+        [
+            "        Punto p = new Punto(2, 3);",
+            "        p.x = 10;",
+            "        System.out.println(p.suma());",
+        ],
+        "13",
+        "Primero se crea el objeto, luego se cambia su atributo x a 10 y al final se calcula la suma: 10 + 3.",
+        context=MAIN_PUNTO,
+    ),
+    bq(
+        "java-p15",
+        "class Contador {\n    int valor;\n    void sumar() { valor++; }\n}\nclass Main {\n    public static void main(String[] args) {\n        Contador c = null;\n        c.sumar();\n        System.out.println(c.valor);\n    }\n}",
+        6,
+        "        Contador c = new Contador();",
+        "1",
+        "Una referencia a null no apunta a ningún objeto: `c.sumar()` lanza `NullPointerException`. Hay que crearlo con `new`.",
+    ),
+]
+
+L_ENCAP.questions += [
+    fq(
+        "java-p16",
+        "Completa la declaración para que el contador sea **compartido** por todos los tickets. Debe mostrar `2`.",
+        "class Ticket {\n    ___ int emitidos = 0;\n    Ticket() { emitidos++; }\n}\n\nclass Main {\n    public static void main(String[] args) {\n        new Ticket();\n        new Ticket();\n        System.out.println(Ticket.emitidos);\n    }\n}",
+        ["static"],
+        "2",
+        "Un atributo `static` pertenece a la clase: hay uno solo para todos los objetos y se usa como `Ticket.emitidos`.",
+    ),
+    oq(
+        "java-p17",
+        "Ordena las líneas del main para que muestre `100.0`.",
+        [
+            "        Cuenta c = new Cuenta();",
+            "        c.ingresar(100);",
+            "        System.out.println(c.getSaldo());",
+            "        c.ingresar(50);",
+        ],
+        "100.0",
+        "Se imprime después de ingresar 100 y antes del segundo ingreso: el orden de las sentencias es el orden en que ocurren las cosas.",
+        context=MAIN_CUENTA,
+    ),
+    bq(
+        "java-p18",
+        "class Cuenta {\n    private double saldo;\n    public double getSaldo() { return saldo; }\n}\nclass Main {\n    public static void main(String[] args) {\n        Cuenta c = new Cuenta();\n        System.out.println(c.saldo);\n    }\n}",
+        7,
+        "        System.out.println(c.getSaldo());",
+        "0.0",
+        "`saldo` es private: desde otra clase solo se puede leer con su getter.",
+    ),
+]
+
+L_HERENCIA.questions += [
+    fq(
+        "java-p19",
+        "Completa el constructor de Jefe para que llame al de Empleado. Debe mostrar `Ana`.",
+        'class Empleado {\n    String nombre;\n    Empleado(String nombre) { this.nombre = nombre; }\n}\n\nclass Jefe extends Empleado {\n    Jefe(String nombre) {\n        ___;\n    }\n}\n\nclass Main {\n    public static void main(String[] args) {\n        System.out.println(new Jefe("Ana").nombre);\n    }\n}',
+        ["super(nombre)"],
+        "Ana",
+        "Empleado no tiene constructor vacío, así que la subclase tiene que llamar a `super(…)` con el nombre, y en la primera línea.",
+    ),
+    oq(
+        "java-p20",
+        "Ordena las líneas para declarar la subclase. Debe mostrar `Guau`.",
+        [
+            "class Perro extends Animal {",
+            "    @Override",
+            '    String sonido() { return "Guau"; }',
+            "}",
+        ],
+        "Guau",
+        "La anotación va justo antes del método que sobrescribe, y el método, dentro de las llaves de la clase.",
+        context='class Animal {\n    String sonido() { return "..."; }\n}\n___\nclass Main {\n    public static void main(String[] args) {\n        System.out.println(new Perro().sonido());\n    }\n}',
+    ),
+    bq(
+        "java-p21",
+        'class Animal {\n    String sonido() { return "..."; }\n}\nclass Perro extends Animal {\n    @Override\n    String Sonido() { return "Guau"; }\n}\nclass Main {\n    public static void main(String[] args) {\n        Animal a = new Perro();\n        System.out.println(a.sonido());\n    }\n}',
+        5,
+        '    String sonido() { return "Guau"; }',
+        "Guau",
+        "`Sonido` con mayúscula es otro método: no sobrescribe nada y `@Override` hace que no compile. Por eso conviene ponerlo siempre.",
+    ),
+]
+
+L_ABSTRACT.questions += [
+    fq(
+        "java-p22",
+        "Completa la palabra clave para que Robot cumpla el contrato de la interfaz. Debe mostrar `Hola`.",
+        'interface Saludador {\n    String saludo();\n}\n\nclass Robot ___ Saludador {\n    public String saludo() { return "Hola"; }\n}\n\nclass Main {\n    public static void main(String[] args) {\n        System.out.println(new Robot().saludo());\n    }\n}',
+        ["implements"],
+        "Hola",
+        "Una clase **hereda** (`extends`) de otra clase e **implementa** (`implements`) interfaces.",
+    ),
+    oq(
+        "java-p23",
+        "Ordena las líneas para declarar la clase abstracta y su subclase. Debe mostrar `9.0`.",
+        [
+            "abstract class Figura {",
+            "    abstract double area();",
+            "}",
+            "class Cuadrado extends Figura {",
+            "    double area() { return 9; }",
+            "}",
+        ],
+        "9.0",
+        "Cada clase abre y cierra sus llaves; el método abstracto va dentro de Figura y su implementación, dentro de Cuadrado.",
+        context="___\nclass Main {\n    public static void main(String[] args) {\n        Figura f = new Cuadrado();\n        System.out.println(f.area());\n    }\n}",
+    ),
+    bq(
+        "java-p24",
+        'interface Volador {\n    void volar();\n}\nclass Pajaro implements Volador {\n    void volar() { System.out.println("vuela"); }\n}\nclass Main {\n    public static void main(String[] args) {\n        new Pajaro().volar();\n    }\n}',
+        4,
+        '    public void volar() { System.out.println("vuela"); }',
+        "vuela",
+        "Los métodos de una interfaz son public; al implementarlos no se puede reducir su visibilidad.",
+    ),
+]
+
+L_COLECCIONES.questions += [
+    fq(
+        "java-p25",
+        "Completa para mostrar cuántos elementos tiene la lista. Debe mostrar `2`.",
+        "List<Integer> n = new ArrayList<>();\nn.add(4);\nn.add(9);\nSystem.out.println(n.___);",
+        ["size()"],
+        "2",
+        "Las listas usan el método `size()`; los arrays, el atributo `length`; los String, el método `length()`.",
+    ),
+    oq(
+        "java-p26",
+        "Ordena el bucle que cuenta las palabras. Debe mostrar `{a=2, b=1}`.",
+        [
+            'for (String p : "a b a".split(" ")) {',
+            "    cuenta.put(p, cuenta.getOrDefault(p, 0) + 1);",
+            "}",
+        ],
+        "{a=2, b=1}",
+        "Para cada palabra, se suma 1 a su cuenta (0 si todavía no estaba).",
+        context="Map<String, Integer> cuenta = new TreeMap<>();\n___\nSystem.out.println(cuenta);",
+    ),
+    bq(
+        "java-p27",
+        "List<Integer> l = new ArrayList<>(List.of(1, 2, 3, 4));\nfor (Integer x : l) if (x % 2 == 0) l.remove(x);\nSystem.out.println(l);",
+        1,
+        "l.removeIf(x -> x % 2 == 0);",
+        "[1, 3]",
+        "Borrar mientras se recorre con for-each lanza `ConcurrentModificationException`. `removeIf` hace el filtrado de forma segura.",
+    ),
+]
+
+L_EXCEPCIONES.questions += [
+    fq(
+        "java-p28",
+        "Completa el tipo de excepción que hay que capturar. Debe mostrar el mensaje de error.",
+        'try {\n    int r = 10 / 0;\n    System.out.println(r);\n} catch (___ e) {\n    System.out.println("No se puede dividir entre 0");\n}',
+        ["ArithmeticException", "RuntimeException", "Exception", "Throwable"],
+        "No se puede dividir entre 0",
+        "Dividir un entero entre 0 lanza `ArithmeticException`. Capturar una superclase (RuntimeException, Exception) también funciona, pero cuanto más específico, mejor.",
+    ),
+    oq(
+        "java-p29",
+        "Ordena las líneas para que el programa capture el error y muestre su mensaje.",
+        [
+            "try {",
+            '    int n = Integer.parseInt("x");',
+            "    System.out.println(n * 2);",
+            "} catch (NumberFormatException e) {",
+            '    System.out.println("Error: " + e.getMessage());',
+            "}",
+        ],
+        'Error: For input string: "x"',
+        "El código que puede fallar va dentro del try; el catch recibe la excepción `e` y solo existe dentro de su bloque.",
+    ),
+    bq(
+        "java-p30",
+        'class Main {\n    static void validar(int edad) throws Exception {\n        if (edad < 0) throw new Exception("edad negativa");\n    }\n    public static void main(String[] args) {\n        validar(-1);\n    }\n}',
+        5,
+        "        try { validar(-1); } catch (Exception e) { System.out.println(e.getMessage()); }",
+        "edad negativa",
+        "`Exception` es comprobada: quien llama a `validar` tiene que capturarla (o declararla con throws). Si no, no compila.",
+    ),
+]
 
 BLOCKS = [
     Block("java-basico", "Fundamentos", "Tipos, operadores y String.", 20, [L_TIPOS, L_STRINGS]),

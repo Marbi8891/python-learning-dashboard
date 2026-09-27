@@ -18,7 +18,8 @@ class DungeonRun(val floors: List<Floor>, private val random: Random = Random.De
 
     enum class Phase { ASK, FEEDBACK, FLOOR_CLEARED, WON, LOST }
 
-    data class Answer(val chosen: Set<Int>, val correct: Boolean, val timedOut: Boolean, val coins: Int)
+    /** Resultado de la última sala, para la pantalla de explicación. */
+    data class Outcome(val chosen: Set<Int>, val correct: Boolean, val timedOut: Boolean, val coins: Int)
 
     var floor = 0
         private set
@@ -38,7 +39,7 @@ class DungeonRun(val floors: List<Floor>, private val random: Random = Random.De
         private set
     var phase = Phase.ASK
         private set
-    var last: Answer? = null
+    var last: Outcome? = null
         private set
 
     /** Opciones ocultas por el comodín 50/50 en la pregunta actual. */
@@ -53,12 +54,14 @@ class DungeonRun(val floors: List<Floor>, private val random: Random = Random.De
     val floorsCleared: Int get() = if (phase == Phase.FLOOR_CLEARED || phase == Phase.WON) floor + 1 else floor
 
     /** Devuelve si ha acertado. */
-    fun answer(chosen: Set<Int>): Boolean {
+    fun answer(response: Answer): Boolean {
         check(phase == Phase.ASK)
-        val ok = current.isCorrect(chosen)
-        resolve(chosen, ok, timedOut = false)
+        val ok = current.isCorrect(response)
+        resolve(response.selected, ok, timedOut = false)
         return ok
     }
+
+    fun answer(chosen: Set<Int>): Boolean = answer(Answer(selected = chosen))
 
     /** Se acabó el tiempo del jefe: cuenta como fallo. */
     fun timeout() {
@@ -75,7 +78,7 @@ class DungeonRun(val floors: List<Floor>, private val random: Random = Random.De
         } else {
             hp--
         }
-        last = Answer(chosen, ok, timedOut, earned)
+        last = Outcome(chosen, ok, timedOut, earned)
         phase = Phase.FEEDBACK
     }
 
@@ -214,7 +217,8 @@ class RushGame(private val pool: List<Question>, private val random: Random = Ra
         const val CORRECT_PER_XP = 3
 
         /** Preguntas de código con una sola respuesta: se pueden juzgar de un vistazo. */
-        fun pool(bank: Bank): List<Question> = bank.questions.filter { it.code != null && !it.multi && it.options.size > 1 }
+        fun pool(bank: Bank): List<Question> =
+            bank.questions.filter { it.kind == Kind.CHOICE && it.code != null && !it.multi && it.options.size > 1 }
     }
 }
 
