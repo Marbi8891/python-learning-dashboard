@@ -143,7 +143,8 @@ fun PracticeScreen(model: AppModel, blockSlug: String, onBack: () -> Unit, onThe
                 )
             }
 
-            LangSwitch(lang) { value -> model.update { this.lang = value } }
+            // Solo el PCAP tiene las preguntas también en inglés, como el examen
+            if (model.course.isPcap) LangSwitch(lang) { value -> model.update { this.lang = value } }
         }
     }
 }

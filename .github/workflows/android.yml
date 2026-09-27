@@ -7,9 +7,9 @@ name: Android
 on:
   push:
     branches: [main]
-    paths: ["android/**", "frontend/data/**", ".github/workflows/android.yml"]
+    paths: ["android/**", "frontend/data/**", "scripts/courses/**", ".github/workflows/android.yml"]
   pull_request:
-    paths: ["android/**", "frontend/data/**", ".github/workflows/android.yml"]
+    paths: ["android/**", "frontend/data/**", "scripts/courses/**", ".github/workflows/android.yml"]
   workflow_dispatch:
 
 jobs:
@@ -29,6 +29,10 @@ jobs:
           cache: gradle
       # Desde Windows, git puede guardar gradlew sin permiso de ejecución
       - run: chmod +x gradlew
+      # Cursos de DAW (ADR-0016): cada respuesta se comprueba ejecutando el código de verdad
+      - name: Cursos al día y respuestas comprobadas
+        working-directory: .
+        run: python3 scripts/courses/sql_course.py --check
       - name: Tests del dominio (banco, repaso espaciado, preparación, fusión)
         run: ./gradlew --no-daemon testDebugUnitTest
       - name: Lint de Android

@@ -62,7 +62,7 @@ fun ProfileScreen(model: AppModel, modifier: Modifier = Modifier) {
         item {
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 BigStat("$doneNodes/$totalNodes", "lecciones de la ruta", Modifier.weight(1f))
-                BigStat("$readiness %", "preparación PCAP", Modifier.weight(1f))
+                BigStat("$readiness %", if (model.course.isPcap) "preparación PCAP" else "dominio de ${model.course.title}", Modifier.weight(1f))
             }
         }
         item {

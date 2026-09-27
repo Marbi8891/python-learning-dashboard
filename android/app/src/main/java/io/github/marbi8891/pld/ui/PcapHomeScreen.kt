@@ -38,35 +38,56 @@ fun PcapHomeScreen(model: AppModel, onPractice: (String) -> Unit, onTheory: (Str
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         item {
+            val course = model.course
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Eyebrow("Examen ${bank.exam.code} · Python Institute")
-                Text(
-                    "Prepara el examen PCAP",
-                    modifier = Modifier.semantics { heading() },
-                    style = MaterialTheme.typography.headlineMedium,
-                    color = MaterialTheme.colorScheme.onBackground,
-                )
-                Text(
-                    "${bank.exam.questions} preguntas · ${bank.exam.minutes} minutos · ${bank.exam.pass} % para aprobar. " +
-                        "Aquí practicas por bloque sin gastar vidas, y cada tanda terminada te devuelve una.",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-                LangSwitch(pcap.lang) { lang -> model.update { this.lang = lang } }
+                if (!course.isPcap) {
+                    // Otros cursos de DAW (ADR-0016): sin examen oficial, solo práctica por bloque
+                    Eyebrow(course.subtitle)
+                    Text(
+                        "Practica ${course.title}",
+                        modifier = Modifier.semantics { heading() },
+                        style = MaterialTheme.typography.headlineMedium,
+                        color = MaterialTheme.colorScheme.onBackground,
+                    )
+                    Text(
+                        "Practica por bloque sin gastar vidas; cada tanda terminada te devuelve una.",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                } else {
+                    Eyebrow("Examen ${bank.exam.code} · Python Institute")
+                    Text(
+                        "Prepara el examen PCAP",
+                        modifier = Modifier.semantics { heading() },
+                        style = MaterialTheme.typography.headlineMedium,
+                        color = MaterialTheme.colorScheme.onBackground,
+                    )
+                    Text(
+                        "${bank.exam.questions} preguntas · ${bank.exam.minutes} minutos · ${bank.exam.pass} % para aprobar. " +
+                            "Aquí practicas por bloque sin gastar vidas, y cada tanda terminada te devuelve una.",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                    LangSwitch(pcap.lang) { lang -> model.update { this.lang = lang } }
+                }
             }
         }
 
         item {
             Panel(borderColor = if (status.ready) palette.accent else MaterialTheme.colorScheme.outline) {
-                SectionTitle("Tu preparación")
+                SectionTitle(if (model.course.isPcap) "Tu preparación" else "Tu dominio")
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                     Text("${status.score} %", style = MaterialTheme.typography.displaySmall, color = MaterialTheme.colorScheme.primary)
                     Text("preparación estimada", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
                 Meter(status.score / 100.0, "Preparación estimada", MaterialTheme.colorScheme.primary)
-                Text(advice(status), style = MaterialTheme.typography.bodyMedium)
+                if (model.course.isPcap) Text(advice(status), style = MaterialTheme.typography.bodyMedium)
                 Text(
-                    "Es tu acierto en cada bloque ponderado por su peso en el examen. Orientativo: no es una predicción oficial.",
+                    if (model.course.isPcap) {
+                        "Es tu acierto en cada bloque ponderado por su peso en el examen. Orientativo: no es una predicción oficial."
+                    } else {
+                        "Es tu acierto en cada bloque ponderado por su importancia en el módulo."
+                    },
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )

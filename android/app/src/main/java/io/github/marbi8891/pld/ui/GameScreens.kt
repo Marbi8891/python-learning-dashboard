@@ -53,13 +53,18 @@ import io.github.marbi8891.pld.pcap.RushGame
 import kotlinx.coroutines.delay
 import kotlin.math.roundToInt
 
-// Jefe de cada planta: solo ambientación, un nombre por bloque del PCAP
+// Jefe de cada planta: solo ambientación, un nombre por bloque de cada curso
 private val BOSSES = mapOf(
     "modulos" to "El Guardián de los Imports",
     "excepciones" to "La Hidra de las Excepciones",
     "strings" to "El Tejedor de Cadenas",
     "poo" to "El Arquitecto de Clases",
     "miscelanea" to "El Caos Final",
+    "consultas" to "El Oráculo del SELECT",
+    "agregacion" to "El Recaudador de Grupos",
+    "joins" to "El Tejedor de Tablas",
+    "ddl-dml" to "El Arquitecto de Esquemas",
+    "diseno" to "El Guardián de la Transacción",
 )
 
 /* ---------------------------------------------------------------- Pestaña «Jugar» */
@@ -78,19 +83,19 @@ fun GameHomeScreen(model: AppModel, onDungeon: () -> Unit, onRush: () -> Unit, m
     ) {
         item {
             Text("Jugar", style = MaterialTheme.typography.headlineMedium, color = MaterialTheme.colorScheme.onBackground)
-            Text("Aprende el PCAP jugando. Aquí no gastas las vidas de la ruta.", color = palette.muted)
+            Text("Aprende ${model.course.title} jugando. Aquí no gastas las vidas de la ruta.", color = palette.muted)
         }
         item {
             Panel {
                 Eyebrow("Roguelite · 10-15 min")
                 SectionTitle("⚔ La Mazmorra del Intérprete")
                 Text(
-                    "Cinco plantas, una por bloque del PCAP. En cada sala te espera un bug: acierta para ganar monedas; " +
+                    "${model.bank.exam.blocks.size} plantas, una por bloque de ${model.course.title}. En cada sala te espera un bug: acierta para ganar monedas; " +
                         "si fallas, pierdes una de tus 5 vidas. Al final de cada planta, un jefe con cronómetro. " +
                         "Los bugs empiezan por lo que más fallas y tus respuestas cuentan para la preparación.",
                 )
                 Text(
-                    "Récord: ${records.bestFloors} de 5 plantas · ${records.bestScore} 🪙 · ${records.runs} partidas",
+                    "Récord: ${records.bestFloors} de ${model.bank.exam.blocks.size} plantas · ${records.bestScore} 🪙 · ${records.runs} partidas",
                     style = MaterialTheme.typography.bodySmall,
                     color = palette.muted,
                 )

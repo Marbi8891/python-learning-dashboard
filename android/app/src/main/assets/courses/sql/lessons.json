@@ -1,0 +1,669 @@
+{
+ "modules": [
+  {
+   "slug": "consultas",
+   "title": "Consultas básicas",
+   "summary": "SELECT, filtros, orden y límites.",
+   "lessons": [
+    {
+     "slug": "sql-select",
+     "title": "SELECT: consultar datos",
+     "theory": "SQL es un lenguaje **declarativo**: describes *qué* datos quieres y el sistema gestor (SGBD) decide *cómo* obtenerlos. La sentencia básica es `SELECT columnas FROM tabla`.\n\n- `SELECT *` devuelve todas las columnas. En programas reales es mejor nombrarlas: la consulta no se rompe si la tabla cambia.\n- Puedes calcular expresiones y ponerles un **alias** con `AS`: `SELECT nombre, precio * stock AS valor FROM productos`.\n- `DISTINCT` elimina las **filas** repetidas del resultado. Con varias columnas, compara la combinación completa.\n\n**Ordenar y limitar:**\n- `ORDER BY columna` ordena de menor a mayor (`ASC`, por defecto); `DESC` invierte el orden. Con varias columnas, la segunda solo desempata.\n- `LIMIT n` devuelve solo las n primeras filas (MySQL, SQLite y PostgreSQL). En Oracle se escribe `FETCH FIRST n ROWS ONLY`.\n\nEl SGBD evalúa las cláusulas en un **orden lógico** distinto al escrito: `FROM` → `WHERE` → `GROUP BY` → `HAVING` → `SELECT` → `ORDER BY` → `LIMIT`. Por eso un alias del `SELECT` se puede usar en `ORDER BY`, pero no en `WHERE`.\n\nEn esta app los ejemplos se ejecutan en **SQLite**. Usan SQL estándar, que funciona igual en MySQL; cuando haya diferencias, la teoría lo avisa.",
+     "example_code": "CREATE TABLE productos (id INTEGER PRIMARY KEY, nombre TEXT, precio INTEGER, stock INTEGER);\nINSERT INTO productos VALUES (1, 'Teclado', 25, 10), (2, 'Ratón', 15, 0), (3, 'Monitor', 180, 4);\n\nSELECT nombre, precio * stock AS valor\nFROM productos\nORDER BY valor DESC;",
+     "exercise": "Con la tabla `productos(id, nombre, precio, stock)`, muestra el **nombre** y el **valor en almacén** (`precio * stock`) de cada producto.\n\n- La columna calculada debe llamarse `valor`.\n- Ordena de mayor a menor valor y muestra solo los **dos** primeros.",
+     "starter": "SELECT nombre, ...\nFROM productos\n-- ORDER BY ...\n-- LIMIT ...;\n",
+     "quiz": [
+      {
+       "q": "¿Qué devuelve esta consulta?",
+       "options": [
+        "Ana",
+        "Juan",
+        "alumno",
+        "Sara"
+       ],
+       "answer": 0,
+       "explain": "El alias solo cambia el nombre de la columna, no los datos. Ordenados alfabéticamente, el primero es Ana.",
+       "code": "-- alumnos\n-- id | nombre | ciclo | nota\n-- 1  | Ana    | DAW   | 8\n-- 2  | Luis   | DAM   | 5\n-- 3  | Eva    | DAW   | NULL\n-- 4  | Juan   | ASIR  | 7\n-- 5  | Sara   | DAM   | 9\n\nSELECT nombre AS alumno FROM alumnos ORDER BY nombre LIMIT 1;"
+      },
+      {
+       "q": "¿Qué cláusula limita el número de filas del resultado en MySQL?",
+       "options": [
+        "LIMIT",
+        "TOP",
+        "ROWNUM",
+        "MAXROWS"
+       ],
+       "answer": 0,
+       "explain": "MySQL, SQLite y PostgreSQL usan `LIMIT`. `TOP` es de SQL Server y `ROWNUM` de las versiones antiguas de Oracle."
+      }
+     ],
+     "challenge": {
+      "title": "Catálogo ordenado",
+      "stars": 1,
+      "exercise": "Muestra el nombre y el precio de todos los productos, ordenados por precio de menor a mayor y, a igual precio, por nombre alfabéticamente.",
+      "starter": "SELECT nombre, precio\nFROM productos\n-- ORDER BY ...;\n",
+      "hint": "ORDER BY admite varias columnas separadas por comas: la segunda solo se usa para desempatar."
+     },
+     "assistant": {
+      "hint": "Primero FROM (de dónde), luego SELECT (qué columnas) y al final ORDER BY y LIMIT. El alias `valor` sí se puede usar en ORDER BY.",
+      "faq": [
+       {
+        "q": "¿Importan las mayúsculas en SQL?",
+        "a": "Las palabras clave no: `select` y `SELECT` son iguales, aunque por costumbre se escriben en mayúsculas. Los **datos** pueden distinguirlas o no según la configuración de la base de datos (*collation*)."
+       },
+       {
+        "q": "¿Hace falta el punto y coma?",
+        "a": "Separa sentencias. Con una sola sentencia suele ser opcional, pero en un script con varias es obligatorio. Acostúmbrate a ponerlo siempre."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "MySQL 8.0 Reference Manual",
+       "url": "https://dev.mysql.com/doc/refman/8.0/en/"
+      },
+      {
+       "title": "SQLite — SQL As Understood By SQLite",
+       "url": "https://www.sqlite.org/lang.html"
+      }
+     ]
+    },
+    {
+     "slug": "sql-where",
+     "title": "WHERE: filtrar filas",
+     "theory": "`WHERE` se queda solo con las filas que cumplen una condición: `SELECT nombre FROM alumnos WHERE nota >= 5`.\n\n**Operadores de comparación:** `=`, `<>` (distinto; `!=` también funciona), `<`, `>`, `<=`, `>=`. Los textos van entre comillas simples: `ciclo = 'DAW'`.\n\n**Operadores lógicos:** `AND`, `OR` y `NOT`. Cuidado con la precedencia: `AND` se evalúa **antes** que `OR`. `a OR b AND c` significa `a OR (b AND c)`. Ante la duda, usa paréntesis.\n\n**Atajos muy usados:**\n- `BETWEEN 10 AND 20`: entre dos valores, **ambos incluidos**.\n- `IN ('DAW', 'DAM')`: igual a alguno de la lista.\n- `LIKE 'A%'`: patrones de texto. `%` equivale a cualquier secuencia de caracteres (también vacía) y `_` a exactamente uno.\n\n**NULL** significa «valor desconocido». Cualquier comparación con NULL da *desconocido*, que no es verdadero: `nota = NULL` nunca se cumple, ni siquiera en las filas sin nota. Para eso existen `IS NULL` e `IS NOT NULL`.\n\nDistinción de mayúsculas: en SQLite y en la configuración habitual de MySQL, `LIKE` no distingue mayúsculas en letras sin tilde.",
+     "example_code": "CREATE TABLE productos (id INTEGER PRIMARY KEY, nombre TEXT, precio INTEGER, stock INTEGER);\nINSERT INTO productos VALUES (1, 'Teclado', 25, 10), (2, 'Ratón', 15, 0), (3, 'Monitor', 180, 4), (4, 'Cable', 5, 50);\n\nSELECT nombre, precio\nFROM productos\nWHERE stock > 0 AND precio < 100\nORDER BY precio;",
+     "exercise": "Con la tabla `productos(id, nombre, precio, stock)`:\n\n1. Lista los productos **con stock** que cuestan **menos de 30 €**.\n2. Lista los productos cuyo nombre **empieza por M o por C**.",
+     "starter": "SELECT nombre, precio\nFROM productos\nWHERE ...;\n",
+     "quiz": [
+      {
+       "q": "¿Qué devuelve esta consulta?",
+       "options": [
+        "(sin filas)",
+        "Eva",
+        "Luis",
+        "Error"
+       ],
+       "answer": 1,
+       "explain": "`IS NULL` es la forma correcta de buscar valores desconocidos.",
+       "code": "-- alumnos\n-- id | nombre | ciclo | nota\n-- 1  | Ana    | DAW   | 8\n-- 2  | Luis   | DAM   | 5\n-- 3  | Eva    | DAW   | NULL\n-- 4  | Juan   | ASIR  | 7\n-- 5  | Sara   | DAM   | 9\n\nSELECT nombre FROM alumnos WHERE nota IS NULL;"
+      },
+      {
+       "q": "¿Qué devuelve esta consulta?",
+       "options": [
+        "Juan",
+        "Juan\nLuis\nSara",
+        "Luis\nSara",
+        "Ana\nEva"
+       ],
+       "answer": 1,
+       "explain": "`IN` equivale a varias igualdades unidas con OR: de ASIR o de DAM son Juan, Luis y Sara.",
+       "code": "-- alumnos\n-- id | nombre | ciclo | nota\n-- 1  | Ana    | DAW   | 8\n-- 2  | Luis   | DAM   | 5\n-- 3  | Eva    | DAW   | NULL\n-- 4  | Juan   | ASIR  | 7\n-- 5  | Sara   | DAM   | 9\n\nSELECT nombre FROM alumnos WHERE ciclo IN ('ASIR', 'DAM') ORDER BY nombre;"
+      }
+     ],
+     "challenge": {
+      "title": "Búsqueda por texto",
+      "stars": 2,
+      "exercise": "Muestra los alumnos cuyo nombre contiene la letra `u` y que **no** son de DAW.",
+      "starter": "SELECT nombre, ciclo\nFROM alumnos\nWHERE ...;\n",
+      "hint": "Combina `LIKE '%u%'` con `ciclo <> 'DAW'`. Si mezclas AND y OR, usa paréntesis."
+     },
+     "assistant": {
+      "hint": "Para el segundo apartado puedes combinar dos LIKE con OR: `nombre LIKE 'M%' OR nombre LIKE 'C%'`.",
+      "faq": [
+       {
+        "q": "¿`<>` o `!=`?",
+        "a": "Los dos significan «distinto». `<>` es el del estándar SQL; `!=` lo aceptan MySQL, SQLite y PostgreSQL."
+       },
+       {
+        "q": "¿Por qué `nota = NULL` no devuelve nada?",
+        "a": "NULL significa «desconocido». Comparar algo con un desconocido da *desconocido*, que no es verdadero, así que la fila no pasa el filtro. Usa `IS NULL`."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "MySQL 8.0 Reference Manual",
+       "url": "https://dev.mysql.com/doc/refman/8.0/en/"
+      },
+      {
+       "title": "SQLite — SQL As Understood By SQLite",
+       "url": "https://www.sqlite.org/lang.html"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "agregacion",
+   "title": "Agregados y agrupación",
+   "summary": "COUNT, SUM, AVG, GROUP BY y HAVING.",
+   "lessons": [
+    {
+     "slug": "sql-agregados",
+     "title": "Funciones de agregado",
+     "theory": "Las **funciones de agregado** resumen muchas filas en un solo valor:\n\n- `COUNT(*)` cuenta filas. `COUNT(columna)` cuenta solo las filas donde esa columna **no es NULL**. `COUNT(DISTINCT columna)` cuenta valores distintos.\n- `SUM`, `AVG`, `MIN` y `MAX` calculan suma, media, mínimo y máximo.\n\nTodas, salvo `COUNT(*)`, **ignoran los NULL**. Por eso `AVG(nota)` es la media de las notas conocidas, no de todas las filas. Si quieres tratar el NULL como 0, sustitúyelo con `COALESCE(nota, 0)`.\n\nSi ninguna fila tiene valor, `SUM`, `AVG`, `MIN` y `MAX` devuelven **NULL** (no 0); `COUNT` devuelve 0.\n\nAdmiten expresiones: `SUM(precio * stock)`. Para redondear, `ROUND(AVG(precio), 2)`.\n\nSin `GROUP BY`, una consulta con agregados devuelve **una sola fila**. No mezcles una columna normal con un agregado: MySQL da error y SQLite devuelve un valor de una fila cualquiera. Para eso existe `GROUP BY` (siguiente lección).",
+     "example_code": "CREATE TABLE productos (id INTEGER PRIMARY KEY, nombre TEXT, precio INTEGER, stock INTEGER);\nINSERT INTO productos VALUES (1, 'Teclado', 25, 10), (2, 'Ratón', 15, 0), (3, 'Monitor', 180, 4), (4, 'Cable', 5, 50);\n\nSELECT COUNT(*) AS productos,\n       SUM(stock) AS unidades,\n       ROUND(AVG(precio), 2) AS precio_medio\nFROM productos;",
+     "exercise": "Con la tabla `productos(id, nombre, precio, stock)` calcula, en una sola consulta:\n\n- cuántos productos hay **sin stock**;\n- cuál es el **precio más alto** de los que sí tienen stock.\n\nPista: son dos consultas distintas o, si te atreves, una con dos subconsultas.",
+     "starter": "SELECT COUNT(*)\nFROM productos\nWHERE ...;\n",
+     "quiz": [
+      {
+       "q": "¿Qué devuelve esta consulta?",
+       "options": [
+        "14",
+        "64",
+        "10",
+        "2"
+       ],
+       "answer": 0,
+       "explain": "Cuestan más de 20 el Teclado (10 unidades) y el Monitor (4): 14 unidades.",
+       "code": "-- productos\n-- id | nombre  | precio | stock\n-- 1  | Teclado | 25     | 10\n-- 2  | Ratón   | 15     | 0\n-- 3  | Monitor | 180    | 4\n-- 4  | Cable   | 5      | 50\n\nSELECT SUM(stock) FROM productos WHERE precio > 20;"
+      },
+      {
+       "q": "¿Cuál de estas expresiones **no** ignora los NULL?",
+       "options": [
+        "COUNT(*)",
+        "COUNT(nota)",
+        "AVG(nota)",
+        "MAX(nota)"
+       ],
+       "answer": 0,
+       "explain": "`COUNT(*)` cuenta filas, tengan lo que tengan. Las demás solo trabajan con valores no nulos."
+      }
+     ],
+     "challenge": {
+      "title": "Valor del almacén",
+      "stars": 1,
+      "exercise": "Calcula el valor total del almacén: la suma de `precio * stock` de todos los productos.",
+      "starter": "SELECT ...\nFROM productos;\n",
+      "hint": "Las funciones de agregado admiten expresiones: `SUM(precio * stock)`."
+     },
+     "assistant": {
+      "hint": "`COUNT(*)` con un `WHERE stock = 0` cuenta los agotados; `MAX(precio)` con `WHERE stock > 0`, el más caro disponible.",
+      "faq": [
+       {
+        "q": "¿COUNT(*) o COUNT(1)?",
+        "a": "Son equivalentes en los motores modernos: cuentan filas. `COUNT(columna)` es distinto porque no cuenta los NULL de esa columna."
+       },
+       {
+        "q": "¿Por qué AVG no divide entre todas las filas?",
+        "a": "Porque ignora los NULL: calcula la media de los valores conocidos. Con `AVG(COALESCE(nota, 0))` los NULL cuentan como 0."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "MySQL 8.0 Reference Manual",
+       "url": "https://dev.mysql.com/doc/refman/8.0/en/"
+      },
+      {
+       "title": "SQLite — SQL As Understood By SQLite",
+       "url": "https://www.sqlite.org/lang.html"
+      }
+     ]
+    },
+    {
+     "slug": "sql-group-by",
+     "title": "GROUP BY y HAVING",
+     "theory": "`GROUP BY` reparte las filas en **grupos** con el mismo valor y calcula los agregados de cada grupo:\n\n`SELECT ciclo, COUNT(*) FROM alumnos GROUP BY ciclo` devuelve una fila por ciclo con su número de alumnos.\n\n**La regla de oro:** cada columna del SELECT debe estar en el `GROUP BY` o dentro de una función de agregado. MySQL (con su modo por defecto `ONLY_FULL_GROUP_BY`), PostgreSQL y Oracle dan error si no.\n\n**WHERE frente a HAVING:**\n- `WHERE` filtra **filas** antes de agrupar. No admite agregados.\n- `HAVING` filtra **grupos** después de agrupar. Es donde van condiciones como `COUNT(*) > 1`.\n\nOrden de escritura: `SELECT … FROM … WHERE … GROUP BY … HAVING … ORDER BY …`.\n\nTodos los NULL de la columna agrupada forman **un único grupo**.",
+     "example_code": "CREATE TABLE alumnos (id INTEGER PRIMARY KEY, nombre TEXT, ciclo TEXT, nota INTEGER);\nINSERT INTO alumnos VALUES (1, 'Ana', 'DAW', 8), (2, 'Luis', 'DAM', 5), (3, 'Eva', 'DAW', NULL), (4, 'Juan', 'ASIR', 7), (5, 'Sara', 'DAM', 9);\n\nSELECT ciclo, COUNT(*) AS alumnos, AVG(nota) AS media\nFROM alumnos\nGROUP BY ciclo\nHAVING COUNT(*) > 1\nORDER BY media DESC;",
+     "exercise": "Con la tabla `alumnos(id, nombre, ciclo, nota)`:\n\n1. Cuenta cuántos alumnos hay en cada ciclo.\n2. Muestra solo los ciclos cuya **nota media** es de 7 o más.",
+     "starter": "SELECT ciclo, COUNT(*)\nFROM alumnos\nGROUP BY ...\n-- HAVING ...;\n",
+     "quiz": [
+      {
+       "q": "`SELECT ciclo, nombre, COUNT(*) FROM alumnos GROUP BY ciclo` da error en MySQL. ¿Por qué?",
+       "options": [
+        "`nombre` no está en GROUP BY ni dentro de un agregado",
+        "Falta un HAVING",
+        "COUNT(*) no se puede combinar con GROUP BY",
+        "Hay que agrupar por id"
+       ],
+       "answer": 0,
+       "explain": "Cada grupo tiene varios nombres: el SGBD no sabe cuál mostrar. O agrupas también por `nombre` o lo metes en un agregado."
+      },
+      {
+       "q": "¿Qué devuelve esta consulta?",
+       "options": [
+        "(sin filas)",
+        "5",
+        "2",
+        "1"
+       ],
+       "answer": 2,
+       "explain": "Solo queda el grupo DAW, con Ana y Eva. (Filtrar por ciclo sería más eficiente en WHERE.)",
+       "code": "-- alumnos\n-- id | nombre | ciclo | nota\n-- 1  | Ana    | DAW   | 8\n-- 2  | Luis   | DAM   | 5\n-- 3  | Eva    | DAW   | NULL\n-- 4  | Juan   | ASIR  | 7\n-- 5  | Sara   | DAM   | 9\n\nSELECT COUNT(*) FROM alumnos\nGROUP BY ciclo\nHAVING ciclo = 'DAW';"
+      }
+     ],
+     "challenge": {
+      "title": "Ranking de ciclos",
+      "stars": 2,
+      "exercise": "Muestra cada ciclo con su nota máxima, ordenados de mayor a menor nota máxima.",
+      "starter": "SELECT ciclo, ...\nFROM alumnos\nGROUP BY ciclo\n-- ORDER BY ...;\n",
+      "hint": "Puedes ordenar por un agregado: `ORDER BY MAX(nota) DESC`."
+     },
+     "assistant": {
+      "hint": "La condición sobre la media es un filtro de grupos: va en HAVING, no en WHERE.",
+      "faq": [
+       {
+        "q": "¿Puedo usar un alias del SELECT en HAVING?",
+        "a": "MySQL y SQLite lo permiten, pero no es estándar y PostgreSQL u Oracle fallan. Para que funcione en todas partes, repite la expresión: `HAVING COUNT(*) > 1`."
+       },
+       {
+        "q": "¿Qué pasa con los NULL en GROUP BY?",
+        "a": "Todos los NULL de la columna agrupada forman un grupo propio."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "MySQL 8.0 Reference Manual",
+       "url": "https://dev.mysql.com/doc/refman/8.0/en/"
+      },
+      {
+       "title": "PostgreSQL Tutorial (documentación oficial)",
+       "url": "https://www.postgresql.org/docs/current/tutorial-sql.html"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "joins",
+   "title": "Combinaciones y subconsultas",
+   "summary": "INNER JOIN, LEFT JOIN y consultas anidadas.",
+   "lessons": [
+    {
+     "slug": "sql-inner-join",
+     "title": "INNER JOIN: combinar tablas",
+     "theory": "En una base de datos relacional la información se reparte en varias tablas unidas por **claves**: `pedidos.cliente_id` guarda el `id` del cliente. Un **JOIN** vuelve a juntarlas.\n\n`SELECT c.nombre, p.total FROM clientes c INNER JOIN pedidos p ON p.cliente_id = c.id`\n\n- `ON` indica cómo se relacionan las filas.\n- `INNER JOIN` (o solo `JOIN`) devuelve **solo** las combinaciones que tienen pareja en las dos tablas. Un cliente sin pedidos no aparece.\n- Los **alias de tabla** (`c`, `p`) acortan la consulta. Si dos tablas tienen una columna con el mismo nombre (como `id`), hay que **cualificarla** (`c.id`); si no, el SGBD da un error de columna ambigua.\n\n**Producto cartesiano:** sin condición de unión (`FROM clientes, pedidos`) se combina cada fila con todas las de la otra tabla: 3 clientes × 3 pedidos = 9 filas. Casi nunca es lo que quieres.\n\nPuedes encadenar varios JOIN: `pedidos` → `clientes` → `ciudades`.",
+     "example_code": "CREATE TABLE clientes (id INTEGER PRIMARY KEY, nombre TEXT, ciudad TEXT);\nCREATE TABLE pedidos (id INTEGER PRIMARY KEY, cliente_id INTEGER REFERENCES clientes(id), total INTEGER);\nINSERT INTO clientes VALUES (1, 'Ana', 'Madrid'), (2, 'Luis', 'Leganés'), (3, 'Eva', 'Valladolid');\nINSERT INTO pedidos VALUES (1, 1, 30), (2, 1, 20), (3, 2, 50);\n\nSELECT p.id, c.nombre, c.ciudad, p.total\nFROM pedidos p\nJOIN clientes c ON c.id = p.cliente_id\nORDER BY p.id;",
+     "exercise": "Con `clientes(id, nombre, ciudad)` y `pedidos(id, cliente_id, total)`:\n\n1. Muestra cada pedido con el **nombre** y la **ciudad** de su cliente.\n2. Calcula el **total gastado** por cada cliente que tenga pedidos.",
+     "starter": "SELECT c.nombre, p.total\nFROM pedidos p\nJOIN clientes c ON ...;\n",
+     "quiz": [
+      {
+       "q": "¿Qué devuelve un INNER JOIN?",
+       "options": [
+        "Solo las combinaciones de filas que tienen pareja en las dos tablas",
+        "Todas las filas de la tabla de la izquierda",
+        "Todas las filas de las dos tablas",
+        "Cada fila de una tabla con todas las de la otra"
+       ],
+       "answer": 0,
+       "explain": "Las filas sin pareja se descartan. Para conservarlas se usa LEFT JOIN (siguiente lección)."
+      },
+      {
+       "q": "¿Qué devuelve esta consulta?",
+       "options": [
+        "2",
+        "9",
+        "1",
+        "3"
+       ],
+       "answer": 0,
+       "explain": "La única clienta de Madrid es Ana, que tiene dos pedidos.",
+       "code": "-- clientes\n-- id | nombre | ciudad\n-- 1  | Ana    | Madrid\n-- 2  | Luis   | Leganés\n-- 3  | Eva    | Valladolid\n\n-- pedidos\n-- id | cliente_id | total\n-- 1  | 1          | 30\n-- 2  | 1          | 20\n-- 3  | 2          | 50\n\nSELECT COUNT(*) FROM clientes c\nJOIN pedidos p ON p.cliente_id = c.id\nWHERE c.ciudad = 'Madrid';"
+      }
+     ],
+     "challenge": {
+      "title": "Tres tablas",
+      "stars": 3,
+      "exercise": "Añade la tabla `ciudades(nombre, provincia)` con Madrid, Leganés y Valladolid y muestra cada pedido con la **provincia** de su cliente.",
+      "starter": "CREATE TABLE ciudades (nombre TEXT PRIMARY KEY, provincia TEXT);\nINSERT INTO ciudades VALUES ('Madrid', 'Madrid'), ('Leganés', 'Madrid'), ('Valladolid', 'Valladolid');\n\nSELECT ...\nFROM pedidos p\nJOIN clientes c ON ...\nJOIN ciudades ci ON ...;\n",
+      "hint": "Encadena dos JOIN: pedidos → clientes (por `cliente_id`) y clientes → ciudades (por el nombre de la ciudad)."
+     },
+     "assistant": {
+      "hint": "La condición de unión compara la clave ajena con la primaria: `ON c.id = p.cliente_id`. Para el total, añade `GROUP BY c.nombre` y `SUM(p.total)`.",
+      "faq": [
+       {
+        "q": "¿JOIN es lo mismo que INNER JOIN?",
+        "a": "Sí: la palabra `INNER` es opcional."
+       },
+       {
+        "q": "¿La condición va en ON o en WHERE?",
+        "a": "Con INNER JOIN el resultado es el mismo. Por claridad, pon en `ON` cómo se relacionan las tablas y en `WHERE` los filtros. En los LEFT JOIN la diferencia sí importa."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "MySQL 8.0 Reference Manual",
+       "url": "https://dev.mysql.com/doc/refman/8.0/en/"
+      },
+      {
+       "title": "PostgreSQL Tutorial (documentación oficial)",
+       "url": "https://www.postgresql.org/docs/current/tutorial-sql.html"
+      }
+     ]
+    },
+    {
+     "slug": "sql-left-join-subconsultas",
+     "title": "LEFT JOIN y subconsultas",
+     "theory": "`LEFT JOIN` conserva **todas** las filas de la tabla de la izquierda. Si una fila no tiene pareja, las columnas de la derecha se rellenan con **NULL**.\n\n`SELECT c.nombre, p.total FROM clientes c LEFT JOIN pedidos p ON p.cliente_id = c.id`\n\nAsí aparecen también los clientes sin pedidos. Para quedarte **solo** con ellos: `WHERE p.id IS NULL`.\n\n`RIGHT JOIN` es lo mismo con la tabla de la derecha. Casi siempre se prefiere reescribirlo como LEFT JOIN cambiando el orden de las tablas.\n\n**Cuidado al contar:** tras un LEFT JOIN, `COUNT(*)` cuenta también la fila rellenada con NULL. Usa `COUNT(p.id)` para que un cliente sin pedidos salga con 0.\n\n**Subconsultas:** una consulta dentro de otra, entre paréntesis.\n- Escalar, que devuelve un solo valor: `WHERE nota > (SELECT AVG(nota) FROM alumnos)`.\n- De lista, con `IN`: `WHERE id IN (SELECT cliente_id FROM pedidos)`.\n- Con `EXISTS`, que comprueba si la subconsulta devuelve alguna fila.\n\n**Trampa de NOT IN:** si la subconsulta contiene algún NULL, `NOT IN` no devuelve nada. `NOT EXISTS` o el LEFT JOIN con `IS NULL` no tienen ese problema.",
+     "example_code": "CREATE TABLE clientes (id INTEGER PRIMARY KEY, nombre TEXT, ciudad TEXT);\nCREATE TABLE pedidos (id INTEGER PRIMARY KEY, cliente_id INTEGER REFERENCES clientes(id), total INTEGER);\nINSERT INTO clientes VALUES (1, 'Ana', 'Madrid'), (2, 'Luis', 'Leganés'), (3, 'Eva', 'Valladolid');\nINSERT INTO pedidos VALUES (1, 1, 30), (2, 1, 20), (3, 2, 50);\n\nSELECT c.nombre, COUNT(p.id) AS pedidos\nFROM clientes c\nLEFT JOIN pedidos p ON p.cliente_id = c.id\nGROUP BY c.id\nORDER BY pedidos DESC;",
+     "exercise": "Con `clientes` y `pedidos`:\n\n1. Lista **todos** los clientes con cuántos pedidos tienen, incluidos los que tienen 0.\n2. Muestra los clientes que han hecho algún pedido de **más de 40 €**, usando una subconsulta con `IN`.",
+     "starter": "SELECT c.nombre, COUNT(p.id)\nFROM clientes c\nLEFT JOIN pedidos p ON ...\nGROUP BY c.id;\n",
+     "quiz": [
+      {
+       "q": "¿Qué devuelve esta consulta?",
+       "options": [
+        "Ana | 2\nLuis | 1\nEva | 0",
+        "Ana | 2\nLuis | 1",
+        "Ana | 2\nLuis | 1\nEva | 1",
+        "Ana | 2\nLuis | 1\nEva | NULL"
+       ],
+       "answer": 0,
+       "explain": "`COUNT(p.id)` no cuenta el NULL de Eva: 0. Con `COUNT(*)` habría salido 1.",
+       "code": "-- clientes\n-- id | nombre | ciudad\n-- 1  | Ana    | Madrid\n-- 2  | Luis   | Leganés\n-- 3  | Eva    | Valladolid\n\n-- pedidos\n-- id | cliente_id | total\n-- 1  | 1          | 30\n-- 2  | 1          | 20\n-- 3  | 2          | 50\n\nSELECT c.nombre, COUNT(p.id)\nFROM clientes c\nLEFT JOIN pedidos p ON p.cliente_id = c.id\nGROUP BY c.id\nORDER BY c.id;"
+      },
+      {
+       "q": "¿Por qué `WHERE id NOT IN (SELECT cliente_id FROM pedidos)` puede no devolver ninguna fila?",
+       "options": [
+        "Si la subconsulta contiene algún NULL, la condición nunca es verdadera",
+        "NOT IN no admite subconsultas",
+        "Porque falta un GROUP BY",
+        "Solo funciona con números"
+       ],
+       "answer": 0,
+       "explain": "`x NOT IN (1, NULL)` equivale a `x <> 1 AND x <> NULL`, y lo segundo es *desconocido*. Usa `NOT EXISTS` o filtra los NULL en la subconsulta."
+      }
+     ],
+     "challenge": {
+      "title": "Clientes sin compras",
+      "stars": 2,
+      "exercise": "Encuentra los clientes sin pedidos de **dos** formas: con `LEFT JOIN … WHERE … IS NULL` y con `NOT EXISTS`.",
+      "starter": "SELECT c.nombre\nFROM clientes c\nLEFT JOIN pedidos p ON ...\nWHERE ...;\n",
+      "hint": "Con NOT EXISTS: `WHERE NOT EXISTS (SELECT 1 FROM pedidos p WHERE p.cliente_id = c.id)`."
+     },
+     "assistant": {
+      "hint": "Para contar 0 en los clientes sin pedidos, cuenta una columna de la tabla de la derecha: `COUNT(p.id)`.",
+      "faq": [
+       {
+        "q": "¿COUNT(*) o COUNT(p.id) tras un LEFT JOIN?",
+        "a": "`COUNT(*)` cuenta también la fila rellenada con NULL, así que un cliente sin pedidos saldría con 1. `COUNT(p.id)` ignora ese NULL y da 0."
+       },
+       {
+        "q": "¿Subconsulta o JOIN?",
+        "a": "Muchas veces son equivalentes. Usa JOIN cuando necesites columnas de las dos tablas, e `IN`/`EXISTS` cuando solo quieras filtrar."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "MySQL 8.0 Reference Manual",
+       "url": "https://dev.mysql.com/doc/refman/8.0/en/"
+      },
+      {
+       "title": "PostgreSQL Tutorial (documentación oficial)",
+       "url": "https://www.postgresql.org/docs/current/tutorial-sql.html"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "ddl-dml",
+   "title": "Crear y modificar datos",
+   "summary": "CREATE TABLE, restricciones, INSERT, UPDATE y DELETE.",
+   "lessons": [
+    {
+     "slug": "sql-crear-tablas",
+     "title": "CREATE TABLE y restricciones",
+     "theory": "El **DDL** (lenguaje de definición de datos) crea y modifica la estructura: `CREATE`, `ALTER` y `DROP`.\n\n`CREATE TABLE libros (id INT PRIMARY KEY, titulo VARCHAR(200) NOT NULL, precio DECIMAL(8,2))`\n\n**Tipos habituales en MySQL:** `INT`, `DECIMAL(p,s)` para dinero (sin errores de redondeo), `VARCHAR(n)`, `CHAR(n)` de longitud fija, `DATE`, `DATETIME` y `BOOLEAN`. SQLite, el motor de la app, usa **tipado flexible**: acepta esas declaraciones, pero no siempre comprueba el tipo.\n\n**Restricciones:**\n- `PRIMARY KEY`: identifica cada fila; implica valores únicos y no nulos.\n- `NOT NULL`: obligatorio.\n- `UNIQUE`: sin repetidos (admite NULL).\n- `DEFAULT valor`: valor si no se indica otro.\n- `CHECK (condición)`: regla de negocio, como `CHECK (precio >= 0)`.\n- `FOREIGN KEY … REFERENCES tabla(columna)`: **clave ajena**. El valor tiene que existir en la otra tabla (integridad referencial). `ON DELETE CASCADE` borra también las filas hijas; `ON DELETE SET NULL` las deja sin padre.\n\n**Identificadores automáticos:** en MySQL, `AUTO_INCREMENT`; en SQLite, una columna `INTEGER PRIMARY KEY`; en PostgreSQL, `GENERATED … AS IDENTITY`.\n\nSi una sentencia incumple una restricción, el SGBD la **rechaza con un error** y no guarda nada de esa sentencia.",
+     "example_code": "CREATE TABLE ciclos (\n  codigo CHAR(4) PRIMARY KEY,\n  nombre VARCHAR(100) NOT NULL\n);\nCREATE TABLE alumnos (\n  id INTEGER PRIMARY KEY,\n  nombre VARCHAR(80) NOT NULL,\n  email VARCHAR(120) UNIQUE,\n  ciclo CHAR(4) REFERENCES ciclos(codigo) ON DELETE CASCADE,\n  nota INTEGER CHECK (nota BETWEEN 0 AND 10)\n);\nINSERT INTO ciclos VALUES ('DAW', 'Desarrollo de Aplicaciones Web');\nINSERT INTO alumnos (nombre, email, ciclo, nota) VALUES ('Ana', 'ana@fp.es', 'DAW', 8);\n\nSELECT a.nombre, c.nombre FROM alumnos a JOIN ciclos c ON c.codigo = a.ciclo;",
+     "exercise": "Crea la tabla `libros` con:\n\n- `id`: clave primaria;\n- `titulo`: obligatorio;\n- `isbn`: único;\n- `precio`: con dos decimales y nunca negativo;\n- `alta`: fecha, por defecto la de hoy (`CURRENT_DATE`).",
+     "starter": "CREATE TABLE libros (\n  id INTEGER PRIMARY KEY,\n  -- ...\n);\n",
+     "quiz": [
+      {
+       "q": "Una PRIMARY KEY implica que la columna…",
+       "options": [
+        "no admite repetidos ni NULL",
+        "solo admite números",
+        "se rellena sola siempre",
+        "no se puede consultar con WHERE"
+       ],
+       "answer": 0,
+       "explain": "Es UNIQUE + NOT NULL. Que se rellene sola depende de AUTO_INCREMENT (MySQL) o de INTEGER PRIMARY KEY (SQLite)."
+      },
+      {
+       "q": "¿Qué devuelve la última sentencia de este script?",
+       "options": [
+        "1",
+        "0",
+        "Error",
+        "2"
+       ],
+       "answer": 1,
+       "explain": "`ON DELETE CASCADE` borra automáticamente los préstamos del socio borrado. Sin esa opción, el DELETE habría dado error.",
+       "code": "CREATE TABLE socios (id INTEGER PRIMARY KEY);\nCREATE TABLE prestamos (\n  id INTEGER PRIMARY KEY,\n  socio_id INTEGER REFERENCES socios(id) ON DELETE CASCADE\n);\nINSERT INTO socios VALUES (1);\nINSERT INTO prestamos VALUES (10, 1), (11, 1);\nDELETE FROM socios WHERE id = 1;\nSELECT COUNT(*) FROM prestamos;"
+      }
+     ],
+     "challenge": {
+      "title": "Biblioteca",
+      "stars": 3,
+      "exercise": "Crea `socios` y `prestamos` relacionadas: cada préstamo pertenece a un socio y, si se borra el socio, se borran sus préstamos. Inserta datos de prueba y comprueba el borrado en cascada.",
+      "starter": "CREATE TABLE socios (\n  id INTEGER PRIMARY KEY,\n  nombre VARCHAR(80) NOT NULL\n);\n\nCREATE TABLE prestamos (\n  -- ...\n);\n",
+      "hint": "La clave ajena lleva la opción: `socio_id INTEGER REFERENCES socios(id) ON DELETE CASCADE`."
+     },
+     "assistant": {
+      "hint": "Precio: `DECIMAL(8,2) CHECK (precio >= 0)`. Fecha: `alta DATE DEFAULT CURRENT_DATE`.",
+      "faq": [
+       {
+        "q": "¿VARCHAR o CHAR?",
+        "a": "`CHAR(n)` siempre ocupa n caracteres; va bien para códigos de longitud fija, como `CHAR(9)` para un DNI. `VARCHAR(n)` ocupa solo lo que guardas, hasta n."
+       },
+       {
+        "q": "¿Por qué SQLite no se queja si guardo texto en una columna INTEGER?",
+        "a": "Por su tipado flexible: el tipo declarado es una recomendación. MySQL y PostgreSQL sí lo comprueban. Las restricciones (PRIMARY KEY, NOT NULL, UNIQUE, CHECK y FOREIGN KEY) sí se cumplen en todos."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "MySQL 8.0 Reference Manual",
+       "url": "https://dev.mysql.com/doc/refman/8.0/en/"
+      },
+      {
+       "title": "SQLite — SQL As Understood By SQLite",
+       "url": "https://www.sqlite.org/lang.html"
+      }
+     ]
+    },
+    {
+     "slug": "sql-modificar-datos",
+     "title": "INSERT, UPDATE y DELETE",
+     "theory": "El **DML** (lenguaje de manipulación de datos) cambia el contenido de las tablas.\n\n**Insertar:**\n- `INSERT INTO productos (nombre, precio) VALUES ('Cable', 5)`. Las columnas que no indiques reciben su `DEFAULT` o NULL.\n- Varias filas a la vez: `VALUES (...), (...)`.\n- A partir de una consulta: `INSERT INTO historico SELECT * FROM pedidos WHERE ...`.\n\n**Modificar:** `UPDATE productos SET precio = precio * 1.1 WHERE stock > 0`.\n\n**Borrar:** `DELETE FROM productos WHERE stock = 0`.\n\n**Sin WHERE**, UPDATE y DELETE afectan a **todas** las filas. Antes de lanzarlos, ejecuta un `SELECT` con el mismo WHERE para ver qué filas vas a tocar. Recuerda que los NULL no cumplen las comparaciones: `DELETE … WHERE nota < 5` no borra las filas sin nota.\n\n**Cambios de estructura:**\n- `ALTER TABLE t ADD COLUMN …`, `DROP COLUMN …` y `RENAME TO …`.\n- `DROP TABLE t` elimina la tabla entera.\n- `TRUNCATE TABLE t` la vacía muy rápido y reinicia el AUTO_INCREMENT. Es de MySQL; SQLite no lo tiene.",
+     "example_code": "CREATE TABLE productos (id INTEGER PRIMARY KEY, nombre TEXT, precio INTEGER, stock INTEGER DEFAULT 0);\nINSERT INTO productos (nombre, precio, stock) VALUES ('Teclado', 25, 10), ('Ratón', 15, 0), ('Cable', 5, 50);\n\nUPDATE productos SET precio = precio + 2 WHERE precio < 20;\nDELETE FROM productos WHERE stock = 0;\nALTER TABLE productos ADD COLUMN activo INTEGER DEFAULT 1;\n\nSELECT * FROM productos;",
+     "exercise": "Con la tabla `productos(id, nombre, precio, stock)`:\n\n1. Sube un 10 % el precio de los productos que cuestan menos de 20 €.\n2. Borra los que no tienen stock.\n3. Comprueba el resultado con un SELECT.",
+     "starter": "UPDATE productos\nSET precio = ...\nWHERE ...;\n\nDELETE FROM productos\nWHERE ...;\n\nSELECT * FROM productos;\n",
+     "quiz": [
+      {
+       "q": "¿Qué devuelve la última sentencia de este script?",
+       "options": [
+        "Copia | 8",
+        "Copia | NULL",
+        "Error",
+        "Ana | 8"
+       ],
+       "answer": 0,
+       "explain": "`INSERT … SELECT` inserta las filas que devuelve la consulta; aquí copia el ciclo y la nota de Ana.",
+       "code": "-- alumnos\n-- id | nombre | ciclo | nota\n-- 1  | Ana    | DAW   | 8\n-- 2  | Luis   | DAM   | 5\n-- 3  | Eva    | DAW   | NULL\n-- 4  | Juan   | ASIR  | 7\n-- 5  | Sara   | DAM   | 9\n\nINSERT INTO alumnos (id, nombre, ciclo, nota)\n  SELECT 10, 'Copia', ciclo, nota FROM alumnos WHERE id = 1;\nSELECT nombre, nota FROM alumnos WHERE id = 10;"
+      },
+      {
+       "q": "Antes de lanzar un UPDATE o DELETE en producción, ¿qué conviene hacer?",
+       "options": [
+        "Ejecutar un SELECT con el mismo WHERE para ver qué filas afectará",
+        "Desactivar las claves ajenas",
+        "Hacer un DROP TABLE de prueba",
+        "Nada: se puede deshacer siempre"
+       ],
+       "answer": 0,
+       "explain": "Así compruebas el filtro sin riesgo. Y, si puedes, trabaja dentro de una transacción."
+      }
+     ],
+     "challenge": {
+      "title": "Reposición",
+      "stars": 2,
+      "exercise": "Pon stock 20 a los productos con menos de 5 unidades, añade un producto nuevo con precio y stock y muestra el catálogo ordenado por nombre.",
+      "starter": "UPDATE productos\nSET stock = 20\nWHERE ...;\n\nINSERT INTO productos (nombre, precio, stock) VALUES (...);\n\nSELECT * FROM productos ORDER BY nombre;\n",
+      "hint": "Condición del UPDATE: `stock < 5`. Recuerda que los NULL no cumplen la comparación."
+     },
+     "assistant": {
+      "hint": "Subir un 10 % es multiplicar por 1.1: `SET precio = precio * 1.1`.",
+      "faq": [
+       {
+        "q": "¿Se puede deshacer un DELETE?",
+        "a": "Solo si estás dentro de una transacción sin confirmar (con `ROLLBACK`). Tras `COMMIT`, o en modo autocommit, no: para eso están las copias de seguridad."
+       },
+       {
+        "q": "¿TRUNCATE o DELETE sin WHERE?",
+        "a": "Los dos vacían la tabla. `TRUNCATE` es más rápido y reinicia el AUTO_INCREMENT, pero no admite WHERE y en MySQL no se puede deshacer."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "MySQL 8.0 Reference Manual",
+       "url": "https://dev.mysql.com/doc/refman/8.0/en/"
+      },
+      {
+       "title": "SQLite — SQL As Understood By SQLite",
+       "url": "https://www.sqlite.org/lang.html"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "diseno",
+   "title": "Diseño y transacciones",
+   "summary": "Modelo relacional, normalización, transacciones, vistas e índices.",
+   "lessons": [
+    {
+     "slug": "sql-modelo-relacional",
+     "title": "Modelo relacional y normalización",
+     "theory": "Antes de crear tablas se **diseña**. El modelo **entidad-relación (E/R)** describe entidades (alumno, módulo), sus atributos y cómo se relacionan.\n\n**Cardinalidades y paso a tablas:**\n- **1:N** (un ciclo tiene muchos alumnos): la clave ajena va en el lado N. `alumnos.ciclo` apunta a `ciclos.codigo`.\n- **N:M** (un alumno cursa muchos módulos y un módulo tiene muchos alumnos): hace falta una **tabla intermedia** `matriculas(alumno_id, modulo_id)` con dos claves ajenas y clave primaria compuesta.\n- **1:1**: la clave ajena va en cualquiera de las dos tablas, con UNIQUE.\n\n**Claves:**\n- **candidata**: identifica cada fila de forma única y mínima;\n- **primaria**: la candidata elegida;\n- **ajena** (o foránea): apunta a la primaria de otra tabla.\n\n**Normalización:** evita datos repetidos y las anomalías al insertar, modificar o borrar.\n- **1FN:** valores atómicos, sin listas en una celda ni grupos repetidos (`telefono1`, `telefono2`…).\n- **2FN:** 1FN y cada atributo no clave depende de **toda** la clave primaria. Solo puede fallar con claves compuestas.\n- **3FN:** 2FN y sin **dependencias transitivas**: ningún atributo no clave depende de otro atributo no clave.",
+     "example_code": "CREATE TABLE alumnos (id INTEGER PRIMARY KEY, nombre TEXT NOT NULL);\nCREATE TABLE modulos (codigo TEXT PRIMARY KEY, nombre TEXT NOT NULL);\nCREATE TABLE matriculas (\n  alumno_id INTEGER REFERENCES alumnos(id),\n  modulo_codigo TEXT REFERENCES modulos(codigo),\n  nota INTEGER,\n  PRIMARY KEY (alumno_id, modulo_codigo)\n);\nINSERT INTO alumnos VALUES (1, 'Ana'), (2, 'Luis');\nINSERT INTO modulos VALUES ('BD', 'Bases de datos'), ('PRO', 'Programación');\nINSERT INTO matriculas VALUES (1, 'BD', 8), (1, 'PRO', 7), (2, 'BD', 6);\n\nSELECT a.nombre, m.nombre, x.nota\nFROM matriculas x\nJOIN alumnos a ON a.id = x.alumno_id\nJOIN modulos m ON m.codigo = x.modulo_codigo;",
+     "exercise": "Diseña las tablas de una biblioteca:\n\n- un **libro** puede tener varios **autores** y un autor, varios libros;\n- los **socios** piden **préstamos** de libros, con fecha de salida y de devolución.\n\nEscribe los `CREATE TABLE` con sus claves primarias y ajenas.",
+     "starter": "CREATE TABLE libros (\n  id INTEGER PRIMARY KEY,\n  titulo TEXT NOT NULL\n);\n\n-- autores, libros_autores, socios, prestamos...\n",
+     "quiz": [
+      {
+       "q": "¿Qué es una clave candidata?",
+       "options": [
+        "Un conjunto mínimo de atributos que identifica cada fila de forma única",
+        "Una clave ajena todavía sin usar",
+        "Cualquier columna con índice",
+        "La columna id que se genera sola"
+       ],
+       "answer": 0,
+       "explain": "De las claves candidatas se elige una como primaria. Las demás se suelen proteger con UNIQUE."
+      },
+      {
+       "q": "¿Qué garantiza la integridad referencial?",
+       "options": [
+        "Que toda clave ajena apunte a una fila que existe",
+        "Que no haya filas repetidas",
+        "Que las consultas sean rápidas",
+        "Que los datos estén cifrados"
+       ],
+       "answer": 0,
+       "explain": "Es lo que comprueban las FOREIGN KEY: no puedes matricular a nadie en un ciclo que no existe."
+      }
+     ],
+     "challenge": {
+      "title": "Normaliza",
+      "stars": 3,
+      "exercise": "Lleva hasta 3FN esta tabla: `pedidos(id, cliente, direccion_cliente, producto1, producto2, producto3)`. Escribe las tablas resultantes con sus claves.",
+      "starter": "CREATE TABLE clientes (\n  -- ...\n);\n\nCREATE TABLE pedidos (\n  -- ...\n);\n\nCREATE TABLE lineas_pedido (\n  -- ...\n);\n",
+      "hint": "Los productos repetidos rompen la 1FN (tabla de líneas). La dirección depende del cliente, no del pedido: rompe la 3FN (tabla de clientes)."
+     },
+     "assistant": {
+      "hint": "Libros-autores es N:M: necesitas una tabla intermedia `libros_autores(libro_id, autor_id)`. Un préstamo une un socio y un libro.",
+      "faq": [
+       {
+        "q": "¿Siempre hay que llegar a 3FN?",
+        "a": "Es el objetivo por defecto en bases de datos de gestión. A veces se desnormaliza a propósito para leer más rápido (informes), aceptando el coste de mantener datos duplicados."
+       },
+       {
+        "q": "¿Clave natural o sustituta?",
+        "a": "Natural: un dato real, como el DNI o el ISBN. Sustituta: un id artificial autoincremental. La sustituta no cambia nunca y ocupa poco; la natural se protege con UNIQUE."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "PostgreSQL Tutorial (documentación oficial)",
+       "url": "https://www.postgresql.org/docs/current/tutorial-sql.html"
+      },
+      {
+       "title": "MySQL 8.0 Reference Manual",
+       "url": "https://dev.mysql.com/doc/refman/8.0/en/"
+      }
+     ]
+    },
+    {
+     "slug": "sql-transacciones-vistas",
+     "title": "Transacciones, vistas e índices",
+     "theory": "Una **transacción** agrupa varias sentencias que deben aplicarse **todas o ninguna**. El ejemplo clásico es una transferencia: restar de una cuenta y sumar en otra.\n\n- `BEGIN` (o `START TRANSACTION` en MySQL) la abre.\n- `COMMIT` confirma los cambios.\n- `ROLLBACK` deshace todo lo hecho desde el BEGIN.\n\nSin transacción explícita, cada sentencia se confirma sola (*autocommit*).\n\n**ACID**, las garantías de una transacción:\n- **Atomicidad:** todo o nada.\n- **Consistencia:** se respetan las restricciones.\n- **Aislamiento:** las transacciones simultáneas no se estorban.\n- **Durabilidad:** lo confirmado sobrevive a un fallo.\n\n**Vistas:** `CREATE VIEW aprobados AS SELECT …` guarda una **consulta** con nombre. Se usa como una tabla, pero no copia datos: cada vez que la consultas se ejecuta de nuevo y ves los datos actuales.\n\n**Índices:** `CREATE INDEX idx_ciclo ON alumnos(ciclo)` acelera las búsquedas, los JOIN y los ORDER BY por esa columna. A cambio ocupa espacio y ralentiza un poco los INSERT y UPDATE. La PRIMARY KEY y los UNIQUE ya crean su índice. Un índice **no cambia nunca el resultado** de una consulta, solo su velocidad.",
+     "example_code": "CREATE TABLE cuentas (id INTEGER PRIMARY KEY, titular TEXT, saldo INTEGER CHECK (saldo >= 0));\nINSERT INTO cuentas VALUES (1, 'Ana', 100), (2, 'Luis', 20);\n\nBEGIN;\nUPDATE cuentas SET saldo = saldo - 50 WHERE id = 1;\nUPDATE cuentas SET saldo = saldo + 50 WHERE id = 2;\nCOMMIT;\n\nCREATE VIEW resumen AS SELECT titular, saldo FROM cuentas WHERE saldo > 0;\nSELECT * FROM resumen;",
+     "exercise": "Con la tabla `alumnos(id, nombre, ciclo, nota)`:\n\n1. Crea una vista `resumen_ciclos` con cada ciclo, su número de alumnos y su nota media.\n2. Consulta la vista, cambia una nota con UPDATE y vuelve a consultarla: ¿ha cambiado?",
+     "starter": "CREATE VIEW resumen_ciclos AS\nSELECT ciclo, ...\nFROM alumnos\nGROUP BY ciclo;\n\nSELECT * FROM resumen_ciclos;\n",
+     "quiz": [
+      {
+       "q": "¿Qué hace ROLLBACK?",
+       "options": [
+        "Deshace los cambios de la transacción en curso",
+        "Confirma los cambios",
+        "Borra la tabla",
+        "Vuelve a la copia de seguridad de ayer"
+       ],
+       "answer": 0,
+       "explain": "Solo deshace lo no confirmado de la transacción abierta."
+      },
+      {
+       "q": "¿Qué devuelve la última sentencia de este script?",
+       "options": [
+        "1",
+        "Error",
+        "2",
+        "0"
+       ],
+       "answer": 2,
+       "explain": "Un índice no cambia el resultado, solo lo rápido que se obtiene: sigue habiendo 2 alumnos de DAW.",
+       "code": "-- alumnos\n-- id | nombre | ciclo | nota\n-- 1  | Ana    | DAW   | 8\n-- 2  | Luis   | DAM   | 5\n-- 3  | Eva    | DAW   | NULL\n-- 4  | Juan   | ASIR  | 7\n-- 5  | Sara   | DAM   | 9\n\nCREATE INDEX idx_ciclo ON alumnos(ciclo);\nSELECT COUNT(*) FROM alumnos WHERE ciclo = 'DAW';"
+      }
+     ],
+     "challenge": {
+      "title": "Transferencia segura",
+      "stars": 2,
+      "exercise": "Con `cuentas(id, titular, saldo)`, pasa 50 € de la cuenta 1 a la 2 dentro de una transacción. Después, intenta pasar 1000 € y deshaz la operación con ROLLBACK.",
+      "starter": "BEGIN;\nUPDATE cuentas SET saldo = saldo - 50 WHERE id = 1;\n-- ...\nCOMMIT;\n",
+      "hint": "Si una de las dos sentencias falla (por ejemplo, por un CHECK de saldo >= 0), haz ROLLBACK para que no se aplique ninguna."
+     },
+     "assistant": {
+      "hint": "Una vista es una consulta guardada: al volver a consultarla verás la nota nueva.",
+      "faq": [
+       {
+        "q": "¿Qué pasa si se corta la luz a mitad de una transacción?",
+        "a": "Al reiniciar, el SGBD deshace lo no confirmado (atomicidad) y conserva lo confirmado (durabilidad)."
+       },
+       {
+        "q": "¿Por qué no indexar todas las columnas?",
+        "a": "Cada índice ocupa espacio y hay que actualizarlo en cada INSERT, UPDATE y DELETE. Se indexan las columnas por las que filtras o unes a menudo."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "MySQL 8.0 Reference Manual",
+       "url": "https://dev.mysql.com/doc/refman/8.0/en/"
+      },
+      {
+       "title": "PostgreSQL Tutorial (documentación oficial)",
+       "url": "https://www.postgresql.org/docs/current/tutorial-sql.html"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

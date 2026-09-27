@@ -44,6 +44,14 @@ class PcapState {
     var app: AppProgress = AppProgress()
         private set
 
+    /**
+     * Los demás cursos comparten el progreso de la app del PCAP: una sola racha, XP, meta y vidas (ADR-0016).
+     * El progreso compartido se guarda con el PCAP; el de cada curso guarda solo sus respuestas y su repaso.
+     */
+    fun shareApp(shared: AppProgress) {
+        app = shared
+    }
+
     /* ---------- Repaso espaciado (cajas de Leitner) ---------- */
 
     /** Acierto: sube de caja y el repaso se aleja. Fallo: vuelve a la caja 1 (repaso mañana). */
@@ -137,7 +145,7 @@ class PcapState {
 
     /* ---------- JSON (mismo formato que la web) ---------- */
 
-    fun toJson(): JSONObject = JSONObject().apply {
+    fun toJson(withApp: Boolean = true): JSONObject = JSONObject().apply {
         put("lang", lang)
         put("answers", JSONObject().apply { answers.forEach { (id, h) -> put(id, JSONArray().apply { h.forEach { put(it) } }) } })
         put(
@@ -167,7 +175,7 @@ class PcapState {
             },
         )
         put("plan", JSONObject().apply { put("examDate", examDate ?: JSONObject.NULL) })
-        put("app", app.toJson())
+        if (withApp) put("app", app.toJson())
     }
 
     companion object {
