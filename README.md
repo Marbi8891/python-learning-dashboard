@@ -170,6 +170,7 @@ La firma de release necesita tres secretos en *Settings → Secrets and variable
 | POST | `/api/progress/import` | ✔ | Fusionar el progreso del navegador |
 | POST / GET | `/api/lessons/{slug}/attempts` | ✔ | Registrar un intento o ver los últimos 20 |
 | GET / PUT | `/api/pcap-state` | ✔ | Preparación del PCAP (simulacros, aciertos, fichas, repaso y plan) |
+| GET / PUT | `/api/course-state/{curso}` | ✔ | Estado de los cursos de la app Android: `sql`, `js` o `java` (ADR-0018) |
 
 ## Publicar
 

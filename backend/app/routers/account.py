@@ -7,6 +7,7 @@ from sqlalchemy import delete, select
 
 from app.deps import CurrentUser, DbSession
 from app.models import (
+    CourseState,
     ExerciseAttempt,
     Lesson,
     LessonProgress,
@@ -47,6 +48,10 @@ def export_my_data(user: CurrentUser, db: DbSession) -> UserExport:
             for slug, code, passed, created in attempts
         ],
         pcap=state.data if (state := db.get(PcapState, user.id)) else None,
+        courses={
+            c.course: c.data
+            for c in db.scalars(select(CourseState).where(CourseState.user_id == user.id))
+        },
         exported_at=datetime.now(UTC),
     )
 
@@ -62,7 +67,7 @@ def delete_my_account(data: PasswordConfirm, user: CurrentUser, db: DbSession) -
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Contraseña incorrecta")
     # Borrado explícito: no depende de que la base de datos aplique ON DELETE CASCADE
     # (SQLite no lo hace si no se activa PRAGMA foreign_keys).
-    for model in (ExerciseAttempt, LessonProgress, PasswordResetToken, PcapState):
+    for model in (ExerciseAttempt, LessonProgress, PasswordResetToken, PcapState, CourseState):
         db.execute(delete(model).where(model.user_id == user.id))
     db.delete(user)
     db.commit()

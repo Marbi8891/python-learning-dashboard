@@ -81,6 +81,34 @@ test("la preparación del PCAP se guarda en la cuenta y llega a otro dispositivo
   await other.close();
 });
 
+test("la web conserva el progreso de la app Android guardado en la cuenta", async ({ page, request }) => {
+  // ADR-0018: la app guarda su XP, racha y ruta en el objeto «app»; la web no debe borrarlo al guardar
+  const api = "http://127.0.0.1:8000";
+  const email = uniqueEmail();
+  const password = "contraseña-e2e-123";
+  await request.post(`${api}/api/auth/register`, {
+    data: { email, password, display_name: "Ana", accept_privacy: true },
+  });
+  const login = await request.post(`${api}/api/auth/login`, { form: { username: email, password } });
+  const headers = { Authorization: `Bearer ${(await login.json()).access_token}` };
+  const app = { done: { "variables-1": { perfect: true, date: "2026-09-27" } }, daily: { "2026-09-27": 15 }, goal: 30 };
+  await request.put(`${api}/api/pcap-state`, { headers, data: { data: { answers: { "oop-01": [true] }, app } } });
+
+  await page.goto("/#/pcap/fichas");
+  await page.getByRole("button", { name: "Iniciar sesión" }).click();
+  await page.locator("#login-form").getByLabel("Email").fill(email);
+  await page.locator("#login-form").getByLabel("Contraseña").fill(password);
+  await page.locator("#login-form").getByRole("button", { name: "Entrar" }).click();
+  await expect(page.locator("#account-label")).toHaveText("Ana");
+  // Un cambio en la web provoca un nuevo guardado en la cuenta
+  await page.getByRole("button", { name: "Ver respuesta" }).click();
+  await page.getByRole("button", { name: "Lo sé →" }).click();
+  await expect
+    .poll(async () => (await (await request.get(`${api}/api/pcap-state`, { headers })).json()).data.known?.length ?? 0)
+    .toBe(1);
+  expect((await (await request.get(`${api}/api/pcap-state`, { headers })).json()).data.app).toEqual(app);
+});
+
 test("certificado: requisitos y certificado imprimible", async ({ page, request }) => {
   await page.goto("/#/certificado");
   await expect(page.locator(".cert-requirements li")).toHaveCount(2);

@@ -15,7 +15,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import get_settings
 from app.local_site import mount_frontend
-from app.routers import account, attempts, auth, lessons, pcap, progress
+from app.routers import account, attempts, auth, course_state, lessons, pcap, progress
 from app.security import get_jwt_secret
 
 logging.basicConfig(level=logging.INFO)
@@ -43,6 +43,7 @@ for router in (
     progress.router,
     attempts.router,
     pcap.router,
+    course_state.router,
 ):
     app.include_router(router)
 

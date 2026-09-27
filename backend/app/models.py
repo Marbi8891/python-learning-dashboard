@@ -129,3 +129,22 @@ class PcapState(Base):
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
     )
+
+
+class CourseState(Base):
+    """Estado de un curso de DAW de la app Android (SQL, JavaScript, Java...). Ver ADR-0018.
+
+    Mismo modelo que PcapState: un documento JSON por usuario y curso, que la app fusiona con su
+    copia local antes de guardarlo entero.
+    """
+
+    __tablename__ = "course_states"
+
+    user_id: Mapped[int] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), primary_key=True
+    )
+    course: Mapped[str] = mapped_column(String(20), primary_key=True)
+    data: Mapped[dict] = mapped_column(JSON)
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )

@@ -165,6 +165,10 @@ class AttemptOut(BaseModel):
 
 MAX_PCAP_STATE_BYTES = 200_000  # ~1000 simulacros y todas las respuestas caben de sobra
 
+# Cursos de DAW de la app Android que se pueden guardar en la cuenta (ADR-0016 y ADR-0018).
+# Lista cerrada: evita que un cliente cree documentos con nombres arbitrarios.
+COURSES = ("sql", "js", "java")
+
 
 class PcapStateIn(BaseModel):
     data: dict
@@ -191,4 +195,5 @@ class UserExport(BaseModel):
     progress: list[ProgressItem]
     attempts: list[dict]
     pcap: dict | None = None
+    courses: dict[str, dict] = {}
     exported_at: datetime

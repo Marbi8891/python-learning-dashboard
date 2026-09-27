@@ -13,6 +13,8 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
   - 5 vidas que se recuperan cada 4 h o terminando una tanda de práctica libre;
   - pantalla de celebración y perfil con los últimos 7 días.
 - Workflow `android.yml`: tests del dominio en Kotlin, lint de Android y APK de depuración descargable.
+- **Backend:** `GET/PUT /api/course-state/{curso}` guarda en la cuenta el estado de los cursos de SQL, JavaScript y Java de la app (ADR-0018). Incluido en la exportación y el borrado de datos.
+- **App Android:** la práctica usa `PracticeViewModel` con flujo de datos en un solo sentido (`PracticeUiState`, `PracticeUserAction`) y una barra de progreso. La tanda se conserva al abrir la teoría y volver.
 - **Ejercicios de escribir código** (ADR-0017): completar el hueco tecleando, ordenar líneas y encontrar la línea con el error. Hay 30 en el curso de Java y aparecen en la ruta, la práctica y la mazmorra. Cada uno se comprueba compilando y ejecutando la solución y el error.
 - **Curso de JavaScript** en la app (ADR-0016). Tiene 10 lecciones, de las variables al event loop y `fetch`, con 50 preguntas y 20 del mini-quiz. Las respuestas de código se comprueban ejecutándolas con Node.js; las del DOM son teóricas.
 - **Curso de Java** en la app (ADR-0016). Tiene 10 lecciones, de los tipos a las excepciones, con 50 preguntas y 20 del mini-quiz. Cada respuesta se comprueba compilando y ejecutando el código con Java 17 en la CI, incluidos los errores de compilación y las excepciones.
@@ -21,6 +23,9 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
 - **App Android sin conexión** (ADR-0014): la teoría de las 27 lecciones se lee dentro de la app (explicación, ejemplo, ejercicio, mini-quiz corregido, reto, dudas frecuentes y fuentes). "Teoría" ya no abre la web y la app no pide permiso de internet.
 - **Tarjetas de unidad más completas** en la ruta de la app: estado con color e icono (completada, en curso, bloqueada), bloque y peso en el examen, lecciones hechas con su barra y porcentaje de acierto en las preguntas de la unidad. Se leen como un solo elemento con TalkBack.
 - **APK de release firmado** en la CI con la clave del proyecto, guardada en secretos de GitHub (ADR-0013). La build de depuración pasa a `io.github.marbi8891.pld.debug` y convive con la release.
+
+### Corregido
+- La web conservaba el progreso del PCAP pero **borraba de la cuenta el de la app Android** (XP, racha, ruta y récords) al guardar: ahora lo mantiene (ADR-0018).
 
 ## [1.0.0] - 2026-09-27
 

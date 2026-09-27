@@ -14,6 +14,7 @@ import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.RadioButton
@@ -22,45 +23,43 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.marbi8891.pld.AppModel
-import io.github.marbi8891.pld.pcap.AppProgress
 import io.github.marbi8891.pld.pcap.Answer
-import io.github.marbi8891.pld.pcap.Kind
 import io.github.marbi8891.pld.pcap.Option
+import io.github.marbi8891.pld.pcap.PracticeUserAction
 import io.github.marbi8891.pld.pcap.Question
+import kotlin.math.roundToInt
 
-/** Tanda de práctica de un bloque, con corrección y explicación inmediatas. */
+/**
+ * Tanda de práctica de un bloque, con corrección y explicación inmediatas. El estado vive en
+ * [PracticeViewModel] (flujo de datos en un solo sentido, ADR-0018): aquí solo se pinta y se envían acciones.
+ */
 @Composable
 fun PracticeScreen(model: AppModel, blockSlug: String, onBack: () -> Unit, onTheory: (String) -> Unit) {
+    val course = model.course
+    val vm: PracticeViewModel = viewModel(key = "practica-${course.id}-$blockSlug") { PracticeViewModel(model, course, blockSlug) }
+    val state by vm.state.collectAsState()
     val block = model.bank.block(blockSlug)
-    var round by remember { mutableIntStateOf(0) }
-    val items = remember(blockSlug, round) { model.pcap.practiceSet(model.bank, blockSlug) }
-    var index by remember(blockSlug, round) { mutableIntStateOf(0) }
-    var response by remember(blockSlug, round, index) { mutableStateOf(Answer()) }
-    var checked by remember(blockSlug, round, index) { mutableStateOf(false) }
-    var message by remember(blockSlug, round, index) { mutableStateOf("") }
-    var correct by remember(blockSlug, round) { mutableIntStateOf(0) }
-    var combo by remember(blockSlug, round) { mutableIntStateOf(0) }
     val lang = remember(model.revision) { model.pcap.lang }
     val palette = LocalPalette.current
     val scroll = rememberScrollState()
-    LaunchedEffect(index, round) { scroll.scrollTo(0) } // cada pregunta empieza arriba
+    LaunchedEffect(state.index, state.round) { scroll.scrollTo(0) } // cada pregunta empieza arriba
 
     Scaffold(containerColor = MaterialTheme.colorScheme.background) { padding ->
         Column(
@@ -81,72 +80,53 @@ fun PracticeScreen(model: AppModel, blockSlug: String, onBack: () -> Unit, onThe
                     style = MaterialTheme.typography.headlineSmall,
                 )
                 Text(
-                    "Racha: $combo",
+                    "Racha: ${state.streak}",
                     modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite },
-                    color = if (combo >= 3) palette.streak else palette.muted,
+                    color = if (state.streak >= 3) palette.streak else palette.muted,
                     fontWeight = FontWeight.SemiBold,
                 )
             }
+            LinearProgressIndicator(
+                progress = { state.progress },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .semantics { contentDescription = "Progreso de la tanda: ${(state.progress * 100).roundToInt()} %" },
+                color = palette.accent,
+                trackColor = MaterialTheme.colorScheme.outline,
+            )
 
-            if (index >= items.size) {
+            val question = state.currentQuestion
+            if (state.isCompleted || question == null) {
                 Panel {
-                    SectionTitle("$correct de ${items.size} correctas")
+                    SectionTitle("${state.score} de ${state.questions.size} correctas")
                     Text(
-                        "+$correct XP · recuperas una vida · tu mejor racha: ${model.pcap.bestCombo} aciertos seguidos.",
+                        "+${state.score} XP · recuperas una vida · tu mejor racha: ${model.pcap.bestCombo} aciertos seguidos.",
                         color = palette.muted,
                     )
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Button(onClick = { round++ }) { Text("Otra tanda") }
+                        Button(onClick = { vm.onAction(PracticeUserAction.RestartSession) }) { Text("Otra tanda") }
                         OutlinedButton(onClick = onBack) { Text("Volver") }
                     }
                 }
             } else {
                 QuestionStep(
-                    question = items[index],
-                    number = index + 1,
-                    total = items.size,
+                    question = question,
+                    number = state.index + 1,
+                    total = state.questions.size,
                     lang = lang,
-                    response = response,
-                    checked = checked,
-                    message = message,
+                    response = state.answer,
+                    checked = state.isAnswerSubmitted,
+                    message = state.message,
                     model = model,
-                    onChange = {
-                        response = it
-                        message = ""
-                    },
-                    onCheck = {
-                        val question = items[index]
-                        if (!question.isComplete(response)) {
-                            message = when {
-                                question.kind == Kind.FILL -> "Escribe lo que va en el hueco."
-                                question.kind == Kind.ORDER -> "Coloca todas las líneas."
-                                question.multi -> "Elige ${question.answer.size} respuestas."
-                                else -> "Elige una respuesta."
-                            }
-                        } else {
-                            val ok = question.isCorrect(response)
-                            if (ok) correct++
-                            combo = if (ok) combo + 1 else 0
-                            val streak = combo
-                            model.update {
-                                recordAnswer(question.id, ok)
-                                bestCombo = maxOf(bestCombo, streak)
-                                if (ok) app.addXp(AppProgress.XP_PRACTICE)
-                            }
-                            checked = true
-                        }
-                    },
-                    onNext = {
-                        // Terminar una tanda de práctica libre devuelve una vida (ADR-0012)
-                        if (index + 1 >= items.size) model.update { app.gainHeart() }
-                        index++
-                    },
+                    onChange = { vm.onAction(PracticeUserAction.ChangeAnswer(it)) },
+                    onCheck = { vm.onAction(PracticeUserAction.SubmitAnswer) },
+                    onNext = { vm.onAction(PracticeUserAction.NextQuestion) },
                     onTheory = onTheory,
                 )
             }
 
             // Solo el PCAP tiene las preguntas también en inglés, como el examen
-            if (model.course.isPcap) LangSwitch(lang) { value -> model.update { this.lang = value } }
+            if (course.isPcap) LangSwitch(lang) { value -> model.update { this.lang = value } }
         }
     }
 }
