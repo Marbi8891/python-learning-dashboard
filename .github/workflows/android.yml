@@ -52,9 +52,9 @@ jobs:
           printf %s "$PLD_KEYSTORE_BASE64" | tr -d "\r\n " | base64 --decode > "$PLD_KEYSTORE_PATH"
           ./gradlew --no-daemon assembleRelease
           rm -f "$PLD_KEYSTORE_PATH"
-          # Comprueba la firma y muestra la huella SHA-256 (la pide Android Developer Console)
-          "$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)/apksigner" verify --print-certs \
-            app/build/outputs/apk/release/app-release.apk | grep -E "Signer #1 certificate (DN|SHA-256)"
+          # Comprueba la firma (falla si no es válida) y muestra la huella SHA-256 del certificado
+          APKSIGNER="$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)/apksigner"
+          "$APKSIGNER" verify --verbose --print-certs app/build/outputs/apk/release/app-release.apk
       - if: env.HAS_SIGNING_KEY == 'true' && github.event_name != 'pull_request'
         uses: actions/upload-artifact@v7
         with:
