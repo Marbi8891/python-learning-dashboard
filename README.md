@@ -136,7 +136,12 @@ Usa los mismos datos que la web (`frontend/data/*.json`) y guarda el progreso en
 | 5 | Python real en el móvil (Chaquopy) | Pendiente |
 | 6 | Cuenta y sincronización | Pendiente |
 
-**Instalarla:** en GitHub → *Actions* → *Android* → la última ejecución → *Artifacts* → `python-pcap-apk`. Descomprime el zip, pasa `app-debug.apk` al móvil e instálalo. Android pedirá permiso para instalar apps de origen desconocido.
+**Instalarla:** en GitHub → *Actions* → *Android* → la última ejecución → *Artifacts*:
+
+- `python-pcap-release`: `app-release.apk`, firmado con la clave del proyecto (ADR-0013). Es la versión para usar: las actualizaciones se instalan encima sin perder el progreso.
+- `python-pcap-apk`: `app-debug.apk`, solo para pruebas. Se instala aparte como "Python PCAP (debug)".
+
+La firma de release necesita tres secretos en *Settings → Secrets and variables → Actions*: `PLD_KEYSTORE_BASE64`, `PLD_KEYSTORE_PASSWORD` y `PLD_KEY_ALIAS`. La clave (`.jks`) nunca va al repositorio.
 
 ## API
 

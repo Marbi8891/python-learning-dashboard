@@ -1,5 +1,7 @@
 # App Android nativa (ADR-0011): tests del dominio, lint de Android y APK instalable.
-# El APK de depuración se descarga desde la ejecución, en «Artifacts» → python-pcap-apk.
+# APK de depuración: «Artifacts» → python-pcap-apk.
+# APK de release firmado (ADR-0013): «Artifacts» → python-pcap-release. Solo se genera si
+# existen los secretos PLD_KEYSTORE_BASE64, PLD_KEYSTORE_PASSWORD y PLD_KEY_ALIAS.
 name: Android
 
 on:
@@ -13,6 +15,8 @@ on:
 jobs:
   apk:
     runs-on: ubuntu-latest
+    env:
+      HAS_SIGNING_KEY: ${{ secrets.PLD_KEYSTORE_BASE64 != '' }}
     defaults:
       run:
         working-directory: android
@@ -36,6 +40,27 @@ jobs:
           name: python-pcap-apk
           path: android/app/build/outputs/apk/debug/app-debug.apk
           retention-days: 30
+      # La clave solo existe en el disco temporal del runner durante esta ejecución
+      - name: APK de release firmado
+        if: env.HAS_SIGNING_KEY == 'true' && github.event_name != 'pull_request'
+        env:
+          PLD_KEYSTORE_BASE64: ${{ secrets.PLD_KEYSTORE_BASE64 }}
+          PLD_KEYSTORE_PASSWORD: ${{ secrets.PLD_KEYSTORE_PASSWORD }}
+          PLD_KEY_ALIAS: ${{ secrets.PLD_KEY_ALIAS }}
+          PLD_KEYSTORE_PATH: ${{ runner.temp }}/release.jks
+        run: |
+          printf %s "$PLD_KEYSTORE_BASE64" | tr -d "\r\n " | base64 --decode > "$PLD_KEYSTORE_PATH"
+          ./gradlew --no-daemon assembleRelease
+          rm -f "$PLD_KEYSTORE_PATH"
+          # Comprueba la firma y muestra la huella SHA-256 (la pide Android Developer Console)
+          "$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)/apksigner" verify --print-certs \
+            app/build/outputs/apk/release/app-release.apk | grep -E "Signer #1 certificate (DN|SHA-256)"
+      - if: env.HAS_SIGNING_KEY == 'true' && github.event_name != 'pull_request'
+        uses: actions/upload-artifact@v7
+        with:
+          name: python-pcap-release
+          path: android/app/build/outputs/apk/release/app-release.apk
+          retention-days: 90
       - name: Informes si algo falla
         if: failure()
         uses: actions/upload-artifact@v7

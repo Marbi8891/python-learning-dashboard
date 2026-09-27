@@ -40,4 +40,4 @@ AGP 8.13.0, Gradle 8.14.3, Kotlin 2.2.0, Compose BOM 2025.06.00, compileSdk/targ
 - La lógica del PCAP existe dos veces (JS y Kotlin). Mitigación: los tests Kotlin comprueban las mismas reglas (cajas 1/3/7/14/30, fusión, preparación ponderada) y leen el mismo `pcap.json`.
 - Cada cambio de la app se prueba instalando el APK de la CI.
 - VERIFY: el entorno de desarrollo del asistente no tiene acceso a los repositorios de Google/Maven. La lógica de dominio se compila y prueba allí con `kotlinc`, pero la interfaz Compose solo se compila en la CI.
-- ASSUMPTION: APK de depuración (firmado con la clave de depuración de la CI) es suficiente para uso propio y la defensa. Para Google Play haría falta firma de release y ficha de la tienda.
+- ~~ASSUMPTION: el APK de depuración basta para uso propio y la defensa.~~ Refutada: el móvil lo marca como no seguro y la firma cambia en cada ejecución. Lo sustituye la firma de release de ADR-0013.

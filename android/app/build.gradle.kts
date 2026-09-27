@@ -12,8 +12,8 @@ android {
         applicationId = "io.github.marbi8891.pld"
         minSdk = 26
         targetSdk = 36
-        versionCode = 2
-        versionName = "0.2.0"
+        versionCode = 3
+        versionName = "0.2.1"
 
         // Configuración en un solo sitio, no repartida por el código
         buildConfigField("String", "WEB_URL", "\"https://marbi8891.github.io/python-learning-dashboard/\"")
@@ -22,10 +22,30 @@ android {
     // Una sola fuente de datos: el banco de preguntas y las lecciones de la web (ADR-0011)
     sourceSets["main"].assets.srcDir("../../frontend/data")
 
+    // Firma de release (ADR-0013). La clave nunca está en el repo: la CI la recibe de los
+    // secretos de GitHub en variables de entorno. Sin ellas, la release se genera sin firmar.
+    val keystore = System.getenv("PLD_KEYSTORE_PATH")?.let(::file)?.takeIf { it.exists() }
+    signingConfigs {
+        if (keystore != null) {
+            create("release") {
+                storeFile = keystore
+                storePassword = System.getenv("PLD_KEYSTORE_PASSWORD")
+                keyAlias = System.getenv("PLD_KEY_ALIAS")
+                keyPassword = System.getenv("PLD_KEYSTORE_PASSWORD")
+            }
+        }
+    }
+
     buildTypes {
+        debug {
+            // La de depuración convive con la release en el móvil y no la pisa
+            applicationIdSuffix = ".debug"
+            versionNameSuffix = "-debug"
+        }
         release {
             isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"))
+            signingConfig = signingConfigs.findByName("release")
         }
     }
 

@@ -4,3 +4,7 @@ local.properties
 *.iml
 .idea/
 .kotlin/
+# Claves de firma: nunca en el repo (ADR-0013)
+*.jks
+*.keystore
+*.p12
