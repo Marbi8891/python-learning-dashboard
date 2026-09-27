@@ -24,6 +24,7 @@ import io.github.marbi8891.pld.ui.PcapHomeScreen
 import io.github.marbi8891.pld.ui.PldTheme
 import io.github.marbi8891.pld.ui.PracticeScreen
 import io.github.marbi8891.pld.ui.ProfileScreen
+import io.github.marbi8891.pld.ui.TheoryScreen
 
 /** Pantallas a pantalla completa por encima de las pestañas. Una pila propia basta (ADR-0011). */
 sealed interface Screen {
@@ -32,6 +33,8 @@ sealed interface Screen {
     data class Lesson(val nodeId: String) : Screen
 
     data class Done(val xp: Int, val perfect: Boolean) : Screen
+
+    data class Theory(val slug: String) : Screen
 }
 
 enum class Tab(val label: String, val symbol: String) {
@@ -64,7 +67,7 @@ fun App(model: AppModel) {
 
     when (val screen = stack.lastOrNull()) {
         null -> Tabs(model, tab, onTab = { tab = it }, open = open)
-        is Screen.Practice -> PracticeScreen(model, screen.block, onBack = back)
+        is Screen.Practice -> PracticeScreen(model, screen.block, onBack = back, onTheory = { open(Screen.Theory(it)) })
         is Screen.Lesson -> LessonScreen(
             model,
             model.node(screen.nodeId),
@@ -73,6 +76,7 @@ fun App(model: AppModel) {
             onPractice = { block -> replaceTop(Screen.Practice(block)) },
         )
         is Screen.Done -> CelebrationScreen(model, screen.xp, screen.perfect, onContinue = back)
+        is Screen.Theory -> TheoryScreen(model, screen.slug, onBack = back)
     }
 }
 
@@ -99,9 +103,15 @@ private fun Tabs(model: AppModel, tab: Tab, onTab: (Tab) -> Unit, open: (Screen)
                 model,
                 onStart = { open(Screen.Lesson(it.id)) },
                 onPractice = { open(Screen.Practice(it)) },
+                onTheory = { open(Screen.Theory(it)) },
                 modifier = modifier,
             )
-            Tab.EXAM -> PcapHomeScreen(model, onPractice = { open(Screen.Practice(it)) }, modifier = modifier)
+            Tab.EXAM -> PcapHomeScreen(
+                model,
+                onPractice = { open(Screen.Practice(it)) },
+                onTheory = { open(Screen.Theory(it)) },
+                modifier = modifier,
+            )
             Tab.PROFILE -> ProfileScreen(model, modifier = modifier)
         }
     }

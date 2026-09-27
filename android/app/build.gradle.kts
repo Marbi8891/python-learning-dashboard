@@ -12,11 +12,8 @@ android {
         applicationId = "io.github.marbi8891.pld"
         minSdk = 26
         targetSdk = 36
-        versionCode = 4
-        versionName = "0.2.2"
-
-        // Configuración en un solo sitio, no repartida por el código
-        buildConfigField("String", "WEB_URL", "\"https://marbi8891.github.io/python-learning-dashboard/\"")
+        versionCode = 5
+        versionName = "0.3.0"
     }
 
     // Una sola fuente de datos: el banco de preguntas y las lecciones de la web (ADR-0011)
@@ -56,7 +53,6 @@ android {
 
     buildFeatures {
         compose = true
-        buildConfig = true
     }
 
     testOptions {

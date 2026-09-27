@@ -124,6 +124,9 @@ En `android/` hay una app en **Kotlin + Jetpack Compose** con experiencia tipo D
 - **XP, racha y meta diaria**;
 - **vidas**, que solo se gastan en la ruta y se recuperan con el tiempo o practicando;
 - práctica libre por bloque y la preparación estimada.
+- **teoría completa de las 27 lecciones dentro de la app** (explicación, ejemplo, ejercicio, mini-quiz, reto y dudas frecuentes).
+
+**Funciona entera sin conexión:** la app no pide permiso de internet (ADR-0014).
 
 Usa los mismos datos que la web (`frontend/data/*.json`) y guarda el progreso en el mismo formato, para poder sincronizarlo con la cuenta.
 

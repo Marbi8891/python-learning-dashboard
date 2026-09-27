@@ -7,7 +7,9 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.setValue
 import io.github.marbi8891.pld.pcap.Bank
 import io.github.marbi8891.pld.pcap.Course
+import io.github.marbi8891.pld.pcap.LessonContent
 import io.github.marbi8891.pld.pcap.LessonIndex
+import io.github.marbi8891.pld.pcap.LessonLibrary
 import io.github.marbi8891.pld.pcap.PathNode
 import io.github.marbi8891.pld.pcap.PathUnit
 import io.github.marbi8891.pld.pcap.PcapState
@@ -25,7 +27,11 @@ class AppModel(context: Context) {
     private val prefs = context.getSharedPreferences("pld", Context.MODE_PRIVATE)
 
     val bank: Bank = Bank.parse(context.readAsset("pcap.json"))
-    val lessons: LessonIndex = LessonIndex.parse(context.readAsset("lessons.json"))
+    private val lessonsJson = context.readAsset("lessons.json")
+    val lessons: LessonIndex = LessonIndex.parse(lessonsJson)
+
+    /** Teoría completa de cada lección, para leerla sin conexión (ADR-0014). */
+    val content: Map<String, LessonContent> = LessonLibrary.parse(lessonsJson)
     val units: List<PathUnit> = Course.build(bank, lessons)
     val pcap: PcapState = PcapState.fromJson(prefs.getString(KEY, null))
 
@@ -50,8 +56,6 @@ class AppModel(context: Context) {
     fun questions(node: PathNode): List<Question> = node.questionIds.map { questionsById.getValue(it) }
 
     fun unitOf(node: PathNode): PathUnit = units.first { it.slug == node.unit }
-
-    fun lessonUrl(slug: String) = "${BuildConfig.WEB_URL}#/leccion/$slug"
 
     private companion object {
         const val KEY = "pcap"

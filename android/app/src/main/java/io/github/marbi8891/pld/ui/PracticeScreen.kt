@@ -30,7 +30,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.heading
@@ -46,7 +45,7 @@ import io.github.marbi8891.pld.pcap.Question
 
 /** Tanda de práctica de un bloque, con corrección y explicación inmediatas. */
 @Composable
-fun PracticeScreen(model: AppModel, blockSlug: String, onBack: () -> Unit) {
+fun PracticeScreen(model: AppModel, blockSlug: String, onBack: () -> Unit, onTheory: (String) -> Unit) {
     val block = model.bank.block(blockSlug)
     var round by remember { mutableIntStateOf(0) }
     val items = remember(blockSlug, round) { model.pcap.practiceSet(model.bank, blockSlug) }
@@ -140,6 +139,7 @@ fun PracticeScreen(model: AppModel, blockSlug: String, onBack: () -> Unit) {
                         if (index + 1 >= items.size) model.update { app.gainHeart() }
                         index++
                     },
+                    onTheory = onTheory,
                 )
             }
 
@@ -162,12 +162,13 @@ private fun QuestionStep(
     onSelect: (Int) -> Unit,
     onCheck: () -> Unit,
     onNext: () -> Unit,
+    onTheory: (String) -> Unit,
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
         Text("Pregunta $number de $total", color = LocalPalette.current.muted)
         QuestionView(question, lang, chosen, checked, onSelect)
         if (checked) {
-            Feedback(question, lang, question.isCorrect(chosen), model)
+            Feedback(question, lang, question.isCorrect(chosen), model, onTheory)
             Button(onClick = onNext, modifier = Modifier.fillMaxWidth()) {
                 Text(if (number < total) "Siguiente →" else "Ver resultado")
             }
@@ -233,9 +234,8 @@ fun QuestionView(question: Question, lang: String, chosen: Set<Int>, reveal: Boo
 }
 
 @Composable
-private fun Feedback(question: Question, lang: String, ok: Boolean, model: AppModel) {
+private fun Feedback(question: Question, lang: String, ok: Boolean, model: AppModel, onTheory: (String) -> Unit) {
     val palette = LocalPalette.current
-    val uri = LocalUriHandler.current
     Panel(borderColor = if (ok) palette.accent else palette.danger) {
         Text(
             if (ok) "¡Correcto!" else "No es correcta.",
@@ -250,7 +250,7 @@ private fun Feedback(question: Question, lang: String, ok: Boolean, model: AppMo
             val slug = question.lesson
             val title = slug?.let { model.lessons.titles[it] }
             if (slug != null && title != null) {
-                TextButton(onClick = { uri.openUri(model.lessonUrl(slug)) }) { Text("Repasar la teoría: $title") }
+                TextButton(onClick = { onTheory(slug) }) { Text("Repasar la teoría: $title") }
             }
         }
     }

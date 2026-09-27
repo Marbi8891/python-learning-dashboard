@@ -15,7 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -27,11 +26,10 @@ import kotlin.math.roundToInt
 
 /** Pestaña «Examen»: nota estimada, criterios para estar listo y práctica libre por bloque (sin vidas). */
 @Composable
-fun PcapHomeScreen(model: AppModel, onPractice: (String) -> Unit, modifier: Modifier = Modifier) {
+fun PcapHomeScreen(model: AppModel, onPractice: (String) -> Unit, onTheory: (String) -> Unit, modifier: Modifier = Modifier) {
     val bank = model.bank
     val pcap = model.pcap
     val status = remember(model.revision) { pcap.status(bank) }
-    val uri = LocalUriHandler.current
     val palette = LocalPalette.current
 
     LazyColumn(
@@ -101,7 +99,7 @@ fun PcapHomeScreen(model: AppModel, onPractice: (String) -> Unit, modifier: Modi
                 )
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
                     OutlinedButton(onClick = { onPractice(block.slug) }) { Text("Practicar") }
-                    if (lesson != null) TextButton(onClick = { uri.openUri(model.lessonUrl(lesson)) }) { Text("Teoría (web)") }
+                    if (lesson != null) TextButton(onClick = { onTheory(lesson) }) { Text("Teoría") }
                 }
             }
         }

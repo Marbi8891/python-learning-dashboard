@@ -33,7 +33,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
@@ -62,7 +61,13 @@ private val ZIGZAG = listOf(0, 44, 64, 44, 0, -44, -64, -44)
 
 /** Pestaña principal: el camino de unidades y lecciones cortas, con la racha, la meta y las vidas arriba. */
 @Composable
-fun PathScreen(model: AppModel, onStart: (PathNode) -> Unit, onPractice: (String) -> Unit, modifier: Modifier = Modifier) {
+fun PathScreen(
+    model: AppModel,
+    onStart: (PathNode) -> Unit,
+    onPractice: (String) -> Unit,
+    onTheory: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
     val app = model.pcap.app
     val revision = model.revision
     val current = remember(revision) { app.currentNode(model.units) }
@@ -74,7 +79,6 @@ fun PathScreen(model: AppModel, onStart: (PathNode) -> Unit, onPractice: (String
     }
     val listState = rememberLazyListState()
     var noHeartsFor by remember { mutableStateOf<PathNode?>(null) }
-    val uri = LocalUriHandler.current
 
     // Al abrir, el camino se coloca en la lección que toca
     LaunchedEffect(Unit) {
@@ -94,7 +98,7 @@ fun PathScreen(model: AppModel, onStart: (PathNode) -> Unit, onPractice: (String
                 when (row) {
                     is PathRow.UnitHeader -> {
                         val summary = remember(revision) { model.pcap.unitSummary(row.unit, current) }
-                        UnitCard(row.unit, row.number, summary, model) { uri.openUri(model.lessonUrl(row.unit.slug)) }
+                        UnitCard(row.unit, row.number, summary, model) { onTheory(row.unit.slug) }
                     }
                     is PathRow.Node -> {
                         val state = when {
