@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Solo para el instante antes de que Compose pinte: mismo fondo que la app -->
+    <style name="Theme.Pld" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@color/background</item>
+    </style>
+
+    <color name="background">#FFF7F4EC</color>
+</resources>

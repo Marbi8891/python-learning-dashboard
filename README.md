@@ -112,8 +112,31 @@ JWT_SECRET=<valor> docker compose up --build
 | Backend | `cd backend && python -m pytest --cov=app` | API, seguridad, RGPD, migraciones, contenido y banco del PCAP (cada respuesta se comprueba ejecutando Python; 100 % de cobertura) |
 | End-to-end | `npm ci && npx playwright install chromium && npm run test:e2e` | La app completa con el backend real, la consola Python y la auditoría WCAG |
 | Calidad | `cd backend && ruff check . ../e2e && ruff format --check . ../e2e` | Estilo PEP 8 y formato |
+| App Android | `cd android && ./gradlew testDebugUnitTest lintDebug` | Dominio del PCAP en Kotlin (banco, repaso espaciado, preparación, fusión con la cuenta) y lint de Android |
 
 La CI ejecuta todo en cada push, incluidas las migraciones contra PostgreSQL 16.
+
+## App Android nativa
+
+En `android/` hay una app en **Kotlin + Jetpack Compose** con experiencia tipo Duolingo (ADR-0011 y ADR-0012):
+
+- una **ruta** de 12 unidades y 25 lecciones cortas generada a partir del banco del PCAP;
+- **XP, racha y meta diaria**;
+- **vidas**, que solo se gastan en la ruta y se recuperan con el tiempo o practicando;
+- práctica libre por bloque y la preparación estimada.
+
+Usa los mismos datos que la web (`frontend/data/*.json`) y guarda el progreso en el mismo formato, para poder sincronizarlo con la cuenta.
+
+| Entrega | Contenido | Estado |
+|---|---|---|
+| 1 | Proyecto, CI con APK, panel y práctica por bloque | ✔ |
+| 2 | Ruta, lecciones cortas, XP, racha, meta diaria, vidas, celebración y perfil | ✔ |
+| 3 | Ordenar código y completar el hueco | Pendiente |
+| 4 | Simulacro cronometrado, fichas y repaso de hoy | Pendiente |
+| 5 | Python real en el móvil (Chaquopy) | Pendiente |
+| 6 | Cuenta y sincronización | Pendiente |
+
+**Instalarla:** en GitHub → *Actions* → *Android* → la última ejecución → *Artifacts* → `python-pcap-apk`. Descomprime el zip, pasa `app-debug.apk` al móvil e instálalo. Android pedirá permiso para instalar apps de origen desconocido.
 
 ## API
 

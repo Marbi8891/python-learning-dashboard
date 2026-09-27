@@ -4,6 +4,16 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
 
 ## [Unreleased]
 
+### Añadido
+- **App Android nativa** en Kotlin + Jetpack Compose (`android/`, ADR-0011), entrega 1: panel de preparación del PCAP, práctica por bloque con corrección, explicación y enlace a la teoría, preguntas en español o inglés y funcionamiento sin conexión. Usa el mismo banco de preguntas que la web y guarda el progreso en el mismo formato.
+- **App Android como curso tipo Duolingo** (entrega 2, ADR-0012):
+  - ruta de unidades con lecciones cortas que se desbloquean en orden;
+  - la pregunta fallada vuelve al final de la lección;
+  - XP, racha derivada de la XP diaria, meta diaria elegible (10/20/30/50);
+  - 5 vidas que se recuperan cada 4 h o terminando una tanda de práctica libre;
+  - pantalla de celebración y perfil con los últimos 7 días.
+- Workflow `android.yml`: tests del dominio en Kotlin, lint de Android y APK de depuración descargable.
+
 ## [1.0.0] - 2026-09-27
 
 ### Añadido

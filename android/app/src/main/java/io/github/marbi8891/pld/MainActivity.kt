@@ -1,0 +1,108 @@
+package io.github.marbi8891.pld
+
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import io.github.marbi8891.pld.ui.CelebrationScreen
+import io.github.marbi8891.pld.ui.LessonScreen
+import io.github.marbi8891.pld.ui.PathScreen
+import io.github.marbi8891.pld.ui.PcapHomeScreen
+import io.github.marbi8891.pld.ui.PldTheme
+import io.github.marbi8891.pld.ui.PracticeScreen
+import io.github.marbi8891.pld.ui.ProfileScreen
+
+/** Pantallas a pantalla completa por encima de las pestañas. Una pila propia basta (ADR-0011). */
+sealed interface Screen {
+    data class Practice(val block: String) : Screen
+
+    data class Lesson(val nodeId: String) : Screen
+
+    data class Done(val xp: Int, val perfect: Boolean) : Screen
+}
+
+enum class Tab(val label: String, val symbol: String) {
+    PATH("Ruta", "◆"),
+    EXAM("Examen", "✎"),
+    PROFILE("Perfil", "●"),
+}
+
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        val model = (application as PldApplication).model
+        setContent {
+            PldTheme { App(model) }
+        }
+    }
+}
+
+@Composable
+fun App(model: AppModel) {
+    var tab by remember { mutableStateOf(Tab.PATH) }
+    var stack by remember { mutableStateOf(listOf<Screen>()) }
+    val open: (Screen) -> Unit = { stack = stack + it }
+    val back: () -> Unit = { stack = stack.dropLast(1) }
+    // Al terminar una lección, la celebración sustituye a la lección en la pila
+    val replaceTop: (Screen) -> Unit = { stack = stack.dropLast(1) + it }
+
+    BackHandler(enabled = stack.isNotEmpty(), onBack = back)
+
+    when (val screen = stack.lastOrNull()) {
+        null -> Tabs(model, tab, onTab = { tab = it }, open = open)
+        is Screen.Practice -> PracticeScreen(model, screen.block, onBack = back)
+        is Screen.Lesson -> LessonScreen(
+            model,
+            model.node(screen.nodeId),
+            onExit = back,
+            onFinished = { xp, perfect -> replaceTop(Screen.Done(xp, perfect)) },
+            onPractice = { block -> replaceTop(Screen.Practice(block)) },
+        )
+        is Screen.Done -> CelebrationScreen(model, screen.xp, screen.perfect, onContinue = back)
+    }
+}
+
+@Composable
+private fun Tabs(model: AppModel, tab: Tab, onTab: (Tab) -> Unit, open: (Screen) -> Unit) {
+    Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
+        bottomBar = {
+            NavigationBar {
+                Tab.entries.forEach { item ->
+                    NavigationBarItem(
+                        selected = tab == item,
+                        onClick = { onTab(item) },
+                        icon = { Text(item.symbol) },
+                        label = { Text(item.label) },
+                    )
+                }
+            }
+        },
+    ) { padding ->
+        val modifier = Modifier.padding(padding)
+        when (tab) {
+            Tab.PATH -> PathScreen(
+                model,
+                onStart = { open(Screen.Lesson(it.id)) },
+                onPractice = { open(Screen.Practice(it)) },
+                modifier = modifier,
+            )
+            Tab.EXAM -> PcapHomeScreen(model, onPractice = { open(Screen.Practice(it)) }, modifier = modifier)
+            Tab.PROFILE -> ProfileScreen(model, modifier = modifier)
+        }
+    }
+}
