@@ -166,7 +166,7 @@ private fun QuestionStep(
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
         Text("Pregunta $number de $total", color = LocalPalette.current.muted)
-        QuestionView(question, lang, chosen, checked, onSelect)
+        QuestionView(question, lang, chosen, checked, onSelect = onSelect)
         if (checked) {
             Feedback(question, lang, question.isCorrect(chosen), model, onTheory)
             Button(onClick = onNext, modifier = Modifier.fillMaxWidth()) {
@@ -183,7 +183,14 @@ private fun QuestionStep(
 
 /** Enunciado, código y opciones. Tras corregir, marca la correcta en verde y la elegida mal en rojo. */
 @Composable
-fun QuestionView(question: Question, lang: String, chosen: Set<Int>, reveal: Boolean, onSelect: (Int) -> Unit) {
+fun QuestionView(
+    question: Question,
+    lang: String,
+    chosen: Set<Int>,
+    reveal: Boolean,
+    hidden: Set<Int> = emptySet(),
+    onSelect: (Int) -> Unit,
+) {
     val palette = LocalPalette.current
     val text = question.q.get(lang)
     // Las de «elige dos» ya lo dicen en el enunciado, como en el examen real
@@ -197,6 +204,8 @@ fun QuestionView(question: Question, lang: String, chosen: Set<Int>, reveal: Boo
         question.code?.let { CodeBlock(it) }
         Column(Modifier.selectableGroup(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             question.options.forEachIndexed { i, option ->
+                // Opciones descartadas por el comodín 50/50 del modo «Jugar»
+                if (i in hidden) return@forEachIndexed
                 val selected = i in chosen
                 val border = when {
                     reveal && i in question.answer -> palette.accent

@@ -68,7 +68,7 @@ fun TheoryScreen(model: AppModel, slug: String, onBack: () -> Unit) {
 
             SectionTitle("Ejemplo")
             CodeBlock(lesson.exampleCode)
-            Note("Para ejecutarlo, cópialo en tu editor. Ejecutar Python dentro de la app llegará en la entrega 5.")
+            Note("Para ejecutarlo, cópialo en tu editor. Ejecutar Python dentro de la app llegará en la entrega 6.")
 
             SectionTitle("Ejercicio")
             Markdown(lesson.exercise)

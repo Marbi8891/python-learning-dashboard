@@ -26,6 +26,6 @@ Desde la versión 0.2.2 la app ya tiene dentro el banco de preguntas y la ruta, 
 
 ## Consecuencias
 
-- **Ejecutar Python todavía no es posible dentro de la app.** Los ejemplos y ejercicios se muestran como código. Esto llegará sin conexión en la entrega 5 (Chaquopy, ADR-0011).
+- **Ejecutar Python todavía no es posible dentro de la app.** Los ejemplos y ejercicios se muestran como código. Esto llegará sin conexión con Chaquopy (ADR-0011), que ADR-0015 pasa a la entrega 6.
 - **La entrega 6 (cuenta y sincronización)** será la única función con red y será opcional: la app tiene que seguir funcionando entera sin ella. Añadirá el permiso `INTERNET` con su propio ADR.
 - VERIFY: la interfaz solo se compila en la CI; la lectura de las 27 lecciones y la regla de párrafos y listas tienen tests.

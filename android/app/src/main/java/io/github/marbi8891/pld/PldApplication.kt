@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.setValue
 import io.github.marbi8891.pld.pcap.Bank
 import io.github.marbi8891.pld.pcap.Course
+import io.github.marbi8891.pld.pcap.DungeonRun
 import io.github.marbi8891.pld.pcap.LessonContent
 import io.github.marbi8891.pld.pcap.LessonIndex
 import io.github.marbi8891.pld.pcap.LessonLibrary
@@ -49,6 +50,23 @@ class AppModel(context: Context) {
         prefs.edit().putString(KEY, pcap.toJson().toString()).apply()
         revision++
         return result
+    }
+
+    /**
+     * Partida de la mazmorra en curso (ADR-0015). Vive en memoria: sobrevive a abrir la teoría o cambiar
+     * de pestaña, pero no a que Android cierre la app. Los récords sí se guardan.
+     */
+    var dungeon: DungeonRun? = null
+
+    fun startDungeon() {
+        dungeon = DungeonRun.start(bank, pcap)
+    }
+
+    /** Abandonar cuenta como partida terminada en la planta actual. */
+    fun abandonDungeon() {
+        val run = dungeon ?: return
+        dungeon = null
+        if (!run.finished) update { app.game.recordRun(run) }
     }
 
     fun node(id: String): PathNode = nodesById.getValue(id)

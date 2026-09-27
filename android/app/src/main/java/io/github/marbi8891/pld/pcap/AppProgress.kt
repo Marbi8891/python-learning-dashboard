@@ -9,13 +9,17 @@ import java.time.LocalDate
 data class NodeResult(val perfect: Boolean, val date: String)
 
 /**
- * Progreso de la app (ADR-0012): ruta, XP por día, meta diaria y vidas.
+ * Progreso de la app (ADR-0012): ruta, XP por día, meta diaria, vidas y récords del modo «Jugar».
  * La racha no se guarda: se deriva de la XP de cada día.
  */
 class AppProgress {
     val done: MutableMap<String, NodeResult> = linkedMapOf()
     val daily: MutableMap<String, Int> = sortedMapOf()
     var goal: Int = 20
+
+    /** Récords del modo «Jugar» (ADR-0015). */
+    var game = GameRecords()
+        private set
     private var hearts: Int = MAX_HEARTS
     private var heartsAt: Instant = Instant.EPOCH
 
@@ -101,6 +105,7 @@ class AppProgress {
             done[id] = if (local == null) result else NodeResult(local.perfect || result.perfect, maxOf(local.date, result.date))
         }
         for ((day, xp) in other.daily) daily[day] = maxOf(daily[day] ?: 0, xp)
+        game.merge(other.game)
     }
 
     fun toJson(): JSONObject = JSONObject().apply {
@@ -109,6 +114,7 @@ class AppProgress {
         put("goal", goal)
         put("hearts", hearts)
         put("heartsAt", PcapState.iso(heartsAt))
+        put("game", game.toJson())
     }
 
     companion object {
@@ -134,6 +140,7 @@ class AppProgress {
             }
             progress.goal = json.optInt("goal", 20).takeIf { it in GOALS } ?: 20
             progress.hearts = json.optInt("hearts", MAX_HEARTS).coerceIn(0, MAX_HEARTS)
+            progress.game = GameRecords.fromJson(json.optJSONObject("game"))
             progress.heartsAt = runCatching { Instant.parse(json.optString("heartsAt")) }.getOrDefault(Instant.EPOCH)
             return progress
         }

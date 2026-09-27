@@ -18,12 +18,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import io.github.marbi8891.pld.ui.CelebrationScreen
+import io.github.marbi8891.pld.ui.DungeonScreen
+import io.github.marbi8891.pld.ui.GameHomeScreen
 import io.github.marbi8891.pld.ui.LessonScreen
 import io.github.marbi8891.pld.ui.PathScreen
 import io.github.marbi8891.pld.ui.PcapHomeScreen
 import io.github.marbi8891.pld.ui.PldTheme
 import io.github.marbi8891.pld.ui.PracticeScreen
 import io.github.marbi8891.pld.ui.ProfileScreen
+import io.github.marbi8891.pld.ui.RushScreen
 import io.github.marbi8891.pld.ui.TheoryScreen
 
 /** Pantallas a pantalla completa por encima de las pestañas. Una pila propia basta (ADR-0011). */
@@ -35,10 +38,15 @@ sealed interface Screen {
     data class Done(val xp: Int, val perfect: Boolean) : Screen
 
     data class Theory(val slug: String) : Screen
+
+    data object Dungeon : Screen
+
+    data object Rush : Screen
 }
 
 enum class Tab(val label: String, val symbol: String) {
     PATH("Ruta", "◆"),
+    PLAY("Jugar", "⚔"),
     EXAM("Examen", "✎"),
     PROFILE("Perfil", "●"),
 }
@@ -77,6 +85,8 @@ fun App(model: AppModel) {
         )
         is Screen.Done -> CelebrationScreen(model, screen.xp, screen.perfect, onContinue = back)
         is Screen.Theory -> TheoryScreen(model, screen.slug, onBack = back)
+        Screen.Dungeon -> DungeonScreen(model, onExit = back, onTheory = { open(Screen.Theory(it)) })
+        Screen.Rush -> RushScreen(model, onExit = back)
     }
 }
 
@@ -104,6 +114,12 @@ private fun Tabs(model: AppModel, tab: Tab, onTab: (Tab) -> Unit, open: (Screen)
                 onStart = { open(Screen.Lesson(it.id)) },
                 onPractice = { open(Screen.Practice(it)) },
                 onTheory = { open(Screen.Theory(it)) },
+                modifier = modifier,
+            )
+            Tab.PLAY -> GameHomeScreen(
+                model,
+                onDungeon = { open(Screen.Dungeon) },
+                onRush = { open(Screen.Rush) },
                 modifier = modifier,
             )
             Tab.EXAM -> PcapHomeScreen(

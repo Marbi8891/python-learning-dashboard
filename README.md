@@ -124,6 +124,7 @@ En `android/` hay una app en **Kotlin + Jetpack Compose** con experiencia tipo D
 - **XP, racha y meta diaria**;
 - **vidas**, que solo se gastan en la ruta y se recuperan con el tiempo o practicando;
 - práctica libre por bloque y la preparación estimada.
+- pestaña **Jugar** (ADR-0015): la **Mazmorra del Intérprete**, un roguelite de 5 plantas con jefes, monedas y comodines, y el minijuego **Bug Rush** de 90 segundos;
 - **teoría completa de las 27 lecciones dentro de la app** (explicación, ejemplo, ejercicio, mini-quiz, reto y dudas frecuentes).
 
 **Funciona entera sin conexión:** la app no pide permiso de internet (ADR-0014).
@@ -134,10 +135,11 @@ Usa los mismos datos que la web (`frontend/data/*.json`) y guarda el progreso en
 |---|---|---|
 | 1 | Proyecto, CI con APK, panel y práctica por bloque | ✔ |
 | 2 | Ruta, lecciones cortas, XP, racha, meta diaria, vidas, celebración y perfil | ✔ |
-| 3 | Ordenar código y completar el hueco | Pendiente |
-| 4 | Simulacro cronometrado, fichas y repaso de hoy | Pendiente |
-| 5 | Python real en el móvil (Chaquopy) | Pendiente |
-| 6 | Cuenta y sincronización | Pendiente |
+| 3 | Modo «Jugar»: Mazmorra del Intérprete y Bug Rush | Por probar en el móvil |
+| 4 | Ordenar código y completar el hueco (salas nuevas de la mazmorra) | Pendiente |
+| 5 | Simulacro cronometrado, fichas y repaso de hoy | Pendiente |
+| 6 | Python real en el móvil (Chaquopy) | Pendiente |
+| 7 | Cuenta y sincronización | Pendiente |
 
 **Instalarla:** en GitHub → *Actions* → *Android* → la última ejecución → *Artifacts*:
 

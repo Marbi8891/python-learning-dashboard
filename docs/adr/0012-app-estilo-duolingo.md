@@ -1,6 +1,6 @@
 # ADR-0012: La app Android como curso tipo Duolingo
 
-- **Estado:** Aceptada (revisa el plan de entregas de ADR-0011)
+- **Estado:** Aceptada (revisa el plan de entregas de ADR-0011). ADR-0015 vuelve a revisar el plan de entregas.
 - **Fecha:** 2026-09-27
 
 ## Contexto
