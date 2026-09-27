@@ -65,6 +65,11 @@ private val BOSSES = mapOf(
     "joins" to "El Tejedor de Tablas",
     "ddl-dml" to "El Arquitecto de Esquemas",
     "diseno" to "El Guardián de la Transacción",
+    "java-basico" to "El Compilador Implacable",
+    "java-control" to "El Laberinto de los Bucles",
+    "java-poo" to "El Forjador de Objetos",
+    "java-herencia" to "El Patriarca Polimórfico",
+    "java-colecciones" to "El Coleccionista de Excepciones",
 )
 
 /* ---------------------------------------------------------------- Pestaña «Jugar» */

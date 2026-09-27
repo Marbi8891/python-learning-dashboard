@@ -32,7 +32,9 @@ jobs:
       # Cursos de DAW (ADR-0016): cada respuesta se comprueba ejecutando el código de verdad
       - name: Cursos al día y respuestas comprobadas
         working-directory: .
-        run: python3 scripts/courses/sql_course.py --check
+        run: |
+          python3 scripts/courses/sql_course.py --check
+          python3 scripts/courses/java_course.py --check
       - name: Tests del dominio (banco, repaso espaciado, preparación, fusión)
         run: ./gradlew --no-daemon testDebugUnitTest
       - name: Lint de Android

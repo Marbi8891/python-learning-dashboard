@@ -37,12 +37,16 @@ El autor quiere estudiar con la app otros lenguajes de DAW además de Python: SQ
 - Las preguntas de código se ejecutan en **SQLite**, con las claves ajenas activadas. El SQL es estándar y funciona igual en MySQL; donde hay diferencias, la teoría lo avisa (tipado flexible, `AUTO_INCREMENT`, formato de los decimales).
 - Cada pregunta muestra las tablas de ejemplo como comentarios SQL, para verlas en el móvil sin conexión.
 
+## Segundo curso: Java (módulo Programación)
+
+- Se adelanta a JavaScript porque el autor lo echó en falta al probar la 0.5.0.
+- 5 bloques: fundamentos, control de flujo, clases y objetos, herencia e interfaces, y colecciones y excepciones. 10 lecciones, 50 preguntas y 20 del mini-quiz.
+- Cada pregunta de código se **compila y ejecuta con `java`** (Java 17 en la CI, en modo «archivo fuente»). La salida esperada distingue tres casos: lo que imprime, «Error de compilación» y «Excepción: Nombre». Así las preguntas sobre errores también quedan comprobadas.
+- Los textos que imprimen los programas no llevan tildes, para que la salida sea idéntica con cualquier configuración regional.
+
 ## Consecuencias
 
-- **Orden de los cursos siguientes:** JavaScript, Java y HTML/CSS.
-  - JavaScript se comprobará con Node en la CI.
-  - Java, con `javac`/`java` en la CI (en el móvil, solo leer y predecir).
-  - HTML/CSS tendrá sobre todo preguntas teóricas y de lectura de código.
+- **Cursos siguientes:** JavaScript, que se comprobará con Node en la CI, y HTML/CSS, con sobre todo preguntas teóricas y de lectura de código.
 - **Pendiente:** ejecutar SQL dentro de la app (Android trae SQLite, así que es viable sin conexión). Irá en una entrega propia.
 - **ASSUMPTION:** la sincronización con la cuenta (entrega 7) necesitará guardar en el backend el estado de cada curso, no solo `pcap-state`.
 - **VERIFY:** la interfaz del selector solo se compila en la CI.

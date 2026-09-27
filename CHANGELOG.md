@@ -13,6 +13,7 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
   - 5 vidas que se recuperan cada 4 h o terminando una tanda de práctica libre;
   - pantalla de celebración y perfil con los últimos 7 días.
 - Workflow `android.yml`: tests del dominio en Kotlin, lint de Android y APK de depuración descargable.
+- **Curso de Java** en la app (ADR-0016). Tiene 10 lecciones, de los tipos a las excepciones, con 50 preguntas y 20 del mini-quiz. Cada respuesta se comprueba compilando y ejecutando el código con Java 17 en la CI, incluidos los errores de compilación y las excepciones.
 - **Curso de SQL** en la app (ADR-0016), junto al del PCAP, que no cambia. Tiene 10 lecciones de teoría, 50 preguntas para la ruta, la práctica y el juego, y 20 del mini-quiz. Cada respuesta se comprueba ejecutando el SQL en la CI. La app estrena selector de curso; la XP, la racha, las vidas y los récords son comunes a todos los cursos.
 - **Modo «Jugar»** en la app (ADR-0015): la **Mazmorra del Intérprete** (5 plantas, una por bloque del PCAP; salas con bugs, jefes con cronómetro, monedas, comodines 50/50 y Curar; las respuestas cuentan para la preparación) y el minijuego **Bug Rush** (90 s, deslizar sí/no, multiplicador por combo). Récords guardados con el progreso.
 - **App Android sin conexión** (ADR-0014): la teoría de las 27 lecciones se lee dentro de la app (explicación, ejemplo, ejercicio, mini-quiz corregido, reto, dudas frecuentes y fuentes). "Teoría" ya no abre la web y la app no pide permiso de internet.

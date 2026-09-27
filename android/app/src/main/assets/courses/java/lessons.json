@@ -1,0 +1,670 @@
+{
+ "modules": [
+  {
+   "slug": "java-basico",
+   "title": "Fundamentos",
+   "summary": "Tipos, operadores y String.",
+   "lessons": [
+    {
+     "slug": "java-tipos",
+     "title": "Tipos, variables y operadores",
+     "theory": "Java es de **tipado estático**: cada variable tiene un tipo que el compilador comprueba antes de ejecutar. Muchos errores se detectan al **compilar**, no al ejecutar.\n\n**Tipos primitivos:** `int` (entero), `long` (entero grande), `double` (decimal), `boolean` (`true`/`false`) y `char` (un carácter entre comillas simples: `'a'`). Existen también `byte`, `short` y `float`. `String` no es primitivo: es una **clase** (siguiente lección).\n\nCon `var` el compilador deduce el tipo (`var n = 5;` es un `int`), pero el tipo sigue siendo fijo.\n\n**Operadores que caen en los exámenes:**\n- `/` entre enteros es **división entera**: `7 / 2` da `3`. Si un operando es `double`, da `3.5`.\n- `%` es el resto: `7 % 2` da `1`.\n- `x++` devuelve el valor **y después** incrementa; `++x` incrementa **y después** devuelve.\n- `+` con un `String` **concatena**, y se evalúa de izquierda a derecha: `1 + 2 + \"3\"` es `\"33\"`, pero `\"1\" + 2 + 3` es `\"123\"`.\n\n**Conversiones (casting):**\n- De un tipo pequeño a uno grande es automática: `double d = 5;`.\n- Al revés hay que pedirla y se **trunca**: `(int) 9.99` da `9`. Sin el casting, `int n = 3.5;` **no compila**.\n- Un `char` es un número: `'a' + 1` da `98`.\n\n`final` declara una constante: `final int MAX = 10;` no se puede reasignar.",
+     "example_code": "class Main {\n    public static void main(String[] args) {\n        int a = 7, b = 2;\n        double media = (a + b) / 2.0;\n        System.out.println(a / b + \" \" + a % b + \" \" + media);\n        final int MAX = 10;\n        System.out.println(\"Máximo: \" + MAX);\n    }\n}",
+     "exercise": "Escribe un programa que, dado un número de segundos (por ejemplo `3725`), muestre las horas, minutos y segundos que representa: `1 h 2 min 5 s`.\n\nUsa solo división entera `/` y resto `%`.",
+     "starter": "class Main {\n    public static void main(String[] args) {\n        int total = 3725;\n        int horas = total / 3600;\n        // ...\n        System.out.println(horas + \" h ...\");\n    }\n}\n",
+     "quiz": [
+      {
+       "q": "¿Qué muestra este código?",
+       "options": [
+        "Error de compilación",
+        "a1",
+        "b",
+        "98"
+       ],
+       "answer": 3,
+       "explain": "Un `char` es un número (el código de 'a' es 97). Sumarle 1 da un `int`: 98. Para obtener 'b' habría que hacer `(char) (c + 1)`.",
+       "code": "char c = 'a';\nSystem.out.println(c + 1);"
+      },
+      {
+       "q": "¿Qué tipo usarías para guardar un número de teléfono como 600111222?",
+       "options": [
+        "String, porque no se opera con él y puede llevar prefijo o ceros delante",
+        "int",
+        "double",
+        "long, siempre"
+       ],
+       "answer": 0,
+       "explain": "Solo se usan tipos numéricos para lo que se calcula. Un teléfono o un código postal son texto."
+      }
+     ],
+     "challenge": {
+      "title": "Conversor de temperatura",
+      "stars": 1,
+      "exercise": "Convierte `double celsius = 36.6;` a Fahrenheit (`celsius * 9 / 5 + 32`) y muestra el resultado redondeado a entero con un casting.",
+      "starter": "class Main {\n    public static void main(String[] args) {\n        double celsius = 36.6;\n        // ...\n    }\n}\n",
+      "hint": "Calcula en `double` y convierte al final: `(int) Math.round(f)` redondea; `(int) f` trunca."
+     },
+     "assistant": {
+      "hint": "Primero las horas (`total / 3600`), luego lo que sobra (`total % 3600`) repartido en minutos y segundos.",
+      "faq": [
+       {
+        "q": "¿`int` o `Integer`?",
+        "a": "`int` es el primitivo. `Integer` es su clase envoltorio, necesaria en las colecciones (`ArrayList<Integer>`). Java convierte entre ambos solo (*autoboxing*)."
+       },
+       {
+        "q": "¿Por qué `0.1 + 0.2` no da exactamente `0.3`?",
+        "a": "Porque `double` guarda los decimales en binario y algunos no son exactos. Para dinero se usa `BigDecimal`."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "The Java Tutorials (Oracle)",
+       "url": "https://docs.oracle.com/javase/tutorial/java/"
+      },
+      {
+       "title": "Java Language Specification (SE 17)",
+       "url": "https://docs.oracle.com/javase/specs/jls/se17/html/"
+      }
+     ]
+    },
+    {
+     "slug": "java-strings",
+     "title": "String y sus métodos",
+     "theory": "`String` es una **clase**: sus valores son objetos con métodos.\n\n- `length()` da el número de caracteres.\n- `charAt(i)` devuelve el carácter de la posición i, que empieza en 0.\n- `substring(inicio, fin)` devuelve desde `inicio` hasta `fin` **sin incluirlo**.\n- `indexOf(\"x\")` da la posición de la primera aparición, o `-1` si no está.\n- `toUpperCase()`, `toLowerCase()`, `trim()` y `replace(a, b)`.\n\n**Inmutables:** ningún método cambia el String original; devuelven uno **nuevo**. `s.toUpperCase();` sin guardar el resultado no hace nada.\n\n**Comparar:**\n- `==` compara si dos variables apuntan al **mismo objeto**.\n- `equals` compara el **contenido**. Usa siempre `equals` (o `equalsIgnoreCase`).\n- Dos literales iguales suelen ser el mismo objeto, pero un `new String(\"hola\")` no lo es.\n\n**Convertir:** `Integer.parseInt(\"12\")` da el `int` 12. Si el texto no es un número, lanza `NumberFormatException`. Al revés, `String.valueOf(12)` o `\"\" + 12`.\n\nPara construir textos en un bucle, `StringBuilder` evita crear un String nuevo en cada vuelta.",
+     "example_code": "class Main {\n    public static void main(String[] args) {\n        String ciclo = \"Desarrollo de Aplicaciones Web\";\n        System.out.println(ciclo.length());\n        System.out.println(ciclo.substring(0, 10).toUpperCase());\n        System.out.println(ciclo.indexOf(\"Web\"));\n        System.out.println(\"daw\".equals(\"DAW\") + \" \" + \"daw\".equalsIgnoreCase(\"DAW\"));\n    }\n}",
+     "exercise": "Dado `String email = \"ana.garcia@fp.es\";`:\n\n1. Muestra el **usuario** (lo que va antes de la `@`).\n2. Muestra el **dominio** (lo que va después).\n3. Comprueba si termina en `.es`.",
+     "starter": "class Main {\n    public static void main(String[] args) {\n        String email = \"ana.garcia@fp.es\";\n        int arroba = email.indexOf(\"@\");\n        // ...\n    }\n}\n",
+     "quiz": [
+      {
+       "q": "¿Qué muestra este código?",
+       "options": [
+        "2 -1",
+        "3 0",
+        "2 0",
+        "3 -1"
+       ],
+       "answer": 0,
+       "explain": "Las posiciones empiezan en 0: la W está en la 2. Si no aparece, `indexOf` devuelve -1.",
+       "code": "System.out.println(\"DAW\".indexOf('W') + \" \" + \"DAW\".indexOf('x'));"
+      },
+      {
+       "q": "¿Por qué hay que comparar Strings con `equals` y no con `==`?",
+       "options": [
+        "`==` compara si son el mismo objeto; `equals` compara el contenido",
+        "`==` no compila con Strings",
+        "`equals` es más rápido",
+        "Son equivalentes"
+       ],
+       "answer": 0,
+       "explain": "Dos textos iguales pueden ser objetos distintos en memoria."
+      }
+     ],
+     "challenge": {
+      "title": "Palíndromo",
+      "stars": 2,
+      "exercise": "Comprueba si una palabra se lee igual al revés (`\"reconocer\"`), sin distinguir mayúsculas.",
+      "starter": "class Main {\n    public static void main(String[] args) {\n        String p = \"Reconocer\";\n        // ...\n    }\n}\n",
+      "hint": "`new StringBuilder(p).reverse().toString()` da la palabra invertida; compárala con `equalsIgnoreCase`."
+     },
+     "assistant": {
+      "hint": "Con la posición de la arroba: `substring(0, arroba)` y `substring(arroba + 1)`. Para el final, `endsWith(\".es\")`.",
+      "faq": [
+       {
+        "q": "¿Por qué a veces `==` funciona con Strings?",
+        "a": "Porque Java reutiliza los literales iguales (*string pool*) y apuntan al mismo objeto. Con textos leídos del usuario o creados con `new`, no. No te fíes: usa `equals`."
+       },
+       {
+        "q": "¿`s.equals(\"x\")` o `\"x\".equals(s)`?",
+        "a": "La segunda no falla si `s` es null: evita el `NullPointerException`."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "The Java Tutorials (Oracle)",
+       "url": "https://docs.oracle.com/javase/tutorial/java/"
+      },
+      {
+       "title": "Java SE 17 — API",
+       "url": "https://docs.oracle.com/en/java/javase/17/docs/api/"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "java-control",
+   "title": "Control de flujo",
+   "summary": "Condicionales, switch, bucles y arrays.",
+   "lessons": [
+    {
+     "slug": "java-condicionales",
+     "title": "Condicionales y switch",
+     "theory": "**if / else if / else** ejecuta un bloque u otro según una condición `boolean`. En Java la condición tiene que ser **booleana**: `if (x = 5)` no compila, porque es una asignación (`int`), no una comparación (`==`).\n\n**Operadores lógicos:** `&&` (y), `||` (o) y `!` (no). Son de **cortocircuito**: en `a && b`, si `a` es falso, `b` ni se evalúa. Por eso `v != null && v.length > 0` es seguro.\n\n**Operador ternario:** `condición ? valorSiCierto : valorSiFalso`, por ejemplo `int mayor = a > b ? a : b;`.\n\n**switch clásico:** compara un valor con varios `case`. Si olvidas el `break`, la ejecución **sigue** por los case siguientes (*fall-through*). `default` recoge el resto.\n\n**switch con flechas (Java 14+):** sin fall-through y puede devolver un valor:\n\n`String tipo = switch (dia) { case \"SAB\", \"DOM\" -> \"finde\"; default -> \"laborable\"; };`\n\n`switch` admite `int`, `char`, `String` y `enum`, pero no `double` ni `boolean`.",
+     "example_code": "class Main {\n    public static void main(String[] args) {\n        int nota = 7;\n        String texto;\n        if (nota >= 9) texto = \"Sobresaliente\";\n        else if (nota >= 7) texto = \"Notable\";\n        else if (nota >= 5) texto = \"Aprobado\";\n        else texto = \"Suspenso\";\n        System.out.println(texto);\n\n        String dia = \"DOM\";\n        String tipo = switch (dia) {\n            case \"SAB\", \"DOM\" -> \"fin de semana\";\n            default -> \"laborable\";\n        };\n        System.out.println(tipo);\n    }\n}",
+     "exercise": "Escribe el clásico **FizzBuzz** para un número `n`:\n\n- si es múltiplo de 3 y de 5, muestra `FizzBuzz`;\n- si solo de 3, `Fizz`;\n- si solo de 5, `Buzz`;\n- si no, el número.\n\nPruébalo con 9, 10, 15 y 7.",
+     "starter": "class Main {\n    public static void main(String[] args) {\n        int n = 15;\n        // ...\n    }\n}\n",
+     "quiz": [
+      {
+       "q": "¿Qué muestra este código?",
+       "options": [
+        "lleno",
+        "Excepción: NullPointerException",
+        "nada",
+        "Error de compilación"
+       ],
+       "answer": 2,
+       "explain": "`&&` es de cortocircuito: como `v != null` es falso, `v.length` no llega a evaluarse y no hay NullPointerException.",
+       "code": "int[] v = null;\nif (v != null && v.length > 0) System.out.println(\"lleno\");\nelse System.out.println(\"nada\");"
+      },
+      {
+       "q": "En un switch clásico, ¿qué pasa si olvidas un `break`?",
+       "options": [
+        "Se siguen ejecutando los case siguientes",
+        "No compila",
+        "Se ejecuta el default",
+        "Se sale del switch igualmente"
+       ],
+       "answer": 0,
+       "explain": "Es el *fall-through*: sigue hasta el siguiente `break` o el final del switch."
+      }
+     ],
+     "challenge": {
+      "title": "Días del mes",
+      "stars": 2,
+      "exercise": "Con un `switch` de flechas, devuelve los días de un mes (1-12) de un año no bisiesto.",
+      "starter": "class Main {\n    public static void main(String[] args) {\n        int mes = 2;\n        int dias = switch (mes) {\n            // ...\n            default -> 0;\n        };\n        System.out.println(dias);\n    }\n}\n",
+      "hint": "Agrupa los meses en un solo case: `case 4, 6, 9, 11 -> 30;`."
+     },
+     "assistant": {
+      "hint": "Comprueba primero el caso más restrictivo (múltiplo de 3 **y** de 5); si no, nunca llegarías a él.",
+      "faq": [
+       {
+        "q": "¿switch o if?",
+        "a": "`switch` va bien para comparar **un** valor con muchas constantes. Para rangos (`nota >= 5`) o condiciones distintas, usa if."
+       },
+       {
+        "q": "¿Qué es el fall-through?",
+        "a": "En el switch clásico, sin `break` se ejecutan también los case siguientes. A veces se usa a propósito para agrupar casos; el switch con flechas lo evita."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "The Java Tutorials (Oracle)",
+       "url": "https://docs.oracle.com/javase/tutorial/java/"
+      },
+      {
+       "title": "Java Language Specification (SE 17)",
+       "url": "https://docs.oracle.com/javase/specs/jls/se17/html/"
+      }
+     ]
+    },
+    {
+     "slug": "java-bucles-arrays",
+     "title": "Bucles y arrays",
+     "theory": "**Bucles:**\n- `for (int i = 0; i < n; i++)`: cuando sabes cuántas vueltas das.\n- `while (condición)`: mientras se cumpla; puede no ejecutarse **ninguna** vez.\n- `do { … } while (condición);`: se ejecuta **al menos una** vez, porque comprueba al final.\n- `for (int x : array)`: el *for-each*, que recorre todos los elementos sin índice.\n- `break` sale del bucle y `continue` salta a la siguiente vuelta.\n\n**Arrays:** tamaño **fijo**, índices de `0` a `length - 1`.\n- `int[] v = new int[3];` se llena con valores por defecto: `0` en números, `false` en boolean y `null` en objetos.\n- `int[] v = {4, 8, 15};` crea y rellena a la vez.\n- `v.length` es un atributo, sin paréntesis (en String, `length()` es un método).\n- Un índice fuera de rango lanza `ArrayIndexOutOfBoundsException`.\n\n**Los arrays son objetos:** `int[] b = a;` no copia el array. `a` y `b` apuntan al **mismo**, y cambiar uno cambia el otro. Para copiar, `Arrays.copyOf(a, a.length)`.\n\n`Arrays.toString(v)` muestra el contenido (`[4, 8, 15]`) y `Arrays.sort(v)` lo ordena.",
+     "example_code": "import java.util.Arrays;\n\nclass Main {\n    public static void main(String[] args) {\n        int[] notas = {7, 5, 9, 4, 8};\n        int suma = 0, aprobados = 0;\n        for (int n : notas) {\n            suma += n;\n            if (n >= 5) aprobados++;\n        }\n        Arrays.sort(notas);\n        System.out.println(Arrays.toString(notas));\n        System.out.println(\"Media: \" + (double) suma / notas.length + \", aprobados: \" + aprobados);\n    }\n}",
+     "exercise": "Dado un array de enteros:\n\n1. Encuentra el **mayor** y su **posición**.\n2. Cuenta cuántos son **pares**.\n3. Muéstralo **al revés** sin crear otro array.",
+     "starter": "class Main {\n    public static void main(String[] args) {\n        int[] v = {3, 18, 7, 12, 5};\n        int mayor = v[0], pos = 0;\n        // ...\n    }\n}\n",
+     "quiz": [
+      {
+       "q": "¿Qué muestra este código?",
+       "options": [
+        "99",
+        "1",
+        "Error de compilación",
+        "0"
+       ],
+       "answer": 0,
+       "explain": "`b = a` no copia el array: las dos variables apuntan al mismo objeto.",
+       "code": "int[] a = {1, 2, 3};\nint[] b = a;\nb[0] = 99;\nSystem.out.println(a[0]);"
+      },
+      {
+       "q": "¿Qué muestra este código?",
+       "options": [
+        "null",
+        "0",
+        "Error de compilación",
+        "Excepción: NullPointerException"
+       ],
+       "answer": 0,
+       "explain": "Un array de objetos se inicializa con `null`. Imprimir null no falla; llamar a un método sobre él (`nombres[0].length()`), sí.",
+       "code": "String[] nombres = new String[2];\nSystem.out.println(nombres[0]);"
+      }
+     ],
+     "challenge": {
+      "title": "Matriz traspuesta",
+      "stars": 3,
+      "exercise": "Crea una matriz `int[][] m = {{1, 2, 3}, {4, 5, 6}}` y construye su traspuesta de 3×2 con dos bucles anidados.",
+      "starter": "class Main {\n    public static void main(String[] args) {\n        int[][] m = {{1, 2, 3}, {4, 5, 6}};\n        int[][] t = new int[3][2];\n        // ...\n    }\n}\n",
+      "hint": "La traspuesta cambia filas por columnas: `t[j][i] = m[i][j]`."
+     },
+     "assistant": {
+      "hint": "Para recorrerlo al revés: `for (int i = v.length - 1; i >= 0; i--)`.",
+      "faq": [
+       {
+        "q": "¿Array o ArrayList?",
+        "a": "El array tiene tamaño fijo y admite primitivos. `ArrayList` crece sola y solo guarda objetos (`Integer`, no `int`). Se ve en el bloque de colecciones."
+       },
+       {
+        "q": "¿Por qué `System.out.println(v)` muestra algo como `[I@1b6d3586`?",
+        "a": "Porque imprime la referencia del objeto array. Para ver el contenido: `Arrays.toString(v)`."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "The Java Tutorials (Oracle)",
+       "url": "https://docs.oracle.com/javase/tutorial/java/"
+      },
+      {
+       "title": "Java SE 17 — API",
+       "url": "https://docs.oracle.com/en/java/javase/17/docs/api/"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "java-poo",
+   "title": "Clases y objetos",
+   "summary": "Constructores, encapsulación y static.",
+   "lessons": [
+    {
+     "slug": "java-clases",
+     "title": "Clases, objetos y constructores",
+     "theory": "Una **clase** es una plantilla con **atributos** (datos) y **métodos** (comportamiento). Un **objeto** es una instancia concreta, creada con `new`.\n\n**Constructor:** método especial con el mismo nombre que la clase y sin tipo de retorno. Se ejecuta al hacer `new`.\n- Si no escribes ninguno, Java crea uno vacío por defecto. **En cuanto escribes uno**, ese constructor por defecto desaparece.\n- Se pueden **sobrecargar** varios constructores con distintos parámetros. Uno puede llamar a otro con `this(…)`, que tiene que ser la primera línea.\n\n**`this`** es el objeto actual. Hace falta cuando un parámetro se llama igual que un atributo: `this.nombre = nombre;`. Sin `this`, asignarías el parámetro a sí mismo.\n\n**Referencias:** una variable de tipo clase guarda una **referencia** al objeto. `Contador b = a;` no crea otro objeto: `a` y `b` son el mismo. Una referencia puede ser `null`, y usarla lanza `NullPointerException`.\n\n**toString():** si lo sobrescribes, `System.out.println(objeto)` muestra tu texto en lugar de algo como `Punto@1b6d3586`.\n\nLos atributos sin inicializar valen `0`, `false` o `null` según su tipo.",
+     "example_code": "class Alumno {\n    String nombre;\n    int nota;\n\n    Alumno(String nombre, int nota) {\n        this.nombre = nombre;\n        this.nota = nota;\n    }\n\n    boolean aprobado() {\n        return nota >= 5;\n    }\n\n    @Override\n    public String toString() {\n        return nombre + \" (\" + nota + \")\";\n    }\n}\n\nclass Main {\n    public static void main(String[] args) {\n        Alumno a = new Alumno(\"Ana\", 8);\n        System.out.println(a + \" aprobado: \" + a.aprobado());\n    }\n}",
+     "exercise": "Crea la clase `Producto` con `nombre`, `precio` y `stock`, con:\n\n- un constructor con los tres datos;\n- un método `valor()` que devuelva `precio * stock`;\n- un `toString()` con el formato `Teclado - 25.0 € x 10`.\n\nCrea dos productos en el main y muestra su valor.",
+     "starter": "class Producto {\n    String nombre;\n    double precio;\n    int stock;\n    // constructor, valor() y toString()\n}\n\nclass Main {\n    public static void main(String[] args) {\n        // ...\n    }\n}\n",
+     "quiz": [
+      {
+       "q": "¿Qué es un objeto?",
+       "options": [
+        "Una instancia concreta de una clase, creada con `new`",
+        "Un sinónimo de clase",
+        "Un método especial",
+        "Un tipo primitivo"
+       ],
+       "answer": 0,
+       "explain": "La clase define; el objeto existe en memoria con sus propios valores."
+      },
+      {
+       "q": "¿Qué muestra este código?",
+       "options": [
+        "11",
+        "1",
+        "110",
+        "10"
+       ],
+       "answer": 0,
+       "explain": "`Caja()` delega en el otro constructor con `this(1, 1)`: área 1. La otra caja tiene área 10. Se suman como enteros: 11.",
+       "code": "class Caja {\n    int ancho, alto;\n    Caja() { this(1, 1); }\n    Caja(int ancho, int alto) { this.ancho = ancho; this.alto = alto; }\n    int area() { return ancho * alto; }\n}\n\nclass Main {\n    public static void main(String[] args) {\n        System.out.println(new Caja().area() + new Caja(2, 5).area());\n    }\n}"
+      }
+     ],
+     "challenge": {
+      "title": "Fracciones",
+      "stars": 3,
+      "exercise": "Crea la clase `Fraccion` (numerador y denominador) con un método `sumar(Fraccion otra)` que devuelva una **nueva** fracción, y un `toString()` como `3/4`.",
+      "starter": "class Fraccion {\n    int num, den;\n    // ...\n}\n\nclass Main {\n    public static void main(String[] args) {\n        System.out.println(new Fraccion(1, 2).sumar(new Fraccion(1, 4)));\n    }\n}\n",
+      "hint": "a/b + c/d = (a·d + c·b) / (b·d). Si quieres simplificarla, divide entre el máximo común divisor."
+     },
+     "assistant": {
+      "hint": "En el constructor, `this.precio = precio;` distingue el atributo del parámetro.",
+      "faq": [
+       {
+        "q": "¿Qué diferencia hay entre clase y objeto?",
+        "a": "La clase es el molde (`Alumno`); los objetos, cada alumno concreto creado con `new`. Puede haber miles de objetos de una clase."
+       },
+       {
+        "q": "¿Por qué `new Coche()` no compila si mi clase tiene constructor?",
+        "a": "Porque al escribir un constructor con parámetros, Java deja de crear el vacío. Si lo necesitas, escríbelo tú también."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "The Java Tutorials (Oracle)",
+       "url": "https://docs.oracle.com/javase/tutorial/java/"
+      },
+      {
+       "title": "Java Language Specification (SE 17)",
+       "url": "https://docs.oracle.com/javase/specs/jls/se17/html/"
+      }
+     ]
+    },
+    {
+     "slug": "java-encapsulacion",
+     "title": "Encapsulación y static",
+     "theory": "**Encapsulación:** los atributos se declaran `private` y se accede a ellos con métodos públicos (**getters** y **setters**). Así la clase **controla** su estado: un setter puede rechazar un saldo negativo o una edad imposible.\n\n**Modificadores de acceso**, de más a menos restrictivo:\n- `private`: solo la propia clase;\n- sin modificador (*package-private*): las clases del mismo paquete;\n- `protected`: el paquete y las subclases;\n- `public`: cualquiera.\n\n**`static`** pertenece a la **clase**, no a cada objeto:\n- un atributo `static` es **compartido** por todos los objetos, como un contador de instancias;\n- un método `static` se llama con el nombre de la clase (`Math.max(a, b)`) y **no puede usar atributos de instancia**, porque no hay un objeto concreto. Por eso desde `main`, que es static, no puedes usar un atributo normal sin crear antes un objeto.\n\n**`final`:**\n- en una variable o atributo, no se puede reasignar;\n- en un método, no se puede sobrescribir;\n- en una clase, no se puede heredar de ella (como `String`).\n\nUna constante típica es `public static final double IVA = 0.21;`.",
+     "example_code": "class Cuenta {\n    private static int abiertas = 0;\n    private final String titular;\n    private double saldo;\n\n    Cuenta(String titular) {\n        this.titular = titular;\n        abiertas++;\n    }\n\n    public void ingresar(double cantidad) {\n        if (cantidad > 0) saldo += cantidad;\n    }\n\n    public double getSaldo() { return saldo; }\n    public String getTitular() { return titular; }\n    public static int getAbiertas() { return abiertas; }\n}\n\nclass Main {\n    public static void main(String[] args) {\n        Cuenta c = new Cuenta(\"Ana\");\n        c.ingresar(100);\n        c.ingresar(-50);\n        System.out.println(c.getTitular() + \": \" + c.getSaldo() + \" (cuentas abiertas: \" + Cuenta.getAbiertas() + \")\");\n    }\n}",
+     "exercise": "Encapsula la clase `Alumno`:\n\n- `nombre` y `nota` privados;\n- un `setNota` que solo acepte valores entre 0 y 10;\n- un atributo `static` que cuente cuántos alumnos se han creado.",
+     "starter": "class Alumno {\n    private String nombre;\n    private int nota;\n    // static int ...\n    // constructor, getters y setters\n}\n",
+     "quiz": [
+      {
+       "q": "¿Qué ocurre al compilar y ejecutar este código?",
+       "options": [
+        "Excepción: IllegalStateException",
+        "10",
+        "Error de compilación",
+        "20"
+       ],
+       "answer": 2,
+       "explain": "Una variable `final` no se puede reasignar: el compilador lo impide.",
+       "code": "final int MAX = 10;\nMAX = 20;\nSystem.out.println(MAX);"
+      },
+      {
+       "q": "¿Para qué se ponen los atributos `private` con getters y setters?",
+       "options": [
+        "Para que la clase controle cómo se leen y modifican sus datos",
+        "Para que el programa vaya más rápido",
+        "Porque Java lo exige",
+        "Para poder heredar de la clase"
+       ],
+       "answer": 0,
+       "explain": "Es la encapsulación: puedes validar, cambiar la representación interna o hacer un dato de solo lectura sin romper a quien usa la clase."
+      }
+     ],
+     "challenge": {
+      "title": "Termostato",
+      "stars": 2,
+      "exercise": "Crea la clase `Termostato` con la temperatura privada, límites `static final` (MIN 15, MAX 30) y métodos `subir()` y `bajar()` que nunca se salgan de los límites.",
+      "starter": "class Termostato {\n    static final int MIN = 15, MAX = 30;\n    private int temperatura = 20;\n    // ...\n}\n",
+      "hint": "`temperatura = Math.min(MAX, temperatura + 1);` mantiene el valor dentro del límite."
+     },
+     "assistant": {
+      "hint": "En el setter: `if (nota >= 0 && nota <= 10) this.nota = nota;`. El contador se incrementa en el constructor.",
+      "faq": [
+       {
+        "q": "¿Hace falta un getter y un setter para cada atributo?",
+        "a": "No: solo los que otras clases necesiten. Un atributo sin setter es de solo lectura desde fuera, y eso a menudo es lo que quieres."
+       },
+       {
+        "q": "¿Por qué `main` es static?",
+        "a": "Porque la JVM lo llama sin crear ningún objeto de la clase."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "The Java Tutorials (Oracle)",
+       "url": "https://docs.oracle.com/javase/tutorial/java/"
+      },
+      {
+       "title": "Java Language Specification (SE 17)",
+       "url": "https://docs.oracle.com/javase/specs/jls/se17/html/"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "java-herencia",
+   "title": "Herencia e interfaces",
+   "summary": "Polimorfismo, clases abstractas e interfaces.",
+   "lessons": [
+    {
+     "slug": "java-herencia",
+     "title": "Herencia y polimorfismo",
+     "theory": "Con `class Perro extends Animal`, `Perro` **hereda** los atributos y métodos de `Animal` y puede añadir más. Java solo permite heredar de **una** clase. Si no pones `extends`, la clase hereda de `Object`.\n\n**Constructores:** el de la subclase llama primero al del padre, con `super(…)` explícito o `super()` implícito. Por eso en una cadena A → B → C los constructores se ejecutan en el orden A, B, C.\n\n**Sobrescritura (override):** la subclase redefine un método del padre con la misma firma. `@Override` pide al compilador que compruebe que de verdad sobrescribes (y no creas uno nuevo por una errata). Con `super.metodo()` llamas a la versión del padre.\n\n**Polimorfismo:**\n- Una variable del tipo padre puede apuntar a un objeto hijo: `Animal a = new Perro();`.\n- Al llamar a `a.sonido()`, se ejecuta la versión del **objeto real** (Perro), no la del tipo de la variable. Se decide en tiempo de ejecución.\n- El **compilador** solo te deja llamar a métodos que existan en el **tipo de la variable**: `a.ladrar()` no compila si `ladrar` solo está en Perro.\n\n**Casting e instanceof:**\n- `(Perro) a` convierte la referencia hacia abajo. Si el objeto no es realmente un Perro, lanza `ClassCastException`.\n- Compruébalo antes con `a instanceof Perro`.",
+     "example_code": "class Empleado {\n    protected String nombre;\n    Empleado(String nombre) { this.nombre = nombre; }\n    double sueldo() { return 1200; }\n}\n\nclass Jefe extends Empleado {\n    Jefe(String nombre) { super(nombre); }\n    @Override\n    double sueldo() { return super.sueldo() * 1.5; }\n}\n\nclass Main {\n    public static void main(String[] args) {\n        Empleado[] plantilla = { new Empleado(\"Luis\"), new Jefe(\"Ana\") };\n        for (Empleado e : plantilla) {\n            System.out.println(e.nombre + \": \" + e.sueldo());\n        }\n    }\n}",
+     "exercise": "Crea `Vehiculo` con un método `ruedas()` que devuelva 0, y las subclases `Coche` (4) y `Moto` (2), que lo sobrescriben.\n\nEn el main, guarda varios vehículos en un array `Vehiculo[]` y suma todas sus ruedas.",
+     "starter": "class Vehiculo {\n    int ruedas() { return 0; }\n}\n\n// class Coche extends Vehiculo { ... }\n\nclass Main {\n    public static void main(String[] args) {\n        Vehiculo[] garaje = { /* ... */ };\n    }\n}\n",
+     "quiz": [
+      {
+       "q": "¿Qué muestra este código?",
+       "options": [
+        "true true",
+        "false true",
+        "Error de compilación",
+        "true false"
+       ],
+       "answer": 0,
+       "explain": "Un Perro **es** un Animal: `instanceof` es cierto para su clase y para todas sus superclases.",
+       "code": "class Animal {}\nclass Perro extends Animal {}\n\nclass Main {\n    public static void main(String[] args) {\n        Animal a = new Perro();\n        System.out.println((a instanceof Perro) + \" \" + (a instanceof Animal));\n    }\n}"
+      },
+      {
+       "q": "¿Qué hace la anotación `@Override`?",
+       "options": [
+        "Pide al compilador que compruebe que de verdad sobrescribes un método del padre",
+        "Hace el método privado",
+        "Obliga a las subclases a sobrescribirlo",
+        "Nada, es un comentario"
+       ],
+       "answer": 0,
+       "explain": "Si te equivocas en el nombre o en los parámetros, sin `@Override` crearías otro método sin darte cuenta; con ella, no compila."
+      }
+     ],
+     "challenge": {
+      "title": "Nómina polimórfica",
+      "stars": 2,
+      "exercise": "Añade `Becario extends Empleado`, que cobra la mitad del sueldo base, y calcula el total de una plantilla mixta con un solo bucle.",
+      "starter": "class Becario extends Empleado {\n    // ...\n}\n",
+      "hint": "`return super.sueldo() / 2;` reutiliza el cálculo del padre."
+     },
+     "assistant": {
+      "hint": "Gracias al polimorfismo, `v.ruedas()` ejecuta la versión de cada objeto real aunque el array sea de `Vehiculo`.",
+      "faq": [
+       {
+        "q": "¿Sobrecarga o sobrescritura?",
+        "a": "**Sobrecarga:** mismo nombre y distintos parámetros, en la misma clase. **Sobrescritura:** misma firma, en una subclase, para cambiar el comportamiento."
+       },
+       {
+        "q": "¿Para qué sirve `protected`?",
+        "a": "Deja usar el atributo a las subclases (y al paquete), pero no a cualquier clase."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "The Java Tutorials (Oracle)",
+       "url": "https://docs.oracle.com/javase/tutorial/java/"
+      },
+      {
+       "title": "Java Language Specification (SE 17)",
+       "url": "https://docs.oracle.com/javase/specs/jls/se17/html/"
+      }
+     ]
+    },
+    {
+     "slug": "java-abstractas-interfaces",
+     "title": "Clases abstractas e interfaces",
+     "theory": "**Clase abstracta** (`abstract class Figura`): una clase incompleta que **no se puede instanciar**.\n- Puede tener atributos, constructores y métodos normales, además de métodos `abstract` sin cuerpo (`abstract double area();`).\n- Las subclases concretas **deben** implementarlos.\n- Sirve para compartir código y obligar a completar una parte.\n\n**Interfaz** (`interface Volador`): un **contrato** con los métodos que debe tener quien la implemente.\n- Sus métodos son `public abstract` por defecto. Al implementarlos hay que declararlos **public**, porque no se puede reducir la visibilidad.\n- Desde Java 8 puede tener métodos `default` (con cuerpo) y `static`.\n- Una clase puede implementar **varias** interfaces (`class Pato extends Animal implements Volador, Nadador`), pero heredar de una sola clase.\n\n**¿Cuál usar?**\n- Clase abstracta cuando las subclases comparten estado o código (\"es un\").\n- Interfaz para una capacidad que pueden tener clases sin relación (\"puede hacer\"): `Comparable`, `Runnable`…\n\nNinguna de las dos se instancia con `new`. Sí se pueden usar como **tipo** de variable (`Figura f = new Cuadrado(3);`), y ahí está la gracia del polimorfismo.",
+     "example_code": "interface Pagable {\n    double importe();\n    default String recibo() { return \"Total: \" + importe(); }\n}\n\nabstract class Figura {\n    abstract double area();\n}\n\nclass Cuadrado extends Figura implements Pagable {\n    private final double lado;\n    Cuadrado(double lado) { this.lado = lado; }\n    double area() { return lado * lado; }\n    public double importe() { return area() * 10; }\n}\n\nclass Main {\n    public static void main(String[] args) {\n        Cuadrado c = new Cuadrado(3);\n        System.out.println(c.area());\n        System.out.println(c.recibo());\n    }\n}",
+     "exercise": "Crea la clase abstracta `Figura` con el método abstracto `area()` y un método normal `describir()` que devuelva `\"Área: \" + area()`.\n\nImplementa `Circulo` y `Rectangulo` y muestra la descripción de ambos desde un array `Figura[]`.",
+     "starter": "abstract class Figura {\n    abstract double area();\n    String describir() { return \"Área: \" + area(); }\n}\n\n// class Circulo extends Figura { ... }\n",
+     "quiz": [
+      {
+       "q": "¿Se puede crear un objeto de una interfaz con `new`?",
+       "options": [
+        "No; se crean objetos de clases que la implementan (o de una clase anónima)",
+        "Sí, siempre",
+        "Solo si tiene métodos default",
+        "Solo si no tiene métodos"
+       ],
+       "answer": 0,
+       "explain": "La interfaz es un contrato, no una implementación. Sí se usa como tipo de variable."
+      },
+      {
+       "q": "¿Qué muestra este código?",
+       "options": [
+        "Error de compilación",
+        "43",
+        "7",
+        "7.0"
+       ],
+       "answer": 3,
+       "explain": "La interfaz sirve de tipo común: el bucle suma 4 + 3 sin saber qué clase es cada objeto.",
+       "code": "interface Forma { double area(); }\nclass Cuadrado implements Forma { public double area() { return 4; } }\nclass Triangulo implements Forma { public double area() { return 3; } }\n\nclass Main {\n    public static void main(String[] args) {\n        Forma[] formas = { new Cuadrado(), new Triangulo() };\n        double total = 0;\n        for (Forma f : formas) total += f.area();\n        System.out.println(total);\n    }\n}"
+      }
+     ],
+     "challenge": {
+      "title": "Ordenar con Comparable",
+      "stars": 3,
+      "exercise": "Haz que `Alumno` implemente `Comparable<Alumno>` para ordenar por nota y usa `Arrays.sort` sobre un array de alumnos.",
+      "starter": "class Alumno implements Comparable<Alumno> {\n    String nombre;\n    int nota;\n    // ...\n    public int compareTo(Alumno otro) {\n        // ...\n    }\n}\n",
+      "hint": "`compareTo` devuelve negativo, 0 o positivo: `return Integer.compare(nota, otro.nota);`."
+     },
+     "assistant": {
+      "hint": "Para el área del círculo usa `Math.PI * r * r`.",
+      "faq": [
+       {
+        "q": "¿Una interfaz puede tener atributos?",
+        "a": "Solo constantes: todo atributo de una interfaz es `public static final`."
+       },
+       {
+        "q": "¿Qué es una clase anónima?",
+        "a": "Una implementación sin nombre, creada al vuelo: `Volador v = new Volador() { public void volar() { … } };`. Con interfaces de un solo método se suele usar una lambda."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "The Java Tutorials (Oracle)",
+       "url": "https://docs.oracle.com/javase/tutorial/java/"
+      },
+      {
+       "title": "Java Language Specification (SE 17)",
+       "url": "https://docs.oracle.com/javase/specs/jls/se17/html/"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "java-colecciones",
+   "title": "Colecciones y excepciones",
+   "summary": "ArrayList, HashMap y tratamiento de errores.",
+   "lessons": [
+    {
+     "slug": "java-colecciones",
+     "title": "ArrayList y HashMap",
+     "theory": "Las **colecciones** (`java.util`) crecen solas, al contrario que los arrays. Solo guardan **objetos**: `ArrayList<Integer>`, nunca `ArrayList<int>`. Java convierte entre `int` e `Integer` automáticamente (*autoboxing*).\n\n**ArrayList** (lista ordenada con índice):\n- `add(x)` añade al final y `add(i, x)` inserta en la posición i;\n- `get(i)`, `set(i, x)` y `size()`;\n- `contains(x)` e `indexOf(x)`.\n- **Cuidado con `remove`:** en una `ArrayList<Integer>`, `remove(1)` borra la **posición** 1, y `remove(Integer.valueOf(1))` borra el **valor** 1.\n- `List.of(1, 2, 3)` crea una lista **inmutable**; para modificarla, cópiala en un `new ArrayList<>(…)`.\n\n**HashMap** (pares clave → valor, sin claves repetidas):\n- `put(clave, valor)` guarda o sustituye;\n- `get(clave)` devuelve el valor, o **`null`** si la clave no existe;\n- `getOrDefault(clave, porDefecto)`, `containsKey` y `remove`;\n- se recorre con `for (var e : mapa.entrySet())`.\n- El orden de un `HashMap` **no está garantizado**. `LinkedHashMap` mantiene el de inserción y `TreeMap` ordena por clave.\n\n**No modifiques una lista mientras la recorres con for-each:** lanza `ConcurrentModificationException`. Usa `removeIf(x -> …)` o un `Iterator`.",
+     "example_code": "import java.util.*;\n\nclass Main {\n    public static void main(String[] args) {\n        List<String> alumnos = new ArrayList<>(List.of(\"Ana\", \"Luis\", \"Eva\"));\n        alumnos.add(\"Juan\");\n        alumnos.removeIf(n -> n.startsWith(\"L\"));\n        System.out.println(alumnos + \" \" + alumnos.size());\n\n        Map<String, Integer> notas = new TreeMap<>();\n        notas.put(\"Ana\", 8);\n        notas.put(\"Eva\", 9);\n        notas.put(\"Ana\", 10);\n        System.out.println(notas + \" \" + notas.getOrDefault(\"Juan\", 0));\n    }\n}",
+     "exercise": "Cuenta cuántas veces aparece cada palabra en una frase y muéstralo ordenado alfabéticamente:\n\n`\"el perro y el gato y el raton\"` → `{el=3, gato=1, perro=1, raton=1, y=2}`",
+     "starter": "import java.util.*;\n\nclass Main {\n    public static void main(String[] args) {\n        String frase = \"el perro y el gato y el raton\";\n        Map<String, Integer> cuenta = new TreeMap<>();\n        for (String p : frase.split(\" \")) {\n            // ...\n        }\n        System.out.println(cuenta);\n    }\n}\n",
+     "quiz": [
+      {
+       "q": "¿Qué ocurre al compilar y ejecutar este código?",
+       "options": [
+        "Error de compilación",
+        "[1]",
+        "Excepción: ClassCastException",
+        "[]"
+       ],
+       "answer": 0,
+       "explain": "Las colecciones solo guardan objetos: hay que usar la clase envoltorio `Integer`.",
+       "code": "ArrayList<int> l = new ArrayList<>();\nl.add(1);\nSystem.out.println(l);"
+      },
+      {
+       "q": "¿Qué colección usarías para guardar el teléfono de cada alumno y buscarlo por su nombre?",
+       "options": [
+        "HashMap<String, String>",
+        "ArrayList<String>",
+        "String[]",
+        "ArrayList<Integer>"
+       ],
+       "answer": 0,
+       "explain": "Buscar por una clave es exactamente lo que hace un mapa, y es mucho más rápido que recorrer una lista."
+      }
+     ],
+     "challenge": {
+      "title": "Agenda",
+      "stars": 2,
+      "exercise": "Con un `HashMap<String, String>` de nombre → teléfono, añade tres contactos, actualiza uno, borra otro y muestra el resto ordenado por nombre.",
+      "starter": "import java.util.*;\n\nclass Main {\n    public static void main(String[] args) {\n        Map<String, String> agenda = new HashMap<>();\n        // ...\n    }\n}\n",
+      "hint": "Para mostrarlo ordenado, `new TreeMap<>(agenda)` crea una copia con las claves en orden."
+     },
+     "assistant": {
+      "hint": "`cuenta.put(p, cuenta.getOrDefault(p, 0) + 1);` suma uno a la cuenta de cada palabra.",
+      "faq": [
+       {
+        "q": "¿`List` o `ArrayList` en la declaración?",
+        "a": "`List<String> l = new ArrayList<>();` es lo habitual: programas contra la interfaz y podrías cambiar la implementación sin tocar el resto."
+       },
+       {
+        "q": "¿HashMap o TreeMap?",
+        "a": "HashMap es más rápido, pero no garantiza el orden. TreeMap mantiene las claves ordenadas."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "The Java Tutorials (Oracle)",
+       "url": "https://docs.oracle.com/javase/tutorial/java/"
+      },
+      {
+       "title": "Java SE 17 — API",
+       "url": "https://docs.oracle.com/en/java/javase/17/docs/api/"
+      }
+     ]
+    },
+    {
+     "slug": "java-excepciones",
+     "title": "Excepciones",
+     "theory": "Una **excepción** es un error en tiempo de ejecución. Si nadie la captura, el programa termina y muestra la traza (*stack trace*).\n\n```\ntry { … código que puede fallar … }\ncatch (ArithmeticException e) { … si falla de esa manera … }\nfinally { … se ejecuta SIEMPRE, falle o no … }\n```\n\n- Después de una excepción, el resto del bloque `try` **no** se ejecuta: salta al `catch` que corresponda.\n- `finally` se ejecuta incluso si el try hace `return`. Se usa para cerrar recursos (o, mejor, *try-with-resources*).\n- **Orden de los catch:** del más específico al más general. Poner `catch (Exception e)` antes de `catch (ArithmeticException e)` **no compila**, porque el segundo sería inalcanzable.\n- Varios tipos en un catch: `catch (IOException | NumberFormatException e)`.\n\n**Jerarquía:** `Throwable` se divide en `Error` (fallos graves de la JVM) y `Exception`.\n- Las `RuntimeException` (`NullPointerException`, `ArithmeticException`, `ArrayIndexOutOfBoundsException`…) son **no comprobadas**: no hace falta declararlas.\n- El resto de `Exception` (`IOException`…) son **comprobadas**: o las capturas o las declaras con `throws` en el método. Si no, **no compila**.\n\n**Lanzar las tuyas:** `throw new IllegalArgumentException(\"mensaje\");`. Una excepción propia hereda de `Exception` (comprobada) o de `RuntimeException` (no comprobada). `e.getMessage()` devuelve el mensaje.",
+     "example_code": "class Main {\n    static int dividir(int a, int b) {\n        if (b == 0) throw new IllegalArgumentException(\"El divisor no puede ser 0\");\n        return a / b;\n    }\n\n    public static void main(String[] args) {\n        try {\n            System.out.println(dividir(10, 2));\n            System.out.println(dividir(1, 0));\n            System.out.println(\"Esto no se ejecuta\");\n        } catch (IllegalArgumentException e) {\n            System.out.println(\"Error: \" + e.getMessage());\n        } finally {\n            System.out.println(\"Fin\");\n        }\n    }\n}",
+     "exercise": "Escribe un método `leerEdad(String texto)` que:\n\n- convierta el texto a `int` con `Integer.parseInt`;\n- lance `IllegalArgumentException` si la edad es negativa o mayor que 120.\n\nEn el main, pruébalo con `\"25\"`, `\"abc\"` y `\"-3\"` y captura cada error mostrando un mensaje claro.",
+     "starter": "class Main {\n    static int leerEdad(String texto) {\n        int edad = Integer.parseInt(texto);\n        // ...\n        return edad;\n    }\n\n    public static void main(String[] args) {\n        for (String t : new String[]{\"25\", \"abc\", \"-3\"}) {\n            try {\n                System.out.println(leerEdad(t));\n            } catch (Exception e) {\n                // ...\n            }\n        }\n    }\n}\n",
+     "quiz": [
+      {
+       "q": "¿Qué muestra este código?",
+       "options": [
+        "sin texto",
+        "Excepción: NullPointerException",
+        "null",
+        "0"
+       ],
+       "answer": 0,
+       "explain": "Llamar a un método sobre null lanza `NullPointerException`, que aquí se captura.",
+       "code": "try {\n    String s = null;\n    System.out.println(s.length());\n} catch (NullPointerException e) {\n    System.out.println(\"sin texto\");\n}"
+      },
+      {
+       "q": "¿Cuál de estas excepciones es **comprobada** (obliga a capturarla o declararla)?",
+       "options": [
+        "IOException",
+        "NullPointerException",
+        "ArithmeticException",
+        "ArrayIndexOutOfBoundsException"
+       ],
+       "answer": 0,
+       "explain": "Las otras tres heredan de `RuntimeException` y no son comprobadas."
+      }
+     ],
+     "challenge": {
+      "title": "Excepción propia",
+      "stars": 3,
+      "exercise": "Crea `SaldoInsuficienteException extends Exception` y un método `retirar(double cantidad)` en `Cuenta` que la lance con un mensaje que indique cuánto falta. Captúrala en el main.",
+      "starter": "class SaldoInsuficienteException extends Exception {\n    SaldoInsuficienteException(String mensaje) { super(mensaje); }\n}\n",
+      "hint": "Como es comprobada, `retirar` tiene que declarar `throws SaldoInsuficienteException`."
+     },
+     "assistant": {
+      "hint": "`NumberFormatException` es una subclase de `IllegalArgumentException`: si quieres mensajes distintos, captúrala **antes**.",
+      "faq": [
+       {
+        "q": "¿Comprobada o no comprobada?",
+        "a": "Comprobada (`extends Exception`) si quien llama puede y debe recuperarse, como un archivo que no existe. No comprobada (`extends RuntimeException`) para errores de programación, como un argumento inválido."
+       },
+       {
+        "q": "¿Está bien un `catch (Exception e) {}` vacío?",
+        "a": "Casi nunca: se traga el error y no te enteras. Como mínimo, registra el mensaje."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "The Java Tutorials (Oracle)",
+       "url": "https://docs.oracle.com/javase/tutorial/java/"
+      },
+      {
+       "title": "Java SE 17 — API",
+       "url": "https://docs.oracle.com/en/java/javase/17/docs/api/"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

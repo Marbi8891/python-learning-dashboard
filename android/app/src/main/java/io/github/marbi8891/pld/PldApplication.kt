@@ -32,6 +32,8 @@ class CourseData(
     val title: String,
     /** Módulo de DAW o certificación de la que sale el curso. */
     val subtitle: String,
+    /** Cómo probar los ejemplos fuera de la app, mientras no se puedan ejecutar dentro. */
+    val tryHint: String,
     val bank: Bank,
     val lessons: LessonIndex,
     val content: Map<String, LessonContent>,
@@ -59,10 +61,16 @@ class AppModel(context: Context) {
     private val prefs = context.getSharedPreferences("pld", Context.MODE_PRIVATE)
 
     val courses: List<CourseData> = run {
-        val pcap = load(context, CourseData.PCAP, "Python · PCAP", "Certificación PCAP-31-03", "pcap.json", "lessons.json")
-        val sql = load(context, "sql", "SQL", "Bases de datos (DAW)", "courses/sql/bank.json", "courses/sql/lessons.json")
-        sql.state.shareApp(pcap.state.app)
-        listOf(pcap, sql)
+        val pcap = load(
+            context, CourseData.PCAP, "Python · PCAP", "Certificación PCAP-31-03", "pcap.json", "lessons.json",
+            "Para ejecutarlo, cópialo en tu editor. Ejecutar Python dentro de la app llegará en la entrega 6.",
+        )
+        val others = listOf(
+            course(context, "sql", "SQL", "Bases de datos (DAW)", "Para probarlo, cópialo en tu gestor de bases de datos (MySQL Workbench, DBeaver…)."),
+            course(context, "java", "Java", "Programación (DAW)", "Para probarlo, pégalo en tu IDE (IntelliJ, NetBeans…) o guárdalo en Main.java y ejecuta «java Main.java»."),
+        )
+        others.forEach { it.state.shareApp(pcap.state.app) }
+        listOf(pcap) + others
     }
 
     /** Curso elegido en el selector; se recuerda entre sesiones. */
@@ -128,12 +136,25 @@ class AppModel(context: Context) {
 
     fun unitOf(node: PathNode): PathUnit = units.first { it.slug == node.unit }
 
-    private fun load(context: Context, id: String, title: String, subtitle: String, bankFile: String, lessonsFile: String): CourseData {
+    /** Curso de DAW generado por `scripts/courses/<id>_course.py`. */
+    private fun course(context: Context, id: String, title: String, subtitle: String, tryHint: String): CourseData =
+        load(context, id, title, subtitle, "courses/$id/bank.json", "courses/$id/lessons.json", tryHint)
+
+    private fun load(
+        context: Context,
+        id: String,
+        title: String,
+        subtitle: String,
+        bankFile: String,
+        lessonsFile: String,
+        tryHint: String,
+    ): CourseData {
         val lessonsJson = context.readAsset(lessonsFile)
         return CourseData(
             id = id,
             title = title,
             subtitle = subtitle,
+            tryHint = tryHint,
             bank = Bank.parse(context.readAsset(bankFile)),
             lessons = LessonIndex.parse(lessonsJson),
             content = LessonLibrary.parse(lessonsJson),
