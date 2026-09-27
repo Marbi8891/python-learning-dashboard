@@ -9,7 +9,7 @@ import kotlin.random.Random
 
 /** Los cursos de DAW (ADR-0016) se leen con los mismos lectores que el PCAP y no chocan con él ni entre sí. */
 class CoursesTest {
-    private class Loaded(id: String) {
+    private class Loaded(val id: String) {
         private val dir = File("src/main/assets/courses/$id")
         val bank = Bank.parse(File(dir, "bank.json").readText())
         private val lessonsJson = File(dir, "lessons.json").readText()
@@ -18,7 +18,7 @@ class CoursesTest {
         val units = Course.build(bank, lessons)
     }
 
-    private val courses = listOf("sql", "js", "java").map { Loaded(it) }
+    private val courses = listOf("sql", "js", "java", "entornos").map { Loaded(it) }
 
     private val pcapBank = Bank.parse(File("../../frontend/data/pcap.json").readText())
     private val pcapUnits = Course.build(pcapBank, LessonIndex.parse(File("../../frontend/data/lessons.json").readText()))
@@ -26,9 +26,10 @@ class CoursesTest {
     @Test
     fun rutaCompletaConTeoriaParaCadaUnidad() {
         courses.forEach { c ->
-            assertEquals(5, c.bank.exam.blocks.size)
+            assertTrue(c.bank.exam.blocks.size >= 4)
             assertEquals(100, c.bank.exam.blocks.sumOf { it.weight })
-            assertEquals(10, c.units.size)
+            // Cada lección del curso es una unidad de la ruta
+            assertEquals(c.content.size, c.units.size)
             assertEquals(c.bank.questions.size, c.units.sumOf { u -> u.nodes.sumOf { it.questionIds.size } })
             assertTrue(c.units.all { it.slug in c.content })
             assertTrue(c.bank.questions.all { it.lesson in c.content && (it.kind != Kind.CHOICE || it.answer.single() in it.options.indices) })
@@ -68,7 +69,7 @@ class CoursesTest {
     @Test
     fun ejerciciosDeEscribirCodigo() {
         // ADR-0017: completar el hueco, ordenar líneas y encontrar el error
-        val java = courses.first { it.bank.questions.any { q -> q.kind == Kind.FILL } }.bank
+        val java = courses.first { it.id == "java" }.bank
         val fills = java.questions.filter { it.kind == Kind.FILL }
         val orders = java.questions.filter { it.kind == Kind.ORDER }
         assertEquals(10, fills.size)
@@ -96,12 +97,25 @@ class CoursesTest {
 
     @Test
     fun laMazmorraCorrigeCualquierTipoDeEjercicio() {
-        val java = courses.first { it.bank.questions.any { q -> q.kind == Kind.FILL } }.bank
+        val java = courses.first { it.id == "java" }.bank
         val fill = java.questions.first { it.kind == Kind.FILL }
         val run = DungeonRun(listOf(DungeonRun.Floor("x", listOf(fill, fill, fill, fill))))
         assertTrue(run.answer(Answer(text = fill.accept.first())))
         run.next()
         assertFalse(run.answer(Answer(text = "nada")))
         assertEquals(DungeonRun.MAX_HP - 1, run.hp)
+    }
+
+    @Test
+    fun basesDeDatosSigueElTemarioDelCentroSinPerderProgreso() {
+        // ADR-0019: bloques = UD del centro; las preguntas de antes conservan su id
+        val bd = courses.first { it.id == "sql" }
+        assertEquals(listOf("bd-ud1", "bd-ud2", "bd-ud3", "bd-ampliacion"), bd.bank.exam.blocks.map { it.slug })
+        val ids = bd.bank.questions.map { it.id }.toSet()
+        assertTrue((1..50).all { "sql-%02d".format(it) in ids })
+        // Cada unidad del centro tiene teoría propia y ejercicios de escribir SQL
+        assertTrue(bd.bank.questions.filter { it.block == "bd-ud1" }.size >= 20)
+        assertTrue(bd.bank.questions.any { it.block == "bd-ud2" && it.kind == Kind.FILL })
+        assertTrue(bd.bank.questions.any { it.block == "bd-ud3" && it.kind == Kind.ORDER })
     }
 }

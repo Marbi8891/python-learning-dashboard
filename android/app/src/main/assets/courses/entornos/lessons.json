@@ -1,0 +1,284 @@
+{
+ "modules": [
+  {
+   "slug": "ent-lenguajes",
+   "title": "Lenguajes y programas",
+   "summary": "Lenguajes más usados, programa informático y tipos de software.",
+   "lessons": [
+    {
+     "slug": "ent-lenguajes-y-programas",
+     "title": "Lenguajes de programación y programas",
+     "theory": "Un **lenguaje de programación** es un sistema para escribir instrucciones que el ordenador pueda ejecutar. Cada uno tiene su **sintaxis** (reglas de escritura). El mismo «Hola, mundo» se escribe distinto en cada lenguaje:\n\n- Python: `print(\"Hola, mundo!\")`\n- Java: `System.out.println(\"Hola, mundo!\");`\n- C++: `std::cout << \"Hola, mundo!\" << std::endl;`\n- JavaScript: `console.log(\"Hola, mundo!\");`\n\n**Los más usados:**\n- **Java:** multiplataforma (el mismo programa funciona en distintos sistemas operativos). Aplicaciones empresariales, bancarias y Android. Su sintaxis es más estricta.\n- **Python:** sintaxis sencilla, ideal para empezar. Web, análisis de datos, IA y automatización. Menos rendimiento que C++.\n- **C++:** alto rendimiento y control de recursos. Videojuegos y software de sistemas. Más complejo.\n- **JavaScript:** el lenguaje de la web en el navegador. Páginas interactivas.\n\nNo hay un «mejor» lenguaje: se elige el adecuado para cada proyecto. **Evolución:** C en los 70 (sistemas operativos), Java en los 90 (multiplataforma), Python y JavaScript en la última década (sencillez y flexibilidad).\n\nUn **programa informático** es un conjunto de instrucciones para que el ordenador haga una tarea. Se organiza en bloques: **recibir datos, procesarlos y mostrar resultados**.\n\n**Tipos de software:**\n- **De sistema:** gestiona el hardware y los recursos. El sistema operativo (Windows, Linux).\n- **De aplicación:** tareas concretas del usuario. Un procesador de textos, una app de pedidos.\n- **De desarrollo:** para crear otros programas. Un IDE como Visual Studio o IntelliJ, un compilador.",
+     "example_code": "# Un programa: recibe datos, los procesa y muestra el resultado\nprecios = [25, 15, 180]          # entrada\ntotal = sum(precios) * 1.21      # proceso: suma con IVA\nprint(f\"Total: {total:.2f} €\")   # salida",
+     "exercise": "Escribe un programa en Python que:\n\n1. guarde en una lista las notas `[7, 4, 9, 6]`;\n2. calcule la media;\n3. muestre `Media: 6.5`.\n\nMarca con comentarios la parte de entrada, la de proceso y la de salida.",
+     "starter": "notas = [7, 4, 9, 6]  # entrada\n\n# proceso\n\n# salida\n",
+     "quiz": [
+      {
+       "q": "¿Qué es la sintaxis de un lenguaje de programación?",
+       "options": [
+        "Sus reglas de escritura",
+        "La velocidad a la que se ejecuta",
+        "El programa que lo traduce",
+        "La lista de sus bibliotecas"
+       ],
+       "answer": 0,
+       "explain": "Por eso el mismo «Hola, mundo» se escribe distinto en cada lenguaje."
+      },
+      {
+       "q": "¿Qué lenguaje es imprescindible para el desarrollo web en el navegador?",
+       "options": [
+        "JavaScript",
+        "C++",
+        "Java",
+        "Python"
+       ],
+       "answer": 0,
+       "explain": "Es el que ejecutan los navegadores para hacer las páginas interactivas."
+      }
+     ],
+     "challenge": {
+      "title": "Elige el lenguaje",
+      "stars": 1,
+      "exercise": "Para cada proyecto, elige un lenguaje y justifícalo: un videojuego 3D exigente, la web interactiva de una tienda, un script que renombra archivos y la app de un banco.",
+      "starter": "# Videojuego: ...\n# Web de la tienda: ...\n# Script: ...\n# Banco: ...\n",
+      "hint": "Rendimiento → C++. Navegador → JavaScript. Sencillez y automatización → Python. Empresa y multiplataforma → Java."
+     },
+     "assistant": {
+      "hint": "La media es `sum(notas) / len(notas)`.",
+      "faq": [
+       {
+        "q": "¿Un navegador es software de sistema o de aplicación?",
+        "a": "De aplicación: lo usas para una tarea concreta. El sistema operativo sobre el que funciona es software de sistema."
+       },
+       {
+        "q": "¿Qué lenguaje debería aprender primero?",
+        "a": "En DAW trabajarás con Java (Programación), SQL (Bases de datos), HTML/CSS y JavaScript. Python va bien para practicar la lógica."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "Documentación oficial de Python",
+       "url": "https://docs.python.org/es/3/tutorial/"
+      },
+      {
+       "title": "The Java Tutorials (Oracle)",
+       "url": "https://docs.oracle.com/javase/tutorial/"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "ent-traduccion",
+   "title": "Del código fuente al ejecutable",
+   "summary": "Compilación, enlace, compiladores, intérpretes, máquinas virtuales y contenedores.",
+   "lessons": [
+    {
+     "slug": "ent-compilar-e-interpretar",
+     "title": "Del código fuente al ejecutable",
+     "theory": "El ordenador solo entiende **lenguaje máquina** (ceros y unos). El **código fuente**, el que escribes, hay que traducirlo.\n\n**Etapas en un lenguaje compilado (como C++):**\n1. **Código fuente:** `area.cpp`.\n2. **Compilación:** el **compilador** (por ejemplo `g++`) comprueba los errores y traduce a **código objeto** (`area.o` o `.obj`), en lenguaje máquina pero aún no ejecutable.\n3. **Ensamblado:** en algunos casos, un **ensamblador** convierte el código en instrucciones que el procesador ejecuta.\n4. **Enlace (linking):** el **enlazador** une el código objeto con las **librerías** necesarias.\n5. **Código ejecutable:** un archivo que el sistema operativo ejecuta directamente (`area.exe` en Windows, un binario en Linux).\n\n**Compilador o intérprete:**\n- **Compilador:** traduce **todo** el programa antes de ejecutarlo. Después el ejecutable funciona **sin el código fuente**. C y C++.\n- **Intérprete:** traduce y ejecuta **línea a línea** mientras el programa funciona. Si una línea tiene un error, el programa se detiene **al llegar a ella**. Python.\n- **Java** combina los dos: `javac` compila a **bytecode** (`.class`) y la **máquina virtual de Java (JVM)** lo ejecuta. Por eso es multiplataforma.\n\n**Virtualización:**\n- **Máquina virtual (VM):** simula un ordenador completo, con su propio sistema operativo. Sirve para probar un programa en Linux desde Windows sin tocar el sistema principal.\n- **Contenedor** (Docker): aísla el programa **sin simular un sistema operativo completo**. Es más ligero y facilita desplegar y escalar en servidores.",
+     "example_code": "# Python es interpretado: las líneas anteriores al error sí se ejecutan\nprint(\"Línea 1\")\nprint(\"Línea 2\")\ntry:\n    print(10 / 0)          # aquí se detendría el programa sin el try\nexcept ZeroDivisionError:\n    print(\"Error en la línea 3: el intérprete para aquí\")",
+     "exercise": "Instala Python y, si puedes, un compilador de C (`gcc`).\n\n1. Escribe el mismo programa que sume del 1 al 5 en los dos lenguajes.\n2. Ejecuta el de Python con `python suma.py`.\n3. Compila el de C con `gcc suma.c -o suma` y ejecuta `./suma`.\n\nAnota qué archivos se generan en cada caso.",
+     "starter": "# suma.py\nsuma = 0\nfor i in range(1, 6):\n    suma += i\nprint(suma)\n",
+     "quiz": [
+      {
+       "q": "¿Qué entiende directamente el procesador?",
+       "options": [
+        "El lenguaje máquina",
+        "El código fuente en Java",
+        "El código en Python",
+        "El pseudocódigo"
+       ],
+       "answer": 0,
+       "explain": "Todo lo demás hay que traducirlo con un compilador, un intérprete o ambos."
+      },
+      {
+       "q": "¿Con qué herramienta se gestionan contenedores?",
+       "options": [
+        "Docker",
+        "g++",
+        "javac",
+        "Scrum"
+       ],
+       "answer": 0,
+       "explain": "g++ y javac son compiladores; Scrum es una metodología ágil."
+      }
+     ],
+     "challenge": {
+      "title": "Ordena el proceso",
+      "stars": 2,
+      "exercise": "Ordena y explica en una frase cada paso: enlazador, código fuente, ejecutable, compilador, código objeto. Indica qué archivo sale de cada uno en el ejemplo de `area.cpp`.",
+      "starter": "# 1. Código fuente: area.cpp\n# 2. ...\n",
+      "hint": "Fuente (area.cpp) → compilador → objeto (area.o) → enlazador + librerías → ejecutable (area.exe)."
+     },
+     "assistant": {
+      "hint": "Python no genera ningún ejecutable: el intérprete lee `suma.py` cada vez. `gcc` genera el ejecutable `suma`, que funciona aunque borres `suma.c`.",
+      "faq": [
+       {
+        "q": "¿Python no compila nada?",
+        "a": "CPython traduce internamente a bytecode (los `.pyc` de `__pycache__`) y lo interpreta. Para la unidad, se considera un lenguaje interpretado."
+       },
+       {
+        "q": "¿Docker sustituye a las máquinas virtuales?",
+        "a": "No siempre. Un contenedor comparte el núcleo del sistema anfitrión; si necesitas otro sistema operativo completo, sigue haciendo falta una VM."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "Documentación oficial de Python",
+       "url": "https://docs.python.org/es/3/tutorial/"
+      },
+      {
+       "title": "The Java Tutorials (Oracle)",
+       "url": "https://docs.oracle.com/javase/tutorial/"
+      },
+      {
+       "title": "Docker — Get started",
+       "url": "https://docs.docker.com/get-started/"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "ent-paradigmas",
+   "title": "Paradigmas de programación",
+   "summary": "Imperativo, orientado a objetos, funcional, declarativo y mixto.",
+   "lessons": [
+    {
+     "slug": "ent-paradigmas",
+     "title": "Paradigmas de programación",
+     "theory": "Un **paradigma** es un estilo de organizar el código para resolver problemas.\n\n**Imperativo:** describe **paso a paso** cómo resolverlo. Secuencias de instrucciones, **variables que cambian** de valor y estructuras de control (`if`, `for`, `while`).\n\nEjemplo: `suma = 0` y un bucle `for i in range(1, 6): suma += i`.\n\n**Orientado a objetos (POO):** el código se organiza en **clases** (el molde, con **atributos** y **métodos**) y **objetos** (instancias de la clase). Usa herencia y polimorfismo; favorece la reutilización y la modularidad. Ideal para proyectos grandes. Java es el ejemplo típico.\n\n**Funcional:** se basa en **funciones puras** (sin efectos secundarios, no cambian el estado), datos **inmutables** y funciones como «**ciudadanos de primera clase**» (se pasan como argumento o se devuelven). Útil con grandes volúmenes de datos y en sistemas concurrentes.\n\nEjemplo: `print(sum(range(1, 6)))`, sin bucles ni variables que cambien.\n\n**Declarativo:** dices **qué** quieres, no **cómo** conseguirlo. SQL es el ejemplo: `SELECT nombre FROM estudiantes WHERE edad > 18;` y el SGBD decide cómo buscarlo.\n\n**Paradigmas mixtos:** muchos lenguajes modernos admiten varios. Python permite programar de forma imperativa, orientada a objetos o funcional; Java, desde la versión 8, añade lambdas y streams a la POO.",
+     "example_code": "# El mismo problema en tres estilos: sumar del 1 al 5\n\n# Imperativo: pasos y una variable que cambia\nsuma = 0\nfor i in range(1, 6):\n    suma += i\nprint(suma)\n\n# Funcional: una función aplicada a los datos, sin variables que cambien\nprint(sum(range(1, 6)))\n\n# Orientado a objetos: una clase con su estado y sus métodos\nclass Contador:\n    def __init__(self):\n        self.total = 0\n\n    def sumar(self, n):\n        self.total += n\n\nc = Contador()\nfor i in range(1, 6):\n    c.sumar(i)\nprint(c.total)",
+     "exercise": "Calcula el producto de los números del 1 al 5 (debe dar 120):\n\n1. en estilo **imperativo**, con un bucle;\n2. en estilo **funcional**, con `math.prod`;\n3. en **POO**, con una clase `Multiplicador` que tenga un método `multiplicar(n)`.",
+     "starter": "# 1. Imperativo\nproducto = 1\n\n# 2. Funcional\nimport math\n\n# 3. POO\nclass Multiplicador:\n    pass\n",
+     "quiz": [
+      {
+       "q": "¿Qué paradigma se centra en «qué» quieres y no en «cómo» conseguirlo?",
+       "options": [
+        "Declarativo",
+        "Imperativo",
+        "Orientado a objetos",
+        "Estructurado"
+       ],
+       "answer": 0,
+       "explain": "SQL es el ejemplo típico."
+      },
+      {
+       "q": "¿Qué conceptos son propios de la POO?",
+       "options": [
+        "Clases, objetos, herencia y polimorfismo",
+        "Funciones puras e inmutabilidad",
+        "SELECT, FROM y WHERE",
+        "Compilador y enlazador"
+       ],
+       "answer": 0,
+       "explain": "Las funciones puras son del paradigma funcional; SELECT, del declarativo."
+      }
+     ],
+     "challenge": {
+      "title": "Clasifica",
+      "stars": 2,
+      "exercise": "Di qué paradigma predomina en: un bucle while que acumula un total; `SELECT * FROM pedidos WHERE total > 100`; `map(lambda x: x * 2, datos)`; una clase `Coche` con el método `acelerar()`.",
+      "starter": "# while que acumula: ...\n# SELECT: ...\n# map + lambda: ...\n# clase Coche: ...\n",
+      "hint": "Imperativo, declarativo, funcional y orientado a objetos."
+     },
+     "assistant": {
+      "hint": "El imperativo empieza en 1 (no en 0) y multiplica en el bucle. El funcional es `math.prod(range(1, 6))`.",
+      "faq": [
+       {
+        "q": "¿SQL es un lenguaje de programación?",
+        "a": "Es un lenguaje declarativo de consulta: describes el resultado y el SGBD decide cómo obtenerlo."
+       },
+       {
+        "q": "¿Qué paradigma usaré en Programación?",
+        "a": "Sobre todo imperativo y orientado a objetos, con Java. En Entorno cliente, JavaScript mezcla los tres."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "Documentación oficial de Python",
+       "url": "https://docs.python.org/es/3/tutorial/"
+      },
+      {
+       "title": "The Java Tutorials (Oracle)",
+       "url": "https://docs.oracle.com/javase/tutorial/"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "ent-ciclo-de-vida",
+   "title": "Fases del desarrollo y metodologías ágiles",
+   "summary": "Del análisis al mantenimiento; cascada, Scrum, Kanban y XP.",
+   "lessons": [
+    {
+     "slug": "ent-fases-y-agiles",
+     "title": "Fases del desarrollo y metodologías ágiles",
+     "theory": "**Fases del desarrollo de una aplicación:**\n1. **Análisis de requisitos:** qué necesita el cliente. **Funcionales** (lo que hace: «permitir hacer un pedido») y **no funcionales** (cómo se comporta: «cargar en menos de 3 segundos»). Entrevistas, encuestas y el documento **ERS** (Especificación de Requisitos de Software).\n2. **Diseño:** el **conceptual** define el «qué» (qué módulos habrá) y el **técnico**, el «cómo». Diagramas **UML**, como el de clases.\n3. **Codificación:** se escribe el código, limpio y comentado.\n4. **Pruebas y depuración:** comprobar que funciona y cumple los requisitos, a mano o automatizadas (**JUnit**, **Selenium**). **Depurar** es encontrar y corregir los errores.\n5. **Documentación:** manuales de usuario, guías de instalación y documentación técnica.\n6. **Explotación:** se despliega en el **entorno productivo** y se monitoriza.\n7. **Mantenimiento:** corregir errores y añadir funciones (un método de pago nuevo).\n\nLas fases están conectadas: un error en el análisis arrastra problemas al diseño, al código y a las pruebas.\n\n**Cascada:** proceso **lineal**: todo el análisis, luego todo el diseño, el código y las pruebas. Funciona si los requisitos están claros desde el principio; se adapta mal a los cambios.\n\n**Metodologías ágiles:** ciclos **cortos e iterativos**, colaboración constante, adaptación al cambio, **entregas incrementales** y retroalimentación continua.\n- **Scrum:** **sprints** de 1 a 4 semanas. Roles: **Product Owner** (prioridades y objetivos), **Scrum Master** (que se sigan los principios, quita obstáculos) y **equipo de desarrollo**. El **backlog** es la lista priorizada de tareas; cada día hay una **daily stand-up**.\n- **Kanban:** tablero visual con columnas (**Pendiente, En progreso, Completado**) y un **límite de tareas en progreso** para no saturar al equipo.\n- **Extreme Programming (XP):** calidad del código: **programación en pareja**, **pruebas continuas** y **entregas frecuentes**.\n\nHerramientas: Trello o Jira para tableros y sprints.",
+     "example_code": "# Un tablero Kanban mínimo con límite de tareas en progreso\ntablero = {\"Pendiente\": [\"Diseñar la interfaz\", \"Probar la búsqueda\"], \"En progreso\": [], \"Completado\": []}\nLIMITE = 1\n\ndef empezar(tarea):\n    if len(tablero[\"En progreso\"]) >= LIMITE:\n        print(f\"No se puede empezar «{tarea}»: límite de tareas en progreso\")\n        return\n    tablero[\"Pendiente\"].remove(tarea)\n    tablero[\"En progreso\"].append(tarea)\n\nempezar(\"Diseñar la interfaz\")\nempezar(\"Probar la búsqueda\")\nprint(tablero)",
+     "exercise": "Vas a desarrollar la app de reservas de un gimnasio con Scrum.\n\n1. Escribe 3 requisitos funcionales y 2 no funcionales.\n2. Crea un backlog de 6 tareas ordenadas por prioridad.\n3. Decide qué entra en el primer sprint de 2 semanas y quién hace de Product Owner.",
+     "starter": "# Requisitos funcionales\n# 1. ...\n\n# Requisitos no funcionales\n# 1. ...\n\n# Backlog (de más a menos prioridad)\n# 1. ...\n",
+     "quiz": [
+      {
+       "q": "¿Qué caracteriza a las metodologías ágiles?",
+       "options": [
+        "Ciclos cortos, entregas incrementales y adaptación al cambio",
+        "Planificarlo todo al principio y no cambiar nada",
+        "No hacer pruebas",
+        "Trabajar sin cliente"
+       ],
+       "answer": 0,
+       "explain": "Frente a la cascada, priorizan la colaboración y la retroalimentación continua."
+      },
+      {
+       "q": "¿Qué herramientas se usan para pruebas automatizadas según la unidad?",
+       "options": [
+        "JUnit y Selenium",
+        "Trello y Jira",
+        "Docker y Hadoop",
+        "g++ y javac"
+       ],
+       "answer": 0,
+       "explain": "Trello y Jira sirven para gestionar tareas; Docker, para contenedores; g++ y javac son compiladores."
+      }
+     ],
+     "challenge": {
+      "title": "¿Cascada o ágil?",
+      "stars": 2,
+      "exercise": "Elige metodología para: (1) el software de un marcapasos con requisitos cerrados y certificación; (2) una startup que todavía está descubriendo qué quieren sus clientes. Justifícalo.",
+      "starter": "# 1. Marcapasos: ...\n# 2. Startup: ...\n",
+      "hint": "Requisitos estables y muy regulados → cascada. Mucha incertidumbre y cambios → ágil."
+     },
+     "assistant": {
+      "hint": "Funcional: «el socio puede reservar una clase». No funcional: «la app funciona en móviles con Android 8 o superior». El primer sprint suele entregar algo pequeño que ya funcione, como el registro de socios.",
+      "faq": [
+       {
+        "q": "¿Ágil significa sin documentación?",
+        "a": "No. Significa documentar lo necesario y priorizar el software que funciona, con entregas frecuentes que el cliente puede revisar."
+       },
+       {
+        "q": "¿Kanban tiene sprints?",
+        "a": "No: es un flujo continuo. Los sprints son de Scrum. Muchos equipos usan un tablero Kanban dentro de Scrum."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "La Guía Scrum (en español)",
+       "url": "https://scrumguides.org/docs/scrumguide/v2020/2020-Scrum-Guide-Spanish-European.pdf"
+      },
+      {
+       "title": "The Java Tutorials (Oracle)",
+       "url": "https://docs.oracle.com/javase/tutorial/"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

@@ -6,364 +6,405 @@
   "pass": 0,
   "blocks": [
    {
-    "slug": "consultas",
-    "weight": 30,
-    "items": 10,
-    "title": {
-     "es": "Consultas básicas",
-     "en": "Consultas básicas"
-    }
-   },
-   {
-    "slug": "agregacion",
-    "weight": 20,
-    "items": 10,
-    "title": {
-     "es": "Agregados y agrupación",
-     "en": "Agregados y agrupación"
-    }
-   },
-   {
-    "slug": "joins",
-    "weight": 25,
-    "items": 10,
-    "title": {
-     "es": "Combinaciones y subconsultas",
-     "en": "Combinaciones y subconsultas"
-    }
-   },
-   {
-    "slug": "ddl-dml",
+    "slug": "bd-ud1",
     "weight": 15,
-    "items": 10,
+    "items": 24,
     "title": {
-     "es": "Crear y modificar datos",
-     "en": "Crear y modificar datos"
+     "es": "UD1 · Almacenamiento de la información",
+     "en": "UD1 · Almacenamiento de la información"
     }
    },
    {
-    "slug": "diseno",
+    "slug": "bd-ud2",
+    "weight": 30,
+    "items": 29,
+    "title": {
+     "es": "UD2 · Bases de datos relacionales",
+     "en": "UD2 · Bases de datos relacionales"
+    }
+   },
+   {
+    "slug": "bd-ud3",
+    "weight": 45,
+    "items": 47,
+    "title": {
+     "es": "UD3 · Realización de consultas",
+     "en": "UD3 · Realización de consultas"
+    }
+   },
+   {
+    "slug": "bd-ampliacion",
     "weight": 10,
     "items": 10,
     "title": {
-     "es": "Diseño y transacciones",
-     "en": "Diseño y transacciones"
+     "es": "Ampliación · Modificar datos y transacciones",
+     "en": "Ampliación · Modificar datos y transacciones"
     }
    }
   ]
  },
  "questions": [
   {
-   "id": "sql-01",
-   "block": "consultas",
+   "id": "bd-01",
+   "block": "bd-ud1",
    "q": {
-    "es": "¿Qué devuelve esta consulta?",
-    "en": "¿Qué devuelve esta consulta?"
-   },
-   "code": "-- alumnos\n-- id | nombre | ciclo | nota\n-- 1  | Ana    | DAW   | 8\n-- 2  | Luis   | DAM   | 5\n-- 3  | Eva    | DAW   | NULL\n-- 4  | Juan   | ASIR  | 7\n-- 5  | Sara   | DAM   | 9\n\nSELECT DISTINCT ciclo FROM alumnos ORDER BY ciclo;",
-   "options": [
-    "ASIR\nDAM\nDAM\nDAW\nDAW",
-    "DAW\nDAM\nDAW\nASIR\nDAM",
-    "DAW\nDAM\nASIR",
-    "ASIR\nDAM\nDAW"
-   ],
-   "answer": [
-    3
-   ],
-   "explain": {
-    "es": "`DISTINCT` deja una fila por cada ciclo distinto (DAW, DAM y ASIR) y `ORDER BY ciclo` los ordena alfabéticamente de menor a mayor.",
-    "en": "`DISTINCT` deja una fila por cada ciclo distinto (DAW, DAM y ASIR) y `ORDER BY ciclo` los ordena alfabéticamente de menor a mayor."
-   },
-   "lesson": "sql-select"
-  },
-  {
-   "id": "sql-02",
-   "block": "consultas",
-   "q": {
-    "es": "¿Qué devuelve esta consulta?",
-    "en": "¿Qué devuelve esta consulta?"
-   },
-   "code": "-- alumnos\n-- id | nombre | ciclo | nota\n-- 1  | Ana    | DAW   | 8\n-- 2  | Luis   | DAM   | 5\n-- 3  | Eva    | DAW   | NULL\n-- 4  | Juan   | ASIR  | 7\n-- 5  | Sara   | DAM   | 9\n\nSELECT nombre FROM alumnos ORDER BY nota DESC LIMIT 2;",
-   "options": [
-    "Eva\nSara",
-    "Luis\nAna",
-    "Ana\nSara",
-    "Sara\nAna"
-   ],
-   "answer": [
-    3
-   ],
-   "explain": {
-    "es": "`DESC` ordena de mayor a menor nota (9, 8, 7, 5) y `LIMIT 2` se queda con las dos primeras: Sara y Ana. En SQLite y MySQL los NULL van al final al ordenar en descendente.",
-    "en": "`DESC` ordena de mayor a menor nota (9, 8, 7, 5) y `LIMIT 2` se queda con las dos primeras: Sara y Ana. En SQLite y MySQL los NULL van al final al ordenar en descendente."
-   },
-   "lesson": "sql-select"
-  },
-  {
-   "id": "sql-03",
-   "block": "consultas",
-   "q": {
-    "es": "¿Qué devuelve esta consulta?",
-    "en": "¿Qué devuelve esta consulta?"
-   },
-   "code": "-- productos\n-- id | nombre  | precio | stock\n-- 1  | Teclado | 25     | 10\n-- 2  | Ratón   | 15     | 0\n-- 3  | Monitor | 180    | 4\n-- 4  | Cable   | 5      | 50\n\nSELECT nombre, precio * stock AS valor\nFROM productos\nORDER BY valor DESC\nLIMIT 1;",
-   "options": [
-    "Cable | 250",
-    "Teclado | 250",
-    "Monitor | 720",
-    "Monitor | 180"
-   ],
-   "answer": [
-    2
-   ],
-   "explain": {
-    "es": "El valor es precio × stock: Monitor 180 × 4 = 720, Teclado 250, Cable 250, Ratón 0. El alias `valor` se puede usar en ORDER BY porque este se evalúa después del SELECT.",
-    "en": "El valor es precio × stock: Monitor 180 × 4 = 720, Teclado 250, Cable 250, Ratón 0. El alias `valor` se puede usar en ORDER BY porque este se evalúa después del SELECT."
-   },
-   "lesson": "sql-select"
-  },
-  {
-   "id": "sql-04",
-   "block": "consultas",
-   "q": {
-    "es": "¿En qué orden **lógico** evalúa el SGBD estas cláusulas?",
-    "en": "¿En qué orden **lógico** evalúa el SGBD estas cláusulas?"
+    "es": "¿Cuál es el principal inconveniente de una base de datos centralizada?",
+    "en": "¿Cuál es el principal inconveniente de una base de datos centralizada?"
    },
    "code": null,
    "options": [
     {
-     "es": "FROM → WHERE → SELECT → ORDER BY",
-     "en": "FROM → WHERE → SELECT → ORDER BY"
+     "es": "Si el servidor central falla, no se puede acceder a ningún dato",
+     "en": "Si el servidor central falla, no se puede acceder a ningún dato"
     },
     {
-     "es": "SELECT → FROM → WHERE → ORDER BY",
-     "en": "SELECT → FROM → WHERE → ORDER BY"
+     "es": "Es difícil mantener la coherencia de los datos",
+     "en": "Es difícil mantener la coherencia de los datos"
     },
     {
-     "es": "SELECT → WHERE → FROM → ORDER BY",
-     "en": "SELECT → WHERE → FROM → ORDER BY"
+     "es": "Necesita varios servidores sincronizados",
+     "en": "Necesita varios servidores sincronizados"
     },
     {
-     "es": "FROM → SELECT → WHERE → ORDER BY",
-     "en": "FROM → SELECT → WHERE → ORDER BY"
+     "es": "No permite usar SQL",
+     "en": "No permite usar SQL"
     }
    ],
    "answer": [
     0
    ],
    "explain": {
-    "es": "Primero elige la tabla (`FROM`), filtra filas (`WHERE`), calcula las columnas (`SELECT`) y por último ordena (`ORDER BY`). Por eso un alias del SELECT no existe todavía dentro del WHERE.",
-    "en": "Primero elige la tabla (`FROM`), filtra filas (`WHERE`), calcula las columnas (`SELECT`) y por último ordena (`ORDER BY`). Por eso un alias del SELECT no existe todavía dentro del WHERE."
+    "es": "Todo está en un único servidor: es un **punto único de fallo**. En cambio, la coherencia es justo lo más fácil de mantener en una centralizada.",
+    "en": "Todo está en un único servidor: es un **punto único de fallo**. En cambio, la coherencia es justo lo más fácil de mantener en una centralizada."
    },
-   "lesson": "sql-select"
+   "lesson": "bd-tipos-y-modelos"
   },
   {
-   "id": "sql-05",
-   "block": "consultas",
+   "id": "bd-02",
+   "block": "bd-ud1",
    "q": {
-    "es": "¿Qué hace `SELECT DISTINCT ciclo, nota FROM alumnos`?",
-    "en": "¿Qué hace `SELECT DISTINCT ciclo, nota FROM alumnos`?"
+    "es": "¿Qué ventaja tiene una base de datos distribuida frente a una centralizada?",
+    "en": "¿Qué ventaja tiene una base de datos distribuida frente a una centralizada?"
    },
    "code": null,
    "options": [
     {
-     "es": "Elimina las filas en las que coinciden a la vez el ciclo y la nota",
-     "en": "Elimina las filas en las que coinciden a la vez el ciclo y la nota"
+     "es": "Si un servidor falla, los datos de los demás siguen accesibles",
+     "en": "Si un servidor falla, los datos de los demás siguen accesibles"
     },
     {
-     "es": "Elimina los ciclos repetidos y se queda con la primera nota",
-     "en": "Elimina los ciclos repetidos y se queda con la primera nota"
+     "es": "Es más fácil de administrar",
+     "en": "Es más fácil de administrar"
     },
     {
-     "es": "Aplica DISTINCT solo a la columna ciclo",
-     "en": "Aplica DISTINCT solo a la columna ciclo"
+     "es": "Es más sencillo mantener los datos sincronizados",
+     "en": "Es más sencillo mantener los datos sincronizados"
     },
     {
-     "es": "Da error: DISTINCT solo admite una columna",
-     "en": "Da error: DISTINCT solo admite una columna"
+     "es": "Necesita menos recursos",
+     "en": "Necesita menos recursos"
     }
    ],
    "answer": [
     0
    ],
    "explain": {
-    "es": "`DISTINCT` afecta a la **fila completa** del resultado: dos filas solo se consideran repetidas si coinciden en todas las columnas seleccionadas.",
-    "en": "`DISTINCT` afecta a la **fila completa** del resultado: dos filas solo se consideran repetidas si coinciden en todas las columnas seleccionadas."
+    "es": "Reparte los datos y la carga entre servidores. A cambio, sincronizarlos y administrarla es más difícil y costoso.",
+    "en": "Reparte los datos y la carga entre servidores. A cambio, sincronizarlos y administrarla es más difícil y costoso."
    },
-   "lesson": "sql-select"
+   "lesson": "bd-tipos-y-modelos"
   },
   {
-   "id": "sql-06",
-   "block": "consultas",
+   "id": "bd-03",
+   "block": "bd-ud1",
    "q": {
-    "es": "¿Qué devuelve esta consulta?",
-    "en": "¿Qué devuelve esta consulta?"
+    "es": "Guardar a los alumnos de cada provincia en un servidor distinto es fragmentación…",
+    "en": "Guardar a los alumnos de cada provincia en un servidor distinto es fragmentación…"
    },
-   "code": "-- alumnos\n-- id | nombre | ciclo | nota\n-- 1  | Ana    | DAW   | 8\n-- 2  | Luis   | DAM   | 5\n-- 3  | Eva    | DAW   | NULL\n-- 4  | Juan   | ASIR  | 7\n-- 5  | Sara   | DAM   | 9\n\nSELECT nombre FROM alumnos WHERE nota >= 7 AND ciclo = 'DAW';",
+   "code": null,
    "options": [
-    "(sin filas)",
-    "Ana\nJuan\nSara",
-    "Ana",
-    "Ana\nEva"
+    {
+     "es": "horizontal",
+     "en": "horizontal"
+    },
+    {
+     "es": "vertical",
+     "en": "vertical"
+    },
+    {
+     "es": "mixta",
+     "en": "mixta"
+    },
+    {
+     "es": "jerárquica",
+     "en": "jerárquica"
+    }
    ],
    "answer": [
-    2
+    0
    ],
    "explain": {
-    "es": "De DAW son Ana (8) y Eva (NULL). `NULL >= 7` da *desconocido*, no verdadero, así que Eva no pasa el filtro.",
-    "en": "De DAW son Ana (8) y Eva (NULL). `NULL >= 7` da *desconocido*, no verdadero, así que Eva no pasa el filtro."
+    "es": "Se reparten las **filas** según una condición (la provincia). Todas las filas conservan todas sus columnas.",
+    "en": "Se reparten las **filas** según una condición (la provincia). Todas las filas conservan todas sus columnas."
    },
-   "lesson": "sql-where"
+   "lesson": "bd-tipos-y-modelos"
   },
   {
-   "id": "sql-07",
-   "block": "consultas",
+   "id": "bd-04",
+   "block": "bd-ud1",
    "q": {
-    "es": "¿Qué devuelve esta consulta?",
-    "en": "¿Qué devuelve esta consulta?"
+    "es": "Los datos personales de los empleados van a un servidor y los de nómina a otro. ¿Qué fragmentación es?",
+    "en": "Los datos personales de los empleados van a un servidor y los de nómina a otro. ¿Qué fragmentación es?"
    },
-   "code": "-- alumnos\n-- id | nombre | ciclo | nota\n-- 1  | Ana    | DAW   | 8\n-- 2  | Luis   | DAM   | 5\n-- 3  | Eva    | DAW   | NULL\n-- 4  | Juan   | ASIR  | 7\n-- 5  | Sara   | DAM   | 9\n\nSELECT nombre FROM alumnos WHERE nota = NULL;",
+   "code": null,
    "options": [
-    "Ana\nLuis\nJuan\nSara",
-    "Eva",
-    "Error",
-    "(sin filas)"
+    {
+     "es": "Vertical",
+     "en": "Vertical"
+    },
+    {
+     "es": "Horizontal",
+     "en": "Horizontal"
+    },
+    {
+     "es": "Mixta",
+     "en": "Mixta"
+    },
+    {
+     "es": "Ninguna: es una réplica",
+     "en": "Ninguna: es una réplica"
+    }
    ],
    "answer": [
-    3
+    0
    ],
    "explain": {
-    "es": "No da error, pero no devuelve nada: comparar con NULL usando `=` nunca es verdadero. Para encontrar a Eva hay que escribir `WHERE nota IS NULL`.",
-    "en": "No da error, pero no devuelve nada: comparar con NULL usando `=` nunca es verdadero. Para encontrar a Eva hay que escribir `WHERE nota IS NULL`."
+    "es": "Se reparten las **columnas**. Cada fragmento repite la clave para poder reconstruir al empleado con un JOIN.",
+    "en": "Se reparten las **columnas**. Cada fragmento repite la clave para poder reconstruir al empleado con un JOIN."
    },
-   "lesson": "sql-where"
+   "lesson": "bd-tipos-y-modelos"
   },
   {
-   "id": "sql-08",
-   "block": "consultas",
+   "id": "bd-05",
+   "block": "bd-ud1",
    "q": {
-    "es": "¿Qué devuelve esta consulta?",
-    "en": "¿Qué devuelve esta consulta?"
+    "es": "Se separan los alumnos por provincia y, dentro de cada provincia, sus datos personales de los académicos. ¿Qué fragmentación es?",
+    "en": "Se separan los alumnos por provincia y, dentro de cada provincia, sus datos personales de los académicos. ¿Qué fragmentación es?"
    },
-   "code": "-- alumnos\n-- id | nombre | ciclo | nota\n-- 1  | Ana    | DAW   | 8\n-- 2  | Luis   | DAM   | 5\n-- 3  | Eva    | DAW   | NULL\n-- 4  | Juan   | ASIR  | 7\n-- 5  | Sara   | DAM   | 9\n\nSELECT nombre FROM alumnos\nWHERE ciclo = 'DAM' OR ciclo = 'DAW' AND nota > 7\nORDER BY id;",
+   "code": null,
    "options": [
-    "Sara",
-    "Ana\nLuis\nSara",
-    "Ana\nSara",
-    "Ana\nLuis\nEva\nSara"
+    {
+     "es": "Mixta",
+     "en": "Mixta"
+    },
+    {
+     "es": "Horizontal",
+     "en": "Horizontal"
+    },
+    {
+     "es": "Vertical",
+     "en": "Vertical"
+    },
+    {
+     "es": "Distribuida simple",
+     "en": "Distribuida simple"
+    }
    ],
    "answer": [
-    1
+    0
    ],
    "explain": {
-    "es": "`AND` va antes que `OR`: la condición es `ciclo = 'DAM' OR (ciclo = 'DAW' AND nota > 7)`. Entran todos los de DAM (Luis y Sara) y, de DAW, solo Ana.",
-    "en": "`AND` va antes que `OR`: la condición es `ciclo = 'DAM' OR (ciclo = 'DAW' AND nota > 7)`. Entran todos los de DAM (Luis y Sara) y, de DAW, solo Ana."
+    "es": "Combina la horizontal (por provincia, filas) y la vertical (personal o académico, columnas).",
+    "en": "Combina la horizontal (por provincia, filas) y la vertical (personal o académico, columnas)."
    },
-   "lesson": "sql-where"
+   "lesson": "bd-tipos-y-modelos"
   },
   {
-   "id": "sql-09",
-   "block": "consultas",
+   "id": "bd-06",
+   "block": "bd-ud1",
    "q": {
-    "es": "¿Qué devuelve esta consulta?",
-    "en": "¿Qué devuelve esta consulta?"
+    "es": "¿En qué modelo cada nodo tiene un único padre, como un árbol?",
+    "en": "¿En qué modelo cada nodo tiene un único padre, como un árbol?"
    },
-   "code": "-- productos\n-- id | nombre  | precio | stock\n-- 1  | Teclado | 25     | 10\n-- 2  | Ratón   | 15     | 0\n-- 3  | Monitor | 180    | 4\n-- 4  | Cable   | 5      | 50\n\nSELECT nombre FROM productos\nWHERE precio BETWEEN 15 AND 25\nORDER BY precio;",
+   "code": null,
    "options": [
-    "Teclado",
-    "Ratón",
-    "Ratón\nTeclado",
-    "Cable\nRatón\nTeclado"
+    {
+     "es": "Jerárquico",
+     "en": "Jerárquico"
+    },
+    {
+     "es": "En red",
+     "en": "En red"
+    },
+    {
+     "es": "Relacional",
+     "en": "Relacional"
+    },
+    {
+     "es": "Orientado a objetos",
+     "en": "Orientado a objetos"
+    }
    ],
    "answer": [
-    2
+    0
    ],
    "explain": {
-    "es": "`BETWEEN` incluye los dos extremos: entran el Ratón (15) y el Teclado (25).",
-    "en": "`BETWEEN` incluye los dos extremos: entran el Ratón (15) y el Teclado (25)."
+    "es": "Empresa → Departamentos → Empleados. Si un nodo pudiera tener varios padres, sería el modelo **en red**.",
+    "en": "Empresa → Departamentos → Empleados. Si un nodo pudiera tener varios padres, sería el modelo **en red**."
    },
-   "lesson": "sql-where"
+   "lesson": "bd-tipos-y-modelos"
   },
   {
-   "id": "sql-10",
-   "block": "consultas",
+   "id": "bd-07",
+   "block": "bd-ud1",
    "q": {
-    "es": "¿Qué devuelve esta consulta?",
-    "en": "¿Qué devuelve esta consulta?"
+    "es": "Un empleado puede estar vinculado a varios proyectos, y cada proyecto a varios empleados, en un modelo que no usa tablas. ¿Cuál es?",
+    "en": "Un empleado puede estar vinculado a varios proyectos, y cada proyecto a varios empleados, en un modelo que no usa tablas. ¿Cuál es?"
    },
-   "code": "-- alumnos\n-- id | nombre | ciclo | nota\n-- 1  | Ana    | DAW   | 8\n-- 2  | Luis   | DAM   | 5\n-- 3  | Eva    | DAW   | NULL\n-- 4  | Juan   | ASIR  | 7\n-- 5  | Sara   | DAM   | 9\n\nSELECT nombre FROM alumnos WHERE nombre LIKE '_a%';",
+   "code": null,
    "options": [
-    "Ana\nJuan\nSara",
-    "Ana\nSara",
-    "Juan\nSara",
-    "Sara"
+    {
+     "es": "En red",
+     "en": "En red"
+    },
+    {
+     "es": "Jerárquico",
+     "en": "Jerárquico"
+    },
+    {
+     "es": "Relacional",
+     "en": "Relacional"
+    },
+    {
+     "es": "Fichero plano",
+     "en": "Fichero plano"
+    }
    ],
    "answer": [
-    3
+    0
    ],
    "explain": {
-    "es": "`_` es exactamente un carácter y `%` cualquier resto: el patrón pide que la **segunda** letra sea una a. Solo la cumple Sara.",
-    "en": "`_` es exactamente un carácter y `%` cualquier resto: el patrón pide que la **segunda** letra sea una a. Solo la cumple Sara."
+    "es": "El modelo en red permite que un nodo tenga **varios padres**. Es más flexible que el jerárquico, pero más difícil de gestionar que el relacional.",
+    "en": "El modelo en red permite que un nodo tenga **varios padres**. Es más flexible que el jerárquico, pero más difícil de gestionar que el relacional."
    },
-   "lesson": "sql-where"
+   "lesson": "bd-tipos-y-modelos"
   },
   {
-   "id": "sql-11",
-   "block": "agregacion",
+   "id": "bd-08",
+   "block": "bd-ud1",
    "q": {
-    "es": "¿Qué devuelve esta consulta?",
-    "en": "¿Qué devuelve esta consulta?"
+    "es": "¿Qué modelo guarda los datos como objetos con atributos y métodos?",
+    "en": "¿Qué modelo guarda los datos como objetos con atributos y métodos?"
    },
-   "code": "-- alumnos\n-- id | nombre | ciclo | nota\n-- 1  | Ana    | DAW   | 8\n-- 2  | Luis   | DAM   | 5\n-- 3  | Eva    | DAW   | NULL\n-- 4  | Juan   | ASIR  | 7\n-- 5  | Sara   | DAM   | 9\n\nSELECT COUNT(*), COUNT(nota) FROM alumnos;",
+   "code": null,
    "options": [
-    "5 | 5",
-    "5 | 4",
-    "4 | 4",
-    "4 | 5"
+    {
+     "es": "Orientado a objetos",
+     "en": "Orientado a objetos"
+    },
+    {
+     "es": "Relacional",
+     "en": "Relacional"
+    },
+    {
+     "es": "Jerárquico",
+     "en": "Jerárquico"
+    },
+    {
+     "es": "En red",
+     "en": "En red"
+    }
    ],
    "answer": [
-    1
+    0
    ],
    "explain": {
-    "es": "`COUNT(*)` cuenta las 5 filas; `COUNT(nota)` ignora el NULL de Eva y da 4.",
-    "en": "`COUNT(*)` cuenta las 5 filas; `COUNT(nota)` ignora el NULL de Eva y da 4."
+    "es": "Combina bases de datos y POO. Va bien cuando los datos tienen comportamiento asociado, como en simulaciones o videojuegos.",
+    "en": "Combina bases de datos y POO. Va bien cuando los datos tienen comportamiento asociado, como en simulaciones o videojuegos."
    },
-   "lesson": "sql-agregados"
+   "lesson": "bd-tipos-y-modelos"
   },
   {
-   "id": "sql-12",
-   "block": "agregacion",
+   "id": "bd-09",
+   "block": "bd-ud1",
    "q": {
-    "es": "¿Qué devuelve esta consulta?",
-    "en": "¿Qué devuelve esta consulta?"
+    "es": "¿Cuál de estas NO es una de las 5 V del Big Data?",
+    "en": "¿Cuál de estas NO es una de las 5 V del Big Data?"
    },
-   "code": "-- alumnos\n-- id | nombre | ciclo | nota\n-- 1  | Ana    | DAW   | 8\n-- 2  | Luis   | DAM   | 5\n-- 3  | Eva    | DAW   | NULL\n-- 4  | Juan   | ASIR  | 7\n-- 5  | Sara   | DAM   | 9\n\nSELECT AVG(nota) FROM alumnos;",
+   "code": null,
    "options": [
-    "7",
-    "5.8",
-    "NULL",
-    "7.25"
+    {
+     "es": "Visibilidad",
+     "en": "Visibilidad"
+    },
+    {
+     "es": "Veracidad",
+     "en": "Veracidad"
+    },
+    {
+     "es": "Variedad",
+     "en": "Variedad"
+    },
+    {
+     "es": "Velocidad",
+     "en": "Velocidad"
+    }
    ],
    "answer": [
-    3
+    0
    ],
    "explain": {
-    "es": "AVG ignora los NULL: (8 + 5 + 7 + 9) / 4 = 7,25. Si contara a Eva como 0 saldría 29 / 5 = 5,8.",
-    "en": "AVG ignora los NULL: (8 + 5 + 7 + 9) / 4 = 7,25. Si contara a Eva como 0 saldría 29 / 5 = 5,8."
+    "es": "Las 5 V son Volumen, Velocidad, Variedad, Veracidad y Valor.",
+    "en": "Las 5 V son Volumen, Velocidad, Variedad, Veracidad y Valor."
    },
-   "lesson": "sql-agregados"
+   "lesson": "bd-tipos-y-modelos"
   },
   {
-   "id": "sql-13",
-   "block": "agregacion",
+   "id": "bd-10",
+   "block": "bd-ud1",
    "q": {
-    "es": "¿Qué devuelve esta consulta?",
-    "en": "¿Qué devuelve esta consulta?"
+    "es": "¿Para qué sirve Hadoop?",
+    "en": "¿Para qué sirve Hadoop?"
    },
-   "code": "-- alumnos\n-- id | nombre | ciclo | nota\n-- 1  | Ana    | DAW   | 8\n-- 2  | Luis   | DAM   | 5\n-- 3  | Eva    | DAW   | NULL\n-- 4  | Juan   | ASIR  | 7\n-- 5  | Sara   | DAM   | 9\n\nSELECT COUNT(DISTINCT ciclo) FROM alumnos;",
+   "code": null,
+   "options": [
+    {
+     "es": "Para almacenar y procesar grandes volúmenes de datos repartidos en muchos servidores",
+     "en": "Para almacenar y procesar grandes volúmenes de datos repartidos en muchos servidores"
+    },
+    {
+     "es": "Para diseñar diagramas entidad-relación",
+     "en": "Para diseñar diagramas entidad-relación"
+    },
+    {
+     "es": "Para cifrar bases de datos personales",
+     "en": "Para cifrar bases de datos personales"
+    },
+    {
+     "es": "Para dar permisos a los usuarios de MySQL",
+     "en": "Para dar permisos a los usuarios de MySQL"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Hadoop es una plataforma de código abierto para Big Data, con datos estructurados y no estructurados. Spark se usa cuando se necesita procesar muy rápido, en tiempo real.",
+    "en": "Hadoop es una plataforma de código abierto para Big Data, con datos estructurados y no estructurados. Spark se usa cuando se necesita procesar muy rápido, en tiempo real."
+   },
+   "lesson": "bd-tipos-y-modelos"
+  },
+  {
+   "id": "bd-11",
+   "block": "bd-ud1",
+   "q": {
+    "es": "La tabla de alumnos está fragmentada horizontalmente. ¿Qué devuelve la última consulta?",
+    "en": "La tabla de alumnos está fragmentada horizontalmente. ¿Qué devuelve la última consulta?"
+   },
+   "code": "CREATE TABLE alumnos_madrid (id INTEGER PRIMARY KEY, nombre TEXT);\nCREATE TABLE alumnos_valladolid (id INTEGER PRIMARY KEY, nombre TEXT);\nINSERT INTO alumnos_madrid VALUES (1, 'Ana'), (2, 'Luis');\nINSERT INTO alumnos_valladolid VALUES (3, 'Eva');\nSELECT COUNT(*) FROM (\n  SELECT nombre FROM alumnos_madrid\n  UNION ALL\n  SELECT nombre FROM alumnos_valladolid\n);",
    "options": [
     "1",
-    "5",
+    "Error",
     "3",
     "2"
    ],
@@ -371,671 +412,445 @@
     2
    ],
    "explain": {
-    "es": "Hay tres ciclos distintos: DAW, DAM y ASIR.",
-    "en": "Hay tres ciclos distintos: DAW, DAM y ASIR."
+    "es": "`UNION ALL` junta las filas de los dos fragmentos: 2 + 1 = 3 alumnos. Así se reconstruye la tabla completa.",
+    "en": "`UNION ALL` junta las filas de los dos fragmentos: 2 + 1 = 3 alumnos. Así se reconstruye la tabla completa."
    },
-   "lesson": "sql-agregados"
+   "lesson": "bd-tipos-y-modelos"
   },
   {
-   "id": "sql-14",
-   "block": "agregacion",
+   "id": "bd-12",
+   "block": "bd-ud1",
    "q": {
-    "es": "¿Qué devuelve esta consulta?",
-    "en": "¿Qué devuelve esta consulta?"
+    "es": "Los empleados están fragmentados verticalmente. ¿Qué devuelve la última consulta?",
+    "en": "Los empleados están fragmentados verticalmente. ¿Qué devuelve la última consulta?"
    },
-   "code": "-- productos\n-- id | nombre  | precio | stock\n-- 1  | Teclado | 25     | 10\n-- 2  | Ratón   | 15     | 0\n-- 3  | Monitor | 180    | 4\n-- 4  | Cable   | 5      | 50\n\nSELECT MAX(precio) - MIN(precio) FROM productos;",
-   "options": [
-    "175",
-    "5",
-    "155",
-    "180"
-   ],
-   "answer": [
-    0
-   ],
-   "explain": {
-    "es": "El más caro cuesta 180 y el más barato 5: la diferencia es 175. Se pueden operar agregados entre sí.",
-    "en": "El más caro cuesta 180 y el más barato 5: la diferencia es 175. Se pueden operar agregados entre sí."
-   },
-   "lesson": "sql-agregados"
-  },
-  {
-   "id": "sql-15",
-   "block": "agregacion",
-   "q": {
-    "es": "¿Qué devuelve esta consulta?",
-    "en": "¿Qué devuelve esta consulta?"
-   },
-   "code": "-- alumnos\n-- id | nombre | ciclo | nota\n-- 1  | Ana    | DAW   | 8\n-- 2  | Luis   | DAM   | 5\n-- 3  | Eva    | DAW   | NULL\n-- 4  | Juan   | ASIR  | 7\n-- 5  | Sara   | DAM   | 9\n\nSELECT SUM(nota) FROM alumnos WHERE nota IS NULL;",
-   "options": [
-    "0",
-    "Error",
-    "(sin filas)",
-    "NULL"
-   ],
-   "answer": [
-    3
-   ],
-   "explain": {
-    "es": "Devuelve una fila con NULL: SUM ignora los NULL y, si no queda ningún valor, el resultado es NULL, no 0. Para obtener 0 se escribe `COALESCE(SUM(nota), 0)`.",
-    "en": "Devuelve una fila con NULL: SUM ignora los NULL y, si no queda ningún valor, el resultado es NULL, no 0. Para obtener 0 se escribe `COALESCE(SUM(nota), 0)`."
-   },
-   "lesson": "sql-agregados"
-  },
-  {
-   "id": "sql-16",
-   "block": "agregacion",
-   "q": {
-    "es": "¿Qué devuelve esta consulta?",
-    "en": "¿Qué devuelve esta consulta?"
-   },
-   "code": "-- alumnos\n-- id | nombre | ciclo | nota\n-- 1  | Ana    | DAW   | 8\n-- 2  | Luis   | DAM   | 5\n-- 3  | Eva    | DAW   | NULL\n-- 4  | Juan   | ASIR  | 7\n-- 5  | Sara   | DAM   | 9\n\nSELECT ciclo, COUNT(*) FROM alumnos\nGROUP BY ciclo\nORDER BY ciclo;",
-   "options": [
-    "5",
-    "ASIR | 1\nDAM | 2\nDAW | 2",
-    "DAW | 2\nDAM | 2\nASIR | 1",
-    "ASIR | 1\nDAM | 2\nDAW | 1"
-   ],
-   "answer": [
-    1
-   ],
-   "explain": {
-    "es": "Una fila por ciclo. `COUNT(*)` cuenta filas, así que Eva cuenta en DAW aunque no tenga nota. `ORDER BY ciclo` ordena alfabéticamente.",
-    "en": "Una fila por ciclo. `COUNT(*)` cuenta filas, así que Eva cuenta en DAW aunque no tenga nota. `ORDER BY ciclo` ordena alfabéticamente."
-   },
-   "lesson": "sql-group-by"
-  },
-  {
-   "id": "sql-17",
-   "block": "agregacion",
-   "q": {
-    "es": "¿Qué devuelve esta consulta?",
-    "en": "¿Qué devuelve esta consulta?"
-   },
-   "code": "-- alumnos\n-- id | nombre | ciclo | nota\n-- 1  | Ana    | DAW   | 8\n-- 2  | Luis   | DAM   | 5\n-- 3  | Eva    | DAW   | NULL\n-- 4  | Juan   | ASIR  | 7\n-- 5  | Sara   | DAM   | 9\n\nSELECT ciclo FROM alumnos\nGROUP BY ciclo\nHAVING COUNT(*) > 1\nORDER BY ciclo;",
-   "options": [
-    "ASIR\nDAM\nDAW",
-    "DAM\nDAW",
-    "ASIR",
-    "DAM"
-   ],
-   "answer": [
-    1
-   ],
-   "explain": {
-    "es": "`HAVING` descarta los grupos con un solo alumno (ASIR).",
-    "en": "`HAVING` descarta los grupos con un solo alumno (ASIR)."
-   },
-   "lesson": "sql-group-by"
-  },
-  {
-   "id": "sql-18",
-   "block": "agregacion",
-   "q": {
-    "es": "¿Qué devuelve esta consulta?",
-    "en": "¿Qué devuelve esta consulta?"
-   },
-   "code": "-- alumnos\n-- id | nombre | ciclo | nota\n-- 1  | Ana    | DAW   | 8\n-- 2  | Luis   | DAM   | 5\n-- 3  | Eva    | DAW   | NULL\n-- 4  | Juan   | ASIR  | 7\n-- 5  | Sara   | DAM   | 9\n\nSELECT ciclo, MAX(nota) FROM alumnos\nWHERE nota < 9\nGROUP BY ciclo\nORDER BY ciclo;",
-   "options": [
-    "ASIR | 7\nDAM | 5\nDAW | 8",
-    "ASIR | 7\nDAM | 9\nDAW | 8",
-    "ASIR | 7\nDAM | 5\nDAW | NULL",
-    "DAM | 5\nDAW | 8"
-   ],
-   "answer": [
-    0
-   ],
-   "explain": {
-    "es": "`WHERE` actúa **antes** de agrupar: quita a Sara (9) y a Eva (NULL no cumple `< 9`). En DAM solo queda Luis con 5.",
-    "en": "`WHERE` actúa **antes** de agrupar: quita a Sara (9) y a Eva (NULL no cumple `< 9`). En DAM solo queda Luis con 5."
-   },
-   "lesson": "sql-group-by"
-  },
-  {
-   "id": "sql-19",
-   "block": "agregacion",
-   "q": {
-    "es": "¿Cuál es la diferencia entre WHERE y HAVING?",
-    "en": "¿Cuál es la diferencia entre WHERE y HAVING?"
-   },
-   "code": null,
-   "options": [
-    {
-     "es": "WHERE filtra filas antes de agrupar; HAVING filtra grupos después",
-     "en": "WHERE filtra filas antes de agrupar; HAVING filtra grupos después"
-    },
-    {
-     "es": "Son equivalentes; HAVING es más moderno",
-     "en": "Son equivalentes; HAVING es más moderno"
-    },
-    {
-     "es": "HAVING filtra filas y WHERE filtra columnas",
-     "en": "HAVING filtra filas y WHERE filtra columnas"
-    },
-    {
-     "es": "WHERE solo funciona con GROUP BY",
-     "en": "WHERE solo funciona con GROUP BY"
-    }
-   ],
-   "answer": [
-    0
-   ],
-   "explain": {
-    "es": "Por eso las condiciones con agregados (`COUNT(*) > 1`, `AVG(nota) >= 5`) solo pueden ir en HAVING.",
-    "en": "Por eso las condiciones con agregados (`COUNT(*) > 1`, `AVG(nota) >= 5`) solo pueden ir en HAVING."
-   },
-   "lesson": "sql-group-by"
-  },
-  {
-   "id": "sql-20",
-   "block": "agregacion",
-   "q": {
-    "es": "¿Qué devuelve esta consulta?",
-    "en": "¿Qué devuelve esta consulta?"
-   },
-   "code": "-- alumnos\n-- id | nombre | ciclo | nota\n-- 1  | Ana    | DAW   | 8\n-- 2  | Luis   | DAM   | 5\n-- 3  | Eva    | DAW   | NULL\n-- 4  | Juan   | ASIR  | 7\n-- 5  | Sara   | DAM   | 9\n\nSELECT ciclo, AVG(nota) FROM alumnos\nGROUP BY ciclo\nHAVING AVG(nota) >= 7\nORDER BY ciclo;",
-   "options": [
-    "ASIR | 7.0\nDAM | 7.0\nDAW | 4.0",
-    "DAW | 8.0",
-    "ASIR | 7.0\nDAM | 7.0\nDAW | 8.0",
-    "ASIR | 7.0\nDAW | 8.0"
-   ],
-   "answer": [
-    2
-   ],
-   "explain": {
-    "es": "Medias: ASIR 7, DAM (5 + 9) / 2 = 7 y DAW 8 (el NULL de Eva no cuenta). Las tres cumplen `>= 7`. SQLite muestra los decimales como 7.0; MySQL, como 7.0000.",
-    "en": "Medias: ASIR 7, DAM (5 + 9) / 2 = 7 y DAW 8 (el NULL de Eva no cuenta). Las tres cumplen `>= 7`. SQLite muestra los decimales como 7.0; MySQL, como 7.0000."
-   },
-   "lesson": "sql-group-by"
-  },
-  {
-   "id": "sql-21",
-   "block": "joins",
-   "q": {
-    "es": "¿Qué devuelve esta consulta?",
-    "en": "¿Qué devuelve esta consulta?"
-   },
-   "code": "-- clientes\n-- id | nombre | ciudad\n-- 1  | Ana    | Madrid\n-- 2  | Luis   | Leganés\n-- 3  | Eva    | Valladolid\n\n-- pedidos\n-- id | cliente_id | total\n-- 1  | 1          | 30\n-- 2  | 1          | 20\n-- 3  | 2          | 50\n\nSELECT c.nombre, p.total\nFROM clientes c\nINNER JOIN pedidos p ON p.cliente_id = c.id\nORDER BY p.id;",
-   "options": [
-    "Ana | 30\nLuis | 50",
-    "Ana | 30\nAna | 20\nLuis | 50\nEva | NULL",
-    "Ana | 30\nAna | 20\nLuis | 50",
-    "Ana | 50\nLuis | 50"
-   ],
-   "answer": [
-    2
-   ],
-   "explain": {
-    "es": "Sale una fila por cada pareja cliente-pedido: Ana tiene dos pedidos y aparece dos veces. Eva no tiene pedidos y el INNER JOIN la descarta.",
-    "en": "Sale una fila por cada pareja cliente-pedido: Ana tiene dos pedidos y aparece dos veces. Eva no tiene pedidos y el INNER JOIN la descarta."
-   },
-   "lesson": "sql-inner-join"
-  },
-  {
-   "id": "sql-22",
-   "block": "joins",
-   "q": {
-    "es": "¿Qué devuelve esta consulta?",
-    "en": "¿Qué devuelve esta consulta?"
-   },
-   "code": "-- clientes\n-- id | nombre | ciudad\n-- 1  | Ana    | Madrid\n-- 2  | Luis   | Leganés\n-- 3  | Eva    | Valladolid\n\n-- pedidos\n-- id | cliente_id | total\n-- 1  | 1          | 30\n-- 2  | 1          | 20\n-- 3  | 2          | 50\n\nSELECT COUNT(*) FROM clientes, pedidos;",
-   "options": [
-    "9",
-    "3",
-    "Error",
-    "6"
-   ],
-   "answer": [
-    0
-   ],
-   "explain": {
-    "es": "Sin condición de unión se hace el **producto cartesiano**: cada uno de los 3 clientes con cada uno de los 3 pedidos, 9 filas.",
-    "en": "Sin condición de unión se hace el **producto cartesiano**: cada uno de los 3 clientes con cada uno de los 3 pedidos, 9 filas."
-   },
-   "lesson": "sql-inner-join"
-  },
-  {
-   "id": "sql-23",
-   "block": "joins",
-   "q": {
-    "es": "¿Qué devuelve esta consulta?",
-    "en": "¿Qué devuelve esta consulta?"
-   },
-   "code": "-- clientes\n-- id | nombre | ciudad\n-- 1  | Ana    | Madrid\n-- 2  | Luis   | Leganés\n-- 3  | Eva    | Valladolid\n\n-- pedidos\n-- id | cliente_id | total\n-- 1  | 1          | 30\n-- 2  | 1          | 20\n-- 3  | 2          | 50\n\nSELECT c.nombre, SUM(p.total)\nFROM clientes c\nJOIN pedidos p ON p.cliente_id = c.id\nGROUP BY c.nombre\nORDER BY c.nombre;",
-   "options": [
-    "Ana | 100",
-    "Ana | 50\nEva | NULL\nLuis | 50",
-    "Ana | 50\nLuis | 50",
-    "Ana | 30\nLuis | 50"
-   ],
-   "answer": [
-    2
-   ],
-   "explain": {
-    "es": "JOIN y GROUP BY se combinan: Ana suma 30 + 20 = 50 y Luis 50. Eva no aparece porque no tiene pedidos.",
-    "en": "JOIN y GROUP BY se combinan: Ana suma 30 + 20 = 50 y Luis 50. Eva no aparece porque no tiene pedidos."
-   },
-   "lesson": "sql-inner-join"
-  },
-  {
-   "id": "sql-24",
-   "block": "joins",
-   "q": {
-    "es": "¿Qué devuelve esta consulta?",
-    "en": "¿Qué devuelve esta consulta?"
-   },
-   "code": "-- clientes\n-- id | nombre | ciudad\n-- 1  | Ana    | Madrid\n-- 2  | Luis   | Leganés\n-- 3  | Eva    | Valladolid\n\n-- pedidos\n-- id | cliente_id | total\n-- 1  | 1          | 30\n-- 2  | 1          | 20\n-- 3  | 2          | 50\n\nSELECT nombre FROM clientes\nJOIN pedidos ON pedidos.cliente_id = clientes.id\nWHERE total > 25\nORDER BY total;",
+   "code": "CREATE TABLE emp_personal (id INTEGER PRIMARY KEY, nombre TEXT);\nCREATE TABLE emp_nomina (id INTEGER PRIMARY KEY, salario INTEGER);\nINSERT INTO emp_personal VALUES (1, 'Ana'), (2, 'Luis');\nINSERT INTO emp_nomina VALUES (1, 2100), (2, 1800);\nSELECT p.nombre, n.salario\nFROM emp_personal p JOIN emp_nomina n ON n.id = p.id\nWHERE p.id = 2;",
    "options": [
     "Luis",
-    "Ana\nAna\nLuis",
-    "Ana\nLuis",
-    "Eva"
-   ],
-   "answer": [
-    2
-   ],
-   "explain": {
-    "es": "Pedidos de más de 25: el 1 de Ana (30) y el 3 de Luis (50). `nombre` y `total` solo existen en una tabla cada una, así que no hace falta cualificarlas.",
-    "en": "Pedidos de más de 25: el 1 de Ana (30) y el 3 de Luis (50). `nombre` y `total` solo existen en una tabla cada una, así que no hace falta cualificarlas."
-   },
-   "lesson": "sql-inner-join"
-  },
-  {
-   "id": "sql-25",
-   "block": "joins",
-   "q": {
-    "es": "¿Qué ocurre al ejecutar esta consulta?",
-    "en": "¿Qué ocurre al ejecutar esta consulta?"
-   },
-   "code": "-- clientes\n-- id | nombre | ciudad\n-- 1  | Ana    | Madrid\n-- 2  | Luis   | Leganés\n-- 3  | Eva    | Valladolid\n\n-- pedidos\n-- id | cliente_id | total\n-- 1  | 1          | 30\n-- 2  | 1          | 20\n-- 3  | 2          | 50\n\nSELECT id FROM clientes\nJOIN pedidos ON pedidos.cliente_id = clientes.id;",
-   "options": [
-    "1\n1\n2",
+    "Luis | 1800",
     "Error",
-    "(sin filas)",
-    "1\n2\n3"
+    "Luis | 2100"
    ],
    "answer": [
     1
    ],
    "explain": {
-    "es": "Las dos tablas tienen una columna `id` y el SGBD no sabe cuál quieres: error de columna **ambigua**. Hay que escribir `clientes.id` o `pedidos.id`.",
-    "en": "Las dos tablas tienen una columna `id` y el SGBD no sabe cuál quieres: error de columna **ambigua**. Hay que escribir `clientes.id` o `pedidos.id`."
+    "es": "Los dos fragmentos comparten la clave `id`: con un JOIN por ella se reconstruye la fila completa del empleado 2.",
+    "en": "Los dos fragmentos comparten la clave `id`: con un JOIN por ella se reconstruye la fila completa del empleado 2."
    },
-   "lesson": "sql-inner-join"
+   "lesson": "bd-tipos-y-modelos"
   },
   {
-   "id": "sql-26",
-   "block": "joins",
+   "id": "bd-13",
+   "block": "bd-ud1",
    "q": {
-    "es": "¿Qué devuelve esta consulta?",
-    "en": "¿Qué devuelve esta consulta?"
-   },
-   "code": "-- clientes\n-- id | nombre | ciudad\n-- 1  | Ana    | Madrid\n-- 2  | Luis   | Leganés\n-- 3  | Eva    | Valladolid\n\n-- pedidos\n-- id | cliente_id | total\n-- 1  | 1          | 30\n-- 2  | 1          | 20\n-- 3  | 2          | 50\n\nSELECT c.nombre, p.total\nFROM clientes c\nLEFT JOIN pedidos p ON p.cliente_id = c.id\nORDER BY c.id, p.id;",
-   "options": [
-    "Ana | 30\nAna | 20\nLuis | 50",
-    "Ana | 50\nLuis | 50\nEva | 0",
-    "Ana | 30\nLuis | 50\nEva | NULL",
-    "Ana | 30\nAna | 20\nLuis | 50\nEva | NULL"
-   ],
-   "answer": [
-    3
-   ],
-   "explain": {
-    "es": "LEFT JOIN conserva a Eva aunque no tenga pedidos y rellena `total` con NULL (no con 0).",
-    "en": "LEFT JOIN conserva a Eva aunque no tenga pedidos y rellena `total` con NULL (no con 0)."
-   },
-   "lesson": "sql-left-join-subconsultas"
-  },
-  {
-   "id": "sql-27",
-   "block": "joins",
-   "q": {
-    "es": "¿Qué devuelve esta consulta?",
-    "en": "¿Qué devuelve esta consulta?"
-   },
-   "code": "-- clientes\n-- id | nombre | ciudad\n-- 1  | Ana    | Madrid\n-- 2  | Luis   | Leganés\n-- 3  | Eva    | Valladolid\n\n-- pedidos\n-- id | cliente_id | total\n-- 1  | 1          | 30\n-- 2  | 1          | 20\n-- 3  | 2          | 50\n\nSELECT c.nombre\nFROM clientes c\nLEFT JOIN pedidos p ON p.cliente_id = c.id\nWHERE p.id IS NULL;",
-   "options": [
-    "Eva",
-    "Ana\nLuis",
-    "(sin filas)",
-    "Ana\nLuis\nEva"
-   ],
-   "answer": [
-    0
-   ],
-   "explain": {
-    "es": "Es el patrón para encontrar filas **sin pareja**: solo Eva tiene la parte de pedidos a NULL.",
-    "en": "Es el patrón para encontrar filas **sin pareja**: solo Eva tiene la parte de pedidos a NULL."
-   },
-   "lesson": "sql-left-join-subconsultas"
-  },
-  {
-   "id": "sql-28",
-   "block": "joins",
-   "q": {
-    "es": "¿Qué devuelve esta consulta?",
-    "en": "¿Qué devuelve esta consulta?"
-   },
-   "code": "-- alumnos\n-- id | nombre | ciclo | nota\n-- 1  | Ana    | DAW   | 8\n-- 2  | Luis   | DAM   | 5\n-- 3  | Eva    | DAW   | NULL\n-- 4  | Juan   | ASIR  | 7\n-- 5  | Sara   | DAM   | 9\n\nSELECT nombre FROM alumnos\nWHERE nota > (SELECT AVG(nota) FROM alumnos)\nORDER BY nombre;",
-   "options": [
-    "Sara",
-    "Ana\nSara",
-    "Ana\nJuan\nSara",
-    "Error"
-   ],
-   "answer": [
-    1
-   ],
-   "explain": {
-    "es": "La subconsulta calcula la media: 7,25. Superan esa nota Ana (8) y Sara (9); Juan tiene 7.",
-    "en": "La subconsulta calcula la media: 7,25. Superan esa nota Ana (8) y Sara (9); Juan tiene 7."
-   },
-   "lesson": "sql-left-join-subconsultas"
-  },
-  {
-   "id": "sql-29",
-   "block": "joins",
-   "q": {
-    "es": "¿Qué devuelve esta consulta?",
-    "en": "¿Qué devuelve esta consulta?"
-   },
-   "code": "-- clientes\n-- id | nombre | ciudad\n-- 1  | Ana    | Madrid\n-- 2  | Luis   | Leganés\n-- 3  | Eva    | Valladolid\n\n-- pedidos\n-- id | cliente_id | total\n-- 1  | 1          | 30\n-- 2  | 1          | 20\n-- 3  | 2          | 50\n\nSELECT nombre FROM clientes\nWHERE id IN (SELECT cliente_id FROM pedidos WHERE total >= 30)\nORDER BY nombre;",
-   "options": [
-    "Ana\nAna\nLuis",
-    "Eva",
-    "Ana\nLuis",
-    "Luis"
-   ],
-   "answer": [
-    2
-   ],
-   "explain": {
-    "es": "La subconsulta devuelve los clientes 1 (pedido de 30) y 2 (pedido de 50). Con IN cada cliente sale una sola vez, a diferencia de un JOIN.",
-    "en": "La subconsulta devuelve los clientes 1 (pedido de 30) y 2 (pedido de 50). Con IN cada cliente sale una sola vez, a diferencia de un JOIN."
-   },
-   "lesson": "sql-left-join-subconsultas"
-  },
-  {
-   "id": "sql-30",
-   "block": "joins",
-   "q": {
-    "es": "¿Qué devuelve esta consulta?",
-    "en": "¿Qué devuelve esta consulta?"
-   },
-   "code": "-- clientes\n-- id | nombre | ciudad\n-- 1  | Ana    | Madrid\n-- 2  | Luis   | Leganés\n-- 3  | Eva    | Valladolid\n\n-- pedidos\n-- id | cliente_id | total\n-- 1  | 1          | 30\n-- 2  | 1          | 20\n-- 3  | 2          | 50\n\nSELECT COUNT(*)\nFROM clientes c\nLEFT JOIN pedidos p ON p.cliente_id = c.id;",
-   "options": [
-    "3",
-    "5",
-    "4",
-    "9"
-   ],
-   "answer": [
-    2
-   ],
-   "explain": {
-    "es": "Tres filas de parejas (Ana ×2, Luis) más la fila de Eva rellenada con NULL: 4.",
-    "en": "Tres filas de parejas (Ana ×2, Luis) más la fila de Eva rellenada con NULL: 4."
-   },
-   "lesson": "sql-left-join-subconsultas"
-  },
-  {
-   "id": "sql-31",
-   "block": "ddl-dml",
-   "q": {
-    "es": "¿Qué ocurre al ejecutar este script?",
-    "en": "¿Qué ocurre al ejecutar este script?"
-   },
-   "code": "CREATE TABLE socios (id INTEGER PRIMARY KEY, email TEXT UNIQUE);\nINSERT INTO socios VALUES (1, 'a@fp.es');\nINSERT INTO socios VALUES (2, 'a@fp.es');\nSELECT COUNT(*) FROM socios;",
-   "options": [
-    "1",
-    "2",
-    "0",
-    "Error"
-   ],
-   "answer": [
-    3
-   ],
-   "explain": {
-    "es": "El segundo INSERT repite un email en una columna `UNIQUE`: el SGBD lo rechaza con un error y el script se detiene ahí.",
-    "en": "El segundo INSERT repite un email en una columna `UNIQUE`: el SGBD lo rechaza con un error y el script se detiene ahí."
-   },
-   "lesson": "sql-crear-tablas"
-  },
-  {
-   "id": "sql-32",
-   "block": "ddl-dml",
-   "q": {
-    "es": "¿Qué devuelve la última sentencia de este script?",
-    "en": "¿Qué devuelve la última sentencia de este script?"
-   },
-   "code": "CREATE TABLE cuentas (\n  id INTEGER PRIMARY KEY,\n  estado TEXT DEFAULT 'activa',\n  edad INTEGER CHECK (edad >= 16)\n);\nINSERT INTO cuentas (id, edad) VALUES (1, 18);\nSELECT estado FROM cuentas;",
-   "options": [
-    "NULL",
-    "(sin filas)",
-    "Error",
-    "activa"
-   ],
-   "answer": [
-    3
-   ],
-   "explain": {
-    "es": "El INSERT no da valor a `estado`, así que se usa el `DEFAULT`. La edad 18 cumple el CHECK.",
-    "en": "El INSERT no da valor a `estado`, así que se usa el `DEFAULT`. La edad 18 cumple el CHECK."
-   },
-   "lesson": "sql-crear-tablas"
-  },
-  {
-   "id": "sql-33",
-   "block": "ddl-dml",
-   "q": {
-    "es": "¿Qué ocurre al ejecutar este script?",
-    "en": "¿Qué ocurre al ejecutar este script?"
-   },
-   "code": "CREATE TABLE cuentas (\n  id INTEGER PRIMARY KEY,\n  edad INTEGER CHECK (edad >= 16)\n);\nINSERT INTO cuentas VALUES (1, 15);\nSELECT edad FROM cuentas;",
-   "options": [
-    "15",
-    "Error",
-    "(sin filas)",
-    "NULL"
-   ],
-   "answer": [
-    1
-   ],
-   "explain": {
-    "es": "15 no cumple `CHECK (edad >= 16)`: el INSERT se rechaza con un error. Así se protegen las reglas de negocio en la propia base de datos.",
-    "en": "15 no cumple `CHECK (edad >= 16)`: el INSERT se rechaza con un error. Así se protegen las reglas de negocio en la propia base de datos."
-   },
-   "lesson": "sql-crear-tablas"
-  },
-  {
-   "id": "sql-34",
-   "block": "ddl-dml",
-   "q": {
-    "es": "¿Qué ocurre al ejecutar este script?",
-    "en": "¿Qué ocurre al ejecutar este script?"
-   },
-   "code": "CREATE TABLE ciclos (codigo TEXT PRIMARY KEY);\nCREATE TABLE matriculas (\n  id INTEGER PRIMARY KEY,\n  ciclo TEXT REFERENCES ciclos(codigo)\n);\nINSERT INTO ciclos VALUES ('DAW');\nINSERT INTO matriculas VALUES (1, 'DAM');\nSELECT * FROM matriculas;",
-   "options": [
-    "1 | NULL",
-    "1 | DAM",
-    "(sin filas)",
-    "Error"
-   ],
-   "answer": [
-    3
-   ],
-   "explain": {
-    "es": "'DAM' no existe en `ciclos`: la clave ajena lo impide (integridad referencial). MySQL con InnoDB también lo rechaza; en SQLite hay que activar `PRAGMA foreign_keys = ON`, que la app activa siempre.",
-    "en": "'DAM' no existe en `ciclos`: la clave ajena lo impide (integridad referencial). MySQL con InnoDB también lo rechaza; en SQLite hay que activar `PRAGMA foreign_keys = ON`, que la app activa siempre."
-   },
-   "lesson": "sql-crear-tablas"
-  },
-  {
-   "id": "sql-35",
-   "block": "ddl-dml",
-   "q": {
-    "es": "¿Qué tipo usarías en MySQL para guardar precios sin errores de redondeo?",
-    "en": "¿Qué tipo usarías en MySQL para guardar precios sin errores de redondeo?"
+    "es": "Un fichero guarda «Juan,25» en cada línea, sin ninguna estructura más. ¿Qué tipo de fichero es?",
+    "en": "Un fichero guarda «Juan,25» en cada línea, sin ninguna estructura más. ¿Qué tipo de fichero es?"
    },
    "code": null,
    "options": [
     {
-     "es": "DECIMAL(10,2)",
-     "en": "DECIMAL(10,2)"
+     "es": "Plano",
+     "en": "Plano"
     },
     {
-     "es": "FLOAT",
-     "en": "FLOAT"
+     "es": "Indexado",
+     "en": "Indexado"
     },
     {
-     "es": "DOUBLE",
-     "en": "DOUBLE"
+     "es": "De acceso directo",
+     "en": "De acceso directo"
     },
     {
-     "es": "VARCHAR(10)",
-     "en": "VARCHAR(10)"
+     "es": "Una base de datos relacional",
+     "en": "Una base de datos relacional"
     }
    ],
    "answer": [
     0
    ],
    "explain": {
-    "es": "`DECIMAL` guarda el número exacto. `FLOAT` y `DOUBLE` son aproximados (0,1 + 0,2 no da exactamente 0,3) y en un texto no se puede calcular.",
-    "en": "`DECIMAL` guarda el número exacto. `FLOAT` y `DOUBLE` son aproximados (0,1 + 0,2 no da exactamente 0,3) y en un texto no se puede calcular."
+    "es": "Es un fichero plano (de texto). Es fácil de manejar, pero con muchos datos cuesta encontrar uno concreto.",
+    "en": "Es un fichero plano (de texto). Es fácil de manejar, pero con muchos datos cuesta encontrar uno concreto."
    },
-   "lesson": "sql-crear-tablas"
+   "lesson": "bd-ficheros-rgpd-sgbd"
   },
   {
-   "id": "sql-36",
-   "block": "ddl-dml",
+   "id": "bd-14",
+   "block": "bd-ud1",
    "q": {
-    "es": "¿Qué devuelve la última sentencia de este script?",
-    "en": "¿Qué devuelve la última sentencia de este script?"
-   },
-   "code": "-- productos\n-- id | nombre  | precio | stock\n-- 1  | Teclado | 25     | 10\n-- 2  | Ratón   | 15     | 0\n-- 3  | Monitor | 180    | 4\n-- 4  | Cable   | 5      | 50\n\nUPDATE productos SET precio = precio * 2 WHERE stock = 0;\nSELECT SUM(precio) FROM productos;",
-   "options": [
-    "240",
-    "255",
-    "450",
-    "225"
-   ],
-   "answer": [
-    0
-   ],
-   "explain": {
-    "es": "Solo el Ratón tiene stock 0: su precio pasa de 15 a 30. Suma: 25 + 30 + 180 + 5 = 240.",
-    "en": "Solo el Ratón tiene stock 0: su precio pasa de 15 a 30. Suma: 25 + 30 + 180 + 5 = 240."
-   },
-   "lesson": "sql-modificar-datos"
-  },
-  {
-   "id": "sql-37",
-   "block": "ddl-dml",
-   "q": {
-    "es": "¿Qué devuelve la última sentencia de este script?",
-    "en": "¿Qué devuelve la última sentencia de este script?"
-   },
-   "code": "-- alumnos\n-- id | nombre | ciclo | nota\n-- 1  | Ana    | DAW   | 8\n-- 2  | Luis   | DAM   | 5\n-- 3  | Eva    | DAW   | NULL\n-- 4  | Juan   | ASIR  | 7\n-- 5  | Sara   | DAM   | 9\n\nDELETE FROM alumnos WHERE nota < 7;\nSELECT COUNT(*) FROM alumnos;",
-   "options": [
-    "3",
-    "5",
-    "2",
-    "4"
-   ],
-   "answer": [
-    3
-   ],
-   "explain": {
-    "es": "Solo se borra Luis (5). Eva tiene la nota a NULL y `NULL < 7` no es verdadero, así que **no** se borra. Quedan 4 filas.",
-    "en": "Solo se borra Luis (5). Eva tiene la nota a NULL y `NULL < 7` no es verdadero, así que **no** se borra. Quedan 4 filas."
-   },
-   "lesson": "sql-modificar-datos"
-  },
-  {
-   "id": "sql-38",
-   "block": "ddl-dml",
-   "q": {
-    "es": "¿Qué devuelve la última sentencia de este script?",
-    "en": "¿Qué devuelve la última sentencia de este script?"
-   },
-   "code": "-- alumnos\n-- id | nombre | ciclo | nota\n-- 1  | Ana    | DAW   | 8\n-- 2  | Luis   | DAM   | 5\n-- 3  | Eva    | DAW   | NULL\n-- 4  | Juan   | ASIR  | 7\n-- 5  | Sara   | DAM   | 9\n\nUPDATE alumnos SET nota = 10;\nSELECT COUNT(*) FROM alumnos WHERE nota = 10;",
-   "options": [
-    "5",
-    "4",
-    "1",
-    "0"
-   ],
-   "answer": [
-    0
-   ],
-   "explain": {
-    "es": "Un UPDATE sin WHERE cambia **todas** las filas, incluida la de Eva, que tenía NULL.",
-    "en": "Un UPDATE sin WHERE cambia **todas** las filas, incluida la de Eva, que tenía NULL."
-   },
-   "lesson": "sql-modificar-datos"
-  },
-  {
-   "id": "sql-39",
-   "block": "ddl-dml",
-   "q": {
-    "es": "¿Qué devuelve la última sentencia de este script?",
-    "en": "¿Qué devuelve la última sentencia de este script?"
-   },
-   "code": "-- productos\n-- id | nombre  | precio | stock\n-- 1  | Teclado | 25     | 10\n-- 2  | Ratón   | 15     | 0\n-- 3  | Monitor | 180    | 4\n-- 4  | Cable   | 5      | 50\n\nINSERT INTO productos (nombre, precio) VALUES ('Alfombrilla', 8);\nSELECT id, stock FROM productos WHERE nombre = 'Alfombrilla';",
-   "options": [
-    "5 | NULL",
-    "Error",
-    "5 | 0",
-    "1 | NULL"
-   ],
-   "answer": [
-    0
-   ],
-   "explain": {
-    "es": "El id se genera solo (el mayor más uno: 5), como con AUTO_INCREMENT en MySQL. `stock` no tiene DEFAULT, así que queda NULL, no 0.",
-    "en": "El id se genera solo (el mayor más uno: 5), como con AUTO_INCREMENT en MySQL. `stock` no tiene DEFAULT, así que queda NULL, no 0."
-   },
-   "lesson": "sql-modificar-datos"
-  },
-  {
-   "id": "sql-40",
-   "block": "ddl-dml",
-   "q": {
-    "es": "¿Qué diferencia hay entre `DELETE FROM t` y `DROP TABLE t`?",
-    "en": "¿Qué diferencia hay entre `DELETE FROM t` y `DROP TABLE t`?"
+    "es": "¿Qué inconveniente tiene un fichero indexado?",
+    "en": "¿Qué inconveniente tiene un fichero indexado?"
    },
    "code": null,
    "options": [
     {
-     "es": "DELETE borra las filas y la tabla sigue existiendo; DROP elimina la tabla entera",
-     "en": "DELETE borra las filas y la tabla sigue existiendo; DROP elimina la tabla entera"
+     "es": "El índice ocupa espacio y hay que mantenerlo actualizado",
+     "en": "El índice ocupa espacio y hay que mantenerlo actualizado"
     },
     {
-     "es": "Ninguna, son sinónimos",
-     "en": "Ninguna, son sinónimos"
+     "es": "No permite buscar un registro concreto",
+     "en": "No permite buscar un registro concreto"
     },
     {
-     "es": "DROP borra solo las filas repetidas",
-     "en": "DROP borra solo las filas repetidas"
+     "es": "Solo se puede leer de principio a fin",
+     "en": "Solo se puede leer de principio a fin"
     },
     {
-     "es": "DELETE elimina también la estructura",
-     "en": "DELETE elimina también la estructura"
+     "es": "No puede guardar números",
+     "en": "No puede guardar números"
     }
    ],
    "answer": [
     0
    ],
    "explain": {
-    "es": "Después de un DELETE sin WHERE la tabla sigue ahí, vacía. Después de DROP TABLE ya no existe.",
-    "en": "Después de un DELETE sin WHERE la tabla sigue ahí, vacía. Después de DROP TABLE ya no existe."
+    "es": "El índice acelera las búsquedas, pero cuesta espacio y tiempo mantenerlo al día. Es el mismo equilibrio que con los índices de una base de datos.",
+    "en": "El índice acelera las búsquedas, pero cuesta espacio y tiempo mantenerlo al día. Es el mismo equilibrio que con los índices de una base de datos."
    },
-   "lesson": "sql-modificar-datos"
+   "lesson": "bd-ficheros-rgpd-sgbd"
+  },
+  {
+   "id": "bd-15",
+   "block": "bd-ud1",
+   "q": {
+    "es": "Quieres calcular la media de edad de todas las personas de un fichero. ¿Qué acceso es el adecuado?",
+    "en": "Quieres calcular la media de edad de todas las personas de un fichero. ¿Qué acceso es el adecuado?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Secuencial",
+     "en": "Secuencial"
+    },
+    {
+     "es": "Aleatorio",
+     "en": "Aleatorio"
+    },
+    {
+     "es": "Por índice único",
+     "en": "Por índice único"
+    },
+    {
+     "es": "Ninguno: hace falta un SGBD",
+     "en": "Ninguno: hace falta un SGBD"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Hay que leer todos los registros en orden: el acceso secuencial es justo para eso.",
+    "en": "Hay que leer todos los registros en orden: el acceso secuencial es justo para eso."
+   },
+   "lesson": "bd-ficheros-rgpd-sgbd"
+  },
+  {
+   "id": "bd-16",
+   "block": "bd-ud1",
+   "q": {
+    "es": "Quieres actualizar el precio del producto P123 en un fichero de acceso directo. ¿Qué acceso usarás?",
+    "en": "Quieres actualizar el precio del producto P123 en un fichero de acceso directo. ¿Qué acceso usarás?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Aleatorio",
+     "en": "Aleatorio"
+    },
+    {
+     "es": "Secuencial",
+     "en": "Secuencial"
+    },
+    {
+     "es": "Fragmentado",
+     "en": "Fragmentado"
+    },
+    {
+     "es": "Distribuido",
+     "en": "Distribuido"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "El acceso aleatorio salta directamente al registro sin recorrer los anteriores.",
+    "en": "El acceso aleatorio salta directamente al registro sin recorrer los anteriores."
+   },
+   "lesson": "bd-ficheros-rgpd-sgbd"
+  },
+  {
+   "id": "bd-17",
+   "block": "bd-ud1",
+   "q": {
+    "es": "¿Qué relación hay entre el RGPD y la LOPDGDD?",
+    "en": "¿Qué relación hay entre el RGPD y la LOPDGDD?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "El RGPD es europeo y la LOPDGDD es la ley española que lo complementa",
+     "en": "El RGPD es europeo y la LOPDGDD es la ley española que lo complementa"
+    },
+    {
+     "es": "La LOPDGDD es europea y el RGPD es español",
+     "en": "La LOPDGDD es europea y el RGPD es español"
+    },
+    {
+     "es": "La LOPDGDD sustituyó al RGPD en 2018",
+     "en": "La LOPDGDD sustituyó al RGPD en 2018"
+    },
+    {
+     "es": "Son dos nombres de la misma ley",
+     "en": "Son dos nombres de la misma ley"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "El RGPD se aplica en toda la UE desde 2018. La LOPDGDD lo adapta a España y añade derechos digitales.",
+    "en": "El RGPD se aplica en toda la UE desde 2018. La LOPDGDD lo adapta a España y añade derechos digitales."
+   },
+   "lesson": "bd-ficheros-rgpd-sgbd"
+  },
+  {
+   "id": "bd-18",
+   "block": "bd-ud1",
+   "q": {
+    "es": "Una web te pide dirección y teléfono solo para descargar un archivo gratuito. ¿Qué principio incumple?",
+    "en": "Una web te pide dirección y teléfono solo para descargar un archivo gratuito. ¿Qué principio incumple?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Minimización de datos",
+     "en": "Minimización de datos"
+    },
+    {
+     "es": "Transparencia",
+     "en": "Transparencia"
+    },
+    {
+     "es": "Seguridad",
+     "en": "Seguridad"
+    },
+    {
+     "es": "Veracidad",
+     "en": "Veracidad"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Solo se deben recoger los datos estrictamente necesarios para la finalidad. Para descargar un archivo, la dirección y el teléfono sobran.",
+    "en": "Solo se deben recoger los datos estrictamente necesarios para la finalidad. Para descargar un archivo, la dirección y el teléfono sobran."
+   },
+   "lesson": "bd-ficheros-rgpd-sgbd"
+  },
+  {
+   "id": "bd-19",
+   "block": "bd-ud1",
+   "q": {
+    "es": "¿Qué norma recoge el derecho a la desconexión digital en el trabajo?",
+    "en": "¿Qué norma recoge el derecho a la desconexión digital en el trabajo?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "La LOPDGDD",
+     "en": "La LOPDGDD"
+    },
+    {
+     "es": "El RGPD",
+     "en": "El RGPD"
+    },
+    {
+     "es": "El modelo relacional",
+     "en": "El modelo relacional"
+    },
+    {
+     "es": "La norma SQL",
+     "en": "La norma SQL"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Es uno de los derechos digitales que la LOPDGDD añade a lo que ya establece el RGPD.",
+    "en": "Es uno de los derechos digitales que la LOPDGDD añade a lo que ya establece el RGPD."
+   },
+   "lesson": "bd-ficheros-rgpd-sgbd"
+  },
+  {
+   "id": "bd-20",
+   "block": "bd-ud1",
+   "q": {
+    "es": "Un usuario pide que borren todos sus datos de tu app. ¿Qué debes hacer?",
+    "en": "Un usuario pide que borren todos sus datos de tu app. ¿Qué debes hacer?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Facilitarlo: es su derecho de supresión",
+     "en": "Facilitarlo: es su derecho de supresión"
+    },
+    {
+     "es": "Negarte si los datos son útiles para la empresa",
+     "en": "Negarte si los datos son útiles para la empresa"
+    },
+    {
+     "es": "Ocultarlos en la app pero conservarlos siempre",
+     "en": "Ocultarlos en la app pero conservarlos siempre"
+    },
+    {
+     "es": "Pedirle que lo haga él con SQL",
+     "en": "Pedirle que lo haga él con SQL"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Los usuarios tienen derecho de acceso, rectificación y supresión, y la aplicación debe facilitarlos.",
+    "en": "Los usuarios tienen derecho de acceso, rectificación y supresión, y la aplicación debe facilitarlos."
+   },
+   "lesson": "bd-ficheros-rgpd-sgbd"
+  },
+  {
+   "id": "bd-21",
+   "block": "bd-ud1",
+   "q": {
+    "es": "¿Qué función del SGBD cubre la sentencia GRANT?",
+    "en": "¿Qué función del SGBD cubre la sentencia GRANT?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Control de datos (DCL)",
+     "en": "Control de datos (DCL)"
+    },
+    {
+     "es": "Definición de datos (DDL)",
+     "en": "Definición de datos (DDL)"
+    },
+    {
+     "es": "Manipulación de datos (DML)",
+     "en": "Manipulación de datos (DML)"
+    },
+    {
+     "es": "Ninguna: GRANT no es SQL",
+     "en": "Ninguna: GRANT no es SQL"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Dar y quitar permisos (GRANT y REVOKE) es control de datos. CREATE, ALTER y DROP son definición; INSERT, UPDATE, DELETE y SELECT, manipulación.",
+    "en": "Dar y quitar permisos (GRANT y REVOKE) es control de datos. CREATE, ALTER y DROP son definición; INSERT, UPDATE, DELETE y SELECT, manipulación."
+   },
+   "lesson": "bd-ficheros-rgpd-sgbd"
+  },
+  {
+   "id": "bd-22",
+   "block": "bd-ud1",
+   "q": {
+    "es": "¿Qué componente del SGBD procesa realmente el almacenamiento y la recuperación de los datos?",
+    "en": "¿Qué componente del SGBD procesa realmente el almacenamiento y la recuperación de los datos?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "El motor de base de datos",
+     "en": "El motor de base de datos"
+    },
+    {
+     "es": "El lenguaje de consulta",
+     "en": "El lenguaje de consulta"
+    },
+    {
+     "es": "Las herramientas de administración",
+     "en": "Las herramientas de administración"
+    },
+    {
+     "es": "El sistema operativo",
+     "en": "El sistema operativo"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "El motor es el núcleo. SQL es cómo se lo pides y las herramientas de administración sirven para permisos, copias o supervisión.",
+    "en": "El motor es el núcleo. SQL es cómo se lo pides y las herramientas de administración sirven para permisos, copias o supervisión."
+   },
+   "lesson": "bd-ficheros-rgpd-sgbd"
+  },
+  {
+   "id": "bd-23",
+   "block": "bd-ud1",
+   "q": {
+    "es": "MongoDB y Neo4j son, respectivamente, SGBD…",
+    "en": "MongoDB y Neo4j son, respectivamente, SGBD…"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "NoSQL y de grafos",
+     "en": "NoSQL y de grafos"
+    },
+    {
+     "es": "relacional y NoSQL",
+     "en": "relacional y NoSQL"
+    },
+    {
+     "es": "de grafos y relacional",
+     "en": "de grafos y relacional"
+    },
+    {
+     "es": "jerárquico y en red",
+     "en": "jerárquico y en red"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "MongoDB es NoSQL (documentos, datos semiestructurados). Neo4j es de grafos (relaciones complejas). MySQL, PostgreSQL y Oracle son relacionales.",
+    "en": "MongoDB es NoSQL (documentos, datos semiestructurados). Neo4j es de grafos (relaciones complejas). MySQL, PostgreSQL y Oracle son relacionales."
+   },
+   "lesson": "bd-ficheros-rgpd-sgbd"
+  },
+  {
+   "id": "bd-24",
+   "block": "bd-ud1",
+   "q": {
+    "es": "El SGBD garantiza la integridad de los datos. ¿Qué ocurre al ejecutar este script?",
+    "en": "El SGBD garantiza la integridad de los datos. ¿Qué ocurre al ejecutar este script?"
+   },
+   "code": "CREATE TABLE productos (codigo TEXT PRIMARY KEY, precio INTEGER);\nINSERT INTO productos VALUES ('P123', 25);\nINSERT INTO productos VALUES ('P123', 30);\nSELECT precio FROM productos;",
+   "options": [
+    "25",
+    "25\n30",
+    "Error",
+    "30"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "El segundo INSERT repite la clave primaria: el SGBD lo rechaza. Evitar duplicados es parte de su función de control.",
+    "en": "El segundo INSERT repite la clave primaria: el SGBD lo rechaza. Evitar duplicados es parte de su función de control."
+   },
+   "lesson": "bd-ficheros-rgpd-sgbd"
   },
   {
    "id": "sql-41",
-   "block": "diseno",
+   "block": "bd-ud2",
    "q": {
     "es": "Un alumno se matricula en muchos módulos y cada módulo tiene muchos alumnos. ¿Cómo se representa?",
     "en": "Un alumno se matricula en muchos módulos y cada módulo tiene muchos alumnos. ¿Cómo se representa?"
@@ -1070,7 +885,7 @@
   },
   {
    "id": "sql-42",
-   "block": "diseno",
+   "block": "bd-ud2",
    "q": {
     "es": "En la relación 1:N «un ciclo tiene muchos alumnos», ¿dónde va la clave ajena?",
     "en": "En la relación 1:N «un ciclo tiene muchos alumnos», ¿dónde va la clave ajena?"
@@ -1105,7 +920,7 @@
   },
   {
    "id": "sql-43",
-   "block": "diseno",
+   "block": "bd-ud2",
    "q": {
     "es": "La tabla alumnos tiene una columna `telefonos` con el valor '600111222, 611333444'. ¿Qué incumple?",
     "en": "La tabla alumnos tiene una columna `telefonos` con el valor '600111222, 611333444'. ¿Qué incumple?"
@@ -1140,7 +955,7 @@
   },
   {
    "id": "sql-44",
-   "block": "diseno",
+   "block": "bd-ud2",
    "q": {
     "es": "matriculas(alumno_id, modulo_id, nombre_modulo, nota) tiene como clave (alumno_id, modulo_id). ¿Qué problema hay?",
     "en": "matriculas(alumno_id, modulo_id, nombre_modulo, nota) tiene como clave (alumno_id, modulo_id). ¿Qué problema hay?"
@@ -1175,7 +990,7 @@
   },
   {
    "id": "sql-45",
-   "block": "diseno",
+   "block": "bd-ud2",
    "q": {
     "es": "empleados(id, departamento_id, nombre_departamento), con clave id. ¿Qué forma normal incumple?",
     "en": "empleados(id, departamento_id, nombre_departamento), con clave id. ¿Qué forma normal incumple?"
@@ -1209,8 +1024,1957 @@
    "lesson": "sql-modelo-relacional"
   },
   {
+   "id": "sql-31",
+   "block": "bd-ud2",
+   "q": {
+    "es": "¿Qué ocurre al ejecutar este script?",
+    "en": "¿Qué ocurre al ejecutar este script?"
+   },
+   "code": "CREATE TABLE socios (id INTEGER PRIMARY KEY, email TEXT UNIQUE);\nINSERT INTO socios VALUES (1, 'a@fp.es');\nINSERT INTO socios VALUES (2, 'a@fp.es');\nSELECT COUNT(*) FROM socios;",
+   "options": [
+    "1",
+    "2",
+    "0",
+    "Error"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "El segundo INSERT repite un email en una columna `UNIQUE`: el SGBD lo rechaza con un error y el script se detiene ahí.",
+    "en": "El segundo INSERT repite un email en una columna `UNIQUE`: el SGBD lo rechaza con un error y el script se detiene ahí."
+   },
+   "lesson": "sql-crear-tablas"
+  },
+  {
+   "id": "sql-32",
+   "block": "bd-ud2",
+   "q": {
+    "es": "¿Qué devuelve la última sentencia de este script?",
+    "en": "¿Qué devuelve la última sentencia de este script?"
+   },
+   "code": "CREATE TABLE cuentas (\n  id INTEGER PRIMARY KEY,\n  estado TEXT DEFAULT 'activa',\n  edad INTEGER CHECK (edad >= 16)\n);\nINSERT INTO cuentas (id, edad) VALUES (1, 18);\nSELECT estado FROM cuentas;",
+   "options": [
+    "NULL",
+    "(sin filas)",
+    "Error",
+    "activa"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "El INSERT no da valor a `estado`, así que se usa el `DEFAULT`. La edad 18 cumple el CHECK.",
+    "en": "El INSERT no da valor a `estado`, así que se usa el `DEFAULT`. La edad 18 cumple el CHECK."
+   },
+   "lesson": "sql-crear-tablas"
+  },
+  {
+   "id": "sql-33",
+   "block": "bd-ud2",
+   "q": {
+    "es": "¿Qué ocurre al ejecutar este script?",
+    "en": "¿Qué ocurre al ejecutar este script?"
+   },
+   "code": "CREATE TABLE cuentas (\n  id INTEGER PRIMARY KEY,\n  edad INTEGER CHECK (edad >= 16)\n);\nINSERT INTO cuentas VALUES (1, 15);\nSELECT edad FROM cuentas;",
+   "options": [
+    "15",
+    "Error",
+    "(sin filas)",
+    "NULL"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": {
+    "es": "15 no cumple `CHECK (edad >= 16)`: el INSERT se rechaza con un error. Así se protegen las reglas de negocio en la propia base de datos.",
+    "en": "15 no cumple `CHECK (edad >= 16)`: el INSERT se rechaza con un error. Así se protegen las reglas de negocio en la propia base de datos."
+   },
+   "lesson": "sql-crear-tablas"
+  },
+  {
+   "id": "sql-34",
+   "block": "bd-ud2",
+   "q": {
+    "es": "¿Qué ocurre al ejecutar este script?",
+    "en": "¿Qué ocurre al ejecutar este script?"
+   },
+   "code": "CREATE TABLE ciclos (codigo TEXT PRIMARY KEY);\nCREATE TABLE matriculas (\n  id INTEGER PRIMARY KEY,\n  ciclo TEXT REFERENCES ciclos(codigo)\n);\nINSERT INTO ciclos VALUES ('DAW');\nINSERT INTO matriculas VALUES (1, 'DAM');\nSELECT * FROM matriculas;",
+   "options": [
+    "1 | NULL",
+    "1 | DAM",
+    "(sin filas)",
+    "Error"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "'DAM' no existe en `ciclos`: la clave ajena lo impide (integridad referencial). MySQL con InnoDB también lo rechaza; en SQLite hay que activar `PRAGMA foreign_keys = ON`, que la app activa siempre.",
+    "en": "'DAM' no existe en `ciclos`: la clave ajena lo impide (integridad referencial). MySQL con InnoDB también lo rechaza; en SQLite hay que activar `PRAGMA foreign_keys = ON`, que la app activa siempre."
+   },
+   "lesson": "sql-crear-tablas"
+  },
+  {
+   "id": "sql-35",
+   "block": "bd-ud2",
+   "q": {
+    "es": "¿Qué tipo usarías en MySQL para guardar precios sin errores de redondeo?",
+    "en": "¿Qué tipo usarías en MySQL para guardar precios sin errores de redondeo?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "DECIMAL(10,2)",
+     "en": "DECIMAL(10,2)"
+    },
+    {
+     "es": "FLOAT",
+     "en": "FLOAT"
+    },
+    {
+     "es": "DOUBLE",
+     "en": "DOUBLE"
+    },
+    {
+     "es": "VARCHAR(10)",
+     "en": "VARCHAR(10)"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "`DECIMAL` guarda el número exacto. `FLOAT` y `DOUBLE` son aproximados (0,1 + 0,2 no da exactamente 0,3) y en un texto no se puede calcular.",
+    "en": "`DECIMAL` guarda el número exacto. `FLOAT` y `DOUBLE` son aproximados (0,1 + 0,2 no da exactamente 0,3) y en un texto no se puede calcular."
+   },
+   "lesson": "sql-crear-tablas"
+  },
+  {
+   "id": "bd-25",
+   "block": "bd-ud2",
+   "q": {
+    "es": "¿Qué devuelve esta consulta?",
+    "en": "¿Qué devuelve esta consulta?"
+   },
+   "code": "-- alumnos\n-- id | nombre | ciclo | nota\n-- 1  | Ana    | DAW   | 8\n-- 2  | Luis   | DAM   | 5\n-- 3  | Eva    | DAW   | NULL\n-- 4  | Juan   | ASIR  | 7\n-- 5  | Sara   | DAM   | 9\n\nSELECT nombre FROM alumnos WHERE nota = NULL;",
+   "options": [
+    "(sin filas)",
+    "Error",
+    "NULL",
+    "Eva"
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Comparar con `= NULL` nunca es verdadero, ni siquiera con otro NULL. Para encontrar a Eva hay que escribir `WHERE nota IS NULL`.",
+    "en": "Comparar con `= NULL` nunca es verdadero, ni siquiera con otro NULL. Para encontrar a Eva hay que escribir `WHERE nota IS NULL`."
+   },
+   "lesson": "bd-null-indices-dcl"
+  },
+  {
+   "id": "bd-26",
+   "block": "bd-ud2",
+   "q": {
+    "es": "¿Qué devuelve esta consulta?",
+    "en": "¿Qué devuelve esta consulta?"
+   },
+   "code": "-- alumnos\n-- id | nombre | ciclo | nota\n-- 1  | Ana    | DAW   | 8\n-- 2  | Luis   | DAM   | 5\n-- 3  | Eva    | DAW   | NULL\n-- 4  | Juan   | ASIR  | 7\n-- 5  | Sara   | DAM   | 9\n\nSELECT nombre FROM alumnos WHERE nota IS NULL;",
+   "options": [
+    "Error",
+    "(sin filas)",
+    "Ana\nLuis\nJuan\nSara",
+    "Eva"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "`IS NULL` es la forma correcta de preguntar por un dato que falta.",
+    "en": "`IS NULL` es la forma correcta de preguntar por un dato que falta."
+   },
+   "lesson": "bd-null-indices-dcl"
+  },
+  {
+   "id": "bd-27",
+   "block": "bd-ud2",
+   "q": {
+    "es": "¿Qué devuelve esta consulta?",
+    "en": "¿Qué devuelve esta consulta?"
+   },
+   "code": "-- alumnos\n-- id | nombre | ciclo | nota\n-- 1  | Ana    | DAW   | 8\n-- 2  | Luis   | DAM   | 5\n-- 3  | Eva    | DAW   | NULL\n-- 4  | Juan   | ASIR  | 7\n-- 5  | Sara   | DAM   | 9\n\nSELECT COUNT(nota), COUNT(*) FROM alumnos;",
+   "options": [
+    "4 | 5",
+    "4 | 4",
+    "5 | 4",
+    "5 | 5"
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "`COUNT(*)` cuenta las 5 filas; `COUNT(nota)` no cuenta la nota NULL de Eva.",
+    "en": "`COUNT(*)` cuenta las 5 filas; `COUNT(nota)` no cuenta la nota NULL de Eva."
+   },
+   "lesson": "bd-null-indices-dcl"
+  },
+  {
+   "id": "bd-28",
+   "block": "bd-ud2",
+   "q": {
+    "es": "¿Qué devuelve esta consulta?",
+    "en": "¿Qué devuelve esta consulta?"
+   },
+   "code": "-- alumnos\n-- id | nombre | ciclo | nota\n-- 1  | Ana    | DAW   | 8\n-- 2  | Luis   | DAM   | 5\n-- 3  | Eva    | DAW   | NULL\n-- 4  | Juan   | ASIR  | 7\n-- 5  | Sara   | DAM   | 9\n\nSELECT AVG(nota) FROM alumnos;",
+   "options": [
+    "Error",
+    "7.25",
+    "5.8",
+    "7"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": {
+    "es": "AVG ignora los NULL: (8 + 5 + 7 + 9) / 4 = 7,25. Si contara a Eva como 0, saldría 29 / 5 = 5,8.",
+    "en": "AVG ignora los NULL: (8 + 5 + 7 + 9) / 4 = 7,25. Si contara a Eva como 0, saldría 29 / 5 = 5,8."
+   },
+   "lesson": "bd-null-indices-dcl"
+  },
+  {
+   "id": "bd-29",
+   "block": "bd-ud2",
+   "q": {
+    "es": "¿Qué devuelve la última sentencia de este script?",
+    "en": "¿Qué devuelve la última sentencia de este script?"
+   },
+   "code": "CREATE TABLE clientes (id INTEGER PRIMARY KEY, nombre TEXT);\nINSERT INTO clientes VALUES (1, 'Ana');\nALTER TABLE clientes ADD email TEXT;\nSELECT nombre, email FROM clientes;",
+   "options": [
+    "Ana | ",
+    "Ana",
+    "Error",
+    "Ana | NULL"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "La columna nueva existe en todas las filas, pero las que ya había no tienen valor: queda a NULL.",
+    "en": "La columna nueva existe en todas las filas, pero las que ya había no tienen valor: queda a NULL."
+   },
+   "lesson": "bd-null-indices-dcl"
+  },
+  {
+   "id": "bd-30",
+   "block": "bd-ud2",
+   "q": {
+    "es": "¿Qué devuelve la última sentencia de este script?",
+    "en": "¿Qué devuelve la última sentencia de este script?"
+   },
+   "code": "CREATE TABLE productos (id INTEGER PRIMARY KEY, nombre TEXT);\nINSERT INTO productos VALUES (1, 'Teclado');\nALTER TABLE productos ADD stock INTEGER DEFAULT 0;\nSELECT stock FROM productos;",
+   "options": [
+    "Error",
+    "0",
+    "(sin filas)",
+    "NULL"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": {
+    "es": "Con `DEFAULT 0`, las filas que ya existían toman ese valor en la columna nueva.",
+    "en": "Con `DEFAULT 0`, las filas que ya existían toman ese valor en la columna nueva."
+   },
+   "lesson": "bd-null-indices-dcl"
+  },
+  {
+   "id": "bd-31",
+   "block": "bd-ud2",
+   "q": {
+    "es": "¿Qué ocurre al ejecutar este script?",
+    "en": "¿Qué ocurre al ejecutar este script?"
+   },
+   "code": "CREATE TABLE clientes (id INTEGER PRIMARY KEY, nombre TEXT);\nINSERT INTO clientes VALUES (1, 'Ana');\nDROP TABLE clientes;\nSELECT * FROM clientes;",
+   "options": [
+    "1 | Ana",
+    "NULL",
+    "Error",
+    "(sin filas)"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "`DROP TABLE` elimina la tabla entera, estructura y datos. Después ya no existe y el SELECT falla. Para vaciarla conservando la estructura se usa `DELETE FROM`.",
+    "en": "`DROP TABLE` elimina la tabla entera, estructura y datos. Después ya no existe y el SELECT falla. Para vaciarla conservando la estructura se usa `DELETE FROM`."
+   },
+   "lesson": "bd-null-indices-dcl"
+  },
+  {
+   "id": "bd-32",
+   "block": "bd-ud2",
+   "q": {
+    "es": "En MySQL, ¿cómo cambias la columna Email de la tabla Clientes a VARCHAR(75)?",
+    "en": "En MySQL, ¿cómo cambias la columna Email de la tabla Clientes a VARCHAR(75)?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "ALTER TABLE Clientes MODIFY Email VARCHAR(75);",
+     "en": "ALTER TABLE Clientes MODIFY Email VARCHAR(75);"
+    },
+    {
+     "es": "UPDATE Clientes SET Email = VARCHAR(75);",
+     "en": "UPDATE Clientes SET Email = VARCHAR(75);"
+    },
+    {
+     "es": "CHANGE TABLE Clientes Email VARCHAR(75);",
+     "en": "CHANGE TABLE Clientes Email VARCHAR(75);"
+    },
+    {
+     "es": "ALTER Clientes Email TO VARCHAR(75);",
+     "en": "ALTER Clientes Email TO VARCHAR(75);"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "`ALTER TABLE … MODIFY` es la sintaxis de MySQL. UPDATE cambia datos, no la estructura.",
+    "en": "`ALTER TABLE … MODIFY` es la sintaxis de MySQL. UPDATE cambia datos, no la estructura."
+   },
+   "lesson": "bd-null-indices-dcl"
+  },
+  {
+   "id": "bd-33",
+   "block": "bd-ud2",
+   "q": {
+    "es": "¿Qué efecto tiene crear un índice sobre una columna?",
+    "en": "¿Qué efecto tiene crear un índice sobre una columna?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Las búsquedas por esa columna van más rápido, pero los INSERT y UPDATE algo más lentos",
+     "en": "Las búsquedas por esa columna van más rápido, pero los INSERT y UPDATE algo más lentos"
+    },
+    {
+     "es": "Todo va más rápido, sin ningún inconveniente",
+     "en": "Todo va más rápido, sin ningún inconveniente"
+    },
+    {
+     "es": "Cambia el orden de los resultados de las consultas",
+     "en": "Cambia el orden de los resultados de las consultas"
+    },
+    {
+     "es": "Impide que la columna tenga valores repetidos",
+     "en": "Impide que la columna tenga valores repetidos"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Cada escritura tiene que actualizar también el índice. Solo un índice **único** impide repetidos, y ninguno cambia el resultado.",
+    "en": "Cada escritura tiene que actualizar también el índice. Solo un índice **único** impide repetidos, y ninguno cambia el resultado."
+   },
+   "lesson": "bd-null-indices-dcl"
+  },
+  {
+   "id": "bd-34",
+   "block": "bd-ud2",
+   "q": {
+    "es": "Las consultas buscan a menudo los pedidos de un cliente en una fecha. ¿Qué índice conviene?",
+    "en": "Las consultas buscan a menudo los pedidos de un cliente en una fecha. ¿Qué índice conviene?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Un índice compuesto sobre (cliente_id, fecha)",
+     "en": "Un índice compuesto sobre (cliente_id, fecha)"
+    },
+    {
+     "es": "Un índice único sobre fecha",
+     "en": "Un índice único sobre fecha"
+    },
+    {
+     "es": "Un índice sobre cada columna de la tabla",
+     "en": "Un índice sobre cada columna de la tabla"
+    },
+    {
+     "es": "Ninguno: los índices solo sirven para la clave primaria",
+     "en": "Ninguno: los índices solo sirven para la clave primaria"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Un índice compuesto cubre consultas que filtran por varias columnas a la vez. Indexarlo todo ralentizaría las escrituras sin necesidad.",
+    "en": "Un índice compuesto cubre consultas que filtran por varias columnas a la vez. Indexarlo todo ralentizaría las escrituras sin necesidad."
+   },
+   "lesson": "bd-null-indices-dcl"
+  },
+  {
+   "id": "bd-35",
+   "block": "bd-ud2",
+   "q": {
+    "es": "¿Qué ocurre al ejecutar este script?",
+    "en": "¿Qué ocurre al ejecutar este script?"
+   },
+   "code": "CREATE TABLE usuarios (id INTEGER PRIMARY KEY, email TEXT);\nCREATE UNIQUE INDEX idx_email ON usuarios(email);\nINSERT INTO usuarios VALUES (1, 'a@fp.es');\nINSERT INTO usuarios VALUES (2, 'a@fp.es');\nSELECT COUNT(*) FROM usuarios;",
+   "options": [
+    "Error",
+    "1",
+    "0",
+    "2"
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Un índice **único** acelera las búsquedas y además impide repetir el email: el segundo INSERT se rechaza.",
+    "en": "Un índice **único** acelera las búsquedas y además impide repetir el email: el segundo INSERT se rechaza."
+   },
+   "lesson": "bd-null-indices-dcl"
+  },
+  {
+   "id": "bd-36",
+   "block": "bd-ud2",
+   "q": {
+    "es": "¿Qué sentencia de MySQL deja a juan consultar y añadir datos en la tabla productos de la base tienda?",
+    "en": "¿Qué sentencia de MySQL deja a juan consultar y añadir datos en la tabla productos de la base tienda?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "GRANT SELECT, INSERT ON tienda.productos TO 'juan'@'localhost';",
+     "en": "GRANT SELECT, INSERT ON tienda.productos TO 'juan'@'localhost';"
+    },
+    {
+     "es": "GRANT SELECT, INSERT ON tienda.productos FROM 'juan'@'localhost';",
+     "en": "GRANT SELECT, INSERT ON tienda.productos FROM 'juan'@'localhost';"
+    },
+    {
+     "es": "REVOKE SELECT, INSERT ON tienda.productos TO 'juan'@'localhost';",
+     "en": "REVOKE SELECT, INSERT ON tienda.productos TO 'juan'@'localhost';"
+    },
+    {
+     "es": "ALLOW SELECT, INSERT FOR juan IN tienda.productos;",
+     "en": "ALLOW SELECT, INSERT FOR juan IN tienda.productos;"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "GRANT privilegios ON base.tabla TO usuario. REVOKE es para quitarlos, y va con FROM.",
+    "en": "GRANT privilegios ON base.tabla TO usuario. REVOKE es para quitarlos, y va con FROM."
+   },
+   "lesson": "bd-null-indices-dcl"
+  },
+  {
+   "id": "bd-37",
+   "block": "bd-ud2",
+   "q": {
+    "es": "¿Cómo le quitas a juan el permiso de insertar en tienda.productos?",
+    "en": "¿Cómo le quitas a juan el permiso de insertar en tienda.productos?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "REVOKE INSERT ON tienda.productos FROM 'juan'@'localhost';",
+     "en": "REVOKE INSERT ON tienda.productos FROM 'juan'@'localhost';"
+    },
+    {
+     "es": "REVOKE INSERT ON tienda.productos TO 'juan'@'localhost';",
+     "en": "REVOKE INSERT ON tienda.productos TO 'juan'@'localhost';"
+    },
+    {
+     "es": "DELETE INSERT FROM juan;",
+     "en": "DELETE INSERT FROM juan;"
+    },
+    {
+     "es": "DROP GRANT INSERT ON tienda.productos;",
+     "en": "DROP GRANT INSERT ON tienda.productos;"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "REVOKE tiene la misma estructura que GRANT, pero con **FROM** en lugar de TO.",
+    "en": "REVOKE tiene la misma estructura que GRANT, pero con **FROM** en lugar de TO."
+   },
+   "lesson": "bd-null-indices-dcl"
+  },
+  {
+   "id": "bd-38",
+   "block": "bd-ud2",
+   "q": {
+    "es": "¿Qué ventaja tiene usar roles?",
+    "en": "¿Qué ventaja tiene usar roles?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Agrupan permisos y se asignan de una vez a muchos usuarios con la misma función",
+     "en": "Agrupan permisos y se asignan de una vez a muchos usuarios con la misma función"
+    },
+    {
+     "es": "Hacen que las consultas sean más rápidas",
+     "en": "Hacen que las consultas sean más rápidas"
+    },
+    {
+     "es": "Sustituyen a las contraseñas",
+     "en": "Sustituyen a las contraseñas"
+    },
+    {
+     "es": "Permiten saltarse las claves ajenas",
+     "en": "Permiten saltarse las claves ajenas"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Si cambian los permisos de los gestores, se cambia el rol una vez y afecta a todos los que lo tienen.",
+    "en": "Si cambian los permisos de los gestores, se cambia el rol una vez y afecta a todos los que lo tienen."
+   },
+   "lesson": "bd-null-indices-dcl"
+  },
+  {
+   "id": "bd-39",
+   "block": "bd-ud2",
+   "q": {
+    "es": "La vista se crea antes de insertar los pedidos. ¿Qué devuelve la última consulta?",
+    "en": "La vista se crea antes de insertar los pedidos. ¿Qué devuelve la última consulta?"
+   },
+   "code": "CREATE TABLE pedidos (id INTEGER PRIMARY KEY, total INTEGER, estado TEXT);\nCREATE VIEW completados AS\n  SELECT id, total FROM pedidos WHERE estado = 'Completado';\nINSERT INTO pedidos VALUES\n  (1, 30, 'Completado'), (2, 20, 'Pendiente'), (3, 50, 'Completado');\nSELECT COUNT(*) FROM completados;",
+   "options": [
+    "0",
+    "3",
+    "Error",
+    "2"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "Una vista no guarda datos: guarda la consulta y la ejecuta cada vez. Por eso ve los pedidos insertados después de crearla.",
+    "en": "Una vista no guarda datos: guarda la consulta y la ejecuta cada vez. Por eso ve los pedidos insertados después de crearla."
+   },
+   "lesson": "bd-null-indices-dcl"
+  },
+  {
+   "id": "bd-40",
+   "block": "bd-ud2",
+   "q": {
+    "es": "Algunos usuarios no deben ver el salario de los empleados. ¿Qué solución usa lo visto en la unidad?",
+    "en": "Algunos usuarios no deben ver el salario de los empleados. ¿Qué solución usa lo visto en la unidad?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Una vista con todas las columnas menos el salario, y dar permiso solo sobre la vista",
+     "en": "Una vista con todas las columnas menos el salario, y dar permiso solo sobre la vista"
+    },
+    {
+     "es": "Borrar la columna salario",
+     "en": "Borrar la columna salario"
+    },
+    {
+     "es": "Guardar el salario como NULL",
+     "en": "Guardar el salario como NULL"
+    },
+    {
+     "es": "Crear un índice sobre salario",
+     "en": "Crear un índice sobre salario"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Proteger datos sensibles es uno de los usos principales de las vistas. Combinada con GRANT, cada usuario solo ve lo que necesita.",
+    "en": "Proteger datos sensibles es uno de los usos principales de las vistas. Combinada con GRANT, cada usuario solo ve lo que necesita."
+   },
+   "lesson": "bd-null-indices-dcl"
+  },
+  {
+   "id": "bd-41",
+   "block": "bd-ud2",
+   "q": {
+    "es": "Completa la consulta para obtener los alumnos sin nota.",
+    "en": "Completa la consulta para obtener los alumnos sin nota."
+   },
+   "kind": "fill",
+   "code": "CREATE TABLE alumnos (id INTEGER PRIMARY KEY, nombre TEXT, ciclo TEXT, nota INTEGER);\nINSERT INTO alumnos VALUES (1, 'Ana', 'DAW', 8), (2, 'Luis', 'DAM', 5), (3, 'Eva', 'DAW', NULL), (4, 'Juan', 'ASIR', 7), (5, 'Sara', 'DAM', 9);\nSELECT nombre FROM alumnos WHERE nota IS ___;",
+   "accept": [
+    "NULL",
+    "null"
+   ],
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "Con `= NULL` no saldría nadie: hay que usar `IS NULL`. Solución: `NULL`.",
+    "en": "Con `= NULL` no saldría nadie: hay que usar `IS NULL`. Solución: `NULL`."
+   },
+   "lesson": "bd-null-indices-dcl"
+  },
+  {
+   "id": "bd-42",
+   "block": "bd-ud2",
+   "q": {
+    "es": "Este script debería devolver `2`, pero da error o devuelve otra cosa. ¿Qué línea tiene el error?",
+    "en": "Este script debería devolver `2`, pero da error o devuelve otra cosa. ¿Qué línea tiene el error?"
+   },
+   "kind": "choice",
+   "code": null,
+   "options": [
+    "CREATE TABLE clientes (id INTEGER PRIMARY KEY, telefono TEXT);",
+    "INSERT INTO clientes VALUES (1, '600111222'), (2, NULL);",
+    "SELECT id FROM clientes WHERE telefono = NULL;"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "`telefono = NULL` nunca es verdadero, así que no sale ninguna fila. La corrección es `WHERE telefono IS NULL`. Corrección: `SELECT id FROM clientes WHERE telefono IS NULL;`.",
+    "en": "`telefono = NULL` nunca es verdadero, así que no sale ninguna fila. La corrección es `WHERE telefono IS NULL`. Corrección: `SELECT id FROM clientes WHERE telefono IS NULL;`."
+   },
+   "lesson": "bd-null-indices-dcl"
+  },
+  {
+   "id": "bd-43",
+   "block": "bd-ud2",
+   "q": {
+    "es": "Ordena el script para que el SELECT devuelva `1 | Ana | NULL`.",
+    "en": "Ordena el script para que el SELECT devuelva `1 | Ana | NULL`."
+   },
+   "kind": "order",
+   "code": "___",
+   "lines": [
+    "CREATE TABLE clientes (id INTEGER PRIMARY KEY, nombre TEXT);",
+    "INSERT INTO clientes VALUES (1, 'Ana');",
+    "ALTER TABLE clientes ADD email TEXT;",
+    "SELECT * FROM clientes;"
+   ],
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "Primero la estructura, luego los datos, después el cambio de estructura y por último la consulta. Si el ALTER fuera antes del INSERT, faltaría un valor para `email` y el INSERT fallaría.",
+    "en": "Primero la estructura, luego los datos, después el cambio de estructura y por último la consulta. Si el ALTER fuera antes del INSERT, faltaría un valor para `email` y el INSERT fallaría."
+   },
+   "lesson": "bd-null-indices-dcl"
+  },
+  {
+   "id": "sql-01",
+   "block": "bd-ud3",
+   "q": {
+    "es": "¿Qué devuelve esta consulta?",
+    "en": "¿Qué devuelve esta consulta?"
+   },
+   "code": "-- alumnos\n-- id | nombre | ciclo | nota\n-- 1  | Ana    | DAW   | 8\n-- 2  | Luis   | DAM   | 5\n-- 3  | Eva    | DAW   | NULL\n-- 4  | Juan   | ASIR  | 7\n-- 5  | Sara   | DAM   | 9\n\nSELECT DISTINCT ciclo FROM alumnos ORDER BY ciclo;",
+   "options": [
+    "ASIR\nDAM\nDAM\nDAW\nDAW",
+    "DAW\nDAM\nDAW\nASIR\nDAM",
+    "DAW\nDAM\nASIR",
+    "ASIR\nDAM\nDAW"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "`DISTINCT` deja una fila por cada ciclo distinto (DAW, DAM y ASIR) y `ORDER BY ciclo` los ordena alfabéticamente de menor a mayor.",
+    "en": "`DISTINCT` deja una fila por cada ciclo distinto (DAW, DAM y ASIR) y `ORDER BY ciclo` los ordena alfabéticamente de menor a mayor."
+   },
+   "lesson": "sql-select"
+  },
+  {
+   "id": "sql-02",
+   "block": "bd-ud3",
+   "q": {
+    "es": "¿Qué devuelve esta consulta?",
+    "en": "¿Qué devuelve esta consulta?"
+   },
+   "code": "-- alumnos\n-- id | nombre | ciclo | nota\n-- 1  | Ana    | DAW   | 8\n-- 2  | Luis   | DAM   | 5\n-- 3  | Eva    | DAW   | NULL\n-- 4  | Juan   | ASIR  | 7\n-- 5  | Sara   | DAM   | 9\n\nSELECT nombre FROM alumnos ORDER BY nota DESC LIMIT 2;",
+   "options": [
+    "Eva\nSara",
+    "Luis\nAna",
+    "Ana\nSara",
+    "Sara\nAna"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "`DESC` ordena de mayor a menor nota (9, 8, 7, 5) y `LIMIT 2` se queda con las dos primeras: Sara y Ana. En SQLite y MySQL los NULL van al final al ordenar en descendente.",
+    "en": "`DESC` ordena de mayor a menor nota (9, 8, 7, 5) y `LIMIT 2` se queda con las dos primeras: Sara y Ana. En SQLite y MySQL los NULL van al final al ordenar en descendente."
+   },
+   "lesson": "sql-select"
+  },
+  {
+   "id": "sql-03",
+   "block": "bd-ud3",
+   "q": {
+    "es": "¿Qué devuelve esta consulta?",
+    "en": "¿Qué devuelve esta consulta?"
+   },
+   "code": "-- productos\n-- id | nombre  | precio | stock\n-- 1  | Teclado | 25     | 10\n-- 2  | Ratón   | 15     | 0\n-- 3  | Monitor | 180    | 4\n-- 4  | Cable   | 5      | 50\n\nSELECT nombre, precio * stock AS valor\nFROM productos\nORDER BY valor DESC\nLIMIT 1;",
+   "options": [
+    "Cable | 250",
+    "Teclado | 250",
+    "Monitor | 720",
+    "Monitor | 180"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "El valor es precio × stock: Monitor 180 × 4 = 720, Teclado 250, Cable 250, Ratón 0. El alias `valor` se puede usar en ORDER BY porque este se evalúa después del SELECT.",
+    "en": "El valor es precio × stock: Monitor 180 × 4 = 720, Teclado 250, Cable 250, Ratón 0. El alias `valor` se puede usar en ORDER BY porque este se evalúa después del SELECT."
+   },
+   "lesson": "sql-select"
+  },
+  {
+   "id": "sql-04",
+   "block": "bd-ud3",
+   "q": {
+    "es": "¿En qué orden **lógico** evalúa el SGBD estas cláusulas?",
+    "en": "¿En qué orden **lógico** evalúa el SGBD estas cláusulas?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "FROM → WHERE → SELECT → ORDER BY",
+     "en": "FROM → WHERE → SELECT → ORDER BY"
+    },
+    {
+     "es": "SELECT → FROM → WHERE → ORDER BY",
+     "en": "SELECT → FROM → WHERE → ORDER BY"
+    },
+    {
+     "es": "SELECT → WHERE → FROM → ORDER BY",
+     "en": "SELECT → WHERE → FROM → ORDER BY"
+    },
+    {
+     "es": "FROM → SELECT → WHERE → ORDER BY",
+     "en": "FROM → SELECT → WHERE → ORDER BY"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Primero elige la tabla (`FROM`), filtra filas (`WHERE`), calcula las columnas (`SELECT`) y por último ordena (`ORDER BY`). Por eso un alias del SELECT no existe todavía dentro del WHERE.",
+    "en": "Primero elige la tabla (`FROM`), filtra filas (`WHERE`), calcula las columnas (`SELECT`) y por último ordena (`ORDER BY`). Por eso un alias del SELECT no existe todavía dentro del WHERE."
+   },
+   "lesson": "sql-select"
+  },
+  {
+   "id": "sql-05",
+   "block": "bd-ud3",
+   "q": {
+    "es": "¿Qué hace `SELECT DISTINCT ciclo, nota FROM alumnos`?",
+    "en": "¿Qué hace `SELECT DISTINCT ciclo, nota FROM alumnos`?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Elimina las filas en las que coinciden a la vez el ciclo y la nota",
+     "en": "Elimina las filas en las que coinciden a la vez el ciclo y la nota"
+    },
+    {
+     "es": "Elimina los ciclos repetidos y se queda con la primera nota",
+     "en": "Elimina los ciclos repetidos y se queda con la primera nota"
+    },
+    {
+     "es": "Aplica DISTINCT solo a la columna ciclo",
+     "en": "Aplica DISTINCT solo a la columna ciclo"
+    },
+    {
+     "es": "Da error: DISTINCT solo admite una columna",
+     "en": "Da error: DISTINCT solo admite una columna"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "`DISTINCT` afecta a la **fila completa** del resultado: dos filas solo se consideran repetidas si coinciden en todas las columnas seleccionadas.",
+    "en": "`DISTINCT` afecta a la **fila completa** del resultado: dos filas solo se consideran repetidas si coinciden en todas las columnas seleccionadas."
+   },
+   "lesson": "sql-select"
+  },
+  {
+   "id": "sql-06",
+   "block": "bd-ud3",
+   "q": {
+    "es": "¿Qué devuelve esta consulta?",
+    "en": "¿Qué devuelve esta consulta?"
+   },
+   "code": "-- alumnos\n-- id | nombre | ciclo | nota\n-- 1  | Ana    | DAW   | 8\n-- 2  | Luis   | DAM   | 5\n-- 3  | Eva    | DAW   | NULL\n-- 4  | Juan   | ASIR  | 7\n-- 5  | Sara   | DAM   | 9\n\nSELECT nombre FROM alumnos WHERE nota >= 7 AND ciclo = 'DAW';",
+   "options": [
+    "(sin filas)",
+    "Ana\nJuan\nSara",
+    "Ana",
+    "Ana\nEva"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "De DAW son Ana (8) y Eva (NULL). `NULL >= 7` da *desconocido*, no verdadero, así que Eva no pasa el filtro.",
+    "en": "De DAW son Ana (8) y Eva (NULL). `NULL >= 7` da *desconocido*, no verdadero, así que Eva no pasa el filtro."
+   },
+   "lesson": "sql-where"
+  },
+  {
+   "id": "sql-07",
+   "block": "bd-ud3",
+   "q": {
+    "es": "¿Qué devuelve esta consulta?",
+    "en": "¿Qué devuelve esta consulta?"
+   },
+   "code": "-- alumnos\n-- id | nombre | ciclo | nota\n-- 1  | Ana    | DAW   | 8\n-- 2  | Luis   | DAM   | 5\n-- 3  | Eva    | DAW   | NULL\n-- 4  | Juan   | ASIR  | 7\n-- 5  | Sara   | DAM   | 9\n\nSELECT nombre FROM alumnos WHERE nota = NULL;",
+   "options": [
+    "Ana\nLuis\nJuan\nSara",
+    "Eva",
+    "Error",
+    "(sin filas)"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "No da error, pero no devuelve nada: comparar con NULL usando `=` nunca es verdadero. Para encontrar a Eva hay que escribir `WHERE nota IS NULL`.",
+    "en": "No da error, pero no devuelve nada: comparar con NULL usando `=` nunca es verdadero. Para encontrar a Eva hay que escribir `WHERE nota IS NULL`."
+   },
+   "lesson": "sql-where"
+  },
+  {
+   "id": "sql-08",
+   "block": "bd-ud3",
+   "q": {
+    "es": "¿Qué devuelve esta consulta?",
+    "en": "¿Qué devuelve esta consulta?"
+   },
+   "code": "-- alumnos\n-- id | nombre | ciclo | nota\n-- 1  | Ana    | DAW   | 8\n-- 2  | Luis   | DAM   | 5\n-- 3  | Eva    | DAW   | NULL\n-- 4  | Juan   | ASIR  | 7\n-- 5  | Sara   | DAM   | 9\n\nSELECT nombre FROM alumnos\nWHERE ciclo = 'DAM' OR ciclo = 'DAW' AND nota > 7\nORDER BY id;",
+   "options": [
+    "Sara",
+    "Ana\nLuis\nSara",
+    "Ana\nSara",
+    "Ana\nLuis\nEva\nSara"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": {
+    "es": "`AND` va antes que `OR`: la condición es `ciclo = 'DAM' OR (ciclo = 'DAW' AND nota > 7)`. Entran todos los de DAM (Luis y Sara) y, de DAW, solo Ana.",
+    "en": "`AND` va antes que `OR`: la condición es `ciclo = 'DAM' OR (ciclo = 'DAW' AND nota > 7)`. Entran todos los de DAM (Luis y Sara) y, de DAW, solo Ana."
+   },
+   "lesson": "sql-where"
+  },
+  {
+   "id": "sql-09",
+   "block": "bd-ud3",
+   "q": {
+    "es": "¿Qué devuelve esta consulta?",
+    "en": "¿Qué devuelve esta consulta?"
+   },
+   "code": "-- productos\n-- id | nombre  | precio | stock\n-- 1  | Teclado | 25     | 10\n-- 2  | Ratón   | 15     | 0\n-- 3  | Monitor | 180    | 4\n-- 4  | Cable   | 5      | 50\n\nSELECT nombre FROM productos\nWHERE precio BETWEEN 15 AND 25\nORDER BY precio;",
+   "options": [
+    "Teclado",
+    "Ratón",
+    "Ratón\nTeclado",
+    "Cable\nRatón\nTeclado"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "`BETWEEN` incluye los dos extremos: entran el Ratón (15) y el Teclado (25).",
+    "en": "`BETWEEN` incluye los dos extremos: entran el Ratón (15) y el Teclado (25)."
+   },
+   "lesson": "sql-where"
+  },
+  {
+   "id": "sql-10",
+   "block": "bd-ud3",
+   "q": {
+    "es": "¿Qué devuelve esta consulta?",
+    "en": "¿Qué devuelve esta consulta?"
+   },
+   "code": "-- alumnos\n-- id | nombre | ciclo | nota\n-- 1  | Ana    | DAW   | 8\n-- 2  | Luis   | DAM   | 5\n-- 3  | Eva    | DAW   | NULL\n-- 4  | Juan   | ASIR  | 7\n-- 5  | Sara   | DAM   | 9\n\nSELECT nombre FROM alumnos WHERE nombre LIKE '_a%';",
+   "options": [
+    "Ana\nJuan\nSara",
+    "Ana\nSara",
+    "Juan\nSara",
+    "Sara"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "`_` es exactamente un carácter y `%` cualquier resto: el patrón pide que la **segunda** letra sea una a. Solo la cumple Sara.",
+    "en": "`_` es exactamente un carácter y `%` cualquier resto: el patrón pide que la **segunda** letra sea una a. Solo la cumple Sara."
+   },
+   "lesson": "sql-where"
+  },
+  {
+   "id": "sql-11",
+   "block": "bd-ud3",
+   "q": {
+    "es": "¿Qué devuelve esta consulta?",
+    "en": "¿Qué devuelve esta consulta?"
+   },
+   "code": "-- alumnos\n-- id | nombre | ciclo | nota\n-- 1  | Ana    | DAW   | 8\n-- 2  | Luis   | DAM   | 5\n-- 3  | Eva    | DAW   | NULL\n-- 4  | Juan   | ASIR  | 7\n-- 5  | Sara   | DAM   | 9\n\nSELECT COUNT(*), COUNT(nota) FROM alumnos;",
+   "options": [
+    "5 | 5",
+    "5 | 4",
+    "4 | 4",
+    "4 | 5"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": {
+    "es": "`COUNT(*)` cuenta las 5 filas; `COUNT(nota)` ignora el NULL de Eva y da 4.",
+    "en": "`COUNT(*)` cuenta las 5 filas; `COUNT(nota)` ignora el NULL de Eva y da 4."
+   },
+   "lesson": "sql-agregados"
+  },
+  {
+   "id": "sql-12",
+   "block": "bd-ud3",
+   "q": {
+    "es": "¿Qué devuelve esta consulta?",
+    "en": "¿Qué devuelve esta consulta?"
+   },
+   "code": "-- alumnos\n-- id | nombre | ciclo | nota\n-- 1  | Ana    | DAW   | 8\n-- 2  | Luis   | DAM   | 5\n-- 3  | Eva    | DAW   | NULL\n-- 4  | Juan   | ASIR  | 7\n-- 5  | Sara   | DAM   | 9\n\nSELECT AVG(nota) FROM alumnos;",
+   "options": [
+    "7",
+    "5.8",
+    "NULL",
+    "7.25"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "AVG ignora los NULL: (8 + 5 + 7 + 9) / 4 = 7,25. Si contara a Eva como 0 saldría 29 / 5 = 5,8.",
+    "en": "AVG ignora los NULL: (8 + 5 + 7 + 9) / 4 = 7,25. Si contara a Eva como 0 saldría 29 / 5 = 5,8."
+   },
+   "lesson": "sql-agregados"
+  },
+  {
+   "id": "sql-13",
+   "block": "bd-ud3",
+   "q": {
+    "es": "¿Qué devuelve esta consulta?",
+    "en": "¿Qué devuelve esta consulta?"
+   },
+   "code": "-- alumnos\n-- id | nombre | ciclo | nota\n-- 1  | Ana    | DAW   | 8\n-- 2  | Luis   | DAM   | 5\n-- 3  | Eva    | DAW   | NULL\n-- 4  | Juan   | ASIR  | 7\n-- 5  | Sara   | DAM   | 9\n\nSELECT COUNT(DISTINCT ciclo) FROM alumnos;",
+   "options": [
+    "1",
+    "5",
+    "3",
+    "2"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "Hay tres ciclos distintos: DAW, DAM y ASIR.",
+    "en": "Hay tres ciclos distintos: DAW, DAM y ASIR."
+   },
+   "lesson": "sql-agregados"
+  },
+  {
+   "id": "sql-14",
+   "block": "bd-ud3",
+   "q": {
+    "es": "¿Qué devuelve esta consulta?",
+    "en": "¿Qué devuelve esta consulta?"
+   },
+   "code": "-- productos\n-- id | nombre  | precio | stock\n-- 1  | Teclado | 25     | 10\n-- 2  | Ratón   | 15     | 0\n-- 3  | Monitor | 180    | 4\n-- 4  | Cable   | 5      | 50\n\nSELECT MAX(precio) - MIN(precio) FROM productos;",
+   "options": [
+    "175",
+    "5",
+    "155",
+    "180"
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "El más caro cuesta 180 y el más barato 5: la diferencia es 175. Se pueden operar agregados entre sí.",
+    "en": "El más caro cuesta 180 y el más barato 5: la diferencia es 175. Se pueden operar agregados entre sí."
+   },
+   "lesson": "sql-agregados"
+  },
+  {
+   "id": "sql-15",
+   "block": "bd-ud3",
+   "q": {
+    "es": "¿Qué devuelve esta consulta?",
+    "en": "¿Qué devuelve esta consulta?"
+   },
+   "code": "-- alumnos\n-- id | nombre | ciclo | nota\n-- 1  | Ana    | DAW   | 8\n-- 2  | Luis   | DAM   | 5\n-- 3  | Eva    | DAW   | NULL\n-- 4  | Juan   | ASIR  | 7\n-- 5  | Sara   | DAM   | 9\n\nSELECT SUM(nota) FROM alumnos WHERE nota IS NULL;",
+   "options": [
+    "0",
+    "Error",
+    "(sin filas)",
+    "NULL"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "Devuelve una fila con NULL: SUM ignora los NULL y, si no queda ningún valor, el resultado es NULL, no 0. Para obtener 0 se escribe `COALESCE(SUM(nota), 0)`.",
+    "en": "Devuelve una fila con NULL: SUM ignora los NULL y, si no queda ningún valor, el resultado es NULL, no 0. Para obtener 0 se escribe `COALESCE(SUM(nota), 0)`."
+   },
+   "lesson": "sql-agregados"
+  },
+  {
+   "id": "sql-16",
+   "block": "bd-ud3",
+   "q": {
+    "es": "¿Qué devuelve esta consulta?",
+    "en": "¿Qué devuelve esta consulta?"
+   },
+   "code": "-- alumnos\n-- id | nombre | ciclo | nota\n-- 1  | Ana    | DAW   | 8\n-- 2  | Luis   | DAM   | 5\n-- 3  | Eva    | DAW   | NULL\n-- 4  | Juan   | ASIR  | 7\n-- 5  | Sara   | DAM   | 9\n\nSELECT ciclo, COUNT(*) FROM alumnos\nGROUP BY ciclo\nORDER BY ciclo;",
+   "options": [
+    "5",
+    "ASIR | 1\nDAM | 2\nDAW | 2",
+    "DAW | 2\nDAM | 2\nASIR | 1",
+    "ASIR | 1\nDAM | 2\nDAW | 1"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": {
+    "es": "Una fila por ciclo. `COUNT(*)` cuenta filas, así que Eva cuenta en DAW aunque no tenga nota. `ORDER BY ciclo` ordena alfabéticamente.",
+    "en": "Una fila por ciclo. `COUNT(*)` cuenta filas, así que Eva cuenta en DAW aunque no tenga nota. `ORDER BY ciclo` ordena alfabéticamente."
+   },
+   "lesson": "sql-group-by"
+  },
+  {
+   "id": "sql-17",
+   "block": "bd-ud3",
+   "q": {
+    "es": "¿Qué devuelve esta consulta?",
+    "en": "¿Qué devuelve esta consulta?"
+   },
+   "code": "-- alumnos\n-- id | nombre | ciclo | nota\n-- 1  | Ana    | DAW   | 8\n-- 2  | Luis   | DAM   | 5\n-- 3  | Eva    | DAW   | NULL\n-- 4  | Juan   | ASIR  | 7\n-- 5  | Sara   | DAM   | 9\n\nSELECT ciclo FROM alumnos\nGROUP BY ciclo\nHAVING COUNT(*) > 1\nORDER BY ciclo;",
+   "options": [
+    "ASIR\nDAM\nDAW",
+    "DAM\nDAW",
+    "ASIR",
+    "DAM"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": {
+    "es": "`HAVING` descarta los grupos con un solo alumno (ASIR).",
+    "en": "`HAVING` descarta los grupos con un solo alumno (ASIR)."
+   },
+   "lesson": "sql-group-by"
+  },
+  {
+   "id": "sql-18",
+   "block": "bd-ud3",
+   "q": {
+    "es": "¿Qué devuelve esta consulta?",
+    "en": "¿Qué devuelve esta consulta?"
+   },
+   "code": "-- alumnos\n-- id | nombre | ciclo | nota\n-- 1  | Ana    | DAW   | 8\n-- 2  | Luis   | DAM   | 5\n-- 3  | Eva    | DAW   | NULL\n-- 4  | Juan   | ASIR  | 7\n-- 5  | Sara   | DAM   | 9\n\nSELECT ciclo, MAX(nota) FROM alumnos\nWHERE nota < 9\nGROUP BY ciclo\nORDER BY ciclo;",
+   "options": [
+    "ASIR | 7\nDAM | 5\nDAW | 8",
+    "ASIR | 7\nDAM | 9\nDAW | 8",
+    "ASIR | 7\nDAM | 5\nDAW | NULL",
+    "DAM | 5\nDAW | 8"
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "`WHERE` actúa **antes** de agrupar: quita a Sara (9) y a Eva (NULL no cumple `< 9`). En DAM solo queda Luis con 5.",
+    "en": "`WHERE` actúa **antes** de agrupar: quita a Sara (9) y a Eva (NULL no cumple `< 9`). En DAM solo queda Luis con 5."
+   },
+   "lesson": "sql-group-by"
+  },
+  {
+   "id": "sql-19",
+   "block": "bd-ud3",
+   "q": {
+    "es": "¿Cuál es la diferencia entre WHERE y HAVING?",
+    "en": "¿Cuál es la diferencia entre WHERE y HAVING?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "WHERE filtra filas antes de agrupar; HAVING filtra grupos después",
+     "en": "WHERE filtra filas antes de agrupar; HAVING filtra grupos después"
+    },
+    {
+     "es": "Son equivalentes; HAVING es más moderno",
+     "en": "Son equivalentes; HAVING es más moderno"
+    },
+    {
+     "es": "HAVING filtra filas y WHERE filtra columnas",
+     "en": "HAVING filtra filas y WHERE filtra columnas"
+    },
+    {
+     "es": "WHERE solo funciona con GROUP BY",
+     "en": "WHERE solo funciona con GROUP BY"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Por eso las condiciones con agregados (`COUNT(*) > 1`, `AVG(nota) >= 5`) solo pueden ir en HAVING.",
+    "en": "Por eso las condiciones con agregados (`COUNT(*) > 1`, `AVG(nota) >= 5`) solo pueden ir en HAVING."
+   },
+   "lesson": "sql-group-by"
+  },
+  {
+   "id": "sql-20",
+   "block": "bd-ud3",
+   "q": {
+    "es": "¿Qué devuelve esta consulta?",
+    "en": "¿Qué devuelve esta consulta?"
+   },
+   "code": "-- alumnos\n-- id | nombre | ciclo | nota\n-- 1  | Ana    | DAW   | 8\n-- 2  | Luis   | DAM   | 5\n-- 3  | Eva    | DAW   | NULL\n-- 4  | Juan   | ASIR  | 7\n-- 5  | Sara   | DAM   | 9\n\nSELECT ciclo, AVG(nota) FROM alumnos\nGROUP BY ciclo\nHAVING AVG(nota) >= 7\nORDER BY ciclo;",
+   "options": [
+    "ASIR | 7.0\nDAM | 7.0\nDAW | 4.0",
+    "DAW | 8.0",
+    "ASIR | 7.0\nDAM | 7.0\nDAW | 8.0",
+    "ASIR | 7.0\nDAW | 8.0"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "Medias: ASIR 7, DAM (5 + 9) / 2 = 7 y DAW 8 (el NULL de Eva no cuenta). Las tres cumplen `>= 7`. SQLite muestra los decimales como 7.0; MySQL, como 7.0000.",
+    "en": "Medias: ASIR 7, DAM (5 + 9) / 2 = 7 y DAW 8 (el NULL de Eva no cuenta). Las tres cumplen `>= 7`. SQLite muestra los decimales como 7.0; MySQL, como 7.0000."
+   },
+   "lesson": "sql-group-by"
+  },
+  {
+   "id": "sql-21",
+   "block": "bd-ud3",
+   "q": {
+    "es": "¿Qué devuelve esta consulta?",
+    "en": "¿Qué devuelve esta consulta?"
+   },
+   "code": "-- clientes\n-- id | nombre | ciudad\n-- 1  | Ana    | Madrid\n-- 2  | Luis   | Leganés\n-- 3  | Eva    | Valladolid\n\n-- pedidos\n-- id | cliente_id | total\n-- 1  | 1          | 30\n-- 2  | 1          | 20\n-- 3  | 2          | 50\n\nSELECT c.nombre, p.total\nFROM clientes c\nINNER JOIN pedidos p ON p.cliente_id = c.id\nORDER BY p.id;",
+   "options": [
+    "Ana | 30\nLuis | 50",
+    "Ana | 30\nAna | 20\nLuis | 50\nEva | NULL",
+    "Ana | 30\nAna | 20\nLuis | 50",
+    "Ana | 50\nLuis | 50"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "Sale una fila por cada pareja cliente-pedido: Ana tiene dos pedidos y aparece dos veces. Eva no tiene pedidos y el INNER JOIN la descarta.",
+    "en": "Sale una fila por cada pareja cliente-pedido: Ana tiene dos pedidos y aparece dos veces. Eva no tiene pedidos y el INNER JOIN la descarta."
+   },
+   "lesson": "sql-inner-join"
+  },
+  {
+   "id": "sql-22",
+   "block": "bd-ud3",
+   "q": {
+    "es": "¿Qué devuelve esta consulta?",
+    "en": "¿Qué devuelve esta consulta?"
+   },
+   "code": "-- clientes\n-- id | nombre | ciudad\n-- 1  | Ana    | Madrid\n-- 2  | Luis   | Leganés\n-- 3  | Eva    | Valladolid\n\n-- pedidos\n-- id | cliente_id | total\n-- 1  | 1          | 30\n-- 2  | 1          | 20\n-- 3  | 2          | 50\n\nSELECT COUNT(*) FROM clientes, pedidos;",
+   "options": [
+    "9",
+    "3",
+    "Error",
+    "6"
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Sin condición de unión se hace el **producto cartesiano**: cada uno de los 3 clientes con cada uno de los 3 pedidos, 9 filas.",
+    "en": "Sin condición de unión se hace el **producto cartesiano**: cada uno de los 3 clientes con cada uno de los 3 pedidos, 9 filas."
+   },
+   "lesson": "sql-inner-join"
+  },
+  {
+   "id": "sql-23",
+   "block": "bd-ud3",
+   "q": {
+    "es": "¿Qué devuelve esta consulta?",
+    "en": "¿Qué devuelve esta consulta?"
+   },
+   "code": "-- clientes\n-- id | nombre | ciudad\n-- 1  | Ana    | Madrid\n-- 2  | Luis   | Leganés\n-- 3  | Eva    | Valladolid\n\n-- pedidos\n-- id | cliente_id | total\n-- 1  | 1          | 30\n-- 2  | 1          | 20\n-- 3  | 2          | 50\n\nSELECT c.nombre, SUM(p.total)\nFROM clientes c\nJOIN pedidos p ON p.cliente_id = c.id\nGROUP BY c.nombre\nORDER BY c.nombre;",
+   "options": [
+    "Ana | 100",
+    "Ana | 50\nEva | NULL\nLuis | 50",
+    "Ana | 50\nLuis | 50",
+    "Ana | 30\nLuis | 50"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "JOIN y GROUP BY se combinan: Ana suma 30 + 20 = 50 y Luis 50. Eva no aparece porque no tiene pedidos.",
+    "en": "JOIN y GROUP BY se combinan: Ana suma 30 + 20 = 50 y Luis 50. Eva no aparece porque no tiene pedidos."
+   },
+   "lesson": "sql-inner-join"
+  },
+  {
+   "id": "sql-24",
+   "block": "bd-ud3",
+   "q": {
+    "es": "¿Qué devuelve esta consulta?",
+    "en": "¿Qué devuelve esta consulta?"
+   },
+   "code": "-- clientes\n-- id | nombre | ciudad\n-- 1  | Ana    | Madrid\n-- 2  | Luis   | Leganés\n-- 3  | Eva    | Valladolid\n\n-- pedidos\n-- id | cliente_id | total\n-- 1  | 1          | 30\n-- 2  | 1          | 20\n-- 3  | 2          | 50\n\nSELECT nombre FROM clientes\nJOIN pedidos ON pedidos.cliente_id = clientes.id\nWHERE total > 25\nORDER BY total;",
+   "options": [
+    "Luis",
+    "Ana\nAna\nLuis",
+    "Ana\nLuis",
+    "Eva"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "Pedidos de más de 25: el 1 de Ana (30) y el 3 de Luis (50). `nombre` y `total` solo existen en una tabla cada una, así que no hace falta cualificarlas.",
+    "en": "Pedidos de más de 25: el 1 de Ana (30) y el 3 de Luis (50). `nombre` y `total` solo existen en una tabla cada una, así que no hace falta cualificarlas."
+   },
+   "lesson": "sql-inner-join"
+  },
+  {
+   "id": "sql-25",
+   "block": "bd-ud3",
+   "q": {
+    "es": "¿Qué ocurre al ejecutar esta consulta?",
+    "en": "¿Qué ocurre al ejecutar esta consulta?"
+   },
+   "code": "-- clientes\n-- id | nombre | ciudad\n-- 1  | Ana    | Madrid\n-- 2  | Luis   | Leganés\n-- 3  | Eva    | Valladolid\n\n-- pedidos\n-- id | cliente_id | total\n-- 1  | 1          | 30\n-- 2  | 1          | 20\n-- 3  | 2          | 50\n\nSELECT id FROM clientes\nJOIN pedidos ON pedidos.cliente_id = clientes.id;",
+   "options": [
+    "1\n1\n2",
+    "Error",
+    "(sin filas)",
+    "1\n2\n3"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": {
+    "es": "Las dos tablas tienen una columna `id` y el SGBD no sabe cuál quieres: error de columna **ambigua**. Hay que escribir `clientes.id` o `pedidos.id`.",
+    "en": "Las dos tablas tienen una columna `id` y el SGBD no sabe cuál quieres: error de columna **ambigua**. Hay que escribir `clientes.id` o `pedidos.id`."
+   },
+   "lesson": "sql-inner-join"
+  },
+  {
+   "id": "sql-26",
+   "block": "bd-ud3",
+   "q": {
+    "es": "¿Qué devuelve esta consulta?",
+    "en": "¿Qué devuelve esta consulta?"
+   },
+   "code": "-- clientes\n-- id | nombre | ciudad\n-- 1  | Ana    | Madrid\n-- 2  | Luis   | Leganés\n-- 3  | Eva    | Valladolid\n\n-- pedidos\n-- id | cliente_id | total\n-- 1  | 1          | 30\n-- 2  | 1          | 20\n-- 3  | 2          | 50\n\nSELECT c.nombre, p.total\nFROM clientes c\nLEFT JOIN pedidos p ON p.cliente_id = c.id\nORDER BY c.id, p.id;",
+   "options": [
+    "Ana | 30\nAna | 20\nLuis | 50",
+    "Ana | 50\nLuis | 50\nEva | 0",
+    "Ana | 30\nLuis | 50\nEva | NULL",
+    "Ana | 30\nAna | 20\nLuis | 50\nEva | NULL"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "LEFT JOIN conserva a Eva aunque no tenga pedidos y rellena `total` con NULL (no con 0).",
+    "en": "LEFT JOIN conserva a Eva aunque no tenga pedidos y rellena `total` con NULL (no con 0)."
+   },
+   "lesson": "sql-left-join-subconsultas"
+  },
+  {
+   "id": "sql-27",
+   "block": "bd-ud3",
+   "q": {
+    "es": "¿Qué devuelve esta consulta?",
+    "en": "¿Qué devuelve esta consulta?"
+   },
+   "code": "-- clientes\n-- id | nombre | ciudad\n-- 1  | Ana    | Madrid\n-- 2  | Luis   | Leganés\n-- 3  | Eva    | Valladolid\n\n-- pedidos\n-- id | cliente_id | total\n-- 1  | 1          | 30\n-- 2  | 1          | 20\n-- 3  | 2          | 50\n\nSELECT c.nombre\nFROM clientes c\nLEFT JOIN pedidos p ON p.cliente_id = c.id\nWHERE p.id IS NULL;",
+   "options": [
+    "Eva",
+    "Ana\nLuis",
+    "(sin filas)",
+    "Ana\nLuis\nEva"
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Es el patrón para encontrar filas **sin pareja**: solo Eva tiene la parte de pedidos a NULL.",
+    "en": "Es el patrón para encontrar filas **sin pareja**: solo Eva tiene la parte de pedidos a NULL."
+   },
+   "lesson": "sql-left-join-subconsultas"
+  },
+  {
+   "id": "sql-28",
+   "block": "bd-ud3",
+   "q": {
+    "es": "¿Qué devuelve esta consulta?",
+    "en": "¿Qué devuelve esta consulta?"
+   },
+   "code": "-- alumnos\n-- id | nombre | ciclo | nota\n-- 1  | Ana    | DAW   | 8\n-- 2  | Luis   | DAM   | 5\n-- 3  | Eva    | DAW   | NULL\n-- 4  | Juan   | ASIR  | 7\n-- 5  | Sara   | DAM   | 9\n\nSELECT nombre FROM alumnos\nWHERE nota > (SELECT AVG(nota) FROM alumnos)\nORDER BY nombre;",
+   "options": [
+    "Sara",
+    "Ana\nSara",
+    "Ana\nJuan\nSara",
+    "Error"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": {
+    "es": "La subconsulta calcula la media: 7,25. Superan esa nota Ana (8) y Sara (9); Juan tiene 7.",
+    "en": "La subconsulta calcula la media: 7,25. Superan esa nota Ana (8) y Sara (9); Juan tiene 7."
+   },
+   "lesson": "sql-left-join-subconsultas"
+  },
+  {
+   "id": "sql-29",
+   "block": "bd-ud3",
+   "q": {
+    "es": "¿Qué devuelve esta consulta?",
+    "en": "¿Qué devuelve esta consulta?"
+   },
+   "code": "-- clientes\n-- id | nombre | ciudad\n-- 1  | Ana    | Madrid\n-- 2  | Luis   | Leganés\n-- 3  | Eva    | Valladolid\n\n-- pedidos\n-- id | cliente_id | total\n-- 1  | 1          | 30\n-- 2  | 1          | 20\n-- 3  | 2          | 50\n\nSELECT nombre FROM clientes\nWHERE id IN (SELECT cliente_id FROM pedidos WHERE total >= 30)\nORDER BY nombre;",
+   "options": [
+    "Ana\nAna\nLuis",
+    "Eva",
+    "Ana\nLuis",
+    "Luis"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "La subconsulta devuelve los clientes 1 (pedido de 30) y 2 (pedido de 50). Con IN cada cliente sale una sola vez, a diferencia de un JOIN.",
+    "en": "La subconsulta devuelve los clientes 1 (pedido de 30) y 2 (pedido de 50). Con IN cada cliente sale una sola vez, a diferencia de un JOIN."
+   },
+   "lesson": "sql-left-join-subconsultas"
+  },
+  {
+   "id": "sql-30",
+   "block": "bd-ud3",
+   "q": {
+    "es": "¿Qué devuelve esta consulta?",
+    "en": "¿Qué devuelve esta consulta?"
+   },
+   "code": "-- clientes\n-- id | nombre | ciudad\n-- 1  | Ana    | Madrid\n-- 2  | Luis   | Leganés\n-- 3  | Eva    | Valladolid\n\n-- pedidos\n-- id | cliente_id | total\n-- 1  | 1          | 30\n-- 2  | 1          | 20\n-- 3  | 2          | 50\n\nSELECT COUNT(*)\nFROM clientes c\nLEFT JOIN pedidos p ON p.cliente_id = c.id;",
+   "options": [
+    "3",
+    "5",
+    "4",
+    "9"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "Tres filas de parejas (Ana ×2, Luis) más la fila de Eva rellenada con NULL: 4.",
+    "en": "Tres filas de parejas (Ana ×2, Luis) más la fila de Eva rellenada con NULL: 4."
+   },
+   "lesson": "sql-left-join-subconsultas"
+  },
+  {
+   "id": "bd-44",
+   "block": "bd-ud3",
+   "q": {
+    "es": "¿Qué devuelve esta consulta?",
+    "en": "¿Qué devuelve esta consulta?"
+   },
+   "code": "-- clientes\n-- id | nombre | ciudad\n-- 1  | Ana    | Madrid\n-- 2  | Luis   | Leganés\n-- 3  | Eva    | Valladolid\n\n-- proveedores\n-- id | nombre\n-- 1  | Ana\n-- 2  | Tecnofp\n-- 3  | Luis\n\nSELECT nombre FROM clientes\nUNION\nSELECT nombre FROM proveedores\nORDER BY nombre;",
+   "options": [
+    "Ana\nEva\nLuis\nTecnofp",
+    "Ana\nLuis",
+    "Eva",
+    "Ana\nAna\nEva\nLuis\nLuis\nTecnofp"
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "UNION junta los dos resultados y quita los duplicados: Ana y Luis aparecen una sola vez.",
+    "en": "UNION junta los dos resultados y quita los duplicados: Ana y Luis aparecen una sola vez."
+   },
+   "lesson": "bd-conjuntos-y-optimizacion"
+  },
+  {
+   "id": "bd-45",
+   "block": "bd-ud3",
+   "q": {
+    "es": "¿Qué devuelve esta consulta?",
+    "en": "¿Qué devuelve esta consulta?"
+   },
+   "code": "-- clientes\n-- id | nombre | ciudad\n-- 1  | Ana    | Madrid\n-- 2  | Luis   | Leganés\n-- 3  | Eva    | Valladolid\n\n-- proveedores\n-- id | nombre\n-- 1  | Ana\n-- 2  | Tecnofp\n-- 3  | Luis\n\nSELECT COUNT(*) FROM (\n  SELECT nombre FROM clientes\n  UNION ALL\n  SELECT nombre FROM proveedores\n);",
+   "options": [
+    "4",
+    "Error",
+    "6",
+    "2"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "`UNION ALL` conserva los duplicados: 3 clientes + 3 proveedores = 6 filas. Con UNION serían 4.",
+    "en": "`UNION ALL` conserva los duplicados: 3 clientes + 3 proveedores = 6 filas. Con UNION serían 4."
+   },
+   "lesson": "bd-conjuntos-y-optimizacion"
+  },
+  {
+   "id": "bd-46",
+   "block": "bd-ud3",
+   "q": {
+    "es": "¿Qué devuelve esta consulta?",
+    "en": "¿Qué devuelve esta consulta?"
+   },
+   "code": "-- clientes\n-- id | nombre | ciudad\n-- 1  | Ana    | Madrid\n-- 2  | Luis   | Leganés\n-- 3  | Eva    | Valladolid\n\n-- proveedores\n-- id | nombre\n-- 1  | Ana\n-- 2  | Tecnofp\n-- 3  | Luis\n\nSELECT nombre FROM clientes\nINTERSECT\nSELECT nombre FROM proveedores\nORDER BY nombre;",
+   "options": [
+    "Eva",
+    "Ana\nLuis",
+    "Tecnofp",
+    "Ana\nEva\nLuis\nTecnofp"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": {
+    "es": "INTERSECT devuelve solo los nombres que aparecen en las dos consultas.",
+    "en": "INTERSECT devuelve solo los nombres que aparecen en las dos consultas."
+   },
+   "lesson": "bd-conjuntos-y-optimizacion"
+  },
+  {
+   "id": "bd-47",
+   "block": "bd-ud3",
+   "q": {
+    "es": "¿Qué devuelve esta consulta?",
+    "en": "¿Qué devuelve esta consulta?"
+   },
+   "code": "-- clientes\n-- id | nombre | ciudad\n-- 1  | Ana    | Madrid\n-- 2  | Luis   | Leganés\n-- 3  | Eva    | Valladolid\n\n-- proveedores\n-- id | nombre\n-- 1  | Ana\n-- 2  | Tecnofp\n-- 3  | Luis\n\nSELECT nombre FROM clientes\nEXCEPT\nSELECT nombre FROM proveedores;",
+   "options": [
+    "Ana\nLuis",
+    "Eva",
+    "Tecnofp",
+    "Eva\nTecnofp"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": {
+    "es": "EXCEPT devuelve lo que está en la primera consulta y no en la segunda. Al revés (proveedores EXCEPT clientes) saldría Tecnofp.",
+    "en": "EXCEPT devuelve lo que está en la primera consulta y no en la segunda. Al revés (proveedores EXCEPT clientes) saldría Tecnofp."
+   },
+   "lesson": "bd-conjuntos-y-optimizacion"
+  },
+  {
+   "id": "bd-48",
+   "block": "bd-ud3",
+   "q": {
+    "es": "¿Qué ocurre al ejecutar esta consulta?",
+    "en": "¿Qué ocurre al ejecutar esta consulta?"
+   },
+   "code": "-- clientes\n-- id | nombre | ciudad\n-- 1  | Ana    | Madrid\n-- 2  | Luis   | Leganés\n-- 3  | Eva    | Valladolid\n\n-- proveedores\n-- id | nombre\n-- 1  | Ana\n-- 2  | Tecnofp\n-- 3  | Luis\n\nSELECT id, nombre FROM clientes\nUNION\nSELECT nombre FROM proveedores;",
+   "options": [
+    "Error",
+    "1 | Ana\n2 | Luis\n3 | Eva",
+    "Ana\nEva\nLuis\nTecnofp",
+    "(sin filas)"
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Para combinar selecciones, las dos consultas deben tener el mismo número de columnas. Aquí una tiene 2 y la otra 1.",
+    "en": "Para combinar selecciones, las dos consultas deben tener el mismo número de columnas. Aquí una tiene 2 y la otra 1."
+   },
+   "lesson": "bd-conjuntos-y-optimizacion"
+  },
+  {
+   "id": "bd-49",
+   "block": "bd-ud3",
+   "q": {
+    "es": "¿Qué devuelve esta consulta?",
+    "en": "¿Qué devuelve esta consulta?"
+   },
+   "code": "-- clientes\n-- id | nombre | ciudad\n-- 1  | Ana    | Madrid\n-- 2  | Luis   | Leganés\n-- 3  | Eva    | Valladolid\n\n-- pedidos\n-- id | cliente_id | total\n-- 1  | 1          | 30\n-- 2  | 1          | 20\n-- 3  | 2          | 50\n\nSELECT c.nombre, COALESCE(p.total, 0)\nFROM clientes c LEFT JOIN pedidos p ON p.cliente_id = c.id\nWHERE c.id = 3;",
+   "options": [
+    "(sin filas)",
+    "Eva | NULL",
+    "Error",
+    "Eva | 0"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "Eva no tiene pedidos: el LEFT JOIN la mantiene con `p.total` a NULL, y COALESCE lo sustituye por 0.",
+    "en": "Eva no tiene pedidos: el LEFT JOIN la mantiene con `p.total` a NULL, y COALESCE lo sustituye por 0."
+   },
+   "lesson": "bd-conjuntos-y-optimizacion"
+  },
+  {
+   "id": "bd-50",
+   "block": "bd-ud3",
+   "q": {
+    "es": "¿Qué devuelve esta consulta?",
+    "en": "¿Qué devuelve esta consulta?"
+   },
+   "code": "-- productos\n-- id | nombre  | precio | stock\n-- 1  | Teclado | 25     | 10\n-- 2  | Ratón   | 15     | 0\n-- 3  | Monitor | 180    | 4\n-- 4  | Cable   | 5      | 50\n\nSELECT nombre FROM productos\nWHERE precio > (SELECT AVG(precio) FROM productos);",
+   "options": [
+    "Cable\nRatón",
+    "Teclado\nMonitor",
+    "Error",
+    "Monitor"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "La subconsulta escalar calcula la media: (25 + 15 + 180 + 5) / 4 = 56,25. Solo el monitor la supera.",
+    "en": "La subconsulta escalar calcula la media: (25 + 15 + 180 + 5) / 4 = 56,25. Solo el monitor la supera."
+   },
+   "lesson": "bd-conjuntos-y-optimizacion"
+  },
+  {
+   "id": "bd-51",
+   "block": "bd-ud3",
+   "q": {
+    "es": "¿Qué devuelve esta consulta?",
+    "en": "¿Qué devuelve esta consulta?"
+   },
+   "code": "-- clientes\n-- id | nombre | ciudad\n-- 1  | Ana    | Madrid\n-- 2  | Luis   | Leganés\n-- 3  | Eva    | Valladolid\n\n-- pedidos\n-- id | cliente_id | total\n-- 1  | 1          | 30\n-- 2  | 1          | 20\n-- 3  | 2          | 50\n\nSELECT nombre FROM clientes\nWHERE id IN (SELECT cliente_id FROM pedidos)\nORDER BY nombre;",
+   "options": [
+    "Ana\nEva\nLuis",
+    "Eva",
+    "Ana\nLuis",
+    "Ana\nAna\nLuis"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "La subconsulta devuelve varias filas (1, 1, 2) e IN comprueba si el id está entre ellas. Cada cliente sale una vez, aunque tenga varios pedidos.",
+    "en": "La subconsulta devuelve varias filas (1, 1, 2) e IN comprueba si el id está entre ellas. Cada cliente sale una vez, aunque tenga varios pedidos."
+   },
+   "lesson": "bd-conjuntos-y-optimizacion"
+  },
+  {
+   "id": "bd-52",
+   "block": "bd-ud3",
+   "q": {
+    "es": "¿Qué devuelve esta consulta?",
+    "en": "¿Qué devuelve esta consulta?"
+   },
+   "code": "-- clientes\n-- id | nombre | ciudad\n-- 1  | Ana    | Madrid\n-- 2  | Luis   | Leganés\n-- 3  | Eva    | Valladolid\n\n-- pedidos\n-- id | cliente_id | total\n-- 1  | 1          | 30\n-- 2  | 1          | 20\n-- 3  | 2          | 50\n\nSELECT nombre FROM clientes\nWHERE id NOT IN (SELECT cliente_id FROM pedidos);",
+   "options": [
+    "Eva",
+    "Error",
+    "Ana\nLuis",
+    "(sin filas)"
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Los clientes cuyo id no aparece en ningún pedido. Es lo mismo que un LEFT JOIN con `WHERE p.id IS NULL`.",
+    "en": "Los clientes cuyo id no aparece en ningún pedido. Es lo mismo que un LEFT JOIN con `WHERE p.id IS NULL`."
+   },
+   "lesson": "bd-conjuntos-y-optimizacion"
+  },
+  {
+   "id": "bd-53",
+   "block": "bd-ud3",
+   "q": {
+    "es": "¿Qué composición incluye todas las filas de las dos tablas, con NULL donde no hay coincidencia?",
+    "en": "¿Qué composición incluye todas las filas de las dos tablas, con NULL donde no hay coincidencia?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "FULL OUTER JOIN",
+     "en": "FULL OUTER JOIN"
+    },
+    {
+     "es": "INNER JOIN",
+     "en": "INNER JOIN"
+    },
+    {
+     "es": "LEFT JOIN",
+     "en": "LEFT JOIN"
+    },
+    {
+     "es": "RIGHT JOIN",
+     "en": "RIGHT JOIN"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "LEFT conserva la izquierda; RIGHT, la derecha; FULL OUTER, las dos. INNER solo lo que coincide.",
+    "en": "LEFT conserva la izquierda; RIGHT, la derecha; FULL OUTER, las dos. INNER solo lo que coincide."
+   },
+   "lesson": "bd-conjuntos-y-optimizacion"
+  },
+  {
+   "id": "bd-54",
+   "block": "bd-ud3",
+   "q": {
+    "es": "`clientes RIGHT JOIN pedidos ON …` da el mismo resultado que…",
+    "en": "`clientes RIGHT JOIN pedidos ON …` da el mismo resultado que…"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "pedidos LEFT JOIN clientes ON …",
+     "en": "pedidos LEFT JOIN clientes ON …"
+    },
+    {
+     "es": "clientes LEFT JOIN pedidos ON …",
+     "en": "clientes LEFT JOIN pedidos ON …"
+    },
+    {
+     "es": "clientes INNER JOIN pedidos ON …",
+     "en": "clientes INNER JOIN pedidos ON …"
+    },
+    {
+     "es": "clientes FULL OUTER JOIN pedidos ON …",
+     "en": "clientes FULL OUTER JOIN pedidos ON …"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "RIGHT JOIN conserva todas las filas de la tabla de la derecha. Cambiando el orden de las tablas se escribe como LEFT JOIN.",
+    "en": "RIGHT JOIN conserva todas las filas de la tabla de la derecha. Cambiando el orden de las tablas se escribe como LEFT JOIN."
+   },
+   "lesson": "bd-conjuntos-y-optimizacion"
+  },
+  {
+   "id": "bd-55",
+   "block": "bd-ud3",
+   "q": {
+    "es": "¿Para qué sirve `EXPLAIN SELECT …`?",
+    "en": "¿Para qué sirve `EXPLAIN SELECT …`?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Para ver el plan de ejecución: cómo va a hacer el SGBD la consulta y si usa índices",
+     "en": "Para ver el plan de ejecución: cómo va a hacer el SGBD la consulta y si usa índices"
+    },
+    {
+     "es": "Para que la consulta explique sus resultados en texto",
+     "en": "Para que la consulta explique sus resultados en texto"
+    },
+    {
+     "es": "Para ejecutar la consulta sin permisos",
+     "en": "Para ejecutar la consulta sin permisos"
+    },
+    {
+     "es": "Para crear un índice automáticamente",
+     "en": "Para crear un índice automáticamente"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "El plan de ejecución ayuda a encontrar cuellos de botella, como una búsqueda que recorre toda la tabla porque falta un índice.",
+    "en": "El plan de ejecución ayuda a encontrar cuellos de botella, como una búsqueda que recorre toda la tabla porque falta un índice."
+   },
+   "lesson": "bd-conjuntos-y-optimizacion"
+  },
+  {
+   "id": "bd-56",
+   "block": "bd-ud3",
+   "q": {
+    "es": "¿Cuál de estas es una buena práctica para optimizar consultas?",
+    "en": "¿Cuál de estas es una buena práctica para optimizar consultas?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Pedir solo las columnas necesarias en lugar de SELECT *",
+     "en": "Pedir solo las columnas necesarias en lugar de SELECT *"
+    },
+    {
+     "es": "Crear un índice en todas las columnas",
+     "en": "Crear un índice en todas las columnas"
+    },
+    {
+     "es": "No actualizar nunca las estadísticas",
+     "en": "No actualizar nunca las estadísticas"
+    },
+    {
+     "es": "Usar siempre subconsultas en lugar de JOIN",
+     "en": "Usar siempre subconsultas en lugar de JOIN"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Menos columnas, menos datos que procesar. Indexar todo ralentiza las escrituras, las estadísticas deben estar al día y un JOIN suele ser más eficiente.",
+    "en": "Menos columnas, menos datos que procesar. Indexar todo ralentiza las escrituras, las estadísticas deben estar al día y un JOIN suele ser más eficiente."
+   },
+   "lesson": "bd-conjuntos-y-optimizacion"
+  },
+  {
+   "id": "bd-57",
+   "block": "bd-ud3",
+   "q": {
+    "es": "En `SELECT nombre, departamento FROM empleados WHERE departamento = 'Ventas'`, ¿qué parte es la proyección y cuál la selección?",
+    "en": "En `SELECT nombre, departamento FROM empleados WHERE departamento = 'Ventas'`, ¿qué parte es la proyección y cuál la selección?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Proyección: nombre, departamento. Selección: el WHERE",
+     "en": "Proyección: nombre, departamento. Selección: el WHERE"
+    },
+    {
+     "es": "Proyección: el WHERE. Selección: nombre, departamento",
+     "en": "Proyección: el WHERE. Selección: nombre, departamento"
+    },
+    {
+     "es": "Las dos son el FROM",
+     "en": "Las dos son el FROM"
+    },
+    {
+     "es": "Proyección: FROM empleados. Selección: el SELECT",
+     "en": "Proyección: FROM empleados. Selección: el SELECT"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Proyectar es elegir columnas; seleccionar es filtrar filas.",
+    "en": "Proyectar es elegir columnas; seleccionar es filtrar filas."
+   },
+   "lesson": "bd-conjuntos-y-optimizacion"
+  },
+  {
+   "id": "bd-58",
+   "block": "bd-ud3",
+   "q": {
+    "es": "Completa la consulta para obtener los clientes que no son proveedores.",
+    "en": "Completa la consulta para obtener los clientes que no son proveedores."
+   },
+   "kind": "fill",
+   "code": "CREATE TABLE clientes (id INTEGER PRIMARY KEY, nombre TEXT, ciudad TEXT);\nINSERT INTO clientes VALUES (1, 'Ana', 'Madrid'), (2, 'Luis', 'Leganés'), (3, 'Eva', 'Valladolid');\nCREATE TABLE proveedores (id INTEGER PRIMARY KEY, nombre TEXT);\nINSERT INTO proveedores VALUES (1, 'Ana'), (2, 'Tecnofp'), (3, 'Luis');\nSELECT nombre FROM clientes\n___\nSELECT nombre FROM proveedores;",
+   "accept": [
+    "EXCEPT",
+    "except"
+   ],
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "EXCEPT deja lo que está en la primera consulta y no en la segunda. Solución: `EXCEPT`.",
+    "en": "EXCEPT deja lo que está en la primera consulta y no en la segunda. Solución: `EXCEPT`."
+   },
+   "lesson": "bd-conjuntos-y-optimizacion"
+  },
+  {
+   "id": "bd-59",
+   "block": "bd-ud3",
+   "q": {
+    "es": "Ordena las cláusulas para obtener las unidades vendidas por región, en orden alfabético.",
+    "en": "Ordena las cláusulas para obtener las unidades vendidas por región, en orden alfabético."
+   },
+   "kind": "order",
+   "code": "CREATE TABLE ventas (region TEXT, cantidad INTEGER);\nINSERT INTO ventas VALUES ('Norte', 5), ('Sur', 3), ('Norte', 2);\n___",
+   "lines": [
+    "SELECT region, SUM(cantidad)",
+    "FROM ventas",
+    "GROUP BY region",
+    "ORDER BY region;"
+   ],
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "El orden de las cláusulas es fijo: SELECT, FROM, WHERE, GROUP BY, HAVING y ORDER BY.",
+    "en": "El orden de las cláusulas es fijo: SELECT, FROM, WHERE, GROUP BY, HAVING y ORDER BY."
+   },
+   "lesson": "bd-conjuntos-y-optimizacion"
+  },
+  {
+   "id": "bd-60",
+   "block": "bd-ud3",
+   "q": {
+    "es": "Este script debería devolver `Norte | 7`, pero da error o devuelve otra cosa. ¿Qué línea tiene el error?",
+    "en": "Este script debería devolver `Norte | 7`, pero da error o devuelve otra cosa. ¿Qué línea tiene el error?"
+   },
+   "kind": "choice",
+   "code": null,
+   "options": [
+    "CREATE TABLE ventas (region TEXT, cantidad INTEGER);",
+    "INSERT INTO ventas VALUES ('Norte', 5), ('Sur', 3), ('Norte', 2);",
+    "SELECT region, SUM(cantidad) FROM ventas",
+    "WHERE SUM(cantidad) > 4 GROUP BY region;"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "WHERE filtra filas antes de agrupar y no puede usar funciones de agregado. Las condiciones sobre grupos van en HAVING, después del GROUP BY. Corrección: `GROUP BY region HAVING SUM(cantidad) > 4;`.",
+    "en": "WHERE filtra filas antes de agrupar y no puede usar funciones de agregado. Las condiciones sobre grupos van en HAVING, después del GROUP BY. Corrección: `GROUP BY region HAVING SUM(cantidad) > 4;`."
+   },
+   "lesson": "bd-conjuntos-y-optimizacion"
+  },
+  {
+   "id": "sql-36",
+   "block": "bd-ampliacion",
+   "q": {
+    "es": "¿Qué devuelve la última sentencia de este script?",
+    "en": "¿Qué devuelve la última sentencia de este script?"
+   },
+   "code": "-- productos\n-- id | nombre  | precio | stock\n-- 1  | Teclado | 25     | 10\n-- 2  | Ratón   | 15     | 0\n-- 3  | Monitor | 180    | 4\n-- 4  | Cable   | 5      | 50\n\nUPDATE productos SET precio = precio * 2 WHERE stock = 0;\nSELECT SUM(precio) FROM productos;",
+   "options": [
+    "240",
+    "255",
+    "450",
+    "225"
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Solo el Ratón tiene stock 0: su precio pasa de 15 a 30. Suma: 25 + 30 + 180 + 5 = 240.",
+    "en": "Solo el Ratón tiene stock 0: su precio pasa de 15 a 30. Suma: 25 + 30 + 180 + 5 = 240."
+   },
+   "lesson": "sql-modificar-datos"
+  },
+  {
+   "id": "sql-37",
+   "block": "bd-ampliacion",
+   "q": {
+    "es": "¿Qué devuelve la última sentencia de este script?",
+    "en": "¿Qué devuelve la última sentencia de este script?"
+   },
+   "code": "-- alumnos\n-- id | nombre | ciclo | nota\n-- 1  | Ana    | DAW   | 8\n-- 2  | Luis   | DAM   | 5\n-- 3  | Eva    | DAW   | NULL\n-- 4  | Juan   | ASIR  | 7\n-- 5  | Sara   | DAM   | 9\n\nDELETE FROM alumnos WHERE nota < 7;\nSELECT COUNT(*) FROM alumnos;",
+   "options": [
+    "3",
+    "5",
+    "2",
+    "4"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "Solo se borra Luis (5). Eva tiene la nota a NULL y `NULL < 7` no es verdadero, así que **no** se borra. Quedan 4 filas.",
+    "en": "Solo se borra Luis (5). Eva tiene la nota a NULL y `NULL < 7` no es verdadero, así que **no** se borra. Quedan 4 filas."
+   },
+   "lesson": "sql-modificar-datos"
+  },
+  {
+   "id": "sql-38",
+   "block": "bd-ampliacion",
+   "q": {
+    "es": "¿Qué devuelve la última sentencia de este script?",
+    "en": "¿Qué devuelve la última sentencia de este script?"
+   },
+   "code": "-- alumnos\n-- id | nombre | ciclo | nota\n-- 1  | Ana    | DAW   | 8\n-- 2  | Luis   | DAM   | 5\n-- 3  | Eva    | DAW   | NULL\n-- 4  | Juan   | ASIR  | 7\n-- 5  | Sara   | DAM   | 9\n\nUPDATE alumnos SET nota = 10;\nSELECT COUNT(*) FROM alumnos WHERE nota = 10;",
+   "options": [
+    "5",
+    "4",
+    "1",
+    "0"
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Un UPDATE sin WHERE cambia **todas** las filas, incluida la de Eva, que tenía NULL.",
+    "en": "Un UPDATE sin WHERE cambia **todas** las filas, incluida la de Eva, que tenía NULL."
+   },
+   "lesson": "sql-modificar-datos"
+  },
+  {
+   "id": "sql-39",
+   "block": "bd-ampliacion",
+   "q": {
+    "es": "¿Qué devuelve la última sentencia de este script?",
+    "en": "¿Qué devuelve la última sentencia de este script?"
+   },
+   "code": "-- productos\n-- id | nombre  | precio | stock\n-- 1  | Teclado | 25     | 10\n-- 2  | Ratón   | 15     | 0\n-- 3  | Monitor | 180    | 4\n-- 4  | Cable   | 5      | 50\n\nINSERT INTO productos (nombre, precio) VALUES ('Alfombrilla', 8);\nSELECT id, stock FROM productos WHERE nombre = 'Alfombrilla';",
+   "options": [
+    "5 | NULL",
+    "Error",
+    "5 | 0",
+    "1 | NULL"
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "El id se genera solo (el mayor más uno: 5), como con AUTO_INCREMENT en MySQL. `stock` no tiene DEFAULT, así que queda NULL, no 0.",
+    "en": "El id se genera solo (el mayor más uno: 5), como con AUTO_INCREMENT en MySQL. `stock` no tiene DEFAULT, así que queda NULL, no 0."
+   },
+   "lesson": "sql-modificar-datos"
+  },
+  {
+   "id": "sql-40",
+   "block": "bd-ampliacion",
+   "q": {
+    "es": "¿Qué diferencia hay entre `DELETE FROM t` y `DROP TABLE t`?",
+    "en": "¿Qué diferencia hay entre `DELETE FROM t` y `DROP TABLE t`?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "DELETE borra las filas y la tabla sigue existiendo; DROP elimina la tabla entera",
+     "en": "DELETE borra las filas y la tabla sigue existiendo; DROP elimina la tabla entera"
+    },
+    {
+     "es": "Ninguna, son sinónimos",
+     "en": "Ninguna, son sinónimos"
+    },
+    {
+     "es": "DROP borra solo las filas repetidas",
+     "en": "DROP borra solo las filas repetidas"
+    },
+    {
+     "es": "DELETE elimina también la estructura",
+     "en": "DELETE elimina también la estructura"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Después de un DELETE sin WHERE la tabla sigue ahí, vacía. Después de DROP TABLE ya no existe.",
+    "en": "Después de un DELETE sin WHERE la tabla sigue ahí, vacía. Después de DROP TABLE ya no existe."
+   },
+   "lesson": "sql-modificar-datos"
+  },
+  {
    "id": "sql-46",
-   "block": "diseno",
+   "block": "bd-ampliacion",
    "q": {
     "es": "¿Qué devuelve la última sentencia de este script?",
     "en": "¿Qué devuelve la última sentencia de este script?"
@@ -1233,7 +2997,7 @@
   },
   {
    "id": "sql-47",
-   "block": "diseno",
+   "block": "bd-ampliacion",
    "q": {
     "es": "¿Qué devuelve la última sentencia de este script?",
     "en": "¿Qué devuelve la última sentencia de este script?"
@@ -1256,7 +3020,7 @@
   },
   {
    "id": "sql-48",
-   "block": "diseno",
+   "block": "bd-ampliacion",
    "q": {
     "es": "¿Qué devuelve la última sentencia de este script?",
     "en": "¿Qué devuelve la última sentencia de este script?"
@@ -1279,7 +3043,7 @@
   },
   {
    "id": "sql-49",
-   "block": "diseno",
+   "block": "bd-ampliacion",
    "q": {
     "es": "¿Qué propiedad ACID garantiza que una transacción se aplica entera o no se aplica nada?",
     "en": "¿Qué propiedad ACID garantiza que una transacción se aplica entera o no se aplica nada?"
@@ -1314,7 +3078,7 @@
   },
   {
    "id": "sql-50",
-   "block": "diseno",
+   "block": "bd-ampliacion",
    "q": {
     "es": "¿Cuándo **no** compensa crear un índice?",
     "en": "¿Cuándo **no** compensa crear un índice?"

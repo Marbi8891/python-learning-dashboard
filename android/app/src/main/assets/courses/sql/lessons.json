@@ -1,9 +1,334 @@
 {
  "modules": [
   {
-   "slug": "consultas",
-   "title": "Consultas básicas",
-   "summary": "SELECT, filtros, orden y límites.",
+   "slug": "bd-ud1",
+   "title": "UD1 · Almacenamiento de la información",
+   "summary": "Tipos y modelos de bases de datos, fragmentación, Big Data, ficheros, RGPD y SGBD.",
+   "lessons": [
+    {
+     "slug": "bd-tipos-y-modelos",
+     "title": "Tipos y modelos de bases de datos",
+     "theory": "**Almacenar información** es organizar, guardar y recuperar datos de forma eficiente. Si una tienda online guarda mal sus pedidos, pierde datos o se retrasa.\n\n**Según dónde está la información:**\n- **Centralizada:** todo en un único servidor. Es fácil de administrar y de mantener coherente, pero si ese servidor cae, no hay acceso a nada (**punto único de fallo**) y se satura con muchos usuarios.\n- **Distribuida:** los datos se reparten entre varios servidores conectados. Si uno falla, los demás siguen y la carga se reparte, pero es más difícil mantener los datos sincronizados y cuesta más administrarla.\n\n**Fragmentación** (en las distribuidas):\n- **Horizontal:** se reparten las **filas**. Los alumnos de cada provincia, en un servidor distinto.\n- **Vertical:** se reparten las **columnas**. Los datos personales de un empleado en un servidor y la nómina en otro, unidos por la clave.\n- **Mixta:** las dos a la vez.\n\n**Modelos de bases de datos:**\n- **Relacional:** tablas con filas y columnas, relacionadas por claves primarias y ajenas. Es el más usado.\n- **Jerárquico:** un árbol; cada nodo tiene **un solo padre** (Empresa → Departamentos → Empleados).\n- **En red:** como el jerárquico, pero un nodo puede tener **varios padres**. Más flexible y más difícil de gestionar.\n- **Orientado a objetos:** los datos son objetos con **atributos y métodos** (un `Personaje` con `nivel` y `actualizarNivel()`).\n\n**Según la ubicación:** **local** (en un solo equipo), **en la nube** (servidores remotos por internet, escalable) y **distribuida**. Para elegir se mira la **escalabilidad**, el **rendimiento** y la **seguridad**.\n\n**Big Data:** volúmenes de datos que las herramientas tradicionales no procesan bien. Las **5 V**: **Volumen**, **Velocidad** (tiempo real), **Variedad** (estructurados y no estructurados), **Veracidad** (fiabilidad) y **Valor**. Herramientas: **Hadoop** (almacena y procesa datos repartidos en muchos servidores) y **Spark** (procesamiento muy rápido, en tiempo real).",
+     "example_code": "-- Fragmentación horizontal: cada provincia en su tabla (en la realidad, en su servidor)\nCREATE TABLE alumnos_madrid (id INTEGER PRIMARY KEY, nombre TEXT, provincia TEXT);\nCREATE TABLE alumnos_valladolid (id INTEGER PRIMARY KEY, nombre TEXT, provincia TEXT);\nINSERT INTO alumnos_madrid VALUES (1, 'Ana', 'Madrid'), (2, 'Luis', 'Madrid');\nINSERT INTO alumnos_valladolid VALUES (3, 'Eva', 'Valladolid');\n\n-- La tabla completa se reconstruye uniendo los fragmentos\nSELECT * FROM alumnos_madrid\nUNION ALL\nSELECT * FROM alumnos_valladolid;",
+     "exercise": "Una cadena de academias tiene sedes en Madrid y Valladolid y guarda de cada alumno: nombre, DNI, dirección, notas y pagos.\n\n1. Propón una **fragmentación horizontal** y una **vertical** de la tabla de alumnos.\n2. Escribe los `CREATE TABLE` de la vertical y la consulta que reconstruye al alumno completo.",
+     "starter": "-- Fragmento con los datos personales\nCREATE TABLE alumnos_personal (\n  id INTEGER PRIMARY KEY,\n  -- ...\n);\n\n-- Fragmento con los datos académicos\nCREATE TABLE alumnos_academico (\n  -- ...\n);\n",
+     "quiz": [
+      {
+       "q": "Una app móvil de pedidos de comida con usuarios en todo el país necesita escalar rápido. ¿Qué tipo de base de datos encaja mejor?",
+       "options": [
+        "En la nube",
+        "Local, en el ordenador del restaurante",
+        "Un fichero plano",
+        "Jerárquica"
+       ],
+       "answer": 0,
+       "explain": "La nube da escalabilidad y acceso desde cualquier lugar sin montar infraestructura propia."
+      },
+      {
+       "q": "En Big Data, ¿qué significa la «Veracidad»?",
+       "options": [
+        "Que los datos sean fiables y estén libres de errores",
+        "Que se procesen en tiempo real",
+        "Que haya muchos formatos distintos",
+        "Que generen beneficio"
+       ],
+       "answer": 0,
+       "explain": "Tiempo real es Velocidad; muchos formatos, Variedad; beneficio, Valor."
+      }
+     ],
+     "challenge": {
+      "title": "Elige el modelo",
+      "stars": 2,
+      "exercise": "Para cada caso, di qué tipo de base de datos elegirías y por qué: (1) el inventario de una tienda de barrio; (2) una plataforma de cursos online con alumnos de todo el mundo; (3) una red de contactos donde importa quién conoce a quién.",
+      "starter": "-- 1. Tienda de barrio: ...\n-- 2. Plataforma global: ...\n-- 3. Red de contactos: ...\n",
+      "hint": "Piensa en escalabilidad y acceso remoto. Una relacional local basta para una tienda pequeña; lo global pide nube; las relaciones complejas, un modelo de grafos."
+     },
+     "assistant": {
+      "hint": "En la vertical, los dos fragmentos repiten la clave primaria `id` para poder volver a unirlos con un JOIN.",
+      "faq": [
+       {
+        "q": "¿La fragmentación es lo mismo que una copia de seguridad?",
+        "a": "No. Fragmentar reparte los datos: cada fila o columna está en un solo sitio. Replicar sí copia los mismos datos en varios servidores, para que sigan disponibles si uno falla."
+       },
+       {
+        "q": "¿Qué modelo se usa hoy?",
+        "a": "El relacional domina en aplicaciones de gestión (MySQL, PostgreSQL, Oracle). Los jerárquicos y en red son sobre todo históricos. Para Big Data y redes sociales se usan también bases NoSQL y de grafos."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "MySQL 8.0 Reference Manual",
+       "url": "https://dev.mysql.com/doc/refman/8.0/en/"
+      },
+      {
+       "title": "PostgreSQL Tutorial (documentación oficial)",
+       "url": "https://www.postgresql.org/docs/current/tutorial-sql.html"
+      }
+     ]
+    },
+    {
+     "slug": "bd-ficheros-rgpd-sgbd",
+     "title": "Ficheros, protección de datos y SGBD",
+     "theory": "**Ficheros:** la forma más básica de guardar datos.\n- **Planos** (de texto): líneas seguidas sin estructura extra, como `Juan,25`. Fáciles de crear, pero lentos para buscar un dato concreto.\n- **Indexados:** los datos van con un **índice** (por ejemplo, por número de cliente) para encontrarlos sin recorrer todo. A cambio, el índice ocupa espacio y hay que mantenerlo al día.\n- **De acceso directo:** divididos en registros a los que se salta directamente (el producto `P123`). Rápidos, pero más complejos de diseñar.\n\n**Métodos de acceso:**\n- **Secuencial:** se lee del principio al final. Ideal para procesar **todo** (la media de todas las edades), lento para un dato concreto.\n- **Aleatorio** (directo): se va a cualquier posición sin recorrer lo anterior. Ideal para **un registro concreto** (actualizar el precio de un producto).\n\n**Protección de datos:**\n- **RGPD:** reglamento **europeo**, aplicable desde 2018, para los datos personales de los ciudadanos de la UE.\n- **LOPDGDD:** ley orgánica **española** que lo complementa y añade derechos digitales, como la **desconexión digital** en el trabajo.\n- **Principios:** **consentimiento** claro, **transparencia** (qué datos, para qué y quién), **minimización** (solo los datos necesarios) y **seguridad** (cifrado, control de accesos).\n- **Tus obligaciones como desarrollador:** informar a los usuarios, proteger los datos y facilitar sus derechos: **acceso, rectificación y supresión** (la app debe permitir borrar los datos).\n\n**SGBD** (sistema gestor de bases de datos): el software intermediario entre los datos y quien los usa. Sus tres funciones:\n- **Definición** de datos: crear tablas, índices y relaciones (**DDL**: `CREATE`, `ALTER`, `DROP`).\n- **Manipulación**: insertar, modificar, borrar y consultar (**DML**: `INSERT`, `UPDATE`, `DELETE`, `SELECT`).\n- **Control**: seguridad, integridad y permisos (**DCL**: `GRANT`, `REVOKE`).\n\n**Componentes:** el **motor** (procesa el almacenamiento y la recuperación), el **lenguaje de consulta** (SQL) y las **herramientas de administración** (permisos, copias de seguridad).\n\n**Tipos:** **relacionales** (MySQL, PostgreSQL, Oracle), **NoSQL** (MongoDB, Cassandra; datos no estructurados, gran volumen) y **de grafos** (Neo4j; relaciones complejas como redes de contactos o rutas).",
+     "example_code": "-- Definición (DDL)\nCREATE TABLE productos (codigo TEXT PRIMARY KEY, nombre TEXT NOT NULL, precio INTEGER);\n\n-- Manipulación (DML)\nINSERT INTO productos VALUES ('P123', 'Teclado', 25), ('P124', 'Ratón', 15);\nUPDATE productos SET precio = 22 WHERE codigo = 'P123';\n\n-- Control (DCL), en MySQL (SQLite no tiene usuarios):\n-- GRANT SELECT ON tienda.productos TO 'vendedor'@'localhost';\n\nSELECT * FROM productos WHERE codigo = 'P123';",
+     "exercise": "Diseña el registro de usuarios de una web que permite descargar un PDF gratuito.\n\n1. ¿Qué datos pedirías como **mínimo**? Justifícalo con el principio de minimización.\n2. Escribe el `CREATE TABLE` y el `DELETE` que ejecutarías si un usuario ejerce su derecho de supresión.",
+     "starter": "CREATE TABLE usuarios (\n  id INTEGER PRIMARY KEY,\n  -- ...\n);\n\n-- Derecho de supresión del usuario 7\n",
+     "quiz": [
+      {
+       "q": "¿Qué método de acceso es más eficiente para leer un único registro concreto?",
+       "options": [
+        "Aleatorio",
+        "Secuencial",
+        "Los dos igual",
+        "Ninguno"
+       ],
+       "answer": 0,
+       "explain": "El secuencial obliga a recorrer todo hasta encontrarlo; el aleatorio va directo."
+      },
+      {
+       "q": "¿Cuál de estos es un principio de la protección de datos?",
+       "options": [
+        "Transparencia",
+        "Fragmentación",
+        "Normalización",
+        "Velocidad"
+       ],
+       "answer": 0,
+       "explain": "Consentimiento, transparencia, minimización y seguridad. Los demás son conceptos de bases de datos o de Big Data."
+      }
+     ],
+     "challenge": {
+      "title": "Clasifica sentencias",
+      "stars": 1,
+      "exercise": "Clasifica como DDL, DML o DCL: `CREATE TABLE`, `SELECT`, `GRANT`, `ALTER TABLE`, `DELETE`, `REVOKE`, `UPDATE`, `DROP TABLE`.",
+      "starter": "-- DDL: ...\n-- DML: ...\n-- DCL: ...\n",
+      "hint": "DDL cambia la estructura; DML, los datos; DCL, los permisos."
+     },
+     "assistant": {
+      "hint": "Para descargar un PDF basta con un email (y la fecha del consentimiento). Ni dirección ni teléfono. Supresión: `DELETE FROM usuarios WHERE id = 7;`.",
+      "faq": [
+       {
+        "q": "¿Un SGBD y una base de datos son lo mismo?",
+        "a": "No. La base de datos son los datos organizados; el SGBD es el programa que los gestiona (MySQL, PostgreSQL…). Un mismo SGBD puede gestionar muchas bases de datos."
+       },
+       {
+        "q": "¿El RGPD se aplica a mis proyectos de clase?",
+        "a": "Si guardan datos personales de personas reales, sí. En clase y en pruebas, usa datos inventados."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "Agencia Española de Protección de Datos",
+       "url": "https://www.aepd.es/"
+      },
+      {
+       "title": "MySQL 8.0 Reference Manual",
+       "url": "https://dev.mysql.com/doc/refman/8.0/en/"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "bd-ud2",
+   "title": "UD2 · Bases de datos relacionales",
+   "summary": "Claves, relaciones, NULL, tipos, restricciones, índices, DDL, DCL y vistas.",
+   "lessons": [
+    {
+     "slug": "sql-modelo-relacional",
+     "title": "Modelo relacional y normalización",
+     "theory": "Antes de crear tablas se **diseña**. El modelo **entidad-relación (E/R)** describe entidades (alumno, módulo), sus atributos y cómo se relacionan.\n\n**Cardinalidades y paso a tablas:**\n- **1:N** (un ciclo tiene muchos alumnos): la clave ajena va en el lado N. `alumnos.ciclo` apunta a `ciclos.codigo`.\n- **N:M** (un alumno cursa muchos módulos y un módulo tiene muchos alumnos): hace falta una **tabla intermedia** `matriculas(alumno_id, modulo_id)` con dos claves ajenas y clave primaria compuesta.\n- **1:1**: la clave ajena va en cualquiera de las dos tablas, con UNIQUE.\n\n**Claves:**\n- **candidata**: identifica cada fila de forma única y mínima;\n- **primaria**: la candidata elegida;\n- **ajena** (o foránea): apunta a la primaria de otra tabla.\n\n**Normalización:** evita datos repetidos y las anomalías al insertar, modificar o borrar.\n- **1FN:** valores atómicos, sin listas en una celda ni grupos repetidos (`telefono1`, `telefono2`…).\n- **2FN:** 1FN y cada atributo no clave depende de **toda** la clave primaria. Solo puede fallar con claves compuestas.\n- **3FN:** 2FN y sin **dependencias transitivas**: ningún atributo no clave depende de otro atributo no clave.",
+     "example_code": "CREATE TABLE alumnos (id INTEGER PRIMARY KEY, nombre TEXT NOT NULL);\nCREATE TABLE modulos (codigo TEXT PRIMARY KEY, nombre TEXT NOT NULL);\nCREATE TABLE matriculas (\n  alumno_id INTEGER REFERENCES alumnos(id),\n  modulo_codigo TEXT REFERENCES modulos(codigo),\n  nota INTEGER,\n  PRIMARY KEY (alumno_id, modulo_codigo)\n);\nINSERT INTO alumnos VALUES (1, 'Ana'), (2, 'Luis');\nINSERT INTO modulos VALUES ('BD', 'Bases de datos'), ('PRO', 'Programación');\nINSERT INTO matriculas VALUES (1, 'BD', 8), (1, 'PRO', 7), (2, 'BD', 6);\n\nSELECT a.nombre, m.nombre, x.nota\nFROM matriculas x\nJOIN alumnos a ON a.id = x.alumno_id\nJOIN modulos m ON m.codigo = x.modulo_codigo;",
+     "exercise": "Diseña las tablas de una biblioteca:\n\n- un **libro** puede tener varios **autores** y un autor, varios libros;\n- los **socios** piden **préstamos** de libros, con fecha de salida y de devolución.\n\nEscribe los `CREATE TABLE` con sus claves primarias y ajenas.",
+     "starter": "CREATE TABLE libros (\n  id INTEGER PRIMARY KEY,\n  titulo TEXT NOT NULL\n);\n\n-- autores, libros_autores, socios, prestamos...\n",
+     "quiz": [
+      {
+       "q": "¿Qué es una clave candidata?",
+       "options": [
+        "Un conjunto mínimo de atributos que identifica cada fila de forma única",
+        "Una clave ajena todavía sin usar",
+        "Cualquier columna con índice",
+        "La columna id que se genera sola"
+       ],
+       "answer": 0,
+       "explain": "De las claves candidatas se elige una como primaria. Las demás se suelen proteger con UNIQUE."
+      },
+      {
+       "q": "¿Qué garantiza la integridad referencial?",
+       "options": [
+        "Que toda clave ajena apunte a una fila que existe",
+        "Que no haya filas repetidas",
+        "Que las consultas sean rápidas",
+        "Que los datos estén cifrados"
+       ],
+       "answer": 0,
+       "explain": "Es lo que comprueban las FOREIGN KEY: no puedes matricular a nadie en un ciclo que no existe."
+      }
+     ],
+     "challenge": {
+      "title": "Normaliza",
+      "stars": 3,
+      "exercise": "Lleva hasta 3FN esta tabla: `pedidos(id, cliente, direccion_cliente, producto1, producto2, producto3)`. Escribe las tablas resultantes con sus claves.",
+      "starter": "CREATE TABLE clientes (\n  -- ...\n);\n\nCREATE TABLE pedidos (\n  -- ...\n);\n\nCREATE TABLE lineas_pedido (\n  -- ...\n);\n",
+      "hint": "Los productos repetidos rompen la 1FN (tabla de líneas). La dirección depende del cliente, no del pedido: rompe la 3FN (tabla de clientes)."
+     },
+     "assistant": {
+      "hint": "Libros-autores es N:M: necesitas una tabla intermedia `libros_autores(libro_id, autor_id)`. Un préstamo une un socio y un libro.",
+      "faq": [
+       {
+        "q": "¿Siempre hay que llegar a 3FN?",
+        "a": "Es el objetivo por defecto en bases de datos de gestión. A veces se desnormaliza a propósito para leer más rápido (informes), aceptando el coste de mantener datos duplicados."
+       },
+       {
+        "q": "¿Clave natural o sustituta?",
+        "a": "Natural: un dato real, como el DNI o el ISBN. Sustituta: un id artificial autoincremental. La sustituta no cambia nunca y ocupa poco; la natural se protege con UNIQUE."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "PostgreSQL Tutorial (documentación oficial)",
+       "url": "https://www.postgresql.org/docs/current/tutorial-sql.html"
+      },
+      {
+       "title": "MySQL 8.0 Reference Manual",
+       "url": "https://dev.mysql.com/doc/refman/8.0/en/"
+      }
+     ]
+    },
+    {
+     "slug": "sql-crear-tablas",
+     "title": "CREATE TABLE y restricciones",
+     "theory": "El **DDL** (lenguaje de definición de datos) crea y modifica la estructura: `CREATE`, `ALTER` y `DROP`.\n\n`CREATE TABLE libros (id INT PRIMARY KEY, titulo VARCHAR(200) NOT NULL, precio DECIMAL(8,2))`\n\n**Tipos habituales en MySQL:** `INT`, `DECIMAL(p,s)` para dinero (sin errores de redondeo), `VARCHAR(n)`, `CHAR(n)` de longitud fija, `DATE`, `DATETIME` y `BOOLEAN`. SQLite, el motor de la app, usa **tipado flexible**: acepta esas declaraciones, pero no siempre comprueba el tipo.\n\n**Restricciones:**\n- `PRIMARY KEY`: identifica cada fila; implica valores únicos y no nulos.\n- `NOT NULL`: obligatorio.\n- `UNIQUE`: sin repetidos (admite NULL).\n- `DEFAULT valor`: valor si no se indica otro.\n- `CHECK (condición)`: regla de negocio, como `CHECK (precio >= 0)`.\n- `FOREIGN KEY … REFERENCES tabla(columna)`: **clave ajena**. El valor tiene que existir en la otra tabla (integridad referencial). `ON DELETE CASCADE` borra también las filas hijas; `ON DELETE SET NULL` las deja sin padre.\n\n**Identificadores automáticos:** en MySQL, `AUTO_INCREMENT`; en SQLite, una columna `INTEGER PRIMARY KEY`; en PostgreSQL, `GENERATED … AS IDENTITY`.\n\nSi una sentencia incumple una restricción, el SGBD la **rechaza con un error** y no guarda nada de esa sentencia.",
+     "example_code": "CREATE TABLE ciclos (\n  codigo CHAR(4) PRIMARY KEY,\n  nombre VARCHAR(100) NOT NULL\n);\nCREATE TABLE alumnos (\n  id INTEGER PRIMARY KEY,\n  nombre VARCHAR(80) NOT NULL,\n  email VARCHAR(120) UNIQUE,\n  ciclo CHAR(4) REFERENCES ciclos(codigo) ON DELETE CASCADE,\n  nota INTEGER CHECK (nota BETWEEN 0 AND 10)\n);\nINSERT INTO ciclos VALUES ('DAW', 'Desarrollo de Aplicaciones Web');\nINSERT INTO alumnos (nombre, email, ciclo, nota) VALUES ('Ana', 'ana@fp.es', 'DAW', 8);\n\nSELECT a.nombre, c.nombre FROM alumnos a JOIN ciclos c ON c.codigo = a.ciclo;",
+     "exercise": "Crea la tabla `libros` con:\n\n- `id`: clave primaria;\n- `titulo`: obligatorio;\n- `isbn`: único;\n- `precio`: con dos decimales y nunca negativo;\n- `alta`: fecha, por defecto la de hoy (`CURRENT_DATE`).",
+     "starter": "CREATE TABLE libros (\n  id INTEGER PRIMARY KEY,\n  -- ...\n);\n",
+     "quiz": [
+      {
+       "q": "Una PRIMARY KEY implica que la columna…",
+       "options": [
+        "no admite repetidos ni NULL",
+        "solo admite números",
+        "se rellena sola siempre",
+        "no se puede consultar con WHERE"
+       ],
+       "answer": 0,
+       "explain": "Es UNIQUE + NOT NULL. Que se rellene sola depende de AUTO_INCREMENT (MySQL) o de INTEGER PRIMARY KEY (SQLite)."
+      },
+      {
+       "q": "¿Qué devuelve la última sentencia de este script?",
+       "options": [
+        "1",
+        "0",
+        "Error",
+        "2"
+       ],
+       "answer": 1,
+       "explain": "`ON DELETE CASCADE` borra automáticamente los préstamos del socio borrado. Sin esa opción, el DELETE habría dado error.",
+       "code": "CREATE TABLE socios (id INTEGER PRIMARY KEY);\nCREATE TABLE prestamos (\n  id INTEGER PRIMARY KEY,\n  socio_id INTEGER REFERENCES socios(id) ON DELETE CASCADE\n);\nINSERT INTO socios VALUES (1);\nINSERT INTO prestamos VALUES (10, 1), (11, 1);\nDELETE FROM socios WHERE id = 1;\nSELECT COUNT(*) FROM prestamos;"
+      }
+     ],
+     "challenge": {
+      "title": "Biblioteca",
+      "stars": 3,
+      "exercise": "Crea `socios` y `prestamos` relacionadas: cada préstamo pertenece a un socio y, si se borra el socio, se borran sus préstamos. Inserta datos de prueba y comprueba el borrado en cascada.",
+      "starter": "CREATE TABLE socios (\n  id INTEGER PRIMARY KEY,\n  nombre VARCHAR(80) NOT NULL\n);\n\nCREATE TABLE prestamos (\n  -- ...\n);\n",
+      "hint": "La clave ajena lleva la opción: `socio_id INTEGER REFERENCES socios(id) ON DELETE CASCADE`."
+     },
+     "assistant": {
+      "hint": "Precio: `DECIMAL(8,2) CHECK (precio >= 0)`. Fecha: `alta DATE DEFAULT CURRENT_DATE`.",
+      "faq": [
+       {
+        "q": "¿VARCHAR o CHAR?",
+        "a": "`CHAR(n)` siempre ocupa n caracteres; va bien para códigos de longitud fija, como `CHAR(9)` para un DNI. `VARCHAR(n)` ocupa solo lo que guardas, hasta n."
+       },
+       {
+        "q": "¿Por qué SQLite no se queja si guardo texto en una columna INTEGER?",
+        "a": "Por su tipado flexible: el tipo declarado es una recomendación. MySQL y PostgreSQL sí lo comprueban. Las restricciones (PRIMARY KEY, NOT NULL, UNIQUE, CHECK y FOREIGN KEY) sí se cumplen en todos."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "MySQL 8.0 Reference Manual",
+       "url": "https://dev.mysql.com/doc/refman/8.0/en/"
+      },
+      {
+       "title": "SQLite — SQL As Understood By SQLite",
+       "url": "https://www.sqlite.org/lang.html"
+      }
+     ]
+    },
+    {
+     "slug": "bd-null-indices-dcl",
+     "title": "NULL, ALTER, índices, usuarios y vistas",
+     "theory": "**NULL** significa que el dato **no se conoce, no aplica o aún no se ha registrado**. No es 0 ni una cadena vacía.\n- `NULL` no es igual a nada, ni siquiera a otro NULL: `WHERE telefono = NULL` **no devuelve nunca filas**. Se usa `IS NULL` o `IS NOT NULL`.\n- `COUNT(*)` cuenta filas; `COUNT(columna)` no cuenta los NULL. `SUM`, `AVG`, `MAX` y `MIN` también los ignoran.\n- Si un dato es obligatorio, declara la columna `NOT NULL`; si tiene un valor habitual, usa `DEFAULT`.\n\n**Tipos de datos:** `INT`/`INTEGER` (enteros), `VARCHAR(n)` y `TEXT` (texto), `DATE`, `TIME` y `DATETIME` (fechas y horas), `BOOLEAN` (verdadero o falso) y `DECIMAL(p,s)` (dinero). El tipo correcto ahorra espacio, acelera las consultas e impide guardar datos inválidos.\n\n**DDL para cambiar la estructura:**\n- `ALTER TABLE clientes ADD email VARCHAR(100);` añade una columna, que queda a NULL en las filas que ya existían (o con su `DEFAULT`).\n- `ALTER TABLE clientes MODIFY email VARCHAR(75);` cambia el tipo en **MySQL** (en PostgreSQL es `ALTER COLUMN … TYPE`).\n- `DROP TABLE clientes;` borra la tabla **y todos sus datos**. Úsalo con cuidado.\n\n**Índices:** como el índice de un libro. `CREATE INDEX idx_cat ON productos(categoria);`\n- **Únicos** (`CREATE UNIQUE INDEX`): además impiden repetidos.\n- **Compuestos:** sobre varias columnas, como `(cliente_id, fecha)`, para consultas que filtran por las dos.\n- Aceleran las lecturas, pero **ralentizan las escrituras** (INSERT, UPDATE y DELETE deben actualizar el índice). No se indexan todas las columnas: solo las que se consultan a menudo.\n\n**DCL (MySQL):** usuarios, permisos y roles.\n- `CREATE USER 'juan'@'localhost' IDENTIFIED BY '…';`\n- `GRANT SELECT, INSERT ON tienda.productos TO 'juan'@'localhost';` da permisos (`tienda.*` es toda la base de datos; `ALL PRIVILEGES`, todos los permisos).\n- `REVOKE INSERT ON tienda.productos FROM 'juan'@'localhost';` los quita. Ojo: GRANT va con **TO** y REVOKE con **FROM**.\n- **Roles:** un conjunto de permisos con nombre que se asigna a varios usuarios: `CREATE ROLE 'gestor_tienda'; GRANT SELECT, INSERT, UPDATE ON tienda.* TO 'gestor_tienda'; GRANT 'gestor_tienda' TO 'juan'@'localhost';`\n\n**Vistas:** `CREATE VIEW nombre AS SELECT …` es una **tabla virtual**: guarda la consulta, no los datos. Sirven para reutilizar consultas complejas, **ocultar columnas sensibles** (el salario) y dar a cada usuario los datos que necesita. Siempre muestran los datos actuales de las tablas; no todas permiten INSERT o UPDATE.",
+     "example_code": "CREATE TABLE clientes (\n  id INTEGER PRIMARY KEY,\n  nombre VARCHAR(50) NOT NULL,\n  telefono VARCHAR(15) NULL\n);\nINSERT INTO clientes VALUES (1, 'Ana', '600111222'), (2, 'Carlos', NULL), (3, 'Marta', '611333444');\n\nALTER TABLE clientes ADD email VARCHAR(100);\nCREATE INDEX idx_nombre ON clientes(nombre);\nCREATE VIEW sin_telefono AS SELECT id, nombre FROM clientes WHERE telefono IS NULL;\n\nSELECT * FROM sin_telefono;",
+     "exercise": "Sobre una tabla `empleados(id, nombre, puesto, salario, telefono)`:\n\n1. Crea una vista `empleados_publico` sin el salario.\n2. Añade la columna `fecha_baja` (vacía mientras el empleado siga activo).\n3. Escribe, en MySQL, el GRANT para que `rrhh`@`localhost` solo pueda consultar esa vista.",
+     "starter": "CREATE VIEW empleados_publico AS\nSELECT ...;\n\nALTER TABLE empleados ...;\n\n-- GRANT ...\n",
+     "quiz": [
+      {
+       "q": "¿Qué significa que una columna tenga el valor NULL?",
+       "options": [
+        "Que el dato se desconoce, no aplica o no se ha registrado",
+        "Que vale 0",
+        "Que es una cadena vacía",
+        "Que la fila está borrada"
+       ],
+       "answer": 0,
+       "explain": "NULL es ausencia de dato. No es 0 ni una cadena vacía."
+      },
+      {
+       "q": "¿Qué es una vista?",
+       "options": [
+        "Una consulta guardada que se usa como una tabla virtual",
+        "Una copia de seguridad de una tabla",
+        "Un índice sobre varias columnas",
+        "Un usuario con permisos de solo lectura"
+       ],
+       "answer": 0,
+       "explain": "No almacena datos propios: los lee de las tablas cada vez que se consulta."
+      }
+     ],
+     "challenge": {
+      "title": "Permisos de una tienda",
+      "stars": 2,
+      "exercise": "Escribe en MySQL: un rol `vendedor` que pueda consultar e insertar en `tienda.pedidos` y solo consultar `tienda.productos`; asígnalo a `lucia`@`localhost`; después quítale a ese rol el permiso de insertar.",
+      "starter": "CREATE ROLE 'vendedor';\n-- ...\n",
+      "hint": "Cada GRANT va con ON base.tabla TO rol. Para quitarlo: `REVOKE INSERT ON tienda.pedidos FROM 'vendedor';`."
+     },
+     "assistant": {
+      "hint": "`GRANT SELECT ON empresa.empleados_publico TO 'rrhh'@'localhost';`. La fecha de baja admite NULL: es un dato que no aplica mientras el empleado sigue activo.",
+      "faq": [
+       {
+        "q": "¿Por qué `= NULL` no da error pero tampoco devuelve nada?",
+        "a": "Comparar con NULL da «desconocido», ni verdadero ni falso, y el WHERE solo deja pasar lo verdadero. Por eso existe `IS NULL`."
+       },
+       {
+        "q": "¿Un índice cambia el resultado de una consulta?",
+        "a": "Nunca. Solo cambia lo rápido que se obtiene. El plan de ejecución (`EXPLAIN`) te dice si se usa."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "MySQL 8.0 Reference Manual",
+       "url": "https://dev.mysql.com/doc/refman/8.0/en/"
+      },
+      {
+       "title": "SQLite — SQL As Understood By SQLite",
+       "url": "https://www.sqlite.org/lang.html"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "bd-ud3",
+   "title": "UD3 · Realización de consultas",
+   "summary": "SELECT, operadores, agrupación, composiciones, UNION/INTERSECT/EXCEPT, subconsultas y optimización.",
    "lessons": [
     {
      "slug": "sql-select",
@@ -131,14 +456,7 @@
        "url": "https://www.sqlite.org/lang.html"
       }
      ]
-    }
-   ]
-  },
-  {
-   "slug": "agregacion",
-   "title": "Agregados y agrupación",
-   "summary": "COUNT, SUM, AVG, GROUP BY y HAVING.",
-   "lessons": [
+    },
     {
      "slug": "sql-agregados",
      "title": "Funciones de agregado",
@@ -264,14 +582,7 @@
        "url": "https://www.postgresql.org/docs/current/tutorial-sql.html"
       }
      ]
-    }
-   ]
-  },
-  {
-   "slug": "joins",
-   "title": "Combinaciones y subconsultas",
-   "summary": "INNER JOIN, LEFT JOIN y consultas anidadas.",
-   "lessons": [
+    },
     {
      "slug": "sql-inner-join",
      "title": "INNER JOIN: combinar tablas",
@@ -397,63 +708,55 @@
        "url": "https://www.postgresql.org/docs/current/tutorial-sql.html"
       }
      ]
-    }
-   ]
-  },
-  {
-   "slug": "ddl-dml",
-   "title": "Crear y modificar datos",
-   "summary": "CREATE TABLE, restricciones, INSERT, UPDATE y DELETE.",
-   "lessons": [
+    },
     {
-     "slug": "sql-crear-tablas",
-     "title": "CREATE TABLE y restricciones",
-     "theory": "El **DDL** (lenguaje de definición de datos) crea y modifica la estructura: `CREATE`, `ALTER` y `DROP`.\n\n`CREATE TABLE libros (id INT PRIMARY KEY, titulo VARCHAR(200) NOT NULL, precio DECIMAL(8,2))`\n\n**Tipos habituales en MySQL:** `INT`, `DECIMAL(p,s)` para dinero (sin errores de redondeo), `VARCHAR(n)`, `CHAR(n)` de longitud fija, `DATE`, `DATETIME` y `BOOLEAN`. SQLite, el motor de la app, usa **tipado flexible**: acepta esas declaraciones, pero no siempre comprueba el tipo.\n\n**Restricciones:**\n- `PRIMARY KEY`: identifica cada fila; implica valores únicos y no nulos.\n- `NOT NULL`: obligatorio.\n- `UNIQUE`: sin repetidos (admite NULL).\n- `DEFAULT valor`: valor si no se indica otro.\n- `CHECK (condición)`: regla de negocio, como `CHECK (precio >= 0)`.\n- `FOREIGN KEY … REFERENCES tabla(columna)`: **clave ajena**. El valor tiene que existir en la otra tabla (integridad referencial). `ON DELETE CASCADE` borra también las filas hijas; `ON DELETE SET NULL` las deja sin padre.\n\n**Identificadores automáticos:** en MySQL, `AUTO_INCREMENT`; en SQLite, una columna `INTEGER PRIMARY KEY`; en PostgreSQL, `GENERATED … AS IDENTITY`.\n\nSi una sentencia incumple una restricción, el SGBD la **rechaza con un error** y no guarda nada de esa sentencia.",
-     "example_code": "CREATE TABLE ciclos (\n  codigo CHAR(4) PRIMARY KEY,\n  nombre VARCHAR(100) NOT NULL\n);\nCREATE TABLE alumnos (\n  id INTEGER PRIMARY KEY,\n  nombre VARCHAR(80) NOT NULL,\n  email VARCHAR(120) UNIQUE,\n  ciclo CHAR(4) REFERENCES ciclos(codigo) ON DELETE CASCADE,\n  nota INTEGER CHECK (nota BETWEEN 0 AND 10)\n);\nINSERT INTO ciclos VALUES ('DAW', 'Desarrollo de Aplicaciones Web');\nINSERT INTO alumnos (nombre, email, ciclo, nota) VALUES ('Ana', 'ana@fp.es', 'DAW', 8);\n\nSELECT a.nombre, c.nombre FROM alumnos a JOIN ciclos c ON c.codigo = a.ciclo;",
-     "exercise": "Crea la tabla `libros` con:\n\n- `id`: clave primaria;\n- `titulo`: obligatorio;\n- `isbn`: único;\n- `precio`: con dos decimales y nunca negativo;\n- `alta`: fecha, por defecto la de hoy (`CURRENT_DATE`).",
-     "starter": "CREATE TABLE libros (\n  id INTEGER PRIMARY KEY,\n  -- ...\n);\n",
+     "slug": "bd-conjuntos-y-optimizacion",
+     "title": "UNION, INTERSECT, EXCEPT, subconsultas y optimización",
+     "theory": "**Proyección, selección y ordenación:**\n- **Proyección:** elegir **columnas**, en el `SELECT`.\n- **Selección:** elegir **filas**, en el `WHERE`.\n- **Ordenación:** `ORDER BY columna ASC` (por defecto) o `DESC`.\n\n**Operadores:** de comparación `=`, `<>` (o `!=`, que aceptan MySQL y SQLite), `<`, `>`, `<=` y `>=`; lógicos `AND`, `OR` y `NOT`. Usa paréntesis al mezclar AND y OR: `precio > 50 AND (categoria = 'Hogar' OR categoria = 'Electrónica')`.\n\n**Combinar selecciones** (las dos consultas deben tener **el mismo número de columnas y tipos compatibles**):\n- `UNION`: junta los resultados y **quita los duplicados**. `UNION ALL` los conserva.\n- `INTERSECT`: solo lo que está **en las dos**.\n- `EXCEPT`: lo que está en la **primera y no en la segunda**. (MySQL los admite desde la versión 8.0.31; Oracle llama `MINUS` a EXCEPT).\n- No garantizan orden: añade `ORDER BY` **al final**.\n\n**Composiciones externas:**\n- `LEFT JOIN`: todas las filas de la izquierda; donde no hay pareja, NULL.\n- `RIGHT JOIN`: todas las de la derecha. `A RIGHT JOIN B` equivale a `B LEFT JOIN A`.\n- `FULL OUTER JOIN`: todas las de las dos (MySQL no la tiene: se simula con LEFT JOIN UNION RIGHT JOIN).\n- `COALESCE(valor, alternativa)` sustituye los NULL: `COALESCE(p.total, 0)`.\n\n**Subconsultas:** una consulta entre paréntesis dentro de otra; se ejecuta primero.\n- **Escalar** (un solo valor): `WHERE precio > (SELECT AVG(precio) FROM productos)`.\n- **De varias filas**: con `IN`, `ANY` o `ALL`: `WHERE id IN (SELECT cliente_id FROM pedidos)`.\n- Un JOIN suele ser más eficiente que una subconsulta equivalente.\n\n**Optimización:**\n- **Índices** en las columnas que se filtran o se unen a menudo.\n- Evita `SELECT *`: pide solo las columnas que necesitas.\n- **Estadísticas** al día: el SGBD las usa para decidir cómo ejecutar la consulta.\n- **Plan de ejecución:** `EXPLAIN SELECT …` muestra los pasos y si se usa un índice. Sirve para encontrar **cuellos de botella** (falta de índices, consultas mal diseñadas, tablas enormes sin particionar).",
+     "example_code": "CREATE TABLE clientes (id INTEGER PRIMARY KEY, nombre TEXT, ciudad TEXT);\nINSERT INTO clientes VALUES (1, 'Ana', 'Madrid'), (2, 'Luis', 'Leganés'), (3, 'Eva', 'Valladolid');\nCREATE TABLE proveedores (id INTEGER PRIMARY KEY, nombre TEXT);\nINSERT INTO proveedores VALUES (1, 'Ana'), (2, 'Tecnofp'), (3, 'Luis');\nCREATE TABLE pedidos (id INTEGER PRIMARY KEY, cliente_id INTEGER REFERENCES clientes(id), total INTEGER);\nINSERT INTO pedidos VALUES (1, 1, 30), (2, 1, 20), (3, 2, 50);\n\n-- Nombres que son a la vez clientes y proveedores\nSELECT nombre FROM clientes INTERSECT SELECT nombre FROM proveedores;\n\n-- Todos los clientes con su gasto (0 si no han comprado)\nSELECT c.nombre, COALESCE(SUM(p.total), 0) AS gasto\nFROM clientes c LEFT JOIN pedidos p ON p.cliente_id = c.id\nGROUP BY c.id, c.nombre\nORDER BY gasto DESC;",
+     "exercise": "Con las tablas `clientes`, `proveedores` y `pedidos`:\n\n1. Lista sin repetidos todos los nombres de clientes y proveedores, en orden alfabético.\n2. Muestra los clientes que no han hecho ningún pedido de dos formas: con `NOT IN` y con `LEFT JOIN … IS NULL`.\n3. Escribe un `EXPLAIN` de la segunda y crea el índice que ayudaría.",
+     "starter": "SELECT nombre FROM clientes\nUNION\nSELECT nombre FROM proveedores\nORDER BY nombre;\n\n-- 2. ...\n",
      "quiz": [
       {
-       "q": "Una PRIMARY KEY implica que la columna…",
+       "q": "¿Qué diferencia hay entre UNION y UNION ALL?",
        "options": [
-        "no admite repetidos ni NULL",
-        "solo admite números",
-        "se rellena sola siempre",
-        "no se puede consultar con WHERE"
+        "UNION quita los duplicados y UNION ALL los conserva",
+        "UNION ALL quita los duplicados y UNION los conserva",
+        "UNION ALL une todas las tablas de la base de datos",
+        "Ninguna"
        ],
        "answer": 0,
-       "explain": "Es UNIQUE + NOT NULL. Que se rellene sola depende de AUTO_INCREMENT (MySQL) o de INTEGER PRIMARY KEY (SQLite)."
+       "explain": "UNION ALL es además más rápido, porque no tiene que buscar duplicados."
       },
       {
-       "q": "¿Qué devuelve la última sentencia de este script?",
+       "q": "¿Cuándo se ejecuta una subconsulta escalar dentro de un WHERE?",
        "options": [
-        "1",
-        "0",
-        "Error",
-        "2"
+        "Primero, y su resultado se usa en la consulta principal",
+        "Después de la consulta principal",
+        "Solo si la consulta principal no devuelve filas",
+        "Nunca: las subconsultas no van en el WHERE"
        ],
-       "answer": 1,
-       "explain": "`ON DELETE CASCADE` borra automáticamente los préstamos del socio borrado. Sin esa opción, el DELETE habría dado error.",
-       "code": "CREATE TABLE socios (id INTEGER PRIMARY KEY);\nCREATE TABLE prestamos (\n  id INTEGER PRIMARY KEY,\n  socio_id INTEGER REFERENCES socios(id) ON DELETE CASCADE\n);\nINSERT INTO socios VALUES (1);\nINSERT INTO prestamos VALUES (10, 1), (11, 1);\nDELETE FROM socios WHERE id = 1;\nSELECT COUNT(*) FROM prestamos;"
+       "answer": 0,
+       "explain": "La consulta interna calcula el valor (por ejemplo, la media) y la externa lo usa para filtrar."
       }
      ],
      "challenge": {
-      "title": "Biblioteca",
+      "title": "Informe de ventas",
       "stars": 3,
-      "exercise": "Crea `socios` y `prestamos` relacionadas: cada préstamo pertenece a un socio y, si se borra el socio, se borran sus préstamos. Inserta datos de prueba y comprueba el borrado en cascada.",
-      "starter": "CREATE TABLE socios (\n  id INTEGER PRIMARY KEY,\n  nombre VARCHAR(80) NOT NULL\n);\n\nCREATE TABLE prestamos (\n  -- ...\n);\n",
-      "hint": "La clave ajena lleva la opción: `socio_id INTEGER REFERENCES socios(id) ON DELETE CASCADE`."
+      "exercise": "Con `ventas(producto, categoria, cantidad, precio)`: el ingreso total por categoría, solo de las categorías que superen los 1000 €, de mayor a menor, y los productos cuyo ingreso supere la media de ingresos por producto.",
+      "starter": "SELECT categoria, SUM(cantidad * precio) AS ingresos\nFROM ventas\n-- ...\n",
+      "hint": "Lo primero es GROUP BY + HAVING + ORDER BY DESC. Lo segundo necesita una subconsulta que calcule la media."
      },
      "assistant": {
-      "hint": "Precio: `DECIMAL(8,2) CHECK (precio >= 0)`. Fecha: `alta DATE DEFAULT CURRENT_DATE`.",
+      "hint": "`WHERE id NOT IN (SELECT cliente_id FROM pedidos)`. Con LEFT JOIN: `WHERE p.id IS NULL`. El índice iría en `pedidos(cliente_id)`.",
       "faq": [
        {
-        "q": "¿VARCHAR o CHAR?",
-        "a": "`CHAR(n)` siempre ocupa n caracteres; va bien para códigos de longitud fija, como `CHAR(9)` para un DNI. `VARCHAR(n)` ocupa solo lo que guardas, hasta n."
+        "q": "¿UNION o JOIN?",
+        "a": "UNION pone filas **debajo** de otras (mismas columnas). JOIN pone columnas **al lado** (relaciona filas por una clave)."
        },
        {
-        "q": "¿Por qué SQLite no se queja si guardo texto en una columna INTEGER?",
-        "a": "Por su tipado flexible: el tipo declarado es una recomendación. MySQL y PostgreSQL sí lo comprueban. Las restricciones (PRIMARY KEY, NOT NULL, UNIQUE, CHECK y FOREIGN KEY) sí se cumplen en todos."
+        "q": "¿Cuidado con NOT IN?",
+        "a": "Si la subconsulta devuelve algún NULL, `NOT IN` no devuelve ninguna fila. Con claves ajenas que admiten NULL, es más seguro `NOT EXISTS` o el `LEFT JOIN … IS NULL`."
        }
       ]
      },
@@ -463,11 +766,18 @@
        "url": "https://dev.mysql.com/doc/refman/8.0/en/"
       },
       {
-       "title": "SQLite — SQL As Understood By SQLite",
-       "url": "https://www.sqlite.org/lang.html"
+       "title": "PostgreSQL Tutorial (documentación oficial)",
+       "url": "https://www.postgresql.org/docs/current/tutorial-sql.html"
       }
      ]
-    },
+    }
+   ]
+  },
+  {
+   "slug": "bd-ampliacion",
+   "title": "Ampliación · Modificar datos y transacciones",
+   "summary": "INSERT, UPDATE, DELETE y transacciones: lo que viene después de la UD3.",
+   "lessons": [
     {
      "slug": "sql-modificar-datos",
      "title": "INSERT, UPDATE y DELETE",
@@ -528,75 +838,6 @@
       {
        "title": "SQLite — SQL As Understood By SQLite",
        "url": "https://www.sqlite.org/lang.html"
-      }
-     ]
-    }
-   ]
-  },
-  {
-   "slug": "diseno",
-   "title": "Diseño y transacciones",
-   "summary": "Modelo relacional, normalización, transacciones, vistas e índices.",
-   "lessons": [
-    {
-     "slug": "sql-modelo-relacional",
-     "title": "Modelo relacional y normalización",
-     "theory": "Antes de crear tablas se **diseña**. El modelo **entidad-relación (E/R)** describe entidades (alumno, módulo), sus atributos y cómo se relacionan.\n\n**Cardinalidades y paso a tablas:**\n- **1:N** (un ciclo tiene muchos alumnos): la clave ajena va en el lado N. `alumnos.ciclo` apunta a `ciclos.codigo`.\n- **N:M** (un alumno cursa muchos módulos y un módulo tiene muchos alumnos): hace falta una **tabla intermedia** `matriculas(alumno_id, modulo_id)` con dos claves ajenas y clave primaria compuesta.\n- **1:1**: la clave ajena va en cualquiera de las dos tablas, con UNIQUE.\n\n**Claves:**\n- **candidata**: identifica cada fila de forma única y mínima;\n- **primaria**: la candidata elegida;\n- **ajena** (o foránea): apunta a la primaria de otra tabla.\n\n**Normalización:** evita datos repetidos y las anomalías al insertar, modificar o borrar.\n- **1FN:** valores atómicos, sin listas en una celda ni grupos repetidos (`telefono1`, `telefono2`…).\n- **2FN:** 1FN y cada atributo no clave depende de **toda** la clave primaria. Solo puede fallar con claves compuestas.\n- **3FN:** 2FN y sin **dependencias transitivas**: ningún atributo no clave depende de otro atributo no clave.",
-     "example_code": "CREATE TABLE alumnos (id INTEGER PRIMARY KEY, nombre TEXT NOT NULL);\nCREATE TABLE modulos (codigo TEXT PRIMARY KEY, nombre TEXT NOT NULL);\nCREATE TABLE matriculas (\n  alumno_id INTEGER REFERENCES alumnos(id),\n  modulo_codigo TEXT REFERENCES modulos(codigo),\n  nota INTEGER,\n  PRIMARY KEY (alumno_id, modulo_codigo)\n);\nINSERT INTO alumnos VALUES (1, 'Ana'), (2, 'Luis');\nINSERT INTO modulos VALUES ('BD', 'Bases de datos'), ('PRO', 'Programación');\nINSERT INTO matriculas VALUES (1, 'BD', 8), (1, 'PRO', 7), (2, 'BD', 6);\n\nSELECT a.nombre, m.nombre, x.nota\nFROM matriculas x\nJOIN alumnos a ON a.id = x.alumno_id\nJOIN modulos m ON m.codigo = x.modulo_codigo;",
-     "exercise": "Diseña las tablas de una biblioteca:\n\n- un **libro** puede tener varios **autores** y un autor, varios libros;\n- los **socios** piden **préstamos** de libros, con fecha de salida y de devolución.\n\nEscribe los `CREATE TABLE` con sus claves primarias y ajenas.",
-     "starter": "CREATE TABLE libros (\n  id INTEGER PRIMARY KEY,\n  titulo TEXT NOT NULL\n);\n\n-- autores, libros_autores, socios, prestamos...\n",
-     "quiz": [
-      {
-       "q": "¿Qué es una clave candidata?",
-       "options": [
-        "Un conjunto mínimo de atributos que identifica cada fila de forma única",
-        "Una clave ajena todavía sin usar",
-        "Cualquier columna con índice",
-        "La columna id que se genera sola"
-       ],
-       "answer": 0,
-       "explain": "De las claves candidatas se elige una como primaria. Las demás se suelen proteger con UNIQUE."
-      },
-      {
-       "q": "¿Qué garantiza la integridad referencial?",
-       "options": [
-        "Que toda clave ajena apunte a una fila que existe",
-        "Que no haya filas repetidas",
-        "Que las consultas sean rápidas",
-        "Que los datos estén cifrados"
-       ],
-       "answer": 0,
-       "explain": "Es lo que comprueban las FOREIGN KEY: no puedes matricular a nadie en un ciclo que no existe."
-      }
-     ],
-     "challenge": {
-      "title": "Normaliza",
-      "stars": 3,
-      "exercise": "Lleva hasta 3FN esta tabla: `pedidos(id, cliente, direccion_cliente, producto1, producto2, producto3)`. Escribe las tablas resultantes con sus claves.",
-      "starter": "CREATE TABLE clientes (\n  -- ...\n);\n\nCREATE TABLE pedidos (\n  -- ...\n);\n\nCREATE TABLE lineas_pedido (\n  -- ...\n);\n",
-      "hint": "Los productos repetidos rompen la 1FN (tabla de líneas). La dirección depende del cliente, no del pedido: rompe la 3FN (tabla de clientes)."
-     },
-     "assistant": {
-      "hint": "Libros-autores es N:M: necesitas una tabla intermedia `libros_autores(libro_id, autor_id)`. Un préstamo une un socio y un libro.",
-      "faq": [
-       {
-        "q": "¿Siempre hay que llegar a 3FN?",
-        "a": "Es el objetivo por defecto en bases de datos de gestión. A veces se desnormaliza a propósito para leer más rápido (informes), aceptando el coste de mantener datos duplicados."
-       },
-       {
-        "q": "¿Clave natural o sustituta?",
-        "a": "Natural: un dato real, como el DNI o el ISBN. Sustituta: un id artificial autoincremental. La sustituta no cambia nunca y ocupa poco; la natural se protege con UNIQUE."
-       }
-      ]
-     },
-     "sources": [
-      {
-       "title": "PostgreSQL Tutorial (documentación oficial)",
-       "url": "https://www.postgresql.org/docs/current/tutorial-sql.html"
-      },
-      {
-       "title": "MySQL 8.0 Reference Manual",
-       "url": "https://dev.mysql.com/doc/refman/8.0/en/"
       }
      ]
     },

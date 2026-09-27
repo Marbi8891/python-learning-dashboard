@@ -112,7 +112,7 @@ JWT_SECRET=<valor> docker compose up --build
 | Backend | `cd backend && python -m pytest --cov=app` | API, seguridad, RGPD, migraciones, contenido y banco del PCAP (cada respuesta se comprueba ejecutando Python; 100 % de cobertura) |
 | End-to-end | `npm ci && npx playwright install chromium && npm run test:e2e` | La app completa con el backend real, la consola Python y la auditoría WCAG |
 | Calidad | `cd backend && ruff check . ../e2e && ruff format --check . ../e2e` | Estilo PEP 8 y formato |
-| Cursos de la app | `python scripts/courses/sql_course.py --check` (y `js_course.py`, `java_course.py`) | Cada respuesta de código se comprueba ejecutándola (SQLite, Node y Java) |
+| Cursos de la app | `python scripts/courses/sql_course.py --check` (y `js_course.py`, `java_course.py`, `entornos_course.py`) | Cada respuesta de código se comprueba ejecutándola (SQLite, Node, Java y Python) |
 | App Android | `cd android && ./gradlew testDebugUnitTest lintDebug` | Dominio del PCAP en Kotlin (banco, repaso espaciado, preparación, fusión con la cuenta) y lint de Android |
 
 La CI ejecuta todo en cada push, incluidas las migraciones contra PostgreSQL 16.
@@ -128,7 +128,7 @@ En `android/` hay una app en **Kotlin + Jetpack Compose** con experiencia tipo D
 - pestaña **Jugar** (ADR-0015): la **Mazmorra del Intérprete**, un roguelite de 5 plantas con jefes, monedas y comodines, y el minijuego **Bug Rush** de 90 segundos;
 - **teoría completa de las 27 lecciones dentro de la app** (explicación, ejemplo, ejercicio, mini-quiz, reto y dudas frecuentes).
 
-**Más cursos de DAW** (ADR-0016): ya están **SQL** (Bases de datos), **JavaScript** (Entorno cliente) y **Java** (Programación), con 10 lecciones y 50 preguntas cada uno. Todas las respuestas de código se comprueban ejecutando el código. HTML/CSS irá después. El del PCAP no cambia.
+**Más cursos de DAW** (ADR-0016): ya están **Bases de datos** (SQL, organizado por las UD1-UD3 del centro, ADR-0019), **Entornos de desarrollo** (UD1 del centro), **JavaScript** (Entorno cliente) y **Java** (Programación). Todas las respuestas de código se comprueban ejecutando el código. HTML/CSS irá después. El del PCAP no cambia.
 
 **Funciona entera sin conexión:** la app no pide permiso de internet (ADR-0014).
 
@@ -140,9 +140,10 @@ Usa los mismos datos que la web (`frontend/data/*.json`) y guarda el progreso en
 | 2 | Ruta, lecciones cortas, XP, racha, meta diaria, vidas, celebración y perfil | ✔ |
 | 3 | Modo «Jugar»: Mazmorra del Intérprete y Bug Rush | Por probar en el móvil |
 | 4 | Escribir código: completar el hueco, ordenar líneas y encontrar el error (ADR-0017, Java) | Por probar en el móvil |
+| 4b | Bases de datos por UD1-UD3 del centro y curso de Entornos de desarrollo (ADR-0019) | Por probar en el móvil |
 | 5 | Simulacro cronometrado, fichas y repaso de hoy | Pendiente |
 | 6 | Python real en el móvil (Chaquopy) | Pendiente |
-| 7 | Cuenta y sincronización | Pendiente |
+| 7 | Cuenta y sincronización (ADR-0018): B1 en el backend y la web | B1 ✔ · B2 pendiente |
 
 **Instalarla:** en GitHub → *Actions* → *Android* → la última ejecución → *Artifacts*:
 
@@ -170,7 +171,7 @@ La firma de release necesita tres secretos en *Settings → Secrets and variable
 | POST | `/api/progress/import` | ✔ | Fusionar el progreso del navegador |
 | POST / GET | `/api/lessons/{slug}/attempts` | ✔ | Registrar un intento o ver los últimos 20 |
 | GET / PUT | `/api/pcap-state` | ✔ | Preparación del PCAP (simulacros, aciertos, fichas, repaso y plan) |
-| GET / PUT | `/api/course-state/{curso}` | ✔ | Estado de los cursos de la app Android: `sql`, `js` o `java` (ADR-0018) |
+| GET / PUT | `/api/course-state/{curso}` | ✔ | Estado de los cursos de la app Android: `sql`, `js`, `java` o `entornos` (ADR-0018) |
 
 ## Publicar
 

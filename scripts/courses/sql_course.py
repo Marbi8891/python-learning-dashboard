@@ -1,6 +1,8 @@
 # ruff: noqa: E501
 # (contenido didáctico: los textos largos van en una sola línea para poder leerlos y editarlos)
-"""Curso de SQL (módulo Bases de datos de DAW) para la app Android (ADR-0016).
+"""Curso de Bases de datos (módulo 0484 de DAW) para la app Android (ADR-0016, ADR-0019).
+
+Sigue las UD1-UD3 del temario del centro; lo que va más allá está en el bloque de ampliación.
 
 Las preguntas de código se ejecutan en SQLite con las claves ajenas activadas y su salida se compara con
 la esperada. El SQL usado es estándar: funciona igual en MySQL salvo lo que la teoría avisa.
@@ -1470,41 +1472,1044 @@ Con la tabla `alumnos(id, nombre, ciclo, nota)`:
     sources=[MYSQL, PG],
 )
 
+# ---------------------------------------------------------------- temario del centro (ADR-0019)
+# Lecciones nuevas que siguen las UD1-UD3 del módulo Bases de datos de tu centro. Las lecciones
+# anteriores conservan sus slugs e ids para no perder el progreso; solo cambian de bloque.
+
+PROVEEDORES = T(
+    "proveedores",
+    [("id", "INTEGER PRIMARY KEY"), ("nombre", "TEXT")],
+    [(1, "Ana"), (2, "Tecnofp"), (3, "Luis")],
+)
+
+
+def fq(id: str, q: str, code: str, accept: list[str], expect: str, explain: str) -> Q:
+    """Completar el hueco `___`: cada respuesta aceptada se ejecuta y tiene que dar `expect`."""
+    return Q(
+        id=id,
+        q=q,
+        code=code.strip("\n"),
+        expect=expect,
+        explain=explain,
+        kind="fill",
+        accept=accept,
+    )
+
+
+def oq(id: str, q: str, lines: list[str], expect: str, explain: str, context: str = "___") -> Q:
+    """Ordenar líneas: en `context`, la línea `___` es donde van las líneas ordenadas."""
+    return Q(
+        id=id,
+        q=q,
+        code=context.strip("\n"),
+        expect=expect,
+        explain=explain,
+        kind="order",
+        lines=lines,
+    )
+
+
+def bq(id: str, code: str, bug: int, fix: str, target: str, explain: str) -> Q:
+    """Encontrar el error: las opciones son las líneas; la corrección tiene que dar `target`."""
+    q = f"Este script debería devolver `{target}`, pero da error o devuelve otra cosa. ¿Qué línea tiene el error?"
+    return Q(
+        id=id,
+        q=q,
+        code=code.strip("\n"),
+        explain=explain,
+        kind="bug",
+        bug=bug,
+        fix=fix,
+        target=target,
+    )
+
+
+AEPD = ("Agencia Española de Protección de Datos", "https://www.aepd.es/")
+
+L_UD1_TIPOS = Lesson(
+    slug="bd-tipos-y-modelos",
+    title="Tipos y modelos de bases de datos",
+    theory="""
+**Almacenar información** es organizar, guardar y recuperar datos de forma eficiente. Si una tienda online guarda mal sus pedidos, pierde datos o se retrasa.
+
+**Según dónde está la información:**
+- **Centralizada:** todo en un único servidor. Es fácil de administrar y de mantener coherente, pero si ese servidor cae, no hay acceso a nada (**punto único de fallo**) y se satura con muchos usuarios.
+- **Distribuida:** los datos se reparten entre varios servidores conectados. Si uno falla, los demás siguen y la carga se reparte, pero es más difícil mantener los datos sincronizados y cuesta más administrarla.
+
+**Fragmentación** (en las distribuidas):
+- **Horizontal:** se reparten las **filas**. Los alumnos de cada provincia, en un servidor distinto.
+- **Vertical:** se reparten las **columnas**. Los datos personales de un empleado en un servidor y la nómina en otro, unidos por la clave.
+- **Mixta:** las dos a la vez.
+
+**Modelos de bases de datos:**
+- **Relacional:** tablas con filas y columnas, relacionadas por claves primarias y ajenas. Es el más usado.
+- **Jerárquico:** un árbol; cada nodo tiene **un solo padre** (Empresa → Departamentos → Empleados).
+- **En red:** como el jerárquico, pero un nodo puede tener **varios padres**. Más flexible y más difícil de gestionar.
+- **Orientado a objetos:** los datos son objetos con **atributos y métodos** (un `Personaje` con `nivel` y `actualizarNivel()`).
+
+**Según la ubicación:** **local** (en un solo equipo), **en la nube** (servidores remotos por internet, escalable) y **distribuida**. Para elegir se mira la **escalabilidad**, el **rendimiento** y la **seguridad**.
+
+**Big Data:** volúmenes de datos que las herramientas tradicionales no procesan bien. Las **5 V**: **Volumen**, **Velocidad** (tiempo real), **Variedad** (estructurados y no estructurados), **Veracidad** (fiabilidad) y **Valor**. Herramientas: **Hadoop** (almacena y procesa datos repartidos en muchos servidores) y **Spark** (procesamiento muy rápido, en tiempo real).
+""",
+    example="""
+-- Fragmentación horizontal: cada provincia en su tabla (en la realidad, en su servidor)
+CREATE TABLE alumnos_madrid (id INTEGER PRIMARY KEY, nombre TEXT, provincia TEXT);
+CREATE TABLE alumnos_valladolid (id INTEGER PRIMARY KEY, nombre TEXT, provincia TEXT);
+INSERT INTO alumnos_madrid VALUES (1, 'Ana', 'Madrid'), (2, 'Luis', 'Madrid');
+INSERT INTO alumnos_valladolid VALUES (3, 'Eva', 'Valladolid');
+
+-- La tabla completa se reconstruye uniendo los fragmentos
+SELECT * FROM alumnos_madrid
+UNION ALL
+SELECT * FROM alumnos_valladolid;
+""",
+    exercise="""
+Una cadena de academias tiene sedes en Madrid y Valladolid y guarda de cada alumno: nombre, DNI, dirección, notas y pagos.
+
+1. Propón una **fragmentación horizontal** y una **vertical** de la tabla de alumnos.
+2. Escribe los `CREATE TABLE` de la vertical y la consulta que reconstruye al alumno completo.
+""",
+    starter="-- Fragmento con los datos personales\nCREATE TABLE alumnos_personal (\n  id INTEGER PRIMARY KEY,\n  -- ...\n);\n\n-- Fragmento con los datos académicos\nCREATE TABLE alumnos_academico (\n  -- ...\n);",
+    hint="En la vertical, los dos fragmentos repiten la clave primaria `id` para poder volver a unirlos con un JOIN.",
+    faq=[
+        (
+            "¿La fragmentación es lo mismo que una copia de seguridad?",
+            "No. Fragmentar reparte los datos: cada fila o columna está en un solo sitio. Replicar sí copia los mismos datos en varios servidores, para que sigan disponibles si uno falla.",
+        ),
+        (
+            "¿Qué modelo se usa hoy?",
+            "El relacional domina en aplicaciones de gestión (MySQL, PostgreSQL, Oracle). Los jerárquicos y en red son sobre todo históricos. Para Big Data y redes sociales se usan también bases NoSQL y de grafos.",
+        ),
+    ],
+    challenge=(
+        "Elige el modelo",
+        2,
+        "Para cada caso, di qué tipo de base de datos elegirías y por qué: (1) el inventario de una tienda de barrio; (2) una plataforma de cursos online con alumnos de todo el mundo; (3) una red de contactos donde importa quién conoce a quién.",
+        "-- 1. Tienda de barrio: ...\n-- 2. Plataforma global: ...\n-- 3. Red de contactos: ...",
+        "Piensa en escalabilidad y acceso remoto. Una relacional local basta para una tienda pequeña; lo global pide nube; las relaciones complejas, un modelo de grafos.",
+    ),
+    questions=[
+        tq(
+            "bd-01",
+            "¿Cuál es el principal inconveniente de una base de datos centralizada?",
+            [
+                "Si el servidor central falla, no se puede acceder a ningún dato",
+                "Es difícil mantener la coherencia de los datos",
+                "Necesita varios servidores sincronizados",
+                "No permite usar SQL",
+            ],
+            0,
+            "Todo está en un único servidor: es un **punto único de fallo**. En cambio, la coherencia es justo lo más fácil de mantener en una centralizada.",
+        ),
+        tq(
+            "bd-02",
+            "¿Qué ventaja tiene una base de datos distribuida frente a una centralizada?",
+            [
+                "Si un servidor falla, los datos de los demás siguen accesibles",
+                "Es más fácil de administrar",
+                "Es más sencillo mantener los datos sincronizados",
+                "Necesita menos recursos",
+            ],
+            0,
+            "Reparte los datos y la carga entre servidores. A cambio, sincronizarlos y administrarla es más difícil y costoso.",
+        ),
+        tq(
+            "bd-03",
+            "Guardar a los alumnos de cada provincia en un servidor distinto es fragmentación…",
+            ["horizontal", "vertical", "mixta", "jerárquica"],
+            0,
+            "Se reparten las **filas** según una condición (la provincia). Todas las filas conservan todas sus columnas.",
+        ),
+        tq(
+            "bd-04",
+            "Los datos personales de los empleados van a un servidor y los de nómina a otro. ¿Qué fragmentación es?",
+            ["Vertical", "Horizontal", "Mixta", "Ninguna: es una réplica"],
+            0,
+            "Se reparten las **columnas**. Cada fragmento repite la clave para poder reconstruir al empleado con un JOIN.",
+        ),
+        tq(
+            "bd-05",
+            "Se separan los alumnos por provincia y, dentro de cada provincia, sus datos personales de los académicos. ¿Qué fragmentación es?",
+            ["Mixta", "Horizontal", "Vertical", "Distribuida simple"],
+            0,
+            "Combina la horizontal (por provincia, filas) y la vertical (personal o académico, columnas).",
+        ),
+        tq(
+            "bd-06",
+            "¿En qué modelo cada nodo tiene un único padre, como un árbol?",
+            ["Jerárquico", "En red", "Relacional", "Orientado a objetos"],
+            0,
+            "Empresa → Departamentos → Empleados. Si un nodo pudiera tener varios padres, sería el modelo **en red**.",
+        ),
+        tq(
+            "bd-07",
+            "Un empleado puede estar vinculado a varios proyectos, y cada proyecto a varios empleados, en un modelo que no usa tablas. ¿Cuál es?",
+            ["En red", "Jerárquico", "Relacional", "Fichero plano"],
+            0,
+            "El modelo en red permite que un nodo tenga **varios padres**. Es más flexible que el jerárquico, pero más difícil de gestionar que el relacional.",
+        ),
+        tq(
+            "bd-08",
+            "¿Qué modelo guarda los datos como objetos con atributos y métodos?",
+            ["Orientado a objetos", "Relacional", "Jerárquico", "En red"],
+            0,
+            "Combina bases de datos y POO. Va bien cuando los datos tienen comportamiento asociado, como en simulaciones o videojuegos.",
+        ),
+        tq(
+            "bd-09",
+            "¿Cuál de estas NO es una de las 5 V del Big Data?",
+            ["Visibilidad", "Veracidad", "Variedad", "Velocidad"],
+            0,
+            "Las 5 V son Volumen, Velocidad, Variedad, Veracidad y Valor.",
+        ),
+        tq(
+            "bd-10",
+            "¿Para qué sirve Hadoop?",
+            [
+                "Para almacenar y procesar grandes volúmenes de datos repartidos en muchos servidores",
+                "Para diseñar diagramas entidad-relación",
+                "Para cifrar bases de datos personales",
+                "Para dar permisos a los usuarios de MySQL",
+            ],
+            0,
+            "Hadoop es una plataforma de código abierto para Big Data, con datos estructurados y no estructurados. Spark se usa cuando se necesita procesar muy rápido, en tiempo real.",
+        ),
+        sq(
+            "bd-11",
+            "La tabla de alumnos está fragmentada horizontalmente. ¿Qué devuelve la última consulta?",
+            "CREATE TABLE alumnos_madrid (id INTEGER PRIMARY KEY, nombre TEXT);\nCREATE TABLE alumnos_valladolid (id INTEGER PRIMARY KEY, nombre TEXT);\nINSERT INTO alumnos_madrid VALUES (1, 'Ana'), (2, 'Luis');\nINSERT INTO alumnos_valladolid VALUES (3, 'Eva');\nSELECT COUNT(*) FROM (\n  SELECT nombre FROM alumnos_madrid\n  UNION ALL\n  SELECT nombre FROM alumnos_valladolid\n);",
+            "3",
+            ["2", "1", "Error"],
+            "`UNION ALL` junta las filas de los dos fragmentos: 2 + 1 = 3 alumnos. Así se reconstruye la tabla completa.",
+        ),
+        sq(
+            "bd-12",
+            "Los empleados están fragmentados verticalmente. ¿Qué devuelve la última consulta?",
+            "CREATE TABLE emp_personal (id INTEGER PRIMARY KEY, nombre TEXT);\nCREATE TABLE emp_nomina (id INTEGER PRIMARY KEY, salario INTEGER);\nINSERT INTO emp_personal VALUES (1, 'Ana'), (2, 'Luis');\nINSERT INTO emp_nomina VALUES (1, 2100), (2, 1800);\nSELECT p.nombre, n.salario\nFROM emp_personal p JOIN emp_nomina n ON n.id = p.id\nWHERE p.id = 2;",
+            "Luis | 1800",
+            ["Luis | 2100", "Luis", "Error"],
+            "Los dos fragmentos comparten la clave `id`: con un JOIN por ella se reconstruye la fila completa del empleado 2.",
+        ),
+    ],
+    quiz=[
+        tq(
+            "bd-q01",
+            "Una app móvil de pedidos de comida con usuarios en todo el país necesita escalar rápido. ¿Qué tipo de base de datos encaja mejor?",
+            [
+                "En la nube",
+                "Local, en el ordenador del restaurante",
+                "Un fichero plano",
+                "Jerárquica",
+            ],
+            0,
+            "La nube da escalabilidad y acceso desde cualquier lugar sin montar infraestructura propia.",
+        ),
+        tq(
+            "bd-q02",
+            "En Big Data, ¿qué significa la «Veracidad»?",
+            [
+                "Que los datos sean fiables y estén libres de errores",
+                "Que se procesen en tiempo real",
+                "Que haya muchos formatos distintos",
+                "Que generen beneficio",
+            ],
+            0,
+            "Tiempo real es Velocidad; muchos formatos, Variedad; beneficio, Valor.",
+        ),
+    ],
+    sources=[MYSQL, PG],
+)
+
+L_UD1_SGBD = Lesson(
+    slug="bd-ficheros-rgpd-sgbd",
+    title="Ficheros, protección de datos y SGBD",
+    theory="""
+**Ficheros:** la forma más básica de guardar datos.
+- **Planos** (de texto): líneas seguidas sin estructura extra, como `Juan,25`. Fáciles de crear, pero lentos para buscar un dato concreto.
+- **Indexados:** los datos van con un **índice** (por ejemplo, por número de cliente) para encontrarlos sin recorrer todo. A cambio, el índice ocupa espacio y hay que mantenerlo al día.
+- **De acceso directo:** divididos en registros a los que se salta directamente (el producto `P123`). Rápidos, pero más complejos de diseñar.
+
+**Métodos de acceso:**
+- **Secuencial:** se lee del principio al final. Ideal para procesar **todo** (la media de todas las edades), lento para un dato concreto.
+- **Aleatorio** (directo): se va a cualquier posición sin recorrer lo anterior. Ideal para **un registro concreto** (actualizar el precio de un producto).
+
+**Protección de datos:**
+- **RGPD:** reglamento **europeo**, aplicable desde 2018, para los datos personales de los ciudadanos de la UE.
+- **LOPDGDD:** ley orgánica **española** que lo complementa y añade derechos digitales, como la **desconexión digital** en el trabajo.
+- **Principios:** **consentimiento** claro, **transparencia** (qué datos, para qué y quién), **minimización** (solo los datos necesarios) y **seguridad** (cifrado, control de accesos).
+- **Tus obligaciones como desarrollador:** informar a los usuarios, proteger los datos y facilitar sus derechos: **acceso, rectificación y supresión** (la app debe permitir borrar los datos).
+
+**SGBD** (sistema gestor de bases de datos): el software intermediario entre los datos y quien los usa. Sus tres funciones:
+- **Definición** de datos: crear tablas, índices y relaciones (**DDL**: `CREATE`, `ALTER`, `DROP`).
+- **Manipulación**: insertar, modificar, borrar y consultar (**DML**: `INSERT`, `UPDATE`, `DELETE`, `SELECT`).
+- **Control**: seguridad, integridad y permisos (**DCL**: `GRANT`, `REVOKE`).
+
+**Componentes:** el **motor** (procesa el almacenamiento y la recuperación), el **lenguaje de consulta** (SQL) y las **herramientas de administración** (permisos, copias de seguridad).
+
+**Tipos:** **relacionales** (MySQL, PostgreSQL, Oracle), **NoSQL** (MongoDB, Cassandra; datos no estructurados, gran volumen) y **de grafos** (Neo4j; relaciones complejas como redes de contactos o rutas).
+""",
+    example="""
+-- Definición (DDL)
+CREATE TABLE productos (codigo TEXT PRIMARY KEY, nombre TEXT NOT NULL, precio INTEGER);
+
+-- Manipulación (DML)
+INSERT INTO productos VALUES ('P123', 'Teclado', 25), ('P124', 'Ratón', 15);
+UPDATE productos SET precio = 22 WHERE codigo = 'P123';
+
+-- Control (DCL), en MySQL (SQLite no tiene usuarios):
+-- GRANT SELECT ON tienda.productos TO 'vendedor'@'localhost';
+
+SELECT * FROM productos WHERE codigo = 'P123';
+""",
+    exercise="""
+Diseña el registro de usuarios de una web que permite descargar un PDF gratuito.
+
+1. ¿Qué datos pedirías como **mínimo**? Justifícalo con el principio de minimización.
+2. Escribe el `CREATE TABLE` y el `DELETE` que ejecutarías si un usuario ejerce su derecho de supresión.
+""",
+    starter="CREATE TABLE usuarios (\n  id INTEGER PRIMARY KEY,\n  -- ...\n);\n\n-- Derecho de supresión del usuario 7\n",
+    hint="Para descargar un PDF basta con un email (y la fecha del consentimiento). Ni dirección ni teléfono. Supresión: `DELETE FROM usuarios WHERE id = 7;`.",
+    faq=[
+        (
+            "¿Un SGBD y una base de datos son lo mismo?",
+            "No. La base de datos son los datos organizados; el SGBD es el programa que los gestiona (MySQL, PostgreSQL…). Un mismo SGBD puede gestionar muchas bases de datos.",
+        ),
+        (
+            "¿El RGPD se aplica a mis proyectos de clase?",
+            "Si guardan datos personales de personas reales, sí. En clase y en pruebas, usa datos inventados.",
+        ),
+    ],
+    challenge=(
+        "Clasifica sentencias",
+        1,
+        "Clasifica como DDL, DML o DCL: `CREATE TABLE`, `SELECT`, `GRANT`, `ALTER TABLE`, `DELETE`, `REVOKE`, `UPDATE`, `DROP TABLE`.",
+        "-- DDL: ...\n-- DML: ...\n-- DCL: ...",
+        "DDL cambia la estructura; DML, los datos; DCL, los permisos.",
+    ),
+    questions=[
+        tq(
+            "bd-13",
+            "Un fichero guarda «Juan,25» en cada línea, sin ninguna estructura más. ¿Qué tipo de fichero es?",
+            ["Plano", "Indexado", "De acceso directo", "Una base de datos relacional"],
+            0,
+            "Es un fichero plano (de texto). Es fácil de manejar, pero con muchos datos cuesta encontrar uno concreto.",
+        ),
+        tq(
+            "bd-14",
+            "¿Qué inconveniente tiene un fichero indexado?",
+            [
+                "El índice ocupa espacio y hay que mantenerlo actualizado",
+                "No permite buscar un registro concreto",
+                "Solo se puede leer de principio a fin",
+                "No puede guardar números",
+            ],
+            0,
+            "El índice acelera las búsquedas, pero cuesta espacio y tiempo mantenerlo al día. Es el mismo equilibrio que con los índices de una base de datos.",
+        ),
+        tq(
+            "bd-15",
+            "Quieres calcular la media de edad de todas las personas de un fichero. ¿Qué acceso es el adecuado?",
+            ["Secuencial", "Aleatorio", "Por índice único", "Ninguno: hace falta un SGBD"],
+            0,
+            "Hay que leer todos los registros en orden: el acceso secuencial es justo para eso.",
+        ),
+        tq(
+            "bd-16",
+            "Quieres actualizar el precio del producto P123 en un fichero de acceso directo. ¿Qué acceso usarás?",
+            ["Aleatorio", "Secuencial", "Fragmentado", "Distribuido"],
+            0,
+            "El acceso aleatorio salta directamente al registro sin recorrer los anteriores.",
+        ),
+        tq(
+            "bd-17",
+            "¿Qué relación hay entre el RGPD y la LOPDGDD?",
+            [
+                "El RGPD es europeo y la LOPDGDD es la ley española que lo complementa",
+                "La LOPDGDD es europea y el RGPD es español",
+                "La LOPDGDD sustituyó al RGPD en 2018",
+                "Son dos nombres de la misma ley",
+            ],
+            0,
+            "El RGPD se aplica en toda la UE desde 2018. La LOPDGDD lo adapta a España y añade derechos digitales.",
+        ),
+        tq(
+            "bd-18",
+            "Una web te pide dirección y teléfono solo para descargar un archivo gratuito. ¿Qué principio incumple?",
+            ["Minimización de datos", "Transparencia", "Seguridad", "Veracidad"],
+            0,
+            "Solo se deben recoger los datos estrictamente necesarios para la finalidad. Para descargar un archivo, la dirección y el teléfono sobran.",
+        ),
+        tq(
+            "bd-19",
+            "¿Qué norma recoge el derecho a la desconexión digital en el trabajo?",
+            ["La LOPDGDD", "El RGPD", "El modelo relacional", "La norma SQL"],
+            0,
+            "Es uno de los derechos digitales que la LOPDGDD añade a lo que ya establece el RGPD.",
+        ),
+        tq(
+            "bd-20",
+            "Un usuario pide que borren todos sus datos de tu app. ¿Qué debes hacer?",
+            [
+                "Facilitarlo: es su derecho de supresión",
+                "Negarte si los datos son útiles para la empresa",
+                "Ocultarlos en la app pero conservarlos siempre",
+                "Pedirle que lo haga él con SQL",
+            ],
+            0,
+            "Los usuarios tienen derecho de acceso, rectificación y supresión, y la aplicación debe facilitarlos.",
+        ),
+        tq(
+            "bd-21",
+            "¿Qué función del SGBD cubre la sentencia GRANT?",
+            [
+                "Control de datos (DCL)",
+                "Definición de datos (DDL)",
+                "Manipulación de datos (DML)",
+                "Ninguna: GRANT no es SQL",
+            ],
+            0,
+            "Dar y quitar permisos (GRANT y REVOKE) es control de datos. CREATE, ALTER y DROP son definición; INSERT, UPDATE, DELETE y SELECT, manipulación.",
+        ),
+        tq(
+            "bd-22",
+            "¿Qué componente del SGBD procesa realmente el almacenamiento y la recuperación de los datos?",
+            [
+                "El motor de base de datos",
+                "El lenguaje de consulta",
+                "Las herramientas de administración",
+                "El sistema operativo",
+            ],
+            0,
+            "El motor es el núcleo. SQL es cómo se lo pides y las herramientas de administración sirven para permisos, copias o supervisión.",
+        ),
+        tq(
+            "bd-23",
+            "MongoDB y Neo4j son, respectivamente, SGBD…",
+            [
+                "NoSQL y de grafos",
+                "relacional y NoSQL",
+                "de grafos y relacional",
+                "jerárquico y en red",
+            ],
+            0,
+            "MongoDB es NoSQL (documentos, datos semiestructurados). Neo4j es de grafos (relaciones complejas). MySQL, PostgreSQL y Oracle son relacionales.",
+        ),
+        sq(
+            "bd-24",
+            "El SGBD garantiza la integridad de los datos. ¿Qué ocurre al ejecutar este script?",
+            "CREATE TABLE productos (codigo TEXT PRIMARY KEY, precio INTEGER);\nINSERT INTO productos VALUES ('P123', 25);\nINSERT INTO productos VALUES ('P123', 30);\nSELECT precio FROM productos;",
+            "Error",
+            ["25", "30", "25\n30"],
+            "El segundo INSERT repite la clave primaria: el SGBD lo rechaza. Evitar duplicados es parte de su función de control.",
+        ),
+    ],
+    quiz=[
+        tq(
+            "bd-q03",
+            "¿Qué método de acceso es más eficiente para leer un único registro concreto?",
+            ["Aleatorio", "Secuencial", "Los dos igual", "Ninguno"],
+            0,
+            "El secuencial obliga a recorrer todo hasta encontrarlo; el aleatorio va directo.",
+        ),
+        tq(
+            "bd-q04",
+            "¿Cuál de estos es un principio de la protección de datos?",
+            ["Transparencia", "Fragmentación", "Normalización", "Velocidad"],
+            0,
+            "Consentimiento, transparencia, minimización y seguridad. Los demás son conceptos de bases de datos o de Big Data.",
+        ),
+    ],
+    sources=[AEPD, MYSQL],
+)
+
+L_UD2_MAS = Lesson(
+    slug="bd-null-indices-dcl",
+    title="NULL, ALTER, índices, usuarios y vistas",
+    theory="""
+**NULL** significa que el dato **no se conoce, no aplica o aún no se ha registrado**. No es 0 ni una cadena vacía.
+- `NULL` no es igual a nada, ni siquiera a otro NULL: `WHERE telefono = NULL` **no devuelve nunca filas**. Se usa `IS NULL` o `IS NOT NULL`.
+- `COUNT(*)` cuenta filas; `COUNT(columna)` no cuenta los NULL. `SUM`, `AVG`, `MAX` y `MIN` también los ignoran.
+- Si un dato es obligatorio, declara la columna `NOT NULL`; si tiene un valor habitual, usa `DEFAULT`.
+
+**Tipos de datos:** `INT`/`INTEGER` (enteros), `VARCHAR(n)` y `TEXT` (texto), `DATE`, `TIME` y `DATETIME` (fechas y horas), `BOOLEAN` (verdadero o falso) y `DECIMAL(p,s)` (dinero). El tipo correcto ahorra espacio, acelera las consultas e impide guardar datos inválidos.
+
+**DDL para cambiar la estructura:**
+- `ALTER TABLE clientes ADD email VARCHAR(100);` añade una columna, que queda a NULL en las filas que ya existían (o con su `DEFAULT`).
+- `ALTER TABLE clientes MODIFY email VARCHAR(75);` cambia el tipo en **MySQL** (en PostgreSQL es `ALTER COLUMN … TYPE`).
+- `DROP TABLE clientes;` borra la tabla **y todos sus datos**. Úsalo con cuidado.
+
+**Índices:** como el índice de un libro. `CREATE INDEX idx_cat ON productos(categoria);`
+- **Únicos** (`CREATE UNIQUE INDEX`): además impiden repetidos.
+- **Compuestos:** sobre varias columnas, como `(cliente_id, fecha)`, para consultas que filtran por las dos.
+- Aceleran las lecturas, pero **ralentizan las escrituras** (INSERT, UPDATE y DELETE deben actualizar el índice). No se indexan todas las columnas: solo las que se consultan a menudo.
+
+**DCL (MySQL):** usuarios, permisos y roles.
+- `CREATE USER 'juan'@'localhost' IDENTIFIED BY '…';`
+- `GRANT SELECT, INSERT ON tienda.productos TO 'juan'@'localhost';` da permisos (`tienda.*` es toda la base de datos; `ALL PRIVILEGES`, todos los permisos).
+- `REVOKE INSERT ON tienda.productos FROM 'juan'@'localhost';` los quita. Ojo: GRANT va con **TO** y REVOKE con **FROM**.
+- **Roles:** un conjunto de permisos con nombre que se asigna a varios usuarios: `CREATE ROLE 'gestor_tienda'; GRANT SELECT, INSERT, UPDATE ON tienda.* TO 'gestor_tienda'; GRANT 'gestor_tienda' TO 'juan'@'localhost';`
+
+**Vistas:** `CREATE VIEW nombre AS SELECT …` es una **tabla virtual**: guarda la consulta, no los datos. Sirven para reutilizar consultas complejas, **ocultar columnas sensibles** (el salario) y dar a cada usuario los datos que necesita. Siempre muestran los datos actuales de las tablas; no todas permiten INSERT o UPDATE.
+""",
+    example="""
+CREATE TABLE clientes (
+  id INTEGER PRIMARY KEY,
+  nombre VARCHAR(50) NOT NULL,
+  telefono VARCHAR(15) NULL
+);
+INSERT INTO clientes VALUES (1, 'Ana', '600111222'), (2, 'Carlos', NULL), (3, 'Marta', '611333444');
+
+ALTER TABLE clientes ADD email VARCHAR(100);
+CREATE INDEX idx_nombre ON clientes(nombre);
+CREATE VIEW sin_telefono AS SELECT id, nombre FROM clientes WHERE telefono IS NULL;
+
+SELECT * FROM sin_telefono;
+""",
+    exercise="""
+Sobre una tabla `empleados(id, nombre, puesto, salario, telefono)`:
+
+1. Crea una vista `empleados_publico` sin el salario.
+2. Añade la columna `fecha_baja` (vacía mientras el empleado siga activo).
+3. Escribe, en MySQL, el GRANT para que `rrhh`@`localhost` solo pueda consultar esa vista.
+""",
+    starter="CREATE VIEW empleados_publico AS\nSELECT ...;\n\nALTER TABLE empleados ...;\n\n-- GRANT ...",
+    hint="`GRANT SELECT ON empresa.empleados_publico TO 'rrhh'@'localhost';`. La fecha de baja admite NULL: es un dato que no aplica mientras el empleado sigue activo.",
+    faq=[
+        (
+            "¿Por qué `= NULL` no da error pero tampoco devuelve nada?",
+            "Comparar con NULL da «desconocido», ni verdadero ni falso, y el WHERE solo deja pasar lo verdadero. Por eso existe `IS NULL`.",
+        ),
+        (
+            "¿Un índice cambia el resultado de una consulta?",
+            "Nunca. Solo cambia lo rápido que se obtiene. El plan de ejecución (`EXPLAIN`) te dice si se usa.",
+        ),
+    ],
+    challenge=(
+        "Permisos de una tienda",
+        2,
+        "Escribe en MySQL: un rol `vendedor` que pueda consultar e insertar en `tienda.pedidos` y solo consultar `tienda.productos`; asígnalo a `lucia`@`localhost`; después quítale a ese rol el permiso de insertar.",
+        "CREATE ROLE 'vendedor';\n-- ...",
+        "Cada GRANT va con ON base.tabla TO rol. Para quitarlo: `REVOKE INSERT ON tienda.pedidos FROM 'vendedor';`.",
+    ),
+    questions=[
+        cq(
+            "bd-25",
+            QUE,
+            [ALUMNOS],
+            "SELECT nombre FROM alumnos WHERE nota = NULL;",
+            "(sin filas)",
+            ["Eva", "Error", "NULL"],
+            "Comparar con `= NULL` nunca es verdadero, ni siquiera con otro NULL. Para encontrar a Eva hay que escribir `WHERE nota IS NULL`.",
+        ),
+        cq(
+            "bd-26",
+            QUE,
+            [ALUMNOS],
+            "SELECT nombre FROM alumnos WHERE nota IS NULL;",
+            "Eva",
+            ["(sin filas)", "Error", "Ana\nLuis\nJuan\nSara"],
+            "`IS NULL` es la forma correcta de preguntar por un dato que falta.",
+        ),
+        cq(
+            "bd-27",
+            QUE,
+            [ALUMNOS],
+            "SELECT COUNT(nota), COUNT(*) FROM alumnos;",
+            "4 | 5",
+            ["5 | 5", "4 | 4", "5 | 4"],
+            "`COUNT(*)` cuenta las 5 filas; `COUNT(nota)` no cuenta la nota NULL de Eva.",
+        ),
+        cq(
+            "bd-28",
+            QUE,
+            [ALUMNOS],
+            "SELECT AVG(nota) FROM alumnos;",
+            "7.25",
+            ["5.8", "7", "Error"],
+            "AVG ignora los NULL: (8 + 5 + 7 + 9) / 4 = 7,25. Si contara a Eva como 0, saldría 29 / 5 = 5,8.",
+        ),
+        sq(
+            "bd-29",
+            SCRIPT,
+            "CREATE TABLE clientes (id INTEGER PRIMARY KEY, nombre TEXT);\nINSERT INTO clientes VALUES (1, 'Ana');\nALTER TABLE clientes ADD email TEXT;\nSELECT nombre, email FROM clientes;",
+            "Ana | NULL",
+            ["Ana", "Error", "Ana | "],
+            "La columna nueva existe en todas las filas, pero las que ya había no tienen valor: queda a NULL.",
+        ),
+        sq(
+            "bd-30",
+            SCRIPT,
+            "CREATE TABLE productos (id INTEGER PRIMARY KEY, nombre TEXT);\nINSERT INTO productos VALUES (1, 'Teclado');\nALTER TABLE productos ADD stock INTEGER DEFAULT 0;\nSELECT stock FROM productos;",
+            "0",
+            ["NULL", "Error", "(sin filas)"],
+            "Con `DEFAULT 0`, las filas que ya existían toman ese valor en la columna nueva.",
+        ),
+        sq(
+            "bd-31",
+            "¿Qué ocurre al ejecutar este script?",
+            "CREATE TABLE clientes (id INTEGER PRIMARY KEY, nombre TEXT);\nINSERT INTO clientes VALUES (1, 'Ana');\nDROP TABLE clientes;\nSELECT * FROM clientes;",
+            "Error",
+            ["(sin filas)", "1 | Ana", "NULL"],
+            "`DROP TABLE` elimina la tabla entera, estructura y datos. Después ya no existe y el SELECT falla. Para vaciarla conservando la estructura se usa `DELETE FROM`.",
+        ),
+        tq(
+            "bd-32",
+            "En MySQL, ¿cómo cambias la columna Email de la tabla Clientes a VARCHAR(75)?",
+            [
+                "ALTER TABLE Clientes MODIFY Email VARCHAR(75);",
+                "UPDATE Clientes SET Email = VARCHAR(75);",
+                "CHANGE TABLE Clientes Email VARCHAR(75);",
+                "ALTER Clientes Email TO VARCHAR(75);",
+            ],
+            0,
+            "`ALTER TABLE … MODIFY` es la sintaxis de MySQL. UPDATE cambia datos, no la estructura.",
+        ),
+        tq(
+            "bd-33",
+            "¿Qué efecto tiene crear un índice sobre una columna?",
+            [
+                "Las búsquedas por esa columna van más rápido, pero los INSERT y UPDATE algo más lentos",
+                "Todo va más rápido, sin ningún inconveniente",
+                "Cambia el orden de los resultados de las consultas",
+                "Impide que la columna tenga valores repetidos",
+            ],
+            0,
+            "Cada escritura tiene que actualizar también el índice. Solo un índice **único** impide repetidos, y ninguno cambia el resultado.",
+        ),
+        tq(
+            "bd-34",
+            "Las consultas buscan a menudo los pedidos de un cliente en una fecha. ¿Qué índice conviene?",
+            [
+                "Un índice compuesto sobre (cliente_id, fecha)",
+                "Un índice único sobre fecha",
+                "Un índice sobre cada columna de la tabla",
+                "Ninguno: los índices solo sirven para la clave primaria",
+            ],
+            0,
+            "Un índice compuesto cubre consultas que filtran por varias columnas a la vez. Indexarlo todo ralentizaría las escrituras sin necesidad.",
+        ),
+        sq(
+            "bd-35",
+            "¿Qué ocurre al ejecutar este script?",
+            "CREATE TABLE usuarios (id INTEGER PRIMARY KEY, email TEXT);\nCREATE UNIQUE INDEX idx_email ON usuarios(email);\nINSERT INTO usuarios VALUES (1, 'a@fp.es');\nINSERT INTO usuarios VALUES (2, 'a@fp.es');\nSELECT COUNT(*) FROM usuarios;",
+            "Error",
+            ["2", "1", "0"],
+            "Un índice **único** acelera las búsquedas y además impide repetir el email: el segundo INSERT se rechaza.",
+        ),
+        tq(
+            "bd-36",
+            "¿Qué sentencia de MySQL deja a juan consultar y añadir datos en la tabla productos de la base tienda?",
+            [
+                "GRANT SELECT, INSERT ON tienda.productos TO 'juan'@'localhost';",
+                "GRANT SELECT, INSERT ON tienda.productos FROM 'juan'@'localhost';",
+                "REVOKE SELECT, INSERT ON tienda.productos TO 'juan'@'localhost';",
+                "ALLOW SELECT, INSERT FOR juan IN tienda.productos;",
+            ],
+            0,
+            "GRANT privilegios ON base.tabla TO usuario. REVOKE es para quitarlos, y va con FROM.",
+        ),
+        tq(
+            "bd-37",
+            "¿Cómo le quitas a juan el permiso de insertar en tienda.productos?",
+            [
+                "REVOKE INSERT ON tienda.productos FROM 'juan'@'localhost';",
+                "REVOKE INSERT ON tienda.productos TO 'juan'@'localhost';",
+                "DELETE INSERT FROM juan;",
+                "DROP GRANT INSERT ON tienda.productos;",
+            ],
+            0,
+            "REVOKE tiene la misma estructura que GRANT, pero con **FROM** en lugar de TO.",
+        ),
+        tq(
+            "bd-38",
+            "¿Qué ventaja tiene usar roles?",
+            [
+                "Agrupan permisos y se asignan de una vez a muchos usuarios con la misma función",
+                "Hacen que las consultas sean más rápidas",
+                "Sustituyen a las contraseñas",
+                "Permiten saltarse las claves ajenas",
+            ],
+            0,
+            "Si cambian los permisos de los gestores, se cambia el rol una vez y afecta a todos los que lo tienen.",
+        ),
+        sq(
+            "bd-39",
+            "La vista se crea antes de insertar los pedidos. ¿Qué devuelve la última consulta?",
+            "CREATE TABLE pedidos (id INTEGER PRIMARY KEY, total INTEGER, estado TEXT);\nCREATE VIEW completados AS\n  SELECT id, total FROM pedidos WHERE estado = 'Completado';\nINSERT INTO pedidos VALUES\n  (1, 30, 'Completado'), (2, 20, 'Pendiente'), (3, 50, 'Completado');\nSELECT COUNT(*) FROM completados;",
+            "2",
+            ["0", "3", "Error"],
+            "Una vista no guarda datos: guarda la consulta y la ejecuta cada vez. Por eso ve los pedidos insertados después de crearla.",
+        ),
+        tq(
+            "bd-40",
+            "Algunos usuarios no deben ver el salario de los empleados. ¿Qué solución usa lo visto en la unidad?",
+            [
+                "Una vista con todas las columnas menos el salario, y dar permiso solo sobre la vista",
+                "Borrar la columna salario",
+                "Guardar el salario como NULL",
+                "Crear un índice sobre salario",
+            ],
+            0,
+            "Proteger datos sensibles es uno de los usos principales de las vistas. Combinada con GRANT, cada usuario solo ve lo que necesita.",
+        ),
+        fq(
+            "bd-41",
+            "Completa la consulta para obtener los alumnos sin nota.",
+            ALUMNOS.setup() + "SELECT nombre FROM alumnos WHERE nota IS ___;",
+            ["NULL", "null"],
+            "Eva",
+            "Con `= NULL` no saldría nadie: hay que usar `IS NULL`.",
+        ),
+        bq(
+            "bd-42",
+            "CREATE TABLE clientes (id INTEGER PRIMARY KEY, telefono TEXT);\nINSERT INTO clientes VALUES (1, '600111222'), (2, NULL);\nSELECT id FROM clientes WHERE telefono = NULL;",
+            2,
+            "SELECT id FROM clientes WHERE telefono IS NULL;",
+            "2",
+            "`telefono = NULL` nunca es verdadero, así que no sale ninguna fila. La corrección es `WHERE telefono IS NULL`.",
+        ),
+        oq(
+            "bd-43",
+            "Ordena el script para que el SELECT devuelva `1 | Ana | NULL`.",
+            [
+                "CREATE TABLE clientes (id INTEGER PRIMARY KEY, nombre TEXT);",
+                "INSERT INTO clientes VALUES (1, 'Ana');",
+                "ALTER TABLE clientes ADD email TEXT;",
+                "SELECT * FROM clientes;",
+            ],
+            "1 | Ana | NULL",
+            "Primero la estructura, luego los datos, después el cambio de estructura y por último la consulta. Si el ALTER fuera antes del INSERT, faltaría un valor para `email` y el INSERT fallaría.",
+        ),
+    ],
+    quiz=[
+        tq(
+            "bd-q05",
+            "¿Qué significa que una columna tenga el valor NULL?",
+            [
+                "Que el dato se desconoce, no aplica o no se ha registrado",
+                "Que vale 0",
+                "Que es una cadena vacía",
+                "Que la fila está borrada",
+            ],
+            0,
+            "NULL es ausencia de dato. No es 0 ni una cadena vacía.",
+        ),
+        tq(
+            "bd-q06",
+            "¿Qué es una vista?",
+            [
+                "Una consulta guardada que se usa como una tabla virtual",
+                "Una copia de seguridad de una tabla",
+                "Un índice sobre varias columnas",
+                "Un usuario con permisos de solo lectura",
+            ],
+            0,
+            "No almacena datos propios: los lee de las tablas cada vez que se consulta.",
+        ),
+    ],
+    sources=[MYSQL, SQLITE],
+)
+
+L_UD3_MAS = Lesson(
+    slug="bd-conjuntos-y-optimizacion",
+    title="UNION, INTERSECT, EXCEPT, subconsultas y optimización",
+    theory="""
+**Proyección, selección y ordenación:**
+- **Proyección:** elegir **columnas**, en el `SELECT`.
+- **Selección:** elegir **filas**, en el `WHERE`.
+- **Ordenación:** `ORDER BY columna ASC` (por defecto) o `DESC`.
+
+**Operadores:** de comparación `=`, `<>` (o `!=`, que aceptan MySQL y SQLite), `<`, `>`, `<=` y `>=`; lógicos `AND`, `OR` y `NOT`. Usa paréntesis al mezclar AND y OR: `precio > 50 AND (categoria = 'Hogar' OR categoria = 'Electrónica')`.
+
+**Combinar selecciones** (las dos consultas deben tener **el mismo número de columnas y tipos compatibles**):
+- `UNION`: junta los resultados y **quita los duplicados**. `UNION ALL` los conserva.
+- `INTERSECT`: solo lo que está **en las dos**.
+- `EXCEPT`: lo que está en la **primera y no en la segunda**. (MySQL los admite desde la versión 8.0.31; Oracle llama `MINUS` a EXCEPT).
+- No garantizan orden: añade `ORDER BY` **al final**.
+
+**Composiciones externas:**
+- `LEFT JOIN`: todas las filas de la izquierda; donde no hay pareja, NULL.
+- `RIGHT JOIN`: todas las de la derecha. `A RIGHT JOIN B` equivale a `B LEFT JOIN A`.
+- `FULL OUTER JOIN`: todas las de las dos (MySQL no la tiene: se simula con LEFT JOIN UNION RIGHT JOIN).
+- `COALESCE(valor, alternativa)` sustituye los NULL: `COALESCE(p.total, 0)`.
+
+**Subconsultas:** una consulta entre paréntesis dentro de otra; se ejecuta primero.
+- **Escalar** (un solo valor): `WHERE precio > (SELECT AVG(precio) FROM productos)`.
+- **De varias filas**: con `IN`, `ANY` o `ALL`: `WHERE id IN (SELECT cliente_id FROM pedidos)`.
+- Un JOIN suele ser más eficiente que una subconsulta equivalente.
+
+**Optimización:**
+- **Índices** en las columnas que se filtran o se unen a menudo.
+- Evita `SELECT *`: pide solo las columnas que necesitas.
+- **Estadísticas** al día: el SGBD las usa para decidir cómo ejecutar la consulta.
+- **Plan de ejecución:** `EXPLAIN SELECT …` muestra los pasos y si se usa un índice. Sirve para encontrar **cuellos de botella** (falta de índices, consultas mal diseñadas, tablas enormes sin particionar).
+""",
+    example=CLIENTES.setup()
+    + PROVEEDORES.setup()
+    + PEDIDOS.setup()
+    + """
+-- Nombres que son a la vez clientes y proveedores
+SELECT nombre FROM clientes INTERSECT SELECT nombre FROM proveedores;
+
+-- Todos los clientes con su gasto (0 si no han comprado)
+SELECT c.nombre, COALESCE(SUM(p.total), 0) AS gasto
+FROM clientes c LEFT JOIN pedidos p ON p.cliente_id = c.id
+GROUP BY c.id, c.nombre
+ORDER BY gasto DESC;
+""",
+    exercise="""
+Con las tablas `clientes`, `proveedores` y `pedidos`:
+
+1. Lista sin repetidos todos los nombres de clientes y proveedores, en orden alfabético.
+2. Muestra los clientes que no han hecho ningún pedido de dos formas: con `NOT IN` y con `LEFT JOIN … IS NULL`.
+3. Escribe un `EXPLAIN` de la segunda y crea el índice que ayudaría.
+""",
+    starter="SELECT nombre FROM clientes\nUNION\nSELECT nombre FROM proveedores\nORDER BY nombre;\n\n-- 2. ...",
+    hint="`WHERE id NOT IN (SELECT cliente_id FROM pedidos)`. Con LEFT JOIN: `WHERE p.id IS NULL`. El índice iría en `pedidos(cliente_id)`.",
+    faq=[
+        (
+            "¿UNION o JOIN?",
+            "UNION pone filas **debajo** de otras (mismas columnas). JOIN pone columnas **al lado** (relaciona filas por una clave).",
+        ),
+        (
+            "¿Cuidado con NOT IN?",
+            "Si la subconsulta devuelve algún NULL, `NOT IN` no devuelve ninguna fila. Con claves ajenas que admiten NULL, es más seguro `NOT EXISTS` o el `LEFT JOIN … IS NULL`.",
+        ),
+    ],
+    challenge=(
+        "Informe de ventas",
+        3,
+        "Con `ventas(producto, categoria, cantidad, precio)`: el ingreso total por categoría, solo de las categorías que superen los 1000 €, de mayor a menor, y los productos cuyo ingreso supere la media de ingresos por producto.",
+        "SELECT categoria, SUM(cantidad * precio) AS ingresos\nFROM ventas\n-- ...",
+        "Lo primero es GROUP BY + HAVING + ORDER BY DESC. Lo segundo necesita una subconsulta que calcule la media.",
+    ),
+    questions=[
+        cq(
+            "bd-44",
+            QUE,
+            [CLIENTES, PROVEEDORES],
+            "SELECT nombre FROM clientes\nUNION\nSELECT nombre FROM proveedores\nORDER BY nombre;",
+            "Ana\nEva\nLuis\nTecnofp",
+            ["Ana\nAna\nEva\nLuis\nLuis\nTecnofp", "Ana\nLuis", "Eva"],
+            "UNION junta los dos resultados y quita los duplicados: Ana y Luis aparecen una sola vez.",
+        ),
+        cq(
+            "bd-45",
+            QUE,
+            [CLIENTES, PROVEEDORES],
+            "SELECT COUNT(*) FROM (\n  SELECT nombre FROM clientes\n  UNION ALL\n  SELECT nombre FROM proveedores\n);",
+            "6",
+            ["4", "2", "Error"],
+            "`UNION ALL` conserva los duplicados: 3 clientes + 3 proveedores = 6 filas. Con UNION serían 4.",
+        ),
+        cq(
+            "bd-46",
+            QUE,
+            [CLIENTES, PROVEEDORES],
+            "SELECT nombre FROM clientes\nINTERSECT\nSELECT nombre FROM proveedores\nORDER BY nombre;",
+            "Ana\nLuis",
+            ["Eva", "Ana\nEva\nLuis\nTecnofp", "Tecnofp"],
+            "INTERSECT devuelve solo los nombres que aparecen en las dos consultas.",
+        ),
+        cq(
+            "bd-47",
+            QUE,
+            [CLIENTES, PROVEEDORES],
+            "SELECT nombre FROM clientes\nEXCEPT\nSELECT nombre FROM proveedores;",
+            "Eva",
+            ["Tecnofp", "Ana\nLuis", "Eva\nTecnofp"],
+            "EXCEPT devuelve lo que está en la primera consulta y no en la segunda. Al revés (proveedores EXCEPT clientes) saldría Tecnofp.",
+        ),
+        cq(
+            "bd-48",
+            "¿Qué ocurre al ejecutar esta consulta?",
+            [CLIENTES, PROVEEDORES],
+            "SELECT id, nombre FROM clientes\nUNION\nSELECT nombre FROM proveedores;",
+            "Error",
+            ["Ana\nEva\nLuis\nTecnofp", "1 | Ana\n2 | Luis\n3 | Eva", "(sin filas)"],
+            "Para combinar selecciones, las dos consultas deben tener el mismo número de columnas. Aquí una tiene 2 y la otra 1.",
+        ),
+        cq(
+            "bd-49",
+            QUE,
+            [CLIENTES, PEDIDOS],
+            "SELECT c.nombre, COALESCE(p.total, 0)\nFROM clientes c LEFT JOIN pedidos p ON p.cliente_id = c.id\nWHERE c.id = 3;",
+            "Eva | 0",
+            ["Eva | NULL", "(sin filas)", "Error"],
+            "Eva no tiene pedidos: el LEFT JOIN la mantiene con `p.total` a NULL, y COALESCE lo sustituye por 0.",
+        ),
+        cq(
+            "bd-50",
+            QUE,
+            [PRODUCTOS],
+            "SELECT nombre FROM productos\nWHERE precio > (SELECT AVG(precio) FROM productos);",
+            "Monitor",
+            ["Teclado\nMonitor", "Cable\nRatón", "Error"],
+            "La subconsulta escalar calcula la media: (25 + 15 + 180 + 5) / 4 = 56,25. Solo el monitor la supera.",
+        ),
+        cq(
+            "bd-51",
+            QUE,
+            [CLIENTES, PEDIDOS],
+            "SELECT nombre FROM clientes\nWHERE id IN (SELECT cliente_id FROM pedidos)\nORDER BY nombre;",
+            "Ana\nLuis",
+            ["Ana\nAna\nLuis", "Eva", "Ana\nEva\nLuis"],
+            "La subconsulta devuelve varias filas (1, 1, 2) e IN comprueba si el id está entre ellas. Cada cliente sale una vez, aunque tenga varios pedidos.",
+        ),
+        cq(
+            "bd-52",
+            QUE,
+            [CLIENTES, PEDIDOS],
+            "SELECT nombre FROM clientes\nWHERE id NOT IN (SELECT cliente_id FROM pedidos);",
+            "Eva",
+            ["Ana\nLuis", "(sin filas)", "Error"],
+            "Los clientes cuyo id no aparece en ningún pedido. Es lo mismo que un LEFT JOIN con `WHERE p.id IS NULL`.",
+        ),
+        tq(
+            "bd-53",
+            "¿Qué composición incluye todas las filas de las dos tablas, con NULL donde no hay coincidencia?",
+            ["FULL OUTER JOIN", "INNER JOIN", "LEFT JOIN", "RIGHT JOIN"],
+            0,
+            "LEFT conserva la izquierda; RIGHT, la derecha; FULL OUTER, las dos. INNER solo lo que coincide.",
+        ),
+        tq(
+            "bd-54",
+            "`clientes RIGHT JOIN pedidos ON …` da el mismo resultado que…",
+            [
+                "pedidos LEFT JOIN clientes ON …",
+                "clientes LEFT JOIN pedidos ON …",
+                "clientes INNER JOIN pedidos ON …",
+                "clientes FULL OUTER JOIN pedidos ON …",
+            ],
+            0,
+            "RIGHT JOIN conserva todas las filas de la tabla de la derecha. Cambiando el orden de las tablas se escribe como LEFT JOIN.",
+        ),
+        tq(
+            "bd-55",
+            "¿Para qué sirve `EXPLAIN SELECT …`?",
+            [
+                "Para ver el plan de ejecución: cómo va a hacer el SGBD la consulta y si usa índices",
+                "Para que la consulta explique sus resultados en texto",
+                "Para ejecutar la consulta sin permisos",
+                "Para crear un índice automáticamente",
+            ],
+            0,
+            "El plan de ejecución ayuda a encontrar cuellos de botella, como una búsqueda que recorre toda la tabla porque falta un índice.",
+        ),
+        tq(
+            "bd-56",
+            "¿Cuál de estas es una buena práctica para optimizar consultas?",
+            [
+                "Pedir solo las columnas necesarias en lugar de SELECT *",
+                "Crear un índice en todas las columnas",
+                "No actualizar nunca las estadísticas",
+                "Usar siempre subconsultas en lugar de JOIN",
+            ],
+            0,
+            "Menos columnas, menos datos que procesar. Indexar todo ralentiza las escrituras, las estadísticas deben estar al día y un JOIN suele ser más eficiente.",
+        ),
+        tq(
+            "bd-57",
+            "En `SELECT nombre, departamento FROM empleados WHERE departamento = 'Ventas'`, ¿qué parte es la proyección y cuál la selección?",
+            [
+                "Proyección: nombre, departamento. Selección: el WHERE",
+                "Proyección: el WHERE. Selección: nombre, departamento",
+                "Las dos son el FROM",
+                "Proyección: FROM empleados. Selección: el SELECT",
+            ],
+            0,
+            "Proyectar es elegir columnas; seleccionar es filtrar filas.",
+        ),
+        fq(
+            "bd-58",
+            "Completa la consulta para obtener los clientes que no son proveedores.",
+            CLIENTES.setup()
+            + PROVEEDORES.setup()
+            + "SELECT nombre FROM clientes\n___\nSELECT nombre FROM proveedores;",
+            ["EXCEPT", "except"],
+            "Eva",
+            "EXCEPT deja lo que está en la primera consulta y no en la segunda.",
+        ),
+        oq(
+            "bd-59",
+            "Ordena las cláusulas para obtener las unidades vendidas por región, en orden alfabético.",
+            [
+                "SELECT region, SUM(cantidad)",
+                "FROM ventas",
+                "GROUP BY region",
+                "ORDER BY region;",
+            ],
+            "Norte | 7\nSur | 3",
+            "El orden de las cláusulas es fijo: SELECT, FROM, WHERE, GROUP BY, HAVING y ORDER BY.",
+            context="CREATE TABLE ventas (region TEXT, cantidad INTEGER);\nINSERT INTO ventas VALUES ('Norte', 5), ('Sur', 3), ('Norte', 2);\n___",
+        ),
+        bq(
+            "bd-60",
+            "CREATE TABLE ventas (region TEXT, cantidad INTEGER);\nINSERT INTO ventas VALUES ('Norte', 5), ('Sur', 3), ('Norte', 2);\nSELECT region, SUM(cantidad) FROM ventas\nWHERE SUM(cantidad) > 4 GROUP BY region;",
+            3,
+            "GROUP BY region HAVING SUM(cantidad) > 4;",
+            "Norte | 7",
+            "WHERE filtra filas antes de agrupar y no puede usar funciones de agregado. Las condiciones sobre grupos van en HAVING, después del GROUP BY.",
+        ),
+    ],
+    quiz=[
+        tq(
+            "bd-q07",
+            "¿Qué diferencia hay entre UNION y UNION ALL?",
+            [
+                "UNION quita los duplicados y UNION ALL los conserva",
+                "UNION ALL quita los duplicados y UNION los conserva",
+                "UNION ALL une todas las tablas de la base de datos",
+                "Ninguna",
+            ],
+            0,
+            "UNION ALL es además más rápido, porque no tiene que buscar duplicados.",
+        ),
+        tq(
+            "bd-q08",
+            "¿Cuándo se ejecuta una subconsulta escalar dentro de un WHERE?",
+            [
+                "Primero, y su resultado se usa en la consulta principal",
+                "Después de la consulta principal",
+                "Solo si la consulta principal no devuelve filas",
+                "Nunca: las subconsultas no van en el WHERE",
+            ],
+            0,
+            "La consulta interna calcula el valor (por ejemplo, la media) y la externa lo usa para filtrar.",
+        ),
+    ],
+    sources=[MYSQL, PG],
+)
+
+
 BLOCKS = [
     Block(
-        "consultas",
-        "Consultas básicas",
-        "SELECT, filtros, orden y límites.",
-        30,
-        [L_SELECT, L_WHERE],
-    ),
-    Block(
-        "agregacion",
-        "Agregados y agrupación",
-        "COUNT, SUM, AVG, GROUP BY y HAVING.",
-        20,
-        [L_AGG, L_GROUP],
-    ),
-    Block(
-        "joins",
-        "Combinaciones y subconsultas",
-        "INNER JOIN, LEFT JOIN y consultas anidadas.",
-        25,
-        [L_JOIN, L_LEFT],
-    ),
-    Block(
-        "ddl-dml",
-        "Crear y modificar datos",
-        "CREATE TABLE, restricciones, INSERT, UPDATE y DELETE.",
+        "bd-ud1",
+        "UD1 · Almacenamiento de la información",
+        "Tipos y modelos de bases de datos, fragmentación, Big Data, ficheros, RGPD y SGBD.",
         15,
-        [L_CREATE, L_DML],
+        [L_UD1_TIPOS, L_UD1_SGBD],
     ),
     Block(
-        "diseno",
-        "Diseño y transacciones",
-        "Modelo relacional, normalización, transacciones, vistas e índices.",
+        "bd-ud2",
+        "UD2 · Bases de datos relacionales",
+        "Claves, relaciones, NULL, tipos, restricciones, índices, DDL, DCL y vistas.",
+        30,
+        [L_MODEL, L_CREATE, L_UD2_MAS],
+    ),
+    Block(
+        "bd-ud3",
+        "UD3 · Realización de consultas",
+        "SELECT, operadores, agrupación, composiciones, UNION/INTERSECT/EXCEPT, subconsultas y optimización.",
+        45,
+        [L_SELECT, L_WHERE, L_AGG, L_GROUP, L_JOIN, L_LEFT, L_UD3_MAS],
+    ),
+    Block(
+        "bd-ampliacion",
+        "Ampliación · Modificar datos y transacciones",
+        "INSERT, UPDATE, DELETE y transacciones: lo que viene después de la UD3.",
         10,
-        [L_MODEL, L_TX],
+        [L_DML, L_TX],
     ),
 ]
 

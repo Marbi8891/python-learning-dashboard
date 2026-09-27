@@ -5,6 +5,8 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
 ## [Unreleased]
 
 ### Añadido
+- **Bases de datos según el temario del centro** (ADR-0019): el curso de SQL pasa a llamarse «Bases de datos» y se organiza por las UD1-UD3 del centro. Tiene 60 preguntas nuevas: tipos y modelos, fragmentación, Big Data, ficheros, RGPD y LOPDGDD, SGBD, NULL, ALTER y DROP, índices, usuarios, GRANT, REVOKE y roles, vistas, UNION, INTERSECT y EXCEPT, subconsultas y EXPLAIN. Incluye 6 ejercicios de escribir SQL. Las preguntas y el progreso anteriores se conservan.
+- **Curso de Entornos de desarrollo** (ADR-0019), según la UD1 del centro: lenguajes y tipos de software, compilación y enlace, compiladores e intérpretes, máquinas virtuales y contenedores, paradigmas, fases del desarrollo, cascada, Scrum, Kanban y XP. Tiene 51 preguntas; las de código Python se comprueban ejecutándolas.
 - **App Android nativa** en Kotlin + Jetpack Compose (`android/`, ADR-0011), entrega 1: panel de preparación del PCAP, práctica por bloque con corrección, explicación y enlace a la teoría, preguntas en español o inglés y funcionamiento sin conexión. Usa el mismo banco de preguntas que la web y guarda el progreso en el mismo formato.
 - **App Android como curso tipo Duolingo** (entrega 2, ADR-0012):
   - ruta de unidades con lecciones cortas que se desbloquean en orden;

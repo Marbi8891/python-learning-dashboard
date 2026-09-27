@@ -66,9 +66,10 @@ class AppModel(context: Context) {
             "Para ejecutarlo, cópialo en tu editor. Ejecutar Python dentro de la app llegará en la entrega 6.",
         )
         val others = listOf(
-            course(context, "sql", "SQL", "Bases de datos (DAW)", "Para probarlo, cópialo en tu gestor de bases de datos (MySQL Workbench, DBeaver…)."),
+            course(context, "sql", "Bases de datos", "Módulo 0484 · UD1-UD3 de tu centro (SQL)", "Para probarlo, cópialo en tu gestor de bases de datos (MySQL Workbench, DBeaver…)."),
             course(context, "js", "JavaScript", "Entorno cliente (DAW)", "Para probarlo, pégalo en la consola del navegador (F12) o guárdalo en un .js y ejecútalo con Node. El código del DOM necesita una página HTML."),
             course(context, "java", "Java", "Programación (DAW)", "Para probarlo, pégalo en tu IDE (IntelliJ, NetBeans…) o guárdalo en Main.java y ejecuta «java Main.java»."),
+            course(context, "entornos", "Entornos", "Entornos de desarrollo (0487) · UD1 de tu centro", "Los ejemplos están en Python: pégalos en un archivo .py y ejecútalo con «python archivo.py», o en tu IDE."),
         )
         others.forEach { it.state.shareApp(pcap.state.app) }
         listOf(pcap) + others

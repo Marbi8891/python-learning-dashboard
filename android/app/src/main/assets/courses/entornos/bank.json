@@ -1,0 +1,1711 @@
+{
+ "exam": {
+  "code": "ENTORNOS",
+  "questions": 0,
+  "minutes": 0,
+  "pass": 0,
+  "blocks": [
+   {
+    "slug": "ent-lenguajes",
+    "weight": 25,
+    "items": 11,
+    "title": {
+     "es": "Lenguajes y programas",
+     "en": "Lenguajes y programas"
+    }
+   },
+   {
+    "slug": "ent-traduccion",
+    "weight": 25,
+    "items": 12,
+    "title": {
+     "es": "Del código fuente al ejecutable",
+     "en": "Del código fuente al ejecutable"
+    }
+   },
+   {
+    "slug": "ent-paradigmas",
+    "weight": 25,
+    "items": 13,
+    "title": {
+     "es": "Paradigmas de programación",
+     "en": "Paradigmas de programación"
+    }
+   },
+   {
+    "slug": "ent-ciclo-de-vida",
+    "weight": 25,
+    "items": 15,
+    "title": {
+     "es": "Fases del desarrollo y metodologías ágiles",
+     "en": "Fases del desarrollo y metodologías ágiles"
+    }
+   }
+  ]
+ },
+ "questions": [
+  {
+   "id": "ent-01",
+   "block": "ent-lenguajes",
+   "q": {
+    "es": "¿En qué lenguaje está escrito este fragmento?",
+    "en": "¿En qué lenguaje está escrito este fragmento?"
+   },
+   "code": "System.out.println(\"Hola, mundo!\");",
+   "options": [
+    {
+     "es": "Java",
+     "en": "Java"
+    },
+    {
+     "es": "Python",
+     "en": "Python"
+    },
+    {
+     "es": "C++",
+     "en": "C++"
+    },
+    {
+     "es": "JavaScript",
+     "en": "JavaScript"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "`System.out.println` es la forma de mostrar texto en Java. En JavaScript sería `console.log`.",
+    "en": "`System.out.println` es la forma de mostrar texto en Java. En JavaScript sería `console.log`."
+   },
+   "lesson": "ent-lenguajes-y-programas"
+  },
+  {
+   "id": "ent-02",
+   "block": "ent-lenguajes",
+   "q": {
+    "es": "¿En qué lenguaje está escrito este fragmento?",
+    "en": "¿En qué lenguaje está escrito este fragmento?"
+   },
+   "code": "std::cout << \"Hola, mundo!\" << std::endl;",
+   "options": [
+    {
+     "es": "C++",
+     "en": "C++"
+    },
+    {
+     "es": "Java",
+     "en": "Java"
+    },
+    {
+     "es": "Python",
+     "en": "Python"
+    },
+    {
+     "es": "JavaScript",
+     "en": "JavaScript"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "`std::cout` y el operador `<<` son de C++.",
+    "en": "`std::cout` y el operador `<<` son de C++."
+   },
+   "lesson": "ent-lenguajes-y-programas"
+  },
+  {
+   "id": "ent-03",
+   "block": "ent-lenguajes",
+   "q": {
+    "es": "¿En qué lenguaje está escrito este fragmento?",
+    "en": "¿En qué lenguaje está escrito este fragmento?"
+   },
+   "code": "console.log(\"Hola, mundo!\");",
+   "options": [
+    {
+     "es": "JavaScript",
+     "en": "JavaScript"
+    },
+    {
+     "es": "Java",
+     "en": "Java"
+    },
+    {
+     "es": "C++",
+     "en": "C++"
+    },
+    {
+     "es": "Python",
+     "en": "Python"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "`console.log` muestra texto en la consola del navegador o de Node.js.",
+    "en": "`console.log` muestra texto en la consola del navegador o de Node.js."
+   },
+   "lesson": "ent-lenguajes-y-programas"
+  },
+  {
+   "id": "ent-04",
+   "block": "ent-lenguajes",
+   "q": {
+    "es": "¿Qué significa que Java es multiplataforma?",
+    "en": "¿Qué significa que Java es multiplataforma?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Que el mismo programa puede ejecutarse en distintos sistemas operativos",
+     "en": "Que el mismo programa puede ejecutarse en distintos sistemas operativos"
+    },
+    {
+     "es": "Que se puede escribir con cualquier editor",
+     "en": "Que se puede escribir con cualquier editor"
+    },
+    {
+     "es": "Que funciona solo en el navegador",
+     "en": "Que funciona solo en el navegador"
+    },
+    {
+     "es": "Que no necesita memoria",
+     "en": "Que no necesita memoria"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "El programa compilado funciona en cualquier sistema con la máquina virtual de Java (JVM).",
+    "en": "El programa compilado funciona en cualquier sistema con la máquina virtual de Java (JVM)."
+   },
+   "lesson": "ent-lenguajes-y-programas"
+  },
+  {
+   "id": "ent-05",
+   "block": "ent-lenguajes",
+   "q": {
+    "es": "Necesitas el máximo rendimiento para un videojuego. ¿Qué lenguaje de la unidad encaja mejor?",
+    "en": "Necesitas el máximo rendimiento para un videojuego. ¿Qué lenguaje de la unidad encaja mejor?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "C++",
+     "en": "C++"
+    },
+    {
+     "es": "Python",
+     "en": "Python"
+    },
+    {
+     "es": "JavaScript",
+     "en": "JavaScript"
+    },
+    {
+     "es": "SQL",
+     "en": "SQL"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "C++ ofrece alto rendimiento y control de los recursos, a cambio de una sintaxis más compleja.",
+    "en": "C++ ofrece alto rendimiento y control de los recursos, a cambio de una sintaxis más compleja."
+   },
+   "lesson": "ent-lenguajes-y-programas"
+  },
+  {
+   "id": "ent-06",
+   "block": "ent-lenguajes",
+   "q": {
+    "es": "¿Qué desventaja se atribuye a Python frente a C++?",
+    "en": "¿Qué desventaja se atribuye a Python frente a C++?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Menor rendimiento",
+     "en": "Menor rendimiento"
+    },
+    {
+     "es": "Sintaxis difícil de leer",
+     "en": "Sintaxis difícil de leer"
+    },
+    {
+     "es": "No sirve para análisis de datos",
+     "en": "No sirve para análisis de datos"
+    },
+    {
+     "es": "Solo funciona en Windows",
+     "en": "Solo funciona en Windows"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Python es fácil de leer y muy versátil, pero suele ser más lento que un lenguaje compilado como C++.",
+    "en": "Python es fácil de leer y muy versátil, pero suele ser más lento que un lenguaje compilado como C++."
+   },
+   "lesson": "ent-lenguajes-y-programas"
+  },
+  {
+   "id": "ent-07",
+   "block": "ent-lenguajes",
+   "q": {
+    "es": "El sistema operativo Windows es software…",
+    "en": "El sistema operativo Windows es software…"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "de sistema",
+     "en": "de sistema"
+    },
+    {
+     "es": "de aplicación",
+     "en": "de aplicación"
+    },
+    {
+     "es": "de desarrollo",
+     "en": "de desarrollo"
+    },
+    {
+     "es": "de ofimática",
+     "en": "de ofimática"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Gestiona el hardware y los recursos, y permite ejecutar los demás programas.",
+    "en": "Gestiona el hardware y los recursos, y permite ejecutar los demás programas."
+   },
+   "lesson": "ent-lenguajes-y-programas"
+  },
+  {
+   "id": "ent-08",
+   "block": "ent-lenguajes",
+   "q": {
+    "es": "Visual Studio, IntelliJ o un compilador son software…",
+    "en": "Visual Studio, IntelliJ o un compilador son software…"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "de desarrollo",
+     "en": "de desarrollo"
+    },
+    {
+     "es": "de sistema",
+     "en": "de sistema"
+    },
+    {
+     "es": "de aplicación",
+     "en": "de aplicación"
+    },
+    {
+     "es": "de base de datos",
+     "en": "de base de datos"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Están pensados para programadores: escribir, depurar y probar código.",
+    "en": "Están pensados para programadores: escribir, depurar y probar código."
+   },
+   "lesson": "ent-lenguajes-y-programas"
+  },
+  {
+   "id": "ent-09",
+   "block": "ent-lenguajes",
+   "q": {
+    "es": "Microsoft Word es software…",
+    "en": "Microsoft Word es software…"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "de aplicación",
+     "en": "de aplicación"
+    },
+    {
+     "es": "de sistema",
+     "en": "de sistema"
+    },
+    {
+     "es": "de desarrollo",
+     "en": "de desarrollo"
+    },
+    {
+     "es": "de red",
+     "en": "de red"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Sirve para una tarea concreta del usuario: crear documentos.",
+    "en": "Sirve para una tarea concreta del usuario: crear documentos."
+   },
+   "lesson": "ent-lenguajes-y-programas"
+  },
+  {
+   "id": "ent-10",
+   "block": "ent-lenguajes",
+   "q": {
+    "es": "¿Qué muestra este código de Python?",
+    "en": "¿Qué muestra este código de Python?"
+   },
+   "code": "precios = [25, 15, 10]\ntotal = sum(precios)\nprint(f\"Total: {total}\")",
+   "options": [
+    "Error",
+    "Total: 25",
+    "Total: {total}",
+    "Total: 50"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "Entrada (la lista), proceso (sumar) y salida (print). La `f` delante de las comillas sustituye `{total}` por su valor.",
+    "en": "Entrada (la lista), proceso (sumar) y salida (print). La `f` delante de las comillas sustituye `{total}` por su valor."
+   },
+   "lesson": "ent-lenguajes-y-programas"
+  },
+  {
+   "id": "ent-11",
+   "block": "ent-lenguajes",
+   "q": {
+    "es": "¿Qué muestra este código de Python?",
+    "en": "¿Qué muestra este código de Python?"
+   },
+   "code": "notas = [7, 4, 9, 6]\nmedia = sum(notas) / len(notas)\nprint(media)",
+   "options": [
+    "6",
+    "6.5",
+    "Error",
+    "26"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": {
+    "es": "26 / 4 = 6,5. En Python, `/` siempre da un número decimal.",
+    "en": "26 / 4 = 6,5. En Python, `/` siempre da un número decimal."
+   },
+   "lesson": "ent-lenguajes-y-programas"
+  },
+  {
+   "id": "ent-12",
+   "block": "ent-traduccion",
+   "q": {
+    "es": "¿Qué genera el compilador a partir del código fuente en C++?",
+    "en": "¿Qué genera el compilador a partir del código fuente en C++?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Código objeto (.o o .obj), que aún no es ejecutable",
+     "en": "Código objeto (.o o .obj), que aún no es ejecutable"
+    },
+    {
+     "es": "Directamente el archivo .exe final, siempre",
+     "en": "Directamente el archivo .exe final, siempre"
+    },
+    {
+     "es": "Otra vez el código fuente, pero formateado",
+     "en": "Otra vez el código fuente, pero formateado"
+    },
+    {
+     "es": "Un archivo de texto con los errores",
+     "en": "Un archivo de texto con los errores"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Después, el enlazador une el código objeto con las librerías para formar el ejecutable.",
+    "en": "Después, el enlazador une el código objeto con las librerías para formar el ejecutable."
+   },
+   "lesson": "ent-compilar-e-interpretar"
+  },
+  {
+   "id": "ent-13",
+   "block": "ent-traduccion",
+   "q": {
+    "es": "¿Qué hace el enlazador (linker)?",
+    "en": "¿Qué hace el enlazador (linker)?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Une el código objeto con las librerías para formar el ejecutable",
+     "en": "Une el código objeto con las librerías para formar el ejecutable"
+    },
+    {
+     "es": "Traduce el código fuente línea a línea",
+     "en": "Traduce el código fuente línea a línea"
+    },
+    {
+     "es": "Comprueba la sintaxis del código fuente",
+     "en": "Comprueba la sintaxis del código fuente"
+    },
+    {
+     "es": "Crea una máquina virtual",
+     "en": "Crea una máquina virtual"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Traducir línea a línea es lo que hace un intérprete; comprobar la sintaxis, el compilador.",
+    "en": "Traducir línea a línea es lo que hace un intérprete; comprobar la sintaxis, el compilador."
+   },
+   "lesson": "ent-compilar-e-interpretar"
+  },
+  {
+   "id": "ent-14",
+   "block": "ent-traduccion",
+   "q": {
+    "es": "¿Cuál es el orden correcto?",
+    "en": "¿Cuál es el orden correcto?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Código fuente → compilación → código objeto → enlace → ejecutable",
+     "en": "Código fuente → compilación → código objeto → enlace → ejecutable"
+    },
+    {
+     "es": "Código objeto → código fuente → enlace → ejecutable",
+     "en": "Código objeto → código fuente → enlace → ejecutable"
+    },
+    {
+     "es": "Enlace → compilación → código fuente → ejecutable",
+     "en": "Enlace → compilación → código fuente → ejecutable"
+    },
+    {
+     "es": "Código fuente → enlace → compilación → código objeto",
+     "en": "Código fuente → enlace → compilación → código objeto"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Primero se traduce (compilación) y después se une con las librerías (enlace).",
+    "en": "Primero se traduce (compilación) y después se une con las librerías (enlace)."
+   },
+   "lesson": "ent-compilar-e-interpretar"
+  },
+  {
+   "id": "ent-15",
+   "block": "ent-traduccion",
+   "q": {
+    "es": "¿Qué diferencia hay entre un compilador y un intérprete?",
+    "en": "¿Qué diferencia hay entre un compilador y un intérprete?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "El compilador traduce todo antes de ejecutar; el intérprete traduce y ejecuta línea a línea",
+     "en": "El compilador traduce todo antes de ejecutar; el intérprete traduce y ejecuta línea a línea"
+    },
+    {
+     "es": "El intérprete genera un .exe y el compilador no",
+     "en": "El intérprete genera un .exe y el compilador no"
+    },
+    {
+     "es": "El compilador solo sirve para Python",
+     "en": "El compilador solo sirve para Python"
+    },
+    {
+     "es": "No hay ninguna diferencia",
+     "en": "No hay ninguna diferencia"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Con un compilador obtienes un ejecutable que funciona sin el código fuente. Con un intérprete, necesitas el código y el intérprete cada vez.",
+    "en": "Con un compilador obtienes un ejecutable que funciona sin el código fuente. Con un intérprete, necesitas el código y el intérprete cada vez."
+   },
+   "lesson": "ent-compilar-e-interpretar"
+  },
+  {
+   "id": "ent-16",
+   "block": "ent-traduccion",
+   "q": {
+    "es": "Python es interpretado. ¿Qué ocurre al ejecutar este programa?",
+    "en": "Python es interpretado. ¿Qué ocurre al ejecutar este programa?"
+   },
+   "code": "print(\"A\")\nprint(\"B\")\nprint(10 / 0)\nprint(\"C\")",
+   "options": [
+    {
+     "es": "Muestra A y B, y se detiene con un error en la tercera línea",
+     "en": "Muestra A y B, y se detiene con un error en la tercera línea"
+    },
+    {
+     "es": "No muestra nada: el error se detecta antes de empezar",
+     "en": "No muestra nada: el error se detecta antes de empezar"
+    },
+    {
+     "es": "Muestra A, B y C",
+     "en": "Muestra A, B y C"
+    },
+    {
+     "es": "Muestra A, B, un aviso y después C",
+     "en": "Muestra A, B, un aviso y después C"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "El intérprete ejecuta línea a línea: A y B se muestran y el programa se detiene al llegar a la división por cero. Un compilador de C++ habría encontrado los errores de sintaxis antes de ejecutar nada.",
+    "en": "El intérprete ejecuta línea a línea: A y B se muestran y el programa se detiene al llegar a la división por cero. Un compilador de C++ habría encontrado los errores de sintaxis antes de ejecutar nada."
+   },
+   "lesson": "ent-compilar-e-interpretar"
+  },
+  {
+   "id": "ent-48",
+   "block": "ent-traduccion",
+   "q": {
+    "es": "¿Qué hace la primera de estas dos órdenes?",
+    "en": "¿Qué hace la primera de estas dos órdenes?"
+   },
+   "code": "javac Main.java\njava Main",
+   "options": [
+    {
+     "es": "Compila Main.java a bytecode (Main.class)",
+     "en": "Compila Main.java a bytecode (Main.class)"
+    },
+    {
+     "es": "Ejecuta el programa en la JVM",
+     "en": "Ejecuta el programa en la JVM"
+    },
+    {
+     "es": "Crea un Main.exe que solo funciona en Windows",
+     "en": "Crea un Main.exe que solo funciona en Windows"
+    },
+    {
+     "es": "Interpreta el código fuente línea a línea",
+     "en": "Interpreta el código fuente línea a línea"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "`javac` es el compilador de Java y genera bytecode. La segunda orden, `java Main`, lo ejecuta en la máquina virtual (JVM).",
+    "en": "`javac` es el compilador de Java y genera bytecode. La segunda orden, `java Main`, lo ejecuta en la máquina virtual (JVM)."
+   },
+   "lesson": "ent-compilar-e-interpretar"
+  },
+  {
+   "id": "ent-49",
+   "block": "ent-traduccion",
+   "q": {
+    "es": "¿Qué archivo obtienes con esta orden?",
+    "en": "¿Qué archivo obtienes con esta orden?"
+   },
+   "code": "g++ area.cpp -o area.exe",
+   "options": [
+    {
+     "es": "El ejecutable area.exe: g++ compila y enlaza en un solo paso",
+     "en": "El ejecutable area.exe: g++ compila y enlaza en un solo paso"
+    },
+    {
+     "es": "Solo el código objeto area.o",
+     "en": "Solo el código objeto area.o"
+    },
+    {
+     "es": "Otra copia de area.cpp",
+     "en": "Otra copia de area.cpp"
+    },
+    {
+     "es": "Ninguno: g++ es un intérprete",
+     "en": "Ninguno: g++ es un intérprete"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Con `-o`, g++ compila y llama al enlazador. Para quedarte solo con el código objeto se usa `g++ -c area.cpp`, que genera area.o.",
+    "en": "Con `-o`, g++ compila y llama al enlazador. Para quedarte solo con el código objeto se usa `g++ -c area.cpp`, que genera area.o."
+   },
+   "lesson": "ent-compilar-e-interpretar"
+  },
+  {
+   "id": "ent-17",
+   "block": "ent-traduccion",
+   "q": {
+    "es": "¿Qué muestra este código de Python?",
+    "en": "¿Qué muestra este código de Python?"
+   },
+   "code": "try:\n    print(\"A\")\n    print(10 / 0)\n    print(\"B\")\nexcept ZeroDivisionError:\n    print(\"Error controlado\")",
+   "options": [
+    "A\nError controlado",
+    "A\nB\nError controlado",
+    "Error controlado",
+    "Error"
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Se ejecuta A; la división por cero salta al `except`, así que B no se muestra. El programa termina bien.",
+    "en": "Se ejecuta A; la división por cero salta al `except`, así que B no se muestra. El programa termina bien."
+   },
+   "lesson": "ent-compilar-e-interpretar"
+  },
+  {
+   "id": "ent-18",
+   "block": "ent-traduccion",
+   "q": {
+    "es": "¿Cómo se ejecuta un programa Java?",
+    "en": "¿Cómo se ejecuta un programa Java?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "javac lo compila a bytecode (.class) y la máquina virtual de Java (JVM) lo ejecuta",
+     "en": "javac lo compila a bytecode (.class) y la máquina virtual de Java (JVM) lo ejecuta"
+    },
+    {
+     "es": "Se interpreta directamente el archivo .java línea a línea, sin compilar",
+     "en": "Se interpreta directamente el archivo .java línea a línea, sin compilar"
+    },
+    {
+     "es": "Se compila a un .exe que solo funciona en Windows",
+     "en": "Se compila a un .exe que solo funciona en Windows"
+    },
+    {
+     "es": "Lo ejecuta el navegador",
+     "en": "Lo ejecuta el navegador"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "El bytecode es el mismo para todos los sistemas: cada sistema tiene su JVM. Por eso Java es multiplataforma.",
+    "en": "El bytecode es el mismo para todos los sistemas: cada sistema tiene su JVM. Por eso Java es multiplataforma."
+   },
+   "lesson": "ent-compilar-e-interpretar"
+  },
+  {
+   "id": "ent-19",
+   "block": "ent-traduccion",
+   "q": {
+    "es": "¿Qué diferencia a un contenedor de una máquina virtual?",
+    "en": "¿Qué diferencia a un contenedor de una máquina virtual?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "El contenedor no simula un sistema operativo completo, así que es más ligero",
+     "en": "El contenedor no simula un sistema operativo completo, así que es más ligero"
+    },
+    {
+     "es": "El contenedor simula un ordenador completo con su sistema operativo",
+     "en": "El contenedor simula un ordenador completo con su sistema operativo"
+    },
+    {
+     "es": "La máquina virtual es más ligera que el contenedor",
+     "en": "La máquina virtual es más ligera que el contenedor"
+    },
+    {
+     "es": "No se pueden ejecutar programas en un contenedor",
+     "en": "No se pueden ejecutar programas en un contenedor"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "La VM simula un ordenador entero. El contenedor (por ejemplo con Docker) solo aísla el programa y lo que necesita.",
+    "en": "La VM simula un ordenador entero. El contenedor (por ejemplo con Docker) solo aísla el programa y lo que necesita."
+   },
+   "lesson": "ent-compilar-e-interpretar"
+  },
+  {
+   "id": "ent-20",
+   "block": "ent-traduccion",
+   "q": {
+    "es": "Quieres probar tu programa en Linux desde un ordenador con Windows sin tocar tu sistema. ¿Qué usarías según la unidad?",
+    "en": "Quieres probar tu programa en Linux desde un ordenador con Windows sin tocar tu sistema. ¿Qué usarías según la unidad?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Una máquina virtual",
+     "en": "Una máquina virtual"
+    },
+    {
+     "es": "Un enlazador",
+     "en": "Un enlazador"
+    },
+    {
+     "es": "Un fichero plano",
+     "en": "Un fichero plano"
+    },
+    {
+     "es": "Un compilador de C++",
+     "en": "Un compilador de C++"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "La VM ejecuta otro sistema operativo en un entorno aislado.",
+    "en": "La VM ejecuta otro sistema operativo en un entorno aislado."
+   },
+   "lesson": "ent-compilar-e-interpretar"
+  },
+  {
+   "id": "ent-21",
+   "block": "ent-traduccion",
+   "q": {
+    "es": "Tras compilar este programa de C++ con g++, ¿necesitas el archivo area.cpp para ejecutar area.exe?",
+    "en": "Tras compilar este programa de C++ con g++, ¿necesitas el archivo area.cpp para ejecutar area.exe?"
+   },
+   "code": "#include <iostream>\nint main() {\n    double r = 2;\n    std::cout << 3.14159 * r * r << std::endl;\n    return 0;\n}",
+   "options": [
+    {
+     "es": "No: el ejecutable funciona sin el código fuente",
+     "en": "No: el ejecutable funciona sin el código fuente"
+    },
+    {
+     "es": "Sí: el ejecutable lee area.cpp cada vez",
+     "en": "Sí: el ejecutable lee area.cpp cada vez"
+    },
+    {
+     "es": "Sí: hace falta el intérprete de C++",
+     "en": "Sí: hace falta el intérprete de C++"
+    },
+    {
+     "es": "Solo en Linux",
+     "en": "Solo en Linux"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Es la gran diferencia con un lenguaje interpretado: el ejecutable ya está en lenguaje máquina.",
+    "en": "Es la gran diferencia con un lenguaje interpretado: el ejecutable ya está en lenguaje máquina."
+   },
+   "lesson": "ent-compilar-e-interpretar"
+  },
+  {
+   "id": "ent-22",
+   "block": "ent-paradigmas",
+   "q": {
+    "es": "¿Qué paradigma sigue este código?",
+    "en": "¿Qué paradigma sigue este código?"
+   },
+   "code": "suma = 0\nfor i in range(1, 6):\n    suma += i\nprint(suma)",
+   "options": [
+    {
+     "es": "Imperativo",
+     "en": "Imperativo"
+    },
+    {
+     "es": "Funcional",
+     "en": "Funcional"
+    },
+    {
+     "es": "Declarativo",
+     "en": "Declarativo"
+    },
+    {
+     "es": "Orientado a objetos",
+     "en": "Orientado a objetos"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Describe los pasos uno a uno con un bucle y una variable que cambia de valor.",
+    "en": "Describe los pasos uno a uno con un bucle y una variable que cambia de valor."
+   },
+   "lesson": "ent-paradigmas"
+  },
+  {
+   "id": "ent-23",
+   "block": "ent-paradigmas",
+   "q": {
+    "es": "¿Qué paradigma sigue este código?",
+    "en": "¿Qué paradigma sigue este código?"
+   },
+   "code": "print(sum(range(1, 6)))",
+   "options": [
+    {
+     "es": "Funcional",
+     "en": "Funcional"
+    },
+    {
+     "es": "Imperativo",
+     "en": "Imperativo"
+    },
+    {
+     "es": "Declarativo",
+     "en": "Declarativo"
+    },
+    {
+     "es": "Orientado a objetos",
+     "en": "Orientado a objetos"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Aplica funciones a los datos sin variables que cambien: estilo funcional.",
+    "en": "Aplica funciones a los datos sin variables que cambien: estilo funcional."
+   },
+   "lesson": "ent-paradigmas"
+  },
+  {
+   "id": "ent-24",
+   "block": "ent-paradigmas",
+   "q": {
+    "es": "¿Qué paradigma sigue este código?",
+    "en": "¿Qué paradigma sigue este código?"
+   },
+   "code": "SELECT nombre FROM estudiantes WHERE edad > 18;",
+   "options": [
+    {
+     "es": "Declarativo",
+     "en": "Declarativo"
+    },
+    {
+     "es": "Imperativo",
+     "en": "Imperativo"
+    },
+    {
+     "es": "Orientado a objetos",
+     "en": "Orientado a objetos"
+    },
+    {
+     "es": "Funcional",
+     "en": "Funcional"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Dice qué datos quiere, no cómo buscarlos: eso lo decide el SGBD.",
+    "en": "Dice qué datos quiere, no cómo buscarlos: eso lo decide el SGBD."
+   },
+   "lesson": "ent-paradigmas"
+  },
+  {
+   "id": "ent-25",
+   "block": "ent-paradigmas",
+   "q": {
+    "es": "¿Qué paradigma sigue este código Java?",
+    "en": "¿Qué paradigma sigue este código Java?"
+   },
+   "code": "class Coche {\n    String marca;\n    int velocidad;\n    void acelerar() { velocidad += 10; }\n}",
+   "options": [
+    {
+     "es": "Orientado a objetos",
+     "en": "Orientado a objetos"
+    },
+    {
+     "es": "Funcional",
+     "en": "Funcional"
+    },
+    {
+     "es": "Declarativo",
+     "en": "Declarativo"
+    },
+    {
+     "es": "Ensamblador",
+     "en": "Ensamblador"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Define una clase con atributos (marca, velocidad) y un método (acelerar).",
+    "en": "Define una clase con atributos (marca, velocidad) y un método (acelerar)."
+   },
+   "lesson": "ent-paradigmas"
+  },
+  {
+   "id": "ent-26",
+   "block": "ent-paradigmas",
+   "q": {
+    "es": "¿Qué muestra este código de Python?",
+    "en": "¿Qué muestra este código de Python?"
+   },
+   "code": "suma = 0\nfor i in range(1, 6):\n    suma += i\nprint(suma)",
+   "options": [
+    "15",
+    "5",
+    "10",
+    "Error"
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "range(1, 6) va del 1 al 5 (el 6 no se incluye): 1 + 2 + 3 + 4 + 5 = 15.",
+    "en": "range(1, 6) va del 1 al 5 (el 6 no se incluye): 1 + 2 + 3 + 4 + 5 = 15."
+   },
+   "lesson": "ent-paradigmas"
+  },
+  {
+   "id": "ent-27",
+   "block": "ent-paradigmas",
+   "q": {
+    "es": "¿Qué muestra este código de Python?",
+    "en": "¿Qué muestra este código de Python?"
+   },
+   "code": "class Coche:\n    def __init__(self):\n        self.velocidad = 0\n\n    def acelerar(self):\n        self.velocidad += 10\n\nmi_coche = Coche()\nmi_coche.acelerar()\nmi_coche.acelerar()\nprint(mi_coche.velocidad)",
+   "options": [
+    "10",
+    "0",
+    "Error",
+    "20"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "El objeto guarda su estado: cada llamada a acelerar() suma 10 a su atributo velocidad.",
+    "en": "El objeto guarda su estado: cada llamada a acelerar() suma 10 a su atributo velocidad."
+   },
+   "lesson": "ent-paradigmas"
+  },
+  {
+   "id": "ent-28",
+   "block": "ent-paradigmas",
+   "q": {
+    "es": "¿Qué muestra este código de Python?",
+    "en": "¿Qué muestra este código de Python?"
+   },
+   "code": "def doble(x):\n    return x * 2\n\nnumeros = [1, 2, 3]\nprint(list(map(doble, numeros)))\nprint(numeros)",
+   "options": [
+    "[2, 4, 6]\n[2, 4, 6]",
+    "[1, 2, 3]\n[2, 4, 6]",
+    "Error",
+    "[2, 4, 6]\n[1, 2, 3]"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "La función `doble` se pasa como argumento a `map` (ciudadana de primera clase). La lista original no cambia: es el estilo funcional.",
+    "en": "La función `doble` se pasa como argumento a `map` (ciudadana de primera clase). La lista original no cambia: es el estilo funcional."
+   },
+   "lesson": "ent-paradigmas"
+  },
+  {
+   "id": "ent-29",
+   "block": "ent-paradigmas",
+   "q": {
+    "es": "¿Qué muestra este código de Python?",
+    "en": "¿Qué muestra este código de Python?"
+   },
+   "code": "total = 0\n\ndef sumar(n):\n    global total\n    total += n\n\nsumar(5)\nsumar(5)\nprint(total)",
+   "options": [
+    "5",
+    "10",
+    "Error",
+    "0"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": {
+    "es": "Esta función **no es pura**: modifica una variable global (efecto secundario). La programación funcional evita justo esto.",
+    "en": "Esta función **no es pura**: modifica una variable global (efecto secundario). La programación funcional evita justo esto."
+   },
+   "lesson": "ent-paradigmas"
+  },
+  {
+   "id": "ent-30",
+   "block": "ent-paradigmas",
+   "q": {
+    "es": "¿Qué es una función pura?",
+    "en": "¿Qué es una función pura?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "La que, con los mismos datos, devuelve siempre lo mismo y no modifica nada fuera de ella",
+     "en": "La que, con los mismos datos, devuelve siempre lo mismo y no modifica nada fuera de ella"
+    },
+    {
+     "es": "Una función sin parámetros",
+     "en": "Una función sin parámetros"
+    },
+    {
+     "es": "Una función que solo usa bucles",
+     "en": "Una función que solo usa bucles"
+    },
+    {
+     "es": "Una función escrita en C",
+     "en": "Una función escrita en C"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Sin efectos secundarios: no cambia variables globales, ni ficheros, ni la pantalla.",
+    "en": "Sin efectos secundarios: no cambia variables globales, ni ficheros, ni la pantalla."
+   },
+   "lesson": "ent-paradigmas"
+  },
+  {
+   "id": "ent-31",
+   "block": "ent-paradigmas",
+   "q": {
+    "es": "En POO, ¿qué es un objeto?",
+    "en": "En POO, ¿qué es un objeto?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Una instancia concreta de una clase",
+     "en": "Una instancia concreta de una clase"
+    },
+    {
+     "es": "El molde que define atributos y métodos",
+     "en": "El molde que define atributos y métodos"
+    },
+    {
+     "es": "Un tipo de bucle",
+     "en": "Un tipo de bucle"
+    },
+    {
+     "es": "Una función pura",
+     "en": "Una función pura"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "La clase es el molde (Coche); el objeto, un coche concreto creado con `new Coche()`.",
+    "en": "La clase es el molde (Coche); el objeto, un coche concreto creado con `new Coche()`."
+   },
+   "lesson": "ent-paradigmas"
+  },
+  {
+   "id": "ent-32",
+   "block": "ent-paradigmas",
+   "q": {
+    "es": "¿Por qué se dice que Python es multiparadigma?",
+    "en": "¿Por qué se dice que Python es multiparadigma?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Porque permite programar de forma imperativa, orientada a objetos o funcional",
+     "en": "Porque permite programar de forma imperativa, orientada a objetos o funcional"
+    },
+    {
+     "es": "Porque se ejecuta en varios sistemas operativos",
+     "en": "Porque se ejecuta en varios sistemas operativos"
+    },
+    {
+     "es": "Porque tiene compilador e intérprete",
+     "en": "Porque tiene compilador e intérprete"
+    },
+    {
+     "es": "Porque se puede usar en la web",
+     "en": "Porque se puede usar en la web"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Ejecutarse en varios sistemas es ser multiplataforma, que es otra cosa.",
+    "en": "Ejecutarse en varios sistemas es ser multiplataforma, que es otra cosa."
+   },
+   "lesson": "ent-paradigmas"
+  },
+  {
+   "id": "ent-33",
+   "block": "ent-paradigmas",
+   "q": {
+    "es": "Completa la versión funcional para que muestre 15.",
+    "en": "Completa la versión funcional para que muestre 15."
+   },
+   "kind": "fill",
+   "code": "print(___(range(1, 6)))",
+   "accept": [
+    "sum"
+   ],
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "`sum` recibe los números del 1 al 5 y devuelve su suma, sin bucles ni variables que cambien. Solución: `sum`.",
+    "en": "`sum` recibe los números del 1 al 5 y devuelve su suma, sin bucles ni variables que cambien. Solución: `sum`."
+   },
+   "lesson": "ent-paradigmas"
+  },
+  {
+   "id": "ent-34",
+   "block": "ent-paradigmas",
+   "q": {
+    "es": "Ordena las líneas de la versión imperativa para que muestre 15.",
+    "en": "Ordena las líneas de la versión imperativa para que muestre 15."
+   },
+   "kind": "order",
+   "code": "___",
+   "lines": [
+    "suma = 0",
+    "for i in range(1, 6):",
+    "    suma += i",
+    "print(suma)"
+   ],
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "Primero se inicializa la variable, después el bucle la actualiza y al final se muestra.",
+    "en": "Primero se inicializa la variable, después el bucle la actualiza y al final se muestra."
+   },
+   "lesson": "ent-paradigmas"
+  },
+  {
+   "id": "ent-35",
+   "block": "ent-ciclo-de-vida",
+   "q": {
+    "es": "«La aplicación debe cargar en menos de tres segundos» es un requisito…",
+    "en": "«La aplicación debe cargar en menos de tres segundos» es un requisito…"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "no funcional",
+     "en": "no funcional"
+    },
+    {
+     "es": "funcional",
+     "en": "funcional"
+    },
+    {
+     "es": "de diseño técnico",
+     "en": "de diseño técnico"
+    },
+    {
+     "es": "de mantenimiento",
+     "en": "de mantenimiento"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Describe cómo debe comportarse la aplicación, no qué hace. «Permitir hacer un pedido» sería funcional.",
+    "en": "Describe cómo debe comportarse la aplicación, no qué hace. «Permitir hacer un pedido» sería funcional."
+   },
+   "lesson": "ent-fases-y-agiles"
+  },
+  {
+   "id": "ent-36",
+   "block": "ent-ciclo-de-vida",
+   "q": {
+    "es": "¿Qué documento organiza y detalla los requisitos?",
+    "en": "¿Qué documento organiza y detalla los requisitos?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "La ERS (Especificación de Requisitos de Software)",
+     "en": "La ERS (Especificación de Requisitos de Software)"
+    },
+    {
+     "es": "El backlog de Kanban",
+     "en": "El backlog de Kanban"
+    },
+    {
+     "es": "El manual de usuario",
+     "en": "El manual de usuario"
+    },
+    {
+     "es": "El diagrama de Gantt",
+     "en": "El diagrama de Gantt"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Se elabora en la fase de análisis, a partir de entrevistas, encuestas y reuniones con el cliente.",
+    "en": "Se elabora en la fase de análisis, a partir de entrevistas, encuestas y reuniones con el cliente."
+   },
+   "lesson": "ent-fases-y-agiles"
+  },
+  {
+   "id": "ent-37",
+   "block": "ent-ciclo-de-vida",
+   "q": {
+    "es": "¿En qué fase se usan diagramas UML como el de clases?",
+    "en": "¿En qué fase se usan diagramas UML como el de clases?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Diseño",
+     "en": "Diseño"
+    },
+    {
+     "es": "Análisis de requisitos",
+     "en": "Análisis de requisitos"
+    },
+    {
+     "es": "Explotación",
+     "en": "Explotación"
+    },
+    {
+     "es": "Mantenimiento",
+     "en": "Mantenimiento"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "En el diseño se decide la estructura de la aplicación. UML permite representarla gráficamente.",
+    "en": "En el diseño se decide la estructura de la aplicación. UML permite representarla gráficamente."
+   },
+   "lesson": "ent-fases-y-agiles"
+  },
+  {
+   "id": "ent-38",
+   "block": "ent-ciclo-de-vida",
+   "q": {
+    "es": "¿Qué es depurar?",
+    "en": "¿Qué es depurar?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Identificar y corregir los errores del código",
+     "en": "Identificar y corregir los errores del código"
+    },
+    {
+     "es": "Borrar el código que no se usa",
+     "en": "Borrar el código que no se usa"
+    },
+    {
+     "es": "Documentar el código",
+     "en": "Documentar el código"
+    },
+    {
+     "es": "Desplegar la aplicación",
+     "en": "Desplegar la aplicación"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Forma parte de la fase de pruebas y depuración.",
+    "en": "Forma parte de la fase de pruebas y depuración."
+   },
+   "lesson": "ent-fases-y-agiles"
+  },
+  {
+   "id": "ent-39",
+   "block": "ent-ciclo-de-vida",
+   "q": {
+    "es": "Los usuarios piden un nuevo método de pago en una app ya publicada. ¿En qué fase se hace?",
+    "en": "Los usuarios piden un nuevo método de pago en una app ya publicada. ¿En qué fase se hace?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Mantenimiento",
+     "en": "Mantenimiento"
+    },
+    {
+     "es": "Análisis de requisitos",
+     "en": "Análisis de requisitos"
+    },
+    {
+     "es": "Explotación",
+     "en": "Explotación"
+    },
+    {
+     "es": "Codificación inicial",
+     "en": "Codificación inicial"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "El desarrollo no acaba con el despliegue: corregir errores y añadir funciones es mantenimiento.",
+    "en": "El desarrollo no acaba con el despliegue: corregir errores y añadir funciones es mantenimiento."
+   },
+   "lesson": "ent-fases-y-agiles"
+  },
+  {
+   "id": "ent-40",
+   "block": "ent-ciclo-de-vida",
+   "q": {
+    "es": "¿Cuál es el orden correcto de las fases?",
+    "en": "¿Cuál es el orden correcto de las fases?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Análisis, diseño, codificación, pruebas, documentación, explotación y mantenimiento",
+     "en": "Análisis, diseño, codificación, pruebas, documentación, explotación y mantenimiento"
+    },
+    {
+     "es": "Diseño, análisis, pruebas, codificación, explotación y mantenimiento",
+     "en": "Diseño, análisis, pruebas, codificación, explotación y mantenimiento"
+    },
+    {
+     "es": "Codificación, pruebas, análisis, diseño y explotación",
+     "en": "Codificación, pruebas, análisis, diseño y explotación"
+    },
+    {
+     "es": "Análisis, codificación, diseño, explotación y pruebas",
+     "en": "Análisis, codificación, diseño, explotación y pruebas"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Primero se decide qué hay que hacer y cómo, después se construye y se prueba, y por último se pone en marcha y se mantiene.",
+    "en": "Primero se decide qué hay que hacer y cómo, después se construye y se prueba, y por último se pone en marcha y se mantiene."
+   },
+   "lesson": "ent-fases-y-agiles"
+  },
+  {
+   "id": "ent-41",
+   "block": "ent-ciclo-de-vida",
+   "q": {
+    "es": "En Scrum, ¿quién define las prioridades y los objetivos del proyecto?",
+    "en": "En Scrum, ¿quién define las prioridades y los objetivos del proyecto?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "El Product Owner",
+     "en": "El Product Owner"
+    },
+    {
+     "es": "El Scrum Master",
+     "en": "El Scrum Master"
+    },
+    {
+     "es": "El equipo de desarrollo",
+     "en": "El equipo de desarrollo"
+    },
+    {
+     "es": "El cliente final, en la daily",
+     "en": "El cliente final, en la daily"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "El Scrum Master se asegura de que se siga Scrum y quita obstáculos; el equipo hace el trabajo técnico.",
+    "en": "El Scrum Master se asegura de que se siga Scrum y quita obstáculos; el equipo hace el trabajo técnico."
+   },
+   "lesson": "ent-fases-y-agiles"
+  },
+  {
+   "id": "ent-42",
+   "block": "ent-ciclo-de-vida",
+   "q": {
+    "es": "¿Cuánto suele durar un sprint de Scrum?",
+    "en": "¿Cuánto suele durar un sprint de Scrum?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Entre una y cuatro semanas",
+     "en": "Entre una y cuatro semanas"
+    },
+    {
+     "es": "Un día",
+     "en": "Un día"
+    },
+    {
+     "es": "Entre seis y doce meses",
+     "en": "Entre seis y doce meses"
+    },
+    {
+     "es": "Lo que dure el proyecto",
+     "en": "Lo que dure el proyecto"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Son ciclos cortos: al final de cada uno se enseña algo que funciona y se recoge la opinión del cliente.",
+    "en": "Son ciclos cortos: al final de cada uno se enseña algo que funciona y se recoge la opinión del cliente."
+   },
+   "lesson": "ent-fases-y-agiles"
+  },
+  {
+   "id": "ent-43",
+   "block": "ent-ciclo-de-vida",
+   "q": {
+    "es": "¿Qué es el backlog?",
+    "en": "¿Qué es el backlog?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "La lista de tareas pendientes ordenadas por prioridad",
+     "en": "La lista de tareas pendientes ordenadas por prioridad"
+    },
+    {
+     "es": "La reunión diaria del equipo",
+     "en": "La reunión diaria del equipo"
+    },
+    {
+     "es": "El registro de errores del servidor",
+     "en": "El registro de errores del servidor"
+    },
+    {
+     "es": "El documento de requisitos no funcionales",
+     "en": "El documento de requisitos no funcionales"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "La reunión diaria es la daily stand-up.",
+    "en": "La reunión diaria es la daily stand-up."
+   },
+   "lesson": "ent-fases-y-agiles"
+  },
+  {
+   "id": "ent-44",
+   "block": "ent-ciclo-de-vida",
+   "q": {
+    "es": "¿Cuál es una regla principal de Kanban?",
+    "en": "¿Cuál es una regla principal de Kanban?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Limitar la cantidad de tareas en progreso",
+     "en": "Limitar la cantidad de tareas en progreso"
+    },
+    {
+     "es": "Trabajar siempre en sprints de dos semanas",
+     "en": "Trabajar siempre en sprints de dos semanas"
+    },
+    {
+     "es": "Programar siempre en pareja",
+     "en": "Programar siempre en pareja"
+    },
+    {
+     "es": "No usar tableros",
+     "en": "No usar tableros"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Limitar el trabajo en curso mantiene un flujo constante y evita saturar al equipo. Los sprints son de Scrum y la programación en pareja, de XP.",
+    "en": "Limitar el trabajo en curso mantiene un flujo constante y evita saturar al equipo. Los sprints son de Scrum y la programación en pareja, de XP."
+   },
+   "lesson": "ent-fases-y-agiles"
+  },
+  {
+   "id": "ent-45",
+   "block": "ent-ciclo-de-vida",
+   "q": {
+    "es": "¿Qué metodología se centra en la calidad del código con programación en pareja y pruebas continuas?",
+    "en": "¿Qué metodología se centra en la calidad del código con programación en pareja y pruebas continuas?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Extreme Programming (XP)",
+     "en": "Extreme Programming (XP)"
+    },
+    {
+     "es": "Kanban",
+     "en": "Kanban"
+    },
+    {
+     "es": "Cascada",
+     "en": "Cascada"
+    },
+    {
+     "es": "Scrum",
+     "en": "Scrum"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "XP añade además entregas frecuentes de pequeñas partes funcionales.",
+    "en": "XP añade además entregas frecuentes de pequeñas partes funcionales."
+   },
+   "lesson": "ent-fases-y-agiles"
+  },
+  {
+   "id": "ent-46",
+   "block": "ent-ciclo-de-vida",
+   "q": {
+    "es": "¿Cuándo funciona bien el modelo en cascada?",
+    "en": "¿Cuándo funciona bien el modelo en cascada?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Cuando los requisitos están muy claros desde el principio y apenas cambian",
+     "en": "Cuando los requisitos están muy claros desde el principio y apenas cambian"
+    },
+    {
+     "es": "Cuando los requisitos cambian constantemente",
+     "en": "Cuando los requisitos cambian constantemente"
+    },
+    {
+     "es": "Cuando el cliente quiere ver avances cada semana",
+     "en": "Cuando el cliente quiere ver avances cada semana"
+    },
+    {
+     "es": "Nunca: está prohibido",
+     "en": "Nunca: está prohibido"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Es lineal: cada fase empieza cuando acaba la anterior, así que los cambios tardíos salen caros.",
+    "en": "Es lineal: cada fase empieza cuando acaba la anterior, así que los cambios tardíos salen caros."
+   },
+   "lesson": "ent-fases-y-agiles"
+  },
+  {
+   "id": "ent-50",
+   "block": "ent-ciclo-de-vida",
+   "q": {
+    "es": "Este tablero organiza el trabajo del equipo. ¿Qué metodología refleja?",
+    "en": "Este tablero organiza el trabajo del equipo. ¿Qué metodología refleja?"
+   },
+   "code": "Pendiente         | En progreso (máx. 2) | Completado\n\"Pagar con tarjeta\" | \"Registro de socios\" | \"Pantalla de inicio\"\n\"Buscar clases\"     |                      |",
+   "options": [
+    {
+     "es": "Kanban",
+     "en": "Kanban"
+    },
+    {
+     "es": "Cascada",
+     "en": "Cascada"
+    },
+    {
+     "es": "Extreme Programming",
+     "en": "Extreme Programming"
+    },
+    {
+     "es": "Scrum sin sprints",
+     "en": "Scrum sin sprints"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Columnas por etapa y un límite de tareas en progreso: es un tablero Kanban.",
+    "en": "Columnas por etapa y un límite de tareas en progreso: es un tablero Kanban."
+   },
+   "lesson": "ent-fases-y-agiles"
+  },
+  {
+   "id": "ent-51",
+   "block": "ent-ciclo-de-vida",
+   "q": {
+    "es": "¿En qué fase del desarrollo se escribe este código?",
+    "en": "¿En qué fase del desarrollo se escribe este código?"
+   },
+   "code": "@Test\nvoid totalConIva() {\n    assertEquals(121.0, Pedido.total(100.0), 0.001);\n}",
+   "options": [
+    {
+     "es": "Pruebas",
+     "en": "Pruebas"
+    },
+    {
+     "es": "Análisis de requisitos",
+     "en": "Análisis de requisitos"
+    },
+    {
+     "es": "Diseño",
+     "en": "Diseño"
+    },
+    {
+     "es": "Explotación",
+     "en": "Explotación"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Es una prueba automatizada con JUnit: comprueba que el cálculo del total cumple lo esperado.",
+    "en": "Es una prueba automatizada con JUnit: comprueba que el cálculo del total cumple lo esperado."
+   },
+   "lesson": "ent-fases-y-agiles"
+  },
+  {
+   "id": "ent-47",
+   "block": "ent-ciclo-de-vida",
+   "q": {
+    "es": "Un tablero Kanban con límite de 1 tarea en progreso. ¿Qué muestra este código?",
+    "en": "Un tablero Kanban con límite de 1 tarea en progreso. ¿Qué muestra este código?"
+   },
+   "code": "en_progreso = []\nLIMITE = 1\n\ndef empezar(tarea):\n    if len(en_progreso) >= LIMITE:\n        return \"Bloqueada: \" + tarea\n    en_progreso.append(tarea)\n    return \"Empezada: \" + tarea\n\nprint(empezar(\"Diseño\"))\nprint(empezar(\"Pruebas\"))",
+   "options": [
+    "Empezada: Diseño\nEmpezada: Pruebas",
+    "Error",
+    "Empezada: Diseño\nBloqueada: Pruebas",
+    "Bloqueada: Diseño\nEmpezada: Pruebas"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "Con el límite de tareas en progreso, no se empieza una tarea nueva hasta terminar la que está en curso.",
+    "en": "Con el límite de tareas en progreso, no se empieza una tarea nueva hasta terminar la que está en curso."
+   },
+   "lesson": "ent-fases-y-agiles"
+  }
+ ],
+ "cards": []
+}
