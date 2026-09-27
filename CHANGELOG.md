@@ -13,6 +13,7 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
   - 5 vidas que se recuperan cada 4 h o terminando una tanda de práctica libre;
   - pantalla de celebración y perfil con los últimos 7 días.
 - Workflow `android.yml`: tests del dominio en Kotlin, lint de Android y APK de depuración descargable.
+- **Tarjetas de unidad más completas** en la ruta de la app: estado con color e icono (completada, en curso, bloqueada), bloque y peso en el examen, lecciones hechas con su barra y porcentaje de acierto en las preguntas de la unidad. Se leen como un solo elemento con TalkBack.
 - **APK de release firmado** en la CI con la clave del proyecto, guardada en secretos de GitHub (ADR-0013). La build de depuración pasa a `io.github.marbi8891.pld.debug` y convive con la release.
 
 ## [1.0.0] - 2026-09-27

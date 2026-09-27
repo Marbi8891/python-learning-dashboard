@@ -131,4 +131,29 @@ class CourseTest {
         assertEquals(5, s.app.heartsNow())
         assertEquals(0, s.app.totalXp())
     }
+
+    @Test
+    fun resumenDeUnidadParaSuTarjeta() {
+        val s = PcapState()
+        val first = units[0]
+        val fresh = s.unitSummary(first, s.app.currentNode(units))
+        assertEquals(UnitState.CURRENT, fresh.state)
+        assertEquals(0, fresh.lessonsDone)
+        assertEquals(first.nodes.sumOf { it.questionIds.size }, fresh.questions)
+        assertNull(fresh.rate)
+        assertEquals(UnitState.LOCKED, s.unitSummary(units[1], s.app.currentNode(units)).state)
+
+        // Acierto: cuenta el último intento de cada pregunta respondida
+        val (a, b) = first.nodes[0].questionIds
+        s.recordAnswer(a, false)
+        s.recordAnswer(a, true)
+        s.recordAnswer(b, false)
+        first.nodes.forEach { s.app.complete(it, perfect = false, today = today) }
+        val done = s.unitSummary(first, s.app.currentNode(units))
+        assertEquals(UnitState.DONE, done.state)
+        assertEquals(1f, done.progress)
+        assertEquals(2, done.answered)
+        assertEquals(0.5, done.rate) // 1 de 2, exacto en coma flotante
+        assertEquals(UnitState.CURRENT, s.unitSummary(units[1], s.app.currentNode(units)).state)
+    }
 }

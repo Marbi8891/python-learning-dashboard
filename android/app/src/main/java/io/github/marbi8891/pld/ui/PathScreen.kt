@@ -1,5 +1,6 @@
 package io.github.marbi8891.pld.ui
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -17,6 +18,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -29,9 +31,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
@@ -41,7 +45,11 @@ import androidx.compose.ui.unit.sp
 import io.github.marbi8891.pld.AppModel
 import io.github.marbi8891.pld.pcap.PathNode
 import io.github.marbi8891.pld.pcap.PathUnit
+import io.github.marbi8891.pld.pcap.UnitState
+import io.github.marbi8891.pld.pcap.UnitSummary
+import io.github.marbi8891.pld.pcap.unitSummary
 import java.time.Duration
+import kotlin.math.roundToInt
 
 private sealed interface PathRow {
     data class UnitHeader(val unit: PathUnit, val number: Int) : PathRow
@@ -84,7 +92,10 @@ fun PathScreen(model: AppModel, onStart: (PathNode) -> Unit, onPractice: (String
         ) {
             items(rows, key = { row -> if (row is PathRow.Node) row.node.id else "u-" + (row as PathRow.UnitHeader).unit.slug }) { row ->
                 when (row) {
-                    is PathRow.UnitHeader -> UnitCard(row.unit, row.number, model) { uri.openUri(model.lessonUrl(row.unit.slug)) }
+                    is PathRow.UnitHeader -> {
+                        val summary = remember(revision) { model.pcap.unitSummary(row.unit, current) }
+                        UnitCard(row.unit, row.number, summary, model) { uri.openUri(model.lessonUrl(row.unit.slug)) }
+                    }
                     is PathRow.Node -> {
                         val state = when {
                             row.node.id in app.done -> NodeState.DONE
@@ -145,23 +156,81 @@ private fun Stat(text: String, description: String, color: Color) {
     )
 }
 
+/**
+ * Cabecera de cada unidad: estado (color e icono), bloque y peso en el examen,
+ * lecciones hechas con su barra y acierto en sus preguntas.
+ */
 @Composable
-private fun UnitCard(unit: PathUnit, number: Int, model: AppModel, onTheory: () -> Unit) {
+private fun UnitCard(unit: PathUnit, number: Int, summary: UnitSummary, model: AppModel, onTheory: () -> Unit) {
+    val blocks = model.bank.exam.blocks
     val block = model.bank.block(unit.block)
+    val blockNumber = blocks.indexOf(block) + 1
+    val palette = LocalPalette.current
+    val colors = MaterialTheme.colorScheme
+    // Fondo, texto, color de la barra y del borde según el estado
+    val (background, content, bar, border) = when (summary.state) {
+        UnitState.CURRENT -> listOf(colors.primary, colors.onPrimary, colors.onPrimary, colors.primary)
+        UnitState.DONE -> listOf(colors.surface, colors.onSurface, palette.accent, palette.accent)
+        UnitState.LOCKED -> listOf(colors.surfaceVariant, colors.onSurfaceVariant, colors.onSurfaceVariant, colors.outline)
+    }
+    val (icon, stateLabel) = when (summary.state) {
+        UnitState.DONE -> "✓" to "completada"
+        UnitState.CURRENT -> "▶" to "en curso"
+        UnitState.LOCKED -> "🔒" to "bloqueada"
+    }
+    val lessons = "${summary.lessonsDone} de ${summary.lessons} ${if (summary.lessons == 1) "lección" else "lecciones"}"
+    val accuracy = summary.rate?.let { "aciertas el ${(it * 100).roundToInt()} %" } ?: "aún sin responder"
+    val weight = "Bloque $blockNumber · ${block.weight} % del examen"
+
     Surface(
-        color = MaterialTheme.colorScheme.primary,
-        contentColor = MaterialTheme.colorScheme.onPrimary,
+        color = background,
+        contentColor = content,
         shape = CardShape,
+        border = BorderStroke(if (summary.state == UnitState.DONE) 2.dp else 1.dp, border),
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 12.dp),
     ) {
-        Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
-            Column(Modifier.weight(1f)) {
-                Text("UNIDAD $number · ${block.title.es.uppercase()}", style = MaterialTheme.typography.labelMedium)
-                Text(unit.title, modifier = Modifier.semantics { heading() }, style = MaterialTheme.typography.titleLarge)
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                // Todo el resumen se lee como un solo elemento con TalkBack; «Teoría» queda aparte
+                Column(
+                    Modifier
+                        .weight(1f)
+                        .clearAndSetSemantics {
+                            heading()
+                            contentDescription = "Unidad $number, ${unit.title}, $stateLabel. $weight. $lessons. " +
+                                "${summary.questions} preguntas, $accuracy."
+                        },
+                ) {
+                    Text(
+                        "$icon  UNIDAD $number · ${block.title.es.uppercase()}",
+                        style = MaterialTheme.typography.labelMedium,
+                        fontWeight = FontWeight.Bold,
+                    )
+                    Text(unit.title, style = MaterialTheme.typography.titleLarge)
+                    Text(weight, style = MaterialTheme.typography.bodySmall, modifier = Modifier.alpha(0.85f))
+                }
+                TextButton(onClick = onTheory) { Text("Teoría", color = content) }
             }
-            TextButton(onClick = onTheory) { Text("Teoría", color = MaterialTheme.colorScheme.onPrimary) }
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                LinearProgressIndicator(
+                    progress = { summary.progress },
+                    modifier = Modifier
+                        .weight(1f)
+                        .clearAndSetSemantics { },
+                    color = bar,
+                    trackColor = bar.copy(alpha = 0.25f),
+                )
+                Text(lessons, style = MaterialTheme.typography.labelMedium, modifier = Modifier.clearAndSetSemantics { })
+            }
+            Text(
+                "${summary.questions} preguntas · $accuracy",
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier
+                    .alpha(0.85f)
+                    .clearAndSetSemantics { },
+            )
         }
     }
 }

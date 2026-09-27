@@ -49,3 +49,39 @@ object Course {
         }
     }
 }
+
+enum class UnitState { DONE, CURRENT, LOCKED }
+
+/**
+ * Resumen de una unidad para su tarjeta: estado, lecciones hechas y acierto.
+ * El acierto sigue la misma regla que [PcapState.blockStats]: último intento de cada pregunta respondida.
+ */
+data class UnitSummary(
+    val state: UnitState,
+    val lessonsDone: Int,
+    val lessons: Int,
+    val questions: Int,
+    val answered: Int,
+    val rate: Double?,
+) {
+    val progress: Float get() = if (lessons == 0) 0f else lessonsDone.toFloat() / lessons
+}
+
+fun PcapState.unitSummary(unit: PathUnit, current: PathNode?): UnitSummary {
+    val lessonsDone = unit.nodes.count { it.id in app.done }
+    val state = when {
+        lessonsDone == unit.nodes.size -> UnitState.DONE
+        current != null && current in unit.nodes -> UnitState.CURRENT
+        else -> UnitState.LOCKED
+    }
+    val ids = unit.nodes.flatMap { it.questionIds }
+    val last = ids.mapNotNull { answers[it]?.lastOrNull() }
+    return UnitSummary(
+        state = state,
+        lessonsDone = lessonsDone,
+        lessons = unit.nodes.size,
+        questions = ids.size,
+        answered = last.size,
+        rate = if (last.isEmpty()) null else last.count { it }.toDouble() / last.size,
+    )
+}

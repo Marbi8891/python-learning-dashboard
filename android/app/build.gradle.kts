@@ -12,8 +12,8 @@ android {
         applicationId = "io.github.marbi8891.pld"
         minSdk = 26
         targetSdk = 36
-        versionCode = 3
-        versionName = "0.2.1"
+        versionCode = 4
+        versionName = "0.2.2"
 
         // Configuración en un solo sitio, no repartida por el código
         buildConfigField("String", "WEB_URL", "\"https://marbi8891.github.io/python-learning-dashboard/\"")
