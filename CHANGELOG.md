@@ -4,7 +4,18 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-09-29
+
+Primera versión estable. Resumen en `docs/RELEASE-1.0.0.md`.
+
 ### Añadido
+- **Cabeceras de seguridad en la API** (`X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, `Strict-Transport-Security` y `Permissions-Policy`) con sus pruebas; el backend mantiene el 100 % de cobertura (412 pruebas).
+- **Memoria del proyecto** (`docs/memoria/`) con diagramas de casos de uso, arquitectura y modelo de datos, y guion de demo y defensa (`docs/DEMO-Y-DEFENSA.md`).
+
+### Cambios anteriores incluidos en 1.0.0
+
+### Añadido
+- **Preparación para publicar:** aviso legal, página 404 propia, vista previa al compartir (Open Graph y Twitter con imagen 1200×630), `robots.txt`, `sitemap.xml`, aviso si JavaScript está desactivado y analítica opcional sin cookies (GoatCounter, apagada hasta definir `goatcounter` en `config.js`; la política de privacidad la menciona solo cuando está activa).
 - **Bases de datos según el temario del centro** (ADR-0019): el curso de SQL pasa a llamarse «Bases de datos» y se organiza por las UD1-UD3 del centro. Tiene 60 preguntas nuevas: tipos y modelos, fragmentación, Big Data, ficheros, RGPD y LOPDGDD, SGBD, NULL, ALTER y DROP, índices, usuarios, GRANT, REVOKE y roles, vistas, UNION, INTERSECT y EXCEPT, subconsultas y EXPLAIN. Incluye 6 ejercicios de escribir SQL. Las preguntas y el progreso anteriores se conservan.
 - **Curso de Entornos de desarrollo** (ADR-0019), según la UD1 del centro: lenguajes y tipos de software, compilación y enlace, compiladores e intérpretes, máquinas virtuales y contenedores, paradigmas, fases del desarrollo, cascada, Scrum, Kanban y XP. Tiene 51 preguntas; las de código Python se comprueban ejecutándolas.
 - **App Android nativa** en Kotlin + Jetpack Compose (`android/`, ADR-0011), entrega 1: panel de preparación del PCAP, práctica por bloque con corrección, explicación y enlace a la teoría, preguntas en español o inglés y funcionamiento sin conexión. Usa el mismo banco de preguntas que la web y guarda el progreso en el mismo formato.

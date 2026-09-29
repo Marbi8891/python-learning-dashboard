@@ -16,6 +16,8 @@
     .legal table { width: 100%; border-collapse: collapse; margin-top: var(--space-3); font-size: 14px; }
     .legal th, .legal td { text-align: left; vertical-align: top; padding: var(--space-2); border-bottom: 1px solid var(--color-border); }
   </style>
+  <script src="config.js"></script>
+  <script src="js/analytics.js" defer></script>
 </head>
 <body>
   <main class="legal prose" id="main">
@@ -57,6 +59,11 @@
     <h2>5. Almacenamiento en tu navegador</h2>
     <p>No usamos cookies. Usamos <code>localStorage</code> solo para funciones que tú pides: guardar tu progreso, tus borradores de código y, si inicias sesión, tu sesión. Son estrictamente necesarios para el servicio y no se usan para seguimiento. Puedes borrarlos desde la configuración de tu navegador.</p>
 
+    <div id="analytics-note" hidden>
+      <h2>Estadísticas de visitas</h2>
+      <p>Medimos cuánta gente entra, desde qué país o enlace llega y qué páginas mira, con <strong>GoatCounter</strong>. No usa cookies ni guarda tu IP, no crea perfiles y no se comparte con terceros. Si tu navegador envía la señal «No rastrear», no se cuenta tu visita. Base legal: interés legítimo en conocer el uso del servicio (art. 6.1.f).</p>
+    </div>
+
     <h2>6. Tus derechos</h2>
     <p>Puedes ejercer tus derechos de acceso, rectificación, supresión, oposición, limitación y portabilidad:</p>
     <ul>
@@ -69,5 +76,6 @@
     <h2>7. Seguridad</h2>
     <p>Contraseñas cifradas con Argon2, conexiones HTTPS, sesiones que caducan, límite de intentos de inicio de sesión y cierre de todas las sesiones al cambiar la contraseña.</p>
   </main>
+  <script>if ((window.PLD_CONFIG || {}).goatcounter) document.getElementById("analytics-note").hidden = false;</script>
 </body>
 </html>
