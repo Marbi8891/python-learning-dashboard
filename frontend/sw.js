@@ -3,7 +3,7 @@
    - Pyodide (Python en el navegador): primero la copia guardada; sus URL llevan la versión y no cambian.
    - API del backend: nunca se guarda (datos personales y siempre actuales). */
 
-const VERSION = "v2";
+const VERSION = "v3";
 const SITE_CACHE = `pld-site-${VERSION}`;
 const PYODIDE_CACHE = "pld-pyodide"; // se conserva entre versiones: son ~10 MB inmutables
 const SHELL = ["./", "index.html", "config.js", "js/analytics.js", "manifest.webmanifest", "favicon.svg"];
