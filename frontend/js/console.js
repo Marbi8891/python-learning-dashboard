@@ -150,6 +150,15 @@ export function loadStarter(kind = "exercise") {
   $("#console-editor").focus();
 }
 
+// Código pegado que sale del ejercicio de Python y toca el navegador o la red: puede ser una
+// trampa de «copia y pega esto» (MITRE ATT&CK T1204.004, mitigación M1017 «User Training»).
+// Solo avisa; no bloquea, porque aprender también es probar código ajeno.
+const RISKY_PASTE = /\b(import\s+js|from\s+js\b|pyodide|fetch|XMLHttpRequest|localStorage|sessionStorage|indexedDB|document\.cookie|postMessage|eval\s*\(|exec\s*\(|base64)/i;
+
+export function isRiskyPaste(text) {
+  return RISKY_PASTE.test(text);
+}
+
 export function initConsole() {
   const editor = $("#console-editor");
   let tabInsertsSpaces = true;
@@ -172,6 +181,10 @@ export function initConsole() {
     tabInsertsSpaces = true;
   });
   editor.addEventListener("input", saveDraft);
+  editor.addEventListener("paste", (event) => {
+    const pasted = event.clipboardData?.getData("text") ?? "";
+    $("#console-paste-warning").hidden = !isRiskyPaste(pasted);
+  });
 
   $("#console-run").addEventListener("click", runConsole);
   // «Ir a la línea N» funciona tanto en la salida como en el resultado de la comprobación

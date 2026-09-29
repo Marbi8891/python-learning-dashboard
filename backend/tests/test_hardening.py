@@ -184,5 +184,5 @@ def test_body_limit_also_protects_apps_that_do_not_catch_errors():
         sent.append(message)
 
     guarded = BodySizeLimit(reader, max_bytes=100)
-    asyncio.run(guarded({"type": "http", "headers": []}, receive, send))
+    asyncio.run(guarded({"type": "http", "path": "/api/x", "headers": []}, receive, send))
     assert [m.get("status") for m in sent if m["type"] == "http.response.start"] == [413]

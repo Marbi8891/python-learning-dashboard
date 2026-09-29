@@ -2,23 +2,31 @@
 
 from typing import Annotated
 
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends, HTTPException, Request, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.models import Lesson, User
-from app.security import decode_access_token
+from app.security import decode_access_token, looks_forged
+from app.security_events import Event, record
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
 
 DbSession = Annotated[Session, Depends(get_db)]
 
 
-def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], db: DbSession) -> User:
+def get_current_user(
+    token: Annotated[str, Depends(oauth2_scheme)], request: Request, db: DbSession
+) -> User:
     decoded = decode_access_token(token)
     user = db.get(User, decoded[0]) if decoded else None
+    if decoded is None and looks_forged(token):
+        record(Event.TOKEN_FORGED, request)
+    elif user is not None and decoded[1] != user.token_version:
+        # Token de antes de cerrar sesiones o cambiar la contraseña: posible token robado
+        record(Event.TOKEN_REVOKED_USED, request, user=user.id)
     # Un token emitido antes de cambiar la contraseña deja de valer
     if user is None or decoded[1] != user.token_version:
         raise HTTPException(

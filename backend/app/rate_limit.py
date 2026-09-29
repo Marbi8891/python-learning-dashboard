@@ -83,4 +83,7 @@ def client_ip(request: Request) -> str:
 
 def limit_auth_attempts(request: Request) -> None:
     if not auth_limiter.hit(client_ip(request)):
+        from app.security_events import Event, record  # evita la importación circular
+
+        record(Event.RATE_LIMITED, request)
         raise HTTPException(status_code=status.HTTP_429_TOO_MANY_REQUESTS, detail=TOO_MANY)

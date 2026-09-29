@@ -70,6 +70,18 @@ def decode_access_token(token: str) -> tuple[int, int] | None:
         return None
 
 
+def looks_forged(token: str) -> bool:
+    """¿Es un JWT bien formado pero con firma o algoritmo que no son los nuestros?
+    Eso no pasa por accidente: alguien intenta fabricar una sesión (T1606.001)."""
+    try:
+        jwt.decode(token, get_jwt_secret(), algorithms=[ALGORITHM], options={"verify_exp": False})
+    except (jwt.InvalidSignatureError, jwt.InvalidAlgorithmError):
+        return True
+    except jwt.PyJWTError:
+        return False
+    return False
+
+
 def new_reset_token() -> tuple[str, str]:
     """Devuelve (token para el enlace, hash para guardar en la base de datos)."""
     token = secrets.token_urlsafe(32)

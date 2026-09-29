@@ -5,6 +5,13 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
 ## [Unreleased]
 
 ### Seguridad
+- **Protección con MITRE ATT&CK** (ADR-0023):
+  - modelo de amenazas por táctica con mitigaciones, evidencias y estado, y capa para ATT&CK Navigator;
+  - registro de eventos de seguridad con el ID de técnica y la IP y el email seudonimizados (detecta fuerza bruta, tokens falsificados o robados, abusos de recuperación y ataques de tamaño);
+  - se rechazan las contraseñas comunes o que contienen el email o el nombre;
+  - restablecer la contraseña levanta el bloqueo de la cuenta;
+  - la consola avisa al pegar código que toca el navegador o la red;
+  - política de privacidad actualizada.
 - **Auditoría y endurecimiento integral** (ADR-0022):
   - el límite de intentos ya no se puede saltar falsificando `X-Forwarded-For`;
   - bloqueo por cuenta tras 10 fallos y límite de emails de recuperación;

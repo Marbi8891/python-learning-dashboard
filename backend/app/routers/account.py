@@ -2,7 +2,7 @@
 
 from datetime import UTC, datetime
 
-from fastapi import APIRouter, Depends, HTTPException, Response, status
+from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
 from sqlalchemy import delete, select
 
 from app.deps import CurrentUser, DbSession
@@ -19,6 +19,7 @@ from app.rate_limit import limit_auth_attempts
 from app.routers.progress import list_progress
 from app.schemas import PasswordConfirm, UserExport, UserOut
 from app.security import verify_password
+from app.security_events import Event, record
 
 router = APIRouter(prefix="/api/users/me", tags=["cuenta"])
 
@@ -61,14 +62,20 @@ def export_my_data(user: CurrentUser, db: DbSession) -> UserExport:
     status_code=status.HTTP_204_NO_CONTENT,
     dependencies=[Depends(limit_auth_attempts)],
 )
-def delete_my_account(data: PasswordConfirm, user: CurrentUser, db: DbSession) -> Response:
+def delete_my_account(
+    data: PasswordConfirm, user: CurrentUser, request: Request, db: DbSession
+) -> Response:
     """Borra la cuenta y todos sus datos. Pide la contraseña para evitar borrados accidentales."""
     if not verify_password(data.password, user.password_hash):
+        # Alguien con la sesión abierta pero sin la contraseña (T1539 sesión robada → T1485)
+        record(Event.LOGIN_FAILED, request, user=user.id, action="delete")
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Contraseña incorrecta")
     # Borrado explícito: no depende de que la base de datos aplique ON DELETE CASCADE
     # (SQLite no lo hace si no se activa PRAGMA foreign_keys).
     for model in (ExerciseAttempt, LessonProgress, PasswordResetToken, PcapState, CourseState):
         db.execute(delete(model).where(model.user_id == user.id))
+    user_id = user.id
     db.delete(user)
     db.commit()
+    record(Event.ACCOUNT_DELETED, request, user=user_id)
     return Response(status_code=status.HTTP_204_NO_CONTENT)

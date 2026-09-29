@@ -70,6 +70,19 @@
   color: var(--color-text-muted);
 }
 
+.console__warning {
+  margin-top: var(--space-1);
+  padding: var(--space-2) var(--space-3);
+  border-left: 3px solid var(--color-danger);
+  font-size: 13px;
+  color: var(--color-text);
+  background: var(--color-surface);
+}
+
+.console__warning[hidden] {
+  display: none;
+}
+
 .console__stdin {
   margin-top: var(--space-3);
 }

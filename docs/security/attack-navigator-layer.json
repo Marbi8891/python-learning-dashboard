@@ -1,0 +1,272 @@
+{
+  "name": "Python Learning Dashboard: cobertura defensiva",
+  "versions": {
+    "attack": "19",
+    "navigator": "5.1.0",
+    "layer": "4.5"
+  },
+  "domain": "enterprise-attack",
+  "description": "Técnicas relevantes para la web y la API (ADR-0023). Verde: cubierta y probada; amarillo: parcial; rojo: sin cubrir.",
+  "sorting": 0,
+  "hideDisabled": false,
+  "techniques": [
+    {
+      "techniqueID": "T1595.002",
+      "score": 50,
+      "color": "#ffc107",
+      "comment": "/docs desactivado en producción",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1589.002",
+      "score": 50,
+      "color": "#ffc107",
+      "comment": "Recuperación sin enumeración; el registro responde 409 (riesgo aceptado)",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1593.003",
+      "score": 50,
+      "color": "#ffc107",
+      "comment": "Secretos fuera del repo; secret scanning pendiente",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1190",
+      "score": 100,
+      "color": "#4caf50",
+      "comment": "ORM parametrizado, Pydantic, límite de cuerpo, pip-audit/npm audit",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1189",
+      "score": 100,
+      "color": "#4caf50",
+      "comment": "CSP, escapado, progress-guard, frame-buster",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1195.001",
+      "score": 50,
+      "color": "#ffc107",
+      "comment": "Dependencias mínimas, Dependabot, auditorías en CI",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1195.002",
+      "score": 50,
+      "color": "#ffc107",
+      "comment": "Permisos mínimos en Actions; falta fijar por SHA",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1078",
+      "score": 50,
+      "color": "#ffc107",
+      "comment": "Política de contraseñas y bloqueo; sin MFA",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1566.002",
+      "score": 50,
+      "color": "#ffc107",
+      "comment": "Emails de recuperación con aviso",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1204.004",
+      "score": 100,
+      "color": "#4caf50",
+      "comment": "Aviso al pegar código de riesgo en la consola; Worker aislado",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1059.006",
+      "score": 100,
+      "color": "#4caf50",
+      "comment": "Pyodide en Web Worker sin DOM ni localStorage",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1059.007",
+      "score": 100,
+      "color": "#4caf50",
+      "comment": "CSP script-src restringida",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1098",
+      "score": 100,
+      "color": "#4caf50",
+      "comment": "Enlace de un solo uso, hash, caducidad, cierra sesiones; evento auth.password_reset_*",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1110.001",
+      "score": 100,
+      "color": "#4caf50",
+      "comment": "Límite por IP real y bloqueo por cuenta; eventos auth.login_failed/account_locked",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1110.002",
+      "score": 100,
+      "color": "#4caf50",
+      "comment": "Argon2id con rehash",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1110.003",
+      "score": 100,
+      "color": "#4caf50",
+      "comment": "Contraseñas comunes rechazadas",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1110.004",
+      "score": 50,
+      "color": "#ffc107",
+      "comment": "Lista de comunes y bloqueo; sin MFA",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1606.001",
+      "score": 100,
+      "color": "#4caf50",
+      "comment": "JWT con exp/sub obligatorios; evento auth.token_forged",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1539",
+      "score": 50,
+      "color": "#ffc107",
+      "comment": "Sin XSS por CSP y escapado; token en localStorage",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1528",
+      "score": 100,
+      "color": "#4caf50",
+      "comment": "Token de recuperación hasheado, sin Referer ni analítica",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1552.001",
+      "score": 50,
+      "color": "#ffc107",
+      "comment": ".gitignore/.dockerignore, trap del keystore",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1557",
+      "score": 100,
+      "color": "#4caf50",
+      "comment": "HTTPS, sslmode=require, STARTTLS verificado",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1087.004",
+      "score": 100,
+      "color": "#4caf50",
+      "comment": "Sin endpoint de listado de usuarios",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1550.001",
+      "score": 100,
+      "color": "#4caf50",
+      "comment": "token_version y caducidad 1 h; evento auth.token_revoked_used",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1485",
+      "score": 50,
+      "color": "#ffc107",
+      "comment": "Borrado con contraseña y registrado; copias Neon por verificar",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1565.001",
+      "score": 100,
+      "color": "#4caf50",
+      "comment": "Validación y escapado de datos guardados",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1499.003",
+      "score": 100,
+      "color": "#4caf50",
+      "comment": "Límite de cuerpo, Argon2 19 MiB, poda de intentos; evento request.too_large",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1531",
+      "score": 100,
+      "color": "#4caf50",
+      "comment": "Bloqueo de 15 min que se levanta al restablecer la contraseña",
+      "enabled": true,
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1491.002",
+      "score": 50,
+      "color": "#ffc107",
+      "comment": "Publicación solo desde main por Actions; protección de rama pendiente",
+      "enabled": true,
+      "showSubtechniques": false
+    }
+  ],
+  "gradient": {
+    "colors": [
+      "#f44336",
+      "#ffc107",
+      "#4caf50"
+    ],
+    "minValue": 0,
+    "maxValue": 100
+  },
+  "legendItems": [
+    {
+      "label": "Cubierta y probada",
+      "color": "#4caf50"
+    },
+    {
+      "label": "Parcial",
+      "color": "#ffc107"
+    },
+    {
+      "label": "Sin cubrir",
+      "color": "#f44336"
+    }
+  ],
+  "showTacticRowBackground": false,
+  "selectTechniquesAcrossTactics": true,
+  "selectSubtechniquesWithParent": false
+}

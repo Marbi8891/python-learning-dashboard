@@ -63,6 +63,24 @@ Solo la última versión de `main`, que es la que está desplegada:
 - `backend/.env`, las claves y los keystores están en `.gitignore`.
 - `JWT_SECRET` es obligatorio y tiene al menos 32 caracteres.
 
+## Modelo de amenazas MITRE ATT&CK (ADR-0023)
+
+Las amenazas se revisan técnica por técnica con la matriz MITRE ATT&CK Enterprise v19 en [`docs/security/mitre-attack.md`](docs/security/mitre-attack.md), con una capa para ATT&CK Navigator.
+
+**Detección**
+- El logger `pld.security` escribe una línea JSON por evento, con el ID de la técnica (`"attack": "T1110"`).
+- Eventos: fallos de login, bloqueos, tokens falsificados o revocados, recuperaciones y borrados.
+- La IP y el email van seudonimizados (HMAC con el secreto del servidor).
+
+**Contraseñas**
+- No se aceptan las más comunes ni las que contienen el email o el nombre.
+
+**Bloqueos**
+- Restablecer la contraseña levanta el bloqueo de la cuenta, para que un atacante no pueda echar a nadie (T1531).
+
+**Consola**
+- Avisa al pegar código que toca el navegador o la red (T1204.004).
+
 ## Ajustes que hay que activar en GitHub
 
 No se pueden versionar, así que se activan a mano en *Settings*:

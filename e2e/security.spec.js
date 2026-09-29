@@ -1,5 +1,5 @@
 // Seguridad del frontend (ADR-0022): CSP sin bloqueos, datos manipulados, cierre de sesión y marcos.
-const { test, expect, uniqueEmail } = require("./fixtures");
+const { test, expect, uniqueEmail, openLesson } = require("./fixtures");
 
 const API = "http://127.0.0.1:8000";
 
@@ -74,4 +74,35 @@ test("la web no se muestra dentro de un marco de otra página (clickjacking)", a
   await page.setContent('<iframe src="http://localhost:5500/#/inicio" width="800" height="600"></iframe>');
   const frame = page.frameLocator("iframe");
   await expect(frame.locator("html")).toHaveCSS("display", "none");
+});
+
+test("avisa si se pega en la consola código que toca el navegador (T1204.004)", async ({ page }) => {
+  await openLesson(page, "variables");
+  const paste = (text) =>
+    page.locator("#console-editor").evaluate((editor, value) => {
+      const data = new DataTransfer();
+      data.setData("text/plain", value);
+      editor.dispatchEvent(new ClipboardEvent("paste", { clipboardData: data, bubbles: true }));
+    }, text);
+  const warning = page.locator("#console-paste-warning");
+  await paste("print('hola')");
+  await expect(warning).toBeHidden();
+  await paste("from js import fetch\nfetch('https://ejemplo.invalid')");
+  await expect(warning).toBeVisible();
+  await paste("x = 1");
+  await expect(warning).toBeHidden();
+});
+
+test("el registro rechaza una contraseña de las más usadas y explica por qué", async ({ page }) => {
+  await page.goto("/#/inicio");
+  await page.getByRole("button", { name: "Iniciar sesión" }).click();
+  await page.locator("#account-dialog").getByRole("link", { name: "Crea una" }).click();
+  const form = page.locator("#register-form");
+  await form.getByLabel("Nombre").fill("Ana");
+  await form.getByLabel("Email").fill(uniqueEmail());
+  await form.getByLabel(/Contraseña/).fill("password123");
+  await form.getByLabel(/acepto la/).check();
+  await form.getByRole("button", { name: "Crear cuenta" }).click();
+  await expect(page.locator("#account-dialog")).toContainText("de las más usadas");
+  await expect(page.locator("#account-label")).toHaveText("Iniciar sesión");
 });

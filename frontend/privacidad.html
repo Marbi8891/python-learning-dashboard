@@ -44,6 +44,7 @@
         <tr><td>Progreso de estudio: respuestas a las preguntas, simulacros (nota y tiempo), fecha prevista de examen, repaso espaciado, progreso de la app Android y de los cursos de DAW</td><td>Sincronizar tu preparación entre la web y la app</td><td>Ejecución del servicio (art. 6.1.b)</td></tr>
         <tr><td>Fecha de aceptación de esta política</td><td>Poder demostrar que la aceptaste</td><td>Responsabilidad proactiva (art. 5.2 y 7.1)</td></tr>
         <tr><td>Dirección IP (temporalmente, en memoria)</td><td>Limitar intentos de inicio de sesión y proteger las cuentas</td><td>Interés legítimo en la seguridad (art. 6.1.f)</td></tr>
+        <tr><td>Registro de seguridad: tipo de evento (inicio de sesión fallido o correcto, bloqueo, sesión falsificada o revocada, recuperación de contraseña, borrado de cuenta…), número interno de usuario y un <strong>seudónimo</strong> de la IP y del email (un código que no permite saber cuáles son sin la clave del servidor). Nunca el email, la IP ni la contraseña en claro</td><td>Detectar ataques a las cuentas (fuerza bruta, sesiones robadas) y reaccionar a tiempo</td><td>Interés legítimo en la seguridad (art. 6.1.f); se conserva solo el tiempo limitado que el proveedor (Render) guarda los registros</td></tr>
       </tbody>
     </table>
     <p>No usamos tus datos para publicidad, no hacemos perfiles y no los vendemos.</p>
@@ -85,6 +86,8 @@
       <li>Contraseñas guardadas como <em>hash</em> Argon2id; conexiones cifradas (HTTPS) y también entre el servidor y la base de datos.</li>
       <li>Sesiones que caducan a la hora; puedes cerrar la sesión en todos tus dispositivos, y cambiar la contraseña las cierra todas.</li>
       <li>Límite de intentos de inicio de sesión por dirección y por cuenta, y de emails de recuperación.</li>
+      <li>No se aceptan las contraseñas más comunes ni las que contienen tu email o tu nombre.</li>
+      <li>Las amenazas se revisan con la matriz pública MITRE ATT&amp;CK y los intentos de ataque quedan en un registro seudonimizado.</li>
       <li>Política de seguridad del contenido (CSP) en la web, protección frente a la inserción en marcos de otras páginas y datos personales que nunca se guardan en cachés.</li>
       <li>Los enlaces de recuperación son de un solo uso, caducan a los 30 minutos y nunca se escriben en los registros del servidor.</li>
     </ul>

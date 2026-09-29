@@ -3,7 +3,7 @@
 from datetime import UTC, datetime, timedelta
 from typing import Annotated
 
-from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Response, status
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request, Response, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy import delete, select, update
 from sqlalchemy.exc import IntegrityError
@@ -12,6 +12,7 @@ from app.config import get_settings
 from app.deps import CurrentUser, DbSession
 from app.mailer import send_email
 from app.models import PasswordResetToken, User
+from app.password_policy import weakness
 from app.rate_limit import TOO_MANY, limit_auth_attempts, login_failures, reset_requests
 from app.schemas import PasswordResetConfirm, PasswordResetRequest, Token, UserCreate, UserOut
 from app.security import (
@@ -22,6 +23,7 @@ from app.security import (
     new_reset_token,
     verify_password,
 )
+from app.security_events import Event, pseudonym, record
 
 router = APIRouter(prefix="/api", tags=["usuarios"])
 
@@ -33,6 +35,7 @@ router = APIRouter(prefix="/api", tags=["usuarios"])
     dependencies=[Depends(limit_auth_attempts)],
 )
 def register(data: UserCreate, db: DbSession) -> User:
+    _reject_weak(data.password, data.email, data.display_name)
     user = User(
         email=data.email,
         password_hash=hash_password(data.password),
@@ -52,17 +55,22 @@ def register(data: UserCreate, db: DbSession) -> User:
 
 
 @router.post("/auth/login", response_model=Token, dependencies=[Depends(limit_auth_attempts)])
-def login(form: Annotated[OAuth2PasswordRequestForm, Depends()], db: DbSession) -> Token:
+def login(
+    form: Annotated[OAuth2PasswordRequestForm, Depends()], request: Request, db: DbSession
+) -> Token:
     """Login con formulario OAuth2: el campo `username` es el email.
 
     Además del límite por IP, una cuenta con demasiados fallos seguidos se bloquea un rato,
     aunque los intentos lleguen de muchas IPs distintas (ADR-0022)."""
     email = form.username.strip().lower()
+    account = pseudonym(email)
     if login_failures.blocked(email):
+        record(Event.ACCOUNT_LOCKED, request, account=account)
         raise HTTPException(status_code=status.HTTP_429_TOO_MANY_REQUESTS, detail=TOO_MANY)
     user = db.scalar(select(User).where(User.email == email))
     if not verify_password(form.password, user.password_hash if user else None):
         login_failures.record(email)
+        record(Event.LOGIN_FAILED, request, account=account, known=user is not None)
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Email o contraseña incorrectos",
@@ -72,14 +80,16 @@ def login(form: Annotated[OAuth2PasswordRequestForm, Depends()], db: DbSession) 
     if needs_rehash(user.password_hash):  # hashes creados con parámetros anteriores
         user.password_hash = hash_password(form.password)
         db.commit()
+    record(Event.LOGIN_OK, request, user=user.id)
     return Token(access_token=create_access_token(user.id, user.token_version))
 
 
 @router.post("/auth/logout-all", status_code=status.HTTP_204_NO_CONTENT)
-def logout_everywhere(user: CurrentUser, db: DbSession) -> Response:
+def logout_everywhere(user: CurrentUser, request: Request, db: DbSession) -> Response:
     """Cierra la sesión en todos los dispositivos: los tokens emitidos dejan de valer."""
     user.token_version += 1
     db.commit()
+    record(Event.LOGOUT_ALL, request, user=user.id)
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
@@ -94,10 +104,11 @@ RESET_ACCEPTED = {
     dependencies=[Depends(limit_auth_attempts)],
 )
 def request_password_reset(
-    data: PasswordResetRequest, background: BackgroundTasks, db: DbSession
+    data: PasswordResetRequest, background: BackgroundTasks, request: Request, db: DbSession
 ) -> dict[str, str]:
     """Responde siempre igual, exista o no el email (no revela qué cuentas hay)."""
     user = db.scalar(select(User).where(User.email == data.email))
+    record(Event.RESET_REQUESTED, request, account=pseudonym(data.email), known=user is not None)
     # Como mucho unos pocos emails por cuenta y cuarto de hora; la respuesta no cambia
     if user is not None and reset_requests.hit(data.email):
         settings = get_settings()
@@ -123,7 +134,7 @@ def request_password_reset(
     status_code=status.HTTP_204_NO_CONTENT,
     dependencies=[Depends(limit_auth_attempts)],
 )
-def confirm_password_reset(data: PasswordResetConfirm, db: DbSession) -> Response:
+def confirm_password_reset(data: PasswordResetConfirm, request: Request, db: DbSession) -> Response:
     reset = db.scalar(
         select(PasswordResetToken).where(
             PasswordResetToken.token_hash == hash_reset_token(data.token)
@@ -135,6 +146,9 @@ def confirm_password_reset(data: PasswordResetConfirm, db: DbSession) -> Respons
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="El enlace no es válido o ha caducado. Pide uno nuevo.",
         )
+    user = db.get(User, reset.user_id)
+    # Antes de gastar el enlace: si la contraseña no vale, se puede probar con otra
+    _reject_weak(data.new_password, user.email, user.display_name)
     # Un solo uso incluso con dos peticiones a la vez: solo gana la que marca el enlace como usado
     claimed = db.execute(
         update(PasswordResetToken)
@@ -147,13 +161,23 @@ def confirm_password_reset(data: PasswordResetConfirm, db: DbSession) -> Respons
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="El enlace no es válido o ha caducado. Pide uno nuevo.",
         )
-    user = db.get(User, reset.user_id)
     user.password_hash = hash_password(data.new_password)
     user.token_version += 1  # cierra todas las sesiones abiertas
     db.commit()
+    # Quien controla el email recupera el acceso aunque un atacante haya bloqueado la cuenta
+    # a base de fallos (abuso del bloqueo, T1531 Account Access Removal)
+    login_failures.clear(user.email)
+    record(Event.RESET_DONE, request, user=user.id)
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
 def _as_utc(moment: datetime) -> datetime:
     """SQLite devuelve fechas sin zona horaria; las guardamos siempre en UTC."""
     return moment if moment.tzinfo else moment.replace(tzinfo=UTC)
+
+
+def _reject_weak(password: str, email: str, name: str) -> None:
+    """Contraseñas comunes o con datos personales: 422 con el motivo (ADR-0023, M1027)."""
+    problem = weakness(password, email, name)
+    if problem:
+        raise HTTPException(status_code=422, detail=problem)

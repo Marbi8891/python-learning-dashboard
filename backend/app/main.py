@@ -17,6 +17,7 @@ from app.config import get_settings
 from app.local_site import mount_frontend
 from app.routers import account, attempts, auth, course_state, lessons, pcap, progress
 from app.security import get_jwt_secret
+from app.security_events import Event, record
 
 logging.basicConfig(level=logging.INFO)
 
@@ -67,6 +68,10 @@ async def security_headers(request: Request, call_next):
     return response
 
 
+def _log_too_large(scope) -> None:
+    record(Event.BODY_TOO_LARGE, Request(scope))
+
+
 class BodySizeLimit:
     """Rechaza con 413 los cuerpos mayores que MAX_BODY_BYTES, contando lo que llega realmente
     (también sin Content-Length), antes de que nadie lo lea entero en memoria (ADR-0022)."""
@@ -81,6 +86,7 @@ class BodySizeLimit:
             return
         declared = dict(scope["headers"]).get(b"content-length")
         if declared is not None and declared.isdigit() and int(declared) > self.max_bytes:
+            _log_too_large(scope)
             await self._too_large(send)
             return
         received = 0
@@ -93,6 +99,7 @@ class BodySizeLimit:
             if received > self.max_bytes and not responded:
                 # Se responde 413 ya; lo que intente enviar la app después se descarta
                 responded = True
+                _log_too_large(scope)
                 await self._too_large(send)
                 raise _BodyTooLarge
             return message
