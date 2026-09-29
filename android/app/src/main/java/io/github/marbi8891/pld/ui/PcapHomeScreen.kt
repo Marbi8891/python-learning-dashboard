@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -20,13 +21,20 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import io.github.marbi8891.pld.AppModel
+import io.github.marbi8891.pld.pcap.Mock
 import io.github.marbi8891.pld.pcap.PcapState
 import io.github.marbi8891.pld.pcap.Status
 import kotlin.math.roundToInt
 
-/** Pestaña «Examen»: nota estimada, criterios para estar listo y práctica libre por bloque (sin vidas). */
+/** Pestaña «Examen»: simulacro, nota estimada, criterios para estar listo y práctica libre por bloque (sin vidas). */
 @Composable
-fun PcapHomeScreen(model: AppModel, onPractice: (String) -> Unit, onTheory: (String) -> Unit, modifier: Modifier = Modifier) {
+fun PcapHomeScreen(
+    model: AppModel,
+    onPractice: (String) -> Unit,
+    onTheory: (String) -> Unit,
+    onMock: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     val bank = model.bank
     val pcap = model.pcap
     val status = remember(model.revision) { pcap.status(bank) }
@@ -70,6 +78,29 @@ fun PcapHomeScreen(model: AppModel, onPractice: (String) -> Unit, onTheory: (Str
                     )
                     LangSwitch(pcap.lang) { lang -> model.update { this.lang = lang } }
                 }
+            }
+        }
+
+        item {
+            // Simulacro cronometrado (ADR-0024): el PCAP con el reparto oficial; los cursos, tipo examen del centro
+            val plan = remember(model.course.id) { Mock.plan(bank) }
+            val last = status.lastExam
+            Panel {
+                SectionTitle("Simulacro de examen")
+                Text(
+                    "${plan.total} preguntas · ${plan.minutes} minutos · ${plan.pass} % para aprobar. " +
+                        "Sin ver la corrección hasta entregar, como en el examen.",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                if (last != null) {
+                    Text(
+                        "Último: ${last.score} % (${last.correct} de ${last.total}) · ${pcap.exams.count { it.score >= plan.pass }} aprobados de ${pcap.exams.size}",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = if (last.score >= plan.pass) palette.accent else palette.danger,
+                    )
+                }
+                Button(onClick = onMock) { Text("Hacer un simulacro") }
             }
         }
 

@@ -4,6 +4,14 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
 
 ## [Unreleased]
 
+### Añadido
+- **App Android 0.12.0: simulacro de examen** (ADR-0024):
+  - PCAP con el reparto oficial (40 preguntas, 65 minutos);
+  - cursos DAW con 30 preguntas según el peso de cada bloque (45 minutos, aprobado con un 50 %), incluido el de Programación en Python;
+  - se corrige al entregar o al acabarse el tiempo;
+  - nota por bloques y revisión de los fallos con su explicación;
+  - el resultado se guarda con el mismo formato que la web.
+
 ### Seguridad
 - **Protección con MITRE ATT&CK** (ADR-0023):
   - modelo de amenazas por táctica con mitigaciones, evidencias y estado, y capa para ATT&CK Navigator;

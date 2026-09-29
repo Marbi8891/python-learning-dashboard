@@ -37,6 +37,7 @@ import io.github.marbi8891.pld.ui.CelebrationScreen
 import io.github.marbi8891.pld.ui.DungeonScreen
 import io.github.marbi8891.pld.ui.GameHomeScreen
 import io.github.marbi8891.pld.ui.LessonScreen
+import io.github.marbi8891.pld.ui.MockScreen
 import io.github.marbi8891.pld.ui.PathScreen
 import io.github.marbi8891.pld.ui.PcapHomeScreen
 import io.github.marbi8891.pld.ui.PldTheme
@@ -58,6 +59,9 @@ sealed interface Screen {
     data object Dungeon : Screen
 
     data object Rush : Screen
+
+    /** Simulacro cronometrado del curso elegido (ADR-0024). */
+    data object Mock : Screen
 }
 
 enum class Tab(val label: String, val symbol: String) {
@@ -103,6 +107,7 @@ fun App(model: AppModel) {
         is Screen.Theory -> TheoryScreen(model, screen.slug, onBack = back)
         Screen.Dungeon -> DungeonScreen(model, onExit = back, onTheory = { open(Screen.Theory(it)) })
         Screen.Rush -> RushScreen(model, onExit = back)
+        Screen.Mock -> MockScreen(model, onBack = back)
     }
 }
 
@@ -147,6 +152,7 @@ private fun Tabs(model: AppModel, tab: Tab, onTab: (Tab) -> Unit, open: (Screen)
                     model,
                     onPractice = { open(Screen.Practice(it)) },
                     onTheory = { open(Screen.Theory(it)) },
+                    onMock = { open(Screen.Mock) },
                     modifier = modifier,
                 )
                 Tab.PROFILE -> ProfileScreen(model, modifier = modifier)

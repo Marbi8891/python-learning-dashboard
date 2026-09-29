@@ -12,8 +12,8 @@ android {
         applicationId = "io.github.marbi8891.pld"
         minSdk = 26
         targetSdk = 36
-        versionCode = 13
-        versionName = "0.11.0"
+        versionCode = 14
+        versionName = "0.12.0"
     }
 
     // Una sola fuente de datos: el banco de preguntas y las lecciones de la web (ADR-0011)
