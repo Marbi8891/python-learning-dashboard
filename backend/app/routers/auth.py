@@ -5,19 +5,20 @@ from typing import Annotated
 
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Response, status
 from fastapi.security import OAuth2PasswordRequestForm
-from sqlalchemy import delete, select
+from sqlalchemy import delete, select, update
 from sqlalchemy.exc import IntegrityError
 
 from app.config import get_settings
-from app.deps import DbSession
+from app.deps import CurrentUser, DbSession
 from app.mailer import send_email
 from app.models import PasswordResetToken, User
-from app.rate_limit import limit_auth_attempts
+from app.rate_limit import TOO_MANY, limit_auth_attempts, login_failures, reset_requests
 from app.schemas import PasswordResetConfirm, PasswordResetRequest, Token, UserCreate, UserOut
 from app.security import (
     create_access_token,
     hash_password,
     hash_reset_token,
+    needs_rehash,
     new_reset_token,
     verify_password,
 )
@@ -52,15 +53,34 @@ def register(data: UserCreate, db: DbSession) -> User:
 
 @router.post("/auth/login", response_model=Token, dependencies=[Depends(limit_auth_attempts)])
 def login(form: Annotated[OAuth2PasswordRequestForm, Depends()], db: DbSession) -> Token:
-    """Login con formulario OAuth2: el campo `username` es el email."""
-    user = db.scalar(select(User).where(User.email == form.username.strip().lower()))
+    """Login con formulario OAuth2: el campo `username` es el email.
+
+    Además del límite por IP, una cuenta con demasiados fallos seguidos se bloquea un rato,
+    aunque los intentos lleguen de muchas IPs distintas (ADR-0022)."""
+    email = form.username.strip().lower()
+    if login_failures.blocked(email):
+        raise HTTPException(status_code=status.HTTP_429_TOO_MANY_REQUESTS, detail=TOO_MANY)
+    user = db.scalar(select(User).where(User.email == email))
     if not verify_password(form.password, user.password_hash if user else None):
+        login_failures.record(email)
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Email o contraseña incorrectos",
             headers={"WWW-Authenticate": "Bearer"},
         )
+    login_failures.clear(email)
+    if needs_rehash(user.password_hash):  # hashes creados con parámetros anteriores
+        user.password_hash = hash_password(form.password)
+        db.commit()
     return Token(access_token=create_access_token(user.id, user.token_version))
+
+
+@router.post("/auth/logout-all", status_code=status.HTTP_204_NO_CONTENT)
+def logout_everywhere(user: CurrentUser, db: DbSession) -> Response:
+    """Cierra la sesión en todos los dispositivos: los tokens emitidos dejan de valer."""
+    user.token_version += 1
+    db.commit()
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
 RESET_ACCEPTED = {
@@ -78,7 +98,8 @@ def request_password_reset(
 ) -> dict[str, str]:
     """Responde siempre igual, exista o no el email (no revela qué cuentas hay)."""
     user = db.scalar(select(User).where(User.email == data.email))
-    if user is not None:
+    # Como mucho unos pocos emails por cuenta y cuarto de hora; la respuesta no cambia
+    if user is not None and reset_requests.hit(data.email):
         settings = get_settings()
         db.execute(delete(PasswordResetToken).where(PasswordResetToken.user_id == user.id))
         token, token_hash = new_reset_token()
@@ -114,10 +135,21 @@ def confirm_password_reset(data: PasswordResetConfirm, db: DbSession) -> Respons
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="El enlace no es válido o ha caducado. Pide uno nuevo.",
         )
+    # Un solo uso incluso con dos peticiones a la vez: solo gana la que marca el enlace como usado
+    claimed = db.execute(
+        update(PasswordResetToken)
+        .where(PasswordResetToken.id == reset.id, PasswordResetToken.used_at.is_(None))
+        .values(used_at=now)
+    )
+    if claimed.rowcount != 1:  # pragma: no cover - carrera entre dos peticiones simultáneas
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="El enlace no es válido o ha caducado. Pide uno nuevo.",
+        )
     user = db.get(User, reset.user_id)
     user.password_hash = hash_password(data.new_password)
     user.token_version += 1  # cierra todas las sesiones abiertas
-    reset.used_at = now
     db.commit()
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 

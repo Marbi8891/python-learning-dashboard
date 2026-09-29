@@ -1,7 +1,12 @@
 /* Diálogo de cuenta: login, registro, recuperación, perfil, exportación y borrado. */
 
 import { apiEnabled, request, serverInfo } from "./api.js";
-import { endSession, startSession, state, subscribe } from "./store.js";
+import { escapeHtml } from "./markdown.js";
+import { flushCourseSync } from "./course-store.js";
+import { flushPcapSync } from "./pcap-sync.js";
+import { clearLocalData, endSession, startSession, state, subscribe } from "./store.js";
+
+const FLASH_KEY = "pld:flash";
 
 const $ = (selector) => document.querySelector(selector);
 let showToast = () => {};
@@ -46,6 +51,30 @@ async function submitting(form, action) {
   }
 }
 
+/** Cierra la sesión y borra de este navegador los datos personales (equipos compartidos).
+    Se recarga la página para que tampoco quede nada en memoria; el aviso se muestra al volver. */
+function leave(message) {
+  endSession();
+  clearLocalData();
+  try {
+    sessionStorage.setItem(FLASH_KEY, `${message} Tus datos se han borrado de este navegador.`);
+  } catch {
+    // sin almacenamiento: se recarga igualmente
+  }
+  location.reload();
+}
+
+/** Aviso pendiente de la página anterior (tras cerrar sesión o borrar la cuenta). */
+export function takeFlash() {
+  try {
+    const message = sessionStorage.getItem(FLASH_KEY);
+    sessionStorage.removeItem(FLASH_KEY);
+    return message;
+  } catch {
+    return null;
+  }
+}
+
 /** Sin SMTP en el servidor no se pueden enviar enlaces: se ofrece el contacto en su lugar. */
 async function setupPasswordRecovery() {
   const info = await serverInfo;
@@ -55,7 +84,7 @@ async function setupPasswordRecovery() {
   form.querySelector("label").hidden = true;
   form.querySelector("button[type=submit]").hidden = true;
   form.querySelector("p").innerHTML = contact
-    ? `La recuperación por email aún no está activa. Escribe desde el email de tu cuenta a <a href="mailto:${contact}">${contact}</a> y te enviaremos un enlace para elegir otra contraseña.`
+    ? `La recuperación por email aún no está activa. Escribe desde el email de tu cuenta a <a href="mailto:${escapeHtml(contact)}">${escapeHtml(contact)}</a> y te enviaremos un enlace para elegir otra contraseña.`
     : "La recuperación por email aún no está activa.";
 }
 
@@ -174,19 +203,18 @@ export function initAccount({ toast }) {
     }
   });
 
-  $("#logout-button").addEventListener("click", () => {
-    endSession();
-    dialog().close();
-    showToast("Sesión cerrada. Tu progreso sigue guardado en este navegador.");
+  $("#logout-button").addEventListener("click", async () => {
+    const everywhere = $("#logout-everywhere").checked;
+    await Promise.allSettled([flushPcapSync(), flushCourseSync()]); // nada se queda sin subir
+    if (everywhere) await request("POST", "/api/auth/logout-all").catch(() => {});
+    leave(everywhere ? "Sesión cerrada en todos tus dispositivos." : "Sesión cerrada.");
   });
 
   $("#delete-form").addEventListener("submit", (event) => {
     event.preventDefault();
     submitting(event.target, async (data) => {
       await request("POST", "/api/users/me/delete", { json: { password: data.get("password") } });
-      endSession();
-      dialog().close();
-      showToast("Tu cuenta y todos sus datos se han borrado.");
+      leave("Tu cuenta y todos sus datos se han borrado.");
     });
   });
 }

@@ -23,7 +23,7 @@ class PldApplication : Application() {
 
 /**
  * Un curso de la app (ADR-0016). El PCAP usa los mismos JSON que la web; los demás cursos de DAW
- * (SQL, ...) viven en `assets/courses/<id>/` con el mismo formato, generados y comprobados por
+ * (SQL, ...) viven en `frontend/data/courses/<id>/` (assets `courses/<id>/`, ADR-0021) con el mismo formato, generados y comprobados por
  * `scripts/courses/`.
  */
 class CourseData(
@@ -66,10 +66,11 @@ class AppModel(context: Context) {
             "Para ejecutarlo, cópialo en tu editor. Ejecutar Python dentro de la app llegará en la entrega 6.",
         )
         val others = listOf(
+            course(context, "programacion", "Programación", "Módulo 0485 en Python · UT1-UT9", "Para probarlo, pégalo en un archivo .py y ejecútalo con «python archivo.py» o en PyCharm. Los ejemplos de ventanas necesitan «pip install pyside6»."),
             course(context, "sql", "Bases de datos", "Módulo 0484 · UD1-UD3 de tu centro (SQL)", "Para probarlo, cópialo en tu gestor de bases de datos (MySQL Workbench, DBeaver…)."),
-            course(context, "js", "JavaScript", "Entorno cliente (DAW)", "Para probarlo, pégalo en la consola del navegador (F12) o guárdalo en un .js y ejecútalo con Node. El código del DOM necesita una página HTML."),
-            course(context, "java", "Java", "Programación (DAW)", "Para probarlo, pégalo en tu IDE (IntelliJ, NetBeans…) o guárdalo en Main.java y ejecuta «java Main.java»."),
             course(context, "entornos", "Entornos", "Entornos de desarrollo (0487) · UD1 de tu centro", "Los ejemplos están en Python: pégalos en un archivo .py y ejecútalo con «python archivo.py», o en tu IDE."),
+            course(context, "js", "JavaScript", "Entorno cliente (DAW)", "Para probarlo, pégalo en la consola del navegador (F12) o guárdalo en un .js y ejecútalo con Node. El código del DOM necesita una página HTML."),
+            course(context, "java", "Java", "Para más adelante: Java desde cero", "Para probarlo, pégalo en tu IDE (IntelliJ, NetBeans…) o guárdalo en Main.java y ejecuta «java Main.java»."),
         )
         others.forEach { it.state.shareApp(pcap.state.app) }
         listOf(pcap) + others

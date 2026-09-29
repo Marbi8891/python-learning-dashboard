@@ -88,6 +88,18 @@ export async function restoreSession() {
   }
 }
 
+/** Borra de este navegador todo lo personal (progreso, borradores, nombre del certificado,
+    logros…). Se conservan solo las preferencias de aspecto. Para equipos compartidos (ADR-0022). */
+export function clearLocalData() {
+  try {
+    for (const key of Object.keys(localStorage)) {
+      if (key.startsWith("pld:") && key !== "pld:prefs") localStorage.removeItem(key);
+    }
+  } catch {
+    // sin almacenamiento: no hay nada que borrar
+  }
+}
+
 export function endSession() {
   setToken(null);
   state.user = null;

@@ -10,7 +10,7 @@ import kotlin.random.Random
 /** Los cursos de DAW (ADR-0016) se leen con los mismos lectores que el PCAP y no chocan con él ni entre sí. */
 class CoursesTest {
     private class Loaded(val id: String) {
-        private val dir = File("src/main/assets/courses/$id")
+        private val dir = File("../../frontend/data/courses/$id")
         val bank = Bank.parse(File(dir, "bank.json").readText())
         private val lessonsJson = File(dir, "lessons.json").readText()
         val lessons = LessonIndex.parse(lessonsJson)
@@ -18,7 +18,7 @@ class CoursesTest {
         val units = Course.build(bank, lessons)
     }
 
-    private val courses = listOf("sql", "js", "java", "entornos").map { Loaded(it) }
+    private val courses = listOf("programacion", "sql", "js", "java", "entornos").map { Loaded(it) }
 
     private val pcapBank = Bank.parse(File("../../frontend/data/pcap.json").readText())
     private val pcapUnits = Course.build(pcapBank, LessonIndex.parse(File("../../frontend/data/lessons.json").readText()))
@@ -117,5 +117,15 @@ class CoursesTest {
         assertTrue(bd.bank.questions.filter { it.block == "bd-ud1" }.size >= 20)
         assertTrue(bd.bank.questions.any { it.block == "bd-ud2" && it.kind == Kind.FILL })
         assertTrue(bd.bank.questions.any { it.block == "bd-ud3" && it.kind == Kind.ORDER })
+    }
+
+    @Test
+    fun programacionSigueLasNueveUnidades() {
+        // ADR-0020: un bloque por UT, con ejercicios de escribir código en Python
+        val prog = courses.first { it.id == "programacion" }
+        assertEquals((1..9).map { "prog-ut$it" }, prog.bank.exam.blocks.map { it.slug })
+        assertTrue(prog.bank.questions.size >= 150)
+        assertTrue(prog.bank.questions.any { it.kind == Kind.FILL } && prog.bank.questions.any { it.kind == Kind.ORDER })
+        assertTrue(prog.bank.exam.blocks.all { b -> prog.bank.questions.count { it.block == b.slug } >= DungeonRun.ROOMS + DungeonRun.BOSS })
     }
 }

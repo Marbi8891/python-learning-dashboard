@@ -1,0 +1,4535 @@
+{
+ "exam": {
+  "code": "PROGRAMACION",
+  "questions": 0,
+  "minutes": 0,
+  "pass": 0,
+  "blocks": [
+   {
+    "slug": "prog-ut1",
+    "weight": 8,
+    "items": 15,
+    "title": {
+     "es": "UT1 · Introducción y algoritmos",
+     "en": "UT1 · Introducción y algoritmos"
+    }
+   },
+   {
+    "slug": "prog-ut2",
+    "weight": 12,
+    "items": 16,
+    "title": {
+     "es": "UT2 · Elementos de un programa",
+     "en": "UT2 · Elementos de un programa"
+    }
+   },
+   {
+    "slug": "prog-ut3",
+    "weight": 20,
+    "items": 25,
+    "title": {
+     "es": "UT3 · Estructuras de control y funciones",
+     "en": "UT3 · Estructuras de control y funciones"
+    }
+   },
+   {
+    "slug": "prog-ut4",
+    "weight": 8,
+    "items": 13,
+    "title": {
+     "es": "UT4 · POO",
+     "en": "UT4 · POO"
+    }
+   },
+   {
+    "slug": "prog-ut5",
+    "weight": 15,
+    "items": 25,
+    "title": {
+     "es": "UT5 · POO en Python (I)",
+     "en": "UT5 · POO en Python (I)"
+    }
+   },
+   {
+    "slug": "prog-ut6",
+    "weight": 17,
+    "items": 31,
+    "title": {
+     "es": "UT6 · POO en Python (II) y estructuras de datos",
+     "en": "UT6 · POO en Python (II) y estructuras de datos"
+    }
+   },
+   {
+    "slug": "prog-ut7",
+    "weight": 5,
+    "items": 9,
+    "title": {
+     "es": "UT7 · Proyecto",
+     "en": "UT7 · Proyecto"
+    }
+   },
+   {
+    "slug": "prog-ut8",
+    "weight": 10,
+    "items": 16,
+    "title": {
+     "es": "UT8 · Gestión de datos",
+     "en": "UT8 · Gestión de datos"
+    }
+   },
+   {
+    "slug": "prog-ut9",
+    "weight": 5,
+    "items": 13,
+    "title": {
+     "es": "UT9 · Interfaces gráficas",
+     "en": "UT9 · Interfaces gráficas"
+    }
+   }
+  ]
+ },
+ "questions": [
+  {
+   "id": "prog-01",
+   "block": "prog-ut1",
+   "q": {
+    "es": "¿Qué es un algoritmo?",
+    "en": "¿Qué es un algoritmo?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Un conjunto ordenado y finito de operaciones que resuelve un problema",
+     "en": "Un conjunto ordenado y finito de operaciones que resuelve un problema"
+    },
+    {
+     "es": "Cualquier programa escrito en Python",
+     "en": "Cualquier programa escrito en Python"
+    },
+    {
+     "es": "Un diagrama con un inicio y varios finales",
+     "en": "Un diagrama con un inicio y varios finales"
+    },
+    {
+     "es": "Una lista de variables",
+     "en": "Una lista de variables"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Además tiene entradas y salidas definidas, termina en un tiempo finito y cada paso es preciso.",
+    "en": "Además tiene entradas y salidas definidas, termina en un tiempo finito y cada paso es preciso."
+   },
+   "lesson": "prog-ut1-algoritmos"
+  },
+  {
+   "id": "prog-02",
+   "block": "prog-ut1",
+   "q": {
+    "es": "¿Cuál NO es una característica de un algoritmo?",
+    "en": "¿Cuál NO es una característica de un algoritmo?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Puede tener pasos ambiguos si el programador los entiende",
+     "en": "Puede tener pasos ambiguos si el programador los entiende"
+    },
+    {
+     "es": "Tiene un número finito de pasos",
+     "en": "Tiene un número finito de pasos"
+    },
+    {
+     "es": "Termina en un tiempo finito",
+     "en": "Termina en un tiempo finito"
+    },
+    {
+     "es": "Puede tener varios datos de entrada y de salida",
+     "en": "Puede tener varios datos de entrada y de salida"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Cada operación tiene que ser precisa y sin ambigüedad: el ordenador no interpreta intenciones.",
+    "en": "Cada operación tiene que ser precisa y sin ambigüedad: el ordenador no interpreta intenciones."
+   },
+   "lesson": "prog-ut1-algoritmos"
+  },
+  {
+   "id": "prog-03",
+   "block": "prog-ut1",
+   "q": {
+    "es": "¿Qué estructuras admite la programación estructurada?",
+    "en": "¿Qué estructuras admite la programación estructurada?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Secuencial, alternativa e iterativa",
+     "en": "Secuencial, alternativa e iterativa"
+    },
+    {
+     "es": "Secuencial, alternativa y saltos goto",
+     "en": "Secuencial, alternativa y saltos goto"
+    },
+    {
+     "es": "Solo bucles",
+     "en": "Solo bucles"
+    },
+    {
+     "es": "Clases, objetos y herencia",
+     "en": "Clases, objetos y herencia"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Con esas tres se puede escribir cualquier algoritmo, sin saltos incondicionales.",
+    "en": "Con esas tres se puede escribir cualquier algoritmo, sin saltos incondicionales."
+   },
+   "lesson": "prog-ut1-algoritmos"
+  },
+  {
+   "id": "prog-04",
+   "block": "prog-ut1",
+   "q": {
+    "es": "En programación modular, cada función debe tener…",
+    "en": "En programación modular, cada función debe tener…"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "máxima cohesión y mínimo acoplamiento",
+     "en": "máxima cohesión y mínimo acoplamiento"
+    },
+    {
+     "es": "mínima cohesión y máximo acoplamiento",
+     "en": "mínima cohesión y máximo acoplamiento"
+    },
+    {
+     "es": "acceso a todas las variables globales",
+     "en": "acceso a todas las variables globales"
+    },
+    {
+     "es": "más de 200 líneas",
+     "en": "más de 200 líneas"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Cohesión: la función hace una sola cosa bien. Acoplamiento: depende lo menos posible de las demás. Así funciona como una caja negra.",
+    "en": "Cohesión: la función hace una sola cosa bien. Acoplamiento: depende lo menos posible de las demás. Así funciona como una caja negra."
+   },
+   "lesson": "prog-ut1-algoritmos"
+  },
+  {
+   "id": "prog-05",
+   "block": "prog-ut1",
+   "q": {
+    "es": "¿Qué regla cumple un diagrama de flujo bien hecho?",
+    "en": "¿Qué regla cumple un diagrama de flujo bien hecho?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Los símbolos de inicio y fin aparecen una sola vez",
+     "en": "Los símbolos de inicio y fin aparecen una sola vez"
+    },
+    {
+     "es": "Puede tener varios inicios",
+     "en": "Puede tener varios inicios"
+    },
+    {
+     "es": "El flujo va de abajo arriba",
+     "en": "El flujo va de abajo arriba"
+    },
+    {
+     "es": "Las líneas se cruzan para ahorrar espacio",
+     "en": "Las líneas se cruzan para ahorrar espacio"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Se empieza arriba y se acaba abajo, el flujo va de arriba abajo y de izquierda a derecha, y los cruces se evitan con conectores.",
+    "en": "Se empieza arriba y se acaba abajo, el flujo va de arriba abajo y de izquierda a derecha, y los cruces se evitan con conectores."
+   },
+   "lesson": "prog-ut1-algoritmos"
+  },
+  {
+   "id": "prog-06",
+   "block": "prog-ut1",
+   "q": {
+    "es": "¿Qué es PSeInt?",
+    "en": "¿Qué es PSeInt?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Un intérprete de pseudocódigo para estudiantes que también dibuja el diagrama de flujo",
+     "en": "Un intérprete de pseudocódigo para estudiantes que también dibuja el diagrama de flujo"
+    },
+    {
+     "es": "Un compilador de Python",
+     "en": "Un compilador de Python"
+    },
+    {
+     "es": "Un sistema gestor de bases de datos",
+     "en": "Un sistema gestor de bases de datos"
+    },
+    {
+     "es": "Un IDE para Java",
+     "en": "Un IDE para Java"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Permite probar el algoritmo en pseudocódigo antes de pasarlo a un lenguaje real.",
+    "en": "Permite probar el algoritmo en pseudocódigo antes de pasarlo a un lenguaje real."
+   },
+   "lesson": "prog-ut1-algoritmos"
+  },
+  {
+   "id": "prog-07",
+   "block": "prog-ut1",
+   "q": {
+    "es": "En pseudocódigo, ¿qué significa `C ← A`?",
+    "en": "En pseudocódigo, ¿qué significa `C ← A`?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Asigna a C el valor de A",
+     "en": "Asigna a C el valor de A"
+    },
+    {
+     "es": "Compara C con A",
+     "en": "Compara C con A"
+    },
+    {
+     "es": "C es menor que A",
+     "en": "C es menor que A"
+    },
+    {
+     "es": "Borra A",
+     "en": "Borra A"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "La flecha es la asignación. En Python se escribe `c = a`, y la comparación de igualdad es `==`.",
+    "en": "La flecha es la asignación. En Python se escribe `c = a`, y la comparación de igualdad es `==`."
+   },
+   "lesson": "prog-ut1-algoritmos"
+  },
+  {
+   "id": "prog-08",
+   "block": "prog-ut1",
+   "q": {
+    "es": "Buscar un valor recorriendo una lista elemento a elemento tiene un coste…",
+    "en": "Buscar un valor recorriendo una lista elemento a elemento tiene un coste…"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "O(n), lineal",
+     "en": "O(n), lineal"
+    },
+    {
+     "es": "O(1), constante",
+     "en": "O(1), constante"
+    },
+    {
+     "es": "O(log n), logarítmico",
+     "en": "O(log n), logarítmico"
+    },
+    {
+     "es": "O(n²), cuadrático",
+     "en": "O(n²), cuadrático"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "En el peor caso hay que mirar los n elementos. Acceder por índice es O(1) y la búsqueda binaria en una lista ordenada, O(log n).",
+    "en": "En el peor caso hay que mirar los n elementos. Acceder por índice es O(1) y la búsqueda binaria en una lista ordenada, O(log n)."
+   },
+   "lesson": "prog-ut1-algoritmos"
+  },
+  {
+   "id": "prog-09",
+   "block": "prog-ut1",
+   "q": {
+    "es": "Java y Python compilan a bytecode que ejecuta una máquina virtual. Son lenguajes…",
+    "en": "Java y Python compilan a bytecode que ejecuta una máquina virtual. Son lenguajes…"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "mixtos o intermedios",
+     "en": "mixtos o intermedios"
+    },
+    {
+     "es": "compilados puros",
+     "en": "compilados puros"
+    },
+    {
+     "es": "de bajo nivel",
+     "en": "de bajo nivel"
+    },
+    {
+     "es": "ensambladores",
+     "en": "ensambladores"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "El bytecode no depende del procesador: se gana portabilidad a cambio de algo de velocidad.",
+    "en": "El bytecode no depende del procesador: se gana portabilidad a cambio de algo de velocidad."
+   },
+   "lesson": "prog-ut1-algoritmos"
+  },
+  {
+   "id": "prog-10",
+   "block": "prog-ut1",
+   "q": {
+    "es": "Los comentarios y docstrings del código son documentación…",
+    "en": "Los comentarios y docstrings del código son documentación…"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "interna",
+     "en": "interna"
+    },
+    {
+     "es": "externa",
+     "en": "externa"
+    },
+    {
+     "es": "de usuario",
+     "en": "de usuario"
+    },
+    {
+     "es": "de mantenimiento externa",
+     "en": "de mantenimiento externa"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "La externa son los documentos aparte: diseño, manual de usuario y manual de mantenimiento.",
+    "en": "La externa son los documentos aparte: diseño, manual de usuario y manual de mantenimiento."
+   },
+   "lesson": "prog-ut1-algoritmos"
+  },
+  {
+   "id": "prog-11",
+   "block": "prog-ut1",
+   "q": {
+    "es": "¿Cuál es el orden del ciclo de vida clásico?",
+    "en": "¿Cuál es el orden del ciclo de vida clásico?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Análisis, diseño, codificación y pruebas, implantación, mantenimiento",
+     "en": "Análisis, diseño, codificación y pruebas, implantación, mantenimiento"
+    },
+    {
+     "es": "Codificación, análisis, diseño, mantenimiento",
+     "en": "Codificación, análisis, diseño, mantenimiento"
+    },
+    {
+     "es": "Diseño, codificación, análisis, implantación",
+     "en": "Diseño, codificación, análisis, implantación"
+    },
+    {
+     "es": "Pruebas, análisis, codificación, diseño",
+     "en": "Pruebas, análisis, codificación, diseño"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Del mantenimiento se puede volver al análisis para una nueva versión.",
+    "en": "Del mantenimiento se puede volver al análisis para una nueva versión."
+   },
+   "lesson": "prog-ut1-algoritmos"
+  },
+  {
+   "id": "prog-12",
+   "block": "prog-ut1",
+   "q": {
+    "es": "¿Qué inventó Blaise Pascal en 1642?",
+    "en": "¿Qué inventó Blaise Pascal en 1642?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "La Pascalina, una calculadora mecánica",
+     "en": "La Pascalina, una calculadora mecánica"
+    },
+    {
+     "es": "Las tarjetas perforadas",
+     "en": "Las tarjetas perforadas"
+    },
+    {
+     "es": "La máquina de Turing",
+     "en": "La máquina de Turing"
+    },
+    {
+     "es": "El transistor",
+     "en": "El transistor"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Las tarjetas perforadas son de Jacquard (1802), la máquina de Turing de Alan Turing y el transistor de los laboratorios Bell (1947).",
+    "en": "Las tarjetas perforadas son de Jacquard (1802), la máquina de Turing de Alan Turing y el transistor de los laboratorios Bell (1947)."
+   },
+   "lesson": "prog-ut1-algoritmos"
+  },
+  {
+   "id": "prog-13",
+   "block": "prog-ut1",
+   "q": {
+    "es": "Es la traducción a Python del intercambio con variable auxiliar. ¿Qué muestra este código?",
+    "en": "Es la traducción a Python del intercambio con variable auxiliar. ¿Qué muestra este código?"
+   },
+   "code": "a = 4\nb = 2\nc = a\na = b\nb = c\nprint(a, b)",
+   "options": [
+    "4 4",
+    "2 4",
+    "4 2",
+    "2 2"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": {
+    "es": "La variable auxiliar guarda el valor de `a` antes de perderlo. Sin ella, `a = b; b = a` dejaría las dos a 2.",
+    "en": "La variable auxiliar guarda el valor de `a` antes de perderlo. Sin ella, `a = b; b = a` dejaría las dos a 2."
+   },
+   "lesson": "prog-ut1-algoritmos"
+  },
+  {
+   "id": "prog-14",
+   "block": "prog-ut1",
+   "q": {
+    "es": "Traducción del pseudocódigo «mientras C <= A: Imprimir C; C ← C + 2». ¿Qué muestra este código?",
+    "en": "Traducción del pseudocódigo «mientras C <= A: Imprimir C; C ← C + 2». ¿Qué muestra este código?"
+   },
+   "code": "a = 7\nc = 0\nwhile c <= a:\n    print(c)\n    c = c + 2",
+   "options": [
+    "0\n2\n4\n6",
+    "0\n1\n2\n3\n4\n5\n6\n7",
+    "2\n4\n6",
+    "0\n2\n4\n6\n8"
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Tras imprimir 6, c pasa a 8, la condición 8 <= 7 es falsa y el bucle termina.",
+    "en": "Tras imprimir 6, c pasa a 8, la condición 8 <= 7 es falsa y el bucle termina."
+   },
+   "lesson": "prog-ut1-algoritmos"
+  },
+  {
+   "id": "prog-15",
+   "block": "prog-ut1",
+   "q": {
+    "es": "Si el usuario introduce 7, ¿qué escribe este pseudocódigo?",
+    "en": "Si el usuario introduce 7, ¿qué escribe este pseudocódigo?"
+   },
+   "code": "Algoritmo ParImpar\n    Leer n\n    Si (n % 2) = 0 Entonces\n        Escribir \"Par\"\n    SiNo\n        Escribir \"Impar\"\n    FinSi\nFinAlgoritmo",
+   "options": [
+    {
+     "es": "Impar",
+     "en": "Impar"
+    },
+    {
+     "es": "Par",
+     "en": "Par"
+    },
+    {
+     "es": "Nada",
+     "en": "Nada"
+    },
+    {
+     "es": "Error",
+     "en": "Error"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "7 % 2 vale 1, distinto de 0, así que se ejecuta la rama SiNo. En pseudocódigo `=` compara; en Python sería `==`.",
+    "en": "7 % 2 vale 1, distinto de 0, así que se ejecuta la rama SiNo. En pseudocódigo `=` compara; en Python sería `==`."
+   },
+   "lesson": "prog-ut1-algoritmos"
+  },
+  {
+   "id": "prog-16",
+   "block": "prog-ut2",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "print(7 / 2, 7 // 2, 7 % 2, 7 ** 2)",
+   "options": [
+    "3 3 1 49",
+    "3.5 3.5 1 14",
+    "3.5 3 1 49",
+    "3.5 3 1 14"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "`/` siempre da float; `//` es la división entera, `%` el resto y `**` la potencia.",
+    "en": "`/` siempre da float; `//` es la división entera, `%` el resto y `**` la potencia."
+   },
+   "lesson": "prog-ut2-elementos"
+  },
+  {
+   "id": "prog-17",
+   "block": "prog-ut2",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "print(0 or 10, 0 and 10, 3 and 5)",
+   "options": [
+    "10 0 3",
+    "0 10 5",
+    "10 0 5",
+    "True False True"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "Cortocircuito: `or` devuelve el primer valor verdadero (o el último); `and` devuelve el primer valor falso (o el último).",
+    "en": "Cortocircuito: `or` devuelve el primer valor verdadero (o el último); `and` devuelve el primer valor falso (o el último)."
+   },
+   "lesson": "prog-ut2-elementos"
+  },
+  {
+   "id": "prog-18",
+   "block": "prog-ut2",
+   "q": {
+    "es": "`input()` siempre devuelve una cadena. Si el usuario escribe 5… ¿Qué muestra este código?",
+    "en": "`input()` siempre devuelve una cadena. Si el usuario escribe 5… ¿Qué muestra este código?"
+   },
+   "code": "n = \"5\"   # lo que devolvería input()\nprint(n * 2, int(n) * 2)",
+   "options": [
+    "55 10",
+    "55 55",
+    "10 10",
+    "Error"
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Una cadena por 2 se repite; primero hay que convertirla con `int()`.",
+    "en": "Una cadena por 2 se repite; primero hay que convertirla con `int()`."
+   },
+   "lesson": "prog-ut2-elementos"
+  },
+  {
+   "id": "prog-19",
+   "block": "prog-ut2",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "print(\"a\", \"b\", end=\"-\")\nprint(\"c\")",
+   "options": [
+    "a b\nc",
+    "ab-c",
+    "a b-c",
+    "a-b-c"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "`print` separa los argumentos con un espacio (`sep`) y termina con `end`, que aquí es un guion en lugar del salto de línea.",
+    "en": "`print` separa los argumentos con un espacio (`sep`) y termina con `end`, que aquí es un guion en lugar del salto de línea."
+   },
+   "lesson": "prog-ut2-elementos"
+  },
+  {
+   "id": "prog-20",
+   "block": "prog-ut2",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "s = \"Python\"\nprint(s[0], s[-1], s[1:4], s[::-1])",
+   "options": [
+    "P n ytho nohtyP",
+    "P n yth nohtyP",
+    "P o yth nohtyP",
+    "y n yth Python"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": {
+    "es": "Índices desde 0, negativos desde el final; en la rebanada el fin (4) no se incluye; `[::-1]` recorre al revés.",
+    "en": "Índices desde 0, negativos desde el final; en la rebanada el fin (4) no se incluye; `[::-1]` recorre al revés."
+   },
+   "lesson": "prog-ut2-elementos"
+  },
+  {
+   "id": "prog-21",
+   "block": "prog-ut2",
+   "q": {
+    "es": "Las cadenas son inmutables. ¿Qué muestra este código?",
+    "en": "Las cadenas son inmutables. ¿Qué muestra este código?"
+   },
+   "code": "s = \"hola\"\ntry:\n    s[0] = \"H\"\nexcept Exception as e:\n    print(type(e).__name__)",
+   "options": [
+    "hola",
+    "TypeError",
+    "IndexError",
+    "Hola"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": {
+    "es": "No se puede cambiar un carácter de una cadena. Se crea otra: `s = \"H\" + s[1:]`.",
+    "en": "No se puede cambiar un carácter de una cadena. Se crea otra: `s = \"H\" + s[1:]`."
+   },
+   "lesson": "prog-ut2-elementos"
+  },
+  {
+   "id": "prog-22",
+   "block": "prog-ut2",
+   "q": {
+    "es": "¿Cuál es un identificador válido en Python?",
+    "en": "¿Cuál es un identificador válido en Python?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "_total",
+     "en": "_total"
+    },
+    {
+     "es": "2dias",
+     "en": "2dias"
+    },
+    {
+     "es": "mi-variable",
+     "en": "mi-variable"
+    },
+    {
+     "es": "precio$",
+     "en": "precio$"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Empieza por letra o `_` y solo lleva letras, dígitos y `_`. El guion se leería como una resta.",
+    "en": "Empieza por letra o `_` y solo lleva letras, dígitos y `_`. El guion se leería como una resta."
+   },
+   "lesson": "prog-ut2-elementos"
+  },
+  {
+   "id": "prog-23",
+   "block": "prog-ut2",
+   "q": {
+    "es": "Según PEP 8, ¿qué nombres son correctos?",
+    "en": "Según PEP 8, ¿qué nombres son correctos?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Clase MiPunto, función guardar_datos, constante PI",
+     "en": "Clase MiPunto, función guardar_datos, constante PI"
+    },
+    {
+     "es": "Clase mi_punto, función GuardarDatos, constante pi",
+     "en": "Clase mi_punto, función GuardarDatos, constante pi"
+    },
+    {
+     "es": "Clase MIPUNTO, función guardarDatos, constante Pi",
+     "en": "Clase MIPUNTO, función guardarDatos, constante Pi"
+    },
+    {
+     "es": "Todos valen igual",
+     "en": "Todos valen igual"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Clases en CamelCase, funciones y variables en snake_case, constantes en MAYÚSCULAS.",
+    "en": "Clases en CamelCase, funciones y variables en snake_case, constantes en MAYÚSCULAS."
+   },
+   "lesson": "prog-ut2-elementos"
+  },
+  {
+   "id": "prog-24",
+   "block": "prog-ut2",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "print(type(6 / 3).__name__, type(6 // 3).__name__)",
+   "options": [
+    "float float",
+    "int float",
+    "float int",
+    "int int"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "Aunque la división sea exacta, `/` devuelve float (2.0). `//` entre enteros devuelve int.",
+    "en": "Aunque la división sea exacta, `/` devuelve float (2.0). `//` entre enteros devuelve int."
+   },
+   "lesson": "prog-ut2-elementos"
+  },
+  {
+   "id": "prog-25",
+   "block": "prog-ut2",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "precio = 3.14159\nprint(f\"{precio:.2f} €\")",
+   "options": [
+    "3.1 €",
+    "{precio:.2f} €",
+    "3.14 €",
+    "3.14159 €"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "`:.2f` redondea a dos decimales. Sin la `f`, `:.2` serían dos cifras significativas (3.1).",
+    "en": "`:.2f` redondea a dos decimales. Sin la `f`, `:.2` serían dos cifras significativas (3.1)."
+   },
+   "lesson": "prog-ut2-elementos"
+  },
+  {
+   "id": "prog-26",
+   "block": "prog-ut2",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "a, b = 1, 2\na, b = b, a\nprint(a, b)",
+   "options": [
+    "Error",
+    "2 2",
+    "1 2",
+    "2 1"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "Python evalúa primero el lado derecho (la tupla `b, a`) y luego asigna: intercambio sin variable auxiliar.",
+    "en": "Python evalúa primero el lado derecho (la tupla `b, a`) y luego asigna: intercambio sin variable auxiliar."
+   },
+   "lesson": "prog-ut2-elementos"
+  },
+  {
+   "id": "prog-27",
+   "block": "prog-ut2",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "print(0b101, 0x1F, 1_000)",
+   "options": [
+    "5 31 1000",
+    "5 15 1000",
+    "Error",
+    "101 1F 1_000"
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "`0b` es binario, `0x` hexadecimal y `_` solo separa dígitos para leerlos mejor.",
+    "en": "`0b` es binario, `0x` hexadecimal y `_` solo separa dígitos para leerlos mejor."
+   },
+   "lesson": "prog-ut2-elementos"
+  },
+  {
+   "id": "prog-28",
+   "block": "prog-ut2",
+   "q": {
+    "es": "¿Quién creó Python y de dónde viene su nombre?",
+    "en": "¿Quién creó Python y de dónde viene su nombre?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Guido van Rossum; de los Monty Python",
+     "en": "Guido van Rossum; de los Monty Python"
+    },
+    {
+     "es": "James Gosling; de una serpiente",
+     "en": "James Gosling; de una serpiente"
+    },
+    {
+     "es": "Dennis Ritchie; de la mitología griega",
+     "en": "Dennis Ritchie; de la mitología griega"
+    },
+    {
+     "es": "Guido van Rossum; de una serpiente",
+     "en": "Guido van Rossum; de una serpiente"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Empezó en las navidades de 1989. Python 3.0 salió en 2008.",
+    "en": "Empezó en las navidades de 1989. Python 3.0 salió en 2008."
+   },
+   "lesson": "prog-ut2-elementos"
+  },
+  {
+   "id": "prog-29",
+   "block": "prog-ut2",
+   "q": {
+    "es": "¿Qué significa que Python tiene tipado dinámico?",
+    "en": "¿Qué significa que Python tiene tipado dinámico?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Que una misma variable puede apuntar a objetos de distinto tipo durante el programa",
+     "en": "Que una misma variable puede apuntar a objetos de distinto tipo durante el programa"
+    },
+    {
+     "es": "Que convierte solo `\"3\" + 4` en 7",
+     "en": "Que convierte solo `\"3\" + 4` en 7"
+    },
+    {
+     "es": "Que no tiene tipos",
+     "en": "Que no tiene tipos"
+    },
+    {
+     "es": "Que hay que declarar el tipo de cada variable",
+     "en": "Que hay que declarar el tipo de cada variable"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "El tipo va con el objeto. Además es fuerte: `\"3\" + 4` da TypeError en lugar de convertir solo.",
+    "en": "El tipo va con el objeto. Además es fuerte: `\"3\" + 4` da TypeError en lugar de convertir solo."
+   },
+   "lesson": "prog-ut2-elementos"
+  },
+  {
+   "id": "prog-30",
+   "block": "prog-ut2",
+   "q": {
+    "es": "¿Dónde guarda Python el bytecode compilado de los módulos?",
+    "en": "¿Dónde guarda Python el bytecode compilado de los módulos?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "En ficheros .pyc dentro de __pycache__",
+     "en": "En ficheros .pyc dentro de __pycache__"
+    },
+    {
+     "es": "En un .exe junto al programa",
+     "en": "En un .exe junto al programa"
+    },
+    {
+     "es": "En la memoria, sin guardarlo nunca",
+     "en": "En la memoria, sin guardarlo nunca"
+    },
+    {
+     "es": "En un .class",
+     "en": "En un .class"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Python se considera interpretado, pero antes compila a bytecode que ejecuta su máquina virtual. Los `.class` son de Java.",
+    "en": "Python se considera interpretado, pero antes compila a bytecode que ejecuta su máquina virtual. Los `.class` son de Java."
+   },
+   "lesson": "prog-ut2-elementos"
+  },
+  {
+   "id": "prog-31",
+   "block": "prog-ut2",
+   "q": {
+    "es": "Completa con el operador que da la división entera.",
+    "en": "Completa con el operador que da la división entera."
+   },
+   "kind": "fill",
+   "code": "print(10 ___ 3)",
+   "accept": [
+    "//"
+   ],
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "`10 / 3` daría 3.3333333333333335; `//` descarta los decimales. Solución: `//`.",
+    "en": "`10 / 3` daría 3.3333333333333335; `//` descarta los decimales. Solución: `//`."
+   },
+   "lesson": "prog-ut2-elementos"
+  },
+  {
+   "id": "prog-32",
+   "block": "prog-ut3",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "print(list(range(0, 10, 3)))",
+   "options": [
+    "[0, 3, 6, 9, 10]",
+    "[0, 3, 6, 9]",
+    "[0, 3, 6]",
+    "[3, 6, 9]"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": {
+    "es": "Empieza en 0, avanza de 3 en 3 y se detiene antes de 10.",
+    "en": "Empieza en 0, avanza de 3 en 3 y se detiene antes de 10."
+   },
+   "lesson": "prog-ut3-control"
+  },
+  {
+   "id": "prog-33",
+   "block": "prog-ut3",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "print(sum(range(5, 10)))",
+   "options": [
+    "45",
+    "50",
+    "30",
+    "35"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "5 + 6 + 7 + 8 + 9 = 35: el 10 no se incluye.",
+    "en": "5 + 6 + 7 + 8 + 9 = 35: el 10 no se incluye."
+   },
+   "lesson": "prog-ut3-control"
+  },
+  {
+   "id": "prog-34",
+   "block": "prog-ut3",
+   "q": {
+    "es": "El `else` del `for` se ejecuta si no hubo `break`. ¿Qué muestra este código?",
+    "en": "El `else` del `for` se ejecuta si no hubo `break`. ¿Qué muestra este código?"
+   },
+   "code": "n = 9\nfor divisor in range(2, n):\n    if n % divisor == 0:\n        print(n, \"no es primo\")\n        break\nelse:\n    print(n, \"es primo\")",
+   "options": [
+    "9 no es primo\n9 es primo",
+    "9 es primo",
+    "Error",
+    "9 no es primo"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "Con divisor 3 se cumple la condición, se imprime y `break` sale del bucle: el `else` ya no se ejecuta.",
+    "en": "Con divisor 3 se cumple la condición, se imprime y `break` sale del bucle: el `else` ya no se ejecuta."
+   },
+   "lesson": "prog-ut3-control"
+  },
+  {
+   "id": "prog-35",
+   "block": "prog-ut3",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "pares = []\nfor i in range(6):\n    if i % 2:\n        continue\n    pares.append(i)\nprint(pares)",
+   "options": [
+    "[0, 2, 4]",
+    "[1, 3, 5]",
+    "[]",
+    "[0, 2, 4, 6]"
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "`i % 2` vale 1 (verdadero) para los impares: `continue` los salta antes de añadirlos.",
+    "en": "`i % 2` vale 1 (verdadero) para los impares: `continue` los salta antes de añadirlos."
+   },
+   "lesson": "prog-ut3-control"
+  },
+  {
+   "id": "prog-36",
+   "block": "prog-ut3",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "n = 10\npasos = 0\nwhile n > 1:\n    n //= 2\n    pasos += 1\nprint(pasos)",
+   "options": [
+    "4",
+    "10",
+    "5",
+    "3"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "10 → 5 → 2 → 1: tres vueltas. Al llegar a 1, la condición es falsa.",
+    "en": "10 → 5 → 2 → 1: tres vueltas. Al llegar a 1, la condición es falsa."
+   },
+   "lesson": "prog-ut3-control"
+  },
+  {
+   "id": "prog-37",
+   "block": "prog-ut3",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "x = 20\nprint(5 < x < 15, 5 < x)",
+   "options": [
+    "True False",
+    "Error",
+    "True True",
+    "False True"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "`5 < x < 15` equivale a `5 < x and x < 15`: 20 no es menor que 15.",
+    "en": "`5 < x < 15` equivale a `5 < x and x < 15`: 20 no es menor que 15."
+   },
+   "lesson": "prog-ut3-control"
+  },
+  {
+   "id": "prog-38",
+   "block": "prog-ut3",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "edad = 17\nprint(\"mayor\" if edad >= 18 else \"menor\")",
+   "options": [
+    "Error",
+    "True",
+    "mayor",
+    "menor"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "Es el condicional en una línea de Python: `valor_si if condición else valor_no`.",
+    "en": "Es el condicional en una línea de Python: `valor_si if condición else valor_no`."
+   },
+   "lesson": "prog-ut3-control"
+  },
+  {
+   "id": "prog-39",
+   "block": "prog-ut3",
+   "q": {
+    "es": "Condición de año bisiesto de los apuntes. ¿Qué muestra este código?",
+    "en": "Condición de año bisiesto de los apuntes. ¿Qué muestra este código?"
+   },
+   "code": "anio = 1900\nif not anio % 4 and (anio % 100 or not anio % 400):\n    print(\"Bisiesto\")\nelse:\n    print(\"No bisiesto\")",
+   "options": [
+    "No bisiesto",
+    "Error",
+    "Bisiesto",
+    "True"
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "1900 es múltiplo de 4 y de 100, pero no de 400: no es bisiesto. `not anio % 4` es verdadero cuando el resto es 0.",
+    "en": "1900 es múltiplo de 4 y de 100, pero no de 400: no es bisiesto. `not anio % 4` es verdadero cuando el resto es 0."
+   },
+   "lesson": "prog-ut3-control"
+  },
+  {
+   "id": "prog-40",
+   "block": "prog-ut3",
+   "q": {
+    "es": "Necesita Python 3.10 o posterior. ¿Qué muestra este código?",
+    "en": "Necesita Python 3.10 o posterior. ¿Qué muestra este código?"
+   },
+   "code": "dia = 6\nmatch dia:\n    case 6 | 7:\n        print(\"Fin de semana\")\n    case _:\n        print(\"Laborable\")",
+   "options": [
+    "Error",
+    "Laborable",
+    "6",
+    "Fin de semana"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "`|` junta varios patrones en un `case`; `case _` recoge todo lo demás.",
+    "en": "`|` junta varios patrones en un `case`; `case _` recoge todo lo demás."
+   },
+   "lesson": "prog-ut3-control"
+  },
+  {
+   "id": "prog-41",
+   "block": "prog-ut3",
+   "q": {
+    "es": "Simulamos lo que teclearía el usuario. ¿Qué muestra este código?",
+    "en": "Simulamos lo que teclearía el usuario. ¿Qué muestra este código?"
+   },
+   "code": "teclado = iter([\"ho\", \"la\", \"FIN\", \"extra\"])\nresultado = \"\"\nwhile (linea := next(teclado)) != \"FIN\":\n    resultado += linea\nprint(resultado)",
+   "options": [
+    "ho",
+    "holaFIN",
+    "hola",
+    "holaFINextra"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "La morsa asigna y compara a la vez. Al leer \"FIN\", el bucle termina y \"extra\" ni se lee.",
+    "en": "La morsa asigna y compara a la vez. Al leer \"FIN\", el bucle termina y \"extra\" ni se lee."
+   },
+   "lesson": "prog-ut3-control"
+  },
+  {
+   "id": "prog-42",
+   "block": "prog-ut3",
+   "q": {
+    "es": "En el depurador de PyCharm, ¿qué diferencia hay entre Step Over (F8) y Step Into (F7)?",
+    "en": "En el depurador de PyCharm, ¿qué diferencia hay entre Step Over (F8) y Step Into (F7)?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Step Over ejecuta la línea sin entrar en las funciones; Step Into entra en ellas",
+     "en": "Step Over ejecuta la línea sin entrar en las funciones; Step Into entra en ellas"
+    },
+    {
+     "es": "Son lo mismo",
+     "en": "Son lo mismo"
+    },
+    {
+     "es": "Step Over salta hasta el final del programa",
+     "en": "Step Over salta hasta el final del programa"
+    },
+    {
+     "es": "Step Into borra el punto de ruptura",
+     "en": "Step Into borra el punto de ruptura"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Step Out (Mayús+F8) termina la función actual y vuelve a quien la llamó.",
+    "en": "Step Out (Mayús+F8) termina la función actual y vuelve a quien la llamó."
+   },
+   "lesson": "prog-ut3-control"
+  },
+  {
+   "id": "prog-43",
+   "block": "prog-ut3",
+   "q": {
+    "es": "¿Qué es un docstring?",
+    "en": "¿Qué es un docstring?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Una cadena literal que es la primera instrucción de un módulo, clase o función y la documenta",
+     "en": "Una cadena literal que es la primera instrucción de un módulo, clase o función y la documenta"
+    },
+    {
+     "es": "Cualquier comentario con #",
+     "en": "Cualquier comentario con #"
+    },
+    {
+     "es": "Un fichero de documentación externa",
+     "en": "Un fichero de documentación externa"
+    },
+    {
+     "es": "Una cadena con formato f",
+     "en": "Una cadena con formato f"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Se lee con `__doc__` o `help()`. PEP 257 pide una primera línea de resumen acabada en punto.",
+    "en": "Se lee con `__doc__` o `help()`. PEP 257 pide una primera línea de resumen acabada en punto."
+   },
+   "lesson": "prog-ut3-control"
+  },
+  {
+   "id": "prog-44",
+   "block": "prog-ut3",
+   "q": {
+    "es": "Según PEP 8, ¿qué es correcto?",
+    "en": "Según PEP 8, ¿qué es correcto?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Indentar con 4 espacios y no pasar de 79 caracteres por línea",
+     "en": "Indentar con 4 espacios y no pasar de 79 caracteres por línea"
+    },
+    {
+     "es": "Indentar con tabuladores y espacios mezclados",
+     "en": "Indentar con tabuladores y espacios mezclados"
+    },
+    {
+     "es": "Escribir todo en una sola línea",
+     "en": "Escribir todo en una sola línea"
+    },
+    {
+     "es": "Nombrar las funciones en MAYÚSCULAS",
+     "en": "Nombrar las funciones en MAYÚSCULAS"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Son convenciones de estilo: el código se lee muchas más veces de las que se escribe.",
+    "en": "Son convenciones de estilo: el código se lee muchas más veces de las que se escribe."
+   },
+   "lesson": "prog-ut3-control"
+  },
+  {
+   "id": "prog-45",
+   "block": "prog-ut3",
+   "q": {
+    "es": "Ordena las líneas para sumar los pares del 1 al 10 (debe mostrar 30).",
+    "en": "Ordena las líneas para sumar los pares del 1 al 10 (debe mostrar 30)."
+   },
+   "kind": "order",
+   "code": "___",
+   "lines": [
+    "total = 0",
+    "for n in range(1, 11):",
+    "    if n % 2 == 0:",
+    "        total += n",
+    "print(total)"
+   ],
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "Inicializar, recorrer, filtrar, acumular y mostrar al final (fuera del bucle).",
+    "en": "Inicializar, recorrer, filtrar, acumular y mostrar al final (fuera del bucle)."
+   },
+   "lesson": "prog-ut3-control"
+  },
+  {
+   "id": "prog-46",
+   "block": "prog-ut3",
+   "q": {
+    "es": "Este programa debería mostrar `15`, pero falla o muestra otra cosa. ¿Qué línea tiene el error?",
+    "en": "Este programa debería mostrar `15`, pero falla o muestra otra cosa. ¿Qué línea tiene el error?"
+   },
+   "kind": "choice",
+   "code": null,
+   "options": [
+    "suma = 0",
+    "for i in range(1, 5):",
+    "    suma += i",
+    "print(suma)"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": {
+    "es": "Para sumar del 1 al 5 el fin del range debe ser 6: el fin no se incluye. Con `range(1, 5)` suma 1 + 2 + 3 + 4 = 10. Corrección: `for i in range(1, 6):`.",
+    "en": "Para sumar del 1 al 5 el fin del range debe ser 6: el fin no se incluye. Con `range(1, 5)` suma 1 + 2 + 3 + 4 = 10. Corrección: `for i in range(1, 6):`."
+   },
+   "lesson": "prog-ut3-control"
+  },
+  {
+   "id": "prog-47",
+   "block": "prog-ut3",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "def saluda():\n    print(\"hola\")\n\nr = saluda()\nprint(r)",
+   "options": [
+    "hola",
+    "hola\nNone",
+    "None",
+    "hola\nhola"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": {
+    "es": "La función imprime, pero no tiene `return`: devuelve None.",
+    "en": "La función imprime, pero no tiene `return`: devuelve None."
+   },
+   "lesson": "prog-ut3-funciones"
+  },
+  {
+   "id": "prog-48",
+   "block": "prog-ut3",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "def f():\n    return 1, 2\n\nr = f()\nprint(type(r).__name__, r)",
+   "options": [
+    "tuple (1, 2)",
+    "int 1",
+    "Error",
+    "list [1, 2]"
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Python no devuelve dos valores sueltos: los empaqueta en una tupla. Se desempaqueta con `a, b = f()`.",
+    "en": "Python no devuelve dos valores sueltos: los empaqueta en una tupla. Se desempaqueta con `a, b = f()`."
+   },
+   "lesson": "prog-ut3-funciones"
+  },
+  {
+   "id": "prog-49",
+   "block": "prog-ut3",
+   "q": {
+    "es": "Ejemplo de ámbitos de los apuntes. ¿Qué muestra este código?",
+    "en": "Ejemplo de ámbitos de los apuntes. ¿Qué muestra este código?"
+   },
+   "code": "g = 5\n\ndef mi_func():\n    global g\n    g = 6\n    b = 6\n\n    def interna():\n        nonlocal b\n        global g\n        b = 7\n        g = 8\n\n    interna()\n    print(b, g)\n\nmi_func()\nprint(g)",
+   "options": [
+    "6 6\n5",
+    "6 8\n8",
+    "7 8\n5",
+    "7 8\n8"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "`nonlocal b` modifica la `b` de `mi_func`; `global g` modifica la `g` del programa principal.",
+    "en": "`nonlocal b` modifica la `b` de `mi_func`; `global g` modifica la `g` del programa principal."
+   },
+   "lesson": "prog-ut3-funciones"
+  },
+  {
+   "id": "prog-50",
+   "block": "prog-ut3",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "g = 5\n\ndef f():\n    g = 6\n\nf()\nprint(g)",
+   "options": [
+    "Error",
+    "6",
+    "None",
+    "5"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "Sin `global`, la asignación crea una variable local `g` que desaparece al terminar la función.",
+    "en": "Sin `global`, la asignación crea una variable local `g` que desaparece al terminar la función."
+   },
+   "lesson": "prog-ut3-funciones"
+  },
+  {
+   "id": "prog-51",
+   "block": "prog-ut3",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "contador = 0\n\ndef incrementar():\n    contador += 1\n\ntry:\n    incrementar()\nexcept Exception as e:\n    print(type(e).__name__)",
+   "options": [
+    "UnboundLocalError",
+    "1",
+    "NameError",
+    "0"
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Como la función asigna `contador`, es local en toda la función, y `+=` necesita leerla antes de tener valor. Falta `global contador`.",
+    "en": "Como la función asigna `contador`, es local en toda la función, y `+=` necesita leerla antes de tener valor. Falta `global contador`."
+   },
+   "lesson": "prog-ut3-funciones"
+  },
+  {
+   "id": "prog-52",
+   "block": "prog-ut3",
+   "q": {
+    "es": "Una lista es mutable. ¿Qué muestra este código?",
+    "en": "Una lista es mutable. ¿Qué muestra este código?"
+   },
+   "code": "def anadir(lista):\n    lista.append(4)\n\nnumeros = [1]\nanadir(numeros)\nprint(numeros)",
+   "options": [
+    "[1, 4]",
+    "[1]",
+    "[4]",
+    "None"
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "La función recibe una referencia al mismo objeto y lo modifica: el cambio se ve fuera. Para evitarlo se trabaja con `lista.copy()`.",
+    "en": "La función recibe una referencia al mismo objeto y lo modifica: el cambio se ve fuera. Para evitarlo se trabaja con `lista.copy()`."
+   },
+   "lesson": "prog-ut3-funciones"
+  },
+  {
+   "id": "prog-53",
+   "block": "prog-ut3",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "def cambiar(lista):\n    lista = [9]\n\nnumeros = [1]\ncambiar(numeros)\nprint(numeros)",
+   "options": [
+    "Error",
+    "[1, 9]",
+    "[1]",
+    "[9]"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "Reasignar el parámetro solo cambia a qué apunta el nombre local: el objeto de fuera no se toca. Por eso los apuntes dicen que los parámetros son de entrada.",
+    "en": "Reasignar el parámetro solo cambia a qué apunta el nombre local: el objeto de fuera no se toca. Por eso los apuntes dicen que los parámetros son de entrada."
+   },
+   "lesson": "prog-ut3-funciones"
+  },
+  {
+   "id": "prog-54",
+   "block": "prog-ut3",
+   "q": {
+    "es": "Según los apuntes, ¿qué diferencia hay entre función y procedimiento en Python?",
+    "en": "Según los apuntes, ¿qué diferencia hay entre función y procedimiento en Python?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "No hay procedimientos: una función sin return devuelve None",
+     "en": "No hay procedimientos: una función sin return devuelve None"
+    },
+    {
+     "es": "Los procedimientos se definen con proc",
+     "en": "Los procedimientos se definen con proc"
+    },
+    {
+     "es": "Las funciones no pueden recibir parámetros",
+     "en": "Las funciones no pueden recibir parámetros"
+    },
+    {
+     "es": "Los procedimientos devuelven siempre 0",
+     "en": "Los procedimientos devuelven siempre 0"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "En otros lenguajes (Pascal, por ejemplo) sí se distinguen.",
+    "en": "En otros lenguajes (Pascal, por ejemplo) sí se distinguen."
+   },
+   "lesson": "prog-ut3-funciones"
+  },
+  {
+   "id": "prog-55",
+   "block": "prog-ut3",
+   "q": {
+    "es": "¿Qué es la programación modular?",
+    "en": "¿Qué es la programación modular?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Descomponer el problema en subproblemas más simples, cada uno resuelto por una función",
+     "en": "Descomponer el problema en subproblemas más simples, cada uno resuelto por una función"
+    },
+    {
+     "es": "Escribir todo el programa en un único bloque",
+     "en": "Escribir todo el programa en un único bloque"
+    },
+    {
+     "es": "Usar solo clases",
+     "en": "Usar solo clases"
+    },
+    {
+     "es": "Programar sin funciones",
+     "en": "Programar sin funciones"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Se descompone hasta que cada acción sea inmediata de programar.",
+    "en": "Se descompone hasta que cada acción sea inmediata de programar."
+   },
+   "lesson": "prog-ut3-funciones"
+  },
+  {
+   "id": "prog-56",
+   "block": "prog-ut3",
+   "q": {
+    "es": "Completa la función para que devuelva el cuadrado.",
+    "en": "Completa la función para que devuelva el cuadrado."
+   },
+   "kind": "fill",
+   "code": "def cuadrado(n):\n    ___ n * n\n\nprint(cuadrado(4))",
+   "accept": [
+    "return"
+   ],
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "Sin `return`, la función devolvería None y se imprimiría None. Solución: `return`.",
+    "en": "Sin `return`, la función devolvería None y se imprimiría None. Solución: `return`."
+   },
+   "lesson": "prog-ut3-funciones"
+  },
+  {
+   "id": "prog-57",
+   "block": "prog-ut4",
+   "q": {
+    "es": "¿Qué es una clase?",
+    "en": "¿Qué es una clase?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "El molde que define los atributos y métodos de un grupo de objetos",
+     "en": "El molde que define los atributos y métodos de un grupo de objetos"
+    },
+    {
+     "es": "Un objeto concreto",
+     "en": "Un objeto concreto"
+    },
+    {
+     "es": "Una variable global",
+     "en": "Una variable global"
+    },
+    {
+     "es": "Una función sin parámetros",
+     "en": "Una función sin parámetros"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Los objetos son las instancias concretas creadas a partir de ese molde.",
+    "en": "Los objetos son las instancias concretas creadas a partir de ese molde."
+   },
+   "lesson": "prog-ut4-poo"
+  },
+  {
+   "id": "prog-58",
+   "block": "prog-ut4",
+   "q": {
+    "es": "¿Qué es el estado de un objeto?",
+    "en": "¿Qué es el estado de un objeto?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "El valor de todos sus atributos en un momento dado",
+     "en": "El valor de todos sus atributos en un momento dado"
+    },
+    {
+     "es": "Su nombre de clase",
+     "en": "Su nombre de clase"
+    },
+    {
+     "es": "La lista de sus métodos",
+     "en": "La lista de sus métodos"
+    },
+    {
+     "es": "Si está en memoria o no",
+     "en": "Si está en memoria o no"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Dos objetos de la misma clase tienen los mismos atributos pero, normalmente, distinto estado.",
+    "en": "Dos objetos de la misma clase tienen los mismos atributos pero, normalmente, distinto estado."
+   },
+   "lesson": "prog-ut4-poo"
+  },
+  {
+   "id": "prog-59",
+   "block": "prog-ut4",
+   "q": {
+    "es": "En un diagrama de clases UML, ¿qué indican `+`, `-` y `#`?",
+    "en": "En un diagrama de clases UML, ¿qué indican `+`, `-` y `#`?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Pública, privada y protegida",
+     "en": "Pública, privada y protegida"
+    },
+    {
+     "es": "Suma, resta y comentario",
+     "en": "Suma, resta y comentario"
+    },
+    {
+     "es": "Estática, final y abstracta",
+     "en": "Estática, final y abstracta"
+    },
+    {
+     "es": "Constructor, destructor y método",
+     "en": "Constructor, destructor y método"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Protegida: accesible desde la clase y sus herederas.",
+    "en": "Protegida: accesible desde la clase y sus herederas."
+   },
+   "lesson": "prog-ut4-poo"
+  },
+  {
+   "id": "prog-60",
+   "block": "prog-ut4",
+   "q": {
+    "es": "¿Qué es la encapsulación?",
+    "en": "¿Qué es la encapsulación?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Reunir en una única estructura los datos y las operaciones sobre esos datos",
+     "en": "Reunir en una única estructura los datos y las operaciones sobre esos datos"
+    },
+    {
+     "es": "Ignorar las características que no importan",
+     "en": "Ignorar las características que no importan"
+    },
+    {
+     "es": "Heredar de varias clases",
+     "en": "Heredar de varias clases"
+    },
+    {
+     "es": "Tener varios métodos con el mismo nombre",
+     "en": "Tener varios métodos con el mismo nombre"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Ignorar lo que no importa es la abstracción. Proteger los datos internos es la ocultación.",
+    "en": "Ignorar lo que no importa es la abstracción. Proteger los datos internos es la ocultación."
+   },
+   "lesson": "prog-ut4-poo"
+  },
+  {
+   "id": "prog-61",
+   "block": "prog-ut4",
+   "q": {
+    "es": "Generalizar Perro, Gato y Loro en una clase Animal con lo que comparten es un ejemplo de…",
+    "en": "Generalizar Perro, Gato y Loro en una clase Animal con lo que comparten es un ejemplo de…"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "abstracción",
+     "en": "abstracción"
+    },
+    {
+     "es": "sobrecarga",
+     "en": "sobrecarga"
+    },
+    {
+     "es": "composición",
+     "en": "composición"
+    },
+    {
+     "es": "destrucción",
+     "en": "destrucción"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Nos quedamos con lo relevante (nombre, edad, emitir sonido) e ignoramos los detalles de cada especie.",
+    "en": "Nos quedamos con lo relevante (nombre, edad, emitir sonido) e ignoramos los detalles de cada especie."
+   },
+   "lesson": "prog-ut4-poo"
+  },
+  {
+   "id": "prog-62",
+   "block": "prog-ut4",
+   "q": {
+    "es": "Un Capítulo solo existe dentro de su Temporada y pertenece a una sola. ¿Qué relación es?",
+    "en": "Un Capítulo solo existe dentro de su Temporada y pertenece a una sola. ¿Qué relación es?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Composición",
+     "en": "Composición"
+    },
+    {
+     "es": "Agregación",
+     "en": "Agregación"
+    },
+    {
+     "es": "Asociación simple",
+     "en": "Asociación simple"
+    },
+    {
+     "es": "Herencia",
+     "en": "Herencia"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Las partes pertenecen de forma exclusiva y no existen sin el todo: si se borra la temporada, se borran sus capítulos.",
+    "en": "Las partes pertenecen de forma exclusiva y no existen sin el todo: si se borra la temporada, se borran sus capítulos."
+   },
+   "lesson": "prog-ut4-poo"
+  },
+  {
+   "id": "prog-63",
+   "block": "prog-ut4",
+   "q": {
+    "es": "Un Punto lo usan a la vez un Polígono y un Círculo, y existe por su cuenta. ¿Qué relación es?",
+    "en": "Un Punto lo usan a la vez un Polígono y un Círculo, y existe por su cuenta. ¿Qué relación es?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Agregación",
+     "en": "Agregación"
+    },
+    {
+     "es": "Composición",
+     "en": "Composición"
+    },
+    {
+     "es": "Herencia",
+     "en": "Herencia"
+    },
+    {
+     "es": "Sobrecarga",
+     "en": "Sobrecarga"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Forma parte de otras clases, pero no de forma exclusiva.",
+    "en": "Forma parte de otras clases, pero no de forma exclusiva."
+   },
+   "lesson": "prog-ut4-poo"
+  },
+  {
+   "id": "prog-64",
+   "block": "prog-ut4",
+   "q": {
+    "es": "¿Qué tipo de herencia tiene Python?",
+    "en": "¿Qué tipo de herencia tiene Python?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Múltiple: una clase puede tener varios padres",
+     "en": "Múltiple: una clase puede tener varios padres"
+    },
+    {
+     "es": "Solo simple, como las clases de Java",
+     "en": "Solo simple, como las clases de Java"
+    },
+    {
+     "es": "No tiene herencia",
+     "en": "No tiene herencia"
+    },
+    {
+     "es": "Solo mediante interfaces",
+     "en": "Solo mediante interfaces"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "`class Hija(Padre1, Padre2):`. Java solo permite un padre (y varias interfaces).",
+    "en": "`class Hija(Padre1, Padre2):`. Java solo permite un padre (y varias interfaces)."
+   },
+   "lesson": "prog-ut4-poo"
+  },
+  {
+   "id": "prog-65",
+   "block": "prog-ut4",
+   "q": {
+    "es": "Python no tiene sobrecarga. ¿Qué muestra este código?",
+    "en": "Python no tiene sobrecarga. ¿Qué muestra este código?"
+   },
+   "code": "def area(lado):\n    return lado * lado\n\ndef area(base, altura):\n    return base * altura\n\ntry:\n    print(area(3))\nexcept TypeError:\n    print(\"TypeError\")",
+   "options": [
+    "TypeError",
+    "None",
+    "9",
+    "3"
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "El segundo `def` sustituye al primero: ya solo existe `area(base, altura)`, y falta un argumento. Se simula con parámetros por defecto: `def area(base, altura=None)`.",
+    "en": "El segundo `def` sustituye al primero: ya solo existe `area(base, altura)`, y falta un argumento. Se simula con parámetros por defecto: `def area(base, altura=None)`."
+   },
+   "lesson": "prog-ut4-poo"
+  },
+  {
+   "id": "prog-66",
+   "block": "prog-ut4",
+   "q": {
+    "es": "¿Cuál fue el primer lenguaje orientado a objetos?",
+    "en": "¿Cuál fue el primer lenguaje orientado a objetos?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Simula 67",
+     "en": "Simula 67"
+    },
+    {
+     "es": "Java",
+     "en": "Java"
+    },
+    {
+     "es": "Python",
+     "en": "Python"
+    },
+    {
+     "es": "C",
+     "en": "C"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Después llegó Smalltalk (Xerox PARC). La POO se popularizó en los 80 con C++.",
+    "en": "Después llegó Smalltalk (Xerox PARC). La POO se popularizó en los 80 con C++."
+   },
+   "lesson": "prog-ut4-poo"
+  },
+  {
+   "id": "prog-67",
+   "block": "prog-ut4",
+   "q": {
+    "es": "¿Qué dice el principio abierto/cerrado?",
+    "en": "¿Qué dice el principio abierto/cerrado?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Una clase debe estar abierta a la extensión y cerrada a la modificación",
+     "en": "Una clase debe estar abierta a la extensión y cerrada a la modificación"
+    },
+    {
+     "es": "Todos los atributos deben ser públicos",
+     "en": "Todos los atributos deben ser públicos"
+    },
+    {
+     "es": "Una clase solo puede tener un método",
+     "en": "Una clase solo puede tener un método"
+    },
+    {
+     "es": "Hay que cerrar los ficheros al terminar",
+     "en": "Hay que cerrar los ficheros al terminar"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Es la «O» de SOLID: se añade funcionalidad heredando o componiendo, sin tocar el código que ya funciona.",
+    "en": "Es la «O» de SOLID: se añade funcionalidad heredando o componiendo, sin tocar el código que ya funciona."
+   },
+   "lesson": "prog-ut4-poo"
+  },
+  {
+   "id": "prog-68",
+   "block": "prog-ut4",
+   "q": {
+    "es": "Ejemplo de los apuntes: dos variables pueden apuntar al mismo objeto. ¿Qué muestra este código?",
+    "en": "Ejemplo de los apuntes: dos variables pueden apuntar al mismo objeto. ¿Qué muestra este código?"
+   },
+   "code": "class Punto:\n    def __init__(self):\n        self.x = 0\n\np1 = Punto()\np1.x = 2\np2 = p1\np2.x = 3\nprint(p1.x)\np2 = Punto()\np2.x = 4\nprint(p1.x, p2.x)",
+   "options": [
+    "3\n4 4",
+    "2\n2 4",
+    "2\n3 4",
+    "3\n3 4"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "`p2 = p1` no copia: crea un alias del mismo objeto. `p2 = Punto()` crea otro objeto distinto.",
+    "en": "`p2 = p1` no copia: crea un alias del mismo objeto. `p2 = Punto()` crea otro objeto distinto."
+   },
+   "lesson": "prog-ut4-poo"
+  },
+  {
+   "id": "prog-69",
+   "block": "prog-ut4",
+   "q": {
+    "es": "¿Qué es el polimorfismo?",
+    "en": "¿Qué es el polimorfismo?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Que la misma llamada a un método dé resultados distintos según la clase del objeto",
+     "en": "Que la misma llamada a un método dé resultados distintos según la clase del objeto"
+    },
+    {
+     "es": "Tener varios constructores",
+     "en": "Tener varios constructores"
+    },
+    {
+     "es": "Copiar un objeto",
+     "en": "Copiar un objeto"
+    },
+    {
+     "es": "Ocultar los atributos",
+     "en": "Ocultar los atributos"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Se consigue sobrescribiendo en cada clase hija un método heredado: `animal.hablar()` ladra o maúlla según el objeto.",
+    "en": "Se consigue sobrescribiendo en cada clase hija un método heredado: `animal.hablar()` ladra o maúlla según el objeto."
+   },
+   "lesson": "prog-ut4-poo"
+  },
+  {
+   "id": "prog-70",
+   "block": "prog-ut5",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "class Persona:\n    def __init__(self, nombre):\n        self.nombre = nombre\n\n    def saludar(self):\n        return f\"Hola, soy {self.nombre}\"\n\np = Persona(\"Ana\")\nprint(p.saludar())",
+   "options": [
+    "Hola, soy nombre",
+    "Error",
+    "Hola, soy self.nombre",
+    "Hola, soy Ana"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "`self` es el propio objeto `p`: `self.nombre` vale \"Ana\". Al llamar `p.saludar()`, Python pasa `p` como `self`.",
+    "en": "`self` es el propio objeto `p`: `self.nombre` vale \"Ana\". Al llamar `p.saludar()`, Python pasa `p` como `self`."
+   },
+   "lesson": "prog-ut5-clases"
+  },
+  {
+   "id": "prog-71",
+   "block": "prog-ut5",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "class Cuenta:\n    def __init__(self):\n        self.__saldo = 100\n\nc = Cuenta()\nprint(c._Cuenta__saldo)\ntry:\n    print(c.__saldo)\nexcept AttributeError:\n    print(\"AttributeError\")",
+   "options": [
+    "AttributeError\nAttributeError",
+    "Error",
+    "100\nAttributeError",
+    "100\n100"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "El doble subrayado cambia el nombre a `_Cuenta__saldo` (name mangling). Sigue siendo accesible: no es privado de verdad.",
+    "en": "El doble subrayado cambia el nombre a `_Cuenta__saldo` (name mangling). Sigue siendo accesible: no es privado de verdad."
+   },
+   "lesson": "prog-ut5-clases"
+  },
+  {
+   "id": "prog-72",
+   "block": "prog-ut5",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "class Celsius:\n    def __init__(self, grados):\n        self.grados = grados\n\n    @property\n    def grados(self):\n        return self._grados\n\n    @grados.setter\n    def grados(self, valor):\n        if valor < -273.15:\n            raise ValueError(\"Imposible\")\n        self._grados = valor\n\nt = Celsius(25)\nprint(t.grados * 1.8 + 32)\ntry:\n    t.grados = -300\nexcept ValueError as e:\n    print(e)",
+   "options": [
+    "25\nImposible",
+    "77.0\n-300",
+    "Error",
+    "77.0\nImposible"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "La asignación `t.grados = -300` pasa por el setter, que valida y lanza la excepción. Así se protege el dato sin cambiar cómo se usa.",
+    "en": "La asignación `t.grados = -300` pasa por el setter, que valida y lanza la excepción. Así se protege el dato sin cambiar cómo se usa."
+   },
+   "lesson": "prog-ut5-clases"
+  },
+  {
+   "id": "prog-73",
+   "block": "prog-ut5",
+   "q": {
+    "es": "Una propiedad sin setter es de solo lectura. ¿Qué muestra este código?",
+    "en": "Una propiedad sin setter es de solo lectura. ¿Qué muestra este código?"
+   },
+   "code": "class Circulo:\n    def __init__(self, radio):\n        self._radio = radio\n\n    @property\n    def radio(self):\n        return self._radio\n\nc = Circulo(2)\ntry:\n    c.radio = 5\nexcept AttributeError:\n    print(\"AttributeError\")\nprint(c.radio)",
+   "options": [
+    "AttributeError\n5",
+    "AttributeError\n2",
+    "2",
+    "5"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": {
+    "es": "Sin `@radio.setter` no se puede asignar: da AttributeError y el valor no cambia.",
+    "en": "Sin `@radio.setter` no se puede asignar: da AttributeError y el valor no cambia."
+   },
+   "lesson": "prog-ut5-clases"
+  },
+  {
+   "id": "prog-74",
+   "block": "prog-ut5",
+   "q": {
+    "es": "Ejemplo de los apuntes: los valores por defecto se evalúan al definir la función. ¿Qué muestra este código?",
+    "en": "Ejemplo de los apuntes: los valores por defecto se evalúan al definir la función. ¿Qué muestra este código?"
+   },
+   "code": "i = 5\n\ndef f(arg=i):\n    print(arg)\n\ni = 6\nf()",
+   "options": [
+    "Error",
+    "None",
+    "6",
+    "5"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "El valor por defecto se calcula una vez, cuando se ejecuta el `def`. Cambiar `i` después no le afecta.",
+    "en": "El valor por defecto se calcula una vez, cuando se ejecuta el `def`. Cambiar `i` después no le afecta."
+   },
+   "lesson": "prog-ut5-clases"
+  },
+  {
+   "id": "prog-75",
+   "block": "prog-ut5",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "def anadir(x, lista=[]):\n    lista.append(x)\n    return lista\n\nanadir(1)\nprint(anadir(2))",
+   "options": [
+    "Error",
+    "[2]",
+    "[1, 2]",
+    "[1]"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "La lista por defecto se crea una sola vez y se comparte entre llamadas. Solución: `lista=None` y crearla dentro.",
+    "en": "La lista por defecto se crea una sola vez y se comparte entre llamadas. Solución: `lista=None` y crearla dentro."
+   },
+   "lesson": "prog-ut5-clases"
+  },
+  {
+   "id": "prog-76",
+   "block": "prog-ut5",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "def f(*args):\n    print(type(args).__name__, args)\n\nf(1, 2)",
+   "options": [
+    "Error",
+    "int 1 2",
+    "tuple (1, 2)",
+    "list [1, 2]"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "`*args` recoge los argumentos posicionales sobrantes en una tupla.",
+    "en": "`*args` recoge los argumentos posicionales sobrantes en una tupla."
+   },
+   "lesson": "prog-ut5-clases"
+  },
+  {
+   "id": "prog-77",
+   "block": "prog-ut5",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "def f(**datos):\n    print(type(datos).__name__, datos)\n\nf(a=1, b=2)",
+   "options": [
+    "Error",
+    "dict {'a': 1, 'b': 2}",
+    "tuple (1, 2)",
+    "list ['a', 'b']"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": {
+    "es": "`**kwargs` recoge los argumentos pasados por nombre en un diccionario. Va siempre al final.",
+    "en": "`**kwargs` recoge los argumentos pasados por nombre en un diccionario. Va siempre al final."
+   },
+   "lesson": "prog-ut5-clases"
+  },
+  {
+   "id": "prog-78",
+   "block": "prog-ut5",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "def resta(a, b):\n    return a - b\n\nprint(resta(b=2, a=10))",
+   "options": [
+    "Error",
+    "8",
+    "-8",
+    "12"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": {
+    "es": "Pasados por nombre, el orden de la llamada no importa: a = 10 y b = 2.",
+    "en": "Pasados por nombre, el orden de la llamada no importa: a = 10 y b = 2."
+   },
+   "lesson": "prog-ut5-clases"
+  },
+  {
+   "id": "prog-79",
+   "block": "prog-ut5",
+   "q": {
+    "es": "Las sugerencias de tipo no obligan. ¿Qué muestra este código?",
+    "en": "Las sugerencias de tipo no obligan. ¿Qué muestra este código?"
+   },
+   "code": "def doble(n: int) -> int:\n    return n * 2\n\nprint(doble(\"ab\"))",
+   "options": [
+    "Error",
+    "abab",
+    "4",
+    "None"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": {
+    "es": "Python no comprueba los tipos al ejecutar: las anotaciones documentan y ayudan al IDE o a herramientas como mypy.",
+    "en": "Python no comprueba los tipos al ejecutar: las anotaciones documentan y ayudan al IDE o a herramientas como mypy."
+   },
+   "lesson": "prog-ut5-clases"
+  },
+  {
+   "id": "prog-80",
+   "block": "prog-ut5",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "def hacer_incrementador(n):\n    return lambda x: x + n\n\nsuma5 = hacer_incrementador(5)\nprint(suma5(10))",
+   "options": [
+    "Error",
+    "10",
+    "15",
+    "5"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "La lambda recuerda el `n` con el que se creó. `suma5` es una función que suma 5.",
+    "en": "La lambda recuerda el `n` con el que se creó. `suma5` es una función que suma 5."
+   },
+   "lesson": "prog-ut5-clases"
+  },
+  {
+   "id": "prog-81",
+   "block": "prog-ut5",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "class Punto:\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n\n    def __str__(self):\n        return f\"({self.x}, {self.y})\"\n\nprint(Punto(1, 2))",
+   "options": [
+    "1 2",
+    "Punto(1, 2)",
+    "(1, 2)",
+    "<__main__.Punto object>"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "`print` llama a `__str__`. Sin él, se vería algo como `<__main__.Punto object at 0x…>`.",
+    "en": "`print` llama a `__str__`. Sin él, se vería algo como `<__main__.Punto object at 0x…>`."
+   },
+   "lesson": "prog-ut5-clases"
+  },
+  {
+   "id": "prog-82",
+   "block": "prog-ut5",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "class Articulo:\n    IVA = 21\n\na = Articulo()\nb = Articulo()\na.IVA = 10\nprint(a.IVA, b.IVA, Articulo.IVA)",
+   "options": [
+    "10 21 21",
+    "10 10 10",
+    "21 21 21",
+    "10 10 21"
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "`a.IVA = 10` crea un atributo de instancia solo en `a`, que oculta el de clase. Para cambiarlo para todos: `Articulo.IVA = 10`.",
+    "en": "`a.IVA = 10` crea un atributo de instancia solo en `a`, que oculta el de clase. Para cambiarlo para todos: `Articulo.IVA = 10`."
+   },
+   "lesson": "prog-ut5-clases"
+  },
+  {
+   "id": "prog-83",
+   "block": "prog-ut5",
+   "q": {
+    "es": "¿Qué es `self` en un método?",
+    "en": "¿Qué es `self` en un método?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Una referencia al objeto sobre el que se llama el método",
+     "en": "Una referencia al objeto sobre el que se llama el método"
+    },
+    {
+     "es": "El nombre de la clase",
+     "en": "El nombre de la clase"
+    },
+    {
+     "es": "Una palabra reservada que crea objetos",
+     "en": "Una palabra reservada que crea objetos"
+    },
+    {
+     "es": "Un atributo de clase",
+     "en": "Un atributo de clase"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Equivale al `this` de Java. Python lo pasa automáticamente: `p.saludar()` es `Persona.saludar(p)`.",
+    "en": "Equivale al `this` de Java. Python lo pasa automáticamente: `p.saludar()` es `Persona.saludar(p)`."
+   },
+   "lesson": "prog-ut5-clases"
+  },
+  {
+   "id": "prog-84",
+   "block": "prog-ut5",
+   "q": {
+    "es": "Completa el primer parámetro del inicializador.",
+    "en": "Completa el primer parámetro del inicializador."
+   },
+   "kind": "fill",
+   "code": "class Coche:\n    def __init__(___, marca):\n        self.marca = marca\n\nprint(Coche(\"Seat\").marca)",
+   "accept": [
+    "self"
+   ],
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "El primer parámetro de todo método de instancia es la referencia al objeto; por convenio se llama `self`. Solución: `self`.",
+    "en": "El primer parámetro de todo método de instancia es la referencia al objeto; por convenio se llama `self`. Solución: `self`."
+   },
+   "lesson": "prog-ut5-clases"
+  },
+  {
+   "id": "prog-85",
+   "block": "prog-ut5",
+   "q": {
+    "es": "El código se ejecuta directamente, no importado. ¿Qué muestra este código?",
+    "en": "El código se ejecuta directamente, no importado. ¿Qué muestra este código?"
+   },
+   "code": "print(__name__)",
+   "options": [
+    "main",
+    "__main__",
+    "Error",
+    "None"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": {
+    "es": "`__name__` vale \"__main__\" en el fichero que se ejecuta; si el módulo se importa, vale el nombre del módulo.",
+    "en": "`__name__` vale \"__main__\" en el fichero que se ejecuta; si el módulo se importa, vale el nombre del módulo."
+   },
+   "lesson": "prog-ut5-modulos-cadenas"
+  },
+  {
+   "id": "prog-86",
+   "block": "prog-ut5",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "import math\nprint(math.ceil(2.1), math.floor(2.9), math.sqrt(16))",
+   "options": [
+    "3 2 4",
+    "2 3 4",
+    "2 2 4.0",
+    "3 2 4.0"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "`ceil` redondea hacia arriba, `floor` hacia abajo y `sqrt` devuelve siempre un float.",
+    "en": "`ceil` redondea hacia arriba, `floor` hacia abajo y `sqrt` devuelve siempre un float."
+   },
+   "lesson": "prog-ut5-modulos-cadenas"
+  },
+  {
+   "id": "prog-87",
+   "block": "prog-ut5",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "s = \"  Hola Mundo  \"\nprint(s.strip().lower().replace(\"mundo\", \"DAW\"))",
+   "options": [
+    "hola DAW",
+    "Hola DAW",
+    "hola mundo",
+    "  hola daw  "
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Cada método devuelve una cadena nueva y se encadenan: se quitan los espacios, se pasa a minúsculas y se reemplaza.",
+    "en": "Cada método devuelve una cadena nueva y se encadenan: se quitan los espacios, se pasa a minúsculas y se reemplaza."
+   },
+   "lesson": "prog-ut5-modulos-cadenas"
+  },
+  {
+   "id": "prog-88",
+   "block": "prog-ut5",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "print(\"python\".find(\"th\"), \"python\".find(\"z\"), \"th\" in \"python\")",
+   "options": [
+    "2 0 False",
+    "2 -1 True",
+    "2 None True",
+    "3 -1 True"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": {
+    "es": "`find` da la posición de la primera coincidencia o -1 si no la encuentra.",
+    "en": "`find` da la posición de la primera coincidencia o -1 si no la encuentra."
+   },
+   "lesson": "prog-ut5-modulos-cadenas"
+  },
+  {
+   "id": "prog-89",
+   "block": "prog-ut5",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "palabras = \"uno  dos tres\".split()\nprint(len(palabras), \"-\".join(palabras))",
+   "options": [
+    "Error",
+    "4 uno--dos-tres",
+    "3 uno-dos-tres",
+    "3 uno dos tres"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "`split()` sin argumento separa por cualquier cantidad de espacios. `split(\" \")` daría una cadena vacía entre los dos espacios.",
+    "en": "`split()` sin argumento separa por cualquier cantidad de espacios. `split(\" \")` daría una cadena vacía entre los dos espacios."
+   },
+   "lesson": "prog-ut5-modulos-cadenas"
+  },
+  {
+   "id": "prog-90",
+   "block": "prog-ut5",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "import re\nprint(re.findall(r\"\\d+\", \"Tengo 2 gatos y 13 peces\"))",
+   "options": [
+    "[2, 13]",
+    "['2', '1', '3']",
+    "['2', '13']",
+    "['Tengo', 'gatos']"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "`\\d+` es uno o más dígitos seguidos. `findall` devuelve una lista de cadenas.",
+    "en": "`\\d+` es uno o más dígitos seguidos. `findall` devuelve una lista de cadenas."
+   },
+   "lesson": "prog-ut5-modulos-cadenas"
+  },
+  {
+   "id": "prog-91",
+   "block": "prog-ut5",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "import re\nprint(re.match(r\"\\d\", \"a1\") is None, re.search(r\"\\d\", \"a1\").group())",
+   "options": [
+    "True a",
+    "False 1",
+    "Error",
+    "True 1"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "`match` solo mira el principio (una «a»); `search` encuentra el 1 en cualquier posición.",
+    "en": "`match` solo mira el principio (una «a»); `search` encuentra el 1 en cualquier posición."
+   },
+   "lesson": "prog-ut5-modulos-cadenas"
+  },
+  {
+   "id": "prog-92",
+   "block": "prog-ut5",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "import re\npatron = r\"[0-9]{8}[A-Z]\"\nprint(bool(re.fullmatch(patron, \"12345678Z\")), bool(re.fullmatch(patron, \"1234567Z\")))",
+   "options": [
+    "False True",
+    "False False",
+    "True False",
+    "True True"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "Ocho dígitos exactos y una mayúscula. El segundo solo tiene siete dígitos.",
+    "en": "Ocho dígitos exactos y una mayúscula. El segundo solo tiene siete dígitos."
+   },
+   "lesson": "prog-ut5-modulos-cadenas"
+  },
+  {
+   "id": "prog-93",
+   "block": "prog-ut5",
+   "q": {
+    "es": "¿Qué es un paquete en Python?",
+    "en": "¿Qué es un paquete en Python?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Una carpeta que agrupa módulos (con __init__.py, opcional desde 3.3)",
+     "en": "Una carpeta que agrupa módulos (con __init__.py, opcional desde 3.3)"
+    },
+    {
+     "es": "Un único fichero .py",
+     "en": "Un único fichero .py"
+    },
+    {
+     "es": "Una clase con métodos estáticos",
+     "en": "Una clase con métodos estáticos"
+    },
+    {
+     "es": "Un entorno virtual",
+     "en": "Un entorno virtual"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Un módulo es un fichero `.py`; un paquete, una carpeta de módulos.",
+    "en": "Un módulo es un fichero `.py`; un paquete, una carpeta de módulos."
+   },
+   "lesson": "prog-ut5-modulos-cadenas"
+  },
+  {
+   "id": "prog-94",
+   "block": "prog-ut5",
+   "q": {
+    "es": "Tras `from math import sqrt`, ¿cómo se usa la raíz cuadrada?",
+    "en": "Tras `from math import sqrt`, ¿cómo se usa la raíz cuadrada?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "sqrt(16)",
+     "en": "sqrt(16)"
+    },
+    {
+     "es": "math.sqrt(16)",
+     "en": "math.sqrt(16)"
+    },
+    {
+     "es": "math(16).sqrt",
+     "en": "math(16).sqrt"
+    },
+    {
+     "es": "import sqrt(16)",
+     "en": "import sqrt(16)"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Con `import math` sería `math.sqrt(16)`.",
+    "en": "Con `import math` sería `math.sqrt(16)`."
+   },
+   "lesson": "prog-ut5-modulos-cadenas"
+  },
+  {
+   "id": "prog-95",
+   "block": "prog-ut6",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "lista = [3, 1, 2]\nr = lista.sort()\nprint(r, lista)",
+   "options": [
+    "None [1, 2, 3]",
+    "[1, 2, 3] [3, 1, 2]",
+    "None [3, 1, 2]",
+    "[1, 2, 3] [1, 2, 3]"
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "`sort()` ordena la propia lista y devuelve None. `sorted(lista)` devolvería una lista nueva.",
+    "en": "`sort()` ordena la propia lista y devuelve None. `sorted(lista)` devolvería una lista nueva."
+   },
+   "lesson": "prog-ut6-colecciones"
+  },
+  {
+   "id": "prog-96",
+   "block": "prog-ut6",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "print(sorted([\"b\", \"A\", \"c\"]), sorted([\"b\", \"A\", \"c\"], key=str.lower))",
+   "options": [
+    "['A', 'b', 'c'] ['A', 'b', 'c']",
+    "['A', 'c', 'b'] ['A', 'b', 'c']",
+    "['b', 'A', 'c'] ['A', 'b', 'c']",
+    "Error"
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Aquí coinciden: las mayúsculas van antes que las minúsculas y «A» ya es la primera. Con `key=str.lower` se compara sin distinguir mayúsculas.",
+    "en": "Aquí coinciden: las mayúsculas van antes que las minúsculas y «A» ya es la primera. Con `key=str.lower` se compara sin distinguir mayúsculas."
+   },
+   "lesson": "prog-ut6-colecciones"
+  },
+  {
+   "id": "prog-97",
+   "block": "prog-ut6",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "print(len(list(\"abc\")), len([\"abc\"]))",
+   "options": [
+    "1 3",
+    "1 1",
+    "3 3",
+    "3 1"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "`list()` recorre la cadena letra a letra; `[\"abc\"]` es una lista con un solo elemento.",
+    "en": "`list()` recorre la cadena letra a letra; `[\"abc\"]` es una lista con un solo elemento."
+   },
+   "lesson": "prog-ut6-colecciones"
+  },
+  {
+   "id": "prog-98",
+   "block": "prog-ut6",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "lista = [1, 2, 3, 2]\nlista.remove(2)\nx = lista.pop()\nprint(lista, x)",
+   "options": [
+    "[1, 3, 2] 2",
+    "[1, 2] 3",
+    "[3] 2",
+    "[1, 3] 2"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "`remove(2)` quita la primera aparición; `pop()` quita y devuelve el último (el otro 2).",
+    "en": "`remove(2)` quita la primera aparición; `pop()` quita y devuelve el último (el otro 2)."
+   },
+   "lesson": "prog-ut6-colecciones"
+  },
+  {
+   "id": "prog-99",
+   "block": "prog-ut6",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "a = [1, 2]\nb = a\nc = a.copy()\na.append(3)\nprint(b, c)",
+   "options": [
+    "[1, 2, 3] [1, 2]",
+    "[1, 2] [1, 2]",
+    "[1, 2, 3] [1, 2, 3]",
+    "[1, 2] [1, 2, 3]"
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "`b` es la misma lista que `a` (alias); `c` es una copia independiente.",
+    "en": "`b` es la misma lista que `a` (alias); `c` es una copia independiente."
+   },
+   "lesson": "prog-ut6-colecciones"
+  },
+  {
+   "id": "prog-100",
+   "block": "prog-ut6",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "t = (1, 2)\ntry:\n    t[0] = 5\nexcept TypeError:\n    print(\"TypeError\")\nprint(t)",
+   "options": [
+    "TypeError\n(5, 2)",
+    "(5, 2)",
+    "TypeError\n(1, 2)",
+    "(1, 2)"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "Las tuplas son inmutables: no se puede cambiar un elemento.",
+    "en": "Las tuplas son inmutables: no se puede cambiar un elemento."
+   },
+   "lesson": "prog-ut6-colecciones"
+  },
+  {
+   "id": "prog-101",
+   "block": "prog-ut6",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "precios = {\"pera\": 2}\nprint(precios.get(\"uva\", 0), precios[\"pera\"])\ntry:\n    print(precios[\"uva\"])\nexcept KeyError:\n    print(\"KeyError\")",
+   "options": [
+    "0 2\nKeyError",
+    "None 2\nNone",
+    "0 2\n0",
+    "Error"
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "`get` devuelve el valor por defecto si la clave no existe; los corchetes lanzan KeyError.",
+    "en": "`get` devuelve el valor por defecto si la clave no existe; los corchetes lanzan KeyError."
+   },
+   "lesson": "prog-ut6-colecciones"
+  },
+  {
+   "id": "prog-102",
+   "block": "prog-ut6",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "frecuencia = {}\nfor letra in \"banana\":\n    frecuencia[letra] = frecuencia.get(letra, 0) + 1\nprint(frecuencia)",
+   "options": [
+    "{'a': 3, 'b': 1, 'n': 2}",
+    "{'b': 1, 'a': 1, 'n': 1}",
+    "{'b': 1, 'a': 3, 'n': 2}",
+    "Error"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "Los diccionarios conservan el orden de inserción (desde Python 3.7): b, a, n.",
+    "en": "Los diccionarios conservan el orden de inserción (desde Python 3.7): b, a, n."
+   },
+   "lesson": "prog-ut6-colecciones"
+  },
+  {
+   "id": "prog-103",
+   "block": "prog-ut6",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "a = {1, 2, 3}\nb = {2, 3, 4}\nprint(sorted(a | b), sorted(a & b), sorted(a - b), sorted(a ^ b))",
+   "options": [
+    "[1, 2, 3, 4] [2, 3] [1] [1, 4]",
+    "[1, 2, 2, 3, 3, 4] [2, 3] [1] [1, 4]",
+    "[1, 2, 3, 4] [2, 3] [4] [1, 4]",
+    "[1, 2, 3, 4] [1, 4] [1] [2, 3]"
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Unión, intersección, diferencia (en a y no en b) y diferencia simétrica (en uno solo de los dos).",
+    "en": "Unión, intersección, diferencia (en a y no en b) y diferencia simétrica (en uno solo de los dos)."
+   },
+   "lesson": "prog-ut6-colecciones"
+  },
+  {
+   "id": "prog-104",
+   "block": "prog-ut6",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "print(type({}).__name__, type(set()).__name__, len({1, 1, 2}))",
+   "options": [
+    "dict dict 2",
+    "dict set 2",
+    "set set 3",
+    "set dict 3"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": {
+    "es": "`{}` es un diccionario vacío; el conjunto vacío es `set()`. Los repetidos se eliminan.",
+    "en": "`{}` es un diccionario vacío; el conjunto vacío es `set()`. Los repetidos se eliminan."
+   },
+   "lesson": "prog-ut6-colecciones"
+  },
+  {
+   "id": "prog-105",
+   "block": "prog-ut6",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "print([x ** 2 for x in range(6) if x % 2 == 0])",
+   "options": [
+    "[4, 16]",
+    "[0, 2, 4]",
+    "[0, 1, 4, 9, 16, 25]",
+    "[0, 4, 16]"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "Se filtran los pares (0, 2, 4) y se eleva cada uno al cuadrado.",
+    "en": "Se filtran los pares (0, 2, 4) y se eleva cada uno al cuadrado."
+   },
+   "lesson": "prog-ut6-colecciones"
+  },
+  {
+   "id": "prog-106",
+   "block": "prog-ut6",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "print({x: x ** 2 for x in range(4)})",
+   "options": [
+    "{0, 1, 4, 9}",
+    "{1: 1, 2: 4, 3: 9}",
+    "[0, 1, 4, 9]",
+    "{0: 0, 1: 1, 2: 4, 3: 9}"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "Comprensión de diccionario: `clave: valor for …`.",
+    "en": "Comprensión de diccionario: `clave: valor for …`."
+   },
+   "lesson": "prog-ut6-colecciones"
+  },
+  {
+   "id": "prog-107",
+   "block": "prog-ut6",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "def fibo(n):\n    if n <= 1:\n        return n\n    return fibo(n - 1) + fibo(n - 2)\n\nprint(fibo(7))",
+   "options": [
+    "21",
+    "13",
+    "8",
+    "Error"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": {
+    "es": "0, 1, 1, 2, 3, 5, 8, 13: fibo(7) es 13. El caso base (n <= 1) detiene la recursión.",
+    "en": "0, 1, 1, 2, 3, 5, 8, 13: fibo(7) es 13. El caso base (n <= 1) detiene la recursión."
+   },
+   "lesson": "prog-ut6-colecciones"
+  },
+  {
+   "id": "prog-108",
+   "block": "prog-ut6",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "matriz = [[1, 2, 3], [4, 5, 6]]\nprint(matriz[1][0], len(matriz), len(matriz[0]))",
+   "options": [
+    "4 2 3",
+    "1 2 3",
+    "4 3 2",
+    "2 2 3"
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "`matriz[1]` es la segunda fila y `[0]`, su primer elemento. Hay 2 filas de 3 columnas.",
+    "en": "`matriz[1]` es la segunda fila y `[0]`, su primer elemento. Hay 2 filas de 3 columnas."
+   },
+   "lesson": "prog-ut6-colecciones"
+  },
+  {
+   "id": "prog-109",
+   "block": "prog-ut6",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "for i, fruta in enumerate([\"pera\", \"uva\"], start=1):\n    print(i, fruta)",
+   "options": [
+    "1 pera\n2 uva",
+    "Error",
+    "0 pera\n1 uva",
+    "pera 1\nuva 2"
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "`enumerate` da el índice y el elemento; los apuntes lo prefieren a `for i in range(len(lista))`.",
+    "en": "`enumerate` da el índice y el elemento; los apuntes lo prefieren a `for i in range(len(lista))`."
+   },
+   "lesson": "prog-ut6-colecciones"
+  },
+  {
+   "id": "prog-110",
+   "block": "prog-ut6",
+   "q": {
+    "es": "Ordena las líneas del factorial recursivo (debe mostrar 120).",
+    "en": "Ordena las líneas del factorial recursivo (debe mostrar 120)."
+   },
+   "kind": "order",
+   "code": "___",
+   "lines": [
+    "def factorial(n):",
+    "    if n <= 1:",
+    "        return 1",
+    "    return n * factorial(n - 1)",
+    "print(factorial(5))"
+   ],
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "Primero el caso base, después la llamada recursiva que se acerca a él.",
+    "en": "Primero el caso base, después la llamada recursiva que se acerca a él."
+   },
+   "lesson": "prog-ut6-colecciones"
+  },
+  {
+   "id": "prog-111",
+   "block": "prog-ut6",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "class Persona:\n    def __init__(self, nombre):\n        self.nombre = nombre\n\n    def __str__(self):\n        return self.nombre\n\nclass Alumno(Persona):\n    def __init__(self, nombre, nia):\n        super().__init__(nombre)\n        self.nia = nia\n\n    def __str__(self):\n        return f\"{super().__str__()} (nia {self.nia})\"\n\nprint(Alumno(\"Ana\", 7))",
+   "options": [
+    "Ana",
+    "(nia 7)",
+    "Ana (nia 7)",
+    "Error"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "`super().__init__` inicializa la parte de Persona y `super().__str__()` reutiliza el método del padre en la sobrescritura.",
+    "en": "`super().__init__` inicializa la parte de Persona y `super().__str__()` reutiliza el método del padre en la sobrescritura."
+   },
+   "lesson": "prog-ut6-herencia-excepciones"
+  },
+  {
+   "id": "prog-112",
+   "block": "prog-ut6",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "class Animal:\n    def hablar(self):\n        return \"...\"\n\nclass Perro(Animal):\n    def hablar(self):\n        return \"Guau\"\n\nclass Gato(Animal):\n    def hablar(self):\n        return \"Miau\"\n\nfor a in [Perro(), Gato(), Animal()]:\n    print(a.hablar())",
+   "options": [
+    "Error",
+    "...\n...\n...",
+    "Guau\nMiau\n...",
+    "Guau\nGuau\nGuau"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "Polimorfismo: la misma llamada ejecuta el método de la clase real de cada objeto.",
+    "en": "Polimorfismo: la misma llamada ejecuta el método de la clase real de cada objeto."
+   },
+   "lesson": "prog-ut6-herencia-excepciones"
+  },
+  {
+   "id": "prog-113",
+   "block": "prog-ut6",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "class Persona:\n    pass\n\nclass Alumno(Persona):\n    pass\n\na = Alumno()\nprint(isinstance(a, Persona), type(a) is Persona, isinstance(a, object))",
+   "options": [
+    "True False True",
+    "False False True",
+    "True True True",
+    "True False False"
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Un Alumno es también una Persona (y un object), pero su tipo exacto es Alumno.",
+    "en": "Un Alumno es también una Persona (y un object), pero su tipo exacto es Alumno."
+   },
+   "lesson": "prog-ut6-herencia-excepciones"
+  },
+  {
+   "id": "prog-114",
+   "block": "prog-ut6",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "class Persona:\n    ANIO_ACTUAL = 2026\n\n    def __init__(self, nombre, edad):\n        self.nombre = nombre\n        self.edad = edad\n\n    @classmethod\n    def desde_anio(cls, nombre, anio):\n        return cls(nombre, cls.ANIO_ACTUAL - anio)\n\n    @staticmethod\n    def es_adulto(edad):\n        return edad >= 18\n\np = Persona.desde_anio(\"Ana\", 2000)\nprint(p.edad, Persona.es_adulto(p.edad))",
+   "options": [
+    "2000 True",
+    "26 False",
+    "26 True",
+    "Error"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "El método de clase es un constructor alternativo (`cls(...)` crea el objeto). El estático no necesita objeto ni clase.",
+    "en": "El método de clase es un constructor alternativo (`cls(...)` crea el objeto). El estático no necesita objeto ni clase."
+   },
+   "lesson": "prog-ut6-herencia-excepciones"
+  },
+  {
+   "id": "prog-115",
+   "block": "prog-ut6",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "from abc import ABC, abstractmethod\n\nclass Figura(ABC):\n    @abstractmethod\n    def area(self):\n        pass\n\ntry:\n    Figura()\nexcept TypeError:\n    print(\"TypeError\")",
+   "options": [
+    "0",
+    "TypeError",
+    "Figura",
+    "None"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": {
+    "es": "Una clase con métodos abstractos sin implementar no se puede instanciar: sirve de molde para las hijas.",
+    "en": "Una clase con métodos abstractos sin implementar no se puede instanciar: sirve de molde para las hijas."
+   },
+   "lesson": "prog-ut6-herencia-excepciones"
+  },
+  {
+   "id": "prog-116",
+   "block": "prog-ut6",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "class Punto:\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n\n    def __add__(self, otro):\n        return Punto(self.x + otro.x, self.y + otro.y)\n\n    def __str__(self):\n        return f\"({self.x}, {self.y})\"\n\nprint(Punto(1, 2) + Punto(3, 4))",
+   "options": [
+    "(1, 2)(3, 4)",
+    "(3, 8)",
+    "Error",
+    "(4, 6)"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "El operador `+` llama a `__add__`: sobrecarga de operadores con métodos mágicos.",
+    "en": "El operador `+` llama a `__add__`: sobrecarga de operadores con métodos mágicos."
+   },
+   "lesson": "prog-ut6-herencia-excepciones"
+  },
+  {
+   "id": "prog-117",
+   "block": "prog-ut6",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "def cuenta(n):\n    i = 0\n    while i < n:\n        yield i\n        i += 1\n\nprint(list(cuenta(3)))",
+   "options": [
+    "[1, 2, 3]",
+    "[0, 1, 2]",
+    "None",
+    "3"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": {
+    "es": "Cada `yield` entrega un valor y pausa la función hasta que se pide el siguiente.",
+    "en": "Cada `yield` entrega un valor y pausa la función hasta que se pide el siguiente."
+   },
+   "lesson": "prog-ut6-herencia-excepciones"
+  },
+  {
+   "id": "prog-118",
+   "block": "prog-ut6",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "def dividir(a, b):\n    try:\n        r = a / b\n    except ZeroDivisionError:\n        print(\"Error: división por cero\")\n    else:\n        print(r)\n    finally:\n        print(\"Fin\")\n\ndividir(1, 0)\ndividir(4, 2)",
+   "options": [
+    "Error: división por cero\nFin\n2.0",
+    "Error: división por cero\nFin\n2.0\nFin",
+    "Error: división por cero\n2.0\nFin",
+    "Fin\nFin"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": {
+    "es": "`else` solo se ejecuta si no hubo excepción; `finally`, siempre.",
+    "en": "`else` solo se ejecuta si no hubo excepción; `finally`, siempre."
+   },
+   "lesson": "prog-ut6-herencia-excepciones"
+  },
+  {
+   "id": "prog-119",
+   "block": "prog-ut6",
+   "q": {
+    "es": "IndexError es hija de LookupError. ¿Qué muestra este código?",
+    "en": "IndexError es hija de LookupError. ¿Qué muestra este código?"
+   },
+   "code": "try:\n    [1][5]\nexcept LookupError:\n    print(\"Lookup\")\nexcept IndexError:\n    print(\"Index\")",
+   "options": [
+    "Index",
+    "Lookup\nIndex",
+    "Error",
+    "Lookup"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "El primer `except` compatible gana y captura también a las hijas. Las excepciones más concretas deben ir primero.",
+    "en": "El primer `except` compatible gana y captura también a las hijas. Las excepciones más concretas deben ir primero."
+   },
+   "lesson": "prog-ut6-herencia-excepciones"
+  },
+  {
+   "id": "prog-120",
+   "block": "prog-ut6",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "class SaldoError(Exception):\n    pass\n\ndef retirar(saldo, cantidad):\n    if cantidad > saldo:\n        raise SaldoError(\"Saldo insuficiente\")\n    return saldo - cantidad\n\ntry:\n    retirar(50, 80)\nexcept SaldoError as e:\n    print(e)",
+   "options": [
+    "Error",
+    "-30",
+    "Saldo insuficiente",
+    "SaldoError"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "Una excepción propia hereda de Exception. `print(e)` muestra su mensaje.",
+    "en": "Una excepción propia hereda de Exception. `print(e)` muestra su mensaje."
+   },
+   "lesson": "prog-ut6-herencia-excepciones"
+  },
+  {
+   "id": "prog-121",
+   "block": "prog-ut6",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "from collections import deque\n\npila = [1, 2, 3]\ncola = deque([1, 2, 3])\nprint(pila.pop(), cola.popleft())",
+   "options": [
+    "1 1",
+    "3 3",
+    "1 3",
+    "3 1"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "Pila LIFO: sale el último en entrar. Cola FIFO: sale el primero. `deque.popleft()` es eficiente; `lista.pop(0)` no.",
+    "en": "Pila LIFO: sale el último en entrar. Cola FIFO: sale el primero. `deque.popleft()` es eficiente; `lista.pop(0)` no."
+   },
+   "lesson": "prog-ut6-herencia-excepciones"
+  },
+  {
+   "id": "prog-122",
+   "block": "prog-ut6",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "class A:\n    def quien(self):\n        return \"A\"\n\nclass B(A):\n    def quien(self):\n        return \"B\"\n\nclass C(A):\n    def quien(self):\n        return \"C\"\n\nclass D(B, C):\n    pass\n\nprint(D().quien())",
+   "options": [
+    "B",
+    "A",
+    "Error",
+    "C"
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Con herencia múltiple, Python busca de izquierda a derecha (MRO: D, B, C, A, object).",
+    "en": "Con herencia múltiple, Python busca de izquierda a derecha (MRO: D, B, C, A, object)."
+   },
+   "lesson": "prog-ut6-herencia-excepciones"
+  },
+  {
+   "id": "prog-123",
+   "block": "prog-ut6",
+   "q": {
+    "es": "En unittest, ¿qué hace setUp?",
+    "en": "En unittest, ¿qué hace setUp?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Se ejecuta antes de cada método de prueba para preparar el entorno",
+     "en": "Se ejecuta antes de cada método de prueba para preparar el entorno"
+    },
+    {
+     "es": "Se ejecuta una sola vez al final",
+     "en": "Se ejecuta una sola vez al final"
+    },
+    {
+     "es": "Define la clase que se prueba",
+     "en": "Define la clase que se prueba"
+    },
+    {
+     "es": "Compara dos valores",
+     "en": "Compara dos valores"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Las pruebas son métodos que empiezan por `test_` en una clase que hereda de `unittest.TestCase`.",
+    "en": "Las pruebas son métodos que empiezan por `test_` en una clase que hereda de `unittest.TestCase`."
+   },
+   "lesson": "prog-ut6-herencia-excepciones"
+  },
+  {
+   "id": "prog-124",
+   "block": "prog-ut6",
+   "q": {
+    "es": "¿Qué hace `@final` del módulo typing?",
+    "en": "¿Qué hace `@final` del módulo typing?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Marca un método que no debe sobrescribirse; lo comprueban herramientas como mypy, no el intérprete",
+     "en": "Marca un método que no debe sobrescribirse; lo comprueban herramientas como mypy, no el intérprete"
+    },
+    {
+     "es": "Impide al intérprete ejecutar el método",
+     "en": "Impide al intérprete ejecutar el método"
+    },
+    {
+     "es": "Convierte el método en estático",
+     "en": "Convierte el método en estático"
+    },
+    {
+     "es": "Hace el atributo inmutable en ejecución",
+     "en": "Hace el atributo inmutable en ejecución"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Python no lanza ningún error al ejecutar si una hija lo sobrescribe: es una indicación para los analizadores de código.",
+    "en": "Python no lanza ningún error al ejecutar si una hija lo sobrescribe: es una indicación para los analizadores de código."
+   },
+   "lesson": "prog-ut6-herencia-excepciones"
+  },
+  {
+   "id": "prog-125",
+   "block": "prog-ut6",
+   "q": {
+    "es": "Este programa debería mostrar `Ana 7`, pero falla o muestra otra cosa. ¿Qué línea tiene el error?",
+    "en": "Este programa debería mostrar `Ana 7`, pero falla o muestra otra cosa. ¿Qué línea tiene el error?"
+   },
+   "kind": "choice",
+   "code": null,
+   "options": [
+    "class Persona:",
+    "    def __init__(self, nombre):",
+    "        self.nombre = nombre",
+    "class Alumno(Persona):",
+    "    def __init__(self, nombre, nia):",
+    "        self.nia = nia",
+    "a = Alumno(\"Ana\", 7)",
+    "print(a.nombre, a.nia)"
+   ],
+   "answer": [
+    5
+   ],
+   "explain": {
+    "es": "El inicializador de Alumno no llama al del padre, así que el objeto no tiene `nombre` (AttributeError). Hay que empezar por `super().__init__(nombre)`. Corrección: `super().__init__(nombre); self.nia = nia`.",
+    "en": "El inicializador de Alumno no llama al del padre, así que el objeto no tiene `nombre` (AttributeError). Hay que empezar por `super().__init__(nombre)`. Corrección: `super().__init__(nombre); self.nia = nia`."
+   },
+   "lesson": "prog-ut6-herencia-excepciones"
+  },
+  {
+   "id": "prog-126",
+   "block": "prog-ut7",
+   "q": {
+    "es": "Nivel 1: sumatorio de S1 = 10 a S2 = 20, ambos incluidos. ¿Qué muestra este código?",
+    "en": "Nivel 1: sumatorio de S1 = 10 a S2 = 20, ambos incluidos. ¿Qué muestra este código?"
+   },
+   "code": "print(sum(range(10, 21)))",
+   "options": [
+    "155",
+    "210",
+    "165",
+    "30"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "10 + 11 + … + 20 = 165. Para incluir el 20, el range acaba en 21.",
+    "en": "10 + 11 + … + 20 = 165. Para incluir el 20, el range acaba en 21."
+   },
+   "lesson": "prog-ut7-proyecto"
+  },
+  {
+   "id": "prog-127",
+   "block": "prog-ut7",
+   "q": {
+    "es": "Nivel 2: productorio de 5 a 10. ¿Qué muestra este código?",
+    "en": "Nivel 2: productorio de 5 a 10. ¿Qué muestra este código?"
+   },
+   "code": "import math\nprint(math.prod(range(5, 11)))",
+   "options": [
+    "151200",
+    "3628800",
+    "45",
+    "30240"
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "5 × 6 × 7 × 8 × 9 × 10 = 151200.",
+    "en": "5 × 6 × 7 × 8 × 9 × 10 = 151200."
+   },
+   "lesson": "prog-ut7-proyecto"
+  },
+  {
+   "id": "prog-128",
+   "block": "prog-ut7",
+   "q": {
+    "es": "Nivel 3 con N = 78. ¿Qué muestra este código?",
+    "en": "Nivel 3 con N = 78. ¿Qué muestra este código?"
+   },
+   "code": "import math\nn = 78\nprint(math.factorial(n // 10))",
+   "options": [
+    "720",
+    "5040",
+    "78",
+    "40320"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": {
+    "es": "78 // 10 = 7 (redondeo hacia abajo) y 7! = 5040.",
+    "en": "78 // 10 = 7 (redondeo hacia abajo) y 7! = 5040."
+   },
+   "lesson": "prog-ut7-proyecto"
+  },
+  {
+   "id": "prog-129",
+   "block": "prog-ut7",
+   "q": {
+    "es": "Nivel 4. ¿Qué muestra este código?",
+    "en": "Nivel 4. ¿Qué muestra este código?"
+   },
+   "code": "def es_primo(p):\n    if p < 2:\n        return 0\n    for d in range(2, int(p ** 0.5) + 1):\n        if p % d == 0:\n            return 0\n    return 1\n\nprint(es_primo(97), es_primo(91))",
+   "options": [
+    "0 0",
+    "0 1",
+    "1 1",
+    "1 0"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "97 es primo; 91 = 7 × 13 no lo es.",
+    "en": "97 es primo; 91 = 7 × 13 no lo es."
+   },
+   "lesson": "prog-ut7-proyecto"
+  },
+  {
+   "id": "prog-130",
+   "block": "prog-ut7",
+   "q": {
+    "es": "Nivel 5 con M = 7 y S = 5. ¿Qué muestra este código?",
+    "en": "Nivel 5 con M = 7 y S = 5. ¿Qué muestra este código?"
+   },
+   "code": "import math\nprint(math.factorial(7) + math.factorial(5))",
+   "options": [
+    "5165",
+    "5040",
+    "5160",
+    "12"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "7! = 5040 y 5! = 120: la suma es 5160.",
+    "en": "7! = 5040 y 5! = 120: la suma es 5160."
+   },
+   "lesson": "prog-ut7-proyecto"
+  },
+  {
+   "id": "prog-131",
+   "block": "prog-ut7",
+   "q": {
+    "es": "¿Qué valores puede devolver `random.random()`?",
+    "en": "¿Qué valores puede devolver `random.random()`?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Un real entre 0.0 (incluido) y 1.0 (excluido)",
+     "en": "Un real entre 0.0 (incluido) y 1.0 (excluido)"
+    },
+    {
+     "es": "Un entero entre 0 y 1",
+     "en": "Un entero entre 0 y 1"
+    },
+    {
+     "es": "Un real entre 0 y 100",
+     "en": "Un real entre 0 y 100"
+    },
+    {
+     "es": "Un real entre -1 y 1",
+     "en": "Un real entre -1 y 1"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Para enteros se usa `randint(a, b)`, que sí incluye los dos extremos.",
+    "en": "Para enteros se usa `randint(a, b)`, que sí incluye los dos extremos."
+   },
+   "lesson": "prog-ut7-proyecto"
+  },
+  {
+   "id": "prog-132",
+   "block": "prog-ut7",
+   "q": {
+    "es": "En el juego, ¿qué pasa si el jugador falla el código del nivel 3?",
+    "en": "En el juego, ¿qué pasa si el jugador falla el código del nivel 3?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Va a la pantalla de Perder y después a Fin",
+     "en": "Va a la pantalla de Perder y después a Fin"
+    },
+    {
+     "es": "Repite el nivel 3",
+     "en": "Repite el nivel 3"
+    },
+    {
+     "es": "Vuelve al nivel 1",
+     "en": "Vuelve al nivel 1"
+    },
+    {
+     "es": "Pasa al nivel 4 con menos puntos",
+     "en": "Pasa al nivel 4 con menos puntos"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Cualquier fallo lleva a Perder; acertar los cinco lleva a Ganar.",
+    "en": "Cualquier fallo lleva a Perder; acertar los cinco lleva a Ganar."
+   },
+   "lesson": "prog-ut7-proyecto"
+  },
+  {
+   "id": "prog-133",
+   "block": "prog-ut7",
+   "q": {
+    "es": "¿Qué función elige al azar un elemento de una lista?",
+    "en": "¿Qué función elige al azar un elemento de una lista?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "random.choice(lista)",
+     "en": "random.choice(lista)"
+    },
+    {
+     "es": "random.random(lista)",
+     "en": "random.random(lista)"
+    },
+    {
+     "es": "random.randint(lista)",
+     "en": "random.randint(lista)"
+    },
+    {
+     "es": "lista.random()",
+     "en": "lista.random()"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Sirve para elegir el enunciado de cada nivel de entre varios.",
+    "en": "Sirve para elegir el enunciado de cada nivel de entre varios."
+   },
+   "lesson": "prog-ut7-proyecto"
+  },
+  {
+   "id": "prog-134",
+   "block": "prog-ut7",
+   "q": {
+    "es": "Completa para sumar del 10 al 20, ambos incluidos.",
+    "en": "Completa para sumar del 10 al 20, ambos incluidos."
+   },
+   "kind": "fill",
+   "code": "print(sum(range(10, ___)))",
+   "accept": [
+    "21"
+   ],
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "El fin de range no se incluye: para llegar al 20 hay que poner 21. Solución: `21`.",
+    "en": "El fin de range no se incluye: para llegar al 20 hay que poner 21. Solución: `21`."
+   },
+   "lesson": "prog-ut7-proyecto"
+  },
+  {
+   "id": "prog-135",
+   "block": "prog-ut8",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "with open(\"datos.txt\", \"w\", encoding=\"utf-8\") as f:\n    f.write(\"uno\\n\")\n    f.write(\"dos\\n\")\n\nwith open(\"datos.txt\", encoding=\"utf-8\") as f:\n    print(f.readlines())",
+   "options": [
+    "['uno\\ndos\\n']",
+    "uno\ndos",
+    "['uno\\n', 'dos\\n']",
+    "['uno', 'dos']"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "`readlines()` devuelve una lista con cada línea, incluido su salto de línea.",
+    "en": "`readlines()` devuelve una lista con cada línea, incluido su salto de línea."
+   },
+   "lesson": "prog-ut8-ficheros-bd"
+  },
+  {
+   "id": "prog-136",
+   "block": "prog-ut8",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "with open(\"f.txt\", \"w\", encoding=\"utf-8\") as f:\n    f.write(\"A\")\nwith open(\"f.txt\", \"a\", encoding=\"utf-8\") as f:\n    f.write(\"B\")\nwith open(\"f.txt\", \"w\", encoding=\"utf-8\") as f:\n    f.write(\"C\")\nwith open(\"f.txt\", encoding=\"utf-8\") as f:\n    print(f.read())",
+   "options": [
+    "CAB",
+    "C",
+    "ABC",
+    "AB"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": {
+    "es": "`a` añade (queda «AB»), pero el último `w` vacía el fichero antes de escribir «C».",
+    "en": "`a` añade (queda «AB»), pero el último `w` vacía el fichero antes de escribir «C»."
+   },
+   "lesson": "prog-ut8-ficheros-bd"
+  },
+  {
+   "id": "prog-137",
+   "block": "prog-ut8",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "with open(\"f.txt\", \"w\", encoding=\"utf-8\") as f:\n    print(f.write(\"hola\\n\"))",
+   "options": [
+    "None",
+    "4",
+    "hola",
+    "5"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "`write` devuelve cuántos caracteres escribió: 4 letras y el salto de línea.",
+    "en": "`write` devuelve cuántos caracteres escribió: 4 letras y el salto de línea."
+   },
+   "lesson": "prog-ut8-ficheros-bd"
+  },
+  {
+   "id": "prog-138",
+   "block": "prog-ut8",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "with open(\"f.txt\", \"w\", encoding=\"utf-8\") as f:\n    f.write(\"abc\")\nwith open(\"f.txt\", encoding=\"utf-8\") as f:\n    print(f.read())\n    print(repr(f.read()))",
+   "options": [
+    "abc\nNone",
+    "abc\nabc",
+    "Error",
+    "abc\n''"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "Tras leer todo, el puntero está al final: la siguiente lectura devuelve una cadena vacía.",
+    "en": "Tras leer todo, el puntero está al final: la siguiente lectura devuelve una cadena vacía."
+   },
+   "lesson": "prog-ut8-ficheros-bd"
+  },
+  {
+   "id": "prog-139",
+   "block": "prog-ut8",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "open(\"f.txt\", \"w\").close()\ntry:\n    open(\"f.txt\", \"x\")\nexcept FileExistsError:\n    print(\"FileExistsError\")",
+   "options": [
+    "FileExistsError",
+    "FileNotFoundError",
+    "Error",
+    "Nada"
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "El modo `x` solo crea ficheros nuevos: si ya existe, falla. Evita machacar datos por accidente.",
+    "en": "El modo `x` solo crea ficheros nuevos: si ya existe, falla. Evita machacar datos por accidente."
+   },
+   "lesson": "prog-ut8-ficheros-bd"
+  },
+  {
+   "id": "prog-140",
+   "block": "prog-ut8",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "try:\n    with open(\"no_existe.txt\", encoding=\"utf-8\") as f:\n        print(f.read())\nexcept FileNotFoundError:\n    print(\"FileNotFoundError\")",
+   "options": [
+    "FileNotFoundError",
+    "''",
+    "None",
+    "Se crea vacío"
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "El modo `r` (por defecto) exige que el fichero exista. `with` no captura la excepción.",
+    "en": "El modo `r` (por defecto) exige que el fichero exista. `with` no captura la excepción."
+   },
+   "lesson": "prog-ut8-ficheros-bd"
+  },
+  {
+   "id": "prog-141",
+   "block": "prog-ut8",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "with open(\"f.txt\", \"w\", encoding=\"utf-8\") as f:\n    f.write(\"a\\nb\\nc\\n\")\nlineas = 0\nwith open(\"f.txt\", encoding=\"utf-8\") as f:\n    for linea in f:\n        lineas += 1\nprint(lineas, f.closed)",
+   "options": [
+    "3 True",
+    "1 True",
+    "4 True",
+    "3 False"
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "`for linea in f` recorre el fichero línea a línea. Al salir del `with`, el fichero queda cerrado.",
+    "en": "`for linea in f` recorre el fichero línea a línea. Al salir del `with`, el fichero queda cerrado."
+   },
+   "lesson": "prog-ut8-ficheros-bd"
+  },
+  {
+   "id": "prog-142",
+   "block": "prog-ut8",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "with open(\"b.bin\", \"wb\") as f:\n    f.write(bytes([65, 66]))\nwith open(\"b.bin\", \"rb\") as f:\n    datos = f.read()\nprint(datos, type(datos).__name__)",
+   "options": [
+    "b'AB' bytes",
+    "b'65 66' bytes",
+    "[65, 66] list",
+    "AB str"
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "En binario se leen bytes, no cadenas. 65 y 66 son los códigos de «A» y «B».",
+    "en": "En binario se leen bytes, no cadenas. 65 y 66 son los códigos de «A» y «B»."
+   },
+   "lesson": "prog-ut8-ficheros-bd"
+  },
+  {
+   "id": "prog-143",
+   "block": "prog-ut8",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "import pickle\ndatos = {\"Ana\": [8, 9]}\ncopia = pickle.loads(pickle.dumps(datos))\nprint(copia == datos, copia is datos)",
+   "options": [
+    "True True",
+    "False False",
+    "False True",
+    "True False"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "Deserializar crea un clon: tiene el mismo contenido (`==`) pero es otro objeto (`is` es False).",
+    "en": "Deserializar crea un clon: tiene el mismo contenido (`==`) pero es otro objeto (`is` es False)."
+   },
+   "lesson": "prog-ut8-ficheros-bd"
+  },
+  {
+   "id": "prog-144",
+   "block": "prog-ut8",
+   "q": {
+    "es": "DB-API con sqlite3. ¿Qué muestra este código?",
+    "en": "DB-API con sqlite3. ¿Qué muestra este código?"
+   },
+   "code": "import sqlite3\ncon = sqlite3.connect(\":memory:\")\ncur = con.cursor()\ncur.execute(\"CREATE TABLE alumnos (nombre TEXT, edad INTEGER)\")\ncur.execute(\"INSERT INTO alumnos VALUES (?, ?)\", (\"Ana\", 20))\ncon.commit()\nfila = cur.execute(\"SELECT nombre, edad FROM alumnos\").fetchone()\nprint(fila[0], fila[1])\ncon.close()",
+   "options": [
+    "Error",
+    "('Ana', 20)",
+    "Ana",
+    "Ana 20"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "`fetchone()` devuelve una fila como tupla. Los `?` reciben los valores de forma segura.",
+    "en": "`fetchone()` devuelve una fila como tupla. Los `?` reciben los valores de forma segura."
+   },
+   "lesson": "prog-ut8-ficheros-bd"
+  },
+  {
+   "id": "prog-145",
+   "block": "prog-ut8",
+   "q": {
+    "es": "Un usuario malintencionado escribe como nombre `' OR '1'='1`. ¿Qué muestra este código?",
+    "en": "Un usuario malintencionado escribe como nombre `' OR '1'='1`. ¿Qué muestra este código?"
+   },
+   "code": "import sqlite3\ncon = sqlite3.connect(\":memory:\")\ncon.execute(\"CREATE TABLE usuarios (nombre TEXT)\")\ncon.execute(\"INSERT INTO usuarios VALUES ('ana')\")\nentrada = \"' OR '1'='1\"\nseguro = con.execute(\"SELECT COUNT(*) FROM usuarios WHERE nombre = ?\", (entrada,)).fetchone()[0]\ninseguro = con.execute(f\"SELECT COUNT(*) FROM usuarios WHERE nombre = '{entrada}'\").fetchone()[0]\nprint(seguro, inseguro)",
+   "options": [
+    "1 1",
+    "Error",
+    "0 1",
+    "0 0"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "Con parámetros, la entrada se trata como texto y no coincide con nadie. Concatenada, la condición `OR '1'='1'` es siempre verdadera: inyección SQL.",
+    "en": "Con parámetros, la entrada se trata como texto y no coincide con nadie. Concatenada, la condición `OR '1'='1'` es siempre verdadera: inyección SQL."
+   },
+   "lesson": "prog-ut8-ficheros-bd"
+  },
+  {
+   "id": "prog-146",
+   "block": "prog-ut8",
+   "q": {
+    "es": "¿Qué muestra este código?",
+    "en": "¿Qué muestra este código?"
+   },
+   "code": "from pathlib import Path\nruta = Path(\"datos\") / \"notas.txt\"\nprint(ruta.name, ruta.suffix, ruta.parent.name)",
+   "options": [
+    "datos/notas.txt txt datos",
+    "Error",
+    "notas.txt .txt datos",
+    "notas .txt datos"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "`pathlib` trata las rutas como objetos y usa el separador correcto de cada sistema.",
+    "en": "`pathlib` trata las rutas como objetos y usa el separador correcto de cada sistema."
+   },
+   "lesson": "prog-ut8-ficheros-bd"
+  },
+  {
+   "id": "prog-147",
+   "block": "prog-ut8",
+   "q": {
+    "es": "¿Qué caracteriza al acceso secuencial?",
+    "en": "¿Qué caracteriza al acceso secuencial?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "El puntero avanza desde el principio, de uno en uno",
+     "en": "El puntero avanza desde el principio, de uno en uno"
+    },
+    {
+     "es": "Se salta a cualquier posición directamente",
+     "en": "Se salta a cualquier posición directamente"
+    },
+    {
+     "es": "Solo sirve para ficheros binarios",
+     "en": "Solo sirve para ficheros binarios"
+    },
+    {
+     "es": "Necesita una base de datos",
+     "en": "Necesita una base de datos"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "En el acceso directo se va a cualquier posición con `seek`.",
+    "en": "En el acceso directo se va a cualquier posición con `seek`."
+   },
+   "lesson": "prog-ut8-ficheros-bd"
+  },
+  {
+   "id": "prog-148",
+   "block": "prog-ut8",
+   "q": {
+    "es": "¿Qué diferencia hay entre SAX y DOM para leer XML?",
+    "en": "¿Qué diferencia hay entre SAX y DOM para leer XML?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "SAX lee por eventos, poco a poco; DOM carga el documento entero como un árbol",
+     "en": "SAX lee por eventos, poco a poco; DOM carga el documento entero como un árbol"
+    },
+    {
+     "es": "SAX escribe y DOM lee",
+     "en": "SAX escribe y DOM lee"
+    },
+    {
+     "es": "DOM es solo para JSON",
+     "en": "DOM es solo para JSON"
+    },
+    {
+     "es": "Son lo mismo",
+     "en": "Son lo mismo"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "SAX gasta poca memoria pero no permite volver atrás; DOM permite ir a cualquier nodo.",
+    "en": "SAX gasta poca memoria pero no permite volver atrás; DOM permite ir a cualquier nodo."
+   },
+   "lesson": "prog-ut8-ficheros-bd"
+  },
+  {
+   "id": "prog-149",
+   "block": "prog-ut8",
+   "q": {
+    "es": "¿Qué modo de apertura crea el fichero o lo vacía si ya existe?",
+    "en": "¿Qué modo de apertura crea el fichero o lo vacía si ya existe?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "w",
+     "en": "w"
+    },
+    {
+     "es": "a",
+     "en": "a"
+    },
+    {
+     "es": "r",
+     "en": "r"
+    },
+    {
+     "es": "x",
+     "en": "x"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "`a` añade al final, `r` solo lee y `x` falla si el fichero ya existe.",
+    "en": "`a` añade al final, `r` solo lee y `x` falla si el fichero ya existe."
+   },
+   "lesson": "prog-ut8-ficheros-bd"
+  },
+  {
+   "id": "prog-150",
+   "block": "prog-ut8",
+   "q": {
+    "es": "¿Qué estándar define la forma de acceder a bases de datos desde Python?",
+    "en": "¿Qué estándar define la forma de acceder a bases de datos desde Python?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "DB-API, en el PEP 249",
+     "en": "DB-API, en el PEP 249"
+    },
+    {
+     "es": "PEP 8",
+     "en": "PEP 8"
+    },
+    {
+     "es": "JDBC",
+     "en": "JDBC"
+    },
+    {
+     "es": "ODBC de Python 2",
+     "en": "ODBC de Python 2"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Por eso sqlite3, mysql.connector o psycopg2 se usan casi igual: conexión, cursor, execute, fetch y commit.",
+    "en": "Por eso sqlite3, mysql.connector o psycopg2 se usan casi igual: conexión, cursor, execute, fetch y commit."
+   },
+   "lesson": "prog-ut8-ficheros-bd"
+  },
+  {
+   "id": "prog-151",
+   "block": "prog-ut9",
+   "q": {
+    "es": "¿Qué es la programación dirigida por eventos?",
+    "en": "¿Qué es la programación dirigida por eventos?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Aquella en la que el orden de ejecución lo deciden los eventos, como los clics del usuario",
+     "en": "Aquella en la que el orden de ejecución lo deciden los eventos, como los clics del usuario"
+    },
+    {
+     "es": "Un programa que se ejecuta de arriba abajo sin esperar",
+     "en": "Un programa que se ejecuta de arriba abajo sin esperar"
+    },
+    {
+     "es": "Un tipo de bucle for",
+     "en": "Un tipo de bucle for"
+    },
+    {
+     "es": "Programar sin funciones",
+     "en": "Programar sin funciones"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "El programa espera en un bucle de eventos y reacciona llamando a las funciones asociadas.",
+    "en": "El programa espera en un bucle de eventos y reacciona llamando a las funciones asociadas."
+   },
+   "lesson": "prog-ut9-interfaces"
+  },
+  {
+   "id": "prog-152",
+   "block": "prog-ut9",
+   "q": {
+    "es": "En el modelo de eventos, ¿quién gestiona el evento?",
+    "en": "En el modelo de eventos, ¿quién gestiona el evento?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "El oyente (objetivo), registrado en la fuente, mediante una callback",
+     "en": "El oyente (objetivo), registrado en la fuente, mediante una callback"
+    },
+    {
+     "es": "La fuente, sin avisar a nadie",
+     "en": "La fuente, sin avisar a nadie"
+    },
+    {
+     "es": "El sistema operativo siempre",
+     "en": "El sistema operativo siempre"
+    },
+    {
+     "es": "El layout",
+     "en": "El layout"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "La fuente es el control cuyo estado cambia; el objeto evento lleva la información.",
+    "en": "La fuente es el control cuyo estado cambia; el objeto evento lleva la información."
+   },
+   "lesson": "prog-ut9-interfaces"
+  },
+  {
+   "id": "prog-153",
+   "block": "prog-ut9",
+   "q": {
+    "es": "¿Qué ventaja tiene Tkinter frente a Qt?",
+    "en": "¿Qué ventaja tiene Tkinter frente a Qt?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Viene incluida con Python y su API es sencilla",
+     "en": "Viene incluida con Python y su API es sencilla"
+    },
+    {
+     "es": "Tiene muchos más widgets avanzados",
+     "en": "Tiene muchos más widgets avanzados"
+    },
+    {
+     "es": "Incluye Qt Designer",
+     "en": "Incluye Qt Designer"
+    },
+    {
+     "es": "Solo funciona en Windows",
+     "en": "Solo funciona en Windows"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Qt ofrece más controles, señales y slots y Qt Designer, a cambio de más curva de aprendizaje.",
+    "en": "Qt ofrece más controles, señales y slots y Qt Designer, a cambio de más curva de aprendizaje."
+   },
+   "lesson": "prog-ut9-interfaces"
+  },
+  {
+   "id": "prog-154",
+   "block": "prog-ut9",
+   "q": {
+    "es": "¿Qué diferencia hay entre PySide6 y PyQt6?",
+    "en": "¿Qué diferencia hay entre PySide6 y PyQt6?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "PySide6 la mantiene la empresa de Qt y PyQt otra empresa; se puede usar cualquiera, sin mezclarlas",
+     "en": "PySide6 la mantiene la empresa de Qt y PyQt otra empresa; se puede usar cualquiera, sin mezclarlas"
+    },
+    {
+     "es": "PySide6 es para Tkinter",
+     "en": "PySide6 es para Tkinter"
+    },
+    {
+     "es": "PyQt no usa señales",
+     "en": "PyQt no usa señales"
+    },
+    {
+     "es": "PySide6 solo sirve para juegos",
+     "en": "PySide6 solo sirve para juegos"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Las dos envuelven la misma biblioteca Qt con una API casi idéntica.",
+    "en": "Las dos envuelven la misma biblioteca Qt con una API casi idéntica."
+   },
+   "lesson": "prog-ut9-interfaces"
+  },
+  {
+   "id": "prog-155",
+   "block": "prog-ut9",
+   "q": {
+    "es": "¿Qué hace esta línea?",
+    "en": "¿Qué hace esta línea?"
+   },
+   "code": "self.boton.clicked.connect(self.saludar)",
+   "options": [
+    {
+     "es": "Conecta la señal clicked del botón con el método saludar, que se ejecutará en cada clic",
+     "en": "Conecta la señal clicked del botón con el método saludar, que se ejecutará en cada clic"
+    },
+    {
+     "es": "Ejecuta saludar una vez al crear el botón",
+     "en": "Ejecuta saludar una vez al crear el botón"
+    },
+    {
+     "es": "Crea un botón llamado saludar",
+     "en": "Crea un botón llamado saludar"
+    },
+    {
+     "es": "Cierra la ventana",
+     "en": "Cierra la ventana"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Es el mecanismo de señales y slots de Qt: `señal.connect(función)`. Sin paréntesis, porque se pasa la función, no su resultado.",
+    "en": "Es el mecanismo de señales y slots de Qt: `señal.connect(función)`. Sin paréntesis, porque se pasa la función, no su resultado."
+   },
+   "lesson": "prog-ut9-interfaces"
+  },
+  {
+   "id": "prog-156",
+   "block": "prog-ut9",
+   "q": {
+    "es": "¿Qué hace la última línea?",
+    "en": "¿Qué hace la última línea?"
+   },
+   "code": "app = QApplication(sys.argv)\nventana = Ventana()\nventana.show()\nsys.exit(app.exec())",
+   "options": [
+    {
+     "es": "Entra en el bucle de eventos y, al cerrarse, termina el programa con su código de salida",
+     "en": "Entra en el bucle de eventos y, al cerrarse, termina el programa con su código de salida"
+    },
+    {
+     "es": "Cierra la ventana inmediatamente",
+     "en": "Cierra la ventana inmediatamente"
+    },
+    {
+     "es": "Compila la interfaz",
+     "en": "Compila la interfaz"
+    },
+    {
+     "es": "Muestra la ventana por segunda vez",
+     "en": "Muestra la ventana por segunda vez"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "El bucle espera eventos y los reparte a los controles hasta que se cierra la aplicación.",
+    "en": "El bucle espera eventos y los reparte a los controles hasta que se cierra la aplicación."
+   },
+   "lesson": "prog-ut9-interfaces"
+  },
+  {
+   "id": "prog-157",
+   "block": "prog-ut9",
+   "q": {
+    "es": "¿Dónde queda el botón?",
+    "en": "¿Dónde queda el botón?"
+   },
+   "code": "layout = QGridLayout()\nlayout.addWidget(etiqueta, 0, 0)\nlayout.addWidget(boton, 1, 2)",
+   "options": [
+    {
+     "es": "En la fila 1, columna 2 (contando desde 0)",
+     "en": "En la fila 1, columna 2 (contando desde 0)"
+    },
+    {
+     "es": "En la fila 2, columna 1",
+     "en": "En la fila 2, columna 1"
+    },
+    {
+     "es": "En la posición (1, 2) en píxeles",
+     "en": "En la posición (1, 2) en píxeles"
+    },
+    {
+     "es": "Encima de la etiqueta",
+     "en": "Encima de la etiqueta"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "`addWidget(widget, fila, columna)`, empezando en 0. Se le pueden añadir cuántas filas y columnas ocupa.",
+    "en": "`addWidget(widget, fila, columna)`, empezando en 0. Se le pueden añadir cuántas filas y columnas ocupa."
+   },
+   "lesson": "prog-ut9-interfaces"
+  },
+  {
+   "id": "prog-158",
+   "block": "prog-ut9",
+   "q": {
+    "es": "¿Qué inconveniente tiene el posicionamiento absoluto con move(x, y)?",
+    "en": "¿Qué inconveniente tiene el posicionamiento absoluto con move(x, y)?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "No se adapta al redimensionar la ventana ni a otras fuentes o sistemas",
+     "en": "No se adapta al redimensionar la ventana ni a otras fuentes o sistemas"
+    },
+    {
+     "es": "No se puede usar en Qt",
+     "en": "No se puede usar en Qt"
+    },
+    {
+     "es": "Es más lento de ejecutar",
+     "en": "Es más lento de ejecutar"
+    },
+    {
+     "es": "Borra los widgets",
+     "en": "Borra los widgets"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Por eso se prefieren los layouts: QHBoxLayout, QVBoxLayout y QGridLayout.",
+    "en": "Por eso se prefieren los layouts: QHBoxLayout, QVBoxLayout y QGridLayout."
+   },
+   "lesson": "prog-ut9-interfaces"
+  },
+  {
+   "id": "prog-159",
+   "block": "prog-ut9",
+   "q": {
+    "es": "Varios botones están conectados a este mismo método. ¿Qué devuelve `self.sender()`?",
+    "en": "Varios botones están conectados a este mismo método. ¿Qué devuelve `self.sender()`?"
+   },
+   "code": "def boton_pulsado(self):\n    boton = self.sender()\n    self.resultado.setText(boton.text())",
+   "options": [
+    {
+     "es": "El control que emitió la señal: el botón pulsado",
+     "en": "El control que emitió la señal: el botón pulsado"
+    },
+    {
+     "es": "Siempre el primer botón",
+     "en": "Siempre el primer botón"
+    },
+    {
+     "es": "La ventana principal",
+     "en": "La ventana principal"
+    },
+    {
+     "es": "None",
+     "en": "None"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Así un solo slot sirve para toda una calculadora: se mira el texto del botón pulsado.",
+    "en": "Así un solo slot sirve para toda una calculadora: se mira el texto del botón pulsado."
+   },
+   "lesson": "prog-ut9-interfaces"
+  },
+  {
+   "id": "prog-160",
+   "block": "prog-ut9",
+   "q": {
+    "es": "¿Qué ocurre si el usuario pulsa No?",
+    "en": "¿Qué ocurre si el usuario pulsa No?"
+   },
+   "code": "def closeEvent(self, event):\n    respuesta = QMessageBox.question(self, \"Salir\", \"¿Seguro?\")\n    if respuesta == QMessageBox.StandardButton.Yes:\n        event.accept()\n    else:\n        event.ignore()",
+   "options": [
+    {
+     "es": "La ventana no se cierra",
+     "en": "La ventana no se cierra"
+    },
+    {
+     "es": "La ventana se cierra igualmente",
+     "en": "La ventana se cierra igualmente"
+    },
+    {
+     "es": "El programa lanza una excepción",
+     "en": "El programa lanza una excepción"
+    },
+    {
+     "es": "Se abre otra ventana",
+     "en": "Se abre otra ventana"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Los eventos de la propia ventana se tratan sobrescribiendo métodos como `closeEvent`; `ignore()` cancela el cierre.",
+    "en": "Los eventos de la propia ventana se tratan sobrescribiendo métodos como `closeEvent`; `ignore()` cancela el cierre."
+   },
+   "lesson": "prog-ut9-interfaces"
+  },
+  {
+   "id": "prog-161",
+   "block": "prog-ut9",
+   "q": {
+    "es": "¿Cuándo se llama a `self.actualizar`?",
+    "en": "¿Cuándo se llama a `self.actualizar`?"
+   },
+   "code": "self.entrada = QLineEdit()\nself.entrada.textChanged.connect(self.actualizar)",
+   "options": [
+    {
+     "es": "Cada vez que cambia el texto de la caja",
+     "en": "Cada vez que cambia el texto de la caja"
+    },
+    {
+     "es": "Solo al pulsar Intro",
+     "en": "Solo al pulsar Intro"
+    },
+    {
+     "es": "Al cerrar la ventana",
+     "en": "Al cerrar la ventana"
+    },
+    {
+     "es": "Una sola vez al crearla",
+     "en": "Una sola vez al crearla"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "`textChanged` se emite con cada cambio y pasa el texto nuevo al slot. Para reaccionar solo a Intro está `returnPressed`.",
+    "en": "`textChanged` se emite con cada cambio y pasa el texto nuevo al slot. Para reaccionar solo a Intro está `returnPressed`."
+   },
+   "lesson": "prog-ut9-interfaces"
+  },
+  {
+   "id": "prog-162",
+   "block": "prog-ut9",
+   "q": {
+    "es": "En PySide6, ¿en qué módulo están QPushButton, QLineEdit y QMainWindow?",
+    "en": "En PySide6, ¿en qué módulo están QPushButton, QLineEdit y QMainWindow?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "QtWidgets",
+     "en": "QtWidgets"
+    },
+    {
+     "es": "QtGui",
+     "en": "QtGui"
+    },
+    {
+     "es": "QtCore",
+     "en": "QtCore"
+    },
+    {
+     "es": "QtSql",
+     "en": "QtSql"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Los apuntes los ponen en QtGui en algunos ejemplos, que es de Qt4. En Qt6, QtGui tiene iconos, fuentes y QAction; QtCore, señales y temporizadores.",
+    "en": "Los apuntes los ponen en QtGui en algunos ejemplos, que es de Qt4. En Qt6, QtGui tiene iconos, fuentes y QAction; QtCore, señales y temporizadores."
+   },
+   "lesson": "prog-ut9-interfaces"
+  },
+  {
+   "id": "prog-163",
+   "block": "prog-ut9",
+   "q": {
+    "es": "Simulación en Python puro de una señal con dos oyentes. ¿Qué muestra este código?",
+    "en": "Simulación en Python puro de una señal con dos oyentes. ¿Qué muestra este código?"
+   },
+   "code": "class Senal:\n    def __init__(self):\n        self.oyentes = []\n\n    def connect(self, funcion):\n        self.oyentes.append(funcion)\n\n    def emit(self, valor):\n        for funcion in self.oyentes:\n            funcion(valor)\n\nclicked = Senal()\nclicked.connect(lambda v: print(\"Guardar\", v))\nclicked.connect(lambda v: print(\"Registrar\", v))\nclicked.emit(1)",
+   "options": [
+    "Guardar 1",
+    "Error",
+    "Guardar 1\nRegistrar 1",
+    "Registrar 1\nGuardar 1"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "Una señal puede tener varios oyentes: al emitirse, se llama a todos en el orden en que se conectaron.",
+    "en": "Una señal puede tener varios oyentes: al emitirse, se llama a todos en el orden en que se conectaron."
+   },
+   "lesson": "prog-ut9-interfaces"
+  }
+ ],
+ "cards": []
+}

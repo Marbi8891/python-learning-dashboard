@@ -1,8 +1,9 @@
 """Intentos de ejercicios del usuario."""
 
 from fastapi import APIRouter, status
-from sqlalchemy import select
+from sqlalchemy import delete, select
 
+from app.config import get_settings
 from app.deps import CurrentUser, DbSession, get_lesson_or_404
 from app.models import ExerciseAttempt
 from app.routers.progress import mark_completed
@@ -23,6 +24,17 @@ def create_attempt(
         user_id=user.id, lesson_id=lesson.id, code=data.code, passed=data.passed
     )
     db.add(attempt)
+    db.flush()
+    # Solo se guardan los más recientes: el código es texto libre (puede llevar datos personales)
+    # y un bucle de intentos no puede llenar la base de datos
+    keep = get_settings().attempts_kept_per_lesson
+    old_ids = (
+        select(ExerciseAttempt.id)
+        .where(ExerciseAttempt.user_id == user.id, ExerciseAttempt.lesson_id == lesson.id)
+        .order_by(ExerciseAttempt.id.desc())
+        .offset(keep)
+    )
+    db.execute(delete(ExerciseAttempt).where(ExerciseAttempt.id.in_(old_ids)))
     db.commit()
     db.refresh(attempt)
     if attempt.passed:

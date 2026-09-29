@@ -13,7 +13,10 @@ from app.config import get_settings
 ALGORITHM = "HS256"
 MIN_SECRET_LENGTH = 32
 
-_hasher = PasswordHasher()
+# Argon2id con los parámetros mínimos que recomienda OWASP (19 MiB, 2 pasadas, 1 hilo).
+# Los de por defecto (64 MiB) dejaban sin memoria la instancia gratuita (512 MB) con unos pocos
+# logins a la vez. Los hashes antiguos siguen valiendo y se rehacen al entrar (needs_rehash).
+_hasher = PasswordHasher(time_cost=2, memory_cost=19 * 1024, parallelism=1)
 # Se usa cuando el email no existe, para que el login tarde lo mismo
 # y no revele qué emails están registrados (enumeración de usuarios).
 _DUMMY_HASH = _hasher.hash("contrasena-ficticia-para-igualar-tiempos")
@@ -29,6 +32,10 @@ def verify_password(password: str, password_hash: str | None) -> bool:
     except (VerificationError, InvalidHashError):
         return False
     return password_hash is not None
+
+
+def needs_rehash(password_hash: str) -> bool:
+    return _hasher.check_needs_rehash(password_hash)
 
 
 def get_jwt_secret() -> str:
@@ -55,7 +62,9 @@ def create_access_token(user_id: int, token_version: int = 0) -> str:
 def decode_access_token(token: str) -> tuple[int, int] | None:
     """Devuelve (id de usuario, versión del token), o None si es inválido o ha caducado."""
     try:
-        payload = jwt.decode(token, get_jwt_secret(), algorithms=[ALGORITHM])
+        payload = jwt.decode(
+            token, get_jwt_secret(), algorithms=[ALGORITHM], options={"require": ["exp", "sub"]}
+        )
         return int(payload["sub"]), int(payload.get("ver", 0))
     except (jwt.PyJWTError, KeyError, ValueError, TypeError):
         return None

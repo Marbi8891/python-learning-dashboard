@@ -1,6 +1,7 @@
 """Ramas internas: SMTP, límite de intentos, concurrencia, configuración y scripts."""
 
 import runpy
+import ssl
 
 import pytest
 from sqlalchemy import select
@@ -17,13 +18,19 @@ from app.security import get_jwt_secret, hash_password
 @pytest.mark.parametrize(
     ("url", "expected"),
     [
-        ("postgres://u:p@h/db", "postgresql+psycopg://u:p@h/db"),
-        ("postgresql://u:p@h/db", "postgresql+psycopg://u:p@h/db"),
-        ("postgresql+psycopg://u:p@h/db", "postgresql+psycopg://u:p@h/db"),
+        ("postgres://u:p@h/db", "postgresql+psycopg://u:p@h/db?sslmode=require"),
+        ("postgresql://u:p@h/db?a=1", "postgresql+psycopg://u:p@h/db?a=1&sslmode=require"),
+        (
+            "postgresql://u:p@h/db?sslmode=verify-full",
+            "postgresql+psycopg://u:p@h/db?sslmode=verify-full",
+        ),
+        # Base de datos local o de docker-compose: sin TLS
+        ("postgresql+psycopg://pld:pld@db:5432/pld", "postgresql+psycopg://pld:pld@db:5432/pld"),
+        ("postgresql://u:p@localhost:5432/db", "postgresql+psycopg://u:p@localhost:5432/db"),
         ("sqlite:///./dev.db", "sqlite:///./dev.db"),
     ],
 )
-def test_database_url_gets_psycopg_driver(url, expected):
+def test_database_url_gets_psycopg_driver_and_tls(url, expected):
     assert Settings(database_url=url).database_url == expected
 
 
@@ -74,8 +81,8 @@ class FakeSMTP:
     def __exit__(self, *exc):
         return False
 
-    def starttls(self):
-        self.tls = True
+    def starttls(self, context=None):
+        self.tls = context
 
     def login(self, user, password):
         self.credentials = (user, password)
@@ -98,7 +105,9 @@ def smtp(monkeypatch):
 def test_send_email_via_smtp_with_tls(smtp):
     mailer.send_email("ana@example.com", "Asunto", "Cuerpo")
     server, message = smtp.sent[0]
-    assert server.tls and server.credentials == ("usuario", "clave")
+    # El certificado del servidor SMTP se verifica (contexto por defecto, ADR-0022)
+    assert server.tls.verify_mode == ssl.CERT_REQUIRED and server.tls.check_hostname
+    assert server.credentials == ("usuario", "clave")
     assert message["To"] == "ana@example.com" and message["Subject"] == "Asunto"
 
 
@@ -106,6 +115,14 @@ def test_send_email_failure_is_logged_not_raised(smtp, caplog):
     smtp.fail = True
     mailer.send_email("ana@example.com", "Asunto", "Cuerpo")  # no debe lanzar excepción
     assert "No se pudo enviar" in caplog.text
+    assert "ana@example.com" not in caplog.text  # el email se enmascara en el log
+
+
+def test_without_smtp_nothing_sensitive_is_logged(caplog):
+    with caplog.at_level("WARNING", logger="pld.mailer"):
+        mailer.send_email("ana@example.com", "Asunto", "token=secreto")
+    assert "a***@example.com" in caplog.text
+    assert "secreto" not in caplog.text and "ana@example.com" not in caplog.text
 
 
 def test_mark_completed_survives_concurrent_insert(client):

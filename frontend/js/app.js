@@ -5,7 +5,7 @@
 import hljs from "../vendor/highlight/core.min.js";
 import python from "../vendor/highlight/python.min.js";
 import { apiEnabled } from "./api.js";
-import { initAccount, openAccount, openPasswordReset } from "./account.js";
+import { initAccount, openAccount, openPasswordReset, takeFlash } from "./account.js";
 import { initAssistant, setAssistantLesson } from "./assistant.js";
 import { celebrate } from "./celebrate.js";
 import {
@@ -31,9 +31,11 @@ import {
   subscribe as onGame,
 } from "./game.js";
 import { renderHome } from "./home.js";
-import { escapeHtml, renderMarkdown } from "./markdown.js";
+import { escapeHtml, renderMarkdown, safeUrl } from "./markdown.js";
 import { renderCertificate, saveCertificateName } from "./certificate.js";
 import { openPcap, refreshPcap } from "./pcap.js";
+import { initCourseSync } from "./course-store.js";
+import { openDaw, refreshDaw } from "./daw.js";
 import { initPcapSync } from "./pcap-sync.js";
 import { initPrefs } from "./prefs.js";
 import { badgesHtml, renderProfile } from "./profile.js";
@@ -51,6 +53,7 @@ const PROFILE_ROUTE = "#/perfil";
 const PCAP_ROUTE = "#/pcap";
 const CERTIFICATE_ROUTE = "#/certificado";
 const PRIVATE_ROUTE = "#/cuenta";
+const DAW_ROUTE = "#/daw";
 const mobile = window.matchMedia("(max-width: 900px)");
 
 const content = {
@@ -173,7 +176,7 @@ function renderSources(sources = []) {
   const items = sources
     .map(
       (s) =>
-        `<li><a href="${escapeHtml(s.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(s.title)}</a></li>`,
+        `<li><a href="${safeUrl(s.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(s.title)}</a></li>`,
     )
     .join("");
   return `
@@ -372,6 +375,8 @@ const VIEWS = {
   certificate: { element: "#certificate-view", title: "Certificado · Python Learning Dashboard", focus: "#certificate-title", render: () => renderCertificate(content) },
   // La zona PCAP se pinta sola (openPcap): tiene simulacros en curso que no se deben repintar
   pcap: { element: "#pcap-view", title: "Examen PCAP · Python Learning Dashboard", focus: null, render: null },
+  // Los cursos de DAW también se pintan solos (openDaw): cargan su banco y tienen tandas en curso
+  daw: { element: "#daw-view", title: "Cursos de DAW · Python Learning Dashboard", focus: null, render: null },
 };
 
 /** Muestra una vista de página completa (portada o perfil) en lugar de la lección. */
@@ -562,6 +567,11 @@ function navigate({ moveFocus = true } = {}) {
     showPage("certificate", { moveFocus });
     return;
   }
+  if (location.hash === DAW_ROUTE || location.hash.startsWith(`${DAW_ROUTE}/`)) {
+    showPage("daw", { moveFocus: false });
+    openDaw(location.hash, { moveFocus });
+    return;
+  }
   if (location.hash.startsWith(PCAP_ROUTE)) {
     showPage("pcap", { moveFocus: false });
     openPcap(location.hash, content.modules, { moveFocus });
@@ -710,6 +720,9 @@ async function init() {
     refreshGame();
     refreshPcap();
   });
+  initCourseSync(refreshDaw);
+  const flash = takeFlash(); // aviso tras cerrar sesión o borrar la cuenta
+  if (flash) showToast(flash);
   restoreSession();
 }
 

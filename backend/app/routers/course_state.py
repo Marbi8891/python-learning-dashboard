@@ -1,6 +1,7 @@
-"""Estado de los cursos de DAW de la app Android guardado en la cuenta (ver ADR-0018).
+"""Estado de los cursos de DAW guardado en la cuenta (ver ADR-0018 y ADR-0021).
 
-El PCAP sigue en /api/pcap-state (ADR-0010); aquí van SQL, JavaScript y Java, uno por documento.
+Lo comparten la app Android y la web. El PCAP sigue en /api/pcap-state (ADR-0010); aquí va cada
+curso de DAW (Programación, Bases de datos, Entornos, JavaScript y Java) en su documento.
 El usuario sale siempre del token de sesión, nunca del cuerpo de la petición.
 """
 

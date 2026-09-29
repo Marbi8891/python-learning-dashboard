@@ -1,6 +1,5 @@
 """Privacidad (RGPD), exportación, borrado de cuenta y recuperación de contraseña."""
 
-import logging
 import re
 
 from app.models import CourseState, ExerciseAttempt, LessonProgress, PcapState, User
@@ -63,11 +62,13 @@ def test_delete_account_removes_everything(client, auth_headers):
     assert register(client).status_code == 201
 
 
-def _request_reset_link(client, caplog, email="ana@example.com") -> str | None:
-    with caplog.at_level(logging.WARNING, logger="pld.mailer"):
-        response = client.post("/api/auth/password-reset/request", json={"email": email})
+def _request_reset_link(client, monkeypatch, email="ana@example.com") -> str | None:
+    """Pide el enlace y lo lee del email que se habría enviado (nunca del log, ADR-0022)."""
+    sent = []
+    monkeypatch.setattr("app.routers.auth.send_email", lambda to, subject, body: sent.append(body))
+    response = client.post("/api/auth/password-reset/request", json={"email": email})
     assert response.status_code == 202
-    match = re.search(r"token=([\w-]+)", caplog.text)
+    match = re.search(r"token=([\w-]+)", sent[0]) if sent else None
     return match.group(1) if match else None
 
 
@@ -79,9 +80,9 @@ def test_reset_request_same_answer_for_unknown_email(client, caplog):
     assert known.json() == unknown.json()
 
 
-def test_password_reset_flow_invalidates_old_sessions(client, caplog, auth_headers):
-    token = _request_reset_link(client, caplog)
-    assert token, "El enlace de recuperación debe aparecer en el log cuando no hay SMTP"
+def test_password_reset_flow_invalidates_old_sessions(client, monkeypatch, auth_headers):
+    token = _request_reset_link(client, monkeypatch)
+    assert token, "El email de recuperación debe llevar el enlace"
 
     new_password = "nueva-contraseña-456"
     confirm = client.post(
@@ -99,7 +100,7 @@ def test_password_reset_flow_invalidates_old_sessions(client, caplog, auth_heade
     assert again.status_code == 400
 
 
-def test_reset_with_invalid_or_expired_token(client, caplog):
+def test_reset_with_invalid_or_expired_token(client, monkeypatch):
     register(client)
     bad = client.post(
         "/api/auth/password-reset/confirm",
@@ -107,7 +108,7 @@ def test_reset_with_invalid_or_expired_token(client, caplog):
     )
     assert bad.status_code == 400
 
-    token = _request_reset_link(client, caplog)
+    token = _request_reset_link(client, monkeypatch)
     with client.engine.begin() as conn:
         conn.exec_driver_sql("UPDATE password_reset_tokens SET expires_at = '2000-01-01 00:00:00'")
     expired = client.post(
@@ -117,11 +118,10 @@ def test_reset_with_invalid_or_expired_token(client, caplog):
     assert expired.status_code == 400
 
 
-def test_new_reset_request_invalidates_previous_link(client, caplog):
+def test_new_reset_request_invalidates_previous_link(client, monkeypatch):
     register(client)
-    first = _request_reset_link(client, caplog)
-    caplog.clear()
-    second = _request_reset_link(client, caplog)
+    first = _request_reset_link(client, monkeypatch)
+    second = _request_reset_link(client, monkeypatch)
     assert first != second
     old = client.post(
         "/api/auth/password-reset/confirm",

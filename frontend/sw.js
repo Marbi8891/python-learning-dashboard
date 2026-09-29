@@ -3,7 +3,7 @@
    - Pyodide (Python en el navegador): primero la copia guardada; sus URL llevan la versión y no cambian.
    - API del backend: nunca se guarda (datos personales y siempre actuales). */
 
-const VERSION = "v3";
+const VERSION = "v4";
 const SITE_CACHE = `pld-site-${VERSION}`;
 const PYODIDE_CACHE = "pld-pyodide"; // se conserva entre versiones: son ~10 MB inmutables
 const SHELL = ["./", "index.html", "config.js", "js/analytics.js", "manifest.webmanifest", "favicon.svg"];
@@ -17,7 +17,12 @@ self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches
       .keys()
-      .then((keys) => Promise.all(keys.filter((k) => k !== SITE_CACHE && k !== PYODIDE_CACHE).map((k) => caches.delete(k))))
+      // Solo las cachés propias: el origen marbi8891.github.io lo comparten otros proyectos de Pages
+      .then((keys) =>
+        Promise.all(
+          keys.filter((k) => k.startsWith("pld-site-") && k !== SITE_CACHE).map((k) => caches.delete(k)),
+        ),
+      )
       .then(() => self.clients.claim()),
   );
 });

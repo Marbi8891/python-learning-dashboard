@@ -2,6 +2,11 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
+  <!-- Seguridad (ADR-0022). GitHub Pages no permite cabeceras propias: la política va en <meta>.
+       Si activas GoatCounter (config.js), añade https://gc.zgo.at a script-src y tu
+       https://<código>.goatcounter.com a connect-src e img-src. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Página no encontrada · Python Learning Dashboard</title>
   <meta name="theme-color" content="#0c0d10">

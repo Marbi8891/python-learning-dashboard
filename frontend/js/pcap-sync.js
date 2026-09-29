@@ -17,6 +17,14 @@ async function push() {
   }
 }
 
+/** Sube ya el cambio pendiente (antes de cerrar sesión). */
+export async function flushPcapSync() {
+  if (!timer || !state.user) return;
+  clearTimeout(timer);
+  timer = null;
+  await push();
+}
+
 /** @param {() => void} onMerged se llama cuando llega la copia de la cuenta (para repintar) */
 export function initPcapSync(onMerged) {
   onPcapSave(() => {

@@ -167,7 +167,7 @@ MAX_PCAP_STATE_BYTES = 200_000  # ~1000 simulacros y todas las respuestas caben 
 
 # Cursos de DAW de la app Android que se pueden guardar en la cuenta (ADR-0016 y ADR-0018).
 # Lista cerrada: evita que un cliente cree documentos con nombres arbitrarios.
-COURSES = ("sql", "js", "java", "entornos")
+COURSES = ("sql", "js", "java", "entornos", "programacion")
 
 
 class PcapStateIn(BaseModel):

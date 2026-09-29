@@ -1,0 +1,812 @@
+{
+ "modules": [
+  {
+   "slug": "prog-ut1",
+   "title": "UT1 · Introducción y algoritmos",
+   "summary": "Historia, software, paradigmas, algoritmos, diagramas de flujo, pseudocódigo, complejidad y ciclo de vida.",
+   "lessons": [
+    {
+     "slug": "prog-ut1-algoritmos",
+     "title": "UT1 · Introducción, algoritmos y pseudocódigo",
+     "theory": "**Un poco de historia:** el ábaco; la **Pascalina** de Blaise Pascal (1642), una calculadora mecánica; las **tarjetas perforadas** del telar de Jacquard (1802); la máquina diferencial de **Charles Babbage** (1822); la **máquina de Turing** de Alan Turing; el **ENIAC** (proyecto iniciado en 1943, unos 18.000 tubos de vacío) y el **transistor** (1947, laboratorios Bell).\n\n**Software** según su función: **de sistema** (sistema operativo, controladores), **de programación** (compiladores, IDE) y **de aplicación** (lo que haremos casi siempre).\n\n**Programar** es diseñar y codificar un algoritmo con las instrucciones de un lenguaje, respetando su sintaxis. Pasos: observar el problema → pensar soluciones **en papel** → elegir la mejor → implementarla → probarla.\n\n**Paradigmas:**\n- **Estructurada:** solo tres estructuras (**secuencial, alternativa e iterativa**), sin saltos incondicionales (`goto`).\n- **Modular:** el programa se divide en funciones que funcionan como **cajas negras**, con **máxima cohesión y mínimo acoplamiento**.\n- **Orientada a objetos:** el código se organiza en clases y objetos (UT4).\n\n**Algoritmo:** conjunto **ordenado y finito** de operaciones que resuelve un problema, con entradas y salidas definidas. Tiene un número finito de pasos, termina en un tiempo finito y cada paso es **preciso, sin ambigüedad**. Elementos: datos (entero, real, lógico, carácter, cadena), constantes y variables, expresiones (operadores y operandos) y palabras reservadas. Esquema: **Entrada → Proceso → Salida**. No hay un único algoritmo para cada problema.\n\n**Representación:**\n- **Diagrama de flujo (ordinograma):** empieza arriba y termina abajo; los símbolos de inicio y fin aparecen **una sola vez**; el flujo va de arriba abajo y de izquierda a derecha; se evitan los cruces con conectores.\n- **Pseudocódigo:** con **PSeInt**, un intérprete de pseudocódigo para estudiantes que además dibuja el diagrama de flujo. Asignación con `←`; estructuras `Si … Entonces … SiNo … FinSi`, `Mientras … Hacer … FinMientras`, `Para`, `Segun`; `Leer` y `Escribir`.\n\n**Eficiencia:** en espacio (memoria) y en tiempo. El **orden de complejidad** dice cómo crece el coste al crecer los datos: `O(1)` constante, `O(log n)` logarítmico, `O(n)` lineal, `O(n log n)`, `O(n²)` cuadrático.\n\n**Lenguajes:** de bajo nivel (máquina, ensamblador) y de alto nivel. Según su ejecución: **compilados** (los más rápidos, dependen de la arquitectura), **interpretados** y **mixtos** (compilan a **bytecode** que ejecuta una máquina virtual: ganan portabilidad; Java y Python).\n\n**Documentación:** **interna** (comentarios y docstrings en el código) y **externa** (diseño, manual de usuario y de mantenimiento).\n\n**Ciclo de vida clásico:** análisis → diseño → codificación y pruebas → implantación → mantenimiento. Solo una de las fases es escribir código.",
+     "example_code": "# Pseudocódigo (PSeInt):  C <- A;  A <- B;  B <- C\na = 4\nb = 2\nprint(\"Antes:\", a, b)\nc = a        # variable auxiliar\na = b\nb = c\nprint(\"Después:\", a, b)\n\n# Par o impar:  Si (n % 2) = 0 Entonces Escribir \"Par\" SiNo Escribir \"Impar\" FinSi\nn = 7\nif n % 2 == 0:\n    print(\"Par\")\nelse:\n    print(\"Impar\")",
+     "exercise": "Escribe en **pseudocódigo** (o en PSeInt) y después en Python un algoritmo que:\n\n1. lea dos números;\n2. muestre cuál es mayor o si son iguales.\n\nDibuja también su diagrama de flujo en papel: un solo inicio y un solo fin.",
+     "starter": "a = 5\nb = 8\n\n# Si a > b ... SiNo Si b > a ... SiNo iguales\n",
+     "quiz": [
+      {
+       "q": "¿Qué tres partes tiene todo algoritmo?",
+       "options": [
+        "Entrada, proceso y salida",
+        "Inicio, bucle y fin",
+        "Clase, objeto y método",
+        "Análisis, diseño y código"
+       ],
+       "answer": 0,
+       "explain": "Es el esquema básico que se repite en cualquier programa."
+      },
+      {
+       "q": "¿Existe un único algoritmo correcto para cada problema?",
+       "options": [
+        "No: suele haber varios, y se elige el más adecuado",
+        "Sí, siempre uno",
+        "Sí, el más corto",
+        "Depende del lenguaje"
+       ],
+       "answer": 0,
+       "explain": "Se evalúan las soluciones candidatas: si dan el resultado esperado, si son eficientes y qué pasa al crecer los datos."
+      }
+     ],
+     "challenge": {
+      "title": "Traza",
+      "stars": 2,
+      "exercise": "Haz a mano la traza (tabla con el valor de cada variable tras cada instrucción) de: A=4, B=2, C=3; A←B; C←A; B←3; A←A*2; C←C−B.",
+      "starter": "# A  B  C\n# 4  2  3\n",
+      "hint": "Tras A←B, A vale 2; C←A copia ese 2. Al final: A=4, B=3, C=−1."
+     },
+     "assistant": {
+      "hint": "Necesitas una alternativa anidada: `if a > b` … `elif b > a` … `else`.",
+      "faq": [
+       {
+        "q": "¿Por qué programar primero en papel?",
+        "a": "Porque el problema difícil es el algoritmo, no la sintaxis. Si el algoritmo está mal en papel, estará mal en cualquier lenguaje."
+       },
+       {
+        "q": "¿O(n log n) es logarítmico?",
+        "a": "No exactamente: es «n por log n» (linealítmico). Crece más que O(n) y mucho menos que O(n²); es el coste de los buenos algoritmos de ordenación."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "DAW-Programacion · César San Juan Pastor (IES Arcipreste de Hita), CC BY-NC",
+       "url": "https://github.com/csanjuanp-ies/DAW-Programacion"
+      },
+      {
+       "title": "PSeInt — intérprete de pseudocódigo",
+       "url": "https://pseint.sourceforge.net/"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "prog-ut2",
+   "title": "UT2 · Elementos de un programa",
+   "summary": "Python, sintaxis, E/S, identificadores, operadores, literales, cadenas y variables.",
+   "lessons": [
+    {
+     "slug": "prog-ut2-elementos",
+     "title": "UT2 · Elementos de un programa en Python",
+     "theory": "**Python** lo creó **Guido van Rossum** (empezó en 1989); el nombre viene de los **Monty Python**. Python 3.0 (2008) rompió la compatibilidad con Python 2. Hoy lo gestiona la Python Software Foundation.\n\n**Características:** tipado **fuerte y dinámico** (una variable puede apuntar a objetos de distinto tipo, pero no se mezclan tipos sin convertirlos); en Python **todo es un objeto**; interpretado, aunque antes **compila a bytecode** (`.pyc` en `__pycache__`) que ejecuta su máquina virtual; multiplataforma; enorme biblioteca estándar; recolector de basura; paquetes con **pip** (`pip install`, `pip install -U`, `pip uninstall`). Los **entornos virtuales** (`python -m venv ruta`) aíslan las dependencias de cada proyecto. IDE del curso: **PyCharm**.\n\n**Sintaxis básica:**\n- No hay `;` al final. Los bloques se abren con `:` y se marcan con la **indentación** (4 espacios; no mezclar tabuladores).\n- Comentarios con `#`; los de varias líneas se simulan con `\"\"\"…\"\"\"`.\n- Distingue mayúsculas y minúsculas. Una línea larga se parte con `\\` o dentro de paréntesis, corchetes o llaves.\n\n**Funciones de inicio:** `print(…, end=\"\")` (por defecto `end` es un salto de línea), `input(\"texto\")` (**siempre devuelve una cadena**: hay que convertirla con `int()` o `float()`), `str()`, `type()`, `dir()` (lista los métodos) y `pass` (bloque vacío).\n\n**Identificadores:** empiezan por letra o `_`, y siguen letras, dígitos o `_`. Sin `-`, `$`, `@` ni espacios. **PEP 8:** clases `MiPunto`, variables y funciones `nombre_alumno`, `guardar_datos`, constantes `PI`.\n\n**Operadores:**\n- Aritméticos: `+ - * /` (**siempre da float**), `//` (división entera), `%` (resto), `**` (potencia).\n- Comparación: `== != < <= > >=`, encadenables: `5 < x < 15`.\n- Lógicos `and`, `or`, `not`, con **cortocircuito**: `0 or 10` da `10`; `0 and 10` da `0`.\n- Pertenencia `in`, identidad `is` (para `None`), asignación compuesta `+=`, `-=`… y morsa `:=` (Python 3.8).\n\n**Literales:** enteros (`0b101`, `0o17`, `0x1F`, `1_000`), reales, complejos, cadenas con `'` o `\"`, triples comillas, secuencias de escape (`\\n`, `\\t`), `None`, `True`/`False`.\n\n**Cadenas:** inmutables, índices desde 0 y negativos desde el final, **rebanadas** `s[inicio:fin:paso]` (el fin no se incluye; `s[::-1]` la invierte), `+` concatena y `*` repite. Formato con **f-strings**: `f\"{precio:.2f}\"`.\n\n**Variables:** nombres que apuntan a objetos. Inmutables: números, cadenas, tuplas; mutables: listas, diccionarios, conjuntos. Asignación múltiple `a, b = b, a`. No hay constantes reales: se escriben en MAYÚSCULAS por convenio.",
+     "example_code": "PI = 3.14159                      # constante por convenio\nradio = float(\"2\")                # input() devolvería una cadena: se convierte\narea = PI * radio ** 2\nprint(f\"Área: {area:.2f}\")\n\nnombre = \"Python\"\nprint(nombre[0], nombre[-1], nombre[::-1])\nprint(7 / 2, 7 // 2, 7 % 2, 2 ** 10)",
+     "exercise": "Escribe un programa que pida el peso (kg) y la estatura (m) y muestre el **índice de masa corporal** (peso / estatura²) con dos decimales.\n\nPruébalo con 70 y 1.75: debe salir 22.86.",
+     "starter": "peso = float(input(\"Peso (kg)? \"))\nestatura = float(input(\"Estatura (m)? \"))\n\n# imc = ...\n",
+     "quiz": [
+      {
+       "q": "¿Qué devuelve siempre `input()`?",
+       "options": [
+        "Una cadena (str)",
+        "Un entero",
+        "El tipo que escriba el usuario",
+        "None"
+       ],
+       "answer": 0,
+       "explain": "Por eso casi siempre se escribe `int(input(...))` o `float(input(...))`."
+      },
+      {
+       "q": "¿Cómo se marca un bloque en Python?",
+       "options": [
+        "Con `:` y la indentación",
+        "Con llaves {}",
+        "Con begin y end",
+        "Con punto y coma"
+       ],
+       "answer": 0,
+       "explain": "La indentación forma parte de la sintaxis; PEP 8 pide 4 espacios."
+      }
+     ],
+     "challenge": {
+      "title": "Fecha a trozos",
+      "stars": 2,
+      "exercise": "Dada una fecha como entero `ddmmaaaa` (por ejemplo 25122026), obtén día, mes y año solo con `//` y `%`.",
+      "starter": "fecha = 25122026\n\n# dia = ...\n# mes = ...\n# anio = ...\n",
+      "hint": "El año son los 4 últimos dígitos: `fecha % 10000`. El día: `fecha // 1000000`. El mes: `fecha // 10000 % 100`."
+     },
+     "assistant": {
+      "hint": "`print(f\"IMC: {imc:.2f}\")`. Ojo: `:.2` serían dos cifras significativas, no dos decimales; hace falta `:.2f`.",
+      "faq": [
+       {
+        "q": "¿Por qué `input()` + `input()` concatena en vez de sumar?",
+        "a": "Porque `input()` devuelve cadenas. `\"2\" + \"3\"` es `\"23\"`. Convierte primero: `int(input(...))`."
+       },
+       {
+        "q": "¿Python es débilmente tipado?",
+        "a": "No: es de tipado dinámico (el tipo va con el objeto, no con la variable) pero fuerte: `\"3\" + 4` da error en vez de convertir solo."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "DAW-Programacion · César San Juan Pastor (IES Arcipreste de Hita), CC BY-NC",
+       "url": "https://github.com/csanjuanp-ies/DAW-Programacion"
+      },
+      {
+       "title": "Tutorial oficial de Python (en español)",
+       "url": "https://docs.python.org/es/3/tutorial/"
+      },
+      {
+       "title": "PEP 8 — Guía de estilo para el código Python",
+       "url": "https://peps.python.org/pep-0008/"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "prog-ut3",
+   "title": "UT3 · Estructuras de control y funciones",
+   "summary": "if, match, for, while, break, continue, depuración, docstrings, funciones y ámbitos.",
+   "lessons": [
+    {
+     "slug": "prog-ut3-control",
+     "title": "UT3 · Estructuras de control y depuración",
+     "theory": "Máxima del curso: **el código tiene que ser fácil de leer, no corto**, y se empieza siempre en papel.\n\n**Condiciones:** expresiones que dan `True` o `False` con operadores de comparación, lógicos (`and`, `or` con cortocircuito, `not`), pertenencia (`in`) e identidad (`is`). Se pueden encadenar: `5 < x < 15`.\n\n**Alternativas:** `if` / `elif` / `else` (solo el `if` es obligatorio). Condicional en una línea: `valor_si if condicion else valor_no`. Desde **Python 3.10** existe `match`/`case` (con `case _` como caso por defecto y `|` para varias opciones).\n\n**range(inicio, fin, paso):** el **fin no se incluye**. `range(5)` → 0…4; `range(5, 10)` → 5…9; `range(0, 10, 3)` → 0, 3, 6, 9; `range(10, 0, -1)` cuenta hacia atrás.\n\n**Bucles:**\n- `for` recorre cualquier secuencia (cadena, lista, range…).\n- `while` repite mientras se cumpla la condición: hay que cambiarla dentro, o será un **bucle infinito**.\n- Los dos admiten `else`, que se ejecuta si el bucle termina **sin `break`** (útil para búsquedas, como comprobar si un número es primo).\n- `break` sale del bucle; `continue` pasa a la siguiente vuelta. Python no tiene `goto`.\n- Morsa en bucles: `while (linea := input()) != \"FIN\":`.\n\n**Depuración (PyCharm):** se lanza con **Debug** en lugar de Run. **Punto de ruptura** (Ctrl+F8) en una línea ejecutable; **Step Over (F8)** ejecuta la línea sin entrar en las funciones; **Step Into (F7)** entra en ellas; **Step Out (Mayús+F8)** sale; se inspeccionan variables y se evalúan expresiones. Probar = inspeccionar el código + baterías de pruebas + pruebas unitarias, y cada corrección puede introducir errores nuevos.\n\n**Docstrings (PEP 257):** cadena literal que va como **primera instrucción** de un módulo, clase o función. Primera línea: un resumen terminado en punto. Se consulta con `funcion.__doc__` o `help(funcion)`.\n\n**Estilo (PEP 8):** 4 espacios, líneas de 79 caracteres como máximo, espacios alrededor de los operadores, dos líneas en blanco entre funciones de primer nivel.",
+     "example_code": "def es_primo(n):\n    \"\"\"Devuelve True si n es primo.\"\"\"\n    for divisor in range(2, n):\n        if n % divisor == 0:\n            return False\n    return n > 1\n\nfor numero in range(1, 20):\n    if not es_primo(numero):\n        continue            # los no primos se saltan\n    print(numero, end=\" \")\nprint()\n\nnota = 7\nmatch nota:\n    case 9 | 10:\n        print(\"Sobresaliente\")\n    case 7 | 8:\n        print(\"Notable\")\n    case _:\n        print(\"Otra nota\")",
+     "exercise": "Escribe un programa que pida números hasta que se introduzca un 0 y, al final, diga cuántos positivos y cuántos negativos había.\n\nUsa `while` con el operador morsa `:=`.",
+     "starter": "positivos = negativos = 0\nwhile (numero := int(input(\"Número? \"))) != 0:\n    # ...\n    pass\nprint(positivos, negativos)\n",
+     "quiz": [
+      {
+       "q": "¿Qué hace `continue` dentro de un bucle?",
+       "options": [
+        "Salta a la siguiente vuelta",
+        "Termina el bucle",
+        "Termina el programa",
+        "Repite la vuelta actual"
+       ],
+       "answer": 0,
+       "explain": "`break` es el que termina el bucle."
+      },
+      {
+       "q": "¿Qué valores da `range(3)`?",
+       "options": [
+        "0, 1, 2",
+        "1, 2, 3",
+        "0, 1, 2, 3",
+        "3"
+       ],
+       "answer": 0,
+       "explain": "Empieza en 0 y el fin no se incluye."
+      }
+     ],
+     "challenge": {
+      "title": "Pirámide",
+      "stars": 2,
+      "exercise": "Pide un número de filas y dibuja una pirámide de asteriscos centrada: 1, 3, 5… asteriscos por fila.",
+      "starter": "filas = 4\nfor fila in range(filas):\n    # espacios + asteriscos\n    pass\n",
+      "hint": "En la fila i (desde 0) hay `filas - i - 1` espacios y `2 * i + 1` asteriscos: `print(\" \" * espacios + \"*\" * asteriscos)`."
+     },
+     "assistant": {
+      "hint": "Dentro del bucle: `if numero > 0: positivos += 1` y `elif numero < 0: negativos += 1`. El 0 no se cuenta: corta el bucle.",
+      "faq": [
+       {
+        "q": "¿Para qué sirve el `else` de un bucle?",
+        "a": "Se ejecuta solo si el bucle acaba sin `break`. En una búsqueda: si el `for` termina sin encontrar (sin `break`), el `else` dice «no encontrado»."
+       },
+       {
+        "q": "¿Puedo modificar la lista que recorro con for?",
+        "a": "Mejor no: al borrar o insertar elementos, el bucle puede saltarse algunos. Recorre una copia (`for x in lista[:]`) o crea una lista nueva."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "DAW-Programacion · César San Juan Pastor (IES Arcipreste de Hita), CC BY-NC",
+       "url": "https://github.com/csanjuanp-ies/DAW-Programacion"
+      },
+      {
+       "title": "Tutorial oficial de Python (en español)",
+       "url": "https://docs.python.org/es/3/tutorial/"
+      },
+      {
+       "title": "PEP 8 — Guía de estilo para el código Python",
+       "url": "https://peps.python.org/pep-0008/"
+      }
+     ]
+    },
+    {
+     "slug": "prog-ut3-funciones",
+     "title": "UT3 · Programación modular y funciones",
+     "theory": "**Programación modular:** descomponer el problema una y otra vez en subproblemas más simples, hasta que cada acción sea evidente. Cada subproblema se resuelve con una función.\n\n**Función y procedimiento:** una función recibe parámetros, hace un proceso y **devuelve un resultado**; un procedimiento no devuelve nada. En Python no hay procedimientos: una función sin `return` devuelve **`None`**. Las funciones son objetos.\n\n- Se definen con `def nombre(parametros):` y se llaman con `nombre(argumentos)`.\n- `return a, b` devuelve **una tupla** con los dos valores.\n- Recomendaciones del curso: funciones cortas (unas 25-30 líneas), sacar a funciones el código repetido, devolver uno o dos valores y, si se puede, un único `return` al final.\n\n**Ámbito de las variables:**\n- **local:** creada dentro de la función; desaparece al terminar.\n- **global:** creada en el programa principal. Se puede **leer** desde una función, pero para **asignarla** hace falta `global nombre`.\n- **nonlocal:** en una función dentro de otra, permite modificar la variable de la función que la contiene.\n- Si una función asigna una variable sin declararla `global`, Python la trata como local en toda la función: usarla antes de asignarla da **UnboundLocalError**.\n\n**Parámetros:** no llevan tipo. Los apuntes dicen que «en Python todos los parámetros son de entrada», y es cierto que **reasignar** un parámetro no cambia nada fuera. Pero si el argumento es **mutable** (una lista, un diccionario) y la función lo **modifica** (`append`, `lista[0] = …`), el cambio sí se ve fuera: se pasa una referencia al mismo objeto. Si no quieres eso, trabaja con una copia (`lista.copy()`).",
+     "example_code": "def area_rectangulo(base, altura):\n    \"\"\"Devuelve el área de un rectángulo.\"\"\"\n    return base * altura\n\n\ndef min_max(valores):\n    \"\"\"Devuelve el mínimo y el máximo de una lista.\"\"\"\n    return min(valores), max(valores)\n\n\nprint(area_rectangulo(3, 4))\nminimo, maximo = min_max([7, 2, 9])\nprint(minimo, maximo)\n\ncontador = 0\n\ndef incrementar():\n    global contador\n    contador += 1\n\nincrementar()\nincrementar()\nprint(contador)",
+     "exercise": "Descompón el juego del **ahorcado** en funciones:\n\n1. `elegir_palabra()` devuelve una palabra al azar de una lista;\n2. `mostrar(palabra, letras)` devuelve la palabra con `_` en las letras no acertadas;\n3. `ha_ganado(palabra, letras)` devuelve True o False.\n\nDespués escribe el programa principal que las use.",
+     "starter": "import random\n\nPALABRAS = [\"python\", \"daw\", \"variable\"]\n\n\ndef elegir_palabra():\n    pass\n\n\ndef mostrar(palabra, letras):\n    pass\n",
+     "quiz": [
+      {
+       "q": "¿Qué palabra permite asignar una variable global dentro de una función?",
+       "options": [
+        "global",
+        "nonlocal",
+        "static",
+        "public"
+       ],
+       "answer": 0,
+       "explain": "`nonlocal` es para la variable de la función exterior, en funciones anidadas."
+      },
+      {
+       "q": "`return a, b` devuelve…",
+       "options": [
+        "una tupla (a, b)",
+        "solo a",
+        "una lista [a, b]",
+        "un error"
+       ],
+       "answer": 0,
+       "explain": "Se desempaqueta con `x, y = funcion()`."
+      }
+     ],
+     "challenge": {
+      "title": "Valor absoluto",
+      "stars": 1,
+      "exercise": "Escribe `absoluto(n)` sin usar `abs()`, con un único `return`, y pruébala con -5, 0 y 3.",
+      "starter": "def absoluto(n):\n    pass\n",
+      "hint": "`return n if n >= 0 else -n`."
+     },
+     "assistant": {
+      "hint": "`mostrar` puede construir la cadena con `\" \".join(c if c in letras else \"_\" for c in palabra)`.",
+      "faq": [
+       {
+        "q": "¿Por qué evitar las variables globales?",
+        "a": "Porque cualquier función puede cambiarlas y es difícil saber quién lo hizo. Pasa los datos como parámetros y devuelve resultados."
+       },
+       {
+        "q": "¿Qué devuelve una función sin return?",
+        "a": "`None`. Por eso `x = print(\"hola\")` deja `x` a None."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "DAW-Programacion · César San Juan Pastor (IES Arcipreste de Hita), CC BY-NC",
+       "url": "https://github.com/csanjuanp-ies/DAW-Programacion"
+      },
+      {
+       "title": "Tutorial oficial de Python (en español)",
+       "url": "https://docs.python.org/es/3/tutorial/"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "prog-ut4",
+   "title": "UT4 · POO",
+   "summary": "Clases, objetos, encapsulación, abstracción, herencia, relaciones, sobrecarga y polimorfismo.",
+   "lessons": [
+    {
+     "slug": "prog-ut4-poo",
+     "title": "UT4 · Programación orientada a objetos",
+     "theory": "La **POO** organiza el código en **clases**, a partir de las cuales se crean **objetos** que se relacionan entre sí mediante **mensajes** (llamadas a métodos). Nació con **Simula 67** (Oslo) y **Smalltalk** (Xerox PARC), y se popularizó en los 80 con C++ y las interfaces gráficas.\n\n**Conceptos:**\n- **Clase:** el molde. Describe los **atributos** (datos) y los **métodos** (comportamiento) comunes a un grupo de objetos.\n- **Objeto:** una **instancia** concreta de una clase. Su **estado** es el valor de sus atributos en cada momento.\n- **Constructor:** se ejecuta al crear el objeto para inicializarlo (en Python, `__init__`). **Destructor:** lo último que se ejecuta, para liberar recursos.\n- **Visibilidad en UML:** `+` pública, `-` privada, `#` protegida (la clase y sus hijas). La parte pública es la **interfaz** de la clase.\n\n**Propiedades de la POO:**\n- **Abstracción:** quedarse con lo relevante e ignorar lo demás. Perro, Gato y Loro se generalizan en Animal.\n- **Encapsulación:** reunir en una estructura los datos y las operaciones sobre esos datos. **Ocultación:** proteger los datos internos y exponer solo la interfaz.\n- **Herencia:** una clase reutiliza lo declarado en otra. **Simple** (un padre, como en Java) o **múltiple** (varios, como en Python).\n- **Polimorfismo:** la misma llamada da resultados distintos según la clase del objeto; se consigue **sobrescribiendo** los métodos heredados, y se resuelve en ejecución (enlace dinámico).\n- **Sobrecarga:** varios métodos con el mismo nombre y distinta firma. En Java o C++ se resuelve al compilar. **Python no la tiene**: un segundo `def` con el mismo nombre sustituye al primero (se simula con parámetros por defecto o `*args`).\n\n**Relaciones entre clases:**\n- **Asociación:** una clase usa a otra (un Profesor imparte un Módulo).\n- **Agregación:** una clase forma parte de otra, **pero no de forma exclusiva**; la parte puede existir por su cuenta (un Punto que usan un Polígono y un Círculo).\n- **Composición:** agregación **exclusiva**; las partes no existen sin el todo (los Capítulos de una Temporada).\n\n**Principios SOLID (Robert C. Martin):** responsabilidad única, **abierto/cerrado** (abierto a la extensión, cerrado a la modificación), sustitución de Liskov, segregación de interfaces e inversión de dependencias.\n\n**Ventajas:** reutilización, mantenimiento y aislamiento de errores. **Inconvenientes:** cuesta cambiar la forma de pensar y no compensa en tareas muy simples.",
+     "example_code": "class Punto:\n    def __init__(self):\n        self.x = 0\n        self.y = 0\n\n\np1 = Punto()\np1.x = 2\np2 = p1            # p2 y p1 son el MISMO objeto (alias)\np2.x = 3\nprint(p1.x)        # 3\np2 = Punto()       # ahora p2 es otro objeto\np2.x = 4\nprint(p1.x, p2.x)  # 3 4",
+     "exercise": "Dibuja el **diagrama de clases UML** de una plataforma de series:\n\n- una Serie tiene varias Temporadas y cada Temporada varios Capítulos;\n- de cada Actor interesa su nombre, y un actor puede salir en muchas series.\n\nIndica qué relaciones son composición, agregación o asociación, y la visibilidad de los atributos.",
+     "starter": "# Serie ◆── Temporada ◆── Capitulo   (composición)\n# Serie ──── Actor                     (¿...?)\n",
+     "quiz": [
+      {
+       "q": "¿Qué es un objeto?",
+       "options": [
+        "Una instancia de una clase",
+        "El molde de una clase",
+        "Un tipo de bucle",
+        "Un módulo"
+       ],
+       "answer": 0,
+       "explain": "Se crea llamando a la clase: `p = Punto()`."
+      },
+      {
+       "q": "¿Qué método inicializa los objetos en Python?",
+       "options": [
+        "__init__",
+        "El que se llama como la clase",
+        "main",
+        "__del__"
+       ],
+       "answer": 0,
+       "explain": "En Java el constructor se llama como la clase; en Python es `__init__`. `__del__` es el destructor."
+      }
+     ],
+     "challenge": {
+      "title": "Hospital",
+      "stars": 3,
+      "exercise": "Diseña en UML: un Hospital tiene Plantas (composición); en cada planta hay Habitaciones; los Médicos (que existen fuera del hospital) atienden a Pacientes. Marca multiplicidades.",
+      "starter": "# Hospital 1 ◆── * Planta\n# ...\n",
+      "hint": "Pregúntate en cada relación: ¿la parte puede existir sin el todo? Si no, es composición."
+     },
+     "assistant": {
+      "hint": "Un capítulo no existe sin su temporada (composición). Un actor existe aunque se borre la serie: asociación (o agregación).",
+      "faq": [
+       {
+        "q": "¿Clase y objeto no son lo mismo?",
+        "a": "No: la clase es la definición (Coche) y el objeto, cada coche concreto que creas con ella. De una clase salen muchos objetos."
+       },
+       {
+        "q": "¿Sobrecarga y sobrescritura son lo mismo?",
+        "a": "No. Sobrecarga: mismo nombre y distinta firma en la misma clase. Sobrescritura: la clase hija redefine un método heredado con la misma firma; es la base del polimorfismo."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "DAW-Programacion · César San Juan Pastor (IES Arcipreste de Hita), CC BY-NC",
+       "url": "https://github.com/csanjuanp-ies/DAW-Programacion"
+      },
+      {
+       "title": "Tutorial oficial de Python (en español)",
+       "url": "https://docs.python.org/es/3/tutorial/"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "prog-ut5",
+   "title": "UT5 · POO en Python (I)",
+   "summary": "Clases, propiedades, parámetros, módulos, cadenas y expresiones regulares.",
+   "lessons": [
+    {
+     "slug": "prog-ut5-clases",
+     "title": "UT5 · Clases, métodos y parámetros en Python",
+     "theory": "**Definir una clase:** `class NombreClase:` y dentro sus métodos con `def`. El primer parámetro de cada método es **`self`**, una referencia al objeto actual (el `this` de Java); Python lo pasa solo. Los atributos se crean en **`__init__`** (el inicializador): `self.nombre = nombre`.\n\n- **Atributos de instancia:** cada objeto tiene los suyos (`self.x`).\n- **Atributos de clase:** se definen en el cuerpo de la clase y los comparten todos los objetos (`IVA = 21`). Ojo: `objeto.IVA = 10` no cambia el de la clase, **crea un atributo de instancia** que lo oculta.\n\n**Visibilidad:** en Python todo es público. `_nombre` indica «no lo toques desde fuera» (convenio; el curso usa esta forma). `__nombre` activa el *name mangling*: desde fuera pasa a llamarse `_Clase__nombre`.\n\n**Propiedades:** atributos que ejecutan código al leerlos o asignarlos (los getters y setters de otros lenguajes). Con `@property` para leer y `@nombre.setter` para asignar y validar. Sin setter, la propiedad es de solo lectura.\n\n**Métodos especiales:** `__str__` (lo que muestra `print(objeto)`), `__repr__`, `__del__` (lo llama el recolector de basura; no está garantizado cuándo).\n\n**Parámetros:**\n- **Por defecto:** `def f(a, b=0)`. Van detrás de los obligatorios y **se evalúan una sola vez, al definir la función**. Por eso nunca se usa una lista como valor por defecto: se comparte entre llamadas. Se usa `None`.\n- **Por nombre:** `resta(b=2, a=10)`.\n- `*args` agrupa los argumentos posicionales sobrantes en una **tupla**; `**kwargs` agrupa los nombrados en un **diccionario**.\n- `/` marca los parámetros solo posicionales y `*`, los solo por nombre: `def f(a, /, b, *, c)`.\n- **Sugerencias de tipo:** `def doble(n: int) -> int:`. Documentan, pero **no obligan** ni convierten nada.\n- **Lambda:** función anónima de una expresión: `lambda x: x + n`. Útil con `sorted`, `map` y `filter`.\n\nEstilo de los apuntes: clases en CamelCase con sustantivos, métodos en snake_case que empiezan por verbo, y validar los datos en el constructor.",
+     "example_code": "class Articulo:\n    IVA = 21                                   # atributo de clase\n\n    def __init__(self, nombre, precio=0):\n        self.nombre = nombre\n        self._precio = 0\n        self.precio = precio                   # pasa por el setter\n\n    @property\n    def precio(self):\n        return self._precio\n\n    @precio.setter\n    def precio(self, valor):\n        if valor < 0:\n            raise ValueError(\"El precio no puede ser negativo\")\n        self._precio = valor\n\n    def get_pvp(self):\n        return self.precio * (1 + Articulo.IVA / 100)\n\n    def __str__(self):\n        return f\"{self.nombre}: {self.get_pvp():.2f} €\"\n\n\nteclado = Articulo(\"Teclado\", 20)\nprint(teclado)",
+     "exercise": "Crea la clase `Persona` con `nombre` y `edad`, y los métodos:\n\n- `es_mayor_de_edad()` → True si tiene 18 o más;\n- `es_jubilado()` → True si tiene 65 o más;\n- `diferencia_edad(otra)` → los años de diferencia con otra persona (siempre positivos).\n\nValida en el constructor que la edad no sea negativa.",
+     "starter": "class Persona:\n    def __init__(self, nombre, edad):\n        pass\n",
+     "quiz": [
+      {
+       "q": "¿Dónde se crean normalmente los atributos de instancia?",
+       "options": [
+        "En __init__, con self.nombre = valor",
+        "Fuera de la clase",
+        "En un atributo de clase",
+        "En el import"
+       ],
+       "answer": 0,
+       "explain": "Así cada objeto tiene los suyos desde que se crea."
+      },
+      {
+       "q": "¿Qué agrupa `**kwargs`?",
+       "options": [
+        "Los argumentos pasados por nombre, en un diccionario",
+        "Los posicionales, en una tupla",
+        "Todos los argumentos, en una lista",
+        "Solo los obligatorios"
+       ],
+       "answer": 0,
+       "explain": "`*args` es el que agrupa los posicionales en una tupla."
+      }
+     ],
+     "challenge": {
+      "title": "Rectángulo",
+      "stars": 2,
+      "exercise": "Clase `Rectangulo` definida por dos esquinas (x1, y1) y (x2, y2), con propiedades de solo lectura `ancho` y `alto` y métodos `area()` y `perimetro()`.",
+      "starter": "class Rectangulo:\n    def __init__(self, x1, y1, x2, y2):\n        pass\n",
+      "hint": "`ancho` es `abs(self.x2 - self.x1)`, como `@property` sin setter."
+     },
+     "assistant": {
+      "hint": "`diferencia_edad` es `abs(self.edad - otra.edad)`. Para validar: `if edad < 0: raise ValueError(...)`.",
+      "faq": [
+       {
+        "q": "¿Uso `_` o `__` para lo privado?",
+        "a": "El curso recomienda un solo `_`: indica que es interno. `__` cambia el nombre (name mangling) y complica la herencia; no impide el acceso."
+       },
+       {
+        "q": "¿Por qué no `def f(lista=[])`?",
+        "a": "Porque esa lista se crea una vez al definir la función y se comparte entre todas las llamadas. Usa `lista=None` y dentro `if lista is None: lista = []`."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "DAW-Programacion · César San Juan Pastor (IES Arcipreste de Hita), CC BY-NC",
+       "url": "https://github.com/csanjuanp-ies/DAW-Programacion"
+      },
+      {
+       "title": "Tutorial oficial de Python (en español)",
+       "url": "https://docs.python.org/es/3/tutorial/"
+      }
+     ]
+    },
+    {
+     "slug": "prog-ut5-modulos-cadenas",
+     "title": "UT5 · Módulos, paquetes, cadenas y expresiones regulares",
+     "theory": "**Módulo:** un fichero `.py`. **Paquete:** una carpeta de módulos (con `__init__.py`, opcional desde Python 3.3, que puede definir `__all__`).\n\n**Importar:**\n- `import math` → se usa `math.sqrt(16)`;\n- `from math import sqrt, pi` → se usa `sqrt(16)` sin prefijo;\n- `import numpy as np` → alias;\n- importaciones relativas dentro de un paquete: `from . import modulo`.\n\nAl importar un módulo **se ejecuta** su código (las funciones y clases solo se definen). Por eso el programa principal se protege con `if __name__ == \"__main__\":` — `__name__` vale `\"__main__\"` solo en el fichero que se ejecuta directamente.\n\n**Memoria:** Python cuenta las referencias de cada objeto y, cuando no queda ninguna, lo libera; el módulo `gc` (recolector generacional) limpia además las referencias circulares.\n\n**Cadenas (str):** inmutables, en Unicode. Métodos: `upper`, `lower`, `capitalize`, `title`, `swapcase`, `strip`, `replace`, `split`, `join`, `count`, `find` (devuelve `-1` si no está; para comprobar suele bastar `in`), `startswith`, `endswith`, `isdigit`, `isalpha`, `center`. Ninguno cambia la cadena: **devuelven una nueva**.\n\n**Expresiones regulares (módulo `re`):** se escriben como cadenas *raw* `r\"…\"`.\n- Anclas `^` (inicio) y `$` (fin); clases `[abc]`, rangos `[a-z]`, negación `[^0-9]`; `\\d` dígito, `\\w` letra/dígito/_, `\\s` espacio, `.` cualquier carácter.\n- Cuantificadores: `*` (0 o más), `+` (1 o más), `?` (0 o 1), `{n}`, `{n,m}`.\n- Funciones: `re.match` (solo al **principio**), `re.search` (en cualquier sitio), `re.fullmatch` (la cadena entera), `re.findall` (lista de coincidencias), `re.sub` (reemplazar), `re.split`.\n\n**math:** `ceil`, `floor`, `sqrt`, `pow`, `gcd`, `pi`, `e`, `log`, `sin`… Los apuntes presentan también **NumPy** (arrays), **Pandas** (Series y DataFrame) y **Matplotlib** (gráficas), que se instalan con pip.",
+     "example_code": "import math\nimport re\n\ndef es_dni_valido(dni):\n    \"\"\"8 dígitos y una letra mayúscula.\"\"\"\n    return re.fullmatch(r\"[0-9]{8}[A-Z]\", dni) is not None\n\ndef main():\n    print(math.sqrt(16), math.ceil(2.1))\n    print(es_dni_valido(\"12345678Z\"), es_dni_valido(\"1234Z\"))\n    frase = \"  Aprender Python en DAW  \"\n    print(frase.strip().upper())\n    print(re.findall(r\"\\d+\", \"Tengo 2 gatos y 13 peces\"))\n\nif __name__ == \"__main__\":\n    main()",
+     "exercise": "Crea un módulo `utilidades.py` con:\n\n1. `invertir(cadena)`;\n2. `contar_palabras(cadena)`;\n3. `es_palindromo(cadena)` (ignorando espacios y mayúsculas).\n\nImpórtalo desde otro fichero y pruébalo con «Anita lava la tina».",
+     "starter": "# utilidades.py\n\ndef invertir(cadena):\n    pass\n\n\nif __name__ == \"__main__\":\n    print(invertir(\"hola\"))\n",
+     "quiz": [
+      {
+       "q": "¿Para qué sirve `if __name__ == \"__main__\":`?",
+       "options": [
+        "Para que ese código solo se ejecute al lanzar el fichero directamente, no al importarlo",
+        "Para declarar la función main obligatoria",
+        "Para importar módulos",
+        "Para capturar errores"
+       ],
+       "answer": 0,
+       "explain": "Al importar un módulo se ejecuta su código; con esta guarda, las pruebas o el programa principal no se lanzan."
+      },
+      {
+       "q": "¿Los métodos de str modifican la cadena?",
+       "options": [
+        "No: las cadenas son inmutables y devuelven una nueva",
+        "Sí, siempre",
+        "Solo upper y lower",
+        "Solo si se usa self"
+       ],
+       "answer": 0,
+       "explain": "Por eso se escribe `s = s.upper()`."
+      }
+     ],
+     "challenge": {
+      "title": "Contraseña segura",
+      "stars": 2,
+      "exercise": "Escribe `es_segura(clave)`: al menos 8 caracteres, una mayúscula, una minúscula y un dígito. Hazlo con `re.search` para cada condición.",
+      "starter": "import re\n\ndef es_segura(clave):\n    pass\n",
+      "hint": "Cuatro comprobaciones con `and`: `len(clave) >= 8`, `re.search(r\"[A-Z]\", clave)`, `r\"[a-z]\"` y `r\"\\d\"`."
+     },
+     "assistant": {
+      "hint": "Palíndromo: `limpia = cadena.replace(\" \", \"\").lower()` y `return limpia == limpia[::-1]`. Para contar palabras, `len(cadena.split())` (sin argumento, `split` ignora los espacios repetidos).",
+      "faq": [
+       {
+        "q": "¿`re.match` o `re.search`?",
+        "a": "`match` solo busca al principio de la cadena; `search`, en cualquier posición. Para validar la cadena entera, `fullmatch`."
+       },
+       {
+        "q": "¿Por qué `r\"\\d\"` y no `\"\\d\"`?",
+        "a": "En una cadena normal la barra `\\` inicia secuencias de escape. Con `r` se queda tal cual, que es lo que espera `re`."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "DAW-Programacion · César San Juan Pastor (IES Arcipreste de Hita), CC BY-NC",
+       "url": "https://github.com/csanjuanp-ies/DAW-Programacion"
+      },
+      {
+       "title": "Tutorial oficial de Python (en español)",
+       "url": "https://docs.python.org/es/3/tutorial/"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "prog-ut6",
+   "title": "UT6 · POO en Python (II) y estructuras de datos",
+   "summary": "Listas, tuplas, diccionarios, conjuntos, recursividad, herencia, excepciones y estructuras.",
+   "lessons": [
+    {
+     "slug": "prog-ut6-colecciones",
+     "title": "UT6 · Listas, tuplas, diccionarios, conjuntos y recursividad",
+     "theory": "**Secuencias:** contenedores **ordenados** que admiten repetidos, con índices desde 0 y negativos, rebanadas y las funciones `len`, `max`, `min`, `sum`, `sorted`, `zip`, `enumerate`, `in`.\n\n**Listas** (mutables): `[]`, `list(iterable)` (ojo: `list(\"abc\")` da 3 elementos y `[\"abc\"]`, uno), comprensiones.\n- Métodos: `append(x)`, `extend(iterable)`, `insert(i, x)`, `remove(x)` (la **primera** aparición), `pop(i)` (quita y **devuelve**; por defecto el último), `clear()`, `index(x)`, `count(x)`, `reverse()`, `copy()` (copia superficial, igual que `lista[:]`).\n- `del lista[i]` borra sin devolver.\n- `lista.sort()` ordena **en la misma lista** y devuelve `None`; `sorted(lista)` devuelve **una lista nueva**. Los dos admiten `key=` (una función, por ejemplo `str.lower` o una lambda) y `reverse=True`.\n- `b = a` **no copia**: las dos variables son la misma lista.\n- Listas de listas para matrices: `m[fila][columna]`. Para cálculo numérico de verdad, `numpy.array`.\n\n**Tuplas** (inmutables): `(1, 2)`, `tuple(...)`. Para datos que no cambian; más ligeras que las listas.\n\n**Diccionarios** (mutables): pares **clave → valor**; las claves deben ser inmutables (hashables). `d[clave]` da **KeyError** si no existe; `d.get(clave, defecto)` no falla. Métodos `keys()`, `values()`, `items()` (vistas que se actualizan solas), `pop`, `update`, `setdefault`, y `|` para unir (3.9).\n\n**Conjuntos:** sin orden y **sin repetidos**. `set()` crea uno vacío (`{}` es un diccionario vacío). Operaciones: `|` unión, `&` intersección, `-` diferencia, `^` diferencia simétrica.\n\n**Comprensiones:** `[expr for x in iterable if condición]`, `{k: v for …}`, `{x for …}`.\n\n**Recursividad:** una función que se llama a sí misma. Necesita un **caso base** que detenga las llamadas y que cada llamada se acerque a él. Ventajas: código cercano a la definición matemática y elegante con estructuras recursivas (árboles). Inconvenientes: consume más memoria y tiempo (y Python limita la profundidad a unas 1000 llamadas). Úsala cuando simplifique de verdad.",
+     "example_code": "notas = {\"Ana\": [7, 9], \"Luis\": [5, 6]}\nnotas[\"Eva\"] = [8]\nfor alumno, lista in notas.items():\n    print(alumno, sum(lista) / len(lista))\n\npares = [n for n in range(10) if n % 2 == 0]\nprint(pares)\nprint(sorted([\"pera\", \"Uva\", \"manzana\"], key=str.lower))\n\ndef factorial(n):\n    if n <= 1:          # caso base\n        return 1\n    return n * factorial(n - 1)\n\nprint(factorial(5))",
+     "exercise": "Con un diccionario, cuenta cuántas veces aparece cada palabra en un texto y muestra las 3 más frecuentes, de más a menos.\n\nPruébalo con: «el perro y el gato y el loro».",
+     "starter": "texto = \"el perro y el gato y el loro\"\nfrecuencias = {}\n\n# for palabra in texto.split(): ...\n",
+     "quiz": [
+      {
+       "q": "¿Qué necesita siempre una función recursiva?",
+       "options": [
+        "Un caso base que detenga las llamadas",
+        "Un bucle while",
+        "Una variable global",
+        "Un atributo de clase"
+       ],
+       "answer": 0,
+       "explain": "Sin caso base se llama sin fin hasta dar RecursionError."
+      },
+      {
+       "q": "¿Qué diferencia a una tupla de una lista?",
+       "options": [
+        "La tupla es inmutable",
+        "La tupla no tiene orden",
+        "La tupla no admite repetidos",
+        "Ninguna"
+       ],
+       "answer": 0,
+       "explain": "Los conjuntos son los que no tienen orden ni repetidos."
+      }
+     ],
+     "challenge": {
+      "title": "Torres de Hanói",
+      "stars": 3,
+      "exercise": "Escribe `hanoi(discos, origen, auxiliar, destino)` recursiva que imprima los movimientos. Con 3 discos deben salir 7.",
+      "starter": "def hanoi(discos, origen=1, auxiliar=2, destino=3):\n    pass\n",
+      "hint": "Caso base: 1 disco se mueve directamente. Si no: mueve n-1 al auxiliar, el grande al destino y los n-1 del auxiliar al destino."
+     },
+     "assistant": {
+      "hint": "`frecuencias[p] = frecuencias.get(p, 0) + 1`. Luego `sorted(frecuencias.items(), key=lambda t: t[1], reverse=True)[:3]`.",
+      "faq": [
+       {
+        "q": "¿`sort()` o `sorted()`?",
+        "a": "`sort()` cambia la lista y devuelve None, así que `x = lista.sort()` deja x a None. `sorted()` devuelve una lista nueva y deja la original igual."
+       },
+       {
+        "q": "¿Por qué `b = a` no copia la lista?",
+        "a": "Porque la asignación solo da otro nombre al mismo objeto. Para copiar: `a.copy()`, `a[:]` o `list(a)`; para listas anidadas, `copy.deepcopy(a)`."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "DAW-Programacion · César San Juan Pastor (IES Arcipreste de Hita), CC BY-NC",
+       "url": "https://github.com/csanjuanp-ies/DAW-Programacion"
+      },
+      {
+       "title": "Tutorial oficial de Python (en español)",
+       "url": "https://docs.python.org/es/3/tutorial/"
+      }
+     ]
+    },
+    {
+     "slug": "prog-ut6-herencia-excepciones",
+     "title": "UT6 · Herencia, polimorfismo, excepciones y estructuras de datos",
+     "theory": "**Herencia:** `class Hija(Padre):` o, con varios padres, `class Hija(Padre1, Padre2):`. Toda clase hereda al final de **`object`**. En el inicializador de la hija hay que llamar **al principio** al del padre: `super().__init__(...)`. Con herencia múltiple, Python sigue un orden fijo de búsqueda de métodos (MRO): de izquierda a derecha.\n\n**Sobrescritura:** la hija redefine un método heredado; con `super().metodo()` puede reutilizar el del padre. **Polimorfismo:** la misma llamada (`animal.hablar()`) hace cosas distintas según la clase real del objeto.\n\n**Tipo de un objeto:** `isinstance(objeto, Clase)` es verdadero también para las clases hijas; `type(objeto) is Clase` solo para la clase exacta.\n\n**Atributos y métodos de clase y estáticos:**\n- `@classmethod` recibe la clase (`cls`) y se usa, por ejemplo, para constructores alternativos: `return cls(...)`.\n- `@staticmethod` no recibe ni `self` ni `cls`: es una función que vive dentro de la clase.\n\n**Clases abstractas e interfaces:** `from abc import ABC, abstractmethod`. Un `@abstractmethod` obliga a las hijas a implementarlo, y la clase abstracta **no se puede instanciar**. Una interfaz, en Python, es una clase abstracta solo con métodos abstractos. `@final` (del módulo `typing`, 3.8) marca lo que no debe sobrescribirse, aunque lo comprueban herramientas como mypy, no el intérprete.\n\n**Métodos mágicos:** `__str__`, `__len__`, `__eq__`, `__lt__`, `__add__` (el operador `+`), `__getitem__`, `__contains__` (`in`), `__iter__` y `__next__` (este último lanza `StopIteration` al acabar)…\n\n**Generadores:** funciones con **`yield`**: devuelven un valor y **se pausan** hasta que se pide el siguiente.\n\n**Excepciones:** errores durante la ejecución; todas derivan de `BaseException` (las normales, de `Exception`).\n- `try` / `except Tipo as e` / `else` (si **no** hubo error) / `finally` (**siempre**).\n- Un `except` captura también las excepciones hijas, así que **el orden importa**: primero las más concretas.\n- `raise ValueError(\"mensaje\")` lanza; `raise` a secas relanza. Excepciones propias: `class SaldoError(Exception): pass`.\n\n**Estructuras de datos:** **pila** (LIFO) con una lista (`append` y `pop`); **cola** (FIFO) con `collections.deque` (`append` y `popleft`); **árboles** (cada nodo, un padre; binario si tiene como máximo 2 hijos) y **grafos** (con `networkx`).\n\n**Pruebas unitarias (`unittest`):** una clase que hereda de `TestCase`, métodos que empiezan por `test_`, `setUp` antes de cada prueba y comprobaciones `assertEqual`, `assertTrue`, `assertRaises`.",
+     "example_code": "from abc import ABC, abstractmethod\n\n\nclass Animal(ABC):\n    def __init__(self, nombre):\n        self.nombre = nombre\n\n    @abstractmethod\n    def hablar(self):\n        pass\n\n    def __str__(self):\n        return f\"{self.nombre} dice {self.hablar()}\"\n\n\nclass Perro(Animal):\n    def hablar(self):\n        return \"Guau\"\n\n\nclass Gato(Animal):\n    def hablar(self):\n        return \"Miau\"\n\n\nfor animal in [Perro(\"Toby\"), Gato(\"Misi\")]:\n    print(animal)           # polimorfismo\n\ntry:\n    Animal(\"Nadie\")\nexcept TypeError:\n    print(\"No se puede instanciar una clase abstracta\")",
+     "exercise": "Jerarquía de cuentas bancarias:\n\n- `CuentaBancaria` (abstracta) con `iban`, `saldo` y los métodos `ingresar(cantidad)` y `retirar(cantidad)`;\n- `CuentaCorriente`: puede quedarse en negativo hasta −50 €;\n- `CuentaAhorro`: nunca en negativo.\n\nLanza una excepción propia `SaldoInsuficienteError` cuando no se pueda retirar, y captúrala en el programa principal.",
+     "starter": "from abc import ABC, abstractmethod\n\n\nclass SaldoInsuficienteError(Exception):\n    pass\n\n\nclass CuentaBancaria(ABC):\n    pass\n",
+     "quiz": [
+      {
+       "q": "¿Cuándo se ejecuta el bloque `finally`?",
+       "options": [
+        "Siempre, haya o no excepción",
+        "Solo si hay excepción",
+        "Solo si no hay excepción",
+        "Nunca si hay return"
+       ],
+       "answer": 0,
+       "explain": "Se usa para liberar recursos: cerrar ficheros o conexiones."
+      },
+      {
+       "q": "¿De qué clase heredan todas las clases de Python?",
+       "options": [
+        "object",
+        "Exception",
+        "type",
+        "ABC"
+       ],
+       "answer": 0,
+       "explain": "Es la raíz de la jerarquía; si no se indica padre, se hereda de object."
+      }
+     ],
+     "challenge": {
+      "title": "Vector con operadores",
+      "stars": 2,
+      "exercise": "Crea la clase `Vector2D` con `__add__`, `__sub__`, `__eq__`, `__str__` y `__len__`, que devuelva el módulo redondeado a entero.",
+      "starter": "class Vector2D:\n    def __init__(self, x, y):\n        pass\n",
+      "hint": "`__add__` devuelve `Vector2D(self.x + otro.x, self.y + otro.y)`. `__len__` debe devolver un int: `round(math.hypot(self.x, self.y))`."
+     },
+     "assistant": {
+      "hint": "Cada hija define un método abstracto `saldo_minimo()`. `retirar` comprueba `self.saldo - cantidad < self.saldo_minimo()` y lanza la excepción.",
+      "faq": [
+       {
+        "q": "¿Se puede usar super() con herencia múltiple?",
+        "a": "Sí: `super()` sigue el orden MRO de la clase. Los apuntes llaman a cada padre por su nombre (`Padre.__init__(self, ...)`), lo que también funciona, pero entonces hay que pasar `self`."
+       },
+       {
+        "q": "¿`__x` en el padre se hereda?",
+        "a": "Sí, pero con el nombre cambiado (`_Padre__x`). Por eso el curso recomienda un solo guion bajo para lo interno."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "DAW-Programacion · César San Juan Pastor (IES Arcipreste de Hita), CC BY-NC",
+       "url": "https://github.com/csanjuanp-ies/DAW-Programacion"
+      },
+      {
+       "title": "Tutorial oficial de Python (en español)",
+       "url": "https://docs.python.org/es/3/tutorial/"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "prog-ut7",
+   "title": "UT7 · Proyecto",
+   "summary": "El juego de los códigos secretos: sumatorio, productorio, factorial, primos y random.",
+   "lessons": [
+    {
+     "slug": "prog-ut7-proyecto",
+     "title": "UT7 · Proyecto: el juego de los códigos secretos",
+     "theory": "La UT7 es un **proyecto integrador**: una **aventura conversacional** (se muestra un texto y se responde por teclado) para practicar comprensión lectora y matemáticas, ambientada en una galaxia lejana.\n\n**Flujo del juego:** Inicio (se pulsa Intro) → Nivel 1 → … → Nivel 5 → **Ganar** → Fin. Una respuesta incorrecta en cualquier nivel lleva a **Perder** → Fin.\n\n**Los cinco códigos** (con números aleatorios en cada partida):\n1. **Sumatorio** de S1 a S2, ambos incluidos (S1 entre 1 y 10, S2 entre 20 y 30).\n2. **Productorio** de P1 a P2, ambos incluidos (P1 entre 1 y 7, P2 entre 8 y 12).\n3. **Factorial** de N/10 redondeado hacia abajo (N entre 50 y 100).\n4. **1 si P es primo, 0 si no** (P entre 10 y 100).\n5. **M! + S!** (M y S entre 5 y 10).\n\n**Aleatoriedad (módulo random):** `random.random()` devuelve un real en **[0.0, 1.0)** (el 1 no se incluye); `random.randint(a, b)` un entero **con los dos extremos incluidos**; `random.choice(secuencia)` elige un elemento. Las preguntas de cada nivel se pueden guardar en listas o diccionarios y elegir con `choice`.\n\n**Cómo abordarlo:** una función por cálculo (`sumatorio`, `productorio`, `factorial`, `es_primo`), una función por nivel que genera los números, pregunta y devuelve si se acertó, y un programa principal que recorre los niveles y para al primer fallo.",
+     "example_code": "import math\nimport random\n\n\ndef sumatorio(desde, hasta):\n    return sum(range(desde, hasta + 1))\n\n\ndef es_primo(n):\n    return n > 1 and all(n % d for d in range(2, int(n ** 0.5) + 1))\n\n\ns1, s2 = random.randint(1, 10), random.randint(20, 30)\nprint(f\"Nivel 1: suma de {s1} a {s2} = {sumatorio(s1, s2)}\")\nprint(\"Nivel 2:\", math.prod(range(5, 11)))\nprint(\"Nivel 3:\", math.factorial(78 // 10))\nprint(\"Nivel 4:\", 1 if es_primo(97) else 0)\nprint(\"Nivel 5:\", math.factorial(7) + math.factorial(5))",
+     "exercise": "Programa el juego completo:\n\n- una función por nivel que genere los números con `random.randint`, muestre el texto, lea la respuesta y devuelva `True` o `False`;\n- un bucle que recorra los niveles y pare al primer fallo;\n- pantallas de Ganar y Perder, y «Gracias por jugar» al final.",
+     "starter": "import random\n\n\ndef nivel_1():\n    s1 = random.randint(1, 10)\n    s2 = random.randint(20, 30)\n    respuesta = int(input(f\"Suma de {s1} a {s2}? \"))\n    return respuesta == sum(range(s1, s2 + 1))\n",
+     "quiz": [
+      {
+       "q": "¿`random.randint(1, 10)` puede devolver 10?",
+       "options": [
+        "Sí, incluye los dos extremos",
+        "No, nunca",
+        "Solo con semilla",
+        "Solo si se usa float"
+       ],
+       "answer": 0,
+       "explain": "A diferencia de `range`, `randint` incluye el final."
+      }
+     ],
+     "challenge": {
+      "title": "Preguntas aleatorias",
+      "stars": 2,
+      "exercise": "Guarda 3 enunciados distintos por nivel en un diccionario `{nivel: [enunciados]}` y elige uno con `random.choice` en cada partida.",
+      "starter": "import random\n\nENUNCIADOS = {\n    1: [\"Chewbacca necesita...\", \"...\"],\n}\n",
+      "hint": "`random.choice(ENUNCIADOS[1])` devuelve uno de los textos del nivel 1."
+     },
+     "assistant": {
+      "hint": "Guarda los niveles en una lista de funciones: `for nivel in [nivel_1, nivel_2, ...]: if not nivel(): ...`.",
+      "faq": [
+       {
+        "q": "¿randint incluye el último número?",
+        "a": "Sí: `randint(1, 10)` puede dar 10. En cambio `range(1, 10)` y `random.randrange(1, 10)` no incluyen el 10."
+       },
+       {
+        "q": "¿Cómo compruebo si un número es primo de forma eficiente?",
+        "a": "Basta con probar divisores hasta la raíz cuadrada: si n tiene un divisor mayor que √n, también tiene uno menor."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "DAW-Programacion · César San Juan Pastor (IES Arcipreste de Hita), CC BY-NC",
+       "url": "https://github.com/csanjuanp-ies/DAW-Programacion"
+      },
+      {
+       "title": "Tutorial oficial de Python (en español)",
+       "url": "https://docs.python.org/es/3/tutorial/"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "prog-ut8",
+   "title": "UT8 · Gestión de datos",
+   "summary": "Ficheros de texto y binarios, with, pickle, pathlib, bases de datos con DB-API y XML.",
+   "lessons": [
+    {
+     "slug": "prog-ut8-ficheros-bd",
+     "title": "UT8 · Ficheros, serialización, bases de datos y XML",
+     "theory": "La memoria principal se pierde al terminar el programa y es limitada: los **ficheros** guardan los datos en memoria secundaria.\n\n**Tipos de acceso:** **secuencial** (el puntero avanza desde el principio, uno a uno) y **directo** (se salta a cualquier posición con `seek`). **Texto** (caracteres con una codificación; se leen como `str`) frente a **binario** (bytes tal cual están en memoria; se leen como `bytes`: imágenes, ejecutables).\n\n**Trabajo con ficheros:** apertura → operaciones → **cierre**. Si no se cierra, lo escrito puede quedarse en el búfer y perderse.\n- `open(ruta, modo, encoding=\"utf-8\")`: especifica siempre la codificación (la de por defecto depende del sistema: cp1252 en Windows, UTF-8 en Linux).\n- Modos: `r` leer (por defecto; error si no existe), `w` escribir (**crea o vacía** el fichero), `a` añadir al final, `x` crear (error si ya existe), `b` binario, `+` leer y escribir.\n- **`with open(...) as f:`** cierra el fichero al salir del bloque, aunque haya un error (no captura la excepción: para eso, `try`).\n- `write(texto)` devuelve los caracteres escritos y **no añade el salto de línea**; `read()` todo, `read(n)` hasta n caracteres, `readline()` una línea (con su `\\n`), `readlines()` la lista de líneas, `for linea in f` recorre línea a línea; al final, `read()` devuelve `\"\"`. `seek` y `tell` mueven y dan la posición.\n\n**Serialización:** convertir un objeto en bytes o texto para guardarlo o enviarlo, y reconstruir después **un clon**. Con `pickle` (`dumps`/`loads`, `dump`/`load`), o en formatos legibles como JSON o XML. No se pueden serializar ficheros abiertos, sockets ni conexiones.\n\n**Sistema de ficheros:** `os` (`listdir`, `mkdir`, `remove`, `rename`, `getcwd`), `pathlib.Path` (rutas como objetos, independientes del sistema: `Path(\"datos\") / \"notas.txt\"`) y `shutil` (`copy`, `move`, `rmtree`).\n\n**Bases de datos desde Python:** el estándar **DB-API (PEP 249)**: conexión → cursor → `execute` → `fetchone`/`fetchall` → `commit` → cerrar. Drivers: `sqlite3` (incluido), `mysql.connector`, `psycopg2`… Pasa siempre los datos como **parámetros** (`?` en SQLite, `%s` en MySQL), nunca concatenando cadenas: así se evita la **inyección SQL**.\n\n**XML:** con el paquete `xml`. **SAX** lee por eventos, una parte cada vez (poca memoria, sin volver atrás); **DOM** carga el documento entero como un árbol (acceso directo a cualquier nodo).",
+     "example_code": "import pickle\nimport sqlite3\nfrom pathlib import Path\n\nruta = Path(\"notas.txt\")\nwith ruta.open(\"w\", encoding=\"utf-8\") as f:\n    f.write(\"Ana 8\\n\")\n    f.write(\"Luis 6\\n\")\n\nwith ruta.open(encoding=\"utf-8\") as f:\n    for linea in f:\n        nombre, nota = linea.split()\n        print(nombre, int(nota))\n\ncopia = pickle.loads(pickle.dumps({\"Ana\": [8, 9]}))\nprint(copia)\n\nconexion = sqlite3.connect(\":memory:\")\ncursor = conexion.cursor()\ncursor.execute(\"CREATE TABLE alumnos (nombre TEXT, nota INTEGER)\")\ncursor.execute(\"INSERT INTO alumnos VALUES (?, ?)\", (\"Eva\", 9))\nconexion.commit()\nprint(cursor.execute(\"SELECT * FROM alumnos\").fetchall())\nconexion.close()",
+     "exercise": "El fichero `alumnos.txt` tiene una línea por alumno: `nombre apellido nota1 nota2 nota3`.\n\n1. Lee el fichero con `with` y calcula la media de cada alumno.\n2. Escribe `medias.txt` con los alumnos ordenados de mayor a menor media.\n3. Guarda también los resultados en una tabla de SQLite con parámetros `?`.",
+     "starter": "from statistics import mean\n\nalumnos = []\nwith open(\"alumnos.txt\", encoding=\"utf-8\") as f:\n    for linea in f:\n        nombre, apellido, *notas = linea.split()\n        # ...\n",
+     "quiz": [
+      {
+       "q": "¿Qué garantiza `with open(...) as f:`?",
+       "options": [
+        "Que el fichero se cierra al salir del bloque, aunque haya un error",
+        "Que no habrá errores",
+        "Que el fichero existe",
+        "Que se lee en binario"
+       ],
+       "answer": 0,
+       "explain": "No captura las excepciones: para eso hace falta `try`."
+      },
+      {
+       "q": "¿Por qué hay que pasar los datos a SQL como parámetros?",
+       "options": [
+        "Para evitar la inyección SQL",
+        "Porque es más corto",
+        "Porque SQLite no acepta texto",
+        "Para no tener que hacer commit"
+       ],
+       "answer": 0,
+       "explain": "El driver trata el parámetro como dato, nunca como parte de la sentencia."
+      }
+     ],
+     "challenge": {
+      "title": "Clínica veterinaria",
+      "stars": 3,
+      "exercise": "Carga al iniciar tres ficheros (clientes, mascotas y citas), trabaja en memoria con clases y guarda todo al salir. Después haz la misma versión con SQLite.",
+      "starter": "class Cliente:\n    pass\n\n\nclass Mascota:\n    pass\n",
+      "hint": "Separa en funciones: `cargar_datos()`, `guardar_datos()` y el menú. Cada línea del fichero se convierte en un objeto y viceversa."
+     },
+     "assistant": {
+      "hint": "`alumnos.append((mean(int(n) for n in notas), nombre, apellido))` y después `sorted(alumnos, reverse=True)`.",
+      "faq": [
+       {
+        "q": "¿`with` captura los errores?",
+        "a": "No: garantiza que el fichero se cierra, pero la excepción sigue su camino. Si el fichero puede no existir, rodéalo con `try`/`except FileNotFoundError`."
+       },
+       {
+        "q": "¿Por qué no construir el SQL con f-strings?",
+        "a": "Porque si el dato contiene comillas o SQL, se ejecutaría como código (inyección SQL). Con parámetros, el driver lo trata siempre como dato."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "DAW-Programacion · César San Juan Pastor (IES Arcipreste de Hita), CC BY-NC",
+       "url": "https://github.com/csanjuanp-ies/DAW-Programacion"
+      },
+      {
+       "title": "Tutorial oficial de Python (en español)",
+       "url": "https://docs.python.org/es/3/tutorial/"
+      },
+      {
+       "title": "sqlite3 — DB-API 2.0 para SQLite",
+       "url": "https://docs.python.org/es/3/library/sqlite3.html"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "prog-ut9",
+   "title": "UT9 · Interfaces gráficas",
+   "summary": "Eventos, señales y slots, PySide6, controles, diálogos y layouts.",
+   "lessons": [
+    {
+     "slug": "prog-ut9-interfaces",
+     "title": "UT9 · Interfaces gráficas con Qt (PySide6)",
+     "theory": "**Interfaz de usuario:** el espacio donde interactúan la persona y la máquina. Una **GUI** lo hace con ventanas, iconos y controles en vez de la línea de comandos. Debe ser fácil de usar, eficiente y agradable (diseño centrado en el usuario; en español, IPO: interacción persona-ordenador).\n\n**Elementos de una GUI:** **contenedores** (agrupan componentes y los colocan con un *layout*), **componentes o widgets** (botones, cajas de texto, listas, menús), ventanas, barras de menú y **diálogos**.\n\n**Programación dirigida por eventos:** el orden de ejecución lo deciden los **eventos** (un clic, una tecla, un temporizador). Hay una **fuente** (el control cuyo estado cambia), un **objeto evento** con la información, y un **oyente u objetivo** registrado en la fuente, que lo gestiona con una función *callback*. En Qt: un control emite una **señal** y se conecta a un **slot**: `boton.clicked.connect(self.saludar)`.\n\n**Librerías:** Qt, GTK, wxWidgets, Tkinter. El curso usa **Qt con PySide6** (la mantiene la propia empresa de Qt; **PyQt** es de otra empresa: se puede usar cualquiera, pero no mezclarlas). **Tkinter** viene con Python y es sencilla, pero tiene menos controles. Qt tiene muchos widgets, señales y slots, **Qt Designer** para diseñar ventanas y una curva de aprendizaje mayor.\n\n**Esquema de un programa PySide6:**\n- `app = QApplication(sys.argv)`;\n- una clase que hereda de `QWidget` o `QMainWindow` y crea los controles en su `__init__`;\n- `ventana.show()`;\n- `sys.exit(app.exec())`, que entra en el **bucle de eventos** (en versiones antiguas, `exec_()`).\n\n**Módulos:** `QtWidgets` (ventanas y controles), `QtCore` (señales, temporizadores, tipos básicos), `QtGui` (iconos, fuentes, colores y, en Qt6, `QAction`). Los apuntes ponen algunos widgets en `QtGui`: eso era en Qt4; en PySide6 están en `QtWidgets`.\n\n**Controles:** `QPushButton` (`clicked`), `QLineEdit` (`textChanged`, `text()`), `QLabel`, `QCheckBox` (`stateChanged`), `QRadioButton` (`isChecked()`), `QComboBox`, `QSlider` (`valueChanged`), `QProgressBar`, `QTableWidget`. Dentro de un slot, `self.sender()` devuelve el control que emitió la señal.\n\n**QMainWindow:** barra de menús (`menuBar()`), barra de herramientas, barra de estado (`statusBar().showMessage(...)`) y widget central. **Diálogos:** `QMessageBox`, `QInputDialog`, `QFileDialog`, `QColorDialog`.\n\n**Eventos de la ventana:** se tratan **sobrescribiendo métodos**, como `closeEvent(self, event)`, con `event.accept()` o `event.ignore()`.\n\n**Layouts:** posicionamiento absoluto con `move(x, y)` (no se adapta al redimensionar ni a otras fuentes o sistemas) o, mejor, gestores: `QHBoxLayout`, `QVBoxLayout` y `QGridLayout` (`addWidget(widget, fila, columna)`).",
+     "example_code": "# Sin ventana: la misma idea de señales y slots en Python puro\nclass Boton:\n    def __init__(self, texto):\n        self.texto = texto\n        self._oyentes = []\n\n    def connect(self, funcion):          # registrar un oyente\n        self._oyentes.append(funcion)\n\n    def click(self):                     # el usuario pulsa: se emite la señal\n        for funcion in self._oyentes:\n            funcion(self)\n\n\ndef saludar(fuente):\n    print(f\"Has pulsado «{fuente.texto}»\")\n\n\naceptar = Boton(\"Aceptar\")\naceptar.connect(saludar)\naceptar.click()",
+     "exercise": "Con PySide6 (`pip install pyside6`), crea una ventana con:\n\n- un `QLineEdit` donde escribir un número;\n- un `QLabel` que diga «Par» o «Impar» cada vez que cambie el texto (`textChanged`);\n- un `QGridLayout` para colocarlos.\n\nSi el texto no es un número, la etiqueta debe decir «No es un número».",
+     "starter": "import sys\nfrom PySide6.QtWidgets import QApplication, QGridLayout, QLabel, QLineEdit, QWidget\n\n\nclass Ventana(QWidget):\n    def __init__(self):\n        super().__init__()\n        # ...\n",
+     "quiz": [
+      {
+       "q": "¿Cómo se llama en Qt el mecanismo que une un evento con la función que lo atiende?",
+       "options": [
+        "Señales y slots",
+        "Try y except",
+        "Getters y setters",
+        "Import y from"
+       ],
+       "answer": 0,
+       "explain": "`control.señal.connect(slot)`."
+      },
+      {
+       "q": "¿Qué layout coloca los widgets en filas y columnas?",
+       "options": [
+        "QGridLayout",
+        "QHBoxLayout",
+        "QVBoxLayout",
+        "move(x, y)"
+       ],
+       "answer": 0,
+       "explain": "QHBoxLayout los pone en horizontal y QVBoxLayout en vertical."
+      }
+     ],
+     "challenge": {
+      "title": "Login",
+      "stars": 3,
+      "exercise": "Ventana de inicio de sesión que lea usuarios de un fichero `usuario:clave`, oculte la contraseña (`setEchoMode(QLineEdit.EchoMode.Password)`) y muestre el resultado con un `QMessageBox`.",
+      "starter": "from PySide6.QtWidgets import QLineEdit, QMessageBox\n",
+      "hint": "Carga los usuarios en un diccionario al abrir la ventana. En un proyecto real, las contraseñas nunca se guardan en claro: se guarda su hash."
+     },
+     "assistant": {
+      "hint": "Conecta `self.entrada.textChanged.connect(self.comprobar)` y en `comprobar` usa `try: n = int(texto) except ValueError: ...`.",
+      "faq": [
+       {
+        "q": "¿PySide6 o PyQt6?",
+        "a": "Son casi iguales. El curso usa PySide6 (licencia LGPL, de la empresa de Qt). No mezcles las dos en un mismo proyecto."
+       },
+       {
+        "q": "¿`exec()` o `exec_()`?",
+        "a": "En PySide6 se usa `app.exec()`. `exec_()` viene de cuando `exec` era palabra reservada en Python 2 y está obsoleto."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "DAW-Programacion · César San Juan Pastor (IES Arcipreste de Hita), CC BY-NC",
+       "url": "https://github.com/csanjuanp-ies/DAW-Programacion"
+      },
+      {
+       "title": "Qt for Python (PySide6) — documentación oficial",
+       "url": "https://doc.qt.io/qtforpython-6/"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

@@ -4,6 +4,9 @@ const ESCAPES = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&
 
 export const escapeHtml = (text) => String(text ?? "").replace(/[&<>"']/g, (c) => ESCAPES[c]);
 
+/** Solo enlaces https:// (ni javascript: ni data:), por si un dato llega manipulado. */
+export const safeUrl = (url) => (/^https:\/\//i.test(String(url ?? "")) ? escapeHtml(url) : "#");
+
 /** Admite `código`, **negrita** y *cursiva*. */
 export function renderInline(text) {
   const codeSpans = [];

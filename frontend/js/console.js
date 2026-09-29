@@ -52,8 +52,10 @@ function saveDraft() {
 /** Explicación en español del error (la genera runner.py) con botón para ir a la línea. */
 export function renderHint(hint) {
   if (!hint) return "";
-  const line = hint.line
-    ? `<button type="button" class="error-help__line" data-go-line="${hint.line}">Ir a la línea ${hint.line}</button>`
+  // La salida del Worker no es de fiar: el código del alumno puede falsearla (ADR-0022)
+  const number = Number.isInteger(hint.line) && hint.line > 0 ? hint.line : null;
+  const line = number
+    ? `<button type="button" class="error-help__line" data-go-line="${number}">Ir a la línea ${number}</button>`
     : "";
   return `<span class="error-help" role="note"><strong>${renderInline(hint.title)}</strong>${renderInline(hint.text)}<br>${line}</span>`;
 }
@@ -70,8 +72,8 @@ function goToLine(number) {
 function showOutput({ output = "", error = null, hint = null }) {
   const box = $("#console-output");
   const parts = [];
-  if (output) parts.push(`<span>${escapeHtml(output)}</span>`);
-  if (error) parts.push(`<span class="console__error">${escapeHtml(error)}</span>${renderHint(hint)}`);
+  if (output) parts.push(`<span>${escapeHtml(String(output))}</span>`);
+  if (error) parts.push(`<span class="console__error">${escapeHtml(String(error))}</span>${renderHint(hint)}`);
   box.innerHTML = parts.join("") || '<span class="console__muted">(El programa no ha mostrado nada)</span>';
 }
 
@@ -108,7 +110,8 @@ export function checkCode({ checks, button, box, onResult }) {
     const result = await runner.check(code, checks);
     box.hidden = false;
     box.dataset.passed = String(result.passed);
-    const where = result.total > 1 && !result.passed ? ` (prueba ${result.case} de ${result.total})` : "";
+    const [done, total] = [Number(result.case), Number(result.total)]; // números o NaN, nunca HTML
+    const where = total > 1 && !result.passed ? ` (prueba ${done} de ${total})` : "";
     box.innerHTML = `
       <p class="check__title">${result.passed ? "✓ ¡Correcto!" : "✗ Todavía no"}${where}</p>
       <p>${escapeHtml(result.message)}</p>

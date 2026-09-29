@@ -6,7 +6,8 @@ ejecuta el código de verdad y falla si la salida real es otra. Así ninguna res
 escribe «a ojo».
 
 Salida, con el mismo formato que `frontend/data/pcap.json` y `lessons.json` para que la app
-reutilice su lector: android/app/src/main/assets/courses/<id>/bank.json y .../lessons.json
+reutilice su lector: frontend/data/courses/<id>/bank.json y .../lessons.json. La web los sirve
+tal cual y la app Android los incluye como assets (frontend/data es carpeta de assets, ADR-0021).
 
 Uso:  python scripts/courses/<curso>.py           (genera)
       python scripts/courses/<curso>.py --check   (CI: falla si los JSON no están al día)
@@ -22,7 +23,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-ASSETS = ROOT / "android" / "app" / "src" / "main" / "assets" / "courses"
+ASSETS = ROOT / "frontend" / "data" / "courses"
 
 
 @dataclass

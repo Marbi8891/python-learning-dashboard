@@ -2,6 +2,11 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
+  <!-- Seguridad (ADR-0022). GitHub Pages no permite cabeceras propias: la política va en <meta>.
+       Si activas GoatCounter (config.js), añade https://gc.zgo.at a script-src y tu
+       https://<código>.goatcounter.com a connect-src e img-src. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net/pyodide/v314.0.7/full/ 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://pld-api.onrender.com http://127.0.0.1:8000 http://localhost:8000 https://cdn.jsdelivr.net/pyodide/v314.0.7/full/; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Python Learning Dashboard · Prepara el PCAP</title>
   <meta name="description" content="Prepara el examen PCAP de Python: temario completo, consola de Python en el navegador, ejercicios corregidos y simulacros de examen.">
@@ -33,19 +38,11 @@
   <link rel="stylesheet" href="css/academy.css">
   <link rel="stylesheet" href="css/pcap.css">
   <link rel="stylesheet" href="css/certificate.css">
+  <link rel="stylesheet" href="css/daw.css">
   <link rel="preload" href="fonts/fraunces-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
 
-  <!-- Tema y tamaño de letra antes de pintar la página (sin parpadeo) -->
-  <script>
-    (function () {
-      var prefs = {};
-      try { prefs = JSON.parse(localStorage.getItem("pld:prefs")) || {}; } catch (e) {}
-      var theme = prefs.theme || "auto";
-      if (theme === "auto") theme = matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
-      document.documentElement.dataset.theme = theme;
-      document.documentElement.dataset.font = prefs.font || "normal";
-    })();
-  </script>
+  <!-- Tema y tamaño de letra antes de pintar la página (sin parpadeo) y defensa contra marcos -->
+  <script src="js/theme-init.js"></script>
   <script src="config.js"></script>
   <script src="js/analytics.js" defer></script>
   <script type="module" src="js/app.js"></script>
@@ -84,6 +81,10 @@
           <a href="#/pcap" data-view="pcap">
             <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M9 4h6M12 4v3M5 13a7 7 0 1 0 14 0a7 7 0 1 0 -14 0M12 13l3-2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
             Examen PCAP
+          </a>
+          <a href="#/daw" data-view="daw">
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 5h7v14H4zM13 5h7v14h-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+            Cursos DAW
           </a>
           <a href="#/perfil" data-view="profile">
             <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
@@ -153,6 +154,9 @@
 
       <!-- ============ EXAMEN PCAP ============ -->
       <section class="page pcap" id="pcap-view" aria-labelledby="pcap-title" hidden></section>
+
+      <!-- ============ CURSOS DE DAW ============ -->
+      <section class="page pcap daw" id="daw-view" aria-labelledby="daw-title" hidden></section>
 
       <!-- ============ CERTIFICADO ============ -->
       <section class="page" id="certificate-view" aria-labelledby="certificate-title" hidden></section>
@@ -284,7 +288,8 @@
     <div class="account__form" data-view="profile" hidden>
       <h2 class="visually-hidden" data-title="Tu cuenta">Tu cuenta</h2>
       <p><strong id="profile-name"></strong><br><span id="profile-email" class="account__muted"></span></p>
-      <p class="account__muted">Tu progreso y tus ejercicios se guardan en tu cuenta.</p>
+      <p class="account__muted">Tu progreso y tus ejercicios se guardan en tu cuenta. Al cerrar sesión se borran de este navegador (siguen en tu cuenta).</p>
+      <label class="account__check"><input type="checkbox" id="logout-everywhere"> Cerrar también la sesión en mis otros dispositivos</label>
       <div class="account__buttons">
         <button class="btn btn--ghost" id="export-button" type="button">Descargar mis datos (JSON)</button>
         <button class="btn btn--ghost" id="logout-button" type="button">Cerrar sesión</button>

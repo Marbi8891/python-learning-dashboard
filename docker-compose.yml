@@ -24,6 +24,8 @@ services:
       JWT_SECRET: ${JWT_SECRET:?Define JWT_SECRET (mínimo 32 caracteres)}
       CORS_ORIGINS: '["http://localhost:5500"]'
       FRONTEND_URL: http://localhost:5500
+      TRUSTED_PROXY_HOPS: "0"  # en local no hay proxy delante
+      ENABLE_DOCS: "true"
     ports:
       - "8000:8000"
     depends_on:

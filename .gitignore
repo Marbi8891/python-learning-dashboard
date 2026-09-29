@@ -8,9 +8,19 @@ __pycache__/
 .pytest_cache/
 .ruff_cache/
 
-# Secretos y datos locales del backend
+# Secretos y datos locales (nunca al repositorio público)
 .env
+.env.*
+!.env.example
 *.db
+*.jks
+*.keystore
+*.p12
+*.pem
+*.key
+.coverage
+htmlcov/
+coverage.xml
 
 # Sistema operativo
 Thumbs.db

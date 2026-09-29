@@ -1,6 +1,8 @@
 /* Estado de la preparación del PCAP, guardado en este navegador (clave pld:pcap).
    Sin dependencias: lo leen la zona de examen (pcap.js) y la gamificación (game.js). */
 
+import { cleanProgress } from "./progress-guard.js";
+
 const KEY = "pld:pcap";
 
 function empty() {
@@ -18,7 +20,7 @@ function empty() {
 
 function load() {
   try {
-    const saved = JSON.parse(localStorage.getItem(KEY));
+    const saved = cleanProgress(JSON.parse(localStorage.getItem(KEY)));
     return {
       ...empty(),
       ...saved,
@@ -82,7 +84,7 @@ const later = (a, b) => ((a?.last ?? "") >= (b?.last ?? "") ? a : b);
 
 /** Combina el estado de la cuenta con el local sin perder nada de ninguno de los dos. */
 export function mergePcap(remote = {}) {
-  const base = { ...empty(), ...remote };
+  const base = { ...empty(), ...cleanProgress(remote) };
   for (const [id, history] of Object.entries(base.answers)) {
     if (!pcap.answers[id] || history.length > pcap.answers[id].length) pcap.answers[id] = history;
   }

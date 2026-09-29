@@ -1,7 +1,19 @@
-# Pull requests automáticos para mantener las dependencias al día
+# Pull requests automáticos para mantener las dependencias al día (ADR-0022)
 version: 2
 updates:
   - package-ecosystem: pip
+    directory: /backend
+    schedule:
+      interval: monthly
+  - package-ecosystem: npm  # tests end-to-end
+    directory: /
+    schedule:
+      interval: monthly
+  - package-ecosystem: gradle  # app Android
+    directory: /android
+    schedule:
+      interval: monthly
+  - package-ecosystem: docker  # imagen del backend
     directory: /backend
     schedule:
       interval: monthly

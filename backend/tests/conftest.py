@@ -13,7 +13,7 @@ from sqlalchemy.pool import StaticPool  # noqa: E402
 
 from app.database import Base, get_db  # noqa: E402
 from app.main import app  # noqa: E402
-from app.rate_limit import auth_limiter  # noqa: E402
+from app.rate_limit import auth_limiter, login_failures, reset_requests  # noqa: E402
 from app.seed import seed  # noqa: E402
 
 PASSWORD = "contraseña-segura-123"
@@ -36,12 +36,14 @@ def client():
             yield db
 
     app.dependency_overrides[get_db] = override_get_db
-    auth_limiter.reset()
+    for limiter in (auth_limiter, login_failures, reset_requests):
+        limiter.reset()
     with TestClient(app) as test_client:
         test_client.engine = engine
         yield test_client
     app.dependency_overrides.clear()
-    auth_limiter.reset()
+    for limiter in (auth_limiter, login_failures, reset_requests):
+        limiter.reset()
 
 
 def register(client, email="ana@example.com", password=PASSWORD, name="Ana"):
@@ -59,5 +61,6 @@ def login(client, email="ana@example.com", password=PASSWORD):
 def auth_headers(client):
     register(client)
     token = login(client).json()["access_token"]
-    auth_limiter.reset()  # que el registro y el login de la fixture no consuman el límite
+    for limiter in (auth_limiter, login_failures, reset_requests):
+        limiter.reset()  # que el registro y el login de la fixture no consuman el límite
     return {"Authorization": f"Bearer {token}"}

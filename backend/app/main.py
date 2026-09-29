@@ -27,7 +27,16 @@ async def lifespan(_: FastAPI):
     yield
 
 
-app = FastAPI(title="Python Learning Dashboard API", version="1.0.0", lifespan=lifespan)
+_docs = get_settings().enable_docs
+app = FastAPI(
+    title="Python Learning Dashboard API",
+    version="1.0.0",
+    lifespan=lifespan,
+    # En producción no se publica el mapa de la API (ENABLE_DOCS=true para verla en local)
+    docs_url="/docs" if _docs else None,
+    redoc_url="/redoc" if _docs else None,
+    openapi_url="/openapi.json" if _docs else None,
+)
 
 app.add_middleware(
     CORSMiddleware,
@@ -44,6 +53,8 @@ API_SECURITY_HEADERS = {
     "Referrer-Policy": "no-referrer",
     "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
     "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
+    # Respuestas con datos personales (sesión, progreso, exportación): nunca en cachés intermedias
+    "Cache-Control": "no-store",
 }
 
 
@@ -54,6 +65,68 @@ async def security_headers(request: Request, call_next):
         for name, value in API_SECURITY_HEADERS.items():
             response.headers.setdefault(name, value)
     return response
+
+
+class BodySizeLimit:
+    """Rechaza con 413 los cuerpos mayores que MAX_BODY_BYTES, contando lo que llega realmente
+    (también sin Content-Length), antes de que nadie lo lea entero en memoria (ADR-0022)."""
+
+    def __init__(self, app, max_bytes: int):
+        self.app = app
+        self.max_bytes = max_bytes
+
+    async def __call__(self, scope, receive, send):
+        if scope["type"] != "http":
+            await self.app(scope, receive, send)
+            return
+        declared = dict(scope["headers"]).get(b"content-length")
+        if declared is not None and declared.isdigit() and int(declared) > self.max_bytes:
+            await self._too_large(send)
+            return
+        received = 0
+        responded = False
+
+        async def limited_receive():
+            nonlocal received, responded
+            message = await receive()
+            received += len(message.get("body", b""))
+            if received > self.max_bytes and not responded:
+                # Se responde 413 ya; lo que intente enviar la app después se descarta
+                responded = True
+                await self._too_large(send)
+                raise _BodyTooLarge
+            return message
+
+        async def guarded_send(message):
+            if not responded:
+                await send(message)
+
+        try:
+            await self.app(scope, limited_receive, guarded_send)
+        except _BodyTooLarge:
+            pass
+
+    @staticmethod
+    async def _too_large(send) -> None:
+        body = b'{"detail":"La peticion es demasiado grande"}'
+        await send(
+            {
+                "type": "http.response.start",
+                "status": 413,
+                "headers": [
+                    (b"content-type", b"application/json"),
+                    (b"content-length", b"%d" % len(body)),
+                ],
+            }
+        )
+        await send({"type": "http.response.body", "body": body})
+
+
+class _BodyTooLarge(Exception):
+    pass
+
+
+app.add_middleware(BodySizeLimit, max_bytes=get_settings().max_body_bytes)
 
 
 for router in (

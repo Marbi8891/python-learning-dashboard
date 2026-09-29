@@ -115,7 +115,7 @@ function renderPlan(stats) {
   const date = pcap.plan.examDate;
   const form = `
     <form class="plan-form" id="plan-form">
-      <label>Fecha de tu examen <input type="date" name="exam-date" min="${isoDay()}" value="${date ?? ""}" required></label>
+      <label>Fecha de tu examen <input type="date" name="exam-date" min="${isoDay()}" value="${escapeHtml(date ?? "")}" required></label>
       <button class="btn btn--ghost" type="submit">Guardar fecha</button>
       ${date ? `<button class="btn btn--ghost" type="button" data-pcap="clear-date">Quitar fecha</button>` : ""}
     </form>`;

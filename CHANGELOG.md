@@ -4,7 +4,33 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
 
 ## [Unreleased]
 
+### Seguridad
+- **Auditoría y endurecimiento integral** (ADR-0022):
+  - el límite de intentos ya no se puede saltar falsificando `X-Forwarded-For`;
+  - bloqueo por cuenta tras 10 fallos y límite de emails de recuperación;
+  - Argon2id con menos memoria para que no se pueda tumbar el servidor;
+  - cierre de sesión en todos los dispositivos;
+  - cuerpos de las peticiones limitados a 300 KB;
+  - `Cache-Control: no-store`, `/docs` desactivado en producción y TLS obligatorio hacia la base de datos;
+  - STARTTLS con el certificado verificado, y los enlaces de recuperación nunca se escriben en el log.
+- **Web:**
+  - Content-Security-Policy;
+  - protección contra la inserción en marcos (*clickjacking*);
+  - se corrige una XSS a partir de la salida del código Python del alumno;
+  - se valida el progreso guardado en el navegador o en la cuenta;
+  - al cerrar sesión o borrar la cuenta se borran los datos personales del navegador;
+  - la analítica respeta Global Privacy Control y no envía el token de recuperación.
+- **Cadena de suministro:**
+  - las GitHub Actions tienen permisos de solo lectura;
+  - `pip-audit` y `npm audit` en la CI;
+  - se valida el wrapper de Gradle;
+  - Dependabot vigila también npm, Gradle y Docker;
+  - se retiran el SDK de AWS y `dotenv`, que no se usaban.
+- **Documentación:** política de privacidad y `SECURITY.md` actualizados.
+
 ### Añadido
+- **Cursos de DAW en la web** (ADR-0021): nueva sección «Cursos DAW» (`#/daw`) con Programación, Bases de datos, Entornos, JavaScript y Java. Incluye teoría, mini-quiz, práctica por bloque con test, completar el hueco y ordenar líneas, y repaso espaciado. Con sesión iniciada, el progreso se comparte con la app Android. Los JSON de los cursos pasan a `frontend/data/courses/`, que la app ya incluye como assets.
+- **Curso de Programación en Python** en la app Android (ADR-0020): 9 unidades de trabajo, de algoritmos y pseudocódigo a interfaces gráficas con PySide6, siguiendo el curso abierto DAW-Programacion de César San Juan Pastor (CC no comercial). Tiene 12 lecciones, 163 preguntas y 23 del mini-quiz, con ejercicios de escribir código. Cada respuesta de código se comprueba ejecutando Python en la CI, incluidos los ficheros y SQLite. El curso de Java se queda para más adelante.
 - **«Mi cuenta» (área privada):** pantalla `#/cuenta` con el nombre, el email, la fecha de alta, el resumen de progreso y del examen PCAP, un botón para continuar y el acceso a la gestión de datos. Solo aparece en el menú con la sesión iniciada; sin sesión muestra la invitación a entrar.
 
 ## [1.0.0] - 2026-09-29

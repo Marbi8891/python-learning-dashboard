@@ -11,3 +11,5 @@ node_modules
 e2e
 test-results
 playwright-report
+**/.local-secret
+**/.coverage
