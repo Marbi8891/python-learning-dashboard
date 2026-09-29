@@ -1,0 +1,15 @@
+digraph ER { rankdir=TB; nodesep=0.35; ranksep=0.6; node [shape=record, fontname="Helvetica", fontsize=11, style=filled, fillcolor="#f7f3e8"]; edge [fontname="Helvetica", fontsize=10];
+modules [label="{modules|id PK\lslug UNIQUE\ltitle\lposition\l}"];
+lessons [label="{lessons|id PK\lslug UNIQUE\lmodule_id FK\ltitle\lposition\ltheory, example_code, exercise\lsources, starter, checks (JSON)\lassistant, quiz, challenge (JSON)\l}"];
+users [label="{users|id PK\lemail UNIQUE\lpassword_hash (Argon2)\ldisplay_name\lcreated_at\lprivacy_accepted_at\ltoken_version\l}"];
+lesson_progress [label="{lesson_progress|id PK\luser_id FK\llesson_id FK\lcompleted_at\l}"];
+exercise_attempts [label="{exercise_attempts|id PK\luser_id FK\llesson_id FK\lcode\lpassed\lcreated_at\l}"];
+password_reset_tokens [label="{password_reset_tokens|id PK\luser_id FK\ltoken_hash UNIQUE\lexpires_at\lused_at\lcreated_at\l}"];
+pcap_states [label="{pcap_states|user_id PK, FK\ldata (JSON)\lupdated_at\l}"];
+course_states [label="{course_states|user_id PK, FK\lcourse PK\ldata (JSON)\lupdated_at\l}"];
+modules -> lessons [label="1 : N"];
+users -> lesson_progress [label="1 : N"]; lessons -> lesson_progress [label="1 : N"];
+users -> exercise_attempts [label="1 : N"]; lessons -> exercise_attempts [label="1 : N"];
+users -> password_reset_tokens [label="1 : N"];
+users -> pcap_states [label="1 : 1"]; users -> course_states [label="1 : N"];
+}

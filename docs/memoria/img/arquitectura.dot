@@ -1,0 +1,13 @@
+digraph A { rankdir=TB; fontname="Helvetica"; node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=11, fillcolor="#f7f3e8"]; edge [fontname="Helvetica", fontsize=10];
+user [label="Alumno\n(navegador o móvil)", fillcolor="#e8eef7"];
+subgraph cluster_web { label="Frontend (GitHub Pages)"; style=dashed; web [label="HTML + CSS + JS (módulos ES)\nlessons.json · pcap.json"]; sw [label="Service worker (PWA, sin conexión)"]; py [label="Pyodide en Web Worker\n(consola y corrección)"]; }
+subgraph cluster_api { label="Backend (Render, Frankfurt)"; style=dashed; api [label="FastAPI + SQLAlchemy 2\nJWT + Argon2, límite de intentos"]; }
+db [label="PostgreSQL (Neon, Frankfurt)", shape=cylinder, fillcolor="#e8f7ec"];
+cdn [label="jsDelivr (CDN)\nsolo Pyodide", fillcolor="#eeeeee"];
+android [label="App Android nativa\nKotlin + Compose\n(sin conexión)", fillcolor="#e8eef7"];
+ci [label="GitHub Actions\nCI: ruff, pytest 100 %, Playwright,\nmigraciones en PostgreSQL 16, APK", fillcolor="#eeeeee"];
+user -> web; user -> android; web -> sw; web -> py; py -> cdn [label="1.ª carga"];
+web -> api [label="HTTPS · JSON · JWT"]; api -> db [label="SQL"];
+android -> api [label="sincronización\n(opcional, ADR-0018)", style=dashed];
+ci -> web [label="despliega", style=dotted]; ci -> api [label="prueba", style=dotted];
+}

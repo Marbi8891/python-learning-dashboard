@@ -1,0 +1,11 @@
+digraph U { rankdir=LR; node [fontname="Helvetica", fontsize=11]; edge [arrowhead=none];
+anon [label="Alumno\nsin cuenta", shape=box, style=filled, fillcolor="#e8eef7"];
+reg [label="Alumno\ncon cuenta", shape=box, style=filled, fillcolor="#e8eef7"];
+node [shape=ellipse, style=filled, fillcolor="#f7f3e8"];
+c1 [label="Estudiar lecciones"]; c2 [label="Ejecutar código en la consola"]; c3 [label="Resolver ejercicios corregidos"];
+c4 [label="Simulacro cronometrado PCAP"]; c5 [label="Practicar por bloque y fichas"]; c6 [label="Ganar XP, racha y logros"];
+c7 [label="Registrarse e iniciar sesión"]; c8 [label="Sincronizar progreso"]; c9 [label="Exportar mis datos (RGPD)"];
+c10 [label="Borrar mi cuenta"]; c11 [label="Recuperar contraseña"]; c12 [label="Obtener certificado"];
+anon -> c1; anon -> c2; anon -> c3; anon -> c4; anon -> c5; anon -> c6; anon -> c7; anon -> c12;
+reg -> c1; reg -> c3; reg -> c4; reg -> c8; reg -> c9; reg -> c10; reg -> c11;
+}
