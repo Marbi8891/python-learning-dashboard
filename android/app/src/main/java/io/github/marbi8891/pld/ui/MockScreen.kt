@@ -49,7 +49,7 @@ fun MockScreen(model: AppModel, onBack: () -> Unit) {
     val course = model.course
     val vm: MockViewModel = viewModel(key = "simulacro-${course.id}") { MockViewModel(model, course) }
     // Al entrar de nuevo tras terminar, empieza uno nuevo; a mitad, se retoma el que estaba en marcha
-    remember { if (vm.state.value.finished) vm.restart() }
+    LaunchedEffect(Unit) { if (vm.state.value.finished) vm.restart() }
     val state by vm.state.collectAsState()
     val lang = remember(model.revision) { model.pcap.lang }
     val scroll = rememberScrollState()
