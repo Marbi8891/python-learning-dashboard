@@ -243,3 +243,13 @@
   height: 18px;
   accent-color: var(--color-primary);
 }
+
+/* ---- Mi cuenta (área privada) ---- */
+.account-card { display: flex; align-items: center; gap: var(--space-4); }
+.account-card__avatar {
+  display: grid; place-items: center; flex: none;
+  width: 64px; height: 64px; border-radius: 50%;
+  background: var(--color-primary-strong); color: var(--color-on-primary);
+  font-weight: 700; font-size: 22px; letter-spacing: 0.02em;
+}
+.account-card__meta { color: var(--color-text-muted); margin: var(--space-2) 0; overflow-wrap: anywhere; }

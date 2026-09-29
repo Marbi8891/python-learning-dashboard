@@ -4,7 +4,8 @@
 
 import hljs from "../vendor/highlight/core.min.js";
 import python from "../vendor/highlight/python.min.js";
-import { initAccount, openPasswordReset } from "./account.js";
+import { apiEnabled } from "./api.js";
+import { initAccount, openAccount, openPasswordReset } from "./account.js";
 import { initAssistant, setAssistantLesson } from "./assistant.js";
 import { celebrate } from "./celebrate.js";
 import {
@@ -36,6 +37,7 @@ import { openPcap, refreshPcap } from "./pcap.js";
 import { initPcapSync } from "./pcap-sync.js";
 import { initPrefs } from "./prefs.js";
 import { badgesHtml, renderProfile } from "./profile.js";
+import { renderPrivate } from "./private.js";
 import { setQuizLesson } from "./quiz.js";
 import { recordAttempt, restoreSession, setCompleted, state, subscribe } from "./store.js";
 
@@ -48,6 +50,7 @@ const HOME_ROUTE = "#/inicio";
 const PROFILE_ROUTE = "#/perfil";
 const PCAP_ROUTE = "#/pcap";
 const CERTIFICATE_ROUTE = "#/certificado";
+const PRIVATE_ROUTE = "#/cuenta";
 const mobile = window.matchMedia("(max-width: 900px)");
 
 const content = {
@@ -365,6 +368,7 @@ function refreshProgressViews() {
 const VIEWS = {
   home: { element: "#home-view", title: "Python Learning Dashboard", focus: "#home-title", render: () => renderHome(content, defaultSlug()) },
   profile: { element: "#profile-view", title: "Mi aprendizaje · Python Learning Dashboard", focus: "#profile-title", render: () => renderProfile(content) },
+  private: { element: "#private-view", title: "Mi cuenta · Python Learning Dashboard", focus: "#private-title", render: () => renderPrivate(content, apiEnabled) },
   certificate: { element: "#certificate-view", title: "Certificado · Python Learning Dashboard", focus: "#certificate-title", render: () => renderCertificate(content) },
   // La zona PCAP se pinta sola (openPcap): tiene simulacros en curso que no se deben repintar
   pcap: { element: "#pcap-view", title: "Examen PCAP · Python Learning Dashboard", focus: null, render: null },
@@ -384,6 +388,11 @@ function showPage(name, { moveFocus = true } = {}) {
   if (mobile.matches) setMenu(false);
   if (moveFocus && view.focus) $(view.focus).focus();
   window.scrollTo({ top: 0 });
+}
+
+/** «Mi cuenta» solo aparece en el menú con la sesión iniciada. */
+function updatePrivateNav() {
+  $("#private-nav").hidden = !state.user;
 }
 
 function updateSiteNav() {
@@ -545,6 +554,10 @@ function navigate({ moveFocus = true } = {}) {
     showPage("profile", { moveFocus });
     return;
   }
+  if (location.hash === PRIVATE_ROUTE) {
+    showPage("private", { moveFocus });
+    return;
+  }
   if (location.hash === CERTIFICATE_ROUTE) {
     showPage("certificate", { moveFocus });
     return;
@@ -678,11 +691,16 @@ async function init() {
   navigate({ moveFocus: false });
   window.addEventListener("hashchange", () => navigate());
   subscribe(() => {
+    updatePrivateNav();
     updateSidebar();
     updateCompleteButton();
     refreshProgressViews();
   });
   $("#next-step").addEventListener("click", () => nextAction().run());
+  $("#private-view").addEventListener("click", (event) => {
+    if (event.target.closest("[data-open-account]")) openAccount();
+  });
+  updatePrivateNav();
   $("#certificate-view").addEventListener("submit", (event) => {
     event.preventDefault();
     saveCertificateName(event.target.elements["cert-name"].value.trim());

@@ -4,6 +4,9 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
 
 ## [Unreleased]
 
+### Añadido
+- **«Mi cuenta» (área privada):** pantalla `#/cuenta` con el nombre, el email, la fecha de alta, el resumen de progreso y del examen PCAP, un botón para continuar y el acceso a la gestión de datos. Solo aparece en el menú con la sesión iniciada; sin sesión muestra la invitación a entrar.
+
 ## [1.0.0] - 2026-09-29
 
 Primera versión estable. Resumen en `docs/RELEASE-1.0.0.md`.
