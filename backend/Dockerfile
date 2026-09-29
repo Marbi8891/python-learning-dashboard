@@ -2,7 +2,7 @@
 # porque necesita el contenido compartido de frontend/data:
 #   docker build -f backend/Dockerfile -t pld-api .
 #   docker run -p 8000:8000 --env-file backend/.env pld-api
-FROM python:3.12-slim
+FROM python:3.14-slim
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
