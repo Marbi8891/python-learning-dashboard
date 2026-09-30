@@ -12,8 +12,8 @@ android {
         applicationId = "io.github.marbi8891.pld"
         minSdk = 26
         targetSdk = 36
-        versionCode = 15
-        versionName = "0.13.0"
+        versionCode = 16
+        versionName = "0.14.0"
 
         // Servidor de la cuenta y web (ADR-0026). Se cambian sin tocar el código:
         // ./gradlew assembleDebug -PpldApiUrl=https://otra-api.example -PpldWebUrl=https://... (solo HTTPS)

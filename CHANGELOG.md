@@ -5,6 +5,12 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
 ## [Unreleased]
 
 ### Añadido
+- **App Android 0.14.0: Ruta rediseñada, fluida y sin ruido visual** (ADR-0028):
+  - un solo color de acento para la lección que toca;
+  - una línea fina que une las lecciones y se colorea hasta donde has llegado;
+  - cabeceras de unidad finas que se quedan fijas arriba;
+  - barra de estado en texto, sin emojis;
+  - pulso suave en la lección actual y botón «Ir a mi lección» cuando no está en pantalla.
 - **App Android 0.13.0: cuenta y sincronización** (ADR-0026):
   - inicio de sesión con la cuenta de la web en la pestaña Perfil;
   - el progreso de todos los cursos se junta con el de la web sin perder nada, al abrir la app, al salir y con «Sincronizar ahora»;

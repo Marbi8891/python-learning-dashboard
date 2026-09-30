@@ -1,6 +1,18 @@
 package io.github.marbi8891.pld.ui
 
-import androidx.compose.foundation.BorderStroke
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -10,56 +22,69 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.github.marbi8891.pld.AppModel
 import io.github.marbi8891.pld.pcap.PathNode
 import io.github.marbi8891.pld.pcap.PathUnit
-import io.github.marbi8891.pld.pcap.UnitState
 import io.github.marbi8891.pld.pcap.UnitSummary
+import io.github.marbi8891.pld.pcap.UnitState
 import io.github.marbi8891.pld.pcap.unitSummary
+import kotlinx.coroutines.launch
 import java.time.Duration
+import kotlin.math.hypot
 import kotlin.math.roundToInt
 
-private sealed interface PathRow {
-    data class UnitHeader(val unit: PathUnit, val number: Int) : PathRow
+/*
+ * Pestaña «Ruta» (ADR-0028): un camino tranquilo, sin ruido visual.
+ * Un solo color de acento (la lección que toca), una línea fina que une las lecciones y se colorea
+ * hasta donde has llegado, cabeceras de unidad finas que se quedan fijas arriba y movimiento suave.
+ */
 
-    data class Node(val node: PathNode, val position: Int) : PathRow
-}
+// Desplazamiento horizontal de cada lección: una curva suave, no un zigzag brusco
+private val CURVE = listOf(0, 34, 48, 34, 0, -34, -48, -34)
+private val ROW: Dp = 84.dp // alto fijo de cada lección: así la línea sabe dónde está la anterior
+private val NODE: Dp = 52.dp
+private val CURRENT_NODE: Dp = 64.dp
 
-// Desplazamiento horizontal de los nodos para dibujar el camino en zigzag
-private val ZIGZAG = listOf(0, 44, 64, 44, 0, -44, -64, -44)
+private enum class NodeState { DONE, CURRENT, LOCKED }
 
-/** Pestaña principal: el camino de unidades y lecciones cortas, con la racha, la meta y las vidas arriba. */
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PathScreen(
     model: AppModel,
@@ -71,45 +96,73 @@ fun PathScreen(
     val app = model.pcap.app
     val revision = model.revision
     val current = remember(revision) { app.currentNode(model.units) }
-    val rows = remember {
-        var position = 0
-        model.units.flatMapIndexed { i, unit ->
-            listOf<PathRow>(PathRow.UnitHeader(unit, i + 1)) + unit.nodes.map { PathRow.Node(it, position++) }
+    val units = model.units
+    // Índice en la lista (cada unidad es su cabecera más sus lecciones) de cada lección
+    val indexOf = remember(units) {
+        var index = 0
+        buildMap {
+            units.forEach { unit ->
+                index++ // cabecera
+                unit.nodes.forEach { put(it.id, index++) }
+            }
         }
     }
+    // Posición de cada lección en la curva, seguida a lo largo de todo el curso
+    val curveOf = remember(units) { units.flatMap { it.nodes }.withIndex().associate { (i, node) -> node.id to i } }
+    val currentIndex = current?.let { indexOf[it.id] }
     val listState = rememberLazyListState()
+    val scope = rememberCoroutineScope()
     var noHeartsFor by remember { mutableStateOf<PathNode?>(null) }
 
-    // Al abrir, el camino se coloca en la lección que toca
+    // Al abrir, el camino se coloca en la lección que toca (con la anterior a la vista)
     LaunchedEffect(Unit) {
-        val index = rows.indexOfFirst { it is PathRow.Node && it.node == current }
-        if (index > 1) listState.scrollToItem(index - 1)
+        if (currentIndex != null && currentIndex > 1) listState.scrollToItem(currentIndex - 1)
+    }
+    val currentVisible by remember(currentIndex) {
+        derivedStateOf { currentIndex == null || listState.layoutInfo.visibleItemsInfo.any { it.index == currentIndex } }
     }
 
     Column(modifier.fillMaxSize()) {
         StatusBar(model)
-        LazyColumn(
-            state = listState,
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 32.dp),
-            verticalArrangement = Arrangement.spacedBy(14.dp),
-        ) {
-            items(rows, key = { row -> if (row is PathRow.Node) row.node.id else "u-" + (row as PathRow.UnitHeader).unit.slug }) { row ->
-                when (row) {
-                    is PathRow.UnitHeader -> {
-                        val summary = remember(revision) { model.pcap.unitSummary(row.unit, current) }
-                        UnitCard(row.unit, row.number, summary, model) { onTheory(row.unit.slug) }
+        Box(Modifier.fillMaxSize()) {
+            LazyColumn(
+                state = listState,
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(bottom = 96.dp),
+            ) {
+                units.forEachIndexed { u, unit ->
+                    stickyHeader(key = "u-${unit.slug}") {
+                        val summary = remember(revision) { model.pcap.unitSummary(unit, current) }
+                        UnitHeader(unit, u + 1, summary) { onTheory(unit.slug) }
                     }
-                    is PathRow.Node -> {
+                    items(unit.nodes.size, key = { unit.nodes[it].id }) { i ->
+                        val node = unit.nodes[i]
                         val state = when {
-                            row.node.id in app.done -> NodeState.DONE
-                            row.node == current -> NodeState.CURRENT
+                            node.id in app.done -> NodeState.DONE
+                            node == current -> NodeState.CURRENT
                             else -> NodeState.LOCKED
                         }
-                        NodeButton(row.node, row.position, state, model.unitOf(row.node).title) {
-                            if (app.heartsNow() > 0) onStart(row.node) else noHeartsFor = row.node
+                        val position = curveOf.getValue(node.id)
+                        // La línea sube hasta la lección anterior de la misma unidad
+                        val previous = if (i == 0) null else CURVE[(position - 1) % CURVE.size]
+                        LessonNode(node, CURVE[position % CURVE.size], previous, state, unit.title) {
+                            if (app.heartsNow() > 0) onStart(node) else noHeartsFor = node
                         }
                     }
+                }
+            }
+
+            // Solo cuando tu lección no se ve: vuelve a ella con un desplazamiento suave
+            AnimatedVisibility(
+                visible = !currentVisible,
+                enter = fadeIn() + slideInVertically { it / 2 },
+                exit = fadeOut() + slideOutVertically { it / 2 },
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 20.dp),
+            ) {
+                Button(onClick = { scope.launch { if (currentIndex != null) listState.animateScrollToItem(maxOf(0, currentIndex - 1)) } }) {
+                    Text("Ir a mi lección")
                 }
             }
         }
@@ -127,7 +180,7 @@ fun PathScreen(
     }
 }
 
-/** Racha, XP de hoy frente a la meta y vidas. */
+/** Racha, XP de hoy frente a la meta y vidas: tres cifras tranquilas, sin iconos de colores. */
 @Composable
 fun StatusBar(model: AppModel) {
     val revision = model.revision
@@ -136,149 +189,177 @@ fun StatusBar(model: AppModel) {
     val today = remember(revision) { app.xpOn(java.time.LocalDate.now()) }
     val hearts = remember(revision) { app.heartsNow() }
     val palette = LocalPalette.current
-    Surface(color = MaterialTheme.colorScheme.surface, modifier = Modifier.fillMaxWidth()) {
-        Row(
-            Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Stat("🔥 $streak", "Racha: $streak ${if (streak == 1) "día" else "días"}", palette.streak)
-            Stat("⚡ $today/${app.goal}", "XP de hoy: $today de ${app.goal}", MaterialTheme.colorScheme.primary)
-            Stat("♥ $hearts", "Vidas: $hearts de 5", palette.danger)
-        }
+    val ink = MaterialTheme.colorScheme.onBackground
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.background)
+            .padding(horizontal = 20.dp, vertical = 8.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+    ) {
+        Figure("$streak", if (streak == 1) "día de racha" else "días de racha", ink)
+        Figure("$today/${app.goal}", "XP hoy", if (today >= app.goal) palette.accent else ink)
+        Figure("$hearts", if (hearts == 1) "vida" else "vidas", if (hearts == 0) palette.danger else ink)
     }
 }
 
 @Composable
-private fun Stat(text: String, description: String, color: Color) {
-    Text(
-        text,
-        modifier = Modifier.semantics { contentDescription = description },
-        color = color,
-        fontWeight = FontWeight.Bold,
-        fontSize = 17.sp,
-    )
+private fun Figure(value: String, label: String, color: Color) {
+    Row(
+        verticalAlignment = Alignment.Bottom,
+        modifier = Modifier.clearAndSetSemantics { contentDescription = "$value $label" },
+    ) {
+        Text(value, color = color, fontWeight = FontWeight.SemiBold, fontSize = 17.sp)
+        Text(" $label", color = LocalPalette.current.muted, style = MaterialTheme.typography.labelMedium)
+    }
 }
 
-/**
- * Cabecera de cada unidad: estado (color e icono), bloque y peso en el examen,
- * lecciones hechas con su barra y acierto en sus preguntas.
- */
+/** Cabecera fina de unidad: se queda fija arriba mientras recorres sus lecciones. */
 @Composable
-private fun UnitCard(unit: PathUnit, number: Int, summary: UnitSummary, model: AppModel, onTheory: () -> Unit) {
-    val blocks = model.bank.exam.blocks
-    val block = model.bank.block(unit.block)
-    val blockNumber = blocks.indexOf(block) + 1
+private fun UnitHeader(unit: PathUnit, number: Int, summary: UnitSummary, onTheory: () -> Unit) {
     val palette = LocalPalette.current
     val colors = MaterialTheme.colorScheme
-    // Fondo, texto, color de la barra y del borde según el estado
-    val (background, content, bar, border) = when (summary.state) {
-        UnitState.CURRENT -> listOf(colors.primary, colors.onPrimary, colors.onPrimary, colors.primary)
-        UnitState.DONE -> listOf(colors.surface, colors.onSurface, palette.accent, palette.accent)
-        UnitState.LOCKED -> listOf(colors.surfaceVariant, colors.onSurfaceVariant, colors.onSurfaceVariant, colors.outline)
-    }
-    val (icon, stateLabel) = when (summary.state) {
-        UnitState.DONE -> "✓" to "completada"
-        UnitState.CURRENT -> "▶" to "en curso"
-        UnitState.LOCKED -> "🔒" to "bloqueada"
-    }
-    val lessons = "${summary.lessonsDone} de ${summary.lessons} ${if (summary.lessons == 1) "lección" else "lecciones"}"
+    val progress by animateFloatAsState(summary.progress, tween(600), label = "unidad")
+    val state = summary.state
     val accuracy = summary.rate?.let { "aciertas el ${(it * 100).roundToInt()} %" } ?: "aún sin responder"
-    val weight = "Bloque $blockNumber · ${block.weight} % del examen"
-
-    Surface(
-        color = background,
-        contentColor = content,
-        shape = CardShape,
-        border = BorderStroke(if (summary.state == UnitState.DONE) 2.dp else 1.dp, border),
-        modifier = Modifier
+    val stateLabel = when (state) {
+        UnitState.DONE -> "completada"
+        UnitState.CURRENT -> "en curso"
+        UnitState.LOCKED -> "por empezar"
+    }
+    Column(
+        Modifier
             .fillMaxWidth()
-            .padding(top = 12.dp),
+            .background(colors.background) // opaca: las lecciones pasan por debajo
+            .padding(start = 20.dp, end = 8.dp, top = 16.dp, bottom = 10.dp),
     ) {
-        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                // Todo el resumen se lee como un solo elemento con TalkBack; «Teoría» queda aparte
-                Column(
-                    Modifier
-                        .weight(1f)
-                        .clearAndSetSemantics {
-                            heading()
-                            contentDescription = "Unidad $number, ${unit.title}, $stateLabel. $weight. $lessons. " +
-                                "${summary.questions} preguntas, $accuracy."
-                        },
-                ) {
-                    Text(
-                        "$icon  UNIDAD $number · ${block.title.es.uppercase()}",
-                        style = MaterialTheme.typography.labelMedium,
-                        fontWeight = FontWeight.Bold,
-                    )
-                    Text(unit.title, style = MaterialTheme.typography.titleLarge)
-                    Text(weight, style = MaterialTheme.typography.bodySmall, modifier = Modifier.alpha(0.85f))
-                }
-                TextButton(onClick = onTheory) { Text("Teoría", color = content) }
-            }
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                LinearProgressIndicator(
-                    progress = { summary.progress },
-                    modifier = Modifier
-                        .weight(1f)
-                        .clearAndSetSemantics { },
-                    color = bar,
-                    trackColor = bar.copy(alpha = 0.25f),
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Column(
+                Modifier
+                    .weight(1f)
+                    .clearAndSetSemantics {
+                        heading()
+                        contentDescription = "Unidad $number, ${unit.title}, $stateLabel. " +
+                            "${summary.lessonsDone} de ${summary.lessons} lecciones. ${summary.questions} preguntas, $accuracy."
+                    },
+            ) {
+                Text(
+                    "UNIDAD $number",
+                    style = MaterialTheme.typography.labelSmall,
+                    letterSpacing = 1.2.sp,
+                    color = if (state == UnitState.CURRENT) colors.primary else palette.muted,
+                    fontWeight = FontWeight.SemiBold,
                 )
-                Text(lessons, style = MaterialTheme.typography.labelMedium, modifier = Modifier.clearAndSetSemantics { })
+                Text(
+                    unit.title,
+                    style = MaterialTheme.typography.titleMedium,
+                    color = if (state == UnitState.LOCKED) palette.muted else colors.onBackground,
+                )
             }
             Text(
-                "${summary.questions} preguntas · $accuracy",
-                style = MaterialTheme.typography.bodySmall,
-                modifier = Modifier
-                    .alpha(0.85f)
-                    .clearAndSetSemantics { },
+                "${summary.lessonsDone}/${summary.lessons}",
+                style = MaterialTheme.typography.labelMedium,
+                color = palette.muted,
+                modifier = Modifier.clearAndSetSemantics { },
+            )
+            TextButton(onClick = onTheory, modifier = Modifier.semantics { contentDescription = "Teoría de ${unit.title}" }) {
+                Text("Teoría", color = palette.muted)
+            }
+        }
+        // Barra fina de progreso: se rellena con suavidad al completar una lección
+        Box(
+            Modifier
+                .padding(top = 6.dp, end = 12.dp)
+                .fillMaxWidth()
+                .height(3.dp)
+                .background(colors.outline, RoundedCornerShape(2.dp)),
+        ) {
+            Box(
+                Modifier
+                    .fillMaxWidth(progress)
+                    .height(3.dp)
+                    .background(if (state == UnitState.DONE) palette.accent else colors.primary, RoundedCornerShape(2.dp)),
             )
         }
     }
 }
 
-private enum class NodeState { DONE, CURRENT, LOCKED }
-
+/**
+ * Una lección del camino. Dibuja por detrás la línea hasta la anterior, recortada en los bordes de
+ * los círculos para que no los atraviese.
+ */
 @Composable
-private fun NodeButton(node: PathNode, position: Int, state: NodeState, unitTitle: String, onClick: () -> Unit) {
+private fun LessonNode(node: PathNode, offset: Int, previousOffset: Int?, state: NodeState, unitTitle: String, onClick: () -> Unit) {
     val palette = LocalPalette.current
-    val (background, content) = when (state) {
-        NodeState.DONE -> palette.accent to MaterialTheme.colorScheme.background
-        NodeState.CURRENT -> MaterialTheme.colorScheme.primary to MaterialTheme.colorScheme.onPrimary
-        NodeState.LOCKED -> MaterialTheme.colorScheme.surfaceVariant to MaterialTheme.colorScheme.onSurfaceVariant
-    }
+    val colors = MaterialTheme.colorScheme
+    val lineColor = if (state == NodeState.LOCKED) colors.outline else palette.accent.copy(alpha = 0.55f)
+    val diameter = if (state == NodeState.CURRENT) CURRENT_NODE else NODE
     val label = when (state) {
         NodeState.DONE -> "completada"
-        NodeState.CURRENT -> "disponible, toca para empezar"
+        NodeState.CURRENT -> "la que toca, toca para empezar"
         NodeState.LOCKED -> "bloqueada"
     }
-    val ring = if (state == NodeState.CURRENT) Modifier.border(4.dp, MaterialTheme.colorScheme.outline, CircleShape) else Modifier
-    Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-        Column(
-            Modifier.offset(x = ZIGZAG[position % ZIGZAG.size].dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            if (state == NodeState.CURRENT) {
-                Text("EMPEZAR", color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.labelLarge)
+
+    Box(
+        Modifier
+            .fillMaxWidth()
+            .height(ROW)
+            .drawBehind {
+                if (previousOffset == null) return@drawBehind
+                val here = Offset(size.width / 2 + offset.dp.toPx(), size.height / 2)
+                val before = Offset(size.width / 2 + previousOffset.dp.toPx(), size.height / 2 - ROW.toPx())
+                val length = hypot(here.x - before.x, here.y - before.y)
+                val dir = Offset((here.x - before.x) / length, (here.y - before.y) / length)
+                val margin = 6.dp.toPx()
+                drawLine(
+                    color = lineColor,
+                    start = before + dir * (NODE.toPx() / 2 + margin),
+                    end = here - dir * (diameter.toPx() / 2 + margin),
+                    strokeWidth = 3.dp.toPx(),
+                    cap = StrokeCap.Round,
+                )
+            },
+        contentAlignment = Alignment.Center,
+    ) {
+        Box(Modifier.offset(x = offset.dp), contentAlignment = Alignment.Center) {
+            if (state == NodeState.CURRENT) Pulse(colors.primary)
+            val (fill, content, border) = when (state) {
+                NodeState.DONE -> Triple(palette.accent.copy(alpha = 0.16f), palette.accent, palette.accent.copy(alpha = 0.6f))
+                NodeState.CURRENT -> Triple(colors.primary, colors.onPrimary, colors.primary)
+                NodeState.LOCKED -> Triple(Color.Transparent, palette.muted, colors.outline)
             }
-            Surface(
-                shape = CircleShape,
-                color = background,
-                contentColor = content,
-                modifier = Modifier
-                    .size(if (state == NodeState.CURRENT) 76.dp else 64.dp)
-                    .then(ring)
+            Box(
+                Modifier
+                    .size(diameter)
+                    .background(fill, CircleShape)
+                    .border(2.dp, border, CircleShape)
                     .clickable(enabled = state != NodeState.LOCKED, role = Role.Button, onClick = onClick)
                     .semantics { contentDescription = "Lección ${node.number} de $unitTitle: $label" },
+                contentAlignment = Alignment.Center,
             ) {
-                Box(contentAlignment = Alignment.Center) {
-                    Text(if (state == NodeState.DONE) "✓" else "${node.number}", fontSize = 24.sp, fontWeight = FontWeight.Bold)
-                }
+                Text(
+                    if (state == NodeState.DONE) "✓" else "${node.number}",
+                    color = content,
+                    fontSize = if (state == NodeState.CURRENT) 22.sp else 18.sp,
+                    fontWeight = FontWeight.SemiBold,
+                )
             }
         }
     }
+}
+
+/** Halo que late despacio alrededor de la lección que toca (quieto si el sistema desactiva las animaciones). */
+@Composable
+private fun Pulse(color: Color) {
+    val transition = rememberInfiniteTransition(label = "pulso")
+    val scale by transition.animateFloat(1f, 1.28f, infiniteRepeatable(tween(1400), RepeatMode.Reverse), label = "escala")
+    val alpha by transition.animateFloat(0.28f, 0f, infiniteRepeatable(tween(1400), RepeatMode.Reverse), label = "alfa")
+    Box(
+        Modifier
+            .size(CURRENT_NODE)
+            .scale(scale)
+            .background(color.copy(alpha = alpha), CircleShape),
+    )
 }
 
 @Composable
