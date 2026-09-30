@@ -8,6 +8,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy import delete, select, update
 from sqlalchemy.exc import IntegrityError
 
+from app import activity
 from app.config import get_settings
 from app.deps import CurrentUser, DbSession
 from app.mailer import send_email
@@ -71,6 +72,9 @@ def login(
     if not verify_password(form.password, user.password_hash if user else None):
         login_failures.record(email)
         record(Event.LOGIN_FAILED, request, account=account, known=user is not None)
+        if user is not None:  # el titular lo verá en «Actividad de la cuenta» (ADR-0025)
+            activity.log(db, user.id, "login_failed", request)
+            db.commit()
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Email o contraseña incorrectos",
@@ -79,7 +83,8 @@ def login(
     login_failures.clear(email)
     if needs_rehash(user.password_hash):  # hashes creados con parámetros anteriores
         user.password_hash = hash_password(form.password)
-        db.commit()
+    activity.log(db, user.id, "login", request)
+    db.commit()
     record(Event.LOGIN_OK, request, user=user.id)
     return Token(access_token=create_access_token(user.id, user.token_version))
 
@@ -88,6 +93,7 @@ def login(
 def logout_everywhere(user: CurrentUser, request: Request, db: DbSession) -> Response:
     """Cierra la sesión en todos los dispositivos: los tokens emitidos dejan de valer."""
     user.token_version += 1
+    activity.log(db, user.id, "logout_all", request)
     db.commit()
     record(Event.LOGOUT_ALL, request, user=user.id)
     return Response(status_code=status.HTTP_204_NO_CONTENT)
@@ -163,6 +169,7 @@ def confirm_password_reset(data: PasswordResetConfirm, request: Request, db: DbS
         )
     user.password_hash = hash_password(data.new_password)
     user.token_version += 1  # cierra todas las sesiones abiertas
+    activity.log(db, user.id, "password_reset", request)
     db.commit()
     # Quien controla el email recupera el acceso aunque un atacante haya bloqueado la cuenta
     # a base de fallos (abuso del bloqueo, T1531 Account Access Removal)

@@ -49,7 +49,10 @@ export function cleanProgress(value) {
   if ("flags" in value) clean.flags = isObject(value.flags) ? value.flags : {};
   if ("plan" in value) {
     const date = value.plan?.examDate;
+    const goal = value.plan?.dailyGoal;
     clean.plan = { examDate: typeof date === "string" && DAY.test(date) ? date : null };
+    // Meta diaria de «Mi cuenta» (ADR-0025): solo en el plan del PCAP, que comparten todos los cursos
+    if (Number.isInteger(goal) && goal >= 1 && goal <= 200) clean.plan.dailyGoal = goal;
   }
   return clean;
 }

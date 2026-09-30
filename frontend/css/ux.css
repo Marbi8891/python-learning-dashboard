@@ -253,3 +253,27 @@
   font-weight: 700; font-size: 22px; letter-spacing: 0.02em;
 }
 .account-card__meta { color: var(--color-text-muted); margin: var(--space-2) 0; overflow-wrap: anywhere; }
+
+/* ---- Mi cuenta ampliada (ADR-0025) ---- */
+.section-subtitle { font-size: 1.05rem; margin: var(--space-4) 0 var(--space-2); }
+.goal { display: grid; gap: var(--space-2); max-width: 32rem; margin-bottom: var(--space-4); }
+.goal label { display: grid; gap: var(--space-1); font-weight: 600; }
+.goal select,
+.history input[type="date"] {
+  padding: 6px 8px; border: 1px solid var(--color-border); border-radius: var(--radius-sm);
+  background: var(--color-input-bg); color: var(--color-text); font: inherit;
+}
+.course-progress-list { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--space-3);
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr)); }
+.course-progress { border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: var(--space-3); }
+.course-progress__title { margin: 0; font-weight: 700; }
+.course-progress__title .account-card__meta { display: block; font-weight: 400; margin: 0; }
+.account-form { display: grid; align-content: start; gap: var(--space-2); }
+.account-form input { width: 100%; }
+.form-message:empty { display: none; }
+.form-message { margin: 0; color: var(--color-danger-strong); }
+.form-message[data-ok="true"] { color: var(--color-text); }
+.activity-list { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--space-2); }
+.activity-list li { display: grid; border-left: 3px solid var(--color-border); padding-left: var(--space-3); }
+.activity-list li[data-kind="login_failed"] { border-left-color: var(--color-danger); }
+.activity-list .account-card__meta { margin: 0; }

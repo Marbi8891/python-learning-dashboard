@@ -148,3 +148,17 @@ class CourseState(Base):
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
     )
+
+
+class AccountEvent(Base):
+    """Actividad de seguridad que el usuario ve en «Mi cuenta» (ADR-0025): inicios de sesión,
+    intentos fallidos, cambios de contraseña… Solo el tipo, la fecha y el dispositivo aproximado
+    («Android · Chrome»), nunca la IP. Se guardan los últimos eventos de cada usuario."""
+
+    __tablename__ = "account_events"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    kind: Mapped[str] = mapped_column(String(30))
+    device: Mapped[str] = mapped_column(String(60), default="")
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())

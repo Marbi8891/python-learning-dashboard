@@ -100,6 +100,12 @@ export function clearLocalData() {
   }
 }
 
+/** Datos del usuario cambiados desde «Mi cuenta» (nombre): repinta sin volver a sincronizar. */
+export function updateUser(user) {
+  state.user = user;
+  emit({ type: "profile" });
+}
+
 export function endSession() {
   setToken(null);
   state.user = null;

@@ -32,14 +32,14 @@ import {
 } from "./game.js";
 import { renderHome } from "./home.js";
 import { escapeHtml, renderMarkdown, safeUrl } from "./markdown.js";
-import { renderCertificate, saveCertificateName } from "./certificate.js";
+import { renderCertificate, renderCourseCertificate, saveCertificateName } from "./certificate.js";
 import { openPcap, refreshPcap } from "./pcap.js";
 import { initCourseSync } from "./course-store.js";
 import { openDaw, refreshDaw } from "./daw.js";
 import { initPcapSync } from "./pcap-sync.js";
 import { initPrefs } from "./prefs.js";
 import { badgesHtml, renderProfile } from "./profile.js";
-import { renderPrivate } from "./private.js";
+import { initPrivate, renderPrivate } from "./private.js";
 import { setQuizLesson } from "./quiz.js";
 import { recordAttempt, restoreSession, setCompleted, state, subscribe } from "./store.js";
 
@@ -372,7 +372,16 @@ const VIEWS = {
   home: { element: "#home-view", title: "Python Learning Dashboard", focus: "#home-title", render: () => renderHome(content, defaultSlug()) },
   profile: { element: "#profile-view", title: "Mi aprendizaje · Python Learning Dashboard", focus: "#profile-title", render: () => renderProfile(content) },
   private: { element: "#private-view", title: "Mi cuenta · Python Learning Dashboard", focus: "#private-title", render: () => renderPrivate(content, apiEnabled) },
-  certificate: { element: "#certificate-view", title: "Certificado · Python Learning Dashboard", focus: "#certificate-title", render: () => renderCertificate(content) },
+  certificate: {
+    element: "#certificate-view",
+    title: "Certificado · Python Learning Dashboard",
+    focus: "#certificate-title",
+    // #/certificado (PCAP) o #/certificado/<curso> (cursos de DAW, ADR-0025)
+    render: () =>
+      location.hash.startsWith(`${CERTIFICATE_ROUTE}/`)
+        ? renderCourseCertificate(location.hash.slice(CERTIFICATE_ROUTE.length + 1))
+        : renderCertificate(content),
+  },
   // La zona PCAP se pinta sola (openPcap): tiene simulacros en curso que no se deben repintar
   pcap: { element: "#pcap-view", title: "Examen PCAP · Python Learning Dashboard", focus: null, render: null },
   // Los cursos de DAW también se pintan solos (openDaw): cargan su banco y tienen tandas en curso
@@ -563,7 +572,7 @@ function navigate({ moveFocus = true } = {}) {
     showPage("private", { moveFocus });
     return;
   }
-  if (location.hash === CERTIFICATE_ROUTE) {
+  if (location.hash === CERTIFICATE_ROUTE || location.hash.startsWith(`${CERTIFICATE_ROUTE}/`)) {
     showPage("certificate", { moveFocus });
     return;
   }
@@ -680,6 +689,7 @@ async function init() {
   initConsole();
   initAssistant();
   initAccount({ toast: showToast });
+  initPrivate({ toast: showToast, refresh: refreshProgressViews });
   initPrefs();
 
   try {

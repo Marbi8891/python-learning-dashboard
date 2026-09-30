@@ -18,6 +18,22 @@ export const DAW_COURSES = [
 ];
 
 const key = (id) => `pld:course:${id}`;
+
+const banks = new Map();
+
+/** Banco de preguntas de un curso (se descarga una vez por visita). */
+export function loadCourseBank(id) {
+  if (!banks.has(id)) {
+    const url = id === "pcap" ? "data/pcap.json" : `data/courses/${id}/bank.json`;
+    const loading = fetch(url).then((response) => {
+      if (!response.ok) throw new Error(`No se pudo cargar ${url} (HTTP ${response.status})`);
+      return response.json();
+    });
+    loading.catch(() => banks.delete(id)); // si falla, se reintenta la próxima vez
+    banks.set(id, loading);
+  }
+  return banks.get(id);
+}
 const INTERVAL_DAYS = [0, 1, 3, 7, 14, 30]; // igual que el PCAP y la app
 const MAX_BOX = INTERVAL_DAYS.length - 1;
 const HISTORY = 5;

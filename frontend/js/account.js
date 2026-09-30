@@ -130,6 +130,7 @@ export function initAccount({ toast }) {
   renderAccountButton();
   setupPasswordRecovery();
   subscribe((change) => {
+    if (change.type === "profile") renderAccountButton(); // nombre cambiado en «Mi cuenta»
     if (change.type !== "user") return;
     renderAccountButton();
     if (change.expired) showToast("Tu sesión ha caducado. Vuelve a iniciar sesión.");

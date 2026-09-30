@@ -189,6 +189,25 @@ class PcapStateOut(BaseModel):
 # ---------- Exportación de datos (RGPD, derecho de acceso y portabilidad) ----------
 
 
+class ProfileUpdate(BaseModel):
+    display_name: str = Field(min_length=1, max_length=80)
+
+
+class PasswordChange(BaseModel):
+    current_password: str = Field(max_length=128)
+    new_password: Password
+
+
+class ActivityOut(BaseModel):
+    """Un evento de «Actividad de la cuenta» (ADR-0025)."""
+
+    model_config = ConfigDict(from_attributes=True)
+
+    kind: str
+    device: str
+    created_at: datetime
+
+
 class UserExport(BaseModel):
     user: UserOut
     privacy_accepted_at: datetime | None
@@ -196,4 +215,5 @@ class UserExport(BaseModel):
     attempts: list[dict]
     pcap: dict | None = None
     courses: dict[str, dict] = {}
+    activity: list[ActivityOut] = []
     exported_at: datetime

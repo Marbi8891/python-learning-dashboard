@@ -5,6 +5,11 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
 ## [Unreleased]
 
 ### Añadido
+- **«Mi cuenta» ampliada** (ADR-0025):
+  - **plan de estudio:** fecha de examen de cada curso con los días que faltan, repaso pendiente de hoy y meta diaria de preguntas;
+  - **progreso de todos los cursos** (web y app): dominio, tema más flojo con un enlace para practicarlo e historial de simulacros;
+  - **logros y certificados**, con un certificado nuevo para cada curso de DAW (#/certificado/<curso>);
+  - **perfil y seguridad:** cambiar el nombre y la contraseña (cierra las demás sesiones y mantiene esta) y ver la actividad reciente de la cuenta con el dispositivo aproximado, sin guardar la IP.
 - **App Android 0.12.0: simulacro de examen** (ADR-0024):
   - PCAP con el reparto oficial (40 preguntas, 65 minutos);
   - cursos DAW con 30 preguntas según el peso de cada bloque (45 minutos, aprobado con un 50 %), incluido el de Programación en Python;
