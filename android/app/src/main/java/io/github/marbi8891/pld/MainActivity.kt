@@ -166,7 +166,15 @@ private fun Tabs(model: AppModel, tab: Tab, onTab: (Tab) -> Unit, open: (Screen)
                     onMock = { open(Screen.Mock) },
                     modifier = modifier,
                 )
-                Tab.PROFILE -> ProfileScreen(model, modifier = modifier)
+                Tab.PROFILE -> ProfileScreen(
+                    model,
+                    // Practicar el tema flojo de otro curso: se cambia a ese curso y se abre la tanda
+                    onPractice = { courseId, block ->
+                        model.selectCourse(courseId)
+                        open(Screen.Practice(block))
+                    },
+                    modifier = modifier,
+                )
             }
         }
     }

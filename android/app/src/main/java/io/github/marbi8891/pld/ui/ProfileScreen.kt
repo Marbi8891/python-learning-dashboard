@@ -33,9 +33,9 @@ import java.time.LocalDate
 import java.time.format.TextStyle
 import java.util.Locale
 
-/** Pestaña «Perfil»: cuenta y sincronización, racha, XP, últimos 7 días, meta diaria y avance en la ruta. */
+/** Pestaña «Perfil» («Mi cuenta», ADR-0027): cuenta, plan, progreso de todos los cursos, racha, XP, meta, simulacros, certificados, logros y seguridad. */
 @Composable
-fun ProfileScreen(model: AppModel, modifier: Modifier = Modifier) {
+fun ProfileScreen(model: AppModel, onPractice: (String, String) -> Unit, modifier: Modifier = Modifier) {
     val revision = model.revision
     val app = model.pcap.app
     val today = LocalDate.now()
@@ -44,6 +44,7 @@ fun ProfileScreen(model: AppModel, modifier: Modifier = Modifier) {
     val doneNodes = remember(revision) { model.units.flatMap { it.nodes }.count { it.id in app.done } }
     val readiness = remember(revision) { model.pcap.status(model.bank).score }
     val palette = LocalPalette.current
+    val overviews = rememberOverviews(model)
 
     LazyColumn(
         modifier = modifier.fillMaxSize(),
@@ -51,9 +52,12 @@ fun ProfileScreen(model: AppModel, modifier: Modifier = Modifier) {
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         item {
-            Text("Tu progreso", style = MaterialTheme.typography.headlineMedium, color = MaterialTheme.colorScheme.onBackground)
+            Text("Mi cuenta", style = MaterialTheme.typography.headlineMedium, color = MaterialTheme.colorScheme.onBackground)
         }
         item { AccountPanel(model) }
+        // «Mi cuenta» como en la web (ADR-0027)
+        item { StudyPlanPanel(model, overviews) }
+        item { CoursesProgressPanel(overviews, onPractice) }
         item {
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 BigStat("🔥 ${app.streak(today)}", "días de racha", Modifier.weight(1f))
@@ -102,6 +106,9 @@ fun ProfileScreen(model: AppModel, modifier: Modifier = Modifier) {
                 }
             }
         }
+        item { ExamHistoryPanel(model) }
+        item { AchievementsPanel(model, overviews) }
+        if (model.session != null) item { SecurityPanel(model) }
     }
 }
 

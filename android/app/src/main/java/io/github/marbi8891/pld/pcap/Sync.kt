@@ -24,6 +24,22 @@ fun interface Http {
 /** Error que se puede enseñar tal cual. [code] 0 = sin conexión; 401 = sesión caducada. */
 class ApiException(val code: Int, message: String) : Exception(message)
 
+/** Un evento de «Actividad de la cuenta» (ADR-0025): tipo, fecha ISO y dispositivo aproximado. */
+data class ActivityItem(val kind: String, val createdAt: String, val device: String) {
+    val label: String get() = LABELS[kind] ?: kind
+
+    companion object {
+        val LABELS = mapOf(
+            "login" to "Inicio de sesión",
+            "login_failed" to "Intento con contraseña incorrecta",
+            "password_changed" to "Contraseña cambiada",
+            "password_reset" to "Contraseña restablecida por email",
+            "logout_all" to "Sesión cerrada en todos los dispositivos",
+            "name_changed" to "Nombre cambiado",
+        )
+    }
+}
+
 /** Sesión guardada en el móvil: el token caduca en 1 hora (el servidor no da tokens de refresco). */
 data class Session(val token: String, val email: String, val name: String)
 
@@ -45,6 +61,37 @@ class AccountApi(baseUrl: String, private val http: Http) {
         call("PUT", path(course), token, "application/json", JSONObject().put("data", data).toString())
     }
 
+    /* ---------- Perfil y seguridad (ADR-0027) ---------- */
+
+    /** Cambia el nombre visible. Devuelve el nombre guardado. */
+    fun rename(token: String, name: String): String =
+        call("PATCH", "/api/users/me", token, "application/json", JSONObject().put("display_name", name).toString())
+            .getString("display_name")
+
+    /** Cambia la contraseña. El servidor cierra las demás sesiones y devuelve un token nuevo para esta. */
+    fun changePassword(token: String, current: String, new: String): String {
+        val body = JSONObject().put("current_password", current).put("new_password", new).toString()
+        return call("POST", "/api/users/me/password", token, "application/json", body).getString("access_token")
+    }
+
+    fun activity(token: String): List<ActivityItem> {
+        val list = callArray("/api/users/me/activity", token)
+        return (0 until list.length()).map { i ->
+            val e = list.getJSONObject(i)
+            ActivityItem(e.getString("kind"), e.getString("created_at"), e.optString("device"))
+        }
+    }
+
+    private fun callArray(path: String, token: String): JSONArray {
+        val response = try {
+            http.send("GET", base + path, token, null, null)
+        } catch (error: IOException) {
+            throw ApiException(0, OFFLINE)
+        }
+        if (response.code in 200..299) return runCatching { JSONArray(response.body) }.getOrElse { JSONArray() }
+        throw ApiException(response.code, message(response, login = false))
+    }
+
     private fun path(course: String) = if (course == PCAP) "/api/pcap-state" else "/api/course-state/$course"
 
     private fun call(
@@ -58,7 +105,7 @@ class AccountApi(baseUrl: String, private val http: Http) {
         val response = try {
             http.send(method, base + path, token, contentType, body)
         } catch (error: IOException) {
-            throw ApiException(0, "No hay conexión con el servidor. Comprueba internet y vuelve a probar.")
+            throw ApiException(0, OFFLINE)
         }
         if (response.code in 200..299) return runCatching { JSONObject(response.body) }.getOrElse { JSONObject() }
         throw ApiException(response.code, message(response, login))
@@ -77,6 +124,7 @@ class AccountApi(baseUrl: String, private val http: Http) {
 
     companion object {
         const val PCAP = "pcap"
+        private const val OFFLINE = "No hay conexión con el servidor. Comprueba internet y vuelve a probar."
 
         private fun enc(value: String): String = URLEncoder.encode(value, "UTF-8")
     }

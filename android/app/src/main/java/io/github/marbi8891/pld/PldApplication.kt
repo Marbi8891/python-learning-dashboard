@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import io.github.marbi8891.pld.pcap.AccountApi
+import io.github.marbi8891.pld.pcap.ActivityItem
 import io.github.marbi8891.pld.pcap.ApiException
 import io.github.marbi8891.pld.pcap.Bank
 import io.github.marbi8891.pld.pcap.Course
@@ -245,6 +246,42 @@ class AppModel(context: Context) {
             if (error.code == 401) logout(error.message.orEmpty()) else syncMessage = error.message.orEmpty()
         } finally {
             syncing = false
+        }
+    }
+
+    /* ---------- «Mi cuenta» en la app (ADR-0027) ---------- */
+
+    /** Fecha del examen de un curso («AAAA-MM-DD» o null). Se sincroniza como en la web. */
+    fun setExamDate(courseId: String, date: String?) {
+        val course = courses.first { it.id == courseId }
+        course.state.examDate = date
+        saveAll()
+        revision++
+    }
+
+    /** Cambia el nombre en la cuenta. Lanza [ApiException] con un mensaje para enseñar. */
+    suspend fun rename(name: String) {
+        val current = session ?: return
+        val saved = withContext(Dispatchers.IO) { api.rename(current.token, name.trim()) }
+        sessionPrefs.edit().putString(KEY_NAME, saved).apply()
+        session = current.copy(name = saved)
+    }
+
+    /** Cambia la contraseña: las demás sesiones se cierran y esta sigue con el token nuevo. */
+    suspend fun changePassword(currentPassword: String, newPassword: String) {
+        val current = session ?: return
+        val token = withContext(Dispatchers.IO) { api.changePassword(current.token, currentPassword, newPassword) }
+        sessionPrefs.edit().putString(KEY_TOKEN, token).apply()
+        session = current.copy(token = token)
+    }
+
+    suspend fun activity(): List<ActivityItem> {
+        val current = session ?: return emptyList()
+        return try {
+            withContext(Dispatchers.IO) { api.activity(current.token) }
+        } catch (error: ApiException) {
+            if (error.code == 401) logout(error.message.orEmpty())
+            throw error
         }
     }
 

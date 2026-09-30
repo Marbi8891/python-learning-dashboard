@@ -10,6 +10,11 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
   - el progreso de todos los cursos se junta con el de la web sin perder nada, al abrir la app, al salir y con «Sincronizar ahora»;
   - la contraseña no se guarda y la sesión no va en las copias de seguridad del móvil;
   - la app sigue funcionando entera sin conexión y sin cuenta.
+- **App Android 0.13.0: «Mi cuenta» como en la web** (ADR-0027). En la pestaña Perfil:
+  - plan de estudio con la fecha de cada examen (sincronizada con la web) y el repaso de hoy;
+  - progreso de todos los cursos con el tema más flojo y un botón para practicarlo;
+  - historial de simulacros, certificados (se abren en la web) y 8 logros;
+  - cambiar el nombre y la contraseña sin cerrar la sesión del móvil, y ver la actividad reciente de la cuenta.
 - **«Mi cuenta» ampliada** (ADR-0025):
   - **plan de estudio:** fecha de examen de cada curso con los días que faltan, repaso pendiente de hoy y meta diaria de preguntas;
   - **progreso de todos los cursos** (web y app): dominio, tema más flojo con un enlace para practicarlo e historial de simulacros;
