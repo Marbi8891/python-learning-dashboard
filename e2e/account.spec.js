@@ -41,6 +41,8 @@ test("registro, sincronización del progreso local, cierre e inicio de sesión",
 
   await page.locator("#account-button").click();
   await dialog(page).getByRole("button", { name: "Cerrar sesión" }).click();
+  // Cerrar sesión borra los datos del navegador y recarga (ADR-0022): el aviso sale ya recargada
+  await expect(page.locator("#toast")).toContainText("Sesión cerrada");
   await expect(page.locator("#account-label")).toHaveText("Iniciar sesión");
 
   await page.evaluate(() => localStorage.removeItem("pld:completed")); // otro dispositivo
