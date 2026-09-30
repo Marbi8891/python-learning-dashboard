@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Android 12 y posteriores: el progreso viaja en las copias y al cambiar de móvil; la sesión, no (ADR-0026). -->
+<data-extraction-rules>
+    <cloud-backup>
+        <exclude domain="sharedpref" path="pld-session.xml" />
+    </cloud-backup>
+    <device-transfer>
+        <exclude domain="sharedpref" path="pld-session.xml" />
+    </device-transfer>
+</data-extraction-rules>

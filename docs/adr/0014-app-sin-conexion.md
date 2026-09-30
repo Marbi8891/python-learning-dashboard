@@ -1,6 +1,6 @@
 # ADR-0014: La app Android funciona entera sin conexión
 
-- **Estado:** Aceptada
+- **Estado:** Aceptada. El permiso de internet lo revisa [ADR-0026](0026-cuenta-y-sincronizacion-en-la-app.md): se añade solo para la cuenta, que es opcional
 - **Fecha:** 2026-09-27
 
 ## Contexto

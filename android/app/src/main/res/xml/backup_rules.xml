@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copias de seguridad hasta Android 11: el progreso sí, la sesión (token) no (ADR-0026). -->
+<full-backup-content>
+    <exclude domain="sharedpref" path="pld-session.xml" />
+</full-backup-content>

@@ -33,7 +33,7 @@ import java.time.LocalDate
 import java.time.format.TextStyle
 import java.util.Locale
 
-/** Pestaña «Perfil»: racha, XP, últimos 7 días, meta diaria y avance en la ruta. */
+/** Pestaña «Perfil»: cuenta y sincronización, racha, XP, últimos 7 días, meta diaria y avance en la ruta. */
 @Composable
 fun ProfileScreen(model: AppModel, modifier: Modifier = Modifier) {
     val revision = model.revision
@@ -53,6 +53,7 @@ fun ProfileScreen(model: AppModel, modifier: Modifier = Modifier) {
         item {
             Text("Tu progreso", style = MaterialTheme.typography.headlineMedium, color = MaterialTheme.colorScheme.onBackground)
         }
+        item { AccountPanel(model) }
         item {
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 BigStat("🔥 ${app.streak(today)}", "días de racha", Modifier.weight(1f))

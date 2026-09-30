@@ -31,6 +31,7 @@ _SYSTEMS = (
     ("linux", "Linux"),
 )
 _BROWSERS = (
+    ("pld-app", "App"),  # la app Android del proyecto (ADR-0026)
     ("edg/", "Edge"),
     ("opr/", "Opera"),
     ("firefox", "Firefox"),

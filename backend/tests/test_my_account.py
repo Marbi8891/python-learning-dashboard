@@ -113,4 +113,5 @@ def test_device_names():
     assert device(ua("Mozilla/5.0 (iPhone; CPU iPhone OS 18) Safari/605")) == "iPhone · Safari"
     assert device(ua("Mozilla/5.0 (Windows NT 10.0) Chrome/140 Edg/140")) == "Windows · Edge"
     assert device(ua("okhttp/4.12.0")) == "App Android"
+    assert device(ua("PLD-App/0.13.0 (Android)")) == "Android · App"
     assert device(None) == "Dispositivo desconocido"

@@ -6,6 +6,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import io.github.marbi8891.pld.pcap.AccountApi
+import io.github.marbi8891.pld.pcap.ApiException
 import io.github.marbi8891.pld.pcap.Bank
 import io.github.marbi8891.pld.pcap.Course
 import io.github.marbi8891.pld.pcap.DungeonRun
@@ -16,6 +18,15 @@ import io.github.marbi8891.pld.pcap.PathNode
 import io.github.marbi8891.pld.pcap.PathUnit
 import io.github.marbi8891.pld.pcap.PcapState
 import io.github.marbi8891.pld.pcap.Question
+import io.github.marbi8891.pld.pcap.Session
+import io.github.marbi8891.pld.pcap.Sync
+import io.github.marbi8891.pld.pcap.UrlConnectionHttp
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class PldApplication : Application() {
     val model: AppModel by lazy { AppModel(this) }
@@ -165,8 +176,97 @@ class AppModel(context: Context) {
         )
     }
 
+    /* ---------- Cuenta y sincronización (ADR-0026) ---------- */
+
+    // La sesión va en su propio archivo, excluido de las copias de seguridad (res/xml/*backup*)
+    private val sessionPrefs = context.getSharedPreferences(SESSION_PREFS, Context.MODE_PRIVATE)
+    private val api = AccountApi(BuildConfig.API_URL, UrlConnectionHttp("PLD-App/${BuildConfig.VERSION_NAME} (Android)"))
+    private val scope = MainScope()
+
+    var session: Session? by mutableStateOf(readSession())
+        private set
+
+    /** Email de la última sesión, para no tener que escribirlo otra vez cuando caduca. */
+    val lastEmail: String get() = sessionPrefs.getString(KEY_EMAIL, "").orEmpty()
+
+    var syncing by mutableStateOf(false)
+        private set
+    var syncMessage by mutableStateOf("")
+        private set
+    var lastSync: String? by mutableStateOf(sessionPrefs.getString(KEY_LAST_SYNC, null))
+        private set
+
+    /** Inicia sesión y sincroniza. Lanza [ApiException] con un mensaje para enseñar. */
+    suspend fun login(email: String, password: String) {
+        val newSession = withContext(Dispatchers.IO) { api.login(email, password) }
+        sessionPrefs.edit()
+            .putString(KEY_TOKEN, newSession.token)
+            .putString(KEY_EMAIL, newSession.email)
+            .putString(KEY_NAME, newSession.name)
+            .apply()
+        session = newSession
+        sync()
+    }
+
+    /** Cierra la sesión en este móvil. El progreso se queda: es del móvil y ya está en la cuenta. */
+    fun logout(message: String = "") {
+        sessionPrefs.edit().remove(KEY_TOKEN).remove(KEY_NAME).apply()
+        session = null
+        syncMessage = message
+    }
+
+    /** Sincroniza sin esperar (al abrir y al salir de la app). Sin sesión no hace nada. */
+    fun syncInBackground() {
+        if (session != null) scope.launch { sync() }
+    }
+
+    /**
+     * Trae el estado de cada curso de la cuenta, lo fusiona con el del móvil sin perder nada y sube
+     * el resultado. La red va en segundo plano; la fusión, en el hilo principal, que es el único que
+     * toca el estado.
+     */
+    suspend fun sync() {
+        val current = session ?: return
+        if (syncing) return
+        syncing = true
+        syncMessage = "Sincronizando…"
+        try {
+            val remote = withContext(Dispatchers.IO) { courses.associate { it.id to api.pull(current.token, it.id) } }
+            val merged = courses.associate { c -> c.id to Sync.merge(c.state, remote.getValue(c.id), c.isPcap) }
+            courses.forEach { it.state.updateFlags(it.bank) }
+            saveAll()
+            revision++
+            withContext(Dispatchers.IO) { merged.forEach { (id, data) -> api.push(current.token, id, data) } }
+            val now = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM HH:mm"))
+            sessionPrefs.edit().putString(KEY_LAST_SYNC, now).apply()
+            lastSync = now
+            syncMessage = "Progreso sincronizado con tu cuenta."
+        } catch (error: ApiException) {
+            if (error.code == 401) logout(error.message.orEmpty()) else syncMessage = error.message.orEmpty()
+        } finally {
+            syncing = false
+        }
+    }
+
+    private fun readSession(): Session? {
+        val token = sessionPrefs.getString(KEY_TOKEN, null) ?: return null
+        return Session(token, sessionPrefs.getString(KEY_EMAIL, "").orEmpty(), sessionPrefs.getString(KEY_NAME, "").orEmpty())
+    }
+
+    /** Guarda el estado de todos los cursos (tras fusionar lo que llega de la cuenta). */
+    private fun saveAll() {
+        val edit = prefs.edit()
+        courses.forEach { edit.putString(it.key, it.state.toJson(withApp = it.isPcap).toString()) }
+        edit.apply()
+    }
+
     private companion object {
         const val KEY_COURSE = "course"
+        const val SESSION_PREFS = "pld-session"
+        const val KEY_TOKEN = "token"
+        const val KEY_EMAIL = "email"
+        const val KEY_NAME = "name"
+        const val KEY_LAST_SYNC = "lastSync"
     }
 }
 

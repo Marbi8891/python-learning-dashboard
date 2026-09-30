@@ -40,6 +40,9 @@ class PcapState {
     val srs: MutableMap<String, SrsItem> = linkedMapOf()
     var examDate: String? = null
 
+    /** Meta diaria de preguntas que se elige en «Mi cuenta» de la web (ADR-0025). La app la conserva. */
+    var dailyGoal: Int? = null
+
     /** Progreso propio de la app: ruta, XP diaria, meta y vidas (ADR-0012). */
     var app: AppProgress = AppProgress()
         private set
@@ -140,6 +143,7 @@ class PcapState {
             srs[id] = if (local != null && local.last >= item.last) local else item
         }
         if (examDate == null) examDate = remote.examDate
+        if (dailyGoal == null) dailyGoal = remote.dailyGoal
         app.merge(remote.app)
     }
 
@@ -174,7 +178,13 @@ class PcapState {
                 srs.forEach { (id, s) -> put(id, JSONObject().apply { put("box", s.box); put("due", s.due); put("last", s.last) }) }
             },
         )
-        put("plan", JSONObject().apply { put("examDate", examDate ?: JSONObject.NULL) })
+        put(
+            "plan",
+            JSONObject().apply {
+                put("examDate", examDate ?: JSONObject.NULL)
+                dailyGoal?.let { put("dailyGoal", it) }
+            },
+        )
         if (withApp) put("app", app.toJson())
     }
 
@@ -228,6 +238,7 @@ class PcapState {
                 }
             }
             state.examDate = root.optJSONObject("plan")?.optStringOrNull("examDate")
+            state.dailyGoal = root.optJSONObject("plan")?.optInt("dailyGoal", 0)?.takeIf { it in 1..200 }
             state.app = AppProgress.fromJson(root.optJSONObject("app"))
             return state
         }

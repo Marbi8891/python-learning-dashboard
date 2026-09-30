@@ -80,6 +80,17 @@ class MainActivity : ComponentActivity() {
             PldTheme { App(model) }
         }
     }
+
+    // Con sesión iniciada: se trae lo nuevo al abrir y se sube lo hecho al salir (ADR-0026)
+    override fun onStart() {
+        super.onStart()
+        (application as PldApplication).model.syncInBackground()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        (application as PldApplication).model.syncInBackground()
+    }
 }
 
 @Composable

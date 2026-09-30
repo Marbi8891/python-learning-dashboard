@@ -12,8 +12,15 @@ android {
         applicationId = "io.github.marbi8891.pld"
         minSdk = 26
         targetSdk = 36
-        versionCode = 14
-        versionName = "0.12.0"
+        versionCode = 15
+        versionName = "0.13.0"
+
+        // Servidor de la cuenta y web (ADR-0026). Se cambian sin tocar el código:
+        // ./gradlew assembleDebug -PpldApiUrl=https://otra-api.example -PpldWebUrl=https://... (solo HTTPS)
+        val apiUrl = (project.findProperty("pldApiUrl") as String?) ?: "https://pld-api.onrender.com"
+        val webUrl = (project.findProperty("pldWebUrl") as String?) ?: "https://marbi8891.github.io/python-learning-dashboard/"
+        buildConfigField("String", "API_URL", "\"$apiUrl\"")
+        buildConfigField("String", "WEB_URL", "\"$webUrl\"")
     }
 
     // Una sola fuente de datos: el banco de preguntas y las lecciones de la web (ADR-0011)
@@ -53,6 +60,7 @@ android {
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 
     testOptions {
