@@ -5,6 +5,10 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
 ## [Unreleased]
 
 ### Añadido
+- **App Android 0.15.0: la Ruta como un libro** (ADR-0029), que sustituye al camino de la 0.14.0:
+  - cada tema es una página que se pasa deslizando;
+  - arriba, el nombre del tema, con un desplegable de sus lecciones y otro con el índice de todos los temas;
+  - cada página abre con una entradilla de la teoría y un único botón para continuar.
 - **App Android 0.14.0: Ruta rediseñada, fluida y sin ruido visual** (ADR-0028):
   - un solo color de acento para la lección que toca;
   - una línea fina que une las lecciones y se colorea hasta donde has llegado;

@@ -1,6 +1,6 @@
 # ADR-0028: Rediseño de la Ruta: fluida y sin ruido visual
 
-- **Estado:** Aceptada e implementada (app 0.14.0)
+- **Estado:** Sustituida por [ADR-0029](0029-ruta-como-un-libro.md) (app 0.15.0)
 - **Fecha:** 2026-09-30
 - **Sustituye en lo visual a:** la pantalla de ruta de [ADR-0012](0012-app-estilo-duolingo.md). La lógica no cambia: las unidades, las lecciones, las vidas y el desbloqueo siguen igual.
 
