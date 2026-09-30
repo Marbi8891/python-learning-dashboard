@@ -1,6 +1,5 @@
 package io.github.marbi8891.pld.ui
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateFloatAsState
@@ -153,7 +152,8 @@ fun PathScreen(
             }
 
             // Solo cuando tu lección no se ve: vuelve a ella con un desplazamiento suave
-            AnimatedVisibility(
+            // Nombre completo: dentro de un Box que está en un Column, la versión «de Column» no se puede usar
+            androidx.compose.animation.AnimatedVisibility(
                 visible = !currentVisible,
                 enter = fadeIn() + slideInVertically { it / 2 },
                 exit = fadeOut() + slideOutVertically { it / 2 },
