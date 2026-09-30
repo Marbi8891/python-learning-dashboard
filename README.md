@@ -150,7 +150,7 @@ Usa los mismos datos que la web (`frontend/data/*.json`) y guarda el progreso en
 **Instalarla:** en GitHub → *Actions* → *Android* → la última ejecución → *Artifacts*:
 
 - `python-pcap-release`: `app-release.apk`, firmado con la clave del proyecto (ADR-0013). Es la versión para usar: las actualizaciones se instalan encima sin perder el progreso.
-- `python-pcap-apk`: `app-debug.apk`, solo para pruebas. Se instala aparte como "Python PCAP (debug)".
+- `python-pcap-apk`: `app-debug.apk`, solo en los pull requests. Se instala aparte como "Python PCAP (debug)", con su propio progreso, así que **no es para el móvil de uso diario** (ADR-0030).
 
 La firma de release necesita tres secretos en *Settings → Secrets and variables → Actions*: `PLD_KEYSTORE_BASE64`, `PLD_KEYSTORE_PASSWORD` y `PLD_KEY_ALIAS`. La clave (`.jks`) nunca va al repositorio.
 

@@ -1,7 +1,8 @@
 # App Android nativa (ADR-0011): tests del dominio, lint de Android y APK instalable.
-# APK de depuración: «Artifacts» → python-pcap-apk.
 # APK de release firmado (ADR-0013): «Artifacts» → python-pcap-release. Solo se genera si
 # existen los secretos PLD_KEYSTORE_BASE64, PLD_KEYSTORE_PASSWORD y PLD_KEY_ALIAS.
+# APK de depuración («Artifacts» → python-pcap-apk): solo cuando no hay release, es decir, en
+# los pull requests o sin secretos. Así en el móvil hay una sola app (ADR-0030).
 name: Android
 
 on:
@@ -52,8 +53,10 @@ jobs:
       - name: Lint de Android
         run: ./gradlew --no-daemon lintDebug
       - name: APK de depuración
+        if: env.HAS_SIGNING_KEY != 'true' || github.event_name == 'pull_request'
         run: ./gradlew --no-daemon assembleDebug
-      - uses: actions/upload-artifact@v7
+      - if: env.HAS_SIGNING_KEY != 'true' || github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v7
         with:
           name: python-pcap-apk
           path: android/app/build/outputs/apk/debug/app-debug.apk

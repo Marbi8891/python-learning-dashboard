@@ -4,6 +4,9 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
 
 ## [Unreleased]
 
+### Cambiado
+- **Una sola app en el móvil** (ADR-0030): la CI ya no publica el APK de depuración en `main`, solo el de release firmado. El de depuración queda para los pull requests. Pasos para llevar el progreso de «Python PCAP (debug)» a «Python PCAP» con la sincronización.
+
 ### Añadido
 - **App Android 0.15.0: la Ruta como un libro** (ADR-0029), que sustituye al camino de la 0.14.0:
   - cada tema es una página que se pasa deslizando;
