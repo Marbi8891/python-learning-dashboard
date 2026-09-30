@@ -40,9 +40,10 @@ En el móvil del autor hay dos iconos: «Python PCAP» (release) y «Python PCAP
 
 ## Consecuencias
 
-- **DONE:** el YAML del workflow es válido y las condiciones de los dos APK son complementarias: en cada ejecución se publica uno de los dos, nunca los dos.
+- **DONE:**
+  - el YAML del workflow es válido y las condiciones de los dos APK son complementarias: en cada ejecución se publica uno de los dos, nunca los dos;
+  - la ejecución 36771285540 en `main` (2026-09-30) terminó bien y solo publicó `python-pcap-release`.
 - **VERIFY:**
-  - la próxima ejecución en `main` solo publica `python-pcap-release`;
   - la app de depuración instalada es la 0.13.0 o posterior, que tiene «Tu cuenta» en Perfil (la versión se ve en Ajustes → Aplicaciones → «Python PCAP (debug)»);
   - tras sincronizar, el progreso aparece en la release antes de desinstalar la de depuración.
 - **NEEDS_HUMAN:** desinstalar «Python PCAP (debug)» lo hace el autor en el móvil.
