@@ -6,7 +6,7 @@ const isLocalhost = ["localhost", "127.0.0.1"].includes(location.hostname);
 export const API_URL = (config.apiUrl || (isLocalhost ? "http://127.0.0.1:8000" : "")).replace(/\/+$/, "");
 export const apiEnabled = Boolean(API_URL);
 
-const TOKEN_KEY = "pld:token";
+// Security by default: el token de acceso solo vive en memoria JavaScript.\n// No se persiste en localStorage/sessionStorage, porque cualquier XSS podría leerlo.\nlet accessToken = null;
 
 /** Despierta el servidor (el plan gratuito se duerme sin uso) y lee sus capacidades.
     Se lanza al cargar la página para que el alumno no espere al iniciar sesión. */
@@ -24,20 +24,11 @@ export class ApiError extends Error {
 }
 
 export function getToken() {
-  try {
-    return localStorage.getItem(TOKEN_KEY);
-  } catch {
-    return null;
-  }
+  return accessToken;
 }
 
 export function setToken(token) {
-  try {
-    if (token) localStorage.setItem(TOKEN_KEY, token);
-    else localStorage.removeItem(TOKEN_KEY);
-  } catch {
-    // Sin almacenamiento (modo privado): la sesión dura hasta recargar la página.
-  }
+  accessToken = typeof token === "string" && token.length > 0 ? token : null;
 }
 
 // Mensajes en español para los errores de validación (422) de la API
