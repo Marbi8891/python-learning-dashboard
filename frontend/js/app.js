@@ -462,9 +462,7 @@ async function onCheckResult(result, code) {
       "beforeend",
       '<div class="check__next"><strong>Ejercicio completado</strong><span>Todos los tests han pasado. +' +
         gained +
-        ' XP.</span><a class="btn btn--primary" href="#/leccion/' +
-        slug +
-        '#quiz">Continuar al quiz →</a></div>',
+        ' XP.</span><button class="btn btn--primary" type="button" data-action="open-quiz">Continuar al quiz →</button></div>',
     );
     showToast("¡Ejercicio superado! Lección completada.");
     celebrate();
@@ -503,6 +501,9 @@ function initActions() {
         break;
       case "load-starter":
         loadStarter();
+        break;
+      case "open-quiz":
+        openTab("quiz");
         break;
       case "check":
         checkCode({
