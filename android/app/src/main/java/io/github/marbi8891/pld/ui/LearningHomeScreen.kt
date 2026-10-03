@@ -54,6 +54,7 @@ fun AppModel.learningRecommendation(): LearningRecommendation? {
 fun LearningHomeScreen(
     model: AppModel,
     onStart: (String) -> Unit,
+    onTheoryHome: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val recommendation = remember(model.revision, model.course.id) { model.learningRecommendation() }
@@ -129,8 +130,8 @@ fun LearningHomeScreen(
                 }
             }
 
-            OutlinedButton(onClick = {}, modifier = Modifier.fillMaxWidth(), enabled = false) {
-                Text("La sesión se adapta a tus respuestas")
+            OutlinedButton(onClick = onTheoryHome, modifier = Modifier.fillMaxWidth()) {
+                Text("Estudiar teoría")
             }
         }
     }
