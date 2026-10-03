@@ -7,12 +7,14 @@ export const API_URL = (config.apiUrl || (isLocalhost ? "http://127.0.0.1:8000" 
 export const apiEnabled = Boolean(API_URL);
 export const API_V1_PREFIX = "/api/v1";
 
-// Security by default: el token de acceso solo vive en memoria JavaScript.\n// No se persiste en localStorage/sessionStorage, porque cualquier XSS podría leerlo.\nlet accessToken = null;
+// Security by default: el token de acceso solo vive en memoria JavaScript.
+// No se persiste en localStorage/sessionStorage, porque cualquier XSS podría leerlo.
+let accessToken = null;
 
 /** Despierta el servidor (el plan gratuito se duerme sin uso) y lee sus capacidades.
     Se lanza al cargar la página para que el alumno no espere al iniciar sesión. */
 export const serverInfo = apiEnabled
-  ? fetch(`${API_URL}/api/health`)
+  ? fetch(`${API_URL}${API_V1_PREFIX}/health`)
       .then((response) => response.json())
       .catch(() => null)
   : Promise.resolve(null);
