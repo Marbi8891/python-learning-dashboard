@@ -179,15 +179,5 @@ def health() -> dict[str, str | bool]:
     return {"status": "ok", "email": bool(get_settings().smtp_host)}
 
 
-@app.get("/api/v1", tags=["sistema"])
-def api_info() -> dict[str, str]:
-    return {
-        "name": "Python Learning Dashboard API",
-        "version": "v1",
-        "docs": "/docs",
-        "openapi": "/openapi.json",
-    }
-
-
 if get_settings().serve_frontend:
     mount_frontend(app, get_settings().frontend_dir)
