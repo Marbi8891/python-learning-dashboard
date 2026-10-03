@@ -159,6 +159,7 @@ private fun Tabs(model: AppModel, tab: Tab, onTab: (Tab) -> Unit, open: (Screen)
                 Tab.LEARN -> LearningHomeScreen(
                     model,
                     onStart = { open(Screen.LearningPractice(it)) },
+                    onTheoryHome = { open(Screen.TheoryHome) },
                     modifier = modifier,
                 )
                 Tab.PATH -> PathScreen(
