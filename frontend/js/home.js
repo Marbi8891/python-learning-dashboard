@@ -2,6 +2,7 @@
 
 import { courseTotals, formatDuration, lessonMinutes, stars } from "./course.js";
 import { game, levelInfo, streak } from "./game.js";
+import { pcap } from "./pcap-store.js";
 import { escapeHtml } from "./markdown.js";
 import { state } from "./store.js";
 
