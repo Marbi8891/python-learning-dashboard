@@ -32,6 +32,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 
+/** Sesión breve de práctica centrada en comprobar, explicar y volver a intentar. */
 data class LearningSessionState(
     val questions: List<Question>,
     val current: Question?,
