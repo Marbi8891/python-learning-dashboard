@@ -205,7 +205,10 @@
         </div>
 
         <label class="console__label" for="console-editor">Código Python</label>
-        <textarea class="console__editor" id="console-editor" rows="10" spellcheck="false" autocapitalize="off" autocomplete="off" aria-describedby="console-help"></textarea>
+        <div class="console__editor-shell">
+          <pre class="console__line-numbers" id="console-line-numbers" aria-hidden="true">1</pre>
+          <textarea class="console__editor" id="console-editor" rows="10" spellcheck="false" autocapitalize="off" autocomplete="off" aria-describedby="console-help"></textarea>
+        </div>
         <p class="console__warning" id="console-paste-warning" role="status" hidden>Ojo: lo que has pegado usa funciones del navegador o de la red, no solo Python. No ejecutes código que te hayan pasado si no entiendes qué hace, sobre todo si te lo mandan diciendo «pega esto aquí».</p>
         <p class="console__help" id="console-help"><kbd>Tab</kbd> inserta 4 espacios · <kbd>Esc</kbd> y después <kbd>Tab</kbd> para salir del editor · <kbd>Ctrl</kbd>+<kbd>Enter</kbd> ejecuta</p>
 
@@ -217,7 +220,8 @@
 
         <div class="console__actions">
           <button class="btn btn--success" id="console-run" type="button">▶ Ejecutar</button>
-          <button class="btn btn--ghost" id="console-example" type="button">Cargar ejemplo</button>
+          <button class="btn btn--ghost" id="console-example" type="button">Restablecer ejemplo</button>
+          <button class="btn btn--ghost" id="console-copy" type="button">Copiar código</button>
           <button class="btn btn--ghost" id="console-clear" type="button">Limpiar salida</button>
         </div>
 
