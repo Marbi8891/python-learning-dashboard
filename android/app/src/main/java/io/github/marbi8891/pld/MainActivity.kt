@@ -46,6 +46,7 @@ import io.github.marbi8891.pld.ui.PldTheme
 import io.github.marbi8891.pld.ui.PracticeScreen
 import io.github.marbi8891.pld.ui.ProfileScreen
 import io.github.marbi8891.pld.ui.RushScreen
+import io.github.marbi8891.pld.ui.TheoryHomeScreen
 import io.github.marbi8891.pld.ui.TheoryScreen
 
 /** Pantallas a pantalla completa por encima de las pestañas. Una pila propia basta (ADR-0011). */
@@ -53,6 +54,8 @@ sealed interface Screen {
     data class Practice(val block: String) : Screen
 
     data class LearningPractice(val questionId: String) : Screen
+
+    data object TheoryHome : Screen
 
     data class Lesson(val nodeId: String) : Screen
 
@@ -113,6 +116,7 @@ fun App(model: AppModel) {
         null -> Tabs(model, tab, onTab = { tab = it }, open = open)
         is Screen.Practice -> PracticeScreen(model, screen.block, onBack = back, onTheory = { open(Screen.Theory(it)) })
         is Screen.LearningPractice -> LearningPracticeScreen(model, screen.questionId, onBack = back)
+        Screen.TheoryHome -> TheoryHomeScreen(model, onOpen = { open(Screen.Theory(it)) }, onBack = back)
         is Screen.Lesson -> LessonScreen(
             model,
             model.node(screen.nodeId),
