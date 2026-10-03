@@ -138,6 +138,10 @@ class _BodyTooLarge(Exception):
 app.add_middleware(BodySizeLimit, max_bytes=get_settings().max_body_bytes)
 
 
+API_V1_PREFIX = "/api/v1"
+LEGACY_API_PREFIX = "/api"
+
+# API pública versionada. Es la superficie que debe consumir el frontend y cualquier cliente nuevo.
 for router in (
     lessons.router,
     auth.router,
@@ -147,13 +151,42 @@ for router in (
     pcap.router,
     course_state.router,
 ):
-    app.include_router(router)
+    app.include_router(router, prefix=API_V1_PREFIX)
+
+# Compatibilidad con clientes existentes (incluida la app Android). Estas rutas no aparecen
+# en OpenAPI y quedan marcadas como deprecated para no convertir la migración en un corte brusco.
+for router in (
+    lessons.router,
+    auth.router,
+    account.router,
+    progress.router,
+    attempts.router,
+    pcap.router,
+    course_state.router,
+):
+    app.include_router(
+        router,
+        prefix=LEGACY_API_PREFIX,
+        deprecated=True,
+        include_in_schema=False,
+    )
 
 
-@app.get("/api/health", tags=["sistema"])
+@app.get("/api/v1/health", tags=["sistema"])
+@app.get("/api/health", tags=["sistema"], include_in_schema=False)
 def health() -> dict[str, str | bool]:
     # "email": el frontend solo ofrece la recuperación por email si hay SMTP configurado
     return {"status": "ok", "email": bool(get_settings().smtp_host)}
+
+
+@app.get("/api/v1", tags=["sistema"])
+def api_info() -> dict[str, str]:
+    return {
+        "name": "Python Learning Dashboard API",
+        "version": "v1",
+        "docs": "/docs",
+        "openapi": "/openapi.json",
+    }
 
 
 if get_settings().serve_frontend:
