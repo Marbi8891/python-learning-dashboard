@@ -116,51 +116,64 @@ export function renderHome(content, nextSlug) {
   const done = state.completed.size;
   const next = content.lessons.get(nextSlug);
   const greeting = state.user ? `Hola, ${escapeHtml(state.user.display_name)} · ` : "";
+  const answered = Object.keys(pcap.answers).length;
+  const exams = pcap.exams.length;
+  const lastExam = pcap.exams.at(-1);
+  const bestExam = exams ? Math.max(...pcap.exams.map((exam) => exam.score)) : null;
+  const moduleDone = next.module.lessons.filter((lesson) => state.completed.has(lesson.slug)).length;
+  const modulePercent = Math.round((moduleDone / next.module.lessons.length) * 100);
 
   return `
     <header class="course-hero">
-      <p class="eyebrow">${greeting}Curso completo · ${escapeHtml(course.level)}</p>
+      <p class="eyebrow">${greeting}Ruta Python · ${escapeHtml(course.level)}</p>
       <h1 class="course-hero__title" id="home-title" tabindex="-1">${titleHtml(course.title)}</h1>
       <p class="course-hero__lead">${escapeHtml(course.tagline)}</p>
-      <div class="course-hero__cta">${renderCta(content, next, done, totals.lessons)}</div>
-      <dl class="course-facts">
-        <div><dt>Nivel</dt><dd>${escapeHtml(course.level)}</dd></div>
-        <div><dt>Duración estimada</dt><dd>≈ ${formatDuration(totals.minutes)}</dd></div>
-        <div><dt>Lecciones</dt><dd>${totals.lessons}</dd></div>
-        <div><dt>Examen</dt><dd>${escapeHtml(course.exam)}</dd></div>
-      </dl>
     </header>
 
-    ${renderProgress(done, totals.lessons)}
+    <section class="home-continue" aria-labelledby="continue-title">
+      <p class="home-continue__label">Continúa donde lo dejaste</p>
+      <h2 class="home-continue__title" id="continue-title">${escapeHtml(next.title)}</h2>
+      <p class="home-continue__meta">${escapeHtml(next.module.title)} · Lección ${next.index + 1} de ${totals.lessons}</p>
+      <div class="home-continue__progress">
+        <div class="progress-bar" role="progressbar" aria-label="Progreso del módulo actual" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${modulePercent}"><span class="progress-bar__fill" style="--value: ${modulePercent}%"></span></div>
+        <strong>${modulePercent}%</strong>
+      </div>
+      <div class="home-continue__action"><a class="btn btn--primary btn--lg" href="#/leccion/${next.slug}">${done === totals.lessons ? "Repasar desde el principio" : done === 0 && game.read.length === 0 ? "Empezar primera lección" : "Continuar"} →</a></div>
+    </section>
 
-    <section class="course-section" aria-labelledby="home-outcomes-title">
-      <h2 class="section-title" id="home-outcomes-title">Lo que aprenderás</h2>
-      <ul class="outcomes">${course.outcomes.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
+    <div class="home-secondary-grid">
+      ${renderProgress(done, totals.lessons)}
+      <section class="home-panel home-pcap" aria-labelledby="home-pcap-title">
+        <div class="home-panel__head"><h2 class="home-panel__title" id="home-pcap-title">Preparación PCAP</h2><a class="home-panel__meta" href="#/pcap">Abrir PCAP →</a></div>
+        <dl class="home-pcap__stats">
+          <div><dt>Preguntas respondidas</dt><dd>${answered}</dd></div>
+          <div><dt>Simulacros</dt><dd>${exams}</dd></div>
+          <div><dt>Último simulacro</dt><dd>${lastExam ? `${lastExam.score} %` : "—"}</dd></div>
+          <div><dt>Mejor simulacro</dt><dd>${bestExam === null ? "—" : `${bestExam} %`}</dd></div>
+        </dl>
+        <a class="btn btn--secondary" href="#/pcap">${lastExam ? "Continuar preparación" : "Empezar preparación PCAP"}</a>
+      </section>
+    </div>
+
+    <section class="course-section" aria-labelledby="home-activity-title">
+      <div class="section-head"><h2 class="section-title" id="home-activity-title">Actividad reciente</h2><p class="section-head__meta">${done} lecciones completadas</p></div>
+      <ul class="home-activity">
+        ${game.read.slice(-4).reverse().map((slug) => { const lesson = content.lessons.get(slug); return lesson ? `<li><span>${escapeHtml(lesson.title)}</span><span class="home-activity__muted">Teoría revisada</span></li>` : ""; }).join("") || `<li><span>Aún no hay actividad</span><span class="home-activity__muted">Empieza una lección</span></li>`}
+      </ul>
     </section>
 
     <section class="course-section" aria-labelledby="home-syllabus-title">
-      <div class="section-head">
-        <h2 class="section-title" id="home-syllabus-title">Temario</h2>
-        <p class="section-head__meta">${content.modules.length} módulos · ${totals.lessons} lecciones · ≈ ${formatDuration(totals.minutes)} + ${formatDuration(totals.challengeMinutes)} de retos opcionales</p>
-      </div>
+      <div class="section-head"><h2 class="section-title" id="home-syllabus-title">Ruta Python</h2><p class="section-head__meta">${content.modules.length} módulos · ${totals.lessons} lecciones · ≈ ${formatDuration(totals.minutes)}</p></div>
       <div class="syllabus">${renderSyllabus(content, nextSlug)}</div>
     </section>
 
     <section class="course-section" aria-labelledby="home-how-title">
-      <h2 class="section-title" id="home-how-title">Cómo funciona cada lección</h2>
-      <ol class="how-list">
-        ${HOW.map(([title, text], i) => `<li class="how"><span class="how__num" aria-hidden="true">${pad(i + 1)}</span><h3>${title}</h3><p>${text}</p></li>`).join("")}
-      </ol>
+      <h2 class="section-title" id="home-how-title">Cómo funciona una lección</h2>
+      <ol class="how-list">${HOW.map(([title, text], i) => `<li class="how"><span class="how__num" aria-hidden="true">${pad(i + 1)}</span><h3>${title}</h3><p>${text}</p></li>`).join("")}</ol>
     </section>
 
     <section class="course-section course-columns" aria-label="Qué incluye y requisitos">
-      <div>
-        <h2 class="section-title">Incluye</h2>
-        <ul class="checklist">${INCLUDES.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
-      </div>
-      <div>
-        <h2 class="section-title">Requisitos</h2>
-        <ul class="checklist checklist--plain">${course.requirements.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
-      </div>
+      <div><h2 class="section-title">Incluye</h2><ul class="checklist">${INCLUDES.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul></div>
+      <div><h2 class="section-title">Requisitos</h2><ul class="checklist checklist--plain">${course.requirements.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul></div>
     </section>`;
 }
