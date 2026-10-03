@@ -49,6 +49,15 @@ function saveDraft() {
   }
 }
 
+function syncLineNumbers() {
+  const editor = $("#console-editor");
+  const gutter = $("#console-line-numbers");
+  if (!editor || !gutter) return;
+  const count = Math.max(1, editor.value.split("\n").length);
+  gutter.textContent = Array.from({ length: count }, (_, i) => i + 1).join("\n");
+  gutter.scrollTop = editor.scrollTop;
+}
+
 /** Explicación en español del error (la genera runner.py) con botón para ir a la línea. */
 export function renderHint(hint) {
   if (!hint) return "";
@@ -125,6 +134,7 @@ export function checkCode({ checks, button, box, onResult }) {
 export function setLesson(next) {
   lesson = next;
   $("#console-editor").value = readDraft(next.slug) ?? next.example_code;
+  syncLineNumbers();
   $("#console-stdin").value = next.example_stdin;
   $("#console-stdin-box").open = Boolean(next.example_stdin);
   $("#console-output").innerHTML = next.example_in_browser
@@ -134,6 +144,7 @@ export function setLesson(next) {
 
 export function loadExample() {
   $("#console-editor").value = lesson.example_code;
+  syncLineNumbers();
   $("#console-stdin").value = lesson.example_stdin;
   $("#console-stdin-box").open = Boolean(lesson.example_stdin);
   saveDraft();
@@ -144,6 +155,7 @@ export function loadStarter(kind = "exercise") {
   const source = kind === "challenge" ? lesson.challenge : lesson;
   const stdin = kind === "challenge" ? source.stdin : lesson.exercise_stdin;
   $("#console-editor").value = source.starter;
+  syncLineNumbers();
   $("#console-stdin").value = stdin ?? "";
   $("#console-stdin-box").open = Boolean(stdin);
   saveDraft();
@@ -180,7 +192,13 @@ export function initConsole() {
   editor.addEventListener("focus", () => {
     tabInsertsSpaces = true;
   });
-  editor.addEventListener("input", saveDraft);
+  editor.addEventListener("input", () => {
+    saveDraft();
+    syncLineNumbers();
+  });
+  editor.addEventListener("scroll", () => {
+    $("#console-line-numbers").scrollTop = editor.scrollTop;
+  });
   editor.addEventListener("paste", (event) => {
     const pasted = event.clipboardData?.getData("text") ?? "";
     $("#console-paste-warning").hidden = !isRiskyPaste(pasted);
@@ -193,7 +211,18 @@ export function initConsole() {
     if (button) goToLine(Number(button.dataset.goLine));
   });
   $("#console-example").addEventListener("click", loadExample);
-  $("#console-clear").addEventListener("click", () => {
-    $("#console-output").innerHTML = "";
+  $("#console-copy").addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText(editor.value);
+      $("#console-copy").textContent = "Copiado";
+      setTimeout(() => { $("#console-copy").textContent = "Copiar código"; }, 1400);
+    } catch {
+      $("#console-copy").textContent = "No disponible";
+      setTimeout(() => { $("#console-copy").textContent = "Copiar código"; }, 1400);
+    }
   });
+  $("#console-clear").addEventListener("click", () => {
+    $("#console-output").innerHTML = '<span class="console__muted">(Sin salida)</span>';
+  });
+  syncLineNumbers();
 }
