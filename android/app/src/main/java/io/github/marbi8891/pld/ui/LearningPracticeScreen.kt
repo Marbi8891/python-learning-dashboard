@@ -146,20 +146,11 @@ fun LearningPracticeScreen(model: AppModel, questionId: String, onBack: () -> Un
 
                 state.current?.let { question ->
                     QuestionInput(
-                        question = question,
-                        lang = model.pcap.lang,
-                        answer = state.answer,
-                        reveal = state.checked,
-                        onSelect = { index ->
-                            val current = state.answer.selected.toMutableSet()
-                            if (question.multi) {
-                                if (!current.add(index)) current.remove(index)
-                            } else {
-                                current.clear()
-                                current.add(index)
-                            }
-                            vm.change(Answer(selected = current.toList()))
-                        },
+                        question,
+                        model.pcap.lang,
+                        state.answer,
+                        state.checked,
+                        onChange = vm::change,
                     )
 
                     if (state.checked) {
