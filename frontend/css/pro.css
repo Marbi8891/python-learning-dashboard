@@ -1440,3 +1440,63 @@ select {
     min-height: 46px;
   }
 }
+
+/* Consola: editor con gutter de líneas */
+.console__editor-shell {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-code-bg);
+}
+
+.console__line-numbers {
+  overflow: hidden;
+  margin: 0;
+  padding: 12px 10px 12px 0;
+  border-right: 1px solid var(--color-border);
+  color: var(--color-text-faint);
+  font: 500 13px/1.6 var(--font-code);
+  text-align: right;
+  user-select: none;
+  white-space: pre;
+}
+
+.console__editor-shell .console__editor {
+  min-width: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.console__editor-shell:focus-within {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-soft);
+}
+
+.console__editor-shell .console__editor:focus {
+  box-shadow: none;
+}
+
+.console__output {
+  min-height: 120px;
+}
+
+.console__output .console__error {
+  display: block;
+  color: var(--color-danger);
+}
+
+@media (max-width: 600px) {
+  .console__editor-shell {
+    grid-template-columns: 38px minmax(0, 1fr);
+  }
+
+  .console__line-numbers {
+    padding-right: 8px;
+    font-size: 12px;
+  }
+}
