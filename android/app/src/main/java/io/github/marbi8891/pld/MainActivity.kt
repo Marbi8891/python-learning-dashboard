@@ -37,6 +37,8 @@ import io.github.marbi8891.pld.ui.CelebrationScreen
 import io.github.marbi8891.pld.ui.DungeonScreen
 import io.github.marbi8891.pld.ui.GameHomeScreen
 import io.github.marbi8891.pld.ui.LessonScreen
+import io.github.marbi8891.pld.ui.LearningHomeScreen
+import io.github.marbi8891.pld.ui.LearningPracticeScreen
 import io.github.marbi8891.pld.ui.MockScreen
 import io.github.marbi8891.pld.ui.PathScreen
 import io.github.marbi8891.pld.ui.PcapHomeScreen
@@ -49,6 +51,8 @@ import io.github.marbi8891.pld.ui.TheoryScreen
 /** Pantallas a pantalla completa por encima de las pestañas. Una pila propia basta (ADR-0011). */
 sealed interface Screen {
     data class Practice(val block: String) : Screen
+
+    data class LearningPractice(val questionId: String) : Screen
 
     data class Lesson(val nodeId: String) : Screen
 
@@ -65,6 +69,7 @@ sealed interface Screen {
 }
 
 enum class Tab(val label: String, val symbol: String) {
+    LEARN("Aprender", "▶"),
     PATH("Ruta", "◆"),
     PLAY("Jugar", "⚔"),
     EXAM("Examen", "✎"),
@@ -95,7 +100,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun App(model: AppModel) {
-    var tab by remember { mutableStateOf(Tab.PATH) }
+    var tab by remember { mutableStateOf(Tab.LEARN) }
     var stack by remember { mutableStateOf(listOf<Screen>()) }
     val open: (Screen) -> Unit = { stack = stack + it }
     val back: () -> Unit = { stack = stack.dropLast(1) }
@@ -107,6 +112,7 @@ fun App(model: AppModel) {
     when (val screen = stack.lastOrNull()) {
         null -> Tabs(model, tab, onTab = { tab = it }, open = open)
         is Screen.Practice -> PracticeScreen(model, screen.block, onBack = back, onTheory = { open(Screen.Theory(it)) })
+        is Screen.LearningPractice -> LearningPracticeScreen(model, screen.questionId, onBack = back)
         is Screen.Lesson -> LessonScreen(
             model,
             model.node(screen.nodeId),
@@ -146,6 +152,11 @@ private fun Tabs(model: AppModel, tab: Tab, onTab: (Tab) -> Unit, open: (Screen)
         // Al cambiar de curso, cada pestaña empieza de cero (listas, scroll y datos recordados)
         key(course.id) {
             when (tab) {
+                Tab.LEARN -> LearningHomeScreen(
+                    model,
+                    onStart = { open(Screen.LearningPractice(it)) },
+                    modifier = modifier,
+                )
                 Tab.PATH -> PathScreen(
                     model,
                     onStart = { open(Screen.Lesson(it.id)) },
