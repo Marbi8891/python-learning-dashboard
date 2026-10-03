@@ -105,7 +105,7 @@ class LearningSessionVmFactory(
 @Composable
 fun LearningPracticeScreen(model: AppModel, questionId: String, onBack: () -> Unit) {
     val vm: LearningSessionViewModel = viewModel(
-        key = "learning-${questionId}-${model.revision}",
+        key = "learning-${questionId}",
         factory = LearningSessionVmFactory(model, questionId),
     )
     val state by vm.state.collectAsState()
