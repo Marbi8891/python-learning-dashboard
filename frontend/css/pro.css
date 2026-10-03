@@ -1500,3 +1500,51 @@ select {
     font-size: 12px;
   }
 }
+
+.check__next {
+  display: grid;
+  gap: 6px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid currentColor;
+  opacity: 0.96;
+}
+
+.check__next strong {
+  font-size: 15px;
+}
+
+.check__next span {
+  color: var(--color-text-muted);
+  font-size: 13px;
+}
+
+.check__next .btn {
+  justify-self: start;
+  margin-top: 6px;
+}
+
+.quiz__q[data-result="ok"] {
+  border-color: var(--color-success);
+}
+
+.quiz__q[data-result="ko"] {
+  border-color: var(--color-danger);
+}
+
+.quiz__feedback {
+  border-color: var(--color-border);
+  background: var(--color-surface-2);
+}
+
+.quiz__verdict {
+  font-weight: 700;
+}
+
+.quiz__q[data-result="ok"] .quiz__verdict {
+  color: var(--color-success);
+}
+
+.quiz__q[data-result="ko"] .quiz__verdict {
+  color: var(--color-danger);
+}
