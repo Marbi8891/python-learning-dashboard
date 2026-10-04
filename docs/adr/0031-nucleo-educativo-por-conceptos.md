@@ -1,6 +1,6 @@
 # ADR-0031: Núcleo educativo por conceptos (aprender Python y aprobar Programación de DAW)
 
-- **Estado:** Aceptada e implementada en la web (fases 1-3). La app Android, en la fase 4.
+- **Estado:** Aceptada. Implementada en la web (fases 1-3). En la app Android, la fase 4 (ver más abajo).
 - **Fecha:** 2026-10-04
 - **Revisa:** ADR-0009 (enfoque PCAP), ADR-0005 (gamificación), ADR-0021 (cursos DAW en la web)
 
@@ -49,7 +49,7 @@ Se genera con `scripts/learning/build_learning.py` a partir de `concepts.py` y `
   - «cuándo usarlo»;
   - sus **errores típicos**: qué falla, por qué está mal, cómo pensarlo y cómo evitarlo.
 - **Ruta recomendada (`PATH`):** intercala la lógica (pseudocódigo, trazado, depuración) con el lenguaje en cuanto se puede practicar, en lugar de dejarla para el final.
-- **111 ejercicios de 6 tipos:**
+- **128 ejercicios de 6 tipos** (111 en la fase 1 y 17 en la fase 2):
   - elegir opción;
   - predecir la salida (trazado);
   - completar el hueco;
@@ -115,6 +115,42 @@ Son funciones puras, probadas con `node --test`, sin dependencias nuevas.
   - al final: resumen con los errores explicados y la siguiente recomendación.
 - **Markdown:** admite bloques de código y tablas, siempre escapados.
 - **Diseño:** se quitan los degradados y el efecto cristal de `pro.css`. Se corrigen los contrastes que el rediseño anterior había roto: la auditoría WCAG de la CI fallaba en `main`.
+
+### Fase 2: Preparación DAW (`#/daw`)
+
+- **Competencias** (en `learning.json`, apartado `daw`):
+  - **Fundamentos:** 35 % del simulacro.
+  - **Programación:** 35 %.
+  - **Lógica:** 30 %.
+
+  Cada una tiene su dominio, ponderado por la importancia para DAW de sus conceptos, y sus conceptos más flojos.
+- **«Necesitas reforzar X antes de pasar a Y» entre competencias:** Programación y Lógica dependen de Fundamentos (`requires`).
+- **Actividades de examen:**
+  - ejercicios cronometrados (8 en 20 minutos, con corrección);
+  - problemas completos con tests;
+  - lectura de código;
+  - detectar errores;
+  - del enunciado al algoritmo.
+- **Simulacro:** de lo estudiado o del temario completo. Se reparten las preguntas por competencias según su peso, con 1-2 problemas de escribir código. El tiempo es de 3 minutos por pregunta corta y 10 por problema. No hay corrección hasta el final, que muestra la corrección de cada pregunta y explica los errores. Queda en el historial con el resultado por competencia.
+- **17 ejercicios nuevos con formato de examen:**
+  - 8 de encontrar el error;
+  - 3 de ordenar (pseudocódigo, búsqueda lineal y media);
+  - 6 problemas completos: número perfecto, invertir palabras, medias por alumno con diccionarios, menú, segundo mayor sin `max` y letra del DNI.
+- **El curso por UT y los demás módulos** siguen en `#/daw/programacion` y `#/daw/cursos`.
+
+### Fase 3: adaptación
+
+- **Repaso inteligente:** se hace por concepto, con prioridad para los errores activos (fase 1).
+- **Detección de debilidades:**
+  - errores activos o corregidos;
+  - errores más frecuentes;
+  - conceptos más flojos por competencia.
+- **Prueba de nivel:**
+  - una pregunta rápida por concepto (21, sin problemas de código ni POO);
+  - los conceptos acertados quedan como `placed`: no bloquean los prerrequisitos ni se proponen como nuevos;
+  - el plan propone **consolidarlos** cuando hay sitio.
+  - Se ofrece al empezar y se puede repetir desde Progreso.
+- **Ruta personal:** en Aprender, la ruta completa con el estado de cada concepto, lo superado en la prueba y qué hay que reforzar antes del siguiente.
 
 ### Cuenta
 

@@ -114,3 +114,19 @@ test("selectExercises con `only` elige solo entre los ejercicios indicados (prac
   const chosen = selectExercises(index, fresh(), ["bucles", "pseudocodigo"], 4, { now: NOW, only });
   assert.deepEqual(chosen.map((e) => e.id).sort(), [...only].sort());
 });
+
+test("ruta personalizada: lo superado en la prueba de nivel no bloquea ni se propone como nuevo", async () => {
+  const { markPlaced } = await import("../../frontend/js/learn/mastery.js");
+  const state = fresh();
+  for (const id of ["algoritmos", "variables", "tipos", "operadores"]) {
+    recordAttempt(state, exercisesOf(id)[0], { ok: true, error: null }, { now: NOW });
+    markPlaced(state, id, NOW);
+  }
+  const stats = allStats(index, state, NOW);
+  assert.deepEqual(nextNewConcept(index, stats), { id: "entrada-salida", blockedBy: [] });
+  const plan = todayPlan(index, state, NOW, stats);
+  assert.equal(plan[0].type, "learn");
+  assert.equal(plan[0].concept, "entrada-salida");
+  assert.ok(plan.some((p) => p.reason.includes("prueba de nivel")), "propone consolidar lo que ya sabía");
+  assert.ok(!plan.some((p) => p.type === "reinforce"));
+});

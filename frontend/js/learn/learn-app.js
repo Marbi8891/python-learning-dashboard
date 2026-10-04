@@ -11,6 +11,8 @@
 import { learning, loadLearningContent, onLearningChange, saveLearning } from "./learn-store.js";
 import { activeErrors, allStats, areaSummary, daysBetween, lastActivity, markRead } from "./mastery.js";
 import { missingPrerequisites, selectExercises, todayPlan } from "./recommend.js";
+import { activityExercises, EXAM_ACTIVITIES, renderDawPrep } from "./daw-prep.js";
+import { buildDiagnostic, buildExam, examMinutes } from "./exam.js";
 import {
   initSessionEvents,
   renderSession,
@@ -78,6 +80,19 @@ function renderToday() {
       <h2 class="visually-hidden" id="lx-plan-title">Plan de hoy</h2>
       ${items ? `<ol class="lx-plan">${items}</ol>` : `<p>Has dominado todo el temario. Haz un <a href="#/daw">simulacro de DAW</a> o repasa en <a href="#/practicar">Practicar</a>.</p>`}
     </section>
+    ${
+      learning.log.length === 0
+        ? `<section class="lx-panel lx-diagnostic" aria-labelledby="lx-diag-title">
+            <h2 class="lx-panel__title" id="lx-diag-title">¿Ya sabes algo de Python?</h2>
+            <p>Haz la prueba de nivel: una pregunta de cada concepto (unos 15 minutos). Lo que aciertes no te bloqueará y la ruta empezará donde lo necesitas.</p>
+            <button class="btn btn--ghost" type="button" data-learn="diagnostic">Hacer la prueba de nivel</button>
+          </section>`
+        : ""
+    }
+    <details class="lx-details lx-route">
+      <summary>Tu ruta personal (${mastered} de ${all.length} dominados)</summary>
+      ${routeHtml(stats)}
+    </details>
     <div class="lx-grid">
       <section class="lx-panel" aria-labelledby="lx-weak-title">
         <h2 class="lx-panel__title" id="lx-weak-title">Puntos débiles</h2>
@@ -104,6 +119,22 @@ function renderToday() {
         <a href="#/progreso">Ver el progreso completo</a>
       </section>
     </div>`;
+}
+
+/** La ruta recomendada con el estado de cada concepto y qué lo bloquea. */
+function routeHtml(stats) {
+  const next = index.path.find((id) => stats.get(id).attempted === 0 && !stats.get(id).placed);
+  const items = index.path
+    .map((id) => {
+      const s = stats.get(id);
+      const missing = missingPrerequisites(index, stats, id);
+      let note = STATUS[s.status].short;
+      if (s.placed && s.status !== "dominado") note = "Superado en la prueba de nivel";
+      if (id === next) note = missing.length ? `Siguiente · antes refuerza ${missing.map(title).join(" y ")}` : "Siguiente";
+      return `<li class="lx-route__item" data-status="${id === next ? "next" : s.status}"><a href="#/teoria/${id}">${escapeHtml(title(id))}</a> <span class="lx-muted">· ${escapeHtml(note)}</span></li>`;
+    })
+    .join("");
+  return `<ol class="lx-route__list">${items}</ol>`;
 }
 
 /* ---------- Teoría ---------- */
@@ -362,6 +393,7 @@ function renderProgress() {
       </section>
     </div>
     ${exams ? `<section class="lx-section" aria-labelledby="lx-exams-title"><h2 class="lx-section__title" id="lx-exams-title">Simulacros</h2><ul class="lx-list">${exams}</ul></section>` : ""}
+    <div class="lx-actions"><button class="btn btn--ghost" type="button" data-learn="diagnostic">Repetir la prueba de nivel</button></div>
     <p class="lx-muted">Los logros, el XP y la racha del curso PCAP siguen en <a href="#/perfil">Mi aprendizaje</a>.</p>`;
 }
 
@@ -374,7 +406,47 @@ function startReviewAll() {
   startSession({ kind: "review", title: "Repaso de hoy", exercises });
 }
 
+function onDawClick(target) {
+  switch (target.dataset.dawPrep) {
+    case "exam": {
+      const all = target.dataset.scope === "all";
+      const exercises = buildExam(index, learning, { scope: all ? "all" : "studied" });
+      startSession({
+        kind: "exam",
+        title: all ? "Simulacro DAW · temario completo" : "Simulacro DAW · lo estudiado",
+        exercises: exercises.map((e) => e.id),
+        timeLimit: examMinutes(exercises) * 60,
+        meta: { examKind: all ? "daw-completo" : "daw-estudiado" },
+      });
+      break;
+    }
+    case "activity": {
+      const activity = EXAM_ACTIVITIES.find((a) => a.id === target.dataset.activity);
+      startSession({
+        kind: "practice",
+        title: activity.label,
+        exercises: activityExercises(index, learning, activity).map((e) => e.id),
+        timeLimit: activity.minutes ? activity.minutes * 60 : null,
+      });
+      break;
+    }
+    case "reinforce": {
+      const concepts = target.dataset.concepts.split(",");
+      const exercises = selectExercises(index, learning, concepts, 5).map((e) => e.id);
+      startSession({ kind: "practice", title: `Reforzar: ${concepts.map(title).join(" y ")}`, exercises });
+      break;
+    }
+    default:
+      break;
+  }
+}
+
 function onClick(event) {
+  const daw = event.target.closest("[data-daw-prep]");
+  if (daw && index) {
+    onDawClick(daw);
+    return;
+  }
   const target = event.target.closest("[data-learn]");
   if (!target || !index) return;
   const { concept } = target.dataset;
@@ -393,6 +465,9 @@ function onClick(event) {
       break;
     case "review-all":
       startReviewAll();
+      break;
+    case "diagnostic":
+      startSession({ kind: "diagnostic", title: "Prueba de nivel", exercises: buildDiagnostic(index).map((e) => e.id) });
       break;
     case "error":
       startErrorPractice(target.dataset.id);
@@ -461,19 +536,21 @@ function render(route) {
   if (section === "teoria") html = arg && index.concepts.has(arg) ? renderConcept(arg) : renderTheoryIndex();
   else if (section === "practicar") html = renderPractice();
   else if (section === "progreso") html = renderProgress();
+  else if (section === "daw") html = renderDawPrep(index, learning);
   else html = renderToday();
   root().innerHTML = html;
 }
 
 export const LEARN_ROUTES = ["#/aprender", "#/teoria", "#/practicar", "#/progreso", "#/sesion"];
 
-/** ¿La ruta es del núcleo educativo? */
-export const isLearnRoute = (hash) => LEARN_ROUTES.some((r) => hash === r || hash.startsWith(`${r}/`));
+/** ¿La ruta es del núcleo educativo? `#/daw` es la Preparación DAW; `#/daw/<curso>` sigue en daw.js. */
+export const isLearnRoute = (hash) => hash === "#/daw" || LEARN_ROUTES.some((r) => hash === r || hash.startsWith(`${r}/`));
 
 /** Clave del menú principal para una ruta del núcleo. */
 export function learnNavKey(hash) {
   if (hash.startsWith("#/teoria")) return "teoria";
   if (hash.startsWith("#/practicar")) return "practicar";
   if (hash.startsWith("#/progreso")) return "progreso";
+  if (hash.startsWith("#/daw")) return "daw";
   return "aprender";
 }

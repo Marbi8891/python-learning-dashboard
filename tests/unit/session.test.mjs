@@ -96,3 +96,16 @@ test("una sesión de aprendizaje con todo acertado hace avanzar el dominio", () 
   assert.equal(conceptStats(index, state, "variables", NOW).status, "dominado");
   assert.equal(state.concepts.variables.box, 1);
 });
+
+test("prueba de nivel: sin corrección entre preguntas; los conceptos acertados quedan superados", () => {
+  const state = fresh();
+  const session = createSession({ kind: "diagnostic", title: "Prueba de nivel", exercises: ["var-01", "tip-01"], now: NOW });
+  assert.equal(session.feedback, false);
+  submit(session, index, state, { ok: true, error: null }, NOW);
+  submit(session, index, state, { ok: false, error: "tipos.texto-numero" }, NOW);
+  assert.equal(session.phase, "done");
+  finish(session, index, state, NOW);
+  assert.ok(state.concepts.variables.placed);
+  assert.equal(state.concepts.tipos.placed, null);
+  assert.equal(state.exams.length, 0, "no es un simulacro");
+});

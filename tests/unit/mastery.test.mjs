@@ -120,7 +120,7 @@ test("cleanLearning descarta datos manipulados y conserva los válidos", () => {
   });
   assert.deepEqual(clean.ex["buc-01"].h, [true, false]);
   assert.equal(clean.ex["<img>"], undefined);
-  assert.deepEqual(clean.concepts.bucles, { box: 0, due: null, last: null, read: NOW.toISOString() });
+  assert.deepEqual(clean.concepts.bucles, { box: 0, due: null, last: null, read: NOW.toISOString(), placed: null });
   assert.equal(clean.errors["bucles.range-fin"].streak, 0);
   assert.equal(clean.errors.malo, undefined);
   assert.equal(clean.log.length, 1);

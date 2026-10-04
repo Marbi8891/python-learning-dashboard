@@ -6,9 +6,11 @@
    - practice: práctica de uno o varios conceptos;
    - review:   repaso de lo que toca hoy;
    - errors:   ejercicios que trabajan errores concretos;
-   - exam:     simulacro: sin corrección hasta el final, cronometrado y sin nuevos intentos. */
+   - exam:     simulacro: sin corrección hasta el final, cronometrado y sin nuevos intentos;
+   - diagnostic: prueba de nivel: como un simulacro, sin tiempo; cada concepto acertado se marca
+                 como superado para que la ruta pueda saltarlo. */
 
-import { recordAttempt, recordExam, reviewConcept } from "./mastery.js";
+import { markPlaced, recordAttempt, recordExam, reviewConcept } from "./mastery.js";
 import { similarExercise } from "./recommend.js";
 
 export const MAX_RETRIES = 3; // nuevos intentos añadidos al final de una sesión, como mucho
@@ -21,7 +23,7 @@ export function createSession({ kind, title, exercises, timeLimit = null, now = 
     kind,
     title,
     meta,
-    feedback: kind !== "exam",
+    feedback: kind !== "exam" && kind !== "diagnostic",
     queue: exercises.map((id) => ({ id, retry: false, retryOf: null })),
     index: 0,
     phase: exercises.length ? "answer" : "done",
@@ -113,7 +115,10 @@ export function summarize(session, index) {
  */
 export function finish(session, index, state, now = new Date()) {
   const summary = summarize(session, index);
-  for (const [concept, [ok, total]] of Object.entries(summary.byConcept)) reviewConcept(state, concept, ok / total, now);
+  for (const [concept, [ok, total]] of Object.entries(summary.byConcept)) {
+    reviewConcept(state, concept, ok / total, now);
+    if (session.kind === "diagnostic" && ok === total) markPlaced(state, concept, now);
+  }
   if (session.kind === "exam") {
     recordExam(state, {
       date: now.toISOString(),

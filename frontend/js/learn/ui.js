@@ -141,7 +141,8 @@ function bugBody(ex, answer, reveal) {
         .map((text, i) => {
           const n = i + 1;
           const correct = reveal && n === ex.line ? ' data-correct="true"' : "";
-          return `<label class="lx-bug__line"${correct}><input type="radio" name="lx-line" value="${n}"${answer.line === n ? " checked" : ""}${reveal ? " disabled" : ""}>
+          const wrong = reveal && n === answer.line && n !== ex.line ? ' data-wrong="true"' : "";
+          return `<label class="lx-bug__line"${correct}${wrong}><input type="radio" name="lx-line" value="${n}"${answer.line === n ? " checked" : ""}${reveal ? " disabled" : ""}>
             <span class="lx-line__n">${n}</span><code>${highlight(text) || " "}</code></label>`;
         })
         .join("")}

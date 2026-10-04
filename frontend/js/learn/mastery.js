@@ -5,7 +5,8 @@
    {
      v: 1,
      ex:       { [idEjercicio]: { h: [true, false…] (últimos 5), last: ISO, n: intentos } },
-     concepts: { [idConcepto]: { box: 0-5, due: "AAAA-MM-DD" | null, last: ISO | null, read: ISO | null } },
+     concepts: { [idConcepto]: { box: 0-5, due: "AAAA-MM-DD" | null, last: ISO | null, read: ISO | null,
+                                 placed: ISO | null (superado en la prueba de nivel) } },
      errors:   { [idError]: { n: veces, last: ISO, streak: aciertos seguidos desde el último fallo } },
      log:      [ { at: ISO, ex: id, ok: bool, err: idError | null } ]   (los últimos LOG_SIZE)
      exams:    [ { date: ISO, kind, correct, total, seconds, concepts: { [id]: [aciertos, total] } } ]
@@ -57,7 +58,7 @@ export function buildIndex(data) {
 
 /* ---------- Registrar actividad ---------- */
 
-const conceptEntry = (state, id) => (state.concepts[id] ??= { box: 0, due: null, last: null, read: null });
+const conceptEntry = (state, id) => (state.concepts[id] ??= { box: 0, due: null, last: null, read: null, placed: null });
 
 /**
  * Registra un intento. `result` = { ok, error } (de grade() o codeResult()).
@@ -93,6 +94,11 @@ export function markRead(state, conceptId, now = new Date()) {
   const entry = conceptEntry(state, conceptId);
   entry.read = now.toISOString();
   entry.last ??= entry.read;
+}
+
+/** El alumno ha demostrado en la prueba de nivel que ya sabe este concepto: la ruta puede saltarlo. */
+export function markPlaced(state, conceptId, now = new Date()) {
+  conceptEntry(state, conceptId).placed = now.toISOString();
 }
 
 /**
@@ -153,7 +159,18 @@ export function conceptStats(index, state, conceptId, now = new Date()) {
   else if (score >= 0.5) status = "progreso";
   else status = "aprendiendo";
   const due = Boolean(entry?.due && entry.due <= isoDay(now));
-  return { id: conceptId, score, status, attempted, count: exercises.length, due, nextReview: entry?.due ?? null, errors, last: entry?.last ?? null };
+  return {
+    id: conceptId,
+    score,
+    status,
+    attempted,
+    count: exercises.length,
+    due,
+    nextReview: entry?.due ?? null,
+    errors,
+    last: entry?.last ?? null,
+    placed: Boolean(entry?.placed),
+  };
 }
 
 export const allStats = (index, state, now = new Date()) => new Map(index.path.map((id) => [id, conceptStats(index, state, id, now)]));
@@ -215,6 +232,7 @@ export function cleanLearning(value) {
     due: typeof c.due === "string" && DAY.test(c.due) ? c.due : null,
     last: isoOrNull(c.last),
     read: isoOrNull(c.read),
+    placed: isoOrNull(c.placed),
   }));
   state.errors = cleanMap(value.errors, (e) => (isCount(e.n) && isIso(e.last) ? { n: e.n, last: e.last, streak: isCount(e.streak) ? e.streak : 0 } : null));
   state.log = (Array.isArray(value.log) ? value.log : [])
@@ -258,7 +276,8 @@ export function mergeLearning(local, remote) {
       continue;
     }
     const newer = later(mine, entry);
-    local.concepts[id] = { ...newer, read: [mine.read, entry.read].filter(Boolean).sort().at(-1) ?? null };
+    const latest = (field) => [mine[field], entry[field]].filter(Boolean).sort().at(-1) ?? null;
+    local.concepts[id] = { ...newer, read: latest("read"), placed: latest("placed") };
   }
   for (const [id, entry] of Object.entries(other.errors)) {
     const mine = local.errors[id];

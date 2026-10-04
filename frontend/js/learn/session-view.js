@@ -130,7 +130,8 @@ function questionHtml() {
     ? `<button class="btn btn--primary" type="button" data-lx="next">${session.index + 1 < session.queue.length ? "Siguiente →" : "Ver el resumen"}</button>`
     : `<button class="btn btn--primary" type="submit">${ex.kind === "code" ? "Comprobar con los tests" : "Comprobar"}</button>
        ${session.feedback ? '<button class="btn btn--ghost" type="button" data-lx="skip">No lo sé: ver la explicación</button>' : ""}
-       ${session.kind === "exam" ? '<button class="btn btn--ghost" type="button" data-lx="finish">Terminar el simulacro</button>' : ""}`;
+       ${session.kind === "exam" ? '<button class="btn btn--ghost" type="button" data-lx="finish">Terminar el simulacro</button>' : ""}
+       ${session.kind === "diagnostic" ? '<button class="btn btn--ghost" type="button" data-lx="skip-diag">No lo sé</button>' : ""}`;
   return `
     ${retryBanner}
     <form class="exam-form" id="lx-form" novalidate>
@@ -167,11 +168,13 @@ function summaryHtml() {
   const total = exam ? session.queue.length : summary.total;
   const message =
     total === 0 ? "" : summary.correct / total >= 0.8 ? "Muy bien: lo tienes claro." : summary.correct / total >= 0.5 ? "Vas bien, pero conviene repasar lo que has fallado." : "Toca repasar la teoría y volver a intentarlo.";
-  const review = exam ? examReviewHtml() : "";
+  const review = exam || session.kind === "diagnostic" ? examReviewHtml() : "";
+  const placed = session.kind === "diagnostic" ? Object.entries(summary.byConcept).filter(([, [ok, t]]) => ok === t).map(([id]) => conceptTitle(id)) : [];
   return `
     <section class="course-section lx-summary" aria-labelledby="lx-summary-title">
       <h2 class="section-title" id="lx-summary-title">${summary.correct} de ${total} correctos${exam ? ` · ${percent(total ? summary.correct / total : 0)}` : ""}</h2>
       <p class="lx-lead">${message}</p>
+      ${session.kind === "diagnostic" ? `<p>${placed.length ? `Superados en la prueba (la ruta no te bloqueará con ellos): ${escapeHtml(placed.join(", "))}.` : "No has superado ningún concepto todavía: la ruta empieza desde el principio."}</p>` : ""}
       ${summary.retried ? `<p>Nuevos intentos tras la explicación: ${summary.fixed} de ${summary.retried} bien resueltos.</p>` : ""}
       ${exam && summary.unanswered ? `<p>Sin responder: ${summary.unanswered} (cuentan como fallos).</p>` : ""}
       ${concepts ? `<h3 class="lx-h4">Conceptos trabajados</h3><ul class="lx-list">${concepts}</ul>` : ""}
@@ -263,7 +266,7 @@ function readAnswer() {
 function apply(result) {
   submit(session, index, learning, result);
   lastResult = result;
-  if (session.kind !== "exam") markRead(learning, index.exercises.get(currentItem(session).id).concept);
+  if (session.feedback) markRead(learning, index.exercises.get(currentItem(session).id).concept);
   saveLearning();
   if (!session.feedback) {
     draft = {};
@@ -353,6 +356,7 @@ function onClick(event) {
       runCode();
       break;
     case "skip":
+    case "skip-diag":
       apply({ ok: false, error: null });
       break;
     case "next":

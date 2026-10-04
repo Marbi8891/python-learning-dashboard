@@ -232,3 +232,66 @@ test("en el móvil el plan de hoy se lee sin desbordarse", async ({ page }) => {
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth);
   expect(overflow).toBe(false);
 });
+
+test.describe("Preparación DAW", () => {
+  test("competencias, aviso de qué reforzar y temario del centro", async ({ page }) => {
+    // Fundamentos empezado y flojo, Programación empezada: debe pedir reforzar Fundamentos
+    await page.addInitScript(() => {
+      const now = new Date().toISOString();
+      localStorage.setItem(
+        "pld:learn",
+        JSON.stringify({ v: 1, ex: { "var-01": { h: [true], last: now, n: 1 }, "fun-01": { h: [false], last: now, n: 1 } } }),
+      );
+    });
+    await page.goto("/#/daw");
+    await expect(page.locator("#learn-title")).toHaveText("Preparación DAW");
+    await expect(page.getByRole("navigation", { name: "Secciones" }).getByRole("link", { name: "DAW", exact: true })).toHaveAttribute("aria-current", "page");
+    await expect(page.locator(".lx-competency")).toHaveCount(3);
+    await expect(page.locator("#comp-programacion + .lx-muted ~ .lx-warning")).toContainText(/Necesitas reforzar .+ antes de pasar a Programación/);
+    await expect(page.getByRole("link", { name: /Programación por unidades de trabajo/ })).toHaveAttribute("href", "#/daw/programacion");
+  });
+
+  test("simulacro del temario completo: cronometrado, con problemas de código y guardado en el historial", async ({ page }) => {
+    await page.goto("/#/daw");
+    await page.getByRole("button", { name: /Simulacro del temario completo/ }).click();
+    await expect(page).toHaveURL(/#\/sesion$/);
+    await expect(page.locator("#lx-timer")).toHaveText(/^\d+:\d\d$/);
+    await expect(page.locator(".lx-session-bar")).toContainText("de 12");
+    await page.getByRole("button", { name: "Terminar el simulacro" }).click();
+    await expect(page.locator(".lx-summary")).toContainText("0 de 12 correctos");
+    await expect(page.locator(".lx-summary")).toContainText("Sin responder: 12");
+    await page.goto("/#/daw");
+    await expect(page.locator("#lx-hist-title + .lx-list li")).toHaveCount(1);
+    await expect(page.locator("#lx-hist-title + .lx-list")).toContainText("Temario completo");
+  });
+
+  test("Preparación DAW sin infracciones WCAG", async ({ page }) => {
+    await page.goto("/#/daw");
+    await page.locator("#learn-title").waitFor();
+    await audit(page);
+  });
+});
+
+test("prueba de nivel: se ofrece al empezar y lo acertado se salta en la ruta personal", async ({ page }) => {
+  await page.goto("/#/aprender");
+  await page.getByRole("button", { name: "Hacer la prueba de nivel" }).click();
+  await expect(page.locator(".lx-session-bar")).toContainText("de 21"); // un concepto por pregunta, sin POO
+
+  // Prueba corta con ejercicios conocidos: acierta Comprender el problema y Variables
+  await startSession(page, { kind: "diagnostic", title: "Prueba de nivel", exercises: ["alg-01", "var-01", "tip-01"] });
+  await page.locator('input[name="lx-choice"]').first().check();
+  await page.getByRole("button", { name: "Comprobar", exact: true }).click();
+  await page.getByLabel(/Lo que muestra el programa/).fill("3");
+  await page.getByRole("button", { name: "Comprobar", exact: true }).click();
+  await page.getByRole("button", { name: "No lo sé", exact: true }).click();
+  await expect(page.locator(".lx-summary")).toContainText("Superados en la prueba");
+  await expect(page.locator(".lx-reviews li")).toHaveCount(3);
+
+  await page.goto("/#/aprender");
+  await expect(page.getByRole("button", { name: "Hacer la prueba de nivel" })).toHaveCount(0);
+  await page.locator(".lx-route summary").click();
+  // Tipos se falló en la prueba: el siguiente concepto nuevo (Operadores) pide reforzarlo antes
+  await expect(page.locator('.lx-route__item[data-status="next"]')).toContainText("Operadores y expresiones");
+  await expect(page.locator('.lx-route__item[data-status="next"]')).toContainText("antes refuerza Tipos de datos");
+  await expect(page.locator(".lx-route__item").nth(1)).toContainText("Superado en la prueba de nivel");
+});

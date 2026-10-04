@@ -62,6 +62,54 @@ PATH = [
     "poo",
 ]
 
+# Competencias de «Preparación DAW» (las que pidió el autor), en el orden en que se trabajan.
+# `weight`: peso en el simulacro. ASSUMPTION: no conocemos el reparto real de la nota.
+DAW_COMPETENCIES = [
+    {
+        "id": "fundamentos",
+        "title": "Fundamentos",
+        "summary": "Variables, tipos, operadores, entrada y salida, condiciones y bucles.",
+        "requires": [],
+        "concepts": [
+            "variables",
+            "tipos",
+            "operadores",
+            "entrada-salida",
+            "condicionales",
+            "bucles",
+            "acumuladores",
+            "validacion",
+        ],
+        "weight": 35,
+    },
+    {
+        "id": "programacion",
+        "title": "Programación",
+        "summary": "Funciones, colecciones, algoritmos sobre colecciones, módulos, excepciones y ficheros.",
+        "requires": ["fundamentos"],
+        "concepts": [
+            "funciones",
+            "strings",
+            "listas",
+            "tuplas-conjuntos",
+            "diccionarios",
+            "recorridos",
+            "modulos",
+            "excepciones",
+            "archivos",
+        ],
+        "weight": 35,
+    },
+    {
+        "id": "logica",
+        "title": "Lógica",
+        "summary": "Comprender problemas, pseudocódigo, trazado de programas, complejidad básica y depuración.",
+        "requires": ["fundamentos"],
+        "concepts": ["algoritmos", "pseudocodigo", "trazado", "depuracion"],
+        "weight": 30,
+    },
+]
+
 
 def err(cid: str, slug: str, label: str, why: str, think: str, avoid: str) -> dict:
     return {"id": f"{cid}.{slug}", "label": label, "why": why, "think": think, "avoid": avoid}

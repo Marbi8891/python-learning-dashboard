@@ -27,7 +27,7 @@ OUT = DATA / "learning.json"
 TIMEOUT_S = 5
 
 sys.path.insert(0, str(HERE))
-from concepts import AREAS, CONCEPTS, PATH  # noqa: E402
+from concepts import AREAS, CONCEPTS, DAW_COMPETENCIES, PATH  # noqa: E402
 from exercises import E  # noqa: E402
 
 KINDS = {"choice", "output", "fill", "order", "bug", "code"}
@@ -134,6 +134,13 @@ def check_concepts(problems: Problems) -> set[str]:
         for number, _ in example["lines"]:
             if not 1 <= number <= lines:
                 problems.add(where, f"explicación de una línea inexistente: {number}")
+    covered = [cid for comp in DAW_COMPETENCIES for cid in comp["concepts"]]
+    if sorted(covered) != sorted(i for i in ids if i != "poo"):
+        problems.add(
+            "DAW", "cada concepto (salvo POO, para más adelante) va en una sola competencia"
+        )
+    if sum(comp["weight"] for comp in DAW_COMPETENCIES) != 100:
+        problems.add("DAW", "los pesos de las competencias deben sumar 100")
     if sorted(PATH) != sorted(ids):
         problems.add("conceptos", "PATH debe contener cada concepto una vez")
     for position, cid in enumerate(PATH):
@@ -271,6 +278,7 @@ def build() -> dict:
         "version": 1,
         "areas": AREAS,
         "path": PATH,
+        "daw": DAW_COMPETENCIES,
         "concepts": CONCEPTS,
         "exercises": exercises,
     }

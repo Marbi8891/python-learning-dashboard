@@ -6,9 +6,12 @@ const { test, expect, uniqueEmail } = require("./fixtures");
 const API = "http://127.0.0.1:8000";
 
 test("el catálogo muestra los cinco cursos y se entra en uno", async ({ page }) => {
+  // #/daw es la Preparación DAW (ADR-0031); el catálogo de cursos sigue en #/daw/cursos
   await page.goto("/#/daw");
+  await page.getByRole("link", { name: "Otros módulos de DAW" }).click();
+  await expect(page).toHaveURL(/#\/daw\/cursos$/);
   await expect(page.locator("#daw-title")).toContainText("Cursos de DAW");
-  await expect(page.getByRole("link", { name: "Cursos DAW" })).toHaveAttribute("aria-current", "page");
+  await expect(page.getByRole("navigation", { name: "Secciones" }).getByRole("link", { name: "DAW", exact: true })).toHaveAttribute("aria-current", "page");
   await expect(page.locator(".daw-card")).toHaveCount(5);
   await page.getByRole("link", { name: "Programación" }).click();
   await expect(page.locator("#daw-title")).toHaveText("Programación");
@@ -89,7 +92,7 @@ test("el progreso de un curso se guarda en la cuenta y conserva lo que haya pues
 });
 
 test("catálogo, lección y práctica sin infracciones WCAG", async ({ page }) => {
-  for (const route of ["/#/daw", "/#/daw/programacion/leccion/prog-ut2-elementos", "/#/daw/js/practica/js-fundamentos"]) {
+  for (const route of ["/#/daw/cursos", "/#/daw/programacion/leccion/prog-ut2-elementos", "/#/daw/js/practica/js-fundamentos"]) {
     await page.goto(route);
     await expect(page.locator("#daw-title")).toBeVisible();
     await page.waitForFunction(() => document.getAnimations().every((a) => a.playState !== "running"));

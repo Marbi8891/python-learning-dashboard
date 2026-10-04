@@ -24,15 +24,18 @@ const isStarted = (s) => s.attempted > 0;
  */
 export function missingPrerequisites(index, stats, conceptId) {
   const concept = index.concepts.get(conceptId);
-  return concept.requires.filter((id) => stats.get(id).score < READY_SCORE);
+  return concept.requires.filter((id) => !isReady(stats.get(id)));
 }
+
+/** Firme: dominio suficiente o superado en la prueba de nivel. */
+export const isReady = (s) => s.score >= READY_SCORE || s.placed;
 
 /**
  * Siguiente concepto nuevo de la ruta. Si el primero pendiente tiene prerrequisitos flojos,
  * se devuelve igualmente con `blockedBy` para poder decir «Necesitas reforzar X antes de pasar a Y».
  */
 export function nextNewConcept(index, stats) {
-  const id = index.path.find((cid) => !isStarted(stats.get(cid)));
+  const id = index.path.find((cid) => !isStarted(stats.get(cid)) && !stats.get(cid).placed);
   if (!id) return null;
   return { id, blockedBy: missingPrerequisites(index, stats, id) };
 }
@@ -93,7 +96,7 @@ export function todayPlan(index, state, now = new Date(), stats = allStats(index
   //    Si además bloquean el siguiente concepto, se dice explícitamente.
   index.path
     .map((id) => stats.get(id))
-    .filter((s) => isStarted(s) && s.status !== "dominado" && index.concepts.get(s.id).daw === 3)
+    .filter((s) => isStarted(s) && !s.placed && s.status !== "dominado" && index.concepts.get(s.id).daw === 3)
     .sort((a, b) => a.score - b.score)
     .forEach((s) =>
       push(blockers.has(s.id) ? reinforce(s.id) : { type: "practice", concept: s.id, reason: `Importante para DAW y aún no lo dominas (${Math.round(s.score * 100)} %).` }),
@@ -103,7 +106,14 @@ export function todayPlan(index, state, now = new Date(), stats = allStats(index
   if (next && blockers.size === 0) push({ type: "learn", concept: next.id, reason: "Siguiente concepto de la ruta." });
   for (const id of blockers) push(reinforce(id));
 
-  // 5. Repaso general: lo dominado que hace más tiempo que no se practica
+  // 5. Repaso general: primero, consolidar lo que ya se sabía (prueba de nivel) y aún no está dominado;
+  //    después, lo dominado que hace más tiempo que no se practica
+  if (plan.length < 3) {
+    index.path
+      .map((id) => stats.get(id))
+      .filter((s) => s.placed && s.status !== "dominado")
+      .forEach((s) => push({ type: "practice", concept: s.id, reason: "Lo superaste en la prueba de nivel: practícalo para consolidarlo." }));
+  }
   if (plan.length < 3) {
     index.path
       .map((id) => stats.get(id))

@@ -31,8 +31,8 @@ test("registro, sincronización del progreso local, cierre e inicio de sesión",
 
   const email = uniqueEmail();
   await register(page, email);
-  const progress = await apiAs(page, "/api/progress");
-  expect(progress.map((p) => p.lesson_slug)).toEqual(["variables"]); // se subió al servidor
+  // se subió al servidor (la fusión es asíncrona: se espera en vez de leer una sola vez)
+  await expect.poll(async () => (await apiAs(page, "/api/progress")).map((p) => p.lesson_slug)).toEqual(["variables"]);
 
   await page.locator(".lesson[data-slug=tipos]").click();
   await page.getByRole("tab", { name: "Práctica y Ejercicio" }).click();

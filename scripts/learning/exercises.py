@@ -2399,3 +2399,528 @@ E += [
         daw=False,
     ),
 ]
+
+# ================================================================== PREPARACIÓN DAW (fase 2)
+# Más ejercicios con formato de examen: encontrar errores, ordenar algoritmos y problemas completos.
+E += [
+    bug(
+        "daw-bug-01",
+        "bucles",
+        "Debería mostrar la tabla del 7 (del 7 × 1 al 7 × 10). ¿Qué línea falla?",
+        """
+        n = 7
+        for i in range(1, 10):
+            print(f"{n} x {i} = {n * i}")
+        """,
+        2,
+        "for i in range(1, 11):",
+        "\n".join(f"7 x {i} = {7 * i}" for i in range(1, 11)),
+        "bucles.range-fin",
+        "`range(1, 10)` se detiene en 9: para llegar al 10 hay que poner 11.",
+    ),
+    bug(
+        "daw-bug-02",
+        "acumuladores",
+        "Debería contar cuántas notas son suspensos (menores que 5) y muestra 1. ¿Qué línea falla?",
+        """
+        notas = [3, 7, 4, 2]
+        suspensos = 0
+        for nota in notas:
+            suspensos = 0
+            if nota < 5:
+                suspensos += 1
+        print(suspensos)
+        """,
+        4,
+        "",
+        "3",
+        "acumuladores.inicializa-dentro",
+        "El `suspensos = 0` de dentro del bucle reinicia el contador en cada vuelta y solo cuenta la última nota. La inicialización ya está antes del bucle: la línea 4 sobra.",
+    ),
+    bug(
+        "daw-bug-03",
+        "funciones",
+        "La función debería devolver el precio con IVA, pero `total` vale None. ¿Qué línea falla?",
+        """
+        def con_iva(precio):
+            print(round(precio * 1.21, 2))
+
+        total = con_iva(100)
+        print(total)
+        """,
+        2,
+        "    return round(precio * 1.21, 2)",
+        "121.0",
+        "funciones.print-en-vez-de-return",
+        "La función muestra el resultado pero no lo devuelve, así que la llamada vale None. Con `return`, el valor llega a `total`.",
+    ),
+    bug(
+        "daw-bug-04",
+        "condicionales",
+        "Un 9,5 debería ser «Sobresaliente». ¿Qué línea tiene el error?",
+        """
+        nota = 9.5
+        if nota >= 5:
+            print("Aprobado")
+        elif nota >= 9:
+            print("Sobresaliente")
+        """,
+        2,
+        'if nota >= 9:\n    print("Sobresaliente")\nelif nota >= 5:',
+        "Sobresaliente",
+        "condicionales.orden-elif",
+        "Las condiciones están en orden inverso: `nota >= 5` se cumple primero y el `elif` nunca llega. Hay que comprobar antes la más exigente.",
+    ),
+    bug(
+        "daw-bug-05",
+        "diccionarios",
+        "Debería contar cuántas veces aparece cada letra, pero da KeyError. ¿Qué línea falla?",
+        """
+        conteo = {}
+        for letra in "casa":
+            conteo[letra] = conteo[letra] + 1
+        print(conteo)
+        """,
+        3,
+        "    conteo[letra] = conteo.get(letra, 0) + 1",
+        "{'c': 1, 'a': 2, 's': 1}",
+        "diccionarios.keyerror",
+        "La primera vez que aparece una letra todavía no es clave del diccionario. `get(letra, 0)` da 0 en ese caso.",
+    ),
+    bug(
+        "daw-bug-06",
+        "recorridos",
+        "Debería mostrar la temperatura más alta (−1), pero muestra 0. ¿Qué línea falla?",
+        """
+        temperaturas = [-5, -1, -8]
+        maxima = 0
+        for t in temperaturas:
+            if t > maxima:
+                maxima = t
+        print(maxima)
+        """,
+        2,
+        "maxima = temperaturas[0]",
+        "-1",
+        "recorridos.max-cero",
+        "Con todos los valores negativos, ninguno supera el 0 inicial. El candidato inicial debe ser un elemento de la lista.",
+    ),
+    bug(
+        "daw-bug-07",
+        "validacion",
+        "Debería pedir la opción hasta que sea «s» o «n», pero acepta cualquier cosa. ¿Qué línea falla?",
+        """
+        opcion = input()
+        while opcion == "s" or opcion == "n":
+            opcion = input()
+        print("Opción:", opcion)
+        """,
+        2,
+        'while opcion != "s" and opcion != "n":',
+        "Opción: s",
+        "validacion.condicion-invertida",
+        "La condición describe el dato **válido**, así que el bucle repite justo cuando la respuesta es buena. Debe repetirse mientras la opción **no** sea ni «s» ni «n».",
+        stdin="x\ns\n",
+    ),
+    bug(
+        "daw-bug-08",
+        "strings",
+        "Debería mostrar el nombre en mayúsculas, pero lo muestra igual. ¿Qué línea falla?",
+        """
+        nombre = "ana"
+        nombre.upper()
+        print(nombre)
+        """,
+        2,
+        "nombre = nombre.upper()",
+        "ANA",
+        "strings.inmutable",
+        "`upper()` no modifica el texto: devuelve otro nuevo que hay que guardar.",
+    ),
+    order(
+        "daw-ord-01",
+        "pseudocodigo",
+        "Ordena el pseudocódigo que pide números hasta que se escribe un 0 y muestra el mayor (el 0 no cuenta).",
+        [
+            "LEER n",
+            "mayor ← n",
+            "MIENTRAS n ≠ 0 HACER",
+            "    SI n > mayor ENTONCES mayor ← n",
+            "    LEER n",
+            "FIN MIENTRAS",
+            "ESCRIBIR mayor",
+        ],
+        "Se lee el primer número antes del bucle y es el primer candidato a mayor. Dentro, se compara y **después** se lee el siguiente: si se leyera antes, el 0 entraría en la comparación.",
+        pseudo=True,
+        error="pseudocodigo.orden-pasos",
+    ),
+    order(
+        "daw-ord-02",
+        "recorridos",
+        "Ordena las líneas de la búsqueda lineal: devuelve la posición del elemento o −1.",
+        [
+            "def buscar(lista, x):",
+            "    for i in range(len(lista)):",
+            "        if lista[i] == x:",
+            "            return i",
+            "    return -1",
+            "print(buscar([5, 8, 3], 3), buscar([5], 9))",
+        ],
+        "El `return -1` va **fuera** del bucle (al mismo nivel que el `for`): solo se sabe que no está cuando se ha recorrido entera.",
+        expect="2 -1",
+        error="recorridos.no-encontrado-dentro",
+    ),
+    order(
+        "daw-ord-03",
+        "acumuladores",
+        "Ordena las líneas que calculan la media de una lista de notas.",
+        [
+            "notas = [6, 8, 7]",
+            "suma = 0",
+            "for nota in notas:",
+            "    suma += nota",
+            "media = suma / len(notas)",
+            "print(media)",
+        ],
+        "Inicializar antes del bucle, acumular dentro y calcular la media **después** del bucle.",
+        expect="7.0",
+        error="acumuladores.media-dentro",
+        level=1,
+    ),
+]
+
+E += [
+    code(
+        "daw-pro-01",
+        "acumuladores",
+        "**Problema de examen.** Pide un número entero positivo `n` y muestra si es **perfecto**: un número es perfecto si es igual a la suma de sus divisores propios (los menores que él). Por ejemplo, 6 = 1 + 2 + 3.\n\nMuestra exactamente `6 es perfecto` o `8 no es perfecto`.",
+        "",
+        """
+        n = int(input())
+        suma = 0
+        for d in range(1, n):
+            if n % d == 0:
+                suma += d
+        if suma == n:
+            print(f"{n} es perfecto")
+        else:
+            print(f"{n} no es perfecto")
+        """,
+        [
+            case(
+                'assert __output__.strip() == "6 es perfecto", f"Con 6 se esperaba «6 es perfecto» y tu programa muestra «{__output__.strip()}»"',
+                "6\n",
+                "operadores.modulo",
+            ),
+            case(
+                'assert __output__.strip() == "28 es perfecto", "28 = 1 + 2 + 4 + 7 + 14 también es perfecto"',
+                "28\n",
+                "bucles.range-fin",
+            ),
+            case(
+                'assert __output__.strip() == "8 no es perfecto", "8 no es perfecto: 1 + 2 + 4 = 7"',
+                "8\n",
+                "acumuladores.inicializa-dentro",
+            ),
+            case(
+                'assert __output__.strip() == "1 no es perfecto", "1 no tiene divisores propios: no es perfecto"',
+                "1\n",
+                "algoritmos.sin-caso-limite",
+            ),
+        ],
+        "Acumulador de los divisores (los `d` con `n % d == 0`) desde 1 hasta n − 1, y una decisión **después** del bucle.",
+        "Recorre `range(1, n)`, suma los divisores y compara la suma con n al terminar.",
+        wrong=[
+            (
+                """
+                n = int(input())
+                suma = 0
+                for d in range(1, n + 1):
+                    if n % d == 0:
+                        suma += d
+                print(f"{n} es perfecto" if suma == n else f"{n} no es perfecto")
+                """,
+                1,
+            )
+        ],
+        level=3,
+    ),
+    code(
+        "daw-pro-02",
+        "strings",
+        '**Problema de examen.** Escribe `invertir_palabras(frase)` que devuelva la frase con el orden de las palabras invertido. Las palabras están separadas por uno o más espacios; el resultado las separa con un solo espacio.\n\n`invertir_palabras("hola  mundo cruel")` → `"cruel mundo hola"`',
+        """
+        def invertir_palabras(frase):
+            ...
+        """,
+        """
+        def invertir_palabras(frase):
+            palabras = frase.split()
+            return " ".join(palabras[::-1])
+        """,
+        [
+            case(
+                'assert invertir_palabras("hola mundo cruel") == "cruel mundo hola", "«hola mundo cruel» → «cruel mundo hola»"',
+                error="strings.slice-fin",
+            ),
+            case(
+                'assert invertir_palabras("  uno   dos ") == "dos uno", "Con espacios de más: «  uno   dos » → «dos uno»"',
+                error="validacion.condicion-invertida",
+            ),
+            case(
+                'assert invertir_palabras("") == "", "Una frase vacía da una frase vacía"',
+                error="algoritmos.sin-caso-limite",
+            ),
+        ],
+        "`split()` sin argumentos separa por cualquier cantidad de espacios y descarta los del principio y el final; `[::-1]` invierte la lista y `join` la vuelve a unir.",
+        "`frase.split()` da la lista de palabras.",
+        wrong=[
+            (
+                """
+                def invertir_palabras(frase):
+                    return " ".join(frase.split(" ")[::-1])
+                """,
+                2,
+            )
+        ],
+        level=2,
+    ),
+    code(
+        "daw-pro-03",
+        "diccionarios",
+        "**Problema de examen.** Tienes las notas de varios alumnos en un diccionario `{nombre: [notas]}`. Escribe `resumen(notas)` que devuelva un diccionario `{nombre: media}` con la media redondeada a 2 decimales (`round(x, 2)`). Un alumno sin notas tiene media 0.",
+        """
+        def resumen(notas):
+            ...
+        """,
+        """
+        def resumen(notas):
+            medias = {}
+            for nombre, lista in notas.items():
+                if lista:
+                    medias[nombre] = round(sum(lista) / len(lista), 2)
+                else:
+                    medias[nombre] = 0
+            return medias
+        """,
+        [
+            case(
+                'assert resumen({"Ana": [7, 8], "Luis": [5, 4, 6]}) == {"Ana": 7.5, "Luis": 5.0}, "Ana → 7.5 y Luis → 5.0"',
+                error="diccionarios.recorrido-claves",
+            ),
+            case(
+                'assert resumen({"Eva": [6, 7, 7]}) == {"Eva": 6.67}, "Redondea a 2 decimales: Eva → 6.67"'
+            ),
+            case(
+                'assert resumen({"Leo": []}) == {"Leo": 0}, "Sin notas, la media es 0 (y no hay que dividir entre 0)"',
+                error="acumuladores.media-dentro",
+            ),
+        ],
+        "Se recorre con `items()` para tener a la vez el nombre y su lista; la media se protege contra la lista vacía.",
+        "`for nombre, lista in notas.items():`",
+        wrong=[
+            (
+                """
+                def resumen(notas):
+                    medias = {}
+                    for nombre, lista in notas.items():
+                        medias[nombre] = round(sum(lista) / len(lista), 2)
+                    return medias
+                """,
+                3,
+            )
+        ],
+        level=3,
+    ),
+    code(
+        "daw-pro-04",
+        "validacion",
+        "**Problema de examen.** Muestra un menú y lee opciones hasta que el usuario elija `3`:\n\n- `1`: lee dos enteros y muestra `Suma: X`\n- `2`: lee dos enteros y muestra `Resta: X` (el primero menos el segundo)\n- `3`: muestra `Adiós` y termina\n- otra cosa: muestra `Opción no válida`\n\nNo hace falta mostrar el texto del menú.",
+        "",
+        """
+        opcion = input()
+        while opcion != "3":
+            if opcion == "1":
+                a = int(input())
+                b = int(input())
+                print(f"Suma: {a + b}")
+            elif opcion == "2":
+                a = int(input())
+                b = int(input())
+                print(f"Resta: {a - b}")
+            else:
+                print("Opción no válida")
+            opcion = input()
+        print("Adiós")
+        """,
+        [
+            case(
+                'lineas = __output__.split()\nassert "Suma: 7" in __output__ and "Resta: 6" in __output__ and "no válida" not in __output__ and __output__.strip().endswith("Adiós"), f"Con 1 (3, 4), 2 (10, 4) y 3 se esperaba «Suma: 7», «Resta: 6» y «Adiós». Tu salida:\\n{__output__}"',
+                "1\n3\n4\n2\n10\n4\n3\n",
+                "entrada-salida.input-texto",
+            ),
+            case(
+                'assert "Opción no válida" in __output__ and __output__.strip().endswith("Adiós"), "Con 9 y después 3 debe avisar de la opción no válida y terminar"',
+                "9\n3\n",
+                "condicionales.if-separados",
+            ),
+            case(
+                'assert __output__.strip() == "Adiós", "Si la primera opción es 3, solo muestra «Adiós»"',
+                "3\n",
+                "bucles.condicion-salida",
+            ),
+        ],
+        'Menú con bucle de lectura: se lee la opción antes del `while` y al final de cada vuelta; la condición es la de **seguir** (`opcion != "3"`). Una cadena `if/elif/else` reparte las opciones.',
+        'Estructura: leer opción → `while opcion != "3":` → if/elif/else → leer opción. «Adiós» va después del bucle.',
+        wrong=[
+            (
+                """
+                opcion = input()
+                while opcion != "3":
+                    if opcion == "1":
+                        a = int(input())
+                        b = int(input())
+                        print(f"Suma: {a + b}")
+                    if opcion == "2":
+                        a = int(input())
+                        b = int(input())
+                        print(f"Resta: {a - b}")
+                    else:
+                        print("Opción no válida")
+                    opcion = input()
+                print("Adiós")
+                """,
+                1,
+            )
+        ],
+        level=3,
+    ),
+    code(
+        "daw-pro-05",
+        "recorridos",
+        "**Problema de examen.** Escribe `segundo_mayor(numeros)` que devuelva el segundo valor **distinto** más grande de la lista, o `None` si no existe. No uses `sort`, `sorted`, `max` ni `set`.\n\n`segundo_mayor([4, 9, 7, 9])` → `7`",
+        """
+        def segundo_mayor(numeros):
+            ...
+        """,
+        """
+        def segundo_mayor(numeros):
+            mayor = None
+            segundo = None
+            for n in numeros:
+                if mayor is None or n > mayor:
+                    segundo = mayor
+                    mayor = n
+                elif n != mayor and (segundo is None or n > segundo):
+                    segundo = n
+            return segundo
+        """,
+        [
+            case(
+                'assert segundo_mayor([4, 9, 7, 9]) == 7, "En [4, 9, 7, 9] el segundo mayor distinto es 7"',
+                error="recorridos.max-cero",
+            ),
+            case(
+                'assert segundo_mayor([-3, -1, -2]) == -2, "Con negativos: [-3, -1, -2] → -2"',
+                error="recorridos.max-cero",
+            ),
+            case(
+                'assert segundo_mayor([5, 5]) is None and segundo_mayor([]) is None, "Sin un segundo valor distinto, devuelve None"',
+                error="algoritmos.sin-caso-limite",
+            ),
+            case(
+                'assert segundo_mayor([1, 8, 3]) == 3, "[1, 8, 3] → 3: al aparecer un nuevo máximo, el anterior pasa a ser el segundo"',
+                error="trazado.valor-antiguo",
+            ),
+            case(
+                'import re\nassert not re.search(r"\\\\b(sort|sorted|max|set)\\\\b", __code__), "Resuélvelo con un recorrido, sin sort, sorted, max ni set"'
+            ),
+        ],
+        "Un solo recorrido con dos candidatos. Cuando aparece un nuevo máximo, el máximo anterior pasa a ser el segundo; si no, se compara con el segundo, ignorando los repetidos del máximo.",
+        "Usa `None` como «todavía no hay candidato», no 0.",
+        wrong=[
+            (
+                """
+                def segundo_mayor(numeros):
+                    mayor = 0
+                    segundo = 0
+                    for n in numeros:
+                        if n > mayor:
+                            segundo = mayor
+                            mayor = n
+                        elif n != mayor and n > segundo:
+                            segundo = n
+                    return segundo if segundo != 0 else None
+                """,
+                2,
+            )
+        ],
+        level=3,
+    ),
+    code(
+        "daw-pro-06",
+        "funciones",
+        '**Problema de examen.** Escribe `letra_dni(numero)` que devuelva la letra del DNI español: es la posición `numero % 23` en la cadena `"TRWAGMYFPDXBNJZSQVHLCKE"`.\n\nAdemás, escribe `dni_valido(dni)` que reciba un texto de 9 caracteres (8 cifras y una letra mayúscula) y devuelva True si la letra es la correcta.',
+        """
+        LETRAS = "TRWAGMYFPDXBNJZSQVHLCKE"
+
+
+        def letra_dni(numero):
+            ...
+
+
+        def dni_valido(dni):
+            ...
+        """,
+        """
+        LETRAS = "TRWAGMYFPDXBNJZSQVHLCKE"
+
+
+        def letra_dni(numero):
+            return LETRAS[numero % 23]
+
+
+        def dni_valido(dni):
+            if len(dni) != 9 or not dni[:8].isdigit():
+                return False
+            return dni[8] == letra_dni(int(dni[:8]))
+        """,
+        [
+            case(
+                'assert letra_dni(12345678) == "Z", "La letra de 12345678 es Z"',
+                error="operadores.modulo",
+            ),
+            case(
+                'assert dni_valido("12345678Z") is True and dni_valido("12345678A") is False, "12345678Z es válido; 12345678A no"',
+                error="strings.slice-fin",
+            ),
+            case(
+                'assert dni_valido("1234567Z") is False and dni_valido("1234567XZ") is False, "Con menos de 8 cifras o con letras entre las cifras no es válido"',
+                error="validacion.condicion-invertida",
+            ),
+            case(
+                'assert dni_valido("00000000T") is True, "00000000T es válido (0 % 23 = 0 → T)"',
+                error="tipos.texto-numero",
+            ),
+        ],
+        "Dos funciones pequeñas: una calcula y la otra valida reutilizándola. Validar el formato **antes** de convertir con `int()` evita el ValueError.",
+        "`dni[:8]` son las cifras y `dni[8]` la letra. Comprueba `isdigit()` antes de `int()`.",
+        wrong=[
+            (
+                """
+                LETRAS = "TRWAGMYFPDXBNJZSQVHLCKE"
+
+
+                def letra_dni(numero):
+                    return LETRAS[numero % 23]
+
+
+                def dni_valido(dni):
+                    return dni[8] == letra_dni(int(dni[:7]))
+                """,
+                2,
+            )
+        ],
+        level=3,
+    ),
+]

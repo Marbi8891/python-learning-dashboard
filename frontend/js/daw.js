@@ -146,6 +146,7 @@ function renderCatalog() {
       </li>`;
   }).join("");
   return `
+    <p class="daw-crumb"><a href="#/daw">Preparación DAW</a></p>
     <header class="course-hero">
       <p class="eyebrow">Ciclo DAW</p>
       <h1 class="course-hero__title" id="daw-title" tabindex="-1">Cursos de <em>DAW</em></h1>
@@ -186,7 +187,7 @@ function renderPanel(course) {
     .join("");
   const first = lessons.get(course.order[0]);
   return `
-    <p class="daw-crumb"><a href="#/daw">Cursos de DAW</a></p>
+    <p class="daw-crumb"><a href="#/daw">Preparación DAW</a> › <a href="#/daw/cursos">Cursos de DAW</a></p>
     <header class="course-hero">
       <p class="eyebrow">${escapeHtml(course.info.subtitle)}</p>
       <h1 class="course-hero__title" id="daw-title" tabindex="-1">${escapeHtml(course.info.title)}</h1>
@@ -249,7 +250,7 @@ function renderLesson(course, slug) {
     .map((s) => `<li><a href="${safeUrl(s.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(s.title)}</a></li>`)
     .join("");
   return `
-    <p class="daw-crumb"><a href="#/daw">Cursos de DAW</a> › <a href="#/daw/${course.id}">${escapeHtml(course.info.title)}</a> ›
+    <p class="daw-crumb"><a href="#/daw">Preparación DAW</a> › <a href="#/daw/${course.id}">${escapeHtml(course.info.title)}</a> ›
       ${escapeHtml(module.title)}</p>
     <header class="course-hero">
       <p class="eyebrow">Lección ${index + 1} de ${course.order.length}</p>
@@ -399,7 +400,7 @@ function renderPractice(course) {
   const block = course.bank.exam.blocks.find((b) => b.slug === session.block);
   const name = session.block === "repaso" ? "Repaso de hoy" : t(block.title);
   const head = `
-    <p class="daw-crumb"><a href="#/daw">Cursos de DAW</a> › <a href="#/daw/${course.id}">${escapeHtml(course.info.title)}</a></p>
+    <p class="daw-crumb"><a href="#/daw">Preparación DAW</a> › <a href="#/daw/${course.id}">${escapeHtml(course.info.title)}</a></p>
     <div class="exam-bar">
       <span class="exam-bar__title" id="daw-title" tabindex="-1">Práctica · ${escapeHtml(name)}</span>
       <span>Pregunta ${Math.min(session.index + 1, session.items.length)} de ${session.items.length}</span>
