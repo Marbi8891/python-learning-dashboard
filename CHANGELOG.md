@@ -16,7 +16,7 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
   - **Tests unitarios del frontend** con `node --test`: dominio, repaso, recomendación, selección, sesiones y simulacros.
   - **App Android 0.16.0:** pestaña «Hoy» con la misma lógica y el mismo progreso que la web.
   - Revisión de seguridad con los riesgos que siguen abiertos (`docs/security/revision-2026-10.md`).
-- **Pantalla de bienvenida** (`#/bienvenida`): en la primera visita explica qué es la web, cómo funciona (concepto → ejercicio → error explicado → repaso) y qué hay en cada sección. Desde ahí se empieza de cero o se hace la prueba de nivel. Las siguientes visitas van directas a «¿Qué estudio ahora?», y la presentación sigue enlazada desde Aprender y el pie del menú.
+- **Pantalla de bienvenida** (`#/bienvenida`), que se muestra en la primera visita. Es un **mapa con 5 paradas** (Aprender → Teoría → Practicar → Repasar → DAW) que se recorre con «Anterior / Siguiente», pulsando una parada o con las flechas; cada parada explica la sección con un ejemplo real. Al final: empezar de cero, prueba de nivel o el **recorrido por el menú**, que resalta cada opción real de la barra lateral con un globo explicativo (también en el móvil, donde abre el menú; se cierra con Escape). Las siguientes visitas van directas a «¿Qué estudio ahora?», y la presentación sigue enlazada desde Aprender y el pie del menú.
 
 ### Corregido
 - **Contraste WCAG** que había roto el rediseño visual: la auditoría de accesibilidad fallaba en `main`. Se quitan también los degradados y el efecto cristal.

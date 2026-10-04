@@ -27,11 +27,8 @@ test("primera visita: pantalla de bienvenida que explica la web y lleva a empeza
   await page.goto("/");
   await expect(page).toHaveURL(/#\/bienvenida$/);
   await expect(page.locator("#learn-title")).toHaveText("Aprende Python entendiendo lo que haces");
-  await expect(page.getByRole("heading", { name: "Cómo funciona" })).toBeVisible();
-  await expect(page.locator(".lx-welcome__step")).toHaveCount(4);
-  for (const name of ["Aprender", "Teoría", "Practicar", "DAW"]) {
-    await expect(page.locator(".lx-welcome__cards").getByRole("link", { name: new RegExp(`^${name}`) })).toBeVisible();
-  }
+  await expect(page.getByRole("heading", { name: /El mapa/ })).toBeVisible();
+  await expect(page.locator(".lx-map__stop")).toHaveCount(5);
   await expect(page.getByRole("button", { name: "Ya sé algo: prueba de nivel" })).toBeVisible();
   await page.getByRole("link", { name: "Empezar desde cero" }).click();
   await expect(page).toHaveURL(/#\/aprender$/);
@@ -48,6 +45,89 @@ test("bienvenida: la prueba de nivel arranca desde la presentación", async ({ p
   await page.goto("/#/bienvenida");
   await page.getByRole("button", { name: "Ya sé algo: prueba de nivel" }).click();
   await expect(page).toHaveURL(/#\/sesion$/);
+});
+
+test("bienvenida como mapa: se avanza parada a parada con botones, clic o flechas", async ({ page }) => {
+  await page.goto("/#/bienvenida");
+  const panel = page.locator("#lx-map-panel");
+  await expect(panel).toContainText("Parada 1 de 5 · Aprender");
+  await expect(page.locator('[data-stop="0"]')).toHaveAttribute("aria-current", "step");
+  await expect(panel.getByRole("button", { name: "Anterior" })).toHaveCount(0);
+
+  await panel.getByRole("button", { name: "Siguiente: Teoría" }).click();
+  await expect(panel).toContainText("Parada 2 de 5 · Teoría");
+  await expect(page.locator("#lx-map-stop-title")).toBeFocused(); // el foco sigue a la parada nueva
+  await expect(panel.locator(".lx-code")).toContainText('print("Menor")');
+  await expect(page.locator('[data-stop="0"]').locator("..")).toHaveAttribute("data-state", "done");
+
+  await panel.getByRole("button", { name: "Siguiente: Practicar" }).click();
+  await expect(panel).toContainText("Qué falla:");
+  await panel.getByRole("button", { name: "Anterior" }).click();
+  await expect(panel).toContainText("Parada 2 de 5");
+
+  // Teclado: flechas entre paradas
+  await page.locator('[data-stop="1"]').focus();
+  await page.keyboard.press("ArrowRight");
+  await expect(page.locator('[data-stop="2"]')).toBeFocused();
+  await expect(panel).toContainText("Parada 3 de 5 · Practicar");
+
+  // Última parada: empezar, prueba de nivel o recorrido por el menú
+  await page.getByRole("button", { name: /Parada 5: DAW/ }).click();
+  await expect(panel).toContainText("La meta: el examen de Programación");
+  await expect(panel.getByRole("button", { name: "Prueba de nivel" })).toBeVisible();
+  await expect(panel.getByRole("button", { name: "Haz el recorrido por el menú" })).toBeVisible();
+  await audit(page);
+  await panel.getByRole("link", { name: "Ver la preparación DAW" }).click();
+  await expect(page).toHaveURL(/#\/daw$/);
+});
+
+test("recorrido por el menú: resalta cada opción real y se cierra con Escape", async ({ page }) => {
+  await page.goto("/#/bienvenida");
+  const start = page.getByRole("button", { name: "Recorrido por el menú", exact: true });
+  await start.click();
+  const tour = page.getByRole("dialog", { name: "Aprender" });
+  await expect(tour).toContainText("Paso 1 de");
+  await expect(page.locator("#tour-title")).toBeFocused();
+  // El resalte está sobre la opción «Aprender» del menú
+  const ring = await page.locator(".tour-ring").boundingBox();
+  const item = await page.locator('[data-nav="aprender"]').boundingBox();
+  expect(Math.abs(ring.y + 4 - item.y)).toBeLessThan(2);
+  await audit(page);
+
+  await page.getByRole("button", { name: "Siguiente", exact: true }).click();
+  await expect(page.getByRole("dialog", { name: "Teoría" })).toBeVisible();
+  await page.getByRole("button", { name: "Anterior" }).click();
+  await expect(page.getByRole("dialog", { name: "Aprender" })).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(page.locator(".tour-pop")).toHaveCount(0);
+  await expect(page.locator(".tour-ring")).toHaveCount(0);
+  await expect(start).toBeFocused();
+
+  // Si se pulsa una opción resaltada, el recorrido termina y se navega
+  await start.click();
+  await page.getByRole("button", { name: "Siguiente", exact: true }).click();
+  await page.locator('[data-nav="teoria"]').click();
+  await expect(page).toHaveURL(/#\/teoria$/);
+  await expect(page.locator(".tour-pop")).toHaveCount(0);
+});
+
+test("recorrido por el menú en el móvil: abre el menú, recorre hasta el final y lo vuelve a cerrar", async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 760 });
+  await page.goto("/#/bienvenida");
+  await page.getByRole("button", { name: "Recorrido por el menú", exact: true }).click();
+  await expect(page.locator("body")).toHaveClass(/nav-open/);
+  const pop = page.locator(".tour-pop");
+  await expect(pop).toContainText("Paso 1 de");
+  const total = Number((await page.locator(".tour-pop__step").textContent()).match(/de (\d+)/)[1]);
+  for (let i = 1; i < total; i++) await page.getByRole("button", { name: "Siguiente", exact: true }).click();
+  await expect(page.getByRole("dialog", { name: "Presentación" })).toBeVisible();
+  // El globo no tapa la opción resaltada
+  const box = await pop.boundingBox();
+  const target = await page.locator('.sidebar__footer a[href="#/bienvenida"]').boundingBox();
+  expect(box.y + box.height <= target.y || box.y >= target.y + target.height).toBe(true);
+  await page.getByRole("button", { name: "Terminar" }).click();
+  await expect(pop).toHaveCount(0);
+  await expect(page.locator("body")).not.toHaveClass(/nav-open/);
 });
 
 test("la portada responde «¿Qué estudio ahora?» y propone el primer concepto", async ({ page }) => {
