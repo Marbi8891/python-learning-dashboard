@@ -38,7 +38,7 @@ import { initCourseSync } from "./course-store.js";
 import { openDaw, refreshDaw } from "./daw.js";
 import { initPcapSync } from "./pcap-sync.js";
 import { isLearnRoute, learnNavKey, openLearn } from "./learn/learn-app.js";
-import { initLearnSync } from "./learn/learn-store.js";
+import { initLearnSync, isFirstVisit } from "./learn/learn-store.js";
 import { initPrefs } from "./prefs.js";
 import { badgesHtml, renderProfile } from "./profile.js";
 import { initPrivate, renderPrivate } from "./private.js";
@@ -52,6 +52,7 @@ const ROUTE_PREFIX = "#/leccion/";
 const RESET_ROUTE = "#/restablecer";
 const HOME_ROUTE = "#/inicio"; // portada del curso PCAP
 const LEARN_ROUTE = "#/aprender"; // página principal: ¿qué estudio ahora? (ADR-0031)
+const WELCOME_ROUTE = "#/bienvenida"; // presentación de la web (solo en la primera visita)
 const PROFILE_ROUTE = "#/perfil";
 const PCAP_ROUTE = "#/pcap";
 const CERTIFICATE_ROUTE = "#/certificado";
@@ -611,9 +612,11 @@ function navigate({ moveFocus = true } = {}) {
     return;
   }
   if (!location.hash.startsWith(ROUTE_PREFIX)) {
-    history.replaceState(null, "", LEARN_ROUTE);
+    // La primera vez se presenta la web; después se va directo a «¿Qué estudio ahora?»
+    const start = isFirstVisit() ? WELCOME_ROUTE : LEARN_ROUTE;
+    history.replaceState(null, "", start);
     showPage("learn", { moveFocus: false });
-    openLearn(LEARN_ROUTE, { moveFocus });
+    openLearn(start, { moveFocus });
     return;
   }
 

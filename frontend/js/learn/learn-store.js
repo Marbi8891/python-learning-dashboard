@@ -47,6 +47,26 @@ export function saveLearning() {
   timer = setTimeout(push, PUSH_DELAY_MS);
 }
 
+const WELCOME_KEY = "pld:welcome-seen";
+
+/** Primera visita: nunca ha visto la bienvenida ni ha hecho ningún ejercicio. */
+export function isFirstVisit() {
+  if (learning.log.length > 0) return false;
+  try {
+    return !localStorage.getItem(WELCOME_KEY);
+  } catch {
+    return false; // sin almacenamiento no se puede recordar: no se insiste con la bienvenida
+  }
+}
+
+export function markWelcomeSeen() {
+  try {
+    localStorage.setItem(WELCOME_KEY, "1");
+  } catch {
+    // sin almacenamiento: no pasa nada
+  }
+}
+
 /** Sube ya el cambio pendiente (antes de cerrar sesión). */
 export async function flushLearnSync() {
   if (!timer || !session.user) return;

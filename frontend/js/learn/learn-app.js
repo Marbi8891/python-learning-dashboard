@@ -8,7 +8,7 @@
      #/progreso             dominio por concepto, errores y actividad
      #/sesion               sesión de estudio en curso (session-view.js) */
 
-import { learning, loadLearningContent, onLearningChange, saveLearning } from "./learn-store.js";
+import { learning, loadLearningContent, markWelcomeSeen, onLearningChange, saveLearning } from "./learn-store.js";
 import { activeErrors, allStats, areaSummary, daysBetween, lastActivity, markRead } from "./mastery.js";
 import { missingPrerequisites, selectExercises, todayPlan } from "./recommend.js";
 import { activityExercises, EXAM_ACTIVITIES, renderDawPrep } from "./daw-prep.js";
@@ -89,7 +89,7 @@ function renderToday() {
     <header class="lx-head">
       <p class="eyebrow">Hoy · ${escapeHtml(date)}</p>
       <h1 class="lx-title" id="learn-title" tabindex="-1">¿Qué estudio ahora?</h1>
-      <p class="lx-lead">Empieza por el primer paso. El plan se ajusta solo a lo que ya dominas y a tus errores.</p>
+      <p class="lx-lead">Empieza por el primer paso. El plan se ajusta solo a lo que ya dominas y a tus errores. <a href="#/bienvenida">¿Cómo funciona?</a></p>
     </header>
     ${nextStep}
     ${
@@ -120,6 +120,48 @@ function renderToday() {
       <summary>Ver tu ruta completa (${mastered} de ${all.length} dominados)</summary>
       ${routeHtml(stats)}
     </details>`;
+}
+
+/* ---------- Bienvenida (#/bienvenida) ---------- */
+
+const STEPS = [
+  ["Entiende el concepto", "Explicación corta y un ejemplo comentado línea a línea, con su salida real."],
+  ["Inténtalo tú", "Ejercicios de seis tipos: predecir la salida, encontrar el error, completar, ordenar y escribir programas."],
+  ["Aprende del error", "Si fallas, te explica qué falla, por qué y cómo evitarlo, y vuelves a intentarlo con un ejercicio parecido."],
+  ["Repasa a tiempo", "Cada concepto vuelve cuando toca: a 1, 3, 7, 14 y 30 días. Así no se olvida."],
+];
+
+const SECTIONS = [
+  ["#/aprender", "Aprender", "Te dice qué estudiar hoy según lo que ya dominas y tus errores."],
+  ["#/teoria", "Teoría", "22 conceptos de programación, de las variables a los ficheros."],
+  ["#/practicar", "Practicar", "Ejercicios por concepto o por tipo, y tus errores pendientes."],
+  ["#/daw", "DAW", "Preparación del módulo de Programación: competencias y simulacros."],
+];
+
+function renderWelcome() {
+  markWelcomeSeen();
+  const steps = STEPS.map(([t, d], i) => `<li class="lx-welcome__step"><span class="lx-welcome__n" aria-hidden="true">${i + 1}</span><div><h3>${t}</h3><p>${d}</p></div></li>`).join("");
+  const sections = SECTIONS.map(([href, t, d]) => `<li><a class="lx-welcome__card" href="${href}"><strong>${t}</strong><span>${d}</span></a></li>`).join("");
+  return `
+    <section class="lx-welcome" aria-labelledby="learn-title">
+      <p class="eyebrow">Bienvenido/a</p>
+      <h1 class="lx-welcome__title" id="learn-title" tabindex="-1">Aprende Python entendiendo lo que haces</h1>
+      <p class="lx-welcome__lead">Y prepara la parte de programación de <strong>DAW</strong> con teoría clara, ejercicios corregidos al momento y la explicación de cada error.</p>
+      <div class="lx-actions lx-welcome__cta">
+        <a class="btn btn--primary btn--lg" href="#/aprender">Empezar desde cero</a>
+        <button class="btn btn--ghost btn--lg" type="button" data-learn="diagnostic">Ya sé algo: prueba de nivel</button>
+      </div>
+      <p class="lx-muted">Gratis y sin registrarte: tu progreso se guarda en este navegador. Con una cuenta opcional, también en el móvil.</p>
+    </section>
+    <section class="lx-section" aria-labelledby="lx-how-title">
+      <h2 class="lx-section__title" id="lx-how-title">Cómo funciona</h2>
+      <ol class="lx-welcome__steps">${steps}</ol>
+    </section>
+    <section class="lx-section" aria-labelledby="lx-sections-title">
+      <h2 class="lx-section__title" id="lx-sections-title">Qué encontrarás</h2>
+      <ul class="lx-welcome__cards">${sections}</ul>
+    </section>
+    <p class="lx-muted">¿Preparas la certificación PCAP? Tienes también <a href="#/inicio">el curso completo de certificación</a>.</p>`;
 }
 
 /** La ruta recomendada con el estado de cada concepto y qué lo bloquea. */
@@ -534,7 +576,8 @@ function render(route) {
     return;
   }
   let html;
-  if (section === "teoria") html = arg && index.concepts.has(arg) ? renderConcept(arg) : renderTheoryIndex();
+  if (section === "bienvenida") html = renderWelcome();
+  else if (section === "teoria") html = arg && index.concepts.has(arg) ? renderConcept(arg) : renderTheoryIndex();
   else if (section === "practicar") html = renderPractice();
   else if (section === "progreso") html = renderProgress();
   else if (section === "daw") html = renderDawPrep(index, learning);
@@ -542,13 +585,14 @@ function render(route) {
   root().innerHTML = html;
 }
 
-export const LEARN_ROUTES = ["#/aprender", "#/teoria", "#/practicar", "#/progreso", "#/sesion"];
+export const LEARN_ROUTES = ["#/bienvenida", "#/aprender", "#/teoria", "#/practicar", "#/progreso", "#/sesion"];
 
 /** ¿La ruta es del núcleo educativo? `#/daw` es la Preparación DAW; `#/daw/<curso>` sigue en daw.js. */
 export const isLearnRoute = (hash) => hash === "#/daw" || LEARN_ROUTES.some((r) => hash === r || hash.startsWith(`${r}/`));
 
 /** Clave del menú principal para una ruta del núcleo. */
 export function learnNavKey(hash) {
+  if (hash.startsWith("#/bienvenida")) return "bienvenida"; // ninguna entrada del menú
   if (hash.startsWith("#/teoria")) return "teoria";
   if (hash.startsWith("#/practicar")) return "practicar";
   if (hash.startsWith("#/progreso")) return "progreso";
