@@ -16,12 +16,13 @@ async function register(page, email, name = "Ana") {
   await expect(page.locator("#account-label")).toHaveText(name);
 }
 
-async function apiAs(page, path) {
-  return page.evaluate(async (url) => {
-    const token = localStorage.getItem("pld:token");
-    const response = await fetch(`http://127.0.0.1:8000${url}`, { headers: { Authorization: `Bearer ${token}` } });
-    return response.json();
-  }, path);
+/** Consulta la API como el usuario. El token de la web solo vive en memoria (no se puede leer
+    del navegador), así que el test inicia sesión por su cuenta. */
+async function apiAs(page, path, email) {
+  const login = await page.request.post("http://127.0.0.1:8000/api/v1/auth/login", { form: { username: email, password: PASSWORD } });
+  const { access_token: token } = await login.json();
+  const response = await page.request.get(`http://127.0.0.1:8000${path}`, { headers: { Authorization: `Bearer ${token}` } });
+  return response.json();
 }
 
 test("registro, sincronización del progreso local, cierre e inicio de sesión", async ({ page }) => {
@@ -32,12 +33,12 @@ test("registro, sincronización del progreso local, cierre e inicio de sesión",
   const email = uniqueEmail();
   await register(page, email);
   // se subió al servidor (la fusión es asíncrona: se espera en vez de leer una sola vez)
-  await expect.poll(async () => (await apiAs(page, "/api/progress")).map((p) => p.lesson_slug)).toEqual(["variables"]);
+  await expect.poll(async () => (await apiAs(page, "/api/v1/progress", email)).map((p) => p.lesson_slug)).toEqual(["variables"]);
 
   await page.locator(".lesson[data-slug=tipos]").click();
   await page.getByRole("tab", { name: "Práctica y Ejercicio" }).click();
   await page.getByRole("button", { name: "Marcar como completada" }).click();
-  await expect.poll(async () => (await apiAs(page, "/api/progress")).length).toBe(2);
+  await expect.poll(async () => (await apiAs(page, "/api/v1/progress", email)).length).toBe(2);
 
   await page.locator("#account-button").click();
   await dialog(page).getByRole("button", { name: "Cerrar sesión" }).click();
@@ -65,11 +66,18 @@ test("errores de validación y credenciales en español", async ({ page }) => {
   await expect(page.locator("#account-message")).toHaveText("Email o contraseña incorrectos");
 });
 
-test("la sesión se restaura al recargar", async ({ page }) => {
-  await openLesson(page);
+test("al recargar no queda ningún token en el navegador, pero el progreso local sí", async ({ page }) => {
+  // El token de acceso solo vive en memoria (security/hardening-defaults): recargar cierra la sesión
+  await openLesson(page, "variables");
   await register(page, uniqueEmail(), "Luis");
+  await page.getByRole("tab", { name: "Práctica y Ejercicio" }).click();
+  await page.getByRole("button", { name: "Marcar como completada" }).click();
   await page.reload();
-  await expect(page.locator("#account-label")).toHaveText("Luis");
+  await expect(page.locator("#account-label")).toHaveText("Iniciar sesión");
+  const stored = await page.evaluate(() => JSON.stringify({ ...localStorage }) + JSON.stringify({ ...sessionStorage }));
+  expect(stored).not.toMatch(/eyJ[\w-]+\.[\w-]+\./); // ningún JWT guardado
+  await page.locator(".lesson[data-slug=tipos]").click();
+  await expect(page.locator(".lesson[data-slug=variables]")).toHaveAttribute("data-status", "completed");
 });
 
 test("exportar datos y eliminar la cuenta (RGPD)", async ({ page }) => {
@@ -114,7 +122,7 @@ test("recuperar contraseña: solicitud y enlace no válido", async ({ page }) =>
 });
 
 test("sin email en el servidor, la recuperación ofrece el contacto", async ({ page }) => {
-  await page.route("**/api/health", (route) => route.fulfill({ json: { status: "ok", email: false } }));
+  await page.route("**/api/v1/health", (route) => route.fulfill({ json: { status: "ok", email: false } }));
   await openLesson(page);
   await page.getByRole("button", { name: "Iniciar sesión" }).click();
   await dialog(page).getByRole("link", { name: "¿Has olvidado tu contraseña?" }).click();
@@ -125,7 +133,7 @@ test("sin email en el servidor, la recuperación ofrece el contacto", async ({ p
 });
 
 test("un servidor lento avisa de que se está despertando", async ({ page }) => {
-  await page.route("**/api/auth/login", async (route) => {
+  await page.route("**/api/v1/auth/login", async (route) => {
     await new Promise((resolve) => setTimeout(resolve, 5000));
     await route.continue();
   });

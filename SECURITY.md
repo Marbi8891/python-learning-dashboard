@@ -24,7 +24,7 @@ Solo la última versión de `main`, que es la que está desplegada:
 - El login tarda lo mismo aunque el email no exista y da un mensaje genérico.
 
 **Sesiones**
-- El token JWT caduca a los 60 minutos.
+- El token JWT caduca a los 30 minutos y la web solo lo guarda en memoria, nunca en `localStorage` (ADR-0032).
 - Se puede cerrar la sesión en todos los dispositivos (`/api/auth/logout-all`).
 - Cambiar la contraseña invalida todos los tokens emitidos.
 
@@ -83,7 +83,7 @@ Las amenazas se revisan técnica por técnica con la matriz MITRE ATT&CK Enterpr
 
 ## Revisión de octubre de 2026 (ADR-0031)
 
-Qué se ha comprobado al añadir el núcleo educativo y **qué riesgos siguen abiertos** (token en `localStorage`, CSP en `<meta>`, Pyodide sin SRI, progreso declarado por el alumno…): [`docs/security/revision-2026-10.md`](docs/security/revision-2026-10.md).
+Qué se ha comprobado al añadir el núcleo educativo y **qué riesgos siguen abiertos** (CSP en `<meta>`, Pyodide sin SRI, progreso declarado por el alumno…): [`docs/security/revision-2026-10.md`](docs/security/revision-2026-10.md).
 
 ## Ajustes que hay que activar en GitHub
 

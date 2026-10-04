@@ -190,8 +190,13 @@ test("el progreso por conceptos se sincroniza con la cuenta y se fusiona con el 
   };
   await request.put(`${API}/api/course-state/learn`, { headers, data: { data: remote } });
 
-  await page.addInitScript((t) => localStorage.setItem("pld:token", t), token);
+  // El token de la web solo vive en memoria: se inicia sesión por la interfaz
   await page.goto("/#/aprender");
+  await page.getByRole("button", { name: "Iniciar sesión" }).click();
+  await page.locator("#login-form").getByLabel("Email").fill(email);
+  await page.locator("#login-form").getByLabel("Contraseña").fill("contraseña-segura");
+  await page.locator("#login-form").getByRole("button", { name: "Entrar" }).click();
+  await expect(page.locator("#account-label")).toHaveText("Ana");
   await startSession(page, { kind: "practice", title: "Bucles", exercises: ["buc-01"] });
   await page.getByLabel(/Lo que muestra el programa/).fill("2 3 4 5");
   await page.getByRole("button", { name: "Comprobar", exact: true }).click();

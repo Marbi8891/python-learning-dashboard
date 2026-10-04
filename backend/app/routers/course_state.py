@@ -13,7 +13,7 @@ from app.deps import CurrentUser, DbSession
 from app.models import CourseState
 from app.schemas import COURSES, PcapStateIn, PcapStateOut
 
-router = APIRouter(prefix="/api/course-state", tags=["cursos"])
+router = APIRouter(prefix="/course-state", tags=["cursos"])
 
 CourseId = Annotated[str, Path(max_length=20)]
 

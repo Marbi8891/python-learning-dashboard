@@ -9,7 +9,7 @@ from app.models import ExerciseAttempt
 from app.routers.progress import mark_completed
 from app.schemas import AttemptCreate, AttemptOut
 
-router = APIRouter(prefix="/api/lessons/{slug}/attempts", tags=["ejercicios"])
+router = APIRouter(prefix="/lessons/{slug}/attempts", tags=["ejercicios"])
 
 HISTORY_LIMIT = 20
 

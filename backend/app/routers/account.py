@@ -32,7 +32,7 @@ from app.schemas import (
 from app.security import create_access_token, hash_password, verify_password
 from app.security_events import Event, record
 
-router = APIRouter(prefix="/api/users/me", tags=["cuenta"])
+router = APIRouter(prefix="/users/me", tags=["cuenta"])
 
 
 @router.get("", response_model=UserOut)

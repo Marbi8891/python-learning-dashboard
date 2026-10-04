@@ -6,7 +6,7 @@ from app.deps import CurrentUser, DbSession
 from app.models import PcapState
 from app.schemas import PcapStateIn, PcapStateOut
 
-router = APIRouter(prefix="/api/pcap-state", tags=["pcap"])
+router = APIRouter(prefix="/pcap-state", tags=["pcap"])
 
 
 @router.get("", response_model=PcapStateOut)

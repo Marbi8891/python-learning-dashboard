@@ -23,7 +23,7 @@ class Settings(BaseSettings):
 
     # Sin valor por defecto a propósito: la API se niega a arrancar sin él (ver main.py).
     jwt_secret: str | None = None
-    access_token_minutes: int = 60
+    access_token_minutes: int = 30
     auth_rate_limit_per_minute: int = 5
     # Fallos de login seguidos por cuenta antes de bloquearla un rato (aunque cambien de IP)
     login_failures_per_account: int = 10
