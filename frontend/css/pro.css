@@ -69,8 +69,12 @@ body {
   letter-spacing: -.005em;
 }
 
-.app {
-  grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+/* Solo en pantallas anchas: en el móvil la barra lateral es un menú deslizante y el contenido
+   ocupa todo el ancho (base.css). Sin la media query, el móvil reservaba 272 px vacíos. */
+@media (min-width: 901px) {
+  .app {
+    grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+  }
 }
 
 .main {
@@ -801,5 +805,12 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .daw-card {
     transition: none;
+  }
+}
+
+/* Móvil: con el menú cerrado, la barra lateral está fuera de la pantalla y no debe proyectar sombra */
+@media (max-width: 900px) {
+  body:not(.nav-open) .sidebar {
+    box-shadow: none;
   }
 }

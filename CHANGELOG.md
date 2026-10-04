@@ -4,6 +4,24 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
 
 ## [Unreleased]
 
+### Añadido
+- **Núcleo educativo por conceptos** (ADR-0031): la plataforma se centra en aprender Python y aprobar Programación de DAW. El PCAP pasa a «Más».
+  - **Menú:** Aprender · Teoría · Practicar · DAW · Progreso.
+  - **Aprender:** «¿Qué estudio ahora?», con un plan corto en este orden: repasos, errores recientes, conceptos de DAW sin dominar y contenido nuevo si la base está firme. También muestra los puntos débiles, la ruta personal y la prueba de nivel.
+  - **Teoría:** 22 conceptos con explicación (reutiliza la de las lecciones), un ejemplo línea a línea con su salida real, cuándo usarlo, los errores habituales y ejercicios.
+  - **Practicar:** «Mis errores» con «Practicar este error», práctica por tipo de actividad y por concepto. Cada fallo se explica (qué falla, por qué, cómo pensarlo y cómo evitarlo) y vuelve al final con un ejercicio parecido.
+  - **Preparación DAW:** competencias con «Necesitas reforzar X antes de pasar a Y», actividades de examen y simulacros cronometrados con corrección al final.
+  - **Progreso:** dominio, estado y próximo repaso de cada concepto, errores frecuentes, actividad y simulacros.
+  - **128 ejercicios de 6 tipos**, generados y **comprobados ejecutando Python** (`scripts/learning/build_learning.py --check`).
+  - **Tests unitarios del frontend** con `node --test`: dominio, repaso, recomendación, selección, sesiones y simulacros.
+  - **App Android 0.16.0:** pestaña «Hoy» con la misma lógica y el mismo progreso que la web.
+  - Revisión de seguridad con los riesgos que siguen abiertos (`docs/security/revision-2026-10.md`).
+
+### Corregido
+- **Contraste WCAG** que había roto el rediseño visual: la auditoría de accesibilidad fallaba en `main`. Se quitan también los degradados y el efecto cristal.
+- **Test e2e de la cuenta:** tenía una carrera con la sincronización.
+- **Móvil:** el rediseño reservaba la columna de la barra lateral (272 px vacíos) y estrechaba todas las páginas. También se quita la sombra que proyectaba el menú cerrado.
+
 ### Cambiado
 - **Una sola app en el móvil** (ADR-0030): la CI ya no publica el APK de depuración en `main`, solo el de release firmado. El de depuración queda para los pull requests. Pasos para llevar el progreso de «Python PCAP (debug)» a «Python PCAP» con la sincronización.
 

@@ -231,6 +231,9 @@ test("en el móvil el plan de hoy se lee sin desbordarse", async ({ page }) => {
   await page.locator("#learn-title").waitFor();
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth);
   expect(overflow).toBe(false);
+  // Regresión: el rediseño reservaba en el móvil la columna de la barra lateral (272 px vacíos)
+  const main = await page.locator("#main").boundingBox();
+  expect(main.width).toBe(375);
 });
 
 test.describe("Preparación DAW", () => {

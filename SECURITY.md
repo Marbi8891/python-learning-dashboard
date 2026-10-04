@@ -81,6 +81,10 @@ Las amenazas se revisan técnica por técnica con la matriz MITRE ATT&CK Enterpr
 **Consola**
 - Avisa al pegar código que toca el navegador o la red (T1204.004).
 
+## Revisión de octubre de 2026 (ADR-0031)
+
+Qué se ha comprobado al añadir el núcleo educativo y **qué riesgos siguen abiertos** (token en `localStorage`, CSP en `<meta>`, Pyodide sin SRI, progreso declarado por el alumno…): [`docs/security/revision-2026-10.md`](docs/security/revision-2026-10.md).
+
 ## Ajustes que hay que activar en GitHub
 
 No se pueden versionar, así que se activan a mano en *Settings*:
