@@ -5,13 +5,16 @@ const isLocalhost = ["localhost", "127.0.0.1"].includes(location.hostname);
 
 export const API_URL = (config.apiUrl || (isLocalhost ? "http://127.0.0.1:8000" : "")).replace(/\/+$/, "");
 export const apiEnabled = Boolean(API_URL);
+export const API_V1_PREFIX = "/api/v1";
 
-const TOKEN_KEY = "pld:token";
+// Security by default: el token de acceso solo vive en memoria JavaScript.
+// No se persiste en localStorage/sessionStorage, porque cualquier XSS podría leerlo.
+let accessToken = null;
 
 /** Despierta el servidor (el plan gratuito se duerme sin uso) y lee sus capacidades.
     Se lanza al cargar la página para que el alumno no espere al iniciar sesión. */
 export const serverInfo = apiEnabled
-  ? fetch(`${API_URL}/api/health`)
+  ? fetch(`${API_URL}${API_V1_PREFIX}/health`)
       .then((response) => response.json())
       .catch(() => null)
   : Promise.resolve(null);
@@ -24,20 +27,11 @@ export class ApiError extends Error {
 }
 
 export function getToken() {
-  try {
-    return localStorage.getItem(TOKEN_KEY);
-  } catch {
-    return null;
-  }
+  return accessToken;
 }
 
 export function setToken(token) {
-  try {
-    if (token) localStorage.setItem(TOKEN_KEY, token);
-    else localStorage.removeItem(TOKEN_KEY);
-  } catch {
-    // Sin almacenamiento (modo privado): la sesión dura hasta recargar la página.
-  }
+  accessToken = typeof token === "string" && token.length > 0 ? token : null;
 }
 
 // Mensajes en español para los errores de validación (422) de la API
@@ -72,9 +66,18 @@ export async function request(method, path, { json, form, auth = true } = {}) {
   const token = getToken();
   if (auth && token) headers.Authorization = `Bearer ${token}`;
 
+  const apiPath =
+    path === "/api" || path === "/api/"
+      ? API_V1_PREFIX
+      : path.startsWith("/api/v1/")
+        ? path
+        : path.startsWith("/api/")
+          ? API_V1_PREFIX + path.slice(4)
+          : path;
+
   let response;
   try {
-    response = await fetch(`${API_URL}${path}`, { method, headers, body });
+    response = await fetch(`${API_URL}${apiPath}`, { method, headers, body });
   } catch {
     throw new ApiError(0, "No se pudo conectar con el servidor. Inténtalo de nuevo en unos segundos.");
   }

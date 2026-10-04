@@ -26,7 +26,7 @@ from app.security import (
 )
 from app.security_events import Event, pseudonym, record
 
-router = APIRouter(prefix="/api", tags=["usuarios"])
+router = APIRouter(prefix="", tags=["usuarios"])
 
 
 @router.post(

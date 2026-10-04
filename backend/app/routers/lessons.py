@@ -8,7 +8,7 @@ from app.database import get_db
 from app.models import Lesson, Module
 from app.schemas import LessonDetail, ModuleOut
 
-router = APIRouter(prefix="/api", tags=["lecciones"])
+router = APIRouter(prefix="", tags=["lecciones"])
 
 
 @router.get("/modules", response_model=list[ModuleOut])

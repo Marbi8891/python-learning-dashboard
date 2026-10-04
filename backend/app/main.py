@@ -54,6 +54,8 @@ API_SECURITY_HEADERS = {
     "Referrer-Policy": "no-referrer",
     "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
     "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
+    # El API solo devuelve JSON; no necesita ejecutar recursos ni poder incrustarse.
+    "Content-Security-Policy": "default-src 'none'; frame-ancestors 'none'; base-uri 'none'; form-action 'none'",
     # Respuestas con datos personales (sesión, progreso, exportación): nunca en cachés intermedias
     "Cache-Control": "no-store",
 }
@@ -136,6 +138,10 @@ class _BodyTooLarge(Exception):
 app.add_middleware(BodySizeLimit, max_bytes=get_settings().max_body_bytes)
 
 
+API_V1_PREFIX = "/api/v1"
+LEGACY_API_PREFIX = "/api"
+
+# API pública versionada. Es la superficie que debe consumir el frontend y cualquier cliente nuevo.
 for router in (
     lessons.router,
     auth.router,
@@ -145,10 +151,29 @@ for router in (
     pcap.router,
     course_state.router,
 ):
-    app.include_router(router)
+    app.include_router(router, prefix=API_V1_PREFIX)
+
+# Compatibilidad con clientes existentes (incluida la app Android). Estas rutas no aparecen
+# en OpenAPI y quedan marcadas como deprecated para no convertir la migración en un corte brusco.
+for router in (
+    lessons.router,
+    auth.router,
+    account.router,
+    progress.router,
+    attempts.router,
+    pcap.router,
+    course_state.router,
+):
+    app.include_router(
+        router,
+        prefix=LEGACY_API_PREFIX,
+        deprecated=True,
+        include_in_schema=False,
+    )
 
 
-@app.get("/api/health", tags=["sistema"])
+@app.get("/api/v1/health", tags=["sistema"])
+@app.get("/api/health", tags=["sistema"], include_in_schema=False)
 def health() -> dict[str, str | bool]:
     # "email": el frontend solo ofrece la recuperación por email si hay SMTP configurado
     return {"status": "ok", "email": bool(get_settings().smtp_host)}

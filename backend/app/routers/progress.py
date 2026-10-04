@@ -9,7 +9,7 @@ from app.deps import CurrentUser, DbSession, get_lesson_or_404
 from app.models import Lesson, LessonProgress
 from app.schemas import ProgressImport, ProgressItem
 
-router = APIRouter(prefix="/api/progress", tags=["progreso"])
+router = APIRouter(prefix="/progress", tags=["progreso"])
 
 
 def list_progress(db: Session, user_id: int) -> list[ProgressItem]:
