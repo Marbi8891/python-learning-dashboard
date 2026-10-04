@@ -159,6 +159,7 @@ Son funciones puras, probadas con `node --test`, sin dependencias nuevas.
 - **`learn/Learning.kt`:** la misma lógica que la web, en Kotlin y sin dependencias de Android. Cubre la lectura de `learning.json`, la corrección, el dominio, los errores activos, el repaso, el plan de hoy, la selección, la sesión con nuevo intento y la fusión del documento `learn`. Incluye el mismo orden de líneas que la web, que imita la aritmética de JavaScript.
 - **Pestaña nueva «Hoy»**, la primera al abrir la app:
   - el plan con su motivo, el progreso y los puntos débiles;
+  - **índice de la teoría** por áreas, con el estado de cada concepto (se abre desde «Hoy»). Recoge la idea de `TheoryHomeScreen` de la rama `feat/android-learning-first`, que no se fusiona: su pestaña «Aprender» trabajaba por preguntas del banco PCAP y duplicaba la pestaña principal;
   - **teoría de cada concepto**: explicación (reutiliza la de `lessons.json`), ejemplo línea a línea, cuándo usarlo y errores habituales;
   - **sesiones** con corrección, explicación del error típico, nuevo intento al final y resumen.
 - **Ejercicios de escribir código:** no se proponen en el móvil, porque la app no ejecuta Python (Chaquopy sigue pendiente, entrega 6). Se hacen en la web, con el mismo progreso.

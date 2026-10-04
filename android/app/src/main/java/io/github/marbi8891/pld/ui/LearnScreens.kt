@@ -74,7 +74,13 @@ private fun pct(value: Double) = "${Math.round(value * 100)} %"
 
 /** Pestaña «Hoy»: el plan de estudio con su motivo, lo más flojo y los repasos pendientes. */
 @Composable
-fun TodayScreen(model: AppModel, onStart: (PlanItem) -> Unit, onConcept: (String) -> Unit, modifier: Modifier = Modifier) {
+fun TodayScreen(
+    model: AppModel,
+    onStart: (PlanItem) -> Unit,
+    onConcept: (String) -> Unit,
+    onTheory: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     val revision = model.revision // se vuelve a pintar con cada guardado
     val learning = model.learning
     val plan = remember(revision) { learning.todayPlan() }
@@ -114,6 +120,7 @@ fun TodayScreen(model: AppModel, onStart: (PlanItem) -> Unit, onConcept: (String
                 }
             }
         }
+        OutlinedButton(onClick = onTheory, modifier = Modifier.fillMaxWidth()) { Text("Teoría: todos los conceptos") }
         Panel {
             Text("Progreso", style = MaterialTheme.typography.titleMedium)
             Text("$mastered de ${stats.size} conceptos dominados")
@@ -133,6 +140,45 @@ fun TodayScreen(model: AppModel, onStart: (PlanItem) -> Unit, onConcept: (String
             style = MaterialTheme.typography.bodySmall,
             color = LocalPalette.current.muted,
         )
+    }
+}
+
+/** Índice de la teoría: los conceptos de cada área, en el orden recomendado, con su estado. */
+@Composable
+fun ConceptIndexScreen(model: AppModel, onOpen: (String) -> Unit, onBack: () -> Unit) {
+    val learning = model.learning
+    val revision = model.revision
+    val stats = remember(revision) { learning.allStats() }
+    Scaffold(containerColor = MaterialTheme.colorScheme.background) { padding ->
+        Column(
+            Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .verticalScroll(rememberScrollState())
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            TextButton(onClick = onBack) { Text("← Volver") }
+            Eyebrow("Teoría")
+            Text("Conceptos de programación", modifier = Modifier.semantics { heading() }, style = MaterialTheme.typography.headlineMedium)
+            learning.content.index.forEach { (area, concepts) ->
+                SectionTitle(area.title)
+                Text(area.summary, style = MaterialTheme.typography.bodyMedium, color = LocalPalette.current.muted)
+                concepts.forEach { concept ->
+                    val s = stats.getValue(concept.id)
+                    val state = if (s.placed && s.status != "dominado") "Superado en la prueba de nivel" else STATUS.getValue(s.status)
+                    Panel(modifier = Modifier.semantics(mergeDescendants = true) {}) {
+                        TextButton(onClick = { onOpen(concept.id) }, modifier = Modifier.fillMaxWidth()) {
+                            Column(Modifier.fillMaxWidth()) {
+                                Text(concept.title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+                                RichText(concept.summary, style = MaterialTheme.typography.bodySmall, color = LocalPalette.current.muted)
+                                Text(if (s.due) "$state · repaso pendiente" else state, style = MaterialTheme.typography.labelMedium)
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 

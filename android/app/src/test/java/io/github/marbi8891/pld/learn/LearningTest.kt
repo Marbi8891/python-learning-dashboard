@@ -35,6 +35,10 @@ class LearningTest {
         assertEquals(22, content.concepts.size)
         assertEquals(content.concepts.keys, content.path.toSet())
         assertEquals(3, content.competencies.size)
+        // Índice de la teoría: todas las áreas con sus conceptos, cada concepto una vez y en orden de ruta
+        assertEquals(listOf("fundamentos", "programacion", "logica", "avanzado"), content.index.map { it.first.id })
+        assertEquals(content.path, content.index.flatMap { it.second }.map { it.id }.sortedBy { content.path.indexOf(it) })
+        assertEquals(content.concepts.size, content.index.sumOf { it.second.size })
         assertEquals(100, content.competencies.sumOf { it.weight })
         content.exercises.values.forEach { assertTrue(it.id, it.concept in content.concepts) }
         content.exercises.values.flatMap { it.errorsTested }.forEach { assertTrue(it, it in content.errors) }

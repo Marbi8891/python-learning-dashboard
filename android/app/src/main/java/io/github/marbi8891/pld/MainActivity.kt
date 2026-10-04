@@ -34,6 +34,7 @@ import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import io.github.marbi8891.pld.ui.CelebrationScreen
+import io.github.marbi8891.pld.ui.ConceptIndexScreen
 import io.github.marbi8891.pld.ui.ConceptScreen
 import io.github.marbi8891.pld.ui.LearnSessionScreen
 import io.github.marbi8891.pld.ui.TodayScreen
@@ -71,6 +72,9 @@ sealed interface Screen {
 
     /** Teoría de un concepto del núcleo educativo. */
     data class Concept(val id: String) : Screen
+
+    /** Índice de la teoría por áreas. */
+    data object ConceptIndex : Screen
 }
 
 enum class Tab(val label: String, val symbol: String) {
@@ -131,6 +135,7 @@ fun App(model: AppModel) {
         Screen.Rush -> RushScreen(model, onExit = back)
         Screen.Mock -> MockScreen(model, onBack = back)
         is Screen.Learn -> LearnSessionScreen(model, screen.title, screen.exercises, onExit = back)
+        Screen.ConceptIndex -> ConceptIndexScreen(model, onOpen = { open(Screen.Concept(it)) }, onBack = back)
         is Screen.Concept -> ConceptScreen(
             model,
             screen.id,
@@ -175,6 +180,7 @@ private fun Tabs(model: AppModel, tab: Tab, onTab: (Tab) -> Unit, open: (Screen)
                         open(Screen.Learn(title, exercises))
                     },
                     onConcept = { open(Screen.Concept(it)) },
+                    onTheory = { open(Screen.ConceptIndex) },
                     modifier = modifier,
                 )
                 Tab.PATH -> PathScreen(

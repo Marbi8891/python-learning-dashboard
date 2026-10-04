@@ -68,9 +68,12 @@ data class Exercise(
         get() = (options.mapNotNull { it.error } + traps.values + checks.mapNotNull { it.error } + listOfNotNull(error)).toSet()
 }
 
+data class Area(val id: String, val title: String, val summary: String)
+
 data class Competency(val id: String, val title: String, val summary: String, val requires: List<String>, val concepts: List<String>, val weight: Int)
 
 class LearningContent(
+    val areas: List<Area>,
     val path: List<String>,
     val concepts: Map<String, Concept>,
     val exercises: Map<String, Exercise>,
@@ -78,6 +81,10 @@ class LearningContent(
 ) {
     val byConcept: Map<String, List<Exercise>> = exercises.values.groupBy { it.concept }
     val errors: Map<String, LearnError> = concepts.values.flatMap { it.errors }.associateBy { it.id }
+
+    /** Índice de la teoría: cada área con sus conceptos en el orden de la ruta. */
+    val index: List<Pair<Area, List<Concept>>>
+        get() = areas.map { area -> area to path.map { concepts.getValue(it) }.filter { it.area == area.id } }.filter { it.second.isNotEmpty() }
 
     companion object {
         fun parse(json: String): LearningContent {
@@ -140,6 +147,7 @@ class LearningContent(
                 )
             } ?: emptyList()
             return LearningContent(
+                areas = root.getJSONArray("areas").objects().map { Area(it.getString("id"), it.getString("title"), it.getString("summary")) },
                 path = root.getJSONArray("path").strings(),
                 concepts = concepts.associateBy { it.id },
                 exercises = exercises.associateBy { it.id },
