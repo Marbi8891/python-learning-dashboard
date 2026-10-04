@@ -152,6 +152,22 @@ Son funciones puras, probadas con `node --test`, sin dependencias nuevas.
   - Se ofrece al empezar y se puede repetir desde Progreso.
 - **Ruta personal:** en Aprender, la ruta completa con el estado de cada concepto, lo superado en la prueba y qué hay que reforzar antes del siguiente.
 
+### Fase 4: app Android
+
+**Objetivo:** que el móvil sirva para aprender Python y aprobar DAW sin ser una copia de la web.
+
+- **`learn/Learning.kt`:** la misma lógica que la web, en Kotlin y sin dependencias de Android. Cubre la lectura de `learning.json`, la corrección, el dominio, los errores activos, el repaso, el plan de hoy, la selección, la sesión con nuevo intento y la fusión del documento `learn`. Incluye el mismo orden de líneas que la web, que imita la aritmética de JavaScript.
+- **Pestaña nueva «Hoy»**, la primera al abrir la app:
+  - el plan con su motivo, el progreso y los puntos débiles;
+  - **teoría de cada concepto**: explicación (reutiliza la de `lessons.json`), ejemplo línea a línea, cuándo usarlo y errores habituales;
+  - **sesiones** con corrección, explicación del error típico, nuevo intento al final y resumen.
+- **Ejercicios de escribir código:** no se proponen en el móvil, porque la app no ejecuta Python (Chaquopy sigue pendiente, entrega 6). Se hacen en la web, con el mismo progreso.
+- **Sincronización:** el documento `learn` va con los cursos en `sync()`. Si el servidor todavía no conoce `learn` (responde 404), se sincroniza el resto sin error.
+- **Lo demás no cambia:** las pestañas Ruta, Jugar, Examen y Perfil se mantienen tal cual (gamificación y PCAP: secundarios, fase 5).
+- **Verificación:**
+  - `LearningTest` (12 tests) se ha compilado con kotlinc 2.0.21 y ha pasado en una JVM. Para compilarlo se usó una implementación mínima de `org.json` que no se sube al repositorio.
+  - **No se ha podido compilar la app de Android** (Compose) en el entorno de desarrollo, porque no hay SDK de Android. **VERIFY:** la CI de Android (`testDebugUnitTest lintDebug assembleRelease`) y una prueba en el móvil.
+
 ### Cuenta
 
 - El documento se guarda en `pld:learn` y en `/api/course-state/learn`.
