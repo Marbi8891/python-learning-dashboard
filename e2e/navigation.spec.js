@@ -1,7 +1,8 @@
 const { test, expect, openLesson } = require("./fixtures");
 
-test("la portada lleva a la primera lección pendiente y la barra lateral navega", async ({ page }) => {
+test("la portada del curso PCAP lleva a la primera lección pendiente y la barra lateral navega", async ({ page }) => {
   await openLesson(page);
+  await page.getByRole("link", { name: "Curso PCAP" }).click();
   await expect(page).toHaveURL(/#\/inicio$/);
   await expect(page.locator("#home-title")).toContainText("Prepara el PCAP");
   await page.getByRole("link", { name: "Empezar la primera lección →" }).click();

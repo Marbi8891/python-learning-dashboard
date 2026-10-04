@@ -6,6 +6,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import io.github.marbi8891.pld.learn.Exercise
+import io.github.marbi8891.pld.learn.Learning
+import io.github.marbi8891.pld.learn.LearningContent
+import io.github.marbi8891.pld.learn.LearningState
+import io.github.marbi8891.pld.learn.PlanItem
 import io.github.marbi8891.pld.pcap.AccountApi
 import io.github.marbi8891.pld.pcap.ActivityItem
 import io.github.marbi8891.pld.pcap.ApiException
@@ -86,6 +91,36 @@ class AppModel(context: Context) {
         )
         others.forEach { it.state.shareApp(pcap.state.app) }
         listOf(pcap) + others
+    }
+
+    /* ---------- Núcleo educativo por conceptos (ADR-0031) ---------- */
+
+    /** Conceptos, errores típicos y ejercicios: el mismo learning.json que la web. */
+    private val learnContent: LearningContent = LearningContent.parse(context.readAsset("learning.json"))
+
+    /** Progreso por conceptos: el mismo documento que la web (/api/course-state/learn). */
+    val learning: Learning = Learning(learnContent, LearningState.fromJson(prefs.getString(KEY_LEARN, null)))
+
+    fun saveLearning() {
+        prefs.edit().putString(KEY_LEARN, learning.state.toJson().toString()).apply()
+        revision++
+    }
+
+    /** Lección del curso PCAP (lessons.json), cuya teoría reutilizan los conceptos. */
+    fun pcapLesson(slug: String) = courses.first { it.isPcap }.content[slug]
+
+    /** Título y ejercicios de la sesión que abre una acción del plan de hoy. */
+    fun planSession(item: PlanItem): Pair<String, List<String>> {
+        val count = if (item.type == "review") 3 else 4
+        val label = when (item.type) {
+            "learn" -> "Aprender"
+            "review" -> "Repaso"
+            "errors" -> "Corregir errores"
+            "reinforce" -> "Reforzar"
+            else -> "Practicar"
+        }
+        val title = learnContent.concepts.getValue(item.concept).title
+        return "$label: $title" to learning.selectExercises(listOf(item.concept), count).map(Exercise::id)
     }
 
     /** Curso elegido en el selector; se recuerda entre sesiones. */
@@ -233,11 +268,26 @@ class AppModel(context: Context) {
         syncMessage = "Sincronizando…"
         try {
             val remote = withContext(Dispatchers.IO) { courses.associate { it.id to api.pull(current.token, it.id) } }
+            // Un servidor anterior a ADR-0031 responde 404 a «learn»: entonces solo se sincronizan los cursos
+            val remoteLearning = withContext(Dispatchers.IO) {
+                try {
+                    api.pull(current.token, LEARN)
+                } catch (error: ApiException) {
+                    if (error.code == 404) null else throw error
+                }
+            }
             val merged = courses.associate { c -> c.id to Sync.merge(c.state, remote.getValue(c.id), c.isPcap) }
             courses.forEach { it.state.updateFlags(it.bank) }
+            // Progreso por conceptos (ADR-0031): misma fusión sin pérdidas que en la web
+            remoteLearning?.let { Learning.merge(learning.state, it) }
+            val learningDoc = learning.state.toJson()
             saveAll()
+            prefs.edit().putString(KEY_LEARN, learningDoc.toString()).apply()
             revision++
-            withContext(Dispatchers.IO) { merged.forEach { (id, data) -> api.push(current.token, id, data) } }
+            withContext(Dispatchers.IO) {
+                merged.forEach { (id, data) -> api.push(current.token, id, data) }
+                if (remoteLearning != null) api.push(current.token, LEARN, learningDoc)
+            }
             val now = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM HH:mm"))
             sessionPrefs.edit().putString(KEY_LAST_SYNC, now).apply()
             lastSync = now
@@ -299,6 +349,8 @@ class AppModel(context: Context) {
 
     private companion object {
         const val KEY_COURSE = "course"
+        const val KEY_LEARN = "learn"
+        const val LEARN = "learn"
         const val SESSION_PREFS = "pld-session"
         const val KEY_TOKEN = "token"
         const val KEY_EMAIL = "email"

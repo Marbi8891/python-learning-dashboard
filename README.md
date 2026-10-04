@@ -5,11 +5,26 @@
 ![Cobertura backend](https://img.shields.io/badge/cobertura%20backend-100%25-brightgreen)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
-Academia web para **preparar el examen PCAP** (Certified Associate in Python Programming, PCAP-31-03): 27 lecciones con teoría propia y fuentes enlazadas, **consola de Python en el navegador**, **ejercicios corregidos automáticamente**, **simulacros de examen cronometrados** y cuenta opcional para sincronizar el progreso.
+Herramienta para **aprender Python entendiendo lo que haces** y **preparar la parte de programación de DAW**. Funciona por conceptos: teoría con ejemplos, ejercicios corregidos al momento, explicación de cada error, repaso espaciado y simulacros. Incluye además el curso del examen PCAP y los demás módulos de DAW.
 
 **Demo:** https://marbi8891.github.io/python-learning-dashboard/
 
-## Funcionalidades
+## Núcleo educativo (ADR-0031)
+
+El ciclo es: concepto → explicación → ejemplo → intento → error o acierto → explicación → nuevo intento → repaso → dominio.
+
+- **Aprender:** responde a «¿qué estudio ahora?» con un plan corto en este orden: repasos pendientes, errores recientes, conceptos importantes para DAW sin dominar y contenido nuevo (solo si la base está firme; si no, dice «Necesitas reforzar X antes de pasar a Y»). Incluye la prueba de nivel y la ruta personal.
+- **Teoría:** 22 conceptos en orden (fundamentos, programación, lógica). Cada uno tiene explicación, ejemplo línea a línea con su salida real, cuándo usarlo, errores habituales, relación con otros conceptos y ejercicios.
+- **Practicar:**
+  - seis tipos de ejercicio: pregunta, ¿qué muestra?, completar, ordenar líneas o pseudocódigo, encontrar el error y escribir el programa (corregido con tests en Pyodide);
+  - **cada fallo explica el error típico** (qué falla, por qué, cómo pensarlo y cómo evitarlo) y vuelve al final con un ejercicio parecido;
+  - «Mis errores» permite practicar un error concreto.
+- **DAW:** competencias (Fundamentos, Programación, Lógica) con su dominio, actividades de examen (cronometrados, problemas completos, lectura de código, detectar errores, del enunciado al algoritmo) y **simulacros** sin corrección hasta el final. Enlaza el temario por UT y los demás módulos.
+- **Progreso:** dominio, estado y próximo repaso de cada concepto, errores frecuentes (pendientes o corregidos), actividad y simulacros.
+- **Contenido verificado:** 128 ejercicios en `frontend/data/learning.json`, generados por `scripts/learning/`. El script ejecuta cada salida, cada corrección y cada solución, y comprueba que las soluciones equivocadas típicas fallan en el test que delata su error.
+- **Mismo progreso en la web y en la app:** `/api/course-state/learn`.
+
+## Curso PCAP y demás funcionalidades
 
 - **Temario del PCAP:** un módulo de bases (nivel PCEP) y uno por cada bloque oficial del examen (Módulos y paquetes, Excepciones, Strings, POO, Miscelánea), más un extra «Después del PCAP». 27 lecciones.
 - **Zona de examen:** simulacro de 40 preguntas en 65 minutos con el reparto oficial del temario, práctica por bloque con corrección al momento, 48 fichas de repaso y panel de preparación por bloque. 126 preguntas originales, en español o en inglés (como el examen), cada una con una comprobación en Python que demuestra su respuesta.
@@ -52,12 +67,15 @@ Decisiones documentadas:
 - [ADR-0008 Backend en Render y base de datos en Neon](docs/adr/0008-backend-render-neon.md)
 - [ADR-0009 Enfoque en el examen PCAP](docs/adr/0009-enfoque-pcap.md)
 - [ADR-0010 Estudio guiado, sincronización y PWA](docs/adr/0010-estudio-guiado-y-pwa.md)
+- [ADR-0031 Núcleo educativo por conceptos](docs/adr/0031-nucleo-educativo-por-conceptos.md) (las ADR-0011 a 0030 están en `docs/adr/`)
 
 ```
 ├── frontend/
+│   ├── data/learning.json  Núcleo educativo: conceptos, errores típicos y ejercicios (generado por scripts/learning)
 │   ├── data/lessons.json   Contenido: teoría, ejemplos, ejercicios, quiz, retos y asistente (fuente única)
 │   ├── data/pcap.json      Banco de preguntas del examen, fichas y formato oficial del PCAP
 │   ├── py/runner.py        Motor que ejecuta y corrige el código (navegador y CI)
+│   ├── js/learn/           núcleo educativo: lógica pura (dominio, repaso, recomendación, sesiones) y vistas
 │   ├── js/                 app, consola, Worker de Pyodide, quiz, juego, asistente, cuenta, API
 │   ├── css/  fonts/  vendor/
 │   ├── config.js           URL de la API (vacía = modo sin cuenta)
@@ -110,16 +128,18 @@ JWT_SECRET=<valor> docker compose up --build
 | Suite | Comando | Qué cubre |
 |---|---|---|
 | Backend | `cd backend && python -m pytest --cov=app` | API, seguridad, RGPD, migraciones, contenido y banco del PCAP (cada respuesta se comprueba ejecutando Python; 100 % de cobertura) |
+| Unitarios del frontend | `npm run test:unit` | Dominio por concepto, errores activos, repaso espaciado, plan de hoy, selección de ejercicios, sesiones, simulacros, prueba de nivel y Markdown seguro (`node --test`, sin dependencias) |
+| Núcleo educativo | `python scripts/learning/build_learning.py --check` | Cada respuesta de los 128 ejercicios se comprueba ejecutando Python con el mismo `runner.py` del navegador |
 | End-to-end | `npm ci && npx playwright install chromium && npm run test:e2e` | La app completa con el backend real, la consola Python y la auditoría WCAG |
 | Calidad | `cd backend && ruff check . ../e2e && ruff format --check . ../e2e` | Estilo PEP 8 y formato |
 | Cursos de la app | `python scripts/courses/sql_course.py --check` (y `js_course.py`, `java_course.py`, `entornos_course.py`, `programacion_course.py`) | Cada respuesta de código se comprueba ejecutándola (SQLite, Node, Java y Python) |
-| App Android | `cd android && ./gradlew testDebugUnitTest lintDebug` | Dominio del PCAP en Kotlin (banco, repaso espaciado, preparación, fusión con la cuenta) y lint de Android |
+| App Android | `cd android && ./gradlew testDebugUnitTest lintDebug` | Dominio del PCAP y del núcleo educativo en Kotlin (banco, repaso espaciado, plan de hoy, sesiones, fusión con la cuenta) y lint de Android |
 
 La CI ejecuta todo en cada push, incluidas las migraciones contra PostgreSQL 16.
 
 ## App Android nativa
 
-En `android/` hay una app en **Kotlin + Jetpack Compose** con experiencia tipo Duolingo (ADR-0011 y ADR-0012):
+En `android/` hay una app en **Kotlin + Jetpack Compose**. Su pestaña principal es **«Hoy»** (ADR-0031): el mismo plan de estudio, la teoría por concepto y las sesiones con explicación de errores que la web, con el mismo progreso. Los ejercicios de escribir programas se hacen en la web, porque necesitan Python. Además, tiene la experiencia tipo Duolingo (ADR-0011 y ADR-0012):
 
 - una **ruta** de 12 unidades y 25 lecciones cortas generada a partir del banco del PCAP;
 - **XP, racha y meta diaria**;
@@ -173,7 +193,7 @@ La firma de release necesita tres secretos en *Settings → Secrets and variable
 | POST | `/api/progress/import` | ✔ | Fusionar el progreso del navegador |
 | POST / GET | `/api/lessons/{slug}/attempts` | ✔ | Registrar un intento o ver los últimos 20 |
 | GET / PUT | `/api/pcap-state` | ✔ | Preparación del PCAP (simulacros, aciertos, fichas, repaso y plan) |
-| GET / PUT | `/api/course-state/{curso}` | ✔ | Estado de los cursos de la app Android: `sql`, `js`, `java`, `entornos` o `programacion` (ADR-0018) |
+| GET / PUT | `/api/course-state/{curso}` | ✔ | Estado de los cursos de la app Android: `sql`, `js`, `java`, `entornos` o `programacion` (ADR-0018), y `learn`: progreso por conceptos del núcleo educativo (ADR-0031) |
 
 ## Publicar
 

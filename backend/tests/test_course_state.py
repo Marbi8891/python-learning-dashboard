@@ -46,3 +46,17 @@ def test_export_and_delete_include_course_states(client, auth_headers):
     client.put("/api/course-state/js", json={"data": {"bestCombo": 3}}, headers=auth_headers)
     exported = client.get("/api/users/me/export", headers=auth_headers).json()
     assert exported["courses"] == {"js": {"bestCombo": 3}}
+
+
+def test_learning_progress_is_saved_and_exported(client, auth_headers):
+    """El progreso por conceptos (ADR-0031) usa el mismo mecanismo, con el id «learn»."""
+    learn = {
+        "v": 1,
+        "ex": {"buc-01": {"h": [False, True], "last": "2026-10-04T10:00:00.000Z", "n": 2}},
+        "errors": {"bucles.range-fin": {"n": 1, "last": "2026-10-04T09:00:00.000Z", "streak": 1}},
+    }
+    saved = client.put("/api/course-state/learn", json={"data": learn}, headers=auth_headers)
+    assert saved.status_code == 200
+    assert client.get("/api/course-state/learn", headers=auth_headers).json()["data"] == learn
+    exported = client.get("/api/users/me/export", headers=auth_headers).json()
+    assert exported["courses"]["learn"] == learn

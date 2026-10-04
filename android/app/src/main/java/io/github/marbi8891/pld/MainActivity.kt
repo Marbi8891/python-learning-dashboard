@@ -34,6 +34,10 @@ import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import io.github.marbi8891.pld.ui.CelebrationScreen
+import io.github.marbi8891.pld.ui.ConceptIndexScreen
+import io.github.marbi8891.pld.ui.ConceptScreen
+import io.github.marbi8891.pld.ui.LearnSessionScreen
+import io.github.marbi8891.pld.ui.TodayScreen
 import io.github.marbi8891.pld.ui.DungeonScreen
 import io.github.marbi8891.pld.ui.GameHomeScreen
 import io.github.marbi8891.pld.ui.LessonScreen
@@ -62,9 +66,20 @@ sealed interface Screen {
 
     /** Simulacro cronometrado del curso elegido (ADR-0024). */
     data object Mock : Screen
+
+    /** Sesión del núcleo educativo (ADR-0031): los ejercicios se eligen al abrirla. */
+    data class Learn(val title: String, val exercises: List<String>) : Screen
+
+    /** Teoría de un concepto del núcleo educativo. */
+    data class Concept(val id: String) : Screen
+
+    /** Índice de la teoría por áreas. */
+    data object ConceptIndex : Screen
 }
 
 enum class Tab(val label: String, val symbol: String) {
+    // ¿Qué estudio ahora? (ADR-0031): la pestaña principal
+    TODAY("Hoy", "★"),
     PATH("Ruta", "◆"),
     PLAY("Jugar", "⚔"),
     EXAM("Examen", "✎"),
@@ -95,7 +110,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun App(model: AppModel) {
-    var tab by remember { mutableStateOf(Tab.PATH) }
+    var tab by remember { mutableStateOf(Tab.TODAY) }
     var stack by remember { mutableStateOf(listOf<Screen>()) }
     val open: (Screen) -> Unit = { stack = stack + it }
     val back: () -> Unit = { stack = stack.dropLast(1) }
@@ -119,6 +134,17 @@ fun App(model: AppModel) {
         Screen.Dungeon -> DungeonScreen(model, onExit = back, onTheory = { open(Screen.Theory(it)) })
         Screen.Rush -> RushScreen(model, onExit = back)
         Screen.Mock -> MockScreen(model, onBack = back)
+        is Screen.Learn -> LearnSessionScreen(model, screen.title, screen.exercises, onExit = back)
+        Screen.ConceptIndex -> ConceptIndexScreen(model, onOpen = { open(Screen.Concept(it)) }, onBack = back)
+        is Screen.Concept -> ConceptScreen(
+            model,
+            screen.id,
+            onBack = back,
+            onPractice = {
+                val exercises = model.learning.selectExercises(listOf(screen.id), 3).map { it.id }
+                replaceTop(Screen.Learn("Comprobar: ${model.learning.content.concepts.getValue(screen.id).title}", exercises))
+            },
+        )
     }
 }
 
@@ -127,7 +153,8 @@ private fun Tabs(model: AppModel, tab: Tab, onTab: (Tab) -> Unit, open: (Screen)
     val course = model.course
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
-        topBar = { CourseSwitcher(model) },
+        // El selector de curso no pinta nada en «Hoy», que trabaja por conceptos
+        topBar = { if (tab != Tab.TODAY) CourseSwitcher(model) },
         bottomBar = {
             NavigationBar {
                 Tab.entries.forEach { item ->
@@ -146,6 +173,16 @@ private fun Tabs(model: AppModel, tab: Tab, onTab: (Tab) -> Unit, open: (Screen)
         // Al cambiar de curso, cada pestaña empieza de cero (listas, scroll y datos recordados)
         key(course.id) {
             when (tab) {
+                Tab.TODAY -> TodayScreen(
+                    model,
+                    onStart = { item ->
+                        val (title, exercises) = model.planSession(item)
+                        open(Screen.Learn(title, exercises))
+                    },
+                    onConcept = { open(Screen.Concept(it)) },
+                    onTheory = { open(Screen.ConceptIndex) },
+                    modifier = modifier,
+                )
                 Tab.PATH -> PathScreen(
                     model,
                     onStart = { open(Screen.Lesson(it.id)) },

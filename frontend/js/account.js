@@ -4,6 +4,7 @@ import { apiEnabled, request, serverInfo } from "./api.js";
 import { escapeHtml } from "./markdown.js";
 import { flushCourseSync } from "./course-store.js";
 import { flushPcapSync } from "./pcap-sync.js";
+import { flushLearnSync } from "./learn/learn-store.js";
 import { clearLocalData, endSession, startSession, state, subscribe } from "./store.js";
 
 const FLASH_KEY = "pld:flash";
@@ -206,7 +207,7 @@ export function initAccount({ toast }) {
 
   $("#logout-button").addEventListener("click", async () => {
     const everywhere = $("#logout-everywhere").checked;
-    await Promise.allSettled([flushPcapSync(), flushCourseSync()]); // nada se queda sin subir
+    await Promise.allSettled([flushPcapSync(), flushCourseSync(), flushLearnSync()]); // nada se queda sin subir
     if (everywhere) await request("POST", "/api/auth/logout-all").catch(() => {});
     leave(everywhere ? "Sesión cerrada en todos tus dispositivos." : "Sesión cerrada.");
   });

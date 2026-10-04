@@ -1,8 +1,9 @@
 // Estética de academia: ficha del curso, temario, cabecera de lección y «Mi aprendizaje».
 const { test, expect, openLesson } = require("./fixtures");
 
-test("la portada es la ficha del curso con su temario", async ({ page }) => {
+test("la portada del curso PCAP es la ficha del curso con su temario", async ({ page }) => {
   await openLesson(page);
+  await page.getByRole("link", { name: "Curso PCAP" }).click();
   await expect(page.locator("#home-title")).toHaveText("Prepara el PCAP, de cero a certificado");
   await expect(page.locator(".course-facts")).toContainText("PCAP-31-03 · 40 preguntas · 65 min");
   await expect(page.locator(".outcomes li")).toHaveCount(6);
@@ -11,14 +12,15 @@ test("la portada es la ficha del curso con su temario", async ({ page }) => {
   // Solo el módulo por el que vas está desplegado, con la siguiente lección marcada
   await expect(page.locator(".syllabus__module[open]")).toHaveCount(1);
   await expect(page.locator('.syllabus__lesson[data-status="current"]')).toContainText("Variables y print()");
-  await expect(page.getByRole("link", { name: "El curso" })).toHaveAttribute("aria-current", "page");
+  await expect(page.getByRole("link", { name: "Curso PCAP" })).toHaveAttribute("aria-current", "page");
 
   await page.locator(".syllabus__module").nth(6).locator("summary").click();
   await page.getByRole("link", { name: /APIs web con Flask/ }).click();
   await expect(page).toHaveURL(/#\/leccion\/flask$/);
   await expect(page.locator("#lesson-crumb")).toHaveText("Módulo 7 · Después del PCAP — Lección 27 de 27");
   await expect(page.locator("#lesson-meta")).toContainText("min");
-  await expect(page.getByRole("link", { name: "El curso" })).not.toHaveAttribute("aria-current", "page");
+  // Las lecciones forman parte del curso PCAP: su entrada del menú sigue marcada
+  await expect(page.getByRole("link", { name: "Curso PCAP" })).toHaveAttribute("aria-current", "page");
 });
 
 test("«Mi aprendizaje» refleja lecciones, quizzes y actividad", async ({ page }) => {
@@ -29,7 +31,9 @@ test("«Mi aprendizaje» refleja lecciones, quizzes y actividad", async ({ page 
   for (let qi = 0; qi < 3; qi += 1) await page.locator(`input[name=q${qi}]`).first().check();
   await page.getByRole("button", { name: "Comprobar respuestas" }).click();
 
-  await page.getByRole("link", { name: "Mi aprendizaje" }).first().click();
+  // «Mi aprendizaje» (XP, logros y lecciones del PCAP) queda enlazado desde Progreso (ADR-0031)
+  await page.getByRole("link", { name: "Progreso", exact: true }).click();
+  await page.getByRole("link", { name: "Mi aprendizaje" }).click();
   await expect(page).toHaveURL(/#\/perfil$/);
   await expect(page.locator("#profile-title")).toHaveText("Mi aprendizaje");
   await expect(page.locator(".kpi").first()).toContainText("1/27");
@@ -41,6 +45,6 @@ test("«Mi aprendizaje» refleja lecciones, quizzes y actividad", async ({ page 
   await expect(page.locator(".history tbody tr")).toHaveCount(27);
 
   // La portada ya ofrece continuar y enlaza al perfil
-  await page.getByRole("link", { name: "El curso" }).click();
+  await page.getByRole("link", { name: "Curso PCAP" }).click();
   await expect(page.getByRole("link", { name: "Continuar: Tipos de datos →" })).toBeVisible();
 });

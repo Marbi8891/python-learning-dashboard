@@ -29,7 +29,7 @@ test.describe("móvil", () => {
   test("menú lateral deslizante accesible", async ({ page }) => {
     await openLesson(page, "funciones");
     const sidebar = page.locator("#sidebar");
-    const menu = page.getByRole("button", { name: "Lecciones" });
+    const menu = page.getByRole("button", { name: "Menú" });
     expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
     expect(await sidebar.evaluate((el) => el.inert)).toBe(true);
 

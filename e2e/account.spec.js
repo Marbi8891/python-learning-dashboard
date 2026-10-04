@@ -31,8 +31,8 @@ test("registro, sincronización del progreso local, cierre e inicio de sesión",
 
   const email = uniqueEmail();
   await register(page, email);
-  const progress = await apiAs(page, "/api/progress");
-  expect(progress.map((p) => p.lesson_slug)).toEqual(["variables"]); // se subió al servidor
+  // se subió al servidor (la fusión es asíncrona: se espera en vez de leer una sola vez)
+  await expect.poll(async () => (await apiAs(page, "/api/progress")).map((p) => p.lesson_slug)).toEqual(["variables"]);
 
   await page.locator(".lesson[data-slug=tipos]").click();
   await page.getByRole("tab", { name: "Práctica y Ejercicio" }).click();
@@ -107,7 +107,7 @@ test("recuperar contraseña: solicitud y enlace no válido", async ({ page }) =>
 
   await page.goto(`/#/restablecer?token=${"x".repeat(43)}`);
   await expect(dialog(page)).toBeVisible();
-  await expect(page).toHaveURL(/#\/inicio$/); // el token no se queda en la URL
+  await expect(page).toHaveURL(/#\/aprender$/); // el token no se queda en la URL
   await page.locator("#reset-form").getByLabel(/Nueva contraseña/).fill("nueva-contraseña-456");
   await page.locator("#reset-form").getByRole("button", { name: "Guardar contraseña" }).click();
   await expect(page.locator("#account-message")).toContainText("no es válido o ha caducado");

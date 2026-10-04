@@ -1,0 +1,4 @@
+{
+  "//": "Los módulos del frontend son ES modules: así Node los carga en los tests unitarios sin avisos.",
+  "type": "module"
+}

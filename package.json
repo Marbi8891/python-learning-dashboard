@@ -2,8 +2,9 @@
   "name": "python-learning-dashboard",
   "version": "1.0.0",
   "private": true,
-  "description": "Tests end-to-end del Python Learning Dashboard (frontend + backend reales)",
+  "description": "Tests del frontend del Python Learning Dashboard: unitarios (node --test) y end-to-end (frontend + backend reales)",
   "scripts": {
+    "test:unit": "node --test \"tests/unit/*.test.mjs\"",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui"
   },

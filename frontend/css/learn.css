@@ -1,0 +1,772 @@
+/* =========================================================
+   learn.css — núcleo educativo: Aprender, Teoría, Practicar,
+   Progreso, DAW y sesiones (ADR-0031). Sobrio y legible:
+   sin degradados, sin animaciones superfluas; el código y el
+   contenido son los protagonistas.
+   ========================================================= */
+
+/* ---------- Barra lateral: lo del curso PCAP solo en su zona ---------- */
+body[data-zone="core"] .stats-card,
+body[data-zone="core"] .path {
+  display: none;
+}
+
+.site-nav__group {
+  margin: var(--space-3) 0 var(--space-1);
+  padding: 0 11px;
+  color: var(--color-text-muted);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.site-nav a.site-nav__secondary {
+  min-height: 34px;
+  font-weight: 500;
+}
+
+/* ---------- Estructura de página ---------- */
+.learn {
+  max-width: 980px;
+}
+
+.lx-head {
+  margin-bottom: var(--space-6);
+}
+
+.lx-title {
+  margin: var(--space-1) 0 var(--space-3);
+  color: var(--color-strong);
+  font-size: clamp(1.7rem, 3vw, 2.2rem);
+  line-height: 1.2;
+  letter-spacing: -.02em;
+}
+
+.lx-title:focus {
+  outline: none;
+}
+
+.lx-lead {
+  max-width: 68ch;
+  color: var(--color-text-muted);
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+.lx-section {
+  margin: var(--space-6) 0;
+}
+
+.lx-section__title {
+  margin-bottom: var(--space-3);
+  color: var(--color-strong);
+  font-size: 1.25rem;
+}
+
+.lx-h4 {
+  margin: var(--space-5) 0 var(--space-2);
+  color: var(--color-strong);
+  font-size: 1rem;
+}
+
+.lx-muted {
+  color: var(--color-text-muted);
+}
+
+.lx-note {
+  margin: var(--space-2) 0;
+  color: var(--color-text-muted);
+  font-size: .95rem;
+}
+
+.lx-warning {
+  margin-top: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-left: 3px solid var(--color-gold);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-2);
+  color: var(--color-text);
+}
+
+.lx-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+}
+
+.lx-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-4);
+  margin: var(--space-6) 0;
+}
+
+.lx-grid--2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.lx-panel {
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.lx-panel__title {
+  margin-bottom: var(--space-3);
+  color: var(--color-strong);
+  font-size: 1rem;
+}
+
+.lx-panel p + .meter,
+.lx-panel .meter + p {
+  margin-top: var(--space-2);
+}
+
+/* ---------- Plan de hoy ---------- */
+.lx-plan {
+  display: grid;
+  gap: var(--space-3);
+  padding: 0;
+  list-style: none;
+}
+
+.lx-plan__item {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr) auto;
+  gap: var(--space-4);
+  align-items: center;
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.lx-plan__item:first-child {
+  border-color: var(--color-primary);
+}
+
+.lx-plan__n {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--color-surface-2);
+  color: var(--color-text);
+  font-weight: 700;
+}
+
+.lx-plan__action {
+  color: var(--color-text-muted);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.lx-plan__title {
+  margin: 2px 0 4px;
+  color: var(--color-strong);
+  font-size: 1.1rem;
+}
+
+.lx-plan__reason {
+  color: var(--color-text-muted);
+}
+
+.lx-plan__go {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-2);
+}
+
+.lx-plan__theory {
+  font-size: .9rem;
+}
+
+/* ---------- Listas, filas y estados ---------- */
+.lx-list {
+  display: grid;
+  gap: var(--space-2);
+  padding: 0;
+  list-style: none;
+}
+
+.lx-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-3);
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.lx-row:last-child {
+  border-bottom: 0;
+}
+
+.lx-row .meter {
+  flex: 1 1 80px;
+  max-width: 140px;
+}
+
+.lx-row__value {
+  color: var(--color-text-muted);
+  font-size: .9rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.lx-row--error {
+  align-items: flex-start;
+  padding: var(--space-3) 0;
+}
+
+.lx-status {
+  display: inline-block;
+  margin-right: var(--space-1);
+  padding: 2px 8px;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  color: var(--color-text-muted);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.lx-status[data-status="dominado"] {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.lx-status[data-status="progreso"],
+.lx-status[data-status="aprendiendo"] {
+  border-color: var(--color-primary);
+  color: var(--color-link);
+}
+
+.lx-status[data-status="due"] {
+  border-color: var(--color-gold);
+  color: var(--color-gold);
+}
+
+.lx-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-5);
+  margin-top: var(--space-4);
+  padding: 0;
+  list-style: none;
+  color: var(--color-text-muted);
+}
+
+.lx-facts strong {
+  color: var(--color-strong);
+  font-size: 1.2rem;
+}
+
+.lx-inline-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+  padding: 0;
+  list-style: none;
+}
+
+/* ---------- Teoría ---------- */
+.lx-concepts {
+  display: grid;
+  gap: 0;
+  padding: 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  list-style: none;
+  background: var(--color-surface);
+}
+
+.lx-concept {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 2px var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.lx-concept:last-child {
+  border-bottom: 0;
+}
+
+.lx-concept__link {
+  font-weight: 600;
+}
+
+.lx-concept__summary {
+  grid-column: 1;
+  color: var(--color-text-muted);
+  font-size: .95rem;
+}
+
+.lx-concept__status {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: center;
+}
+
+.lx-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  align-items: center;
+}
+
+.lx-lines {
+  display: grid;
+  gap: var(--space-2);
+  margin: var(--space-3) 0;
+  padding-left: 0;
+  list-style: none;
+}
+
+.lx-line-ref {
+  display: inline-block;
+  min-width: 70px;
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: .85rem;
+}
+
+.lx-details {
+  margin-bottom: var(--space-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+}
+
+.lx-details > summary {
+  padding: var(--space-3) var(--space-4);
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.lx-details > .lx-error {
+  margin: 0 var(--space-4) var(--space-4);
+}
+
+/* ---------- Código ---------- */
+.lx-code,
+.md-code,
+.lx-output {
+  overflow-x: auto;
+  margin: var(--space-3) 0;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-sm);
+  background: var(--color-code-bg);
+  color: var(--color-code-text);
+  font-family: var(--font-mono);
+  font-size: .92rem;
+  line-height: 1.6;
+}
+
+.lx-output {
+  border: 1px dashed var(--color-border);
+  white-space: pre-wrap;
+}
+
+.lx-code--numbered .lx-line {
+  display: block;
+}
+
+.lx-line__n {
+  display: inline-block;
+  width: 2.2em;
+  margin-right: var(--space-3);
+  color: #8b98aa; /* sobre el fondo de código, siempre oscuro: 5,6:1 */
+  text-align: right;
+  user-select: none;
+}
+
+.table-wrap {
+  overflow-x: auto;
+  margin: var(--space-3) 0;
+}
+
+.md-table,
+.lx-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .95rem;
+}
+
+.md-table th,
+.md-table td,
+.lx-table th,
+.lx-table td {
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+  text-align: left;
+  vertical-align: middle;
+}
+
+.lx-table th[scope="row"] {
+  font-weight: 500;
+}
+
+.lx-table .meter {
+  display: inline-block;
+  width: 90px;
+  vertical-align: middle;
+}
+
+/* ---------- Ejercicios y sesiones ---------- */
+.lx-exercise legend {
+  display: grid;
+  gap: var(--space-2);
+  width: 100%;
+}
+
+.lx-exercise__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--color-text-muted);
+  font-size: .85rem;
+}
+
+.lx-kind {
+  font-weight: 700;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+}
+
+.lx-concept-tag::before {
+  content: "· ";
+}
+
+.lx-exercise__q {
+  color: var(--color-strong);
+  font-size: 1.05rem;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.lx-field {
+  display: grid;
+  gap: var(--space-2);
+  margin: var(--space-3) 0;
+  font-weight: 500;
+}
+
+.lx-answer,
+.lx-editor,
+#lx-stdin {
+  width: 100%;
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-input-bg, var(--color-code-bg));
+  color: var(--color-text);
+  font-family: var(--font-mono);
+  font-size: .95rem;
+}
+
+.lx-editor {
+  background: var(--color-code-bg);
+  color: var(--color-code-text);
+  line-height: 1.55;
+  tab-size: 4;
+}
+
+.lx-bug {
+  display: grid;
+  gap: 0;
+  margin: var(--space-3) 0;
+  padding: var(--space-2) 0;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--color-code-bg);
+}
+
+.lx-bug .lx-note {
+  padding: 0 var(--space-4);
+  color: var(--color-code-text); /* el fondo es el del código, oscuro en los dos temas */
+}
+
+.lx-bug__line {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 2px var(--space-4);
+  color: var(--color-code-text);
+  font-family: var(--font-mono);
+  font-size: .92rem;
+  cursor: pointer;
+}
+
+.lx-bug__line:hover,
+.lx-bug__line:has(input:checked) {
+  background: rgb(96 165 250 / .14);
+}
+
+.lx-bug__line[data-correct="true"] {
+  background: rgb(34 197 94 / .16);
+}
+
+.lx-bug__line code {
+  white-space: pre;
+  background: none;
+  color: inherit;
+}
+
+.lx-solution {
+  margin-top: var(--space-3);
+  font-weight: 600;
+}
+
+.lx-retry {
+  margin-bottom: var(--space-3);
+  padding: var(--space-2) var(--space-4);
+  border-left: 3px solid var(--color-primary);
+  background: var(--color-surface-2);
+}
+
+.lx-feedback {
+  margin-top: var(--space-4);
+}
+
+.lx-feedback:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.lx-feedback__links {
+  margin-top: var(--space-3);
+}
+
+.lx-session-bar {
+  margin-bottom: var(--space-4);
+}
+
+/* Explicación de un error típico */
+.lx-error {
+  padding: var(--space-3) var(--space-4);
+  border-left: 3px solid var(--color-danger);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-2);
+}
+
+.lx-error__title {
+  margin-bottom: var(--space-2);
+  color: var(--color-strong);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.lx-error__concept {
+  margin-bottom: var(--space-2);
+  color: var(--color-text-muted);
+  font-size: .9rem;
+}
+
+.lx-error__list {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+}
+
+.lx-error__list dt {
+  color: var(--color-text-muted);
+  font-size: .8rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.lx-error__list dd {
+  margin: 0;
+}
+
+.lx-errors,
+.lx-reviews {
+  display: grid;
+  gap: var(--space-3);
+  padding: 0;
+  list-style: none;
+}
+
+.lx-error-item {
+  display: grid;
+  gap: var(--space-2);
+  justify-items: start;
+}
+
+.lx-review details {
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+}
+
+.lx-review summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.lx-review[data-result="ko"] summary {
+  color: var(--color-danger);
+}
+
+/* Tarjetas de actividad (Practicar) */
+.lx-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--space-3);
+  padding: 0;
+  list-style: none;
+}
+
+.lx-card {
+  display: grid;
+  gap: var(--space-2);
+  align-content: start;
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.lx-card__title {
+  color: var(--color-strong);
+  font-size: 1rem;
+}
+
+.lx-card .btn {
+  justify-self: start;
+}
+
+.lx-inline-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.lx-inline-form select {
+  flex: 1 1 200px;
+  min-height: 40px;
+  padding: 0 var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-2);
+  color: var(--color-text);
+}
+
+/* ---------- Pantallas estrechas ---------- */
+@media (max-width: 900px) {
+  .lx-grid,
+  .lx-grid--2 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .lx-plan__item {
+    grid-template-columns: 28px minmax(0, 1fr);
+  }
+
+  .lx-plan__go {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .lx-concept {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .lx-concept__status {
+    grid-column: 1;
+    grid-row: auto;
+  }
+}
+
+/* El asistente responde dudas de cada lección del curso PCAP: fuera de esa zona no aporta */
+body[data-zone="core"] .assistant {
+  display: none;
+}
+
+/* Enlaces del contenido: siempre reconocibles (color y subrayado), no solo por el color */
+.learn a:not(.btn):not(.lx-concept__link) {
+  color: var(--color-link);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.lx-concept__link {
+  color: var(--color-link);
+}
+
+.quiz__q.lx-exercise {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+}
+
+/* Dentro de un bloque de código, el <code> hereda los colores del fondo oscuro (no los del código en línea) */
+.lx-code code,
+.md-code code {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font-size: inherit;
+}
+
+.lx-competency {
+  display: grid;
+  gap: var(--space-2);
+  align-content: start;
+}
+
+.lx-competency .btn {
+  justify-self: start;
+}
+
+.lx-list--pad {
+  padding: 0 var(--space-4) var(--space-3);
+}
+
+.lx-bug__line[data-wrong="true"] {
+  background: rgb(248 113 113 / .18);
+}
+
+/* Ruta personal (Aprender) */
+.lx-route {
+  margin: var(--space-5) 0;
+}
+
+.lx-route__list {
+  columns: 2 280px;
+  column-gap: var(--space-6);
+  margin: 0;
+  padding: 0 var(--space-4) var(--space-4) calc(var(--space-4) + 1.5em);
+}
+
+.lx-route__item {
+  break-inside: avoid;
+  padding: 3px 0;
+}
+
+.lx-route__item[data-status="next"] {
+  font-weight: 700;
+}
+
+.lx-diagnostic {
+  margin: var(--space-5) 0;
+}
