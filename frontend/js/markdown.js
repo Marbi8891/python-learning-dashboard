@@ -21,11 +21,30 @@ export function renderInline(text) {
     .replace(/\u0000(\d+)\u0000/g, (_, i) => codeSpans[Number(i)]);
 }
 
-/** Párrafos (separados por una línea en blanco) y listas con "- " o "1. ". */
+const tableCells = (line) =>
+  line
+    .trim()
+    .replace(/^\||\|$/g, "")
+    .split("|")
+    .map((cell) => cell.trim());
+
+function renderTable(rows) {
+  const [head, , ...body] = rows.map(tableCells);
+  const th = head.map((cell) => `<th scope="col">${renderInline(cell)}</th>`).join("");
+  const trs = body.map((row) => `<tr>${row.map((cell) => `<td>${renderInline(cell)}</td>`).join("")}</tr>`).join("");
+  return `<div class="table-wrap" tabindex="0"><table class="md-table"><thead><tr>${th}</tr></thead><tbody>${trs}</tbody></table></div>`;
+}
+
+/**
+ * Párrafos (separados por una línea en blanco), listas con "- " o "1. ",
+ * bloques de código entre ``` y tablas con | (cabecera, separador |---| y filas).
+ */
 export function renderMarkdown(markdown = "") {
   const html = [];
   let paragraph = [];
   let list = null;
+  let code = null; // líneas del bloque de código abierto
+  let table = null; // filas de la tabla abierta
 
   const flushParagraph = () => {
     if (paragraph.length) html.push(`<p>${renderInline(paragraph.join(" "))}</p>`);
@@ -38,8 +57,35 @@ export function renderMarkdown(markdown = "") {
     }
     list = null;
   };
+  const flushTable = () => {
+    if (table) html.push(table.length >= 2 && /^\|?\s*:?-{3,}/.test(table[1].trim()) ? renderTable(table) : `<p>${renderInline(table.join(" "))}</p>`);
+    table = null;
+  };
 
   for (const line of String(markdown).split("\n")) {
+    if (code) {
+      if (line.trim().startsWith("```")) {
+        html.push(`<pre class="md-code" tabindex="0"><code>${escapeHtml(code.join("\n"))}</code></pre>`);
+        code = null;
+      } else {
+        code.push(line);
+      }
+      continue;
+    }
+    if (line.trim().startsWith("```")) {
+      flushParagraph();
+      flushList();
+      flushTable();
+      code = [];
+      continue;
+    }
+    if (line.trim().startsWith("|")) {
+      flushParagraph();
+      flushList();
+      (table ??= []).push(line);
+      continue;
+    }
+    flushTable();
     const bullet = line.match(/^- (.*)/);
     const numbered = line.match(/^\d+\. (.*)/);
     if (bullet || numbered) {
@@ -56,7 +102,9 @@ export function renderMarkdown(markdown = "") {
       paragraph.push(line.trim());
     }
   }
+  if (code) html.push(`<pre class="md-code" tabindex="0"><code>${escapeHtml(code.join("\n"))}</code></pre>`);
   flushParagraph();
   flushList();
+  flushTable();
   return html.join("");
 }

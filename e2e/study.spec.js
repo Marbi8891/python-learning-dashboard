@@ -138,10 +138,11 @@ test.describe("PWA", () => {
     await expect(page.locator('link[rel="manifest"]')).toHaveAttribute("href", "manifest.webmanifest");
     await page.evaluate(() => navigator.serviceWorker.ready);
     await page.reload(); // ya controlada por el service worker: guarda lo que carga
-    await expect(page.locator("#home-title")).toBeVisible();
+    await expect(page.locator("#learn-title")).toBeVisible();
     await context.setOffline(true);
     await page.reload();
-    await expect(page.locator("#home-title")).toContainText("Prepara el PCAP");
+    await expect(page.locator("#learn-title")).toHaveText("¿Qué estudio ahora?"); // con su contenido (learning.json) en caché
+    await expect(page.locator(".lx-plan__item").first()).toBeVisible();
     await context.setOffline(false);
   });
 });

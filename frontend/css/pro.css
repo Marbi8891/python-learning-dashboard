@@ -11,7 +11,7 @@
   --color-border: #263241;
   --color-text: #edf2f7;
   --color-text-muted: #9aa8b8;
-  --color-text-faint: #718096;
+  --color-text-faint: #8b98aa; /* 5,6:1 sobre --color-surface-2 (WCAG AA) */
   --color-strong: #ffffff;
 
   --color-accent: #22c55e;
@@ -43,12 +43,12 @@
   --color-border: #dce3eb;
   --color-text: #17202b;
   --color-text-muted: #5d6b7b;
-  --color-text-faint: #718096;
+  --color-text-faint: #5d6b7b; /* 4,9:1 sobre --color-surface-2 (WCAG AA) */
   --color-strong: #0f1720;
 
-  --color-accent: #15803d;
+  --color-accent: #166534; /* 5,6:1 sobre --color-accent-soft (WCAG AA) */
   --color-accent-soft: rgb(21 128 61 / .10);
-  --color-accent-hover: #166534;
+  --color-accent-hover: #14532d;
   --color-on-accent: #ffffff;
 
   --color-primary: #2563eb;
@@ -59,14 +59,13 @@
 
   --color-link: #1d4ed8;
   --color-code-inline: #15803d;
-  --color-gold: #a16207;
+  --color-gold: #854d0e; /* 6,1:1 sobre --color-surface-2 */
   --shadow: rgb(15 23 42 / .08);
 }
 
+/* Sin degradados ni efectos de cristal (ADR-0031): el contenido es el protagonista */
 body {
-  background:
-    radial-gradient(circle at 75% -10%, rgb(37 99 235 / .07), transparent 32rem),
-    var(--color-bg);
+  background: var(--color-bg);
   letter-spacing: -.005em;
 }
 
@@ -87,12 +86,11 @@ body {
   height: 42px;
   border: 0;
   border-radius: 11px;
-  background: linear-gradient(135deg, #2563eb, #22c55e);
+  background: var(--color-primary-strong);
   color: #fff;
   font-family: var(--font-mono);
   font-style: normal;
   font-weight: 700;
-  box-shadow: 0 8px 24px rgb(37 99 235 / .18);
 }
 
 .brand__name {
@@ -197,13 +195,11 @@ body {
   padding: clamp(28px, 5vw, 56px);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
-  background:
-    linear-gradient(135deg, rgb(37 99 235 / .11), transparent 48%),
-    var(--color-surface);
-  box-shadow: 0 24px 70px -48px var(--shadow);
+  background: var(--color-surface);
 }
 
 .course-hero::after {
+  display: none;
   content: "";
   position: absolute;
   right: -90px;
@@ -323,7 +319,7 @@ body {
   width: var(--value);
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+  background: var(--color-accent);
 }
 
 .course-progress__facts {
@@ -507,9 +503,8 @@ body {
   z-index: 4;
   padding: 10px;
   border-radius: var(--radius-md);
-  background: color-mix(in srgb, var(--color-surface) 94%, transparent);
+  background: var(--color-surface);
   box-shadow: 0 12px 30px -24px var(--shadow);
-  backdrop-filter: blur(12px);
 }
 
 .step {
@@ -618,10 +613,7 @@ body {
 /* PCAP */
 .readiness {
   border-radius: var(--radius-lg);
-  background:
-    linear-gradient(135deg, var(--color-primary-soft), transparent 55%),
-    var(--color-surface);
-  box-shadow: 0 18px 50px -38px var(--shadow);
+  background: var(--color-surface);
 }
 
 .readiness__score strong,
@@ -646,7 +638,6 @@ body {
 
 .exam-bar {
   border-radius: var(--radius-md);
-  backdrop-filter: blur(10px);
 }
 
 .exam-grid__item[data-state~="current"] {
@@ -683,7 +674,6 @@ body {
 
 .account::backdrop {
   background: rgb(2 6 12 / .68);
-  backdrop-filter: blur(4px);
 }
 
 .account__head {

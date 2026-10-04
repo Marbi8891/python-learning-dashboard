@@ -23,6 +23,9 @@ const runner = new PythonRunner({
   },
 });
 
+/** El mismo Python (un solo Worker) para la consola y para los ejercicios del núcleo educativo. */
+export const pythonRunner = runner;
+
 let lesson = null;
 let busy = false;
 let onRun = () => {};

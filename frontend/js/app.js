@@ -37,6 +37,8 @@ import { openPcap, refreshPcap } from "./pcap.js";
 import { initCourseSync } from "./course-store.js";
 import { openDaw, refreshDaw } from "./daw.js";
 import { initPcapSync } from "./pcap-sync.js";
+import { isLearnRoute, learnNavKey, openLearn } from "./learn/learn-app.js";
+import { initLearnSync } from "./learn/learn-store.js";
 import { initPrefs } from "./prefs.js";
 import { badgesHtml, renderProfile } from "./profile.js";
 import { initPrivate, renderPrivate } from "./private.js";
@@ -48,7 +50,8 @@ hljs.registerLanguage("python", python);
 const DATA_URL = "data/lessons.json";
 const ROUTE_PREFIX = "#/leccion/";
 const RESET_ROUTE = "#/restablecer";
-const HOME_ROUTE = "#/inicio";
+const HOME_ROUTE = "#/inicio"; // portada del curso PCAP
+const LEARN_ROUTE = "#/aprender"; // página principal: ¿qué estudio ahora? (ADR-0031)
 const PROFILE_ROUTE = "#/perfil";
 const PCAP_ROUTE = "#/pcap";
 const CERTIFICATE_ROUTE = "#/certificado";
@@ -62,7 +65,7 @@ const content = {
   lessons: new Map(), // slug -> { ...lesson, module, index }
   order: [], // slugs en el orden de la ruta
   current: null, // lección abierta (o la siguiente recomendada, en el inicio)
-  view: "home", // "home" | "profile" | "pcap" | "lesson"
+  view: "learn", // "learn" | "home" | "profile" | "pcap" | "daw" | "lesson" …
 };
 
 const $ = (selector) => document.querySelector(selector);
@@ -369,7 +372,9 @@ function refreshProgressViews() {
 }
 
 const VIEWS = {
-  home: { element: "#home-view", title: "Python Learning Dashboard", focus: "#home-title", render: () => renderHome(content, defaultSlug()) },
+  // Núcleo educativo: Aprender, Teoría, Practicar, Progreso y sesiones (se pinta solo: openLearn)
+  learn: { element: "#learn-view", title: "Aprender · Python Learning Dashboard", focus: null, render: null },
+  home: { element: "#home-view", title: "Curso PCAP · Python Learning Dashboard", focus: "#home-title", render: () => renderHome(content, defaultSlug()) },
   profile: { element: "#profile-view", title: "Mi aprendizaje · Python Learning Dashboard", focus: "#profile-title", render: () => renderProfile(content) },
   private: { element: "#private-view", title: "Mi cuenta · Python Learning Dashboard", focus: "#private-title", render: () => renderPrivate(content, apiEnabled) },
   certificate: {
@@ -409,11 +414,17 @@ function updatePrivateNav() {
   $("#private-nav").hidden = !state.user;
 }
 
+/** Entrada del menú que corresponde a la vista actual. */
+const NAV_OF_VIEW = { home: "pcap-curso", lesson: "pcap-curso", certificate: "pcap-curso", pcap: "pcap", daw: "daw", profile: "progreso", private: "cuenta" };
+
 function updateSiteNav() {
+  const key = content.view === "learn" ? learnNavKey(location.hash) : NAV_OF_VIEW[content.view];
   for (const link of document.querySelectorAll(".site-nav a")) {
-    if (link.dataset.view === content.view) link.setAttribute("aria-current", "page");
+    if (link.dataset.nav === key) link.setAttribute("aria-current", "page");
     else link.removeAttribute("aria-current");
   }
+  // La barra lateral del curso PCAP (lecciones, XP) solo se muestra en esa zona
+  document.body.dataset.zone = ["home", "lesson", "certificate", "pcap"].includes(content.view) ? "pcap" : "core";
 }
 
 function initTabs() {
@@ -560,10 +571,15 @@ function goTo(slug) {
 function navigate({ moveFocus = true } = {}) {
   if (location.hash.startsWith(RESET_ROUTE)) {
     const token = new URLSearchParams(location.hash.split("?")[1] ?? "").get("token");
-    history.replaceState(null, "", HOME_ROUTE);
+    history.replaceState(null, "", LEARN_ROUTE);
     if (token) openPasswordReset(token);
   }
 
+  if (isLearnRoute(location.hash)) {
+    showPage("learn", { moveFocus: false });
+    openLearn(location.hash, { moveFocus });
+    return;
+  }
   if (location.hash === PROFILE_ROUTE) {
     showPage("profile", { moveFocus });
     return;
@@ -586,9 +602,14 @@ function navigate({ moveFocus = true } = {}) {
     openPcap(location.hash, content.modules, { moveFocus });
     return;
   }
-  if (!location.hash.startsWith(ROUTE_PREFIX)) {
-    if (location.hash !== HOME_ROUTE) history.replaceState(null, "", HOME_ROUTE);
+  if (location.hash === HOME_ROUTE) {
     showPage("home", { moveFocus });
+    return;
+  }
+  if (!location.hash.startsWith(ROUTE_PREFIX)) {
+    history.replaceState(null, "", LEARN_ROUTE);
+    showPage("learn", { moveFocus: false });
+    openLearn(LEARN_ROUTE, { moveFocus });
     return;
   }
 
@@ -731,6 +752,7 @@ async function init() {
     refreshPcap();
   });
   initCourseSync(refreshDaw);
+  initLearnSync();
   const flash = takeFlash(); // aviso tras cerrar sesión o borrar la cuenta
   if (flash) showToast(flash);
   restoreSession();

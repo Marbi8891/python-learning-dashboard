@@ -1,0 +1,3911 @@
+{
+ "version": 1,
+ "areas": [
+  {
+   "id": "fundamentos",
+   "title": "Fundamentos",
+   "summary": "Lo imprescindible para escribir cualquier programa."
+  },
+  {
+   "id": "programacion",
+   "title": "Programación",
+   "summary": "Funciones, colecciones y programas que trabajan con datos."
+  },
+  {
+   "id": "logica",
+   "title": "Lógica",
+   "summary": "Pensar antes de programar: algoritmos, pseudocódigo, trazas y depuración."
+  },
+  {
+   "id": "avanzado",
+   "title": "Más adelante",
+   "summary": "Cuando la base esté firme."
+  }
+ ],
+ "path": [
+  "algoritmos",
+  "variables",
+  "tipos",
+  "operadores",
+  "entrada-salida",
+  "condicionales",
+  "pseudocodigo",
+  "bucles",
+  "trazado",
+  "acumuladores",
+  "validacion",
+  "funciones",
+  "depuracion",
+  "strings",
+  "listas",
+  "recorridos",
+  "tuplas-conjuntos",
+  "diccionarios",
+  "excepciones",
+  "modulos",
+  "archivos",
+  "poo"
+ ],
+ "concepts": [
+  {
+   "id": "algoritmos",
+   "title": "Comprender el problema y diseñar el algoritmo",
+   "area": "fundamentos",
+   "requires": [],
+   "daw": 3,
+   "ut": "prog-ut1",
+   "summary": "Antes de escribir código: datos de entrada, proceso y salida.",
+   "theory": "Un **algoritmo** es una secuencia **ordenada, finita y precisa** de pasos que resuelve un problema. Programar no empieza en el teclado: empieza entendiendo el problema.\n\n**Método en tres preguntas** (úsalo en cada ejercicio de clase y del examen):\n1. **Entrada:** ¿qué datos tengo o me da el usuario? ¿De qué tipo son?\n2. **Salida:** ¿qué tengo que mostrar o devolver exactamente?\n3. **Proceso:** ¿qué pasos transforman la entrada en la salida?\n\nDespués, **prueba el algoritmo a mano** con un caso normal y con un caso límite (0, lista vacía, número negativo…). Si a mano no funciona, en Python tampoco.\n\nUn algoritmo usa solo tres estructuras (**programación estructurada**): **secuencia** (un paso tras otro), **selección** (`if`) e **iteración** (bucles).",
+   "when": "Siempre, antes de escribir la primera línea. En el examen, dedica un minuto a escribir entrada, salida y proceso en un comentario.",
+   "example": {
+    "code": "# Entrada: precio (float) y si el cliente es socio (bool)\n# Salida: precio final con un 10 % de descuento para socios\nprecio = 80.0\nsocio = True\nif socio:\n    precio = precio * 0.9\nprint(precio)",
+    "lines": [
+     [
+      1,
+      "Primero se escribe la entrada: qué datos hay y de qué tipo."
+     ],
+     [
+      2,
+      "Después la salida exacta que se pide."
+     ],
+     [
+      5,
+      "Proceso: una selección, porque el descuento depende de una condición."
+     ],
+     [
+      6,
+      "Se aplica el 10 %: multiplicar por 0.9 es restar la décima parte."
+     ]
+    ],
+    "output": "72.0\n"
+   },
+   "errors": [
+    {
+     "id": "algoritmos.sin-entrada-salida",
+     "label": "Empieza a programar sin saber qué entra y qué sale",
+     "why": "Sin entrada y salida claras, el código resuelve otro problema o se queda a medias.",
+     "think": "Lee el enunciado buscando sustantivos (datos) y verbos (acciones). Los datos son la entrada; lo que se pide mostrar, la salida.",
+     "avoid": "Escribe siempre las tres líneas «Entrada / Proceso / Salida» como comentario antes de programar."
+    },
+    {
+     "id": "algoritmos.sin-caso-limite",
+     "label": "No prueba los casos límite",
+     "why": "El algoritmo funciona con el ejemplo del enunciado pero falla con 0, vacío o negativos.",
+     "think": "Pregúntate: ¿qué pasa si no hay datos? ¿Y si el número es 0 o negativo?",
+     "avoid": "Antes de dar por bueno un algoritmo, trázalo a mano con un caso normal y uno límite."
+    },
+    {
+     "id": "algoritmos.pasos-ambiguos",
+     "label": "Escribe pasos ambiguos o en desorden",
+     "why": "El ordenador no interpreta: necesita cada paso preciso y en el orden correcto.",
+     "think": "Un paso es correcto si otra persona puede ejecutarlo sin preguntarte nada.",
+     "avoid": "Numera los pasos y comprueba que cada uno usa solo datos calculados en pasos anteriores."
+    }
+   ],
+   "related": [
+    "pseudocodigo",
+    "trazado"
+   ]
+  },
+  {
+   "id": "variables",
+   "title": "Variables y asignación",
+   "area": "fundamentos",
+   "requires": [],
+   "daw": 3,
+   "ut": "prog-ut2",
+   "lessons": [
+    "variables"
+   ],
+   "summary": "Nombres que apuntan a valores; `=` asigna, no compara.",
+   "when": "Para guardar cualquier dato que vayas a usar más de una vez o que cambie durante el programa.",
+   "example": {
+    "code": "contador = 0\ncontador = contador + 1\nnombre = \"Ana\"\nprint(nombre, contador)",
+    "lines": [
+     [
+      1,
+      "Se crea `contador` con el valor 0."
+     ],
+     [
+      2,
+      "Python evalúa primero la derecha (0 + 1) y guarda el resultado en `contador`."
+     ],
+     [
+      3,
+      "Los textos van entre comillas."
+     ],
+     [
+      4,
+      "`print` con comas separa los valores con un espacio."
+     ]
+    ],
+    "output": "Ana 1\n"
+   },
+   "errors": [
+    {
+     "id": "variables.asigna-compara",
+     "label": "Confunde `=` (asignar) con `==` (comparar)",
+     "why": "`=` guarda un valor; `==` pregunta si dos valores son iguales y devuelve True o False.",
+     "think": "Lee `x = 5` como «x pasa a valer 5» y `x == 5` como «¿x vale 5?».",
+     "avoid": "En un `if` o un `while` casi siempre va `==`; en una línea suelta, `=`."
+    },
+    {
+     "id": "variables.orden-asignacion",
+     "label": "Cree que la asignación funciona de izquierda a derecha",
+     "why": "En `a = b` el valor de `b` se copia en `a`, nunca al revés. En `x = x + 1` primero se calcula la derecha.",
+     "think": "Evalúa siempre la parte derecha completa y después escribe el resultado en la variable de la izquierda.",
+     "avoid": "Haz una traza: apunta en una tabla el valor de cada variable después de cada línea."
+    },
+    {
+     "id": "variables.nombre-texto",
+     "label": "Confunde el nombre de una variable con un texto",
+     "why": "`nombre` es una variable; `\"nombre\"` es el texto literal «nombre».",
+     "think": "Las comillas convierten cualquier cosa en texto literal.",
+     "avoid": "Si quieres el valor, escribe el nombre sin comillas; si quieres esas letras, con comillas."
+    }
+   ],
+   "related": [
+    "tipos",
+    "trazado"
+   ]
+  },
+  {
+   "id": "tipos",
+   "title": "Tipos de datos y conversiones",
+   "area": "fundamentos",
+   "requires": [
+    "variables"
+   ],
+   "daw": 3,
+   "ut": "prog-ut2",
+   "lessons": [
+    "tipos"
+   ],
+   "summary": "int, float, str y bool; cómo y cuándo convertir entre ellos.",
+   "when": "Siempre que leas datos del usuario (llegan como texto) o mezcles números y textos.",
+   "example": {
+    "code": "edad = \"20\"\nprint(edad + \"1\")\nprint(int(edad) + 1)\nprint(type(3 / 2), type(3 // 2))",
+    "lines": [
+     [
+      1,
+      "`edad` es un texto, aunque parezca un número."
+     ],
+     [
+      2,
+      "Con textos, `+` concatena: «20» + «1» = «201»."
+     ],
+     [
+      3,
+      "`int()` lo convierte a entero y ahora `+` suma: 21."
+     ],
+     [
+      4,
+      "`/` siempre da float; `//` entre enteros da int."
+     ]
+    ],
+    "output": "201\n21\n<class 'float'> <class 'int'>\n"
+   },
+   "errors": [
+    {
+     "id": "tipos.texto-numero",
+     "label": "Trata un texto que parece número como si fuera un número",
+     "why": "`\"5\"` es un str: `\"5\" + \"5\"` da `\"55\"` y `\"5\" + 5` da TypeError.",
+     "think": "Pregúntate de dónde viene el dato. Si viene de `input()` o va entre comillas, es texto.",
+     "avoid": "Convierte con `int()` o `float()` justo al leer el dato."
+    },
+    {
+     "id": "tipos.division-float",
+     "label": "Espera un entero de la división `/`",
+     "why": "En Python 3, `/` devuelve siempre float (`6 / 2` es `3.0`).",
+     "think": "¿Necesito decimales o un número de grupos completos? Para grupos completos, `//`.",
+     "avoid": "Usa `//` para cociente entero y `%` para el resto."
+    },
+    {
+     "id": "tipos.bool-texto",
+     "label": "Escribe los booleanos como texto o en minúscula",
+     "why": "Los booleanos son `True` y `False` (con mayúscula y sin comillas). `\"False\"` es un texto no vacío y cuenta como verdadero.",
+     "think": "Un booleano responde a una pregunta de sí o no; no es una palabra.",
+     "avoid": "Nunca pongas comillas a True/False."
+    }
+   ],
+   "related": [
+    "operadores",
+    "entrada-salida"
+   ]
+  },
+  {
+   "id": "operadores",
+   "title": "Operadores y expresiones",
+   "area": "fundamentos",
+   "requires": [
+    "tipos"
+   ],
+   "daw": 3,
+   "ut": "prog-ut2",
+   "lessons": [
+    "operadores"
+   ],
+   "summary": "Aritméticos, de comparación y lógicos; prioridad y resto (`%`).",
+   "when": "En cálculos, en las condiciones de `if` y `while`, y para saber si un número es par o múltiplo de otro.",
+   "example": {
+    "code": "n = 17\nprint(n // 5, n % 5)\nprint(n % 2 == 0)\nprint(2 + 3 * 4, (2 + 3) * 4)\nprint(n > 10 and n < 20)",
+    "lines": [
+     [
+      2,
+      "`//` da el cociente (3) y `%` el resto (2)."
+     ],
+     [
+      3,
+      "Un número es par si el resto entre 2 es 0."
+     ],
+     [
+      4,
+      "La multiplicación va antes que la suma; los paréntesis cambian el orden."
+     ],
+     [
+      5,
+      "`and` es verdadero solo si las dos partes lo son."
+     ]
+    ],
+    "output": "3 2\nFalse\n14 20\nTrue\n"
+   },
+   "errors": [
+    {
+     "id": "operadores.prioridad",
+     "label": "Ignora la prioridad de los operadores",
+     "why": "`*`, `/`, `//` y `%` se evalúan antes que `+` y `-`; `not` antes que `and`, y `and` antes que `or`.",
+     "think": "Evalúa por niveles: primero paréntesis, luego potencias, luego `* / // %`, luego `+ -`, luego comparaciones y por último `not`, `and`, `or`.",
+     "avoid": "Si dudas, pon paréntesis: hacen el código más claro."
+    },
+    {
+     "id": "operadores.and-or",
+     "label": "Confunde `and` con `or`",
+     "why": "`and` exige que se cumplan las dos condiciones; `or`, al menos una.",
+     "think": "Di la condición en voz alta: «mayor de edad Y con entrada» frente a «sábado O domingo».",
+     "avoid": "Comprueba la condición con un caso que deba dar True y otro que deba dar False."
+    },
+    {
+     "id": "operadores.modulo",
+     "label": "No sabe usar el resto `%`",
+     "why": "`a % b` es el resto de dividir a entre b. Es 0 cuando a es múltiplo de b.",
+     "think": "Divide a mano: 17 entre 5 cabe 3 veces y sobran 2. Ese 2 es `17 % 5`.",
+     "avoid": "Recuerda los usos típicos: par (`n % 2 == 0`), múltiplo (`n % k == 0`) y última cifra (`n % 10`)."
+    },
+    {
+     "id": "operadores.rango-encadenado",
+     "label": "Escribe mal un rango de valores",
+     "why": "`0 < n < 10` es válido en Python; `n > 0 and < 10` no, porque cada lado de `and` tiene que ser una comparación completa.",
+     "think": "Cada condición se evalúa sola: ¿n > 0? ¿n < 10?",
+     "avoid": "Usa `0 < n < 10` o `n > 0 and n < 10`."
+    }
+   ],
+   "related": [
+    "condicionales",
+    "tipos"
+   ]
+  },
+  {
+   "id": "entrada-salida",
+   "title": "Entrada y salida",
+   "area": "fundamentos",
+   "requires": [
+    "tipos"
+   ],
+   "daw": 3,
+   "ut": "prog-ut2",
+   "lessons": [
+    "input"
+   ],
+   "summary": "`input()` siempre devuelve texto; `print()` y f-strings para mostrar resultados.",
+   "when": "En casi todos los ejercicios de clase: leer datos del usuario y mostrar el resultado con el formato pedido.",
+   "example": {
+    "code": "nombre = input(\"Nombre: \")\nedad = int(input(\"Edad: \"))\nprint(f\"{nombre} cumplirá {edad + 1} años\")\nprint(f\"Media: {7 / 3:.2f}\")",
+    "stdin": "Ana\n20\n",
+    "lines": [
+     [
+      1,
+      "`input` muestra el mensaje y devuelve lo escrito, siempre como texto."
+     ],
+     [
+      2,
+      "Para operar con un número hay que convertir la entrada con `int()`."
+     ],
+     [
+      3,
+      "En una f-string, lo que va entre llaves se evalúa."
+     ],
+     [
+      4,
+      "`:.2f` muestra el número con 2 decimales."
+     ]
+    ],
+    "output": "Nombre: Edad: Ana cumplirá 21 años\nMedia: 2.33\n"
+   },
+   "errors": [
+    {
+     "id": "entrada-salida.input-texto",
+     "label": "Olvida que `input()` devuelve texto",
+     "why": "Aunque el usuario escriba 5, `input()` devuelve `\"5\"`. Sumarlo a un número da TypeError y compararlo con un número no funciona.",
+     "think": "Pregunta: ¿voy a hacer cuentas o comparaciones numéricas con este dato?",
+     "avoid": "Convierte en la misma línea: `n = int(input(\"n: \"))`."
+    },
+    {
+     "id": "entrada-salida.formato-salida",
+     "label": "No respeta el formato de salida pedido",
+     "why": "En los ejercicios corregidos, «Total: 5» y «total=5» son salidas distintas.",
+     "think": "Copia del enunciado el texto exacto que hay que mostrar.",
+     "avoid": "Usa f-strings y compara tu salida carácter a carácter con la del enunciado."
+    },
+    {
+     "id": "entrada-salida.print-return",
+     "label": "Confunde mostrar (`print`) con devolver (`return`)",
+     "why": "`print` solo escribe en pantalla; el valor no se puede usar después. `return` devuelve el valor a quien llamó a la función.",
+     "think": "¿El resultado lo va a leer una persona (print) o lo va a usar otra parte del programa (return)?",
+     "avoid": "Dentro de las funciones de cálculo usa `return`; muestra con `print` fuera de ellas."
+    }
+   ],
+   "related": [
+    "tipos",
+    "validacion"
+   ]
+  },
+  {
+   "id": "condicionales",
+   "title": "Condicionales: if, elif y else",
+   "area": "fundamentos",
+   "requires": [
+    "operadores"
+   ],
+   "daw": 3,
+   "ut": "prog-ut3",
+   "lessons": [
+    "condicionales"
+   ],
+   "summary": "Elegir qué código se ejecuta según una condición.",
+   "when": "Cuando el programa tiene que tomar una decisión: clasificar, validar, elegir un caso.",
+   "example": {
+    "code": "nota = 6.5\nif nota >= 9:\n    print(\"Sobresaliente\")\nelif nota >= 5:\n    print(\"Aprobado\")\nelse:\n    print(\"Suspenso\")",
+    "lines": [
+     [
+      2,
+      "Se comprueba la condición más exigente primero."
+     ],
+     [
+      4,
+      "`elif` solo se evalúa si las anteriores fueron falsas: aquí ya sabemos que nota < 9."
+     ],
+     [
+      5,
+      "Se ejecuta un único bloque: el primero cuya condición sea verdadera."
+     ],
+     [
+      6,
+      "`else` recoge todos los casos restantes y no lleva condición."
+     ]
+    ],
+    "output": "Aprobado\n"
+   },
+   "errors": [
+    {
+     "id": "condicionales.orden-elif",
+     "label": "Ordena mal las condiciones de una cadena if/elif",
+     "why": "Solo se ejecuta la primera rama verdadera. Si `nota >= 5` va antes que `nota >= 9`, un 10 sale «Aprobado».",
+     "think": "Ordena de la condición más restrictiva a la más general.",
+     "avoid": "Prueba la cadena con un valor de cada tramo y con los valores frontera (5, 9…)."
+    },
+    {
+     "id": "condicionales.if-separados",
+     "label": "Usa varios `if` cuando necesita `elif`",
+     "why": "Con `if` separados se evalúan todos y pueden ejecutarse varias ramas.",
+     "think": "¿Los casos se excluyen entre sí? Entonces es una sola cadena if/elif/else.",
+     "avoid": "Usa `elif` cuando solo debe ejecutarse una opción."
+    },
+    {
+     "id": "condicionales.sangria",
+     "label": "Sangra mal el bloque del `if`",
+     "why": "Python decide qué va dentro del `if` por la sangría. Una línea sin sangrar se ejecuta siempre.",
+     "think": "Todo lo que depende de la condición va 4 espacios a la derecha del `if`.",
+     "avoid": "Revisa la sangría después de cada `:`."
+    },
+    {
+     "id": "condicionales.frontera",
+     "label": "Se equivoca en los valores frontera (`>` frente a `>=`)",
+     "why": "«Aprobado desde 5» es `nota >= 5`; con `nota > 5` el 5 queda suspenso.",
+     "think": "Lee el enunciado buscando «desde», «a partir de», «más de», «menos de».",
+     "avoid": "Prueba siempre el valor exacto de la frontera."
+    }
+   ],
+   "related": [
+    "operadores",
+    "bucles"
+   ]
+  },
+  {
+   "id": "bucles",
+   "title": "Bucles: while y for",
+   "area": "fundamentos",
+   "requires": [
+    "condicionales"
+   ],
+   "daw": 3,
+   "ut": "prog-ut3",
+   "lessons": [
+    "bucles"
+   ],
+   "summary": "Repetir: `for` cuando sabes sobre qué iteras, `while` mientras se cumpla una condición.",
+   "when": "`for` para recorrer una secuencia o repetir N veces; `while` cuando no sabes cuántas vueltas habrá (menús, validar datos).",
+   "example": {
+    "code": "for i in range(1, 4):\n    print(\"vuelta\", i)\n\nn = 10\nwhile n > 0:\n    n = n - 4\nprint(\"n final:\", n)",
+    "lines": [
+     [
+      1,
+      "`range(1, 4)` produce 1, 2 y 3: el final no se incluye."
+     ],
+     [
+      5,
+      "La condición se comprueba antes de cada vuelta: es la condición para **seguir**, no para salir."
+     ],
+     [
+      6,
+      "Algo dentro del bucle tiene que cambiar la condición; si no, sería infinito."
+     ],
+     [
+      7,
+      "Al salir, n vale -2: la última resta se hizo cuando n era 2."
+     ]
+    ],
+    "output": "vuelta 1\nvuelta 2\nvuelta 3\nn final: -2\n"
+   },
+   "errors": [
+    {
+     "id": "bucles.condicion-salida",
+     "label": "Confunde la condición del bucle con la condición de salida",
+     "why": "`while` repite **mientras** la condición sea verdadera. Si quieres parar cuando `n == 0`, la condición es `n != 0`.",
+     "think": "Formula la frase «sigue repitiendo mientras…» y escribe eso como condición.",
+     "avoid": "Antes de escribir el `while`, escribe en un comentario cuándo debe terminar y niega esa condición."
+    },
+    {
+     "id": "bucles.range-fin",
+     "label": "Cree que `range` incluye el valor final",
+     "why": "`range(1, 5)` da 1, 2, 3 y 4. Para llegar a n hay que escribir `range(1, n + 1)`.",
+     "think": "Cuenta: `range(a, b)` da `b - a` números.",
+     "avoid": "Comprueba el primer y el último valor con `print(list(range(...)))`."
+    },
+    {
+     "id": "bucles.bucle-infinito",
+     "label": "Escribe un bucle infinito por no actualizar la variable",
+     "why": "Si nada dentro del `while` cambia la condición, el bucle no termina nunca.",
+     "think": "Identifica la variable de la condición y busca la línea que la modifica dentro del bucle.",
+     "avoid": "Cada `while` necesita: inicialización antes, condición y actualización dentro."
+    },
+    {
+     "id": "bucles.uno-de-mas",
+     "label": "Da una vuelta de más o de menos",
+     "why": "Los errores «por uno» aparecen al elegir mal el inicio, el final o el operador (`<` o `<=`).",
+     "think": "Traza la primera y la última vuelta a mano.",
+     "avoid": "Prueba con n = 1 y n = 0: si esos casos salen bien, el resto suele salir bien."
+    }
+   ],
+   "related": [
+    "acumuladores",
+    "recorridos",
+    "trazado"
+   ]
+  },
+  {
+   "id": "acumuladores",
+   "title": "Contadores y acumuladores",
+   "area": "fundamentos",
+   "requires": [
+    "bucles"
+   ],
+   "daw": 3,
+   "ut": "prog-ut3",
+   "lessons": [
+    "bucles"
+   ],
+   "summary": "Contar cuántas veces pasa algo y sumar (o multiplicar) valores dentro de un bucle.",
+   "theory": "Son los dos patrones más usados en los ejercicios de bucles.\n\n**Contador:** cuenta cuántas veces ocurre algo. Empieza en `0` y suma `1` cada vez que se cumple la condición.\n\n```\ncontador = 0\nfor n in numeros:\n    if n > 0:\n        contador += 1\n```\n\n**Acumulador:** va guardando un resultado parcial. Para sumas empieza en `0`; para productos, en `1` (empezar en 0 haría que todo el producto diera 0).\n\n```\nsuma = 0\nfor n in numeros:\n    suma += n\n```\n\n**Las tres reglas:**\n1. Se **inicializa antes** del bucle (si lo inicializas dentro, se reinicia en cada vuelta).\n2. Se **actualiza dentro** del bucle.\n3. Se **usa después** del bucle: la media se calcula al final, `suma / contador`, y comprobando que `contador` no sea 0.",
+   "when": "Contar aprobados, sumar precios, calcular medias, el máximo de una serie… Cualquier enunciado con «cuántos», «total» o «media».",
+   "example": {
+    "code": "notas = [7, 4, 9, 5]\naprobados = 0\nsuma = 0\nfor nota in notas:\n    suma += nota\n    if nota >= 5:\n        aprobados += 1\nprint(aprobados, suma / len(notas))",
+    "lines": [
+     [
+      2,
+      "Contador inicializado a 0, **antes** del bucle."
+     ],
+     [
+      3,
+      "Acumulador de la suma, también antes del bucle."
+     ],
+     [
+      5,
+      "`suma += nota` equivale a `suma = suma + nota`."
+     ],
+     [
+      7,
+      "El contador solo aumenta cuando se cumple la condición."
+     ],
+     [
+      8,
+      "La media se calcula **después** del bucle."
+     ]
+    ],
+    "output": "3 6.25\n"
+   },
+   "errors": [
+    {
+     "id": "acumuladores.inicializa-dentro",
+     "label": "Inicializa el contador o acumulador dentro del bucle",
+     "why": "Si `suma = 0` va dentro del bucle, se pone a cero en cada vuelta y solo queda el último valor.",
+     "think": "¿Cuántas veces debe ejecutarse la inicialización? Una sola: antes del bucle.",
+     "avoid": "Escribe siempre el patrón completo: inicializar (fuera), actualizar (dentro), usar (después)."
+    },
+    {
+     "id": "acumuladores.producto-cero",
+     "label": "Inicializa un producto a 0",
+     "why": "Cualquier número multiplicado por 0 es 0: el producto acumulado debe empezar en 1.",
+     "think": "El valor inicial es el elemento neutro de la operación: 0 para sumar, 1 para multiplicar.",
+     "avoid": "Para factoriales y potencias, empieza en 1."
+    },
+    {
+     "id": "acumuladores.media-dentro",
+     "label": "Calcula la media dentro del bucle o sin proteger la división",
+     "why": "La media solo es correcta cuando ya se han sumado todos los valores. Además, si no hay datos, dividir entre 0 da error.",
+     "think": "La media es un resultado final: va después del bucle.",
+     "avoid": "Calcula `suma / contador` tras el bucle y solo si `contador > 0`."
+    },
+    {
+     "id": "acumuladores.cuenta-todo",
+     "label": "Incrementa el contador fuera de la condición",
+     "why": "Si `contador += 1` no está dentro del `if`, cuenta todos los elementos, no solo los que cumplen la condición.",
+     "think": "¿El contador responde a «cuántos hay» o a «cuántos cumplen X»?",
+     "avoid": "Revisa la sangría: el incremento va dentro del `if`."
+    }
+   ],
+   "related": [
+    "bucles",
+    "recorridos"
+   ]
+  },
+  {
+   "id": "validacion",
+   "title": "Validación de datos",
+   "area": "fundamentos",
+   "requires": [
+    "bucles",
+    "entrada-salida"
+   ],
+   "daw": 3,
+   "ut": "prog-ut3",
+   "summary": "Pedir un dato hasta que sea válido, sin que el programa se rompa.",
+   "theory": "Un programa robusto **no se fía de la entrada**. Validar es comprobar que el dato cumple lo esperado (tipo, rango, formato) y, si no, volver a pedirlo.\n\n**Patrón «pedir hasta que sea válido»** con `while`:\n\n```\nedad = int(input(\"Edad: \"))\nwhile edad < 0 or edad > 120:\n    print(\"Edad no válida\")\n    edad = int(input(\"Edad: \"))\n```\n\nLa condición del `while` describe el dato **inválido**: se repite **mientras** el dato sea incorrecto.\n\n**Si el usuario escribe letras**, `int()` lanza `ValueError`. Se captura con `try/except` (ver Excepciones):\n\n```\nwhile True:\n    try:\n        edad = int(input(\"Edad: \"))\n        if 0 <= edad <= 120:\n            break\n        print(\"Fuera de rango\")\n    except ValueError:\n        print(\"Escribe un número\")\n```\n\nOtras comprobaciones útiles: `texto.strip() == \"\"` (vacío), `texto.isdigit()` (solo cifras), `opcion in (\"s\", \"n\")` (valor de una lista).",
+   "when": "Siempre que el dato venga del usuario o de un fichero: menús, edades, notas, opciones sí/no.",
+   "example": {
+    "code": "nota = int(input(\"Nota (0-10): \"))\nwhile nota < 0 or nota > 10:\n    print(\"Nota no válida\")\n    nota = int(input(\"Nota (0-10): \"))\nprint(\"Nota guardada:\", nota)",
+    "stdin": "12\n-1\n8\n",
+    "lines": [
+     [
+      1,
+      "Se pide el dato una primera vez antes del bucle."
+     ],
+     [
+      2,
+      "La condición describe el dato **incorrecto**: fuera de 0-10."
+     ],
+     [
+      4,
+      "Dentro del bucle se vuelve a pedir; sin esta línea, el bucle sería infinito."
+     ],
+     [
+      5,
+      "Al salir del bucle, el dato es válido seguro."
+     ]
+    ],
+    "output": "Nota (0-10): Nota no válida\nNota (0-10): Nota no válida\nNota (0-10): Nota guardada: 8\n"
+   },
+   "errors": [
+    {
+     "id": "validacion.condicion-invertida",
+     "label": "Escribe la condición del dato válido en el `while`",
+     "why": "El bucle de validación repite mientras el dato es **incorrecto**. Con la condición del dato válido, pide de nuevo justo los datos buenos.",
+     "think": "Completa la frase «vuelve a pedirlo mientras el dato sea…».",
+     "avoid": "Escribe primero la condición de validez y niégala con `not (...)` si te resulta más fácil."
+    },
+    {
+     "id": "validacion.no-repide",
+     "label": "No vuelve a pedir el dato dentro del bucle",
+     "why": "Si el `input()` no se repite dentro del `while`, la variable no cambia y el bucle es infinito.",
+     "think": "¿Qué línea cambia la variable de la condición dentro del bucle?",
+     "avoid": "Dentro del bucle de validación siempre hay un nuevo `input()`."
+    },
+    {
+     "id": "validacion.or-and",
+     "label": "Usa `and` para un rango inválido",
+     "why": "Un número no puede ser a la vez menor que 0 y mayor que 10: `nota < 0 and nota > 10` nunca es verdadero.",
+     "think": "Fuera de rango significa «por debajo O por encima».",
+     "avoid": "Rango válido: `0 <= n <= 10`. Inválido: `n < 0 or n > 10`."
+    }
+   ],
+   "related": [
+    "excepciones",
+    "bucles"
+   ]
+  },
+  {
+   "id": "funciones",
+   "title": "Funciones: parámetros y return",
+   "area": "programacion",
+   "requires": [
+    "condicionales"
+   ],
+   "daw": 3,
+   "ut": "prog-ut3",
+   "lessons": [
+    "funciones"
+   ],
+   "summary": "Encapsular un cálculo con un nombre, recibir datos por parámetros y devolver un resultado.",
+   "when": "Cuando un cálculo se repite, cuando el programa crece o cuando el enunciado dice «implementa una función que…».",
+   "example": {
+    "code": "def area_rectangulo(base, altura):\n    return base * altura\n\nresultado = area_rectangulo(4, 3)\nprint(resultado)\nprint(area_rectangulo(altura=2, base=5))",
+    "lines": [
+     [
+      1,
+      "`base` y `altura` son **parámetros**: nombres que recibirán los valores."
+     ],
+     [
+      2,
+      "`return` devuelve el resultado y termina la función."
+     ],
+     [
+      4,
+      "4 y 3 son los **argumentos**: los valores concretos de esta llamada."
+     ],
+     [
+      6,
+      "Con argumentos por nombre, el orden da igual."
+     ]
+    ],
+    "output": "12\n10\n"
+   },
+   "errors": [
+    {
+     "id": "funciones.print-en-vez-de-return",
+     "label": "Usa `print` en lugar de `return` dentro de la función",
+     "why": "Si la función solo hace `print`, devuelve `None`: `total = calcular(3)` guarda None.",
+     "think": "¿Quién usa el resultado? Si es otra parte del programa, la función tiene que devolverlo.",
+     "avoid": "Las funciones de cálculo terminan en `return`; el `print` va donde se llama."
+    },
+    {
+     "id": "funciones.return-en-bucle",
+     "label": "Pone el `return` dentro del bucle antes de tiempo",
+     "why": "`return` termina la función en ese momento: dentro de un bucle, se sale en la primera vuelta.",
+     "think": "¿Tengo ya la respuesta definitiva en esta vuelta? Si no, el `return` va después del bucle.",
+     "avoid": "Comprueba la sangría del `return`."
+    },
+    {
+     "id": "funciones.definir-no-llamar",
+     "label": "Define la función pero no la llama (o la llama sin paréntesis)",
+     "why": "`def` solo crea la función; no se ejecuta hasta que se llama con paréntesis: `saludar()`.",
+     "think": "Definir es escribir la receta; llamar es cocinarla.",
+     "avoid": "Después de cada `def`, busca dónde se llama."
+    },
+    {
+     "id": "funciones.ambito",
+     "label": "Intenta usar fuera una variable local de la función",
+     "why": "Las variables creadas dentro de una función solo existen dentro de ella.",
+     "think": "Si necesitas el valor fuera, la función tiene que devolverlo.",
+     "avoid": "Comunica funciones con parámetros (entrada) y `return` (salida), no con variables globales."
+    }
+   ],
+   "related": [
+    "modulos",
+    "depuracion"
+   ]
+  },
+  {
+   "id": "strings",
+   "title": "Cadenas de texto",
+   "area": "programacion",
+   "requires": [
+    "bucles"
+   ],
+   "daw": 3,
+   "ut": "prog-ut2",
+   "lessons": [
+    "cadenas",
+    "metodos-string"
+   ],
+   "summary": "Índices, slicing, recorrido y métodos de str; los textos son inmutables.",
+   "when": "Contar letras, validar formatos, invertir palabras, limpiar entradas del usuario.",
+   "example": {
+    "code": "texto = \"Programar\"\nprint(texto[0], texto[-1], len(texto))\nprint(texto[0:3], texto[::-1])\nvocales = 0\nfor letra in texto.lower():\n    if letra in \"aeiou\":\n        vocales += 1\nprint(vocales)",
+    "lines": [
+     [
+      2,
+      "El primer carácter está en la posición 0; `-1` es el último."
+     ],
+     [
+      3,
+      "`[0:3]` va de la posición 0 a la 2 (el final no se incluye); `[::-1]` invierte."
+     ],
+     [
+      5,
+      "Un `for` recorre el texto letra a letra; `lower()` devuelve una copia en minúsculas."
+     ],
+     [
+      6,
+      "`in` comprueba si la letra está dentro de otro texto."
+     ]
+    ],
+    "output": "P r 9\nPro ramargorP\n3\n"
+   },
+   "errors": [
+    {
+     "id": "strings.indice-uno",
+     "label": "Cuenta las posiciones desde 1",
+     "why": "Las posiciones empiezan en 0: en un texto de longitud n, la última es `n - 1`.",
+     "think": "El índice indica cuántos caracteres hay antes de ese.",
+     "avoid": "Usa `texto[-1]` para el último y `range(len(texto))` para las posiciones."
+    },
+    {
+     "id": "strings.inmutable",
+     "label": "Intenta modificar un texto en su sitio",
+     "why": "Los str son inmutables: `texto[0] = \"X\"` da TypeError y `texto.upper()` no cambia `texto`, devuelve otro.",
+     "think": "Los métodos de str crean un texto nuevo: hay que guardarlo.",
+     "avoid": "Escribe `texto = texto.upper()` o construye un texto nuevo."
+    },
+    {
+     "id": "strings.slice-fin",
+     "label": "Cree que el slicing incluye la posición final",
+     "why": "`texto[1:4]` incluye las posiciones 1, 2 y 3, no la 4.",
+     "think": "Igual que `range`: el inicio entra y el final no.",
+     "avoid": "La longitud del trozo es `fin - inicio`."
+    }
+   ],
+   "related": [
+    "listas",
+    "recorridos"
+   ]
+  },
+  {
+   "id": "listas",
+   "title": "Listas",
+   "area": "programacion",
+   "requires": [
+    "bucles"
+   ],
+   "daw": 3,
+   "ut": "prog-ut6",
+   "lessons": [
+    "colecciones"
+   ],
+   "summary": "Secuencias ordenadas y modificables: crear, acceder, añadir, quitar y recorrer.",
+   "theory": "Una **lista** guarda varios valores en orden: `notas = [7, 4, 9]`. Es **mutable**: se puede cambiar después de crearla.\n\n- **Acceso:** `notas[0]` (primero), `notas[-1]` (último), `notas[1:3]` (trozo).\n- **Añadir:** `append(x)` al final, `insert(i, x)` en una posición.\n- **Quitar:** `remove(x)` (por valor, el primero que encuentra), `pop()` (el último) o `pop(i)` (por posición).\n- **Consultar:** `len(lista)`, `x in lista`, `lista.index(x)`, `lista.count(x)`.\n- **Ordenar:** `lista.sort()` ordena la propia lista y devuelve `None`; `sorted(lista)` devuelve una lista nueva.\n\n**Recorrer:** `for nota in notas:` cuando solo necesitas los valores; `for i in range(len(notas)):` o `for i, nota in enumerate(notas):` cuando también necesitas la posición.\n\n**Cuidado con los alias:** `b = a` no copia la lista; los dos nombres apuntan a la misma. Para copiarla: `b = a.copy()` o `b = a[:]`.",
+   "when": "Cuando tienes una colección de datos del mismo tipo en un orden: notas, productos, palabras.",
+   "example": {
+    "code": "compra = [\"pan\", \"leche\"]\ncompra.append(\"huevos\")\ncompra.remove(\"pan\")\nprint(compra, len(compra))\nordenada = sorted([3, 1, 2])\nprint(ordenada)",
+    "lines": [
+     [
+      2,
+      "`append` modifica la propia lista: no hace falta reasignar."
+     ],
+     [
+      3,
+      "`remove` busca el valor y quita la primera aparición."
+     ],
+     [
+      5,
+      "`sorted` devuelve una lista nueva ordenada; la original no cambia."
+     ]
+    ],
+    "output": "['leche', 'huevos'] 2\n[1, 2, 3]\n"
+   },
+   "errors": [
+    {
+     "id": "listas.sort-none",
+     "label": "Guarda el resultado de `lista.sort()`",
+     "why": "`sort()` ordena la lista en su sitio y devuelve `None`: `x = lista.sort()` deja x en None.",
+     "think": "¿El método modifica la lista o devuelve una nueva? `sort`, `append`, `remove` modifican y devuelven None.",
+     "avoid": "Usa `lista.sort()` sola en su línea, o `nueva = sorted(lista)`."
+    },
+    {
+     "id": "listas.alias",
+     "label": "Cree que `b = a` copia la lista",
+     "why": "Asignar una lista no la copia: `a` y `b` son la misma lista y un cambio en una se ve en la otra.",
+     "think": "Una variable es una etiqueta: `b = a` pega una segunda etiqueta en la misma lista.",
+     "avoid": "Copia con `a.copy()` o `a[:]` cuando necesites una lista independiente."
+    },
+    {
+     "id": "listas.indice-fuera",
+     "label": "Accede a una posición que no existe",
+     "why": "En una lista de n elementos, las posiciones válidas van de 0 a n - 1. `lista[n]` da IndexError.",
+     "think": "¿Cuántos elementos hay? La última posición es uno menos.",
+     "avoid": "Recorre con `for x in lista` o `range(len(lista))`, nunca con `range(len(lista) + 1)`."
+    },
+    {
+     "id": "listas.modificar-recorriendo",
+     "label": "Elimina elementos mientras recorre la misma lista",
+     "why": "Al quitar un elemento, los siguientes se desplazan y el `for` se salta alguno.",
+     "think": "No cambies el tamaño de lo que estás recorriendo.",
+     "avoid": "Construye una lista nueva con los elementos que quieres conservar."
+    }
+   ],
+   "related": [
+    "recorridos",
+    "tuplas-conjuntos",
+    "diccionarios"
+   ]
+  },
+  {
+   "id": "tuplas-conjuntos",
+   "title": "Tuplas y conjuntos",
+   "area": "programacion",
+   "requires": [
+    "listas"
+   ],
+   "daw": 2,
+   "ut": "prog-ut6",
+   "lessons": [
+    "colecciones"
+   ],
+   "summary": "Tuplas: secuencias inmutables. Conjuntos: sin orden y sin repetidos.",
+   "theory": "**Tupla:** como una lista, pero **inmutable**. Se escribe con paréntesis: `punto = (3, 4)`. Sirve para datos que van juntos y no deben cambiar (coordenadas, una fecha, varios valores devueltos por una función).\n\n- Se accede igual que a una lista: `punto[0]`.\n- **Desempaquetado:** `x, y = punto`.\n- Una tupla de un elemento lleva coma: `(5,)`. Sin la coma, `(5)` es solo el número 5.\n\n**Conjunto (`set`):** colección **sin orden y sin elementos repetidos**: `{1, 2, 3}`. El conjunto vacío es `set()`; `{}` es un diccionario vacío.\n\n- Quitar repetidos: `set(lista)`.\n- Comprobar si un elemento está (`in`) es muy rápido.\n- Operaciones: unión `|`, intersección `&`, diferencia `-`.\n- No tienen posiciones: `conjunto[0]` da error.",
+   "when": "Tupla: datos fijos que van juntos. Conjunto: quitar repetidos o comprobar pertenencia rápidamente.",
+   "example": {
+    "code": "def min_max(numeros):\n    return min(numeros), max(numeros)\n\nmenor, mayor = min_max([4, 9, 1])\nprint(menor, mayor)\nprint(sorted(set([3, 1, 3, 2, 1])))\nprint({1, 2, 3} & {2, 3, 4})",
+    "lines": [
+     [
+      2,
+      "Devolver dos valores separados por coma devuelve una tupla."
+     ],
+     [
+      4,
+      "Desempaquetado: cada variable recibe un elemento de la tupla."
+     ],
+     [
+      6,
+      "`set` quita los repetidos; `sorted` lo convierte en una lista ordenada."
+     ],
+     [
+      7,
+      "`&` es la intersección: los elementos que están en los dos conjuntos."
+     ]
+    ],
+    "output": "1 9\n[1, 2, 3]\n{2, 3}\n"
+   },
+   "errors": [
+    {
+     "id": "tuplas-conjuntos.tupla-mutable",
+     "label": "Intenta modificar una tupla",
+     "why": "Las tuplas no se pueden modificar: `t[0] = 1` da TypeError y no tienen `append`.",
+     "think": "¿Estos datos deben cambiar? Si sí, usa una lista.",
+     "avoid": "Para «cambiar» una tupla, crea otra nueva."
+    },
+    {
+     "id": "tuplas-conjuntos.set-orden",
+     "label": "Espera que un conjunto mantenga el orden o tenga posiciones",
+     "why": "Un set no tiene orden ni índices: `s[0]` da TypeError y el orden al imprimirlo no está garantizado.",
+     "think": "Un conjunto responde a «¿está o no está?», no a «¿qué posición ocupa?».",
+     "avoid": "Si necesitas orden, conviértelo con `sorted(conjunto)`."
+    },
+    {
+     "id": "tuplas-conjuntos.llaves-vacias",
+     "label": "Cree que `{}` es un conjunto vacío",
+     "why": "`{}` crea un diccionario vacío. El conjunto vacío es `set()`.",
+     "think": "Las llaves vacías se reservaron para los diccionarios, que existían antes.",
+     "avoid": "Escribe siempre `set()` para un conjunto vacío."
+    }
+   ],
+   "related": [
+    "listas",
+    "diccionarios"
+   ]
+  },
+  {
+   "id": "diccionarios",
+   "title": "Diccionarios",
+   "area": "programacion",
+   "requires": [
+    "listas"
+   ],
+   "daw": 3,
+   "ut": "prog-ut6",
+   "lessons": [
+    "colecciones"
+   ],
+   "summary": "Pares clave → valor: buscar, contar y agrupar datos por nombre.",
+   "theory": "Un **diccionario** asocia **claves** con **valores**: `edades = {\"Ana\": 20, \"Luis\": 22}`.\n\n- **Leer:** `edades[\"Ana\"]` (KeyError si no existe) o `edades.get(\"Ana\", 0)` (devuelve 0 si no existe).\n- **Añadir o cambiar:** `edades[\"Eva\"] = 19`.\n- **Borrar:** `del edades[\"Luis\"]` o `edades.pop(\"Luis\")`.\n- **Comprobar:** `\"Ana\" in edades` busca entre las **claves**.\n- **Recorrer:** `for clave in d`, `for valor in d.values()`, `for clave, valor in d.items()`.\n\nLas claves son **únicas** y deben ser inmutables (str, int, tuplas). Asignar a una clave que ya existe sustituye su valor.\n\n**Patrón contador con diccionario** (muy habitual en clase):\n\n```\nfrecuencia = {}\nfor letra in texto:\n    frecuencia[letra] = frecuencia.get(letra, 0) + 1\n```",
+   "when": "Cuando buscas datos por un nombre o código (agenda, stock, notas por alumno) o cuentas apariciones.",
+   "example": {
+    "code": "stock = {\"manzana\": 5, \"pera\": 0}\nstock[\"kiwi\"] = 3\nstock[\"manzana\"] -= 1\nfor fruta, cantidad in stock.items():\n    if cantidad > 0:\n        print(fruta, cantidad)\nprint(stock.get(\"uva\", 0))",
+    "lines": [
+     [
+      2,
+      "Asignar a una clave nueva la añade."
+     ],
+     [
+      3,
+      "Con una clave existente, se modifica su valor."
+     ],
+     [
+      4,
+      "`items()` da cada pareja (clave, valor) para desempaquetarla."
+     ],
+     [
+      7,
+      "`get` con valor por defecto evita el KeyError."
+     ]
+    ],
+    "output": "manzana 4\nkiwi 3\n0\n"
+   },
+   "errors": [
+    {
+     "id": "diccionarios.keyerror",
+     "label": "Lee una clave que puede no existir con `d[clave]`",
+     "why": "`d[clave]` lanza KeyError si la clave no está. Pasa mucho al contar la primera aparición.",
+     "think": "¿Es posible que la clave todavía no esté? Entonces necesitas `get` o comprobar con `in`.",
+     "avoid": "Usa `d.get(clave, 0)` o `if clave in d:`."
+    },
+    {
+     "id": "diccionarios.in-valores",
+     "label": "Cree que `in` busca entre los valores",
+     "why": "`x in d` busca entre las claves. Para los valores: `x in d.values()`.",
+     "think": "Un diccionario se indexa por claves: todo lo que no dice lo contrario trabaja con claves.",
+     "avoid": "Escribe `d.values()` o `d.items()` cuando quieras otra cosa."
+    },
+    {
+     "id": "diccionarios.recorrido-claves",
+     "label": "Recorre el diccionario esperando valores o parejas",
+     "why": "`for x in d` da solo las claves.",
+     "think": "¿Necesito la clave, el valor o los dos?",
+     "avoid": "Para los dos: `for clave, valor in d.items()`."
+    }
+   ],
+   "related": [
+    "listas",
+    "recorridos"
+   ]
+  },
+  {
+   "id": "recorridos",
+   "title": "Recorridos, búsqueda, máximo y mínimo",
+   "area": "programacion",
+   "requires": [
+    "listas",
+    "acumuladores"
+   ],
+   "daw": 3,
+   "ut": "prog-ut6",
+   "summary": "Los algoritmos clásicos sobre colecciones: buscar, contar, filtrar y quedarse con el mejor.",
+   "theory": "Casi todos los problemas sobre listas son una variación de cuatro algoritmos:\n\n**1. Recorrido con acumulador:** sumar, contar, construir una lista nueva (filtrar).\n\n**2. Búsqueda lineal:** ¿está el elemento? Se recorre hasta encontrarlo y se para.\n\n```\ndef buscar(lista, objetivo):\n    for i in range(len(lista)):\n        if lista[i] == objetivo:\n            return i\n    return -1\n```\n\nEl `return -1` va **después** del bucle: solo sabemos que no está cuando lo hemos mirado todo.\n\n**3. Máximo / mínimo:** se toma el **primer elemento** como candidato y se compara con el resto. Empezar en 0 falla si todos los números son negativos.\n\n```\nmayor = lista[0]\nfor x in lista[1:]:\n    if x > mayor:\n        mayor = x\n```\n\n**4. Comprobación universal / existencial:** «¿todos cumplen?» empieza suponiendo `True` y cambia a `False` al encontrar uno que no cumple; «¿alguno cumple?» empieza en `False`.\n\n**Complejidad básica:** una búsqueda lineal mira, en el peor caso, los n elementos (O(n)). Dos bucles anidados sobre la misma lista hacen unas n² comparaciones (O(n²)): con 1.000 elementos, un millón.",
+   "when": "En los ejercicios de «busca», «el mayor», «cuántos cumplen», «¿todos son…?» o «filtra los que…».",
+   "example": {
+    "code": "temperaturas = [-3, -8, -1, -5]\nminima = temperaturas[0]\nfor t in temperaturas:\n    if t < minima:\n        minima = t\nprint(minima)\n\ntodas_negativas = True\nfor t in temperaturas:\n    if t >= 0:\n        todas_negativas = False\nprint(todas_negativas)",
+    "lines": [
+     [
+      2,
+      "El candidato inicial es el primer elemento, no 0."
+     ],
+     [
+      4,
+      "Si aparece uno menor, pasa a ser el nuevo candidato."
+     ],
+     [
+      8,
+      "«¿Todas cumplen?»: se supone que sí hasta encontrar un contraejemplo."
+     ],
+     [
+      10,
+      "Un solo contraejemplo basta para que sea False."
+     ]
+    ],
+    "output": "-8\nTrue\n"
+   },
+   "errors": [
+    {
+     "id": "recorridos.max-cero",
+     "label": "Inicializa el máximo (o el mínimo) con 0",
+     "why": "Si todos los valores son negativos, el máximo inicializado a 0 nunca cambia y el resultado es 0, que no está en la lista.",
+     "think": "El candidato inicial debe ser un valor real de la lista.",
+     "avoid": "Inicializa con `lista[0]` (comprobando antes que la lista no esté vacía)."
+    },
+    {
+     "id": "recorridos.no-encontrado-dentro",
+     "label": "Decide «no encontrado» dentro del bucle",
+     "why": "Un `else: return -1` dentro del bucle termina en el primer elemento que no coincide.",
+     "think": "Solo puedo afirmar que no está cuando he revisado todos los elementos.",
+     "avoid": "El «no encontrado» va después del bucle, sin sangría extra."
+    },
+    {
+     "id": "recorridos.todos-alguno",
+     "label": "Confunde «todos cumplen» con «alguno cumple»",
+     "why": "Para «todos» se empieza en True y basta un contraejemplo; para «alguno», en False y basta un ejemplo.",
+     "think": "¿Qué valor tiene la respuesta si la lista está vacía? Para «todos», True; para «alguno», False.",
+     "avoid": "Escribe el valor inicial pensando en el caso de la lista vacía."
+    },
+    {
+     "id": "recorridos.no-para",
+     "label": "Sigue recorriendo cuando ya ha encontrado el elemento",
+     "why": "Sin `break` ni `return`, el bucle sigue y puede sobrescribir el resultado o hacer trabajo innecesario.",
+     "think": "¿Necesito mirar el resto una vez encontrado?",
+     "avoid": "Usa `return` dentro de una función, o `break` si estás en el programa principal."
+    }
+   ],
+   "related": [
+    "listas",
+    "acumuladores",
+    "trazado"
+   ]
+  },
+  {
+   "id": "excepciones",
+   "title": "Excepciones: try, except y raise",
+   "area": "programacion",
+   "requires": [
+    "funciones"
+   ],
+   "daw": 3,
+   "ut": "prog-ut3",
+   "lessons": [
+    "excepciones"
+   ],
+   "summary": "Controlar los errores en ejecución sin que el programa termine de golpe.",
+   "when": "Al convertir entradas del usuario, abrir ficheros o dividir: operaciones que pueden fallar por causas externas.",
+   "example": {
+    "code": "def dividir(a, b):\n    try:\n        return a / b\n    except ZeroDivisionError:\n        print(\"No se puede dividir entre 0\")\n        return None\n\nprint(dividir(10, 4))\nprint(dividir(1, 0))",
+    "lines": [
+     [
+      2,
+      "Dentro de `try` va el código que puede fallar."
+     ],
+     [
+      4,
+      "Se captura solo la excepción esperada, no todas."
+     ],
+     [
+      5,
+      "El programa continúa en vez de terminar con un traceback."
+     ]
+    ],
+    "output": "2.5\nNo se puede dividir entre 0\nNone\n"
+   },
+   "errors": [
+    {
+     "id": "excepciones.except-generico",
+     "label": "Captura todas las excepciones con un `except:` vacío",
+     "why": "Un `except:` sin tipo oculta también los errores de programación (NameError, TypeError) y dificulta depurar.",
+     "think": "¿Qué error concreto espero que ocurra aquí?",
+     "avoid": "Captura la excepción concreta: `except ValueError:`."
+    },
+    {
+     "id": "excepciones.try-gigante",
+     "label": "Mete demasiado código dentro del `try`",
+     "why": "Si el `try` es muy grande, no sabes qué línea falló y puedes capturar errores que no esperabas.",
+     "think": "¿Qué línea exacta puede lanzar la excepción?",
+     "avoid": "Deja en el `try` solo la operación arriesgada."
+    },
+    {
+     "id": "excepciones.tipo-equivocado",
+     "label": "Captura un tipo de excepción que no corresponde",
+     "why": "`int(\"hola\")` lanza ValueError, no TypeError; dividir entre 0 lanza ZeroDivisionError.",
+     "think": "Provoca el error a propósito en la consola y lee su nombre en la última línea del traceback.",
+     "avoid": "Aprende los cinco habituales: ValueError, TypeError, ZeroDivisionError, IndexError y KeyError."
+    }
+   ],
+   "related": [
+    "validacion",
+    "archivos",
+    "depuracion"
+   ]
+  },
+  {
+   "id": "modulos",
+   "title": "Módulos e importación",
+   "area": "programacion",
+   "requires": [
+    "funciones"
+   ],
+   "daw": 2,
+   "ut": "prog-ut3",
+   "lessons": [
+    "modulos"
+   ],
+   "summary": "Organizar el código en ficheros y reutilizar la biblioteca estándar.",
+   "when": "Cuando el programa crece (separar funciones en otro fichero) o necesitas math, random, datetime…",
+   "example": {
+    "code": "import math\nfrom random import seed, randint\n\nprint(math.sqrt(16), math.pi > 3)\nseed(1)\nprint(1 <= randint(1, 6) <= 6)",
+    "lines": [
+     [
+      1,
+      "`import math` obliga a escribir el prefijo: `math.sqrt`."
+     ],
+     [
+      2,
+      "`from ... import` trae nombres concretos y se usan sin prefijo."
+     ],
+     [
+      5,
+      "`seed` fija la semilla para que los aleatorios se repitan (útil en pruebas)."
+     ]
+    ],
+    "output": "4.0 True\nTrue\n"
+   },
+   "errors": [
+    {
+     "id": "modulos.prefijo",
+     "label": "Usa una función del módulo sin el prefijo (o con él cuando no toca)",
+     "why": "Con `import math` se escribe `math.sqrt`; con `from math import sqrt`, solo `sqrt`.",
+     "think": "Mira la línea del import: ¿importa el módulo o el nombre concreto?",
+     "avoid": "Usa `import modulo` y el prefijo: deja claro de dónde viene cada función."
+    },
+    {
+     "id": "modulos.nombre-fichero",
+     "label": "Llama a su fichero igual que un módulo estándar",
+     "why": "Un fichero propio llamado `random.py` tapa al módulo `random` y los imports dejan de funcionar.",
+     "think": "Python busca primero en la carpeta del programa.",
+     "avoid": "No nombres tus ficheros como módulos de la biblioteca estándar."
+    }
+   ],
+   "related": [
+    "funciones"
+   ]
+  },
+  {
+   "id": "archivos",
+   "title": "Ficheros de texto",
+   "area": "programacion",
+   "requires": [
+    "excepciones",
+    "strings"
+   ],
+   "daw": 2,
+   "ut": "prog-ut8",
+   "lessons": [
+    "archivos"
+   ],
+   "summary": "Leer y escribir ficheros con `with open(...)`, línea a línea.",
+   "when": "Para guardar datos entre ejecuciones o procesar ficheros (CSV, registros, listados).",
+   "example": {
+    "code": "with open(\"notas.txt\", \"w\", encoding=\"utf-8\") as f:\n    f.write(\"Ana;7\\nLuis;4\\n\")\n\nwith open(\"notas.txt\", encoding=\"utf-8\") as f:\n    for linea in f:\n        nombre, nota = linea.strip().split(\";\")\n        print(nombre, int(nota) >= 5)",
+    "lines": [
+     [
+      1,
+      "Modo `\"w\"`: crea el fichero o **borra** su contenido si ya existía."
+     ],
+     [
+      2,
+      "`write` no añade el salto de línea: hay que escribir `\\n`."
+     ],
+     [
+      5,
+      "Recorrer el fichero da una línea en cada vuelta, con su `\\n` al final."
+     ],
+     [
+      6,
+      "`strip` quita el salto de línea y `split` separa los campos."
+     ]
+    ],
+    "output": "Ana True\nLuis False\n"
+   },
+   "errors": [
+    {
+     "id": "archivos.modo-w",
+     "label": "Abre con `\"w\"` un fichero que quería ampliar",
+     "why": "El modo `\"w\"` vacía el fichero al abrirlo. Para añadir al final se usa `\"a\"`.",
+     "think": "¿Quiero empezar de cero o añadir a lo que hay?",
+     "avoid": "`\"r\"` leer, `\"w\"` escribir desde cero, `\"a\"` añadir."
+    },
+    {
+     "id": "archivos.salto-linea",
+     "label": "Olvida el salto de línea al leer o escribir",
+     "why": "Cada línea leída termina en `\\n`, y `write` no lo añade solo.",
+     "think": "Imprime `repr(linea)` para ver los caracteres ocultos.",
+     "avoid": "Usa `linea.strip()` al leer y añade `\\n` al escribir."
+    },
+    {
+     "id": "archivos.sin-with",
+     "label": "Abre el fichero sin cerrarlo",
+     "why": "Sin cerrar, los datos pueden no guardarse y el fichero queda bloqueado.",
+     "think": "¿Quién cierra el fichero si ocurre un error a mitad?",
+     "avoid": "Usa siempre `with open(...) as f:`: lo cierra solo."
+    }
+   ],
+   "related": [
+    "excepciones",
+    "strings"
+   ]
+  },
+  {
+   "id": "pseudocodigo",
+   "title": "Del enunciado al pseudocódigo y del pseudocódigo al código",
+   "area": "logica",
+   "requires": [
+    "algoritmos",
+    "condicionales"
+   ],
+   "daw": 3,
+   "ut": "prog-ut1",
+   "summary": "Escribir el algoritmo en lenguaje estructurado y traducirlo a Python paso a paso.",
+   "theory": "El **pseudocódigo** describe un algoritmo con palabras estructuradas, sin preocuparse de la sintaxis de un lenguaje. En clase y en los exámenes se usa para comprobar que sabes **resolver** el problema, no solo escribir Python.\n\n**Correspondencias con Python:**\n\n| Pseudocódigo | Python |\n|---|---|\n| `LEER n` | `n = int(input())` |\n| `ESCRIBIR x` | `print(x)` |\n| `x ← x + 1` | `x = x + 1` |\n| `SI cond ENTONCES … SINO … FIN SI` | `if cond: … else: …` |\n| `MIENTRAS cond HACER … FIN MIENTRAS` | `while cond: …` |\n| `PARA i DESDE 1 HASTA n HACER` | `for i in range(1, n + 1):` |\n| `REPETIR … HASTA QUE cond` | `while True: … if cond: break` |\n\n**Método:**\n1. Del enunciado, saca entrada, salida y proceso (ver «Comprender el problema»).\n2. Escribe el pseudocódigo con una estructura por línea y sangría.\n3. Trázalo a mano con un ejemplo.\n4. Tradúcelo línea a línea. Fíjate en dos trampas: `HASTA n` **incluye** n (en `range` hay que poner `n + 1`), y `REPETIR … HASTA QUE` termina **cuando** la condición es verdadera (al revés que `while`).",
+   "when": "En los ejercicios que piden el algoritmo, y siempre que un problema no te salga directamente en Python.",
+   "example": {
+    "code": "# ALGORITMO suma_pares\n#   LEER n\n#   suma ← 0\n#   PARA i DESDE 1 HASTA n HACER\n#     SI i MOD 2 = 0 ENTONCES suma ← suma + i\n#   ESCRIBIR suma\nn = int(input())\nsuma = 0\nfor i in range(1, n + 1):\n    if i % 2 == 0:\n        suma = suma + i\nprint(suma)",
+    "stdin": "6\n",
+    "lines": [
+     [
+      7,
+      "`LEER n` se traduce como `input` convertido a entero."
+     ],
+     [
+      9,
+      "`HASTA n` incluye n: en Python, `range(1, n + 1)`."
+     ],
+     [
+      10,
+      "`MOD` es el operador `%`, y `=` en una comparación es `==`."
+     ],
+     [
+      12,
+      "`ESCRIBIR` es `print`."
+     ]
+    ],
+    "output": "12\n"
+   },
+   "errors": [
+    {
+     "id": "pseudocodigo.hasta-incluye",
+     "label": "Traduce `PARA i DESDE 1 HASTA n` como `range(1, n)`",
+     "why": "En pseudocódigo, HASTA n incluye n; `range(1, n)` se detiene en n - 1.",
+     "think": "Pregunta: ¿el último valor del pseudocódigo aparece en mi range?",
+     "avoid": "Traduce siempre `HASTA n` como `range(inicio, n + 1)`."
+    },
+    {
+     "id": "pseudocodigo.repetir-hasta",
+     "label": "Traduce `REPETIR … HASTA QUE cond` como `while cond`",
+     "why": "REPETIR…HASTA QUE se ejecuta al menos una vez y para **cuando** la condición es verdadera; `while cond` repite **mientras** es verdadera.",
+     "think": "HASTA QUE = condición de salida; MIENTRAS = condición de permanencia.",
+     "avoid": "Usa `while True:` con `if cond: break` al final del bloque, o `while not cond:` con una primera ejecución antes."
+    },
+    {
+     "id": "pseudocodigo.orden-pasos",
+     "label": "Ordena mal los pasos del algoritmo",
+     "why": "Un paso no puede usar un dato que aún no se ha leído o calculado.",
+     "think": "Para cada paso, ¿de dónde salen los datos que usa?",
+     "avoid": "Leer → inicializar → procesar (bucles y decisiones) → escribir."
+    }
+   ],
+   "related": [
+    "algoritmos",
+    "trazado"
+   ]
+  },
+  {
+   "id": "trazado",
+   "title": "Lectura y trazado de código",
+   "area": "logica",
+   "requires": [
+    "bucles"
+   ],
+   "daw": 3,
+   "ut": "prog-ut3",
+   "summary": "Ejecutar un programa a mano, línea a línea, apuntando el valor de cada variable.",
+   "theory": "**Trazar** es ejecutar un programa a mano, como lo haría el intérprete. Es la habilidad que más se pregunta en los exámenes («¿qué muestra este programa?») y la mejor herramienta para encontrar errores.\n\n**Tabla de traza:** una columna por variable, una fila por cada vez que algo cambia, y una columna para lo que se muestra.\n\n```\nsuma = 0\nfor i in range(1, 4):\n    suma += i\nprint(suma)\n```\n\n| paso | i | suma | salida |\n|---|---|---|---|\n| inicio | – | 0 | |\n| vuelta 1 | 1 | 1 | |\n| vuelta 2 | 2 | 3 | |\n| vuelta 3 | 3 | 6 | |\n| final | 3 | 6 | 6 |\n\n**Reglas para no equivocarte:**\n- Ejecuta **exactamente** lo que pone, no lo que crees que el programa pretende hacer.\n- En cada `if` y `while`, evalúa la condición con los valores **actuales**.\n- `print` dentro del bucle escribe una línea por vuelta; fuera, una sola vez.\n- Fíjate en la sangría: decide qué está dentro de cada bloque.",
+   "when": "Para responder «¿qué muestra?», para comprobar tu algoritmo antes de programarlo y para encontrar errores lógicos.",
+   "example": {
+    "code": "x = 5\ny = 2\nwhile x > y:\n    x = x - 1\n    y = y + 1\nprint(x, y)",
+    "lines": [
+     [
+      3,
+      "Vuelta 1: 5 > 2 es verdadero → x = 4, y = 3."
+     ],
+     [
+      3,
+      "Vuelta 2: 4 > 3 es verdadero → x = 3, y = 4."
+     ],
+     [
+      3,
+      "Vuelta 3: 3 > 4 es falso → se sale del bucle."
+     ],
+     [
+      6,
+      "Se muestra «3 4»."
+     ]
+    ],
+    "output": "3 4\n"
+   },
+   "errors": [
+    {
+     "id": "trazado.intencion",
+     "label": "Responde lo que el programa «debería» hacer, no lo que hace",
+     "why": "El intérprete no adivina intenciones: si el código tiene un error, la salida refleja ese error.",
+     "think": "Olvida el propósito y ejecuta cada línea literalmente.",
+     "avoid": "Haz la tabla de traza aunque el programa parezca fácil."
+    },
+    {
+     "id": "trazado.print-dentro-fuera",
+     "label": "Confunde un `print` dentro del bucle con uno fuera",
+     "why": "Un `print` sangrado dentro del bucle se ejecuta en cada vuelta; uno sin sangrar, una vez al final.",
+     "think": "Mira la columna en la que empieza el `print`.",
+     "avoid": "Cuenta cuántas líneas de salida tendrá el programa antes de calcularlas."
+    },
+    {
+     "id": "trazado.valor-antiguo",
+     "label": "Usa un valor antiguo de la variable",
+     "why": "Tras `x = x + 1`, las líneas siguientes ven el valor nuevo de x.",
+     "think": "Actualiza la tabla después de cada asignación, no al final de la vuelta.",
+     "avoid": "Tacha el valor anterior en tu tabla cada vez que una variable cambie."
+    }
+   ],
+   "related": [
+    "bucles",
+    "depuracion"
+   ]
+  },
+  {
+   "id": "depuracion",
+   "title": "Depuración y análisis de errores",
+   "area": "logica",
+   "requires": [
+    "funciones"
+   ],
+   "daw": 3,
+   "ut": "prog-ut3",
+   "summary": "Leer un traceback, distinguir errores de sintaxis, de ejecución y lógicos, y localizarlos.",
+   "theory": "Hay tres tipos de errores:\n\n1. **De sintaxis** (`SyntaxError`, `IndentationError`): el programa ni siquiera empieza. Faltan `:`, paréntesis, comillas o la sangría es incorrecta.\n2. **De ejecución** (excepciones): el programa empieza y se detiene en una línea concreta (`NameError`, `TypeError`, `ZeroDivisionError`, `IndexError`…).\n3. **Lógicos:** el programa termina sin errores, pero el resultado es incorrecto. Son los más difíciles: solo los detectan las pruebas y las trazas.\n\n**Cómo leer un traceback:** empieza por la **última línea**: dice el tipo de error y el motivo. La línea de encima indica el fichero y el **número de línea** donde ocurrió.\n\n```\nTraceback (most recent call last):\n  File \"notas.py\", line 3, in <module>\n    media = suma / total\nZeroDivisionError: division by zero\n```\n\n**Depurar con método (no a ciegas):**\n1. **Reproduce** el error con una entrada concreta.\n2. **Formula una hipótesis:** «creo que `total` vale 0 porque…».\n3. **Compruébala:** un `print` temporal o el depurador de PyCharm (punto de ruptura y ejecución paso a paso).\n4. **Corrige** una sola cosa y vuelve a probar, también con los casos que ya funcionaban.",
+   "when": "Cada vez que algo falla. Y en el examen, en los ejercicios de «encuentra el error».",
+   "example": {
+    "code": "def media(numeros):\n    if not numeros:\n        return 0\n    return sum(numeros) / len(numeros)\n\nprint(media([4, 6]))\nprint(media([]))",
+    "lines": [
+     [
+      2,
+      "Corrección de un error de ejecución: con una lista vacía, `len` es 0 y la división fallaría."
+     ],
+     [
+      3,
+      "Se decide qué devolver en el caso límite en vez de dejar que el programa se rompa."
+     ],
+     [
+      7,
+      "Se prueba también el caso que antes fallaba."
+     ]
+    ],
+    "output": "5.0\n0\n"
+   },
+   "errors": [
+    {
+     "id": "depuracion.lee-primera-linea",
+     "label": "Lee el traceback por arriba y se pierde",
+     "why": "La información importante está abajo: tipo de error, mensaje y línea donde ocurrió.",
+     "think": "Lee de abajo arriba: ¿qué error?, ¿en qué línea?, ¿qué valores tenían las variables ahí?",
+     "avoid": "Copia la última línea del traceback y busca su significado si no lo conoces."
+    },
+    {
+     "id": "depuracion.linea-anterior",
+     "label": "Busca un error de sintaxis solo en la línea señalada",
+     "why": "Si falta un paréntesis o unas comillas, Python suele quejarse en la línea siguiente.",
+     "think": "Si la línea señalada parece correcta, mira la anterior.",
+     "avoid": "Revisa que cada paréntesis, corchete y comilla abierto se cierre."
+    },
+    {
+     "id": "depuracion.tipo-error",
+     "label": "No distingue errores de sintaxis, de ejecución y lógicos",
+     "why": "Cada tipo se busca de forma distinta: la sintaxis en la escritura, la ejecución en la línea del traceback y los lógicos con trazas y pruebas.",
+     "think": "¿El programa no arranca, se detiene a mitad o termina con un resultado incorrecto?",
+     "avoid": "Clasifica el error antes de intentar arreglarlo."
+    },
+    {
+     "id": "depuracion.cambios-a-ciegas",
+     "label": "Cambia cosas al azar hasta que funciona",
+     "why": "Los cambios sin hipótesis pueden ocultar el error con otro o romper lo que funcionaba.",
+     "think": "¿Qué creo que está pasando y cómo puedo comprobarlo?",
+     "avoid": "Una hipótesis, una comprobación, un cambio."
+    }
+   ],
+   "related": [
+    "trazado",
+    "excepciones"
+   ]
+  },
+  {
+   "id": "poo",
+   "title": "Clases y objetos (introducción a la POO)",
+   "area": "avanzado",
+   "requires": [
+    "funciones",
+    "diccionarios"
+   ],
+   "daw": 2,
+   "ut": "prog-ut5",
+   "lessons": [
+    "poo"
+   ],
+   "summary": "Agrupar datos y comportamiento: clases, objetos, atributos y métodos.",
+   "when": "Cuando un programa maneja entidades con datos y acciones propias (cuenta bancaria, alumno, producto). Llega después de dominar funciones y colecciones.",
+   "example": {
+    "code": "class Cuenta:\n    def __init__(self, titular, saldo=0):\n        self.titular = titular\n        self.saldo = saldo\n\n    def ingresar(self, cantidad):\n        self.saldo += cantidad\n\nc = Cuenta(\"Ana\")\nc.ingresar(50)\nprint(c.titular, c.saldo)",
+    "lines": [
+     [
+      1,
+      "La clase es el molde; cada objeto creado con ella es una instancia."
+     ],
+     [
+      2,
+      "`__init__` se ejecuta al crear el objeto; `self` es el propio objeto."
+     ],
+     [
+      3,
+      "`self.titular` es un atributo: un dato que guarda cada objeto."
+     ],
+     [
+      9,
+      "Al crear el objeto no se pasa `self`: Python lo añade solo."
+     ]
+    ],
+    "output": "Ana 50\n"
+   },
+   "errors": [
+    {
+     "id": "poo.olvida-self",
+     "label": "Olvida `self` en los métodos o en los atributos",
+     "why": "Sin `self.` la variable es local del método y se pierde; sin `self` como primer parámetro, la llamada falla.",
+     "think": "¿Este dato pertenece al objeto? Entonces es `self.dato`.",
+     "avoid": "Todo método de instancia recibe `self` y guarda los atributos como `self.x`."
+    },
+    {
+     "id": "poo.clase-objeto",
+     "label": "Confunde la clase con el objeto",
+     "why": "La clase es la plantilla; los objetos se crean llamándola: `c = Cuenta(\"Ana\")`.",
+     "think": "Una clase es «Perro»; un objeto es «mi perro Toby».",
+     "avoid": "Llama a los métodos sobre un objeto, no sobre la clase."
+    }
+   ],
+   "related": [
+    "funciones",
+    "diccionarios"
+   ]
+  }
+ ],
+ "exercises": [
+  {
+   "id": "alg-01",
+   "concept": "algoritmos",
+   "kind": "choice",
+   "level": 1,
+   "daw": true,
+   "q": "Enunciado: «Pide el precio de un producto y las unidades, y muestra el total con un 21 % de IVA». ¿Cuál es la **entrada**?",
+   "code": null,
+   "options": [
+    {
+     "text": "El precio y las unidades",
+     "error": null
+    },
+    {
+     "text": "El total con IVA",
+     "error": "algoritmos.sin-entrada-salida"
+    },
+    {
+     "text": "El 21 %",
+     "error": "algoritmos.sin-entrada-salida"
+    },
+    {
+     "text": "La multiplicación",
+     "error": "algoritmos.sin-entrada-salida"
+    }
+   ],
+   "answer": 0,
+   "explain": "La entrada son los datos que da el usuario: precio y unidades. El 21 % es una constante del problema y el total es la **salida**.",
+   "codeOptions": false
+  },
+  {
+   "id": "alg-02",
+   "concept": "algoritmos",
+   "kind": "choice",
+   "level": 1,
+   "daw": true,
+   "q": "¿Cuál de estos pasos **no** es válido en un algoritmo?",
+   "code": null,
+   "options": [
+    {
+     "text": "Repetir hasta que el resultado parezca correcto",
+     "error": null
+    },
+    {
+     "text": "Si n es par, dividir n entre 2",
+     "error": "algoritmos.pasos-ambiguos"
+    },
+    {
+     "text": "Sumar 1 al contador",
+     "error": "algoritmos.pasos-ambiguos"
+    },
+    {
+     "text": "Leer un número entero",
+     "error": "algoritmos.pasos-ambiguos"
+    }
+   ],
+   "answer": 0,
+   "explain": "«Parezca correcto» es ambiguo: el ordenador necesita una condición precisa y comprobable. Los demás pasos son concretos.",
+   "codeOptions": false
+  },
+  {
+   "id": "alg-03",
+   "concept": "algoritmos",
+   "kind": "choice",
+   "level": 1,
+   "daw": true,
+   "q": "Un algoritmo calcula la media de las notas dividiendo la suma entre la cantidad. ¿Qué caso límite hay que comprobar?",
+   "code": null,
+   "options": [
+    {
+     "text": "Que no haya ninguna nota",
+     "error": null
+    },
+    {
+     "text": "Que haya exactamente 3 notas",
+     "error": "algoritmos.sin-caso-limite"
+    },
+    {
+     "text": "Que las notas sean enteras",
+     "error": "algoritmos.sin-caso-limite"
+    },
+    {
+     "text": "Que la suma sea par",
+     "error": "algoritmos.sin-caso-limite"
+    }
+   ],
+   "answer": 0,
+   "explain": "Sin notas, la cantidad es 0 y la división falla. Los casos límite son los extremos: vacío, 0, negativos, un solo elemento.",
+   "codeOptions": false
+  },
+  {
+   "id": "alg-04",
+   "concept": "algoritmos",
+   "kind": "order",
+   "level": 1,
+   "daw": true,
+   "q": "Ordena los pasos del algoritmo para calcular el precio final con descuento.",
+   "lines": [
+    "Leer el precio",
+    "Leer el porcentaje de descuento",
+    "Calcular descuento ← precio × porcentaje / 100",
+    "Calcular final ← precio − descuento",
+    "Escribir final"
+   ],
+   "expect": null,
+   "pseudo": true,
+   "error": "algoritmos.pasos-ambiguos",
+   "explain": "Primero se leen los datos, después se calculan los valores intermedios en orden (el final usa el descuento) y por último se escribe."
+  },
+  {
+   "id": "var-01",
+   "concept": "variables",
+   "kind": "output",
+   "level": 1,
+   "daw": true,
+   "q": "¿Qué muestra este programa?",
+   "code": "a = 3\nb = a\na = 10\nprint(b)",
+   "stdin": "",
+   "expect": "3",
+   "traps": {
+    "10": "variables.orden-asignacion"
+   },
+   "explain": "`b = a` copia en `b` el valor que tiene `a` **en ese momento** (3). Cambiar `a` después no afecta a `b`."
+  },
+  {
+   "id": "var-02",
+   "concept": "variables",
+   "kind": "output",
+   "level": 1,
+   "daw": true,
+   "q": "¿Qué muestra este programa?",
+   "code": "x = 5\nx = x * 2\nx = x - 3\nprint(x)",
+   "stdin": "",
+   "expect": "7",
+   "traps": {
+    "2": "variables.orden-asignacion",
+    "5": "variables.orden-asignacion"
+   },
+   "explain": "Cada línea evalúa la derecha con el valor actual: 5 × 2 = 10; después 10 − 3 = 7."
+  },
+  {
+   "id": "var-03",
+   "concept": "variables",
+   "kind": "output",
+   "level": 2,
+   "daw": true,
+   "q": "¿Qué muestra este programa?",
+   "code": "a = 1\nb = 2\na = b\nb = a\nprint(a, b)",
+   "stdin": "",
+   "expect": "2 2",
+   "traps": {
+    "2 1": "variables.orden-asignacion",
+    "1 2": "variables.orden-asignacion"
+   },
+   "explain": "Tras `a = b`, a vale 2. Entonces `b = a` vuelve a guardar 2 en b. Para **intercambiar** hace falta una variable auxiliar o `a, b = b, a`."
+  },
+  {
+   "id": "var-04",
+   "concept": "variables",
+   "kind": "choice",
+   "level": 1,
+   "daw": true,
+   "q": "¿Qué hace la línea `total == 100`?",
+   "code": null,
+   "options": [
+    {
+     "text": "Compara y no guarda nada: el resultado (True o False) se pierde",
+     "error": null
+    },
+    {
+     "text": "Guarda 100 en total",
+     "error": "variables.asigna-compara"
+    },
+    {
+     "text": "Da un error de sintaxis",
+     "error": "variables.asigna-compara"
+    },
+    {
+     "text": "Suma 100 a total",
+     "error": "variables.asigna-compara"
+    }
+   ],
+   "answer": 0,
+   "explain": "`==` pregunta si dos valores son iguales. Como línea suelta no cambia nada. Para guardar el valor se usa un solo `=`.",
+   "codeOptions": false
+  },
+  {
+   "id": "var-05",
+   "concept": "variables",
+   "kind": "output",
+   "level": 1,
+   "daw": true,
+   "q": "¿Qué muestra este programa?",
+   "code": "nombre = \"Luis\"\nprint(\"nombre\")\nprint(nombre)",
+   "stdin": "",
+   "expect": "nombre\nLuis",
+   "traps": {
+    "Luis\nLuis": "variables.nombre-texto",
+    "nombre\nnombre": "variables.nombre-texto"
+   },
+   "explain": "Con comillas es el texto literal «nombre»; sin comillas, el valor de la variable."
+  },
+  {
+   "id": "var-06",
+   "concept": "variables",
+   "kind": "fill",
+   "level": 2,
+   "daw": true,
+   "q": "Completa para intercambiar los valores de `a` y `b` en una sola línea.",
+   "code": "a = 1\nb = 2\na, b = ___\nprint(a, b)",
+   "accept": [
+    "b, a",
+    "b,a",
+    "(b, a)"
+   ],
+   "expect": "2 1",
+   "traps": {},
+   "explain": "La asignación múltiple evalúa primero toda la derecha (2, 1) y después la reparte."
+  },
+  {
+   "id": "tip-01",
+   "concept": "tipos",
+   "kind": "output",
+   "level": 1,
+   "daw": true,
+   "q": "¿Qué muestra este programa?",
+   "code": "a = \"4\"\nb = \"2\"\nprint(a + b)",
+   "stdin": "",
+   "expect": "42",
+   "traps": {
+    "6": "tipos.texto-numero"
+   },
+   "explain": "Son textos: `+` los concatena. Para sumarlos habría que convertirlos con `int()`."
+  },
+  {
+   "id": "tip-02",
+   "concept": "tipos",
+   "kind": "output",
+   "level": 1,
+   "daw": true,
+   "q": "¿Qué muestra este programa?",
+   "code": "print(7 / 2)\nprint(7 // 2)\nprint(6 / 2)",
+   "stdin": "",
+   "expect": "3.5\n3\n3.0",
+   "traps": {
+    "3.5\n3\n3": "tipos.division-float",
+    "3\n3\n3": "tipos.division-float"
+   },
+   "explain": "`/` siempre devuelve float, aunque la división sea exacta (6 / 2 = 3.0). `//` da el cociente entero."
+  },
+  {
+   "id": "tip-03",
+   "concept": "tipos",
+   "kind": "choice",
+   "level": 1,
+   "daw": true,
+   "q": "¿Qué ocurre al ejecutar `print(\"Edad: \" + 20)`?",
+   "code": null,
+   "options": [
+    {
+     "text": "TypeError: no se puede concatenar str con int",
+     "error": null
+    },
+    {
+     "text": "Muestra «Edad: 20»",
+     "error": "tipos.texto-numero"
+    },
+    {
+     "text": "Muestra «Edad: »",
+     "error": "tipos.texto-numero"
+    },
+    {
+     "text": "Muestra 20",
+     "error": "tipos.texto-numero"
+    }
+   ],
+   "answer": 0,
+   "explain": "`+` entre un str y un int no está definido. Soluciones: `\"Edad: \" + str(20)` o `f\"Edad: {20}\"`.",
+   "codeOptions": false
+  },
+  {
+   "id": "tip-04",
+   "concept": "tipos",
+   "kind": "output",
+   "level": 2,
+   "daw": true,
+   "q": "¿Qué muestra este programa?",
+   "code": "activo = \"False\"\nif activo:\n    print(\"entra\")\nelse:\n    print(\"no entra\")",
+   "stdin": "",
+   "expect": "entra",
+   "traps": {
+    "no entra": "tipos.bool-texto"
+   },
+   "explain": "`\"False\"` es un texto no vacío, y todo texto no vacío cuenta como verdadero. El booleano es `False` sin comillas."
+  },
+  {
+   "id": "tip-05",
+   "concept": "tipos",
+   "kind": "fill",
+   "level": 1,
+   "daw": true,
+   "q": "Completa para que el programa muestre 15.",
+   "code": "texto = \"10\"\nprint(___(texto) + 5)",
+   "accept": [
+    "int"
+   ],
+   "expect": "15",
+   "traps": {
+    "str": "tipos.texto-numero"
+   },
+   "explain": "Hay que convertir el texto a número antes de sumar."
+  },
+  {
+   "id": "ope-01",
+   "concept": "operadores",
+   "kind": "output",
+   "level": 1,
+   "daw": true,
+   "q": "¿Qué muestra este programa?",
+   "code": "print(2 + 3 * 2 ** 2)",
+   "stdin": "",
+   "expect": "14",
+   "traps": {
+    "100": "operadores.prioridad",
+    "20": "operadores.prioridad",
+    "38": "operadores.prioridad"
+   },
+   "explain": "Primero la potencia (2 ** 2 = 4), luego la multiplicación (3 × 4 = 12) y por último la suma (2 + 12)."
+  },
+  {
+   "id": "ope-02",
+   "concept": "operadores",
+   "kind": "output",
+   "level": 1,
+   "daw": true,
+   "q": "¿Qué muestra este programa?",
+   "code": "n = 47\nprint(n // 10, n % 10)",
+   "stdin": "",
+   "expect": "4 7",
+   "traps": {
+    "4.7 7": "tipos.division-float",
+    "7 4": "operadores.modulo"
+   },
+   "explain": "`// 10` quita la última cifra (4) y `% 10` se queda con ella (7). Es un truco habitual para separar cifras."
+  },
+  {
+   "id": "ope-03",
+   "concept": "operadores",
+   "kind": "choice",
+   "level": 2,
+   "daw": true,
+   "q": "¿Qué condición es verdadera **solo** los fines de semana (`dia` vale \"sabado\" o \"domingo\")?",
+   "code": null,
+   "options": [
+    {
+     "text": "dia == \"sabado\" or dia == \"domingo\"",
+     "error": null
+    },
+    {
+     "text": "dia == \"sabado\" and dia == \"domingo\"",
+     "error": "operadores.and-or"
+    },
+    {
+     "text": "dia == \"sabado\" or \"domingo\"",
+     "error": "operadores.and-or"
+    },
+    {
+     "text": "dia == (\"sabado\" and \"domingo\")",
+     "error": "operadores.and-or"
+    }
+   ],
+   "answer": 0,
+   "explain": "Basta con que se cumpla una de las dos: `or`. Cada lado del `or` debe ser una comparación completa: `dia == \"sabado\" or \"domingo\"` siempre es verdadero, porque \"domingo\" es un texto no vacío.",
+   "codeOptions": true
+  },
+  {
+   "id": "ope-04",
+   "concept": "operadores",
+   "kind": "choice",
+   "level": 1,
+   "daw": true,
+   "q": "¿Qué expresión comprueba si `n` es múltiplo de 3?",
+   "code": null,
+   "options": [
+    {
+     "text": "n % 3 == 0",
+     "error": null
+    },
+    {
+     "text": "n / 3 == 0",
+     "error": "operadores.modulo"
+    },
+    {
+     "text": "n // 3 == 0",
+     "error": "operadores.modulo"
+    },
+    {
+     "text": "n % 3 == 1",
+     "error": "operadores.modulo"
+    }
+   ],
+   "answer": 0,
+   "explain": "Un número es múltiplo de 3 cuando el resto de dividirlo entre 3 es 0.",
+   "codeOptions": true
+  },
+  {
+   "id": "ope-05",
+   "concept": "operadores",
+   "kind": "output",
+   "level": 2,
+   "daw": true,
+   "q": "¿Qué muestra este programa?",
+   "code": "edad = 15\nprint(edad >= 12 and edad < 18)\nprint(not edad > 10 or edad == 15)",
+   "stdin": "",
+   "expect": "True\nTrue",
+   "traps": {
+    "True\nFalse": "operadores.prioridad"
+   },
+   "explain": "15 está entre 12 y 17: True. En la segunda, `not` se aplica a `edad > 10` (False) y después `or edad == 15` es True."
+  },
+  {
+   "id": "ope-06",
+   "concept": "operadores",
+   "kind": "fill",
+   "level": 1,
+   "daw": true,
+   "q": "Completa la condición «la nota está entre 0 y 10, ambos incluidos».",
+   "code": "nota = 10\nprint(0 ___ nota <= 10)",
+   "accept": [
+    "<="
+   ],
+   "expect": "True",
+   "traps": {
+    "<": "operadores.rango-encadenado"
+   },
+   "explain": "Python permite encadenar comparaciones: `0 <= nota <= 10`."
+  },
+  {
+   "id": "es-01",
+   "concept": "entrada-salida",
+   "kind": "choice",
+   "level": 2,
+   "daw": true,
+   "q": "El usuario escribe 5. ¿Qué muestra el programa?",
+   "code": "n = input(\"Número: \")\nprint(n * 2)",
+   "options": [
+    {
+     "text": "55",
+     "error": null
+    },
+    {
+     "text": "10",
+     "error": "entrada-salida.input-texto"
+    },
+    {
+     "text": "Error",
+     "error": "entrada-salida.input-texto"
+    },
+    {
+     "text": "5",
+     "error": "entrada-salida.input-texto"
+    }
+   ],
+   "answer": 0,
+   "explain": "`input()` devuelve el texto \"5\" y `n * 2` repite el texto: \"55\". Para multiplicar hay que convertirlo: `int(input())`.",
+   "codeOptions": false
+  },
+  {
+   "id": "es-02",
+   "concept": "entrada-salida",
+   "kind": "output",
+   "level": 1,
+   "daw": true,
+   "q": "¿Qué muestra este programa?",
+   "code": "precio = 3.14159\nprint(f\"Precio: {precio:.2f} €\")",
+   "stdin": "",
+   "expect": "Precio: 3.14 €",
+   "traps": {
+    "Precio: 3.14159 €": "entrada-salida.formato-salida"
+   },
+   "explain": "`:.2f` formatea con 2 decimales (redondeando)."
+  },
+  {
+   "id": "es-03",
+   "concept": "entrada-salida",
+   "kind": "output",
+   "level": 2,
+   "daw": true,
+   "q": "¿Qué muestra este programa?",
+   "code": "print(\"A\", \"B\", sep=\"-\", end=\"!\")\nprint(\"C\")",
+   "stdin": "",
+   "expect": "A-B!C",
+   "traps": {
+    "A-B!\nC": "entrada-salida.formato-salida",
+    "A B!C": "entrada-salida.formato-salida"
+   },
+   "explain": "`sep` cambia el separador entre valores y `end` lo que se escribe al final (por defecto, un salto de línea). Como el primer print termina en «!», «C» sigue en la misma línea."
+  },
+  {
+   "id": "es-04",
+   "concept": "entrada-salida",
+   "kind": "code",
+   "level": 1,
+   "daw": true,
+   "q": "Pide dos números enteros (cada uno en una línea) y muestra exactamente `Suma: X` con su suma.",
+   "starter": "a = input()\nb = input()",
+   "solution": "a = int(input())\nb = int(input())\nprint(f\"Suma: {a + b}\")",
+   "checks": [
+    {
+     "stdin": "3\n4\n",
+     "test": "assert __output__.strip() == \"Suma: 7\", f\"Con 3 y 4 se esperaba «Suma: 7» y tu programa muestra «{__output__.strip()}»\"",
+     "error": "entrada-salida.input-texto"
+    },
+    {
+     "stdin": "-5\n4\n",
+     "test": "assert __output__.strip() == \"Suma: -1\", \"Prueba con números negativos: -5 y 4 debe dar «Suma: -1»\"",
+     "error": null
+    }
+   ],
+   "hint": "Convierte en la misma línea: `a = int(input())`.",
+   "explain": "`input()` devuelve texto: hay que convertir cada dato con `int()` antes de sumar, y respetar el formato exacto de la salida."
+  },
+  {
+   "id": "con-01",
+   "concept": "condicionales",
+   "kind": "output",
+   "level": 1,
+   "daw": true,
+   "q": "¿Qué muestra este programa?",
+   "code": "nota = 10\nif nota >= 5:\n    print(\"Aprobado\")\nelif nota >= 9:\n    print(\"Sobresaliente\")\nelse:\n    print(\"Suspenso\")",
+   "stdin": "",
+   "expect": "Aprobado",
+   "traps": {
+    "Sobresaliente": "condicionales.orden-elif",
+    "Aprobado\nSobresaliente": "condicionales.if-separados"
+   },
+   "explain": "Se ejecuta la **primera** rama verdadera: `10 >= 5` ya lo es, así que el `elif` ni se mira. Las condiciones deben ir de la más exigente a la más general."
+  },
+  {
+   "id": "con-02",
+   "concept": "condicionales",
+   "kind": "output",
+   "level": 1,
+   "daw": true,
+   "q": "¿Qué muestra este programa?",
+   "code": "x = 7\nif x > 5:\n    print(\"mayor que 5\")\nif x > 3:\n    print(\"mayor que 3\")",
+   "stdin": "",
+   "expect": "mayor que 5\nmayor que 3",
+   "traps": {
+    "mayor que 5": "condicionales.if-separados"
+   },
+   "explain": "Son dos `if` independientes: se evalúan los dos y los dos se cumplen."
+  },
+  {
+   "id": "con-03",
+   "concept": "condicionales",
+   "kind": "output",
+   "level": 1,
+   "daw": true,
+   "q": "¿Qué muestra este programa?",
+   "code": "t = 30\nif t > 25:\n    print(\"calor\")\nprint(\"fin\")",
+   "stdin": "",
+   "expect": "calor\nfin",
+   "traps": {
+    "calor": "condicionales.sangria"
+   },
+   "explain": "`print(\"fin\")` no está sangrado: no depende del `if` y se ejecuta siempre."
+  },
+  {
+   "id": "con-04",
+   "concept": "condicionales",
+   "kind": "bug",
+   "level": 2,
+   "daw": true,
+   "q": "Una nota de 5 debe dar «Aprobado». ¿Qué línea tiene el error?",
+   "code": "nota = 5\nif nota > 5:\n    print(\"Aprobado\")\nelse:\n    print(\"Suspenso\")",
+   "stdin": "",
+   "line": 2,
+   "fix": "if nota >= 5:",
+   "expect": "Aprobado",
+   "error": "condicionales.frontera",
+   "explain": "«Aprobado desde 5» incluye el 5: hace falta `>=`. Los valores frontera son los que más fallan."
+  },
+  {
+   "id": "con-05",
+   "concept": "condicionales",
+   "kind": "code",
+   "level": 2,
+   "daw": true,
+   "q": "Escribe la función `clasificar(edad)` que devuelva `\"menor\"` si la edad es menor de 18, `\"adulto\"` si está entre 18 y 64 y `\"senior\"` a partir de 65.",
+   "starter": "def clasificar(edad):\n    ...",
+   "solution": "def clasificar(edad):\n    if edad < 18:\n        return \"menor\"\n    elif edad < 65:\n        return \"adulto\"\n    else:\n        return \"senior\"",
+   "checks": [
+    {
+     "stdin": "",
+     "test": "assert clasificar(10) == \"menor\", \"clasificar(10) debe devolver \\\"menor\\\"\"",
+     "error": null
+    },
+    {
+     "stdin": "",
+     "test": "assert clasificar(18) == \"adulto\", \"18 años ya es \\\"adulto\\\": revisa la frontera\"",
+     "error": "condicionales.frontera"
+    },
+    {
+     "stdin": "",
+     "test": "assert clasificar(64) == \"adulto\" and clasificar(65) == \"senior\", \"64 es \\\"adulto\\\" y 65 ya es \\\"senior\\\"\"",
+     "error": "condicionales.frontera"
+    },
+    {
+     "stdin": "",
+     "test": "assert clasificar(90) == \"senior\", \"clasificar(90) debe devolver \\\"senior\\\"\"",
+     "error": "condicionales.orden-elif"
+    }
+   ],
+   "hint": "Empieza por el caso más bajo. En el `elif` no hace falta repetir `edad >= 18`.",
+   "explain": "Una cadena if/elif/else con las fronteras exactas: `< 18`, `< 65` y el resto. Como solo se ejecuta la primera rama verdadera, en el `elif` ya sabemos que la edad es al menos 18."
+  },
+  {
+   "id": "con-06",
+   "concept": "condicionales",
+   "kind": "choice",
+   "level": 1,
+   "daw": true,
+   "q": "¿Cuántas ramas de una cadena `if / elif / elif / else` pueden ejecutarse en una misma pasada?",
+   "code": null,
+   "options": [
+    {
+     "text": "Exactamente una",
+     "error": null
+    },
+    {
+     "text": "Todas las que sean verdaderas",
+     "error": "condicionales.if-separados"
+    },
+    {
+     "text": "Ninguna o una",
+     "error": "condicionales.if-separados"
+    },
+    {
+     "text": "Depende del número de elif",
+     "error": "condicionales.if-separados"
+    }
+   ],
+   "answer": 0,
+   "explain": "Con `else` siempre se ejecuta exactamente una rama: la primera verdadera o, si ninguna lo es, el `else`. Sin `else` podrían ser cero.",
+   "codeOptions": false
+  },
+  {
+   "id": "buc-01",
+   "concept": "bucles",
+   "kind": "output",
+   "level": 1,
+   "daw": true,
+   "q": "¿Qué muestra este programa?",
+   "code": "for i in range(2, 6):\n    print(i, end=\" \")",
+   "stdin": "",
+   "expect": "2 3 4 5",
+   "traps": {
+    "2 3 4 5 6": "bucles.range-fin",
+    "3 4 5": "bucles.uno-de-mas"
+   },
+   "explain": "`range(2, 6)` empieza en 2 y termina **antes** de 6."
+  },
+  {
+   "id": "buc-02",
+   "concept": "bucles",
+   "kind": "output",
+   "level": 2,
+   "daw": true,
+   "q": "¿Qué muestra este programa?",
+   "code": "n = 0\nwhile n < 10:\n    n = n + 3\nprint(n)",
+   "stdin": "",
+   "expect": "12",
+   "traps": {
+    "9": "bucles.condicion-salida",
+    "10": "bucles.condicion-salida"
+   },
+   "explain": "La condición se comprueba **antes** de cada vuelta: con n = 9 aún se cumple, se suma 3 y n pasa a 12. Después 12 < 10 es falso y se sale."
+  },
+  {
+   "id": "buc-03",
+   "concept": "bucles",
+   "kind": "output",
+   "level": 2,
+   "daw": true,
+   "q": "¿Qué muestra este programa?",
+   "code": "for i in range(10, 0, -3):\n    print(i, end=\" \")",
+   "stdin": "",
+   "expect": "10 7 4 1",
+   "traps": {
+    "10 7 4 1 0": "bucles.range-fin",
+    "10 7 4": "bucles.uno-de-mas"
+   },
+   "explain": "Con paso negativo, `range` cuenta hacia atrás y se detiene antes de llegar a 0."
+  },
+  {
+   "id": "buc-04",
+   "concept": "bucles",
+   "kind": "choice",
+   "level": 1,
+   "daw": true,
+   "q": "Quieres repetir **hasta que** el usuario escriba \"salir\". ¿Qué condición va en el `while`?",
+   "code": null,
+   "options": [
+    {
+     "text": "while respuesta != \"salir\":",
+     "error": null
+    },
+    {
+     "text": "while respuesta == \"salir\":",
+     "error": "bucles.condicion-salida"
+    },
+    {
+     "text": "while \"salir\":",
+     "error": "bucles.condicion-salida"
+    },
+    {
+     "text": "while respuesta = \"salir\":",
+     "error": "variables.asigna-compara"
+    }
+   ],
+   "answer": 0,
+   "explain": "El `while` lleva la condición para **seguir**: mientras la respuesta NO sea \"salir\". «Hasta que X» se escribe `while not X`.",
+   "codeOptions": true
+  },
+  {
+   "id": "buc-05",
+   "concept": "bucles",
+   "kind": "bug",
+   "level": 2,
+   "daw": true,
+   "q": "Este programa debería mostrar 5, 4, 3, 2, 1 pero no termina nunca. ¿Qué línea falla?",
+   "code": "n = 5\nwhile n > 0:\n    print(n)\n    n + 1",
+   "stdin": "",
+   "line": 4,
+   "fix": "    n = n - 1",
+   "expect": "5\n4\n3\n2\n1",
+   "error": "bucles.bucle-infinito",
+   "explain": "`n + 1` calcula un valor pero no lo guarda, y además va en la dirección contraria. Hay que **actualizar** la variable de la condición: `n = n - 1`."
+  },
+  {
+   "id": "buc-06",
+   "concept": "bucles",
+   "kind": "fill",
+   "level": 1,
+   "daw": true,
+   "q": "Completa para mostrar los números del 1 al 5, ambos incluidos.",
+   "code": "for i in range(1, ___):\n    print(i)",
+   "accept": [
+    "6"
+   ],
+   "expect": "1\n2\n3\n4\n5",
+   "traps": {
+    "5": "bucles.range-fin"
+   },
+   "explain": "`range(a, b)` no incluye b: para llegar a 5 hay que poner 6."
+  },
+  {
+   "id": "buc-07",
+   "concept": "bucles",
+   "kind": "output",
+   "level": 3,
+   "daw": true,
+   "q": "¿Qué muestra este programa?",
+   "code": "for i in range(1, 10):\n    if i % 4 == 0:\n        break\n    if i % 2 == 0:\n        continue\n    print(i)",
+   "stdin": "",
+   "expect": "1\n3",
+   "traps": {
+    "1\n3\n5\n7\n9": "trazado.intencion",
+    "1\n3\n4": "trazado.intencion"
+   },
+   "explain": "Con i = 2 se salta (continue); con i = 3 se muestra; con i = 4 se sale del bucle (break) antes de mostrar nada más."
+  },
+  {
+   "id": "acu-01",
+   "concept": "acumuladores",
+   "kind": "output",
+   "level": 1,
+   "daw": true,
+   "q": "¿Qué muestra este programa?",
+   "code": "for n in [3, 5, 2]:\n    suma = 0\n    suma = suma + n\nprint(suma)",
+   "stdin": "",
+   "expect": "2",
+   "traps": {
+    "10": "acumuladores.inicializa-dentro"
+   },
+   "explain": "`suma = 0` está **dentro** del bucle: se reinicia en cada vuelta y solo queda el último valor (0 + 2)."
+  },
+  {
+   "id": "acu-02",
+   "concept": "acumuladores",
+   "kind": "bug",
+   "level": 2,
+   "daw": true,
+   "q": "Debería calcular 1 × 2 × 3 × 4 = 24, pero muestra 0. ¿Qué línea falla?",
+   "code": "producto = 0\nfor i in range(1, 5):\n    producto = producto * i\nprint(producto)",
+   "stdin": "",
+   "line": 1,
+   "fix": "producto = 1",
+   "expect": "24",
+   "error": "acumuladores.producto-cero",
+   "explain": "Un producto acumulado empieza en 1 (el elemento neutro de la multiplicación). Empezar en 0 hace que todo dé 0."
+  },
+  {
+   "id": "acu-03",
+   "concept": "acumuladores",
+   "kind": "output",
+   "level": 1,
+   "daw": true,
+   "q": "¿Qué muestra este programa?",
+   "code": "notas = [8, 3, 5, 4]\naprobados = 0\nfor nota in notas:\n    if nota >= 5:\n        aprobados += 1\nprint(aprobados)",
+   "stdin": "",
+   "expect": "2",
+   "traps": {
+    "4": "acumuladores.cuenta-todo",
+    "1": "condicionales.frontera"
+   },
+   "explain": "El contador solo aumenta cuando la nota es al menos 5: 8 y 5."
+  },
+  {
+   "id": "acu-04",
+   "concept": "acumuladores",
+   "kind": "code",
+   "level": 2,
+   "daw": true,
+   "q": "Escribe `media_positivos(numeros)`: devuelve la media de los números **mayores que 0** de la lista. Si no hay ninguno, devuelve 0.",
+   "starter": "def media_positivos(numeros):\n    ...",
+   "solution": "def media_positivos(numeros):\n    suma = 0\n    cuantos = 0\n    for n in numeros:\n        if n > 0:\n            suma += n\n            cuantos += 1\n    if cuantos == 0:\n        return 0\n    return suma / cuantos",
+   "checks": [
+    {
+     "stdin": "",
+     "test": "assert media_positivos([4, -2, 6]) == 5, \"Con [4, -2, 6] la media de los positivos es (4 + 6) / 2 = 5\"",
+     "error": "acumuladores.cuenta-todo"
+    },
+    {
+     "stdin": "",
+     "test": "assert media_positivos([1, 2, 3, 4]) == 2.5, \"Con [1, 2, 3, 4] la media es 2.5: ¿calculas la media después del bucle?\"",
+     "error": "acumuladores.media-dentro"
+    },
+    {
+     "stdin": "",
+     "test": "assert media_positivos([-1, 0, -5]) == 0, \"Si no hay positivos debe devolver 0 (y no dividir entre 0)\"",
+     "error": "acumuladores.media-dentro"
+    },
+    {
+     "stdin": "",
+     "test": "assert media_positivos([]) == 0, \"Con la lista vacía debe devolver 0\"",
+     "error": "algoritmos.sin-caso-limite"
+    }
+   ],
+   "hint": "Necesitas una suma y un contador. ¿Qué pasa si el contador acaba en 0?",
+   "explain": "Dos acumuladores inicializados fuera del bucle (la suma y el contador), actualizados solo cuando el número es positivo, y la división **después** del bucle, protegida contra el 0."
+  },
+  {
+   "id": "acu-05",
+   "concept": "acumuladores",
+   "kind": "fill",
+   "level": 1,
+   "daw": true,
+   "q": "Completa para calcular la suma de los números del 1 al 10.",
+   "code": "total = ___\nfor i in range(1, 11):\n    total += i\nprint(total)",
+   "accept": [
+    "0"
+   ],
+   "expect": "55",
+   "traps": {
+    "1": "acumuladores.producto-cero"
+   },
+   "explain": "Una suma acumulada empieza en 0."
+  },
+  {
+   "id": "acu-06",
+   "concept": "acumuladores",
+   "kind": "code",
+   "level": 3,
+   "daw": true,
+   "q": "Pide números enteros (uno por línea) hasta que el usuario escriba 0. Después muestra `Cantidad: X` y `Suma: Y` (sin contar el 0).",
+   "starter": "",
+   "solution": "cantidad = 0\nsuma = 0\nn = int(input())\nwhile n != 0:\n    cantidad += 1\n    suma += n\n    n = int(input())\nprint(f\"Cantidad: {cantidad}\")\nprint(f\"Suma: {suma}\")",
+   "checks": [
+    {
+     "stdin": "5\n4\n3\n0\n",
+     "test": "assert \"Cantidad: 3\" in __output__ and \"Suma: 12\" in __output__, f\"Con 5, 4, 3 y 0 se esperaba Cantidad: 3 y Suma: 12. Tu salida:\\n{__output__}\"",
+     "error": "acumuladores.cuenta-todo"
+    },
+    {
+     "stdin": "0\n",
+     "test": "assert \"Cantidad: 0\" in __output__ and \"Suma: 0\" in __output__, \"Si el primer número es 0, no hay ninguno: Cantidad: 0 y Suma: 0\"",
+     "error": "bucles.condicion-salida"
+    }
+   ],
+   "hint": "Lee el primer número antes del `while`; la condición es `n != 0`; dentro, actualiza contador y suma y lee el siguiente.",
+   "explain": "Patrón «leer hasta un valor centinela»: se lee el primer número antes del bucle, se procesa dentro y se vuelve a leer al final de cada vuelta. El 0 nunca se cuenta."
+  },
+  {
+   "id": "val-01",
+   "concept": "validacion",
+   "kind": "choice",
+   "level": 1,
+   "daw": true,
+   "q": "Quieres repetir la pregunta mientras la edad **no** sea válida (válida: de 0 a 120). ¿Qué condición usas?",
+   "code": null,
+   "options": [
+    {
+     "text": "while edad < 0 or edad > 120:",
+     "error": null
+    },
+    {
+     "text": "while edad < 0 and edad > 120:",
+     "error": "validacion.or-and"
+    },
+    {
+     "text": "while 0 <= edad <= 120:",
+     "error": "validacion.condicion-invertida"
+    },
+    {
+     "text": "while edad > 0 or edad < 120:",
+     "error": "validacion.or-and"
+    }
+   ],
+   "answer": 0,
+   "explain": "El bucle de validación se repite mientras el dato es incorrecto: por debajo de 0 **o** por encima de 120. Con `and` nunca sería verdadero.",
+   "codeOptions": true
+  },
+  {
+   "id": "val-02",
+   "concept": "validacion",
+   "kind": "bug",
+   "level": 2,
+   "daw": true,
+   "q": "Si el usuario escribe 15, el programa se queda colgado. ¿Qué línea falta corregir?",
+   "code": "nota = int(input())\nwhile nota < 0 or nota > 10:\n    print(\"Nota no válida\")\n    nota = nota\nprint(\"OK\")",
+   "stdin": "15\n5\n",
+   "line": 4,
+   "fix": "    nota = int(input())",
+   "expect": "Nota no válida\nOK",
+   "error": "validacion.no-repide",
+   "explain": "Dentro del bucle hay que volver a pedir el dato; si no, la variable no cambia y el bucle es infinito."
+  },
+  {
+   "id": "val-03",
+   "concept": "validacion",
+   "kind": "code",
+   "level": 2,
+   "daw": true,
+   "q": "Pide una nota entera hasta que esté entre 0 y 10 (ambos incluidos). Cada vez que no sea válida, muestra `Nota no válida`. Al final muestra `Nota: X`.",
+   "starter": "nota = int(input())",
+   "solution": "nota = int(input())\nwhile nota < 0 or nota > 10:\n    print(\"Nota no válida\")\n    nota = int(input())\nprint(f\"Nota: {nota}\")",
+   "checks": [
+    {
+     "stdin": "11\n-1\n7\n",
+     "test": "assert __output__.count(\"Nota no válida\") == 2 and \"Nota: 7\" in __output__, f\"Con 11, -1 y 7 se esperaban 2 avisos y «Nota: 7». Tu salida:\\n{__output__}\"",
+     "error": "validacion.condicion-invertida"
+    },
+    {
+     "stdin": "10\n",
+     "test": "assert \"Nota no válida\" not in __output__ and \"Nota: 10\" in __output__, \"10 es una nota válida: no debe mostrar el aviso\"",
+     "error": "condicionales.frontera"
+    },
+    {
+     "stdin": "0\n",
+     "test": "assert \"Nota no válida\" not in __output__ and \"Nota: 0\" in __output__, \"0 es una nota válida\"",
+     "error": "condicionales.frontera"
+    }
+   ],
+   "hint": "Condición: `nota < 0 or nota > 10`. No olvides el `input()` dentro del bucle.",
+   "explain": "La condición del `while` describe la nota **incorrecta**, y dentro del bucle se vuelve a pedir."
+  },
+  {
+   "id": "val-04",
+   "concept": "validacion",
+   "kind": "output",
+   "level": 2,
+   "daw": true,
+   "q": "¿Qué muestra este programa?",
+   "code": "for texto in [\"12\", \"doce\", \" 7\"]:\n    print(texto.isdigit(), end=\" \")",
+   "stdin": "",
+   "expect": "True False False",
+   "traps": {
+    "True False True": "validacion.condicion-invertida"
+   },
+   "explain": "`isdigit()` es True solo si **todos** los caracteres son cifras. Un espacio ya no lo es: limpia antes con `strip()`."
+  },
+  {
+   "id": "fun-01",
+   "concept": "funciones",
+   "kind": "output",
+   "level": 2,
+   "daw": true,
+   "q": "¿Qué muestra este programa?",
+   "code": "def doble(n):\n    print(n * 2)\n\nx = doble(4)\nprint(x)",
+   "stdin": "",
+   "expect": "8\nNone",
+   "traps": {
+    "8\n8": "funciones.print-en-vez-de-return",
+    "8": "funciones.print-en-vez-de-return"
+   },
+   "explain": "La función **muestra** 8 pero no **devuelve** nada, así que devuelve None y eso es lo que se guarda en x."
+  },
+  {
+   "id": "fun-02",
+   "concept": "funciones",
+   "kind": "bug",
+   "level": 2,
+   "daw": true,
+   "q": "`contiene([1, 2, 3], 3)` debería devolver True, pero devuelve False. ¿Qué línea falla?",
+   "code": "def contiene(lista, x):\n    for elemento in lista:\n        if elemento == x:\n            return True\n        return False\nprint(contiene([1, 2, 3], 3))",
+   "stdin": "",
+   "line": 5,
+   "fix": "    return False",
+   "expect": "True",
+   "error": "funciones.return-en-bucle",
+   "explain": "El `return False` está dentro del bucle: termina la función en la primera vuelta. Debe ir **después** del bucle, cuando ya se han revisado todos."
+  },
+  {
+   "id": "fun-03",
+   "concept": "funciones",
+   "kind": "output",
+   "level": 1,
+   "daw": true,
+   "q": "¿Qué muestra este programa?",
+   "code": "def saludo(nombre, saludo=\"Hola\"):\n    return f\"{saludo}, {nombre}\"\n\nprint(saludo(\"Ana\"))\nprint(saludo(\"Luis\", \"Buenas\"))",
+   "stdin": "",
+   "expect": "Hola, Ana\nBuenas, Luis",
+   "traps": {},
+   "explain": "El parámetro con valor por defecto se usa cuando no se pasa ese argumento."
+  },
+  {
+   "id": "fun-04",
+   "concept": "funciones",
+   "kind": "choice",
+   "level": 2,
+   "daw": true,
+   "q": "¿Qué ocurre al ejecutar este programa?",
+   "code": "def calcular():\n    total = 10\n\ncalcular()\nprint(total)",
+   "options": [
+    {
+     "text": "NameError: total no existe fuera de la función",
+     "error": null
+    },
+    {
+     "text": "Muestra 10",
+     "error": "funciones.ambito"
+    },
+    {
+     "text": "Muestra None",
+     "error": "funciones.ambito"
+    },
+    {
+     "text": "Muestra 0",
+     "error": "funciones.ambito"
+    }
+   ],
+   "answer": 0,
+   "explain": "`total` es una variable **local** de `calcular`: deja de existir al terminar la función. Para usar el valor fuera hay que devolverlo con `return`.",
+   "codeOptions": false
+  },
+  {
+   "id": "fun-05",
+   "concept": "funciones",
+   "kind": "code",
+   "level": 3,
+   "daw": true,
+   "q": "Escribe `es_primo(n)`: devuelve True si n es primo y False si no. (Los números menores que 2 no son primos.)",
+   "starter": "def es_primo(n):\n    ...",
+   "solution": "def es_primo(n):\n    if n < 2:\n        return False\n    for d in range(2, n):\n        if n % d == 0:\n            return False\n    return True",
+   "checks": [
+    {
+     "stdin": "",
+     "test": "assert es_primo(7) is True and es_primo(13) is True, \"7 y 13 son primos\"",
+     "error": "funciones.return-en-bucle"
+    },
+    {
+     "stdin": "",
+     "test": "assert es_primo(9) is False, \"9 no es primo: es divisible entre 3\"",
+     "error": "funciones.return-en-bucle"
+    },
+    {
+     "stdin": "",
+     "test": "assert es_primo(1) is False and es_primo(0) is False, \"0 y 1 no son primos\"",
+     "error": "algoritmos.sin-caso-limite"
+    },
+    {
+     "stdin": "",
+     "test": "assert es_primo(2) is True, \"2 es primo\"",
+     "error": "bucles.uno-de-mas"
+    }
+   ],
+   "hint": "Prueba los divisores desde 2 hasta n − 1. ¿Dónde va el `return True`?",
+   "explain": "Búsqueda de un divisor: en cuanto aparece uno, ya sabemos que no es primo (`return False` dentro del bucle). Solo cuando se han probado todos sin encontrar ninguno se puede afirmar que es primo (`return True` **después** del bucle)."
+  },
+  {
+   "id": "fun-06",
+   "concept": "funciones",
+   "kind": "fill",
+   "level": 1,
+   "daw": true,
+   "q": "Completa para que la función devuelva el mayor de dos números.",
+   "code": "def mayor(a, b):\n    if a > b:\n        ___ a\n    return b\nprint(mayor(3, 8), mayor(9, 2))",
+   "accept": [
+    "return"
+   ],
+   "expect": "8 9",
+   "traps": {
+    "print": "funciones.print-en-vez-de-return"
+   },
+   "explain": "`return` devuelve el valor y termina la función; así el `return b` final solo se alcanza si a no es mayor."
+  },
+  {
+   "id": "str-01",
+   "concept": "strings",
+   "kind": "output",
+   "level": 1,
+   "daw": true,
+   "q": "¿Qué muestra este programa?",
+   "code": "s = \"Python\"\nprint(s[1], s[-2], s[1:4])",
+   "stdin": "",
+   "expect": "y o yth",
+   "traps": {
+    "P n Pyth": "strings.indice-uno",
+    "y o ytho": "strings.slice-fin",
+    "P o Pyt": "strings.indice-uno"
+   },
+   "explain": "Las posiciones empiezan en 0: s[1] es «y». s[-2] es el penúltimo, «o». s[1:4] toma las posiciones 1, 2 y 3."
+  },
+  {
+   "id": "str-02",
+   "concept": "strings",
+   "kind": "output",
+   "level": 1,
+   "daw": true,
+   "q": "¿Qué muestra este programa?",
+   "code": "s = \"hola\"\ns.upper()\nprint(s)",
+   "stdin": "",
+   "expect": "hola",
+   "traps": {
+    "HOLA": "strings.inmutable"
+   },
+   "explain": "Los textos son inmutables: `upper()` devuelve un texto nuevo que aquí no se guarda. Para cambiar s: `s = s.upper()`."
+  },
+  {
+   "id": "str-03",
+   "concept": "strings",
+   "kind": "code",
+   "level": 2,
+   "daw": true,
+   "q": "Escribe `contar_vocales(texto)` que devuelva cuántas vocales (a, e, i, o, u, en mayúscula o minúscula) tiene el texto.",
+   "starter": "def contar_vocales(texto):\n    ...",
+   "solution": "def contar_vocales(texto):\n    total = 0\n    for letra in texto.lower():\n        if letra in \"aeiou\":\n            total += 1\n    return total",
+   "checks": [
+    {
+     "stdin": "",
+     "test": "assert contar_vocales(\"programa\") == 3, \"«programa» tiene 3 vocales\"",
+     "error": "acumuladores.cuenta-todo"
+    },
+    {
+     "stdin": "",
+     "test": "assert contar_vocales(\"ARBOL\") == 2, \"Cuenta también las mayúsculas: «ARBOL» tiene 2\"",
+     "error": "strings.inmutable"
+    },
+    {
+     "stdin": "",
+     "test": "assert contar_vocales(\"\") == 0, \"Un texto vacío tiene 0 vocales\"",
+     "error": "algoritmos.sin-caso-limite"
+    }
+   ],
+   "hint": "Recorre `texto.lower()` letra a letra y comprueba `letra in \"aeiou\"`.",
+   "explain": "Recorrido del texto con un contador. Pasar el texto a minúsculas con `lower()` (guardando o recorriendo el resultado) evita comprobar las mayúsculas aparte."
+  },
+  {
+   "id": "str-04",
+   "concept": "strings",
+   "kind": "output",
+   "level": 1,
+   "daw": true,
+   "q": "¿Qué muestra este programa?",
+   "code": "palabra = \"radar\"\nprint(palabra == palabra[::-1])\nprint(\"ab\" * 3)",
+   "stdin": "",
+   "expect": "True\nababab",
+   "traps": {},
+   "explain": "`[::-1]` invierte el texto: «radar» es un palíndromo. `*` repite un texto."
+  },
+  {
+   "id": "str-05",
+   "concept": "strings",
+   "kind": "choice",
+   "level": 1,
+   "daw": true,
+   "q": "¿Qué ocurre con `nombre = \"ana\"; nombre[0] = \"A\"`?",
+   "code": null,
+   "options": [
+    {
+     "text": "TypeError: los str no admiten asignación por posición",
+     "error": null
+    },
+    {
+     "text": "nombre pasa a ser \"Ana\"",
+     "error": "strings.inmutable"
+    },
+    {
+     "text": "nombre pasa a ser \"A\"",
+     "error": "strings.inmutable"
+    },
+    {
+     "text": "IndexError",
+     "error": "strings.indice-uno"
+    }
+   ],
+   "answer": 0,
+   "explain": "Los textos son inmutables. Para obtener \"Ana\": `nombre = nombre[0].upper() + nombre[1:]` o `nombre.capitalize()`.",
+   "codeOptions": false
+  },
+  {
+   "id": "lis-01",
+   "concept": "listas",
+   "kind": "output",
+   "level": 2,
+   "daw": true,
+   "q": "¿Qué muestra este programa?",
+   "code": "a = [1, 2]\nb = a\nb.append(3)\nprint(a)",
+   "stdin": "",
+   "expect": "[1, 2, 3]",
+   "traps": {
+    "[1, 2]": "listas.alias"
+   },
+   "explain": "`b = a` no copia la lista: `a` y `b` son la misma lista. Por eso el `append` hecho a través de b se ve en a."
+  },
+  {
+   "id": "lis-02",
+   "concept": "listas",
+   "kind": "output",
+   "level": 2,
+   "daw": true,
+   "q": "¿Qué muestra este programa?",
+   "code": "numeros = [3, 1, 2]\nresultado = numeros.sort()\nprint(resultado, numeros)",
+   "stdin": "",
+   "expect": "None [1, 2, 3]",
+   "traps": {
+    "[1, 2, 3] [1, 2, 3]": "listas.sort-none",
+    "[1, 2, 3] [3, 1, 2]": "listas.sort-none"
+   },
+   "explain": "`sort()` ordena la propia lista y devuelve None. Si quieres una copia ordenada, usa `sorted(numeros)`."
+  },
+  {
+   "id": "lis-03",
+   "concept": "listas",
+   "kind": "choice",
+   "level": 1,
+   "daw": true,
+   "q": "Con `lista = [10, 20, 30]`, ¿qué da `lista[3]`?",
+   "code": null,
+   "options": [
+    {
+     "text": "IndexError",
+     "error": null
+    },
+    {
+     "text": "30",
+     "error": "listas.indice-fuera"
+    },
+    {
+     "text": "None",
+     "error": "listas.indice-fuera"
+    },
+    {
+     "text": "10",
+     "error": "listas.indice-fuera"
+    }
+   ],
+   "answer": 0,
+   "explain": "Hay 3 elementos, en las posiciones 0, 1 y 2. La posición 3 no existe.",
+   "codeOptions": true
+  },
+  {
+   "id": "lis-04",
+   "concept": "listas",
+   "kind": "output",
+   "level": 1,
+   "daw": true,
+   "q": "¿Qué muestra este programa?",
+   "code": "l = [5, 8, 2]\nl.insert(1, 7)\nl.pop()\nprint(l, len(l))",
+   "stdin": "",
+   "expect": "[5, 7, 8] 3",
+   "traps": {},
+   "explain": "`insert(1, 7)` mete el 7 en la posición 1: [5, 7, 8, 2]. `pop()` sin argumento quita el último: [5, 7, 8]."
+  },
+  {
+   "id": "lis-05",
+   "concept": "listas",
+   "kind": "code",
+   "level": 2,
+   "daw": true,
+   "q": "Escribe `filtrar_aprobados(notas)` que devuelva una **lista nueva** con las notas mayores o iguales a 5, en el mismo orden.",
+   "starter": "def filtrar_aprobados(notas):\n    ...",
+   "solution": "def filtrar_aprobados(notas):\n    resultado = []\n    for nota in notas:\n        if nota >= 5:\n            resultado.append(nota)\n    return resultado",
+   "checks": [
+    {
+     "stdin": "",
+     "test": "assert filtrar_aprobados([7, 3, 5, 9, 4]) == [7, 5, 9], \"Con [7, 3, 5, 9, 4] se esperaba [7, 5, 9]\"",
+     "error": "condicionales.frontera"
+    },
+    {
+     "stdin": "",
+     "test": "original = [4, 6]\nfiltrar_aprobados(original)\nassert original == [4, 6], \"La lista original no debe modificarse\"",
+     "error": "listas.modificar-recorriendo"
+    },
+    {
+     "stdin": "",
+     "test": "assert filtrar_aprobados([]) == [], \"Con la lista vacía debe devolver []\"",
+     "error": null
+    }
+   ],
+   "hint": "Crea `resultado = []` antes del bucle y añade con `append` las que cumplan.",
+   "explain": "Se construye una lista nueva con `append`, sin tocar la original. Eliminar de la lista mientras se recorre se salta elementos."
+  },
+  {
+   "id": "lis-06",
+   "concept": "listas",
+   "kind": "fill",
+   "level": 1,
+   "daw": true,
+   "q": "Completa para obtener una copia **independiente** de la lista.",
+   "code": "original = [1, 2, 3]\ncopia = original.___()\ncopia.append(4)\nprint(original)",
+   "accept": [
+    "copy"
+   ],
+   "expect": "[1, 2, 3]",
+   "traps": {},
+   "explain": "`copy()` crea una lista nueva con los mismos elementos; modificar la copia no afecta a la original."
+  },
+  {
+   "id": "tup-01",
+   "concept": "tuplas-conjuntos",
+   "kind": "output",
+   "level": 1,
+   "daw": true,
+   "q": "¿Qué muestra este programa?",
+   "code": "punto = (3, 4)\nx, y = punto\nprint(x + y)\nprint(len({1, 2, 2, 3, 3, 3}))",
+   "stdin": "",
+   "expect": "7\n3",
+   "traps": {
+    "7\n6": "tuplas-conjuntos.set-orden"
+   },
+   "explain": "El desempaquetado reparte la tupla en x e y. Un conjunto no guarda repetidos: {1, 2, 3}."
+  },
+  {
+   "id": "tup-02",
+   "concept": "tuplas-conjuntos",
+   "kind": "choice",
+   "level": 1,
+   "daw": true,
+   "q": "¿Qué tipo tiene `vacio = {}`?",
+   "code": null,
+   "options": [
+    {
+     "text": "dict",
+     "error": null
+    },
+    {
+     "text": "set",
+     "error": "tuplas-conjuntos.llaves-vacias"
+    },
+    {
+     "text": "tuple",
+     "error": "tuplas-conjuntos.llaves-vacias"
+    },
+    {
+     "text": "list",
+     "error": "tuplas-conjuntos.llaves-vacias"
+    }
+   ],
+   "answer": 0,
+   "explain": "Las llaves vacías crean un diccionario. El conjunto vacío se crea con `set()`.",
+   "codeOptions": true
+  },
+  {
+   "id": "tup-03",
+   "concept": "tuplas-conjuntos",
+   "kind": "choice",
+   "level": 1,
+   "daw": true,
+   "q": "¿Qué ocurre con `fecha = (1, 10, 2026); fecha[0] = 2`?",
+   "code": null,
+   "options": [
+    {
+     "text": "TypeError: las tuplas no se pueden modificar",
+     "error": null
+    },
+    {
+     "text": "fecha pasa a ser (2, 10, 2026)",
+     "error": "tuplas-conjuntos.tupla-mutable"
+    },
+    {
+     "text": "Se crea una tupla nueva automáticamente",
+     "error": "tuplas-conjuntos.tupla-mutable"
+    },
+    {
+     "text": "IndexError",
+     "error": "tuplas-conjuntos.tupla-mutable"
+    }
+   ],
+   "answer": 0,
+   "explain": "Las tuplas son inmutables. Si los datos deben cambiar, usa una lista; si no, crea una tupla nueva.",
+   "codeOptions": false
+  },
+  {
+   "id": "tup-04",
+   "concept": "tuplas-conjuntos",
+   "kind": "code",
+   "level": 2,
+   "daw": true,
+   "q": "Escribe `comunes(a, b)` que devuelva una **lista ordenada** con los elementos que aparecen en las dos listas, sin repetidos.",
+   "starter": "def comunes(a, b):\n    ...",
+   "solution": "def comunes(a, b):\n    return sorted(set(a) & set(b))",
+   "checks": [
+    {
+     "stdin": "",
+     "test": "assert comunes([1, 2, 3, 3], [3, 2, 5]) == [2, 3], \"Con [1, 2, 3, 3] y [3, 2, 5] se esperaba [2, 3]\"",
+     "error": "tuplas-conjuntos.set-orden"
+    },
+    {
+     "stdin": "",
+     "test": "assert comunes([1], [2]) == [], \"Sin elementos comunes debe devolver []\"",
+     "error": null
+    },
+    {
+     "stdin": "",
+     "test": "assert isinstance(comunes([2, 1], [1, 2]), list), \"Debe devolver una lista, no un conjunto\"",
+     "error": "tuplas-conjuntos.set-orden"
+    }
+   ],
+   "hint": "Convierte las dos listas a `set`, intersécalas con `&` y ordena el resultado.",
+   "explain": "Los conjuntos quitan repetidos y `&` da la intersección. Como el conjunto no tiene orden, se convierte con `sorted`, que devuelve una lista."
+  },
+  {
+   "id": "dic-01",
+   "concept": "diccionarios",
+   "kind": "output",
+   "level": 1,
+   "daw": true,
+   "q": "¿Qué muestra este programa?",
+   "code": "edades = {\"Ana\": 20, \"Luis\": 22}\nedades[\"Ana\"] = 21\nedades[\"Eva\"] = 19\nprint(len(edades), edades[\"Ana\"])",
+   "stdin": "",
+   "expect": "3 21",
+   "traps": {
+    "4 21": "diccionarios.keyerror",
+    "3 20": "variables.orden-asignacion"
+   },
+   "explain": "Asignar a una clave existente sustituye su valor (Ana pasa a 21); a una clave nueva, la añade (Eva)."
+  },
+  {
+   "id": "dic-02",
+   "concept": "diccionarios",
+   "kind": "output",
+   "level": 1,
+   "daw": true,
+   "q": "¿Qué muestra este programa?",
+   "code": "d = {\"a\": 1, \"b\": 2}\nprint(\"a\" in d, 1 in d)",
+   "stdin": "",
+   "expect": "True False",
+   "traps": {
+    "True True": "diccionarios.in-valores"
+   },
+   "explain": "`in` busca entre las **claves**: \"a\" es clave, 1 no lo es (es un valor). Para los valores: `1 in d.values()`."
+  },
+  {
+   "id": "dic-03",
+   "concept": "diccionarios",
+   "kind": "output",
+   "level": 1,
+   "daw": true,
+   "q": "¿Qué muestra este programa?",
+   "code": "precios = {\"pan\": 1.2, \"leche\": 0.9}\nfor x in precios:\n    print(x)",
+   "stdin": "",
+   "expect": "pan\nleche",
+   "traps": {
+    "1.2\n0.9": "diccionarios.recorrido-claves",
+    "pan 1.2\nleche 0.9": "diccionarios.recorrido-claves"
+   },
+   "explain": "Recorrer un diccionario da sus claves. Para los valores, `.values()`; para las dos cosas, `.items()`."
+  },
+  {
+   "id": "dic-04",
+   "concept": "diccionarios",
+   "kind": "code",
+   "level": 2,
+   "daw": true,
+   "q": "Escribe `frecuencias(palabras)` que reciba una lista de palabras y devuelva un diccionario con cuántas veces aparece cada una.",
+   "starter": "def frecuencias(palabras):\n    ...",
+   "solution": "def frecuencias(palabras):\n    conteo = {}\n    for p in palabras:\n        conteo[p] = conteo.get(p, 0) + 1\n    return conteo",
+   "checks": [
+    {
+     "stdin": "",
+     "test": "assert frecuencias([\"sol\", \"luna\", \"sol\"]) == {\"sol\": 2, \"luna\": 1}, \"Con [sol, luna, sol] se esperaba {\\\"sol\\\": 2, \\\"luna\\\": 1}\"",
+     "error": "diccionarios.keyerror"
+    },
+    {
+     "stdin": "",
+     "test": "assert frecuencias([]) == {}, \"Con la lista vacía debe devolver {}\"",
+     "error": null
+    },
+    {
+     "stdin": "",
+     "test": "assert frecuencias([\"a\"] * 5) == {\"a\": 5}, \"Cinco veces la misma palabra\"",
+     "error": "acumuladores.inicializa-dentro"
+    }
+   ],
+   "hint": "Empieza con `conteo = {}`. Para cada palabra: `conteo[p] = conteo.get(p, 0) + 1`.",
+   "explain": "El patrón contador con diccionario: `get(p, 0)` da 0 la primera vez que aparece la palabra, así nunca hay KeyError."
+  },
+  {
+   "id": "dic-05",
+   "concept": "diccionarios",
+   "kind": "choice",
+   "level": 1,
+   "daw": true,
+   "q": "Con `stock = {\"pan\": 3}`, ¿qué devuelve `stock.get(\"leche\", 0)`?",
+   "code": null,
+   "options": [
+    {
+     "text": "0",
+     "error": null
+    },
+    {
+     "text": "KeyError",
+     "error": "diccionarios.keyerror"
+    },
+    {
+     "text": "None",
+     "error": "diccionarios.keyerror"
+    },
+    {
+     "text": "3",
+     "error": "diccionarios.keyerror"
+    }
+   ],
+   "answer": 0,
+   "explain": "`get` devuelve el valor por defecto (aquí 0) si la clave no existe, en lugar de lanzar KeyError como `stock[\"leche\"]`.",
+   "codeOptions": true
+  },
+  {
+   "id": "rec-01",
+   "concept": "recorridos",
+   "kind": "output",
+   "level": 2,
+   "daw": true,
+   "q": "¿Qué muestra este programa?",
+   "code": "valores = [-4, -2, -9]\nmayor = 0\nfor v in valores:\n    if v > mayor:\n        mayor = v\nprint(mayor)",
+   "stdin": "",
+   "expect": "0",
+   "traps": {
+    "-2": "recorridos.max-cero"
+   },
+   "explain": "Como el máximo empieza en 0 y todos los valores son negativos, nunca se actualiza: el resultado es 0, que ni siquiera está en la lista. Hay que empezar con `valores[0]`."
+  },
+  {
+   "id": "rec-02",
+   "concept": "recorridos",
+   "kind": "bug",
+   "level": 2,
+   "daw": true,
+   "q": "`buscar([4, 7, 9], 9)` debería devolver 2, pero devuelve -1. ¿Qué línea falla?",
+   "code": "def buscar(lista, objetivo):\n    for i in range(len(lista)):\n        if lista[i] == objetivo:\n            return i\n        return -1\nprint(buscar([4, 7, 9], 9))",
+   "stdin": "",
+   "line": 5,
+   "fix": "    return -1",
+   "expect": "2",
+   "error": "recorridos.no-encontrado-dentro",
+   "explain": "El `return -1` dentro del bucle decide «no está» al mirar solo el primer elemento. El -1 se devuelve **después** del bucle, cuando se han revisado todos."
+  },
+  {
+   "id": "rec-03",
+   "concept": "recorridos",
+   "kind": "code",
+   "level": 2,
+   "daw": true,
+   "q": "Escribe `posicion_maximo(numeros)`: devuelve la **posición** del mayor número (la primera si se repite). La lista nunca está vacía.",
+   "starter": "def posicion_maximo(numeros):\n    ...",
+   "solution": "def posicion_maximo(numeros):\n    mejor = 0\n    for i in range(1, len(numeros)):\n        if numeros[i] > numeros[mejor]:\n            mejor = i\n    return mejor",
+   "checks": [
+    {
+     "stdin": "",
+     "test": "assert posicion_maximo([3, 9, 2]) == 1, \"En [3, 9, 2] el mayor (9) está en la posición 1\"",
+     "error": null
+    },
+    {
+     "stdin": "",
+     "test": "assert posicion_maximo([-5, -1, -3]) == 1, \"Con todos negativos: en [-5, -1, -3] el mayor está en la posición 1\"",
+     "error": "recorridos.max-cero"
+    },
+    {
+     "stdin": "",
+     "test": "assert posicion_maximo([7, 7, 1]) == 0, \"Si se repite, la primera posición: [7, 7, 1] → 0\"",
+     "error": "condicionales.frontera"
+    },
+    {
+     "stdin": "",
+     "test": "assert posicion_maximo([4]) == 0, \"Con un solo elemento, la posición 0\"",
+     "error": null
+    }
+   ],
+   "hint": "Guarda la posición del mejor, empezando en 0, y compara `numeros[i] > numeros[mejor]`.",
+   "explain": "Se guarda la posición del mejor candidato, empezando por el primer elemento. Con `>` (y no `>=`) se conserva la primera aparición en caso de empate."
+  },
+  {
+   "id": "rec-04",
+   "concept": "recorridos",
+   "kind": "choice",
+   "level": 2,
+   "daw": true,
+   "q": "Para comprobar si **todos** los números de una lista son pares, ¿con qué valor empieza la variable `todos_pares` y cuándo cambia?",
+   "code": null,
+   "options": [
+    {
+     "text": "Empieza en True y pasa a False al encontrar un impar",
+     "error": null
+    },
+    {
+     "text": "Empieza en False y pasa a True al encontrar un par",
+     "error": "recorridos.todos-alguno"
+    },
+    {
+     "text": "Empieza en True y pasa a False al encontrar un par",
+     "error": "recorridos.todos-alguno"
+    },
+    {
+     "text": "Empieza en 0 y suma 1 por cada par",
+     "error": "recorridos.todos-alguno"
+    }
+   ],
+   "answer": 0,
+   "explain": "«¿Todos cumplen?»: se supone que sí y basta un contraejemplo para desmentirlo. Empezar en False y cambiar con un par respondería a «¿alguno es par?».",
+   "codeOptions": false
+  },
+  {
+   "id": "rec-05",
+   "concept": "recorridos",
+   "kind": "code",
+   "level": 2,
+   "daw": true,
+   "q": "Escribe `todos_positivos(numeros)` que devuelva True si todos los números son mayores que 0 (una lista vacía cuenta como True). No uses `all()`.",
+   "starter": "def todos_positivos(numeros):\n    ...",
+   "solution": "def todos_positivos(numeros):\n    for n in numeros:\n        if n <= 0:\n            return False\n    return True",
+   "checks": [
+    {
+     "stdin": "",
+     "test": "assert todos_positivos([1, 5, 3]) is True, \"[1, 5, 3] son todos positivos\"",
+     "error": "recorridos.no-encontrado-dentro"
+    },
+    {
+     "stdin": "",
+     "test": "assert todos_positivos([1, -5, 3]) is False, \"[1, -5, 3] tiene un negativo\"",
+     "error": "recorridos.todos-alguno"
+    },
+    {
+     "stdin": "",
+     "test": "assert todos_positivos([4, 0]) is False, \"0 no es mayor que 0\"",
+     "error": "condicionales.frontera"
+    },
+    {
+     "stdin": "",
+     "test": "assert todos_positivos([]) is True, \"Una lista vacía cuenta como True\"",
+     "error": "recorridos.todos-alguno"
+    },
+    {
+     "stdin": "",
+     "test": "assert \"all(\" not in __code__, \"Resuélvelo con un bucle, sin all()\"",
+     "error": null
+    }
+   ],
+   "hint": "Busca un contraejemplo: si lo encuentras, `return False`; si el bucle termina, `return True`.",
+   "explain": "Basta un contraejemplo (un número ≤ 0) para devolver False en cuanto aparece. Solo después de revisar todos se puede devolver True."
+  },
+  {
+   "id": "rec-06",
+   "concept": "recorridos",
+   "kind": "choice",
+   "level": 3,
+   "daw": true,
+   "q": "Una función compara cada elemento de una lista con todos los demás (dos bucles anidados). Si la lista pasa de 100 a 1.000 elementos, ¿cuántas comparaciones hará aproximadamente?",
+   "code": null,
+   "options": [
+    {
+     "text": "Unas 100 veces más (de 10.000 a 1.000.000)",
+     "error": null
+    },
+    {
+     "text": "10 veces más",
+     "error": "recorridos.no-para"
+    },
+    {
+     "text": "Las mismas",
+     "error": "recorridos.no-para"
+    },
+    {
+     "text": "1.000 veces más",
+     "error": "recorridos.no-para"
+    }
+   ],
+   "answer": 0,
+   "explain": "Con dos bucles anidados el trabajo crece con n²: (1.000)² / (100)² = 100. Un solo bucle crecería 10 veces.",
+   "codeOptions": false
+  },
+  {
+   "id": "exc-01",
+   "concept": "excepciones",
+   "kind": "output",
+   "level": 1,
+   "daw": true,
+   "q": "¿Qué muestra este programa?",
+   "code": "try:\n    n = int(\"doce\")\n    print(\"convertido\")\nexcept ValueError:\n    print(\"no es un número\")\nprint(\"sigue\")",
+   "stdin": "",
+   "expect": "no es un número\nsigue",
+   "traps": {
+    "convertido\nno es un número\nsigue": "excepciones.try-gigante",
+    "no es un número": "trazado.intencion"
+   },
+   "explain": "`int(\"doce\")` lanza ValueError: se salta el resto del `try`, se ejecuta el `except` y el programa continúa."
+  },
+  {
+   "id": "exc-02",
+   "concept": "excepciones",
+   "kind": "choice",
+   "level": 1,
+   "daw": true,
+   "q": "¿Qué excepción lanza `int(\"3.5\")`?",
+   "code": null,
+   "options": [
+    {
+     "text": "ValueError",
+     "error": null
+    },
+    {
+     "text": "TypeError",
+     "error": "excepciones.tipo-equivocado"
+    },
+    {
+     "text": "ZeroDivisionError",
+     "error": "excepciones.tipo-equivocado"
+    },
+    {
+     "text": "Ninguna: devuelve 3",
+     "error": "tipos.texto-numero"
+    }
+   ],
+   "answer": 0,
+   "explain": "El argumento es del tipo correcto (str) pero su **valor** no representa un entero: ValueError. TypeError sería, por ejemplo, `int([1])`.",
+   "codeOptions": false
+  },
+  {
+   "id": "exc-03",
+   "concept": "excepciones",
+   "kind": "choice",
+   "level": 1,
+   "daw": true,
+   "q": "¿Por qué es mala idea escribir `except:` sin indicar el tipo?",
+   "code": null,
+   "options": [
+    {
+     "text": "Oculta también errores de programación, como NameError, y dificulta encontrarlos",
+     "error": null
+    },
+    {
+     "text": "Porque da error de sintaxis",
+     "error": "excepciones.except-generico"
+    },
+    {
+     "text": "Porque es más lento",
+     "error": "excepciones.except-generico"
+    },
+    {
+     "text": "No es mala idea: es la forma recomendada",
+     "error": "excepciones.except-generico"
+    }
+   ],
+   "answer": 0,
+   "explain": "Un `except` sin tipo lo captura todo, incluso un nombre mal escrito. Captura solo la excepción que esperas.",
+   "codeOptions": false
+  },
+  {
+   "id": "exc-04",
+   "concept": "excepciones",
+   "kind": "code",
+   "level": 2,
+   "daw": true,
+   "q": "Escribe `a_entero(texto)` que devuelva el entero que representa el texto, o `None` si no es un número entero válido.",
+   "starter": "def a_entero(texto):\n    ...",
+   "solution": "def a_entero(texto):\n    try:\n        return int(texto)\n    except ValueError:\n        return None",
+   "checks": [
+    {
+     "stdin": "",
+     "test": "assert a_entero(\"42\") == 42 and a_entero(\"-7\") == -7, \"\\\"42\\\" → 42 y \\\"-7\\\" → -7\"",
+     "error": null
+    },
+    {
+     "stdin": "",
+     "test": "assert a_entero(\"hola\") is None and a_entero(\"3.5\") is None, \"Los textos que no son enteros devuelven None\"",
+     "error": "excepciones.tipo-equivocado"
+    },
+    {
+     "stdin": "",
+     "test": "assert \"except:\" not in __code__.replace(\" \", \"\"), \"Captura la excepción concreta (ValueError), no todas\"",
+     "error": "excepciones.except-generico"
+    }
+   ],
+   "hint": "`try: return int(texto)` y `except ValueError: return None`.",
+   "explain": "Se intenta la conversión y se captura solo ValueError, que es lo que lanza `int()` con un texto no numérico."
+  },
+  {
+   "id": "mod-01",
+   "concept": "modulos",
+   "kind": "choice",
+   "level": 1,
+   "daw": true,
+   "q": "Tras `import math`, ¿cómo se calcula la raíz cuadrada de 9?",
+   "code": null,
+   "options": [
+    {
+     "text": "math.sqrt(9)",
+     "error": null
+    },
+    {
+     "text": "sqrt(9)",
+     "error": "modulos.prefijo"
+    },
+    {
+     "text": "math(9).sqrt",
+     "error": "modulos.prefijo"
+    },
+    {
+     "text": "import sqrt(9)",
+     "error": "modulos.prefijo"
+    }
+   ],
+   "answer": 0,
+   "explain": "Con `import math` las funciones se usan con el prefijo del módulo. `sqrt(9)` solo funcionaría con `from math import sqrt`.",
+   "codeOptions": true
+  },
+  {
+   "id": "mod-02",
+   "concept": "modulos",
+   "kind": "output",
+   "level": 1,
+   "daw": true,
+   "q": "¿Qué muestra este programa?",
+   "code": "from math import floor, ceil\nprint(floor(2.7), ceil(2.1))",
+   "stdin": "",
+   "expect": "2 3",
+   "traps": {},
+   "explain": "`floor` redondea hacia abajo y `ceil` hacia arriba. Con `from ... import` se usan sin prefijo."
+  },
+  {
+   "id": "mod-03",
+   "concept": "modulos",
+   "kind": "choice",
+   "level": 2,
+   "daw": true,
+   "q": "Guardas tu programa como `random.py` y dentro escribes `import random`. ¿Qué pasa?",
+   "code": null,
+   "options": [
+    {
+     "text": "Se importa tu propio fichero en vez del módulo estándar",
+     "error": null
+    },
+    {
+     "text": "Funciona normal",
+     "error": "modulos.nombre-fichero"
+    },
+    {
+     "text": "Python avisa del conflicto y elige el estándar",
+     "error": "modulos.nombre-fichero"
+    },
+    {
+     "text": "Da SyntaxError",
+     "error": "modulos.nombre-fichero"
+    }
+   ],
+   "answer": 0,
+   "explain": "Python busca primero en la carpeta del programa: tu fichero tapa al módulo `random`. No nombres tus ficheros como módulos estándar.",
+   "codeOptions": false
+  },
+  {
+   "id": "arc-01",
+   "concept": "archivos",
+   "kind": "choice",
+   "level": 1,
+   "daw": true,
+   "q": "Quieres **añadir** una línea al final de `registro.txt` sin perder lo que ya tiene. ¿Qué modo usas?",
+   "code": null,
+   "options": [
+    {
+     "text": "\"a\"",
+     "error": null
+    },
+    {
+     "text": "\"w\"",
+     "error": "archivos.modo-w"
+    },
+    {
+     "text": "\"r\"",
+     "error": "archivos.modo-w"
+    },
+    {
+     "text": "\"x\"",
+     "error": "archivos.modo-w"
+    }
+   ],
+   "answer": 0,
+   "explain": "`\"a\"` (append) escribe al final. `\"w\"` vacía el fichero al abrirlo y `\"r\"` es solo lectura.",
+   "codeOptions": true
+  },
+  {
+   "id": "arc-02",
+   "concept": "archivos",
+   "kind": "output",
+   "level": 2,
+   "daw": true,
+   "q": "¿Qué muestra este programa?",
+   "code": "with open(\"datos.txt\", \"w\", encoding=\"utf-8\") as f:\n    f.write(\"uno\")\n    f.write(\"dos\")\nwith open(\"datos.txt\", encoding=\"utf-8\") as f:\n    print(len(f.readlines()))",
+   "stdin": "",
+   "expect": "1",
+   "traps": {
+    "2": "archivos.salto-linea"
+   },
+   "explain": "`write` no añade saltos de línea: el fichero contiene «unodos» en una sola línea."
+  },
+  {
+   "id": "arc-03",
+   "concept": "archivos",
+   "kind": "code",
+   "level": 2,
+   "daw": true,
+   "q": "Escribe `contar_lineas_no_vacias(ruta)` que devuelva cuántas líneas del fichero tienen algún carácter que no sea espacio.",
+   "starter": "def contar_lineas_no_vacias(ruta):\n    ...",
+   "solution": "def contar_lineas_no_vacias(ruta):\n    total = 0\n    with open(ruta, encoding=\"utf-8\") as f:\n        for linea in f:\n            if linea.strip():\n                total += 1\n    return total",
+   "checks": [
+    {
+     "stdin": "",
+     "test": "with open(\"p.txt\", \"w\", encoding=\"utf-8\") as f:\n    f.write(\"hola\\n\\n  \\nadios\\n\")\nassert contar_lineas_no_vacias(\"p.txt\") == 2, \"El fichero tiene 2 líneas con texto (las otras están vacías o solo tienen espacios)\"",
+     "error": "archivos.salto-linea"
+    },
+    {
+     "stdin": "",
+     "test": "with open(\"q.txt\", \"w\", encoding=\"utf-8\") as f:\n    f.write(\"\")\nassert contar_lineas_no_vacias(\"q.txt\") == 0, \"Un fichero vacío tiene 0 líneas\"",
+     "error": null
+    }
+   ],
+   "hint": "Recorre el fichero con `for linea in f` y comprueba `linea.strip()`.",
+   "explain": "Cada línea leída termina en «\\n», así que nunca es un texto vacío: hay que limpiarla con `strip()` antes de comprobarla."
+  },
+  {
+   "id": "pse-01",
+   "concept": "pseudocodigo",
+   "kind": "choice",
+   "level": 1,
+   "daw": true,
+   "q": "¿Cómo se traduce `PARA i DESDE 1 HASTA n HACER` a Python?",
+   "code": null,
+   "options": [
+    {
+     "text": "for i in range(1, n + 1):",
+     "error": null
+    },
+    {
+     "text": "for i in range(1, n):",
+     "error": "pseudocodigo.hasta-incluye"
+    },
+    {
+     "text": "for i in range(n):",
+     "error": "pseudocodigo.hasta-incluye"
+    },
+    {
+     "text": "while i < n:",
+     "error": "pseudocodigo.hasta-incluye"
+    }
+   ],
+   "answer": 0,
+   "explain": "HASTA n incluye n; `range` excluye el final, así que hay que poner n + 1.",
+   "codeOptions": true
+  },
+  {
+   "id": "pse-02",
+   "concept": "pseudocodigo",
+   "kind": "choice",
+   "level": 2,
+   "daw": true,
+   "q": "¿Qué estructura de Python equivale a `REPETIR … HASTA QUE x > 10`?",
+   "code": null,
+   "options": [
+    {
+     "text": "while True: … if x > 10: break",
+     "error": null
+    },
+    {
+     "text": "while x > 10: …",
+     "error": "pseudocodigo.repetir-hasta"
+    },
+    {
+     "text": "for x in range(10): …",
+     "error": "pseudocodigo.repetir-hasta"
+    },
+    {
+     "text": "if x > 10: …",
+     "error": "pseudocodigo.repetir-hasta"
+    }
+   ],
+   "answer": 0,
+   "explain": "REPETIR…HASTA QUE ejecuta el bloque al menos una vez y termina **cuando** la condición es verdadera. `while x > 10` haría lo contrario: repetir mientras sea verdadera.",
+   "codeOptions": true
+  },
+  {
+   "id": "pse-03",
+   "concept": "pseudocodigo",
+   "kind": "order",
+   "level": 2,
+   "daw": true,
+   "q": "Ordena el pseudocódigo que lee n números y escribe cuántos son negativos.",
+   "lines": [
+    "LEER n",
+    "negativos ← 0",
+    "PARA i DESDE 1 HASTA n HACER",
+    "    LEER x",
+    "    SI x < 0 ENTONCES negativos ← negativos + 1",
+    "FIN PARA",
+    "ESCRIBIR negativos"
+   ],
+   "expect": null,
+   "pseudo": true,
+   "error": "pseudocodigo.orden-pasos",
+   "explain": "Leer la cantidad, inicializar el contador **antes** del bucle, leer y comprobar cada número dentro del bucle y escribir el resultado al final."
+  },
+  {
+   "id": "pse-04",
+   "concept": "pseudocodigo",
+   "kind": "code",
+   "level": 2,
+   "daw": true,
+   "q": "Traduce a Python este pseudocódigo:\n\n```\nLEER n\nfactorial ← 1\nPARA i DESDE 1 HASTA n HACER\n    factorial ← factorial * i\nFIN PARA\nESCRIBIR factorial\n```",
+   "starter": "",
+   "solution": "n = int(input())\nfactorial = 1\nfor i in range(1, n + 1):\n    factorial = factorial * i\nprint(factorial)",
+   "checks": [
+    {
+     "stdin": "5\n",
+     "test": "assert __output__.strip() == \"120\", f\"Con n = 5 el factorial es 120 y tu programa muestra «{__output__.strip()}»\"",
+     "error": "pseudocodigo.hasta-incluye"
+    },
+    {
+     "stdin": "0\n",
+     "test": "assert __output__.strip() == \"1\", \"Con n = 0 el factorial es 1\"",
+     "error": "acumuladores.producto-cero"
+    },
+    {
+     "stdin": "1\n",
+     "test": "assert __output__.strip() == \"1\", \"Con n = 1 el factorial es 1\"",
+     "error": null
+    }
+   ],
+   "hint": "Cuidado con HASTA n: en `range` hay que poner n + 1.",
+   "explain": "Traducción línea a línea: LEER → `int(input())`, ← → `=`, PARA … HASTA n → `range(1, n + 1)`, ESCRIBIR → `print`."
+  },
+  {
+   "id": "pse-05",
+   "concept": "pseudocodigo",
+   "kind": "order",
+   "level": 1,
+   "daw": true,
+   "q": "Ordena las líneas de Python que traducen: «LEER n; MIENTRAS n > 0 HACER ESCRIBIR n; n ← n − 2; FIN MIENTRAS».",
+   "lines": [
+    "n = int(input())",
+    "while n > 0:",
+    "    print(n)",
+    "    n = n - 2"
+   ],
+   "expect": null,
+   "pseudo": false,
+   "error": "pseudocodigo.orden-pasos",
+   "explain": "Se lee antes del bucle; dentro, primero se escribe y después se actualiza la variable de la condición."
+  },
+  {
+   "id": "pse-06",
+   "concept": "pseudocodigo",
+   "kind": "code",
+   "level": 2,
+   "daw": true,
+   "q": "Traduce a Python:\n\n```\nintentos ← 0\nREPETIR\n    LEER clave\n    intentos ← intentos + 1\nHASTA QUE clave = \"1234\"\nESCRIBIR \"Intentos: \", intentos\n```\n\nMuestra exactamente `Intentos: X`.",
+   "starter": "",
+   "solution": "intentos = 0\nwhile True:\n    clave = input()\n    intentos = intentos + 1\n    if clave == \"1234\":\n        break\nprint(\"Intentos:\", intentos)",
+   "checks": [
+    {
+     "stdin": "0000\nabcd\n1234\n",
+     "test": "assert __output__.strip() == \"Intentos: 3\", f\"Con las entradas 0000, abcd y 1234 se esperaba «Intentos: 3» y tu programa muestra «{__output__.strip()}»\"",
+     "error": "pseudocodigo.repetir-hasta"
+    },
+    {
+     "stdin": "1234\n",
+     "test": "assert __output__.strip() == \"Intentos: 1\", \"Si la primera clave ya es correcta, se pide una sola vez: «Intentos: 1»\"",
+     "error": "pseudocodigo.repetir-hasta"
+    }
+   ],
+   "hint": "Usa `while True:`, lee la clave, suma el intento y haz `break` si es \"1234\".",
+   "explain": "REPETIR…HASTA QUE se ejecuta al menos una vez y sale **cuando** la condición es verdadera: `while True` con `break` al cumplirse."
+  },
+  {
+   "id": "tra-01",
+   "concept": "trazado",
+   "kind": "output",
+   "level": 3,
+   "daw": true,
+   "q": "¿Qué muestra este programa?",
+   "code": "a = 1\nb = 1\nfor i in range(4):\n    a, b = b, a + b\nprint(a)",
+   "stdin": "",
+   "expect": "5",
+   "traps": {
+    "8": "trazado.valor-antiguo",
+    "3": "bucles.uno-de-mas"
+   },
+   "explain": "Traza: (a, b) = (1, 1) → (1, 2) → (2, 3) → (3, 5) → (5, 8). Tras 4 vueltas, a = 5. Es la sucesión de Fibonacci."
+  },
+  {
+   "id": "tra-02",
+   "concept": "trazado",
+   "kind": "output",
+   "level": 1,
+   "daw": true,
+   "q": "¿Qué muestra este programa?",
+   "code": "total = 0\nfor i in range(1, 4):\n    total += i\n    print(total)",
+   "stdin": "",
+   "expect": "1\n3\n6",
+   "traps": {
+    "6": "trazado.print-dentro-fuera"
+   },
+   "explain": "El `print` está dentro del bucle: muestra el total acumulado en cada vuelta (1, 1 + 2, 1 + 2 + 3)."
+  },
+  {
+   "id": "tra-03",
+   "concept": "trazado",
+   "kind": "output",
+   "level": 3,
+   "daw": true,
+   "q": "¿Qué muestra este programa?",
+   "code": "x = 10\nwhile x > 1:\n    if x % 2 == 0:\n        x = x // 2\n    else:\n        x = x * 3 + 1\n    print(x, end=\" \")",
+   "stdin": "",
+   "expect": "5 16 8 4 2 1",
+   "traps": {
+    "5 16 8 4 2": "trazado.valor-antiguo",
+    "10 5 16 8 4 2": "trazado.print-dentro-fuera"
+   },
+   "explain": "Traza: 10 es par → 5; 5 es impar → 16; 16 → 8 → 4 → 2 → 1. Con x = 1 la condición es falsa y el bucle termina."
+  },
+  {
+   "id": "tra-04",
+   "concept": "trazado",
+   "kind": "output",
+   "level": 3,
+   "daw": true,
+   "q": "¿Qué muestra este programa?",
+   "code": "def f(n):\n    if n <= 1:\n        return 1\n    return n + f(n - 1)\n\nprint(f(4))",
+   "stdin": "",
+   "expect": "10",
+   "traps": {
+    "24": "trazado.intencion",
+    "9": "trazado.valor-antiguo"
+   },
+   "explain": "f(4) = 4 + f(3) = 4 + 3 + f(2) = 4 + 3 + 2 + f(1) = 4 + 3 + 2 + 1 = 10."
+  },
+  {
+   "id": "tra-05",
+   "concept": "trazado",
+   "kind": "output",
+   "level": 2,
+   "daw": true,
+   "q": "¿Qué muestra este programa?",
+   "code": "lista = [2, 4, 6]\nfor i in range(len(lista)):\n    lista[i] = lista[i] + i\nprint(lista)",
+   "stdin": "",
+   "expect": "[2, 5, 8]",
+   "traps": {
+    "[3, 5, 7]": "strings.indice-uno",
+    "[2, 4, 6]": "trazado.intencion"
+   },
+   "explain": "A cada elemento se le suma su posición: 2 + 0, 4 + 1, 6 + 2."
+  },
+  {
+   "id": "tra-06",
+   "concept": "trazado",
+   "kind": "output",
+   "level": 3,
+   "daw": true,
+   "q": "¿Qué muestra este programa?",
+   "code": "for i in range(3):\n    for j in range(i):\n        print(i, j)",
+   "stdin": "",
+   "expect": "1 0\n2 0\n2 1",
+   "traps": {
+    "0 0\n1 0\n1 1\n2 0\n2 1\n2 2": "bucles.range-fin"
+   },
+   "explain": "Con i = 0 el bucle interno no da ninguna vuelta (range(0) está vacío). Con i = 1, j vale 0. Con i = 2, j vale 0 y 1."
+  },
+  {
+   "id": "dep-01",
+   "concept": "depuracion",
+   "kind": "choice",
+   "level": 1,
+   "daw": true,
+   "q": "En este traceback, ¿dónde está el error y de qué tipo es?",
+   "code": "Traceback (most recent call last):\n  File \"notas.py\", line 4, in <module>\n    media = suma / cantidad\nZeroDivisionError: division by zero",
+   "options": [
+    {
+     "text": "En la línea 4, ZeroDivisionError",
+     "error": null
+    },
+    {
+     "text": "En la línea 1, Traceback",
+     "error": "depuracion.lee-primera-linea"
+    },
+    {
+     "text": "En la función media, SyntaxError",
+     "error": "depuracion.tipo-error"
+    },
+    {
+     "text": "No se puede saber",
+     "error": "depuracion.lee-primera-linea"
+    }
+   ],
+   "answer": 0,
+   "explain": "Un traceback se lee de abajo arriba: la última línea da el tipo (ZeroDivisionError) y la de encima, el fichero y la línea (4).",
+   "codeOptions": false
+  },
+  {
+   "id": "dep-02",
+   "concept": "depuracion",
+   "kind": "choice",
+   "level": 1,
+   "daw": true,
+   "q": "Un programa termina sin mostrar ningún error, pero la media que calcula es incorrecta. ¿Qué tipo de error es?",
+   "code": null,
+   "options": [
+    {
+     "text": "Un error lógico",
+     "error": null
+    },
+    {
+     "text": "Un error de sintaxis",
+     "error": "depuracion.tipo-error"
+    },
+    {
+     "text": "Una excepción",
+     "error": "depuracion.tipo-error"
+    },
+    {
+     "text": "No es un error",
+     "error": "depuracion.tipo-error"
+    }
+   ],
+   "answer": 0,
+   "explain": "Si el programa termina pero el resultado está mal, es un error lógico. Se encuentra con trazas y pruebas, no leyendo un traceback.",
+   "codeOptions": false
+  },
+  {
+   "id": "dep-03",
+   "concept": "depuracion",
+   "kind": "choice",
+   "level": 1,
+   "daw": true,
+   "q": "Python señala un `SyntaxError` en la línea 3, que parece correcta. ¿Dónde conviene mirar?",
+   "code": null,
+   "options": [
+    {
+     "text": "En la línea 2: puede faltar un paréntesis o unas comillas por cerrar",
+     "error": null
+    },
+    {
+     "text": "Solo en la línea 3",
+     "error": "depuracion.linea-anterior"
+    },
+    {
+     "text": "Al final del fichero",
+     "error": "depuracion.linea-anterior"
+    },
+    {
+     "text": "Es un fallo de Python",
+     "error": "depuracion.linea-anterior"
+    }
+   ],
+   "answer": 0,
+   "explain": "Cuando algo se abre y no se cierra, Python se da cuenta al leer la línea siguiente.",
+   "codeOptions": false
+  },
+  {
+   "id": "dep-04",
+   "concept": "depuracion",
+   "kind": "bug",
+   "level": 2,
+   "daw": true,
+   "q": "Este programa da `TypeError`. ¿Qué línea hay que corregir?",
+   "code": "edad = input()\nsiguiente = edad + 1\nprint(siguiente)",
+   "stdin": "20\n",
+   "line": 1,
+   "fix": "edad = int(input())",
+   "expect": "21",
+   "error": "entrada-salida.input-texto",
+   "explain": "El error salta en la línea 2, pero la causa está en la 1: `input()` devuelve texto. La línea donde salta un error no siempre es la que hay que arreglar."
+  },
+  {
+   "id": "dep-05",
+   "concept": "depuracion",
+   "kind": "choice",
+   "level": 2,
+   "daw": true,
+   "q": "Tu función devuelve un resultado incorrecto con la lista [3, 0, 5]. ¿Qué es lo primero que deberías hacer?",
+   "code": null,
+   "options": [
+    {
+     "text": "Formular una hipótesis y comprobarla con un print temporal o el depurador",
+     "error": null
+    },
+    {
+     "text": "Cambiar operadores hasta que funcione",
+     "error": "depuracion.cambios-a-ciegas"
+    },
+    {
+     "text": "Reescribir la función desde cero",
+     "error": "depuracion.cambios-a-ciegas"
+    },
+    {
+     "text": "Probar con otra lista para la que funcione",
+     "error": "depuracion.cambios-a-ciegas"
+    }
+   ],
+   "answer": 0,
+   "explain": "Depurar con método: reproducir, formular una hipótesis («creo que el 0 rompe la condición»), comprobarla y corregir una sola cosa.",
+   "codeOptions": false
+  },
+  {
+   "id": "dep-06",
+   "concept": "depuracion",
+   "kind": "bug",
+   "level": 3,
+   "daw": true,
+   "q": "La función debería devolver la suma de los pares, pero devuelve un número demasiado alto. ¿Qué línea tiene el error?",
+   "code": "def suma_pares(numeros):\n    total = 0\n    for n in numeros:\n        if n % 2 == 0:\n            total += n\n        total += 0 if n % 2 == 0 else n\n    return total\nprint(suma_pares([1, 2, 3, 4]))",
+   "stdin": "",
+   "line": 6,
+   "fix": "",
+   "expect": "6",
+   "error": "depuracion.cambios-a-ciegas",
+   "explain": "La línea 6 suma los impares. Es un error lógico típico de cambios hechos a ciegas: sobra la línea entera. La línea corregida está vacía (se elimina)."
+  },
+  {
+   "id": "poo-01",
+   "concept": "poo",
+   "kind": "output",
+   "level": 2,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "class Contador:\n    def __init__(self):\n        self.valor = 0\n\n    def incrementar(self):\n        self.valor += 1\n\na = Contador()\nb = Contador()\na.incrementar()\na.incrementar()\nb.incrementar()\nprint(a.valor, b.valor)",
+   "stdin": "",
+   "expect": "2 1",
+   "traps": {
+    "3 3": "poo.clase-objeto"
+   },
+   "explain": "Cada objeto tiene sus propios atributos: a se incrementa dos veces y b una."
+  },
+  {
+   "id": "poo-02",
+   "concept": "poo",
+   "kind": "choice",
+   "level": 2,
+   "daw": false,
+   "q": "¿Qué falla en este método?",
+   "code": "class Cuenta:\n    def __init__(self):\n        self.saldo = 0\n\n    def ingresar(self, cantidad):\n        saldo += cantidad",
+   "options": [
+    {
+     "text": "Falta self: debería ser self.saldo += cantidad",
+     "error": null
+    },
+    {
+     "text": "Falta return",
+     "error": "funciones.print-en-vez-de-return"
+    },
+    {
+     "text": "cantidad debería ser global",
+     "error": "poo.olvida-self"
+    },
+    {
+     "text": "Nada",
+     "error": "poo.olvida-self"
+    }
+   ],
+   "answer": 0,
+   "explain": "`saldo` sin `self.` es una variable local del método que ni siquiera existe: da UnboundLocalError. El atributo del objeto es `self.saldo`.",
+   "codeOptions": false
+  },
+  {
+   "id": "poo-03",
+   "concept": "poo",
+   "kind": "code",
+   "level": 2,
+   "daw": false,
+   "q": "Crea la clase `Rectangulo` con `__init__(self, base, altura)` y los métodos `area()` y `perimetro()`.",
+   "starter": "class Rectangulo:\n    ...",
+   "solution": "class Rectangulo:\n    def __init__(self, base, altura):\n        self.base = base\n        self.altura = altura\n\n    def area(self):\n        return self.base * self.altura\n\n    def perimetro(self):\n        return 2 * (self.base + self.altura)",
+   "checks": [
+    {
+     "stdin": "",
+     "test": "r = Rectangulo(3, 4)\nassert r.area() == 12, \"Un rectángulo de 3 × 4 tiene área 12\"",
+     "error": "poo.olvida-self"
+    },
+    {
+     "stdin": "",
+     "test": "r = Rectangulo(3, 4)\nassert r.perimetro() == 14, \"Un rectángulo de 3 × 4 tiene perímetro 14\"",
+     "error": "poo.olvida-self"
+    },
+    {
+     "stdin": "",
+     "test": "a, b = Rectangulo(1, 1), Rectangulo(2, 5)\nassert (a.area(), b.area()) == (1, 10), \"Cada objeto usa sus propios datos\"",
+     "error": "poo.clase-objeto"
+    }
+   ],
+   "hint": "En `__init__`: `self.base = base`. En `area`: `return self.base * self.altura`.",
+   "explain": "Los datos se guardan en `self` en el constructor y los métodos los leen con `self.`."
+  }
+ ]
+}

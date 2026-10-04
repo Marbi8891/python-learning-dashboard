@@ -45,7 +45,7 @@ test.describe("móvil", () => {
   test.use({ viewport: { width: 390, height: 844 } });
   test("menú abierto sin infracciones", async ({ page }) => {
     await openLesson(page, "funciones");
-    await page.getByRole("button", { name: "Lecciones" }).click();
+    await page.getByRole("button", { name: "Menú" }).click();
     await audit(page);
   });
 });
@@ -72,11 +72,11 @@ for (const colorScheme of ["light", "dark"]) {
       await openLesson(page, "variables");
       await page.getByRole("tab", { name: "Práctica y Ejercicio" }).click();
       await page.getByRole("button", { name: "Marcar como completada" }).click();
-      await page.getByRole("link", { name: "El curso" }).click();
+      await page.getByRole("link", { name: "Curso PCAP" }).click();
       await expect(page.locator("#home-title")).toBeVisible();
       for (const module of await page.locator(".syllabus__module").all()) await module.evaluate((d) => (d.open = true));
       await audit(page);
-      await page.getByRole("link", { name: "Mi aprendizaje" }).first().click();
+      await page.goto("/#/perfil");
       await expect(page.locator("#profile-title")).toBeVisible();
       await audit(page);
     });

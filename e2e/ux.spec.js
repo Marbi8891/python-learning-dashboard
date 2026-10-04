@@ -5,7 +5,7 @@ test("la portada muestra el progreso y cambia a «Continuar»", async ({ page })
   await openLesson(page, "variables");
   await page.getByRole("tab", { name: "Práctica y Ejercicio" }).click();
   await page.getByRole("button", { name: "Marcar como completada" }).click();
-  await page.getByRole("link", { name: /Python Learning/ }).click();
+  await page.getByRole("link", { name: "Curso PCAP" }).click();
   await expect(page).toHaveURL(/#\/inicio$/);
   await expect(page.locator(".course-progress")).toContainText("1/27");
   await page.getByRole("link", { name: "Continuar: Tipos de datos →" }).click();

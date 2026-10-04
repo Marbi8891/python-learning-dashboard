@@ -45,6 +45,8 @@ jobs:
         run: pip install pip-audit && pip-audit -r requirements.txt
       - name: Tests (SQLite) con cobertura mínima del 100 %
         run: python -m pytest -q --cov=app --cov-report=term-missing --cov-fail-under=100
+      - name: Contenido del núcleo educativo al día y con cada respuesta comprobada (ADR-0031)
+        run: python ../scripts/learning/build_learning.py --check
       - name: Migraciones en PostgreSQL (vacía y con datos existentes)
         env:
           MIGRATION_TEST_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/pld
@@ -67,6 +69,8 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - name: Tests unitarios del frontend (dominio, repaso, recomendación y sesiones)
+        run: npm run test:unit
       - name: Dependencias de npm sin vulnerabilidades altas
         run: npm audit --audit-level=high
       - run: npx playwright install --with-deps chromium
