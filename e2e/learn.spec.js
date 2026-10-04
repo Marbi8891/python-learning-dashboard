@@ -23,8 +23,35 @@ async function audit(page) {
   expect(summary, summary.join("\n")).toEqual([]);
 }
 
-test("la portada responde «¿Qué estudio ahora?» y propone el primer concepto", async ({ page }) => {
+test("primera visita: pantalla de bienvenida que explica la web y lleva a empezar", async ({ page }) => {
   await page.goto("/");
+  await expect(page).toHaveURL(/#\/bienvenida$/);
+  await expect(page.locator("#learn-title")).toHaveText("Aprende Python entendiendo lo que haces");
+  await expect(page.getByRole("heading", { name: "Cómo funciona" })).toBeVisible();
+  await expect(page.locator(".lx-welcome__step")).toHaveCount(4);
+  for (const name of ["Aprender", "Teoría", "Practicar", "DAW"]) {
+    await expect(page.locator(".lx-welcome__cards").getByRole("link", { name: new RegExp(`^${name}`) })).toBeVisible();
+  }
+  await expect(page.getByRole("button", { name: "Ya sé algo: prueba de nivel" })).toBeVisible();
+  await page.getByRole("link", { name: "Empezar desde cero" }).click();
+  await expect(page).toHaveURL(/#\/aprender$/);
+  await expect(page.locator("#learn-title")).toHaveText("¿Qué estudio ahora?");
+  // La segunda visita va directa a «¿Qué estudio ahora?»; la presentación sigue enlazada
+  await page.goto("/");
+  await expect(page).toHaveURL(/#\/aprender$/);
+  await page.getByRole("link", { name: "¿Cómo funciona?" }).click();
+  await expect(page).toHaveURL(/#\/bienvenida$/);
+  await expect(page.locator(".lx-welcome")).toBeVisible();
+});
+
+test("bienvenida: la prueba de nivel arranca desde la presentación", async ({ page }) => {
+  await page.goto("/#/bienvenida");
+  await page.getByRole("button", { name: "Ya sé algo: prueba de nivel" }).click();
+  await expect(page).toHaveURL(/#\/sesion$/);
+});
+
+test("la portada responde «¿Qué estudio ahora?» y propone el primer concepto", async ({ page }) => {
+  await page.goto("/#/aprender");
   await expect(page).toHaveURL(/#\/aprender$/);
   await expect(page.locator("#learn-title")).toHaveText("¿Qué estudio ahora?");
   await expect(page.getByRole("navigation", { name: "Secciones" }).getByRole("link", { name: "Aprender", exact: true })).toHaveAttribute("aria-current", "page");
@@ -211,7 +238,7 @@ for (const colorScheme of ["light", "dark"]) {
   test.describe(`núcleo educativo en modo ${colorScheme}`, () => {
     test.use({ colorScheme });
     test("Hoy, Teoría, concepto, Practicar, Progreso y una corrección sin infracciones WCAG", async ({ page }) => {
-      for (const route of ["/#/aprender", "/#/teoria", "/#/teoria/recorridos", "/#/practicar", "/#/progreso"]) {
+      for (const route of ["/#/bienvenida", "/#/aprender", "/#/teoria", "/#/teoria/recorridos", "/#/practicar", "/#/progreso"]) {
         await page.goto(route);
         await page.locator("#learn-title").waitFor();
         await audit(page);
