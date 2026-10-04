@@ -49,76 +49,77 @@ function renderToday() {
   const plan = todayPlan(index, learning, now, stats);
   const all = [...stats.values()];
   const mastered = all.filter((s) => s.status === "dominado").length;
-  const weak = all.filter((s) => s.attempted > 0 && s.status !== "dominado").sort((a, b) => a.score - b.score).slice(0, 3);
   const due = all.filter((s) => s.due);
   const last = lastActivity(index, learning);
   const date = now.toLocaleDateString("es-ES", { weekday: "long", day: "numeric", month: "long" });
-  const items = plan
+  const [first, ...rest] = plan;
+  const startButton = (item, label, primary) =>
+    `<button class="btn ${primary ? "btn--primary btn--lg" : "btn--ghost"}" type="button" data-learn="plan" data-type="${item.type}" data-concept="${escapeHtml(item.concept)}"${item.errors ? ` data-errors="${escapeHtml(item.errors.join(","))}"` : ""}>${label}<span class="visually-hidden">: ${ACTION[item.type]} ${escapeHtml(title(item.concept))}</span></button>`;
+  const nextStep = first
+    ? `<section class="lx-next lx-plan__item" data-type="${first.type}" aria-labelledby="lx-next-title">
+        <p class="lx-next__label">Tu siguiente paso · ${ACTION[first.type]}</p>
+        <h2 class="lx-next__title" id="lx-next-title">${escapeHtml(title(first.concept))}</h2>
+        <p class="lx-next__reason">${escapeHtml(first.reason)}</p>
+        <div class="lx-actions">
+          ${startButton(first, "Empezar ahora", true)}
+          <a href="#/teoria/${escapeHtml(first.concept)}">Leer antes la teoría</a>
+        </div>
+      </section>`
+    : `<section class="lx-next"><h2 class="lx-next__title">Has dominado todo el temario</h2>
+        <p>Haz un <a href="#/daw">simulacro de DAW</a> o repasa en <a href="#/practicar">Practicar</a>.</p></section>`;
+  const later = rest
     .map(
-      (item, i) => `
-      <li class="lx-plan__item" data-type="${item.type}">
-        <span class="lx-plan__n" aria-hidden="true">${i + 1}</span>
-        <div class="lx-plan__body">
+      (item) => `
+      <li class="lx-plan__item lx-later__item" data-type="${item.type}">
+        <div>
           <p class="lx-plan__action">${ACTION[item.type]}</p>
           <h3 class="lx-plan__title">${escapeHtml(title(item.concept))}</h3>
           <p class="lx-plan__reason">${escapeHtml(item.reason)}</p>
         </div>
-        <div class="lx-plan__go">
-          <button class="btn ${i === 0 ? "btn--primary" : "btn--ghost"}" type="button" data-learn="plan" data-type="${item.type}" data-concept="${escapeHtml(item.concept)}"${item.errors ? ` data-errors="${escapeHtml(item.errors.join(","))}"` : ""}>Empezar<span class="visually-hidden">: ${ACTION[item.type]} ${escapeHtml(title(item.concept))}</span></button>
-          <a class="lx-plan__theory" href="#/teoria/${escapeHtml(item.concept)}">Teoría<span class="visually-hidden"> de ${escapeHtml(title(item.concept))}</span></a>
-        </div>
+        ${startButton(item, "Empezar", false)}
       </li>`,
     )
     .join("");
+  const facts = [
+    `<strong>${mastered}</strong> de ${all.length} conceptos dominados`,
+    due.length ? `<strong>${due.length}</strong> ${due.length === 1 ? "repaso pendiente" : "repasos pendientes"}` : "sin repasos pendientes",
+    last ? `última actividad ${ago(last.at)}` : "todavía sin actividad",
+  ];
   return `
     <header class="lx-head">
       <p class="eyebrow">Hoy · ${escapeHtml(date)}</p>
       <h1 class="lx-title" id="learn-title" tabindex="-1">¿Qué estudio ahora?</h1>
-      <p class="lx-lead">Un plan corto según lo que ya dominas, lo que toca repasar y los errores que has cometido.</p>
+      <p class="lx-lead">Empieza por el primer paso. El plan se ajusta solo a lo que ya dominas y a tus errores.</p>
     </header>
-    <section class="lx-section" aria-labelledby="lx-plan-title">
-      <h2 class="visually-hidden" id="lx-plan-title">Plan de hoy</h2>
-      ${items ? `<ol class="lx-plan">${items}</ol>` : `<p>Has dominado todo el temario. Haz un <a href="#/daw">simulacro de DAW</a> o repasa en <a href="#/practicar">Practicar</a>.</p>`}
-    </section>
+    ${nextStep}
     ${
       learning.log.length === 0
         ? `<section class="lx-panel lx-diagnostic" aria-labelledby="lx-diag-title">
             <h2 class="lx-panel__title" id="lx-diag-title">¿Ya sabes algo de Python?</h2>
-            <p>Haz la prueba de nivel: una pregunta de cada concepto (unos 15 minutos). Lo que aciertes no te bloqueará y la ruta empezará donde lo necesitas.</p>
+            <p>Haz la prueba de nivel (unos 15 minutos): lo que aciertes no te bloqueará y la ruta empezará donde lo necesitas.</p>
             <button class="btn btn--ghost" type="button" data-learn="diagnostic">Hacer la prueba de nivel</button>
           </section>`
         : ""
     }
+    ${
+      later
+        ? `<section class="lx-section" aria-labelledby="lx-later-title">
+            <h2 class="lx-section__title" id="lx-later-title">Después, si te queda tiempo</h2>
+            <ol class="lx-later">${later}</ol>
+          </section>`
+        : ""
+    }
+    <section class="lx-summary-line" aria-label="Resumen">
+      <p>${facts.join(" · ")}</p>
+      <p class="lx-summary-line__links">
+        ${due.length ? `<button class="btn btn--ghost" type="button" data-learn="review-all">Repasar todo (${due.length})</button>` : ""}
+        <a href="#/progreso">Ver mi progreso</a>
+      </p>
+    </section>
     <details class="lx-details lx-route">
-      <summary>Tu ruta personal (${mastered} de ${all.length} dominados)</summary>
+      <summary>Ver tu ruta completa (${mastered} de ${all.length} dominados)</summary>
       ${routeHtml(stats)}
-    </details>
-    <div class="lx-grid">
-      <section class="lx-panel" aria-labelledby="lx-weak-title">
-        <h2 class="lx-panel__title" id="lx-weak-title">Puntos débiles</h2>
-        ${
-          weak.length
-            ? `<ul class="lx-list">${weak.map((s) => `<li class="lx-row"><a href="#/teoria/${s.id}">${escapeHtml(title(s.id))}</a>${meter(s.score, `Dominio de ${title(s.id)}`)}<span class="lx-row__value">${percent(s.score)}</span></li>`).join("")}</ul>`
-            : '<p class="lx-muted">Aún no hay datos: aparecerán cuando practiques.</p>'
-        }
-      </section>
-      <section class="lx-panel" aria-labelledby="lx-due-title">
-        <h2 class="lx-panel__title" id="lx-due-title">Repasos pendientes</h2>
-        ${
-          due.length
-            ? `<ul class="lx-list">${due.map((s) => `<li class="lx-row"><a href="#/teoria/${s.id}">${escapeHtml(title(s.id))}</a><span class="lx-row__value">desde ${formatDay(s.nextReview)}</span></li>`).join("")}</ul>
-               <button class="btn btn--ghost" type="button" data-learn="review-all">Repasar todo (${due.length})</button>`
-            : '<p class="lx-muted">Nada pendiente. Los conceptos vuelven cuando toca: a 1, 3, 7, 14 y 30 días.</p>'
-        }
-      </section>
-      <section class="lx-panel" aria-labelledby="lx-progress-title">
-        <h2 class="lx-panel__title" id="lx-progress-title">Progreso</h2>
-        <p><strong>${mastered}</strong> de ${all.length} conceptos dominados</p>
-        ${meter(mastered / all.length, "Conceptos dominados")}
-        <p class="lx-muted">${last ? `Última actividad: ${ago(last.at)}, ${escapeHtml(title(last.concept))}.` : "Todavía no has empezado."}</p>
-        <a href="#/progreso">Ver el progreso completo</a>
-      </section>
-    </div>`;
+    </details>`;
 }
 
 /** La ruta recomendada con el estado de cada concepto y qué lo bloquea. */
