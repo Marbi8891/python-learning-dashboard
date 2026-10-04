@@ -6,6 +6,14 @@ const { test, expect, uniqueEmail } = require("./fixtures");
 const API = "http://127.0.0.1:8000";
 const PASSWORD = "contraseña-e2e-123";
 
+async function logIn(page, email) {
+  await page.locator("#account-button").click();
+  await page.locator("#login-form").getByLabel("Email").fill(email);
+  await page.locator("#login-form").getByLabel("Contraseña").fill(PASSWORD);
+  await page.locator("#login-form").getByRole("button", { name: "Entrar" }).click();
+  await expect(page.locator("#account-label")).toHaveText("Ana");
+}
+
 async function signIn(page, request) {
   const email = uniqueEmail();
   await request.post(`${API}/api/auth/register`, { data: { email, password: PASSWORD, display_name: "Ana", accept_privacy: true } });
@@ -21,7 +29,7 @@ async function signIn(page, request) {
 }
 
 test("plan de estudio: fecha de examen por curso y meta diaria que se guardan", async ({ page, request }) => {
-  await signIn(page, request);
+  const email = await signIn(page, request);
   const date = page.getByLabel("Fecha del examen de Programación");
   const inTwentyDays = new Date(Date.now() + 20 * 86_400_000);
   const day = `${inTwentyDays.getFullYear()}-${String(inTwentyDays.getMonth() + 1).padStart(2, "0")}-${String(inTwentyDays.getDate()).padStart(2, "0")}`;
@@ -32,7 +40,10 @@ test("plan de estudio: fecha de examen por curso y meta diaria que se guardan", 
 
   await page.getByLabel("Meta diaria").selectOption("30");
   await expect(page.locator("#toast")).toContainText("Meta diaria: 30 preguntas");
+  // Recargar cierra la sesión (token solo en memoria): se vuelve a entrar y se comprueba lo guardado en la cuenta
   await page.reload();
+  await logIn(page, email);
+  await page.goto("/#/cuenta");
   await expect(page.getByLabel("Fecha del examen de Programación")).toHaveValue(day);
   await expect(page.getByLabel("Meta diaria")).toHaveValue("30");
 });

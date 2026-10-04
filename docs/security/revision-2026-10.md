@@ -20,7 +20,8 @@ Esta revisión cubre los cambios del núcleo educativo y repasa las medidas que 
 
 | Riesgo | Por qué sigue | Mitigación actual | Qué haría falta |
 |---|---|---|---|
-| **Token JWT en `localStorage`** | La web (GitHub Pages) y la API (Render) están en orígenes distintos. Una cookie `HttpOnly` exigiría `SameSite=None` y protección CSRF. | CSP estricta, todo escapado, token de 60 minutos y «cerrar sesión en todos los dispositivos» | Mover la web y la API al mismo dominio y usar una cookie `HttpOnly; Secure; SameSite=Strict` |
+| **Token JWT en la memoria de la página** (ADR-0032; antes estaba en `localStorage`) | Un XSS que se ejecute mientras la página está abierta podría usar el token, aunque ya no queda guardado en el navegador. | CSP estricta, todo escapado, token de 30 minutos y «cerrar sesión en todos los dispositivos». Al recargar, la sesión se cierra | Mover la web y la API al mismo dominio, con una cookie `HttpOnly; Secure; SameSite=Strict` y un token de refresco |
+| **Rutas antiguas `/api/...` (sin versión)** | La app Android publicada todavía las usa. | Se sirven marcadas como *deprecated* y fuera de OpenAPI | Pasar la app a `/api/v1` y retirarlas |
 | **`style-src 'unsafe-inline'`** | Las barras de progreso usan `style="--value: …"`. | Solo afecta a estilos. Los scripts no admiten código en línea | Pasar a clases o a `attr()` cuando los navegadores lo soporten |
 | **CSP en `<meta>`** (GitHub Pages no permite cabeceras) | No se puede usar `frame-ancestors`. | Defensa contra marcos en JavaScript (`theme-init.js`) | Servir la web con cabeceras propias |
 | **Pyodide desde jsDelivr sin SRI** | Se importa en el Worker con `import()` dinámico. | La CSP limita el origen a esa versión exacta | Alojar Pyodide en el propio sitio (unos 14 MB) |

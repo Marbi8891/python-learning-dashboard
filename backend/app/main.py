@@ -55,7 +55,9 @@ API_SECURITY_HEADERS = {
     "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
     "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
     # El API solo devuelve JSON; no necesita ejecutar recursos ni poder incrustarse.
-    "Content-Security-Policy": "default-src 'none'; frame-ancestors 'none'; base-uri 'none'; form-action 'none'",
+    "Content-Security-Policy": (
+        "default-src 'none'; frame-ancestors 'none'; base-uri 'none'; form-action 'none'"
+    ),
     # Respuestas con datos personales (sesión, progreso, exportación): nunca en cachés intermedias
     "Cache-Control": "no-store",
 }
