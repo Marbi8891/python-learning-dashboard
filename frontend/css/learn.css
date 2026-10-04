@@ -770,3 +770,152 @@ body[data-zone="core"] .assistant {
 .lx-diagnostic {
   margin: var(--space-5) 0;
 }
+
+/* ===== Navegación y portada más claras (ui/navegacion-clara) ===== */
+
+/* Cada sección del menú dice para qué sirve */
+.site-nav__text {
+  display: grid;
+  gap: 1px;
+  line-height: 1.25;
+}
+
+.site-nav__hint {
+  color: var(--color-text-muted);
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.site-nav a[aria-current="page"] .site-nav__hint {
+  color: var(--color-text);
+}
+
+.site-nav a:not(.site-nav__secondary) {
+  min-height: 48px;
+}
+
+/* «Tu siguiente paso»: una sola acción principal, grande y evidente.
+   Llevan también .lx-plan__item (lo usan los tests): se anula su rejilla de la versión anterior */
+.lx-next.lx-plan__item,
+.lx-later__item.lx-plan__item {
+  grid-template-columns: none;
+}
+
+.lx-later__item.lx-plan__item,
+.lx-later__item.lx-plan__item:first-child {
+  border: 0;
+  border-bottom: 1px solid var(--color-border);
+  border-radius: 0;
+  background: none;
+}
+
+.lx-later__item.lx-plan__item:last-child {
+  border-bottom: 0;
+}
+
+.lx-next {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-6);
+  padding: var(--space-5) var(--space-6);
+  border: 2px solid var(--color-primary);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.lx-next__label {
+  color: var(--color-link);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+
+.lx-next__title {
+  color: var(--color-strong);
+  font-size: clamp(1.4rem, 2.6vw, 1.8rem);
+  line-height: 1.25;
+}
+
+.lx-next__reason {
+  max-width: 60ch;
+  color: var(--color-text-muted);
+  font-size: 1.05rem;
+}
+
+.lx-next .lx-actions {
+  margin-top: var(--space-3);
+}
+
+/* «Después, si te queda tiempo»: filas sencillas, sin competir con el paso principal */
+.lx-later {
+  display: grid;
+  gap: 0;
+  padding: 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  list-style: none;
+  background: var(--color-surface);
+}
+
+.lx-later__item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.lx-later__item:last-child {
+  border-bottom: 0;
+}
+
+.lx-later__item .lx-plan__title {
+  font-size: 1rem;
+}
+
+/* Resumen en una línea, en lugar de varios paneles */
+.lx-summary-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin: var(--space-6) 0 var(--space-3);
+  padding: var(--space-3) 0;
+  border-top: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+}
+
+.lx-summary-line strong {
+  color: var(--color-strong);
+}
+
+.lx-summary-line__links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+/* Barra de progreso dentro de una sesión */
+.lx-session-bar .meter {
+  flex: 1 1 120px;
+  max-width: 220px;
+}
+
+@media (max-width: 600px) {
+  .lx-next {
+    padding: var(--space-4);
+  }
+
+  .lx-next .btn--lg {
+    width: 100%;
+  }
+}
+
+.lx-next .btn--lg {
+  justify-content: center;
+}

@@ -423,6 +423,10 @@ function updateSiteNav() {
     if (link.dataset.nav === key) link.setAttribute("aria-current", "page");
     else link.removeAttribute("aria-current");
   }
+  // En el móvil, la barra superior dice en qué sección estás
+  const active = document.querySelector(".site-nav a[aria-current] .site-nav__text")?.firstChild?.textContent?.trim();
+  const activeAny = document.querySelector(".site-nav a[aria-current]")?.textContent?.trim();
+  $(".topbar__brand").textContent = active || activeAny || "Python Learning";
   // La barra lateral del curso PCAP (lecciones, XP) solo se muestra en esa zona
   document.body.dataset.zone = ["home", "lesson", "certificate", "pcap"].includes(content.view) ? "pcap" : "core";
 }

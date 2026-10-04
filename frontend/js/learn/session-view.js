@@ -8,6 +8,7 @@ import { allStats, markRead } from "./mastery.js";
 import { exercisesForError, selectExercises, todayPlan } from "./recommend.js";
 import { advance, createSession, currentItem, finish, isExpired, secondsLeft, stop, submit } from "./session.js";
 import {
+  meter,
   codeBlock,
   enhanceEditor,
   errorExplanation,
@@ -92,6 +93,7 @@ function header() {
     <div class="exam-bar lx-session-bar">
       <span class="exam-bar__title" id="learn-title" tabindex="-1">${escapeHtml(session.title)}</span>
       ${session.phase === "done" ? "" : `<span>Ejercicio ${position} de ${total}</span>`}
+      ${session.phase === "done" ? "" : meter(session.index / total, "Progreso de la sesión")}
       ${left !== null && session.phase !== "done" ? `<span class="exam-bar__timer" id="lx-timer" role="timer" aria-live="off">${formatTime(left)}</span>` : ""}
     </div>`;
 }
