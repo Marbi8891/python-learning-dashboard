@@ -28,6 +28,7 @@ import {
   recordRead,
   recordRun,
   streak,
+  xpTotal,
   subscribe as onGame,
 } from "./game.js";
 import { renderHome } from "./home.js";
@@ -467,9 +468,18 @@ function downloadExample() {
 
 async function onCheckResult(result, code) {
   const slug = content.current;
+  const beforeXp = xpTotal();
   recordExercise(slug, result.passed);
   await recordAttempt(slug, code, result.passed);
   if (result.passed) {
+    const gained = xpTotal() - beforeXp;
+    const box = $("#check-result");
+    box.insertAdjacentHTML(
+      "beforeend",
+      '<div class="check__next"><strong>Ejercicio completado</strong><span>Todos los tests han pasado' +
+        (gained > 0 ? `: +${gained} XP.` : ".") +
+        '</span><button class="btn btn--primary" type="button" data-action="open-quiz">Continuar al quiz →</button></div>',
+    );
     showToast("¡Ejercicio superado! Lección completada.");
     celebrate();
   }
@@ -507,6 +517,9 @@ function initActions() {
         break;
       case "load-starter":
         loadStarter();
+        break;
+      case "open-quiz":
+        openTab("quiz");
         break;
       case "check":
         checkCode({
