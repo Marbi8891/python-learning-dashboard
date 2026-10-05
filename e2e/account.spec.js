@@ -1,4 +1,5 @@
 // Cuenta de usuario contra el backend REAL (lo arranca playwright.config.js).
+const { request: playwrightRequest } = require("@playwright/test");
 const { test, expect, uniqueEmail, openLesson } = require("./fixtures");
 
 const PASSWORD = "contraseña-e2e-123";
@@ -94,18 +95,19 @@ test("la sesión va en una cookie HttpOnly: sigue al recargar y JavaScript no ve
 
 test("si el navegador bloquea la cookie, se entra igual con el token solo en memoria", async ({ page }) => {
   // Como Safari con las cookies de terceros: la respuesta del login llega sin Set-Cookie
+  // La petición sale desde un contexto aparte: route.fetch() guardaría la cookie en el del navegador
+  const outside = await playwrightRequest.newContext();
   await page.route("http://127.0.0.1:8000/api/v1/auth/login", async (route) => {
-    const response = await route.fetch();
+    const response = await outside.fetch(route.request());
     const headers = { ...response.headers() };
     delete headers["set-cookie"];
     await route.fulfill({ response, headers });
   });
-  await openLesson(page);
+  await openLesson(page, "variables");
   const email = uniqueEmail();
   await register(page, email, "Eva");
   expect(await page.context().cookies()).toEqual([]);
   // La sesión funciona (se sincroniza el progreso) y, como antes, recargar la cierra
-  await page.locator(".lesson[data-slug=variables]").click();
   await page.getByRole("tab", { name: "Práctica y Ejercicio" }).click();
   await page.getByRole("button", { name: "Marcar como completada" }).click();
   await expect.poll(async () => (await apiAs(page, "/api/v1/progress", email)).length).toBe(1);
