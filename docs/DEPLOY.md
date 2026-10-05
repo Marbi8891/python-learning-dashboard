@@ -55,7 +55,7 @@ Si cambias el dominio del frontend, actualiza en el backend `CORS_ORIGINS` y `FR
 
 ## 5. Emails de recuperación de contraseña
 
-Sin SMTP, el enlace de recuperación solo se escribe en los logs del servidor y la web muestra el email de contacto (`contactEmail` en `frontend/config.js`) en lugar del formulario. Cuando configuras el SMTP, `/api/health` devuelve `"email": true` y la web muestra el formulario sola: no hay que tocar el código.
+Sin SMTP no se envía el enlace de recuperación (tampoco se escribe en los logs: cualquiera con acceso a ellos podría usarlo) y la web muestra el email de contacto (`contactEmail` en `frontend/config.js`) en lugar del formulario. Cuando configuras el SMTP, `/api/health` devuelve `"email": true` y la web muestra el formulario sola: no hay que tocar el código.
 
 ### Opción A: Gmail (la más rápida)
 
@@ -72,12 +72,13 @@ Sin SMTP, el enlace de recuperación solo se escribe en los logs del servidor y 
 | `SMTP_FROM` | `Python Learning <tu dirección de Gmail>` |
 
 4. **Save, rebuild and deploy**. Comprueba `https://pld-api.onrender.com/api/health` → `"email": true`.
+5. Para comprobar que el email llega de verdad, pon las mismas variables en `backend/.env` y, desde `backend/`, ejecuta `python -m app.mailer tu-direccion@gmail.com` (también vale en la **Shell** de Render, si tu plan la incluye). Si falla, muestra el error del servidor SMTP (por ejemplo, usuario o contraseña incorrectos).
 
 VERIFY: Gmail limita los envíos diarios de una cuenta personal (del orden de cientos). Para un proyecto de clase sobra; para uso real, mejor la opción B.
 
 ### Opción B: servicio de email transaccional (Brevo, Mailjet…)
 
-Crea una cuenta, verifica el remitente y copia sus datos SMTP (servidor, puerto 587, usuario y clave SMTP) en las mismas variables.
+Crea una cuenta, verifica el remitente y copia sus datos SMTP (servidor, puerto 587 o 465, usuario y clave SMTP) en las mismas variables. El puerto 465 usa TLS directo; cualquier otro, STARTTLS.
 
 ### Después de activarlo (RGPD)
 

@@ -125,6 +125,46 @@ def test_without_smtp_nothing_sensitive_is_logged(caplog):
     assert "secreto" not in caplog.text and "ana@example.com" not in caplog.text
 
 
+class FakeSMTPSSL(FakeSMTP):
+    def __init__(self, host, port, timeout, context):
+        super().__init__(host, port, timeout)
+        self.tls = context
+
+    def starttls(self, context=None):  # pragma: no cover - con SMTPS no se debe llamar
+        raise AssertionError("SMTPS ya va cifrado: no se usa STARTTLS")
+
+
+def test_send_email_on_port_465_uses_smtps(smtp, monkeypatch):
+    monkeypatch.setattr(mailer.smtplib, "SMTP_SSL", FakeSMTPSSL)
+    monkeypatch.setattr(get_settings(), "smtp_port", 465)
+    mailer.send_email("ana@example.com", "Asunto", "Cuerpo")
+    server, _ = smtp.sent[0]
+    assert isinstance(server, FakeSMTPSSL) and server.port == 465
+    assert server.tls.verify_mode == ssl.CERT_REQUIRED and server.tls.check_hostname
+
+
+def test_test_email_command_sends_and_reports(smtp, capsys):
+    assert mailer.main(["ana@example.com"]) == 0
+    assert smtp.sent[0][1]["To"] == "ana@example.com"
+    assert "a***@example.com" in capsys.readouterr().out
+
+
+def test_test_email_command_shows_the_error(smtp, capsys):
+    smtp.fail = True
+    assert mailer.main(["ana@example.com"]) == 1
+    assert "servidor caído" in capsys.readouterr().out
+
+
+def test_test_email_command_without_smtp_or_recipient(capsys, monkeypatch):
+    assert mailer.main(["ana@example.com"]) == 1
+    assert "SMTP_HOST" in capsys.readouterr().out
+    assert mailer.main([]) == 2
+    monkeypatch.setattr("sys.argv", ["mailer.py"])
+    with pytest.raises(SystemExit) as exit_info:  # python -m app.mailer sin argumentos
+        runpy.run_path(mailer.__file__, run_name="__main__")
+    assert exit_info.value.code == 2
+
+
 def test_mark_completed_survives_concurrent_insert(client):
     """Si otra petición inserta la misma fila entre el SELECT y el INSERT, no falla."""
     session = sessionmaker(bind=client.engine, expire_on_commit=False)()

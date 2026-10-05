@@ -38,7 +38,8 @@ class Settings(BaseSettings):
     # /docs y /openapi.json: útiles en desarrollo; en producción no se publica el mapa de la API
     enable_docs: bool = False
 
-    # Recuperación de contraseña. Sin SMTP_HOST, el enlace se escribe en el log (modo desarrollo).
+    # Recuperación de contraseña. Sin SMTP_HOST no se envía el email (ver app/mailer.py).
+    # SMTP_PORT 587: STARTTLS; 465: TLS directo (SMTPS).
     frontend_url: str = "http://localhost:5500"
     password_reset_minutes: int = 30
     smtp_host: str | None = None
