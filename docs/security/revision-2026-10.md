@@ -20,7 +20,7 @@ Esta revisión cubre los cambios del núcleo educativo y repasa las medidas que 
 
 | Riesgo | Por qué sigue | Mitigación actual | Qué haría falta |
 |---|---|---|---|
-| **Token JWT en la memoria de la página** (ADR-0032; antes estaba en `localStorage`) | Un XSS que se ejecute mientras la página está abierta podría usar el token, aunque ya no queda guardado en el navegador. | CSP estricta, todo escapado, token de 30 minutos y «cerrar sesión en todos los dispositivos». Al recargar, la sesión se cierra | Mover la web y la API al mismo dominio, con una cookie `HttpOnly; Secure; SameSite=Strict` y un token de refresco |
+| **Sesión en una cookie de terceros** (ADR-0033; antes, token en memoria y en `localStorage`) | Un XSS ya no puede llevarse el token, pero sí hacer peticiones mientras la página está abierta. En los navegadores que bloquean la cookie, el token vuelve a estar en memoria. | Cookie `HttpOnly; Secure; SameSite=None; Partitioned`, aceptada solo con la cabecera `X-PLD-Session` (CSRF), CORS con lista explícita, CSP estricta y token de 30 minutos | Web y API en el mismo dominio, con `SameSite=Strict`, y un token de refresco |
 | **Rutas antiguas `/api/...` (sin versión)** | La app Android publicada todavía las usa. | Se sirven marcadas como *deprecated* y fuera de OpenAPI | Pasar la app a `/api/v1` y retirarlas |
 | **`style-src 'unsafe-inline'`** | Las barras de progreso usan `style="--value: …"`. | Solo afecta a estilos. Los scripts no admiten código en línea | Pasar a clases o a `attr()` cuando los navegadores lo soporten |
 | **CSP en `<meta>`** (GitHub Pages no permite cabeceras) | No se puede usar `frame-ancestors`. | Defensa contra marcos en JavaScript (`theme-init.js`) | Servir la web con cabeceras propias |

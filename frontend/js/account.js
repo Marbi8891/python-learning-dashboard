@@ -1,6 +1,6 @@
 /* Diálogo de cuenta: login, registro, recuperación, perfil, exportación y borrado. */
 
-import { apiEnabled, request, serverInfo } from "./api.js";
+import { ApiError, apiEnabled, request, serverInfo } from "./api.js";
 import { escapeHtml } from "./markdown.js";
 import { flushCourseSync } from "./course-store.js";
 import { flushPcapSync } from "./pcap-sync.js";
@@ -54,7 +54,9 @@ async function submitting(form, action) {
 
 /** Cierra la sesión y borra de este navegador los datos personales (equipos compartidos).
     Se recarga la página para que tampoco quede nada en memoria; el aviso se muestra al volver. */
-function leave(message) {
+async function leave(message) {
+  // La cookie de sesión es HttpOnly: solo la API puede borrarla
+  await request("POST", "/api/auth/logout", { auth: false }).catch(() => {});
   endSession();
   clearLocalData();
   try {
@@ -89,12 +91,18 @@ async function setupPasswordRecovery() {
     : "La recuperación por email aún no está activa.";
 }
 
+/** La API deja la sesión en una cookie HttpOnly (ADR-0033). Si el navegador no la guarda
+    (bloquea las cookies de terceros, como Safari), se pide el token y vive solo en memoria. */
 async function login(email, password) {
-  const { access_token: token } = await request("POST", "/api/auth/login", {
-    form: { username: email, password },
-    auth: false,
-  });
-  await startSession(token);
+  const form = { username: email, password };
+  await request("POST", "/api/auth/login", { form, auth: false });
+  try {
+    await startSession();
+  } catch (error) {
+    if (!(error instanceof ApiError && error.status === 401)) throw error;
+    const { access_token: token } = await request("POST", "/api/auth/login", { form, auth: false, cookie: false });
+    await startSession(token);
+  }
 }
 
 function downloadJson(data, filename) {
@@ -209,14 +217,14 @@ export function initAccount({ toast }) {
     const everywhere = $("#logout-everywhere").checked;
     await Promise.allSettled([flushPcapSync(), flushCourseSync(), flushLearnSync()]); // nada se queda sin subir
     if (everywhere) await request("POST", "/api/auth/logout-all").catch(() => {});
-    leave(everywhere ? "Sesión cerrada en todos tus dispositivos." : "Sesión cerrada.");
+    await leave(everywhere ? "Sesión cerrada en todos tus dispositivos." : "Sesión cerrada.");
   });
 
   $("#delete-form").addEventListener("submit", (event) => {
     event.preventDefault();
     submitting(event.target, async (data) => {
       await request("POST", "/api/users/me/delete", { json: { password: data.get("password") } });
-      leave("Tu cuenta y todos sus datos se han borrado.");
+      await leave("Tu cuenta y todos sus datos se han borrado.");
     });
   });
 }

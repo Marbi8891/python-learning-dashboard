@@ -126,7 +126,8 @@ class PasswordConfirm(BaseModel):
 
 
 class Token(BaseModel):
-    access_token: str
+    # Sin token cuando va en la cookie HttpOnly (token_type "cookie", ADR-0033)
+    access_token: str | None = None
     token_type: str = "bearer"
 
 

@@ -17,7 +17,6 @@ from app.password_policy import weakness
 from app.rate_limit import TOO_MANY, limit_auth_attempts, login_failures, reset_requests
 from app.schemas import PasswordResetConfirm, PasswordResetRequest, Token, UserCreate, UserOut
 from app.security import (
-    create_access_token,
     hash_password,
     hash_reset_token,
     needs_rehash,
@@ -25,6 +24,7 @@ from app.security import (
     verify_password,
 )
 from app.security_events import Event, pseudonym, record
+from app.session_cookie import clear_session_cookie, issue_session
 
 router = APIRouter(prefix="", tags=["usuarios"])
 
@@ -57,9 +57,15 @@ def register(data: UserCreate, db: DbSession) -> User:
 
 @router.post("/auth/login", response_model=Token, dependencies=[Depends(limit_auth_attempts)])
 def login(
-    form: Annotated[OAuth2PasswordRequestForm, Depends()], request: Request, db: DbSession
+    form: Annotated[OAuth2PasswordRequestForm, Depends()],
+    request: Request,
+    response: Response,
+    db: DbSession,
 ) -> Token:
     """Login con formulario OAuth2: el campo `username` es el email.
+
+    Con la cabecera `X-PLD-Session: cookie` (la web), el token va en una cookie HttpOnly y no en
+    la respuesta (ADR-0033).
 
     Además del límite por IP, una cuenta con demasiados fallos seguidos se bloquea un rato,
     aunque los intentos lleguen de muchas IPs distintas (ADR-0022)."""
@@ -86,7 +92,15 @@ def login(
     activity.log(db, user.id, "login", request)
     db.commit()
     record(Event.LOGIN_OK, request, user=user.id)
-    return Token(access_token=create_access_token(user.id, user.token_version))
+    return issue_session(request, response, user.id, user.token_version)
+
+
+@router.post("/auth/logout", status_code=status.HTTP_204_NO_CONTENT)
+def logout() -> Response:
+    """Cierra la sesión de este navegador: borra la cookie, que JavaScript no puede tocar."""
+    response = Response(status_code=status.HTTP_204_NO_CONTENT)
+    clear_session_cookie(response)
+    return response
 
 
 @router.post("/auth/logout-all", status_code=status.HTTP_204_NO_CONTENT)
@@ -96,7 +110,9 @@ def logout_everywhere(user: CurrentUser, request: Request, db: DbSession) -> Res
     activity.log(db, user.id, "logout_all", request)
     db.commit()
     record(Event.LOGOUT_ALL, request, user=user.id)
-    return Response(status_code=status.HTTP_204_NO_CONTENT)
+    response = Response(status_code=status.HTTP_204_NO_CONTENT)
+    clear_session_cookie(response)
+    return response
 
 
 RESET_ACCEPTED = {

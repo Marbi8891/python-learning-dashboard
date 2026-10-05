@@ -18,6 +18,7 @@ from app.local_site import mount_frontend
 from app.routers import account, attempts, auth, course_state, lessons, pcap, progress
 from app.security import get_jwt_secret
 from app.security_events import Event, record
+from app.session_cookie import MODE_HEADER
 
 logging.basicConfig(level=logging.INFO)
 
@@ -43,7 +44,9 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=get_settings().cors_origins,
     allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE"],
-    allow_headers=["Authorization", "Content-Type"],
+    allow_headers=["Authorization", "Content-Type", MODE_HEADER],
+    # La web envía la cookie de sesión HttpOnly a la API, que está en otro dominio (ADR-0033)
+    allow_credentials=True,
 )
 
 # Cabeceras de seguridad solo en la API: la web local (serve_frontend) sirve HTML y Pyodide,

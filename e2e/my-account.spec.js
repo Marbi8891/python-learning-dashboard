@@ -6,14 +6,6 @@ const { test, expect, uniqueEmail } = require("./fixtures");
 const API = "http://127.0.0.1:8000";
 const PASSWORD = "contraseña-e2e-123";
 
-async function logIn(page, email) {
-  await page.locator("#account-button").click();
-  await page.locator("#login-form").getByLabel("Email").fill(email);
-  await page.locator("#login-form").getByLabel("Contraseña").fill(PASSWORD);
-  await page.locator("#login-form").getByRole("button", { name: "Entrar" }).click();
-  await expect(page.locator("#account-label")).toHaveText("Ana");
-}
-
 async function signIn(page, request) {
   const email = uniqueEmail();
   await request.post(`${API}/api/auth/register`, { data: { email, password: PASSWORD, display_name: "Ana", accept_privacy: true } });
@@ -40,9 +32,9 @@ test("plan de estudio: fecha de examen por curso y meta diaria que se guardan", 
 
   await page.getByLabel("Meta diaria").selectOption("30");
   await expect(page.locator("#toast")).toContainText("Meta diaria: 30 preguntas");
-  // Recargar cierra la sesión (token solo en memoria): se vuelve a entrar y se comprueba lo guardado en la cuenta
+  // La sesión sigue tras recargar (cookie HttpOnly, ADR-0033): lo que se ve sale de la cuenta
   await page.reload();
-  await logIn(page, email);
+  await expect(page.locator("#account-label")).toHaveText("Ana");
   await page.goto("/#/cuenta");
   await expect(page.getByLabel("Fecha del examen de Programación")).toHaveValue(day);
   await expect(page.getByLabel("Meta diaria")).toHaveValue("30");

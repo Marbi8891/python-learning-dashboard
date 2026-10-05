@@ -64,7 +64,7 @@
 | ✓id T1110.003 Password Spraying | La misma contraseña común contra muchas cuentas | M1027: **se rechazan las contraseñas comunes** y las que contienen el email o el nombre. | Muchos `auth.login_failed` con `account` distinto y la misma `ip` | ✔ |
 | ✓id T1110.004 Credential Stuffing | Pares email/contraseña filtrados de otras webs | M1027 y M1036: la lista de comunes, el bloqueo por cuenta y el límite por IP.<br>M1032 MFA: no. | `auth.login_failed` con `known=true` | ◐ |
 | ✓id T1606.001 Web Cookies (Forge Web Credentials) | Fabricar un JWT | M1054:<br>• HS256 con un secreto de 32 o más caracteres;<br>• se exigen `exp` y `sub`;<br>• algoritmo fijo (no se acepta `none`). | **`auth.token_forged`** (firma o algoritmo ajenos) | ✔ |
-| ✓id T1539 Steal Web Session Cookie | Robar el token de un navegador | M1021 y M1054:<br>• CSP y escapado (para que no haya XSS);<br>• el token no se envía en la URL;<br>• cerrar sesión borra los datos locales;<br>• `logout-all`. | `auth.token_revoked_used` | ◐ (el token está en `localStorage`: ver ADR) |
+| ✓id T1539 Steal Web Session Cookie | Robar el token de un navegador | M1021 y M1054:<br>• cookie `HttpOnly` que JavaScript no puede leer, aceptada solo con la cabecera `X-PLD-Session`;<br>• CSP y escapado (para que no haya XSS);<br>• el token no se envía en la URL;<br>• cerrar sesión borra los datos locales;<br>• `logout-all`. | `auth.token_revoked_used` | ✔ (cookie `HttpOnly`, ADR-0033) |
 | T1528 Steal Application Access Token | Llevarse el token de recuperación por Referer o analítica | M1041: la política de *referrer* no envía la ruta a otros sitios (`strict-origin-when-cross-origin`), la analítica quita la `?` y el token solo existe hasheado en la base de datos. | — | ✔ |
 | T1552.001 Credentials In Files | Secretos en el repositorio o en la imagen | `.gitignore` y `.dockerignore`; la clave de firma se borra con `trap` en la CI. | secret scanning (NEEDS_HUMAN) | ◐ |
 | T1557 Adversary-in-the-Middle | Interceptar el tráfico | M1041: HTTPS (Pages y Render), `sslmode=require` hacia Neon y STARTTLS con verificación del certificado. | — | ✔ |
@@ -97,7 +97,7 @@
 2. **Alertas:** los eventos ya están en los logs de Render, pero nadie los mira. Opción barata: un *log stream* de Render hacia un servicio con alertas por texto, por ejemplo cuando aparece `auth.token_forged`.
 3. **MFA (M1032):** TOTP opcional. Se aplaza porque es un proyecto de estudio y el coste en complejidad es alto.
 4. **Fijar las Actions por SHA** (T1195.002). Dependabot sabe actualizarlas.
-5. **Token en una cookie `HttpOnly` y `SameSite=Strict`** en vez de `localStorage` (T1539). Requiere un dominio propio compartido con la API: ver ADR-0023.
+5. **`SameSite=Strict`** para la cookie de sesión (T1539). Ya es `HttpOnly` (ADR-0033); `Strict` requiere un dominio propio compartido con la API.
 6. **VERIFY:** la retención de las copias de Neon y de los logs de Render en el plan gratuito.
 
 ## Cómo buscar ataques en los logs de Render

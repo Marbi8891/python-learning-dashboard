@@ -14,7 +14,7 @@ Interactive OpenAPI documentation is available at /docs when ENABLE_DOCS=true.
 
 | Resource | Endpoints |
 | --- | --- |
-| Authentication | /api/v1/auth/register, /api/v1/auth/login, /api/v1/auth/logout-all |
+| Authentication | /api/v1/auth/register, /api/v1/auth/login, /api/v1/auth/logout, /api/v1/auth/logout-all |
 | Account | /api/v1/users/me, /api/v1/users/me/activity, /api/v1/users/me/export |
 | Course content | /api/v1/modules, /api/v1/lessons/{slug} |
 | Progress | /api/v1/progress, /api/v1/progress/{slug} |
@@ -24,11 +24,17 @@ Interactive OpenAPI documentation is available at /docs when ENABLE_DOCS=true.
 
 ## Authentication
 
-Authenticated endpoints use a Bearer access token:
+Authenticated endpoints accept a Bearer access token:
 
     Authorization: Bearer <access_token>
 
-The browser client keeps the access token in memory rather than localStorage/sessionStorage.
+The web client uses an HttpOnly session cookie instead (ADR-0033). It sends this header on every request:
+
+    X-PLD-Session: cookie
+
+With that header, `POST /auth/login` and `POST /users/me/password` put the token in the `__Host-pld_session` cookie (`HttpOnly; Secure; SameSite=None; Partitioned`) and return `{"access_token": null, "token_type": "cookie"}`. The cookie is only accepted when the header is present (CSRF protection). `POST /auth/logout` and `POST /auth/logout-all` clear it.
+
+Clients that don't send the header, such as the Android app, keep getting the token in the response body. If both a Bearer header and the cookie arrive, the Bearer header wins.
 
 ## Versioning and compatibility
 

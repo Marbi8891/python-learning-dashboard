@@ -379,7 +379,8 @@ export function initPrivate({ toast, refresh }) {
         const token = await request("POST", "/api/users/me/password", {
           json: { current_password: data.get("current_password"), new_password: data.get("new_password") },
         });
-        setToken(token.access_token); // esta sesión sigue; las demás se han cerrado
+        // Esta sesión sigue (con la cookie renovada o, sin cookie, el token nuevo); las demás se han cerrado
+        setToken(token.access_token);
         form.reset();
         toast("Contraseña cambiada. Se han cerrado las sesiones de tus otros dispositivos.");
         refresh();

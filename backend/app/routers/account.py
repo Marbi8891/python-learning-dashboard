@@ -29,8 +29,9 @@ from app.schemas import (
     UserExport,
     UserOut,
 )
-from app.security import create_access_token, hash_password, verify_password
+from app.security import hash_password, verify_password
 from app.security_events import Event, record
+from app.session_cookie import issue_session
 
 router = APIRouter(prefix="/users/me", tags=["cuenta"])
 
@@ -55,7 +56,7 @@ def update_me(data: ProfileUpdate, user: CurrentUser, request: Request, db: DbSe
 
 @router.post("/password", response_model=Token, dependencies=[Depends(limit_auth_attempts)])
 def change_password(
-    data: PasswordChange, user: CurrentUser, request: Request, db: DbSession
+    data: PasswordChange, user: CurrentUser, request: Request, response: Response, db: DbSession
 ) -> Token:
     """Cambiar la contraseña sabiendo la actual. Cierra las demás sesiones y devuelve un token
     nuevo para seguir en esta (ADR-0025)."""
@@ -72,7 +73,7 @@ def change_password(
     activity.log(db, user.id, "password_changed", request)
     db.commit()
     record(Event.PASSWORD_CHANGED, request, user=user.id)
-    return Token(access_token=create_access_token(user.id, user.token_version))
+    return issue_session(request, response, user.id, user.token_version)
 
 
 @router.get("/activity", response_model=list[ActivityOut])

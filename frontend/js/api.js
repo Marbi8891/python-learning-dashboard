@@ -7,8 +7,9 @@ export const API_URL = (config.apiUrl || (isLocalhost ? "http://127.0.0.1:8000" 
 export const apiEnabled = Boolean(API_URL);
 export const API_V1_PREFIX = "/api/v1";
 
-// Security by default: el token de acceso solo vive en memoria JavaScript.
-// No se persiste en localStorage/sessionStorage, porque cualquier XSS podría leerlo.
+// Sesión (ADR-0033): el token va en una cookie HttpOnly que pone la API y que JavaScript no puede
+// leer. Solo si el navegador bloquea esa cookie se guarda aquí, en memoria (nunca en
+// localStorage/sessionStorage, porque cualquier XSS podría leerlo).
 let accessToken = null;
 
 /** Despierta el servidor (el plan gratuito se duerme sin uso) y lee sus capacidades.
@@ -52,8 +53,9 @@ function formatDetail(detail, status) {
   return typeof detail === "string" ? detail : `Error ${status}`;
 }
 
-/** Llama a la API. Lanza ApiError con un mensaje listo para mostrar. */
-export async function request(method, path, { json, form, auth = true } = {}) {
+/** Llama a la API. Lanza ApiError con un mensaje listo para mostrar.
+    `cookie: false` pide el token en la respuesta en vez de en la cookie (ver account.js). */
+export async function request(method, path, { json, form, auth = true, cookie = true } = {}) {
   if (!apiEnabled) throw new ApiError(0, "No hay servidor configurado");
   const headers = {};
   let body;
@@ -65,6 +67,8 @@ export async function request(method, path, { json, form, auth = true } = {}) {
   }
   const token = getToken();
   if (auth && token) headers.Authorization = `Bearer ${token}`;
+  // Sin esta cabecera la API no acepta la cookie (protección CSRF) ni la pone al iniciar sesión
+  else if (cookie) headers["X-PLD-Session"] = "cookie";
 
   const apiPath =
     path === "/api" || path === "/api/"
@@ -77,12 +81,12 @@ export async function request(method, path, { json, form, auth = true } = {}) {
 
   let response;
   try {
-    response = await fetch(`${API_URL}${apiPath}`, { method, headers, body });
+    response = await fetch(`${API_URL}${apiPath}`, { method, headers, body, credentials: "include" });
   } catch {
     throw new ApiError(0, "No se pudo conectar con el servidor. Inténtalo de nuevo en unos segundos.");
   }
 
-  if (response.status === 401 && auth && token) {
+  if (response.status === 401 && auth) {
     setToken(null);
     window.dispatchEvent(new CustomEvent("pld:session-expired"));
   }

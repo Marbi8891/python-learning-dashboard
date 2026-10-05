@@ -24,7 +24,7 @@ Solo la última versión de `main`, que es la que está desplegada:
 - El login tarda lo mismo aunque el email no exista y da un mensaje genérico.
 
 **Sesiones**
-- El token JWT caduca a los 30 minutos y la web solo lo guarda en memoria, nunca en `localStorage` (ADR-0032).
+- El token JWT caduca a los 30 minutos. En la web va en una cookie `HttpOnly; Secure; SameSite=None; Partitioned` que JavaScript no puede leer, y la API solo la acepta junto con la cabecera `X-PLD-Session` (protección CSRF). Si el navegador bloquea la cookie, el token se guarda solo en memoria, nunca en `localStorage` (ADR-0033).
 - Se puede cerrar la sesión en todos los dispositivos (`/api/auth/logout-all`).
 - Cambiar la contraseña invalida todos los tokens emitidos.
 
