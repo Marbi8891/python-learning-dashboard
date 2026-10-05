@@ -176,3 +176,79 @@
   font-size: 13px;
   white-space: pre-wrap;
 }
+
+/* Editor con números de línea (portado de #28) */
+.console__editor-shell {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-code-bg);
+}
+
+.console__line-numbers {
+  overflow: hidden;
+  margin: 0;
+  padding: var(--space-3) 10px var(--space-3) 0;
+  border-right: 1px solid var(--color-border);
+  /* El fondo del código es oscuro en ambos temas: color fijo, ≥ 6,4:1 (WCAG AA) */
+  color: #8b98aa;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1.6;
+  text-align: right;
+  user-select: none;
+  white-space: pre;
+}
+
+.console__editor-shell .console__editor {
+  min-width: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.console__editor-shell:focus-within {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-soft);
+}
+
+.console__editor-shell .console__editor:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+@media (max-width: 600px) {
+  .console__editor-shell {
+    grid-template-columns: 38px minmax(0, 1fr);
+  }
+
+  .console__line-numbers {
+    padding-right: 8px;
+    font-size: 13px;
+  }
+
+  .console__editor-shell .console__editor {
+    font-size: 13px;
+  }
+}
+
+/* Ejercicio superado: XP ganada y paso al quiz */
+.check__next {
+  display: grid;
+  gap: 6px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid currentColor;
+}
+
+.check__next span {
+  color: var(--color-text-muted);
+  font-size: 13px;
+}
+
+.check__next .btn {
+  justify-self: start;
+  margin-top: 6px;
+}
