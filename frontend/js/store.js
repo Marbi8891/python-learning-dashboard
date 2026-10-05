@@ -1,8 +1,11 @@
 /* Estado compartido: progreso (local + cuenta) y sesión del usuario. */
 
-import { ApiError, apiEnabled, getToken, request, setToken } from "./api.js";
+import { ApiError, apiEnabled, request, setToken } from "./api.js";
 
 const PROGRESS_KEY = "pld:completed";
+// Solo un aviso de que hay una cookie de sesión (el token no se puede leer desde aquí): así, al
+// cargar la página, no se pregunta a la API si no hubo sesión.
+const SESSION_KEY = "pld:session";
 const listeners = new Set();
 
 function readLocal() {
@@ -70,18 +73,37 @@ async function syncProgress() {
   emit({ type: "progress" });
 }
 
-export async function startSession(token) {
+function rememberSession(active) {
+  try {
+    if (active) localStorage.setItem(SESSION_KEY, "cookie");
+    else localStorage.removeItem(SESSION_KEY);
+  } catch {
+    // sin almacenamiento: la sesión dura hasta recargar
+  }
+}
+
+function hadSession() {
+  try {
+    return localStorage.getItem(SESSION_KEY) === "cookie";
+  } catch {
+    return false;
+  }
+}
+
+/** Sin token: la sesión va en la cookie HttpOnly. Con token: solo en memoria (ADR-0033). */
+export async function startSession(token = null) {
   setToken(token);
   state.user = await request("GET", "/api/users/me");
+  rememberSession(!token);
   emit({ type: "user" });
   await syncProgress();
 }
 
-/** Al cargar la página: recupera la sesión guardada, si sigue siendo válida. */
+/** Al cargar la página: recupera la sesión de la cookie, si sigue siendo válida. */
 export async function restoreSession() {
-  if (!apiEnabled || !getToken()) return;
+  if (!apiEnabled || !hadSession()) return;
   try {
-    await startSession(getToken());
+    await startSession();
   } catch (error) {
     if (error instanceof ApiError && error.status === 401) endSession();
     else console.warn("Servidor no disponible; se sigue en modo local:", error.message);
@@ -108,11 +130,13 @@ export function updateUser(user) {
 
 export function endSession() {
   setToken(null);
+  rememberSession(false);
   state.user = null;
   emit({ type: "user" });
 }
 
 window.addEventListener("pld:session-expired", () => {
+  rememberSession(false);
   if (!state.user) return;
   state.user = null;
   emit({ type: "user", expired: true });

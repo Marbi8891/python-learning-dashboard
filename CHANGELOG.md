@@ -4,6 +4,9 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
 
 ## [Unreleased]
 
+### Seguridad
+- **Sesión de la web en una cookie `HttpOnly`** (ADR-0033): JavaScript ya no puede leer el token y la sesión sigue al recargar la página. Protección CSRF con la cabecera `X-PLD-Session`. Si el navegador bloquea la cookie, se entra igual con el token solo en memoria. La app Android no cambia. Nuevo `POST /api/v1/auth/logout`.
+
 ### Añadido
 - **Núcleo educativo por conceptos** (ADR-0031): la plataforma se centra en aprender Python y aprobar Programación de DAW. El PCAP pasa a «Más».
   - **Menú:** Aprender · Teoría · Practicar · DAW · Progreso.

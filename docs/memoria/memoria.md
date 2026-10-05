@@ -83,7 +83,7 @@ El proyecto integra competencias de varios módulos de DAW: programación (Pytho
 | Id | Requisito | Cómo se verifica |
 |---|---|---|
 | RNF-01 | Accesibilidad WCAG 2.1 AA, teclado y menú móvil | Auditoría automática en Playwright, en los dos temas |
-| RNF-02 | Privacidad: sin cookies, datos mínimos, RGPD | Política de privacidad, exportación y borrado |
+| RNF-02 | Privacidad: solo una cookie técnica de sesión, datos mínimos, RGPD | Política de privacidad, exportación y borrado |
 | RNF-03 | Seguridad: Argon2, JWT, límite de intentos, cierre de sesiones al cambiar la contraseña | Pruebas de backend |
 | RNF-04 | Fiabilidad: 100 % de cobertura en backend, migraciones probadas en PostgreSQL 16 | CI |
 | RNF-05 | Rendimiento: sin framework, fuentes y resaltado alojados en local, service worker | Medición (ver 6.5) |
@@ -235,7 +235,7 @@ La app Android se distribuye como APK firmado desde GitHub Actions (ADR-0013). L
 
 - **RGPD:** política de privacidad con responsable, finalidades, bases legales, encargados, plazos y derechos. Acceso y portabilidad con la descarga en JSON, y supresión con el borrado de cuenta en cascada.
 - **LSSI:** aviso legal con la identificación del titular.
-- **Cookies:** no se usan. `localStorage` se emplea solo para funciones que pide el usuario y es estrictamente necesario, por lo que no requiere banner.
+- **Cookies:** solo una, técnica, con la sesión de quien inicia sesión (`HttpOnly`, ADR-0033). Es estrictamente necesaria (art. 22.2 LSSI), igual que el uso de `localStorage` para funciones que pide el usuario, por lo que no requiere banner.
 - **Analítica:** opcional y desactivada por defecto. Si se activa, se usa GoatCounter, que no emplea cookies, y la política de privacidad lo indica.
 - **Terceros:** Pyodide se sirve desde jsDelivr la primera vez que se usa la consola, lo que implica que reciben la IP del visitante. Está declarado en la política.
 - **Licencias:** código bajo MIT; fuentes Inter, JetBrains Mono y Fraunces (OFL). PCAP es una marca de Python Institute y el proyecto no está afiliado; el certificado que genera es no oficial.

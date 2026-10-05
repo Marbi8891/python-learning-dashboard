@@ -1,4 +1,5 @@
 // Cuenta de usuario contra el backend REAL (lo arranca playwright.config.js).
+const { request: playwrightRequest } = require("@playwright/test");
 const { test, expect, uniqueEmail, openLesson } = require("./fixtures");
 
 const PASSWORD = "contraseña-e2e-123";
@@ -16,8 +17,8 @@ async function register(page, email, name = "Ana") {
   await expect(page.locator("#account-label")).toHaveText(name);
 }
 
-/** Consulta la API como el usuario. El token de la web solo vive en memoria (no se puede leer
-    del navegador), así que el test inicia sesión por su cuenta. */
+/** Consulta la API como el usuario. El token de la web va en una cookie HttpOnly (no se puede
+    leer desde la página), así que el test inicia sesión por su cuenta. */
 async function apiAs(page, path, email) {
   const login = await page.request.post("http://127.0.0.1:8000/api/v1/auth/login", { form: { username: email, password: PASSWORD } });
   const { access_token: token } = await login.json();
@@ -66,18 +67,53 @@ test("errores de validación y credenciales en español", async ({ page }) => {
   await expect(page.locator("#account-message")).toHaveText("Email o contraseña incorrectos");
 });
 
-test("al recargar no queda ningún token en el navegador, pero el progreso local sí", async ({ page }) => {
-  // El token de acceso solo vive en memoria (security/hardening-defaults): recargar cierra la sesión
+test("la sesión va en una cookie HttpOnly: sigue al recargar y JavaScript no ve el token", async ({ page }) => {
+  // ADR-0033: ni en el almacenamiento ni en document.cookie; solo la API puede leerla y borrarla
   await openLesson(page, "variables");
   await register(page, uniqueEmail(), "Luis");
   await page.getByRole("tab", { name: "Práctica y Ejercicio" }).click();
   await page.getByRole("button", { name: "Marcar como completada" }).click();
+  const sessionCookie = async () => (await page.context().cookies()).find((c) => c.name === "__Host-pld_session");
+  // Particionada (CHIPS): solo vale cuando la API se usa desde esta web
+  expect(await sessionCookie()).toMatchObject({ httpOnly: true, secure: true, sameSite: "None", partitionKey: "http://localhost" });
   await page.reload();
-  await expect(page.locator("#account-label")).toHaveText("Iniciar sesión");
-  const stored = await page.evaluate(() => JSON.stringify({ ...localStorage }) + JSON.stringify({ ...sessionStorage }));
-  expect(stored).not.toMatch(/eyJ[\w-]+\.[\w-]+\./); // ningún JWT guardado
+  await expect(page.locator("#account-label")).toHaveText("Luis");
+  const visible = await page.evaluate(
+    () => JSON.stringify({ ...localStorage }) + JSON.stringify({ ...sessionStorage }) + document.cookie,
+  );
+  expect(visible).not.toMatch(/eyJ[\w-]+\.[\w-]+\./); // ningún JWT al alcance de un script
   await page.locator(".lesson[data-slug=tipos]").click();
   await expect(page.locator(".lesson[data-slug=variables]")).toHaveAttribute("data-status", "completed");
+
+  await page.locator("#account-button").click();
+  await dialog(page).getByRole("button", { name: "Cerrar sesión" }).click();
+  await expect(page.locator("#toast")).toContainText("Sesión cerrada");
+  expect(await sessionCookie()).toBeUndefined(); // la API la borró
+  await page.reload();
+  await expect(page.locator("#account-label")).toHaveText("Iniciar sesión");
+});
+
+test("si el navegador bloquea la cookie, se entra igual con el token solo en memoria", async ({ page }) => {
+  // Como Safari con las cookies de terceros: la respuesta del login llega sin Set-Cookie
+  // La petición sale desde un contexto aparte: route.fetch() guardaría la cookie en el del navegador
+  const outside = await playwrightRequest.newContext();
+  await page.route("http://127.0.0.1:8000/api/v1/auth/login", async (route) => {
+    const response = await outside.fetch(route.request());
+    const headers = { ...response.headers() };
+    delete headers["set-cookie"];
+    await route.fulfill({ response, headers });
+  });
+  await openLesson(page, "variables");
+  const email = uniqueEmail();
+  await register(page, email, "Eva");
+  expect(await page.context().cookies()).toEqual([]);
+  // La sesión funciona (se sincroniza el progreso) y, como antes, recargar la cierra
+  await page.getByRole("tab", { name: "Práctica y Ejercicio" }).click();
+  await page.getByRole("button", { name: "Marcar como completada" }).click();
+  await expect.poll(async () => (await apiAs(page, "/api/v1/progress", email)).length).toBe(1);
+  await page.reload();
+  await page.locator(".lesson[data-slug]").first().waitFor({ state: "attached" });
+  await expect(page.locator("#account-label")).toHaveText("Iniciar sesión");
 });
 
 test("exportar datos y eliminar la cuenta (RGPD)", async ({ page }) => {
