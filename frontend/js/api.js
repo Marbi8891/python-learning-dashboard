@@ -54,10 +54,11 @@ function formatDetail(detail, status) {
 }
 
 /** Llama a la API. Lanza ApiError con un mensaje listo para mostrar.
-    `cookie: false` pide el token en la respuesta en vez de en la cookie (ver account.js). */
-export async function request(method, path, { json, form, auth = true, cookie = true } = {}) {
+    `cookie: false` pide el token en la respuesta en vez de en la cookie (ver account.js).
+    `headers` añade cabeceras propias (por ejemplo, A2A-Version para el tutor, ver tutor.js). */
+export async function request(method, path, { json, form, auth = true, cookie = true, headers: extra = {} } = {}) {
   if (!apiEnabled) throw new ApiError(0, "No hay servidor configurado");
-  const headers = {};
+  const headers = { ...extra };
   let body;
   if (json !== undefined) {
     headers["Content-Type"] = "application/json";
