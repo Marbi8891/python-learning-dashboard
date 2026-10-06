@@ -156,9 +156,9 @@ Todo con el `RateLimiter` en memoria que ya usa la API (sin Redis ni más infrae
 | Entrada: pregunta / código / error | 4000 / 20 000 / 4000 caracteres | — |
 
 Los mensajes no válidos no gastan consultas. **Limitaciones:** los contadores se pierden al
-reiniciar y no se comparten entre instancias (hoy hay una). No hay un presupuesto en euros: para
-eso, fija un **límite de gasto mensual en la consola de Anthropic** (Workspace limits), que es el
-tope definitivo. Cada llamada deja en el log sus tokens de entrada y salida (`a2a.model`) para
+reiniciar y no se comparten entre instancias (hoy hay una). La aplicación no lleva un presupuesto
+en euros: **en producción es obligatorio configurar un límite de gasto adecuado en la Anthropic
+Console** (límites del workspace o de la organización), que es el tope definitivo. Cada llamada deja en el log sus tokens de entrada y salida (`a2a.model`) para
 vigilar el consumo.
 
 ## Agent Card
@@ -293,6 +293,30 @@ contra una API de Anthropic simulada (`httpx2.MockTransport`): inicialización, 
 modelo simulado, errores 4xx/5xx/429, red caída, timeout, respuestas rechazadas, vacías o
 malformadas, que la clave y el contenido nunca llegan a los logs, el contexto minimizado, el
 aislamiento entre usuarios y los límites de coste.
+
+### Validación manual con Anthropic (gasta dinero real)
+
+Fuera de CI, [`scripts/a2a/validate_anthropic.py`](../scripts/a2a/validate_anthropic.py) prueba la
+ruta real: arranca un uvicorn temporal con `A2A_MODEL_PROVIDER=anthropic`, crea un alumno de
+prueba, hace 5 consultas (concepto, error, depuración, ejercicio y solución; la primera con el
+cliente oficial de A2A) y revisa el log del servidor buscando la clave, el JWT, la contraseña, el
+email, el nombre, la pregunta y el código. Al final muestra las llamadas y los tokens consumidos.
+
+```bash
+read -rs ANTHROPIC_API_KEY && export ANTHROPIC_API_KEY   # no queda en el historial
+python scripts/a2a/validate_anthropic.py claude-opus-5-5
+unset ANTHROPIC_API_KEY
+```
+
+La clave solo se lee del entorno: nunca como argumento, en un archivo ni en el repositorio.
+
+## Privacidad
+
+La [política de privacidad](../frontend/privacidad.html) explica la finalidad, los datos que se
+envían, el proveedor (Anthropic), la minimización, que el código no se ejecuta y que no hay que
+escribir secretos ni datos personales. **REVISIÓN LEGAL PENDIENTE:** el texto no lo ha revisado un
+profesional; antes de activar el tutor en producción conviene confirmar la base legal, las
+transferencias internacionales y el acuerdo de tratamiento de datos con Anthropic.
 
 ## Conectar un cliente A2A
 
