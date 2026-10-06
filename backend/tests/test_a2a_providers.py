@@ -136,7 +136,10 @@ def test_mock_provider_keeps_working():
 
 def test_agent_card_never_has_the_key_or_the_mock_notice_in_production():
     app = FastAPI()
-    mount_a2a(app, Settings(a2a_mock_model=False, anthropic_api_key=FAKE_KEY))
+    mount_a2a(
+        app,
+        Settings(a2a_mock_model=False, a2a_model_provider="anthropic", anthropic_api_key=FAKE_KEY),
+    )
     card = TestClient(app).get("/.well-known/agent-card.json")
     assert card.status_code == 200
     assert FAKE_KEY not in card.text
@@ -373,7 +376,7 @@ def test_provider_errors_fail_the_task_with_a_generic_message(client, auth_heade
     monkeypatch.setattr(MockModelProvider, "generate", generate_with_anthropic)
     response = rpc(client, auth_headers, "SendMessage", message())
     assert state(response.json()) == "TASK_STATE_FAILED"
-    assert "no ha podido responder" in response.text
+    assert MockModelProvider.unavailable_message in response.text  # clave inválida: no disponible
     assert FAKE_KEY not in response.text and "401" not in response.text
 
 

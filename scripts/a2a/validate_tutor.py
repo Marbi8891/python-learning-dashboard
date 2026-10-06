@@ -1,21 +1,26 @@
-"""Validación manual del Python Tutor con Anthropic de verdad (ver docs/a2a.md).
+"""Validación manual del Python Tutor con un modelo de verdad (ver docs/a2a.md).
 
 Recorre la ruta real de la aplicación: HTTP → FastAPI → A2A (SDK oficial) → Python Tutor →
-AgentModelProvider → AnthropicProvider → API de Anthropic, y vuelta. Arranca un uvicorn temporal
-con una base de datos SQLite desechable, crea un alumno de prueba y hace 5 consultas (la primera
-con el cliente oficial de A2A). Después revisa el log del servidor buscando secretos o contenido.
+AgentModelProvider → OllamaProvider (u otro) → modelo, y vuelta. Arranca un uvicorn temporal con
+una base de datos SQLite desechable, crea un alumno de prueba y hace 5 consultas (concepto, error,
+depuración, ejercicio y solución; la primera con el cliente oficial de A2A). Después revisa el log
+del servidor buscando secretos o contenido y muestra los tokens usados. No es un test de CI.
 
-GASTA DINERO REAL (5 llamadas, con los límites de A2A_MAX_OUTPUT_TOKENS). No es un test de CI.
+Con Ollama (gratis, local; por defecto):
 
-La clave se lee SOLO de la variable de entorno ANTHROPIC_API_KEY; no se pasa como argumento ni
-se imprime. Por ejemplo, para que no quede en el historial de la terminal:
+    ollama pull qwen2.5-coder:7b
+    python scripts/a2a/validate_tutor.py
+    python scripts/a2a/validate_tutor.py --model qwen2.5-coder:14b
+
+Con Anthropic (DE PAGO: solo si se elige expresamente). La clave se lee SOLO de la variable de
+entorno ANTHROPIC_API_KEY, nunca como argumento:
 
     read -rs ANTHROPIC_API_KEY && export ANTHROPIC_API_KEY
-    python scripts/a2a/validate_anthropic.py            # modelo por defecto (A2A_MODEL)
-    python scripts/a2a/validate_anthropic.py claude-opus-5-5
+    python scripts/a2a/validate_tutor.py --provider anthropic
     unset ANTHROPIC_API_KEY
 """
 
+import argparse
 import asyncio
 import json
 import os
@@ -82,17 +87,24 @@ def free_port() -> int:
         return sock.getsockname()[1]
 
 
-def start_server(workdir: Path, port: int, model: str | None) -> tuple[subprocess.Popen, Path]:
+def start_server(
+    workdir: Path, port: int, provider: str, model: str | None
+) -> tuple[subprocess.Popen, Path]:
     env = {
         **os.environ,
         "DATABASE_URL": f"sqlite:///{workdir / 'validacion.db'}",
         "JWT_SECRET": secrets.token_urlsafe(48),
         "A2A_ENABLED": "true",
         "A2A_MOCK_MODEL": "false",
-        "A2A_MODEL_PROVIDER": "anthropic",
+        "A2A_MODEL_PROVIDER": provider,
         "A2A_BASE_URL": f"http://127.0.0.1:{port}",
         "ANTHROPIC_LOG": "debug",  # el peor caso: el proveedor debe silenciarlo igualmente
     }
+    if provider == "ollama":
+        # Un modelo local en CPU puede tardar varios minutos en la primera respuesta
+        env.setdefault("A2A_MODEL_TIMEOUT_SECONDS", "600")
+    else:
+        env.pop("A2A_MODEL_TIMEOUT_SECONDS", None)
     if model:
         env["A2A_MODEL"] = model
     subprocess.run(
@@ -140,7 +152,7 @@ def start_server(workdir: Path, port: int, model: str | None) -> tuple[subproces
 
 async def ask_with_official_client(api: str, token: str, question: str) -> str:
     headers = {"Authorization": f"Bearer {token}"}
-    async with httpx.AsyncClient(timeout=120, headers=headers) as http:
+    async with httpx.AsyncClient(timeout=900, headers=headers) as http:
         client = await create_client(f"{api}{TUTOR}", client_config=ClientConfig(httpx_client=http))
         request = SendMessageRequest(message=new_text_message(question, role=Role.ROLE_USER))
         async for event in client.send_message(request):
@@ -168,22 +180,44 @@ def ask_with_json_rpc(http: httpx.Client, question: str, data: dict | None) -> d
     return http.post(TUTOR, json=body, headers={"A2A-Version": "1.0"}).json()
 
 
+def check_ollama(model: str) -> None:
+    """Antes de arrancar: ¿responde Ollama y tiene el modelo descargado?"""
+    base = os.environ.get("A2A_OLLAMA_BASE_URL", "http://127.0.0.1:11434").rstrip("/")
+    try:
+        tags = httpx.get(f"{base}/api/tags", timeout=5, trust_env=False).json()
+    except (httpx.HTTPError, ValueError):
+        sys.exit(f"Ollama no responde en {base}. Arráncalo (ollama serve o la app de Ollama).")
+    names = {item.get("name") for item in tags.get("models", [])}
+    if model not in names and f"{model}:latest" not in names:
+        sys.exit(f"Falta el modelo {model} en Ollama. Descárgalo con: ollama pull {model}")
+    print(f"Ollama responde en {base} y tiene {model}.")
+
+
 def main() -> None:
-    if not os.environ.get("ANTHROPIC_API_KEY", "").strip():
-        sys.exit("Falta ANTHROPIC_API_KEY en el entorno (no la pases como argumento).")
-    key = os.environ["ANTHROPIC_API_KEY"]
-    model = sys.argv[1] if len(sys.argv) > 1 else None
+    parser = argparse.ArgumentParser(description="Valida el Python Tutor con un modelo real.")
+    parser.add_argument("--provider", choices=["ollama", "anthropic"], default="ollama")
+    parser.add_argument("--model", help="por defecto, el de A2A_MODEL o el del proveedor")
+    args = parser.parse_args()
+    model = args.model or os.environ.get("A2A_MODEL")
+    key = os.environ.get("ANTHROPIC_API_KEY", "").strip()
+    if args.provider == "anthropic":
+        if not key:
+            sys.exit("Falta ANTHROPIC_API_KEY en el entorno (no la pases como argumento).")
+        print("Aviso: Anthropic es de pago; estas 5 consultas gastan tokens.")
+    else:
+        check_ollama(model or "qwen2.5-coder:7b")
     password = secrets.token_urlsafe(16)
 
     with tempfile.TemporaryDirectory() as tmp:
         port = free_port()
         api = f"http://127.0.0.1:{port}"
-        server, log = start_server(Path(tmp), port, model)
+        server, log = start_server(Path(tmp), port, args.provider, model)
         try:
-            with httpx.Client(base_url=api, timeout=120) as http:
+            with httpx.Client(base_url=api, timeout=900) as http:
                 card = http.get("/.well-known/agent-card.json").text
                 print("Agent Card sin modo simulado:", "simulado" not in card)
-                print("Agent Card sin la clave:", key not in card)
+                if key:
+                    print("Agent Card sin la clave:", key not in card)
                 http.post(
                     "/api/auth/register",
                     json={
@@ -217,7 +251,7 @@ def main() -> None:
         text = log.read_text()
         print("\n=== Revisión del log del servidor ===")
         leaks = {
-            "API key": key,
+            "API key": key or "sin-clave-en-este-modo",
             "JWT del alumno": token,
             "contraseña": password,
             "email": EMAIL,

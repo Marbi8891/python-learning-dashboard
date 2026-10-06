@@ -83,13 +83,24 @@ AGENTS: tuple[AgentSpec, ...] = (
 
 
 def build_model_provider(settings: Settings) -> AgentModelProvider:
-    """El proveedor del modelo según la configuración. Falla al arrancar si falta la API key.
+    """El proveedor del modelo según la configuración. Falla al arrancar si es Anthropic sin clave
+    o si la URL de Ollama no es válida.
 
-    Para añadir otro proveedor (OpenAI, un modelo local…): su clase en `providers/`, un valor más
-    en A2A_MODEL_PROVIDER y su rama aquí. Los agentes no cambian.
+    Para añadir otro proveedor (OpenAI…): su clase en `providers/`, un valor más en
+    A2A_MODEL_PROVIDER y su rama aquí. Los agentes no cambian.
     """
     if settings.a2a_mock_model or settings.a2a_model_provider == "mock":
         return MockModelProvider()
+    if settings.a2a_model_provider == "ollama":
+        from app.a2a.providers.ollama_provider import DEFAULT_MODEL, OllamaProvider
+
+        return OllamaProvider(
+            base_url=settings.a2a_ollama_base_url,
+            model=settings.a2a_model or DEFAULT_MODEL,
+            max_tokens=settings.a2a_max_output_tokens,
+            timeout_seconds=settings.a2a_model_timeout_seconds,
+        )
+    # Anthropic (de pago): solo si se ha elegido expresamente
     secret = settings.anthropic_api_key
     key = secret.get_secret_value().strip() if secret else ""
     if not key:
@@ -97,11 +108,11 @@ def build_model_provider(settings: Settings) -> AgentModelProvider:
             "A2A_MODEL_PROVIDER=anthropic necesita ANTHROPIC_API_KEY (variable de entorno o gestor "
             "de secretos). Para desarrollo y tests sin API key: A2A_MOCK_MODEL=true."
         )
-    from app.a2a.providers.anthropic_provider import AnthropicProvider  # solo si se usa
+    from app.a2a.providers.anthropic_provider import DEFAULT_MODEL, AnthropicProvider
 
     return AnthropicProvider(
         api_key=key,
-        model=settings.a2a_model,
+        model=settings.a2a_model or DEFAULT_MODEL,
         max_tokens=settings.a2a_max_output_tokens,
         timeout_seconds=settings.a2a_model_timeout_seconds,
     )

@@ -13,6 +13,7 @@ MOCK_NOTICE = "_Modo de desarrollo: respuesta preparada por el tutor sin modelo 
 class MockModelProvider:
     name = "mock"
     model = "mock"
+    unavailable_message = "El tutor no está disponible ahora mismo."
 
     async def generate(self, request: ModelRequest) -> str:
         return f"{request.outline}\n\n{MOCK_NOTICE}"

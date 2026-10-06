@@ -53,18 +53,23 @@ class Settings(BaseSettings):
     a2a_enabled: bool = False
     # URL pública de la API que se anuncia en la Agent Card (en Render, la de pld-api)
     a2a_base_url: str = "http://127.0.0.1:8000"
-    # Proveedor del modelo de lenguaje. Con «anthropic», sin ANTHROPIC_API_KEY la API no arranca.
-    a2a_model_provider: Literal["anthropic", "mock"] = "anthropic"
-    # Modelo simulado para desarrollo y tests (sin API key ni llamadas externas). Tiene prioridad
-    # sobre A2A_MODEL_PROVIDER. Nunca en producción.
+    # Proveedor del modelo de lenguaje: «ollama» (local y gratuito, el predeterminado),
+    # «anthropic» (de pago: solo si se elige expresamente y hay ANTHROPIC_API_KEY) o «mock».
+    a2a_model_provider: Literal["ollama", "anthropic", "mock"] = "ollama"
+    # Modelo simulado para desarrollo y tests (sin modelo ni llamadas). Tiene prioridad sobre
+    # A2A_MODEL_PROVIDER. Nunca en producción.
     a2a_mock_model: bool = False
-    a2a_model: str = "claude-opus-5-5"
+    # Modelo del proveedor; vacío = el predeterminado de cada uno (qwen2.5-coder:7b en Ollama,
+    # claude-opus-5-5 en Anthropic)
+    a2a_model: str | None = None
+    # Ollama es un servicio interno: su URL solo sale de aquí, nunca de una petición
+    a2a_ollama_base_url: str = "http://127.0.0.1:11434"
     # Solo del entorno o del gestor de secretos; SecretStr evita que aparezca al imprimir la config
     anthropic_api_key: SecretStr | None = None
-    # Límites de coste: tokens de salida por respuesta (incluido el razonamiento del modelo) y
-    # segundos por llamada al proveedor
+    # Límites: tokens de salida por respuesta (incluido el razonamiento del modelo) y segundos por
+    # llamada al proveedor (un modelo local en CPU puede tardar más de un minuto)
     a2a_max_output_tokens: int = Field(default=4096, ge=256, le=32_000)
-    a2a_model_timeout_seconds: float = Field(default=45.0, gt=0, le=300)
+    a2a_model_timeout_seconds: float = Field(default=120.0, gt=0, le=600)
     # Mensajes al tutor por usuario y minuto; consultas al modelo por usuario y día, y de todos los
     # usuarios juntos por minuto (tope de gasto si muchas cuentas lo usan a la vez)
     a2a_rate_limit_per_minute: int = 20

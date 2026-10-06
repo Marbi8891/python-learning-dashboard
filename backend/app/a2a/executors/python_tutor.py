@@ -20,6 +20,11 @@ from pydantic import ValidationError
 
 from app.a2a.agents.python_tutor import PythonTutorAgent, TutorQuery
 from app.a2a.observability import log_task
+from app.a2a.providers.base import (
+    ModelConfigurationError,
+    ModelTimeoutError,
+    ModelUnavailableError,
+)
 from app.services.learning_context import LearnerContext
 
 # Claves que la ruta de FastAPI deja en el contexto de la llamada (ver server.py)
@@ -130,7 +135,9 @@ class PythonTutorExecutor(AgentExecutor):
             log("limited", error)
             return
         except Exception as error:  # el detalle se queda en el log (solo el tipo), nunca al cliente
-            await updater.failed(updater.new_agent_message([Part(text=FAILED)]))
+            down = (ModelUnavailableError, ModelTimeoutError, ModelConfigurationError)
+            text = self.agent.model.unavailable_message if isinstance(error, down) else FAILED
+            await updater.failed(updater.new_agent_message([Part(text=text)]))
             log("failed", error)
             return
 

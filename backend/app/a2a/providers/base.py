@@ -1,12 +1,17 @@
 """Interfaz común de los modelos de lenguaje.
 
 Los agentes no dependen de ningún proveedor concreto: reciben un `AgentModelProvider`. Hoy existen
-el de Anthropic (producción) y el simulado (desarrollo y tests); para OpenAI o un modelo local
-basta con otra clase que implemente `generate` y lance las excepciones de aquí.
+Ollama (modelo local, el predeterminado), Anthropic (opcional) y el simulado (desarrollo y
+tests); para OpenAI basta con otra clase que implemente `generate` y lance las excepciones de aquí.
 """
 
 from dataclasses import dataclass
 from typing import Protocol
+
+# Se añade a una respuesta que el modelo ha cortado por el límite de tokens
+TRUNCATED_NOTICE = (
+    "_(Respuesta recortada por longitud: pregúntame por la parte que te falte y sigo.)_"
+)
 
 
 @dataclass(frozen=True)
@@ -25,8 +30,10 @@ class ModelRequest:
 
 
 class AgentModelProvider(Protocol):
-    name: str  # proveedor: «anthropic», «mock»…
+    name: str  # proveedor: «ollama», «anthropic», «mock»…
     model: str  # modelo concreto (para los logs y los metadatos de la respuesta)
+    # Lo que ve el alumno si el modelo no está disponible (caído, lento o mal configurado)
+    unavailable_message: str
 
     async def generate(self, request: ModelRequest) -> str:
         """Devuelve el texto de la respuesta. Los fallos se lanzan como `ModelProviderError`."""

@@ -1,7 +1,7 @@
 """Proveedor Anthropic (Claude) con el SDK oficial `anthropic` (Messages API).
 
-Es el proveedor de producción del tutor (A2A_MODEL_PROVIDER=anthropic), pero el agente no lo
-conoce: recibe un `AgentModelProvider` y le basta con `generate`.
+Es opcional y de pago: solo se usa si se elige expresamente (A2A_MODEL_PROVIDER=anthropic) y hay
+ANTHROPIC_API_KEY. El agente no lo conoce: recibe un `AgentModelProvider` y le basta con `generate`.
 
 Seguridad y privacidad:
 - La API key llega del entorno o del gestor de secretos (ANTHROPIC_API_KEY, ver config.py) y solo
@@ -22,6 +22,7 @@ import time
 import anthropic
 
 from app.a2a.providers.base import (
+    TRUNCATED_NOTICE,
     EmptyModelResponseError,
     MalformedModelResponseError,
     ModelConfigurationError,
@@ -45,9 +46,6 @@ MAX_RETRIES = 1  # el SDK reintenta solo errores de red, 408, 409, 429 y 5xx
 # de respaldo que recomienda Anthropic (sin coste de integración). Solo la ofrecen estos modelos.
 FALLBACK_BETA = "server-side-fallback-2026-07-01"
 FALLBACK_MODELS = ("claude-opus-5", "claude-sonnet-5-5", "claude-fable-5")
-TRUNCATED_NOTICE = (
-    "_(Respuesta recortada por longitud: pregúntame por la parte que te falte y sigo.)_"
-)
 
 
 def quiet_sdk_logs() -> None:
@@ -61,6 +59,9 @@ quiet_sdk_logs()
 
 class AnthropicProvider:
     name = "anthropic"
+    unavailable_message = (
+        "El tutor no está disponible ahora mismo. Inténtalo de nuevo en unos minutos."
+    )
 
     def __init__(
         self,

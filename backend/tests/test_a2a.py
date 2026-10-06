@@ -477,14 +477,18 @@ def test_mock_provider_marks_its_answers():
 def test_a2a_needs_a_model_and_mock_is_explicit():
     from fastapi import FastAPI
 
-    # Por defecto el proveedor es Anthropic: sin API key, la API no arranca con A2A activado
-    without_key = Settings(a2a_mock_model=False, anthropic_api_key=None)
+    # Anthropic (de pago) solo si se elige expresamente: sin API key, la API no arranca
+    without_key = Settings(
+        a2a_mock_model=False, a2a_model_provider="anthropic", anthropic_api_key=None
+    )
     with pytest.raises(RuntimeError, match="ANTHROPIC_API_KEY.*A2A_MOCK_MODEL"):
         build_model_provider(without_key)
     with pytest.raises(RuntimeError):
         mount_a2a(FastAPI(), without_key)
     with pytest.raises(RuntimeError):
-        build_model_provider(Settings(a2a_mock_model=False, anthropic_api_key="   "))
+        build_model_provider(
+            Settings(a2a_mock_model=False, a2a_model_provider="anthropic", anthropic_api_key=" ")
+        )
     assert isinstance(build_model_provider(Settings(a2a_mock_model=True)), MockModelProvider)
     assert isinstance(
         build_model_provider(Settings(a2a_model_provider="mock", anthropic_api_key=None)),
@@ -493,7 +497,8 @@ def test_a2a_needs_a_model_and_mock_is_explicit():
     # Desactivado y sin modelo simulado por defecto (producción no los activa)
     assert Settings.model_fields["a2a_enabled"].default is False
     assert Settings.model_fields["a2a_mock_model"].default is False
-    assert Settings.model_fields["a2a_model_provider"].default == "anthropic"
+    # Por defecto, el modelo local (Ollama): nunca una API de pago sin elegirla
+    assert Settings.model_fields["a2a_model_provider"].default == "ollama"
 
 
 def test_cors_header_name_matches_the_sdk():

@@ -35,7 +35,7 @@ Dentro de `backend/app/a2a/`:
 | `cards/python_tutor.py` | La **Agent Card**: nombre, versión, URL, capacidades, skill e input/output |
 | `agents/python_tutor.py` | La **lógica educativa**: valida la pregunta, adapta el nivel, explica errores, revisa el código **sin ejecutarlo** y prepara la respuesta. No sabe nada de A2A |
 | `executors/python_tutor.py` | El **executor**: lee el mensaje A2A, pide el contexto del alumno, llama al agente y publica la tarea (enviada → en curso → artefacto → completada). Maneja errores y cancelaciones |
-| `providers/` | El **modelo de lenguaje**: interfaz `AgentModelProvider`, `AnthropicProvider` (producción) y `MockModelProvider` (desarrollo y tests) |
+| `providers/` | El **modelo de lenguaje**: interfaz `AgentModelProvider`, `OllamaProvider` (local, predeterminado), `AnthropicProvider` (opcional, de pago) y `MockModelProvider` (tests) |
 | `observability.py` | Una línea de log JSON por tarea (`pld.a2a`) |
 | `server.py` | Registro de agentes (`AGENTS`), elección del proveedor, autenticación, límites, tareas por usuario y montaje de rutas |
 
@@ -58,7 +58,7 @@ El nivel (inicial, intermedio, avanzado) sale de su progreso real o lo indica el
 El servidor lee del alumno solo: cuántas lecciones lleva completadas (para calcular el nivel) y,
 si pregunta por una lección, su título, módulo, enunciado, pista y si la tiene superada.
 
-Al **proveedor del modelo** solo le llega (`PythonTutorAgent._prompt`):
+Al **modelo** (Ollama local o, si se activa, Anthropic) solo le llega (`PythonTutorAgent._prompt`):
 
 - las instrucciones del tutor (`SYSTEM_PROMPT`, iguales para todos);
 - el nivel (`inicial`, `intermedio` o `avanzado`), no el progreso con el que se calcula;
@@ -87,59 +87,153 @@ El agente está **desacoplado del proveedor**. El Python Tutor solo conoce esta 
 
 ```python
 class AgentModelProvider(Protocol):
-    name: str    # «anthropic», «mock»…
-    model: str   # modelo concreto, para logs y metadatos
+    name: str                 # «ollama», «anthropic», «mock»…
+    model: str                # modelo concreto, para logs y metadatos
+    unavailable_message: str  # lo que ve el alumno si el modelo no está disponible
     async def generate(self, request: ModelRequest) -> str: ...
 ```
 
 ```
-A2A → Python Tutor Agent → AgentModelProvider → AnthropicProvider   (hoy, producción)
+A2A → Python Tutor Agent → AgentModelProvider → OllamaProvider      (por defecto: local y gratis)
                                               → MockModelProvider   (desarrollo y tests)
+                                              → AnthropicProvider   (opcional, de pago)
                                               → OpenAIProvider      (futuro)
-                                              → LocalModelProvider  (futuro)
 ```
 
-### Anthropic (proveedor inicial de producción)
+En esta fase **no se usa ninguna API de pago**: el proveedor por defecto es Ollama, y Anthropic
+solo se usa si se elige expresamente (`A2A_MODEL_PROVIDER=anthropic` y `ANTHROPIC_API_KEY`).
+
+### Comparativa de proveedores
+
+| Proveedor | Coste de tokens | Internet | Privacidad | Uso |
+|---|---:|---|---|---|
+| Mock | 0 € | No | Máxima: no hay modelo | Tests |
+| Ollama | 0 € (tu hardware) | No, una vez descargado el modelo | Alta: la consulta se procesa en tu equipo o servidor | Desarrollo y uso local |
+| Anthropic | De pago | Sí | Depende de la configuración y del contrato con Anthropic | Opcional, futuro |
+| OpenAI | De pago | Sí | Depende de la configuración | Futuro (no implementado) |
+
+### Ollama (modelo local, predeterminado)
+
+`providers/ollama_provider.py` llama a la API HTTP de Ollama (`POST /api/chat`, sin streaming) con
+`httpx`, que ya instala el SDK de A2A: no añade dependencias.
+
+- URL y modelo solo desde la configuración: `A2A_OLLAMA_BASE_URL` (por defecto
+  `http://127.0.0.1:11434`) y `A2A_MODEL` (por defecto `qwen2.5-coder:7b`). La URL debe ser
+  `http(s)://host:puerto`, sin usuario, ruta ni parámetros, o la API no arranca.
+- Ninguna petición del alumno puede cambiar la URL, el host, el puerto ni el modelo: el mensaje
+  solo admite `lesson_slug`, `code`, `error` y `level`, y cualquier otro campo se rechaza.
+- Sin redirecciones y sin los proxies del entorno (sin SSRF). El navegador **nunca** habla con
+  Ollama ni conoce su dirección: todo pasa por el backend.
+- `num_predict` = `A2A_MAX_OUTPUT_TOKENS` y `num_ctx` = 8192, para que quepa el prompt más largo
+  que admite el tutor. Si el modelo escribe su razonamiento entre `<think>` y `</think>`, se quita.
+- Límite total por llamada `A2A_MODEL_TIMEOUT_SECONDS` (120 s por defecto; un modelo en CPU puede
+  necesitar más). Sin reintentos.
+- Si Ollama está apagado, tarda demasiado, no tiene el modelo o falla, la tarea acaba en
+  `TASK_STATE_FAILED` con «El tutor local no está disponible ahora mismo…», sin detalles internos.
+  El resto del dashboard sigue funcionando.
+- Logs: proveedor, modelo, tokens (`prompt_eval_count`, `eval_count`), motivo de parada y
+  duración; nunca el prompt ni la respuesta.
+
+### Modelo recomendado
+
+Este entorno no permite conocer tu hardware, así que hay dos opciones. Las dos son modelos
+entrenados sobre todo con código (Python incluido), que explican y depuran bien y siguen
+instrucciones en español. Las dos responden directamente, sin razonamiento visible largo, lo que
+importa en CPU:
+
+| Opción | Modelo | Descarga | Memoria aproximada | Cuándo |
+|---|---|---|---|---|
+| Ligera (por defecto) | `qwen2.5-coder:7b` | ~4,7 GB | 8 GB de RAM (mejor con GPU de 6–8 GB) | Portátil normal |
+| Más calidad | `qwen2.5-coder:14b` | ~9 GB | 16 GB de RAM (mejor con GPU de 12 GB) | Equipo con más memoria |
+
+Son cifras aproximadas: compruébalas en la ficha del modelo en ollama.com. Con menos de 8 GB,
+prueba `qwen2.5-coder:3b`; responde peor, pero responde.
+
+### Instalación y puesta en marcha
+
+1. **Instala Ollama** en tu equipo desde [ollama.com/download](https://ollama.com/download)
+   (Windows, macOS o Linux). Se queda escuchando en `http://127.0.0.1:11434`. No lo expongas a
+   Internet: es un servicio interno.
+2. **Descarga el modelo** (una vez; el backend nunca lo descarga solo):
+
+   ```bash
+   ollama pull qwen2.5-coder:7b
+   ```
+
+3. **Comprueba que responde:**
+
+   ```bash
+   curl http://127.0.0.1:11434/api/tags            # debe listar qwen2.5-coder:7b
+   ollama run qwen2.5-coder:7b "¿Qué es una lista en Python?"
+   ```
+
+4. **Configura el backend** en `backend/.env` (además de `JWT_SECRET`):
+
+   ```
+   A2A_ENABLED=true
+   A2A_MODEL_PROVIDER=ollama
+   A2A_OLLAMA_BASE_URL=http://127.0.0.1:11434
+   A2A_MODEL=qwen2.5-coder:7b
+   ```
+
+5. **Arranca el backend** (`uvicorn app.main:app --reload` desde `backend/`) y **el frontend**
+   (`python -m http.server 5500` desde `frontend/`). En la web, **Tutor Python** responde con el
+   modelo local.
+
+6. **Valida de punta a punta** (5 consultas por la app real y revisión de los logs):
+
+   ```bash
+   python scripts/a2a/validate_tutor.py                 # o --model qwen2.5-coder:14b
+   RUN_OLLAMA_INTEGRATION_TESTS=true python -m pytest backend/tests/test_a2a_ollama_integration.py -s
+   ```
+
+**Alternativa sin modelo:** `A2A_MOCK_MODEL=true` usa el modelo simulado (desarrollo y tests). No
+necesita Ollama, red ni claves.
+
+### Anthropic (opcional, de pago)
 
 `providers/anthropic_provider.py` usa el **SDK oficial** [`anthropic`](https://pypi.org/project/anthropic/)
-1.x y la Messages API:
+1.x y la Messages API. Está implementado y probado con la API simulada, pero **desactivado**: solo
+se usa con `A2A_MODEL_PROVIDER=anthropic` y `ANTHROPIC_API_KEY`. La aplicación nunca hace una
+llamada comercial por su cuenta.
 
 - Modelo por defecto **`claude-opus-5-5`** (`A2A_MODEL`), con `output_config.effort = "medium"`
   fijado en el código. El modelo debe admitir `effort` (familia Claude 4.6 y posteriores).
 - Con los modelos que lo admiten (Opus 5 / 5.5, Sonnet 5.5, Fable 5) se activa el **respaldo en
   el servidor** (`fallbacks: "default"`, beta `server-side-fallback-2026-07-01`): si los filtros
   de seguridad del modelo rechazan una consulta, la API la repite con el modelo que recomienda
-  Anthropic en la misma llamada. Si aun así se rechaza, la tarea falla con el mensaje genérico.
-- `max_tokens` = `A2A_MAX_OUTPUT_TOKENS` (incluye el razonamiento del modelo). Si se corta, la
-  respuesta lo dice.
-- Tiempo máximo por llamada `A2A_MODEL_TIMEOUT_SECONDS` y **un solo reintento** (red, 429, 5xx);
-  además, un límite total (el doble) para que ninguna tarea quede colgada.
-- Destino fijo `https://api.anthropic.com`: ni la petición ni `ANTHROPIC_BASE_URL` lo cambian
-  (sin SSRF).
+  Anthropic en la misma llamada.
+- `max_tokens` = `A2A_MAX_OUTPUT_TOKENS`; tiempo máximo por llamada `A2A_MODEL_TIMEOUT_SECONDS` y
+  **un solo reintento**, con un límite total del doble.
+- Destino fijo `https://api.anthropic.com`: ni la petición ni `ANTHROPIC_BASE_URL` lo cambian.
 - No envía `metadata.user_id` ni ningún identificador del alumno.
-- Errores del SDK → excepciones propias (`ModelTimeoutError`, `ModelRateLimitedError`,
-  `ModelConfigurationError`, `ModelRefusedError`, `EmptyModelResponseError`,
-  `MalformedModelResponseError`…), sin la petición ni la respuesta dentro. El alumno ve un mensaje
-  genérico y el log, el tipo de error.
-
-**La API key** sale solo de `ANTHROPIC_API_KEY` (variable de entorno o gestor de secretos; en
-Render, una variable secreta). Se lee como `SecretStr`, se entrega solo al cliente del SDK y nunca
-está en el código, en los tests, en los logs, en la base de datos, en la Agent Card ni en las
-respuestas al frontend. Sin ella, con `A2A_MODEL_PROVIDER=anthropic`, **la API no arranca**.
+- **La API key** sale solo de `ANTHROPIC_API_KEY` (entorno o gestor de secretos), como
+  `SecretStr`. Nunca está en el código, los tests, los logs, la base de datos, la Agent Card ni
+  las respuestas. Sin ella, con `anthropic`, **la API no arranca**.
+- Antes de usarlo en producción: **límite de gasto en la Anthropic Console** y revisión legal de
+  la política de privacidad (ver «Privacidad»).
 
 ### Modelo simulado
 
-`MockModelProvider` (`A2A_MOCK_MODEL=true`) no llama a nada ni necesita clave: devuelve la guía
-del agente marcada como «Modo de desarrollo». Tiene prioridad sobre `A2A_MODEL_PROVIDER`, así que
-los tests y el desarrollo nunca gastan ni envían datos fuera. La Agent Card lo indica.
+`MockModelProvider` (`A2A_MOCK_MODEL=true`) no llama a nada: devuelve la guía del agente marcada
+como «Modo de desarrollo». Tiene prioridad sobre `A2A_MODEL_PROVIDER`, así que los tests nunca
+necesitan Ollama, Internet ni claves. La Agent Card lo indica.
+
+### Errores del proveedor
+
+Cada proveedor traduce sus fallos a las excepciones de `providers/base.py`
+(`ModelTimeoutError`, `ModelUnavailableError`, `ModelConfigurationError`, `ModelRequestError`,
+`ModelRefusedError`, `EmptyModelResponseError`, `MalformedModelResponseError`…), sin la petición
+ni la respuesta dentro. Si el modelo no está disponible, el alumno ve el `unavailable_message`
+del proveedor; si falla otra cosa, un mensaje genérico. El log guarda solo el tipo de error.
 
 ### Cambiar de proveedor
 
-1. Una clase en `providers/` con `name`, `model` y `async generate(request) -> str`, que lance las
-   excepciones de `providers/base.py`.
+1. Una clase en `providers/` con `name`, `model`, `unavailable_message` y
+   `async generate(request) -> str`, que lance las excepciones de `providers/base.py`.
 2. Un valor más en `A2A_MODEL_PROVIDER` (`config.py`) y su rama en `build_model_provider`
-   (`server.py`), con su clave como `SecretStr`.
-3. Sus tests simulando la API, como `tests/test_a2a_providers.py`.
+   (`server.py`); si necesita clave, como `SecretStr`.
+3. Sus tests simulando la API, como `tests/test_a2a_ollama.py` o `tests/test_a2a_providers.py`.
 
 Los agentes, el executor, la Agent Card y el frontend no cambian.
 
@@ -155,11 +249,11 @@ Todo con el `RateLimiter` en memoria que ya usa la API (sin Redis ni más infrae
 | Tokens de salida por respuesta | 4096 | `A2A_MAX_OUTPUT_TOKENS` |
 | Entrada: pregunta / código / error | 4000 / 20 000 / 4000 caracteres | — |
 
-Los mensajes no válidos no gastan consultas. **Limitaciones:** los contadores se pierden al
-reiniciar y no se comparten entre instancias (hoy hay una). La aplicación no lleva un presupuesto
-en euros: **en producción es obligatorio configurar un límite de gasto adecuado en la Anthropic
-Console** (límites del workspace o de la organización), que es el tope definitivo. Cada llamada deja en el log sus tokens de entrada y salida (`a2a.model`) para
-vigilar el consumo.
+Con Ollama estos límites protegen la CPU o GPU del servidor; con Anthropic, además, el gasto. Los
+mensajes no válidos no gastan consultas. **Limitaciones:** los contadores se pierden al reiniciar
+y no se comparten entre instancias (hoy hay una). La aplicación no lleva un presupuesto en euros:
+si algún día se usa Anthropic en producción, **es obligatorio configurar un límite de gasto en la
+Anthropic Console**. Cada llamada deja en el log sus tokens (`a2a.model`).
 
 ## Agent Card
 
@@ -238,21 +332,21 @@ Si el mensaje no es válido, la tarea acaba en `TASK_STATE_REJECTED` con una exp
 
 | Variable | Por defecto | Qué hace |
 |---|---|---|
-| `A2A_ENABLED` | `false` | Monta las rutas A2A. Sin proveedor válido el servidor no arranca |
-| `A2A_MODEL_PROVIDER` | `anthropic` | `anthropic` o `mock` |
-| `ANTHROPIC_API_KEY` | (vacía) | **Secreto.** Obligatoria con `anthropic`. Solo en el entorno o el gestor de secretos, nunca en el repositorio |
-| `A2A_MODEL` | `claude-opus-5-5` | Modelo de Anthropic |
+| `A2A_ENABLED` | `false` | Monta las rutas A2A |
+| `A2A_MODEL_PROVIDER` | `ollama` | `ollama`, `anthropic` o `mock` |
+| `A2A_OLLAMA_BASE_URL` | `http://127.0.0.1:11434` | URL interna de Ollama (solo configuración, nunca de una petición) |
+| `A2A_MODEL` | (vacía) | Modelo; vacía = `qwen2.5-coder:7b` con Ollama o `claude-opus-5-5` con Anthropic |
+| `ANTHROPIC_API_KEY` | (vacía) | **Secreto**, solo con `anthropic`. Solo en el entorno o el gestor de secretos |
 | `A2A_MOCK_MODEL` | `false` | Modelo simulado (gana a `A2A_MODEL_PROVIDER`). Desarrollo y tests, **nunca en producción** |
 | `A2A_MAX_OUTPUT_TOKENS` | `4096` | Tokens de salida por respuesta (256–32 000) |
-| `A2A_MODEL_TIMEOUT_SECONDS` | `45` | Segundos por llamada al proveedor (con un reintento, como mucho el doble) |
-| `A2A_BASE_URL` | `http://127.0.0.1:8000` | URL pública de la API que se anuncia en la Agent Card (en Render: `https://pld-api.onrender.com`) |
+| `A2A_MODEL_TIMEOUT_SECONDS` | `120` | Segundos por llamada al modelo (Anthropic: con un reintento, como mucho el doble) |
+| `A2A_BASE_URL` | `http://127.0.0.1:8000` | URL pública de la API que se anuncia en la Agent Card |
 | `A2A_RATE_LIMIT_PER_MINUTE` | `20` | Mensajes al tutor por usuario y minuto |
 | `A2A_DAILY_LIMIT_PER_USER` | `100` | Consultas al modelo por usuario y día |
 | `A2A_GLOBAL_LIMIT_PER_MINUTE` | `60` | Consultas al modelo de todos los usuarios por minuto |
 
-En Render, `ANTHROPIC_API_KEY` se añade como variable secreta del servicio `pld-api` (no está en
-`render.yaml`, que no activa A2A). Activarlo en producción es una decisión aparte: antes hay que
-fijar el límite de gasto en la consola de Anthropic.
+`render.yaml` no activa A2A: en el plan gratuito de Render no hay memoria para un modelo local.
+Activarlo en producción (con Ollama en un servidor propio o con Anthropic) es una decisión aparte.
 
 ## Arrancarlo en local
 
@@ -261,11 +355,11 @@ cd backend
 pip install -r requirements-dev.txt
 # en backend/.env, además de JWT_SECRET:
 #   A2A_ENABLED=true
-#   A2A_MOCK_MODEL=true            # sin API key ni llamadas externas
-# o, para probar con Claude (la clave, solo en tu entorno, nunca en el repositorio):
+#   A2A_MODEL_PROVIDER=ollama      # con Ollama en marcha y el modelo descargado (ver arriba)
+#   A2A_MODEL=qwen2.5-coder:7b
+# o, sin modelo:
 #   A2A_ENABLED=true
-#   A2A_MODEL_PROVIDER=anthropic
-#   ANTHROPIC_API_KEY=…
+#   A2A_MOCK_MODEL=true
 alembic upgrade head
 python -m app.seed
 uvicorn app.main:app --reload
@@ -276,7 +370,7 @@ La web (`cd frontend && python -m http.server 5500`) muestra entonces **Tutor Py
 ## Tests
 
 ```bash
-cd backend && python -m pytest tests/test_a2a.py tests/test_a2a_providers.py   # solo A2A
+cd backend && python -m pytest tests/test_a2a.py tests/test_a2a_ollama.py tests/test_a2a_providers.py
 cd backend && python -m pytest --cov=app           # todo el backend (100 % de cobertura)
 npm run test:unit                                  # incluye tests/unit/tutor.test.mjs
 npx playwright test e2e/tutor.spec.js              # web → API → A2A → agente → respuesta
@@ -287,36 +381,49 @@ errores JSON-RPC, el aislamiento entre usuarios, el contexto educativo, la valid
 el límite de tamaño, el límite por usuario, la cancelación, CORS, que el código no se ejecuta, que
 los logs y las respuestas no llevan secretos y las piezas por separado.
 
-**Los tests no necesitan API key ni red.** `conftest.py` activa `A2A_MOCK_MODEL=true` y borra
-`ANTHROPIC_API_KEY` del entorno. `tests/test_a2a_providers.py` prueba el SDK oficial de verdad
-contra una API de Anthropic simulada (`httpx2.MockTransport`): inicialización, falta de clave,
-modelo simulado, errores 4xx/5xx/429, red caída, timeout, respuestas rechazadas, vacías o
-malformadas, que la clave y el contenido nunca llegan a los logs, el contexto minimizado, el
-aislamiento entre usuarios y los límites de coste.
+**Los tests no necesitan Ollama, un modelo, Internet ni API keys.** `conftest.py` activa
+`A2A_MOCK_MODEL=true` y borra `ANTHROPIC_API_KEY` del entorno.
 
-### Validación manual con Anthropic (gasta dinero real)
+- `tests/test_a2a_ollama.py` simula la API de Ollama (`httpx.MockTransport`): URL, modelo y prompt
+  correctos, respuesta, respuesta vacía, errores HTTP, timeout, JSON inválido, Ollama apagado,
+  URLs no permitidas, redirecciones, proxies, logs sin contenido, contexto minimizado y aislamiento
+  entre usuarios de punta a punta.
+- `tests/test_a2a_providers.py` hace lo mismo con el SDK de Anthropic contra una API simulada.
+- `tests/test_a2a_ollama_integration.py` es **opcional**: solo se ejecuta con
+  `RUN_OLLAMA_INTEGRATION_TESTS=true` y un Ollama de verdad. CI no lo necesita.
 
-Fuera de CI, [`scripts/a2a/validate_anthropic.py`](../scripts/a2a/validate_anthropic.py) prueba la
-ruta real: arranca un uvicorn temporal con `A2A_MODEL_PROVIDER=anthropic`, crea un alumno de
-prueba, hace 5 consultas (concepto, error, depuración, ejercicio y solución; la primera con el
-cliente oficial de A2A) y revisa el log del servidor buscando la clave, el JWT, la contraseña, el
-email, el nombre, la pregunta y el código. Al final muestra las llamadas y los tokens consumidos.
+### Validación manual de punta a punta
+
+[`scripts/a2a/validate_tutor.py`](../scripts/a2a/validate_tutor.py) prueba la ruta real: comprueba
+que Ollama responde y tiene el modelo, arranca un uvicorn temporal, crea un alumno de prueba y
+hace 5 consultas (concepto, error, depuración, ejercicio y solución; la primera con el cliente
+oficial de A2A). Después revisa el log del servidor buscando la clave, el JWT, la contraseña, el
+email, el nombre, la pregunta y el código, y muestra los tokens usados.
 
 ```bash
-read -rs ANTHROPIC_API_KEY && export ANTHROPIC_API_KEY   # no queda en el historial
-python scripts/a2a/validate_anthropic.py claude-opus-5-5
-unset ANTHROPIC_API_KEY
+python scripts/a2a/validate_tutor.py                       # Ollama (gratis)
+python scripts/a2a/validate_tutor.py --provider anthropic  # DE PAGO: clave solo en el entorno
 ```
-
-La clave solo se lee del entorno: nunca como argumento, en un archivo ni en el repositorio.
 
 ## Privacidad
 
-La [política de privacidad](../frontend/privacidad.html) explica la finalidad, los datos que se
-envían, el proveedor (Anthropic), la minimización, que el código no se ejecuta y que no hay que
-escribir secretos ni datos personales. **REVISIÓN LEGAL PENDIENTE:** el texto no lo ha revisado un
-profesional; antes de activar el tutor en producción conviene confirmar la base legal, las
-transferencias internacionales y el acuerdo de tratamiento de datos con Anthropic.
+Qué datos van a cada sitio:
+
+- **Backend:** recibe la consulta con la sesión del alumno y lee de la base de datos su nivel y,
+  si elige una lección, sus datos (ver «Minimización de datos»). Las tareas viven en memoria.
+- **Ollama (modo local, predeterminado):** los mensajes del tutor se procesan con el modelo local
+  configurado en Ollama y no necesitan enviarse a un proveedor externo de IA. Le llega solo el
+  contexto educativo mínimo. En este modo la aplicación no llama a Anthropic ni a OpenAI. No se ha
+  comprobado la telemetría del propio Ollama (por ejemplo, la búsqueda de actualizaciones), así que
+  no se afirma que sea «100 % privado».
+- **Proveedor externo (solo si se activa Anthropic):** le llega el mismo contexto mínimo, como
+  encargado del tratamiento.
+
+La [política de privacidad](../frontend/privacidad.html) explica la finalidad, los datos, ambos
+modos, la minimización, que el código no se ejecuta y que no hay que escribir secretos ni datos
+personales. **REVISIÓN LEGAL PENDIENTE:** el texto no lo ha revisado un profesional. Antes de usar
+un proveedor externo en producción hay que confirmar la base legal, las transferencias
+internacionales y el acuerdo de tratamiento de datos.
 
 ## Conectar un cliente A2A
 
