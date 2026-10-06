@@ -87,12 +87,17 @@ def free_port() -> int:
         return sock.getsockname()[1]
 
 
+def read_log(log: Path) -> str:
+    return log.read_text(encoding="utf-8", errors="replace")
+
+
 def start_server(
     workdir: Path, port: int, provider: str, model: str | None
 ) -> tuple[subprocess.Popen, Path]:
     env = {
         **os.environ,
-        "DATABASE_URL": f"sqlite:///{workdir / 'validacion.db'}",
+        "DATABASE_URL": f"sqlite:///{(workdir / 'validacion.db').as_posix()}",
+        "PYTHONUTF8": "1",  # el log en UTF-8 también en Windows
         "JWT_SECRET": secrets.token_urlsafe(48),
         "A2A_ENABLED": "true",
         "A2A_MOCK_MODEL": "false",
@@ -122,22 +127,23 @@ def start_server(
         capture_output=True,
     )
     log = workdir / "server.log"
-    server = subprocess.Popen(
-        [
-            sys.executable,
-            "-m",
-            "uvicorn",
-            "app.main:app",
-            "--port",
-            str(port),
-            "--log-level",
-            "info",
-        ],
-        cwd=BACKEND,
-        env=env,
-        stdout=log.open("w"),
-        stderr=subprocess.STDOUT,
-    )
+    with log.open("w", encoding="utf-8") as output:
+        server = subprocess.Popen(
+            [
+                sys.executable,
+                "-m",
+                "uvicorn",
+                "app.main:app",
+                "--port",
+                str(port),
+                "--log-level",
+                "info",
+            ],
+            cwd=BACKEND,
+            env=env,
+            stdout=output,
+            stderr=subprocess.STDOUT,
+        )
     for _ in range(60):
         try:
             if httpx.get(f"http://127.0.0.1:{port}/api/health").status_code == 200:
@@ -145,7 +151,7 @@ def start_server(
         except httpx.HTTPError:
             pass
         if server.poll() is not None:
-            sys.exit(f"El servidor no arranca:\n{log.read_text()}")
+            sys.exit(f"El servidor no arranca:\n{read_log(log)}")
         time.sleep(0.5)
     sys.exit("El servidor no responde")
 
@@ -208,7 +214,8 @@ def main() -> None:
         check_ollama(model or "qwen2.5-coder:7b")
     password = secrets.token_urlsafe(16)
 
-    with tempfile.TemporaryDirectory() as tmp:
+    # En Windows la base de datos puede seguir bloqueada un instante al borrar la carpeta
+    with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as tmp:
         port = free_port()
         api = f"http://127.0.0.1:{port}"
         server, log = start_server(Path(tmp), port, args.provider, model)
@@ -248,7 +255,7 @@ def main() -> None:
             server.terminate()
             server.wait(timeout=10)
 
-        text = log.read_text()
+        text = read_log(log)
         print("\n=== Revisión del log del servidor ===")
         leaks = {
             "API key": key or "sin-clave-en-este-modo",
