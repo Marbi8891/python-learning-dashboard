@@ -22,6 +22,17 @@ Interactive OpenAPI documentation is available at /docs when ENABLE_DOCS=true.
 | PCAP state | /api/v1/pcap-state |
 | DAW course state | /api/v1/course-state/{course} |
 
+## A2A agents
+
+When `A2A_ENABLED=true`, the same FastAPI app also serves A2A 1.0 agents under `/a2a/*` (ADR-0034). They don't replace any REST endpoint.
+
+| Resource | Endpoints |
+| --- | --- |
+| Agent Card (public) | /.well-known/agent-card.json, /a2a/python-tutor/.well-known/agent-card.json |
+| Python Tutor (JSON-RPC, session required) | POST /a2a/python-tutor with header `A2A-Version: 1.0` |
+
+See [a2a.md](a2a.md) (in Spanish) for the message format, examples and security rules.
+
 ## Authentication
 
 Authenticated endpoints accept a Bearer access token:

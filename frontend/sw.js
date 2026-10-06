@@ -55,6 +55,7 @@ self.addEventListener("fetch", (event) => {
   if (request.method !== "GET") return;
   const url = new URL(request.url);
   if (url.pathname.startsWith("/api/") || url.pathname.includes("/api/")) return; // API: sin caché
+  if (url.pathname.startsWith("/a2a/") || url.pathname.startsWith("/.well-known/")) return; // agentes
   if (url.origin === self.location.origin) {
     event.respondWith(networkFirst(request));
   } else if (url.pathname.includes("pyodide")) {

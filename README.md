@@ -55,6 +55,7 @@ En Linux o macOS: `pip install -r backend/requirements.txt && python scripts/run
 |---|---|---|
 | `frontend/` | HTML, CSS y JavaScript (módulos ES, sin framework), Pyodide | GitHub Pages |
 | `backend/` | FastAPI, SQLAlchemy 2, Alembic, PostgreSQL/SQLite, JWT + Argon2 | Docker: Render, Oracle Cloud… |
+| `backend/app/a2a/` | Agentes A2A 1.0 con el SDK oficial `a2a-sdk` (Python Tutor), en la misma app FastAPI | Con el backend (desactivado por defecto) |
 
 Decisiones documentadas:
 - [ADR-0001 Arquitectura](docs/adr/0001-arquitectura.md)
@@ -68,6 +69,7 @@ Decisiones documentadas:
 - [ADR-0009 Enfoque en el examen PCAP](docs/adr/0009-enfoque-pcap.md)
 - [ADR-0010 Estudio guiado, sincronización y PWA](docs/adr/0010-estudio-guiado-y-pwa.md)
 - [ADR-0031 Núcleo educativo por conceptos](docs/adr/0031-nucleo-educativo-por-conceptos.md) (las ADR-0011 a 0030 están en `docs/adr/`)
+- [ADR-0034 Agentes A2A junto a la API REST](docs/adr/0034-agentes-a2a.md) · guía: [docs/a2a.md](docs/a2a.md)
 
 ```
 ├── frontend/
@@ -82,6 +84,8 @@ Decisiones documentadas:
 │   └── privacidad.html
 ├── backend/
 │   ├── app/                API: config, seguridad, modelos, routers, email
+│   ├── app/services/       lógica reutilizable fuera de los routers (contexto del alumno)
+│   ├── app/a2a/            agentes A2A: cards, agents, executors, providers y server.py
 │   ├── migrations/         Alembic
 │   ├── tests/              pytest (100 % de cobertura)
 │   └── Dockerfile
@@ -91,6 +95,7 @@ Decisiones documentadas:
 ├── docker-compose.yml      Todo en local con PostgreSQL
 ├── deploy.ps1              Publicación en GitHub Pages (Windows)
 ├── scripts/run_local.py    Versión de escritorio: web + API en 127.0.0.1
+├── scripts/a2a/            Cliente A2A de ejemplo para el Python Tutor
 └── Iniciar-Dashboard.bat   Lanzador para Windows (doble clic)
 ```
 
@@ -194,6 +199,17 @@ La firma de release necesita tres secretos en *Settings → Secrets and variable
 | POST / GET | `/api/lessons/{slug}/attempts` | ✔ | Registrar un intento o ver los últimos 20 |
 | GET / PUT | `/api/pcap-state` | ✔ | Preparación del PCAP (simulacros, aciertos, fichas, repaso y plan) |
 | GET / PUT | `/api/course-state/{curso}` | ✔ | Estado de los cursos de la app Android: `sql`, `js`, `java`, `entornos` o `programacion` (ADR-0018), y `learn`: progreso por conceptos del núcleo educativo (ADR-0031) |
+
+### A2A (agentes)
+
+Con `A2A_ENABLED=true` el backend añade agentes [A2A 1.0](https://a2a-protocol.org/) junto a la API REST, que no cambia. Detalle, ejemplos y cómo añadir agentes: **[docs/a2a.md](docs/a2a.md)**.
+
+| Método | Ruta | Auth | Descripción |
+|---|---|---|---|
+| GET | `/a2a/python-tutor/.well-known/agent-card.json` | | Agent Card del Python Tutor (también en `/.well-known/agent-card.json`) |
+| POST | `/a2a/python-tutor` | ✔ | JSON-RPC de A2A 1.0 (`SendMessage`, `GetTask`, `ListTasks`, `CancelTask`), cabecera `A2A-Version: 1.0` |
+
+En la web es la sección **Tutor Python** (`#/tutor`), que solo aparece si el servidor ofrece el agente.
 
 ## Publicar
 

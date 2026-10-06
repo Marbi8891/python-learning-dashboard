@@ -44,6 +44,7 @@ import { initPrefs } from "./prefs.js";
 import { badgesHtml, renderProfile } from "./profile.js";
 import { initPrivate, renderPrivate } from "./private.js";
 import { setQuizLesson } from "./quiz.js";
+import { initTutor, openTutor } from "./tutor.js";
 import { recordAttempt, restoreSession, setCompleted, state, subscribe } from "./store.js";
 
 hljs.registerLanguage("python", python);
@@ -59,6 +60,7 @@ const PCAP_ROUTE = "#/pcap";
 const CERTIFICATE_ROUTE = "#/certificado";
 const PRIVATE_ROUTE = "#/cuenta";
 const DAW_ROUTE = "#/daw";
+const TUTOR_ROUTE = "#/tutor"; // Tutor Python: agente A2A del backend (ADR-0034)
 const mobile = window.matchMedia("(max-width: 900px)");
 
 const content = {
@@ -393,6 +395,8 @@ const VIEWS = {
   pcap: { element: "#pcap-view", title: "Examen PCAP · Python Learning Dashboard", focus: null, render: null },
   // Los cursos de DAW también se pintan solos (openDaw): cargan su banco y tienen tandas en curso
   daw: { element: "#daw-view", title: "Cursos de DAW · Python Learning Dashboard", focus: null, render: null },
+  // El tutor se pinta solo (openTutor): repintarlo borraría la conversación
+  tutor: { element: "#tutor-view", title: "Tutor Python · Python Learning Dashboard", focus: null, render: null },
 };
 
 /** Muestra una vista de página completa (portada o perfil) en lugar de la lección. */
@@ -417,7 +421,7 @@ function updatePrivateNav() {
 }
 
 /** Entrada del menú que corresponde a la vista actual. */
-const NAV_OF_VIEW = { home: "pcap-curso", lesson: "pcap-curso", certificate: "pcap-curso", pcap: "pcap", daw: "daw", profile: "progreso", private: "cuenta" };
+const NAV_OF_VIEW = { home: "pcap-curso", lesson: "pcap-curso", certificate: "pcap-curso", pcap: "pcap", daw: "daw", profile: "progreso", private: "cuenta", tutor: "tutor" };
 
 function updateSiteNav() {
   const key = content.view === "learn" ? learnNavKey(location.hash) : NAV_OF_VIEW[content.view];
@@ -582,6 +586,11 @@ function defaultSlug() {
   return content.order.find((slug) => !state.completed.has(slug)) ?? content.order[0];
 }
 
+/** Lecciones sobre las que se puede preguntar al tutor (las del curso, que conoce el backend). */
+function tutorLessons() {
+  return content.order.map((slug) => ({ slug, title: content.lessons.get(slug).title }));
+}
+
 function goTo(slug) {
   location.hash = `${ROUTE_PREFIX}${slug}`;
 }
@@ -604,6 +613,11 @@ function navigate({ moveFocus = true } = {}) {
   }
   if (location.hash === PRIVATE_ROUTE) {
     showPage("private", { moveFocus });
+    return;
+  }
+  if (location.hash === TUTOR_ROUTE) {
+    showPage("tutor", { moveFocus: false });
+    openTutor(tutorLessons(), { moveFocus });
     return;
   }
   if (location.hash === CERTIFICATE_ROUTE || location.hash.startsWith(`${CERTIFICATE_ROUTE}/`)) {
@@ -731,6 +745,7 @@ async function init() {
   initAssistant();
   initAccount({ toast: showToast });
   initPrivate({ toast: showToast, refresh: refreshProgressViews });
+  initTutor();
   initPrefs();
 
   try {
@@ -756,6 +771,7 @@ async function init() {
     updateSidebar();
     updateCompleteButton();
     refreshProgressViews();
+    if (content.view === "tutor") openTutor(tutorLessons(), { moveFocus: false }); // al entrar o salir
   });
   $("#next-step").addEventListener("click", () => nextAction().run());
   $("#private-view").addEventListener("click", (event) => {

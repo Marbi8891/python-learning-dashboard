@@ -22,6 +22,9 @@ from app.session_cookie import MODE_HEADER
 
 logging.basicConfig(level=logging.INFO)
 
+# Versión del protocolo que manda un cliente A2A (ADR-0034); la web la necesita en CORS
+A2A_VERSION_HEADER = "A2A-Version"
+
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
@@ -44,7 +47,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=get_settings().cors_origins,
     allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE"],
-    allow_headers=["Authorization", "Content-Type", MODE_HEADER],
+    allow_headers=["Authorization", "Content-Type", MODE_HEADER, A2A_VERSION_HEADER],
     # La web envía la cookie de sesión HttpOnly a la API, que está en otro dominio (ADR-0033)
     allow_credentials=True,
 )
@@ -66,10 +69,14 @@ API_SECURITY_HEADERS = {
 }
 
 
+# Rutas de la API: la REST y las de los agentes A2A (ADR-0034)
+API_PATHS = ("/api/", "/a2a/", "/.well-known/agent-card.json")
+
+
 @app.middleware("http")
 async def security_headers(request: Request, call_next):
     response = await call_next(request)
-    if request.url.path.startswith("/api/"):
+    if request.url.path.startswith(API_PATHS):
         for name, value in API_SECURITY_HEADERS.items():
             response.headers.setdefault(name, value)
     return response
@@ -183,6 +190,13 @@ def health() -> dict[str, str | bool]:
     # "email": el frontend solo ofrece la recuperación por email si hay SMTP configurado
     return {"status": "ok", "email": bool(get_settings().smtp_host)}
 
+
+# Agentes A2A: una capacidad más junto a la API REST, no un sustituto (ADR-0034).
+# El SDK solo se importa si se activa: sin A2A, la API no gasta memoria en él.
+if get_settings().a2a_enabled:
+    from app.a2a.server import mount_a2a
+
+    mount_a2a(app, get_settings())
 
 if get_settings().serve_frontend:
     mount_frontend(app, get_settings().frontend_dir)

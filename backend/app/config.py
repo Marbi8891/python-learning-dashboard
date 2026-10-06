@@ -48,6 +48,15 @@ class Settings(BaseSettings):
     smtp_password: str | None = None
     smtp_from: str = "Python Learning Dashboard <no-reply@example.com>"
 
+    # Agentes A2A (ADR-0034, docs/a2a.md). Desactivados por defecto: sin proveedor de modelo real,
+    # solo se pueden activar con el modelo simulado de desarrollo (A2A_MOCK_MODEL=true).
+    a2a_enabled: bool = False
+    # URL pública de la API que se anuncia en la Agent Card (en Render, la de pld-api)
+    a2a_base_url: str = "http://127.0.0.1:8000"
+    a2a_mock_model: bool = False
+    # Mensajes al tutor por usuario y minuto
+    a2a_rate_limit_per_minute: int = 20
+
     # Modo aplicación local: la API sirve también la web (ver app/local_site.py)
     serve_frontend: bool = False
     frontend_dir: Path = FRONTEND_DIR
