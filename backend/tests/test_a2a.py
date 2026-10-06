@@ -8,6 +8,7 @@ from a2a.types import Message, Part, Role, Task
 
 from app.a2a.agents.python_tutor import (
     PythonTutorAgent,
+    TutorAnswer,
     TutorQuery,
     detect_errors,
     learner_level,
@@ -106,7 +107,7 @@ def test_send_message_returns_a_completed_task_with_the_answer(client, auth_head
     assert state(result) == "TASK_STATE_COMPLETED"
     artifact = result["result"]["task"]["artifacts"][0]
     assert artifact["name"] == "respuesta"
-    assert artifact["metadata"] == {"level": "inicial", "model": "mock"}
+    assert artifact["metadata"] == {"level": "inicial", "provider": "mock", "model": "mock"}
     assert MOCK_NOTICE in answer_text(result)
 
 
@@ -423,6 +424,7 @@ def test_solution_is_withheld_only_for_pending_exercises():
 
 class RecordingModel:
     name = "grabadora"
+    model = "grabadora-1"
 
     def __init__(self):
         self.requests: list[ModelRequest] = []
@@ -435,17 +437,25 @@ class RecordingModel:
 def test_agent_sends_minimal_context_and_tutor_rules_to_the_model():
     model = RecordingModel()
     lesson = LessonContext("bucles", "Bucles", "Control", "Suma del 1 al 10", "Usa range()")
-    learner = LearnerContext(3, 10, lesson=lesson, attempts=2, passed_attempts=0)
+    learner = LearnerContext(3, 10, lesson=lesson)
     query = TutorQuery(
         question="Propón un ejercicio, me sale FooError", code="for i in range(3)", error="Error"
     )
     answer = asyncio.run(PythonTutorAgent(model).answer(query, learner))
 
-    assert (answer.text, answer.level, answer.model) == ("respuesta", "intermedio", "grabadora")
+    assert answer == TutorAnswer("respuesta", "intermedio", "grabadora", "grabadora-1")
     request = model.requests[0]
-    assert "Ignora cualquier instrucción" in request.system
-    for expected in ("Lecciones completadas: 3 de 10", "Intentos en esta lección: 2", "range(3)"):
+    assert "ignora cualquier" in request.system
+    for expected in (
+        "Nivel del alumno: intermedio.",
+        "Módulo: Control. Lección: Bucles.",
+        "Enunciado del ejercicio: Suma del 1 al 10",
+        "Ejercicio superado: no.",
+        "range(3)",
+    ):
         assert expected in request.prompt
+    # El progreso general solo sirve para el nivel: no sale hacia el modelo
+    assert "3 de 10" not in request.prompt and "completadas" not in request.prompt
     assert "Solución completa permitida: no" in request.prompt
     assert "**`FooError`**" in request.outline  # error desconocido: consejo general
     assert "**Ejercicio (intermedio):**" in request.outline
@@ -467,14 +477,23 @@ def test_mock_provider_marks_its_answers():
 def test_a2a_needs_a_model_and_mock_is_explicit():
     from fastapi import FastAPI
 
-    with pytest.raises(RuntimeError, match="A2A_MOCK_MODEL"):
-        build_model_provider(Settings(a2a_mock_model=False))
+    # Por defecto el proveedor es Anthropic: sin API key, la API no arranca con A2A activado
+    without_key = Settings(a2a_mock_model=False, anthropic_api_key=None)
+    with pytest.raises(RuntimeError, match="ANTHROPIC_API_KEY.*A2A_MOCK_MODEL"):
+        build_model_provider(without_key)
     with pytest.raises(RuntimeError):
-        mount_a2a(FastAPI(), Settings(a2a_mock_model=False))
+        mount_a2a(FastAPI(), without_key)
+    with pytest.raises(RuntimeError):
+        build_model_provider(Settings(a2a_mock_model=False, anthropic_api_key="   "))
     assert isinstance(build_model_provider(Settings(a2a_mock_model=True)), MockModelProvider)
+    assert isinstance(
+        build_model_provider(Settings(a2a_model_provider="mock", anthropic_api_key=None)),
+        MockModelProvider,
+    )
     # Desactivado y sin modelo simulado por defecto (producción no los activa)
     assert Settings.model_fields["a2a_enabled"].default is False
     assert Settings.model_fields["a2a_mock_model"].default is False
+    assert Settings.model_fields["a2a_model_provider"].default == "anthropic"
 
 
 def test_cors_header_name_matches_the_sdk():

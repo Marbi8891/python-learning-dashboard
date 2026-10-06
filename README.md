@@ -202,7 +202,7 @@ La firma de release necesita tres secretos en *Settings → Secrets and variable
 
 ### A2A (agentes)
 
-Con `A2A_ENABLED=true` el backend añade agentes [A2A 1.0](https://a2a-protocol.org/) junto a la API REST, que no cambia. Detalle, ejemplos y cómo añadir agentes: **[docs/a2a.md](docs/a2a.md)**.
+Con `A2A_ENABLED=true` el backend añade agentes [A2A 1.0](https://a2a-protocol.org/) junto a la API REST, que no cambia. El modelo de producción es **Anthropic** (`ANTHROPIC_API_KEY`, solo en el entorno); para desarrollo y tests, `A2A_MOCK_MODEL=true`, sin clave. Detalle, ejemplos, privacidad, límites de coste y cómo añadir agentes o cambiar de proveedor: **[docs/a2a.md](docs/a2a.md)**.
 
 | Método | Ruta | Auth | Descripción |
 |---|---|---|---|

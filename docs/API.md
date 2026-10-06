@@ -31,7 +31,9 @@ When `A2A_ENABLED=true`, the same FastAPI app also serves A2A 1.0 agents under `
 | Agent Card (public) | /.well-known/agent-card.json, /a2a/python-tutor/.well-known/agent-card.json |
 | Python Tutor (JSON-RPC, session required) | POST /a2a/python-tutor with header `A2A-Version: 1.0` |
 
-See [a2a.md](a2a.md) (in Spanish) for the message format, examples and security rules.
+The production model provider is Anthropic (`A2A_MODEL_PROVIDER=anthropic`, key only in `ANTHROPIC_API_KEY`); tests and development use the mock model (`A2A_MOCK_MODEL=true`). The agent only depends on the `AgentModelProvider` interface.
+
+See [a2a.md](a2a.md) (in Spanish) for the message format, examples, security, data minimization and cost limits.
 
 ## Authentication
 

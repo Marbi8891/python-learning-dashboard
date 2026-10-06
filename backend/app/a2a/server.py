@@ -8,7 +8,8 @@ principal, el Python Tutor.
 
 El protocolo lo implementa el SDK oficial (`a2a-sdk`); aquí solo se añade lo del proyecto:
 - Autenticación con la misma sesión que la API REST (`get_current_user`: Bearer o cookie).
-- Límite de mensajes por usuario y minuto.
+- Límites: mensajes por usuario y minuto, y consultas al modelo por usuario y día y de todos los
+  usuarios por minuto (el coste del proveedor no puede crecer sin tope).
 - Las tareas de cada usuario solo las ve ese usuario (el «propietario» es el id de la sesión).
 - El contexto de la llamada solo lleva lo imprescindible: nunca el token ni las cookies.
 
@@ -43,6 +44,7 @@ from fastapi import APIRouter, FastAPI, HTTPException, Request, Response, status
 from app.a2a.agents.python_tutor import PythonTutorAgent
 from app.a2a.cards.python_tutor import build_python_tutor_card
 from app.a2a.executors.python_tutor import (
+    BUDGET_STATE_KEY,
     CORRELATION_STATE_KEY,
     LEARNING_STATE_KEY,
     PythonTutorExecutor,
@@ -60,6 +62,8 @@ logging.getLogger("a2a").setLevel(logging.WARNING)
 A2A_PREFIX = "/a2a"
 # Tareas que se guardan por usuario (en memoria): las más recientes
 TASKS_KEPT_PER_USER = 20
+DAY = 24 * 60 * 60
+ALL_USERS = "all"
 
 
 @dataclass(frozen=True)
@@ -79,12 +83,27 @@ AGENTS: tuple[AgentSpec, ...] = (
 
 
 def build_model_provider(settings: Settings) -> AgentModelProvider:
-    """De momento solo existe el modelo simulado; un proveedor real se añadiría aquí."""
-    if settings.a2a_mock_model:
+    """El proveedor del modelo según la configuración. Falla al arrancar si falta la API key.
+
+    Para añadir otro proveedor (OpenAI, un modelo local…): su clase en `providers/`, un valor más
+    en A2A_MODEL_PROVIDER y su rama aquí. Los agentes no cambian.
+    """
+    if settings.a2a_mock_model or settings.a2a_model_provider == "mock":
         return MockModelProvider()
-    raise RuntimeError(
-        "A2A_ENABLED=true necesita un modelo. En esta versión solo existe el simulado de "
-        "desarrollo: añade A2A_MOCK_MODEL=true (nunca en producción) o desactiva A2A."
+    secret = settings.anthropic_api_key
+    key = secret.get_secret_value().strip() if secret else ""
+    if not key:
+        raise RuntimeError(
+            "A2A_MODEL_PROVIDER=anthropic necesita ANTHROPIC_API_KEY (variable de entorno o gestor "
+            "de secretos). Para desarrollo y tests sin API key: A2A_MOCK_MODEL=true."
+        )
+    from app.a2a.providers.anthropic_provider import AnthropicProvider  # solo si se usa
+
+    return AnthropicProvider(
+        api_key=key,
+        model=settings.a2a_model,
+        max_tokens=settings.a2a_max_output_tokens,
+        timeout_seconds=settings.a2a_model_timeout_seconds,
     )
 
 
@@ -108,7 +127,8 @@ class SessionUser(A2AUser):
 
 
 class SessionContextBuilder(ServerCallContextBuilder):
-    """Contexto mínimo: usuario, versión de A2A, extensiones y el lector de datos educativos.
+    """Contexto mínimo: usuario, versión de A2A, extensiones, el lector de datos educativos y el
+    contador de consultas al modelo.
 
     No copia las cabeceras (el constructor por defecto del SDK guarda todas, incluidas
     `Authorization` y `Cookie`): así el token nunca llega a la capa de agentes.
@@ -118,6 +138,7 @@ class SessionContextBuilder(ServerCallContextBuilder):
         state = {
             "headers": {VERSION_HEADER: request.headers.get(VERSION_HEADER, "")},
             LEARNING_STATE_KEY: request.state.pld_learning,
+            BUDGET_STATE_KEY: request.state.pld_budget,
             CORRELATION_STATE_KEY: request.state.pld_request_id,
         }
         return ServerCallContext(
@@ -154,10 +175,14 @@ def mount_a2a(app: FastAPI, settings: Settings) -> None:
     """Añade las rutas A2A de todos los agentes a la app. Falla al arrancar si falta el modelo."""
     model = build_model_provider(settings)
     limiter = app.state.a2a_limiter = RateLimiter(settings.a2a_rate_limit_per_minute)
+    budget = app.state.a2a_budget = ModelBudget(
+        per_user=RateLimiter(settings.a2a_daily_limit_per_user, window_seconds=DAY),
+        overall=RateLimiter(settings.a2a_global_limit_per_minute),
+    )
     base_url = settings.a2a_base_url.rstrip("/")
     for index, spec in enumerate(AGENTS):
         path = f"{A2A_PREFIX}/{spec.id}"
-        card = spec.build_card(f"{base_url}{path}", settings.a2a_mock_model)
+        card = spec.build_card(f"{base_url}{path}", model.name == MockModelProvider.name)
         handler = DefaultRequestHandler(
             agent_executor=spec.build_executor(model),
             task_store=BoundedTaskStore(),
@@ -170,10 +195,30 @@ def mount_a2a(app: FastAPI, settings: Settings) -> None:
         jsonrpc = create_jsonrpc_routes(
             handler, rpc_url=path, context_builder=SessionContextBuilder()
         )[0].endpoint
-        app.include_router(_session_router(path, jsonrpc, limiter))
+        app.include_router(_session_router(path, jsonrpc, limiter, budget))
 
 
-def _session_router(path: str, jsonrpc: Callable, limiter: RateLimiter) -> APIRouter:
+@dataclass(frozen=True)
+class ModelBudget:
+    """Consultas al modelo: por usuario y día, y de todos por minuto. Reutiliza el `RateLimiter`
+    en memoria de la API (sin Redis): con varias instancias, cada una contaría por su cuenta."""
+
+    per_user: RateLimiter
+    overall: RateLimiter
+
+    def take(self, user_id: int) -> bool:
+        """Gasta una consulta si queda en los dos límites; si no, no cuenta ninguna."""
+        key = f"user:{user_id}"
+        if self.per_user.blocked(key) or self.overall.blocked(ALL_USERS):
+            return False
+        self.per_user.record(key)
+        self.overall.record(ALL_USERS)
+        return True
+
+
+def _session_router(
+    path: str, jsonrpc: Callable, limiter: RateLimiter, budget: ModelBudget
+) -> APIRouter:
     """Ruta JSON-RPC protegida con la sesión de la API (el SDK no la conoce)."""
     router = APIRouter(tags=["A2A: JSON-RPC"])
 
@@ -184,6 +229,7 @@ def _session_router(path: str, jsonrpc: Callable, limiter: RateLimiter) -> APIRo
             raise HTTPException(status_code=status.HTTP_429_TOO_MANY_REQUESTS, detail=TOO_MANY)
         request.state.pld_user = user
         request.state.pld_learning = partial(load_learner_context, db, user.id)
+        request.state.pld_budget = partial(budget.take, user.id)
         request.state.pld_request_id = str(uuid.uuid4())
         response = await jsonrpc(request)
         response.headers["X-Request-ID"] = request.state.pld_request_id

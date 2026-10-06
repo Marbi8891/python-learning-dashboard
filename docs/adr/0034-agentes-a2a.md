@@ -1,6 +1,7 @@
 # ADR-0034: Agentes A2A junto a la API REST (Python Tutor)
 
-- **Estado:** Propuesta (pendiente de que el autor la apruebe en el PR).
+- **Estado:** Propuesta (pendiente de que el autor la apruebe en el PR). Proveedor inicial de
+  producción: Anthropic (decisión del autor, 2026-10-06).
 - **Fecha:** 2026-10-06
 - **Relacionada:** ADR-0003 (los ejercicios se ejecutan en el navegador), ADR-0022 (seguridad
   integral), ADR-0033 (sesión en cookie `HttpOnly`)
@@ -37,12 +38,18 @@ API REST `/api/v1/*` no cambia. A2A es una capacidad más.
    sin protocolo), `executors/` (protocolo, validación y errores), `providers/` (modelo de
    lenguaje) y `server.py` (registro de agentes y rutas). Los datos del alumno salen de
    `app/services/learning_context.py`, no de consultas dentro del executor.
-7. **Modelo intercambiable.** El agente recibe un `AgentModelProvider`. Hoy solo existe el
-   **simulado** (`A2A_MOCK_MODEL=true`), sin API key ni servicios externos. A2A está **desactivado
-   por defecto** y, sin un modelo, el servidor se niega a arrancar con A2A activado: en producción
-   no puede responder un modelo simulado por accidente.
+7. **Modelo intercambiable.** El agente recibe un `AgentModelProvider`. El proveedor de
+   producción es **Anthropic** (SDK oficial `anthropic`, `AnthropicProvider`); el **simulado**
+   (`A2A_MOCK_MODEL=true`) sirve para desarrollo y tests, sin API key ni servicios externos. OpenAI
+   o un modelo local serían otra clase con la misma interfaz. A2A está **desactivado por
+   defecto** y, con Anthropic sin `ANTHROPIC_API_KEY`, el servidor se niega a arrancar: en
+   producción no puede responder un modelo simulado por accidente.
 8. **El código del alumno es texto.** Nunca se ejecuta en el servidor (ni `exec`, ni `eval`, ni
    `subprocess`). Para ejecutarlo sigue estando Pyodide en el navegador (ADR-0003).
+9. **Al proveedor solo le llega el contexto educativo mínimo** de la consulta (nivel, lección,
+   enunciado, si está superado, y la pregunta, el código y el error), nunca datos que identifiquen
+   al alumno ni de otros usuarios. Límites de coste con el `RateLimiter` existente: consultas por
+   usuario y día y de todos por minuto, más `max_tokens` y tiempo máximo por llamada.
 
 ## Alternativas descartadas
 
@@ -50,8 +57,8 @@ API REST `/api/v1/*` no cambia. A2A es una capacidad más.
 - **REST de A2A además de JSON-RPC:** más superficie sin un cliente que lo necesite.
 - **Guardar las tareas en la base de datos** (el SDK trae `DatabaseTaskStore`): añade tablas y
   datos personales que conservar y borrar (RGPD) sin necesidad todavía.
-- **Conectar ya Anthropic u OpenAI:** implica enviar preguntas y código a un tercero; antes hay
-  que decidir proveedor y actualizar la política de privacidad. Queda para la siguiente fase.
+- **Acoplar el tutor a Anthropic** (llamar al SDK desde el agente): impediría cambiar a OpenAI o
+  a un modelo local sin tocar la lógica educativa.
 
 ## Consecuencias
 

@@ -35,9 +35,9 @@ Dentro de `backend/app/a2a/`:
 | `cards/python_tutor.py` | La **Agent Card**: nombre, versión, URL, capacidades, skill e input/output |
 | `agents/python_tutor.py` | La **lógica educativa**: valida la pregunta, adapta el nivel, explica errores, revisa el código **sin ejecutarlo** y prepara la respuesta. No sabe nada de A2A |
 | `executors/python_tutor.py` | El **executor**: lee el mensaje A2A, pide el contexto del alumno, llama al agente y publica la tarea (enviada → en curso → artefacto → completada). Maneja errores y cancelaciones |
-| `providers/` | El **modelo de lenguaje**: interfaz `AgentModelProvider` y el modelo simulado `MockModelProvider` |
+| `providers/` | El **modelo de lenguaje**: interfaz `AgentModelProvider`, `AnthropicProvider` (producción) y `MockModelProvider` (desarrollo y tests) |
 | `observability.py` | Una línea de log JSON por tarea (`pld.a2a`) |
-| `server.py` | Registro de agentes (`AGENTS`), autenticación, límite por usuario, tareas por usuario y montaje de rutas |
+| `server.py` | Registro de agentes (`AGENTS`), elección del proveedor, autenticación, límites, tareas por usuario y montaje de rutas |
 
 ## Python Tutor
 
@@ -53,24 +53,113 @@ Si el alumno pide la solución de un ejercicio que **aún no ha superado**, no s
 El nivel (inicial, intermedio, avanzado) sale de su progreso real o lo indica el alumno. El agente
 **no inventa el progreso**: lo lee del servicio `load_learner_context` con el usuario de la sesión.
 
-Qué datos del alumno usa (minimización): lecciones completadas y totales y, solo si pregunta por una
-lección, su título, enunciado, pista, si la tiene completada y cuántos intentos lleva. Nunca el
-email, el nombre, el historial completo ni el código de intentos anteriores.
+### Minimización de datos
 
-### Modelo de lenguaje
+El servidor lee del alumno solo: cuántas lecciones lleva completadas (para calcular el nivel) y,
+si pregunta por una lección, su título, módulo, enunciado, pista y si la tiene superada.
 
-El agente no depende de ningún proveedor. Recibe un objeto con este método:
+Al **proveedor del modelo** solo le llega (`PythonTutorAgent._prompt`):
+
+- las instrucciones del tutor (`SYSTEM_PROMPT`, iguales para todos);
+- el nivel (`inicial`, `intermedio` o `avanzado`), no el progreso con el que se calcula;
+- si eligió una lección: módulo, lección, enunciado y si el ejercicio está superado (sí/no);
+- lo que el alumno ha escrito en esta consulta: pregunta, código y mensaje de error;
+- la guía que ha preparado el propio agente (explicación del error, pista de la lección…).
+
+Nunca el email, el nombre, el id de usuario, el historial, los intentos anteriores, otras
+lecciones, otros cursos ni datos de otros usuarios. El usuario sale siempre de la sesión: un test
+(`test_the_provider_only_receives_the_session_users_data`) comprueba con la API de Anthropic
+simulada que lo que recibe el proveedor para un alumno no lleva nada de otro.
+
+### Cómo responde el tutor
+
+`SYSTEM_PROMPT` (en `agents/python_tutor.py`) fija este orden: 1) comprender el problema,
+2) identificar el concepto que falla, 3) explicarlo, 4) dar una pista, 5) un ejemplo pequeño,
+6) dejar que el alumno lo vuelva a intentar y 7) la solución completa solo cuando corresponde.
+Respuestas cortas para preguntas sencillas, adaptadas al nivel, sin inventar resultados de
+ejecución, y al analizar código separa **código analizado**, **comportamiento esperado**,
+**comportamiento observado** (solo lo que diga el alumno o su error) e **hipótesis**.
+
+## Production model provider
+
+El agente está **desacoplado del proveedor**. El Python Tutor solo conoce esta interfaz
+(`providers/base.py`):
 
 ```python
 class AgentModelProvider(Protocol):
-    name: str
+    name: str    # «anthropic», «mock»…
+    model: str   # modelo concreto, para logs y metadatos
     async def generate(self, request: ModelRequest) -> str: ...
 ```
 
-`ModelRequest` lleva las instrucciones de tutor (`system`), la pregunta con el contexto mínimo
-(`prompt`) y la guía que ha preparado el agente (`outline`). Hoy solo existe `MockModelProvider`,
-que devuelve esa guía marcada como «Modo de desarrollo». Para Anthropic, OpenAI o un modelo
-local basta con otra clase con `generate` y elegirla en `build_model_provider` (`server.py`).
+```
+A2A → Python Tutor Agent → AgentModelProvider → AnthropicProvider   (hoy, producción)
+                                              → MockModelProvider   (desarrollo y tests)
+                                              → OpenAIProvider      (futuro)
+                                              → LocalModelProvider  (futuro)
+```
+
+### Anthropic (proveedor inicial de producción)
+
+`providers/anthropic_provider.py` usa el **SDK oficial** [`anthropic`](https://pypi.org/project/anthropic/)
+1.x y la Messages API:
+
+- Modelo por defecto **`claude-opus-5-5`** (`A2A_MODEL`), con `output_config.effort = "medium"`
+  fijado en el código. El modelo debe admitir `effort` (familia Claude 4.6 y posteriores).
+- Con los modelos que lo admiten (Opus 5 / 5.5, Sonnet 5.5, Fable 5) se activa el **respaldo en
+  el servidor** (`fallbacks: "default"`, beta `server-side-fallback-2026-07-01`): si los filtros
+  de seguridad del modelo rechazan una consulta, la API la repite con el modelo que recomienda
+  Anthropic en la misma llamada. Si aun así se rechaza, la tarea falla con el mensaje genérico.
+- `max_tokens` = `A2A_MAX_OUTPUT_TOKENS` (incluye el razonamiento del modelo). Si se corta, la
+  respuesta lo dice.
+- Tiempo máximo por llamada `A2A_MODEL_TIMEOUT_SECONDS` y **un solo reintento** (red, 429, 5xx);
+  además, un límite total (el doble) para que ninguna tarea quede colgada.
+- Destino fijo `https://api.anthropic.com`: ni la petición ni `ANTHROPIC_BASE_URL` lo cambian
+  (sin SSRF).
+- No envía `metadata.user_id` ni ningún identificador del alumno.
+- Errores del SDK → excepciones propias (`ModelTimeoutError`, `ModelRateLimitedError`,
+  `ModelConfigurationError`, `ModelRefusedError`, `EmptyModelResponseError`,
+  `MalformedModelResponseError`…), sin la petición ni la respuesta dentro. El alumno ve un mensaje
+  genérico y el log, el tipo de error.
+
+**La API key** sale solo de `ANTHROPIC_API_KEY` (variable de entorno o gestor de secretos; en
+Render, una variable secreta). Se lee como `SecretStr`, se entrega solo al cliente del SDK y nunca
+está en el código, en los tests, en los logs, en la base de datos, en la Agent Card ni en las
+respuestas al frontend. Sin ella, con `A2A_MODEL_PROVIDER=anthropic`, **la API no arranca**.
+
+### Modelo simulado
+
+`MockModelProvider` (`A2A_MOCK_MODEL=true`) no llama a nada ni necesita clave: devuelve la guía
+del agente marcada como «Modo de desarrollo». Tiene prioridad sobre `A2A_MODEL_PROVIDER`, así que
+los tests y el desarrollo nunca gastan ni envían datos fuera. La Agent Card lo indica.
+
+### Cambiar de proveedor
+
+1. Una clase en `providers/` con `name`, `model` y `async generate(request) -> str`, que lance las
+   excepciones de `providers/base.py`.
+2. Un valor más en `A2A_MODEL_PROVIDER` (`config.py`) y su rama en `build_model_provider`
+   (`server.py`), con su clave como `SecretStr`.
+3. Sus tests simulando la API, como `tests/test_a2a_providers.py`.
+
+Los agentes, el executor, la Agent Card y el frontend no cambian.
+
+### Coste y límites
+
+Todo con el `RateLimiter` en memoria que ya usa la API (sin Redis ni más infraestructura):
+
+| Límite | Por defecto | Variable |
+|---|---|---|
+| Mensajes por usuario y minuto (cualquier llamada JSON-RPC) → 429 | 20 | `A2A_RATE_LIMIT_PER_MINUTE` |
+| Consultas al modelo por usuario y día → tarea rechazada con explicación | 100 | `A2A_DAILY_LIMIT_PER_USER` |
+| Consultas al modelo de todos los usuarios por minuto | 60 | `A2A_GLOBAL_LIMIT_PER_MINUTE` |
+| Tokens de salida por respuesta | 4096 | `A2A_MAX_OUTPUT_TOKENS` |
+| Entrada: pregunta / código / error | 4000 / 20 000 / 4000 caracteres | — |
+
+Los mensajes no válidos no gastan consultas. **Limitaciones:** los contadores se pierden al
+reiniciar y no se comparten entre instancias (hoy hay una). No hay un presupuesto en euros: para
+eso, fija un **límite de gasto mensual en la consola de Anthropic** (Workspace limits), que es el
+tope definitivo. Cada llamada deja en el log sus tokens de entrada y salida (`a2a.model`) para
+vigilar el consumo.
 
 ## Agent Card
 
@@ -129,25 +218,41 @@ Si el mensaje no es válido, la tarea acaba en `TASK_STATE_REJECTED` con una exp
   pedir la de otro responde «tarea no encontrada».
 - Se mantienen CORS (lista explícita de orígenes; se añade `A2A-Version` a las cabeceras
   permitidas), cabeceras de seguridad, límite de 300 KB por petición y el registro de ataques.
-- Límite de **20 mensajes por usuario y minuto** (429).
+- Límites de mensajes y de consultas al modelo (ver «Coste y límites»).
+- Ninguna URL de la petición se descarga (se rechazan partes `url` y archivos) y el destino del
+  modelo es fijo: sin SSRF. Los agentes no leen ni escriben archivos.
 - El contexto de cada llamada **no lleva el token ni las cookies** (el SDK por defecto copiaría
   todas las cabeceras).
-- El código del alumno **nunca se ejecuta** en el servidor. Para eso está la consola de la web
-  con Pyodide.
+- El código del alumno **nunca se ejecuta** en el servidor (ni `exec`, ni `eval`, ni
+  `subprocess`): el modelo lo analiza como texto. Para ejecutarlo está la consola de la web con
+  Pyodide. Un test sustituye esas funciones por otras que fallan y comprueba que nada las llama.
 - Los errores internos no llegan al cliente: la tarea acaba en `TASK_STATE_FAILED` con un mensaje
   genérico, y el log guarda solo el tipo de error.
 - Las tareas viven en memoria (las 20 últimas por usuario) y se borran al reiniciar.
+- Logs (`pld.a2a`): agente, proveedor, modelo, tarea, conversación, id de petición, seudónimo del
+  usuario, duración, resultado y tipo de error; y por llamada al modelo, tokens y motivo de parada.
+  Nunca la API key, el JWT, cookies, contraseñas, el prompt, la pregunta, el código ni la
+  respuesta. Los logs DEBUG del SDK de Anthropic (que llevan la petición) se silencian.
 
 ## Variables de entorno
 
 | Variable | Por defecto | Qué hace |
 |---|---|---|
-| `A2A_ENABLED` | `false` | Monta las rutas A2A. Sin modelo (de momento, `A2A_MOCK_MODEL=true`) el servidor no arranca |
-| `A2A_MOCK_MODEL` | `false` | Usa el modelo simulado. Solo para desarrollo y tests, **nunca en producción** |
+| `A2A_ENABLED` | `false` | Monta las rutas A2A. Sin proveedor válido el servidor no arranca |
+| `A2A_MODEL_PROVIDER` | `anthropic` | `anthropic` o `mock` |
+| `ANTHROPIC_API_KEY` | (vacía) | **Secreto.** Obligatoria con `anthropic`. Solo en el entorno o el gestor de secretos, nunca en el repositorio |
+| `A2A_MODEL` | `claude-opus-5-5` | Modelo de Anthropic |
+| `A2A_MOCK_MODEL` | `false` | Modelo simulado (gana a `A2A_MODEL_PROVIDER`). Desarrollo y tests, **nunca en producción** |
+| `A2A_MAX_OUTPUT_TOKENS` | `4096` | Tokens de salida por respuesta (256–32 000) |
+| `A2A_MODEL_TIMEOUT_SECONDS` | `45` | Segundos por llamada al proveedor (con un reintento, como mucho el doble) |
 | `A2A_BASE_URL` | `http://127.0.0.1:8000` | URL pública de la API que se anuncia en la Agent Card (en Render: `https://pld-api.onrender.com`) |
 | `A2A_RATE_LIMIT_PER_MINUTE` | `20` | Mensajes al tutor por usuario y minuto |
+| `A2A_DAILY_LIMIT_PER_USER` | `100` | Consultas al modelo por usuario y día |
+| `A2A_GLOBAL_LIMIT_PER_MINUTE` | `60` | Consultas al modelo de todos los usuarios por minuto |
 
-No hay ninguna clave nueva: el modelo simulado no la necesita.
+En Render, `ANTHROPIC_API_KEY` se añade como variable secreta del servicio `pld-api` (no está en
+`render.yaml`, que no activa A2A). Activarlo en producción es una decisión aparte: antes hay que
+fijar el límite de gasto en la consola de Anthropic.
 
 ## Arrancarlo en local
 
@@ -156,7 +261,11 @@ cd backend
 pip install -r requirements-dev.txt
 # en backend/.env, además de JWT_SECRET:
 #   A2A_ENABLED=true
-#   A2A_MOCK_MODEL=true
+#   A2A_MOCK_MODEL=true            # sin API key ni llamadas externas
+# o, para probar con Claude (la clave, solo en tu entorno, nunca en el repositorio):
+#   A2A_ENABLED=true
+#   A2A_MODEL_PROVIDER=anthropic
+#   ANTHROPIC_API_KEY=…
 alembic upgrade head
 python -m app.seed
 uvicorn app.main:app --reload
@@ -167,7 +276,7 @@ La web (`cd frontend && python -m http.server 5500`) muestra entonces **Tutor Py
 ## Tests
 
 ```bash
-cd backend && python -m pytest tests/test_a2a.py   # solo A2A
+cd backend && python -m pytest tests/test_a2a.py tests/test_a2a_providers.py   # solo A2A
 cd backend && python -m pytest --cov=app           # todo el backend (100 % de cobertura)
 npm run test:unit                                  # incluye tests/unit/tutor.test.mjs
 npx playwright test e2e/tutor.spec.js              # web → API → A2A → agente → respuesta
@@ -177,6 +286,13 @@ npx playwright test e2e/tutor.spec.js              # web → API → A2A → age
 errores JSON-RPC, el aislamiento entre usuarios, el contexto educativo, la validación de entrada,
 el límite de tamaño, el límite por usuario, la cancelación, CORS, que el código no se ejecuta, que
 los logs y las respuestas no llevan secretos y las piezas por separado.
+
+**Los tests no necesitan API key ni red.** `conftest.py` activa `A2A_MOCK_MODEL=true` y borra
+`ANTHROPIC_API_KEY` del entorno. `tests/test_a2a_providers.py` prueba el SDK oficial de verdad
+contra una API de Anthropic simulada (`httpx2.MockTransport`): inicialización, falta de clave,
+modelo simulado, errores 4xx/5xx/429, red caída, timeout, respuestas rechazadas, vacías o
+malformadas, que la clave y el contenido nunca llegan a los logs, el contexto minimizado, el
+aislamiento entre usuarios y los límites de coste.
 
 ## Conectar un cliente A2A
 
@@ -200,7 +316,7 @@ Respuesta (resumida):
 {"jsonrpc":"2.0","id":1,"result":{"task":{
   "id":"…","contextId":"…","status":{"state":"TASK_STATE_COMPLETED"},
   "artifacts":[{"name":"respuesta","parts":[{"text":"Estás en **Variables y print()** …","mediaType":"text/plain"}],
-                "metadata":{"level":"inicial","model":"mock"}}]}}}
+                "metadata":{"level":"inicial","provider":"mock","model":"mock"}}]}}}
 ```
 
 Para seguir la conversación, envía el siguiente mensaje con el mismo `contextId`.
@@ -238,9 +354,7 @@ tareas aisladas por usuario. No hay que tocar el núcleo.
 
 ## Siguientes pasos previstos
 
-- **Proveedor real** (Anthropic, OpenAI o local) detrás de `AgentModelProvider`, con su variable
-  de entorno para la clave y la política de privacidad actualizada (se enviarían preguntas y
-  código a un tercero).
+- **Otros proveedores** (OpenAI, modelo local) detrás de `AgentModelProvider`.
 - **Streaming**: activar `capabilities.streaming` y publicar actualizaciones parciales; el
   executor ya sigue el flujo tarea → actualizaciones → artefacto.
 - **MCP** para que los agentes lean lecciones, progreso y ejercicios como herramientas

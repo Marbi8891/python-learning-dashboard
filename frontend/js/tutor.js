@@ -68,8 +68,9 @@ function chatHtml(lessons) {
           <button class="btn btn--ghost" type="button" data-tutor-reset>Nueva conversación</button>
         </div>
       </form>
-      <p class="account-card__meta">Solo se envía lo que escribes aquí y, si eliges una lección, tu progreso en ella.
-        No se guarda en tu cuenta: el servidor conserva tus últimas consultas en memoria temporal.</p>
+      <p class="account-card__meta">Las respuestas las puede generar un modelo de IA externo: solo se envía lo que escribes aquí y, si eliges
+        una lección, si la has superado. No incluyas datos personales. No se guarda en tu cuenta: el servidor
+        conserva tus últimas consultas en memoria temporal. <a href="privacidad.html">Privacidad</a></p>
     </section>`;
 }
 
