@@ -20,24 +20,39 @@ from pydantic import ValidationError
 
 from app.a2a.agents.python_tutor import PythonTutorAgent, TutorQuery
 from app.a2a.observability import log_task
+from app.a2a.providers.base import (
+    ModelConfigurationError,
+    ModelTimeoutError,
+    ModelUnavailableError,
+)
 from app.services.learning_context import LearnerContext
 
 # Claves que la ruta de FastAPI deja en el contexto de la llamada (ver server.py)
 LEARNING_STATE_KEY = "pld_learning_context"
+BUDGET_STATE_KEY = "pld_model_budget"
 CORRELATION_STATE_KEY = "pld_request_id"
 
 LearningLoader = Callable[[str | None], LearnerContext]
+TakeModelQuery = Callable[[], bool]  # gasta una consulta al modelo; False si no quedan
 
 INVALID_INPUT = (
     "No he podido leer tu mensaje. Escribe tu pregunta como texto (máximo 4000 caracteres) y, si "
     "quieres, añade un objeto JSON con lesson_slug, code, error o level."
 )
 FAILED = "El tutor no ha podido responder ahora mismo. Inténtalo de nuevo en unos segundos."
+LIMITED = (
+    "Has llegado al límite de consultas al tutor por ahora. Mientras tanto, prueba tu código en la "
+    "consola de la lección; podrás volver a preguntar más tarde."
+)
 CANCELED = "Consulta cancelada."
 
 
 class InvalidTutorMessage(ValueError):
     """El mensaje A2A no tiene la forma que espera el tutor."""
+
+
+class ModelBudgetExhausted(Exception):
+    """No quedan consultas al modelo (por usuario y día, o de todos por minuto)."""
 
 
 def parse_message(message: Message | None) -> TutorQuery:
@@ -67,6 +82,7 @@ class PythonTutorExecutor(AgentExecutor):
         started = time.perf_counter()
         state = context.call_context.state
         loader: LearningLoader | None = state.get(LEARNING_STATE_KEY)
+        budget: TakeModelQuery | None = state.get(BUDGET_STATE_KEY)
         task = context.current_task or new_task(
             context.task_id,
             context.context_id,
@@ -77,6 +93,8 @@ class PythonTutorExecutor(AgentExecutor):
         def log(outcome: str, error: BaseException | None = None) -> None:
             log_task(
                 agent=self.agent.name,
+                provider=self.agent.model.name,
+                model=self.agent.model.model,
                 task_id=task.id,
                 context_id=task.context_id,
                 request_id=state.get(CORRELATION_STATE_KEY),
@@ -101,6 +119,8 @@ class PythonTutorExecutor(AgentExecutor):
         try:
             if problem is not None:
                 raise problem
+            if budget is not None and not budget():  # solo cuentan los mensajes válidos
+                raise ModelBudgetExhausted()
             await updater.start_work()
             answer = await self.agent.answer(query, learner)
         except asyncio.CancelledError:
@@ -110,15 +130,21 @@ class PythonTutorExecutor(AgentExecutor):
             await updater.reject(updater.new_agent_message([Part(text=INVALID_INPUT)]))
             log("rejected", error)
             return
+        except ModelBudgetExhausted as error:
+            await updater.reject(updater.new_agent_message([Part(text=LIMITED)]))
+            log("limited", error)
+            return
         except Exception as error:  # el detalle se queda en el log (solo el tipo), nunca al cliente
-            await updater.failed(updater.new_agent_message([Part(text=FAILED)]))
+            down = (ModelUnavailableError, ModelTimeoutError, ModelConfigurationError)
+            text = self.agent.model.unavailable_message if isinstance(error, down) else FAILED
+            await updater.failed(updater.new_agent_message([Part(text=text)]))
             log("failed", error)
             return
 
         await updater.add_artifact(
             [Part(text=answer.text, media_type="text/plain")],
             name="respuesta",
-            metadata={"level": answer.level, "model": answer.model},
+            metadata={"level": answer.level, "provider": answer.provider, "model": answer.model},
         )
         await updater.complete()
         log("completed")

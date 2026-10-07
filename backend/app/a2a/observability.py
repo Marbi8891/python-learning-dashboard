@@ -1,8 +1,9 @@
 """Logs de los agentes A2A: una línea JSON por tarea en el logger `pld.a2a`.
 
-Permiten saber qué agente atendió qué tarea, cuánto tardó y cómo acabó. Nunca llevan el texto de
-la pregunta, el código, tokens, cookies ni datos personales: el usuario va con seudónimo (como en
-`security_events`) y los errores solo con el nombre de la excepción.
+Permiten saber qué agente y qué modelo atendieron qué tarea, cuánto tardó y cómo acabó. Nunca
+llevan el texto de la pregunta, el prompt, el código, API keys, tokens, cookies ni datos
+personales: el usuario va con seudónimo (como en `security_events`) y los errores solo con el
+nombre de la excepción.
 """
 
 import json
@@ -17,6 +18,8 @@ logger = logging.getLogger("pld.a2a")
 def log_task(
     *,
     agent: str,
+    provider: str,
+    model: str,
     task_id: str,
     context_id: str,
     request_id: str | None,
@@ -28,6 +31,8 @@ def log_task(
     entry: dict[str, object] = {
         "event": "a2a.task",
         "agent": agent,
+        "provider": provider,
+        "model": model,
         "task": task_id,
         "context": context_id,
         "request": request_id,

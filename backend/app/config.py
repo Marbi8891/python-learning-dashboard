@@ -2,8 +2,9 @@
 
 from functools import lru_cache
 from pathlib import Path
+from typing import Literal
 
-from pydantic import field_validator
+from pydantic import Field, SecretStr, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 # Fuente única del contenido: la comparten frontend (GitHub Pages) y backend
@@ -48,14 +49,32 @@ class Settings(BaseSettings):
     smtp_password: str | None = None
     smtp_from: str = "Python Learning Dashboard <no-reply@example.com>"
 
-    # Agentes A2A (ADR-0034, docs/a2a.md). Desactivados por defecto: sin proveedor de modelo real,
-    # solo se pueden activar con el modelo simulado de desarrollo (A2A_MOCK_MODEL=true).
+    # Agentes A2A (ADR-0034, docs/a2a.md). Desactivados por defecto.
     a2a_enabled: bool = False
     # URL pública de la API que se anuncia en la Agent Card (en Render, la de pld-api)
     a2a_base_url: str = "http://127.0.0.1:8000"
+    # Proveedor del modelo de lenguaje: «ollama» (local y gratuito, el predeterminado),
+    # «anthropic» (de pago: solo si se elige expresamente y hay ANTHROPIC_API_KEY) o «mock».
+    a2a_model_provider: Literal["ollama", "anthropic", "mock"] = "ollama"
+    # Modelo simulado para desarrollo y tests (sin modelo ni llamadas). Tiene prioridad sobre
+    # A2A_MODEL_PROVIDER. Nunca en producción.
     a2a_mock_model: bool = False
-    # Mensajes al tutor por usuario y minuto
+    # Modelo del proveedor; vacío = el predeterminado de cada uno (qwen2.5-coder:7b en Ollama,
+    # claude-opus-5-5 en Anthropic)
+    a2a_model: str | None = None
+    # Ollama es un servicio interno: su URL solo sale de aquí, nunca de una petición
+    a2a_ollama_base_url: str = "http://127.0.0.1:11434"
+    # Solo del entorno o del gestor de secretos; SecretStr evita que aparezca al imprimir la config
+    anthropic_api_key: SecretStr | None = None
+    # Límites: tokens de salida por respuesta (incluido el razonamiento del modelo) y segundos por
+    # llamada al proveedor (un modelo local en CPU puede tardar más de un minuto)
+    a2a_max_output_tokens: int = Field(default=4096, ge=256, le=32_000)
+    a2a_model_timeout_seconds: float = Field(default=120.0, gt=0, le=600)
+    # Mensajes al tutor por usuario y minuto; consultas al modelo por usuario y día, y de todos los
+    # usuarios juntos por minuto (tope de gasto si muchas cuentas lo usan a la vez)
     a2a_rate_limit_per_minute: int = 20
+    a2a_daily_limit_per_user: int = Field(default=100, ge=1)
+    a2a_global_limit_per_minute: int = Field(default=60, ge=1)
 
     # Modo aplicación local: la API sirve también la web (ver app/local_site.py)
     serve_frontend: bool = False

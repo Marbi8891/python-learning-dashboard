@@ -7,6 +7,8 @@ os.environ.setdefault("JWT_SECRET", "secreto-solo-para-tests-" + "x" * 32)
 # Agentes A2A con el modelo simulado (ADR-0034): se prueban junto al resto de la API
 os.environ.setdefault("A2A_ENABLED", "true")
 os.environ.setdefault("A2A_MOCK_MODEL", "true")
+# Los tests nunca usan una API key real (los del proveedor simulan la API de Anthropic)
+os.environ.pop("ANTHROPIC_API_KEY", None)
 
 import pytest  # noqa: E402
 from fastapi.testclient import TestClient  # noqa: E402
@@ -39,7 +41,12 @@ def client():
             yield db
 
     app.dependency_overrides[get_db] = override_get_db
-    for limiter in (auth_limiter, login_failures, reset_requests, app.state.a2a_limiter):
+    a2a_limiters = (
+        app.state.a2a_limiter,
+        app.state.a2a_budget.per_user,
+        app.state.a2a_budget.overall,
+    )
+    for limiter in (auth_limiter, login_failures, reset_requests, *a2a_limiters):
         limiter.reset()
     with TestClient(app) as test_client:
         test_client.engine = engine

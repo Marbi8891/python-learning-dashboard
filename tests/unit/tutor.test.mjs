@@ -47,7 +47,7 @@ test("una tarea rechazada muestra el mensaje del estado", () => {
   const result = readTaskResult(response);
   assert.equal(result.ok, false);
   assert.equal(result.text, "No he podido leer");
-  assert.equal(result.label, "El tutor no ha podido leer la pregunta");
+  assert.equal(result.label, "El tutor no ha atendido la pregunta (mira su mensaje)");
 });
 
 test("los errores JSON-RPC y las respuestas raras no rompen la vista", () => {

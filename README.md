@@ -202,7 +202,7 @@ La firma de release necesita tres secretos en *Settings → Secrets and variable
 
 ### A2A (agentes)
 
-Con `A2A_ENABLED=true` el backend añade agentes [A2A 1.0](https://a2a-protocol.org/) junto a la API REST, que no cambia. Detalle, ejemplos y cómo añadir agentes: **[docs/a2a.md](docs/a2a.md)**.
+Con `A2A_ENABLED=true` el backend añade agentes [A2A 1.0](https://a2a-protocol.org/) junto a la API REST, que no cambia. El tutor usa por defecto un **modelo local y gratuito con [Ollama](https://ollama.com)** (`A2A_MODEL_PROVIDER=ollama`, modelo recomendado `qwen2.5-coder:7b`); Anthropic está disponible pero desactivado (de pago, solo si se elige). Para tests, `A2A_MOCK_MODEL=true`, sin modelo ni claves. Detalle, ejemplos, privacidad, límites de coste y cómo añadir agentes o cambiar de proveedor: **[docs/a2a.md](docs/a2a.md)**.
 
 | Método | Ruta | Auth | Descripción |
 |---|---|---|---|

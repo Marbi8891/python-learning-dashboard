@@ -18,7 +18,8 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
 - **Agentes A2A y Python Tutor** (ADR-0034, [docs/a2a.md](docs/a2a.md)): el backend puede servir agentes [A2A 1.0](https://a2a-protocol.org/) con el SDK oficial `a2a-sdk`, en la misma app FastAPI y junto a la API REST, que no cambia.
   - **Python Tutor** (`/a2a/python-tutor`): explica conceptos y errores, revisa el código **sin ejecutarlo**, propone ejercicios según el nivel y no da la solución de un ejercicio pendiente. Usa solo el progreso necesario de la sesión del alumno.
   - **Agent Card** pública en `/.well-known/agent-card.json`; el JSON-RPC exige la sesión de la API (Bearer o cookie), con tareas aisladas por usuario y 20 mensajes por minuto.
-  - **Modelo intercambiable** (`AgentModelProvider`); de momento solo el simulado para desarrollo (`A2A_MOCK_MODEL`). A2A está desactivado por defecto.
+  - **Modelo intercambiable** (`AgentModelProvider`). Proveedor por defecto: **Ollama**, un modelo local y gratuito (`qwen2.5-coder:7b` recomendado), sin API key ni llamadas externas. **Anthropic** (SDK oficial `anthropic`) queda disponible pero desactivado: solo con `A2A_MODEL_PROVIDER=anthropic` y `ANTHROPIC_API_KEY`. Modelo simulado para tests (`A2A_MOCK_MODEL`). Al modelo solo le llega el contexto educativo mínimo de la consulta. A2A está desactivado por defecto.
+  - **Límites de coste:** consultas al modelo por usuario y día y de todos por minuto, tokens de salida y tiempo máximo por llamada.
   - **Web:** sección **Tutor Python** (`#/tutor`), visible solo si el servidor ofrece el agente.
   - Cliente de ejemplo con el SDK: `scripts/a2a/tutor_client.py`.
 - **Núcleo educativo por conceptos** (ADR-0031): la plataforma se centra en aprender Python y aprobar Programación de DAW. El PCAP pasa a «Más».

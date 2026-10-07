@@ -9,7 +9,7 @@ export const STATE_LABELS = {
   TASK_STATE_SUBMITTED: "Pregunta enviada",
   TASK_STATE_WORKING: "El tutor está pensando…",
   TASK_STATE_COMPLETED: "Respondida",
-  TASK_STATE_REJECTED: "El tutor no ha podido leer la pregunta",
+  TASK_STATE_REJECTED: "El tutor no ha atendido la pregunta (mira su mensaje)",
   TASK_STATE_FAILED: "El tutor no ha podido responder",
   TASK_STATE_CANCELED: "Consulta cancelada",
 };
