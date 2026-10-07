@@ -599,7 +599,7 @@ function navigate({ moveFocus = true } = {}) {
   if (location.hash.startsWith(RESET_ROUTE)) {
     const token = new URLSearchParams(location.hash.split("?")[1] ?? "").get("token");
     history.replaceState(null, "", LEARN_ROUTE);
-    if (token) openPasswordReset(token);
+    openPasswordReset(token);
   }
 
   if (isLearnRoute(location.hash)) {

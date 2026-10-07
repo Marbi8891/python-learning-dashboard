@@ -5,6 +5,13 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
 ## [Unreleased]
 
 ### Seguridad
+- **Recuperación de contraseña revisada** ([docs/auth.md](docs/auth.md)):
+  - nuevas rutas `POST /api/v1/auth/forgot-password` y `/reset-password`, alias de las actuales, que siguen funcionando para Android;
+  - evento `auth.password_reset_failed` (T1110) por cada enlace no válido;
+  - el enlace deja de valer justo en `expires_at`;
+  - un enlace de un usuario que ya no existe responde 400 en lugar de 500;
+  - en la web: campo «Repite la nueva contraseña», requisitos visibles, «Pedir un enlace nuevo» y un enlace incompleto lleva a pedir otro.
+- Las migraciones de Alembic ya no desactivan los loggers creados antes, como `pld.security`, cuando se ejecutan en el mismo proceso que la app (modo local y tests).
 - **Sesión de la web en una cookie `HttpOnly`** (ADR-0033): JavaScript ya no puede leer el token y la sesión sigue al recargar la página. Protección CSRF con la cabecera `X-PLD-Session`. Si el navegador bloquea la cookie, se entra igual con el token solo en memoria. La app Android no cambia. Nuevo `POST /api/v1/auth/logout`.
 
 ### Añadido

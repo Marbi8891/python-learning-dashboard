@@ -128,8 +128,16 @@ export function openAccount(view) {
   }
 }
 
-/** Enlace del email de recuperación: #/restablecer?token=... */
+const INVALID_RESET_LINK = "Este enlace de recuperación no es válido o ha caducado. Pide uno nuevo.";
+
+/** Enlace del email de recuperación: #/restablecer?token=...
+    Sin token (enlace cortado al copiarlo) se ofrece pedir otro directamente. */
 export function openPasswordReset(token) {
+  if (!token) {
+    openAccount("forgot");
+    setMessage(INVALID_RESET_LINK);
+    return;
+  }
   openAccount("reset");
   $("#reset-token").value = token;
 }
@@ -195,13 +203,17 @@ export function initAccount({ toast }) {
   $("#reset-form").addEventListener("submit", (event) => {
     event.preventDefault();
     submitting(event.target, async (data) => {
+      if (data.get("new_password") !== data.get("confirm_password")) {
+        throw new Error("Las dos contraseñas no coinciden.");
+      }
       await request("POST", "/api/auth/password-reset/confirm", {
         auth: false,
         json: { token: data.get("token"), new_password: data.get("new_password") },
       });
+      event.target.reset();
       endSession();
       showView("login");
-      setMessage("Contraseña cambiada. Ya puedes iniciar sesión.", "success");
+      setMessage("Tu contraseña se ha actualizado correctamente. Ya puedes iniciar sesión.", "success");
     });
   });
 
