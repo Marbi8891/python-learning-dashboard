@@ -5,6 +5,7 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
 ## [Unreleased]
 
 ### Seguridad
+- **Emails de recuperación por HTTPS (Brevo)**: el plan gratuito de Render bloquea la salida SMTP, así que el email no llegaba aunque `/api/health` dijera `"email": true`. Con `BREVO_API_KEY` el email sale por la API de Brevo (puerto 443), sin dependencias nuevas. SMTP sigue disponible. Pasos en `docs/DEPLOY.md`.
 - **Recuperación de contraseña revisada** ([docs/auth.md](docs/auth.md)):
   - nuevas rutas `POST /api/v1/auth/forgot-password` y `/reset-password`, alias de las actuales, que siguen funcionando para Android;
   - evento `auth.password_reset_failed` (T1110) por cada enlace no válido;

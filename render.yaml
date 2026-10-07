@@ -22,7 +22,10 @@ services:
         value: '["https://marbi8891.github.io"]'
       - key: FRONTEND_URL
         value: https://marbi8891.github.io/python-learning-dashboard
-      # Recuperación de contraseña por email: rellénalos en el panel de Render
+      # Recuperación de contraseña por email: rellénalos en el panel de Render.
+      # En el plan gratuito Render bloquea SMTP: usa BREVO_API_KEY + SMTP_FROM (docs/DEPLOY.md)
+      - key: BREVO_API_KEY
+        sync: false
       - key: SMTP_HOST
         sync: false
       - key: SMTP_USER

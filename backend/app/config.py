@@ -39,10 +39,12 @@ class Settings(BaseSettings):
     # /docs y /openapi.json: útiles en desarrollo; en producción no se publica el mapa de la API
     enable_docs: bool = False
 
-    # Recuperación de contraseña. Sin SMTP_HOST no se envía el email (ver app/mailer.py).
+    # Recuperación de contraseña. Sin BREVO_API_KEY ni SMTP_HOST no se envía el email.
     # SMTP_PORT 587: STARTTLS; 465: TLS directo (SMTPS).
     frontend_url: str = "http://localhost:5500"
     password_reset_minutes: int = 30
+    # Clave de la API de Brevo: envía por HTTPS (Render gratis bloquea SMTP). Ver app/mailer.py
+    brevo_api_key: str | None = None
     smtp_host: str | None = None
     smtp_port: int = 587
     smtp_user: str | None = None
