@@ -42,7 +42,7 @@ const FIELD_MESSAGES = {
   new_password: "La contraseña debe tener entre 8 y 128 caracteres",
   display_name: "Escribe tu nombre (máximo 80 caracteres)",
   accept_privacy: "Debes aceptar la política de privacidad",
-  token: "El enlace no es válido",
+  token: "Este enlace de recuperación no es válido o ha caducado. Pide uno nuevo.",
 };
 
 function formatDetail(detail, status) {

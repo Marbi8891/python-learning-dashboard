@@ -13,7 +13,9 @@ config = context.config
 config.set_main_option("sqlalchemy.url", get_settings().database_url)
 
 if config.config_file_name is not None:
-    fileConfig(config.config_file_name)
+    # Sin desactivar los loggers ya creados: si las migraciones se ejecutan dentro del mismo
+    # proceso (tests, modo local), pld.security debe seguir registrando eventos
+    fileConfig(config.config_file_name, disable_existing_loggers=False)
 
 target_metadata = Base.metadata
 

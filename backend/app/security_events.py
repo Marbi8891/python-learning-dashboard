@@ -33,6 +33,7 @@ class Event(StrEnum):
     LOGOUT_ALL = "auth.logout_all"
     RESET_REQUESTED = "auth.password_reset_requested"  # T1098 Account Manipulation
     RESET_DONE = "auth.password_reset_done"  # T1098 Account Manipulation
+    RESET_FAILED = "auth.password_reset_failed"  # T1110 Brute Force (prueba de tokens)
     PASSWORD_CHANGED = "account.password_changed"  # T1098 Account Manipulation
     ACCOUNT_DELETED = "account.deleted"  # T1485 Data Destruction (si no lo pidió el titular)
     BODY_TOO_LARGE = "request.too_large"  # T1499.003 Application Exhaustion Flood
@@ -48,6 +49,7 @@ TECHNIQUE = {
     Event.LOGOUT_ALL: "T1550.001",
     Event.RESET_REQUESTED: "T1098",
     Event.RESET_DONE: "T1098",
+    Event.RESET_FAILED: "T1110",
     Event.PASSWORD_CHANGED: "T1098",
     Event.ACCOUNT_DELETED: "T1485",
     Event.BODY_TOO_LARGE: "T1499.003",

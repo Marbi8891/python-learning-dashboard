@@ -115,13 +115,21 @@ def logout_everywhere(user: CurrentUser, request: Request, db: DbSession) -> Res
     return response
 
 
+INVALID_LINK = "Este enlace de recuperación no es válido o ha caducado. Pide uno nuevo."
 RESET_ACCEPTED = {
     "detail": "Si el email está registrado, recibirás un enlace para cambiar la contraseña."
 }
 
 
+# Cada paso tiene dos rutas: la original (la usan la web y la app Android) y el alias con el
+# nombre más habitual. Comparten la misma función, límites y eventos.
 @router.post(
     "/auth/password-reset/request",
+    status_code=status.HTTP_202_ACCEPTED,
+    dependencies=[Depends(limit_auth_attempts)],
+)
+@router.post(
+    "/auth/forgot-password",
     status_code=status.HTTP_202_ACCEPTED,
     dependencies=[Depends(limit_auth_attempts)],
 )
@@ -156,6 +164,11 @@ def request_password_reset(
     status_code=status.HTTP_204_NO_CONTENT,
     dependencies=[Depends(limit_auth_attempts)],
 )
+@router.post(
+    "/auth/reset-password",
+    status_code=status.HTTP_204_NO_CONTENT,
+    dependencies=[Depends(limit_auth_attempts)],
+)
 def confirm_password_reset(data: PasswordResetConfirm, request: Request, db: DbSession) -> Response:
     reset = db.scalar(
         select(PasswordResetToken).where(
@@ -163,12 +176,11 @@ def confirm_password_reset(data: PasswordResetConfirm, request: Request, db: DbS
         )
     )
     now = datetime.now(UTC)
-    if reset is None or reset.used_at is not None or _as_utc(reset.expires_at) < now:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="El enlace no es válido o ha caducado. Pide uno nuevo.",
-        )
-    user = db.get(User, reset.user_id)
+    user = db.get(User, reset.user_id) if reset is not None else None
+    # Inexistente, manipulado, ya usado o caducado (now >= expires_at): misma respuesta
+    if user is None or reset.used_at is not None or now >= _as_utc(reset.expires_at):
+        record(Event.RESET_FAILED, request)  # muchos seguidos: alguien prueba tokens (T1110)
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=INVALID_LINK)
     # Antes de gastar el enlace: si la contraseña no vale, se puede probar con otra
     _reject_weak(data.new_password, user.email, user.display_name)
     # Un solo uso incluso con dos peticiones a la vez: solo gana la que marca el enlace como usado
@@ -179,10 +191,7 @@ def confirm_password_reset(data: PasswordResetConfirm, request: Request, db: DbS
     )
     if claimed.rowcount != 1:  # pragma: no cover - carrera entre dos peticiones simultáneas
         db.rollback()
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="El enlace no es válido o ha caducado. Pide uno nuevo.",
-        )
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=INVALID_LINK)
     user.password_hash = hash_password(data.new_password)
     user.token_version += 1  # cierra todas las sesiones abiertas
     activity.log(db, user.id, "password_reset", request)

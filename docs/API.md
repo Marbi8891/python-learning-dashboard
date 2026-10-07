@@ -15,6 +15,7 @@ Interactive OpenAPI documentation is available at /docs when ENABLE_DOCS=true.
 | Resource | Endpoints |
 | --- | --- |
 | Authentication | /api/v1/auth/register, /api/v1/auth/login, /api/v1/auth/logout, /api/v1/auth/logout-all |
+| Password recovery ([auth.md](auth.md)) | /api/v1/auth/forgot-password, /api/v1/auth/reset-password (aliases of /auth/password-reset/request and /confirm) |
 | Account | /api/v1/users/me, /api/v1/users/me/activity, /api/v1/users/me/export |
 | Course content | /api/v1/modules, /api/v1/lessons/{slug} |
 | Progress | /api/v1/progress, /api/v1/progress/{slug} |

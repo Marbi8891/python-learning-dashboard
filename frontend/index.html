@@ -304,16 +304,19 @@
     <form class="account__form" id="forgot-form" data-view="forgot" hidden>
       <h2 class="visually-hidden" data-title="Recuperar contraseña">Recuperar contraseña</h2>
       <p>Te enviaremos un enlace para elegir una contraseña nueva.</p>
-      <label>Email <input name="email" type="email" autocomplete="email" required></label>
-      <button class="btn btn--primary" type="submit">Enviar enlace</button>
+      <label>Correo electrónico <input name="email" type="email" autocomplete="email" required></label>
+      <button class="btn btn--primary" type="submit">Enviar instrucciones</button>
       <p><a href="#" data-go="login">Volver</a></p>
     </form>
 
     <form class="account__form" id="reset-form" data-view="reset" hidden>
       <h2 class="visually-hidden" data-title="Nueva contraseña">Nueva contraseña</h2>
       <input type="hidden" name="token" id="reset-token">
-      <label>Nueva contraseña (mínimo 8 caracteres) <input name="new_password" type="password" autocomplete="new-password" minlength="8" maxlength="128" required></label>
+      <p id="reset-rules">Entre 8 y 128 caracteres. No vale una de las contraseñas más usadas ni una que contenga tu email o tu nombre.</p>
+      <label>Nueva contraseña <input name="new_password" type="password" autocomplete="new-password" minlength="8" maxlength="128" aria-describedby="reset-rules" required></label>
+      <label>Repite la nueva contraseña <input name="confirm_password" type="password" autocomplete="new-password" minlength="8" maxlength="128" required></label>
       <button class="btn btn--primary" type="submit">Guardar contraseña</button>
+      <p><a href="#" data-go="forgot">Pedir un enlace nuevo</a></p>
     </form>
 
     <div class="account__form" data-view="profile" hidden>
