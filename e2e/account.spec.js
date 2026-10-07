@@ -145,16 +145,58 @@ test("recuperar contraseña: solicitud y enlace no válido", async ({ page }) =>
   await openLesson(page);
   await page.getByRole("button", { name: "Iniciar sesión" }).click();
   await dialog(page).getByRole("link", { name: "¿Has olvidado tu contraseña?" }).click();
-  await page.locator("#forgot-form").getByLabel("Email").fill("nadie@example.com");
-  await page.locator("#forgot-form").getByRole("button", { name: "Enviar enlace" }).click();
+  await page.locator("#forgot-form").getByLabel("Correo electrónico").fill("nadie@example.com");
+  await page.locator("#forgot-form").getByRole("button", { name: "Enviar instrucciones" }).click();
   await expect(page.locator("#account-message")).toContainText("Si el email está registrado");
 
   await page.goto(`/#/restablecer?token=${"x".repeat(43)}`);
   await expect(dialog(page)).toBeVisible();
   await expect(page).toHaveURL(/#\/aprender$/); // el token no se queda en la URL
-  await page.locator("#reset-form").getByLabel(/Nueva contraseña/).fill("nueva-contraseña-456");
-  await page.locator("#reset-form").getByRole("button", { name: "Guardar contraseña" }).click();
+  const form = page.locator("#reset-form");
+  await expect(form).toContainText("Entre 8 y 128 caracteres"); // requisitos visibles
+  await form.getByLabel("Nueva contraseña", { exact: true }).fill("nueva-contraseña-456");
+  await form.getByLabel("Repite la nueva contraseña").fill("nueva-contraseña-456");
+  await form.getByRole("button", { name: "Guardar contraseña" }).click();
   await expect(page.locator("#account-message")).toContainText("no es válido o ha caducado");
+
+  // Desde el error se puede pedir otro enlace
+  await form.getByRole("link", { name: "Pedir un enlace nuevo" }).click();
+  await expect(page.locator("#forgot-form")).toBeVisible();
+});
+
+test("recuperar contraseña: las dos contraseñas deben coincidir", async ({ page }) => {
+  let called = false;
+  await page.route("**/api/v1/auth/password-reset/confirm", (route) => {
+    called = true;
+    return route.fulfill({ status: 204 });
+  });
+  await page.goto(`/#/restablecer?token=${"x".repeat(43)}`);
+  const form = page.locator("#reset-form");
+  await form.getByLabel("Nueva contraseña", { exact: true }).fill("nueva-contraseña-456");
+  await form.getByLabel("Repite la nueva contraseña").fill("otra-distinta-789");
+  await form.getByRole("button", { name: "Guardar contraseña" }).click();
+  await expect(page.locator("#account-message")).toHaveText("Las dos contraseñas no coinciden.");
+  expect(called).toBe(false); // ni siquiera se llama a la API
+});
+
+test("recuperar contraseña: un enlace incompleto lleva a pedir otro", async ({ page }) => {
+  await page.goto("/#/restablecer");
+  await expect(page.locator("#forgot-form")).toBeVisible();
+  await expect(page.locator("#account-message")).toContainText("no es válido o ha caducado");
+});
+
+test("recuperar contraseña: tras el cambio se vuelve al login", async ({ page }) => {
+  await page.route("**/api/v1/auth/password-reset/confirm", (route) => route.fulfill({ status: 204 }));
+  await page.goto(`/#/restablecer?token=${"x".repeat(43)}`);
+  const form = page.locator("#reset-form");
+  await form.getByLabel("Nueva contraseña", { exact: true }).fill("nueva-contraseña-456");
+  await form.getByLabel("Repite la nueva contraseña").fill("nueva-contraseña-456");
+  await form.getByRole("button", { name: "Guardar contraseña" }).click();
+  await expect(page.locator("#account-message")).toHaveText(
+    "Tu contraseña se ha actualizado correctamente. Ya puedes iniciar sesión.",
+  );
+  await expect(page.locator("#login-form")).toBeVisible();
+  await expect(form.getByLabel("Nueva contraseña", { exact: true })).toHaveValue(""); // no se queda en el DOM
 });
 
 test("sin email en el servidor, la recuperación ofrece el contacto", async ({ page }) => {
@@ -165,7 +207,7 @@ test("sin email en el servidor, la recuperación ofrece el contacto", async ({ p
   const form = page.locator("#forgot-form");
   await expect(form).toContainText("La recuperación por email aún no está activa");
   await expect(form.getByRole("link", { name: /@/ })).toHaveAttribute("href", /^mailto:/);
-  await expect(form.getByRole("button", { name: "Enviar enlace" })).toBeHidden();
+  await expect(form.getByRole("button", { name: "Enviar instrucciones" })).toBeHidden();
 });
 
 test("un servidor lento avisa de que se está despertando", async ({ page }) => {
