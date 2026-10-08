@@ -15,6 +15,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import get_settings
 from app.local_site import mount_frontend
+from app.mailer import email_enabled
 from app.routers import account, attempts, auth, course_state, lessons, pcap, progress
 from app.security import get_jwt_secret
 from app.security_events import Event, record
@@ -187,8 +188,8 @@ for router in (
 @app.get("/api/v1/health", tags=["sistema"])
 @app.get("/api/health", tags=["sistema"], include_in_schema=False)
 def health() -> dict[str, str | bool]:
-    # "email": el frontend solo ofrece la recuperación por email si hay SMTP configurado
-    return {"status": "ok", "email": bool(get_settings().smtp_host)}
+    # "email": el frontend solo ofrece la recuperación por email si se pueden enviar (Brevo o SMTP)
+    return {"status": "ok", "email": email_enabled()}
 
 
 # Agentes A2A: una capacidad más junto a la API REST, no un sustituto (ADR-0034).

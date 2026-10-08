@@ -1,7 +1,11 @@
 """Ramas internas: SMTP, límite de intentos, concurrencia, configuración y scripts."""
 
+import io
+import json
 import runpy
 import ssl
+import urllib.error
+from types import SimpleNamespace
 
 import pytest
 from sqlalchemy import select
@@ -163,6 +167,77 @@ def test_test_email_command_without_smtp_or_recipient(capsys, monkeypatch):
     with pytest.raises(SystemExit) as exit_info:  # python -m app.mailer sin argumentos
         runpy.run_path(mailer.__file__, run_name="__main__")
     assert exit_info.value.code == 2
+
+
+class FakeResponse:
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *exc):
+        return False
+
+
+@pytest.fixture
+def brevo(monkeypatch):
+    """La API de Brevo simulada: guarda las peticiones; con `fail`, responde 401."""
+    calls = SimpleNamespace(requests=[], fail=False)
+
+    def fake_urlopen(request, timeout, context):
+        calls.requests.append((request, context))
+        if calls.fail:
+            raise urllib.error.HTTPError(
+                request.full_url, 401, "Unauthorized", {}, io.BytesIO(b'{"code":"unauthorized"}')
+            )
+        return FakeResponse()
+
+    monkeypatch.setattr(mailer.urllib.request, "urlopen", fake_urlopen)
+    settings = get_settings()
+    monkeypatch.setattr(settings, "brevo_api_key", "clave-brevo")
+    monkeypatch.setattr(settings, "smtp_host", "smtp.example.com")  # Brevo tiene prioridad
+    monkeypatch.setattr(settings, "smtp_from", "Python Learning <yo@example.com>")
+    return calls
+
+
+def test_send_email_via_brevo_https(brevo):
+    mailer.send_email("ana@example.com", "Asunto", "Cuerpo")
+    request, context = brevo.requests[0]
+    assert request.full_url == "https://api.brevo.com/v3/smtp/email"
+    assert request.get_method() == "POST" and request.get_header("Api-key") == "clave-brevo"
+    assert context.verify_mode == ssl.CERT_REQUIRED and context.check_hostname
+    assert json.loads(request.data) == {
+        "sender": {"name": "Python Learning", "email": "yo@example.com"},
+        "to": [{"email": "ana@example.com"}],
+        "subject": "Asunto",
+        "textContent": "Cuerpo",
+    }
+
+
+def test_brevo_failure_is_logged_not_raised(brevo, caplog):
+    brevo.fail = True
+    mailer.send_email("ana@example.com", "Asunto", "token=secreto")
+    assert "No se pudo enviar" in caplog.text
+    assert "secreto" not in caplog.text and "ana@example.com" not in caplog.text
+
+
+def test_brevo_sender_without_name_gets_a_default(brevo, monkeypatch):
+    monkeypatch.setattr(get_settings(), "smtp_from", "yo@example.com")
+    mailer.send_email("ana@example.com", "Asunto", "Cuerpo")
+    sender = json.loads(brevo.requests[0][0].data)["sender"]
+    assert sender == {"name": "Python Learning Dashboard", "email": "yo@example.com"}
+
+
+def test_test_email_command_shows_brevo_error(brevo, capsys):
+    assert mailer.main(["ana@example.com"]) == 0
+    assert "(Brevo)" in capsys.readouterr().out
+    brevo.fail = True
+    assert mailer.main(["ana@example.com"]) == 1
+    out = capsys.readouterr().out
+    assert "401" in out and "unauthorized" in out  # el motivo que da Brevo
+
+
+def test_health_reports_email_with_brevo_only(client, monkeypatch):
+    monkeypatch.setattr(get_settings(), "brevo_api_key", "clave-brevo")
+    assert client.get("/api/v1/health").json()["email"] is True
 
 
 def test_mark_completed_survives_concurrent_insert(client):

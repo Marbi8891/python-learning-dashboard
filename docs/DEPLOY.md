@@ -57,11 +57,29 @@ Si cambias el dominio del frontend, actualiza en el backend `CORS_ORIGINS` y `FR
 
 Sin SMTP no se envía el enlace de recuperación (tampoco se escribe en los logs: cualquiera con acceso a ellos podría usarlo) y la web muestra el email de contacto (`contactEmail` en `frontend/config.js`) en lugar del formulario. Cuando configuras el SMTP, `/api/health` devuelve `"email": true` y la web muestra el formulario sola: no hay que tocar el código.
 
-### Opción A: Gmail (la más rápida)
+> **Plan gratuito de Render:** desde 2025 bloquea la salida a los puertos SMTP (25, 465 y 587), así que con Gmail por SMTP `/api/health` dice `"email": true` pero el email **nunca sale** (en los logs: «No se pudo enviar el email», con *Network is unreachable* o un *timeout*). En el plan gratuito usa la opción A, que envía por HTTPS.
+
+### Opción A: Brevo por HTTPS (gratis, funciona en el plan gratuito de Render)
+
+1. Crea una cuenta gratuita en [brevo.com](https://www.brevo.com) (VERIFY: el plan gratuito permite unos 300 emails al día).
+2. **Senders, domains & dedicated IPs → Senders → Add a sender**: tu dirección (por ejemplo, tu Gmail). Brevo te envía un email para verificarla.
+3. **SMTP & API → API keys → Generate a new API key**. Cópiala: es un secreto, no la guardes en el repositorio.
+4. En Render → `pld-api` → **Environment**:
+
+| Variable | Valor |
+|---|---|
+| `BREVO_API_KEY` | la clave del paso 3 |
+| `SMTP_FROM` | `Python Learning <la dirección verificada en el paso 2>` |
+
+Las variables `SMTP_HOST`, `SMTP_USER` y `SMTP_PASSWORD` sobran: si `BREVO_API_KEY` existe, tiene prioridad.
+
+5. **Save, rebuild and deploy**. Comprueba `https://pld-api.onrender.com/api/health` → `"email": true` y pide un enlace de recuperación desde la web. Si no llega, mira la carpeta de spam y los logs de Render (`No se pudo enviar el email`). Para ver el motivo exacto, ejecuta `python -m app.mailer tu-direccion@gmail.com` en la **Shell** de Render (si tu plan la incluye) o en local con las mismas variables en `backend/.env`.
+
+### Opción B: Gmail por SMTP (servidor propio o plan de pago de Render)
 
 1. En tu cuenta de Google activa la **verificación en dos pasos** (Seguridad → Verificación en dos pasos).
 2. Crea una **contraseña de aplicación**: Seguridad → Contraseñas de aplicaciones → nombre «Python Learning». Google muestra 16 letras: cópialas (sin espacios). Es una contraseña: no la guardes en el repositorio.
-3. En Render → `pld-api` → **Environment**:
+3. En **Environment**:
 
 | Variable | Valor |
 |---|---|
@@ -71,18 +89,13 @@ Sin SMTP no se envía el enlace de recuperación (tampoco se escribe en los logs
 | `SMTP_PASSWORD` | la contraseña de aplicación |
 | `SMTP_FROM` | `Python Learning <tu dirección de Gmail>` |
 
-4. **Save, rebuild and deploy**. Comprueba `https://pld-api.onrender.com/api/health` → `"email": true`.
-5. Para comprobar que el email llega de verdad, pon las mismas variables en `backend/.env` y, desde `backend/`, ejecuta `python -m app.mailer tu-direccion@gmail.com` (también vale en la **Shell** de Render, si tu plan la incluye). Si falla, muestra el error del servidor SMTP (por ejemplo, usuario o contraseña incorrectos).
+4. Para comprobar que el email llega de verdad: `python -m app.mailer tu-direccion@gmail.com` (en local con las variables en `backend/.env`, o en la **Shell** del servidor). Si falla, muestra el error del servidor SMTP.
 
-VERIFY: Gmail limita los envíos diarios de una cuenta personal (del orden de cientos). Para un proyecto de clase sobra; para uso real, mejor la opción B.
-
-### Opción B: servicio de email transaccional (Brevo, Mailjet…)
-
-Crea una cuenta, verifica el remitente y copia sus datos SMTP (servidor, puerto 587 o 465, usuario y clave SMTP) en las mismas variables. El puerto 465 usa TLS directo; cualquier otro, STARTTLS.
+VERIFY: Gmail limita los envíos diarios de una cuenta personal (del orden de cientos). Para un proyecto de clase sobra.
 
 ### Después de activarlo (RGPD)
 
-Actualiza en `frontend/privacidad.html` la línea «Emails de recuperación de contraseña» con el proveedor elegido (Google o el servicio que uses) y publica.
+Actualiza en `frontend/privacidad.html` la línea «Emails de recuperación de contraseña» con el proveedor elegido (Brevo, Google o el servicio que uses) y publica.
 
 ## 6. Antes de abrirlo a usuarios reales
 

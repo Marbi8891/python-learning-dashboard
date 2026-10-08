@@ -35,9 +35,10 @@ Cómo recupera el acceso quien ha olvidado su contraseña, y qué protege cada p
 |---|---|
 | `FRONTEND_URL` | Base de los enlaces del email (equivale a `PASSWORD_RESET_URL_BASE`) |
 | `PASSWORD_RESET_MINUTES` | Vida del enlace, 30 por defecto (equivale a `PASSWORD_RESET_TOKEN_EXPIRE_MINUTES`) |
+| `BREVO_API_KEY` + `SMTP_FROM` | Envío por la API HTTPS de Brevo. Es lo que funciona en el plan gratuito de Render, que bloquea SMTP. Tiene prioridad sobre SMTP |
 | `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, `SMTP_FROM` | Envío del email. Puerto 587 con STARTTLS o 465 con TLS directo. Prueba: `python -m app.mailer tu@email.com`. Pasos en [DEPLOY.md](DEPLOY.md#5-emails-de-recuperación-de-contraseña) |
 
-Sin `SMTP_HOST` no se envía nada, y la web ofrece el email de contacto en lugar del formulario.
+Sin `BREVO_API_KEY` ni `SMTP_HOST` no se envía nada, y la web ofrece el email de contacto en lugar del formulario.
 
 ## Límites conocidos
 
