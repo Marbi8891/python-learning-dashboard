@@ -26,6 +26,16 @@ Las herramientas que falten se saltan con la instrucción para instalarlas: el s
 | Markdown seguro y escape | `npm run test:unit` | `tests/unit/markdown.test.mjs` |
 | Guardián y definición de los agentes | `npm run test:unit` | `tests/unit/appsec-guard.test.mjs` |
 | Navegador: CSP, almacenamiento, cierre de sesión | `npx playwright test e2e/security.spec.js` | `e2e/` |
+| Red cerrada en el Worker de Pyodide (PLD-SEC-004) | `npx playwright test e2e/security.spec.js -g PLD-SEC-004` | `e2e/security.spec.js` |
+| CSP de la web publicada (PLD-SEC-003) | `cd backend && python -m pytest -q tests/test_production_csp.py` y `python scripts/security/production_csp.py --check frontend` | `backend/tests/test_production_csp.py` |
+
+**e2e sin acceso a jsDelivr** (por ejemplo, detrás de un proxy): descarga Pyodide de npm, que es el
+mismo paquete, y sírvelo desde la propia web. La carpeta no se sube al repositorio.
+
+```bash
+npm pack pyodide@314.0.7 && tar xzf pyodide-314.0.7.tgz && mv package frontend/pyodide-local
+PYODIDE_URL=http://localhost:5500/pyodide-local/ npm run test:e2e
+```
 
 Reglas (las aplica `security-qa`): datos ficticios `@example.com`, SQLite en memoria, nunca
 producción; un test de regresión debe fallar sin la corrección; prohibido saltar o debilitar tests.
@@ -119,6 +129,10 @@ delega en `security-auditor` (el registro de depuración muestra `PreToolUse:Bas
 - La última barrera es Git + CI + merge humano.
 
 ## 6. Ajustes que tiene que hacer la persona en GitHub
+
+Estado comprobado el 19/10/2026 con la API pública de GitHub: `main` **no está protegida** y el
+repositorio **no tiene rulesets**. *Secret scanning*, Dependabot alerts y CodeQL no se pueden
+consultar sin permisos de administración: revísalos en *Settings → Code security*.
 
 No se pueden versionar. Ningún paso necesita compartir un secreto.
 

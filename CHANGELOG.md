@@ -5,6 +5,8 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
 ## [Unreleased]
 
 ### Seguridad
+- **La consola de Python ya no puede conectar con otros servidores** (PLD-SEC-004): la CSP de la página no llega al Worker de Pyodide, y se ha comprobado que un programa pegado en la consola podía enviar datos a cualquier origen. Después de cargar Python, el Worker cierra `fetch`, `XMLHttpRequest`, `WebSocket` y el resto de APIs de red, además de `eval`. Con prueba e2e de regresión.
+- Script `scripts/security/production_csp.py` para publicar la web sin los orígenes `localhost:8000` de desarrollo (PLD-SEC-003). Queda pendiente de activar en el despliegue.
 - **Equipo AppSec de agentes** ([docs/security/AGENT_WORKFLOW.md](docs/security/AGENT_WORKFLOW.md)): ocho agentes de Claude Code en `.claude/agents/` (coordinador, auditor, autenticación, API, navegador, dependencias, pruebas y CI) con un guardián que limita qué archivos edita cada uno y bloquea secretos, comandos destructivos y escaneos. Registro de hallazgos, plan de corrección y línea base en `docs/security/`.
 - **Análisis automático en cada PR** (`.github/workflows/security.yml`): Bandit, Semgrep con nueve reglas propias del proyecto y Gitleaks sobre toda la historia, todo gratuito. En local: `python scripts/security/run_checks.py`.
 - Pruebas de aislamiento entre dos cuentas en todas las rutas privadas (`backend/tests/test_security_isolation.py`).
