@@ -18,12 +18,13 @@ const TEAM = [
   "dependency-security",
   "security-qa",
   "security-devsecops",
+  "legaldocs-ai",
 ];
 
 const edit = (file) => ({ tool_name: "Edit", tool_input: { file_path: file } });
 const bash = (command) => ({ tool_name: "Bash", tool_input: { command } });
 
-test("los ocho agentes existen, con cabecera válida y el guardián con su propio nombre", () => {
+test("todos los agentes existen, con cabecera válida y el guardián con su propio nombre", () => {
   const files = readdirSync(AGENTS_DIR).filter((f) => f.endsWith(".md"));
   assert.deepEqual(files.map((f) => f.replace(/\.md$/, "")).sort(), [...TEAM].sort());
   for (const agent of TEAM) {
@@ -52,6 +53,10 @@ test("cada agente solo edita su área", () => {
   assert.ok(decide("security-auditor", edit("docs/security/SECURITY_FINDINGS.md"), ROOT).deny);
   assert.equal(decide("security-lead", edit("docs/security/SECURITY_FINDINGS.md"), ROOT), null);
   assert.equal(decide("security-devsecops", edit(".github/workflows/security.yml"), ROOT), null);
+  assert.equal(decide("legaldocs-ai", edit("docs/legal/expediente/DIAGNOSTICO.md"), ROOT), null);
+  assert.ok(decide("legaldocs-ai", edit("frontend/privacidad.html"), ROOT).deny);
+  assert.ok(decide("legaldocs-ai", edit("frontend/aviso-legal.html"), ROOT).deny);
+  assert.ok(decide("legaldocs-ai", edit("backend/app/routers/account.py"), ROOT).deny);
 });
 
 test("nadie edita la configuración de agentes, de despliegue ni fuera del repositorio", () => {
