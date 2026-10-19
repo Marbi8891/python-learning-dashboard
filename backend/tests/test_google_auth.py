@@ -35,11 +35,9 @@ def test_google_login_creates_account_and_session(client, monkeypatch):
         json={"credential": "x" * 40, "accept_privacy": True},
     )
     assert response.status_code == 200
-    assert response.json()["access_token"]
-    me = client.get(
-        "/api/users/me",
-        headers={"Authorization": f"Bearer {response.json()['access_token']}"},
-    )
+    assert response.json()["access_token"] is None
+    assert response.json()["token_type"] == "cookie"
+    me = client.get("/api/users/me", headers={"X-PLD-Session": "cookie"})
     assert me.status_code == 200
     assert me.json()["email"] == "google@example.com"
     assert me.json()["display_name"] == "Google Alumno"
@@ -65,10 +63,7 @@ def test_google_login_reuses_existing_account(client, monkeypatch):
         json={"credential": "x" * 40, "accept_privacy": True},
     )
     assert response.status_code == 200
-    me = client.get(
-        "/api/users/me",
-        headers={"Authorization": f"Bearer {response.json()['access_token']}"},
-    )
+    me = client.get("/api/users/me", headers={"X-PLD-Session": "cookie"})
     assert me.status_code == 200
     assert me.json()["display_name"] == "Ana"
 
