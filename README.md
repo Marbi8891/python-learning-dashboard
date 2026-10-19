@@ -50,6 +50,18 @@ Doble clic en **`Iniciar-Dashboard.bat`**. La primera vez instala lo necesario y
 
 En Linux o macOS: `pip install -r backend/requirements.txt && python scripts/run_local.py`.
 
+## Documentación técnica
+
+La documentación ampliada está en [`docs/DOCUMENTACION-DEL-PROYECTO.md`](docs/DOCUMENTACION-DEL-PROYECTO.md). Incluye objetivos, arquitectura, estructura de carpetas, tecnologías, instalación local, configuración, API, seguridad, pruebas, despliegue y enlaces a las guías específicas.
+
+Documentación complementaria:
+- [Arquitectura detallada](docs/ARCHITECTURE.md)
+- [Referencia de la API](docs/API.md)
+- [Guía de despliegue](docs/DEPLOY.md)
+- [Ejecutar en Windows](docs/EJECUTAR-EN-WINDOWS.md)
+- [Tutor A2A](docs/a2a.md)
+- [Demo y defensa del proyecto](docs/DEMO-Y-DEFENSA.md)
+
 ## Arquitectura
 
 | Parte | Tecnología | Despliegue |
