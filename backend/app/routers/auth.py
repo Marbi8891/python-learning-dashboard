@@ -75,7 +75,8 @@ def login_google(
                 status_code=400,
                 detail="Debes aceptar la política de privacidad para crear tu cuenta.",
             )
-        name = str(claims.get("name") or email.split("@", 1)[0]).strip()[:80] or email.split("@", 1)[0]
+        fallback_name = email.split("@", 1)[0]
+        name = str(claims.get("name") or fallback_name).strip()[:80] or fallback_name
         user = User(
             email=email,
             password_hash=hash_password(secrets.token_urlsafe(48)),
