@@ -55,7 +55,8 @@ Definidas en `js/app.js` y `js/learn/learn-app.js`:
 | `#/inicio`, `#/leccion/<slug>` | Curso PCAP (27 lecciones) | `js/app.js`, `home.js`, `console.js`, `quiz.js`, `assistant.js` |
 | `#/pcap` | Zona de examen PCAP | `js/pcap.js`, `pcap-store.js` |
 | `#/perfil`, `#/certificado` | Perfil, logros y certificado | `profile.js`, `certificate.js` |
-| `#/cuenta`, `#/restablecer` | Cuenta y recuperación de contraseña | `account.js`, `private.js` |
+| `#/panel`, `#/panel/<sección>` | Panel del alumno (ADR-0035); `#/cuenta` redirige a `#/panel/perfil` | `dashboard.js`, `dashboard-data.js`, `private.js` |
+| `#/restablecer` | Recuperación de contraseña | `account.js` |
 
 ### 2.3 Módulos JavaScript
 
@@ -103,7 +104,7 @@ console.js / session-view.js
 | Clave `localStorage` | Contenido | Módulo | Sincroniza con |
 |---|---|---|---|
 | `pld:completed` | Lecciones PCAP completadas | `store.js` | `/api/v1/progress` |
-| `pld:game` | XP, racha, logros | `game.js` | — (solo local) |
+| `pld:game` | XP, racha, logros | `game.js`, `game-data.js` | `/api/v1/course-state/game` (ADR-0035) |
 | `pld:pcap` | Preparación del examen PCAP | `pcap-store.js` | `/api/v1/pcap-state` |
 | `pld:course:<id>` | Cursos de DAW (sql, js, java, entornos, programacion) | `course-store.js` | `/api/v1/course-state/<id>` |
 | `pld:learn` | Progreso por conceptos (núcleo educativo) | `learn/learn-store.js` | `/api/v1/course-state/learn` |
@@ -214,7 +215,7 @@ Las afirmaciones marcadas con *(inferido)* no se han comprobado con una prueba.
 2. Pyodide se carga del CDN **sin SRI** (riesgo ya documentado en `docs/security/revision-2026-10.md`).
 3. `style-src 'unsafe-inline'` y CSP en `<meta>` (ya documentados).
 4. `app.js` (barra lateral) inserta `module.slug` y `lesson.slug` en atributos HTML **sin escapar**. El dato viene del propio JSON, así que el riesgo es bajo, pero rompe la regla «todo se escapa».
-5. `game.js` mezcla `pld:game` de `localStorage` sin validarlo (los demás almacenes usan `cleanProgress`/`cleanLearning`). Hoy no llega a HTML sin escapar, pero es una inconsistencia.
+5. ~~`game.js` mezcla `pld:game` de `localStorage` sin validarlo~~ Resuelto en ADR-0035: `game-data.js` (`cleanGame`) lo valida al leerlo de `localStorage` y de la cuenta.
 6. La CSP de producción permite `connect-src http://127.0.0.1:8000 http://localhost:8000`.
 7. `python-multipart` y `argon2-cffi` sin límite superior de versión; el backend no tiene *lockfile* con *hashes*.
 8. `deploy.ps1` hace commit **y push a `main`**: ningún agente debe ejecutarlo.

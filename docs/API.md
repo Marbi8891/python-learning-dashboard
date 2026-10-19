@@ -21,7 +21,8 @@ Interactive OpenAPI documentation is available at /docs when ENABLE_DOCS=true.
 | Progress | /api/v1/progress, /api/v1/progress/{slug} |
 | Exercise attempts | /api/v1/lessons/{slug}/attempts |
 | PCAP state | /api/v1/pcap-state |
-| DAW course state | /api/v1/course-state/{course} |
+| DAW course state | /api/v1/course-state/{course} (`sql`, `js`, `java`, `entornos`, `programacion`, `learn`, `game`) |
+| Student dashboard (ADR-0035) | GET /api/v1/dashboard?utc_offset_minutes=, GET /api/v1/dashboard/activity?limit=&offset= |
 
 ## A2A agents
 
@@ -57,6 +58,12 @@ Clients that don't send the header, such as the Android app, keep getting the to
 The previous /api/... routes remain available temporarily for compatibility with existing clients, including the Android application. Legacy routes are excluded from OpenAPI and are deprecated.
 
 New integrations should use /api/v1 only.
+
+## Student dashboard
+
+`GET /api/v1/dashboard` returns, for the authenticated user only, what the dashboard needs and only the server has: the user (`display_name`, `email`, `created_at`, `sign_in_method`: `google`, `password` or `null`), PCAP lessons (total, completed, last completion, next lesson, per module), exercise attempts (count, passed, lessons tried/passed, last attempt), daily activity for the last 30 days in the student's local day (`utc_offset_minutes`, -720..840) and which progress documents are synced (`pcap` and each `course-state`). No passwords, tokens or internal fields.
+
+`GET /api/v1/dashboard/activity` is the learning history (lesson completions and attempts, newest first), paginated with `limit` (1-50, default 20) and `offset`; the submitted code is not included. Both return 401 without a session and 422 for invalid parameters.
 
 ## Design rules
 

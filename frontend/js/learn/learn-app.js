@@ -46,7 +46,7 @@ const formatDay = (iso) => new Date(iso).toLocaleDateString("es-ES", { day: "num
 const DAILY_BUDGET_KEY = "pld:daily-study-minutes";
 const DAILY_BUDGET_OPTIONS = [15, 30, 45, 60];
 
-function dailyBudget() {
+export function dailyBudget() {
   try {
     const value = Number(localStorage.getItem(DAILY_BUDGET_KEY));
     return DAILY_BUDGET_OPTIONS.includes(value) ? value : 45;
