@@ -9,6 +9,7 @@ a quien estudia (ver ADR-0004).
 """
 
 import json
+import re
 import sys
 
 import pytest
@@ -31,6 +32,14 @@ BROWSER_EXAMPLES = [lesson for lesson in LESSONS if lesson["example_in_browser"]
 def test_only_external_package_examples_are_browser_excluded():
     excluded = {lesson["slug"] for lesson in LESSONS if not lesson["example_in_browser"]}
     assert excluded == {"pytest", "flask"}
+
+
+def test_module_and_lesson_slugs_are_safe_for_html_attributes_and_routes():
+    data = json.loads(DEFAULT_LESSONS_FILE.read_text(encoding="utf-8"))
+    for module in data["modules"]:
+        assert re.fullmatch(r"[a-z0-9-]+", module["slug"]), module["slug"]
+        for lesson in module["lessons"]:
+            assert re.fullmatch(r"[a-z0-9-]+", lesson["slug"]), lesson["slug"]
 
 
 @pytest.mark.parametrize(

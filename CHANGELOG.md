@@ -5,6 +5,9 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
 ## [Unreleased]
 
 ### Seguridad
+- **Equipo AppSec de agentes** ([docs/security/AGENT_WORKFLOW.md](docs/security/AGENT_WORKFLOW.md)): ocho agentes de Claude Code en `.claude/agents/` (coordinador, auditor, autenticación, API, navegador, dependencias, pruebas y CI) con un guardián que limita qué archivos edita cada uno y bloquea secretos, comandos destructivos y escaneos. Registro de hallazgos, plan de corrección y línea base en `docs/security/`.
+- **Análisis automático en cada PR** (`.github/workflows/security.yml`): Bandit, Semgrep con nueve reglas propias del proyecto y Gitleaks sobre toda la historia, todo gratuito. En local: `python scripts/security/run_checks.py`.
+- Pruebas de aislamiento entre dos cuentas en todas las rutas privadas (`backend/tests/test_security_isolation.py`).
 - **Emails de recuperación por HTTPS (Brevo)**: el plan gratuito de Render bloquea la salida SMTP, así que el email no llegaba aunque `/api/health` dijera `"email": true`. Con `BREVO_API_KEY` el email sale por la API de Brevo (puerto 443), sin dependencias nuevas. SMTP sigue disponible. Pasos en `docs/DEPLOY.md`.
 - **Recuperación de contraseña revisada** ([docs/auth.md](docs/auth.md)):
   - nuevas rutas `POST /api/v1/auth/forgot-password` y `/reset-password`, alias de las actuales, que siguen funcionando para Android;
@@ -24,6 +27,10 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
   - cada respuesta dice si es de IA, del tutor sin IA o preparada; si el proveedor falla, motivo (`metadata.reason`) y guía sin IA;
   - web: Cancelar, Reintentar (manual), Pedir una pista, «Explícamelo paso a paso», lección abierta preseleccionada, ejemplos ejecutables en el navegador y sin respuestas tardías de otra conversación;
   - 20 casos de evaluación en español en CI y `scripts/a2a/eval_tutor.py` para evaluar con un modelo real.
+- **Panel del alumno** (`#/panel`, ADR-0035): un único espacio para la persona con sesión iniciada, con siete secciones (Resumen, Mis cursos, Mi progreso, Actividad, Planificación, Logros y Mi perfil). Indicadores con datos reales y estados vacíos útiles, «Continuar aprendiendo» con la última actividad y el siguiente paso del plan, gráfica accesible de 30 días (con tabla), errores recurrentes, historial paginado, cierre de sesión y descarga de datos con los mecanismos existentes. Sustituye a «Mi cuenta» (`#/cuenta` redirige a `#/panel/perfil`).
+  - API: `GET /api/v1/dashboard` (resumen agregado del usuario de la sesión) y `GET /api/v1/dashboard/activity` (historial paginado). Sin migraciones.
+  - **XP, racha y logros se guardan en la cuenta** (`/api/v1/course-state/game`): antes solo vivían en el navegador y se perdían al cerrar sesión. Se fusionan sin perder nada y se validan al leerlos.
+  - El inicio de sesión con Google se registra como `login_google` en la actividad de la cuenta, para mostrar el método de acceso.
 - **Agentes A2A y Python Tutor** (ADR-0034, [docs/a2a.md](docs/a2a.md)): el backend puede servir agentes [A2A 1.0](https://a2a-protocol.org/) con el SDK oficial `a2a-sdk`, en la misma app FastAPI y junto a la API REST, que no cambia.
   - **Python Tutor** (`/a2a/python-tutor`): explica conceptos y errores, revisa el código **sin ejecutarlo**, propone ejercicios según el nivel y no da la solución de un ejercicio pendiente. Usa solo el progreso necesario de la sesión del alumno.
   - **Agent Card** pública en `/.well-known/agent-card.json`; el JSON-RPC exige la sesión de la API (Bearer o cookie), con tareas aisladas por usuario y 20 mensajes por minuto.

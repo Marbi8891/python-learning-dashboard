@@ -85,6 +85,15 @@ Las amenazas se revisan técnica por técnica con la matriz MITRE ATT&CK Enterpr
 
 Qué se ha comprobado al añadir el núcleo educativo y **qué riesgos siguen abiertos** (CSP en `<meta>`, Pyodide sin SRI, progreso declarado por el alumno…): [`docs/security/revision-2026-10.md`](docs/security/revision-2026-10.md).
 
+## Equipo AppSec y comprobaciones automáticas
+
+Ocho agentes de Claude Code revisan la seguridad (`.claude/agents/`, ver [`CLAUDE.md`](CLAUDE.md)).
+Registro de hallazgos, plan de corrección y herramientas en [`docs/security/`](docs/security/):
+[línea base](docs/security/SECURITY_BASELINE.md), [hallazgos](docs/security/SECURITY_FINDINGS.md),
+[plan](docs/security/REMEDIATION_PLAN.md), [pruebas y herramientas](docs/security/SECURITY_TESTING.md) y
+[flujo de trabajo](docs/security/AGENT_WORKFLOW.md). La CI pasa además Bandit, Semgrep y Gitleaks
+(`.github/workflows/security.yml`); en local: `python scripts/security/run_checks.py`.
+
 ## Ajustes que hay que activar en GitHub
 
 No se pueden versionar, así que se activan a mano en *Settings*:
@@ -94,5 +103,6 @@ No se pueden versionar, así que se activan a mano en *Settings*:
   - Secret scanning y Push protection;
   - Private vulnerability reporting;
   - CodeQL (*default setup*).
+- Pasos detallados y checks obligatorios: [`docs/security/SECURITY_TESTING.md`](docs/security/SECURITY_TESTING.md) §6.
 - *Actions → General*: *Workflow permissions* en «Read repository contents».
 - *Rules*: proteger `main` con pull request obligatorio, checks obligatorios y sin *force push*.

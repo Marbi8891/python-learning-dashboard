@@ -1,0 +1,251 @@
+/* =========================================================
+   dashboard.css — panel del alumno (#/panel, ADR-0035)
+   Solo lo propio del panel: reutiliza kpis, course-section, meter,
+   course-progress, activity-list y botones de las demás hojas.
+   ========================================================= */
+
+.dash-hero__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.dash-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+/* Menú de secciones: enlaces (cada sección es una ruta), con desplazamiento horizontal en el móvil */
+.dash-nav {
+  margin: var(--space-5) 0;
+  border-bottom: 1px solid var(--color-border);
+  overflow-x: auto;
+}
+
+.dash-nav ul {
+  display: flex;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dash-nav a {
+  display: block;
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 3px solid transparent;
+  color: var(--color-text-muted);
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.dash-nav a:hover {
+  color: var(--color-text);
+}
+
+.dash-nav a[aria-current="page"] {
+  border-bottom-color: var(--color-primary);
+  color: var(--color-strong);
+}
+
+.dash-nav a:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: -2px;
+}
+
+.dash-status {
+  color: var(--color-text-muted);
+}
+
+.dash-alert {
+  margin-bottom: var(--space-5);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--color-danger);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+}
+
+.dash-alert p {
+  margin: var(--space-1) 0;
+}
+
+.dash-pending {
+  color: var(--color-text-faint);
+}
+
+.dash-kpis .kpi dd {
+  font-size: 32px;
+}
+
+.kpi__hint {
+  display: block;
+  margin-top: var(--space-2);
+  color: var(--color-text-muted);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+/* Tarjetas de «Continuar aprendiendo» */
+.dash-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  gap: var(--space-4);
+}
+
+.dash-card {
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.dash-card--highlight {
+  border-color: var(--color-primary);
+  background: var(--color-primary-soft);
+}
+
+.dash-card__title {
+  margin: 0 0 var(--space-2);
+  font-size: 1.05rem;
+}
+
+.dash-card p {
+  margin: var(--space-2) 0;
+}
+
+.dash-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.dash-course {
+  display: grid;
+  align-content: start;
+  gap: var(--space-2);
+}
+
+.dash-course .dash-card__actions {
+  margin-top: auto;
+}
+
+/* Gráfica de actividad: una sola serie, barras finas con el extremo redondeado */
+.dash-chart {
+  margin: 0;
+}
+
+.dash-chart svg {
+  display: block;
+  width: 100%;
+  height: 160px;
+}
+
+.dash-chart__bar {
+  fill: var(--color-accent);
+}
+
+.dash-chart__hit {
+  fill: transparent;
+}
+
+.dash-chart__day:hover .dash-chart__bar {
+  fill: var(--color-accent-hover);
+}
+
+.dash-chart__base {
+  stroke: var(--color-border);
+  stroke-width: 2;
+}
+
+.dash-chart__axis {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+  color: var(--color-text-muted);
+  font-size: 13px;
+}
+
+.dash-details summary {
+  cursor: pointer;
+  color: var(--color-link);
+}
+
+.dash-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dash-tags a {
+  display: inline-block;
+  padding: var(--space-1) var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: var(--color-accent-soft);
+}
+
+.activity-list li[data-kind="attempt_failed"] {
+  border-left-color: var(--color-danger);
+}
+
+.activity-list li[data-kind="lesson_completed"],
+.activity-list li[data-kind="ok"] {
+  border-left-color: var(--color-accent);
+}
+
+.activity-list__row {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.dash-facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  gap: var(--space-3);
+  margin: 0;
+}
+
+.dash-facts dt {
+  color: var(--color-text-muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.dash-facts dd {
+  margin: var(--space-1) 0 0;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 600px) {
+  .dash-hero__actions {
+    width: 100%;
+  }
+
+  .dash-kpis .kpi {
+    padding: var(--space-4);
+  }
+
+  .dash-kpis .kpi dd {
+    font-size: 26px;
+  }
+}
+
+@media (forced-colors: active) {
+  .dash-chart__bar {
+    fill: CanvasText;
+  }
+
+  .dash-nav a[aria-current="page"] {
+    border-bottom-color: Highlight;
+  }
+}

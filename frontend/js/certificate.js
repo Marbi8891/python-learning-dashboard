@@ -101,7 +101,7 @@ export function renderCourseCertificate(id) {
   const course = DAW_COURSES.find((c) => c.id === id);
   if (!course) {
     return `<header class="profile-hero"><h1 class="profile-hero__title" id="certificate-title" tabindex="-1">Certificado no encontrado</h1>
-      <p><a href="#/cuenta">Volver a Mi cuenta</a></p></header>`;
+      <p><a href="#/panel/logros">Volver a Mi panel</a></p></header>`;
   }
   loadCourseBank(id)
     .then((bank) => {
@@ -114,7 +114,7 @@ export function renderCourseCertificate(id) {
     });
   return `
     <header class="profile-hero no-print">
-      <p class="eyebrow"><a href="#/cuenta">Mi cuenta</a> · Certificado</p>
+      <p class="eyebrow"><a href="#/panel/logros">Mi panel</a> · Certificado</p>
       <h1 class="profile-hero__title" id="certificate-title" tabindex="-1">Certificado · ${escapeHtml(course.title)}</h1>
     </header>
     <div id="course-certificate" data-course="${escapeHtml(id)}"><p class="empty-state">Comprobando tu progreso…</p></div>`;

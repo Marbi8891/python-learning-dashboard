@@ -1,0 +1,9 @@
+# Archivos que Semgrep no analiza (sustituye a la lista por defecto)
+node_modules/
+frontend/vendor/
+android/
+.venv/
+.venv-local/
+test-results/
+playwright-report/
+*.min.js

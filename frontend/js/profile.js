@@ -26,7 +26,7 @@ export function badgesHtml() {
 }
 
 /** Últimas 12 semanas, de lunes a domingo, con los días de actividad marcados. */
-function activityHtml() {
+export function activityHtml() {
   const active = new Set(game.days);
   const now = new Date();
   const start = new Date(now);

@@ -1,12 +1,12 @@
-// «Mi cuenta» ampliada (ADR-0025): plan de estudio, progreso de todos los cursos, logros y
-// certificados, perfil y seguridad. Contra el backend real.
+// «Mi cuenta» ampliada (ADR-0025), hoy dentro del panel del alumno (ADR-0035): plan de estudio,
+// progreso de todos los cursos, logros y certificados, perfil y seguridad. Contra el backend real.
 const AxeBuilder = require("@axe-core/playwright").default;
 const { test, expect, uniqueEmail } = require("./fixtures");
 
 const API = "http://127.0.0.1:8000";
 const PASSWORD = "contraseña-e2e-123";
 
-async function signIn(page, request) {
+async function signIn(page, request, section = "perfil") {
   const email = uniqueEmail();
   await request.post(`${API}/api/auth/register`, { data: { email, password: PASSWORD, display_name: "Ana", accept_privacy: true } });
   await page.goto("/#/inicio");
@@ -15,13 +15,16 @@ async function signIn(page, request) {
   await page.locator("#login-form").getByLabel("Contraseña").fill(PASSWORD);
   await page.locator("#login-form").getByRole("button", { name: "Entrar" }).click();
   await expect(page.locator("#account-label")).toHaveText("Ana");
+  // La antigua «Mi cuenta» lleva al perfil del panel; cada parte vive en su sección
   await page.goto("/#/cuenta");
-  await expect(page.locator("#private-title")).toHaveText("Ana");
+  await expect(page).toHaveURL(/#\/panel\/perfil$/);
+  if (section !== "perfil") await page.goto(`/#/panel/${section}`);
+  await expect(page.locator("#private-title")).toHaveText("Hola, Ana");
   return email;
 }
 
 test("plan de estudio: fecha de examen por curso y meta diaria que se guardan", async ({ page, request }) => {
-  const email = await signIn(page, request);
+  const email = await signIn(page, request, "planificacion");
   const date = page.getByLabel("Fecha del examen de Programación");
   const inTwentyDays = new Date(Date.now() + 20 * 86_400_000);
   const day = `${inTwentyDays.getFullYear()}-${String(inTwentyDays.getMonth() + 1).padStart(2, "0")}-${String(inTwentyDays.getDate()).padStart(2, "0")}`;
@@ -35,7 +38,7 @@ test("plan de estudio: fecha de examen por curso y meta diaria que se guardan", 
   // La sesión sigue tras recargar (cookie HttpOnly, ADR-0033): lo que se ve sale de la cuenta
   await page.reload();
   await expect(page.locator("#account-label")).toHaveText("Ana");
-  await page.goto("/#/cuenta");
+  await page.goto("/#/panel/planificacion");
   await expect(page.getByLabel("Fecha del examen de Programación")).toHaveValue(day);
   await expect(page.getByLabel("Meta diaria")).toHaveValue("30");
 });
@@ -45,12 +48,13 @@ test("progreso de todos los cursos, tema más flojo y certificados", async ({ pa
     // Un curso con respuestas: 3 falladas en el primer bloque de Bases de datos
     localStorage.setItem("pld:course:sql", JSON.stringify({ answers: { "sql-01": [false], "sql-02": [false], "sql-03": [true] } }));
   });
-  await signIn(page, request);
+  await signIn(page, request, "cursos");
   const card = page.locator('[data-course-card="sql"]');
   await expect(card).toContainText("3 preguntas respondidas");
   await expect(card).toContainText("Dominio:");
   await expect(card).toContainText("Tu tema más flojo");
   await expect(page.locator('[data-course-card="programacion"]')).toContainText("Siguiente tema sin empezar");
+  await page.goto("/#/panel/logros");
   await expect(page.locator('[data-cert="sql"]')).toContainText("dominio");
 
   // Página del certificado de un curso sin terminar: dice qué falta
@@ -65,7 +69,7 @@ test("perfil y seguridad: cambiar el nombre, la contraseña y ver la actividad",
 
   await page.getByLabel("Nombre que se muestra").fill("Ana María");
   await page.getByRole("button", { name: "Guardar nombre" }).click();
-  await expect(page.locator("#private-title")).toHaveText("Ana María");
+  await expect(page.locator("#private-title")).toHaveText("Hola, Ana María");
   await expect(page.locator("#account-label")).toHaveText("Ana María");
 
   const form = page.locator("#password-form");
@@ -79,16 +83,17 @@ test("perfil y seguridad: cambiar el nombre, la contraseña y ver la actividad",
   await form.getByRole("button", { name: "Cambiar contraseña" }).click();
   await expect(page.locator("#toast")).toContainText("Contraseña cambiada");
   // Esta sesión sigue abierta y la actividad lo refleja
-  await expect(page.locator("#account-activity")).toContainText("Contraseña cambiada desde Mi cuenta");
+  await expect(page.locator("#account-activity")).toContainText("Contraseña cambiada desde Mi panel");
   await expect(page.locator("#account-label")).toHaveText("Ana María");
   const old = await request.post(`${API}/api/auth/login`, { form: { username: email, password: PASSWORD } });
   expect(old.status()).toBe(401);
 });
 
 test("Mi cuenta sin infracciones WCAG", async ({ page, request }) => {
-  await signIn(page, request);
-  await expect(page.locator("#account-activity li").first()).toBeVisible();
+  await signIn(page, request, "cursos");
   await expect(page.locator('[data-course-card="java"] [data-course-detail]')).toContainText("Dominio:");
+  await page.goto("/#/panel/perfil");
+  await expect(page.locator("#account-activity li").first()).toBeVisible();
   await page.waitForFunction(() => !document.querySelector("#toast.toast--visible"), null, { timeout: 20_000 });
   const results = await new AxeBuilder({ page }).include("#private-view").withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"]).analyze();
   const summary = results.violations.map((v) => `${v.id} (${v.impact}): ${v.nodes.map((n) => n.target).join(", ")}`);

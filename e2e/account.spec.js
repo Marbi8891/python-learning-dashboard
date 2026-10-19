@@ -106,7 +106,8 @@ test("si el navegador bloquea la cookie, se entra igual con el token solo en mem
   await openLesson(page, "variables");
   const email = uniqueEmail();
   await register(page, email, "Eva");
-  expect(await page.context().cookies()).toEqual([]);
+  // (Google Identity puede dejar su propia cookie «g_state»: lo que importa es que no haya cookie de sesión)
+  expect((await page.context().cookies()).filter((c) => c.name === "__Host-pld_session")).toEqual([]);
   // La sesión funciona (se sincroniza el progreso) y, como antes, recargar la cierra
   await page.getByRole("tab", { name: "Práctica y Ejercicio" }).click();
   await page.getByRole("button", { name: "Marcar como completada" }).click();

@@ -30,6 +30,9 @@ function save() {
   }
 }
 
+/** Preferencias actuales (para mostrarlas en el panel del alumno). */
+export const currentPrefs = () => ({ ...prefs });
+
 export function initPrefs() {
   apply();
   systemLight.addEventListener("change", () => {
