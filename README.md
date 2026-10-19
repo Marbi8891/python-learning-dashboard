@@ -70,6 +70,7 @@ Decisiones documentadas:
 - [ADR-0010 Estudio guiado, sincronización y PWA](docs/adr/0010-estudio-guiado-y-pwa.md)
 - [ADR-0031 Núcleo educativo por conceptos](docs/adr/0031-nucleo-educativo-por-conceptos.md) (las ADR-0011 a 0030 están en `docs/adr/`)
 - [ADR-0034 Agentes A2A junto a la API REST](docs/adr/0034-agentes-a2a.md) · guía: [docs/a2a.md](docs/a2a.md)
+- [ADR-0036 Tutor de Python adaptativo](docs/adr/0036-tutor-adaptativo.md)
 
 ```
 ├── frontend/

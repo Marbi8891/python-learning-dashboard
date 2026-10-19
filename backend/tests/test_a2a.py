@@ -79,7 +79,7 @@ def test_agent_card_is_public_on_the_standard_and_agent_paths(client):
     assert card["defaultInputModes"] == ["text/plain", "application/json"]
     assert card["defaultOutputModes"] == ["text/plain"]
     assert card["securitySchemes"]["bearer"]["httpAuthSecurityScheme"]["bearerFormat"] == "JWT"
-    assert "Modo de desarrollo" in card["description"]
+    assert "Sin IA" in card["description"]
 
 
 def test_agent_card_has_api_security_headers_and_no_secrets(client):
