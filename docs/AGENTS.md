@@ -1,8 +1,12 @@
 # Agentes de desarrollo (propuesta)
 
-> Documento de la **Fase 1**. Es una **propuesta**: todavía no existe ningún archivo en `.claude/`.
-> Los agentes se crearán en la Fase 2 cuando se autorice. La arquitectura real del proyecto está en
+> Documento de la **Fase 1**. Es una **propuesta**. La arquitectura real del proyecto está en
 > [`ARCHITECTURE.md`](ARCHITECTURE.md).
+>
+> **Actualización (19/10/2026):** el área **security** de este plan ya existe como equipo de ocho
+> agentes AppSec en `.claude/agents/`, con un guardián de rutas (`.claude/hooks/appsec-guard.mjs`) y
+> su flujo en [`security/AGENT_WORKFLOW.md`](security/AGENT_WORKFLOW.md). El resto de agentes de este
+> plan siguen sin crear, pendientes de autorización.
 
 ## 1. Dos mundos que no se mezclan
 

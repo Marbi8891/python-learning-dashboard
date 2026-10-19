@@ -16,6 +16,7 @@
 | Android | `cd android && ./gradlew testDebugUnitTest lintDebug` | Lógica en Kotlin y lint | No ejecutado (sin SDK); lo pasa la CI |
 | Migraciones en PostgreSQL | `MIGRATION_TEST_DATABASE_URL=postgresql://… python -m pytest -q tests/test_migrations.py` (en `backend/`) | Migraciones sobre BD vacía y con datos | Lo pasa la CI |
 | Dependencias | `pip-audit -r backend/requirements.txt` y `npm audit --audit-level=high` | Vulnerabilidades conocidas | Lo pasa la CI |
+| Seguridad (Bandit, Semgrep, Gitleaks…) | `python scripts/security/run_checks.py` | Análisis estático, reglas propias y secretos; ver [`security/SECURITY_TESTING.md`](security/SECURITY_TESTING.md) | Lo pasa la CI (`security.yml`) |
 
 ## 2. Preparar el entorno (una vez)
 

@@ -1,0 +1,131 @@
+# Reglas propias de Semgrep para el Python Learning Dashboard (docs/security/SECURITY_TESTING.md).
+# Funcionan sin conexión ni cuenta: semgrep scan --metrics=off --config .semgrep/ --error
+# Son bloqueantes en la CI: cada una protege una decisión de seguridad ya tomada en el proyecto.
+rules:
+  # ---------- Backend (Python) ----------
+  - id: pld-sql-built-from-strings
+    languages: [python]
+    severity: ERROR
+    message: >-
+      SQL construido con texto. Usa consultas de SQLAlchemy o parámetros enlazados
+      (text("... :x").bindparams(x=...)), nunca f-strings, % ni concatenación (OWASP A03).
+    patterns:
+      - pattern-either:
+          - pattern: sqlalchemy.text(f"...")
+          - pattern: sqlalchemy.text("..." % $X)
+          - pattern: sqlalchemy.text("..." + $X)
+          - pattern: sqlalchemy.text($X.format(...))
+          - pattern: $DB.execute(f"...")
+          - pattern: $DB.execute("..." % $X)
+          - pattern: $DB.execute("..." + $X)
+
+  - id: pld-jwt-without-verification
+    languages: [python]
+    severity: ERROR
+    message: >-
+      JWT decodificado sin verificar la firma o sin fijar el algoritmo. Usa
+      jwt.decode(token, secreto, algorithms=["HS256"]) como en app/security.py (OWASP A02/A07).
+    pattern-either:
+      - pattern: 'jwt.decode(..., options={..., "verify_signature": False, ...}, ...)'
+      - pattern: jwt.decode($TOKEN, $KEY)
+      - pattern: jwt.decode($TOKEN, $KEY, algorithms=[..., "none", ...], ...)
+
+  - id: pld-shell-or-dynamic-code
+    languages: [python]
+    severity: ERROR
+    message: >-
+      Ejecución de comandos con shell o de código dinámico en el backend. La API nunca ejecuta
+      código del alumno: se ejecuta en el navegador con Pyodide (ADR-0004).
+    paths:
+      include: [backend/app/]
+    pattern-either:
+      - pattern: subprocess.$F(..., shell=True, ...)
+      - pattern: os.system(...)
+      - pattern: os.popen(...)
+      - pattern: eval(...)
+      - pattern: exec(...)
+      - pattern: pickle.loads(...)
+      - pattern: yaml.load(...)
+
+  - id: pld-secret-in-log
+    languages: [python]
+    severity: ERROR
+    message: >-
+      Se registra una contraseña, un token o un secreto. Los eventos de seguridad solo llevan
+      seudónimos (app/security_events.py).
+    patterns:
+      - pattern-either:
+          - pattern: $LOG.$LEVEL(..., <... $X.password ...>, ...)
+          - pattern: $LOG.$LEVEL(..., <... $X.new_password ...>, ...)
+          - pattern: $LOG.$LEVEL(..., <... $X.access_token ...>, ...)
+          - pattern: $LOG.$LEVEL(..., <... $SETTINGS.jwt_secret ...>, ...)
+          - pattern: print(..., <... $X.password ...>, ...)
+      - metavariable-regex:
+          metavariable: $LEVEL
+          regex: ^(debug|info|warning|error|exception|critical|log)$
+
+  - id: pld-cors-wildcard
+    languages: [python]
+    severity: ERROR
+    message: >-
+      CORS con comodín junto a credenciales. La API solo acepta la lista explícita de
+      cors_origins (app/config.py), porque la sesión viaja en una cookie (ADR-0033).
+    pattern-either:
+      - pattern: $APP.add_middleware(CORSMiddleware, ..., allow_origins=["*"], ...)
+      - pattern: $APP.add_middleware(CORSMiddleware, ..., allow_origin_regex=$R, ...)
+
+  # ---------- Frontend (JavaScript) ----------
+  - id: pld-js-dynamic-code
+    languages: [javascript]
+    severity: ERROR
+    message: >-
+      Código dinámico en la web. La CSP no permite 'unsafe-eval' y el código del alumno solo se
+      ejecuta en el Worker de Pyodide.
+    paths:
+      exclude: [frontend/vendor/]
+    pattern-either:
+      - pattern: eval(...)
+      - pattern: new Function(...)
+      - pattern: setTimeout("...", ...)
+      - pattern: setInterval("...", ...)
+      - pattern: document.write(...)
+      - pattern: document.writeln(...)
+
+  - id: pld-token-in-web-storage
+    languages: [javascript]
+    severity: ERROR
+    message: >-
+      Token de sesión en localStorage o sessionStorage. La sesión va en una cookie HttpOnly o,
+      si el navegador la bloquea, solo en memoria (ADR-0033).
+    patterns:
+      - pattern-either:
+          - pattern: localStorage.setItem($KEY, ...)
+          - pattern: sessionStorage.setItem($KEY, ...)
+      # Una marca literal (por ejemplo "cookie" en frontend/js/store.js) no es un token
+      - pattern-not: localStorage.setItem($KEY, "...")
+      - pattern-not: sessionStorage.setItem($KEY, "...")
+      - metavariable-regex:
+          metavariable: $KEY
+          regex: (?i).*(token|jwt|session|bearer|credential).*
+
+  - id: pld-url-to-dom-without-escaping
+    languages: [javascript]
+    severity: ERROR
+    message: >-
+      Datos de la URL (location.hash/search, URLSearchParams) insertados como HTML. Escápalos con
+      escapeHtml() de frontend/js/markdown.js (XSS basado en DOM).
+    paths:
+      exclude: [frontend/vendor/]
+    patterns:
+      - pattern-either:
+          - pattern: $EL.innerHTML = <... location.$P ...>
+          - pattern: $EL.insertAdjacentHTML($POS, <... location.$P ...>)
+      - pattern-not: $EL.innerHTML = <... escapeHtml(...) ...>
+
+  - id: pld-target-blank-without-noopener
+    languages: [html]
+    severity: WARNING
+    message: Enlace con target="_blank" sin rel="noopener" (tabnabbing).
+    patterns:
+      - pattern: <a ... target="_blank" ...>...</a>
+      - pattern-not: <a ... rel="$R" ...>...</a>

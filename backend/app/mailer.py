@@ -83,7 +83,8 @@ def _deliver_brevo(to: str, subject: str, body: str) -> None:
         method="POST",
     )
     # urlopen comprueba el certificado; un 4xx/5xx lanza HTTPError (subclase de OSError)
-    with urllib.request.urlopen(request, timeout=15, context=ssl.create_default_context()):
+    # Bandit B310 (esquemas file:/): BREVO_URL es una constante https y nadie la cambia
+    with urllib.request.urlopen(request, timeout=15, context=ssl.create_default_context()):  # nosec B310
         pass
 
 
