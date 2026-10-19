@@ -261,7 +261,7 @@ def looks_like_answer(question: str, conversation: Conversation | None) -> bool:
         return False
     if _CONFUSED.search(question):  # «no lo entiendo» pide otra explicación, no es una respuesta
         return False
-    return not (_CONCEPTUAL.search(question) and len(question.split()) > 4)
+    return "¿" not in question and not question.rstrip().endswith("?")  # una pregunta nueva
 
 
 def classify(
@@ -353,9 +353,8 @@ def after_check(estimate: LevelEstimate, correct: bool) -> LevelEstimate:
 
 
 def _normalize_answer(text: str) -> str:
-    text = text.strip().strip("`").strip()
-    text = re.sub(r"^```\w*\n?|\n?```$", "", text).strip()
-    text = text.strip("\"'«»“”").rstrip(".").strip()
+    text = re.sub(r"^```\w*\n?|\n?```$", "", text.strip())
+    text = text.strip(" \t\n`\"'«»“”").rstrip(".").strip(" `\"'«»“”")
     return re.sub(r"\s+", "", text).casefold()
 
 
