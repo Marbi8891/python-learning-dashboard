@@ -23,9 +23,25 @@ async function audit(page) {
   expect(summary, summary.join("\n")).toEqual([]);
 }
 
-test("primera visita: pantalla de bienvenida que explica la web y lleva a empezar", async ({ page }) => {
+test("primera visita: la portada presenta la web y lleva a empezar", async ({ page }) => {
   await page.goto("/");
-  await expect(page).toHaveURL(/#\/bienvenida$/);
+  await expect(page).toHaveURL(/#\/portada$/);
+  await expect(page.locator("#lp-title")).toHaveText("Aprende programación entendiendo lo que haces");
+  await expect(page.locator("#sidebar")).toBeHidden();
+  await page.getByRole("banner").getByRole("link", { name: "Empezar a aprender" }).click();
+  await expect(page).toHaveURL(/#\/aprender$/);
+  await expect(page.locator("#learn-title")).toHaveText("¿Qué estudio ahora?");
+  await expect(page.locator("#landing-view")).toBeHidden();
+  // La segunda visita va directa a «¿Qué estudio ahora?»; la portada sigue enlazada en el menú
+  await page.goto("/");
+  await expect(page).toHaveURL(/#\/aprender$/);
+  await page.locator('.sidebar__footer a[href="#/portada"]').click();
+  await expect(page).toHaveURL(/#\/portada$/);
+  await expect(page.locator("#lp-title")).toBeVisible();
+});
+
+test("bienvenida: presentación guiada que explica la web y lleva a empezar", async ({ page }) => {
+  await page.goto("/#/bienvenida");
   await expect(page.locator("#learn-title")).toHaveText("Aprende Python entendiendo lo que haces");
   await expect(page.getByRole("heading", { name: /El mapa/ })).toBeVisible();
   await expect(page.locator(".lx-map__stop")).toHaveCount(5);
@@ -33,9 +49,7 @@ test("primera visita: pantalla de bienvenida que explica la web y lleva a empeza
   await page.getByRole("link", { name: "Empezar desde cero" }).click();
   await expect(page).toHaveURL(/#\/aprender$/);
   await expect(page.locator("#learn-title")).toHaveText("¿Qué estudio ahora?");
-  // La segunda visita va directa a «¿Qué estudio ahora?»; la presentación sigue enlazada
-  await page.goto("/");
-  await expect(page).toHaveURL(/#\/aprender$/);
+  // Desde «¿Qué estudio ahora?» se vuelve a la presentación guiada
   await page.getByRole("link", { name: "¿Cómo funciona?" }).click();
   await expect(page).toHaveURL(/#\/bienvenida$/);
   await expect(page.locator(".lx-welcome")).toBeVisible();

@@ -15,9 +15,10 @@ const test = base.test.extend({
 /** Email único por test: los tests se ejecutan en paralelo contra el mismo backend. */
 const uniqueEmail = () => `e2e-${Date.now()}-${Math.random().toString(36).slice(2, 8)}@example.com`;
 
-/** Espera a que la app haya cargado las lecciones. */
+/** Espera a que la app haya cargado las lecciones. Sin lección, abre la presentación de la app
+ *  (la raíz lleva en la primera visita a la portada, que no tiene el menú lateral). */
 async function openLesson(page, slug = "") {
-  await page.goto(slug ? `/#/leccion/${slug}` : "/");
+  await page.goto(slug ? `/#/leccion/${slug}` : "/#/bienvenida");
   await page.locator(".lesson[data-slug]").first().waitFor({ state: "attached" });
 }
 
