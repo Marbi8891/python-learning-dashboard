@@ -10,7 +10,7 @@ Archivos bloqueados mientras un agente los edita. Vacía = nadie está corrigien
 
 | Hallazgo | Dueño | Archivos | Desde |
 |---|---|---|---|
-| PLD-SEC-002 | frontend-security + security-qa | `frontend/js/app.js`, `backend/tests/test_content.py` | 19/10/2026 |
+| — | — | — | — |
 
 ## Pendientes, por prioridad
 
@@ -22,11 +22,10 @@ Archivos bloqueados mientras un agente los edita. Vacía = nadie está corrigien
 
 ## Hechas
 
-| PLD-SEC-002 | Escape de slugs en atributos de la barra lateral y test del formato permitido | PR #50, rama `security/appsec-hardening-oxxazk` | Corrección aplicada; CI pendiente |
-
 | Hallazgo | Corrección | Commit / PR | Verificación |
 |---|---|---|---|
 | PLD-SEC-001 | `backend/tests/test_security_isolation.py` | rama `security/appsec-hardening-oxxazk` | 4 tests pasan; suite con 100 % de cobertura |
+| PLD-SEC-002 | Escape de slugs en atributos de la barra lateral y test del formato permitido | PR #50, rama `security/appsec-hardening-oxxazk` | 639 tests backend (100 %) y 78 unitarios en verde |
 | PLD-SEC-FP1 | `# nosec B310` justificado en `backend/app/mailer.py`, `.gitleaksignore` por huella | ídem | Bandit `-ll -ii` y Gitleaks sin hallazgos |
 
 ## Pendiente de la persona (no lo pueden hacer los agentes)
