@@ -1,16 +1,18 @@
+
 /* Configuración de despliegue del frontend.
-   - apiUrl: URL del backend. Vacío = modo sin cuenta: todo funciona y el progreso se guarda
-     solo en este navegador. En localhost se deja vacío y se usa http://127.0.0.1:8000.
-   - contactEmail: a quién escribir si no hay recuperación de contraseña por email.
-   - serviceWorker: funcionamiento sin conexión (PWA). Desactivado en localhost para desarrollar sin cachés.
-   - goatcounter: código de tu sitio en goatcounter.com (analítica sin cookies). Vacío = sin analítica.
-   - pyodideUrl (opcional): carpeta propia de Pyodide; por defecto, el CDN oficial (jsDelivr).
-   Los valores ya definidos antes de cargar este archivo (por ejemplo, en los tests) se respetan. */
+   - apiUrl: URL del backend.
+   - contactEmail: correo de contacto.
+   - googleClientId: ID público del cliente OAuth de Google.
+   - goatcounter: código de analítica.
+   - serviceWorker: funcionamiento sin conexión.
+*/
 window.PLD_CONFIG = Object.assign(
   {
-    apiUrl: ["localhost", "127.0.0.1"].includes(location.hostname) ? "" : "https://pld-api.onrender.com",
+    apiUrl: ["localhost", "127.0.0.1"].includes(location.hostname)
+      ? ""
+      : "https://pld-api.onrender.com",
     contactEmail: "mrabehfathiprofesional@gmail.com",
-    googleClientId: "1077939677647-kpeuhae3bn4ee8n7pkcruetmcf33rub9.apps.googleusercontent.com",
+    googleClientId: "1077939677647-34gdevneop8c6019g80l3lop6ubdfb41.apps.googleusercontent.com",
     goatcounter: "",
     serviceWorker: !["localhost", "127.0.0.1"].includes(location.hostname),
   },
