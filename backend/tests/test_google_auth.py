@@ -66,3 +66,35 @@ def test_google_login_rejects_unverified_email(client, monkeypatch):
         json={"credential": "x" * 40, "accept_privacy": True},
     )
     assert response.status_code == 401
+
+def test_google_login_requires_privacy_for_new_account(client, monkeypatch):
+    configure_google(
+        monkeypatch,
+        {"email": "privacy@example.com", "email_verified": True, "name": "Alumno", "sub": "sub-3"},
+    )
+    response = client.post(
+        "/api/auth/google",
+        json={"credential": "x" * 40, "accept_privacy": False},
+    )
+    assert response.status_code == 400
+
+
+def test_google_login_rejects_invalid_id_token(client, monkeypatch):
+    configure_google(monkeypatch, {})
+    def invalid_token(token, request, client_id):
+        raise ValueError("invalid token")
+    monkeypatch.setattr(auth, "verify_oauth2_token", invalid_token)
+    response = client.post(
+        "/api/auth/google",
+        json={"credential": "x" * 40, "accept_privacy": True},
+    )
+    assert response.status_code == 401
+
+
+def test_google_login_unconfigured(client, monkeypatch):
+    monkeypatch.setattr(auth, "get_settings", lambda: SimpleNamespace(google_client_id=None))
+    response = client.post(
+        "/api/auth/google",
+        json={"credential": "x" * 40, "accept_privacy": True},
+    )
+    assert response.status_code == 503
