@@ -3,10 +3,15 @@
 from types import SimpleNamespace
 
 from app.routers import auth
+from tests.conftest import register
 
 
 def configure_google(monkeypatch, claims):
-    monkeypatch.setattr(auth, "get_settings", lambda: SimpleNamespace(google_client_id="test-google-client-id"))
+    monkeypatch.setattr(
+        auth,
+        "get_settings",
+        lambda: SimpleNamespace(google_client_id="test-google-client-id"),
+    )
     monkeypatch.setattr(auth, "verify_oauth2_token", lambda token, request, client_id: claims)
 
 
@@ -36,12 +41,15 @@ def test_google_login_creates_account_and_session(client, monkeypatch):
 
 
 def test_google_login_reuses_existing_account(client, monkeypatch):
-    from tests.conftest import register
-
     assert register(client, email="ana@example.com", name="Ana").status_code == 201
     configure_google(
         monkeypatch,
-        {"email": "ANA@example.com", "email_verified": True, "name": "Otro nombre", "sub": "sub-1"},
+        {
+            "email": "ANA@example.com",
+            "email_verified": True,
+            "name": "Otro nombre",
+            "sub": "sub-1",
+        },
     )
     response = client.post(
         "/api/auth/google",
@@ -59,7 +67,12 @@ def test_google_login_reuses_existing_account(client, monkeypatch):
 def test_google_login_rejects_unverified_email(client, monkeypatch):
     configure_google(
         monkeypatch,
-        {"email": "unverified@example.com", "email_verified": False, "name": "Alumno", "sub": "sub-2"},
+        {
+            "email": "unverified@example.com",
+            "email_verified": False,
+            "name": "Alumno",
+            "sub": "sub-2",
+        },
     )
     response = client.post(
         "/api/auth/google",
@@ -70,7 +83,12 @@ def test_google_login_rejects_unverified_email(client, monkeypatch):
 def test_google_login_requires_privacy_for_new_account(client, monkeypatch):
     configure_google(
         monkeypatch,
-        {"email": "privacy@example.com", "email_verified": True, "name": "Alumno", "sub": "sub-3"},
+        {
+            "email": "privacy@example.com",
+            "email_verified": True,
+            "name": "Alumno",
+            "sub": "sub-3",
+        },
     )
     response = client.post(
         "/api/auth/google",
