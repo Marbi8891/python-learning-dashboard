@@ -2,6 +2,10 @@
 
 from types import SimpleNamespace
 
+from sqlalchemy import select
+from sqlalchemy.orm import Session
+
+from app.models import User
 from app.routers import auth
 from tests.conftest import register
 
@@ -42,6 +46,10 @@ def test_google_login_creates_account_and_session(client, monkeypatch):
 
 def test_google_login_reuses_existing_account(client, monkeypatch):
     assert register(client, email="ana@example.com", name="Ana").status_code == 201
+    with Session(client.engine) as db:
+        user = db.scalar(select(User).where(User.email == "ana@example.com"))
+        user.privacy_accepted_at = None
+        db.commit()
     configure_google(
         monkeypatch,
         {
