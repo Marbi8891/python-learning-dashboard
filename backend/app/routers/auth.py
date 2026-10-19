@@ -1,10 +1,15 @@
 """Registro, login y usuario actual."""
 
+import secrets
 from datetime import UTC, datetime, timedelta
 from typing import Annotated
 
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request, Response, status
 from fastapi.security import OAuth2PasswordRequestForm
+from google.auth.exceptions import GoogleAuthError
+from google.auth.transport.requests import Request as GoogleRequest
+from google.oauth2.id_token import verify_oauth2_token
+from pydantic import BaseModel, Field
 from sqlalchemy import delete, select, update
 from sqlalchemy.exc import IntegrityError
 
@@ -27,6 +32,78 @@ from app.security_events import Event, pseudonym, record
 from app.session_cookie import clear_session_cookie, issue_session
 
 router = APIRouter(prefix="", tags=["usuarios"])
+
+
+class GoogleCredential(BaseModel):
+    credential: str = Field(min_length=20, max_length=8192)
+    accept_privacy: bool = False
+
+
+def _verify_google_credential(credential: str, client_id: str) -> dict:
+    """Verifica firma, audiencia y caducidad del ID token con la biblioteca oficial de Google."""
+    try:
+        claims = verify_oauth2_token(credential, GoogleRequest(), client_id)
+    except (ValueError, GoogleAuthError):
+        raise HTTPException(
+            status_code=401,
+            detail="La credencial de Google no es válida o ha caducado.",
+        ) from None
+    if claims.get("email_verified") is not True or not claims.get("email"):
+        raise HTTPException(
+            status_code=401, detail="Google debe confirmar que el email está verificado."
+        )
+    return claims
+
+
+@router.post("/auth/google", dependencies=[Depends(limit_auth_attempts)])
+def login_google(
+    data: GoogleCredential, request: Request, response: Response, db: DbSession
+) -> Token:
+    """Crea o inicia sesión con un ID token de Google validado en el servidor."""
+    settings = get_settings()
+    if not settings.google_client_id:
+        raise HTTPException(
+            status_code=503,
+            detail="El inicio de sesión con Google aún no está configurado.",
+        )
+    claims = _verify_google_credential(data.credential, settings.google_client_id)
+    email = str(claims["email"]).strip().lower()
+    user = db.scalar(select(User).where(User.email == email))
+    if user is None:
+        if not data.accept_privacy:
+            raise HTTPException(
+                status_code=400,
+                detail="Debes aceptar la política de privacidad para crear tu cuenta.",
+            )
+        fallback_name = email.split("@", 1)[0]
+        name = str(claims.get("name") or fallback_name).strip()[:80] or fallback_name
+        user = User(
+            email=email,
+            password_hash=hash_password(secrets.token_urlsafe(48)),
+            display_name=name,
+            privacy_accepted_at=datetime.now(UTC),
+        )
+        db.add(user)
+        try:
+            db.commit()
+        except IntegrityError:
+            # Otra petición pudo crear la misma cuenta al mismo tiempo.
+            db.rollback()
+            user = db.scalar(select(User).where(User.email == email))
+            if user is None:
+                raise HTTPException(
+                    status_code=409,
+                    detail="No se pudo crear la cuenta. Inténtalo de nuevo.",
+                ) from None
+        else:
+            db.refresh(user)
+    elif data.accept_privacy and user.privacy_accepted_at is None:
+        user.privacy_accepted_at = datetime.now(UTC)
+        db.commit()
+    activity.log(db, user.id, "login", request)
+    db.commit()
+    record(Event.LOGIN_OK, request, user=user.id)
+    return issue_session(request, response, user.id, user.token_version)
 
 
 @router.post(

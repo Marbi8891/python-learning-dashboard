@@ -18,6 +18,8 @@ function showView(name) {
   for (const view of dialog().querySelectorAll("[data-view]")) {
     view.hidden = view.dataset.view !== name;
   }
+  const googleLogin = dialog().querySelector("[data-google-login]");
+  if (googleLogin) googleLogin.hidden = name !== "login" || !window.PLD_CONFIG?.googleClientId;
   setMessage("");
   const heading = dialog().querySelector(`[data-view="${name}"] h2`);
   $("#account-title").textContent = heading?.dataset.title ?? "Tu cuenta";
@@ -105,6 +107,66 @@ async function login(email, password) {
   }
 }
 
+async function loginWithGoogle(credential) {
+  if (!$("#google-privacy").checked) {
+    setMessage("Acepta la política de privacidad para continuar con Google.");
+    return;
+  }
+  const payload = { credential, accept_privacy: true };
+  await request("POST", "/api/auth/google", { json: payload, auth: false });
+  try {
+    await startSession();
+  } catch (error) {
+    if (!(error instanceof ApiError && error.status === 401)) throw error;
+    const { access_token: token } = await request("POST", "/api/auth/google", {
+      json: payload, auth: false, cookie: false,
+    });
+    await startSession(token);
+  }
+  dialog().close();
+  showToast(`¡Hola, ${state.user.display_name}! Tu progreso está sincronizado.`);
+}
+
+function initGoogleSignIn() {
+  const clientId = window.PLD_CONFIG?.googleClientId;
+  const target = $("#google-signin");
+  if (!clientId || !target) return;
+  const render = () => {
+    if (!window.google?.accounts?.id || target.dataset.rendered === "true") return;
+    window.google.accounts.id.initialize({
+      client_id: clientId,
+      callback: async ({ credential }) => {
+        if (!credential) {
+          setMessage("Google no ha devuelto una credencial válida.");
+          return;
+        }
+        try {
+          await loginWithGoogle(credential);
+        } catch (error) {
+          setMessage(error.message);
+        }
+      },
+      auto_select: false,
+      cancel_on_tap_outside: true,
+    });
+    window.google.accounts.id.renderButton(target, {
+      type: "standard", theme: "outline", size: "large",
+      text: "continue_with", shape: "rectangular", width: 280,
+      logo_alignment: "left",
+    });
+    target.dataset.rendered = "true";
+  };
+  render();
+  window.addEventListener("load", render, { once: true });
+  const timer = window.setInterval(() => {
+    if (window.google?.accounts?.id) {
+      window.clearInterval(timer);
+      render();
+    }
+  }, 250);
+  window.setTimeout(() => window.clearInterval(timer), 10000);
+}
+
 function downloadJson(data, filename) {
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
   const url = URL.createObjectURL(blob);
@@ -146,6 +208,7 @@ export function initAccount({ toast }) {
   showToast = toast;
   renderAccountButton();
   setupPasswordRecovery();
+  initGoogleSignIn();
   subscribe((change) => {
     if (change.type === "profile") renderAccountButton(); // nombre cambiado en «Mi cuenta»
     if (change.type !== "user") return;

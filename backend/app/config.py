@@ -24,6 +24,8 @@ class Settings(BaseSettings):
 
     # Sin valor por defecto a propósito: la API se niega a arrancar sin él (ver main.py).
     jwt_secret: str | None = None
+    # Client ID público de OAuth 2.0 (nunca un client secret en el frontend).
+    google_client_id: str | None = None
     access_token_minutes: int = 30
     auth_rate_limit_per_minute: int = 5
     # Fallos de login seguidos por cuenta antes de bloquearla un rato (aunque cambien de IP)
