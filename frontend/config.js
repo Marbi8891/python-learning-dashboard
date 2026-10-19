@@ -1,4 +1,5 @@
 
+
 /* Configuración de despliegue del frontend.
    - apiUrl: URL del backend.
    - contactEmail: correo de contacto.
