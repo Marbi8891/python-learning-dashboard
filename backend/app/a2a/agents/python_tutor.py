@@ -82,9 +82,18 @@ _ASKS_EXERCISE = re.compile(
 )
 
 LEVEL_STRATEGY: dict[Level, str] = {
-    "inicial": "Da un solo paso cada vez, define los términos y evita introducir conceptos nuevos sin explicarlos.",
-    "intermedio": "Relaciona el error con el concepto, pide al alumno que prediga el resultado y después compruébalo.",
-    "avanzado": "Prioriza razonamiento, casos límite y alternativas; evita explicar sintaxis básica que ya debería conocer.",
+    "inicial": (
+        "Da un solo paso cada vez, define los términos y evita introducir conceptos nuevos "
+        "sin explicarlos."
+    ),
+    "intermedio": (
+        "Relaciona el error con el concepto, pide al alumno que prediga el resultado y después "
+        "compruébalo."
+    ),
+    "avanzado": (
+        "Prioriza razonamiento, casos límite y alternativas; evita explicar sintaxis básica que "
+        "ya debería conocer."
+    ),
 }
 
 EXERCISES: dict[Level, str] = {
