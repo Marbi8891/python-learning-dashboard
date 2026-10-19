@@ -1,0 +1,75 @@
+# Análisis de seguridad en cada pull request, en main y cada semana (docs/security/SECURITY_TESTING.md):
+#   bandit:   análisis estático del backend (Python)
+#   semgrep:  reglas propias del proyecto (bloqueantes) y conjuntos públicos (informativos)
+#   gitleaks: secretos en toda la historia de Git, con los valores ocultos
+# pip-audit y npm audit siguen en ci.yml. Todo es gratuito y no usa secretos del repositorio.
+name: Security
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: "17 6 * * 1"  # lunes: avisos nuevos de dependencias y reglas aunque no haya cambios
+  workflow_dispatch:
+
+# El token de GitHub solo puede leer el repositorio (ADR-0022)
+permissions:
+  contents: read
+
+concurrency:
+  group: security-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  bandit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - run: pip install bandit==1.9.4
+      - name: Bandit (severidad y confianza media o alta)
+        run: bandit -r backend/app -ll -ii
+
+  semgrep:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - run: pip install semgrep==1.181.0
+      - name: Reglas propias (.semgrep/), bloqueantes
+        run: semgrep scan --metrics=off --config .semgrep/ --error
+      - name: Conjuntos públicos de Semgrep (informativo, no bloquea)
+        # Sin cuenta ni token. Sus alertas se revisan a mano: algunas no aplican a este proyecto
+        continue-on-error: true
+        run: >-
+          semgrep scan --metrics=off
+          --config p/python --config p/javascript --config p/owasp-top-ten
+          --config p/github-actions --config p/dockerfile
+
+  gitleaks:
+    runs-on: ubuntu-latest
+    env:
+      GITLEAKS_VERSION: 8.28.0
+      GITLEAKS_SHA256: a65b5253807a68ac0cafa4414031fd740aeb55f54fb7e55f386acb52e6a840eb
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0  # toda la historia: un secreto borrado sigue en los commits antiguos
+          persist-credentials: false
+      - name: Instalar Gitleaks (binario oficial con su suma SHA-256)
+        run: |
+          curl -sSfL -o gitleaks.tar.gz \
+            "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+          echo "${GITLEAKS_SHA256}  gitleaks.tar.gz" | sha256sum --check
+          tar -xzf gitleaks.tar.gz gitleaks
+      - name: Gitleaks (valores ocultos con --redact; falsos positivos en .gitleaksignore)
+        run: ./gitleaks git --redact --no-banner --verbose .

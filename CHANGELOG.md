@@ -5,6 +5,9 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
 ## [Unreleased]
 
 ### Seguridad
+- **Equipo AppSec de agentes** ([docs/security/AGENT_WORKFLOW.md](docs/security/AGENT_WORKFLOW.md)): ocho agentes de Claude Code en `.claude/agents/` (coordinador, auditor, autenticación, API, navegador, dependencias, pruebas y CI) con un guardián que limita qué archivos edita cada uno y bloquea secretos, comandos destructivos y escaneos. Registro de hallazgos, plan de corrección y línea base en `docs/security/`.
+- **Análisis automático en cada PR** (`.github/workflows/security.yml`): Bandit, Semgrep con nueve reglas propias del proyecto y Gitleaks sobre toda la historia, todo gratuito. En local: `python scripts/security/run_checks.py`.
+- Pruebas de aislamiento entre dos cuentas en todas las rutas privadas (`backend/tests/test_security_isolation.py`).
 - **Emails de recuperación por HTTPS (Brevo)**: el plan gratuito de Render bloquea la salida SMTP, así que el email no llegaba aunque `/api/health` dijera `"email": true`. Con `BREVO_API_KEY` el email sale por la API de Brevo (puerto 443), sin dependencias nuevas. SMTP sigue disponible. Pasos en `docs/DEPLOY.md`.
 - **Recuperación de contraseña revisada** ([docs/auth.md](docs/auth.md)):
   - nuevas rutas `POST /api/v1/auth/forgot-password` y `/reset-password`, alias de las actuales, que siguen funcionando para Android;

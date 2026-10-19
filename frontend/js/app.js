@@ -109,7 +109,7 @@ function renderSidebar() {
   $("#modules").innerHTML = content.modules
     .map(
       (module) => `
-      <details class="module" data-module="${module.slug}">
+      <details class="module" data-module="${escapeHtml(module.slug)}">
         <summary class="module__summary">
           <span class="module__name">${escapeHtml(module.title)}</span>
           <span class="module__count"></span>
@@ -118,7 +118,7 @@ function renderSidebar() {
           ${module.lessons
             .map(
               (lesson) => `
-            <li><a class="lesson" href="${ROUTE_PREFIX}${lesson.slug}" data-slug="${lesson.slug}">
+            <li><a class="lesson" href="${ROUTE_PREFIX}${escapeHtml(lesson.slug)}" data-slug="${escapeHtml(lesson.slug)}">
               <span class="lesson__icon" aria-hidden="true"></span>
               <span class="lesson__name">${escapeHtml(lesson.title)}</span>
               <span class="lesson__badge" aria-hidden="true">En curso</span>
