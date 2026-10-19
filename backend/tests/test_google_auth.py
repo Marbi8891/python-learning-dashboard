@@ -133,8 +133,6 @@ def test_google_login_unconfigured(client, monkeypatch):
 
 
 def test_google_login_handles_concurrent_account_creation(client, monkeypatch):
-    from sqlalchemy.orm import Session as OrmSession
-
     configure_google(
         monkeypatch,
         {
@@ -144,7 +142,7 @@ def test_google_login_handles_concurrent_account_creation(client, monkeypatch):
             "sub": "sub-race",
         },
     )
-    original_commit = OrmSession.commit
+    original_commit = Session.commit
     raised = False
 
     def conflict_once(session):
@@ -154,7 +152,7 @@ def test_google_login_handles_concurrent_account_creation(client, monkeypatch):
             raise IntegrityError("insert", {}, RuntimeError("duplicate email"))
         return original_commit(session)
 
-    monkeypatch.setattr(OrmSession, "commit", conflict_once)
+    monkeypatch.setattr(Session, "commit", conflict_once)
     response = client.post(
         "/api/auth/google",
         json={"credential": "x" * 40, "accept_privacy": True},
