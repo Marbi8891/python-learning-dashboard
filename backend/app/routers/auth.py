@@ -1,15 +1,15 @@
 """Registro, login y usuario actual."""
 
-from datetime import UTC, datetime, timedelta
 import secrets
+from datetime import UTC, datetime, timedelta
 from typing import Annotated
 
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request, Response, status
+from fastapi.security import OAuth2PasswordRequestForm
 from google.auth.exceptions import GoogleAuthError
 from google.auth.transport.requests import Request as GoogleRequest
 from google.oauth2.id_token import verify_oauth2_token
 from pydantic import BaseModel, Field
-from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy import delete, select, update
 from sqlalchemy.exc import IntegrityError
 
@@ -44,9 +44,14 @@ def _verify_google_credential(credential: str, client_id: str) -> dict:
     try:
         claims = verify_oauth2_token(credential, GoogleRequest(), client_id)
     except (ValueError, GoogleAuthError):
-        raise HTTPException(status_code=401, detail="La credencial de Google no es válida o ha caducado.") from None
+        raise HTTPException(
+            status_code=401,
+            detail="La credencial de Google no es válida o ha caducado.",
+        ) from None
     if claims.get("email_verified") is not True or not claims.get("email"):
-        raise HTTPException(status_code=401, detail="Google debe confirmar que el email está verificado.")
+        raise HTTPException(
+            status_code=401, detail="Google debe confirmar que el email está verificado."
+        )
     return claims
 
 
@@ -57,13 +62,19 @@ def login_google(
     """Crea o inicia sesión con un ID token de Google validado en el servidor."""
     settings = get_settings()
     if not settings.google_client_id:
-        raise HTTPException(status_code=503, detail="El inicio de sesión con Google aún no está configurado.")
+        raise HTTPException(
+            status_code=503,
+            detail="El inicio de sesión con Google aún no está configurado.",
+        )
     claims = _verify_google_credential(data.credential, settings.google_client_id)
     email = str(claims["email"]).strip().lower()
     user = db.scalar(select(User).where(User.email == email))
     if user is None:
         if not data.accept_privacy:
-            raise HTTPException(status_code=400, detail="Debes aceptar la política de privacidad para crear tu cuenta.")
+            raise HTTPException(
+                status_code=400,
+                detail="Debes aceptar la política de privacidad para crear tu cuenta.",
+            )
         name = str(claims.get("name") or email.split("@", 1)[0]).strip()[:80] or email.split("@", 1)[0]
         user = User(
             email=email,
@@ -79,7 +90,10 @@ def login_google(
             db.rollback()
             user = db.scalar(select(User).where(User.email == email))
             if user is None:
-                raise HTTPException(status_code=409, detail="No se pudo crear la cuenta. Inténtalo de nuevo.") from None
+                raise HTTPException(
+                    status_code=409,
+                    detail="No se pudo crear la cuenta. Inténtalo de nuevo.",
+                ) from None
         else:
             db.refresh(user)
     elif data.accept_privacy and user.privacy_accepted_at is None:
