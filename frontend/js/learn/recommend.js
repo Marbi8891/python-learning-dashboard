@@ -190,13 +190,16 @@ export function fitPlanToBudget(plan, availableMinutes = 45) {
   let remaining = budget;
   const items = [];
   const deferred = [];
+  let deferRemaining = false;
 
   for (const item of plan) {
     const minutes = ACTION_MINUTES[item.type] ?? 15;
-    if (minutes <= remaining) {
+    if (!deferRemaining && minutes <= remaining) {
       items.push({ ...item, minutes });
       remaining -= minutes;
     } else {
+      // El plan está ordenado por prioridad: no saltar una tarea para meter otra posterior.
+      deferRemaining = true;
       deferred.push({ ...item, minutes });
     }
   }
