@@ -152,9 +152,9 @@ test("fitPlanToBudget conserva la prioridad y difiere las tareas que no caben", 
   const priority = fitPlanToBudget([
     { type: "practice", concept: "prioritaria" },
     { type: "review", concept: "posterior" },
-  ], 10);
-  assert.deepEqual(priority.items, []);
-  assert.deepEqual(priority.deferred.map((item) => item.concept), ["prioritaria", "posterior"]);
+  ], 15);
+  assert.deepEqual(priority.items.map((item) => item.concept), ["prioritaria"]);
+  assert.deepEqual(priority.deferred.map((item) => item.concept), ["posterior"]);
 });
 
 test("fitPlanToBudget limita valores inválidos y conserva todas las tareas si hay tiempo", () => {
