@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { allStats, recordAttempt, reviewConcept } from "../../frontend/js/learn/mastery.js";
-import { missingPrerequisites, nextNewConcept, selectExercises, similarExercise, todayPlan } from "../../frontend/js/learn/recommend.js";
+import { fitPlanToBudget, missingPrerequisites, nextNewConcept, selectExercises, similarExercise, todayPlan } from "../../frontend/js/learn/recommend.js";
 import { daysAgo, exercisesOf, fresh, index, NOW, seeded } from "./helpers.mjs";
 
 const master = (state, concept, now = NOW) => {
@@ -129,4 +129,36 @@ test("ruta personalizada: lo superado en la prueba de nivel no bloquea ni se pro
   assert.equal(plan[0].concept, "entrada-salida");
   assert.ok(plan.some((p) => p.reason.includes("prueba de nivel")), "propone consolidar lo que ya sabía");
   assert.ok(!plan.some((p) => p.type === "reinforce"));
+});
+
+
+test("fitPlanToBudget conserva la prioridad y difiere las tareas que no caben", () => {
+  const plan = [
+    { type: "review", concept: "variables", reason: "repaso" },
+    { type: "errors", concept: "tipos", reason: "error" },
+    { type: "learn", concept: "operadores", reason: "nuevo" },
+  ];
+  const result = fitPlanToBudget(plan, 25);
+  assert.deepEqual(result.items.map((item) => [item.concept, item.minutes]), [
+    ["variables", 10],
+    ["tipos", 15],
+  ]);
+  assert.deepEqual(result.deferred.map((item) => [item.concept, item.minutes]), [["operadores", 15]]);
+  assert.equal(result.plannedMinutes, 25);
+  assert.equal(result.remainingMinutes, 0);
+  assert.equal(result.deferredCount, 1);
+  assert.equal(plan[0].minutes, undefined, "no muta el plan original");
+});
+
+test("fitPlanToBudget limita valores inválidos y conserva todas las tareas si hay tiempo", () => {
+  const plan = [
+    { type: "learn", concept: "variables" },
+    { type: "review", concept: "algoritmos" },
+  ];
+  const fallback = fitPlanToBudget(plan, 0);
+  assert.equal(fallback.availableMinutes, 45);
+  const enough = fitPlanToBudget(plan, 60);
+  assert.equal(enough.items.length, 2);
+  assert.equal(enough.deferredCount, 0);
+  assert.equal(enough.plannedMinutes, 25);
 });
