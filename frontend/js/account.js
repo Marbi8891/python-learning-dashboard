@@ -3,6 +3,7 @@
 import { ApiError, apiEnabled, request, serverInfo } from "./api.js";
 import { escapeHtml } from "./markdown.js";
 import { flushCourseSync } from "./course-store.js";
+import { flushGameSync } from "./game.js";
 import { flushPcapSync } from "./pcap-sync.js";
 import { flushLearnSync } from "./learn/learn-store.js";
 import { clearLocalData, endSession, startSession, state, subscribe } from "./store.js";
@@ -204,6 +205,18 @@ export function openPasswordReset(token) {
   $("#reset-token").value = token;
 }
 
+/** Descarga todos los datos de la cuenta en JSON (RGPD). Lanza ApiError si falla. */
+export async function exportMyData() {
+  downloadJson(await request("GET", "/api/users/me/export"), "mis-datos-python-learning.json");
+}
+
+/** Cierra la sesión (desde el diálogo de la cuenta o desde el panel del alumno). */
+export async function logout({ everywhere = false } = {}) {
+  await Promise.allSettled([flushPcapSync(), flushCourseSync(), flushLearnSync(), flushGameSync()]); // nada se queda sin subir
+  if (everywhere) await request("POST", "/api/auth/logout-all").catch(() => {});
+  await leave(everywhere ? "Sesión cerrada en todos tus dispositivos." : "Sesión cerrada.");
+}
+
 export function initAccount({ toast }) {
   showToast = toast;
   renderAccountButton();
@@ -282,18 +295,13 @@ export function initAccount({ toast }) {
 
   $("#export-button").addEventListener("click", async () => {
     try {
-      downloadJson(await request("GET", "/api/users/me/export"), "mis-datos-python-learning.json");
+      await exportMyData();
     } catch (error) {
       setMessage(error.message);
     }
   });
 
-  $("#logout-button").addEventListener("click", async () => {
-    const everywhere = $("#logout-everywhere").checked;
-    await Promise.allSettled([flushPcapSync(), flushCourseSync(), flushLearnSync()]); // nada se queda sin subir
-    if (everywhere) await request("POST", "/api/auth/logout-all").catch(() => {});
-    await leave(everywhere ? "Sesión cerrada en todos tus dispositivos." : "Sesión cerrada.");
-  });
+  $("#logout-button").addEventListener("click", () => logout({ everywhere: $("#logout-everywhere").checked }));
 
   $("#delete-form").addEventListener("submit", (event) => {
     event.preventDefault();

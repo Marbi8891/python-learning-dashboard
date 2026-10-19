@@ -3,8 +3,12 @@
    Los XP no son un contador que se incrementa: se CALCULAN a partir de hechos
    (lecciones completadas, mejor nota de cada quiz, retos superados...), así que
    repetir una acción nunca da puntos dobles y el total siempre es coherente.
-   Se guarda en este navegador (ver ADR-0005). */
+   Se guarda en este navegador (ver ADR-0005) y, con sesión iniciada, en la cuenta
+   (/api/course-state/game, ADR-0035): así no se pierde al cerrar sesión y se ve igual en el panel
+   de cualquier dispositivo. */
 
+import { request } from "./api.js";
+import { cleanGame, emptyGame, mergeGame } from "./game-data.js";
 import { examsPassed, pcap, questionsMastered } from "./pcap-store.js";
 import { state as store, subscribe as onStore } from "./store.js";
 
@@ -34,29 +38,28 @@ export const LEVELS = [
 let lessons = []; // [{ slug, module, challenge }]
 const listeners = new Set();
 
-function empty() {
-  return {
-    quiz: {}, // slug -> mejor número de aciertos
-    read: [], // lecciones cuya teoría el alumno ha marcado como leída
-    passed: [], // ejercicios superados
-    tried: [], // ejercicios comprobados al menos una vez
-    firstTry: [], // ejercicios superados en el primer intento
-    challenges: [], // retos superados
-    days: [], // días con actividad (AAAA-MM-DD, hora local)
-    flags: { firstRun: false, bugHunter: false, lastRunFailed: false },
-    badges: [],
-  };
-}
-
 function load() {
   try {
-    return { ...empty(), ...JSON.parse(localStorage.getItem(KEY)) };
+    return cleanGame(JSON.parse(localStorage.getItem(KEY)));
   } catch {
-    return empty();
+    return emptyGame();
   }
 }
 
 export const game = load();
+
+const COURSE = "game";
+const PUSH_DELAY_MS = 1500; // agrupa los cambios seguidos en un envío
+let pushTimer = null;
+
+async function push() {
+  pushTimer = null;
+  try {
+    await request("PUT", `/api/course-state/${COURSE}`, { json: { data: game } });
+  } catch (error) {
+    console.warn("No se pudieron guardar los logros en la cuenta:", error.message);
+  }
+}
 
 function save() {
   try {
@@ -64,6 +67,16 @@ function save() {
   } catch {
     // sin almacenamiento: el juego dura hasta recargar
   }
+  if (!store.user) return;
+  clearTimeout(pushTimer);
+  pushTimer = setTimeout(push, PUSH_DELAY_MS);
+}
+
+/** Sube ya el cambio pendiente (antes de cerrar sesión). */
+export async function flushGameSync() {
+  if (!pushTimer || !store.user) return;
+  clearTimeout(pushTimer);
+  await push();
 }
 
 const add = (list, value) => {
@@ -239,10 +252,21 @@ export function recordChallenge(slug, stars) {
 export function initGame(allLessons) {
   lessons = allLessons.map((l) => ({ slug: l.slug, module: l.module.slug, challenge: l.challenge }));
   lastLevel = levelInfo().number;
-  onStore((change) => {
-    if (change.type !== "progress") return;
-    activity();
-    commit();
+  onStore(async (change) => {
+    if (change.type === "progress") {
+      activity();
+      commit();
+      return;
+    }
+    if (change.type !== "user" || !store.user) return;
+    // Al iniciar sesión: se fusiona con la copia de la cuenta y se sube el resultado
+    try {
+      const remote = await request("GET", `/api/course-state/${COURSE}`);
+      mergeGame(game, remote.data);
+      commit();
+    } catch (error) {
+      console.warn("No se pudieron sincronizar los logros:", error.message);
+    }
   });
   commit();
 }

@@ -1,7 +1,7 @@
 """Esquemas de entrada/salida de la API (lo que ve el frontend)."""
 
 import json
-from datetime import datetime
+from datetime import date, datetime
 from typing import Annotated
 
 from pydantic import AfterValidator, BaseModel, ConfigDict, EmailStr, Field, field_validator
@@ -167,9 +167,10 @@ class AttemptOut(BaseModel):
 MAX_PCAP_STATE_BYTES = 200_000  # ~1000 simulacros y todas las respuestas caben de sobra
 
 # Cursos de DAW de la app Android que se pueden guardar en la cuenta (ADR-0016 y ADR-0018),
-# más "learn": el progreso por conceptos del núcleo educativo (ADR-0031).
+# más "learn": el progreso por conceptos del núcleo educativo (ADR-0031) y "game": XP, racha y
+# logros de la web, que antes solo vivían en el navegador (ADR-0035).
 # Lista cerrada: evita que un cliente cree documentos con nombres arbitrarios.
-COURSES = ("sql", "js", "java", "entornos", "programacion", "learn")
+COURSES = ("sql", "js", "java", "entornos", "programacion", "learn", "game")
 
 
 class PcapStateIn(BaseModel):
@@ -219,3 +220,84 @@ class UserExport(BaseModel):
     courses: dict[str, dict] = {}
     activity: list[ActivityOut] = []
     exported_at: datetime
+
+
+# ---------- Panel del alumno ----------
+
+
+class DashboardUser(BaseModel):
+    display_name: str
+    email: str
+    created_at: datetime
+    # Método del último inicio de sesión registrado: "google", "password" o None si aún no hay
+    sign_in_method: str | None
+
+
+class LessonRef(BaseModel):
+    slug: str
+    title: str
+
+
+class ModuleProgress(BaseModel):
+    slug: str
+    title: str
+    total: int
+    completed: int
+
+
+class LessonsSummary(BaseModel):
+    """Curso PCAP de la web: las lecciones están en la base de datos."""
+
+    total: int
+    completed: int
+    last_completed_at: datetime | None
+    next_lesson: LessonRef | None
+    modules: list[ModuleProgress]
+
+
+class ExercisesSummary(BaseModel):
+    """Intentos guardados en la cuenta (los últimos de cada lección: attempts_kept_per_lesson)."""
+
+    attempts: int
+    passed: int
+    lessons_tried: int
+    lessons_passed: int
+    last_attempt_at: datetime | None
+
+
+class DailyActivity(BaseModel):
+    day: date
+    lessons_completed: int
+    attempts: int
+    passed: int
+
+
+class SyncedState(BaseModel):
+    """Documento de progreso guardado en la cuenta (PCAP, cursos de DAW, conceptos, logros)."""
+
+    key: str
+    updated_at: datetime | None
+
+
+class DashboardOut(BaseModel):
+    user: DashboardUser
+    lessons: LessonsSummary
+    exercises: ExercisesSummary
+    daily: list[DailyActivity]
+    synced: list[SyncedState]
+    generated_at: datetime
+
+
+class LearningEvent(BaseModel):
+    kind: str  # "lesson_completed" | "attempt"
+    lesson_slug: str
+    lesson_title: str
+    passed: bool | None
+    at: datetime
+
+
+class LearningEventPage(BaseModel):
+    items: list[LearningEvent]
+    total: int
+    limit: int
+    offset: int

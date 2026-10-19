@@ -36,6 +36,7 @@ El ciclo es: concepto → explicación → ejemplo → intento → error o acier
 - **Retos extra:** uno por lección, de ★ a ★★★ (FizzBuzz, carrito de la compra, renombrador de fotos…), con tests automáticos.
 - **XP, niveles y racha:** 7 niveles de «Novato/a» a «Leyenda de Python», bonus por acertar a la primera, XP por la preparación del examen, 20 logros (7 de ellos del PCAP) con su vitrina y confeti (desactivado si el sistema pide reducir el movimiento).
 - **Estudio guiado:** repaso espaciado de preguntas y fichas, plan semanal a partir de la fecha del examen y, en cada fallo, enlace a la lección que lo explica.
+- **Mi panel** (`#/panel`, ADR-0035): con la sesión iniciada, un único espacio con Resumen (indicadores reales y «Continuar aprendiendo»), Mis cursos, Mi progreso (evolución de 30 días, temas dominados, refuerzo, errores recurrentes y resultados), Actividad (historial paginado), Planificación, Logros y Mi perfil (cuenta, método de acceso, aspecto, seguridad y datos). Sustituye a «Mi cuenta» (`#/cuenta` redirige a `#/panel/perfil`).
 - **Cuenta (opcional):** registro, login, progreso y preparación del examen sincronizados entre dispositivos, recuperación de contraseña y RGPD (descargar los datos y borrar la cuenta).
 - **Certificado de finalización** imprimible (no oficial) y **app instalable** que funciona sin conexión.
 - **Estética de academia:** diseño editorial (tinta, marfil y dorado, titulares en serif), portada con la ficha del curso y temario, y página «Mi aprendizaje» con cifras, actividad, logros e historial.
@@ -70,6 +71,7 @@ Decisiones documentadas:
 - [ADR-0010 Estudio guiado, sincronización y PWA](docs/adr/0010-estudio-guiado-y-pwa.md)
 - [ADR-0031 Núcleo educativo por conceptos](docs/adr/0031-nucleo-educativo-por-conceptos.md) (las ADR-0011 a 0030 están en `docs/adr/`)
 - [ADR-0034 Agentes A2A junto a la API REST](docs/adr/0034-agentes-a2a.md) · guía: [docs/a2a.md](docs/a2a.md)
+- [ADR-0035 Panel del alumno](docs/adr/0035-panel-del-alumno.md)
 
 ```
 ├── frontend/
@@ -133,7 +135,7 @@ JWT_SECRET=<valor> docker compose up --build
 | Suite | Comando | Qué cubre |
 |---|---|---|
 | Backend | `cd backend && python -m pytest --cov=app` | API, seguridad, RGPD, migraciones, contenido y banco del PCAP (cada respuesta se comprueba ejecutando Python; 100 % de cobertura) |
-| Unitarios del frontend | `npm run test:unit` | Dominio por concepto, errores activos, repaso espaciado, plan de hoy, selección de ejercicios, sesiones, simulacros, prueba de nivel y Markdown seguro (`node --test`, sin dependencias) |
+| Unitarios del frontend | `npm run test:unit` | Dominio por concepto, errores activos, repaso espaciado, plan de hoy, selección de ejercicios, sesiones, simulacros, prueba de nivel, Markdown seguro, cálculos del panel y fusión de logros (`node --test`, sin dependencias) |
 | Núcleo educativo | `python scripts/learning/build_learning.py --check` | Cada respuesta de los 128 ejercicios se comprueba ejecutando Python con el mismo `runner.py` del navegador |
 | End-to-end | `npm ci && npx playwright install chromium && npm run test:e2e` | La app completa con el backend real, la consola Python y la auditoría WCAG |
 | Calidad | `cd backend && ruff check . ../e2e && ruff format --check . ../e2e` | Estilo PEP 8 y formato |
@@ -198,7 +200,9 @@ La firma de release necesita tres secretos en *Settings → Secrets and variable
 | POST | `/api/progress/import` | ✔ | Fusionar el progreso del navegador |
 | POST / GET | `/api/lessons/{slug}/attempts` | ✔ | Registrar un intento o ver los últimos 20 |
 | GET / PUT | `/api/pcap-state` | ✔ | Preparación del PCAP (simulacros, aciertos, fichas, repaso y plan) |
-| GET / PUT | `/api/course-state/{curso}` | ✔ | Estado de los cursos de la app Android: `sql`, `js`, `java`, `entornos` o `programacion` (ADR-0018), y `learn`: progreso por conceptos del núcleo educativo (ADR-0031) |
+| GET | `/api/v1/dashboard` | ✔ | Panel del alumno: lecciones, intentos, actividad diaria, documentos sincronizados y método del último acceso (ADR-0035) |
+| GET | `/api/v1/dashboard/activity` | ✔ | Historial de aprendizaje paginado (`limit`, `offset`) |
+| GET / PUT | `/api/course-state/{curso}` | ✔ | Estado de los cursos de la app Android: `sql`, `js`, `java`, `entornos` o `programacion` (ADR-0018), `learn`: progreso por conceptos del núcleo educativo (ADR-0031), y `game`: XP, racha y logros de la web (ADR-0035) |
 
 ### A2A (agentes)
 

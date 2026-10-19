@@ -16,6 +16,10 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
 - **Sesión de la web en una cookie `HttpOnly`** (ADR-0033): JavaScript ya no puede leer el token y la sesión sigue al recargar la página. Protección CSRF con la cabecera `X-PLD-Session`. Si el navegador bloquea la cookie, se entra igual con el token solo en memoria. La app Android no cambia. Nuevo `POST /api/v1/auth/logout`.
 
 ### Añadido
+- **Panel del alumno** (`#/panel`, ADR-0035): un único espacio para la persona con sesión iniciada, con siete secciones (Resumen, Mis cursos, Mi progreso, Actividad, Planificación, Logros y Mi perfil). Indicadores con datos reales y estados vacíos útiles, «Continuar aprendiendo» con la última actividad y el siguiente paso del plan, gráfica accesible de 30 días (con tabla), errores recurrentes, historial paginado, cierre de sesión y descarga de datos con los mecanismos existentes. Sustituye a «Mi cuenta» (`#/cuenta` redirige a `#/panel/perfil`).
+  - API: `GET /api/v1/dashboard` (resumen agregado del usuario de la sesión) y `GET /api/v1/dashboard/activity` (historial paginado). Sin migraciones.
+  - **XP, racha y logros se guardan en la cuenta** (`/api/v1/course-state/game`): antes solo vivían en el navegador y se perdían al cerrar sesión. Se fusionan sin perder nada y se validan al leerlos.
+  - El inicio de sesión con Google se registra como `login_google` en la actividad de la cuenta, para mostrar el método de acceso.
 - **Agentes A2A y Python Tutor** (ADR-0034, [docs/a2a.md](docs/a2a.md)): el backend puede servir agentes [A2A 1.0](https://a2a-protocol.org/) con el SDK oficial `a2a-sdk`, en la misma app FastAPI y junto a la API REST, que no cambia.
   - **Python Tutor** (`/a2a/python-tutor`): explica conceptos y errores, revisa el código **sin ejecutarlo**, propone ejercicios según el nivel y no da la solución de un ejercicio pendiente. Usa solo el progreso necesario de la sesión del alumno.
   - **Agent Card** pública en `/.well-known/agent-card.json`; el JSON-RPC exige la sesión de la API (Bearer o cookie), con tareas aisladas por usuario y 20 mensajes por minuto.

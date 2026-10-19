@@ -1,9 +1,10 @@
-/* «Mi cuenta» (ADR-0025): área privada de la persona con sesión iniciada.
+/* Piezas del área privada (ADR-0025) que usa el panel del alumno (dashboard.js, ADR-0035):
    1. Plan de estudio: fecha de examen por curso, repasos pendientes y meta diaria.
-   2. Progreso en todos los cursos (web y app juntos) e historial de simulacros.
+   2. Historial de simulacros y dominio de cada curso (web y app juntos).
    3. Logros y certificados.
    4. Perfil y seguridad: nombre, contraseña y actividad reciente de la cuenta.
-   Los datos que dependen del banco de preguntas o del servidor se rellenan cuando llegan. */
+   Los datos que dependen del banco de preguntas o del servidor se rellenan cuando llegan.
+   Las acciones (fechas, meta, nombre, contraseña) se enganchan aquí, en initPrivate. */
 
 import { request, setToken } from "./api.js";
 import { certificateStatus, courseCertificateStatus } from "./certificate.js";
@@ -12,9 +13,8 @@ import { BADGES, game, levelInfo, streak } from "./game.js";
 import { escapeHtml } from "./markdown.js";
 import { blockStats, examsPassed, isoDay, pcap, questionsMastered, readiness, savePcap } from "./pcap-store.js";
 import { badgesHtml } from "./profile.js";
-import { state, updateUser } from "./store.js";
+import { updateUser } from "./store.js";
 
-const MEMBER_SINCE = new Intl.DateTimeFormat("es-ES", { month: "long", year: "numeric" });
 const WHEN = new Intl.DateTimeFormat("es-ES", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
 const DAY = new Intl.DateTimeFormat("es-ES", { day: "numeric", month: "short", year: "numeric" });
 const GOALS = [10, 20, 30, 50];
@@ -22,7 +22,7 @@ const DEFAULT_GOAL = 20;
 const $ = (selector) => document.querySelector(selector);
 
 /** Todos los cursos con su estado y sus rutas: el PCAP y los de DAW. */
-const COURSES = [
+export const COURSES = [
   { id: "pcap", title: "Python · PCAP", subtitle: "Certificación PCAP-31-03", home: "#/pcap", review: "#/pcap/repaso", practice: (b) => `#/pcap/practica/${b}` },
   ...DAW_COURSES.map((c) => ({
     ...c,
@@ -31,19 +31,20 @@ const COURSES = [
     practice: (b) => `#/daw/${c.id}/practica/${b}`,
   })),
 ];
-const stateOf = (id) => (id === "pcap" ? pcap : courseState(id));
+export const stateOf = (id) => (id === "pcap" ? pcap : courseState(id));
 const saveOf = (id) => (id === "pcap" ? savePcap() : saveCourse(id));
 
 const ACTIVITY = {
   login: "Inicio de sesión",
+  login_google: "Inicio de sesión con Google",
   login_failed: "Intento de inicio de sesión con contraseña incorrecta",
-  password_changed: "Contraseña cambiada desde Mi cuenta",
+  password_changed: "Contraseña cambiada desde Mi panel",
   password_reset: "Contraseña restablecida con el enlace del email",
   logout_all: "Sesión cerrada en todos los dispositivos",
   name_changed: "Nombre cambiado",
 };
 
-const initials = (name) =>
+export const initials = (name) =>
   name
     .split(/\s+/)
     .map((word) => word.match(/\p{L}/u)?.[0])
@@ -71,14 +72,14 @@ function practicedToday() {
 }
 
 /** Sin sesión no hay datos privados que mostrar: solo la invitación a entrar. */
-function signedOut(apiEnabled) {
+export function signedOut(apiEnabled) {
   return `
     <header class="profile-hero">
-      <p class="eyebrow">Mi cuenta</p>
-      <h1 class="profile-hero__title" id="private-title" tabindex="-1">Tu área privada</h1>
+      <p class="eyebrow">Mi panel</p>
+      <h1 class="profile-hero__title" id="private-title" tabindex="-1">Tu panel de alumno</h1>
       <p class="profile-hero__note">${
         apiEnabled
-          ? "Inicia sesión para ver tu cuenta y sincronizar tu progreso en todos tus dispositivos."
+          ? "Inicia sesión para ver tu panel: cursos, progreso, actividad, planificación y logros sincronizados en todos tus dispositivos. Mientras tanto, tu progreso en este navegador está en <a href=\"#/perfil\">Mi aprendizaje</a>."
           : "Esta versión funciona sin cuenta: tu progreso se guarda solo en este navegador."
       }</p>
       ${apiEnabled ? `<p><button class="btn btn--primary" type="button" data-open-account>Iniciar sesión o crear cuenta</button></p>` : ""}
@@ -87,7 +88,7 @@ function signedOut(apiEnabled) {
 
 /* ---------- 1. Plan de estudio ---------- */
 
-function planHtml() {
+export function planHtml() {
   const goal = pcap.plan.dailyGoal ?? DEFAULT_GOAL;
   const done = practicedToday();
   const days = streak();
@@ -129,26 +130,15 @@ function planHtml() {
     </section>`;
 }
 
-/* ---------- 2. Progreso en todos los cursos ---------- */
+/* ---------- 2. Simulacros y dominio de cada curso ---------- */
 
-function progressHtml() {
-  const cards = COURSES.map((c) => {
-    const s = stateOf(c.id);
-    const answered = Object.keys(s.answers).length;
-    const best = s.exams.length ? Math.max(...s.exams.map((e) => e.score)) : null;
-    return `
-      <li class="course-progress" data-course-card="${c.id}">
-        <p class="course-progress__title"><a href="${c.home}">${escapeHtml(c.title)}</a> <span class="account-card__meta">${escapeHtml(c.subtitle)}</span></p>
-        <p class="account-card__meta">${answered} preguntas respondidas · ${s.exams.length} ${s.exams.length === 1 ? "simulacro" : "simulacros"}${best === null ? "" : ` (mejor: ${best} %)`}</p>
-        <div data-course-detail><p class="account-card__meta">Calculando tu dominio…</p></div>
-      </li>`;
-  }).join("");
-
+/** Últimos simulacros de todos los cursos con banco de preguntas (PCAP y DAW). */
+export function examHistoryHtml() {
   const exams = COURSES.flatMap((c) => stateOf(c.id).exams.map((e) => ({ ...e, course: c.title })))
     .sort((a, b) => b.date.localeCompare(a.date))
     .slice(0, 10);
-  const history = exams.length
-    ? `<div class="table-wrap"><table class="history">
+  return exams.length
+    ? `<div class="table-wrap" tabindex="0" role="region" aria-label="Últimos simulacros"><table class="history">
         <caption class="visually-hidden">Últimos simulacros de todos los cursos</caption>
         <thead><tr><th scope="col">Fecha</th><th scope="col">Curso</th><th scope="col">Nota</th><th scope="col">Aciertos</th><th scope="col">Tiempo</th></tr></thead>
         <tbody>${exams
@@ -157,20 +147,11 @@ function progressHtml() {
               <td>${e.correct}/${e.total}</td><td>${Math.floor(e.seconds / 60)} min</td></tr>`,
           )
           .join("")}</tbody></table></div>`
-    : `<p class="empty-state">Aún no has hecho ningún simulacro. Pruébalo en <a href="#/pcap/simulacro">el PCAP</a> o en la app Android, en cualquier curso.</p>`;
-
-  return `
-    <section class="course-section" aria-labelledby="progress-title">
-      <h2 class="section-title" id="progress-title">Mi progreso en todos los cursos</h2>
-      <p class="account-card__meta">Incluye lo que haces en la web y en la app Android. ${questionsMastered()} preguntas del PCAP dominadas · ${examsPassed()} simulacros del PCAP aprobados.</p>
-      <ul class="course-progress-list">${cards}</ul>
-      <h3 class="section-subtitle">Últimos simulacros</h3>
-      ${history}
-    </section>`;
+    : `<p class="empty-state">Aún no has hecho ningún simulacro de los cursos. Pruébalo en <a href="#/pcap/simulacro">el PCAP</a> o en cualquier curso de DAW.</p>`;
 }
 
 /** Dominio y tema más flojo de cada curso: necesitan el banco de preguntas. */
-async function fillCourse(c) {
+export async function fillCourse(c) {
   const bank = await loadCourseBank(c.id);
   const blocks = bank.exam.blocks;
   const stats = c.id === "pcap" ? blockStats(bank.questions, blocks) : courseBlockStats(c.id, bank);
@@ -184,6 +165,7 @@ async function fillCourse(c) {
   } else if (untried) {
     tip = `Siguiente tema sin empezar: <strong>${escapeHtml(untried.title.es)}</strong>. <a href="${c.practice(untried.slug)}">Empezar</a>`;
   }
+  if (c.id !== "pcap") fillCertificate(c, courseCertificateStatus(c.id, bank));
   const detail = document.querySelector(`[data-course-card="${c.id}"] [data-course-detail]`);
   if (!detail) return;
   detail.innerHTML = `
@@ -191,12 +173,11 @@ async function fillCourse(c) {
       <span class="meter__fill" style="--value: ${score}%"></span>
     </div>
     <p class="account-card__meta">Dominio: <strong>${score} %</strong> · ${tip}</p>`;
-  if (c.id !== "pcap") fillCertificate(c, courseCertificateStatus(c.id, bank));
 }
 
 /* ---------- 3. Logros y certificados ---------- */
 
-function achievementsHtml(content) {
+export function achievementsHtml(content) {
   const pcapCert = certificateStatus(content);
   const certs = COURSES.map((c) => {
     if (c.id === "pcap") {
@@ -233,7 +214,8 @@ function fillCertificate(c, status) {
 
 /* ---------- 4. Perfil y seguridad ---------- */
 
-function securityHtml(user) {
+/** @param {{ google?: boolean }} options google: la sesión se inició con Google (sin contraseña propia conocida) */
+export function securityHtml(user, { google = false } = {}) {
   return `
     <section class="course-section" aria-labelledby="security-title">
       <h2 class="section-title" id="security-title">Perfil y seguridad</h2>
@@ -244,14 +226,17 @@ function securityHtml(user) {
           <button class="btn btn--ghost" type="submit">Guardar nombre</button>
           <p class="form-message" role="status"></p>
         </form>
-        <form class="plan-form account-form" id="password-form">
+        ${google ? `<div class="account-form">
+          <h3 class="section-subtitle">Contraseña</h3>
+          <p class="account-card__meta">Has entrado con Google, así que no necesitas una contraseña de este sitio. Si alguna vez te registraste con email, puedes cambiarla desde «¿Has olvidado tu contraseña?» al iniciar sesión.</p>
+        </div>` : `<form class="plan-form account-form" id="password-form">
           <h3 class="section-subtitle">Cambiar la contraseña</h3>
           <label>Contraseña actual <input name="current_password" type="password" autocomplete="current-password" maxlength="128" required></label>
           <label>Nueva contraseña (mínimo 8 caracteres) <input name="new_password" type="password" autocomplete="new-password" minlength="8" maxlength="128" required></label>
           <label>Repite la nueva <input name="confirm_password" type="password" autocomplete="new-password" minlength="8" maxlength="128" required></label>
           <button class="btn btn--ghost" type="submit">Cambiar contraseña</button>
           <p class="form-message" role="status"></p>
-        </form>
+        </form>`}
       </div>
       <h3 class="section-subtitle">Actividad reciente de la cuenta</h3>
       <div id="account-activity"><p class="account-card__meta">Cargando…</p></div>
@@ -265,7 +250,7 @@ function securityHtml(user) {
     </section>`;
 }
 
-async function fillActivity() {
+export async function fillActivity() {
   if (!$("#account-activity")) return;
   let html;
   try {
@@ -283,43 +268,6 @@ async function fillActivity() {
   }
   const slot = $("#account-activity"); // la página puede haberse repintado mientras llegaba
   if (slot) slot.innerHTML = html;
-}
-
-/* ---------- Página ---------- */
-
-/** @param {object} content { order, lessons, modules }  @param {boolean} apiEnabled */
-export function renderPrivate(content, apiEnabled) {
-  const user = state.user;
-  if (!user) return signedOut(apiEnabled);
-
-  const total = content.order.length;
-  const done = state.completed.size;
-  const next = content.order.find((slug) => !state.completed.has(slug));
-  const since = MEMBER_SINCE.format(new Date(user.created_at));
-
-  // Lo que llega después (bancos de preguntas y actividad) se pinta cuando la página ya está puesta
-  setTimeout(() => {
-    for (const c of COURSES) fillCourse(c).catch(() => {});
-    fillActivity();
-  });
-
-  return `
-    <header class="profile-hero">
-      <p class="eyebrow">Mi cuenta</p>
-      <div class="account-card">
-        <span class="account-card__avatar" aria-hidden="true">${escapeHtml(initials(user.display_name))}</span>
-        <div>
-          <h1 class="profile-hero__title" id="private-title" tabindex="-1">${escapeHtml(user.display_name)}</h1>
-          <p class="account-card__meta">${escapeHtml(user.email)} · miembro desde ${since}</p>
-        </div>
-      </div>
-      <p class="account-card__meta">${done} de ${total} lecciones de Python completadas.
-        ${next ? `<a href="#/leccion/${next}">Continuar: ${escapeHtml(content.lessons.get(next).title)}</a>` : "¡Has completado todas!"}</p>
-    </header>
-    ${planHtml()}
-    ${progressHtml()}
-    ${achievementsHtml(content)}
-    ${securityHtml(user)}`;
 }
 
 /** Mensaje dentro de un formulario (lo lee el lector de pantalla por role="status"). */

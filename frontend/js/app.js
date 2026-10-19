@@ -42,7 +42,8 @@ import { isLearnRoute, learnNavKey, openLearn } from "./learn/learn-app.js";
 import { initLearnSync, isFirstVisit } from "./learn/learn-store.js";
 import { initPrefs } from "./prefs.js";
 import { badgesHtml, renderProfile } from "./profile.js";
-import { initPrivate, renderPrivate } from "./private.js";
+import { dashboardTitle, initDashboard, renderDashboard } from "./dashboard.js";
+import { initPrivate } from "./private.js";
 import { setQuizLesson } from "./quiz.js";
 import { initTutor, openTutor } from "./tutor.js";
 import { recordAttempt, restoreSession, setCompleted, state, subscribe } from "./store.js";
@@ -58,7 +59,8 @@ const WELCOME_ROUTE = "#/bienvenida"; // presentación de la web (solo en la pri
 const PROFILE_ROUTE = "#/perfil";
 const PCAP_ROUTE = "#/pcap";
 const CERTIFICATE_ROUTE = "#/certificado";
-const PRIVATE_ROUTE = "#/cuenta";
+const PRIVATE_ROUTE = "#/cuenta"; // antigua «Mi cuenta»: ahora es la sección «Mi perfil» del panel
+const PANEL_ROUTE = "#/panel"; // panel del alumno: #/panel/<sección> (ADR-0035)
 const DAW_ROUTE = "#/daw";
 const TUTOR_ROUTE = "#/tutor"; // Tutor Python: agente A2A del backend (ADR-0034)
 const mobile = window.matchMedia("(max-width: 900px)");
@@ -380,7 +382,8 @@ const VIEWS = {
   learn: { element: "#learn-view", title: "Aprender · Python Learning Dashboard", focus: null, render: null },
   home: { element: "#home-view", title: "Curso PCAP · Python Learning Dashboard", focus: "#home-title", render: () => renderHome(content, defaultSlug()) },
   profile: { element: "#profile-view", title: "Mi aprendizaje · Python Learning Dashboard", focus: "#profile-title", render: () => renderProfile(content) },
-  private: { element: "#private-view", title: "Mi cuenta · Python Learning Dashboard", focus: "#private-title", render: () => renderPrivate(content, apiEnabled) },
+  // Panel del alumno (ADR-0035). Reúne lo que antes era «Mi cuenta»
+  private: { element: "#private-view", title: dashboardTitle, focus: "#private-title", render: () => renderDashboard(content, apiEnabled) },
   certificate: {
     element: "#certificate-view",
     title: "Certificado · Python Learning Dashboard",
@@ -407,7 +410,7 @@ function showPage(name, { moveFocus = true } = {}) {
   $("#lesson-view").hidden = true;
   for (const [key, other] of Object.entries(VIEWS)) $(other.element).hidden = key !== name;
   if (view.render) $(view.element).innerHTML = view.render();
-  document.title = view.title;
+  document.title = typeof view.title === "function" ? view.title() : view.title;
   updateSidebar();
   updateSiteNav();
   if (mobile.matches) setMenu(false);
@@ -421,7 +424,7 @@ function updatePrivateNav() {
 }
 
 /** Entrada del menú que corresponde a la vista actual. */
-const NAV_OF_VIEW = { home: "pcap-curso", lesson: "pcap-curso", certificate: "pcap-curso", pcap: "pcap", daw: "daw", profile: "progreso", private: "cuenta", tutor: "tutor" };
+const NAV_OF_VIEW = { home: "pcap-curso", lesson: "pcap-curso", certificate: "pcap-curso", pcap: "pcap", daw: "daw", profile: "progreso", private: "panel", tutor: "tutor" };
 
 function updateSiteNav() {
   const key = content.view === "learn" ? learnNavKey(location.hash) : NAV_OF_VIEW[content.view];
@@ -611,7 +614,8 @@ function navigate({ moveFocus = true } = {}) {
     showPage("profile", { moveFocus });
     return;
   }
-  if (location.hash === PRIVATE_ROUTE) {
+  if (location.hash === PRIVATE_ROUTE) history.replaceState(null, "", `${PANEL_ROUTE}/perfil`);
+  if (location.hash === PANEL_ROUTE || location.hash.startsWith(`${PANEL_ROUTE}/`)) {
     showPage("private", { moveFocus });
     return;
   }
@@ -745,6 +749,7 @@ async function init() {
   initAssistant();
   initAccount({ toast: showToast });
   initPrivate({ toast: showToast, refresh: refreshProgressViews });
+  initDashboard({ toast: showToast, refresh: refreshProgressViews });
   initTutor();
   initPrefs();
 
