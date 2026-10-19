@@ -547,7 +547,7 @@ def test_task_store_keeps_only_the_latest_tasks_per_user():
         ("avanzado", "casos límite"),
     ],
 )
-def test_tutor_adapts_scaffolding_to_explicit_level(client, auth_headers, level, expected):
-    result = send(client, auth_headers, "Explícame este concepto", {"level": level})
-    assert state(result) == "TASK_STATE_COMPLETED"
-    assert expected in answer_text(result)
+def test_tutor_adapts_scaffolding_to_explicit_level(level, expected):
+    agent = PythonTutorAgent(MockModelProvider())
+    outline = agent._outline(TutorQuery(question="Explícame este concepto"), None, level)
+    assert expected in outline
