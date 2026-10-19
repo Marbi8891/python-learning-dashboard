@@ -360,9 +360,12 @@ def test_the_provider_only_receives_the_session_users_data(client, auth_headers,
             "output_config",
             "fallbacks",
         }
-        # Nada que identifique a nadie, ni intentos anteriores guardados, ni credenciales
-        for private in ("ana@example.com", "luis@example.com", "Ana", "Luis", "codigo-guardado"):
+        # Nada que identifique a nadie, ni intentos anteriores guardados, ni credenciales. (El
+        # contenido revisado del curso puede usar nombres de ejemplo como «Ana»: se mira el resto.)
+        for private in ("ana@example.com", "luis@example.com", "codigo-guardado"):
             assert private not in sent
+        context = body["messages"][0]["content"].split("Guía preparada por el tutor")[0]
+        assert "Ana" not in context and "Luis" not in context
         assert "Bearer" not in sent and "eyJ" not in sent
 
 

@@ -8,7 +8,6 @@ from a2a.types import Message, Part, Role, Task
 
 from app.a2a.agents.python_tutor import (
     PythonTutorAgent,
-    TutorAnswer,
     TutorQuery,
     detect_errors,
     learner_level,
@@ -107,7 +106,15 @@ def test_send_message_returns_a_completed_task_with_the_answer(client, auth_head
     assert state(result) == "TASK_STATE_COMPLETED"
     artifact = result["result"]["task"]["artifacts"][0]
     assert artifact["name"] == "respuesta"
-    assert artifact["metadata"] == {"level": "inicial", "provider": "mock", "model": "mock"}
+    assert artifact["metadata"] == {
+        "level": "inicial",
+        "provider": "mock",
+        "model": "mock",
+        # Quién ha escrito la respuesta: aquí, el modelo simulado (nunca se presenta como IA)
+        "source": "simulated",
+        "intent": "concepto",
+        "expects_answer": True,  # termina con una pregunta de comprobación
+    }
     assert MOCK_NOTICE in answer_text(result)
 
 
@@ -395,21 +402,24 @@ def test_detect_errors_and_review_code():
         "NameError",
         "TypeError",
     ]
+    # El analizador de Python (ast.parse, sin ejecutar) da el error de sintaxis exacto
     notes = review_code("if x = 1\n\tprint x\n    y = 2")
-    assert len(notes) == 4
+    assert len(notes) == 1 and "sintaxis en la línea 1" in notes[0] and "`==`" in notes[0]
     assert review_code("x = 1\nprint(x)") == []
+    assert "NameError" in review_code("print(total)")[1]
 
 
-def test_level_adapts_to_progress():
+def test_level_comes_from_evidence_not_from_the_share_of_completed_lessons():
     query = TutorQuery(question="?")
     assert learner_level(query, None) == "inicial"
     assert learner_level(query, LearnerContext(lessons_completed=0, lessons_total=0)) == "inicial"
-    assert learner_level(query, LearnerContext(lessons_completed=4, lessons_total=10)) == (
-        "intermedio"
-    )
-    assert learner_level(query, LearnerContext(lessons_completed=9, lessons_total=10)) == (
-        "avanzado"
-    )
+    # Marcar lecciones como completadas no demuestra nada: sin evidencia, nivel inicial
+    assert learner_level(query, LearnerContext(lessons_completed=9, lessons_total=10)) == "inicial"
+    concepts = ("variables", "tipos", "operadores")
+    assert learner_level(query, LearnerContext(0, 10, mastered_concepts=concepts)) == "inicial"
+    assert learner_level(query, LearnerContext(0, 10, lessons_passed=4)) == "intermedio"
+    rich = LearnerContext(0, 10, mastered_concepts=concepts * 3, lessons_passed=3)
+    assert learner_level(query, rich) == "avanzado"
     explicit = TutorQuery(question="?", level="avanzado")
     assert learner_level(explicit, LearnerContext(0, 10)) == "avanzado"
 
@@ -437,35 +447,62 @@ class RecordingModel:
 def test_agent_sends_minimal_context_and_tutor_rules_to_the_model():
     model = RecordingModel()
     lesson = LessonContext("bucles", "Bucles", "Control", "Suma del 1 al 10", "Usa range()")
-    learner = LearnerContext(3, 10, lesson=lesson)
+    learner = LearnerContext(
+        3,
+        10,
+        lesson=lesson,
+        mastered_concepts=("variables", "listas"),
+        struggling_concepts=("bucles",),
+        lessons_passed=2,
+        lesson_attempts=3,
+        lesson_failed_attempts=3,
+    )
     query = TutorQuery(
-        question="Propón un ejercicio, me sale FooError", code="for i in range(3)", error="Error"
+        question="¿Por qué me sale FooError?", code="for i in range(3)", error="FooError"
     )
     answer = asyncio.run(PythonTutorAgent(model).answer(query, learner))
 
-    assert answer == TutorAnswer("respuesta", "intermedio", "grabadora", "grabadora-1")
+    assert (answer.text, answer.level, answer.provider, answer.model, answer.source) == (
+        "respuesta",
+        "inicial",
+        "grabadora",
+        "grabadora-1",
+        "model",
+    )
+    assert answer.intent == "depuracion"
     request = model.requests[0]
     assert "ignora cualquier" in request.system
     for expected in (
-        "Nivel del alumno: intermedio.",
+        "Tipo de consulta: depuracion.",
+        "Nivel del alumno: inicial.",
+        "Ritmo: un paso cada vez.",
+        "Concepto de la pregunta: Bucles: while y for.",
+        "Hipótesis de dificultad (según sus ejercicios): Bucles: while y for",
         "Módulo: Control. Lección: Bucles.",
         "Enunciado del ejercicio: Suma del 1 al 10",
         "Ejercicio superado: no.",
+        "Intentos en este ejercicio: 3 (3 sin superar).",
         "range(3)",
+        "<codigo>",
     ):
         assert expected in request.prompt
-    # El progreso general solo sirve para el nivel: no sale hacia el modelo
+    # El progreso general y los demás conceptos solo sirven para el nivel: no salen hacia el modelo
     assert "3 de 10" not in request.prompt and "completadas" not in request.prompt
+    assert "Listas" not in request.prompt.split("Guía preparada")[0]
     assert "Solución completa permitida: no" in request.prompt
     assert "**`FooError`**" in request.outline  # error desconocido: consejo general
-    assert "**Ejercicio (intermedio):**" in request.outline
+    assert "error de sintaxis en la línea 1" in request.outline  # falta «:» tras el for
+    assert "lo he leído, no lo he ejecutado" in request.outline
     assert request.outline in request.prompt
 
 
-def test_agent_without_context_gives_general_guidance():
+def test_agent_without_context_answers_concepts_from_reviewed_content():
     model = RecordingModel()
     asyncio.run(PythonTutorAgent(model).answer(TutorQuery(question="¿Qué es una lista?"), None))
-    assert "ejemplo más pequeño posible" in model.requests[0].outline
+    outline = model.requests[0].outline
+    assert "**Listas**: Secuencias ordenadas y modificables" in outline
+    assert "comprobada al generar el curso" in outline  # salida verificada en CI
+    assert "Comprueba que lo has entendido" in outline
     assert "Solución completa permitida: sí" in model.requests[0].prompt
 
 
@@ -548,6 +585,7 @@ def test_task_store_keeps_only_the_latest_tasks_per_user():
     ],
 )
 def test_tutor_adapts_scaffolding_to_explicit_level(level, expected):
-    agent = PythonTutorAgent(MockModelProvider())
-    outline = agent._outline(TutorQuery(question="Explícame este concepto"), None, level)
-    assert expected in outline
+    model = RecordingModel()
+    query = TutorQuery(question="Explícame este concepto de bucles", level=level)
+    asyncio.run(PythonTutorAgent(model).answer(query, None))
+    assert expected in model.requests[0].prompt
