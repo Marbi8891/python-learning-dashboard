@@ -14,7 +14,7 @@ La siguiente revisión incremental parte de `git diff 708431f..HEAD`.
 | ID | Título | Severidad | Estado | Responsable |
 |---|---|---|---|---|
 | PLD-SEC-001 | Sin pruebas de aislamiento entre cuentas en la mayoría de rutas privadas | Informativa | Corregido | security-qa |
-| PLD-SEC-002 | Atributos de la barra lateral con datos del contenido sin escapar | Baja | Abierto | frontend-security |
+| PLD-SEC-002 | Atributos de la barra lateral con datos del contenido sin escapar | Baja | En curso: corrección aplicada, CI pendiente | frontend-security |
 | PLD-SEC-003 | La CSP de producción permite `localhost:8000` en `connect-src` | Baja | Abierto | frontend-security |
 | PLD-SEC-004 | El Worker de Pyodide probablemente no tiene CSP | Baja | Probable, pendiente de prueba | frontend-security |
 | PLD-SEC-005 | Dependencias de pip sin *hashes* ni archivo de bloqueo | Baja | Abierto | dependency-security |
@@ -54,15 +54,69 @@ La siguiente revisión incremental parte de `git diff 708431f..HEAD`.
 ### PLD-SEC-002 · Atributos de la barra lateral con datos del contenido sin escapar
 - **Severidad**: Baja. El dato sale de `frontend/data/lessons.json`, que solo cambia con un commit
   al repositorio; no lo controla el alumno ni la API.
-- **Estado**: confirmado (lectura del código) → abierto.
-- **Responsable**: frontend-security.
-- **Ubicación**: `frontend/js/app.js:111` (`data-module="${module.slug}"`) y `frontend/js/app.js:119`
-  (`href` y `data-slug` con `lesson.slug`). El título sí pasa por `escapeHtml`.
+- **Estado**: confirmado; corrección aplicada en la rama del PR #50, validación CI pendiente.
+- **Responsable**: frontend-security + security-qa.
+- **Ubicación**: `frontend/js/app.js` en `renderSidebar()`.
 - **Condiciones**: un slug con comillas en el JSON (error de contenido o commit malicioso).
 - **Impacto**: XSS almacenado en la web publicada para todos los visitantes; requiere acceso de escritura al repositorio.
-- **Recomendación**: `escapeHtml()` en los tres atributos, o validar el formato `^[a-z0-9-]+$` de los
-  slugs en `backend/tests/test_content.py`.
-- **Prueba de regresión**: test unitario o de contenido que rechace un slug con `"`.
+- **Corrección propuesta**: `escapeHtml()` en `data-module`, `href` y `data-slug`; validación de slugs con `^[a-z0-9-]+# Registro de hallazgos de seguridad
+
+Registro central del equipo AppSec. **Solo lo edita `security-lead`**; los especialistas le
+devuelven sus hallazgos con la plantilla de abajo. Flujo y severidad: [`AGENT_WORKFLOW.md`](AGENT_WORKFLOW.md).
+
+| Última revisión | Commit | Tipo | Responsable |
+|---|---|---|---|
+| 19/10/2026 | `708431f` (`main`) | Línea base completa al crear el equipo | security-lead |
+
+La siguiente revisión incremental parte de `git diff 708431f..HEAD`.
+
+## Resumen
+
+| ID | Título | Severidad | Estado | Responsable |
+|---|---|---|---|---|
+| PLD-SEC-001 | Sin pruebas de aislamiento entre cuentas en la mayoría de rutas privadas | Informativa | Corregido | security-qa |
+| PLD-SEC-002 | Atributos de la barra lateral con datos del contenido sin escapar | Baja | En curso: corrección aplicada, CI pendiente | frontend-security |
+| PLD-SEC-003 | La CSP de producción permite `localhost:8000` en `connect-src` | Baja | Abierto | frontend-security |
+| PLD-SEC-004 | El Worker de Pyodide probablemente no tiene CSP | Baja | Probable, pendiente de prueba | frontend-security |
+| PLD-SEC-005 | Dependencias de pip sin *hashes* ni archivo de bloqueo | Baja | Abierto | dependency-security |
+| PLD-SEC-006 | Riesgos ya aceptados en revisiones anteriores | Baja | Aceptado | security-lead |
+| PLD-SEC-FP1 | Alertas de herramientas revisadas como falsos positivos | — | Falso positivo | security-lead |
+
+## Plantilla
+
+```
+### PLD-SEC-NNN · Título
+- Severidad: … (razonamiento: explotabilidad × impacto)
+- Estado: confirmado | probable | no verificable | falso positivo → abierto | en curso | corregido | aceptado
+- Responsable: <agente>
+- Ubicación: archivo:línea
+- Evidencia reproducible: comando o test, y su resultado
+- Condiciones para explotarlo:
+- Impacto y alcance:
+- Recomendación:
+- Prueba de regresión:
+```
+
+## Hallazgos
+
+### PLD-SEC-001 · Sin pruebas de aislamiento entre cuentas en la mayoría de rutas privadas
+- **Severidad**: Informativa. No es una vulnerabilidad: el código filtra por `user.id` en todas las
+  rutas. Es un hueco de pruebas: un cambio futuro podría introducir un IDOR sin que falle ningún test.
+- **Estado**: confirmado → **corregido**.
+- **Responsable**: security-qa.
+- **Ubicación**: `backend/tests/`. Solo `test_dashboard.py:129` y los tests de A2A probaban dos usuarios.
+- **Evidencia**: `grep` de pruebas con dos cuentas en `backend/tests/` (19/10/2026).
+- **Corrección**: `backend/tests/test_security_isolation.py`: dos usuarios; B intenta leer, sobrescribir
+  y borrar los datos de A en progreso, intentos, estados de curso, PCAP, cuenta, exportación y
+  actividad, también con `user_id`/email en la petición; borrar la cuenta de B no toca filas de A;
+  las rutas privadas exigen sesión.
+- **Prueba de regresión**: `cd backend && python -m pytest -q tests/test_security_isolation.py` → 4 pasan.
+
+### PLD-SEC-002 · Atributos de la barra lateral con datos del contenido sin escapar
+- **Severidad**: Baja. El dato sale de `frontend/data/lessons.json`, que solo cambia con un commit
+  al repositorio; no lo controla el alumno ni la API.
+ en `backend/tests/test_content.py`.
+- **Prueba de regresión**: `test_module_and_lesson_slugs_are_safe_for_html_attributes_and_routes`; la CI del último commit está en curso.
 
 ### PLD-SEC-003 · La CSP de producción permite `localhost:8000` en `connect-src`
 - **Severidad**: Baja.
