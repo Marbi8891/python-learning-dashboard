@@ -5,7 +5,7 @@
   <!-- Seguridad (ADR-0022). GitHub Pages no permite cabeceras propias: la política va en <meta>.
        Si activas GoatCounter (config.js), añade https://gc.zgo.at a script-src y tu
        https://<código>.goatcounter.com a connect-src e img-src. -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://accounts.google.com/gsi/client https://cdn.jsdelivr.net/pyodide/v314.0.7/full/ 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://pld-api.onrender.com https://accounts.google.com/gsi/ http://127.0.0.1:8000 http://localhost:8000 https://cdn.jsdelivr.net/pyodide/v314.0.7/full/; frame-src https://accounts.google.com; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://accounts.google.com/gsi/client https://cdn.jsdelivr.net/pyodide/v314.0.7/full/ 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline' https://accounts.google.com/gsi/style; img-src 'self' data:; font-src 'self'; connect-src 'self' https://pld-api.onrender.com https://accounts.google.com/gsi/ http://127.0.0.1:8000 http://localhost:8000 https://cdn.jsdelivr.net/pyodide/v314.0.7/full/; frame-src https://accounts.google.com; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Python Learning Dashboard · Aprende Python y prepara Programación de DAW</title>
