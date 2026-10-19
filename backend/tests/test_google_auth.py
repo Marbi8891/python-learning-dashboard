@@ -110,8 +110,10 @@ def test_google_login_requires_privacy_for_new_account(client, monkeypatch):
 
 def test_google_login_rejects_invalid_id_token(client, monkeypatch):
     configure_google(monkeypatch, {})
+
     def invalid_token(token, request, client_id):
         raise ValueError("invalid token")
+
     monkeypatch.setattr(auth, "verify_oauth2_token", invalid_token)
     response = client.post(
         "/api/auth/google",
