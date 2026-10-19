@@ -1,13 +1,17 @@
-"""Modelo simulado para desarrollo y tests (A2A_MOCK_MODEL=true).
+"""Modelo simulado (A2A_MOCK_MODEL=true o A2A_MODEL_PROVIDER=mock).
 
-No llama a ningún servicio externo ni necesita API key: devuelve la guía que ha preparado el
-agente, marcada como simulada, para probar el protocolo A2A de punta a punta.
-No se debe activar en producción: sus respuestas no son de un modelo de lenguaje.
+No llama a ningún servicio externo ni necesita API key: devuelve la respuesta que ha preparado el
+propio tutor con sus reglas y el contenido revisado del curso, marcada como «sin IA». Sirve para
+desarrollo y tests y, mientras no haya un modelo en producción, como tutor sin IA: sus respuestas
+nunca se presentan como de un modelo de lenguaje (la tarea lleva `source: simulated`).
 """
 
 from app.a2a.providers.base import ModelRequest
 
-MOCK_NOTICE = "_Modo de desarrollo: respuesta preparada por el tutor sin modelo de IA._"
+MOCK_NOTICE = (
+    "_Tutor sin IA: respuesta preparada con reglas y con el contenido revisado del curso; no la "
+    "ha escrito un modelo de lenguaje._"
+)
 
 
 class MockModelProvider:

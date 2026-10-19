@@ -19,6 +19,14 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
 - **Sesión de la web en una cookie `HttpOnly`** (ADR-0033): JavaScript ya no puede leer el token y la sesión sigue al recargar la página. Protección CSRF con la cabecera `X-PLD-Session`. Si el navegador bloquea la cookie, se entra igual con el token solo en memoria. La app Android no cambia. Nuevo `POST /api/v1/auth/logout`.
 
 ### Añadido
+- **Python Tutor adaptativo** (ADR-0036, [docs/a2a.md](docs/a2a.md)):
+  - plan pedagógico determinista antes del modelo: tipo de consulta, concepto, nivel por evidencias (conceptos demostrados y ejercicios superados, no el % global), análisis del código con `ast` sin ejecutarlo, pistas graduadas de 1 a 3 y preguntas de comprobación con salida verificada;
+  - el tutor sin IA (la web publicada) explica con el contenido revisado del curso en lugar de una guía genérica;
+  - memoria de la conversación por `contextId`, acotada y solo en memoria;
+  - saludo, petición ambigua, fuera de tema y corrección de la comprobación sin llamar al modelo ni gastar cupo;
+  - cada respuesta dice si es de IA, del tutor sin IA o preparada; si el proveedor falla, motivo (`metadata.reason`) y guía sin IA;
+  - web: Cancelar, Reintentar (manual), Pedir una pista, «Explícamelo paso a paso», lección abierta preseleccionada, ejemplos ejecutables en el navegador y sin respuestas tardías de otra conversación;
+  - 20 casos de evaluación en español en CI y `scripts/a2a/eval_tutor.py` para evaluar con un modelo real.
 - **Panel del alumno** (`#/panel`, ADR-0035): un único espacio para la persona con sesión iniciada, con siete secciones (Resumen, Mis cursos, Mi progreso, Actividad, Planificación, Logros y Mi perfil). Indicadores con datos reales y estados vacíos útiles, «Continuar aprendiendo» con la última actividad y el siguiente paso del plan, gráfica accesible de 30 días (con tabla), errores recurrentes, historial paginado, cierre de sesión y descarga de datos con los mecanismos existentes. Sustituye a «Mi cuenta» (`#/cuenta` redirige a `#/panel/perfil`).
   - API: `GET /api/v1/dashboard` (resumen agregado del usuario de la sesión) y `GET /api/v1/dashboard/activity` (historial paginado). Sin migraciones.
   - **XP, racha y logros se guardan en la cuenta** (`/api/v1/course-state/game`): antes solo vivían en el navegador y se perdían al cerrar sesión. Se fusionan sin perder nada y se validan al leerlos.

@@ -18,10 +18,12 @@ from a2a.server.tasks import TaskUpdater
 from a2a.types import Message, Part, TaskState
 from pydantic import ValidationError
 
-from app.a2a.agents.python_tutor import PythonTutorAgent, TutorQuery
+from app.a2a.agents.python_tutor import PythonTutorAgent, TutorPlan, TutorQuery
+from app.a2a.conversation import ConversationStore
 from app.a2a.observability import log_task
 from app.a2a.providers.base import (
     ModelConfigurationError,
+    ModelRateLimitedError,
     ModelTimeoutError,
     ModelUnavailableError,
 )
@@ -45,6 +47,19 @@ LIMITED = (
     "consola de la lección; podrás volver a preguntar más tarde."
 )
 CANCELED = "Consulta cancelada."
+PROVIDER_LIMITED = (
+    "El servicio de IA del tutor ha alcanzado su límite de uso por ahora. Inténtalo más tarde."
+)
+FALLBACK = "**Mientras tanto, esto es lo que puedo decirte sin IA:**"
+
+# Motivo de cada fallo, en los metadatos del mensaje de estado: el cliente lo explica sin tener
+# que leer el texto (la web distingue «no disponible», «límite» y «error temporal»).
+REASONS: tuple[tuple[type[BaseException], str], ...] = (
+    (ModelTimeoutError, "provider_timeout"),
+    (ModelRateLimitedError, "provider_rate_limited"),
+    (ModelConfigurationError, "provider_unavailable"),
+    (ModelUnavailableError, "provider_unavailable"),
+)
 
 
 class InvalidTutorMessage(ValueError):
@@ -75,8 +90,10 @@ def parse_message(message: Message | None) -> TutorQuery:
 
 
 class PythonTutorExecutor(AgentExecutor):
-    def __init__(self, agent: PythonTutorAgent):
+    def __init__(self, agent: PythonTutorAgent, conversations: ConversationStore | None = None):
         self.agent = agent
+        # Memoria de cada conversación (contextId) de cada usuario, solo en memoria
+        self.conversations = conversations or ConversationStore()
 
     async def execute(self, context: RequestContext, event_queue: EventQueue) -> None:
         started = time.perf_counter()
@@ -90,7 +107,11 @@ class PythonTutorExecutor(AgentExecutor):
             history=[context.message] if context.message else [],
         )
 
-        def log(outcome: str, error: BaseException | None = None) -> None:
+        plan: TutorPlan | None = None
+
+        def log(outcome: str, error: BaseException | None = None, **details) -> None:
+            if plan is not None:
+                details |= {"intent": plan.intent, "level": plan.level.level}
             log_task(
                 agent=self.agent.name,
                 provider=self.agent.model.name,
@@ -102,6 +123,7 @@ class PythonTutorExecutor(AgentExecutor):
                 outcome=outcome,
                 started=started,
                 error=error,
+                **details,
             )
 
         # Primero lo que necesita la sesión de base de datos de la petición; luego, la tarea
@@ -119,35 +141,60 @@ class PythonTutorExecutor(AgentExecutor):
         try:
             if problem is not None:
                 raise problem
-            if budget is not None and not budget():  # solo cuentan los mensajes válidos
+            owner = context.call_context.user.user_name
+            conversation = self.conversations.get(owner, task.context_id)
+            plan = self.agent.plan(query, learner, conversation)
+            # Solo gastan consulta los mensajes válidos que necesitan el modelo
+            if plan.needs_model and budget is not None and not budget():
                 raise ModelBudgetExhausted()
             await updater.start_work()
-            answer = await self.agent.answer(query, learner)
+            answer = await self.agent.respond(plan)
         except asyncio.CancelledError:
             log("canceled")
             raise
         except InvalidTutorMessage as error:
-            await updater.reject(updater.new_agent_message([Part(text=INVALID_INPUT)]))
-            log("rejected", error)
+            await updater.reject(self._status(updater, INVALID_INPUT, "invalid_input"))
+            log("rejected", error, reason="invalid_input")
             return
         except ModelBudgetExhausted as error:
-            await updater.reject(updater.new_agent_message([Part(text=LIMITED)]))
-            log("limited", error)
+            await updater.reject(self._status(updater, LIMITED, "limit_reached"))
+            log("limited", error, reason="limit_reached")
             return
         except Exception as error:  # el detalle se queda en el log (solo el tipo), nunca al cliente
-            down = (ModelUnavailableError, ModelTimeoutError, ModelConfigurationError)
-            text = self.agent.model.unavailable_message if isinstance(error, down) else FAILED
-            await updater.failed(updater.new_agent_message([Part(text=text)]))
-            log("failed", error)
+            reason = next((code for kind, code in REASONS if isinstance(error, kind)), "error")
+            if reason == "error":
+                text = FAILED
+            else:
+                text = (
+                    PROVIDER_LIMITED
+                    if reason == "provider_rate_limited"
+                    else self.agent.model.unavailable_message
+                )
+                if plan is not None:  # sin IA, el alumno no se queda sin nada
+                    text = f"{text}\n\n{FALLBACK}\n\n{plan.prepared_text}"
+            await updater.failed(self._status(updater, text, reason))
+            log("failed", error, reason=reason)
             return
 
+        self.agent.remember(plan, answer)
         await updater.add_artifact(
             [Part(text=answer.text, media_type="text/plain")],
             name="respuesta",
-            metadata={"level": answer.level, "provider": answer.provider, "model": answer.model},
+            metadata={
+                "level": answer.level,
+                "provider": answer.provider,
+                "model": answer.model,
+                "source": answer.source,
+                "intent": answer.intent,
+                "expects_answer": answer.expects_answer,
+            },
         )
         await updater.complete()
-        log("completed")
+        log("completed", source=answer.source)
+
+    @staticmethod
+    def _status(updater: TaskUpdater, text: str, reason: str) -> Message:
+        return updater.new_agent_message([Part(text=text)], metadata={"reason": reason})
 
     async def cancel(self, context: RequestContext, event_queue: EventQueue) -> None:
         updater = TaskUpdater(event_queue, context.task_id, context.context_id)
