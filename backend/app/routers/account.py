@@ -19,11 +19,12 @@ from app.models import (
 )
 from app.password_policy import weakness
 from app.rate_limit import limit_auth_attempts
+from app.routers.auth import verify_google_identity
 from app.routers.progress import list_progress
 from app.schemas import (
     ActivityOut,
+    DeleteConfirm,
     PasswordChange,
-    PasswordConfirm,
     ProfileUpdate,
     Token,
     UserExport,
@@ -118,11 +119,21 @@ def export_my_data(user: CurrentUser, db: DbSession) -> UserExport:
     dependencies=[Depends(limit_auth_attempts)],
 )
 def delete_my_account(
-    data: PasswordConfirm, user: CurrentUser, request: Request, db: DbSession
+    data: DeleteConfirm, user: CurrentUser, request: Request, db: DbSession
 ) -> Response:
-    """Borra la cuenta y todos sus datos. Pide la contraseña para evitar borrados accidentales."""
-    if not verify_password(data.password, user.password_hash):
-        # Alguien con la sesión abierta pero sin la contraseña (T1539 sesión robada → T1485)
+    """Borra la cuenta y todos sus datos. Pide volver a identificarse (contraseña o Google) para
+    evitar borrados accidentales o con una sesión robada (T1539 → T1485)."""
+    if data.google_credential is not None:
+        # Las cuentas creadas con Google tienen una contraseña aleatoria que nadie conoce:
+        # sin esta vía no podrían ejercer el derecho de supresión (art. 17 RGPD).
+        claims = verify_google_identity(data.google_credential)
+        if str(claims["email"]).strip().lower() != user.email:
+            record(Event.LOGIN_FAILED, request, user=user.id, action="delete")
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Esa cuenta de Google no es la de esta sesión.",
+            )
+    elif data.password is None or not verify_password(data.password, user.password_hash):
         record(Event.LOGIN_FAILED, request, user=user.id, action="delete")
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Contraseña incorrecta")
     # Borrado explícito: no depende de que la base de datos aplique ON DELETE CASCADE

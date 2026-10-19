@@ -199,7 +199,12 @@ for router in (
 @app.get("/api/health", tags=["sistema"], include_in_schema=False)
 def health() -> dict[str, str | bool]:
     # "email": el frontend solo ofrece la recuperación por email si se pueden enviar (Brevo o SMTP)
-    return {"status": "ok", "email": email_enabled()}
+    # "google": y solo enseña «Continuar con Google» si el servidor tiene GOOGLE_CLIENT_ID
+    return {
+        "status": "ok",
+        "email": email_enabled(),
+        "google": bool(get_settings().google_client_id),
+    }
 
 
 # Agentes A2A: una capacidad más junto a la API REST, no un sustituto (ADR-0034).

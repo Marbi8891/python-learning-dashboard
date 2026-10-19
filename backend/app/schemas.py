@@ -121,8 +121,12 @@ class PasswordResetConfirm(BaseModel):
     new_password: Password
 
 
-class PasswordConfirm(BaseModel):
-    password: str = Field(max_length=128)
+class DeleteConfirm(BaseModel):
+    """Confirmación del borrado: la contraseña o, en las cuentas creadas con Google (que no tienen
+    una contraseña conocida), un ID token de Google recién obtenido del mismo email."""
+
+    password: str | None = Field(default=None, max_length=128)
+    google_credential: str | None = Field(default=None, min_length=20, max_length=8192)
 
 
 class Token(BaseModel):

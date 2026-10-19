@@ -156,3 +156,64 @@ def test_google_login_handles_concurrent_account_creation(client, monkeypatch):
         json={"credential": "x" * 40, "accept_privacy": True},
     )
     assert response.status_code == 409
+
+
+def _google_session(client, monkeypatch, email="google@example.com"):
+    configure_google(monkeypatch, {"email": email, "email_verified": True, "sub": "s"})
+    token = client.post(
+        "/api/auth/google", json={"credential": "x" * 40, "accept_privacy": True}
+    ).json()["access_token"]
+    return {"Authorization": f"Bearer {token}"}
+
+
+def test_google_account_can_be_deleted_by_confirming_with_google(client, monkeypatch):
+    # La cuenta se crea con una contraseña aleatoria: sin esta vía no se podría borrar (art. 17)
+    headers = _google_session(client, monkeypatch)
+    client.put("/api/progress/variables", headers=headers)
+    response = client.post(
+        "/api/users/me/delete", json={"google_credential": "y" * 40}, headers=headers
+    )
+    assert response.status_code == 204
+    assert client.get("/api/users/me", headers=headers).status_code == 401
+    with Session(client.engine) as db:
+        assert db.scalar(select(User).where(User.email == "google@example.com")) is None
+
+
+def test_delete_with_another_google_account_is_refused(client, monkeypatch):
+    headers = _google_session(client, monkeypatch)
+    configure_google(
+        monkeypatch, {"email": "otra@example.com", "email_verified": True, "sub": "s2"}
+    )
+    response = client.post(
+        "/api/users/me/delete", json={"google_credential": "y" * 40}, headers=headers
+    )
+    assert response.status_code == 403
+    assert client.get("/api/users/me", headers=headers).status_code == 200
+
+
+def test_delete_with_invalid_google_credential_is_refused(client, monkeypatch):
+    headers = _google_session(client, monkeypatch)
+
+    def reject(token, request, client_id):
+        raise ValueError("firma no válida")
+
+    monkeypatch.setattr(auth, "verify_oauth2_token", reject)
+    response = client.post(
+        "/api/users/me/delete", json={"google_credential": "y" * 40}, headers=headers
+    )
+    assert response.status_code == 401
+    assert client.get("/api/users/me", headers=headers).status_code == 200
+
+
+def test_delete_without_password_nor_google_is_refused(client, auth_headers):
+    response = client.post("/api/users/me/delete", json={}, headers=auth_headers)
+    assert response.status_code == 403
+    assert client.get("/api/users/me", headers=auth_headers).status_code == 200
+
+
+def test_delete_with_google_when_google_is_not_configured(client, auth_headers):
+    response = client.post(
+        "/api/users/me/delete", json={"google_credential": "y" * 40}, headers=auth_headers
+    )
+    assert response.status_code == 503
+    assert client.get("/api/users/me", headers=auth_headers).status_code == 200

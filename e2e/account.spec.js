@@ -224,3 +224,62 @@ test("un servidor lento avisa de que se está despertando", async ({ page }) => 
   await expect(page.locator("#account-message")).toContainText("El servidor se está despertando");
   await expect(page.locator("#account-message")).not.toContainText("despertando", { timeout: 15_000 });
 });
+
+// Google Identity falso: dibuja un botón que, al pulsarlo, devuelve una credencial inventada
+const FAKE_GSI = `window.google = { accounts: { id: {
+  initialize(options) { window.__gsi = options; },
+  renderButton(target) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = "Continuar con Google";
+    button.addEventListener("click", () => window.__gsi.callback({ credential: "credencial-falsa-de-google-123" }));
+    target.append(button);
+  },
+} } };`;
+
+async function withGoogle(page, { serverHasGoogle = true } = {}) {
+  const loads = [];
+  await page.route("https://accounts.google.com/**", (route) => {
+    loads.push(route.request().url());
+    return route.fulfill({ contentType: "text/javascript", body: FAKE_GSI });
+  });
+  await page.route("**/api/v1/health", (route) =>
+    route.fulfill({ json: { status: "ok", email: true, google: serverHasGoogle } }));
+  return loads;
+}
+
+test("Google solo se descarga al abrir el login, no al visitar la web (privacidad)", async ({ page }) => {
+  const loads = await withGoogle(page);
+  await openLesson(page);
+  await page.waitForLoadState("networkidle");
+  expect(loads).toEqual([]);
+  await page.getByRole("button", { name: "Iniciar sesión" }).click();
+  await expect(dialog(page).getByRole("button", { name: "Continuar con Google" })).toBeVisible();
+  expect(loads).toEqual(["https://accounts.google.com/gsi/client"]);
+});
+
+test("si el servidor no tiene Google configurado, no se ofrece el botón", async ({ page }) => {
+  const loads = await withGoogle(page, { serverHasGoogle: false });
+  await openLesson(page);
+  await page.getByRole("button", { name: "Iniciar sesión" }).click();
+  await expect(page.locator("#login-form").getByLabel("Email")).toBeVisible();
+  await expect(page.locator("[data-google-login]")).toBeHidden();
+  expect(loads).toEqual([]);
+});
+
+test("una cuenta de Google se puede borrar confirmando con Google (RGPD)", async ({ page }) => {
+  await withGoogle(page);
+  let body = null;
+  await page.route("**/api/v1/users/me/delete", async (route) => {
+    body = route.request().postDataJSON();
+    // El backend de los e2e no tiene GOOGLE_CLIENT_ID: la validación del token la cubre pytest
+    await route.fulfill({ status: 204 });
+  });
+  await openLesson(page);
+  await register(page, uniqueEmail());
+  await page.locator("#account-button").click();
+  await dialog(page).getByText("Eliminar mi cuenta").click();
+  await dialog(page).locator("[data-google-delete]").getByRole("button", { name: "Continuar con Google" }).click();
+  await expect(page.locator("#toast")).toContainText("se han borrado");
+  expect(body).toEqual({ google_credential: "credencial-falsa-de-google-123" });
+});

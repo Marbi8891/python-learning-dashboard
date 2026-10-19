@@ -37,7 +37,7 @@ La base de datos gratuita de Render caduca a los 30 días, así que se usa Neon:
    - `SMTP_*`: déjalos vacíos por ahora (ver el paso 5).
    - `JWT_SECRET` lo genera Render.
 3. Espera al primer despliegue (unos minutos). Al arrancar, el contenedor crea las tablas en Neon y carga las lecciones.
-4. Comprueba `https://<tu-servicio>.onrender.com/api/health` → `{"status":"ok"}`.
+4. Comprueba `https://<tu-servicio>.onrender.com/api/health` → `"status": "ok"` (también indica si el email y Google están activos).
 
 Plan gratuito de Render: el servicio se duerme tras 15 min sin tráfico y la primera petición tarda cerca de un minuto en despertarlo.
 
@@ -52,6 +52,24 @@ window.PLD_CONFIG = Object.assign({ apiUrl: "https://<tu-servicio>.onrender.com"
 Publica de nuevo con `deploy.ps1`. Aparecerá el botón «Iniciar sesión».
 
 Si cambias el dominio del frontend, actualiza en el backend `CORS_ORIGINS` y `FRONTEND_URL`.
+
+### Inicio de sesión con Google
+
+El botón «Continuar con Google» necesita el **mismo Client ID** en los dos lados. Es un identificador
+público (no es el *client secret*, que este proyecto no usa ni debe estar en ningún sitio del repositorio):
+
+1. Frontend: `googleClientId` en `frontend/config.js`.
+2. Backend: variable `GOOGLE_CLIENT_ID` en Render (Environment) con ese mismo valor. Sin ella,
+   `/api/health` devuelve `"google": false` y la web oculta el botón; con un valor distinto, Google
+   firma tokens para otra audiencia y el login responde 401.
+3. Google Cloud Console → APIs y servicios → Credenciales → ese cliente OAuth (tipo «Aplicación web»):
+   en **Orígenes de JavaScript autorizados** debe estar `https://marbi8891.github.io` (y
+   `http://localhost:5500` para probar en local). No hacen falta URI de redirección.
+4. Pantalla de consentimiento de OAuth: si está en modo «Prueba», solo entran las cuentas añadidas
+   como usuarios de prueba.
+
+Comprobación: `https://<tu-servicio>.onrender.com/api/health` debe decir `"google": true`; después
+entra con una cuenta de prueba, cierra sesión y vuelve a entrar.
 
 ## 5. Emails de recuperación de contraseña
 
@@ -102,6 +120,7 @@ Actualiza en `frontend/privacidad.html` la línea «Emails de recuperación de c
 - [x] Responsable, contacto y proveedores (Render y Neon, Frankfurt) en `frontend/privacidad.html`.
 - [ ] Revisa y acepta los acuerdos de tratamiento de datos (DPA) de Render y Neon desde sus paneles o webs.
 - [ ] Al activar el SMTP, añade el proveedor de email a la política (sección 5).
+- [ ] Con Google activo, la política debe nombrar a Google como proveedor de identidad (sección 4).
 - [ ] Recomendado: que alguien con conocimientos de RGPD revise la política.
 
 ## Alternativa: servidor propio (por ejemplo, Oracle Cloud)

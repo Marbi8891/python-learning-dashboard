@@ -55,18 +55,23 @@ def _verify_google_credential(credential: str, client_id: str) -> dict:
     return claims
 
 
-@router.post("/auth/google", dependencies=[Depends(limit_auth_attempts)])
-def login_google(
-    data: GoogleCredential, request: Request, response: Response, db: DbSession
-) -> Token:
-    """Crea o inicia sesión con un ID token de Google validado en el servidor."""
+def verify_google_identity(credential: str) -> dict:
+    """Claims de un ID token de Google válido para este servidor (503 si Google no está activo)."""
     settings = get_settings()
     if not settings.google_client_id:
         raise HTTPException(
             status_code=503,
             detail="El inicio de sesión con Google aún no está configurado.",
         )
-    claims = _verify_google_credential(data.credential, settings.google_client_id)
+    return _verify_google_credential(credential, settings.google_client_id)
+
+
+@router.post("/auth/google", dependencies=[Depends(limit_auth_attempts)])
+def login_google(
+    data: GoogleCredential, request: Request, response: Response, db: DbSession
+) -> Token:
+    """Crea o inicia sesión con un ID token de Google validado en el servidor."""
+    claims = verify_google_identity(data.credential)
     email = str(claims["email"]).strip().lower()
     user = db.scalar(select(User).where(User.email == email))
     if user is None:

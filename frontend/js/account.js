@@ -20,7 +20,10 @@ function showView(name) {
     view.hidden = view.dataset.view !== name;
   }
   const googleLogin = dialog().querySelector("[data-google-login]");
-  if (googleLogin) googleLogin.hidden = name !== "login" || !window.PLD_CONFIG?.googleClientId;
+  if (googleLogin) {
+    googleLogin.hidden = name !== "login" || !googleEnabled;
+    if (!googleLogin.hidden) showGoogleButton($("#google-signin"));
+  }
   setMessage("");
   const heading = dialog().querySelector(`[data-view="${name}"] h2`);
   $("#account-title").textContent = heading?.dataset.title ?? "Tu cuenta";
@@ -128,21 +131,44 @@ async function loginWithGoogle(credential) {
   showToast(`¡Hola, ${state.user.display_name}! Tu progreso está sincronizado.`);
 }
 
-function initGoogleSignIn() {
-  const clientId = window.PLD_CONFIG?.googleClientId;
-  const target = $("#google-signin");
-  if (!clientId || !target) return;
-  const render = () => {
-    if (!window.google?.accounts?.id || target.dataset.rendered === "true") return;
-    window.google.accounts.id.initialize({
-      client_id: clientId,
+const GOOGLE_IDENTITY_URL = "https://accounts.google.com/gsi/client";
+// Hay botón de Google si config.js tiene el Client ID y el servidor no dice que le falta el suyo
+let googleEnabled = Boolean(window.PLD_CONFIG?.googleClientId);
+let googleIdentity = null;
+
+/** Google Identity se descarga solo al abrir el login o el borrado de la cuenta: quien solo
+    visita la web no envía su IP a Google ni recibe sus cookies. */
+function loadGoogleIdentity() {
+  googleIdentity ??= new Promise((resolve, reject) => {
+    if (window.google?.accounts?.id) {
+      resolve(window.google.accounts.id);
+      return;
+    }
+    const script = Object.assign(document.createElement("script"), { src: GOOGLE_IDENTITY_URL, async: true });
+    script.addEventListener("load", () => {
+      if (window.google?.accounts?.id) resolve(window.google.accounts.id);
+      else reject(new Error("Google no está disponible ahora mismo."));
+    });
+    script.addEventListener("error", () => {
+      script.remove();
+      reject(new Error("No se ha podido conectar con Google. Revisa tu conexión o usa tu email."));
+    });
+    document.head.append(script);
+  }).catch((error) => {
+    googleIdentity = null; // se puede reintentar al volver a abrir el diálogo
+    throw error;
+  }).then((id) => {
+    id.initialize({
+      client_id: window.PLD_CONFIG.googleClientId,
+      // Un solo callback: con sesión abierta, Google confirma el borrado; sin ella, inicia sesión
       callback: async ({ credential }) => {
         if (!credential) {
           setMessage("Google no ha devuelto una credencial válida.");
           return;
         }
         try {
-          await loginWithGoogle(credential);
+          if (state.user) await deleteWithGoogle(credential);
+          else await loginWithGoogle(credential);
         } catch (error) {
           setMessage(error.message);
         }
@@ -150,22 +176,48 @@ function initGoogleSignIn() {
       auto_select: false,
       cancel_on_tap_outside: true,
     });
-    window.google.accounts.id.renderButton(target, {
-      type: "standard", theme: "outline", size: "large",
-      text: "continue_with", shape: "rectangular", width: 280,
-      logo_alignment: "left",
-    });
-    target.dataset.rendered = "true";
-  };
-  render();
-  window.addEventListener("load", render, { once: true });
-  const timer = window.setInterval(() => {
-    if (window.google?.accounts?.id) {
-      window.clearInterval(timer);
-      render();
-    }
-  }, 250);
-  window.setTimeout(() => window.clearInterval(timer), 10000);
+    return id;
+  });
+  return googleIdentity;
+}
+
+async function showGoogleButton(target) {
+  if (!target || target.dataset.rendered === "true") return;
+  let id;
+  try {
+    id = await loadGoogleIdentity();
+  } catch (error) {
+    setMessage(error.message);
+    return;
+  }
+  if (target.dataset.rendered === "true") return;
+  id.renderButton(target, {
+    type: "standard", theme: "outline", size: "large",
+    text: "continue_with", shape: "rectangular", width: 280,
+    logo_alignment: "left",
+  });
+  target.dataset.rendered = "true";
+}
+
+async function deleteWithGoogle(credential) {
+  await request("POST", "/api/users/me/delete", { json: { google_credential: credential } });
+  await leave("Tu cuenta y todos sus datos se han borrado.");
+}
+
+/** Si el servidor dice que no tiene GOOGLE_CLIENT_ID, el botón solo daría un error: se oculta. */
+async function initGoogleSignIn() {
+  if (!googleEnabled) return;
+  const danger = $(".account__danger");
+  danger.addEventListener("toggle", () => {
+    danger.querySelector("[data-google-delete]").hidden = !googleEnabled;
+    if (danger.open && googleEnabled) showGoogleButton($("#google-delete"));
+  });
+  const info = await serverInfo;
+  if (info && info.google === false) {
+    googleEnabled = false;
+    dialog().querySelector("[data-google-login]").hidden = true;
+    danger.querySelector("[data-google-delete]").hidden = true;
+  }
 }
 
 function downloadJson(data, filename) {
