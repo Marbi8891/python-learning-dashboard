@@ -10,6 +10,8 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 # Fuente única del contenido: la comparten frontend (GitHub Pages) y backend
 FRONTEND_DIR = Path(__file__).resolve().parents[2] / "frontend"
 DEFAULT_LESSONS_FILE = FRONTEND_DIR / "data" / "lessons.json"
+# Conceptos, ejemplos verificados y errores típicos: el contenido revisado que usa el tutor
+DEFAULT_LEARNING_FILE = FRONTEND_DIR / "data" / "learning.json"
 
 
 class Settings(BaseSettings):
@@ -17,6 +19,7 @@ class Settings(BaseSettings):
 
     database_url: str = "sqlite:///./dev.db"
     lessons_file: Path = DEFAULT_LESSONS_FILE
+    learning_file: Path = DEFAULT_LEARNING_FILE
     cors_origins: list[str] = [
         "http://localhost:5500",
         "http://127.0.0.1:5500",

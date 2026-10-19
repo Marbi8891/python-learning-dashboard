@@ -3,7 +3,8 @@
 Agent2Agent (**A2A**) es un protocolo abierto para que agentes de IA se describan y se hablen entre
 sí. En este proyecto es **una capacidad más del backend**, junto a la API REST: la web, la app
 Android y cualquier cliente A2A pueden pedir ayuda a agentes educativos sin que cambie nada de lo
-que ya existe. La decisión está en [ADR-0034](adr/0034-agentes-a2a.md).
+que ya existe. La decisión está en [ADR-0034](adr/0034-agentes-a2a.md) y el tutor adaptativo en
+[ADR-0036](adr/0036-tutor-adaptativo.md).
 
 Versión del protocolo: **A2A 1.0**, con el SDK oficial [`a2a-sdk`](https://pypi.org/project/a2a-sdk/) 1.2.x.
 
@@ -50,35 +51,96 @@ Ayuda a aprender Python **como un tutor, no como un solucionador**:
 5. deja que el alumno lo intente.
 
 Si el alumno pide la solución de un ejercicio que **aún no ha superado**, no se la da y le guía.
-El nivel (inicial, intermedio, avanzado) sale de su progreso real o lo indica el alumno. El agente
-**no inventa el progreso**: lo lee del servicio `load_learner_context` con el usuario de la sesión.
+El agente **no inventa el progreso**: lo lee del servicio `load_learner_context` con el usuario de
+la sesión. El diseño completo está en [ADR-0036](adr/0036-tutor-adaptativo.md).
+
+### Plan pedagógico (sin modelo)
+
+Antes de llamar a ningún modelo, `PythonTutorAgent.plan()` decide de forma determinista, con el
+contenido revisado del curso (`frontend/data/learning.json`, cargado por
+`services/curriculum.py`):
+
+| Pieza | Qué decide | Dónde |
+|---|---|---|
+| **Tipo de consulta** | `concepto`, `depuracion`, `pista`, `solucion`, `ejercicio`, `comprobacion` (responde a la pregunta del tutor), `ambigua`, `fuera_de_tema`, `saludo` | `tutor_pedagogy.classify` |
+| **Concepto** | cuál de los 22 conceptos del curso trata la pregunta o el código | `match_concept` |
+| **Nivel** | `inicial`, `intermedio` o `avanzado` por **evidencias** (abajo) | `estimate_level` |
+| **Análisis del código** | `ast.parse`, sin ejecutar: sintaxis, nombres sin definir (con sugerencia), uso antes de asignar, texto + número, `x = lista.sort()`, `return` dentro del bucle, acumulador reiniciado, `while True` sin `break`, código incompleto (`...`, `pass`). Separa **hechos** de **hipótesis** | `tutor_analysis.analyze_code` |
+| **Clase de error** | sintaxis, ejecución o lógica | `error_kind` |
+| **Pistas** | graduadas de 1 a 3 en la misma conversación; la solución solo si el ejercicio está superado | `TutorPlan.hint_level` |
+| **Comprobación** | una pregunta de predicción de salida del curso (salida verificada en CI) y su corrección | `pick_check`, `evaluate_check` |
+| **Precisión** | lista vs `array.array` vs `numpy.ndarray`; funciones o métodos que no existen en Python (`push`, `length`…) | `PRECISION_NOTES`, `unknown_apis` |
+
+Las respuestas `comprobacion`, `ambigua`, `fuera_de_tema` y `saludo` las prepara el agente
+**sin llamar al modelo y sin gastar cupo**. El resto pasa por el proveedor con una guía y un
+contexto mínimo; con el modelo simulado, la guía es la respuesta.
+
+**Nivel por evidencias, nunca por el % global.** Puntos = conceptos demostrados (de la «memoria»
+de Aprender: colocados por la prueba de nivel o con nota ≥ 0,8, aplicados y sin errores activos)
+\+ lecciones con el ejercicio superado: 0–3 inicial, 4–11 intermedio, 12+ avanzado. Baja un nivel
+si hay dificultades demostradas en el concepto de la pregunta, y en la conversación baja a inicial
+si falla la comprobación y sube uno si la acierta. Si el alumno dice su nivel, se respeta. Sin
+evidencias, empieza en inicial y lo dice («sin evidencias todavía»).
+
+**Protocolo por tipo** (`PROTOCOLS` y `SYSTEM_PROMPT` en `agents/python_tutor.py`): concepto →
+idea, ejemplo pequeño con su salida real, error típico y pregunta de comprobación; depuración →
+qué dice el error o el código, clase de error, línea, hipótesis marcada como hipótesis y un cambio
+pequeño que probar en la consola; ejercicio → enunciado del nivel y criterio de éxito, sin
+solución. El modelo recibe el contexto como **datos** (`<pregunta>`, `<codigo>`, `<error>`,
+escapados) y la instrucción de no seguir órdenes que vengan dentro, no revelar su razonamiento,
+no inventar salidas, trazas ni APIs, no decir que ha ejecutado nada y no dar un ejercicio por
+aprobado (eso lo dice la consola de la lección).
+
+### Memoria de la conversación
+
+`conversation.py` (`ConversationStore`) recuerda por **sesión + `contextId`**, solo en memoria:
+de cada turno la intención, el concepto y un extracto (240 caracteres de la pregunta, 480 de la
+respuesta), los 6 últimos; las pistas dadas, la comprobación pendiente y los aciertos y fallos. Al
+modelo se le reenvían los 3 últimos extractos. Máximo 5 conversaciones por alumno y 5000 en total;
+caducan a las 2 horas sin uso y se borran al reiniciar. No va a la base de datos ni a los logs. La
+web empieza una conversación nueva con «Nueva conversación» y al cambiar de usuario.
 
 ### Minimización de datos
 
-El servidor lee del alumno solo: cuántas lecciones lleva completadas (para calcular el nivel) y,
-si pregunta por una lección, su título, módulo, enunciado, pista y si la tiene superada.
+El servidor lee del alumno solo: lecciones con el ejercicio superado, el estado de los conceptos
+en Aprender (demostrados, con dificultades y errores típicos activos) y, si pregunta por una
+lección, su título, módulo, enunciado, pista, si la tiene superada y cuántos intentos lleva.
 
 Al **modelo** (Ollama local o, si se activa, Anthropic) solo le llega (`PythonTutorAgent._prompt`):
 
 - las instrucciones del tutor (`SYSTEM_PROMPT`, iguales para todos);
-- el nivel (`inicial`, `intermedio` o `avanzado`), no el progreso con el que se calcula;
-- si eligió una lección: módulo, lección, enunciado y si el ejercicio está superado (sí/no);
-- lo que el alumno ha escrito en esta consulta: pregunta, código y mensaje de error;
-- la guía que ha preparado el propio agente (explicación del error, pista de la lección…).
+- el tipo de consulta, el nivel y su base en palabras («3 conceptos demostrados en ejercicios»);
+- del concepto de la pregunta **y sus requisitos**: cuáles están comprobados y cuáles le cuestan;
+  nada de los demás conceptos;
+- si eligió una lección: módulo, lección, enunciado, si el ejercicio está superado (sí/no) y
+  cuántos intentos lleva;
+- lo que el alumno ha escrito en esta consulta y los extractos de los 3 últimos turnos de esta
+  conversación;
+- la guía que ha preparado el propio agente (análisis del código, pista que toca, comprobación…).
 
-Nunca el email, el nombre, el id de usuario, el historial, los intentos anteriores, otras
-lecciones, otros cursos ni datos de otros usuarios. El usuario sale siempre de la sesión: un test
+Nunca el email, el nombre, el id de usuario, el código de intentos anteriores, otros cursos ni
+datos de otros usuarios. El usuario sale siempre de la sesión: un test
 (`test_the_provider_only_receives_the_session_users_data`) comprueba con la API de Anthropic
 simulada que lo que recibe el proveedor para un alumno no lleva nada de otro.
 
-### Cómo responde el tutor
+### Qué ve el alumno
 
-`SYSTEM_PROMPT` (en `agents/python_tutor.py`) fija este orden: 1) comprender el problema,
-2) identificar el concepto que falla, 3) explicarlo, 4) dar una pista, 5) un ejemplo pequeño,
-6) dejar que el alumno lo vuelva a intentar y 7) la solución completa solo cuando corresponde.
-Respuestas cortas para preguntas sencillas, adaptadas al nivel, sin inventar resultados de
-ejecución, y al analizar código separa **código analizado**, **comportamiento esperado**,
-**comportamiento observado** (solo lo que diga el alumno o su error) e **hipótesis**.
+Cada respuesta lleva en los metadatos del artefacto `source`, `intent` y `expects_answer`, y la web
+dice siempre de dónde sale:
+
+| `source` | Texto en la web |
+|---|---|
+| `model` | «Respuesta generada por IA (proveedor · modelo). Puede equivocarse: compruébalo en la consola.» |
+| `simulated` | «Tutor sin IA: respuesta preparada con reglas y con el contenido revisado del curso…» |
+| `prepared` | «Respuesta preparada por el tutor, sin IA.» |
+
+Si la tarea falla, el mensaje de estado lleva `metadata.reason`: `provider_unavailable`,
+`provider_timeout`, `provider_rate_limited`, `limit_reached`, `invalid_input` o `error`. Cuando el
+proveedor falla, el alumno recibe además la guía preparada («Mientras tanto, esto es lo que puedo
+decirte sin IA»). La web muestra **Reintentar** solo a mano (nunca reintenta sola una petición que
+cuesta), **Cancelar** mientras espera, **Pedir una pista**, «Explícamelo paso a paso», descarta
+respuestas de una conversación anterior y deja **ejecutar los ejemplos en el navegador** (Pyodide,
+como la consola de las lecciones; nunca en el servidor).
 
 ## Production model provider
 
@@ -103,11 +165,18 @@ A2A → Python Tutor Agent → AgentModelProvider → OllamaProvider      (por d
 En esta fase **no se usa ninguna API de pago**: el proveedor por defecto es Ollama, y Anthropic
 solo se usa si se elige expresamente (`A2A_MODEL_PROVIDER=anthropic` y `ANTHROPIC_API_KEY`).
 
+**Recomendación para producción (ADR-0036):** en Render (plan gratuito) seguir con
+`A2A_MODEL_PROVIDER=mock`: el tutor sin IA ya explica, analiza código, gradúa pistas y comprueba,
+sin coste ni datos a terceros, y la web lo dice. **Ollama no se publica en Internet**: solo en
+local o en un servidor propio detrás del backend (nunca su puerto 11434 abierto). Anthropic solo
+si el autor lo decide, con límite de gasto en la Anthropic Console y la política de privacidad
+actualizada antes.
+
 ### Comparativa de proveedores
 
 | Proveedor | Coste de tokens | Internet | Privacidad | Uso |
 |---|---:|---|---|---|
-| Mock | 0 € | No | Máxima: no hay modelo | Tests |
+| Mock («tutor sin IA») | 0 € | No | Máxima: no hay modelo | Tests y la web publicada hoy (Render) |
 | Ollama | 0 € (tu hardware) | No, una vez descargado el modelo | Alta: la consulta se procesa en tu equipo o servidor | Desarrollo y uso local |
 | Anthropic | De pago | Sí | Depende de la configuración y del contrato con Anthropic | Opcional, futuro |
 | OpenAI | De pago | Sí | Depende de la configuración | Futuro (no implementado) |
@@ -215,9 +284,12 @@ llamada comercial por su cuenta.
 
 ### Modelo simulado
 
-`MockModelProvider` (`A2A_MOCK_MODEL=true`) no llama a nada: devuelve la guía del agente marcada
-como «Modo de desarrollo». Tiene prioridad sobre `A2A_MODEL_PROVIDER`, así que los tests nunca
-necesitan Ollama, Internet ni claves. La Agent Card lo indica.
+`MockModelProvider` (`A2A_MOCK_MODEL=true` o `A2A_MODEL_PROVIDER=mock`) no llama a nada: devuelve
+la guía preparada por el agente con el aviso «Tutor sin IA» (`source: "simulated"`). Desde
+ADR-0036 es un **tutor sin IA útil**, no solo un modo de pruebas: explica con el contenido revisado
+del curso, analiza el código, gradúa pistas y hace comprobaciones. Tiene prioridad sobre
+`A2A_MODEL_PROVIDER`, así que los tests nunca necesitan Ollama, Internet ni claves. La Agent Card
+lo indica («Sin IA»).
 
 ### Errores del proveedor
 
@@ -225,7 +297,8 @@ Cada proveedor traduce sus fallos a las excepciones de `providers/base.py`
 (`ModelTimeoutError`, `ModelUnavailableError`, `ModelConfigurationError`, `ModelRequestError`,
 `ModelRefusedError`, `EmptyModelResponseError`, `MalformedModelResponseError`…), sin la petición
 ni la respuesta dentro. Si el modelo no está disponible, el alumno ve el `unavailable_message`
-del proveedor; si falla otra cosa, un mensaje genérico. El log guarda solo el tipo de error.
+del proveedor; si falla otra cosa, un mensaje genérico, y en ambos casos la guía preparada sin IA.
+El estado lleva `metadata.reason` (ver «Qué ve el alumno»). El log guarda solo el tipo de error.
 
 ### Cambiar de proveedor
 
@@ -253,7 +326,26 @@ Con Ollama estos límites protegen la CPU o GPU del servidor; con Anthropic, ade
 mensajes no válidos no gastan consultas. **Limitaciones:** los contadores se pierden al reiniciar
 y no se comparten entre instancias (hoy hay una). La aplicación no lleva un presupuesto en euros:
 si algún día se usa Anthropic en producción, **es obligatorio configurar un límite de gasto en la
-Anthropic Console**. Cada llamada deja en el log sus tokens (`a2a.model`).
+Anthropic Console**. Cada llamada deja en el log sus tokens (`a2a.model`). Las respuestas
+preparadas (saludo, comprobación, ambigua, fuera de tema) no llaman al modelo ni gastan cupo.
+
+### Observabilidad
+
+Dos líneas JSON por consulta, sin contenido del alumno (ni pregunta, ni código, ni respuesta):
+
+- `a2a.task` (`pld.a2a`): agente, proveedor, modelo, tarea, contexto, usuario seudonimizado,
+  `outcome`, `ms` y, desde ADR-0036, `intent`, `level`, `source` y `reason`.
+- `a2a.model`: proveedor, modelo, `ms`, `input_tokens` y `output_tokens` (si el proveedor los da).
+
+Con los logs de Render descargados:
+
+```bash
+jq -c 'select(.event=="a2a.task") | {intent, source, level, reason, ms}' render.log
+jq -s '[.[] | select(.event=="a2a.task")] | group_by(.intent) | map({intent: .[0].intent, n: length})' render.log
+```
+
+No hay métricas de satisfacción ni de aprendizaje: no hay instrumentación para medirlas y no se
+inventan. Lo más cercano es la evaluación con modelo real (abajo).
 
 ## Agent Card
 
@@ -374,6 +466,7 @@ cd backend && python -m pytest tests/test_a2a.py tests/test_a2a_ollama.py tests/
 cd backend && python -m pytest --cov=app           # todo el backend (100 % de cobertura)
 npm run test:unit                                  # incluye tests/unit/tutor.test.mjs
 npx playwright test e2e/tutor.spec.js              # web → API → A2A → agente → respuesta
+cd backend && python -m pytest tests/test_tutor_eval.py tests/test_tutor_logic.py  # pedagogía
 ```
 
 `tests/test_a2a.py` cubre la Agent Card, la interacción, la sesión (Bearer y cookie con CSRF), los
@@ -391,6 +484,33 @@ los logs y las respuestas no llevan secretos y las piezas por separado.
 - `tests/test_a2a_providers.py` hace lo mismo con el SDK de Anthropic contra una API simulada.
 - `tests/test_a2a_ollama_integration.py` es **opcional**: solo se ejecuta con
   `RUN_OLLAMA_INTEGRATION_TESTS=true` y un Ollama de verdad. CI no lo necesita.
+
+### Evaluación pedagógica
+
+`backend/tests/tutor_eval/casos.json` (versionado) tiene 20 casos en español: concepto para
+principiante y para avanzado, listas vs arrays, `NameError`, `TypeError`, `IndentationError`,
+error lógico, código incompleto, solución de un ejercicio pendiente y de uno superado, petición
+ambigua, inyección de instrucciones, fuera de tema, proveedor caído, cambio de tema, alumno
+confundido, alumno que demuestra comprensión, función inexistente, pistas graduadas y saludo.
+Cada turno tiene tres capas:
+
+- **`sin_ia`**: criterios exactos (tipo, origen, nivel, si espera respuesta, textos que deben
+  estar o no, longitud). `tests/test_tutor_eval.py` los comprueba **en CI** por la ruta real
+  HTTP → A2A → agente con el tutor sin IA.
+- **`modelo`**: lo que debe cumplir cualquier modelo (no afirmar que ha ejecutado código, no dar
+  la solución pendiente…).
+- **`rubrica`**: lo que juzga una persona (claridad, calidad de la pista…).
+
+Las dos últimas las aplica [`scripts/a2a/eval_tutor.py`](../scripts/a2a/eval_tutor.py), **fuera
+de CI**, con un modelo de verdad, y escribe un informe Markdown con cada respuesta, su latencia,
+sus tokens y la rúbrica sin marcar:
+
+```bash
+python scripts/a2a/eval_tutor.py                          # Ollama (gratis, local)
+python scripts/a2a/eval_tutor.py --cases 01 04 16         # solo algunos casos
+python scripts/a2a/eval_tutor.py --provider anthropic     # DE PAGO: clave solo en el entorno
+python scripts/a2a/eval_tutor.py --provider mock          # comprueba el propio script
+```
 
 ### Validación manual de punta a punta
 
@@ -410,7 +530,8 @@ python scripts/a2a/validate_tutor.py --provider anthropic  # DE PAGO: clave solo
 Qué datos van a cada sitio:
 
 - **Backend:** recibe la consulta con la sesión del alumno y lee de la base de datos su nivel y,
-  si elige una lección, sus datos (ver «Minimización de datos»). Las tareas viven en memoria.
+  si elige una lección, sus datos (ver «Minimización de datos»). Las tareas y la memoria de la
+  conversación viven en memoria (ver «Memoria de la conversación»).
 - **Ollama (modo local, predeterminado):** los mensajes del tutor se procesan con el modelo local
   configurado en Ollama y no necesitan enviarse a un proveedor externo de IA. Le llega solo el
   contexto educativo mínimo. En este modo la aplicación no llama a Anthropic ni a OpenAI. No se ha

@@ -16,7 +16,7 @@ from a2a.types import (
 )
 from a2a.utils.constants import PROTOCOL_VERSION_1_0, TransportProtocol
 
-AGENT_VERSION = "0.1.0"
+AGENT_VERSION = "0.2.0"
 BEARER = "bearer"
 
 
@@ -26,7 +26,7 @@ def build_python_tutor_card(agent_url: str, mock_model: bool) -> AgentCard:
         "sin ejecutarlo, propone ejercicios adaptados al nivel y guía sin resolver por el alumno."
     )
     if mock_model:
-        description += " Modo de desarrollo: responde un modelo simulado."
+        description += " Sin IA: responde con reglas y el contenido revisado del curso."
     return AgentCard(
         name="Python Tutor",
         description=description,

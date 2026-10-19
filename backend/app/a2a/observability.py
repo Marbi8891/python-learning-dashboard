@@ -1,6 +1,9 @@
 """Logs de los agentes A2A: una línea JSON por tarea en el logger `pld.a2a`.
 
-Permiten saber qué agente y qué modelo atendieron qué tarea, cuánto tardó y cómo acabó. Nunca
+Permiten saber qué agente y qué modelo atendieron qué tarea, cuánto tardó, cómo acabó, de dónde
+salió la respuesta (`source`: model, simulated o prepared), qué tipo de consulta era (`intent`) y,
+si falló, por qué (`reason`). Con eso se calculan latencia, disponibilidad y tasa de fallos por
+proveedor (ver docs/a2a.md, «Observabilidad»); los tokens van en la línea `a2a.model`. Nunca
 llevan el texto de la pregunta, el prompt, el código, API keys, tokens, cookies ni datos
 personales: el usuario va con seudónimo (como en `security_events`) y los errores solo con el
 nombre de la excepción.
@@ -27,7 +30,9 @@ def log_task(
     outcome: str,
     started: float,
     error: BaseException | None = None,
+    **details: str | bool | None,
 ) -> None:
+    """`details`: datos sin contenido del alumno (intent, source, level, reason…)."""
     entry: dict[str, object] = {
         "event": "a2a.task",
         "agent": agent,
@@ -40,6 +45,7 @@ def log_task(
         "outcome": outcome,
         "ms": round((time.perf_counter() - started) * 1000),
     }
+    entry.update({key: value for key, value in details.items() if value is not None})
     if error is not None:
         entry["error"] = type(error).__name__
     level = logging.ERROR if outcome == "failed" else logging.INFO

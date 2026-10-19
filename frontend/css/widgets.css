@@ -371,3 +371,40 @@
   flex-wrap: wrap;
   gap: var(--space-2);
 }
+
+/* Tutor adaptativo (ADR-0036): origen de cada respuesta, ejemplos ejecutables y ritmo */
+
+.tutor__form .tutor__check {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-2);
+  font-weight: 400;
+}
+
+.tutor__source {
+  margin: var(--space-2) 0 0;
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.tutor__run {
+  align-self: flex-start;
+  min-height: 36px;
+  padding: 6px var(--space-3);
+  font-size: 14px;
+}
+
+.tutor__output {
+  margin: var(--space-2) 0 0;
+  padding: var(--space-2) var(--space-3);
+  border-left: 3px solid var(--color-border);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+a.chip {
+  color: inherit;
+  text-decoration: none;
+}
