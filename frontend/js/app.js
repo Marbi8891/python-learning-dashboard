@@ -69,6 +69,7 @@ const content = {
   lessons: new Map(), // slug -> { ...lesson, module, index }
   order: [], // slugs en el orden de la ruta
   current: null, // lección abierta (o la siguiente recomendada, en el inicio)
+  lastLesson: "", // última lección abierta: el tutor la propone al preguntar
   view: "learn", // "learn" | "home" | "profile" | "pcap" | "daw" | "lesson" …
 };
 
@@ -617,7 +618,7 @@ function navigate({ moveFocus = true } = {}) {
   }
   if (location.hash === TUTOR_ROUTE) {
     showPage("tutor", { moveFocus: false });
-    openTutor(tutorLessons(), { moveFocus });
+    openTutor(tutorLessons(), { moveFocus, lessonSlug: content.lastLesson });
     return;
   }
   if (location.hash === CERTIFICATE_ROUTE || location.hash.startsWith(`${CERTIFICATE_ROUTE}/`)) {
@@ -656,6 +657,7 @@ function navigate({ moveFocus = true } = {}) {
   $("#lesson-view").hidden = false;
   updateSiteNav();
   content.current = slug;
+  content.lastLesson = slug;
   const lesson = currentLesson();
   renderLesson(lesson);
   updateSidebar();

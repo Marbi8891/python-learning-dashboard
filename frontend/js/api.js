@@ -56,7 +56,7 @@ function formatDetail(detail, status) {
 /** Llama a la API. Lanza ApiError con un mensaje listo para mostrar.
     `cookie: false` pide el token en la respuesta en vez de en la cookie (ver account.js).
     `headers` añade cabeceras propias (por ejemplo, A2A-Version para el tutor, ver tutor.js). */
-export async function request(method, path, { json, form, auth = true, cookie = true, headers: extra = {} } = {}) {
+export async function request(method, path, { json, form, auth = true, cookie = true, headers: extra = {}, signal } = {}) {
   if (!apiEnabled) throw new ApiError(0, "No hay servidor configurado");
   const headers = { ...extra };
   let body;
@@ -82,8 +82,9 @@ export async function request(method, path, { json, form, auth = true, cookie = 
 
   let response;
   try {
-    response = await fetch(`${API_URL}${apiPath}`, { method, headers, body, credentials: "include" });
-  } catch {
+    response = await fetch(`${API_URL}${apiPath}`, { method, headers, body, credentials: "include", signal });
+  } catch (error) {
+    if (signal?.aborted) throw error; // cancelada por quien la hizo: no es un fallo de red
     throw new ApiError(0, "No se pudo conectar con el servidor. Inténtalo de nuevo en unos segundos.");
   }
 

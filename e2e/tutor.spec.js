@@ -84,3 +84,91 @@ for (const colorScheme of ["light", "dark"]) {
     expect(summary, summary.join("\n")).toEqual([]);
   });
 }
+
+// Tutor adaptativo (ADR-0036): origen de cada respuesta, comprobación evaluada, fallos y conversación
+test("dice de dónde sale cada respuesta y corrige la pregunta de comprobación", async ({ page }) => {
+  await page.goto("/#/aprender");
+  await register(page);
+  await page.locator("#tutor-nav").click();
+  const view = page.locator("#tutor-view");
+
+  await view.getByLabel("Tu pregunta").fill("¿Qué es una variable?");
+  await view.getByRole("button", { name: "Preguntar" }).click();
+  const first = view.locator(".assistant__msg--bot").first();
+  await expect(first).toContainText("Comprueba que lo has entendido");
+  await expect(first.locator(".tutor__source")).toHaveText(/^Tutor sin IA/); // nunca «generada por IA»
+  await expect(first.getByRole("button", { name: "Ejecutar en tu navegador" }).first()).toBeVisible();
+  await expect(view.getByLabel("Tu pregunta")).toHaveAttribute("placeholder", /Escribe tu respuesta/);
+
+  await view.getByLabel("Tu pregunta").fill("3");
+  await view.getByRole("button", { name: "Preguntar" }).click();
+  const second = view.locator(".assistant__msg--bot").nth(1);
+  await expect(second).toContainText("¡Correcto!");
+  await expect(second.locator(".tutor__source")).toHaveText("Respuesta preparada por el tutor, sin IA.");
+});
+
+test("si el modelo falla explica el motivo y deja reintentar a mano", async ({ page }) => {
+  await page.goto("/#/aprender");
+  await register(page);
+  let calls = 0;
+  await page.route("**/a2a/python-tutor", async (route) => {
+    calls += 1;
+    if (calls > 1) return route.continue();
+    const message = { parts: [{ text: "El tutor local no está disponible ahora mismo." }], metadata: { reason: "provider_unavailable" } };
+    return route.fulfill({ json: { jsonrpc: "2.0", id: 1, result: { task: { id: "t", contextId: "c", status: { state: "TASK_STATE_FAILED", message } } } } });
+  });
+  await page.locator("#tutor-nav").click();
+  const view = page.locator("#tutor-view");
+  await view.getByLabel("Tu pregunta").fill("¿Qué es una lista?");
+  await view.getByRole("button", { name: "Preguntar" }).click();
+  await expect(view.locator("#tutor-status")).toHaveText("El modelo de IA no está disponible ahora mismo");
+  await view.getByRole("button", { name: "Reintentar" }).click();
+  await expect(view.locator("#tutor-status")).toHaveText("Respondida");
+  await expect(view.locator(".assistant__msg--user")).toHaveCount(1); // reintentar no repite la pregunta
+  await expect(view.getByRole("button", { name: "Reintentar" })).toBeHidden();
+});
+
+test("una respuesta que llega tarde no aparece en la conversación nueva", async ({ page }) => {
+  await page.goto("/#/aprender");
+  await register(page);
+  let release;
+  const held = new Promise((resolve) => {
+    release = resolve;
+  });
+  await page.route("**/a2a/python-tutor", async (route) => {
+    await held;
+    await route.continue();
+  });
+  await page.locator("#tutor-nav").click();
+  const view = page.locator("#tutor-view");
+  await view.getByLabel("Tu pregunta").fill("¿Qué es una tupla?");
+  await view.getByRole("button", { name: "Preguntar" }).click();
+  await expect(view.getByRole("button", { name: "Cancelar" })).toBeVisible();
+  await view.getByRole("button", { name: "Nueva conversación" }).click();
+  release();
+  await expect(view.locator("#tutor-status")).toHaveText("Conversación nueva.");
+  await page.waitForTimeout(500);
+  await expect(view.locator(".assistant__msg")).toHaveCount(0);
+  await expect(view.getByRole("button", { name: "Preguntar" })).toBeEnabled();
+});
+
+test("cancelar deja de esperar sin romper la vista", async ({ page }) => {
+  await page.goto("/#/aprender");
+  await register(page);
+  await page.route("**/a2a/python-tutor", () => {}); // nunca responde
+  await page.locator("#tutor-nav").click();
+  const view = page.locator("#tutor-view");
+  await view.getByLabel("Tu pregunta").fill("¿Qué es un bucle?");
+  await view.getByRole("button", { name: "Preguntar" }).click();
+  await view.getByRole("button", { name: "Cancelar" }).click();
+  await expect(view.locator("#tutor-status")).toHaveText(/Has cancelado la espera/);
+  await expect(view.getByRole("button", { name: "Preguntar" })).toBeEnabled();
+  await expect(view.getByRole("button", { name: "Cancelar" })).toBeHidden();
+});
+
+test("desde una lección, el tutor propone esa lección", async ({ page }) => {
+  await page.goto("/#/leccion/bucles");
+  await register(page);
+  await page.locator("#tutor-nav").click();
+  await expect(page.locator("#tutor-view").getByLabel("Lección")).toHaveValue("bucles");
+});

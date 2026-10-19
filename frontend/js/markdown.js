@@ -39,11 +39,18 @@ function renderTable(rows) {
  * Párrafos (separados por una línea en blanco), listas con "- " o "1. ",
  * bloques de código entre ``` y tablas con | (cabecera, separador |---| y filas).
  */
+function codeBlock(lines, lang) {
+  // El lenguaje se marca para que la vista sepa qué es código Python (y no una salida)
+  const attribute = /^[a-z0-9]{1,20}$/.test(lang) ? ` data-lang="${lang}"` : "";
+  return `<pre class="md-code" tabindex="0"${attribute}><code>${escapeHtml(lines.join("\n"))}</code></pre>`;
+}
+
 export function renderMarkdown(markdown = "") {
   const html = [];
   let paragraph = [];
   let list = null;
   let code = null; // líneas del bloque de código abierto
+  let lang = ""; // lenguaje del bloque (```python), solo letras y números
   let table = null; // filas de la tabla abierta
 
   const flushParagraph = () => {
@@ -65,7 +72,7 @@ export function renderMarkdown(markdown = "") {
   for (const line of String(markdown).split("\n")) {
     if (code) {
       if (line.trim().startsWith("```")) {
-        html.push(`<pre class="md-code" tabindex="0"><code>${escapeHtml(code.join("\n"))}</code></pre>`);
+        html.push(codeBlock(code, lang));
         code = null;
       } else {
         code.push(line);
@@ -77,6 +84,7 @@ export function renderMarkdown(markdown = "") {
       flushList();
       flushTable();
       code = [];
+      lang = line.trim().slice(3).trim().toLowerCase();
       continue;
     }
     if (line.trim().startsWith("|")) {
@@ -102,7 +110,7 @@ export function renderMarkdown(markdown = "") {
       paragraph.push(line.trim());
     }
   }
-  if (code) html.push(`<pre class="md-code" tabindex="0"><code>${escapeHtml(code.join("\n"))}</code></pre>`);
+  if (code) html.push(codeBlock(code, lang));
   flushParagraph();
   flushList();
   flushTable();
