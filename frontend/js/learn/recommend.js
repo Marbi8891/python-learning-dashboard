@@ -170,3 +170,47 @@ export function similarExercise(index, exercise, errorId, exclude = []) {
 
 /** Ejercicios que trabajan un error concreto (para «practicar este error»). */
 export const exercisesForError = (index, errorId) => index.data.exercises.filter((e) => errorsTested(e).includes(errorId));
+
+/** Duración orientativa de cada actividad del plan diario, en minutos. */
+export const ACTION_MINUTES = Object.freeze({
+  review: 10,
+  errors: 15,
+  practice: 15,
+  learn: 15,
+  reinforce: 15,
+});
+
+/**
+ * Ajusta el plan al tiempo disponible sin cambiar la prioridad pedagógica.
+ * Las tareas que no caben se devuelven como diferidas, no se eliminan del plan original.
+ * El presupuesto se limita a 15–180 minutos para evitar valores accidentales.
+ */
+export function fitPlanToBudget(plan, availableMinutes = 45) {
+  const budget = Math.min(180, Math.max(15, Math.round(Number(availableMinutes) || 45)));
+  let remaining = budget;
+  const items = [];
+  const deferred = [];
+  let deferRemaining = false;
+
+  for (const item of plan) {
+    const minutes = ACTION_MINUTES[item.type] ?? 15;
+    if (!deferRemaining && minutes <= remaining) {
+      items.push({ ...item, minutes });
+      remaining -= minutes;
+    } else {
+      // El plan está ordenado por prioridad: no saltar una tarea para meter otra posterior.
+      deferRemaining = true;
+      deferred.push({ ...item, minutes });
+    }
+  }
+
+  return {
+    items,
+    deferred,
+    availableMinutes: budget,
+    plannedMinutes: budget - remaining,
+    remainingMinutes: remaining,
+    deferredCount: deferred.length,
+  };
+}
+

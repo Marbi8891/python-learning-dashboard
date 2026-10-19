@@ -12,7 +12,7 @@
 import { learning, loadLearningContent, onLearningChange, saveLearning } from "./learn-store.js";
 import { onWelcomeClick, onWelcomeKeydown, renderWelcome } from "./welcome.js";
 import { activeErrors, allStats, areaSummary, daysBetween, lastActivity, markRead } from "./mastery.js";
-import { missingPrerequisites, selectExercises, todayPlan } from "./recommend.js";
+import { fitPlanToBudget, missingPrerequisites, selectExercises, todayPlan } from "./recommend.js";
 import { activityExercises, EXAM_ACTIVITIES, renderDawPrep } from "./daw-prep.js";
 import { buildDiagnostic, buildExam, examMinutes } from "./exam.js";
 import {
@@ -43,12 +43,36 @@ function ago(iso, now = new Date()) {
 
 const formatDay = (iso) => new Date(iso).toLocaleDateString("es-ES", { day: "numeric", month: "short" });
 
+const DAILY_BUDGET_KEY = "pld:daily-study-minutes";
+const DAILY_BUDGET_OPTIONS = [15, 30, 45, 60];
+
+function dailyBudget() {
+  try {
+    const value = Number(localStorage.getItem(DAILY_BUDGET_KEY));
+    return DAILY_BUDGET_OPTIONS.includes(value) ? value : 45;
+  } catch {
+    return 45;
+  }
+}
+
+function saveDailyBudget(minutes) {
+  if (!DAILY_BUDGET_OPTIONS.includes(Number(minutes))) return;
+  try {
+    localStorage.setItem(DAILY_BUDGET_KEY, String(minutes));
+  } catch {
+    // La preferencia es opcional; el plan sigue funcionando sin almacenamiento.
+  }
+}
+
 /* ---------- Aprender: ¿qué estudio ahora? ---------- */
 
 function renderToday() {
   const now = new Date();
   const stats = allStats(index, learning, now);
-  const plan = todayPlan(index, learning, now, stats);
+  const fullPlan = todayPlan(index, learning, now, stats);
+  const budget = dailyBudget();
+  const budgeted = fitPlanToBudget(fullPlan, budget);
+  const plan = budgeted.items;
   const all = [...stats.values()];
   const mastered = all.filter((s) => s.status === "dominado").length;
   const due = all.filter((s) => s.due);
@@ -57,6 +81,15 @@ function renderToday() {
   const [first, ...rest] = plan;
   const startButton = (item, label, primary) =>
     `<button class="btn ${primary ? "btn--primary btn--lg" : "btn--ghost"}" type="button" data-learn="plan" data-type="${item.type}" data-concept="${escapeHtml(item.concept)}"${item.errors ? ` data-errors="${escapeHtml(item.errors.join(","))}"` : ""}>${label}<span class="visually-hidden">: ${ACTION[item.type]} ${escapeHtml(title(item.concept))}</span></button>`;
+  const budgetControl = `
+    <section class="lx-panel lx-budget" aria-labelledby="lx-budget-title">
+      <h2 class="lx-panel__title" id="lx-budget-title">Tiempo para estudiar hoy</h2>
+      <div class="lx-actions" role="group" aria-label="Tiempo disponible">
+        ${DAILY_BUDGET_OPTIONS.map((minutes) => `<button class="btn ${minutes === budget ? "btn--primary" : "btn--ghost"}" type="button" data-learn="duration" data-minutes="${minutes}" aria-pressed="${minutes === budget}">${minutes} min</button>`).join("")}
+      </div>
+      <p class="lx-muted">Plan estimado: ${budgeted.plannedMinutes} de ${budgeted.availableMinutes} minutos.
+      ${budgeted.deferredCount ? `${budgeted.deferredCount} ${budgeted.deferredCount === 1 ? "tarea queda" : "tareas quedan"} para otra sesión.` : "Todas las tareas recomendadas caben en el tiempo elegido."}</p>
+    </section>`;
   const nextStep = first
     ? `<section class="lx-next lx-plan__item" data-type="${first.type}" aria-labelledby="lx-next-title">
         <p class="lx-next__label">Tu siguiente paso · ${ACTION[first.type]}</p>
@@ -93,6 +126,7 @@ function renderToday() {
       <h1 class="lx-title" id="learn-title" tabindex="-1">¿Qué estudio ahora?</h1>
       <p class="lx-lead">Empieza por el primer paso. El plan se ajusta solo a lo que ya dominas y a tus errores. <a href="#/bienvenida">¿Cómo funciona?</a></p>
     </header>
+    ${budgetControl}
     ${nextStep}
     ${
       learning.log.length === 0
@@ -455,6 +489,10 @@ function onClick(event) {
   if (onWelcomeClick(target)) return;
   const { concept } = target.dataset;
   switch (target.dataset.learn) {
+    case "duration":
+      saveDailyBudget(target.dataset.minutes);
+      render(location.hash);
+      break;
     case "plan":
       startPlanItem(target.dataset.type, concept, { errors: target.dataset.errors?.split(",") ?? [] });
       break;

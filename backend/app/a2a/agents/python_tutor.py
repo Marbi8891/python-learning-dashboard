@@ -81,6 +81,21 @@ _ASKS_EXERCISE = re.compile(
     r"\b(prop[oó]n\w*|quiero practicar|dame (otro|un) ejercicio|otro ejercicio)\b", re.IGNORECASE
 )
 
+LEVEL_STRATEGY: dict[Level, str] = {
+    "inicial": (
+        "Da un solo paso cada vez, define los términos y evita introducir conceptos nuevos "
+        "sin explicarlos."
+    ),
+    "intermedio": (
+        "Relaciona el error con el concepto, pide al alumno que prediga el resultado y después "
+        "compruébalo."
+    ),
+    "avanzado": (
+        "Prioriza razonamiento, casos límite y alternativas; evita explicar sintaxis básica que "
+        "ya debería conocer."
+    ),
+}
+
 EXERCISES: dict[Level, str] = {
     "inicial": "Pide un número con `input()` y muestra si es par o impar.",
     "intermedio": "Escribe una función `contar_vocales(texto)` que devuelva cuántas vocales hay, "
@@ -216,6 +231,7 @@ class PythonTutorAgent:
                 "Para entender un concepto, escribe el ejemplo más pequeño posible en la consola "
                 "y cambia una cosa cada vez: verás qué hace cada parte."
             )
+        parts.append(f"**Cómo te voy a guiar:** {LEVEL_STRATEGY[level]}")
         parts.append("Inténtalo y cuéntame qué obtienes.")
         return "\n\n".join(parts)
 
