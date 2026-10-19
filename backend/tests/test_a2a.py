@@ -537,3 +537,17 @@ def test_task_store_keeps_only_the_latest_tasks_per_user():
     ana_tasks, luis_task = asyncio.run(scenario())
     assert [task and task.id for task in ana_tasks] == [None, "t2", "t3"]
     assert luis_task.id == "t1"
+
+
+@pytest.mark.parametrize(
+    ("level", "expected"),
+    [
+        ("inicial", "define los términos"),
+        ("intermedio", "prediga el resultado"),
+        ("avanzado", "casos límite"),
+    ],
+)
+def test_tutor_adapts_scaffolding_to_explicit_level(client, auth_headers, level, expected):
+    result = send(client, auth_headers, "Explícame este concepto", {"level": level})
+    assert state(result) == "TASK_STATE_COMPLETED"
+    assert expected in answer_text(result)
