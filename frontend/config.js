@@ -10,6 +10,7 @@ window.PLD_CONFIG = Object.assign(
   {
     apiUrl: ["localhost", "127.0.0.1"].includes(location.hostname) ? "" : "https://pld-api.onrender.com",
     contactEmail: "mrabehfathiprofesional@gmail.com",
+    googleClientId: "",
     goatcounter: "",
     serviceWorker: !["localhost", "127.0.0.1"].includes(location.hostname),
   },
