@@ -3,6 +3,7 @@
 from types import SimpleNamespace
 
 from sqlalchemy import select
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app.models import User
@@ -124,3 +125,32 @@ def test_google_login_unconfigured(client, monkeypatch):
         json={"credential": "x" * 40, "accept_privacy": True},
     )
     assert response.status_code == 503
+
+def test_google_login_handles_concurrent_account_creation(client, monkeypatch):
+    from sqlalchemy.orm import Session as OrmSession
+
+    configure_google(
+        monkeypatch,
+        {
+            "email": "race@example.com",
+            "email_verified": True,
+            "name": "Carrera",
+            "sub": "sub-race",
+        },
+    )
+    original_commit = OrmSession.commit
+    raised = False
+
+    def conflict_once(session):
+        nonlocal raised
+        if not raised:
+            raised = True
+            raise IntegrityError("insert", {}, RuntimeError("duplicate email"))
+        return original_commit(session)
+
+    monkeypatch.setattr(OrmSession, "commit", conflict_once)
+    response = client.post(
+        "/api/auth/google",
+        json={"credential": "x" * 40, "accept_privacy": True},
+    )
+    assert response.status_code == 409
