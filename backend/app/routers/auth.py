@@ -100,7 +100,8 @@ def login_google(
     elif data.accept_privacy and user.privacy_accepted_at is None:
         user.privacy_accepted_at = datetime.now(UTC)
         db.commit()
-    activity.log(db, user.id, "login", request)
+    # Tipo propio: el panel del alumno muestra con qué método entró (ADR-0035)
+    activity.log(db, user.id, "login_google", request)
     db.commit()
     record(Event.LOGIN_OK, request, user=user.id)
     return issue_session(request, response, user.id, user.token_version)

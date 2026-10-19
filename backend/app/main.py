@@ -16,7 +16,16 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.config import get_settings
 from app.local_site import mount_frontend
 from app.mailer import email_enabled
-from app.routers import account, attempts, auth, course_state, lessons, pcap, progress
+from app.routers import (
+    account,
+    attempts,
+    auth,
+    course_state,
+    dashboard,
+    lessons,
+    pcap,
+    progress,
+)
 from app.security import get_jwt_secret
 from app.security_events import Event, record
 from app.session_cookie import MODE_HEADER
@@ -163,6 +172,7 @@ for router in (
     attempts.router,
     pcap.router,
     course_state.router,
+    dashboard.router,
 ):
     app.include_router(router, prefix=API_V1_PREFIX)
 

@@ -60,3 +60,12 @@ def test_learning_progress_is_saved_and_exported(client, auth_headers):
     assert client.get("/api/course-state/learn", headers=auth_headers).json()["data"] == learn
     exported = client.get("/api/users/me/export", headers=auth_headers).json()
     assert exported["courses"]["learn"] == learn
+
+
+def test_game_state_is_saved_per_user(client, auth_headers):
+    """XP, racha y logros de la web (ADR-0035): mismo mecanismo, con el id «game»."""
+    game = {"days": ["2026-10-18", "2026-10-19"], "badges": ["hola-mundo"], "quiz": {"tipos": 3}}
+    saved = client.put("/api/course-state/game", json={"data": game}, headers=auth_headers)
+    assert saved.status_code == 200
+    assert client.get("/api/course-state/game", headers=auth_headers).json()["data"] == game
+    assert client.get("/api/course-state/game").status_code == 401
