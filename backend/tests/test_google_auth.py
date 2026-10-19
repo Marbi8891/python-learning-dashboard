@@ -90,7 +90,6 @@ def test_google_login_rejects_unverified_email(client, monkeypatch):
     assert response.status_code == 401
 
 
-
 def test_google_login_requires_privacy_for_new_account(client, monkeypatch):
     configure_google(
         monkeypatch,
@@ -129,7 +128,6 @@ def test_google_login_unconfigured(client, monkeypatch):
         json={"credential": "x" * 40, "accept_privacy": True},
     )
     assert response.status_code == 503
-
 
 
 def test_google_login_handles_concurrent_account_creation(client, monkeypatch):
