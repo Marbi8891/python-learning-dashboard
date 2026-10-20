@@ -130,17 +130,15 @@ class PasswordResetConfirm(BaseModel):
 
 
 class DeleteConfirm(BaseModel):
-    """Confirmación del borrado: la contraseña o, en las cuentas creadas con Google (que no tienen
-    una contraseña conocida), un ID token de Google del mismo email emitido hace menos de 5 min."""
+    """Confirmación del borrado: la contraseña o, en cuentas de Google, un ID token reciente."""
 
     password: str | None = Field(default=None, max_length=128)
     google_credential: str | None = Field(default=None, min_length=20, max_length=8192)
 
     @model_validator(mode="after")
-    def exactly_one_method(self) -> "DeleteConfirm":
-        # Con los dos, una contraseña incorrecta quedaría oculta tras la credencial de Google
+    def one_confirmation(self) -> "DeleteConfirm":
         if (self.password is None) == (self.google_credential is None):
-            raise ValueError("Confirma el borrado con tu contraseña o con Google (solo uno)")
+            raise ValueError("Confirma con tu contraseña o con Google")
         return self
 
 

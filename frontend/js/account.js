@@ -2,6 +2,7 @@
 
 import { ApiError, apiEnabled, request, serverInfo } from "./api.js";
 import { escapeHtml } from "./markdown.js";
+import { renderGoogleButton } from "./google-identity.js";
 import { flushCourseSync } from "./course-store.js";
 import { flushGameSync } from "./game.js";
 import { flushPcapSync } from "./pcap-sync.js";
@@ -19,12 +20,12 @@ function showView(name) {
   for (const view of dialog().querySelectorAll("[data-view]")) {
     view.hidden = view.dataset.view !== name;
   }
+  // Con la sesión abierta no hay botón de entrar con Google: el de la pantalla de borrado es el único
+  const withGoogle = googleAvailable() && !state.user;
   const googleLogin = dialog().querySelector("[data-google-login]");
-  if (googleLogin) {
-    googleLogin.hidden = name !== "login" || !googleEnabled || Boolean(state.user);
-    if (!googleLogin.hidden) showGoogleButton($("#google-signin"), "login");
-  }
+  if (googleLogin) googleLogin.hidden = name !== "login" || !withGoogle;
   setMessage("");
+  if (name === "login" && withGoogle) showGoogleButton($("#google-signin"), loginWithGoogle);
   const heading = dialog().querySelector(`[data-view="${name}"] h2`);
   $("#account-title").textContent = heading?.dataset.title ?? "Tu cuenta";
   dialog().querySelector(`[data-view="${name}"] input, [data-view="${name}"] button`)?.focus();
@@ -131,109 +132,39 @@ async function loginWithGoogle(credential) {
   showToast(`¡Hola, ${state.user.display_name}! Tu progreso está sincronizado.`);
 }
 
-const GOOGLE_IDENTITY_URL = "https://accounts.google.com/gsi/client";
-// Hay botón de Google si config.js tiene el Client ID y el servidor no dice que le falta el suyo
-let googleEnabled = Boolean(window.PLD_CONFIG?.googleClientId);
-let googleIdentity = null;
-// Qué botón de Google se ha pulsado: la credencial solo hace lo que ese botón dice
-let googleIntent = null;
-let googleBusy = false;
+// El servidor dice en /api/health si tiene GOOGLE_CLIENT_ID; sin él, el botón solo daría un error
+let serverHasGoogle = true;
+const googleAvailable = () => Boolean(window.PLD_CONFIG?.googleClientId) && serverHasGoogle;
 
-/** Google Identity se descarga solo al abrir el login o el borrado de la cuenta: quien solo
-    visita la web no envía su IP a Google ni recibe sus cookies. */
-function loadGoogleIdentity() {
-  googleIdentity ??= new Promise((resolve, reject) => {
-    if (window.google?.accounts?.id) {
-      resolve(window.google.accounts.id);
+async function checkServerGoogle() {
+  const info = await serverInfo;
+  if (info?.google !== false) return;
+  serverHasGoogle = false;
+  dialog().querySelector("[data-google-login]").hidden = true;
+  dialog().querySelector("[data-google-delete]").hidden = true;
+}
+
+/** El script de Google se descarga aquí, al mostrar un botón de Google, no al abrir la web. */
+function showGoogleButton(target, action) {
+  renderGoogleButton(target, async (credential) => {
+    if (!credential) {
+      setMessage("Google no ha devuelto una credencial válida.");
       return;
     }
-    const script = Object.assign(document.createElement("script"), { src: GOOGLE_IDENTITY_URL, async: true });
-    script.addEventListener("load", () => {
-      if (window.google?.accounts?.id) resolve(window.google.accounts.id);
-      else reject(new Error("Google no está disponible ahora mismo."));
-    });
-    script.addEventListener("error", () => {
-      script.remove();
-      reject(new Error("No se ha podido conectar con Google. Revisa tu conexión o usa tu email."));
-    });
-    document.head.append(script);
-  }).catch((error) => {
-    googleIdentity = null; // se puede reintentar al volver a abrir el diálogo
-    throw error;
-  }).then((id) => {
-    id.initialize({
-      client_id: window.PLD_CONFIG.googleClientId,
-      // Google admite un solo callback: la acción la decide el botón pulsado (click_listener), y
-      // solo si la pantalla sigue siendo la de ese botón. Nunca se borra desde el botón de entrar.
-      callback: async ({ credential }) => {
-        const intent = googleIntent;
-        googleIntent = null;
-        if (googleBusy || !intent) return;
-        if (!credential) {
-          setMessage("Google no ha devuelto una credencial válida.");
-          return;
-        }
-        const deleting = intent === "delete" && state.user && $(".account__danger").open;
-        const login = intent === "login" && !state.user;
-        if (!deleting && !login) return;
-        googleBusy = true;
-        try {
-          if (deleting) await deleteWithGoogle(credential);
-          else await loginWithGoogle(credential);
-        } catch (error) {
-          setMessage(error.message);
-        } finally {
-          googleBusy = false;
-        }
-      },
-      auto_select: false,
-      cancel_on_tap_outside: true,
-    });
-    return id;
-  });
-  return googleIdentity;
+    try {
+      await action(credential);
+    } catch (error) {
+      setMessage(error.message);
+    }
+  }).catch((error) => setMessage(error.message));
 }
 
-async function showGoogleButton(target, intent) {
-  if (!target || target.dataset.rendered === "true") return;
-  let id;
-  try {
-    id = await loadGoogleIdentity();
-  } catch (error) {
-    setMessage(error.message);
-    return;
-  }
-  if (target.dataset.rendered === "true") return;
-  id.renderButton(target, {
-    type: "standard", theme: "outline", size: "large",
-    text: "continue_with", shape: "rectangular", width: 280,
-    logo_alignment: "left",
-    click_listener: () => {
-      googleIntent = intent;
-    },
-  });
-  target.dataset.rendered = "true";
-}
-
+/** Cuentas creadas con Google: su contraseña es aleatoria, así que el borrado se confirma volviendo
+    a elegir la misma cuenta de Google. */
 async function deleteWithGoogle(credential) {
+  if (!state.user || !dialog().querySelector(".account__danger").open) return; // solo desde su botón
   await request("POST", "/api/users/me/delete", { json: { google_credential: credential } });
   await leave("Tu cuenta y todos sus datos se han borrado.");
-}
-
-/** Si el servidor dice que no tiene GOOGLE_CLIENT_ID, el botón solo daría un error: se oculta. */
-async function initGoogleSignIn() {
-  if (!googleEnabled) return;
-  const danger = $(".account__danger");
-  danger.addEventListener("toggle", () => {
-    danger.querySelector("[data-google-delete]").hidden = !googleEnabled;
-    if (danger.open && googleEnabled) showGoogleButton($("#google-delete"), "delete");
-  });
-  const info = await serverInfo;
-  if (info && info.google === false) {
-    googleEnabled = false;
-    dialog().querySelector("[data-google-login]").hidden = true;
-    danger.querySelector("[data-google-delete]").hidden = true;
-  }
 }
 
 function downloadJson(data, filename) {
@@ -289,7 +220,7 @@ export function initAccount({ toast }) {
   showToast = toast;
   renderAccountButton();
   setupPasswordRecovery();
-  initGoogleSignIn();
+  checkServerGoogle();
   subscribe((change) => {
     if (change.type === "profile") renderAccountButton(); // nombre cambiado en «Mi cuenta»
     if (change.type !== "user") return;
@@ -370,6 +301,13 @@ export function initAccount({ toast }) {
   });
 
   $("#logout-button").addEventListener("click", () => logout({ everywhere: $("#logout-everywhere").checked }));
+
+  const danger = dialog().querySelector(".account__danger");
+  const googleDelete = dialog().querySelector("[data-google-delete]");
+  danger.addEventListener("toggle", () => {
+    googleDelete.hidden = !googleAvailable();
+    if (danger.open && !googleDelete.hidden) showGoogleButton($("#google-delete"), deleteWithGoogle);
+  });
 
   $("#delete-form").addEventListener("submit", (event) => {
     event.preventDefault();

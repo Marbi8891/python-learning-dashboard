@@ -133,17 +133,17 @@ La siguiente revisión incremental parte de `git diff eb187a9..HEAD`.
 
 ### PLD-SEC-007 · Las cuentas creadas con Google no se podían borrar
 - **Severidad**: Media (derecho de supresión, art. 17 RGPD, sin vía en la web).
-- **Estado**: confirmado → **corregido** en el PR #55.
+- **Estado**: confirmado → **corregido** (PR #58, ya en `main`, y endurecido en el PR #55).
 - **Ubicación**: `backend/app/routers/auth.py` (`login_google` crea la cuenta con una contraseña
   aleatoria) y `backend/app/routers/account.py` (`delete_my_account` solo aceptaba contraseña).
 - **Corrección**: `DeleteConfirm` exige **exactamente uno** de `password` o `google_credential` (422
   si faltan los dos o llegan los dos, para que una contraseña incorrecta no quede oculta tras Google).
   La credencial es un ID token nuevo validado con `google.oauth2.id_token` (firma, audiencia,
-  caducidad, `email_verified`), emitido hace **menos de 5 minutos** (`iat`, para que no valga el
-  token del login) y con el email de la sesión. Sigue haciendo falta la sesión. En la web, la
-  credencial solo borra si viene del botón de «Eliminar mi cuenta» (`click_listener`) con esa sección
-  abierta; el botón de entrar se oculta con sesión abierta y nunca borra. Los dos últimos puntos los
-  encontró la revisión independiente de `security-auditor` (20/10/2026).
+  caducidad, `email_verified`), emitido hace **menos de 10 minutos** (`iat`; si no, 403) y con el
+  email de la sesión. Sigue haciendo falta la sesión. En la web, la credencial solo borra con la
+  sección «Eliminar mi cuenta» abierta (`deleteWithGoogle` lo comprueba aunque el último botón de
+  Google mostrado fuera el de borrar); el botón de entrar se oculta con sesión abierta y nunca borra.
+  Los dos últimos puntos los encontró la revisión independiente de `security-auditor` (20/10/2026).
 - **Prueba de regresión**: `backend/tests/test_google_auth.py` (borrado con Google, otra cuenta,
   credencial no válida, sin método, los dos métodos, `null`, sin sesión, Google sin configurar,
   credencial antigua o sin fecha) y `e2e/account.spec.js` (borrado con Google simulado, rechazo de

@@ -3,7 +3,6 @@
 import time
 from types import SimpleNamespace
 
-import pytest
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
@@ -15,8 +14,6 @@ from tests.conftest import PASSWORD, login, register
 
 
 def configure_google(monkeypatch, claims):
-    # Google siempre incluye iat (emisión); por defecto, un token recién emitido
-    claims = {"iat": int(time.time()), **claims} if claims else claims
     monkeypatch.setattr(
         auth,
         "get_settings",
@@ -163,116 +160,100 @@ def test_google_login_handles_concurrent_account_creation(client, monkeypatch):
     assert response.status_code == 409
 
 
-def _google_session(client, monkeypatch, email="google@example.com"):
-    configure_google(monkeypatch, {"email": email, "email_verified": True, "sub": "s"})
-    token = client.post(
+# ---------- Borrar una cuenta de Google (su contraseña es aleatoria) ----------
+
+
+def google_account(client, monkeypatch, email="google@example.com"):
+    """Crea la cuenta entrando con Google y devuelve las cabeceras de su sesión."""
+    claims = {"email": email, "email_verified": True, "name": "G", "sub": "s"}
+    configure_google(monkeypatch, claims)
+    response = client.post(
         "/api/auth/google", json={"credential": "x" * 40, "accept_privacy": True}
-    ).json()["access_token"]
-    return {"Authorization": f"Bearer {token}"}
+    )
+    return {"Authorization": f"Bearer {response.json()['access_token']}"}
+
+
+def fresh_claims(email="google@example.com", age_seconds=0):
+    issued = int(time.time()) - age_seconds
+    return {"email": email, "email_verified": True, "sub": "s", "iat": issued}
+
+
+def delete_with_google(client, headers):
+    return client.post(
+        "/api/users/me/delete", json={"google_credential": "y" * 40}, headers=headers
+    )
 
 
 def test_google_account_can_be_deleted_by_confirming_with_google(client, monkeypatch):
-    # La cuenta se crea con una contraseña aleatoria: sin esta vía no se podría borrar (art. 17)
-    headers = _google_session(client, monkeypatch)
-    client.put("/api/progress/variables", headers=headers)
-    response = client.post(
-        "/api/users/me/delete", json={"google_credential": "y" * 40}, headers=headers
-    )
-    assert response.status_code == 204
+    headers = google_account(client, monkeypatch)
+    configure_google(monkeypatch, fresh_claims(email="GOOGLE@example.com"))
+    assert delete_with_google(client, headers).status_code == 204
     assert client.get("/api/users/me", headers=headers).status_code == 401
     with Session(client.engine) as db:
-        assert db.scalar(select(User).where(User.email == "google@example.com")) is None
+        assert db.scalar(select(User)) is None
 
 
-def test_delete_with_another_google_account_is_refused(client, monkeypatch):
-    headers = _google_session(client, monkeypatch)
-    configure_google(
-        monkeypatch, {"email": "otra@example.com", "email_verified": True, "sub": "s2"}
-    )
-    response = client.post(
-        "/api/users/me/delete", json={"google_credential": "y" * 40}, headers=headers
-    )
+def test_google_confirmation_must_be_from_the_same_account(client, monkeypatch):
+    headers = google_account(client, monkeypatch)
+    configure_google(monkeypatch, fresh_claims(email="otra@example.com"))
+    response = delete_with_google(client, headers)
     assert response.status_code == 403
     assert client.get("/api/users/me", headers=headers).status_code == 200
 
 
-def test_delete_with_invalid_google_credential_is_refused(client, monkeypatch):
-    headers = _google_session(client, monkeypatch)
+def test_google_confirmation_must_be_recent(client, monkeypatch):
+    headers = google_account(client, monkeypatch)
+    configure_google(monkeypatch, fresh_claims(age_seconds=11 * 60))
+    assert delete_with_google(client, headers).status_code == 403
+    configure_google(monkeypatch, {"email": "google@example.com", "email_verified": True})
+    assert delete_with_google(client, headers).status_code == 403  # sin iat
+    assert client.get("/api/users/me", headers=headers).status_code == 200
 
-    def reject(token, request, client_id):
+
+def test_google_confirmation_rejects_an_invalid_token(client, monkeypatch):
+    headers = google_account(client, monkeypatch)
+
+    def invalid(token, request, client_id):
         raise ValueError("firma no válida")
 
-    monkeypatch.setattr(auth, "verify_oauth2_token", reject)
-    response = client.post(
-        "/api/users/me/delete", json={"google_credential": "y" * 40}, headers=headers
-    )
-    assert response.status_code == 401
+    monkeypatch.setattr(auth, "verify_oauth2_token", invalid)
+    assert delete_with_google(client, headers).status_code == 401
     assert client.get("/api/users/me", headers=headers).status_code == 200
 
 
-def test_delete_without_password_nor_google_is_refused(client, auth_headers):
-    response = client.post("/api/users/me/delete", json={}, headers=auth_headers)
-    assert response.status_code == 422
-    assert client.get("/api/users/me", headers=auth_headers).status_code == 200
+def test_google_confirmation_needs_google_configured(client, monkeypatch):
+    headers = google_account(client, monkeypatch)
+    monkeypatch.setattr(auth, "get_settings", lambda: SimpleNamespace(google_client_id=None))
+    assert delete_with_google(client, headers).status_code == 503
 
 
-def test_delete_with_both_methods_is_refused_as_ambiguous(client, monkeypatch):
-    # Con contraseña y Google a la vez no se elige uno en silencio: una contraseña incorrecta
-    # no puede quedar oculta tras una credencial de Google válida
-    assert register(client, email="ana@example.com", name="Ana").status_code == 201
-    configure_google(monkeypatch, {"email": "ana@example.com", "email_verified": True, "sub": "s"})
-    token = client.post(
-        "/api/auth/google", json={"credential": "x" * 40, "accept_privacy": True}
-    ).json()["access_token"]
-    headers = {"Authorization": f"Bearer {token}"}
-    response = client.post(
-        "/api/users/me/delete",
-        json={"password": "incorrecta", "google_credential": "y" * 40},
-        headers=headers,
-    )
-    assert response.status_code == 422
-    assert "solo uno" in str(response.json()["detail"])
-    assert client.get("/api/users/me", headers=headers).status_code == 200
+def test_delete_needs_exactly_one_confirmation(client, auth_headers):
+    for body in ({}, {"password": "x", "google_credential": "y" * 40}):
+        response = client.post("/api/users/me/delete", json=body, headers=auth_headers)
+        assert response.status_code == 422
 
 
 def test_delete_with_null_fields_is_refused(client, auth_headers):
-    response = client.post(
-        "/api/users/me/delete",
-        json={"password": None, "google_credential": None},
-        headers=auth_headers,
-    )
+    body = {"password": None, "google_credential": None}
+    response = client.post("/api/users/me/delete", json=body, headers=auth_headers)
     assert response.status_code == 422
     assert client.get("/api/users/me", headers=auth_headers).status_code == 200
 
 
 def test_delete_requires_an_open_session_even_with_google(client, monkeypatch):
-    configure_google(monkeypatch, {"email": "g@example.com", "email_verified": True, "sub": "s"})
+    configure_google(monkeypatch, fresh_claims(email="g@example.com"))
     response = client.post("/api/users/me/delete", json={"google_credential": "y" * 40})
     assert response.status_code == 401
 
 
-def test_delete_with_google_when_google_is_not_configured(client, auth_headers):
-    response = client.post(
-        "/api/users/me/delete", json={"google_credential": "y" * 40}, headers=auth_headers
-    )
-    assert response.status_code == 503
-    assert client.get("/api/users/me", headers=auth_headers).status_code == 200
-
-
-def _google_login(client, monkeypatch, email="ana@example.com"):
-    configure_google(monkeypatch, {"email": email, "email_verified": True, "sub": "s"})
-    response = client.post(
-        "/api/auth/google", json={"credential": "x" * 40, "accept_privacy": True}
-    )
-    assert response.status_code == 200
-    return {"Authorization": f"Bearer {response.json()['access_token']}"}
+# ---------- Pre-secuestro: Google en una cuenta de contraseña sin email verificado ----------
 
 
 def test_google_login_on_unverified_account_voids_password_and_sessions(client, monkeypatch):
-    # Pre-secuestro: alguien registra el email de Ana con su contraseña antes que ella
+    # Alguien registra el email de Ana con su contraseña antes que ella
     assert register(client, email="ana@example.com", name="Ana").status_code == 201
     intruder = {"Authorization": f"Bearer {login(client).json()['access_token']}"}
-    owner = _google_login(client, monkeypatch)
+    owner = google_account(client, monkeypatch, email="ana@example.com")
     # La contraseña y la sesión del intruso dejan de valer; Ana sigue dentro
     assert client.get("/api/users/me", headers=intruder).status_code == 401
     assert login(client).status_code == 401
@@ -284,8 +265,8 @@ def test_google_login_on_unverified_account_voids_password_and_sessions(client, 
 
 
 def test_later_google_logins_do_not_close_sessions_again(client, monkeypatch):
-    first = _google_login(client, monkeypatch, email="nuevo@example.com")
-    _google_login(client, monkeypatch, email="nuevo@example.com")
+    first = google_account(client, monkeypatch, email="nuevo@example.com")
+    google_account(client, monkeypatch, email="nuevo@example.com")
     assert client.get("/api/users/me", headers=first).status_code == 200
 
 
@@ -299,25 +280,9 @@ def test_password_set_by_email_link_survives_google_login(client, monkeypatch):
     done = client.post("/api/v1/auth/reset-password", json={"token": token, "new_password": new})
     assert done.status_code == 204
     session = {"Authorization": f"Bearer {login(client, password=new).json()['access_token']}"}
-    _google_login(client, monkeypatch)
+    google_account(client, monkeypatch, email="ana@example.com")
     auth_limiter.reset()  # todas las peticiones del test llegan desde la misma IP
     # El enlace llegó a su email: la contraseña es suya y no se anula
     assert login(client, password=new).status_code == 200
     assert client.get("/api/users/me", headers=session).status_code == 200
     assert login(client, password=PASSWORD).status_code == 401
-
-
-@pytest.mark.parametrize("issued_at", [int(time.time()) - 301, None])
-def test_delete_with_old_or_undated_google_credential_is_refused(client, monkeypatch, issued_at):
-    # El token del login (o uno de hace más de 5 minutos) no vale como confirmación del borrado
-    headers = _google_session(client, monkeypatch)
-    configure_google(
-        monkeypatch,
-        {"email": "google@example.com", "email_verified": True, "sub": "s", "iat": issued_at},
-    )
-    response = client.post(
-        "/api/users/me/delete", json={"google_credential": "y" * 40}, headers=headers
-    )
-    assert response.status_code == 401
-    assert "caducado" in response.json()["detail"]
-    assert client.get("/api/users/me", headers=headers).status_code == 200

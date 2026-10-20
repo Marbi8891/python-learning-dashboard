@@ -1,6 +1,6 @@
 """Cuenta del usuario: datos, exportación y borrado (RGPD)."""
 
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 
 from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
 from sqlalchemy import delete, select
@@ -19,7 +19,7 @@ from app.models import (
 )
 from app.password_policy import weakness
 from app.rate_limit import limit_auth_attempts
-from app.routers.auth import GOOGLE_CONFIRM_MAX_AGE_SECONDS, verify_google_identity
+from app.routers import auth
 from app.routers.progress import list_progress
 from app.schemas import (
     ActivityOut,
@@ -114,6 +114,28 @@ def export_my_data(user: CurrentUser, db: DbSession) -> UserExport:
     )
 
 
+# Un ID token de Google vale una hora; para borrar se exige uno recién emitido.
+GOOGLE_CONFIRMATION_MAX_AGE = timedelta(minutes=10)
+
+
+def _confirm_with_google(credential: str, user: User, request: Request) -> None:
+    """La credencial debe ser de Google, reciente y del mismo email que la cuenta."""
+    client_id = auth.get_settings().google_client_id
+    if not client_id:
+        raise HTTPException(
+            status_code=503, detail="El inicio de sesión con Google no está configurado."
+        )
+    claims = auth.verify_google_credential(credential, client_id)
+    issued_at = datetime.fromtimestamp(int(claims.get("iat", 0)), UTC)
+    same_account = str(claims["email"]).strip().lower() == user.email
+    if not same_account or datetime.now(UTC) - issued_at > GOOGLE_CONFIRMATION_MAX_AGE:
+        record(Event.LOGIN_FAILED, request, user=user.id, action="delete")
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Confirma con la misma cuenta de Google con la que entras.",
+        )
+
+
 @router.post(
     "/delete",
     status_code=status.HTTP_204_NO_CONTENT,
@@ -122,20 +144,11 @@ def export_my_data(user: CurrentUser, db: DbSession) -> UserExport:
 def delete_my_account(
     data: DeleteConfirm, user: CurrentUser, request: Request, db: DbSession
 ) -> Response:
-    """Borra la cuenta y todos sus datos. Pide volver a identificarse (contraseña o Google) para
-    evitar borrados accidentales o con una sesión robada (T1539 → T1485)."""
+    """Borra la cuenta y todos sus datos. Pide la contraseña, o volver a entrar con Google en las
+    cuentas creadas con Google (su contraseña es aleatoria y nadie la conoce), para evitar borrados
+    accidentales o desde una sesión robada (T1539 → T1485)."""
     if data.google_credential is not None:
-        # Las cuentas creadas con Google tienen una contraseña aleatoria que nadie conoce:
-        # sin esta vía no podrían ejercer el derecho de supresión (art. 17 RGPD).
-        claims = verify_google_identity(
-            data.google_credential, max_age_seconds=GOOGLE_CONFIRM_MAX_AGE_SECONDS
-        )
-        if str(claims["email"]).strip().lower() != user.email:
-            record(Event.LOGIN_FAILED, request, user=user.id, action="delete")
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail="Esa cuenta de Google no es la de esta sesión.",
-            )
+        _confirm_with_google(data.google_credential, user, request)
     elif not verify_password(data.password, user.password_hash):
         record(Event.LOGIN_FAILED, request, user=user.id, action="delete")
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Contraseña incorrecta")
