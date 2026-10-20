@@ -4,6 +4,9 @@
    - Lo que escribes se envía como texto: tu código nunca se ejecuta en el servidor. Los ejemplos de
      las respuestas se pueden ejecutar aquí, en tu navegador, con el mismo Python de la consola.
    - Cada respuesta dice de dónde sale: un modelo de IA, el tutor sin IA o una respuesta preparada.
+   - Tutor híbrido (ADR-0038): modalidad gratuita (por defecto) o IA avanzada, que solo se puede
+     elegir si el servidor la ofrece y al alumno le queda cuota. La decide el servidor en cada
+     mensaje: si no la concede, responde en modo gratuito y aquí se ofrece seguir en ese modo.
    - La conversación vive solo en esta página (no se guarda en el navegador) y se borra al cerrar
      sesión o al empezar una nueva. Una respuesta que llega tarde a una conversación ya cerrada
      se descarta. */
@@ -14,7 +17,16 @@ import { isRiskyPaste, pythonRunner } from "./console.js";
 import { escapeHtml, renderMarkdown } from "./markdown.js";
 import { TimeoutError } from "./python-runner.js";
 import { state, subscribe } from "./store.js";
-import { A2A_VERSION, readTaskResult, sendMessageRequest, sourceLabel, TUTOR_PATH } from "./tutor-protocol.js";
+import {
+  A2A_VERSION,
+  advancedStatus,
+  MODES_PATH,
+  readTaskResult,
+  sendMessageRequest,
+  sourceLabel,
+  TUTOR_PATH,
+  withRemaining,
+} from "./tutor-protocol.js";
 
 const $ = (selector) => document.querySelector(selector);
 const QUESTION_PLACEHOLDER = "Ejemplo: ¿por qué me sale NameError?";
@@ -35,6 +47,9 @@ let renderedFor; // usuario para el que está pintada la vista (undefined = nada
 let requestId = 0;
 let pending = null; // { controller, conversation } de la pregunta en curso
 let lastQuery = null; // para «Reintentar» (solo si lo pide el alumno)
+let mode = "free"; // modalidad elegida: «free» o «advanced» (el servidor decide si la concede)
+let modes = null; // lo que dice GET /api/v1/tutor/modes (null: no se sabe)
+let modesFailed = false;
 
 function hero(note) {
   return `
@@ -66,6 +81,7 @@ function chatHtml(lessons, lessonSlug) {
       "No ejecuta tu código en el servidor: los ejemplos los puedes ejecutar aquí, en tu navegador.",
   )}
     <section class="course-section tutor" aria-labelledby="tutor-chat-title">
+      ${modesHtml()}
       <h2 class="section-title" id="tutor-chat-title">Conversación</h2>
       <ol class="tutor__messages" id="tutor-messages" aria-live="polite" aria-relevant="additions"></ol>
       <p class="tutor__status" id="tutor-status" role="status"></p>
@@ -83,6 +99,9 @@ function chatHtml(lessons, lessonSlug) {
         <div class="tutor__actions">
           <button class="btn btn--primary" type="submit">Preguntar</button>
           <button class="btn btn--ghost" type="button" data-tutor-hint>Pedir una pista</button>
+          <button class="btn btn--ghost" type="button" data-tutor-alt>Explícamelo de otra forma</button>
+          <button class="btn btn--ghost" type="button" data-tutor-exercise>Otro ejercicio</button>
+          <button class="btn btn--ghost" type="button" data-tutor-free hidden>Seguir en modo gratuito</button>
           <button class="btn btn--ghost" type="button" data-tutor-cancel hidden>Cancelar</button>
           <button class="btn btn--ghost" type="button" data-tutor-retry hidden>Reintentar</button>
           <button class="btn btn--ghost" type="button" data-tutor-reset>Nueva conversación</button>
@@ -91,9 +110,80 @@ function chatHtml(lessons, lessonSlug) {
       <p class="account-card__meta">Según la configuración del servidor responde un modelo de IA o el tutor
         sin IA, con reglas y el contenido revisado del curso: cada respuesta indica su origen. Solo se envía lo
         que escribes aquí y, si eliges una lección, tu estado en ella y en sus conceptos. No incluyas datos
-        personales. No se guarda en tu cuenta: el servidor conserva la conversación en memoria temporal.
+        personales. No se guarda en tu cuenta: el servidor conserva la conversación en memoria temporal (solo
+        cuenta cuántas consultas haces cada día, para los límites). Las respuestas del tutor no marcan lecciones
+        como completadas: eso solo lo hacen tus ejercicios superados.
         <a href="privacidad.html">Privacidad</a></p>
     </section>`;
+}
+
+function modesHtml() {
+  return `
+      <fieldset class="tutor-modes" id="tutor-modes">
+        <legend class="section-title">Modalidad del tutor</legend>
+        <label class="tutor-mode">
+          <input type="radio" name="tutor-mode" value="free" checked
+            aria-labelledby="tutor-mode-free" aria-describedby="tutor-mode-free-text">
+          <span class="tutor-mode__body">
+            <span class="tutor-mode__title" id="tutor-mode-free">Gratuito</span>
+            <span class="tutor-mode__text" id="tutor-mode-free-text">Explicaciones, pistas y ejercicios con el contenido revisado del curso.
+              No usa IA de pago y sigue funcionando aunque la IA avanzada no esté disponible.</span>
+          </span>
+        </label>
+        <label class="tutor-mode">
+          <input type="radio" name="tutor-mode" value="advanced" disabled
+            aria-labelledby="tutor-mode-advanced" aria-describedby="tutor-mode-advanced-text tutor-advanced-status">
+          <span class="tutor-mode__body">
+            <span class="tutor-mode__title" id="tutor-mode-advanced">IA avanzada</span>
+            <span class="tutor-mode__text" id="tutor-mode-advanced-text">Explicaciones adaptadas a tu nivel, pistas progresivas, análisis de tus
+              errores y ejercicios a tu medida. Tiene un número limitado de consultas al día.</span>
+            <span class="tutor-mode__status" id="tutor-advanced-status">Comprobando si está disponible…</span>
+          </span>
+        </label>
+        <p class="tutor-mode__privacy" id="tutor-advanced-privacy" hidden></p>
+      </fieldset>`;
+}
+
+/** Pinta el estado de la IA avanzada según lo que dice el servidor. */
+function renderModes() {
+  const radio = document.querySelector('#tutor-modes input[value="advanced"]');
+  if (!radio) return;
+  const status = modesFailed
+    ? { selectable: false, text: "No se ha podido comprobar si está disponible. Sigues en el modo gratuito." }
+    : advancedStatus(modes);
+  radio.disabled = !status.selectable;
+  $("#tutor-advanced-status").textContent = status.text;
+  const privacy = $("#tutor-advanced-privacy");
+  const provider = modes?.advanced?.available ? modes.advanced : null;
+  privacy.hidden = !provider;
+  if (provider) {
+    const limit = provider.max_input_chars ? ` (máximo ${provider.max_input_chars} caracteres entre pregunta, código y error)` : "";
+    privacy.textContent = provider.simulated
+      ? "Modo de pruebas: la IA avanzada está simulada en este servidor y no envía nada a ningún servicio externo."
+      : `Con la IA avanzada, tu pregunta, el código y el error que escribas${limit} y tu nivel en el tema se envían a ` +
+        `${provider.provider === "openai" ? "OpenAI" : "un proveedor externo de IA"} para generar la respuesta. ` +
+        "No incluyas datos personales. Las preguntas de comprobación las corrige el tutor, no la IA.";
+  }
+  if (!status.selectable && mode === "advanced") chooseMode("free");
+}
+
+async function loadModes() {
+  try {
+    modes = await request("GET", MODES_PATH);
+    modesFailed = false;
+  } catch {
+    modes = null;
+    modesFailed = true; // sin respuesta del servidor no se ofrece la IA avanzada
+  }
+  renderModes();
+}
+
+function chooseMode(value) {
+  mode = value === "advanced" ? "advanced" : "free";
+  const radio = document.querySelector(`#tutor-modes input[value="${mode}"]`);
+  if (radio) radio.checked = true;
+  const free = document.querySelector("[data-tutor-free]");
+  if (free && mode === "free") free.hidden = true;
 }
 
 function addMessage(html, from, note = "") {
@@ -105,7 +195,8 @@ function addMessage(html, from, note = "") {
   }`;
   if (from === "bot") addRunButtons(item);
   $("#tutor-messages").append(item);
-  item.scrollIntoView({ block: "nearest" });
+  // Una respuesta larga se muestra desde su principio: no arrastra al alumno hasta el final
+  item.scrollIntoView({ block: from === "bot" ? "start" : "nearest" });
 }
 
 /** Un botón «Ejecutar en tu navegador» bajo cada ejemplo de Python de la respuesta. */
@@ -152,13 +243,14 @@ function setStatus(text, problem = false) {
 }
 
 function setWaiting(form, waiting) {
-  form.querySelector('[type="submit"]').disabled = waiting;
-  form.querySelector("[data-tutor-hint]").disabled = waiting;
+  for (const button of form.querySelectorAll('[type="submit"], [data-tutor-hint], [data-tutor-alt], [data-tutor-exercise]')) {
+    button.disabled = waiting;
+  }
   form.querySelector("[data-tutor-cancel]").hidden = !waiting;
   form.closest(".tutor").setAttribute("aria-busy", String(waiting));
 }
 
-function readQuery(form, question) {
+function readQuery(form, question, extra = {}) {
   const fields = form.elements;
   return {
     question,
@@ -166,6 +258,8 @@ function readQuery(form, question) {
     code: fields.code.value,
     error: fields.error.value,
     gradual: fields.gradual.checked,
+    mode,
+    ...extra,
   };
 }
 
@@ -191,6 +285,14 @@ async function ask(form, query, { echo = true } = {}) {
     if (result.text) addMessage(renderMarkdown(result.text), "bot", sourceLabel(result.meta));
     setStatus(result.label, !result.ok);
     form.querySelector("[data-tutor-retry]").hidden = !result.retry;
+    const offerFree = Boolean(result.reason?.startsWith("advanced_"));
+    form.querySelector("[data-tutor-free]").hidden = !offerFree;
+    if (result.meta.mode === "advanced") {
+      modes = withRemaining(modes, result.meta);
+      renderModes();
+    } else if (offerFree) {
+      loadModes(); // la cuota o la disponibilidad han cambiado: se vuelve a preguntar
+    }
     if (result.ok) {
       form.elements.question.value = "";
       form.elements.question.placeholder = result.meta.expects_answer ? ANSWER_PLACEHOLDER : QUESTION_PLACEHOLDER;
@@ -229,6 +331,10 @@ export async function openTutor(lessons, { moveFocus = true, lessonSlug = "" } =
     renderedFor = user;
     forgetConversation();
     view.innerHTML = !available ? unavailableHtml() : user === null ? signedOutHtml() : chatHtml(lessons, lessonSlug);
+    mode = "free"; // cada vez se empieza en la gratuita: la de pago se elige expresamente
+    modes = null;
+    modesFailed = false;
+    if (available && user !== null) loadModes();
   } else if (lessonSlug && $("#tutor-form") && !$("#tutor-messages").children.length) {
     $("#tutor-form").elements.lesson.value = lessonSlug; // sin conversación empezada: la lección actual
   }
@@ -242,13 +348,25 @@ export function initTutor() {
     event.preventDefault();
     ask(event.target, readQuery(event.target, event.target.elements.question.value.trim()));
   });
+  view.addEventListener("change", (event) => {
+    if (event.target.name !== "tutor-mode") return;
+    chooseMode(event.target.value);
+    setStatus(mode === "advanced" ? `Modalidad: IA avanzada. ${advancedStatus(modes).text}` : "Modalidad: gratuita.");
+  });
   view.addEventListener("click", (event) => {
     const form = $("#tutor-form");
     if (event.target.closest("[data-open-account]")) openAccount();
     if (event.target.closest("[data-tutor-run]")) runExample(event.target.closest("[data-tutor-run]"));
     if (event.target.closest("[data-tutor-hint]")) ask(form, readQuery(form, "Dame una pista del ejercicio"));
+    if (event.target.closest("[data-tutor-alt]")) ask(form, readQuery(form, "Explícamelo de otra forma", { alternative: true }));
+    if (event.target.closest("[data-tutor-exercise]")) ask(form, readQuery(form, "Proponme otro ejercicio"));
+    if (event.target.closest("[data-tutor-free]")) {
+      chooseMode("free");
+      setStatus("Sigues en el modo gratuito.");
+      form.elements.question.focus();
+    }
     if (event.target.closest("[data-tutor-cancel]")) pending?.controller.abort();
-    if (event.target.closest("[data-tutor-retry]") && lastQuery) ask(form, lastQuery, { echo: false });
+    if (event.target.closest("[data-tutor-retry]") && lastQuery) ask(form, { ...lastQuery, mode }, { echo: false });
     if (event.target.closest("[data-tutor-reset]")) {
       forgetConversation();
       setWaiting(form, false);

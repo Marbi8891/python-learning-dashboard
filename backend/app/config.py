@@ -83,6 +83,25 @@ class Settings(BaseSettings):
     a2a_daily_limit_per_user: int = Field(default=100, ge=1)
     a2a_global_limit_per_minute: int = Field(default=60, ge=1)
 
+    # Tutor híbrido (ADR-0038, docs/tutor-hibrido.md): modalidad «IA avanzada», aparte de la
+    # gratuita (el proveedor de arriba). Desactivada por defecto: «none». «openai» es de pago y
+    # necesita OPENAI_API_KEY y A2A_ADVANCED_MODEL; «mock» la simula sin IA (tests y pruebas e2e).
+    a2a_advanced_provider: Literal["none", "openai", "mock"] = "none"
+    # Solo del entorno o del gestor de secretos, nunca del navegador ni del repositorio
+    openai_api_key: SecretStr | None = None
+    # Modelo de OpenAI disponible en la cuenta. Sin valor por defecto: se elige expresamente
+    a2a_advanced_model: str | None = None
+    # Solo para modelos de razonamiento de OpenAI; vacío = no se envía
+    a2a_advanced_reasoning_effort: Literal["none", "minimal", "low", "medium", "high"] | None = None
+    # Límites de coste (valores iniciales, revisables): consultas por usuario y día, consultas de
+    # todos los usuarios por día, caracteres de pregunta + código + error, tokens de salida y
+    # segundos por llamada. Se cuentan en la base de datos (tabla tutor_usage), por día UTC.
+    a2a_advanced_daily_limit_per_user: int = Field(default=10, ge=1, le=1_000)
+    a2a_advanced_global_daily_limit: int = Field(default=200, ge=1, le=100_000)
+    a2a_advanced_max_input_chars: int = Field(default=6_000, ge=200, le=24_000)
+    a2a_advanced_max_output_tokens: int = Field(default=600, ge=64, le=4_000)
+    a2a_advanced_timeout_seconds: float = Field(default=30.0, gt=0, le=120)
+
     # Modo aplicación local: la API sirve también la web (ver app/local_site.py)
     serve_frontend: bool = False
     frontend_dir: Path = FRONTEND_DIR

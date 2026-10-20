@@ -33,6 +33,7 @@ test("una tarea completada devuelve el texto del artefacto", () => {
   };
   assert.deepEqual(readTaskResult(response), {
     state: "TASK_STATE_COMPLETED",
+    reason: null, // tutor híbrido (ADR-0038): motivo de un fallo o rechazo, si lo hay
     label: "Respondida",
     text: "Explicación",
     contextId: "ctx-1",
