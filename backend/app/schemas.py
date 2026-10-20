@@ -4,7 +4,15 @@ import json
 from datetime import date, datetime
 from typing import Annotated
 
-from pydantic import AfterValidator, BaseModel, ConfigDict, EmailStr, Field, field_validator
+from pydantic import (
+    AfterValidator,
+    BaseModel,
+    ConfigDict,
+    EmailStr,
+    Field,
+    field_validator,
+    model_validator,
+)
 
 # ---------- Lecciones ----------
 
@@ -128,6 +136,13 @@ class DeleteConfirm(BaseModel):
     password: str | None = Field(default=None, max_length=128)
     google_credential: str | None = Field(default=None, min_length=20, max_length=8192)
 
+    @model_validator(mode="after")
+    def exactly_one_method(self) -> "DeleteConfirm":
+        # Con los dos, una contraseña incorrecta quedaría oculta tras la credencial de Google
+        if (self.password is None) == (self.google_credential is None):
+            raise ValueError("Confirma el borrado con tu contraseña o con Google (solo uno)")
+        return self
+
 
 class Token(BaseModel):
     # Sin token cuando va en la cookie HttpOnly (token_type "cookie", ADR-0033)
@@ -218,6 +233,7 @@ class ActivityOut(BaseModel):
 class UserExport(BaseModel):
     user: UserOut
     privacy_accepted_at: datetime | None
+    email_verified_at: datetime | None = None
     progress: list[ProgressItem]
     attempts: list[dict]
     pcap: dict | None = None

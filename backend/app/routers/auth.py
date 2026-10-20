@@ -87,6 +87,7 @@ def login_google(
             password_hash=hash_password(secrets.token_urlsafe(48)),
             display_name=name,
             privacy_accepted_at=datetime.now(UTC),
+            email_verified_at=datetime.now(UTC),
         )
         db.add(user)
         try:
@@ -102,8 +103,18 @@ def login_google(
                 ) from None
         else:
             db.refresh(user)
-    elif data.accept_privacy and user.privacy_accepted_at is None:
-        user.privacy_accepted_at = datetime.now(UTC)
+    else:
+        if data.accept_privacy and user.privacy_accepted_at is None:
+            user.privacy_accepted_at = datetime.now(UTC)
+        if user.email_verified_at is None:
+            # El registro con contraseña no comprueba el email: alguien pudo crear la cuenta con
+            # el email de otra persona antes que ella («pre-secuestro»). Ahora que Google prueba
+            # quién es el dueño, la contraseña anterior deja de valer y se cierran las demás
+            # sesiones. Quien quiera volver a usarla la restablece por email.
+            user.password_hash = hash_password(secrets.token_urlsafe(48))
+            user.token_version += 1
+            user.email_verified_at = datetime.now(UTC)
+            activity.log(db, user.id, "google_linked", request)
         db.commit()
     # Tipo propio: el panel del alumno muestra con qué método entró (ADR-0035)
     activity.log(db, user.id, "login_google", request)
@@ -277,6 +288,7 @@ def confirm_password_reset(data: PasswordResetConfirm, request: Request, db: DbS
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=INVALID_LINK)
     user.password_hash = hash_password(data.new_password)
     user.token_version += 1  # cierra todas las sesiones abiertas
+    user.email_verified_at = now  # el enlace llegó a su email: la contraseña es del dueño
     activity.log(db, user.id, "password_reset", request)
     db.commit()
     # Quien controla el email recupera el acceso aunque un atacante haya bloqueado la cuenta

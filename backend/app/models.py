@@ -71,6 +71,9 @@ class User(Base):
     privacy_accepted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     # Se incrementa al cambiar la contraseña: invalida todos los tokens emitidos antes
     token_version: Mapped[int] = mapped_column(default=0, server_default="0")
+    # Cuándo se demostró que el email es de quien usa la cuenta (Google o enlace de recuperación).
+    # El registro con contraseña no lo verifica: ver login_google (pre-secuestro de cuentas).
+    email_verified_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
 
 class LessonProgress(Base):

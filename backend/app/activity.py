@@ -16,6 +16,7 @@ KEPT = 20  # eventos que se conservan por usuario
 KINDS = {
     "login",
     "login_google",
+    "google_linked",
     "login_failed",
     "password_changed",
     "password_reset",

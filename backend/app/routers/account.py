@@ -98,6 +98,7 @@ def export_my_data(user: CurrentUser, db: DbSession) -> UserExport:
     return UserExport(
         user=UserOut.model_validate(user),
         privacy_accepted_at=user.privacy_accepted_at,
+        email_verified_at=user.email_verified_at,
         progress=list_progress(db, user.id),
         attempts=[
             {"lesson_slug": slug, "code": code, "passed": passed, "created_at": created}
@@ -133,7 +134,7 @@ def delete_my_account(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Esa cuenta de Google no es la de esta sesión.",
             )
-    elif data.password is None or not verify_password(data.password, user.password_hash):
+    elif not verify_password(data.password, user.password_hash):
         record(Event.LOGIN_FAILED, request, user=user.id, action="delete")
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Contraseña incorrecta")
     # Borrado explícito: no depende de que la base de datos aplique ON DELETE CASCADE

@@ -7,8 +7,9 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app.models import User
+from app.rate_limit import auth_limiter
 from app.routers import auth
-from tests.conftest import register
+from tests.conftest import PASSWORD, login, register
 
 
 def configure_google(monkeypatch, claims):
@@ -207,8 +208,43 @@ def test_delete_with_invalid_google_credential_is_refused(client, monkeypatch):
 
 def test_delete_without_password_nor_google_is_refused(client, auth_headers):
     response = client.post("/api/users/me/delete", json={}, headers=auth_headers)
-    assert response.status_code == 403
+    assert response.status_code == 422
     assert client.get("/api/users/me", headers=auth_headers).status_code == 200
+
+
+def test_delete_with_both_methods_is_refused_as_ambiguous(client, monkeypatch):
+    # Con contraseña y Google a la vez no se elige uno en silencio: una contraseña incorrecta
+    # no puede quedar oculta tras una credencial de Google válida
+    assert register(client, email="ana@example.com", name="Ana").status_code == 201
+    configure_google(monkeypatch, {"email": "ana@example.com", "email_verified": True, "sub": "s"})
+    token = client.post(
+        "/api/auth/google", json={"credential": "x" * 40, "accept_privacy": True}
+    ).json()["access_token"]
+    headers = {"Authorization": f"Bearer {token}"}
+    response = client.post(
+        "/api/users/me/delete",
+        json={"password": "incorrecta-123", "google_credential": "y" * 40},
+        headers=headers,
+    )
+    assert response.status_code == 422
+    assert "solo uno" in str(response.json()["detail"])
+    assert client.get("/api/users/me", headers=headers).status_code == 200
+
+
+def test_delete_with_null_fields_is_refused(client, auth_headers):
+    response = client.post(
+        "/api/users/me/delete",
+        json={"password": None, "google_credential": None},
+        headers=auth_headers,
+    )
+    assert response.status_code == 422
+    assert client.get("/api/users/me", headers=auth_headers).status_code == 200
+
+
+def test_delete_requires_an_open_session_even_with_google(client, monkeypatch):
+    configure_google(monkeypatch, {"email": "g@example.com", "email_verified": True, "sub": "s"})
+    response = client.post("/api/users/me/delete", json={"google_credential": "y" * 40})
+    assert response.status_code == 401
 
 
 def test_delete_with_google_when_google_is_not_configured(client, auth_headers):
@@ -217,3 +253,51 @@ def test_delete_with_google_when_google_is_not_configured(client, auth_headers):
     )
     assert response.status_code == 503
     assert client.get("/api/users/me", headers=auth_headers).status_code == 200
+
+
+def _google_login(client, monkeypatch, email="ana@example.com"):
+    configure_google(monkeypatch, {"email": email, "email_verified": True, "sub": "s"})
+    response = client.post(
+        "/api/auth/google", json={"credential": "x" * 40, "accept_privacy": True}
+    )
+    assert response.status_code == 200
+    return {"Authorization": f"Bearer {response.json()['access_token']}"}
+
+
+def test_google_login_on_unverified_account_voids_password_and_sessions(client, monkeypatch):
+    # Pre-secuestro: alguien registra el email de Ana con su contraseña antes que ella
+    assert register(client, email="ana@example.com", name="Ana").status_code == 201
+    intruder = {"Authorization": f"Bearer {login(client).json()['access_token']}"}
+    owner = _google_login(client, monkeypatch)
+    # La contraseña y la sesión del intruso dejan de valer; Ana sigue dentro
+    assert client.get("/api/users/me", headers=intruder).status_code == 401
+    assert login(client).status_code == 401
+    assert client.get("/api/users/me", headers=owner).status_code == 200
+    kinds = [e["kind"] for e in client.get("/api/users/me/activity", headers=owner).json()]
+    assert "google_linked" in kinds
+    exported = client.get("/api/users/me/export", headers=owner).json()
+    assert exported["email_verified_at"] is not None
+
+
+def test_later_google_logins_do_not_close_sessions_again(client, monkeypatch):
+    first = _google_login(client, monkeypatch, email="nuevo@example.com")
+    _google_login(client, monkeypatch, email="nuevo@example.com")
+    assert client.get("/api/users/me", headers=first).status_code == 200
+
+
+def test_password_set_by_email_link_survives_google_login(client, monkeypatch):
+    sent = []
+    monkeypatch.setattr(auth, "send_email", lambda to, subject, body: sent.append(body))
+    assert register(client, email="ana@example.com", name="Ana").status_code == 201
+    client.post("/api/v1/auth/forgot-password", json={"email": "ana@example.com"})
+    token = sent[0].split("token=")[1].split()[0]
+    new = "otra-clave-muy-segura-789"
+    done = client.post("/api/v1/auth/reset-password", json={"token": token, "new_password": new})
+    assert done.status_code == 204
+    session = {"Authorization": f"Bearer {login(client, password=new).json()['access_token']}"}
+    _google_login(client, monkeypatch)
+    auth_limiter.reset()  # todas las peticiones del test llegan desde la misma IP
+    # El enlace llegó a su email: la contraseña es suya y no se anula
+    assert login(client, password=new).status_code == 200
+    assert client.get("/api/users/me", headers=session).status_code == 200
+    assert login(client, password=PASSWORD).status_code == 401
