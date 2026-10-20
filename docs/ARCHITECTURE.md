@@ -48,10 +48,11 @@ Definidas en `js/app.js` y `js/learn/learn-app.js`:
 
 | Ruta | Vista | Módulo |
 |---|---|---|
-| `#/aprender` (principal) | «¿Qué estudio ahora?» | `js/learn/learn-app.js` |
+| `#/portada`, `#/portada/<sección>` | Portada pública a pantalla completa (ADR-0037); la raíz lleva aquí en la primera visita | `js/landing.js`, `css/landing.css` |
+| `#/aprender` (principal) | «¿Qué estudio ahora?»; la raíz lleva aquí desde la segunda visita | `js/learn/learn-app.js` |
 | `#/teoria`, `#/practicar`, `#/progreso` | Núcleo educativo por conceptos (ADR-0031) | `js/learn/*` |
 | `#/daw` | Preparación DAW y cursos de DAW | `js/daw.js`, `js/learn/daw-prep.js` |
-| `#/bienvenida` | Mapa de bienvenida (primera visita) | `js/learn/welcome.js` |
+| `#/bienvenida` | Presentación guiada dentro de la app (mapa con paradas) | `js/learn/welcome.js` |
 | `#/inicio`, `#/leccion/<slug>` | Curso PCAP (27 lecciones) | `js/app.js`, `home.js`, `console.js`, `quiz.js`, `assistant.js` |
 | `#/pcap` | Zona de examen PCAP | `js/pcap.js`, `pcap-store.js` |
 | `#/perfil`, `#/certificado` | Perfil, logros y certificado | `profile.js`, `certificate.js` |

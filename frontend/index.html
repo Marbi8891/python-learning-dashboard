@@ -8,20 +8,20 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://accounts.google.com/gsi/client https://cdn.jsdelivr.net/pyodide/v314.0.7/full/ 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline' https://accounts.google.com/gsi/style; img-src 'self' data:; font-src 'self'; connect-src 'self' https://pld-api.onrender.com https://accounts.google.com/gsi/ http://127.0.0.1:8000 http://localhost:8000 https://cdn.jsdelivr.net/pyodide/v314.0.7/full/; frame-src https://accounts.google.com; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Python Learning Dashboard · Aprende Python y prepara Programación de DAW</title>
-  <meta name="description" content="Aprende Python paso a paso y prepara Programación de DAW: teoría con ejemplos, ejercicios corregidos con explicación de cada error, repaso espaciado y simulacros.">
+  <title>Python Learning Dashboard · Aprende programación entendiendo lo que haces</title>
+  <meta name="description" content="Aprende a programar en Python paso a paso: teoría con ejemplos, ejercicios corregidos con la explicación de cada error, repaso espaciado, tutor y preparación de Programación de DAW. Gratuito y de código abierto.">
   <meta name="theme-color" content="#0c0d10">
   <link rel="canonical" href="https://marbi8891.github.io/python-learning-dashboard/">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="es_ES">
   <meta property="og:site_name" content="Python Learning Dashboard">
-  <meta property="og:title" content="Python Learning Dashboard · Aprende Python y prepara DAW">
-  <meta property="og:description" content="Teoría con ejemplos, ejercicios corregidos con explicación de cada error, repaso espaciado y simulacros de Programación.">
+  <meta property="og:title" content="Python Learning Dashboard · Aprende programación entendiendo lo que haces">
+  <meta property="og:description" content="Teoría con ejemplos, ejercicios corregidos con la explicación de cada error, repaso espaciado y preparación de Programación de DAW.">
   <meta property="og:url" content="https://marbi8891.github.io/python-learning-dashboard/">
   <meta property="og:image" content="https://marbi8891.github.io/python-learning-dashboard/icons/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="Python Learning Dashboard: prepara el examen PCAP">
+  <meta property="og:image:alt" content="Python Learning Dashboard: aprende programación entendiendo lo que haces, con un ejemplo de código y su salida">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="manifest" href="manifest.webmanifest">
@@ -42,6 +42,7 @@
   <link rel="stylesheet" href="css/pro.css">
   <link rel="stylesheet" href="css/learn.css">
   <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/landing.css">
   <link rel="preload" href="fonts/fraunces-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
 
   <!-- Tema y tamaño de letra antes de pintar la página (sin parpadeo) y defensa contra marcos -->
@@ -63,6 +64,9 @@
     <span class="topbar__brand">Python Learning</span>
   </header>
   <div class="sidebar-backdrop" id="sidebar-backdrop" aria-hidden="true"></div>
+
+  <!-- ============ PORTADA PÚBLICA (#/portada): la pinta landing.js ============ -->
+  <div class="landing" id="landing-view" hidden></div>
 
   <div class="app">
     <!-- ============ BARRA LATERAL: RUTA DE APRENDIZAJE ============ -->
@@ -162,6 +166,7 @@
           <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3a9 9 0 0 0 0 18z" fill="currentColor"/></svg>
           Aspecto
         </button>
+        <a href="#/portada">Portada</a>
         <a href="#/bienvenida">Presentación</a>
         <a href="privacidad.html">Privacidad</a>
         <a href="aviso-legal.html">Aviso legal</a>

@@ -24,6 +24,7 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
 - **Sesión de la web en una cookie `HttpOnly`** (ADR-0033): JavaScript ya no puede leer el token y la sesión sigue al recargar la página. Protección CSRF con la cabecera `X-PLD-Session`. Si el navegador bloquea la cookie, se entra igual con el token solo en memoria. La app Android no cambia. Nuevo `POST /api/v1/auth/logout`.
 
 ### Añadido
+- **Portada pública** (`#/portada`, ADR-0037): presenta la web con su cabecera propia y menú móvil accesible, una demostración con un concepto y un ejercicio reales del temario (se corrige y explica el error de cada respuesta trampa, y el ejemplo se puede ejecutar en el navegador), las funciones disponibles, el recorrido en cuatro pasos, el temario, la tecnología, preguntas frecuentes y CodeFeed como propuesta en desarrollo. La raíz lleva a la portada en la primera visita y a «¿Qué estudio ahora?» después. Nueva imagen de vista previa (`icons/og-image.png`) y metadatos actualizados. «Saltar al contenido» ya no cambia la ruta.
 - **Python Tutor adaptativo** (ADR-0036, [docs/a2a.md](docs/a2a.md)):
   - plan pedagógico determinista antes del modelo: tipo de consulta, concepto, nivel por evidencias (conceptos demostrados y ejercicios superados, no el % global), análisis del código con `ast` sin ejecutarlo, pistas graduadas de 1 a 3 y preguntas de comprobación con salida verificada;
   - el tutor sin IA (la web publicada) explica con el contenido revisado del curso en lugar de una guía genérica;

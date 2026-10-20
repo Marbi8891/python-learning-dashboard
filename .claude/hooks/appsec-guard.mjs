@@ -86,6 +86,8 @@ export const AREAS = {
     ".semgrep/**",
     "scripts/security/**",
   ],
+  // LegalDocs AI (docs/legal/README.md): solo su expediente; nunca los documentos publicados
+  "legaldocs-ai": ["docs/legal/**"],
 };
 
 // Nadie, ni siquiera dentro de su área, toca la configuración de los agentes ni la de despliegue
@@ -201,7 +203,10 @@ export function decide(agent, event, root) {
     }
     if (!matches(AREAS[agent], rel)) {
       return {
-        deny: `«${rel}» no es del área de ${agent}. Devuelve el cambio propuesto a security-lead para que lo asigne a su dueño (docs/security/AGENT_WORKFLOW.md)`,
+        deny:
+          agent === "legaldocs-ai"
+            ? `«${rel}» no es del área de ${agent}. Escribe la propuesta en docs/legal/expediente/borradores/ y deja que la persona decida`
+            : `«${rel}» no es del área de ${agent}. Devuelve el cambio propuesto a security-lead para que lo asigne a su dueño (docs/security/AGENT_WORKFLOW.md)`,
       };
     }
     return null;

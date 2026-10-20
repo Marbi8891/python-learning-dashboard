@@ -50,3 +50,13 @@ Reglas comunes de los agentes (las hace cumplir en parte el guardián):
 - No revelar secretos en mensajes, logs, commits o informes.
 - Nada de DoS, escaneos externos ni pruebas destructivas; producción solo en lectura pasiva y con autorización.
 - Conservar los cambios de la persona; crear pruebas cuando sea razonable; documentar riesgos residuales.
+
+## LegalDocs AI
+
+Agente de documentación legal en `.claude/agents/legaldocs-ai.md` (privacidad, LSSI, licencias,
+Reglamento de IA). Instrucciones completas en [`docs/legal/PROMPT_MAESTRO.md`](docs/legal/PROMPT_MAESTRO.md),
+expediente en `docs/legal/expediente/` y pruebas en `docs/legal/PRUEBAS_AGENTE.md`.
+- Invocación: `claude --agent legaldocs-ai "Actualiza el expediente legal"` o `@agent-legaldocs-ai …`.
+- Solo escribe en `docs/legal/**` (lo impone el mismo guardián). Nunca cambia `frontend/privacidad.html`
+  ni `frontend/aviso-legal.html`: propone borradores, y la persona aprueba y fusiona.
+- No es asesoramiento jurídico ni certifica cumplimiento.
