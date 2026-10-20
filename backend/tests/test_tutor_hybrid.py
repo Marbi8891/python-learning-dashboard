@@ -191,7 +191,7 @@ def test_openai_is_built_from_settings_with_its_limits():
     advanced = build_advanced_mode(settings)
     assert isinstance(advanced.model, OpenAIProvider)
     assert (advanced.model.name, advanced.model.model) == ("openai", MODEL)
-    assert advanced.model.max_output_tokens == 600 and advanced.model.deadline_seconds == 40
+    assert advanced.model.max_output_tokens == 600 and advanced.model.deadline_seconds == 20
     assert (advanced.max_input_chars, advanced.daily_limit) == (4000, 10)
     assert FAKE_KEY not in repr(settings) and FAKE_KEY not in str(settings.model_dump())
     assert FAKE_KEY not in repr(advanced.model)
@@ -273,8 +273,7 @@ def test_api_errors_become_provider_errors(status, failure):
     with pytest.raises(failure) as raised:
         generate(api)
     assert FAKE_KEY not in str(raised.value) and raised.value.__cause__ is None
-    retried = status in (429, 500, 503)
-    assert len(api.requests) == (2 if retried else 1)  # como mucho un reintento
+    assert len(api.requests) == 1  # sin reintentos: una consulta de la cuota, una llamada
 
 
 def test_network_errors_and_timeouts():
@@ -567,6 +566,17 @@ def test_accounting_errors_do_not_break_the_answer(client, auth_headers, monkeyp
     result = ask(client, auth_headers, mode="free")
     assert state(result) == "TASK_STATE_COMPLETED"
     assert '"event": "a2a.usage"' in caplog.text and "base de datos caída" not in caplog.text
+
+
+def test_export_and_deletion_only_touch_the_own_tutor_usage(client, auth_headers, openai_api):
+    luis = other_user(client)
+    ask(client, luis)
+    assert client.get("/api/v1/users/me/export", headers=auth_headers).json()["tutor_usage"] == []
+    deleted = client.post(
+        "/api/v1/users/me/delete", json={"password": "contraseña-segura-123"}, headers=auth_headers
+    )
+    assert deleted.status_code == 204
+    assert [(row.user_id, row.requests) for row in usage_rows(client)] == [(2, 1)]
 
 
 def test_export_and_deletion_include_tutor_usage(client, auth_headers, openai_api):

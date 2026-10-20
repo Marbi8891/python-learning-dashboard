@@ -14,7 +14,8 @@ Seguridad y privacidad:
 - Solo se envía `ModelRequest` (instrucciones, pregunta y contexto educativo mínimo). Ningún
   identificador del alumno: ni id, ni email, ni los campos `user` o `safety_identifier`.
 - Los logs del SDK incluyen las peticiones en DEBUG (OPENAI_LOG=debug): se fijan en WARNING.
-- Coste acotado: `max_output_tokens`, un tiempo máximo por llamada y un único reintento.
+- Coste acotado: `max_output_tokens`, un tiempo máximo por llamada y sin reintentos: cada
+  consulta reservada en la cuota es como mucho una llamada facturable.
 """
 
 import asyncio
@@ -41,7 +42,7 @@ from app.a2a.providers.base import (
 logger = logging.getLogger("pld.a2a")
 
 API_URL = "https://api.openai.com/v1"
-MAX_RETRIES = 1  # el SDK reintenta solo errores de red, 408, 409, 429 y 5xx
+MAX_RETRIES = 0  # un reintento podría cobrarse dos veces por una sola consulta de la cuota
 
 
 def quiet_sdk_logs() -> None:
@@ -76,7 +77,7 @@ class OpenAIProvider:
         self.model = model.strip()
         self.max_output_tokens = max_output_tokens
         self.reasoning_effort = reasoning_effort
-        # Límite total, reintento incluido: una llamada nunca deja una tarea colgada
+        # Límite total: una llamada nunca deja una tarea colgada
         self.deadline_seconds = timeout_seconds * (MAX_RETRIES + 1)
         self._client = openai.AsyncOpenAI(
             api_key=api_key,
