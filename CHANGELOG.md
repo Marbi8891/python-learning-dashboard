@@ -66,6 +66,7 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
 - **Móvil:** el rediseño reservaba la columna de la barra lateral (272 px vacíos) y estrechaba todas las páginas. También se quita la sombra que proyectaba el menú cerrado.
 
 ### Cambiado
+- **La raíz de la web enseña siempre la portada** (`#/portada`), no solo en la primera visita, y el logo de la cabecera también lleva a ella. «¿Qué estudio ahora?» sigue en `#/aprender` y en el menú.
 - **Una sola app en el móvil** (ADR-0030): la CI ya no publica el APK de depuración en `main`, solo el de release firmado. El de depuración queda para los pull requests. Pasos para llevar el progreso de «Python PCAP (debug)» a «Python PCAP» con la sincronización.
 
 ### Añadido

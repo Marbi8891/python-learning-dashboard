@@ -4,7 +4,6 @@
    «Anterior» / «Siguiente» o pulsando una parada. Al final puede empezar, hacer la prueba
    de nivel o ver el recorrido por el menú real (tour.js). */
 
-import { markWelcomeSeen } from "./learn-store.js";
 import { startTour } from "../tour.js";
 import { codeBlock, escapeHtml } from "./ui.js";
 
@@ -100,7 +99,6 @@ function panelHtml() {
 }
 
 export function renderWelcome() {
-  markWelcomeSeen();
   stop = 0;
   return `
     <section class="lx-welcome" aria-labelledby="learn-title">

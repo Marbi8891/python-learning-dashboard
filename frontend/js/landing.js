@@ -14,7 +14,7 @@ import { pythonRunner } from "./console.js";
 import { TimeoutError } from "./python-runner.js";
 import { escapeHtml, renderInline } from "./markdown.js";
 import { codeBlock, highlight } from "./learn/ui.js";
-import { loadLearningContent, markWelcomeSeen } from "./learn/learn-store.js";
+import { loadLearningContent } from "./learn/learn-store.js";
 import { INTERVAL_DAYS } from "./learn/mastery.js";
 import { state, subscribe } from "./store.js";
 
@@ -754,7 +754,6 @@ export async function openLanding(hash, { content, moveFocus = true } = {}) {
     bind(view);
     rendered = true;
   }
-  markWelcomeSeen(); // la próxima visita a la raíz va directa a «¿Qué estudio ahora?»
   updateAccount();
   setMenu(false);
   view.hidden = false;
