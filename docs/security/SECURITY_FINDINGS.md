@@ -139,10 +139,15 @@ La siguiente revisión incremental parte de `git diff eb187a9..HEAD`.
 - **Corrección**: `DeleteConfirm` exige **exactamente uno** de `password` o `google_credential` (422
   si faltan los dos o llegan los dos, para que una contraseña incorrecta no quede oculta tras Google).
   La credencial es un ID token nuevo validado con `google.oauth2.id_token` (firma, audiencia,
-  caducidad, `email_verified`) y su email debe ser el de la sesión. Sigue haciendo falta la sesión.
+  caducidad, `email_verified`), emitido hace **menos de 5 minutos** (`iat`, para que no valga el
+  token del login) y con el email de la sesión. Sigue haciendo falta la sesión. En la web, la
+  credencial solo borra si viene del botón de «Eliminar mi cuenta» (`click_listener`) con esa sección
+  abierta; el botón de entrar se oculta con sesión abierta y nunca borra. Los dos últimos puntos los
+  encontró la revisión independiente de `security-auditor` (20/10/2026).
 - **Prueba de regresión**: `backend/tests/test_google_auth.py` (borrado con Google, otra cuenta,
-  credencial no válida, sin método, los dos métodos, `null`, sin sesión, Google sin configurar) y
-  `e2e/account.spec.js` (borrado con Google simulado y rechazo de otra cuenta).
+  credencial no válida, sin método, los dos métodos, `null`, sin sesión, Google sin configurar,
+  credencial antigua o sin fecha) y `e2e/account.spec.js` (borrado con Google simulado, rechazo de
+  otra cuenta y el botón de entrar no borra con la sesión abierta).
 
 ### PLD-SEC-008 · Pre-secuestro de cuentas al entrar con Google
 - **Severidad**: Media. El registro con contraseña no comprueba el email: alguien podía registrar el

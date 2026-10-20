@@ -229,11 +229,14 @@ test("un servidor lento avisa de que se está despertando", async ({ page }) => 
 // Google Identity falso: dibuja un botón que, al pulsarlo, devuelve una credencial inventada
 const FAKE_GSI = `window.google = { accounts: { id: {
   initialize(options) { window.__gsi = options; },
-  renderButton(target) {
+  renderButton(target, options) {
     const button = document.createElement("button");
     button.type = "button";
     button.textContent = "Continuar con Google";
-    button.addEventListener("click", () => window.__gsi.callback({ credential: "credencial-falsa-de-google-123" }));
+    button.addEventListener("click", () => {
+      options.click_listener?.();
+      window.__gsi.callback({ credential: "credencial-falsa-de-google-123" });
+    });
     target.append(button);
   },
 } } };`;
@@ -337,4 +340,30 @@ test("si Google no se puede descargar, se explica y el email sigue funcionando",
   await page.getByRole("button", { name: "Iniciar sesión" }).click();
   await expect(page.locator("#account-message")).toContainText("No se ha podido conectar con Google");
   await expect(page.locator("#login-form").getByRole("button", { name: "Entrar" })).toBeEnabled();
+});
+
+test("con la sesión abierta, el botón de entrar con Google no aparece ni puede borrar la cuenta", async ({ page }) => {
+  await withGoogle(page);
+  const calls = [];
+  await page.route("**/api/v1/users/me/delete", (route) => {
+    calls.push("delete");
+    return route.fulfill({ status: 204 });
+  });
+  await openLesson(page);
+  await register(page, uniqueEmail(), "Iris");
+  // Abrir «Eliminar mi cuenta» descarga Google; después se cierra sin pulsar su botón
+  await page.locator("#account-button").click();
+  await dialog(page).getByText("Eliminar mi cuenta").click();
+  await expect(dialog(page).locator("[data-google-delete]").getByRole("button", { name: "Continuar con Google" })).toBeVisible();
+  await dialog(page).getByText("Eliminar mi cuenta").click();
+  // Un enlace de recuperación con la sesión abierta lleva a «olvidé» y de ahí a la vista de login
+  await page.goto("/#/restablecer");
+  await page.locator("#forgot-form").getByRole("link", { name: "Volver" }).click();
+  await expect(page.locator("#login-form")).toBeVisible();
+  await expect(page.locator("[data-google-login]")).toBeHidden();
+  // Aunque Google devolviera una credencial sin pulsar el botón de borrar, no se borra nada
+  await page.evaluate(() => window.__gsi.callback({ credential: "credencial-falsa-de-google-123" }));
+  await page.waitForTimeout(500);
+  expect(calls).toEqual([]);
+  await expect(page.locator("#account-label")).toHaveText("Iris");
 });

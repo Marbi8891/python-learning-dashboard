@@ -55,15 +55,29 @@ def _verify_google_credential(credential: str, client_id: str) -> dict:
     return claims
 
 
-def verify_google_identity(credential: str) -> dict:
-    """Claims de un ID token de Google válido para este servidor (503 si Google no está activo)."""
+# Una confirmación con Google (borrar la cuenta) tiene que ser de ahora, no el token del login
+GOOGLE_CONFIRM_MAX_AGE_SECONDS = 300
+
+
+def verify_google_identity(credential: str, *, max_age_seconds: int | None = None) -> dict:
+    """Claims de un ID token de Google válido para este servidor (503 si Google no está activo).
+    Con `max_age_seconds`, además debe haberse emitido hace como mucho ese tiempo (`iat`)."""
     settings = get_settings()
     if not settings.google_client_id:
         raise HTTPException(
             status_code=503,
             detail="El inicio de sesión con Google aún no está configurado.",
         )
-    return _verify_google_credential(credential, settings.google_client_id)
+    claims = _verify_google_credential(credential, settings.google_client_id)
+    if max_age_seconds is not None:
+        issued = claims.get("iat")
+        age = datetime.now(UTC).timestamp() - issued if isinstance(issued, int | float) else None
+        if age is None or age > max_age_seconds:
+            raise HTTPException(
+                status_code=401,
+                detail="La confirmación de Google ha caducado. Vuelve a elegir tu cuenta.",
+            )
+    return claims
 
 
 @router.post("/auth/google", dependencies=[Depends(limit_auth_attempts)])

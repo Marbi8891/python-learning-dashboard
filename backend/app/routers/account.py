@@ -19,7 +19,7 @@ from app.models import (
 )
 from app.password_policy import weakness
 from app.rate_limit import limit_auth_attempts
-from app.routers.auth import verify_google_identity
+from app.routers.auth import GOOGLE_CONFIRM_MAX_AGE_SECONDS, verify_google_identity
 from app.routers.progress import list_progress
 from app.schemas import (
     ActivityOut,
@@ -127,7 +127,9 @@ def delete_my_account(
     if data.google_credential is not None:
         # Las cuentas creadas con Google tienen una contraseña aleatoria que nadie conoce:
         # sin esta vía no podrían ejercer el derecho de supresión (art. 17 RGPD).
-        claims = verify_google_identity(data.google_credential)
+        claims = verify_google_identity(
+            data.google_credential, max_age_seconds=GOOGLE_CONFIRM_MAX_AGE_SECONDS
+        )
         if str(claims["email"]).strip().lower() != user.email:
             record(Event.LOGIN_FAILED, request, user=user.id, action="delete")
             raise HTTPException(

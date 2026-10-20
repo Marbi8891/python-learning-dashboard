@@ -21,8 +21,8 @@ function showView(name) {
   }
   const googleLogin = dialog().querySelector("[data-google-login]");
   if (googleLogin) {
-    googleLogin.hidden = name !== "login" || !googleEnabled;
-    if (!googleLogin.hidden) showGoogleButton($("#google-signin"));
+    googleLogin.hidden = name !== "login" || !googleEnabled || Boolean(state.user);
+    if (!googleLogin.hidden) showGoogleButton($("#google-signin"), "login");
   }
   setMessage("");
   const heading = dialog().querySelector(`[data-view="${name}"] h2`);
@@ -135,6 +135,9 @@ const GOOGLE_IDENTITY_URL = "https://accounts.google.com/gsi/client";
 // Hay botón de Google si config.js tiene el Client ID y el servidor no dice que le falta el suyo
 let googleEnabled = Boolean(window.PLD_CONFIG?.googleClientId);
 let googleIdentity = null;
+// Qué botón de Google se ha pulsado: la credencial solo hace lo que ese botón dice
+let googleIntent = null;
+let googleBusy = false;
 
 /** Google Identity se descarga solo al abrir el login o el borrado de la cuenta: quien solo
     visita la web no envía su IP a Google ni recibe sus cookies. */
@@ -160,17 +163,27 @@ function loadGoogleIdentity() {
   }).then((id) => {
     id.initialize({
       client_id: window.PLD_CONFIG.googleClientId,
-      // Un solo callback: con sesión abierta, Google confirma el borrado; sin ella, inicia sesión
+      // Google admite un solo callback: la acción la decide el botón pulsado (click_listener), y
+      // solo si la pantalla sigue siendo la de ese botón. Nunca se borra desde el botón de entrar.
       callback: async ({ credential }) => {
+        const intent = googleIntent;
+        googleIntent = null;
+        if (googleBusy || !intent) return;
         if (!credential) {
           setMessage("Google no ha devuelto una credencial válida.");
           return;
         }
+        const deleting = intent === "delete" && state.user && $(".account__danger").open;
+        const login = intent === "login" && !state.user;
+        if (!deleting && !login) return;
+        googleBusy = true;
         try {
-          if (state.user) await deleteWithGoogle(credential);
+          if (deleting) await deleteWithGoogle(credential);
           else await loginWithGoogle(credential);
         } catch (error) {
           setMessage(error.message);
+        } finally {
+          googleBusy = false;
         }
       },
       auto_select: false,
@@ -181,7 +194,7 @@ function loadGoogleIdentity() {
   return googleIdentity;
 }
 
-async function showGoogleButton(target) {
+async function showGoogleButton(target, intent) {
   if (!target || target.dataset.rendered === "true") return;
   let id;
   try {
@@ -195,6 +208,9 @@ async function showGoogleButton(target) {
     type: "standard", theme: "outline", size: "large",
     text: "continue_with", shape: "rectangular", width: 280,
     logo_alignment: "left",
+    click_listener: () => {
+      googleIntent = intent;
+    },
   });
   target.dataset.rendered = "true";
 }
@@ -210,7 +226,7 @@ async function initGoogleSignIn() {
   const danger = $(".account__danger");
   danger.addEventListener("toggle", () => {
     danger.querySelector("[data-google-delete]").hidden = !googleEnabled;
-    if (danger.open && googleEnabled) showGoogleButton($("#google-delete"));
+    if (danger.open && googleEnabled) showGoogleButton($("#google-delete"), "delete");
   });
   const info = await serverInfo;
   if (info && info.google === false) {

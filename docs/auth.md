@@ -58,7 +58,9 @@ Sin `BREVO_API_KEY` ni `SMTP_HOST` no se envía nada, y la web ofrece el email d
    Google y el enlace de recuperación rellenan `users.email_verified_at`.
 4. La sesión es la misma que con contraseña (cookie `HttpOnly` o token en memoria, ADR-0033).
 5. **Borrar la cuenta**: `POST /api/v1/users/me/delete` con la sesión y **exactamente uno** de
-   `password` o `google_credential` (un ID token nuevo del mismo email). Si no, 422.
+   `password` o `google_credential` (un ID token del mismo email emitido hace menos de 5 minutos;
+   uno más antiguo, como el del login, da 401). Si no, 422. La web solo envía la credencial cuando
+   viene del botón de Google de «Eliminar mi cuenta».
 
 Errores: 401 si la credencial no vale o es de otra audiencia, 403 si en el borrado es de otra cuenta,
 503 si el servidor no tiene `GOOGLE_CLIENT_ID`. Ninguno repite el token ni el email.

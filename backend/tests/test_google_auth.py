@@ -1,7 +1,9 @@
 """Pruebas del inicio de sesión con Google sin llamadas reales a Google."""
 
+import time
 from types import SimpleNamespace
 
+import pytest
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
@@ -13,6 +15,8 @@ from tests.conftest import PASSWORD, login, register
 
 
 def configure_google(monkeypatch, claims):
+    # Google siempre incluye iat (emisión); por defecto, un token recién emitido
+    claims = {"iat": int(time.time()), **claims} if claims else claims
     monkeypatch.setattr(
         auth,
         "get_settings",
@@ -223,7 +227,7 @@ def test_delete_with_both_methods_is_refused_as_ambiguous(client, monkeypatch):
     headers = {"Authorization": f"Bearer {token}"}
     response = client.post(
         "/api/users/me/delete",
-        json={"password": "incorrecta-123", "google_credential": "y" * 40},
+        json={"password": "incorrecta", "google_credential": "y" * 40},
         headers=headers,
     )
     assert response.status_code == 422
@@ -301,3 +305,19 @@ def test_password_set_by_email_link_survives_google_login(client, monkeypatch):
     assert login(client, password=new).status_code == 200
     assert client.get("/api/users/me", headers=session).status_code == 200
     assert login(client, password=PASSWORD).status_code == 401
+
+
+@pytest.mark.parametrize("issued_at", [int(time.time()) - 301, None])
+def test_delete_with_old_or_undated_google_credential_is_refused(client, monkeypatch, issued_at):
+    # El token del login (o uno de hace más de 5 minutos) no vale como confirmación del borrado
+    headers = _google_session(client, monkeypatch)
+    configure_google(
+        monkeypatch,
+        {"email": "google@example.com", "email_verified": True, "sub": "s", "iat": issued_at},
+    )
+    response = client.post(
+        "/api/users/me/delete", json={"google_credential": "y" * 40}, headers=headers
+    )
+    assert response.status_code == 401
+    assert "caducado" in response.json()["detail"]
+    assert client.get("/api/users/me", headers=headers).status_code == 200
