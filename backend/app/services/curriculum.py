@@ -66,6 +66,8 @@ class Concept:
     lessons: tuple[str, ...]
     related: tuple[str, ...]
     requires: tuple[str, ...] = ()
+    # Teoría completa del concepto: la «explicación alternativa» del tutor (ADR-0038)
+    theory: str = ""
 
 
 @dataclass(frozen=True)
@@ -107,6 +109,7 @@ def parse_curriculum(data: dict) -> Curriculum:
             lessons=tuple(raw.get("lessons") or ()),
             related=tuple(raw.get("related") or ()),
             requires=tuple(raw.get("requires") or ()),
+            theory=_text(raw.get("theory")),
         )
         concepts[concept.id] = concept
         for lesson in concept.lessons:

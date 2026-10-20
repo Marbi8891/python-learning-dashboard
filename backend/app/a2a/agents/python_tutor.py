@@ -34,11 +34,13 @@ from app.a2a.agents.tutor_analysis import (
 )
 from app.a2a.agents.tutor_pedagogy import (
     MAX_HINTS,
+    PRECISION_NOTES_BY_ID,
     PREPARED_INTENTS,
     CheckResult,
     Intent,
     Level,
     LevelEstimate,
+    PrecisionNote,
     after_check,
     describes_logic_error,
     estimate_level,
@@ -52,16 +54,20 @@ from app.a2a.agents.tutor_pedagogy import (
 )
 from app.a2a.agents.tutor_pedagogy import classify as classify_intent
 from app.a2a.conversation import Conversation, Turn, excerpt
-from app.a2a.providers.base import AgentModelProvider, ModelRequest
+from app.a2a.providers.base import TRUNCATED_NOTICE, AgentModelProvider, ModelRequest
 from app.services.curriculum import Concept, Curriculum, OutputExercise, get_curriculum
 from app.services.learning_context import LearnerContext
 
 Source = Literal["model", "simulated", "prepared"]
+# Modalidad del tutor híbrido (ADR-0038). La decide y la valida el backend (executor).
+Mode = Literal["free", "advanced"]
 
 MAX_QUESTION = 4_000
 MAX_CODE = 20_000  # el mismo límite que los intentos de ejercicio (schemas.AttemptCreate)
 MAX_ERROR = 4_000
 TURNS_SENT = 3  # turnos anteriores que se reenvían al modelo como contexto (extractos)
+# Tope de la respuesta de un modelo: una salida desbocada no llega entera al alumno
+MAX_ANSWER = 8_000
 
 
 class TutorQuery(BaseModel):
@@ -76,6 +82,11 @@ class TutorQuery(BaseModel):
     level: Level | None = None
     # El alumno prefiere una explicación paso a paso (un paso por turno)
     gradual: bool = False
+    # Pide otra forma de explicar el tema actual («Explícamelo de otra forma»)
+    alternative: bool = False
+    # Modalidad pedida. «advanced» solo se atiende si el backend la tiene activada y queda cuota:
+    # el cliente la pide, pero no se la concede a sí mismo (ver executors/python_tutor.py)
+    mode: Mode = "free"
 
 
 @dataclass(frozen=True)
@@ -88,6 +99,9 @@ class TutorAnswer:
     source: Source = "model"
     intent: str = "concepto"
     expects_answer: bool = False  # termina con una pregunta de comprobación
+    # Tokens que ha informado el proveedor (contabilidad del tutor híbrido); None si no los da
+    input_tokens: int | None = None
+    output_tokens: int | None = None
 
 
 # Errores frecuentes de quien empieza: qué significan y por dónde buscar
@@ -249,7 +263,10 @@ class TutorPlan:
     findings: CodeFindings | None = None
     apis: list[tuple[str, str]] = field(default_factory=list)
     literal: tuple[str, str] | None = None
-    note: str | None = None
+    note: PrecisionNote | None = None  # explicación revisada a mano que se muestra
+    ladder: PrecisionNote | None = None  # nota cuyas comprobaciones siguen (aunque no se muestre)
+    alternative: bool = False
+    exercise: str | None = None  # enunciado propuesto (para no repetirlo en la conversación)
     injection: bool = False
     solution_ok: bool = True
     hint_key: str | None = None
@@ -317,7 +334,9 @@ class PythonTutorAgent:
         errors = detect_errors(query.error, query.question)
 
         note = precision_note(query.question)
-        concept_id = note[0] if note else match_concept(curriculum, query.question)
+        if note is None and query.alternative and conversation and conversation.note:
+            note = PRECISION_NOTES_BY_ID.get(conversation.note)  # otra forma de explicar lo mismo
+        concept_id = note.concept if note else match_concept(curriculum, query.question)
         if concept_id is None and lesson:
             concept_id = next(iter(curriculum.lesson_concepts.get(lesson.slug, ())), None)
         if concept_id is None and conversation and conversation.concept:
@@ -335,7 +354,10 @@ class PythonTutorAgent:
         if intent == "depuracion" and not (query.code or query.error or errors or lesson):
             if not describes_logic_error(query.question):
                 intent = "ambigua"  # «no me funciona», sin nada más: se pide el código
+        if query.alternative and intent in PREPARED_INTENTS and concept_id:
+            intent = "concepto"  # el botón «Explícamelo de otra forma» siempre vuelve a explicar
         evaluation = None
+        ladder = note
         if intent == "comprobacion" and conversation and conversation.pending_check:
             exercise = self._exercise(conversation.pending_check)
             if exercise is None:  # el contenido ha cambiado: se trata como pregunta normal
@@ -343,6 +365,7 @@ class PythonTutorAgent:
             else:
                 evaluation = evaluate_check(exercise, query.question)
                 concept_id = exercise.concept
+                ladder = PRECISION_NOTES_BY_ID.get(conversation.note or "")
 
         previous = conversation.concept if conversation else None
         topic_changed = bool(
@@ -376,7 +399,9 @@ class PythonTutorAgent:
             findings=findings,
             apis=unknown_apis(query.question, query.code),
             literal=literal_print_output(query.question),
-            note=note[1] if note else None,
+            note=note if intent == "concepto" else None,
+            ladder=ladder,
+            alternative=query.alternative,
             injection=mentions_injection(query.question, query.code, query.error),
             solution_ok=solution_allowed(learner),
             evaluation=evaluation,
@@ -402,6 +427,8 @@ class PythonTutorAgent:
         asked = plan.conversation.asked_checks if plan.conversation else []
         concept = plan.concept.id if plan.concept else None
         if plan.evaluation is not None:
+            if plan.ladder and plan.ladder.checks:  # la escalera de la nota, sin salirse de ella
+                return self._ladder_check(plan.ladder, asked, plan.evaluation)
             return pick_check(
                 self.curriculum,
                 concept,
@@ -409,11 +436,34 @@ class PythonTutorAgent:
                 [*asked, plan.evaluation.exercise.id],
                 harder=plan.evaluation.correct,
             )
+        if plan.intent == "ejercicio" and concept:
+            options, fresh = self._exercise_options(plan)
+            if options and not fresh:  # ya no quedan de programar: uno de predecir la salida
+                return pick_check(self.curriculum, concept, plan.level.level, asked)
+            return None
         if plan.intent != "concepto" or plan.level.level == "avanzado":
             return None
-        if plan.literal or plan.apis or plan.note:
+        if plan.literal or plan.apis:
             return None  # ya se ha respondido con un hecho concreto
+        if plan.note:
+            return self._ladder_check(plan.note, asked, None)
         return pick_check(self.curriculum, concept, plan.level.level, asked)
+
+    def _ladder_check(
+        self, note: PrecisionNote, asked: list[str], evaluation: CheckResult | None
+    ) -> OutputExercise | None:
+        """Siguiente comprobación de la nota: tras acertar, una más difícil; tras fallar, otra
+        del mismo nivel (otra oportunidad). Sin repetir las ya preguntadas."""
+        done = {*asked, evaluation.exercise.id} if evaluation else set(asked)
+        options = [ex for id in note.checks if id not in done and (ex := self._exercise(id))]
+        if evaluation is not None:
+            level = evaluation.exercise.level
+            options = [
+                ex
+                for ex in options
+                if (ex.level > level if evaluation.correct else ex.level <= level)
+            ]
+        return options[0] if options else None
 
     # ---------- 2. Respuesta preparada (sin modelo) ----------
 
@@ -456,7 +506,9 @@ class PythonTutorAgent:
         parts += [advice for _, advice in plan.apis]
         concept = plan.concept
         if plan.note:
-            parts.append(plan.note)
+            parts += self._note_parts(plan.note, plan.alternative)
+        elif concept and plan.alternative and concept.theory:
+            parts.append(f"**Otra forma de verlo: {concept.title}**\n\n{concept.theory}")
         elif concept and not plan.literal and not plan.apis:
             parts.append(f"**{concept.title}**: {concept.summary}")
             if concept.when and level != "inicial":
@@ -498,6 +550,18 @@ class PythonTutorAgent:
             )
         if plan.check is None and level == "inicial" and concept:
             parts.append("Pruébalo en la consola de la lección cambiando una sola cosa cada vez.")
+        return parts
+
+    @staticmethod
+    def _note_parts(note: PrecisionNote, alternative: bool) -> list[str]:
+        text, code, output = note.text, note.example, note.output
+        if alternative and note.alternative:
+            text, code, output = note.alternative, note.alternative_example, note.alternative_output
+        parts = [f"**Otra forma de verlo:** {text}" if alternative else text]
+        if code:
+            parts.append(f"**Ejemplo mínimo:**\n\n```python\n{code}\n```")
+        if output:
+            parts.append("**Resultado esperado** (comprobado en las pruebas):\n\n" + _fence(output))
         return parts
 
     def _learner_mistakes(self, plan: TutorPlan) -> str:
@@ -663,15 +727,33 @@ class PythonTutorAgent:
             *self._hint_ladder(plan),
         ]
 
+    def _exercise_options(self, plan: TutorPlan) -> tuple[list[str], list[str]]:
+        """Enunciados de programar para el nivel (si el concepto no tiene, el más fácil de los
+        suyos) y, de ellos, los que aún no se han propuesto en la conversación."""
+        top = {"inicial": 1, "intermedio": 2, "avanzado": 3}[plan.level.level]
+        concept = plan.concept.id if plan.concept else None
+        available = self.curriculum.code_exercises.get(concept or "", ())
+        options = [q for lvl, q in available if lvl <= top] or [q for _, q in sorted(available)][:1]
+        given = plan.conversation.exercises_given if plan.conversation else []
+        return options, [q for q in reversed(options) if q not in given]
+
     def _exercise_parts(self, plan: TutorPlan) -> list[str]:
         level = plan.level.level
-        top = {"inicial": 1, "intermedio": 2, "avanzado": 3}[level]
-        concept = plan.concept.id if plan.concept else None
-        options = [
-            q for lvl, q in self.curriculum.code_exercises.get(concept or "", ()) if lvl <= top
-        ]
-        statement = options[-1] if options else EXERCISES[level]
+        options, fresh = self._exercise_options(plan)
+        if options and not fresh and plan.check:  # «más ejercicios»: sigue con predicciones
+            return [
+                "Ya te he propuesto todos los ejercicios de programar que tengo de este tema. "
+                "Practica con este de predecir la salida:"
+            ]
+        parts: list[str] = []
+        if options and not fresh:
+            parts.append(
+                "Ya te he propuesto todos los ejercicios que tengo de este tema; repasa este:"
+            )
+        statement = (fresh or options[-1:] or [EXERCISES[level]])[0]
+        plan.exercise = statement
         return [
+            *parts,
             f"**Ejercicio ({level}):** {statement}",
             "Cuando lo tengas, pégame tu código y lo revisamos.",
         ]
@@ -684,7 +766,15 @@ class PythonTutorAgent:
         if result.correct:
             parts.append(f"**¡Correcto!** La salida es `{exercise.expect}`. {exercise.explain}")
             if plan.check is None:
-                parts.append("Has comprobado este concepto. ¿Seguimos con otro?")
+                challenge = self._challenge(plan)
+                parts.append(
+                    "Has comprobado este concepto. "
+                    + (
+                        f"**Reto:** {challenge} Cuando lo tengas, pégame tu código y lo revisamos."
+                        if challenge
+                        else "¿Seguimos con otro?"
+                    )
+                )
             return parts
         opening = "No pasa nada." if result.unknown else "**No exactamente.**"
         parts.append(f"{opening} La salida es:\n\n{_fence(exercise.expect)}")
@@ -696,13 +786,27 @@ class PythonTutorAgent:
             parts.append("Repasa el ejemplo de la lección y vuelve a intentarlo en la consola.")
         return parts
 
+    def _challenge(self, plan: TutorPlan) -> str | None:
+        """Un ejercicio de programar del concepto como reto progresivo, tras acertar."""
+        concept = plan.concept.id if plan.concept else ""
+        given = plan.conversation.exercises_given if plan.conversation else []
+        options = [q for _, q in sorted(self.curriculum.code_exercises.get(concept, ()))]
+        fresh = [q for q in options if q not in given]
+        plan.exercise = fresh[0] if fresh else None
+        return plan.exercise
+
     # ---------- 3. Respuesta con el modelo ----------
 
-    async def respond(self, plan: TutorPlan) -> TutorAnswer:
+    async def respond(
+        self, plan: TutorPlan, model: AgentModelProvider | None = None
+    ) -> TutorAnswer:
+        """Responde con `model` (la IA avanzada, si el executor la ha concedido) o con el
+        proveedor del tutor (modalidad gratuita)."""
+        model = model or self.model
         common = {
             "level": plan.level.level,
-            "provider": self.model.name,
-            "model": self.model.model,
+            "provider": model.name,
+            "model": model.model,
             "intent": plan.intent,
             "expects_answer": plan.check is not None,
         }
@@ -711,12 +815,31 @@ class PythonTutorAgent:
         request = ModelRequest(
             system=SYSTEM_PROMPT, prompt=self._prompt(plan), outline=plan.prepared_text
         )
-        text = await self.model.generate(request)
-        if self.model.name == "mock":  # devuelve la guía tal cual: ya lleva la comprobación
+        text = await model.generate(request)
+        common |= {
+            "input_tokens": getattr(text, "input_tokens", None),
+            "output_tokens": getattr(text, "output_tokens", None),
+        }
+        text = str(text)
+        if model.name == "mock":  # devuelve la guía tal cual: ya lleva la comprobación
             return TutorAnswer(text=text, source="simulated", **common)
+        if len(text) > MAX_ANSWER:
+            text = f"{text[:MAX_ANSWER].rstrip()}\n\n{TRUNCATED_NOTICE}"
         if plan.check:
             text = f"{text}\n\n{plan.check_question}"
         return TutorAnswer(text=text, source="model", **common)
+
+    def prepared_answer(self, plan: TutorPlan) -> TutorAnswer:
+        """La respuesta sin modelo (cuando no se concede la IA avanzada)."""
+        return TutorAnswer(
+            text=plan.prepared_text,
+            level=plan.level.level,
+            provider=self.model.name,
+            model=self.model.model,
+            source="prepared",
+            intent=plan.intent,
+            expects_answer=plan.check is not None,
+        )
 
     async def answer(
         self,
@@ -736,6 +859,12 @@ class PythonTutorAgent:
             return
         conversation.gradual = conversation.gradual or plan.query.gradual
         concept = plan.concept.id if plan.concept else None
+        if plan.note:
+            conversation.note = plan.note.id
+        elif plan.ladder is None and concept and concept != conversation.concept:
+            conversation.note = None  # otro tema: la nota anterior ya no se sigue
+        if plan.exercise:
+            conversation.exercises_given.append(plan.exercise)
         if plan.evaluation and concept:
             target, other = (
                 (conversation.correct, conversation.wrong)
@@ -780,6 +909,11 @@ class PythonTutorAgent:
         lines.append(f"Estrategia de nivel: {LEVEL_STRATEGY[level.level]}")
         if plan.gradual or level.level == "inicial":
             lines.append("Ritmo: un paso cada vez.")
+        if plan.alternative:
+            lines.append(
+                "El alumno pide otra explicación distinta de la anterior: usa otra analogía u "
+                "otro ejemplo, sin repetir la misma."
+            )
         lines.append(f"Protocolo: {PROTOCOLS.get(plan.intent, PROTOCOLS['concepto'])}")
         lines += self._learner_lines(plan)
         if learner and learner.lesson:
