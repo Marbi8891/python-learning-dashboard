@@ -4,7 +4,15 @@ import json
 from datetime import date, datetime
 from typing import Annotated
 
-from pydantic import AfterValidator, BaseModel, ConfigDict, EmailStr, Field, field_validator
+from pydantic import (
+    AfterValidator,
+    BaseModel,
+    ConfigDict,
+    EmailStr,
+    Field,
+    field_validator,
+    model_validator,
+)
 
 # ---------- Lecciones ----------
 
@@ -121,8 +129,17 @@ class PasswordResetConfirm(BaseModel):
     new_password: Password
 
 
-class PasswordConfirm(BaseModel):
-    password: str = Field(max_length=128)
+class DeleteConfirm(BaseModel):
+    """Confirmación del borrado: la contraseña o, en cuentas de Google, un ID token reciente."""
+
+    password: str | None = Field(default=None, max_length=128)
+    google_credential: str | None = Field(default=None, min_length=20, max_length=8192)
+
+    @model_validator(mode="after")
+    def one_confirmation(self) -> "DeleteConfirm":
+        if (self.password is None) == (self.google_credential is None):
+            raise ValueError("Confirma con tu contraseña o con Google")
+        return self
 
 
 class Token(BaseModel):

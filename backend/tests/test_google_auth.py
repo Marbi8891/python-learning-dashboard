@@ -1,5 +1,6 @@
 """Pruebas del inicio de sesión con Google sin llamadas reales a Google."""
 
+import time
 from types import SimpleNamespace
 
 from sqlalchemy import select
@@ -156,3 +157,76 @@ def test_google_login_handles_concurrent_account_creation(client, monkeypatch):
         json={"credential": "x" * 40, "accept_privacy": True},
     )
     assert response.status_code == 409
+
+
+# ---------- Borrar una cuenta de Google (su contraseña es aleatoria) ----------
+
+
+def google_account(client, monkeypatch, email="google@example.com"):
+    """Crea la cuenta entrando con Google y devuelve las cabeceras de su sesión."""
+    claims = {"email": email, "email_verified": True, "name": "G", "sub": "s"}
+    configure_google(monkeypatch, claims)
+    response = client.post(
+        "/api/auth/google", json={"credential": "x" * 40, "accept_privacy": True}
+    )
+    return {"Authorization": f"Bearer {response.json()['access_token']}"}
+
+
+def fresh_claims(email="google@example.com", age_seconds=0):
+    issued = int(time.time()) - age_seconds
+    return {"email": email, "email_verified": True, "sub": "s", "iat": issued}
+
+
+def delete_with_google(client, headers):
+    return client.post(
+        "/api/users/me/delete", json={"google_credential": "y" * 40}, headers=headers
+    )
+
+
+def test_google_account_can_be_deleted_by_confirming_with_google(client, monkeypatch):
+    headers = google_account(client, monkeypatch)
+    configure_google(monkeypatch, fresh_claims(email="GOOGLE@example.com"))
+    assert delete_with_google(client, headers).status_code == 204
+    assert client.get("/api/users/me", headers=headers).status_code == 401
+    with Session(client.engine) as db:
+        assert db.scalar(select(User)) is None
+
+
+def test_google_confirmation_must_be_from_the_same_account(client, monkeypatch):
+    headers = google_account(client, monkeypatch)
+    configure_google(monkeypatch, fresh_claims(email="otra@example.com"))
+    response = delete_with_google(client, headers)
+    assert response.status_code == 403
+    assert client.get("/api/users/me", headers=headers).status_code == 200
+
+
+def test_google_confirmation_must_be_recent(client, monkeypatch):
+    headers = google_account(client, monkeypatch)
+    configure_google(monkeypatch, fresh_claims(age_seconds=11 * 60))
+    assert delete_with_google(client, headers).status_code == 403
+    configure_google(monkeypatch, {"email": "google@example.com", "email_verified": True})
+    assert delete_with_google(client, headers).status_code == 403  # sin iat
+    assert client.get("/api/users/me", headers=headers).status_code == 200
+
+
+def test_google_confirmation_rejects_an_invalid_token(client, monkeypatch):
+    headers = google_account(client, monkeypatch)
+
+    def invalid(token, request, client_id):
+        raise ValueError("firma no válida")
+
+    monkeypatch.setattr(auth, "verify_oauth2_token", invalid)
+    assert delete_with_google(client, headers).status_code == 401
+    assert client.get("/api/users/me", headers=headers).status_code == 200
+
+
+def test_google_confirmation_needs_google_configured(client, monkeypatch):
+    headers = google_account(client, monkeypatch)
+    monkeypatch.setattr(auth, "get_settings", lambda: SimpleNamespace(google_client_id=None))
+    assert delete_with_google(client, headers).status_code == 503
+
+
+def test_delete_needs_exactly_one_confirmation(client, auth_headers):
+    for body in ({}, {"password": "x", "google_credential": "y" * 40}):
+        response = client.post("/api/users/me/delete", json=body, headers=auth_headers)
+        assert response.status_code == 422

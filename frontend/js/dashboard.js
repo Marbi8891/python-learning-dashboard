@@ -678,8 +678,8 @@ function profileHtml(user) {
     ${securityHtml(user, { google: method === "google" })}
     <section class="course-section" aria-labelledby="dash-data-title">
       <h2 class="section-title" id="dash-data-title">Privacidad y gestión de datos</h2>
-      <p>Descarga una copia de todos tus datos (RGPD) o gestiona la sesión y el borrado de la cuenta, que pide confirmación con la contraseña.</p>
-      ${method === "google" ? `<p class="account-card__meta">Si siempre entras con Google y quieres borrar la cuenta, primero elige una contraseña con «¿Has olvidado tu contraseña?» en el inicio de sesión.</p>` : ""}
+      <p>Descarga una copia de todos tus datos (RGPD) o gestiona la sesión y el borrado de la cuenta, que pide confirmación con la contraseña o con Google.</p>
+      ${method === "google" ? `<p class="account-card__meta">Si entras con Google, en «Tu cuenta → Eliminar mi cuenta» puedes confirmar el borrado eligiendo la misma cuenta de Google, sin contraseña.</p>` : ""}
       <p class="dash-card__actions">
         <button class="btn btn--ghost" type="button" data-panel="export">Descargar mis datos (JSON)</button>
         <a href="privacidad.html">Política de privacidad</a>

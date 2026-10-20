@@ -224,3 +224,44 @@ test("un servidor lento avisa de que se está despertando", async ({ page }) => 
   await expect(page.locator("#account-message")).toContainText("El servidor se está despertando");
   await expect(page.locator("#account-message")).not.toContainText("despertando", { timeout: 15_000 });
 });
+
+// Google Identity Services falso: el botón llama al callback con una credencial de prueba
+const FAKE_GSI = `window.google = { accounts: { id: {
+  initialize(options) { window.__gsi = options; },
+  renderButton(target) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = "Google de prueba";
+    button.onclick = () => window.__gsi.callback({ credential: "x".repeat(40) });
+    target.append(button);
+  },
+} } };`;
+
+test("el script de Google solo se descarga al abrir el inicio de sesión o el borrado", async ({ page }) => {
+  const requests = [];
+  await page.route("https://accounts.google.com/**", (route) => {
+    requests.push(route.request().url());
+    return route.fulfill({ contentType: "text/javascript", body: FAKE_GSI });
+  });
+  await openLesson(page);
+  await page.goto("/#/portada");
+  await expect(page.locator("#landing-view")).toBeVisible();
+  expect(requests).toEqual([]); // ni la portada ni las lecciones cargan Google
+
+  await openLesson(page);
+  await page.getByRole("button", { name: "Iniciar sesión" }).click();
+  await expect(dialog(page).locator("#google-signin")).toContainText("Google de prueba");
+  expect(requests).toEqual(["https://accounts.google.com/gsi/client"]);
+  await dialog(page).locator("#account-close").click();
+
+  // Ya con sesión, «Eliminar mi cuenta» ofrece confirmar con Google (mismo script, sin recargarlo)
+  await register(page, uniqueEmail());
+  await page.locator("#account-button").click();
+  await dialog(page).getByText("Eliminar mi cuenta").click();
+  const confirm = dialog(page).locator("[data-google-delete]");
+  await confirm.getByRole("button", { name: "Google de prueba" }).click();
+  // El backend de los e2e no tiene Google configurado: la petición llega y se rechaza sin borrar nada
+  await expect(page.locator("#account-message")).toContainText("Google no está configurado");
+  await expect(page.locator("#account-label")).toHaveText("Ana");
+  expect(requests).toHaveLength(1);
+});
