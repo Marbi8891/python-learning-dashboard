@@ -6,13 +6,14 @@
 ![Cobertura backend](https://img.shields.io/badge/cobertura%20backend-100%25-brightgreen)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
-Herramienta para **aprender Python entendiendo lo que haces** y **preparar la parte de programación de DAW**. Funciona por conceptos: teoría con ejemplos, ejercicios corregidos al momento, explicación de cada error, repaso espaciado y simulacros. Incluye además el curso del examen PCAP, los demás módulos de DAW, un tutor de Python, un panel personal para el alumno y una app Android.
+Herramienta para **aprender Python entendiendo lo que haces** y **preparar la parte de programación de DAW**. Funciona por conceptos: teoría con ejemplos, ejercicios corregidos al momento, explicación de cada error, repaso espaciado y simulacros. Incluye además el curso del examen PCAP, los demás módulos de DAW, una portada pública, un tutor de Python, un panel personal para el alumno y una app Android.
 
 **Demo:** https://marbi8891.github.io/python-learning-dashboard/
 
 ## Índice
 
 - [Qué incluye hoy](#qué-incluye-hoy)
+- [Portada](#portada-adr-0037)
 - [Núcleo educativo](#núcleo-educativo-adr-0031)
 - [Curso PCAP y demás funcionalidades](#curso-pcap-y-demás-funcionalidades)
 - [Mi panel](#mi-panel-adr-0035)
@@ -25,23 +26,28 @@ Herramienta para **aprender Python entendiendo lo que haces** y **preparar la pa
 
 ## Qué incluye hoy
 
-Todo lo de esta tabla está en `main`, salvo lo marcado como «En PR».
+Todo lo de esta tabla está en `main`.
 
 | Área | Qué hace | Dónde | Decisión |
 |---|---|---|---|
-| Núcleo educativo | 22 conceptos y 128 ejercicios comprobados ejecutando Python | Aprender, Teoría, Practicar, DAW, Progreso | [ADR-0031](docs/adr/0031-nucleo-educativo-por-conceptos.md) |
+| Núcleo educativo | 22 conceptos y 131 ejercicios comprobados ejecutando Python | Aprender, Teoría, Practicar, DAW, Progreso | [ADR-0031](docs/adr/0031-nucleo-educativo-por-conceptos.md) |
 | Curso PCAP | 27 lecciones, 126 preguntas y simulacro oficial de 40 preguntas | Menú «Más» | [ADR-0009](docs/adr/0009-enfoque-pcap.md) |
-| Bienvenida | Mapa de 5 paradas y recorrido guiado por el menú en la primera visita | `#/bienvenida` | — |
+| Portada | Presentación pública con una demostración real del temario; la raíz de la web lleva aquí | `#/portada` (PR #57, #55) | [ADR-0037](docs/adr/0037-portada-publica.md) |
+| Bienvenida | Mapa de 5 paradas y recorrido guiado por el menú | `#/bienvenida` | — |
 | Mi panel | Resumen, cursos, progreso, actividad, planificación, logros y perfil | `#/panel` (PR #49) | [ADR-0035](docs/adr/0035-panel-del-alumno.md) |
-| Login con Google | Crear cuenta o entrar con Google, verificado en el servidor | Pantalla de acceso (PR #46, #48) | — |
+| Login con Google | Crear cuenta, entrar y borrar la cuenta con Google; el script de Google solo se carga al abrir el acceso | Pantalla de acceso (PR #46, #48, #55) | [docs/auth.md](docs/auth.md) |
 | Sesión segura | Token en cookie `HttpOnly` con protección CSRF | Web (PR #39) | [ADR-0033](docs/adr/0033-sesion-en-cookie-httponly.md) |
 | Recuperación de contraseña | Enlace por email, enviado por la API HTTPS de Brevo o por SMTP | `#/restablecer` (PR #36, #42, #44) | [docs/auth.md](docs/auth.md) |
 | Python Tutor | Tutor de Python por A2A 1.0, con Ollama local, modo sin IA o Anthropic opcional | `#/tutor` (PR #40, #41) | [ADR-0034](docs/adr/0034-agentes-a2a.md) |
 | Tutor adaptativo | Plan pedagógico propio, nivel por evidencias, pistas graduadas y origen visible de cada respuesta | `#/tutor` (PR #51, #54) | [ADR-0036](docs/adr/0036-tutor-adaptativo.md) |
+| Tutor híbrido | Modo gratuito siempre disponible e «IA avanzada» con OpenAI opcional, desactivada por defecto y con cuotas | `#/tutor` (PR #60) | [ADR-0038](docs/adr/0038-tutor-hibrido.md) |
 | App Android | Kotlin + Compose, sin conexión, con el mismo progreso que la web | `android/` | [ADR-0011](docs/adr/0011-app-android-nativa.md) |
 | Equipo AppSec | 8 agentes de seguridad, guardián de rutas y análisis automático en cada PR | `.claude/agents/`, `security.yml` (PR #50, #52) | [AGENT_WORKFLOW](docs/security/AGENT_WORKFLOW.md) |
 | LegalDocs AI | Agente que mantiene el expediente legal (privacidad, LSSI, licencias, IA) | `docs/legal/` (PR #53) | [docs/legal](docs/legal/README.md) |
-| Cierre del MVP | Borrar desde la web las cuentas creadas con Google y cargar el script de Google solo al abrir el login | **En PR (#55, borrador)** | — |
+
+## Portada (ADR-0037)
+
+`#/portada` presenta la web a quien llega desde un enlace, con su propia cabecera y menú móvil accesible. Incluye una demostración con un concepto y un ejercicio reales del temario (corrige y explica el error de cada respuesta trampa, y el ejemplo se puede ejecutar en el navegador), las funciones disponibles, el recorrido en cuatro pasos, el temario, la tecnología, preguntas frecuentes y CodeFeed como propuesta en desarrollo. La raíz de la web y el logo llevan a la portada; «Empezar a aprender» lleva a «¿Qué estudio ahora?». Cada sección tiene su ruta (`#/portada/<sección>`).
 
 ## Núcleo educativo (ADR-0031)
 
@@ -56,7 +62,7 @@ El ciclo es: concepto → explicación → ejemplo → intento → error o acier
 - **DAW:** competencias (Fundamentos, Programación, Lógica) con su dominio, actividades de examen (cronometrados, problemas completos, lectura de código, detectar errores, del enunciado al algoritmo) y **simulacros** sin corrección hasta el final. Enlaza el temario por UT y los demás módulos.
 - **Progreso:** dominio, estado y próximo repaso de cada concepto, errores frecuentes (pendientes o corregidos), actividad y simulacros.
 - **Plan según el tiempo disponible:** el plan del día y las indicaciones del tutor se adaptan a los minutos que tengas (PR #45).
-- **Contenido verificado:** 128 ejercicios en `frontend/data/learning.json`, generados por `scripts/learning/`. El script ejecuta cada salida, cada corrección y cada solución, y comprueba que las soluciones equivocadas típicas fallan en el test que delata su error.
+- **Contenido verificado:** 131 ejercicios en `frontend/data/learning.json`, generados por `scripts/learning/`. El script ejecuta cada salida, cada corrección y cada solución, y comprueba que las soluciones equivocadas típicas fallan en el test que delata su error.
 - **Mismo progreso en la web y en la app:** `/api/v1/course-state/learn`.
 
 ## Curso PCAP y demás funcionalidades
@@ -96,13 +102,13 @@ Los indicadores solo muestran lo que se puede calcular de verdad: si no hay dato
 
 La cuenta es **opcional**: sin ella todo funciona y el progreso se guarda en el navegador.
 
-- **Registro con email y contraseña** (Argon2) o **con Google**. El ID token de Google se verifica en el servidor (firma, audiencia, caducidad y email verificado) y la cuenta nueva también exige aceptar la política de privacidad.
+- **Registro con email y contraseña** (Argon2) o **con Google**. El ID token de Google se verifica en el servidor (firma, audiencia, caducidad y email verificado) y la cuenta nueva también exige aceptar la política de privacidad. El script de Google solo se descarga al abrir el inicio de sesión o el borrado de la cuenta, no en cada visita, y el botón solo aparece si el servidor tiene `GOOGLE_CLIENT_ID`. Si alguien entra con Google en una cuenta creada con contraseña cuyo email nunca se verificó, la contraseña se anula y se cierran las demás sesiones, para evitar que otra persona la haya registrado antes.
 - **Sesión en una cookie `HttpOnly`** (ADR-0033): JavaScript no puede leer el token y la sesión sobrevive a recargar. Protección CSRF con la cabecera `X-PLD-Session`. La app Android sigue usando `Authorization: Bearer`. Sesiones de 30 minutos.
 - **Cerrar sesión** en este dispositivo o en todos.
 - **Protección contra fuerza bruta:** límite de intentos por minuto y bloqueo temporal de la cuenta tras varios fallos.
 - **Recuperación de contraseña** ([docs/auth.md](docs/auth.md)): «¿Has olvidado tu contraseña?» envía un enlace de un solo uso que caduca a los 30 minutos y, al usarlo, cierra todas las sesiones. La respuesta es la misma exista o no la cuenta. El email sale por la **API HTTPS de Brevo** (`BREVO_API_KEY`), porque el plan gratuito de Render bloquea SMTP, o por SMTP (`SMTP_HOST`, puertos 587 o 465). Sin ninguno de los dos, no se envía.
 - **Sincronización** del progreso, la preparación del PCAP, los cursos, el XP y los logros entre la web y la app.
-- **RGPD:** descargar todos tus datos en JSON y borrar la cuenta. Las cuentas creadas con Google aún no pueden borrarse desde la web; el arreglo está en el PR #55.
+- **RGPD:** descargar todos tus datos en JSON y borrar la cuenta, confirmando con la contraseña o eligiendo la misma cuenta de Google.
 - Páginas públicas: [`privacidad.html`](frontend/privacidad.html) y [`aviso-legal.html`](frontend/aviso-legal.html).
 
 ## Python Tutor (A2A)
@@ -113,18 +119,22 @@ Con `A2A_ENABLED=true` el backend añade agentes [A2A 1.0](https://a2a-protocol.
 - **Adaptativo** (ADR-0036): antes de llamar a ningún modelo prepara un plan pedagógico (tipo de consulta, concepto, nivel, pista que toca y pregunta de comprobación). El nivel sale de las evidencias (conceptos demostrados y ejercicios superados), no del % global. Las pistas van de 1 a 3, recuerda la conversación (solo en memoria) y reutiliza el contenido revisado del curso.
 - **Cada respuesta dice su origen:** de IA, del tutor sin IA o preparada. Si el modelo falla, explica el motivo y responde igualmente con la guía sin IA.
 - **En la web:** Cancelar, Reintentar, «Pedir una pista», «Explícamelo paso a paso», la lección abierta preseleccionada y ejemplos que se ejecutan en el navegador.
-- **Proveedores de modelo, sin gastar:**
+- **Dos modalidades** (ADR-0038, [docs/tutor-hibrido.md](docs/tutor-hibrido.md)):
+  - **Gratuita**, siempre disponible. Su modelo se elige con `A2A_MODEL_PROVIDER`:
 
-  | `A2A_MODEL_PROVIDER` | Qué es | Coste |
-  |---|---|---|
-  | `ollama` (por defecto) | Modelo local con [Ollama](https://ollama.com), recomendado `qwen2.5-coder:7b` | Gratis |
-  | `mock` | Tutor sin IA: responde con el plan pedagógico y el contenido del curso | Gratis |
-  | `anthropic` | API de Anthropic, solo con `ANTHROPIC_API_KEY` | De pago, desactivado salvo que se elija |
+    | `A2A_MODEL_PROVIDER` | Qué es | Coste |
+    |---|---|---|
+    | `ollama` (por defecto) | Modelo local con [Ollama](https://ollama.com), recomendado `qwen2.5-coder:7b` | Gratis |
+    | `mock` | Tutor sin IA: responde con el plan pedagógico y el contenido del curso | Gratis |
+    | `anthropic` | API de Anthropic, solo con `ANTHROPIC_API_KEY` | De pago, desactivado salvo que se elija |
+
+  - **IA avanzada**, opcional y **desactivada por defecto** (`A2A_ADVANCED_PROVIDER=none`). Con `openai` y `OPENAI_API_KEY` usa OpenAI (de pago). La modalidad la decide el backend, no el navegador, y tiene cuotas guardadas en la base de datos: 10 consultas por alumno y día, 200 en total al día, 6000 caracteres de entrada, 600 tokens de salida y 30 s por llamada, sin reintentos. Al llegar a un límite o si falla, se explica y se responde en modo gratuito; un fallo nunca pasa una consulta gratuita a la de pago. Antes de activarla en producción hay que revisar la privacidad (borrador en `docs/legal/expediente/borradores/`).
+- **Comprobaciones:** «Explícamelo de otra forma», «Otro ejercicio» y una escalera de comprobaciones que sube de dificultad si aciertas. Las corrige el backend con la salida verificada en CI, nunca la IA, y una respuesta de la IA no marca nada como completado.
 
 - **Límites:** mensajes por usuario y minuto, consultas al modelo por usuario y día y en total por minuto, tokens de salida y tiempo máximo por llamada.
 - **Evaluación:** 20 casos en español que se ejecutan en CI (`backend/tests/tutor_eval/`) y `scripts/a2a/eval_tutor.py` para evaluar con un modelo real.
 
-Detalle, ejemplos, privacidad y cómo añadir agentes: **[docs/a2a.md](docs/a2a.md)**.
+Detalle, ejemplos, privacidad y cómo añadir agentes: **[docs/a2a.md](docs/a2a.md)** y **[docs/tutor-hibrido.md](docs/tutor-hibrido.md)**.
 
 ## App Android nativa
 
@@ -240,7 +250,7 @@ Qué ejecutar según lo que cambies: [docs/TESTING.md](docs/TESTING.md) §3.
 |---|---|---|
 | Backend | `cd backend && python -m pytest --cov=app` | API, seguridad, aislamiento entre cuentas, RGPD, migraciones, tutor (incluidos los casos de evaluación), contenido y banco del PCAP (cada respuesta se comprueba ejecutando Python; 100 % de cobertura) |
 | Unitarios del frontend | `npm run test:unit` | Dominio por concepto, errores activos, repaso espaciado, plan de hoy, selección de ejercicios, sesiones, simulacros, prueba de nivel, Markdown seguro, cálculos del panel y fusión de logros (`node --test`, sin dependencias) |
-| Núcleo educativo | `python scripts/learning/build_learning.py --check` | Cada respuesta de los 128 ejercicios se comprueba ejecutando Python con el mismo `runner.py` del navegador |
+| Núcleo educativo | `python scripts/learning/build_learning.py --check` | Cada respuesta de los 131 ejercicios se comprueba ejecutando Python con el mismo `runner.py` del navegador |
 | End-to-end | `npm ci && npx playwright install chromium && npm run test:e2e` | La app completa con el backend real, la consola Python y la auditoría WCAG |
 | Calidad | `cd backend && ruff check . ../e2e && ruff format --check . ../e2e` | Estilo PEP 8 y formato |
 | Seguridad | `python scripts/security/run_checks.py` | Bandit, Semgrep con las reglas del proyecto, Gitleaks y auditoría de dependencias, si están instalados |
@@ -310,6 +320,8 @@ Decisiones documentadas (todas en [`docs/adr/`](docs/adr/)):
 - [ADR-0034 Agentes A2A junto a la API REST](docs/adr/0034-agentes-a2a.md)
 - [ADR-0035 Panel del alumno](docs/adr/0035-panel-del-alumno.md)
 - [ADR-0036 Tutor de Python adaptativo](docs/adr/0036-tutor-adaptativo.md)
+- [ADR-0037 Portada pública](docs/adr/0037-portada-publica.md)
+- [ADR-0038 Tutor híbrido](docs/adr/0038-tutor-hibrido.md)
 
 ## API
 
@@ -330,7 +342,7 @@ La API pública está en `/api/v1`. Las rutas antiguas sin versión (`/api/...`)
 | POST | `/users/me/password` | ✔ | Cambiar la contraseña |
 | GET | `/users/me/activity` | ✔ | Actividad de la cuenta (accesos y cambios) |
 | GET | `/users/me/export` | ✔ | Todos mis datos en JSON (RGPD) |
-| POST | `/users/me/delete` | ✔ | Borrar la cuenta y sus datos (pide la contraseña) |
+| POST | `/users/me/delete` | ✔ | Borrar la cuenta y sus datos (pide `password` o `google_credential`) |
 | GET | `/progress` | ✔ | Lecciones completadas |
 | PUT / DELETE | `/progress/{slug}` | ✔ | Marcar o desmarcar |
 | POST | `/progress/import` | ✔ | Fusionar el progreso del navegador |
@@ -338,6 +350,7 @@ La API pública está en `/api/v1`. Las rutas antiguas sin versión (`/api/...`)
 | GET / PUT | `/pcap-state` | ✔ | Preparación del PCAP (simulacros, aciertos, fichas, repaso y plan) |
 | GET | `/dashboard` | ✔ | Panel del alumno: lecciones, intentos, actividad diaria, documentos sincronizados y método del último acceso (ADR-0035) |
 | GET | `/dashboard/activity` | ✔ | Historial de aprendizaje paginado (`limit`, `offset`) |
+| GET | `/tutor/modes` | ✔ | Modalidades del tutor y cuota avanzada que le queda al alumno (solo con A2A activo, ADR-0038) |
 | GET / PUT | `/course-state/{curso}` | ✔ | Cursos de la app (`sql`, `js`, `java`, `entornos`, `programacion`), `learn` (núcleo educativo) y `game` (XP, racha y logros) |
 
 «Auth» es la sesión: la cookie `HttpOnly` en la web o `Authorization: Bearer` en la app y los scripts.
@@ -354,7 +367,7 @@ La API pública está en `/api/v1`. Las rutas antiguas sin versión (`/api/...`)
 - [Documentación del proyecto](docs/DOCUMENTACION-DEL-PROYECTO.md): objetivos, arquitectura, tecnologías, instalación, configuración, API, seguridad, pruebas y despliegue
 - [Arquitectura detallada](docs/ARCHITECTURE.md) · [Referencia de la API](docs/API.md) · [Pruebas](docs/TESTING.md)
 - [Guía de despliegue](docs/DEPLOY.md) · [Ejecutar en Windows](docs/EJECUTAR-EN-WINDOWS.md)
-- [Recuperación de contraseña](docs/auth.md) · [Python Tutor y A2A](docs/a2a.md)
+- [Cuenta y recuperación de contraseña](docs/auth.md) · [Python Tutor y A2A](docs/a2a.md) · [Tutor híbrido](docs/tutor-hibrido.md)
 - [Seguridad](docs/SECURITY.md) · [Hallazgos de seguridad](docs/security/SECURITY_FINDINGS.md) · [Flujo del equipo AppSec](docs/security/AGENT_WORKFLOW.md)
 - [Expediente legal](docs/legal/README.md)
 - [Agentes de desarrollo](docs/AGENTS.md) · [MCP](docs/MCP.md)
@@ -363,7 +376,7 @@ La API pública está en `/api/v1`. Las rutas antiguas sin versión (`/api/...`)
 
 ## Publicar
 
-Hacer merge a `main` publica la web en GitHub Pages ([`pages.yml`](.github/workflows/pages.yml)). Guía completa en **[docs/DEPLOY.md](docs/DEPLOY.md)**: GitHub Pages, backend en Render, conexión entre ambos, email con Brevo o SMTP y la lista de comprobación del RGPD. La configuración del tutor en el servidor está en [docs/a2a.md](docs/a2a.md).
+Hacer merge a `main` publica la web en GitHub Pages ([`pages.yml`](.github/workflows/pages.yml)), que antes quita de la CSP los orígenes de desarrollo (`localhost:8000`). Guía completa en **[docs/DEPLOY.md](docs/DEPLOY.md)**: GitHub Pages, backend en Render, conexión entre ambos, Google Sign-In, email con Brevo o SMTP y la lista de comprobación del RGPD. La configuración del tutor en el servidor está en [docs/a2a.md](docs/a2a.md).
 
 ## Contribuir y licencia
 
