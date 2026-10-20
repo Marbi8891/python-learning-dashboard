@@ -39,7 +39,7 @@ class GoogleCredential(BaseModel):
     accept_privacy: bool = False
 
 
-def _verify_google_credential(credential: str, client_id: str) -> dict:
+def verify_google_credential(credential: str, client_id: str) -> dict:
     """Verifica firma, audiencia y caducidad del ID token con la biblioteca oficial de Google."""
     try:
         claims = verify_oauth2_token(credential, GoogleRequest(), client_id)
@@ -66,7 +66,7 @@ def login_google(
             status_code=503,
             detail="El inicio de sesión con Google aún no está configurado.",
         )
-    claims = _verify_google_credential(data.credential, settings.google_client_id)
+    claims = verify_google_credential(data.credential, settings.google_client_id)
     email = str(claims["email"]).strip().lower()
     user = db.scalar(select(User).where(User.email == email))
     if user is None:

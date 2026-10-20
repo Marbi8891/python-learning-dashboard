@@ -2,6 +2,7 @@
 
 import { ApiError, apiEnabled, request, serverInfo } from "./api.js";
 import { escapeHtml } from "./markdown.js";
+import { renderGoogleButton } from "./google-identity.js";
 import { flushCourseSync } from "./course-store.js";
 import { flushGameSync } from "./game.js";
 import { flushPcapSync } from "./pcap-sync.js";
@@ -19,9 +20,11 @@ function showView(name) {
   for (const view of dialog().querySelectorAll("[data-view]")) {
     view.hidden = view.dataset.view !== name;
   }
+  const withGoogle = Boolean(window.PLD_CONFIG?.googleClientId);
   const googleLogin = dialog().querySelector("[data-google-login]");
-  if (googleLogin) googleLogin.hidden = name !== "login" || !window.PLD_CONFIG?.googleClientId;
+  if (googleLogin) googleLogin.hidden = name !== "login" || !withGoogle;
   setMessage("");
+  if (name === "login" && withGoogle) showGoogleButton($("#google-signin"), loginWithGoogle);
   const heading = dialog().querySelector(`[data-view="${name}"] h2`);
   $("#account-title").textContent = heading?.dataset.title ?? "Tu cuenta";
   dialog().querySelector(`[data-view="${name}"] input, [data-view="${name}"] button`)?.focus();
@@ -128,44 +131,26 @@ async function loginWithGoogle(credential) {
   showToast(`¡Hola, ${state.user.display_name}! Tu progreso está sincronizado.`);
 }
 
-function initGoogleSignIn() {
-  const clientId = window.PLD_CONFIG?.googleClientId;
-  const target = $("#google-signin");
-  if (!clientId || !target) return;
-  const render = () => {
-    if (!window.google?.accounts?.id || target.dataset.rendered === "true") return;
-    window.google.accounts.id.initialize({
-      client_id: clientId,
-      callback: async ({ credential }) => {
-        if (!credential) {
-          setMessage("Google no ha devuelto una credencial válida.");
-          return;
-        }
-        try {
-          await loginWithGoogle(credential);
-        } catch (error) {
-          setMessage(error.message);
-        }
-      },
-      auto_select: false,
-      cancel_on_tap_outside: true,
-    });
-    window.google.accounts.id.renderButton(target, {
-      type: "standard", theme: "outline", size: "large",
-      text: "continue_with", shape: "rectangular", width: 280,
-      logo_alignment: "left",
-    });
-    target.dataset.rendered = "true";
-  };
-  render();
-  window.addEventListener("load", render, { once: true });
-  const timer = window.setInterval(() => {
-    if (window.google?.accounts?.id) {
-      window.clearInterval(timer);
-      render();
+/** El script de Google se descarga aquí, al mostrar un botón de Google, no al abrir la web. */
+function showGoogleButton(target, action) {
+  renderGoogleButton(target, async (credential) => {
+    if (!credential) {
+      setMessage("Google no ha devuelto una credencial válida.");
+      return;
     }
-  }, 250);
-  window.setTimeout(() => window.clearInterval(timer), 10000);
+    try {
+      await action(credential);
+    } catch (error) {
+      setMessage(error.message);
+    }
+  }).catch((error) => setMessage(error.message));
+}
+
+/** Cuentas creadas con Google: su contraseña es aleatoria, así que el borrado se confirma volviendo
+    a elegir la misma cuenta de Google. */
+async function deleteWithGoogle(credential) {
+  await request("POST", "/api/users/me/delete", { json: { google_credential: credential } });
+  await leave("Tu cuenta y todos sus datos se han borrado.");
 }
 
 function downloadJson(data, filename) {
@@ -221,7 +206,6 @@ export function initAccount({ toast }) {
   showToast = toast;
   renderAccountButton();
   setupPasswordRecovery();
-  initGoogleSignIn();
   subscribe((change) => {
     if (change.type === "profile") renderAccountButton(); // nombre cambiado en «Mi cuenta»
     if (change.type !== "user") return;
@@ -302,6 +286,13 @@ export function initAccount({ toast }) {
   });
 
   $("#logout-button").addEventListener("click", () => logout({ everywhere: $("#logout-everywhere").checked }));
+
+  const danger = dialog().querySelector(".account__danger");
+  const googleDelete = dialog().querySelector("[data-google-delete]");
+  danger.addEventListener("toggle", () => {
+    googleDelete.hidden = !window.PLD_CONFIG?.googleClientId;
+    if (danger.open && !googleDelete.hidden) showGoogleButton($("#google-delete"), deleteWithGoogle);
+  });
 
   $("#delete-form").addEventListener("submit", (event) => {
     event.preventDefault();

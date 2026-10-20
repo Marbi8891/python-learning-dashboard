@@ -5,6 +5,8 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
 ## [Unreleased]
 
 ### Seguridad
+- **Las cuentas creadas con Google ya se pueden borrar desde la web**: su contraseña es aleatoria, así que «Eliminar mi cuenta» acepta también confirmar eligiendo la misma cuenta de Google. El servidor exige un ID token válido, del mismo email y emitido hace menos de 10 minutos (`POST /api/users/me/delete` con `google_credential`).
+- **El script de Google solo se descarga al abrir el inicio de sesión o el borrado de la cuenta** (`frontend/js/google-identity.js`), no en cada visita: Google ya no recibe la IP de quien solo estudia. Con prueba e2e.
 - **La consola de Python ya no puede conectar con otros servidores** (PLD-SEC-004): la CSP de la página no llega al Worker de Pyodide, y se ha comprobado que un programa pegado en la consola podía enviar datos a cualquier origen. Después de cargar Python, el Worker cierra `fetch`, `XMLHttpRequest`, `WebSocket` y el resto de APIs de red, además de `eval`. Con prueba e2e de regresión.
 - Script `scripts/security/production_csp.py` para publicar la web sin los orígenes `localhost:8000` de desarrollo (PLD-SEC-003). Queda pendiente de activar en el despliegue.
 - **Equipo AppSec de agentes** ([docs/security/AGENT_WORKFLOW.md](docs/security/AGENT_WORKFLOW.md)): ocho agentes de Claude Code en `.claude/agents/` (coordinador, auditor, autenticación, API, navegador, dependencias, pruebas y CI) con un guardián que limita qué archivos edita cada uno y bloquea secretos, comandos destructivos y escaneos. Registro de hallazgos, plan de corrección y línea base en `docs/security/`.

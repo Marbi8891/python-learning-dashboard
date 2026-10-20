@@ -48,7 +48,6 @@
   <!-- Tema y tamaño de letra antes de pintar la página (sin parpadeo) y defensa contra marcos -->
   <script src="js/theme-init.js"></script>
   <script src="config.js"></script>
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <script src="js/analytics.js" defer></script>
   <script type="module" src="js/app.js"></script>
 </head>
@@ -347,6 +346,10 @@
           <label>Confirma con tu contraseña <input name="password" type="password" autocomplete="current-password" required></label>
           <button class="btn btn--danger" type="submit">Eliminar definitivamente</button>
         </form>
+        <div class="account__google" data-google-delete hidden>
+          <p class="account__muted">¿Entras con Google y no tienes contraseña de este sitio? Confirma eligiendo la misma cuenta de Google:</p>
+          <div id="google-delete"></div>
+        </div>
       </details>
     </div>
   </dialog>
