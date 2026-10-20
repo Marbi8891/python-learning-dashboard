@@ -1418,6 +1418,44 @@ E += [
         "El desempaquetado reparte la tupla en x e y. Un conjunto no guarda repetidos: {1, 2, 3}.",
         traps={"7\n6": "tuplas-conjuntos.set-orden"},
     ),
+    # tup-05 a tup-07: comprobaciones del tutor para «diferencia entre lista y tupla» (ADR-0038)
+    output(
+        "tup-05",
+        "tuplas-conjuntos",
+        """
+        datos = [1, 2, 3]
+        fijos = (1, 2, 3)
+        datos[0] = 9
+        print(datos, fijos)
+        """,
+        "[9, 2, 3] (1, 2, 3)",
+        "Solo cambia la lista: `datos[0] = 9` reasigna su primer elemento porque las listas son mutables. La tupla `fijos` no se ha tocado y, además, no admitiría esa asignación.",
+        traps={"[9, 2, 3] (9, 2, 3)": "tuplas-conjuntos.tupla-mutable"},
+    ),
+    output(
+        "tup-06",
+        "tuplas-conjuntos",
+        """
+        notas = [5, 7]
+        notas.append(9)
+        punto = (3, 4)
+        print(notas, punto[1])
+        """,
+        "[5, 7, 9] 4",
+        "`append` añade un elemento al final de la lista, que es mutable. De la tupla solo se lee: `punto[1]` es su segundo elemento, el 4.",
+    ),
+    output(
+        "tup-07",
+        "tuplas-conjuntos",
+        """
+        t = (5)
+        u = (5,)
+        print(type(t).__name__, type(u).__name__)
+        """,
+        "int tuple",
+        "Los paréntesis solos no crean una tupla: `(5)` es el número 5. Lo que crea la tupla es la coma: `(5,)`.",
+        level=2,
+    ),
     choice(
         "tup-02",
         "tuplas-conjuntos",

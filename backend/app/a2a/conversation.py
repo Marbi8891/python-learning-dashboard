@@ -47,6 +47,8 @@ class Conversation:
     correct: list[str] = field(default_factory=list)  # conceptos comprobados en esta conversación
     wrong: list[str] = field(default_factory=list)  # conceptos en que ha fallado la comprobación
     gradual: bool = False
+    note: str | None = None  # explicación revisada a mano que se está siguiendo (ADR-0038)
+    exercises_given: list[str] = field(default_factory=list)  # enunciados ya propuestos
 
     def remember(self, turn: Turn) -> None:
         self.turns.append(turn)

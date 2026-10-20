@@ -13,6 +13,10 @@ El protocolo lo implementa el SDK oficial (`a2a-sdk`); aquí solo se añade lo d
 - Las tareas de cada usuario solo las ve ese usuario (el «propietario» es el id de la sesión).
 - El contexto de la llamada solo lleva lo imprescindible: nunca el token ni las cookies.
 
+Tutor híbrido (ADR-0038): además del proveedor de siempre (modalidad gratuita), el tutor puede
+tener una modalidad «IA avanzada» (A2A_ADVANCED_PROVIDER, OpenAI) con cuotas en la base de datos.
+`GET /api/v1/tutor/modes` dice a la web qué modalidades hay y cuánta cuota le queda al alumno.
+
 Para añadir un agente: su card, su agente y su executor, y una entrada en `AGENTS`.
 """
 
@@ -23,6 +27,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import datetime
 from functools import partial
+from typing import Literal
 
 from a2a.auth.user import User as A2AUser
 from a2a.extensions.common import HTTP_EXTENSION_HEADER, get_requested_extensions
@@ -40,6 +45,7 @@ from a2a.server.tasks import InMemoryTaskStore
 from a2a.types import AgentCard, Task
 from a2a.utils.constants import AGENT_CARD_WELL_KNOWN_PATH, VERSION_HEADER
 from fastapi import APIRouter, FastAPI, HTTPException, Request, Response, status
+from pydantic import BaseModel
 
 from app.a2a.agents.python_tutor import PythonTutorAgent
 from app.a2a.cards.python_tutor import build_python_tutor_card
@@ -47,6 +53,8 @@ from app.a2a.executors.python_tutor import (
     BUDGET_STATE_KEY,
     CORRELATION_STATE_KEY,
     LEARNING_STATE_KEY,
+    USAGE_STATE_KEY,
+    AdvancedMode,
     PythonTutorExecutor,
 )
 from app.a2a.providers import AgentModelProvider, MockModelProvider
@@ -55,9 +63,11 @@ from app.deps import CurrentUser, DbSession
 from app.rate_limit import TOO_MANY, RateLimiter
 from app.security_events import Event, record
 from app.services.learning_context import load_learner_context
+from app.services.tutor_usage import AdvancedLimits, UsageLedger
 
 # El SDK escribe el cuerpo de cada petición en DEBUG: nunca debe llegar a los logs
 logging.getLogger("a2a").setLevel(logging.WARNING)
+logger = logging.getLogger("pld.a2a")
 
 A2A_PREFIX = "/a2a"
 # Tareas que se guardan por usuario (en memoria): las más recientes
@@ -70,14 +80,16 @@ ALL_USERS = "all"
 class AgentSpec:
     id: str
     build_card: Callable[[str, bool], AgentCard]
-    build_executor: Callable[[AgentModelProvider], AgentExecutor]
+    build_executor: Callable[[AgentModelProvider, AdvancedMode | None], AgentExecutor]
 
 
 AGENTS: tuple[AgentSpec, ...] = (
     AgentSpec(
         id=PythonTutorAgent.name,
         build_card=build_python_tutor_card,
-        build_executor=lambda model: PythonTutorExecutor(PythonTutorAgent(model)),
+        build_executor=lambda model, advanced: PythonTutorExecutor(
+            PythonTutorAgent(model), advanced=advanced
+        ),
     ),
 )
 
@@ -118,6 +130,43 @@ def build_model_provider(settings: Settings) -> AgentModelProvider:
     )
 
 
+def build_advanced_mode(settings: Settings) -> AdvancedMode | None:
+    """La modalidad «IA avanzada» del tutor híbrido, o None si no está activada.
+
+    A diferencia del proveedor principal, una configuración incompleta no impide arrancar: la IA
+    avanzada se queda desactivada (se avisa en el log, sin secretos) y el tutor gratuito sigue.
+    """
+    provider = settings.a2a_advanced_provider
+    if provider == "none":
+        return None
+    if provider == "mock":
+        model: AgentModelProvider = MockModelProvider()
+    else:
+        secret = settings.openai_api_key
+        key = secret.get_secret_value().strip() if secret else ""
+        name = (settings.a2a_advanced_model or "").strip()
+        if not key or not name:
+            missing = "OPENAI_API_KEY" if not key else "A2A_ADVANCED_MODEL"
+            logger.error(
+                f'{{"event": "a2a.config", "advanced": "disabled", "missing": "{missing}"}}'
+            )
+            return None
+        from app.a2a.providers.openai_provider import OpenAIProvider
+
+        model = OpenAIProvider(
+            api_key=key,
+            model=name,
+            max_output_tokens=settings.a2a_advanced_max_output_tokens,
+            timeout_seconds=settings.a2a_advanced_timeout_seconds,
+            reasoning_effort=settings.a2a_advanced_reasoning_effort,
+        )
+    return AdvancedMode(
+        model=model,
+        max_input_chars=settings.a2a_advanced_max_input_chars,
+        daily_limit=settings.a2a_advanced_daily_limit_per_user,
+    )
+
+
 class SessionUser(A2AUser):
     """Usuario de la sesión de la API, visto desde el SDK de A2A."""
 
@@ -151,6 +200,7 @@ class SessionContextBuilder(ServerCallContextBuilder):
             LEARNING_STATE_KEY: request.state.pld_learning,
             BUDGET_STATE_KEY: request.state.pld_budget,
             CORRELATION_STATE_KEY: request.state.pld_request_id,
+            USAGE_STATE_KEY: request.state.pld_usage,
         }
         return ServerCallContext(
             user=SessionUser(request.state.pld_user.id, request.state.pld_user.created_at),
@@ -185,17 +235,24 @@ class BoundedTaskStore(InMemoryTaskStore):
 def mount_a2a(app: FastAPI, settings: Settings) -> None:
     """Añade las rutas A2A de todos los agentes a la app. Falla al arrancar si falta el modelo."""
     model = build_model_provider(settings)
+    advanced = build_advanced_mode(settings)
+    limits = AdvancedLimits(
+        per_user_daily=settings.a2a_advanced_daily_limit_per_user,
+        global_daily=settings.a2a_advanced_global_daily_limit,
+    )
     limiter = app.state.a2a_limiter = RateLimiter(settings.a2a_rate_limit_per_minute)
     budget = app.state.a2a_budget = ModelBudget(
         per_user=RateLimiter(settings.a2a_daily_limit_per_user, window_seconds=DAY),
         overall=RateLimiter(settings.a2a_global_limit_per_minute),
     )
     base_url = settings.a2a_base_url.rstrip("/")
+    executors = app.state.a2a_executors = {}
     for index, spec in enumerate(AGENTS):
         path = f"{A2A_PREFIX}/{spec.id}"
         card = spec.build_card(f"{base_url}{path}", model.name == MockModelProvider.name)
+        executor = executors[spec.id] = spec.build_executor(model, advanced)
         handler = DefaultRequestHandler(
-            agent_executor=spec.build_executor(model),
+            agent_executor=executor,
             task_store=BoundedTaskStore(),
             agent_card=card,
         )
@@ -206,7 +263,9 @@ def mount_a2a(app: FastAPI, settings: Settings) -> None:
         jsonrpc = create_jsonrpc_routes(
             handler, rpc_url=path, context_builder=SessionContextBuilder()
         )[0].endpoint
-        app.include_router(_session_router(path, jsonrpc, limiter, budget))
+        app.include_router(_session_router(path, jsonrpc, limiter, budget, limits))
+    tutor = executors[PythonTutorAgent.name]
+    app.include_router(_modes_router(tutor, limits, settings), prefix="/api/v1")
 
 
 @dataclass(frozen=True)
@@ -228,7 +287,11 @@ class ModelBudget:
 
 
 def _session_router(
-    path: str, jsonrpc: Callable, limiter: RateLimiter, budget: ModelBudget
+    path: str,
+    jsonrpc: Callable,
+    limiter: RateLimiter,
+    budget: ModelBudget,
+    limits: AdvancedLimits,
 ) -> APIRouter:
     """Ruta JSON-RPC protegida con la sesión de la API (el SDK no la conoce)."""
     router = APIRouter(tags=["A2A: JSON-RPC"])
@@ -241,9 +304,66 @@ def _session_router(
         request.state.pld_user = user
         request.state.pld_learning = partial(load_learner_context, db, user.id)
         request.state.pld_budget = partial(budget.take, user.id)
+        request.state.pld_usage = UsageLedger(db, user.id, limits)
         request.state.pld_request_id = str(uuid.uuid4())
         response = await jsonrpc(request)
         response.headers["X-Request-ID"] = request.state.pld_request_id
         return response
+
+    return router
+
+
+class FreeModeOut(BaseModel):
+    available: bool = True
+    provider: str
+    simulated: bool  # respuestas preparadas con reglas, sin modelo de lenguaje
+
+
+class AdvancedModeOut(BaseModel):
+    available: bool
+    provider: str | None = None
+    simulated: bool = False  # modo de pruebas: «avanzada» sin IA real (A2A_ADVANCED_PROVIDER=mock)
+    daily_limit: int | None = None
+    used_today: int | None = None
+    remaining: int | None = None
+    global_available: bool | None = None  # si queda cuota común hoy (no cuánta)
+    max_input_chars: int | None = None
+    max_output_tokens: int | None = None
+
+
+class TutorModesOut(BaseModel):
+    default: Literal["free"] = "free"
+    free: FreeModeOut
+    advanced: AdvancedModeOut
+
+
+def _modes_router(
+    tutor: PythonTutorExecutor, limits: AdvancedLimits, settings: Settings
+) -> APIRouter:
+    """Qué modalidades ofrece el tutor y cuánta cuota avanzada le queda al alumno. Lo lee del
+    executor: es el mismo que decide en cada mensaje, así que la web nunca ve otra cosa."""
+    router = APIRouter(prefix="/tutor", tags=["Tutor híbrido"])
+
+    @router.get("/modes", response_model=TutorModesOut, summary="Modalidades del tutor")
+    def tutor_modes(user: CurrentUser, db: DbSession) -> TutorModesOut:
+        model, advanced = tutor.agent.model, tutor.advanced
+        free = FreeModeOut(provider=model.name, simulated=model.name == MockModelProvider.name)
+        if advanced is None:
+            return TutorModesOut(free=free, advanced=AdvancedModeOut(available=False))
+        quota = UsageLedger(db, user.id, limits).quota()
+        return TutorModesOut(
+            free=free,
+            advanced=AdvancedModeOut(
+                available=True,
+                provider=advanced.model.name,
+                simulated=advanced.model.name == MockModelProvider.name,
+                daily_limit=quota.limit,
+                used_today=quota.used,
+                remaining=quota.remaining,
+                global_available=quota.global_available,
+                max_input_chars=advanced.max_input_chars,
+                max_output_tokens=settings.a2a_advanced_max_output_tokens,
+            ),
+        )
 
     return router

@@ -9,6 +9,10 @@ os.environ.setdefault("A2A_ENABLED", "true")
 os.environ.setdefault("A2A_MOCK_MODEL", "true")
 # Los tests nunca usan una API key real (los del proveedor simulan la API de Anthropic)
 os.environ.pop("ANTHROPIC_API_KEY", None)
+# Tutor híbrido (ADR-0038): la IA avanzada, simulada (sin OpenAI ni clave). Los tests de OpenAI
+# simulan su API con un transporte HTTP falso
+os.environ.setdefault("A2A_ADVANCED_PROVIDER", "mock")
+os.environ.pop("OPENAI_API_KEY", None)
 
 import pytest  # noqa: E402
 from fastapi.testclient import TestClient  # noqa: E402

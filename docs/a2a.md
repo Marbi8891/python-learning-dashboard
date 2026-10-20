@@ -391,10 +391,23 @@ La respuesta trae `X-Request-ID`, el mismo id que aparece en el log de la tarea.
 
 - **Texto** (obligatorio, máx. 4000 caracteres): la pregunta.
 - **Datos** (opcional, un objeto): `lesson_slug`, `code` (máx. 20 000), `error` (máx. 4000) y
-  `level` (`inicial`, `intermedio` o `avanzado`). Cualquier otro campo se rechaza.
+  `level` (`inicial`, `intermedio` o `avanzado`), `alternative` (booleano: otra explicación del
+  mismo concepto) y `mode` (`free` o `advanced`, por defecto `free`; ver
+  [tutor-hibrido.md](tutor-hibrido.md)). Cualquier otro campo se rechaza.
 - Archivos y URLs se **rechazan**: el agente no descarga nada.
 
 Si el mensaje no es válido, la tarea acaba en `TASK_STATE_REJECTED` con una explicación.
+
+### Tutor híbrido
+
+El tutor tiene dos modalidades: **gratuita** (el proveedor de arriba, siempre disponible) e **IA
+avanzada** (OpenAI, opcional, de pago y desactivada por defecto). El backend decide y valida la
+modalidad, lleva las cuotas en la tabla `tutor_usage` y nunca convierte una petición gratuita en
+una de pago. `GET /api/v1/tutor/modes` dice qué ofrece el servidor. Si la IA avanzada no se puede
+usar, la tarea acaba en `TASK_STATE_REJECTED` con el motivo (`advanced_unavailable`,
+`advanced_input_too_long`, `advanced_limit_reached` o `advanced_global_limit`) y la respuesta
+gratuita. Detalles, variables, costes y privacidad en [tutor-hibrido.md](tutor-hibrido.md)
+(ADR-0038).
 
 ## Autenticación y seguridad
 
@@ -436,6 +449,9 @@ Si el mensaje no es válido, la tarea acaba en `TASK_STATE_REJECTED` con una exp
 | `A2A_RATE_LIMIT_PER_MINUTE` | `20` | Mensajes al tutor por usuario y minuto |
 | `A2A_DAILY_LIMIT_PER_USER` | `100` | Consultas al modelo por usuario y día |
 | `A2A_GLOBAL_LIMIT_PER_MINUTE` | `60` | Consultas al modelo de todos los usuarios por minuto |
+
+Las variables de la IA avanzada (`A2A_ADVANCED_*`, `OPENAI_API_KEY`) están en
+[tutor-hibrido.md](tutor-hibrido.md).
 
 `render.yaml` no activa A2A: en el plan gratuito de Render no hay memoria para un modelo local.
 Activarlo en producción (con Ollama en un servidor propio o con Anthropic) es una decisión aparte.
