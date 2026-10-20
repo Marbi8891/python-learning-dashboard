@@ -231,6 +231,7 @@ class ActivityOut(BaseModel):
 class UserExport(BaseModel):
     user: UserOut
     privacy_accepted_at: datetime | None
+    email_verified_at: datetime | None = None
     progress: list[ProgressItem]
     attempts: list[dict]
     pcap: dict | None = None

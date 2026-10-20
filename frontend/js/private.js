@@ -37,6 +37,7 @@ const saveOf = (id) => (id === "pcap" ? savePcap() : saveCourse(id));
 const ACTIVITY = {
   login: "Inicio de sesión",
   login_google: "Inicio de sesión con Google",
+  google_linked: "Cuenta vinculada con Google: la contraseña anterior se anuló",
   login_failed: "Intento de inicio de sesión con contraseña incorrecta",
   password_changed: "Contraseña cambiada desde Mi panel",
   password_reset: "Contraseña restablecida con el enlace del email",

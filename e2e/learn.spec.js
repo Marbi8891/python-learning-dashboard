@@ -23,7 +23,7 @@ async function audit(page) {
   expect(summary, summary.join("\n")).toEqual([]);
 }
 
-test("primera visita: la portada presenta la web y lleva a empezar", async ({ page }) => {
+test("la raíz enseña siempre la portada, que presenta la web y lleva a empezar", async ({ page }) => {
   await page.goto("/");
   await expect(page).toHaveURL(/#\/portada$/);
   await expect(page.locator("#lp-title")).toHaveText("Aprende programación entendiendo lo que haces");
@@ -32,10 +32,17 @@ test("primera visita: la portada presenta la web y lleva a empezar", async ({ pa
   await expect(page).toHaveURL(/#\/aprender$/);
   await expect(page.locator("#learn-title")).toHaveText("¿Qué estudio ahora?");
   await expect(page.locator("#landing-view")).toBeHidden();
-  // La segunda visita va directa a «¿Qué estudio ahora?»; la portada sigue enlazada en el menú
+  // Las visitas siguientes también empiezan en la portada; además sigue enlazada en el menú
   await page.goto("/");
-  await expect(page).toHaveURL(/#\/aprender$/);
+  await expect(page).toHaveURL(/#\/portada$/);
+  await expect(page.locator("#lp-title")).toBeVisible();
+  await page.goto("/#/aprender");
   await page.locator('.sidebar__footer a[href="#/portada"]').click();
+  await expect(page).toHaveURL(/#\/portada$/);
+  await expect(page.locator("#lp-title")).toBeVisible();
+  // El logo de la cabecera también lleva a la portada
+  await page.goto("/#/aprender");
+  await page.getByRole("link", { name: "Python Learning Dashboard: ir a la portada" }).click();
   await expect(page).toHaveURL(/#\/portada$/);
   await expect(page.locator("#lp-title")).toBeVisible();
 });

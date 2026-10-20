@@ -18,11 +18,11 @@ Las tres afectan a la web publicada o al despliegue: no se aplican sin el «sí�
 
 | Orden | Hallazgo | Cambio | Consecuencias | Cómo validarlo |
 |---|---|---|---|---|
-| 1 | PLD-SEC-003 | Activar `production_csp.py` al publicar (parche abajo) | La web publicada deja de permitir `127.0.0.1:8000` y `localhost:8000`. Desarrollo y e2e no cambian | CI en verde; tras el despliegue, ver el `<meta>` de la web publicada y probar login y consola |
+| 1 | PLD-SEC-003 | Activar `production_csp.py` al publicar: **aplicado en el PR #55** | La web publicada deja de permitir `127.0.0.1:8000` y `localhost:8000`. Desarrollo y e2e no cambian | CI en verde; tras el despliegue, ver el `<meta>` de la web publicada y probar login y consola |
 | 2 | PLD-SEC-005 | `backend/requirements.lock` con *hashes* y `pip install --require-hashes` en el Dockerfile | Builds reproducibles. Cada cambio de dependencias exige regenerar el lock (Dependabot no lo hace solo con `requirements.txt`) | Build de Docker local, pytest dentro de la imagen, despliegue en Render y `/api/v1/health` |
 | 3 | PLD-SEC-004 (barrera completa) | Crear el Worker desde una URL `blob:` y añadir `blob:` a `worker-src` | El Worker heredaría la CSP de la página. Amplía `worker-src`, así que hay que valorarlo | e2e completo, incluida la prueba de PLD-SEC-004, en Chromium, Firefox y Safari |
 
-### Parche propuesto para PLD-SEC-003 (`.github/workflows/pages.yml`, sin aplicar)
+### Parche de PLD-SEC-003 (`.github/workflows/pages.yml`, aplicado en el PR #55)
 
 ```yaml
       - uses: actions/checkout@v7

@@ -21,8 +21,9 @@ La web se publica en GitHub Pages bajo `/python-learning-dashboard/` y todas sus
    y el asistente (`body[data-page="landing"]`); tiene su propia cabecera y pie.
 3. **Secciones con ruta propia** (`#/portada/funcionalidades`, `#/portada/como-funciona`…): un
    ancla `#seccion` cambiaría el hash y el router la trataría como ruta desconocida.
-4. **La raíz lleva a la portada solo en la primera visita** (`isFirstVisit()`); después, a
-   `#/aprender`, como antes. `#/bienvenida` se mantiene como presentación guiada.
+4. **La raíz lleva siempre a la portada** (decisión de la persona del 20/10/2026; antes solo en la
+   primera visita y después a `#/aprender`). «Empezar a aprender» y el menú llevan a `#/aprender`; el logo de la
+   cabecera (escritorio y móvil) lleva a la portada. `#/bienvenida` se mantiene como presentación guiada.
 5. **Contenido verificable**: el texto es fijo o sale de `learning.json`, `lessons.json` y
    `DAW_COURSES`. La demostración usa el concepto «bucles» y el ejercicio `buc-01` reales, con la
    misma relación respuesta trampa → error del temario. Lo que es un ejemplo (la conversación y el

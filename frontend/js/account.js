@@ -20,7 +20,8 @@ function showView(name) {
   for (const view of dialog().querySelectorAll("[data-view]")) {
     view.hidden = view.dataset.view !== name;
   }
-  const withGoogle = Boolean(window.PLD_CONFIG?.googleClientId);
+  // Con la sesión abierta no hay botón de entrar con Google: el de la pantalla de borrado es el único
+  const withGoogle = googleAvailable() && !state.user;
   const googleLogin = dialog().querySelector("[data-google-login]");
   if (googleLogin) googleLogin.hidden = name !== "login" || !withGoogle;
   setMessage("");
@@ -131,6 +132,18 @@ async function loginWithGoogle(credential) {
   showToast(`¡Hola, ${state.user.display_name}! Tu progreso está sincronizado.`);
 }
 
+// El servidor dice en /api/health si tiene GOOGLE_CLIENT_ID; sin él, el botón solo daría un error
+let serverHasGoogle = true;
+const googleAvailable = () => Boolean(window.PLD_CONFIG?.googleClientId) && serverHasGoogle;
+
+async function checkServerGoogle() {
+  const info = await serverInfo;
+  if (info?.google !== false) return;
+  serverHasGoogle = false;
+  dialog().querySelector("[data-google-login]").hidden = true;
+  dialog().querySelector("[data-google-delete]").hidden = true;
+}
+
 /** El script de Google se descarga aquí, al mostrar un botón de Google, no al abrir la web. */
 function showGoogleButton(target, action) {
   renderGoogleButton(target, async (credential) => {
@@ -149,6 +162,7 @@ function showGoogleButton(target, action) {
 /** Cuentas creadas con Google: su contraseña es aleatoria, así que el borrado se confirma volviendo
     a elegir la misma cuenta de Google. */
 async function deleteWithGoogle(credential) {
+  if (!state.user || !dialog().querySelector(".account__danger").open) return; // solo desde su botón
   await request("POST", "/api/users/me/delete", { json: { google_credential: credential } });
   await leave("Tu cuenta y todos sus datos se han borrado.");
 }
@@ -206,6 +220,7 @@ export function initAccount({ toast }) {
   showToast = toast;
   renderAccountButton();
   setupPasswordRecovery();
+  checkServerGoogle();
   subscribe((change) => {
     if (change.type === "profile") renderAccountButton(); // nombre cambiado en «Mi cuenta»
     if (change.type !== "user") return;
@@ -290,7 +305,7 @@ export function initAccount({ toast }) {
   const danger = dialog().querySelector(".account__danger");
   const googleDelete = dialog().querySelector("[data-google-delete]");
   danger.addEventListener("toggle", () => {
-    googleDelete.hidden = !window.PLD_CONFIG?.googleClientId;
+    googleDelete.hidden = !googleAvailable();
     if (danger.open && !googleDelete.hidden) showGoogleButton($("#google-delete"), deleteWithGoogle);
   });
 

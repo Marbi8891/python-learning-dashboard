@@ -1,4 +1,4 @@
-# Recuperación de contraseña
+# Recuperación de contraseña e inicio de sesión con Google
 
 Cómo recupera el acceso quien ha olvidado su contraseña, y qué protege cada paso. Reutiliza la autenticación existente (Argon2, JWT con `token_version`, límites y eventos de seguridad): no hay un segundo sistema.
 
@@ -45,9 +45,30 @@ Sin `BREVO_API_KEY` ni `SMTP_HOST` no se envía nada, y la web ofrece el email d
 - Los límites viven en memoria: con varias instancias del backend, cada una cuenta por separado (ADR-0022). Hoy hay una sola instancia.
 - Si la cuenta existe, se escriben filas en la base de datos (unos milisegundos). Igualarlo del todo exigiría escrituras ficticias, y no compensa.
 
+## Inicio de sesión con Google
+
+1. La web descarga Google Identity Services (`accounts.google.com/gsi/client`) **solo** al abrir el
+   inicio de sesión o «Eliminar mi cuenta», y solo si `config.js` tiene `googleClientId` y
+   `/api/health` no dice `"google": false`.
+2. `POST /api/v1/auth/google` con `{credential, accept_privacy}`. El servidor valida el ID token con la
+   biblioteca oficial (`google.oauth2.id_token.verify_oauth2_token`: firma, audiencia = `GOOGLE_CLIENT_ID`,
+   caducidad) y exige `email_verified`. Cuenta nueva: hace falta aceptar la privacidad.
+3. **Cuenta existente sin email verificado** (creada con contraseña y nunca recuperada por email):
+   la contraseña se anula, se cierran las demás sesiones y se registra `google_linked` (PLD-SEC-008).
+   Google y el enlace de recuperación rellenan `users.email_verified_at`.
+4. La sesión es la misma que con contraseña (cookie `HttpOnly` o token en memoria, ADR-0033).
+5. **Borrar la cuenta**: `POST /api/v1/users/me/delete` con la sesión y **exactamente uno** de
+   `password` o `google_credential` (un ID token del mismo email emitido hace menos de 10 minutos;
+   uno más antiguo da 403). Si no, 422. La web solo envía la credencial con la sección «Eliminar mi
+   cuenta» abierta (el último botón de Google mostrado decide, `frontend/js/google-identity.js`).
+
+Errores: 401 si la credencial no vale o es de otra audiencia, 403 si en el borrado es de otra cuenta o no es reciente,
+503 si el servidor no tiene `GOOGLE_CLIENT_ID`. Ninguno repite el token ni el email.
+
 ## Tests
 
 - `backend/tests/test_password_reset.py`: las dos rutas, emails mal formados, anti-enumeración, hash, token manipulado, caducidad exacta, usuario inexistente, límite por IP, cabeceras falsas, secretos en logs, payloads grandes y reutilización.
 - También `test_account.py`, `test_hardening.py` y `test_attack_detection.py`.
 - `e2e/account.spec.js`: solicitud, enlace no válido, contraseñas distintas, enlace incompleto y vuelta al login.
 - El email nunca se envía en los tests: se sustituye `send_email` por un buzón falso.
+- Google: `backend/tests/test_google_auth.py` (sin llamadas a Google: se sustituye `verify_oauth2_token`) y `e2e/account.spec.js` con un Google Identity falso. Son pruebas **simuladas**: el inicio de sesión real con Google se prueba a mano con una cuenta de prueba (ver [DEPLOY.md](DEPLOY.md)).

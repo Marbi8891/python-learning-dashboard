@@ -40,7 +40,7 @@ import { openDaw, refreshDaw } from "./daw.js";
 import { initPcapSync } from "./pcap-sync.js";
 import { isLearnRoute, learnNavKey, openLearn } from "./learn/learn-app.js";
 import { LANDING_ROUTE, closeLanding, isLandingRoute, openLanding } from "./landing.js";
-import { initLearnSync, isFirstVisit } from "./learn/learn-store.js";
+import { initLearnSync } from "./learn/learn-store.js";
 import { initPrefs } from "./prefs.js";
 import { badgesHtml, renderProfile } from "./profile.js";
 import { dashboardTitle, initDashboard, renderDashboard } from "./dashboard.js";
@@ -652,15 +652,9 @@ function navigate({ moveFocus = true } = {}) {
     return;
   }
   if (!location.hash.startsWith(ROUTE_PREFIX)) {
-    // La primera vez se muestra la portada; después se va directo a «¿Qué estudio ahora?»
-    if (isFirstVisit()) {
-      history.replaceState(null, "", LANDING_ROUTE);
-      openLanding(LANDING_ROUTE, { content, moveFocus });
-      return;
-    }
-    history.replaceState(null, "", LEARN_ROUTE);
-    showPage("learn", { moveFocus: false });
-    openLearn(LEARN_ROUTE, { moveFocus });
+    // La raíz enseña siempre la portada; «Empezar a aprender» lleva a «¿Qué estudio ahora?»
+    history.replaceState(null, "", LANDING_ROUTE);
+    openLanding(LANDING_ROUTE, { content, moveFocus });
     return;
   }
 

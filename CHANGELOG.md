@@ -7,6 +7,10 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
 ### Seguridad
 - **Las cuentas creadas con Google ya se pueden borrar desde la web**: su contraseña es aleatoria, así que «Eliminar mi cuenta» acepta también confirmar eligiendo la misma cuenta de Google. El servidor exige un ID token válido, del mismo email y emitido hace menos de 10 minutos (`POST /api/users/me/delete` con `google_credential`).
 - **El script de Google solo se descarga al abrir el inicio de sesión o el borrado de la cuenta** (`frontend/js/google-identity.js`), no en cada visita: Google ya no recibe la IP de quien solo estudia. Con prueba e2e.
+- **Borrado de cuenta con un solo método**: `POST /api/v1/users/me/delete` exige exactamente uno de `password` o `google_credential` (422 si faltan los dos o llegan los dos).
+- **Pre-secuestro de cuentas con Google** (PLD-SEC-008): al entrar con Google en una cuenta creada con contraseña cuyo email nunca se ha verificado, la contraseña se anula, se cierran las demás sesiones y se registra «Cuenta vinculada con Google». Nueva columna `users.email_verified_at` (migración aditiva); la exportación la incluye.
+- **CSP de la web publicada sin `localhost:8000`** (PLD-SEC-003): `pages.yml` ejecuta `scripts/security/production_csp.py` sobre la copia que se publica.
+- `/api/health` indica `"google"`: la web oculta «Continuar con Google» si el servidor no tiene `GOOGLE_CLIENT_ID`, en lugar de ofrecer un botón que responde 503. La variable se documenta en `render.yaml`, `backend/.env.example` y `docs/DEPLOY.md` (con las comprobaciones de Google Cloud).
 - **La consola de Python ya no puede conectar con otros servidores** (PLD-SEC-004): la CSP de la página no llega al Worker de Pyodide, y se ha comprobado que un programa pegado en la consola podía enviar datos a cualquier origen. Después de cargar Python, el Worker cierra `fetch`, `XMLHttpRequest`, `WebSocket` y el resto de APIs de red, además de `eval`. Con prueba e2e de regresión.
 - Script `scripts/security/production_csp.py` para publicar la web sin los orígenes `localhost:8000` de desarrollo (PLD-SEC-003). Queda pendiente de activar en el despliegue.
 - **Equipo AppSec de agentes** ([docs/security/AGENT_WORKFLOW.md](docs/security/AGENT_WORKFLOW.md)): ocho agentes de Claude Code en `.claude/agents/` (coordinador, auditor, autenticación, API, navegador, dependencias, pruebas y CI) con un guardián que limita qué archivos edita cada uno y bloquea secretos, comandos destructivos y escaneos. Registro de hallazgos, plan de corrección y línea base en `docs/security/`.
@@ -62,6 +66,7 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
 - **Móvil:** el rediseño reservaba la columna de la barra lateral (272 px vacíos) y estrechaba todas las páginas. También se quita la sombra que proyectaba el menú cerrado.
 
 ### Cambiado
+- **La raíz de la web enseña siempre la portada** (`#/portada`), no solo en la primera visita, y el logo de la cabecera también lleva a ella. «¿Qué estudio ahora?» sigue en `#/aprender` y en el menú.
 - **Una sola app en el móvil** (ADR-0030): la CI ya no publica el APK de depuración en `main`, solo el de release firmado. El de depuración queda para los pull requests. Pasos para llevar el progreso de «Python PCAP (debug)» a «Python PCAP» con la sincronización.
 
 ### Añadido

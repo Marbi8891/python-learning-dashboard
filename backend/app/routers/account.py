@@ -98,6 +98,7 @@ def export_my_data(user: CurrentUser, db: DbSession) -> UserExport:
     return UserExport(
         user=UserOut.model_validate(user),
         privacy_accepted_at=user.privacy_accepted_at,
+        email_verified_at=user.email_verified_at,
         progress=list_progress(db, user.id),
         attempts=[
             {"lesson_slug": slug, "code": code, "passed": passed, "created_at": created}
