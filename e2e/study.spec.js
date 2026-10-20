@@ -136,7 +136,7 @@ test.describe("PWA", () => {
     });
     await page.goto("/");
     await expect(page.locator('link[rel="manifest"]')).toHaveAttribute("href", "manifest.webmanifest");
-    await expect(page).toHaveURL(/#\/bienvenida$/); // primera visita: presentación
+    await expect(page).toHaveURL(/#\/portada$/); // primera visita: portada
     await page.evaluate(() => navigator.serviceWorker.ready);
     await page.goto("/#/aprender");
     await page.reload(); // ya controlada por el service worker: guarda lo que carga
