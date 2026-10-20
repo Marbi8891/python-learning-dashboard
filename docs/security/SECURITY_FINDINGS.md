@@ -16,9 +16,12 @@ La siguiente revisión incremental parte de `git diff eb187a9..HEAD`.
 |---|---|---|---|---|
 | PLD-SEC-001 | Sin pruebas de aislamiento entre cuentas en la mayoría de rutas privadas | Informativa | Corregido | security-qa |
 | PLD-SEC-002 | Atributos de la barra lateral con datos del contenido sin escapar | Baja | Corregido | frontend-security |
-| PLD-SEC-003 | La CSP de producción permite `localhost:8000` en `connect-src` | Baja | Corrección preparada; falta activarla en `pages.yml` (autorización) | frontend-security |
+| PLD-SEC-003 | La CSP de producción permite `localhost:8000` en `connect-src` | Baja | Activada en `pages.yml` en el PR #55 (sin fusionar); falta comprobar la web publicada | frontend-security |
 | PLD-SEC-004 | El Worker de Pyodide no tiene CSP y podía conectar con cualquier origen | Media | Confirmado → mitigado (riesgo residual documentado) | frontend-security |
 | PLD-SEC-005 | Dependencias de pip sin *hashes* ni archivo de bloqueo | Baja | Confirmado; propuesta verificada, pendiente de decisión | dependency-security |
+| PLD-SEC-007 | Las cuentas creadas con Google no se podían borrar | Media | Corregido en el PR #55 (sin fusionar) | auth-security |
+| PLD-SEC-008 | Pre-secuestro: Google entraba en una cuenta de contraseña sin email verificado | Media | Corregido en el PR #55 (sin fusionar) | auth-security |
+| PLD-SEC-009 | Google Identity se cargaba en cada visita | Baja | Corregido en el PR #55 (sin fusionar) | frontend-security |
 | PLD-SEC-006 | Riesgos ya aceptados en revisiones anteriores | Baja | Aceptado | security-lead |
 | PLD-SEC-FP1 | Alertas de herramientas revisadas como falsos positivos | — | Falso positivo | security-lead |
 
@@ -78,8 +81,11 @@ La siguiente revisión incremental parte de `git diff eb187a9..HEAD`.
 - **Impacto**: con un XSS, la página publicada podría hablar con un servicio local en el puerto 8000 del visitante.
 - **Corrección**: `scripts/security/production_csp.py` quita los dos orígenes de la copia que se
   publica y falla si queda algún origen `http:`; el repositorio y el desarrollo no cambian.
-  **Falta activarla**: un paso en `.github/workflows/pages.yml` (ver `REMEDIATION_PLAN.md`), que
-  cambia la web publicada y necesita la autorización de la persona.
+  **Activada en el PR #55** (20/10/2026, sin fusionar): paso «CSP de producción» en
+  `.github/workflows/pages.yml`, autorizado por la persona en su encargo de cierre del MVP. Sobre una
+  copia de `frontend/` quita exactamente `http://127.0.0.1:8000` y `http://localhost:8000` (44
+  caracteres) y deja intactos Google y Pyodide. **Pendiente**: tras el merge, ver el `<meta>` de la
+  web publicada (no se ha podido abrir desde el entorno de la auditoría).
 - **Prueba de regresión**: `backend/tests/test_production_csp.py` (4 tests): solo cambian esos dos
   orígenes, el resto de directivas y de la página quedan igual, y se rechazan orígenes `http:`.
 
@@ -124,6 +130,44 @@ La siguiente revisión incremental parte de `git diff eb187a9..HEAD`.
   paquetes con 1 559 *hashes* de PyPI, y `pip install --require-hashes --only-binary=:all:` para
   Python 3.12 en Linux instala los 63 sin errores. Pasos y contrapartidas en `REMEDIATION_PLAN.md`.
 - **Prueba de regresión**: un job de CI que instale con `--require-hashes` y ejecute pytest.
+
+### PLD-SEC-007 · Las cuentas creadas con Google no se podían borrar
+- **Severidad**: Media (derecho de supresión, art. 17 RGPD, sin vía en la web).
+- **Estado**: confirmado → **corregido** en el PR #55.
+- **Ubicación**: `backend/app/routers/auth.py` (`login_google` crea la cuenta con una contraseña
+  aleatoria) y `backend/app/routers/account.py` (`delete_my_account` solo aceptaba contraseña).
+- **Corrección**: `DeleteConfirm` exige **exactamente uno** de `password` o `google_credential` (422
+  si faltan los dos o llegan los dos, para que una contraseña incorrecta no quede oculta tras Google).
+  La credencial es un ID token nuevo validado con `google.oauth2.id_token` (firma, audiencia,
+  caducidad, `email_verified`) y su email debe ser el de la sesión. Sigue haciendo falta la sesión.
+- **Prueba de regresión**: `backend/tests/test_google_auth.py` (borrado con Google, otra cuenta,
+  credencial no válida, sin método, los dos métodos, `null`, sin sesión, Google sin configurar) y
+  `e2e/account.spec.js` (borrado con Google simulado y rechazo de otra cuenta).
+
+### PLD-SEC-008 · Pre-secuestro de cuentas al entrar con Google
+- **Severidad**: Media. El registro con contraseña no comprueba el email: alguien podía registrar el
+  email de otra persona y, cuando esta entraba con Google, compartir la cuenta sabiendo la contraseña.
+- **Estado**: confirmado en el código → **corregido** en el PR #55 (decisión de la persona del
+  20/10/2026: anular la contraseña).
+- **Corrección**: nueva columna `users.email_verified_at` (migración aditiva `b4f1c2d3e5a6`, vacía
+  para las cuentas existentes). Google y el enlace de recuperación la rellenan. Si se entra con Google
+  en una cuenta sin email verificado, se sustituye la contraseña por una aleatoria, se incrementa
+  `token_version` (se cierran las demás sesiones) y se registra `google_linked` en la actividad.
+  Quien quiera volver a usar contraseña la restablece por email.
+- **Riesgo residual**: mientras no haya envío de email (Brevo pendiente), esa cuenta solo puede
+  entrar con Google. Las cuentas antiguas creadas con Google cierran sus otras sesiones una vez.
+- **Prueba de regresión**: `test_google_login_on_unverified_account_voids_password_and_sessions`,
+  `test_later_google_logins_do_not_close_sessions_again`,
+  `test_password_set_by_email_link_survives_google_login`.
+
+### PLD-SEC-009 · Google Identity se cargaba en cada visita
+- **Severidad**: Baja (privacidad): Google recibía la IP de cualquier visitante y podía dejar su
+  cookie `g_state`.
+- **Estado**: **corregido** en el PR #55: `frontend/js/account.js` descarga
+  `https://accounts.google.com/gsi/client` solo al abrir el inicio de sesión o «Eliminar mi cuenta», y
+  `/api/health` indica `"google"` para ocultar el botón si el servidor no tiene `GOOGLE_CLIENT_ID`.
+- **Prueba de regresión**: `e2e/account.spec.js` («Google solo se descarga al abrir el login…»).
+- **Pendiente** (hilo legal): la política de privacidad aún no nombra a Google.
 
 ### PLD-SEC-006 · Riesgos ya aceptados en revisiones anteriores
 Siguen vigentes y documentados en [`revision-2026-10.md`](revision-2026-10.md): `style-src 'unsafe-inline'`,

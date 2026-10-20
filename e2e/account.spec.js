@@ -1,5 +1,6 @@
 // Cuenta de usuario contra el backend REAL (lo arranca playwright.config.js).
 const { request: playwrightRequest } = require("@playwright/test");
+const AxeBuilder = require("@axe-core/playwright").default;
 const { test, expect, uniqueEmail, openLesson } = require("./fixtures");
 
 const PASSWORD = "contraseña-e2e-123";
@@ -282,4 +283,58 @@ test("una cuenta de Google se puede borrar confirmando con Google (RGPD)", async
   await dialog(page).locator("[data-google-delete]").getByRole("button", { name: "Continuar con Google" }).click();
   await expect(page.locator("#toast")).toContainText("se han borrado");
   expect(body).toEqual({ google_credential: "credencial-falsa-de-google-123" });
+});
+
+// Google simulado: la credencial es inventada y la respuesta del servidor también. Comprueba la
+// web (privacidad, sesión, mensajes); la validación real del ID token la cubre pytest.
+test("entrar con Google simulado exige la privacidad y abre la sesión", async ({ page }) => {
+  await withGoogle(page);
+  const email = uniqueEmail();
+  const api = "http://127.0.0.1:8000/api/v1";
+  await page.request.post(`${api}/auth/register`, {
+    data: { email, password: PASSWORD, display_name: "Gala", accept_privacy: true },
+  });
+  const { access_token: token } = await (await page.request.post(`${api}/auth/login`, {
+    form: { username: email, password: PASSWORD },
+  })).json();
+  const bodies = [];
+  await page.route("**/api/v1/auth/google", (route) => {
+    bodies.push(route.request().postDataJSON());
+    return route.fulfill({ json: { access_token: token, token_type: "bearer" } });
+  });
+  await openLesson(page);
+  await page.getByRole("button", { name: "Iniciar sesión" }).click();
+  const google = dialog(page).getByRole("button", { name: "Continuar con Google" });
+  await google.click();
+  await expect(page.locator("#account-message")).toHaveText("Acepta la política de privacidad para continuar con Google.");
+  expect(bodies).toEqual([]);
+  // Accesible con el bloque de Google visible
+  const axe = await new AxeBuilder({ page }).include("#account-dialog").withTags(["wcag2a", "wcag2aa"]).analyze();
+  expect(axe.violations.map((v) => v.id)).toEqual([]);
+  await page.locator("[data-google-login]").getByLabel(/acepto la/).check();
+  await google.click();
+  await expect(page.locator("#account-label")).toHaveText("Gala");
+  expect(bodies[0]).toEqual({ credential: "credencial-falsa-de-google-123", accept_privacy: true });
+});
+
+test("confirmar el borrado con otra cuenta de Google se rechaza y la cuenta sigue", async ({ page }) => {
+  await withGoogle(page);
+  await page.route("**/api/v1/users/me/delete", (route) =>
+    route.fulfill({ status: 403, json: { detail: "Esa cuenta de Google no es la de esta sesión." } }));
+  await openLesson(page);
+  await register(page, uniqueEmail(), "Hugo");
+  await page.locator("#account-button").click();
+  await dialog(page).getByText("Eliminar mi cuenta").click();
+  await dialog(page).locator("[data-google-delete]").getByRole("button", { name: "Continuar con Google" }).click();
+  await expect(page.getByRole("alert")).toHaveText("Esa cuenta de Google no es la de esta sesión.");
+  await expect(page.locator("#account-label")).toHaveText("Hugo");
+});
+
+test("si Google no se puede descargar, se explica y el email sigue funcionando", async ({ page }) => {
+  await page.route("https://accounts.google.com/**", (route) => route.abort());
+  await page.route("**/api/v1/health", (route) => route.fulfill({ json: { status: "ok", email: true, google: true } }));
+  await openLesson(page);
+  await page.getByRole("button", { name: "Iniciar sesión" }).click();
+  await expect(page.locator("#account-message")).toContainText("No se ha podido conectar con Google");
+  await expect(page.locator("#login-form").getByRole("button", { name: "Entrar" })).toBeEnabled();
 });

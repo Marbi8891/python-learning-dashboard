@@ -69,7 +69,11 @@ público (no es el *client secret*, que este proyecto no usa ni debe estar en ni
    como usuarios de prueba.
 
 Comprobación: `https://<tu-servicio>.onrender.com/api/health` debe decir `"google": true`; después
-entra con una cuenta de prueba, cierra sesión y vuelve a entrar.
+entra con una cuenta de prueba, cierra sesión, vuelve a entrar y prueba «Eliminar mi cuenta» con
+Google. La web solo descarga el script de Google al abrir el inicio de sesión o el borrado.
+
+La migración `b4f1c2d3e5a6` (columna `users.email_verified_at`) se aplica sola al arrancar el
+contenedor (`alembic upgrade head`). Es aditiva: no modifica datos existentes.
 
 ## 5. Emails de recuperación de contraseña
 

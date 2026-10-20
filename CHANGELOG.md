@@ -5,6 +5,9 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
 ## [Unreleased]
 
 ### Seguridad
+- **Borrado de cuenta con un solo método**: `POST /api/v1/users/me/delete` exige exactamente uno de `password` o `google_credential` (422 si faltan los dos o llegan los dos).
+- **Pre-secuestro de cuentas con Google** (PLD-SEC-008): al entrar con Google en una cuenta creada con contraseña cuyo email nunca se ha verificado, la contraseña se anula, se cierran las demás sesiones y se registra «Cuenta vinculada con Google». Nueva columna `users.email_verified_at` (migración aditiva); la exportación la incluye.
+- **CSP de la web publicada sin `localhost:8000`** (PLD-SEC-003): `pages.yml` ejecuta `scripts/security/production_csp.py` sobre la copia que se publica.
 - **Las cuentas creadas con Google ya se pueden borrar** (art. 17 RGPD): tienen una contraseña aleatoria que nadie conoce, así que «Eliminar mi cuenta» siempre respondía «Contraseña incorrecta». `POST /api/v1/users/me/delete` acepta ahora `google_credential` (un ID token de Google del mismo email, validado en el servidor) además de `password`; la web ofrece «Continuar con Google» en esa sección.
 - **Google Identity solo se descarga al abrir el inicio de sesión o el borrado de la cuenta**: antes se cargaba en cada visita, y Google recibía la IP de cualquier visitante (y podía dejar su cookie `g_state`) aunque no usara su cuenta.
 - `/api/health` indica `"google"`: la web oculta «Continuar con Google» si el servidor no tiene `GOOGLE_CLIENT_ID`, en lugar de ofrecer un botón que responde 503. La variable se documenta en `render.yaml`, `backend/.env.example` y `docs/DEPLOY.md` (con las comprobaciones de Google Cloud).
