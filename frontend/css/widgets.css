@@ -404,6 +404,105 @@
   overflow-wrap: anywhere;
 }
 
+/* Tutor híbrido (ADR-0038): selector de modalidad. Primero móvil (una columna); en pantallas
+   anchas, las dos opciones lado a lado. La elegida se marca con el borde y con el propio radio,
+   no solo con el color. */
+
+.tutor-modes {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-4);
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+.tutor-modes legend {
+  padding: 0;
+  margin-bottom: var(--space-2);
+}
+
+.tutor-mode {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.tutor-mode input {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin: 2px 0 0;
+  accent-color: var(--color-accent);
+}
+
+.tutor-mode:has(input:checked) {
+  border-width: 2px;
+  border-color: var(--color-accent);
+  padding: calc(var(--space-3) - 1px);
+}
+
+.tutor-mode:has(input:disabled) {
+  cursor: not-allowed;
+}
+
+.tutor-mode:has(input:disabled) .tutor-mode__title,
+.tutor-mode:has(input:disabled) .tutor-mode__text {
+  color: var(--color-text-muted);
+}
+
+.tutor-mode:has(input:focus-visible) {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.tutor-mode__body {
+  display: grid;
+  gap: var(--space-1);
+  font-size: 14px;
+}
+
+.tutor-mode__title {
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.tutor-mode__status,
+.tutor-mode__privacy {
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.tutor-mode__status {
+  font-weight: 600;
+}
+
+.tutor-mode__privacy {
+  margin: 0;
+}
+
+@media (min-width: 720px) {
+  .tutor-modes {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .tutor-modes legend,
+  .tutor-mode__privacy {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Botones de acción a todo el ancho en pantallas pequeñas: fáciles de pulsar */
+@media (max-width: 479px) {
+  .tutor__actions .btn {
+    flex: 1 1 100%;
+  }
+}
+
 a.chip {
   color: inherit;
   text-decoration: none;

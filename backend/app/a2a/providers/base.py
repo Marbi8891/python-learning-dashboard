@@ -1,8 +1,8 @@
 """Interfaz común de los modelos de lenguaje.
 
 Los agentes no dependen de ningún proveedor concreto: reciben un `AgentModelProvider`. Hoy existen
-Ollama (modelo local, el predeterminado), Anthropic (opcional) y el simulado (desarrollo y
-tests); para OpenAI basta con otra clase que implemente `generate` y lance las excepciones de aquí.
+Ollama (modelo local, el predeterminado), Anthropic (opcional), OpenAI (solo para la modalidad
+«IA avanzada» del tutor híbrido, ADR-0038) y el simulado (desarrollo y tests).
 """
 
 from dataclasses import dataclass
@@ -29,8 +29,27 @@ class ModelRequest:
     outline: str
 
 
+class ModelReply(str):
+    """Texto de la respuesta con el consumo de tokens, si el proveedor lo informa.
+
+    Es un `str`, así que los proveedores que devuelven texto sin más siguen valiendo: el tutor
+    híbrido lee `input_tokens` y `output_tokens` con `getattr` para la contabilidad de consumo.
+    """
+
+    input_tokens: int | None
+    output_tokens: int | None
+
+    def __new__(
+        cls, text: str, *, input_tokens: int | None = None, output_tokens: int | None = None
+    ):
+        reply = super().__new__(cls, text)
+        reply.input_tokens = input_tokens
+        reply.output_tokens = output_tokens
+        return reply
+
+
 class AgentModelProvider(Protocol):
-    name: str  # proveedor: «ollama», «anthropic», «mock»…
+    name: str  # proveedor: «ollama», «anthropic», «openai», «mock»…
     model: str  # modelo concreto (para los logs y los metadatos de la respuesta)
     # Lo que ve el alumno si el modelo no está disponible (caído, lento o mal configurado)
     unavailable_message: str

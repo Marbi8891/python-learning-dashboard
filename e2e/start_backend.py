@@ -26,6 +26,8 @@ os.environ.update(
     # Tutor Python (ADR-0034) con el modelo simulado: sin API key ni servicios externos
     A2A_ENABLED="true",
     A2A_MOCK_MODEL="true",
+    # Tutor híbrido (ADR-0038): la IA avanzada, simulada (sin OpenAI ni clave)
+    A2A_ADVANCED_PROVIDER="mock",
 )
 
 import uvicorn  # noqa: E402

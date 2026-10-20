@@ -50,3 +50,9 @@ def log_task(
         entry["error"] = type(error).__name__
     level = logging.ERROR if outcome == "failed" else logging.INFO
     logger.log(level, json.dumps(entry, ensure_ascii=False, sort_keys=True))
+
+
+def log_usage_error(error: BaseException) -> None:
+    """La contabilidad del tutor híbrido ha fallado (la respuesta ya se ha dado): solo el tipo."""
+    entry = {"event": "a2a.usage", "outcome": "failed", "error": type(error).__name__}
+    logger.error(json.dumps(entry, ensure_ascii=False, sort_keys=True))
