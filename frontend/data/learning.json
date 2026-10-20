@@ -2887,6 +2887,47 @@
    "explain": "El desempaquetado reparte la tupla en x e y. Un conjunto no guarda repetidos: {1, 2, 3}."
   },
   {
+   "id": "tup-05",
+   "concept": "tuplas-conjuntos",
+   "kind": "output",
+   "level": 1,
+   "daw": true,
+   "q": "¿Qué muestra este programa?",
+   "code": "datos = [1, 2, 3]\nfijos = (1, 2, 3)\ndatos[0] = 9\nprint(datos, fijos)",
+   "stdin": "",
+   "expect": "[9, 2, 3] (1, 2, 3)",
+   "traps": {
+    "[9, 2, 3] (9, 2, 3)": "tuplas-conjuntos.tupla-mutable"
+   },
+   "explain": "Solo cambia la lista: `datos[0] = 9` reasigna su primer elemento porque las listas son mutables. La tupla `fijos` no se ha tocado y, además, no admitiría esa asignación."
+  },
+  {
+   "id": "tup-06",
+   "concept": "tuplas-conjuntos",
+   "kind": "output",
+   "level": 1,
+   "daw": true,
+   "q": "¿Qué muestra este programa?",
+   "code": "notas = [5, 7]\nnotas.append(9)\npunto = (3, 4)\nprint(notas, punto[1])",
+   "stdin": "",
+   "expect": "[5, 7, 9] 4",
+   "traps": {},
+   "explain": "`append` añade un elemento al final de la lista, que es mutable. De la tupla solo se lee: `punto[1]` es su segundo elemento, el 4."
+  },
+  {
+   "id": "tup-07",
+   "concept": "tuplas-conjuntos",
+   "kind": "output",
+   "level": 2,
+   "daw": true,
+   "q": "¿Qué muestra este programa?",
+   "code": "t = (5)\nu = (5,)\nprint(type(t).__name__, type(u).__name__)",
+   "stdin": "",
+   "expect": "int tuple",
+   "traps": {},
+   "explain": "Los paréntesis solos no crean una tupla: `(5)` es el número 5. Lo que crea la tupla es la coma: `(5,)`."
+  },
+  {
    "id": "tup-02",
    "concept": "tuplas-conjuntos",
    "kind": "choice",
