@@ -26,6 +26,7 @@ Las herramientas que falten se saltan con la instrucción para instalarlas: el s
 | Markdown seguro y escape | `npm run test:unit` | `tests/unit/markdown.test.mjs` |
 | Guardián y definición de los agentes | `npm run test:unit` | `tests/unit/appsec-guard.test.mjs` |
 | Navegador: CSP, almacenamiento, cierre de sesión | `npx playwright test e2e/security.spec.js` | `e2e/` |
+| Google: carga bajo demanda, botón oculto sin servidor, borrado y otra cuenta (simulado) | `npx playwright test e2e/account.spec.js -g Google` | `e2e/account.spec.js` |
 | Red cerrada en el Worker de Pyodide (PLD-SEC-004) | `npx playwright test e2e/security.spec.js -g PLD-SEC-004` | `e2e/security.spec.js` |
 | CSP de la web publicada (PLD-SEC-003) | `cd backend && python -m pytest -q tests/test_production_csp.py` y `python scripts/security/production_csp.py --check frontend` | `backend/tests/test_production_csp.py` |
 

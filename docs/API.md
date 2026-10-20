@@ -14,9 +14,10 @@ Interactive OpenAPI documentation is available at /docs when ENABLE_DOCS=true.
 
 | Resource | Endpoints |
 | --- | --- |
-| Authentication | /api/v1/auth/register, /api/v1/auth/login, /api/v1/auth/logout, /api/v1/auth/logout-all |
+| Authentication | /api/v1/auth/register, /api/v1/auth/login, /api/v1/auth/google, /api/v1/auth/logout, /api/v1/auth/logout-all |
 | Password recovery ([auth.md](auth.md)) | /api/v1/auth/forgot-password, /api/v1/auth/reset-password (aliases of /auth/password-reset/request and /confirm) |
-| Account | /api/v1/users/me, /api/v1/users/me/activity, /api/v1/users/me/export |
+| Account | /api/v1/users/me, /api/v1/users/me/activity, /api/v1/users/me/export, POST /api/v1/users/me/delete (exactly one of `password` or `google_credential`, see [auth.md](auth.md)) |
+| Health | GET /api/v1/health → `status`, `email` (reset emails can be sent), `google` (`GOOGLE_CLIENT_ID` is set) |
 | Course content | /api/v1/modules, /api/v1/lessons/{slug} |
 | Progress | /api/v1/progress, /api/v1/progress/{slug} |
 | Exercise attempts | /api/v1/lessons/{slug}/attempts |
@@ -34,6 +35,8 @@ When `A2A_ENABLED=true`, the same FastAPI app also serves A2A 1.0 agents under `
 | Python Tutor (JSON-RPC, session required) | POST /a2a/python-tutor with header `A2A-Version: 1.0` |
 
 The default model provider is a free local model through Ollama (`A2A_MODEL_PROVIDER=ollama`); Anthropic is available but only used when chosen explicitly (`A2A_MODEL_PROVIDER=anthropic`, key only in `ANTHROPIC_API_KEY`); tests use the mock model (`A2A_MOCK_MODEL=true`). The agent only depends on the `AgentModelProvider` interface.
+
+**Hybrid tutor** (ADR-0038, [tutor-hibrido.md](tutor-hibrido.md)): `GET /api/v1/tutor/modes` (session required) tells the client which tutor modes the backend offers — `free` (always available) and `advanced` (optional OpenAI, disabled by default) — plus the student's advanced quota for today (`daily_limit`, `used_today`, `remaining`, `global_available`, `max_input_chars`, `max_output_tokens`). The tutor message accepts two new optional data fields: `mode` (`free` or `advanced`, default `free`) and `alternative` (boolean). The backend validates the mode: an unavailable mode, a message over the advanced input limit or an exhausted quota ends the task as `TASK_STATE_REJECTED` with reason `advanced_unavailable`, `advanced_input_too_long`, `advanced_limit_reached` or `advanced_global_limit`, and still includes the free answer. The artifact metadata gains `mode` and, for advanced answers, `quota_remaining`. Existing clients that send neither field keep the previous behaviour.
 
 See [a2a.md](a2a.md) (in Spanish) for the message format, examples, security, data minimization and cost limits.
 

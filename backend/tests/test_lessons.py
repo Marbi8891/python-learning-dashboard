@@ -12,7 +12,12 @@ from app.seed import seed
 def test_health(client):
     response = client.get("/api/health")
     assert response.status_code == 200
-    assert response.json() == {"status": "ok", "email": False}
+    assert response.json() == {"status": "ok", "email": False, "google": False}
+
+
+def test_health_reports_google_when_client_id_is_configured(client, monkeypatch):
+    monkeypatch.setattr(get_settings(), "google_client_id", "test-google-client-id")
+    assert client.get("/api/health").json()["google"] is True
 
 
 def test_health_reports_email_when_smtp_is_configured(client, monkeypatch):

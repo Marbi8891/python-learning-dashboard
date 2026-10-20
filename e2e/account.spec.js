@@ -1,5 +1,6 @@
 // Cuenta de usuario contra el backend REAL (lo arranca playwright.config.js).
 const { request: playwrightRequest } = require("@playwright/test");
+const AxeBuilder = require("@axe-core/playwright").default;
 const { test, expect, uniqueEmail, openLesson } = require("./fixtures");
 
 const PASSWORD = "contraseña-e2e-123";
@@ -223,4 +224,165 @@ test("un servidor lento avisa de que se está despertando", async ({ page }) => 
   await page.locator("#login-form").getByRole("button", { name: "Entrar" }).click();
   await expect(page.locator("#account-message")).toContainText("El servidor se está despertando");
   await expect(page.locator("#account-message")).not.toContainText("despertando", { timeout: 15_000 });
+});
+
+// Google Identity Services falso: el botón llama al callback con una credencial de prueba
+const FAKE_GSI = `window.google = { accounts: { id: {
+  initialize(options) { window.__gsi = options; },
+  renderButton(target) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = "Google de prueba";
+    button.onclick = () => window.__gsi.callback({ credential: "x".repeat(40) });
+    target.append(button);
+  },
+} } };`;
+
+test("el script de Google solo se descarga al abrir el inicio de sesión o el borrado", async ({ page }) => {
+  const requests = [];
+  await page.route("https://accounts.google.com/**", (route) => {
+    requests.push(route.request().url());
+    return route.fulfill({ contentType: "text/javascript", body: FAKE_GSI });
+  });
+  // El servidor dice que tiene Google; el borrado real responde que no está configurado (503)
+  await page.route("**/api/v1/health", (route) =>
+    route.fulfill({ json: { status: "ok", email: true, google: true } }));
+  await openLesson(page);
+  await page.goto("/#/portada");
+  await expect(page.locator("#landing-view")).toBeVisible();
+  expect(requests).toEqual([]); // ni la portada ni las lecciones cargan Google
+
+  await openLesson(page);
+  await page.getByRole("button", { name: "Iniciar sesión" }).click();
+  await expect(dialog(page).locator("#google-signin")).toContainText("Google de prueba");
+  expect(requests).toEqual(["https://accounts.google.com/gsi/client"]);
+  await dialog(page).locator("#account-close").click();
+
+  // Ya con sesión, «Eliminar mi cuenta» ofrece confirmar con Google (mismo script, sin recargarlo)
+  await register(page, uniqueEmail());
+  await page.locator("#account-button").click();
+  await dialog(page).getByText("Eliminar mi cuenta").click();
+  const confirm = dialog(page).locator("[data-google-delete]");
+  await confirm.getByRole("button", { name: "Google de prueba" }).click();
+  // El backend de los e2e no tiene Google configurado: la petición llega y se rechaza sin borrar nada
+  await expect(page.locator("#account-message")).toContainText("Google no está configurado");
+  await expect(page.locator("#account-label")).toHaveText("Ana");
+  expect(requests).toHaveLength(1);
+});
+
+async function withGoogle(page, { serverHasGoogle = true } = {}) {
+  const loads = [];
+  await page.route("https://accounts.google.com/**", (route) => {
+    loads.push(route.request().url());
+    return route.fulfill({ contentType: "text/javascript", body: FAKE_GSI });
+  });
+  await page.route("**/api/v1/health", (route) =>
+    route.fulfill({ json: { status: "ok", email: true, google: serverHasGoogle } }));
+  return loads;
+}
+
+test("si el servidor no tiene Google configurado, no se ofrece el botón", async ({ page }) => {
+  const loads = await withGoogle(page, { serverHasGoogle: false });
+  await openLesson(page);
+  await page.getByRole("button", { name: "Iniciar sesión" }).click();
+  await expect(page.locator("#login-form").getByLabel("Email")).toBeVisible();
+  await expect(page.locator("[data-google-login]")).toBeHidden();
+  expect(loads).toEqual([]);
+});
+
+test("una cuenta de Google se puede borrar confirmando con Google (RGPD)", async ({ page }) => {
+  await withGoogle(page);
+  let body = null;
+  await page.route("**/api/v1/users/me/delete", async (route) => {
+    body = route.request().postDataJSON();
+    // El backend de los e2e no tiene GOOGLE_CLIENT_ID: la validación del token la cubre pytest
+    await route.fulfill({ status: 204 });
+  });
+  await openLesson(page);
+  await register(page, uniqueEmail());
+  await page.locator("#account-button").click();
+  await dialog(page).getByText("Eliminar mi cuenta").click();
+  await dialog(page).locator("[data-google-delete]").getByRole("button", { name: "Google de prueba" }).click();
+  await expect(page.locator("#toast")).toContainText("se han borrado");
+  expect(body).toEqual({ google_credential: "x".repeat(40) });
+});
+
+// Google simulado: la credencial es inventada y la respuesta del servidor también. Comprueba la
+// web (privacidad, sesión, mensajes); la validación real del ID token la cubre pytest.
+test("entrar con Google simulado exige la privacidad y abre la sesión", async ({ page }) => {
+  await withGoogle(page);
+  const email = uniqueEmail();
+  const api = "http://127.0.0.1:8000/api/v1";
+  await page.request.post(`${api}/auth/register`, {
+    data: { email, password: PASSWORD, display_name: "Gala", accept_privacy: true },
+  });
+  const { access_token: token } = await (await page.request.post(`${api}/auth/login`, {
+    form: { username: email, password: PASSWORD },
+  })).json();
+  const bodies = [];
+  await page.route("**/api/v1/auth/google", (route) => {
+    bodies.push(route.request().postDataJSON());
+    return route.fulfill({ json: { access_token: token, token_type: "bearer" } });
+  });
+  await openLesson(page);
+  await page.getByRole("button", { name: "Iniciar sesión" }).click();
+  const google = dialog(page).getByRole("button", { name: "Google de prueba" });
+  await google.click();
+  await expect(page.locator("#account-message")).toHaveText("Acepta la política de privacidad para continuar con Google.");
+  expect(bodies).toEqual([]);
+  // Accesible con el bloque de Google visible
+  const axe = await new AxeBuilder({ page }).include("#account-dialog").withTags(["wcag2a", "wcag2aa"]).analyze();
+  expect(axe.violations.map((v) => v.id)).toEqual([]);
+  await page.locator("[data-google-login]").getByLabel(/acepto la/).check();
+  await google.click();
+  await expect(page.locator("#account-label")).toHaveText("Gala");
+  expect(bodies[0]).toEqual({ credential: "x".repeat(40), accept_privacy: true });
+});
+
+test("confirmar el borrado con otra cuenta de Google se rechaza y la cuenta sigue", async ({ page }) => {
+  await withGoogle(page);
+  await page.route("**/api/v1/users/me/delete", (route) =>
+    route.fulfill({ status: 403, json: { detail: "Esa cuenta de Google no es la de esta sesión." } }));
+  await openLesson(page);
+  await register(page, uniqueEmail(), "Hugo");
+  await page.locator("#account-button").click();
+  await dialog(page).getByText("Eliminar mi cuenta").click();
+  await dialog(page).locator("[data-google-delete]").getByRole("button", { name: "Google de prueba" }).click();
+  await expect(page.getByRole("alert")).toHaveText("Esa cuenta de Google no es la de esta sesión.");
+  await expect(page.locator("#account-label")).toHaveText("Hugo");
+});
+
+test("si Google no se puede descargar, se explica y el email sigue funcionando", async ({ page }) => {
+  await page.route("https://accounts.google.com/**", (route) => route.abort());
+  await page.route("**/api/v1/health", (route) => route.fulfill({ json: { status: "ok", email: true, google: true } }));
+  await openLesson(page);
+  await page.getByRole("button", { name: "Iniciar sesión" }).click();
+  await expect(page.locator("#account-message")).toContainText("No se ha podido cargar Google");
+  await expect(page.locator("#login-form").getByRole("button", { name: "Entrar" })).toBeEnabled();
+});
+
+test("con la sesión abierta, el botón de entrar con Google no aparece ni puede borrar la cuenta", async ({ page }) => {
+  await withGoogle(page);
+  const calls = [];
+  await page.route("**/api/v1/users/me/delete", (route) => {
+    calls.push("delete");
+    return route.fulfill({ status: 204 });
+  });
+  await openLesson(page);
+  await register(page, uniqueEmail(), "Iris");
+  // Abrir «Eliminar mi cuenta» descarga Google; después se cierra sin pulsar su botón
+  await page.locator("#account-button").click();
+  await dialog(page).getByText("Eliminar mi cuenta").click();
+  await expect(dialog(page).locator("[data-google-delete]").getByRole("button", { name: "Google de prueba" })).toBeVisible();
+  await dialog(page).getByText("Eliminar mi cuenta").click();
+  // Un enlace de recuperación con la sesión abierta lleva a «olvidé» y de ahí a la vista de login
+  await page.goto("/#/restablecer");
+  await page.locator("#forgot-form").getByRole("link", { name: "Volver" }).click();
+  await expect(page.locator("#login-form")).toBeVisible();
+  await expect(page.locator("[data-google-login]")).toBeHidden();
+  // Aunque Google devolviera una credencial sin pulsar el botón de borrar, no se borra nada
+  await page.evaluate(() => window.__gsi.callback({ credential: "x".repeat(40) }));
+  await page.waitForTimeout(500);
+  expect(calls).toEqual([]);
+  await expect(page.locator("#account-label")).toHaveText("Iris");
 });

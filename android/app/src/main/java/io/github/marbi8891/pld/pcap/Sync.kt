@@ -31,6 +31,8 @@ data class ActivityItem(val kind: String, val createdAt: String, val device: Str
     companion object {
         val LABELS = mapOf(
             "login" to "Inicio de sesión",
+            "login_google" to "Inicio de sesión con Google",
+            "google_linked" to "Cuenta vinculada con Google: contraseña anterior anulada",
             "login_failed" to "Intento con contraseña incorrecta",
             "password_changed" to "Contraseña cambiada",
             "password_reset" to "Contraseña restablecida por email",

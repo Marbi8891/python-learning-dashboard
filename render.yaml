@@ -22,6 +22,10 @@ services:
         value: '["https://marbi8891.github.io"]'
       - key: FRONTEND_URL
         value: https://marbi8891.github.io/python-learning-dashboard
+      # Client ID público de Google (el mismo que googleClientId en frontend/config.js).
+      # Se pega en el panel; sin él la web oculta «Continuar con Google» (docs/DEPLOY.md)
+      - key: GOOGLE_CLIENT_ID
+        sync: false
       # Recuperación de contraseña por email: rellénalos en el panel de Render.
       # En el plan gratuito Render bloquea SMTP: usa BREVO_API_KEY + SMTP_FROM (docs/DEPLOY.md)
       - key: BREVO_API_KEY

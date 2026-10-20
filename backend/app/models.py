@@ -1,9 +1,10 @@
 """Modelos de la base de datos."""
 
-from datetime import datetime
+from datetime import date, datetime
 
 from sqlalchemy import (
     JSON,
+    Date,
     DateTime,
     ForeignKey,
     Index,
@@ -71,6 +72,9 @@ class User(Base):
     privacy_accepted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     # Se incrementa al cambiar la contraseña: invalida todos los tokens emitidos antes
     token_version: Mapped[int] = mapped_column(default=0, server_default="0")
+    # Cuándo se demostró que el email es de quien usa la cuenta (Google o enlace de recuperación).
+    # El registro con contraseña no lo verifica: ver login_google (pre-secuestro de cuentas).
+    email_verified_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
 
 class LessonProgress(Base):
@@ -162,3 +166,23 @@ class AccountEvent(Base):
     kind: Mapped[str] = mapped_column(String(30))
     device: Mapped[str] = mapped_column(String(60), default="")
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class TutorUsage(Base):
+    """Consultas al tutor por usuario, día (UTC) y modalidad (ADR-0038): «free» o «advanced».
+
+    Sirve para las cuotas de la IA avanzada (de pago) y para saber cuánto se usa cada modalidad.
+    Solo cuenta: ni preguntas ni respuestas. Los tokens son los que informa el proveedor.
+    """
+
+    __tablename__ = "tutor_usage"
+    __table_args__ = (Index("ix_tutor_usage_day_mode", "day", "mode"),)
+
+    user_id: Mapped[int] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), primary_key=True
+    )
+    day: Mapped[date] = mapped_column(Date, primary_key=True)
+    mode: Mapped[str] = mapped_column(String(10), primary_key=True)
+    requests: Mapped[int] = mapped_column(default=0, server_default="0")
+    input_tokens: Mapped[int] = mapped_column(default=0, server_default="0")
+    output_tokens: Mapped[int] = mapped_column(default=0, server_default="0")

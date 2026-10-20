@@ -193,25 +193,86 @@ GLOSSARY: dict[str, str] = {
     "parametro": "el nombre que recibe, dentro de la función, el valor que se le pasa.",
 }
 
+
+@dataclass(frozen=True)
+class PrecisionNote:
+    """Explicación revisada a mano para una pregunta en la que es fácil equivocarse.
+
+    - text: la explicación; alternative: otra forma de explicarlo («Explícamelo de otra forma»).
+    - example/output: el ejemplo mínimo y su salida. Los tests lo ejecutan con CPython y
+      comprueban la salida (el servidor nunca ejecuta código).
+    - checks: preguntas de comprobación de `learning.json`, de la más fácil a la más difícil.
+    """
+
+    id: str
+    pattern: re.Pattern[str]
+    concept: str
+    text: str
+    alternative: str = ""
+    example: str = ""
+    output: str = ""
+    alternative_example: str = ""
+    alternative_output: str = ""
+    checks: tuple[str, ...] = ()
+
+
 # Matices técnicos revisados a mano, para preguntas en las que es fácil equivocarse
-PRECISION_NOTES: tuple[tuple[re.Pattern[str], str, str], ...] = (
-    (
-        re.compile(r"\b(array|arrays|arreglo|arreglos|numpy|vector)\b", re.IGNORECASE),
-        "listas",
-        "En Python lo que otros lenguajes llaman «array» se hace casi siempre con una **lista**, "
-        "pero no son lo mismo:\n\n"
-        "- **`list`** (integrada en Python): ordenada y modificable; puede mezclar tipos, como "
-        '`[1, "a", 2.5]`, y crece con `append`.\n'
-        "- **`array.array`** (módulo `array` de la biblioteca estándar): todos los elementos son "
-        "del mismo tipo numérico, indicado con un código: `array('i', [1, 2, 3])` guarda "
-        "enteros y ocupa menos memoria que una lista.\n"
-        "- **`numpy.ndarray`** (biblioteca externa NumPy, hay que instalarla): arrays numéricos "
-        "de una o más dimensiones con operaciones elemento a elemento. `np.array([1, 2]) * 2` "
-        "da `array([2, 4])`, mientras que `[1, 2] * 2` da `[1, 2, 1, 2]`: con una lista, `*` "
-        "repite la lista.\n\n"
-        "En este curso se usan listas.",
+PRECISION_NOTES: tuple[PrecisionNote, ...] = (
+    PrecisionNote(
+        id="lista-tupla",
+        pattern=re.compile(
+            r"(?=.*\b(lista|listas|list)\b)(?=.*\b(tupla|tuplas|tuple)\b)",
+            re.IGNORECASE | re.DOTALL,
+        ),
+        concept="tuplas-conjuntos",
+        text=(
+            "Una **lista** y una **tupla** guardan varios valores en orden y se leen igual "
+            "(`datos[0]` es el primero). La diferencia principal es una sola:\n\n"
+            "- La **lista** (`[1, 2, 3]`, con corchetes) es **mutable**: después de crearla "
+            "puedes cambiar, añadir o quitar elementos.\n"
+            "- La **tupla** (`(1, 2, 3)`, con paréntesis) es **inmutable**: una vez creada, no "
+            "puedes reasignar sus elementos.\n\n"
+            "**Mutable** significa «que se puede modificar»; **inmutable**, lo contrario."
+        ),
+        example=(
+            "lista = [1, 2, 3]\nlista[0] = 10\nprint(lista)\n\ntupla = (1, 2, 3)\nprint(tupla[0])"
+        ),
+        output="[10, 2, 3]\n1",
+        alternative=(
+            "Piensa en una **lista** como una pizarra: puedes borrar y escribir encima. Una "
+            "**tupla** es como un texto impreso: lo lees, pero no lo cambias. Si escribes "
+            "`tupla[0] = 10`, Python se detiene con `TypeError: 'tuple' object does not support "
+            "item assignment`.\n\n"
+            "Para «cambiar» una tupla se crea **otra nueva** a partir de la anterior:"
+        ),
+        alternative_example=(
+            "fecha = (20, 10, 2026)\nnueva = (21,) + fecha[1:]\nprint(fecha)\nprint(nueva)"
+        ),
+        alternative_output="(20, 10, 2026)\n(21, 10, 2026)",
+        checks=("tup-05", "tup-06", "tup-07"),
+    ),
+    PrecisionNote(
+        id="arrays",
+        pattern=re.compile(r"\b(array|arrays|arreglo|arreglos|numpy|vector)\b", re.IGNORECASE),
+        concept="listas",
+        text=(
+            "En Python lo que otros lenguajes llaman «array» se hace casi siempre con una "
+            "**lista**, pero no son lo mismo:\n\n"
+            "- **`list`** (integrada en Python): ordenada y modificable; puede mezclar tipos, como "
+            '`[1, "a", 2.5]`, y crece con `append`.\n'
+            "- **`array.array`** (módulo `array` de la biblioteca estándar): todos los elementos "
+            "son del mismo tipo numérico, indicado con un código: `array('i', [1, 2, 3])` guarda "
+            "enteros y ocupa menos memoria que una lista.\n"
+            "- **`numpy.ndarray`** (biblioteca externa NumPy, hay que instalarla): arrays "
+            "numéricos de una o más dimensiones con operaciones elemento a elemento. "
+            "`np.array([1, 2]) * 2` da `array([2, 4])`, mientras que `[1, 2] * 2` da "
+            "`[1, 2, 1, 2]`: con una lista, `*` repite la lista.\n\n"
+            "En este curso se usan listas."
+        ),
     ),
 )
+
+PRECISION_NOTES_BY_ID: dict[str, PrecisionNote] = {note.id: note for note in PRECISION_NOTES}
 
 
 @dataclass(frozen=True)
@@ -240,10 +301,10 @@ def match_concept(curriculum: Curriculum, *texts: str | None) -> str | None:
     return best
 
 
-def precision_note(question: str) -> tuple[str, str] | None:
-    for pattern, concept, note in PRECISION_NOTES:
-        if pattern.search(question):
-            return concept, note
+def precision_note(question: str) -> PrecisionNote | None:
+    for note in PRECISION_NOTES:
+        if note.pattern.search(question):
+            return note
     return None
 
 

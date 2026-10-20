@@ -114,6 +114,7 @@ def test_send_message_returns_a_completed_task_with_the_answer(client, auth_head
         "source": "simulated",
         "intent": "concepto",
         "expects_answer": True,  # termina con una pregunta de comprobación
+        "mode": "free",  # tutor híbrido (ADR-0038): sin pedir otra cosa, la modalidad gratuita
     }
     assert MOCK_NOTICE in answer_text(result)
 
