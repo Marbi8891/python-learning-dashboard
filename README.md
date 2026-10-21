@@ -70,8 +70,10 @@ El ciclo es: concepto → explicación → ejemplo → intento → error o acier
 - **Temario del PCAP:** un módulo de bases (nivel PCEP) y uno por cada bloque oficial del examen (Módulos y paquetes, Excepciones, Strings, POO, Miscelánea), más un extra «Después del PCAP». 27 lecciones.
 - **Zona de examen:** simulacro de 40 preguntas en 65 minutos con el reparto oficial del temario, práctica por bloque con corrección al momento, 48 fichas de repaso y panel de preparación por bloque. 126 preguntas originales, en español o en inglés (como el examen), cada una con una comprobación en Python que demuestra su respuesta.
 - **Teoría y ejemplos:** explicaciones propias, código con resaltado de sintaxis, números de línea y botones «Copiar», «Probar en la consola» y «Abrir en PyCharm» (copia el código, guía los pasos y permite descargar el `.py`).
-- **Consola interactiva:** Python 3.14 real ([Pyodide](https://pyodide.org)) en un Web Worker. Admite `input()`, muestra los errores con la línea exacta y corta los bucles infinitos a los 10 s. Después de cargar Python, el Worker cierra el acceso a la red, así que un programa pegado en la consola no puede enviar datos a otros servidores.
-- **Ejercicios corregidos:** cada lección tiene plantilla y tests. Superarlos completa la lección.
+- **Consola interactiva:** Python 3.14 real ([Pyodide](https://pyodide.org)) en un Web Worker. Admite `input()`, muestra los errores con la línea exacta, se puede **detener** en cualquier momento y corta los bucles infinitos a los 10 s. Después de cargar Python, el Worker cierra el acceso a la red, así que un programa pegado en la consola no puede enviar datos a otros servidores.
+- **Ejercicios corregidos:** cada lección tiene plantilla y tests que comprueban el comportamiento (variables, salida y código). El resultado distingue respuesta incorrecta, error de ejecución, tiempo agotado y fallo del corrector. Superarlos completa la lección.
+- **Buscador de lecciones** en la barra lateral (sin tildes ni mayúsculas) con filtro «Solo pendientes».
+- **Copia de seguridad del progreso:** en «Mi aprendizaje» puedes exportar tu progreso a un archivo JSON e importarlo en otro navegador, sin cuenta. Importar suma, nunca borra.
 - **Asistente:** preguntas frecuentes, pista del ejercicio y «Siguiente tema», adaptados a cada lección.
 - **Mini-quiz:** 3 preguntas por lección (81 en total) que explican por qué cada respuesta es correcta o no.
 - **Retos extra:** uno por lección, de ★ a ★★★ (FizzBuzz, carrito de la compra, renombrador de fotos…), con tests automáticos.
@@ -252,7 +254,8 @@ Qué ejecutar según lo que cambies: [docs/TESTING.md](docs/TESTING.md) §3.
 | Unitarios del frontend | `npm run test:unit` | Dominio por concepto, errores activos, repaso espaciado, plan de hoy, selección de ejercicios, sesiones, simulacros, prueba de nivel, Markdown seguro, cálculos del panel y fusión de logros (`node --test`, sin dependencias) |
 | Núcleo educativo | `python scripts/learning/build_learning.py --check` | Cada respuesta de los 131 ejercicios se comprueba ejecutando Python con el mismo `runner.py` del navegador |
 | End-to-end | `npm ci && npx playwright install chromium && npm run test:e2e` | La app completa con el backend real, la consola Python y la auditoría WCAG |
-| Calidad | `cd backend && ruff check . ../e2e && ruff format --check . ../e2e` | Estilo PEP 8 y formato |
+| Calidad | `cd backend && ruff check . ../e2e ../scripts && ruff format --check . ../e2e ../scripts` | Estilo PEP 8 y formato |
+| Sitio estático | `python scripts/check_site.py` | Lo que se publica en Pages: rutas relativas, archivos e imports que existen, sintaxis de JavaScript y JSON válidos (también se ejecuta antes de publicar) |
 | Seguridad | `python scripts/security/run_checks.py` | Bandit, Semgrep con las reglas del proyecto, Gitleaks y auditoría de dependencias, si están instalados |
 | Cursos de la app | `python scripts/courses/sql_course.py --check` (y `js_course.py`, `java_course.py`, `entornos_course.py`, `programacion_course.py`) | Cada respuesta de código se comprueba ejecutándola (SQLite, Node, Java y Python) |
 | App Android | `cd android && ./gradlew testDebugUnitTest lintDebug` | Dominio del PCAP y del núcleo educativo en Kotlin (banco, repaso espaciado, plan de hoy, sesiones, fusión con la cuenta) y lint de Android |
@@ -365,6 +368,7 @@ La API pública está en `/api/v1`. Las rutas antiguas sin versión (`/api/...`)
 ## Documentación
 
 - [Documentación del proyecto](docs/DOCUMENTACION-DEL-PROYECTO.md): objetivos, arquitectura, tecnologías, instalación, configuración, API, seguridad, pruebas y despliegue
+- [Auditoría técnica (21/10/2026)](docs/AUDIT.md) · [Hoja de ruta](docs/ROADMAP.md)
 - [Arquitectura detallada](docs/ARCHITECTURE.md) · [Referencia de la API](docs/API.md) · [Pruebas](docs/TESTING.md)
 - [Guía de despliegue](docs/DEPLOY.md) · [Ejecutar en Windows](docs/EJECUTAR-EN-WINDOWS.md)
 - [Cuenta y recuperación de contraseña](docs/auth.md) · [Python Tutor y A2A](docs/a2a.md) · [Tutor híbrido](docs/tutor-hibrido.md)

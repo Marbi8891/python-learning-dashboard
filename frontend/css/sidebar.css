@@ -368,3 +368,39 @@ a.lesson:hover {
     pointer-events: auto;
   }
 }
+
+/* ---------- Búsqueda de lecciones ---------- */
+.lesson-filter {
+  display: grid;
+  gap: var(--space-1);
+  margin: 0 var(--space-2) var(--space-3);
+}
+
+.lesson-filter input[type="search"] {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-input-bg);
+  color: var(--color-text);
+  font: inherit;
+  font-size: 14px;
+}
+
+.lesson-filter__pending {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.lesson-filter__status {
+  margin: 0;
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.lesson-filter__status:empty {
+  display: none;
+}

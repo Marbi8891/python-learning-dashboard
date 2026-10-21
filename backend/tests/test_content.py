@@ -157,3 +157,14 @@ def test_course_sheet_is_complete():
     assert len(course["outcomes"]) >= 3
     assert course["requirements"]
     assert all(module["summary"] for module in data["modules"])
+
+
+def test_check_distinguishes_wrong_answer_from_runtime_error():
+    cases = [{"test": "assert doble(2) == 4, 'doble(2) debe ser 4'"}]
+    assert runner.check_exercise("def doble(x):\n    return x * 2\n", cases)["kind"] == "passed"
+    wrong = runner.check_exercise("def doble(x):\n    return x + 1\n", cases)
+    assert (wrong["kind"], wrong["message"]) == ("wrong_answer", "doble(2) debe ser 4")
+    missing = runner.check_exercise("x = 1\n", cases)  # se ejecuta, pero falta lo que se pide
+    assert missing["kind"] == "wrong_answer" and "NameError" in missing["message"]
+    crash = runner.check_exercise("print(1 / 0)\n", cases)
+    assert crash["kind"] == "runtime_error" and "ZeroDivisionError" in crash["error"]

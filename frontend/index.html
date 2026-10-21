@@ -158,6 +158,12 @@
 
       <nav class="path" aria-label="Ruta de aprendizaje">
         <h2 class="path__title">Lecciones del curso PCAP</h2>
+        <div class="lesson-filter" role="search">
+          <label class="visually-hidden" for="lesson-filter">Buscar lección</label>
+          <input id="lesson-filter" type="search" placeholder="Buscar lección…" autocomplete="off" aria-describedby="lesson-filter-status">
+          <label class="lesson-filter__pending"><input id="lesson-filter-pending" type="checkbox"> Solo pendientes</label>
+          <p class="lesson-filter__status" id="lesson-filter-status" role="status"></p>
+        </div>
         <div id="modules"><!-- Se genera desde data/lessons.json --></div>
       </nav>
 
@@ -247,6 +253,7 @@
 
         <div class="console__actions">
           <button class="btn btn--success" id="console-run" type="button">▶ Ejecutar</button>
+          <button class="btn btn--danger" id="console-stop" type="button" hidden>■ Detener</button>
           <button class="btn btn--ghost" id="console-example" type="button">Cargar ejemplo</button>
           <button class="btn btn--ghost" id="console-copy" type="button">Copiar código</button>
           <button class="btn btn--ghost" id="console-clear" type="button">Limpiar salida</button>

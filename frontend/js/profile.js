@@ -158,5 +158,16 @@ export function renderProfile(content) {
           <tbody>${historyRows(content)}</tbody>
         </table>
       </div>
+    </section>
+
+    <section class="course-section" aria-labelledby="profile-backup-title">
+      <h2 class="section-title" id="profile-backup-title">Copia de seguridad del progreso</h2>
+      <p>Descarga tu progreso de este navegador en un archivo para guardarlo o llevarlo a otro navegador o equipo. Al importar una copia, se <strong>suma</strong> a lo que ya tienes: no se borra nada.${state.user ? " Con la sesión iniciada, también se guarda en tu cuenta." : ""}</p>
+      <p><button class="btn btn--ghost" type="button" data-progress-export>Exportar mi progreso</button></p>
+      <p class="backup-import">
+        <label for="progress-import">Importar una copia (.json, máximo 2 MB)</label>
+        <input id="progress-import" type="file" accept=".json,application/json" aria-describedby="progress-import-message">
+      </p>
+      <p class="form-message" id="progress-import-message" role="status"></p>
     </section>`;
 }

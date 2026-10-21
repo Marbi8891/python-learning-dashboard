@@ -1,7 +1,7 @@
 /* Consola interactiva y comprobación de ejercicios. */
 
 import { escapeHtml, renderInline } from "./markdown.js";
-import { PythonRunner, TimeoutError } from "./python-runner.js";
+import { PythonRunner, StoppedError, TimeoutError } from "./python-runner.js";
 
 const $ = (selector) => document.querySelector(selector);
 const DRAFT_PREFIX = "pld:draft:";
@@ -95,15 +95,19 @@ async function withRunner(button, label, action) {
   const original = button.innerHTML;
   button.disabled = true;
   button.textContent = label;
+  $("#console-stop").hidden = false;
   try {
     await action();
   } catch (error) {
-    const message = error instanceof TimeoutError ? `${error.message} ¿Hay un bucle infinito?` : error.message;
-    showOutput({ error: message });
+    if (error instanceof StoppedError) showOutput({ output: error.message });
+    else showOutput({ error: error instanceof TimeoutError ? `${error.message} ¿Hay un bucle infinito?` : error.message });
   } finally {
     busy = false;
     button.disabled = false;
     button.innerHTML = original;
+    // Si el foco estaba en «Detener», que no se pierda al ocultarlo
+    if (document.activeElement === $("#console-stop")) button.focus();
+    $("#console-stop").hidden = true;
   }
 }
 
@@ -115,20 +119,41 @@ export function runConsole() {
   });
 }
 
+/* Tipo de resultado de una comprobación: no es lo mismo una respuesta incorrecta que un error al
+   ejecutar, un tiempo agotado o un fallo del corrector (que no es culpa del alumno). */
+const CHECK_KIND = {
+  wrong_answer: "Respuesta incorrecta: el programa se ejecuta, pero no cumple lo que pide el ejercicio.",
+  runtime_error: "Error de ejecución: el programa se detiene antes de terminar.",
+  timeout: "Tiempo agotado.",
+  system: "Fallo del corrector: no es un error de tu código.",
+};
+
 /** Comprueba el código de la consola con unos tests (del ejercicio o del reto). */
 export function checkCode({ checks, button, box, onResult }) {
   return withRunner(button, "Comprobando…", async () => {
     const code = $("#console-editor").value;
-    const result = await runner.check(code, checks);
+    let result;
+    try {
+      result = await runner.check(code, checks);
+    } catch (error) {
+      if (error instanceof StoppedError) throw error;
+      result =
+        error instanceof TimeoutError
+          ? { passed: false, kind: "timeout", message: `${error.message} ¿Hay un bucle infinito?` }
+          : { passed: false, kind: "system", message: `No se pudo comprobar el ejercicio (${error.message}). Vuelve a intentarlo.` };
+    }
     box.hidden = false;
     box.dataset.passed = String(result.passed);
     const [done, total] = [Number(result.case), Number(result.total)]; // números o NaN, nunca HTML
-    const where = total > 1 && !result.passed ? ` (prueba ${done} de ${total})` : "";
+    const where = total > 1 && !result.passed && done ? ` (prueba ${done} de ${total})` : "";
+    const kind = CHECK_KIND[result.kind]; // solo textos propios: la salida del Worker no es de fiar
     box.innerHTML = `
       <p class="check__title">${result.passed ? "✓ ¡Correcto!" : "✗ Todavía no"}${where}</p>
+      ${kind ? `<p class="check__kind">${kind}</p>` : ""}
       <p>${escapeHtml(result.message)}</p>
       ${result.error ? `<pre class="console__error">${escapeHtml(result.error)}</pre>${renderHint(result.hint)}` : ""}`;
     box.focus();
+    if (result.kind === "system") return; // un fallo del corrector no cuenta como intento
     await onResult(result, code);
   });
 }
@@ -208,6 +233,7 @@ export function initConsole() {
   });
 
   $("#console-run").addEventListener("click", runConsole);
+  $("#console-stop").addEventListener("click", () => runner.stop());
   // «Ir a la línea N» funciona tanto en la salida como en el resultado de la comprobación
   document.addEventListener("click", (event) => {
     const button = event.target.closest("[data-go-line]");

@@ -1,8 +1,9 @@
 # Arquitectura actual
 
-> Documento de la **Fase 1 (auditoría)**. Describe el proyecto **tal como está** en `main`
-> (commit `9d35ee6`, 5 de octubre de 2026). No propone cambios: los problemas detectados se
-> listan al final y los cambios futuros se deciden fase a fase.
+> Escrito en la Fase 1 (commit `9d35ee6`, 5/10/2026) y **revisado el 21/10/2026** con la auditoría
+> integral ([`AUDIT.md`](AUDIT.md)). Describe el proyecto tal como está; la evolución propuesta está en
+> el §9 y, con prioridades y criterios de aceptación, en [`ROADMAP.md`](ROADMAP.md). La lista del §8 es
+> la de la Fase 1, con el estado actual de cada punto.
 
 ## 1. Visión general
 
@@ -67,7 +68,9 @@ Definidas en `js/app.js` y `js/learn/learn-app.js`:
 | Núcleo educativo (lógica pura) | `learn/mastery.js`, `recommend.js`, `session.js`, `exam.js`, `answers.js` | Dominio por concepto, repaso espaciado, plan de hoy, sesiones, simulacros. **No tocan el DOM**: se prueban con `node --test` |
 | Núcleo educativo (vistas) | `learn/learn-app.js`, `session-view.js`, `ui.js`, `welcome.js`, `daw-prep.js` | Pintan HTML con plantillas de texto |
 | Persistencia | `store.js`, `game.js`, `pcap-store.js`, `course-store.js`, `learn/learn-store.js`, `prefs.js` | Leen/escriben `localStorage` y sincronizan con la API |
-| Validación de datos externos | `progress-guard.js` (`cleanProgress`), `learn/mastery.js` (`cleanLearning`) | Filtran lo que llega de `localStorage` o de la cuenta |
+| Validación de datos externos | `progress-guard.js` (`cleanProgress`), `learn/mastery.js` (`cleanLearning`), `game-data.js` (`cleanGame`) | Filtran lo que llega de `localStorage`, de la cuenta o de un archivo importado |
+| Copia del progreso | `progress-file.js` (puro: formato `pld-progress` v1, validación), `progress-transfer.js` (descarga e importación con fusión) | Exportar/importar en «Mi aprendizaje» sin cuenta |
+| Navegación | `lesson-filter.js` | Buscador de lecciones y «Solo pendientes» de la barra lateral |
 | Seguridad del HTML | `markdown.js` | `escapeHtml`, `safeUrl`, Markdown mínimo que siempre escapa |
 | Python | `python-runner.js`, `pyodide-worker.js`, `console.js` | Consola y corrección de ejercicios |
 | API | `api.js` | Cliente HTTP, token en memoria, prefijo `/api/v1` |
@@ -87,15 +90,20 @@ console.js / session-view.js
 ```
 
 - Pyodide se carga **solo la primera vez que se ejecuta código** (perezoso).
-- Límite de 10 s: si se supera, se destruye el Worker y se crea otro.
+- Límite de 10 s: si se supera, se destruye el Worker y se crea otro (`TimeoutError`). El botón
+  «Detener» hace lo mismo a petición del alumno (`PythonRunner.stop()`, `StoppedError`): es la única
+  forma de cortar Pyodide sin `SharedArrayBuffer`, que GitHub Pages no permite activar (necesita
+  cabeceras COOP/COEP). Tras cortar, Python empieza limpio.
+- `check_exercise` devuelve `kind`: `passed`, `runtime_error` o `wrong_answer`; `console.js` añade
+  `timeout` y `system` (fallo del corrector, que no cuenta como intento).
 - `py/runner.py` es el **mismo motor** que usan los tests de CPython (`backend/tests`, `scripts/learning`).
 - Al pegar código que toca `js`, `fetch`, `localStorage`… la consola avisa (`console.js`, `RISKY_PASTE`).
 
 ### 2.5 PWA
 
-- `manifest.webmanifest` (nombre «Prepara el PCAP», `start_url: ./#/inicio`).
-- `sw.js` (versión `v5`, se cambia a mano):
-  - web propia: *network first* con copia en caché `pld-site-v5`;
+- `manifest.webmanifest` («Python Learning Dashboard», `start_url: ./#/aprender`).
+- `sw.js` (versión `v7`, se cambia a mano):
+  - web propia: *network first* con copia en caché `pld-site-v7`;
   - Pyodide: *cache first* en `pld-pyodide`;
   - API: nunca se guarda en caché.
 - Se registra en `app.js` solo si `PLD_CONFIG.serviceWorker` (desactivado en localhost).
@@ -116,6 +124,13 @@ console.js / session-view.js
 
 El **token de sesión** (JWT) vive solo en una variable de `api.js` (ADR-0032). Al cerrar sesión
 se borran todas las claves `pld:*` salvo `pld:prefs`.
+
+**Copia del progreso** (`progress-file.js`): «Exportar mi progreso» descarga un JSON
+`{ format: "pld-progress", version: 1, exportedAt, data: { completed, learn, pcap, game, courses } }`.
+Al importarlo, el archivo solo se lee con `JSON.parse` (máximo 2 MB), se comprueban formato y versión,
+cada parte pasa por su limpiador y se **fusiona** con las mismas funciones que la sincronización con la
+cuenta (`mergeLearning`, `mergePcap`, `mergeCourse`, `mergeGame`, unión de lecciones): nunca se borra
+progreso. Con sesión iniciada, los cambios se suben a la cuenta antes de recargar.
 
 ### 2.7 Contenido (`frontend/data/`)
 
@@ -200,9 +215,9 @@ rutas antiguas `/api/...` (`pcap/Sync.kt`). Pide permiso de internet solo para l
 | Workflow | Cuándo | Qué hace |
 |---|---|---|
 | `ci.yml` → `backend` | push a `main` y PR | ruff, `pip-audit`, pytest 100 %, `build_learning.py --check`, migraciones en PostgreSQL 16 |
-| `ci.yml` → `e2e` | push a `main` y PR | `npm run test:unit`, `npm audit`, Playwright + axe |
+| `ci.yml` → `e2e` | push a `main` y PR | `scripts/check_site.py`, `npm run test:unit`, `npm audit`, Playwright + axe |
 | `android.yml` | cambios en `android/`, `frontend/data/`, `scripts/courses/` | Comprueba cursos, tests JVM, lint, APK |
-| `pages.yml` | push a `main` que toca `frontend/` | **Publica** la web |
+| `pages.yml` | push a `main` que toca `frontend/` | CSP de producción, `check_site.py` sobre la copia, **publica** la web y comprueba que responde |
 
 Todos los workflows usan `permissions: contents: read` (salvo Pages) y `persist-credentials: false`.
 
@@ -212,12 +227,12 @@ Resumen. El detalle de seguridad está en [`SECURITY.md`](SECURITY.md) y el de p
 Las afirmaciones marcadas con *(inferido)* no se han comprobado con una prueba.
 
 ### Seguridad
-1. El Worker de Pyodide **no recibe la CSP** de `<meta>` *(inferido de la especificación CSP)*: el código Python del alumno podría usar `import js` para hacer peticiones a cualquier origen. No tiene acceso al token, al DOM ni a `localStorage`.
+1. ~~El Worker de Pyodide no recibe la CSP de `<meta>`~~ Confirmado y mitigado (PLD-SEC-004): el Worker cierra el acceso a la red tras cargar Python; riesgo residual documentado.
 2. Pyodide se carga del CDN **sin SRI** (riesgo ya documentado en `docs/security/revision-2026-10.md`).
 3. `style-src 'unsafe-inline'` y CSP en `<meta>` (ya documentados).
-4. `app.js` (barra lateral) inserta `module.slug` y `lesson.slug` en atributos HTML **sin escapar**. El dato viene del propio JSON, así que el riesgo es bajo, pero rompe la regla «todo se escapa».
+4. ~~`app.js` (barra lateral) inserta los slugs sin escapar~~ Corregido (PLD-SEC-002).
 5. ~~`game.js` mezcla `pld:game` de `localStorage` sin validarlo~~ Resuelto en ADR-0035: `game-data.js` (`cleanGame`) lo valida al leerlo de `localStorage` y de la cuenta.
-6. La CSP de producción permite `connect-src http://127.0.0.1:8000 http://localhost:8000`.
+6. ~~La CSP de producción permite `localhost:8000`~~ Corregido en `pages.yml` (PLD-SEC-003, #55).
 7. `python-multipart` y `argon2-cffi` sin límite superior de versión; el backend no tiene *lockfile* con *hashes*.
 8. `deploy.ps1` hace commit **y push a `main`**: ningún agente debe ejecutarlo.
 
@@ -228,7 +243,7 @@ Las afirmaciones marcadas con *(inferido)* no se han comprobado con una prueba.
 ### Rendimiento
 11. 13 CSS bloqueantes (≈113 KB) y ≈325 KB de JS sin minificar, todos importados al arrancar desde `app.js`.
 12. `data/lessons.json` (225 KB) se descarga al arrancar aunque la portada sea `#/aprender`, y se pide dos veces (`app.js` y `learn-app.js`).
-13. El service worker precachea solo 6 archivos: sin conexión solo funciona lo ya visitado. La versión `v5` se cambia a mano.
+13. El service worker precachea solo 6 archivos: sin conexión solo funciona lo ya visitado. La versión (`v7`) se cambia a mano.
 
 ### Duplicación y archivos grandes
 14. La lógica del núcleo educativo está **duplicada** en JavaScript y en Kotlin (hay que cambiar las dos).
@@ -236,7 +251,26 @@ Las afirmaciones marcadas con *(inferido)* no se han comprobado con una prueba.
 16. Archivos muy grandes: `scripts/courses/programacion_course.py` (3 199 líneas), `scripts/learning/exercises.py` (2 926), `sql_course.py` (2 517), `learn.css` (1 267), `pcap.js` (774), `app.js` (768).
 
 ### Deuda técnica
-17. `manifest.webmanifest` sigue presentando la app como «Prepara el PCAP» con `start_url #/inicio`, pero la portada es ahora `#/aprender`.
-18. La plantilla de PR y `CONTRIBUTING.md` no mencionan `npm run test:unit` ni `build_learning.py --check`.
+17. ~~`manifest.webmanifest` desfasado~~ Corregido el 21/10 (AUD-07).
+18. ~~La plantilla de PR no menciona `npm run test:unit` ni `build_learning.py --check`~~ Corregido el 21/10 (AUD-08).
 19. Rutas antiguas `/api/...` mantenidas por la app Android publicada (ya documentado).
-20. Los tests e2e y Android no se pudieron ejecutar en esta auditoría (sin navegador del proyecto instalado ni SDK de Android); se confía en la CI.
+20. En la auditoría del 21/10 los e2e sí se ejecutaron (148/148, con Pyodide servido en local); Android sigue sin poder ejecutarse aquí (sin SDK) y se confía en la CI.
+
+## 9. Evolución propuesta
+
+Principio: **mejorar la arquitectura actual de forma incremental**. No hay motivo técnico para añadir
+un framework, un *bundler* ni otro alojamiento: los módulos ES sin *build* encajan con GitHub Pages y
+con las pruebas de `node --test`.
+
+1. **Separar más la lógica pura de las vistas**, como ya hacen `learn/mastery.js`, `game-data.js` y
+   `progress-file.js`: cada regla de negocio nueva va en un módulo sin DOM con su test unitario, y la
+   vista solo la pinta. Candidatos: el cálculo del simulacro en `pcap.js` y los resúmenes de `dashboard.js`.
+2. **Un único contrato para los ejercicios**. Hoy conviven el formato de las lecciones (`checks` con
+   asserts) y el del núcleo educativo (seis tipos). La evolución es añadir a ambos los mismos campos
+   opcionales (`hints`, casos no mostrados, `estimatedMinutes`, errores habituales) desde los scripts
+   que generan el contenido, sin cambiar el motor (`runner.py`), que ya devuelve el tipo de resultado.
+3. **Carga diferida** de las vistas que no se usan al arrancar con `import()` (ROADMAP R11).
+4. **Paridad con Android** mediante casos de prueba compartidos en JSON (R3) antes de cambiar lógica
+   del núcleo educativo.
+5. **Backend**: sin cambios de proveedor. Si algún día hiciera falta corregir en el servidor (casos
+   realmente ocultos), sería un servicio aparte y aislado, nunca dentro del proceso de la API (ROADMAP D3).

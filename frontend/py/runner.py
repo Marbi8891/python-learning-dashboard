@@ -170,13 +170,18 @@ def check_exercise(code: str, cases: list[dict]) -> dict:
     variables del alumno, su salida (`__output__`) y su código fuente (`__code__`).
     El código se ejecuta con __name__ = "solucion": lo que esté dentro de
     `if __name__ == "__main__":` no se ejecuta durante la comprobación.
+
+    `kind` distingue el resultado: "passed", "runtime_error" (el código del alumno falla al
+    ejecutarse) o "wrong_answer" (se ejecuta, pero no cumple un test). El tiempo agotado y los
+    fallos del propio corrector los detecta quien llama (python-runner.js).
     """
     for number, case in enumerate(cases, start=1):
         stdin = case.get("stdin", "")
         result = run_code(code, stdin, name="solucion")
         base = {"passed": False, "case": number, "total": len(cases), "stdin": stdin}
         if result["error"]:
-            return base | {"message": "Tu código da un error al ejecutarse.",
+            return base | {"kind": "runtime_error",
+                           "message": "Tu código da un error al ejecutarse.",
                            "output": result["output"], "error": result["error"],
                            "hint": result["hint"]}
 
@@ -188,14 +193,15 @@ def check_exercise(code: str, cases: list[dict]) -> dict:
             with contextlib.redirect_stdout(test_output):
                 exec(compile(case["test"], "<tests>", "exec"), namespace)
         except AssertionError as exc:
-            return base | {"message": str(exc) or "Un test ha fallado.",
+            return base | {"kind": "wrong_answer", "message": str(exc) or "Un test ha fallado.",
                            "output": result["output"], "error": None}
         except BaseException as exc:
-            return base | {"message": f"Al probar tu código se produjo {type(exc).__name__}: {exc}",
+            return base | {"kind": "wrong_answer",
+                           "message": f"Al probar tu código se produjo {type(exc).__name__}: {exc}",
                            "output": result["output"], "error": None}
         finally:
             sys.stdin = old_stdin
-    return {"passed": True, "case": len(cases), "total": len(cases),
+    return {"passed": True, "kind": "passed", "case": len(cases), "total": len(cases),
             "message": "¡Todos los tests superados!"}
 
 

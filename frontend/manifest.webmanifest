@@ -1,9 +1,9 @@
 {
-  "name": "Python Learning Dashboard · Prepara el PCAP",
-  "short_name": "PCAP Python",
-  "description": "Prepara el examen PCAP de Python: lecciones, consola de Python, ejercicios corregidos y simulacros.",
+  "name": "Python Learning Dashboard",
+  "short_name": "Python Learning",
+  "description": "Aprende Python desde cero y prepara DAM/DAW y el PCAP: teoría, consola de Python, ejercicios corregidos, repaso y simulacros.",
   "lang": "es",
-  "start_url": "./#/inicio",
+  "start_url": "./#/aprender",
   "scope": "./",
   "display": "standalone",
   "background_color": "#0c0d10",
