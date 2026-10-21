@@ -119,20 +119,41 @@ export function runConsole() {
   });
 }
 
+/* Tipo de resultado de una comprobación: no es lo mismo una respuesta incorrecta que un error al
+   ejecutar, un tiempo agotado o un fallo del corrector (que no es culpa del alumno). */
+const CHECK_KIND = {
+  wrong_answer: "Respuesta incorrecta: el programa se ejecuta, pero no cumple lo que pide el ejercicio.",
+  runtime_error: "Error de ejecución: el programa se detiene antes de terminar.",
+  timeout: "Tiempo agotado.",
+  system: "Fallo del corrector: no es un error de tu código.",
+};
+
 /** Comprueba el código de la consola con unos tests (del ejercicio o del reto). */
 export function checkCode({ checks, button, box, onResult }) {
   return withRunner(button, "Comprobando…", async () => {
     const code = $("#console-editor").value;
-    const result = await runner.check(code, checks);
+    let result;
+    try {
+      result = await runner.check(code, checks);
+    } catch (error) {
+      if (error instanceof StoppedError) throw error;
+      result =
+        error instanceof TimeoutError
+          ? { passed: false, kind: "timeout", message: `${error.message} ¿Hay un bucle infinito?` }
+          : { passed: false, kind: "system", message: `No se pudo comprobar el ejercicio (${error.message}). Vuelve a intentarlo.` };
+    }
     box.hidden = false;
     box.dataset.passed = String(result.passed);
     const [done, total] = [Number(result.case), Number(result.total)]; // números o NaN, nunca HTML
-    const where = total > 1 && !result.passed ? ` (prueba ${done} de ${total})` : "";
+    const where = total > 1 && !result.passed && done ? ` (prueba ${done} de ${total})` : "";
+    const kind = CHECK_KIND[result.kind]; // solo textos propios: la salida del Worker no es de fiar
     box.innerHTML = `
       <p class="check__title">${result.passed ? "✓ ¡Correcto!" : "✗ Todavía no"}${where}</p>
+      ${kind ? `<p class="check__kind">${kind}</p>` : ""}
       <p>${escapeHtml(result.message)}</p>
       ${result.error ? `<pre class="console__error">${escapeHtml(result.error)}</pre>${renderHint(result.hint)}` : ""}`;
     box.focus();
+    if (result.kind === "system") return; // un fallo del corrector no cuenta como intento
     await onResult(result, code);
   });
 }

@@ -111,10 +111,28 @@ test("superar los tests completa la lección", async ({ page }) => {
   await page.locator("#console-editor").fill("resultado = 41");
   await page.getByRole("button", { name: "Comprobar solución" }).click();
   await expect(page.locator("#check-result")).toContainText("resultado debe ser 42", { timeout: 90_000 });
+  await expect(page.locator("#check-result")).toContainText("Respuesta incorrecta");
+
+  await page.locator("#console-editor").fill("resultado = 1 / 0");
+  await page.getByRole("button", { name: "Comprobar solución" }).click();
+  await expect(page.locator("#check-result")).toContainText("Error de ejecución");
 
   await page.locator("#console-editor").fill("resultado = 6 * 7");
   await page.getByRole("button", { name: "Comprobar solución" }).click();
   await expect(page.locator("#check-result")).toHaveAttribute("data-passed", "true");
   await expect(page.locator("#progress-value")).toHaveText("13%");
   await expect(page.getByRole("button", { name: "Marcar como pendiente" })).toBeVisible();
+});
+
+test("una comprobación que no termina se muestra como «Tiempo agotado»", async ({ page }) => {
+  await page.addInitScript(() => {
+    window.PLD_CONFIG = Object.assign(window.PLD_CONFIG ?? {}, { runTimeoutMs: 4000 });
+  });
+  await openLesson(page, "bucles");
+  await run(page, "print('calentando')"); // primera carga de Pyodide, fuera del límite
+  await page.getByRole("tab", { name: "Práctica y Ejercicio" }).click();
+  await page.locator("#console-editor").fill("while True:\n    pass");
+  await page.getByRole("button", { name: "Comprobar solución" }).click();
+  await expect(page.locator("#check-result")).toContainText("Tiempo agotado", { timeout: 30_000 });
+  await expect(page.locator("#check-result")).toHaveAttribute("data-passed", "false");
 });
