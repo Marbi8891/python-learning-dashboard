@@ -45,6 +45,7 @@ import { initPrefs } from "./prefs.js";
 import { badgesHtml, renderProfile } from "./profile.js";
 import { dashboardTitle, initDashboard, renderDashboard } from "./dashboard.js";
 import { initPrivate } from "./private.js";
+import { initProgressTransfer } from "./progress-transfer.js";
 import { setQuizLesson } from "./quiz.js";
 import { initTutor, openTutor } from "./tutor.js";
 import { recordAttempt, restoreSession, setCompleted, state, subscribe } from "./store.js";
@@ -812,6 +813,7 @@ async function init() {
   });
   initCourseSync(refreshDaw);
   initLearnSync();
+  initProgressTransfer();
   const flash = takeFlash(); // aviso tras cerrar sesión o borrar la cuenta
   if (flash) showToast(flash);
   restoreSession();
