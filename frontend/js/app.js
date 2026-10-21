@@ -44,6 +44,7 @@ import { initLearnSync } from "./learn/learn-store.js";
 import { initPrefs } from "./prefs.js";
 import { badgesHtml, renderProfile } from "./profile.js";
 import { dashboardTitle, initDashboard, renderDashboard } from "./dashboard.js";
+import { initLessonFilter } from "./lesson-filter.js";
 import { initPrivate } from "./private.js";
 import { initProgressTransfer } from "./progress-transfer.js";
 import { setQuizLesson } from "./quiz.js";
@@ -786,6 +787,7 @@ async function init() {
 
   indexLessons(content.modules);
   renderSidebar();
+  initLessonFilter();
   initGameUi();
   initGame([...content.lessons.values()]);
   navigate({ moveFocus: false });
