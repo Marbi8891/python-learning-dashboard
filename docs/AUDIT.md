@@ -122,7 +122,8 @@ Comandos ejecutados de verdad en este contenedor. Los e2e usan Pyodide de npm se
 | End-to-end + axe | `PYODIDE_URL=… npx playwright test` | 148 passed | 153 passed |
 | Sitio estático | `python scripts/check_site.py` | (no existía) | PASS |
 | Dependencias | `npm audit --audit-level=high`, `pip-audit -r backend/requirements.txt` | 0 vulnerabilidades | igual |
-| Cursos DAW con Java, Android, migraciones en PostgreSQL, Gitleaks, Semgrep | — | No ejecutados aquí; los pasa la CI | — |
+| Seguridad | `python scripts/security/run_checks.py` (Bandit, Semgrep con las reglas de `.semgrep/`) y `gitleaks git --log-opts=main..HEAD` | — | PASS: sin hallazgos ni secretos en los 7 commits de la rama |
+| Cursos DAW con Java, Android, migraciones en PostgreSQL | — | No ejecutados aquí (sin Java, SDK ni PostgreSQL); los pasa la CI | — |
 
 ## 6. Rendimiento (medido, no estimado)
 
