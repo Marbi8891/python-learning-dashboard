@@ -69,6 +69,8 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - name: Prueba de humo del sitio (rutas, imports, sintaxis de JavaScript y JSON)
+        run: python scripts/check_site.py
       - name: Tests unitarios del frontend (dominio, repaso, recomendación y sesiones)
         run: npm run test:unit
       - name: Dependencias de npm sin vulnerabilidades altas

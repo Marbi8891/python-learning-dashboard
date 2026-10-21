@@ -21,6 +21,24 @@ El script crea el repositorio, activa Pages (vía GitHub Actions) y sube el cód
 
 URL final: `https://marbi8891.github.io/python-learning-dashboard/`
 
+### Publicar, comprobar y revertir
+
+Desde que el repositorio existe, **publicar = fusionar un PR en `main`**: `.github/workflows/pages.yml`
+se ejecuta solo cuando cambia `frontend/**` (o el propio workflow).
+
+1. **Antes de fusionar**: el PR debe tener la CI en verde (`ci.yml` y `security.yml`). La CI ya ejecuta
+   `python scripts/check_site.py` (rutas relativas, archivos e imports que existen, sintaxis de
+   JavaScript y JSON válidos).
+2. **Al publicar**, `pages.yml` repite esa prueba sobre la copia con la CSP de producción y no publica si
+   falla. Tras publicar, el paso «Comprobación tras publicar» pide `index.html`, `js/app.js` y
+   `data/lessons.json` a la URL real (hasta 2 minutos de margen para la CDN de Pages).
+3. **Comprobación manual** (1 minuto): abre la web con Ctrl+F5, entra en una lección y pulsa «Ejecutar».
+4. **Revertir una publicación**: en GitHub, abre el PR fusionado y pulsa **Revert**; se crea un PR que
+   deshace el cambio. Al fusionarlo, `pages.yml` vuelve a publicar la versión anterior. Si hay prisa,
+   **Actions → Deploy frontend → Run workflow** no sirve para volver atrás (publica `main` tal como
+   está): la reversión siempre es un commit en `main`. El service worker usa «primero la red», así
+   que los alumnos reciben la versión revertida al recargar.
+
 ## 2. Base de datos en Neon
 
 La base de datos gratuita de Render caduca a los 30 días, así que se usa Neon: PostgreSQL con plan gratuito permanente (0,5 GB) y servidores en la UE (ver [ADR-0008](adr/0008-backend-render-neon.md)).

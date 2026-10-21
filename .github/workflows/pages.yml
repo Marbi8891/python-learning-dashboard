@@ -34,8 +34,29 @@ jobs:
       # (PLD-SEC-003). Solo cambia el artefacto, no el repositorio; falla si cambiaría otra cosa.
       - name: CSP de producción
         run: python3 scripts/security/production_csp.py frontend
+      # Antes de publicar: rutas relativas, archivos e imports que existen, JavaScript y JSON válidos
+      - name: Prueba de humo del sitio
+        run: python3 scripts/check_site.py frontend
       - uses: actions/upload-pages-artifact@v5
         with:
           path: frontend
       - id: deployment
         uses: actions/deploy-pages@v5
+      # Después de publicar: la web y sus archivos principales responden. Si falla, la reversión está en
+      # docs/DEPLOY.md («Revertir una publicación»).
+      - name: Comprobación tras publicar
+        env:
+          URL: ${{ steps.deployment.outputs.page_url }}
+          SHA: ${{ github.sha }}
+        run: |
+          for attempt in 1 2 3 4 5 6; do
+            if curl -fsS "${URL}index.html" | grep -q "<title>" \
+              && curl -fsS -o /dev/null "${URL}js/app.js" \
+              && curl -fsS -o /dev/null "${URL}data/lessons.json"; then
+              echo "Web publicada y respondiendo ($SHA)"
+              exit 0
+            fi
+            sleep 20
+          done
+          echo "La web no responde tras publicar" >&2
+          exit 1
