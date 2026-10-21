@@ -1,7 +1,7 @@
 /* Consola interactiva y comprobación de ejercicios. */
 
 import { escapeHtml, renderInline } from "./markdown.js";
-import { PythonRunner, TimeoutError } from "./python-runner.js";
+import { PythonRunner, StoppedError, TimeoutError } from "./python-runner.js";
 
 const $ = (selector) => document.querySelector(selector);
 const DRAFT_PREFIX = "pld:draft:";
@@ -95,15 +95,19 @@ async function withRunner(button, label, action) {
   const original = button.innerHTML;
   button.disabled = true;
   button.textContent = label;
+  $("#console-stop").hidden = false;
   try {
     await action();
   } catch (error) {
-    const message = error instanceof TimeoutError ? `${error.message} ¿Hay un bucle infinito?` : error.message;
-    showOutput({ error: message });
+    if (error instanceof StoppedError) showOutput({ output: error.message });
+    else showOutput({ error: error instanceof TimeoutError ? `${error.message} ¿Hay un bucle infinito?` : error.message });
   } finally {
     busy = false;
     button.disabled = false;
     button.innerHTML = original;
+    // Si el foco estaba en «Detener», que no se pierda al ocultarlo
+    if (document.activeElement === $("#console-stop")) button.focus();
+    $("#console-stop").hidden = true;
   }
 }
 
@@ -208,6 +212,7 @@ export function initConsole() {
   });
 
   $("#console-run").addEventListener("click", runConsole);
+  $("#console-stop").addEventListener("click", () => runner.stop());
   // «Ir a la línea N» funciona tanto en la salida como en el resultado de la comprobación
   document.addEventListener("click", (event) => {
     const button = event.target.closest("[data-go-line]");

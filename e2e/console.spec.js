@@ -48,6 +48,22 @@ test("corta un bucle infinito y la consola sigue funcionando", async ({ page }) 
   await expect(output(page)).toContainText("sigo vivo");
 });
 
+test("«Detener» corta un programa en marcha sin esperar al límite de tiempo", async ({ page }) => {
+  await openLesson(page, "bucles");
+  await expect(page.locator("#console-stop")).toBeHidden();
+  await run(page, "print('calentando')"); // primera carga de Pyodide
+  await page.locator("#console-editor").fill("while True:\n    pass");
+  await page.locator("#console-run").click();
+  const stop = page.locator("#console-stop");
+  await expect(stop).toBeVisible();
+  await stop.click();
+  await expect(output(page)).toContainText("Has detenido el programa", { timeout: 5_000 });
+  await expect(stop).toBeHidden();
+  await expect(page.locator("#console-run")).toBeFocused();
+  await run(page, "print('sigo vivo')");
+  await expect(output(page)).toContainText("sigo vivo");
+});
+
 test("Ctrl+Enter ejecuta y Tab inserta 4 espacios", async ({ page }) => {
   await openLesson(page, "variables");
   const editor = page.locator("#console-editor");

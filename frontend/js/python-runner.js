@@ -8,6 +8,8 @@ export const PYODIDE_VERSION = "314.0.7";
 const DEFAULT_INDEX_URL = `https://cdn.jsdelivr.net/pyodide/v${PYODIDE_VERSION}/full/`;
 
 export class TimeoutError extends Error {}
+/** El alumno ha pulsado «Detener»: no es un fallo de su código ni de Python. */
+export class StoppedError extends Error {}
 
 export class PythonRunner {
   constructor({ indexURL, timeoutMs = 10_000, onStatus = () => {} } = {}) {
@@ -26,6 +28,23 @@ export class PythonRunner {
 
   check(code, cases) {
     return this.#call({ type: "check", code, cases: JSON.stringify(cases) });
+  }
+
+  /** ¿Hay alguna ejecución o comprobación en marcha? */
+  get busy() {
+    return this.pending.size > 0;
+  }
+
+  /**
+   * Detiene lo que se esté ejecutando: destruye el Worker (la única forma de cortar un bucle en
+   * Pyodide sin SharedArrayBuffer) y la siguiente ejecución lo vuelve a crear con Python limpio.
+   * Devuelve false si no había nada que detener.
+   */
+  stop() {
+    if (!this.busy) return false;
+    this.#reset(new StoppedError("Has detenido el programa. Python se ha reiniciado."));
+    this.onStatus("idle");
+    return true;
   }
 
   #start() {
@@ -79,13 +98,13 @@ export class PythonRunner {
     else job.resolve(result);
   }
 
-  #reset() {
+  #reset(reason = new Error("Python se ha reiniciado")) {
     this.worker?.terminate();
     this.worker = null;
     this.ready = null;
     for (const job of this.pending.values()) {
       clearTimeout(job.timer);
-      job.reject(new Error("Python se ha reiniciado"));
+      job.reject(reason);
     }
     this.pending.clear();
   }
