@@ -1,4 +1,4 @@
-/* Guarda la preparación del PCAP en la cuenta (ADR-0010).
+/* Guarda la preparación del PCAP en la cuenta.
    Al iniciar sesión fusiona la copia de la cuenta con la local; después sube cada cambio. */
 
 import { request } from "./api.js";

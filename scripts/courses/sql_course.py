@@ -1,6 +1,6 @@
 # ruff: noqa: E501
 # (contenido didáctico: los textos largos van en una sola línea para poder leerlos y editarlos)
-"""Curso de Bases de datos (módulo 0484 de DAW) para la app Android (ADR-0016, ADR-0019).
+"""Curso de Bases de datos (módulo 0484 de DAW) para la web.
 
 Sigue las UD1-UD3 del temario del centro; lo que va más allá está en el bloque de ampliación.
 
@@ -1472,7 +1472,7 @@ Con la tabla `alumnos(id, nombre, ciclo, nota)`:
     sources=[MYSQL, PG],
 )
 
-# ---------------------------------------------------------------- temario del centro (ADR-0019)
+# ---------------------------------------------------------------- temario del centro
 # Lecciones nuevas que siguen las UD1-UD3 del módulo Bases de datos de tu centro. Las lecciones
 # anteriores conservan sus slugs e ids para no perder el progreso; solo cambian de bloque.
 
@@ -2514,4 +2514,4 @@ BLOCKS = [
 ]
 
 if __name__ == "__main__":
-    main("sql", BLOCKS, run_sql, check_example)
+    main("sql", BLOCKS, run_sql, check_example, module="0484")

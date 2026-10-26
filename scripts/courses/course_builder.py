@@ -1,13 +1,13 @@
-"""Genera los JSON de un curso de la app Android (ADR-0016) y comprueba sus respuestas.
+"""Genera los JSON de un curso de DAW y comprueba sus respuestas.
 
 Cada curso se escribe en un script de Python (`sql_course.py`, ...) con sus bloques, lecciones
 y preguntas. Las preguntas de código indican la salida que su autor espera (`expect`): el script
 ejecuta el código de verdad y falla si la salida real es otra. Así ninguna respuesta correcta se
 escribe «a ojo».
 
-Salida, con el mismo formato que `frontend/data/pcap.json` y `lessons.json` para que la app
+Salida, con el mismo formato que `frontend/data/pcap.json` y `lessons.json` para que la web
 reutilice su lector: frontend/data/courses/<id>/bank.json y .../lessons.json. La web los sirve
-tal cual y la app Android los incluye como assets (frontend/data es carpeta de assets, ADR-0021).
+tal cual.
 
 Uso:  python scripts/courses/<curso>.py           (genera)
       python scripts/courses/<curso>.py --check   (CI: falla si los JSON no están al día)
@@ -41,7 +41,7 @@ class Q:
     run: str | None = None  # lo que se ejecuta para comprobar (por defecto, `code`)
     expect: str | None = None  # salida esperada
     wrong: list[str] = field(default_factory=list)  # distractores de las preguntas de código
-    # Ejercicios de escribir código (ADR-0017)
+    # Ejercicios de escribir código
     kind: str = (
         "choice"  # choice · fill (hueco ___) · order (ordenar líneas) · bug (línea con error)
     )
@@ -50,6 +50,8 @@ class Q:
     bug: int | None = None  # bug: índice de la línea con el error
     fix: str | None = None  # bug: la línea corregida
     target: str | None = None  # bug: lo que debería mostrar el programa corregido
+    # Módulo oficial que trabaja (código del currículo). Vacío = el módulo del curso
+    module: str | None = None
 
 
 @dataclass
@@ -172,6 +174,7 @@ def build(
     blocks: list[Block],
     runner: Callable[[str], str],
     examples: Callable[[str], None],
+    module: str,
 ) -> dict[str, str]:
     assert sum(b.weight for b in blocks) == 100, "los pesos de los bloques deben sumar 100"
     ids: set[str] = set()
@@ -206,6 +209,7 @@ def build(
                             **entry,
                             "explain": {"es": q.explain + extra, "en": q.explain + extra},
                             "lesson": lesson.slug,
+                            "module": q.module or module,
                         }
                     )
                     continue
@@ -223,6 +227,7 @@ def build(
                         "answer": [answer],
                         "explain": {"es": q.explain, "en": q.explain},
                         "lesson": lesson.slug,
+                        "module": q.module or module,
                     }
                 )
             title, stars, text, starter, hint = lesson.challenge
@@ -285,8 +290,11 @@ def main(
     blocks: list[Block],
     runner: Callable[[str], str],
     examples: Callable[[str], None],
+    *,
+    module: str,
 ) -> None:
-    files = build(course_id, blocks, runner, examples)
+    """`module`: código del módulo oficial de DAW que trabaja el curso (Orden EDU/1311/2024)."""
+    files = build(course_id, blocks, runner, examples, module)
     folder = ASSETS / course_id
     if "--check" in sys.argv:
         stale = [
@@ -303,7 +311,7 @@ def main(
         return
     folder.mkdir(parents=True, exist_ok=True)
     for name, text in files.items():
-        (folder / name).write_text(text, encoding="utf-8")
+        (folder / name).write_text(text, encoding="utf-8", newline="\n")  # LF también en Windows
     total = json.loads(files["bank.json"])["questions"]
     print(
         f"Curso {course_id}: {len(total)} preguntas y "

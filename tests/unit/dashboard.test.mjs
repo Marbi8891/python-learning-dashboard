@@ -4,6 +4,8 @@ import {
   dailySeries,
   examSummary,
   lastPractice,
+  MASTERY_STREAK,
+  moduleProgress,
   latestActivity,
   parseServerDate,
   recurringErrors,
@@ -82,4 +84,22 @@ test("porcentajes solo con un denominador conocido", () => {
   assert.equal(safePercent(1, 3), 33);
   assert.equal(safePercent(1, 0), null);
   assert.equal(safePercent(1, undefined), null);
+});
+
+test("progreso por módulo: practicada no es lo mismo que dominada", () => {
+  const modules = [
+    { id: "0485", code: "0485", name: "Programación", course: 1, platformQuestions: 4, platformQuestionIds: { programacion: ["p1", "p2", "p3"], java: ["j1"] } },
+    { id: "0484", code: "0484", name: "Bases de datos", course: 1, platformQuestions: 1, platformQuestionIds: { sql: ["s1"] } },
+    { id: "0613", code: "0613", name: "Servidor", course: 2, platformQuestions: 0, platformQuestionIds: {} },
+  ];
+  const states = {
+    // p1: dos aciertos seguidos (dominada) · p2: un acierto suelto · p3: falló la última · j1: sin responder
+    programacion: { p1: [false, true, true], p2: [true], p3: [true, true, false] },
+    sql: { s1: "dañado" },
+  };
+  const [prog, bd, ...rest] = moduleProgress(modules, (course) => states[course]);
+  assert.deepEqual(prog, { id: "0485", code: "0485", name: "Programación", course: 1, total: 4, practiced: 3, mastered: 1 });
+  assert.equal(bd.practiced, 0); // un historial que no es una lista no cuenta
+  assert.deepEqual(rest, []); // un módulo sin preguntas en la plataforma no aparece
+  assert.equal(MASTERY_STREAK, 2);
 });

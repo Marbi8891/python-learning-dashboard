@@ -1,4 +1,4 @@
-"""Detección y mitigación según MITRE ATT&CK (ADR-0023): eventos de seguridad y contraseñas."""
+"""Detección y mitigación según MITRE ATT&CK: eventos de seguridad y contraseñas."""
 
 import json
 import logging
@@ -40,7 +40,7 @@ def test_failed_logins_are_recorded_without_personal_data(client, events, caplog
     assert entry["attack"] == "T1110"
     assert entry["account"] == pseudonym("ana@example.com")
     assert entry["known"] is True
-    assert entry["path"] == "/api/auth/login"
+    assert entry["path"] == "/api/v1/auth/login"
     assert "ana@example.com" not in caplog.text and "testclient" not in caplog.text
     assert "incorrecta-000" not in caplog.text
 
@@ -68,7 +68,7 @@ def test_lockout_and_ip_limit_are_recorded(client, events, monkeypatch):
 def test_successful_login_and_logout_all_are_recorded(client, events):
     register(client)
     token = login(client).json()["access_token"]
-    client.post("/api/auth/logout-all", headers={"Authorization": f"Bearer {token}"})
+    client.post("/api/v1/auth/logout-all", headers={"Authorization": f"Bearer {token}"})
     recorded = names(events())
     assert Event.LOGIN_OK in recorded and Event.LOGOUT_ALL in recorded
 
@@ -76,7 +76,7 @@ def test_successful_login_and_logout_all_are_recorded(client, events):
 def test_forged_tokens_are_detected(client, events):
     register(client)
     forged = jwt.encode({"sub": "1", "ver": 0, "exp": 9999999999}, "otro-secreto" * 4, ALGORITHM)
-    assert client.get("/api/users/me", headers={"Authorization": f"Bearer {forged}"}).status_code
+    assert client.get("/api/v1/users/me", headers={"Authorization": f"Bearer {forged}"}).status_code
     assert names(events()) == [Event.TOKEN_FORGED]
 
 
@@ -88,16 +88,16 @@ def test_garbage_or_expired_tokens_are_not_called_forged():
 
 
 def test_revoked_tokens_being_reused_are_detected(client, events, auth_headers):
-    client.post("/api/auth/logout-all", headers=auth_headers)
-    assert client.get("/api/users/me", headers=auth_headers).status_code == 401
+    client.post("/api/v1/auth/logout-all", headers=auth_headers)
+    assert client.get("/api/v1/users/me", headers=auth_headers).status_code == 401
     assert Event.TOKEN_REVOKED_USED in names(events())
 
 
 def test_account_deletion_is_recorded(client, events, auth_headers):
-    bad = client.post("/api/users/me/delete", json={"password": "nope"}, headers=auth_headers)
+    bad = client.post("/api/v1/users/me/delete", json={"password": "nope"}, headers=auth_headers)
     assert bad.status_code == 403
     auth_limiter.reset()
-    ok = client.post("/api/users/me/delete", json={"password": PASSWORD}, headers=auth_headers)
+    ok = client.post("/api/v1/users/me/delete", json={"password": PASSWORD}, headers=auth_headers)
     assert ok.status_code == 204
     entries = events()
     assert {"event": Event.LOGIN_FAILED, "action": "delete"}.items() <= entries[-2].items()
@@ -105,7 +105,7 @@ def test_account_deletion_is_recorded(client, events, auth_headers):
 
 
 def test_reset_request_is_recorded_even_for_unknown_emails(client, events):
-    client.post("/api/auth/password-reset/request", json={"email": "nadie@example.com"})
+    client.post("/api/v1/auth/password-reset/request", json={"email": "nadie@example.com"})
     [entry] = events()
     assert entry["event"] == Event.RESET_REQUESTED and entry["known"] is False
 
@@ -115,7 +115,7 @@ def test_oversized_body_is_recorded(client, events, auth_headers):
 
     big = b"a" * (get_settings().max_body_bytes + 1)
     client.put(
-        "/api/pcap-state", content=big, headers={**auth_headers, "Content-Type": "text/plain"}
+        "/api/v1/pcap-state", content=big, headers={**auth_headers, "Content-Type": "text/plain"}
     )
     assert Event.BODY_TOO_LARGE in names(events())
 
@@ -158,7 +158,7 @@ def test_reset_with_weak_password_keeps_the_link_usable(client, monkeypatch):
 
     register(client)
     token = _request_reset_link(client, monkeypatch)
-    url = "/api/auth/password-reset/confirm"
+    url = "/api/v1/auth/password-reset/confirm"
     weak = client.post(url, json={"token": token, "new_password": "qwertyuiop"})
     assert weak.status_code == 422
     auth_limiter.reset()
@@ -178,7 +178,7 @@ def test_password_reset_lifts_a_malicious_lockout(client, monkeypatch):
     assert login(client).status_code == 429
     token = _request_reset_link(client, monkeypatch)
     new = "tortuga-azul-en-bici"
-    url = "/api/auth/password-reset/confirm"
+    url = "/api/v1/auth/password-reset/confirm"
     assert client.post(url, json={"token": token, "new_password": new}).status_code == 204
     auth_limiter.reset()
     assert login(client, password=new).status_code == 200

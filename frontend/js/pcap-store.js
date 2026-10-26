@@ -96,8 +96,8 @@ export function mergePcap(remote = {}) {
   for (const [id, item] of Object.entries(base.srs)) pcap.srs[id] = later(pcap.srs[id], item);
   pcap.plan.examDate ??= base.plan?.examDate ?? null;
   pcap.plan.dailyGoal ??= base.plan?.dailyGoal;
-  // Progreso de la app Android (XP, racha, ruta, vidas y récords; ADR-0018). La web no lo modifica:
-  // conserva la copia de la cuenta para no borrarlo al guardar. La app fusiona el suyo al sincronizar.
+  // Progreso guardado por otro cliente (XP, racha, ruta, vidas y récords). La web no lo modifica:
+  // conserva la copia de la cuenta para no borrarlo al guardar.
   if (base.app) pcap.app = base.app;
 }
 

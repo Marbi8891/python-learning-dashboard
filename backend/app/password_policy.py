@@ -1,4 +1,4 @@
-"""Política de contraseñas (MITRE ATT&CK M1027 «Password Policies», ADR-0023).
+"""Política de contraseñas (MITRE ATT&CK M1027 «Password Policies»).
 
 Frena los ataques que prueban contraseñas habituales contra muchas cuentas (T1110.003 Password
 Spraying) o reutilizan listas filtradas (T1110.004 Credential Stuffing): no se aceptan las

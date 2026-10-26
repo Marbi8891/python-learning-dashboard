@@ -19,7 +19,7 @@ depends_on: str | Sequence[str] | None = None
 
 
 def upgrade() -> None:
-    """Consultas al tutor por usuario, día y modalidad: cuotas de la IA avanzada (ADR-0038)."""
+    """Consultas al tutor por usuario, día y modalidad: cuotas de la IA avanzada."""
     op.create_table(
         "tutor_usage",
         sa.Column("user_id", sa.Integer(), nullable=False),

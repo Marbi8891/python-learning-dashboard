@@ -1,4 +1,4 @@
-/* Sesiones de estudio (ADR-0031): la lógica del ciclo
+/* Sesiones de estudio: la lógica del ciclo
    intento → acierto/error → explicación → nuevo intento → repaso, sin DOM.
 
    Tipos de sesión:

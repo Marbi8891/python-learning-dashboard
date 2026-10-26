@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <!-- Seguridad (ADR-0022). GitHub Pages no permite cabeceras propias: la política va en <meta>.
+  <!-- Seguridad. GitHub Pages no permite cabeceras propias: la política va en <meta>.
        Si activas GoatCounter (config.js), añade https://gc.zgo.at a script-src y tu
        https://<código>.goatcounter.com a connect-src e img-src. -->
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
@@ -28,7 +28,7 @@
   <main class="legal prose" id="main">
     <p><a href="./">← Volver al dashboard</a></p>
     <h1>Política de privacidad</h1>
-    <p class="sources__note">Última actualización: 6 de octubre de 2026</p>
+    <p class="sources__note">Última actualización: 26 de octubre de 2026</p>
 
     <h2>1. Responsable del tratamiento</h2>
     <p>Responsable: Mrabeh Fathi Boussayff, persona física, autor de este proyecto educativo · Contacto para privacidad: <a href="mailto:mrabehfathiprofesional@gmail.com">mrabehfathiprofesional@gmail.com</a>.</p>
@@ -41,12 +41,11 @@
       <tbody>
         <tr><td>Email, nombre y contraseña (se guarda solo un resumen irreversible, <em>hash</em> Argon2id: nadie puede leerla, ni siquiera nosotros)</td><td>Crear y gestionar tu cuenta e iniciar sesión</td><td>Ejecución del servicio que solicitas (art. 6.1.b)</td></tr>
         <tr><td>Lecciones completadas, código enviado en los ejercicios y su resultado (los 50 intentos más recientes de cada lección)</td><td>Guardar tu progreso y sincronizarlo entre dispositivos</td><td>Ejecución del servicio (art. 6.1.b)</td></tr>
-        <tr><td>Progreso de estudio: respuestas a las preguntas, simulacros (nota y tiempo), fecha prevista de examen, repaso espaciado, progreso de la app Android y de los cursos de DAW, y XP, racha (días con actividad) y logros de la web</td><td>Sincronizar tu preparación entre la web y la app</td><td>Ejecución del servicio (art. 6.1.b)</td></tr>
+        <tr><td>Progreso de estudio: respuestas a las preguntas, simulacros (nota y tiempo), fecha prevista de examen, repaso espaciado, progreso de los cursos de DAW, y XP, racha (días con actividad) y logros de la web</td><td>Guardar tu preparación en tu cuenta</td><td>Ejecución del servicio (art. 6.1.b)</td></tr>
         <tr><td>Fecha de aceptación de esta política</td><td>Poder demostrar que la aceptaste</td><td>Responsabilidad proactiva (art. 5.2 y 7.1)</td></tr>
         <tr><td>Dirección IP (temporalmente, en memoria)</td><td>Limitar intentos de inicio de sesión y proteger las cuentas</td><td>Interés legítimo en la seguridad (art. 6.1.f)</td></tr>
         <tr><td>Actividad de tu cuenta: los últimos 20 inicios de sesión, intentos fallidos y cambios (nombre, contraseña), con la fecha y el tipo de dispositivo aproximado («Android · Chrome»). No se guarda la IP ni el navegador exacto</td><td>Que puedas ver en «Mi panel» (Mi perfil) si alguien ha entrado sin tu permiso</td><td>Interés legítimo en la seguridad de tu cuenta (art. 6.1.f); se borra con la cuenta y se incluye en la descarga de tus datos</td></tr>
         <tr><td>Registro de seguridad: tipo de evento (inicio de sesión fallido o correcto, bloqueo, sesión falsificada o revocada, recuperación de contraseña, borrado de cuenta…), número interno de usuario y un <strong>seudónimo</strong> de la IP y del email (un código que no permite saber cuáles son sin la clave del servidor). Nunca el email, la IP ni la contraseña en claro</td><td>Detectar ataques a las cuentas (fuerza bruta, sesiones robadas) y reaccionar a tiempo</td><td>Interés legítimo en la seguridad (art. 6.1.f); se conserva solo el tiempo limitado que el proveedor (Render) guarda los registros</td></tr>
-        <tr><td>Consultas al <strong>Tutor Python</strong> (si el servidor lo ofrece y lo usas): tu pregunta, el código y el mensaje de error que escribas; de la lección que elijas, su título, su enunciado, si la has superado y cuántos intentos llevas; y, para ajustar el nivel, cuántas lecciones has superado y qué conceptos del tema de tu pregunta has demostrado o te están costando en Aprender. No se envía tu email, tu nombre, el código de tus intentos anteriores ni datos de otras personas. Tu código se envía como texto para que el tutor lo lea: nunca se ejecuta en nuestro servidor (los ejemplos que pulses «Ejecutar» se ejecutan en tu navegador). No escribas contraseñas, claves ni datos personales en la pregunta ni en el código. De cada conversación el servidor recuerda solo en memoria un extracto de los últimos turnos, las pistas dadas y si has acertado sus preguntas; se borra a las 2 horas sin uso o al reiniciarlo y no se guarda en la base de datos ni en los registros</td><td>Responder a tu duda y adaptar la explicación a tu nivel</td><td>Ejecución del servicio que solicitas al usar el tutor (art. 6.1.b)</td></tr>
       </tbody>
     </table>
     <p>No usamos tus datos para publicidad, no hacemos perfiles y no los vendemos.</p>
@@ -59,7 +58,6 @@
       <li><strong>Servidor de la aplicación:</strong> Render (render.com), con el servidor en Frankfurt (Alemania, UE).</li>
       <li><strong>Base de datos:</strong> Neon (neon.com), con los datos en Frankfurt (Alemania, UE).</li>
       <li>Ambos proveedores tienen su sede en EE. UU. y actúan como encargados del tratamiento según sus acuerdos de tratamiento de datos, que incluyen las cláusulas contractuales tipo de la Comisión Europea para cualquier acceso desde fuera del Espacio Económico Europeo.</li>
-      <li><strong>Tutor Python:</strong> solo funciona si el servidor lo tiene activado (si no, la sección no aparece y no se envía nada). Cada respuesta dice de dónde sale. El «tutor sin IA» responde con reglas y con el contenido revisado del curso, sin ningún modelo de IA. Si se usa un <strong>modelo de IA local</strong> (Ollama), se ejecuta en el propio servidor y la consulta no se envía a ningún proveedor externo de IA. Si en el futuro se activara un proveedor externo, como <strong>Anthropic</strong> (anthropic.com, EE. UU.), recibiría solo los datos de la consulta descritos arriba, como encargado del tratamiento, y se indicaría aquí. No escribas datos personales en tus preguntas ni en tu código.</li>
       <li><strong>Emails de recuperación de contraseña:</strong> todavía no están activados. Cuando se activen, aquí se indicará el proveedor de envío.</li>
       <li><strong>GitHub Pages</strong> sirve esta web y registra datos técnicos de acceso (como la IP) según su propia política.</li>
       <li><strong>jsDelivr</strong> sirve el intérprete de Python (Pyodide) la primera vez que usas la consola. Recibe tu IP como parte de la descarga.</li>
@@ -69,7 +67,6 @@
     <h2>5. Almacenamiento en tu navegador</h2>
     <p><strong>Una sola cookie, y solo si inicias sesión.</strong> Es la cookie de sesión <code>__Host-pld_session</code>: la pone nuestro servidor al entrar, dura como mucho 30 minutos, el código de la página no puede leerla y se borra al cerrar sesión. Es técnica y estrictamente necesaria para mantener la sesión que tú abres, por lo que no requiere consentimiento (art. 22.2 LSSI). No usamos cookies de análisis ni de publicidad.</p>
     <p>Usamos <code>localStorage</code> solo para funciones que tú pides: guardar tu progreso, tus borradores de código y, si inicias sesión, un aviso de que la tienes abierta (no la sesión en sí). Son estrictamente necesarios para el servicio y no se usan para seguimiento.</p>
-    <p><strong>App Android.</strong> Sin cuenta, la app no envía nada: todo se guarda en el móvil. Si inicias sesión en ella, se conecta al servidor (solo por HTTPS) para sincronizar tu progreso al abrirla, al salir y cuando pulsas «Sincronizar ahora». En el móvil se guardan tu email, tu nombre y la sesión (caduca en una hora), nunca tu contraseña, y la sesión no se incluye en las copias de seguridad del teléfono.</p>
     <p><strong>Al cerrar sesión o eliminar tu cuenta, se borran de este navegador</strong> tu progreso, tus borradores y el resto de datos personales (se conservan solo tus preferencias de aspecto). Así, en un ordenador compartido la siguiente persona no ve nada tuyo. Sin cuenta, puedes borrarlos desde la configuración de tu navegador.</p>
 
     <div id="analytics-note" hidden>

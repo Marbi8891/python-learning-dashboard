@@ -1,5 +1,5 @@
-/* Progreso de los cursos de DAW en la web (ADR-0021).
-   Un documento por curso con el mismo formato que la app Android y que la zona PCAP
+/* Progreso de los cursos de DAW en la web.
+   Un documento por curso con el mismo formato que la zona PCAP
    (answers, srs, bestCombo…). Se guarda en este navegador (pld:course:<id>) y, con sesión,
    en la cuenta (/api/course-state/<id>), así que la web y la app comparten el progreso. */
 

@@ -74,7 +74,8 @@
     "es": "`typeof` devuelve el tipo del **valor**: \"42\" entre comillas es un string. No existe el tipo `int`: todos los números son `number`.",
     "en": "`typeof` devuelve el tipo del **valor**: \"42\" entre comillas es un string. No existe el tipo `int`: todos los números son `number`."
    },
-   "lesson": "js-variables"
+   "lesson": "js-variables",
+   "module": "0612"
   },
   {
    "id": "js-02",
@@ -97,7 +98,8 @@
     "es": "Dos rarezas: `typeof null` es \"object\" (un error histórico del lenguaje) y los arrays también son \"object\". Para arrays se usa `Array.isArray`.",
     "en": "Dos rarezas: `typeof null` es \"object\" (un error histórico del lenguaje) y los arrays también son \"object\". Para arrays se usa `Array.isArray`."
    },
-   "lesson": "js-variables"
+   "lesson": "js-variables",
+   "module": "0612"
   },
   {
    "id": "js-03",
@@ -120,7 +122,8 @@
     "es": "`const` impide reasignar la variable, pero el array se puede modificar: `push` añade un tercer elemento.",
     "en": "`const` impide reasignar la variable, pero el array se puede modificar: `push` añade un tercer elemento."
    },
-   "lesson": "js-variables"
+   "lesson": "js-variables",
+   "module": "0612"
   },
   {
    "id": "js-04",
@@ -143,7 +146,8 @@
     "es": "Reasignar una constante lanza `TypeError: Assignment to constant variable`. Si vas a cambiar el valor, usa `let`.",
     "en": "Reasignar una constante lanza `TypeError: Assignment to constant variable`. Si vas a cambiar el valor, usa `let`."
    },
-   "lesson": "js-variables"
+   "lesson": "js-variables",
+   "module": "0612"
   },
   {
    "id": "js-05",
@@ -166,7 +170,8 @@
     "es": "Dentro de `${ }` va una **expresión** que se evalúa: `nota + 1` es 8 porque `nota` es un número.",
     "en": "Dentro de `${ }` va una **expresión** que se evalúa: `nota + 1` es 8 porque `nota` es un número."
    },
-   "lesson": "js-variables"
+   "lesson": "js-variables",
+   "module": "0612"
   },
   {
    "id": "js-06",
@@ -189,7 +194,8 @@
     "es": "`==` convierte el texto a número antes de comparar; `===` no convierte y los tipos son distintos.",
     "en": "`==` convierte el texto a número antes de comparar; `===` no convierte y los tipos son distintos."
    },
-   "lesson": "js-coercion"
+   "lesson": "js-coercion",
+   "module": "0612"
   },
   {
    "id": "js-07",
@@ -212,7 +218,8 @@
     "es": "Con un string, `+` concatena: \"53\". El `-` solo existe para números, así que convierte \"5\" a 5: 2.",
     "en": "Con un string, `+` concatena: \"53\". El `-` solo existe para números, así que convierte \"5\" a 5: 2."
    },
-   "lesson": "js-coercion"
+   "lesson": "js-coercion",
+   "module": "0612"
   },
   {
    "id": "js-08",
@@ -235,7 +242,8 @@
     "es": "Solo el texto vacío es falsy; \"0\" es un texto con un carácter. Un array, aunque esté vacío, es un objeto: truthy. El número 0 es falsy.",
     "en": "Solo el texto vacío es falsy; \"0\" es un texto con un carácter. Un array, aunque esté vacío, es un objeto: truthy. El número 0 es falsy."
    },
-   "lesson": "js-coercion"
+   "lesson": "js-coercion",
+   "module": "0612"
   },
   {
    "id": "js-09",
@@ -258,7 +266,8 @@
     "es": "`||` descarta cualquier falsy, también el 0. `??` solo sustituye null o undefined, así que respeta la edad 0.",
     "en": "`||` descarta cualquier falsy, también el 0. `??` solo sustituye null o undefined, así que respeta la edad 0."
    },
-   "lesson": "js-coercion"
+   "lesson": "js-coercion",
+   "module": "0612"
   },
   {
    "id": "js-10",
@@ -281,7 +290,8 @@
     "es": "NaN es el único valor distinto de sí mismo. `Number(\"abc\")` da NaN y `Number.isNaN` lo detecta.",
     "en": "NaN es el único valor distinto de sí mismo. `Number(\"abc\")` da NaN y `Number.isNaN` lo detecta."
    },
-   "lesson": "js-coercion"
+   "lesson": "js-coercion",
+   "module": "0612"
   },
   {
    "id": "js-11",
@@ -304,7 +314,8 @@
     "es": "Sin argumento, el parámetro toma su valor por defecto. Una flecha sin llaves devuelve la expresión.",
     "en": "Sin argumento, el parámetro toma su valor por defecto. Una flecha sin llaves devuelve la expresión."
    },
-   "lesson": "js-funciones"
+   "lesson": "js-funciones",
+   "module": "0612"
   },
   {
    "id": "js-12",
@@ -327,7 +338,8 @@
     "es": "Las **declaraciones** de función se elevan (*hoisting*): existen desde el principio de su ámbito y se pueden llamar antes.",
     "en": "Las **declaraciones** de función se elevan (*hoisting*): existen desde el principio de su ámbito y se pueden llamar antes."
    },
-   "lesson": "js-funciones"
+   "lesson": "js-funciones",
+   "module": "0612"
   },
   {
    "id": "js-13",
@@ -350,7 +362,8 @@
     "es": "Una función guardada en un `const` no existe hasta su línea: usarla antes lanza `ReferenceError`.",
     "en": "Una función guardada en un `const` no existe hasta su línea: usarla antes lanza `ReferenceError`."
    },
-   "lesson": "js-funciones"
+   "lesson": "js-funciones",
+   "module": "0612"
   },
   {
    "id": "js-14",
@@ -373,7 +386,8 @@
     "es": "`...nums` recoge todos los argumentos en un array (vacío si no hay ninguno). El 0 inicial de `reduce` evita el error con el array vacío.",
     "en": "`...nums` recoge todos los argumentos en un array (vacío si no hay ninguno). El 0 inicial de `reduce` evita el error con el array vacío."
    },
-   "lesson": "js-funciones"
+   "lesson": "js-funciones",
+   "module": "0612"
   },
   {
    "id": "js-15",
@@ -396,7 +410,8 @@
     "es": "Calcula el producto, pero no lo **devuelve**. Una función sin `return` devuelve `undefined`.",
     "en": "Calcula el producto, pero no lo **devuelve**. Una función sin `return` devuelve `undefined`."
    },
-   "lesson": "js-funciones"
+   "lesson": "js-funciones",
+   "module": "0612"
   },
   {
    "id": "js-16",
@@ -419,7 +434,8 @@
     "es": "Con `var` solo hay **una** `i` compartida. Cuando se ejecutan los setTimeout, el bucle ya ha terminado e `i` vale 3.",
     "en": "Con `var` solo hay **una** `i` compartida. Cuando se ejecutan los setTimeout, el bucle ya ha terminado e `i` vale 3."
    },
-   "lesson": "js-ambito"
+   "lesson": "js-ambito",
+   "module": "0612"
   },
   {
    "id": "js-17",
@@ -442,7 +458,8 @@
     "es": "Con `let`, cada vuelta del bucle tiene su propia `i`, y cada función recuerda la suya.",
     "en": "Con `let`, cada vuelta del bucle tiene su propia `i`, y cada función recuerda la suya."
    },
-   "lesson": "js-ambito"
+   "lesson": "js-ambito",
+   "module": "0612"
   },
   {
    "id": "js-18",
@@ -465,7 +482,8 @@
     "es": "Cada llamada a `crearContador` crea su propio `n`. `a` ya se ha usado dos veces, así que la tercera da 3; `b` empieza de cero.",
     "en": "Cada llamada a `crearContador` crea su propio `n`. `a` ya se ha usado dos veces, así que la tercera da 3; `b` empieza de cero."
    },
-   "lesson": "js-ambito"
+   "lesson": "js-ambito",
+   "module": "0612"
   },
   {
    "id": "js-19",
@@ -488,7 +506,8 @@
     "es": "`x` está en la zona muerta temporal hasta su declaración: leerla antes lanza `ReferenceError`.",
     "en": "`x` está en la zona muerta temporal hasta su declaración: leerla antes lanza `ReferenceError`."
    },
-   "lesson": "js-ambito"
+   "lesson": "js-ambito",
+   "module": "0612"
   },
   {
    "id": "js-20",
@@ -511,7 +530,8 @@
     "es": "La declaración `var y` se eleva, pero la asignación `= 5` se queda en su línea: en el console.log, y existe y vale undefined.",
     "en": "La declaración `var y` se eleva, pero la asignación `= 5` se queda en su línea: en el console.log, y existe y vale undefined."
    },
-   "lesson": "js-ambito"
+   "lesson": "js-ambito",
+   "module": "0612"
   },
   {
    "id": "js-21",
@@ -534,7 +554,8 @@
     "es": "`map` da [2, 4, 6, 8] y `filter` se queda con los mayores que 4: 6 y 8.",
     "en": "`map` da [2, 4, 6, 8] y `filter` se queda con los mayores que 4: 6 y 8."
    },
-   "lesson": "js-arrays"
+   "lesson": "js-arrays",
+   "module": "0612"
   },
   {
    "id": "js-22",
@@ -557,7 +578,8 @@
     "es": "Sin función de comparación, `sort` ordena como **texto**: \"10\" va antes que \"9\" porque '1' < '9'. Para números: `sort((a, b) => a - b)`.",
     "en": "Sin función de comparación, `sort` ordena como **texto**: \"10\" va antes que \"9\" porque '1' < '9'. Para números: `sort((a, b) => a - b)`."
    },
-   "lesson": "js-arrays"
+   "lesson": "js-arrays",
+   "module": "0612"
   },
   {
    "id": "js-23",
@@ -580,7 +602,8 @@
     "es": "`reduce` parte del valor inicial 0 y va sumando cada precio: 35.",
     "en": "`reduce` parte del valor inicial 0 y va sumando cada precio: 35."
    },
-   "lesson": "js-arrays"
+   "lesson": "js-arrays",
+   "module": "0612"
   },
   {
    "id": "js-24",
@@ -603,7 +626,8 @@
     "es": "`find` devuelve el **primero** que cumple la condición (Ana); `filter` devuelve **todos** (Ana y Eva).",
     "en": "`find` devuelve el **primero** que cumple la condición (Ana); `filter` devuelve **todos** (Ana y Eva)."
    },
-   "lesson": "js-arrays"
+   "lesson": "js-arrays",
+   "module": "0612"
   },
   {
    "id": "js-25",
@@ -626,7 +650,8 @@
     "es": "El hueco entre comas salta el 2. `...resto` recoge lo que queda (4 y 5): longitud 2.",
     "en": "El hueco entre comas salta el 2. `...resto` recoge lo que queda (4 y 5): longitud 2."
    },
-   "lesson": "js-arrays"
+   "lesson": "js-arrays",
+   "module": "0612"
   },
   {
    "id": "js-26",
@@ -649,7 +674,8 @@
     "es": "`ciudad` no existe en el objeto, así que toma el valor por defecto de la desestructuración.",
     "en": "`ciudad` no existe en el objeto, así que toma el valor por defecto de la desestructuración."
    },
-   "lesson": "js-objetos"
+   "lesson": "js-objetos",
+   "module": "0612"
   },
   {
    "id": "js-27",
@@ -672,7 +698,8 @@
     "es": "La propagación hace una copia **superficial**: `n` se copia, pero `datos` sigue siendo el mismo objeto en los dos.",
     "en": "La propagación hace una copia **superficial**: `n` se copia, pero `datos` sigue siendo el mismo objeto en los dos."
    },
-   "lesson": "js-objetos"
+   "lesson": "js-objetos",
+   "module": "0612"
   },
   {
    "id": "js-28",
@@ -695,7 +722,8 @@
     "es": "`JSON.stringify` devuelve un **texto** con claves entre comillas dobles y sin espacios.",
     "en": "`JSON.stringify` devuelve un **texto** con claves entre comillas dobles y sin espacios."
    },
-   "lesson": "js-objetos"
+   "lesson": "js-objetos",
+   "module": "0612"
   },
   {
    "id": "js-29",
@@ -718,7 +746,8 @@
     "es": "`alumno.direccion` es undefined. Con `?.` no falla, pero en el segundo acceso se lee `.calle` de undefined: `TypeError`. Los argumentos se evalúan antes de imprimir, así que no se imprime nada.",
     "en": "`alumno.direccion` es undefined. Con `?.` no falla, pero en el segundo acceso se lee `.calle` de undefined: `TypeError`. Los argumentos se evalúan antes de imprimir, así que no se imprime nada."
    },
-   "lesson": "js-objetos"
+   "lesson": "js-objetos",
+   "module": "0612"
   },
   {
    "id": "js-30",
@@ -741,7 +770,8 @@
     "es": "`Object.keys` da las claves y `Object.values` los valores, ambos como arrays.",
     "en": "`Object.keys` da las claves y `Object.values` los valores, ambos como arrays."
    },
-   "lesson": "js-objetos"
+   "lesson": "js-objetos",
+   "module": "0612"
   },
   {
    "id": "js-31",
@@ -776,7 +806,8 @@
     "es": "Si metes con innerHTML un texto escrito por el usuario, podría incluir `<img onerror=…>` y ejecutar código.",
     "en": "Si metes con innerHTML un texto escrito por el usuario, podría incluir `<img onerror=…>` y ejecutar código."
    },
-   "lesson": "js-dom"
+   "lesson": "js-dom",
+   "module": "0612"
   },
   {
    "id": "js-32",
@@ -811,7 +842,8 @@
     "es": "`querySelector` devuelve el primer elemento que coincide; para todos existe `querySelectorAll`.",
     "en": "`querySelector` devuelve el primer elemento que coincide; para todos existe `querySelectorAll`."
    },
-   "lesson": "js-dom"
+   "lesson": "js-dom",
+   "module": "0612"
   },
   {
    "id": "js-33",
@@ -846,7 +878,8 @@
     "es": "Por eso recorrerla con `forEach` nunca falla, mientras que `querySelector` sí puede devolver null.",
     "en": "Por eso recorrerla con `forEach` nunca falla, mientras que `querySelector` sí puede devolver null."
    },
-   "lesson": "js-dom"
+   "lesson": "js-dom",
+   "module": "0612"
   },
   {
    "id": "js-34",
@@ -881,7 +914,8 @@
     "es": "`className =` sustituye todas las clases por una sola.",
     "en": "`className =` sustituye todas las clases por una sola."
    },
-   "lesson": "js-dom"
+   "lesson": "js-dom",
+   "module": "0612"
   },
   {
    "id": "js-35",
@@ -916,7 +950,8 @@
     "es": "El navegador ejecuta el script en cuanto lo encuentra. Con `defer` espera a que el HTML esté completo.",
     "en": "El navegador ejecuta el script en cuanto lo encuentra. Con `defer` espera a que el HTML esté completo."
    },
-   "lesson": "js-dom"
+   "lesson": "js-dom",
+   "module": "0612"
   },
   {
    "id": "js-36",
@@ -951,7 +986,8 @@
     "es": "Se pasa la función sin llamarla; el navegador la llamará en cada click.",
     "en": "Se pasa la función sin llamarla; el navegador la llamará en cada click."
    },
-   "lesson": "js-eventos"
+   "lesson": "js-eventos",
+   "module": "0612"
   },
   {
    "id": "js-37",
@@ -986,7 +1022,8 @@
     "es": "Los paréntesis **llaman** a la función. Si necesitas pasarle argumentos: `() => saludar(\"Ana\")`.",
     "en": "Los paréntesis **llaman** a la función. Si necesitas pasarle argumentos: `() => saludar(\"Ana\")`."
    },
-   "lesson": "js-eventos"
+   "lesson": "js-eventos",
+   "module": "0612"
   },
   {
    "id": "js-38",
@@ -1021,7 +1058,8 @@
     "es": "`preventDefault` cancela la acción por defecto del navegador, que es enviar el formulario y recargar.",
     "en": "`preventDefault` cancela la acción por defecto del navegador, que es enviar el formulario y recargar."
    },
-   "lesson": "js-eventos"
+   "lesson": "js-eventos",
+   "module": "0612"
   },
   {
    "id": "js-39",
@@ -1056,7 +1094,8 @@
     "es": "Los eventos suben por el árbol. `stopPropagation()` lo evitaría.",
     "en": "Los eventos suben por el árbol. `stopPropagation()` lo evitaría."
    },
-   "lesson": "js-eventos"
+   "lesson": "js-eventos",
+   "module": "0612"
   },
   {
    "id": "js-40",
@@ -1091,7 +1130,8 @@
     "es": "Funciona también con los elementos que se añaden después y ahorra listeners.",
     "en": "Funciona también con los elementos que se añaden después y ahorra listeners."
    },
-   "lesson": "js-eventos"
+   "lesson": "js-eventos",
+   "module": "0612"
   },
   {
    "id": "js-41",
@@ -1114,7 +1154,8 @@
     "es": "El setTimeout, aunque sea de 0 ms, se ejecuta cuando termina todo el código síncrono.",
     "en": "El setTimeout, aunque sea de 0 ms, se ejecuta cuando termina todo el código síncrono."
    },
-   "lesson": "js-asincronia"
+   "lesson": "js-asincronia",
+   "module": "0612"
   },
   {
    "id": "js-42",
@@ -1137,7 +1178,8 @@
     "es": "Primero el código síncrono; después las **microtareas** (el then de la promesa) y por último las tareas como setTimeout.",
     "en": "Primero el código síncrono; después las **microtareas** (el then de la promesa) y por último las tareas como setTimeout."
    },
-   "lesson": "js-asincronia"
+   "lesson": "js-asincronia",
+   "module": "0612"
   },
   {
    "id": "js-43",
@@ -1160,7 +1202,8 @@
     "es": "Una función async **siempre** devuelve una promesa (un objeto). El 5 se obtiene con `then` o con `await`.",
     "en": "Una función async **siempre** devuelve una promesa (un objeto). El 5 se obtiene con `then` o con `await`."
    },
-   "lesson": "js-asincronia"
+   "lesson": "js-asincronia",
+   "module": "0612"
   },
   {
    "id": "js-44",
@@ -1183,7 +1226,8 @@
     "es": "`main` imprime 1 y se pausa en el await. Mientras tanto, el resto del programa imprime 3. Al terminar la espera, main continúa e imprime 2.",
     "en": "`main` imprime 1 y se pausa en el await. Mientras tanto, el resto del programa imprime 3. Al terminar la espera, main continúa e imprime 2."
    },
-   "lesson": "js-asincronia"
+   "lesson": "js-asincronia",
+   "module": "0612"
   },
   {
    "id": "js-45",
@@ -1206,7 +1250,8 @@
     "es": "El error de una función async rechaza su promesa y el `catch` lo trata, pero de forma asíncrona: después del código síncrono.",
     "en": "El error de una función async rechaza su promesa y el `catch` lo trata, pero de forma asíncrona: después del código síncrono."
    },
-   "lesson": "js-asincronia"
+   "lesson": "js-asincronia",
+   "module": "0612"
   },
   {
    "id": "js-46",
@@ -1229,7 +1274,8 @@
     "es": "`precio` llega como **texto** \"12\" y `+` concatena: \"123\". Hay que convertir: `Number(datos.precio)`.",
     "en": "`precio` llega como **texto** \"12\" y `+` concatena: \"123\". Hay que convertir: `Number(datos.precio)`."
    },
-   "lesson": "js-fetch-json"
+   "lesson": "js-fetch-json",
+   "module": "0612"
   },
   {
    "id": "js-47",
@@ -1252,7 +1298,8 @@
     "es": "Es un objeto válido en JavaScript, pero no es JSON válido: JSON exige comillas dobles en claves y textos.",
     "en": "Es un objeto válido en JavaScript, pero no es JSON válido: JSON exige comillas dobles en claves y textos."
    },
-   "lesson": "js-fetch-json"
+   "lesson": "js-fetch-json",
+   "module": "0612"
   },
   {
    "id": "js-48",
@@ -1287,7 +1334,8 @@
     "es": "`fetch` solo rechaza por errores de red. Un 404 es una respuesta válida del servidor.",
     "en": "`fetch` solo rechaza por errores de red. Un 404 es una respuesta válida del servidor."
    },
-   "lesson": "js-fetch-json"
+   "lesson": "js-fetch-json",
+   "module": "0612"
   },
   {
    "id": "js-49",
@@ -1322,7 +1370,8 @@
     "es": "El cuerpo puede llegar en trozos; `json()` espera a tenerlo entero y lo convierte.",
     "en": "El cuerpo puede llegar en trozos; `json()` espera a tenerlo entero y lo convierte."
    },
-   "lesson": "js-fetch-json"
+   "lesson": "js-fetch-json",
+   "module": "0612"
   },
   {
    "id": "js-50",
@@ -1345,7 +1394,8 @@
     "es": "El `await` de una promesa rechazada lanza el error dentro del try: salta al catch sin ejecutar \"no llega\" y termina con el finally.",
     "en": "El `await` de una promesa rechazada lanza el error dentro del try: salta al catch sin ejecutar \"no llega\" y termina con el finally."
    },
-   "lesson": "js-fetch-json"
+   "lesson": "js-fetch-json",
+   "module": "0612"
   }
  ],
  "cards": []

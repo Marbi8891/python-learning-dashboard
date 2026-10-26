@@ -1,10 +1,9 @@
 """Modelos de la base de datos."""
 
-from datetime import date, datetime
+from datetime import datetime
 
 from sqlalchemy import (
     JSON,
-    Date,
     DateTime,
     ForeignKey,
     Index,
@@ -92,7 +91,7 @@ class LessonProgress(Base):
 
 
 class ExerciseAttempt(Base):
-    """Intento de ejercicio. Los tests se ejecutan en el navegador (ver ADR-0003)."""
+    """Intento de ejercicio. Los tests se ejecutan en el navegador."""
 
     __tablename__ = "exercise_attempts"
     __table_args__ = (Index("ix_attempts_user_lesson", "user_id", "lesson_id"),)
@@ -119,7 +118,7 @@ class PasswordResetToken(Base):
 
 
 class PcapState(Base):
-    """Preparación del examen PCAP (simulacros, aciertos, fichas, plan). Ver ADR-0010.
+    """Preparación del examen PCAP (simulacros, aciertos, fichas, plan).
 
     Un documento JSON por usuario: el navegador lo fusiona con su copia local y lo guarda entero.
     """
@@ -136,7 +135,7 @@ class PcapState(Base):
 
 
 class CourseState(Base):
-    """Estado de un curso de DAW de la app Android (SQL, JavaScript, Java...). Ver ADR-0018.
+    """Estado de un curso de DAW (SQL, JavaScript, Java...).
 
     Mismo modelo que PcapState: un documento JSON por usuario y curso, que la app fusiona con su
     copia local antes de guardarlo entero.
@@ -155,7 +154,7 @@ class CourseState(Base):
 
 
 class AccountEvent(Base):
-    """Actividad de seguridad que el usuario ve en «Mi cuenta» (ADR-0025): inicios de sesión,
+    """Actividad de seguridad que el usuario ve en «Mi cuenta»: inicios de sesión,
     intentos fallidos, cambios de contraseña… Solo el tipo, la fecha y el dispositivo aproximado
     («Android · Chrome»), nunca la IP. Se guardan los últimos eventos de cada usuario."""
 
@@ -166,23 +165,3 @@ class AccountEvent(Base):
     kind: Mapped[str] = mapped_column(String(30))
     device: Mapped[str] = mapped_column(String(60), default="")
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
-
-
-class TutorUsage(Base):
-    """Consultas al tutor por usuario, día (UTC) y modalidad (ADR-0038): «free» o «advanced».
-
-    Sirve para las cuotas de la IA avanzada (de pago) y para saber cuánto se usa cada modalidad.
-    Solo cuenta: ni preguntas ni respuestas. Los tokens son los que informa el proveedor.
-    """
-
-    __tablename__ = "tutor_usage"
-    __table_args__ = (Index("ix_tutor_usage_day_mode", "day", "mode"),)
-
-    user_id: Mapped[int] = mapped_column(
-        ForeignKey("users.id", ondelete="CASCADE"), primary_key=True
-    )
-    day: Mapped[date] = mapped_column(Date, primary_key=True)
-    mode: Mapped[str] = mapped_column(String(10), primary_key=True)
-    requests: Mapped[int] = mapped_column(default=0, server_default="0")
-    input_tokens: Mapped[int] = mapped_column(default=0, server_default="0")
-    output_tokens: Mapped[int] = mapped_column(default=0, server_default="0")

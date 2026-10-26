@@ -3,8 +3,8 @@
    Los XP no son un contador que se incrementa: se CALCULAN a partir de hechos
    (lecciones completadas, mejor nota de cada quiz, retos superados...), así que
    repetir una acción nunca da puntos dobles y el total siempre es coherente.
-   Se guarda en este navegador (ver ADR-0005) y, con sesión iniciada, en la cuenta
-   (/api/course-state/game, ADR-0035): así no se pierde al cerrar sesión y se ve igual en el panel
+   Se guarda en este navegador y, con sesión iniciada, en la cuenta
+   (/api/course-state/game): así no se pierde al cerrar sesión y se ve igual en el panel
    de cualquier dispositivo. */
 
 import { request } from "./api.js";
@@ -19,7 +19,7 @@ const XP = {
   quizPerfectBonus: 10,
   firstTry: 20,
   perStar: 30,
-  // Preparación del PCAP (ver ADR-0009)
+  // Preparación del PCAP
   pcapQuestion: 5, // por cada pregunta tipo examen distinta acertada alguna vez
   examPassed: 50, // por simulacro aprobado, hasta MAX_PASSED_EXAMS
 };

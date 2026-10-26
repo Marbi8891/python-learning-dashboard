@@ -2,7 +2,7 @@
    - tema y tamaño de letra guardados;
    - defensa contra clickjacking: GitHub Pages no permite la cabecera X-Frame-Options ni
      frame-ancestors en la CSP de <meta>, así que si otra web nos mete en un marco no se muestra
-     nada (ADR-0022). */
+     nada. */
 (function () {
   if (window.top !== window.self) {
     document.documentElement.style.display = "none";

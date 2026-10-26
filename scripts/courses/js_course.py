@@ -1,6 +1,6 @@
 # ruff: noqa: E501
 # (contenido didáctico: los textos largos van en una sola línea para poder leerlos y editarlos)
-"""Curso de JavaScript (módulo Desarrollo Web en Entorno Cliente de DAW) para la app (ADR-0016).
+"""Curso de JavaScript (módulo Desarrollo Web en Entorno Cliente de DAW) para la web.
 
 Cada pregunta de código se ejecuta con Node.js y su salida se compara con la esperada. Formato:
 lo que imprime `console.log`, «(sin salida)» si no imprime nada y «Lanza NombreDelError» si
@@ -1470,4 +1470,4 @@ BLOCKS = [
 ]
 
 if __name__ == "__main__":
-    main("js", BLOCKS, run_js, check_example)
+    main("js", BLOCKS, run_js, check_example, module="0612")

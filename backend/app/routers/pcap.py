@@ -1,4 +1,4 @@
-"""Preparación del examen PCAP guardada en la cuenta (ver ADR-0010)."""
+"""Preparación del examen PCAP guardada en la cuenta."""
 
 from fastapi import APIRouter
 

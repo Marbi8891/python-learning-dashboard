@@ -1,5 +1,5 @@
 # ruff: noqa: E501
-"""Mapa de conceptos del núcleo educativo (ADR-0031).
+"""Mapa de conceptos del núcleo educativo.
 
 Cada concepto es la unidad de aprendizaje: tiene prerrequisitos, importancia para DAW,
 teoría, un ejemplo explicado línea a línea, cuándo usarlo y sus errores típicos.

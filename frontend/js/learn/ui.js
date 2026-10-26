@@ -1,4 +1,4 @@
-/* Piezas de interfaz compartidas por las vistas del núcleo educativo (ADR-0031):
+/* Piezas de interfaz compartidas por las vistas del núcleo educativo:
    código resaltado, ejercicios, explicación de errores y medidores. Todo el texto se escapa. */
 
 import hljs from "../../vendor/highlight/core.min.js";

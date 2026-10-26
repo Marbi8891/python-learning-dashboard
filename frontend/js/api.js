@@ -7,7 +7,7 @@ export const API_URL = (config.apiUrl || (isLocalhost ? "http://127.0.0.1:8000" 
 export const apiEnabled = Boolean(API_URL);
 export const API_V1_PREFIX = "/api/v1";
 
-// Sesión (ADR-0033): el token va en una cookie HttpOnly que pone la API y que JavaScript no puede
+// Sesión: el token va en una cookie HttpOnly que pone la API y que JavaScript no puede
 // leer. Solo si el navegador bloquea esa cookie se guarda aquí, en memoria (nunca en
 // localStorage/sessionStorage, porque cualquier XSS podría leerlo).
 let accessToken = null;
@@ -55,7 +55,7 @@ function formatDetail(detail, status) {
 
 /** Llama a la API. Lanza ApiError con un mensaje listo para mostrar.
     `cookie: false` pide el token en la respuesta en vez de en la cookie (ver account.js).
-    `headers` añade cabeceras propias (por ejemplo, A2A-Version para el tutor, ver tutor.js). */
+    `headers` añade cabeceras propias. */
 export async function request(method, path, { json, form, auth = true, cookie = true, headers: extra = {}, signal } = {}) {
   if (!apiEnabled) throw new ApiError(0, "No hay servidor configurado");
   const headers = { ...extra };

@@ -1,9 +1,9 @@
-"""«Mi cuenta» (ADR-0025): editar el perfil, cambiar la contraseña y ver la actividad."""
+"""«Mi cuenta»: editar el perfil, cambiar la contraseña y ver la actividad."""
 
 from app.rate_limit import auth_limiter
 from tests.conftest import PASSWORD, login, register
 
-URL = "/api/users/me"
+URL = "/api/v1/users/me"
 NEW = "tortuga-azul-en-bici"
 ANDROID = {"User-Agent": "Mozilla/5.0 (Linux; Android 15) AppleWebKit/537.36 Chrome/140.0 Mobile"}
 
@@ -60,10 +60,12 @@ def test_change_password_needs_the_current_one_and_a_strong_new_one(client, auth
 
 def test_activity_shows_logins_failures_and_device_without_ip(client):
     register(client)
-    client.post("/api/auth/login", data={"username": "ana@example.com", "password": "mal-000000"})
+    client.post(
+        "/api/v1/auth/login", data={"username": "ana@example.com", "password": "mal-000000"}
+    )
     auth_limiter.reset()
     token = client.post(
-        "/api/auth/login",
+        "/api/v1/auth/login",
         data={"username": "ana@example.com", "password": PASSWORD},
         headers=ANDROID,
     ).json()["access_token"]
@@ -83,7 +85,7 @@ def test_activity_keeps_only_the_latest_events(client, auth_headers, monkeypatch
 
 
 def test_logout_all_and_reset_appear_in_activity(client, auth_headers):
-    client.post("/api/auth/logout-all", headers=auth_headers)
+    client.post("/api/v1/auth/logout-all", headers=auth_headers)
     auth_limiter.reset()
     token = login(client).json()["access_token"]
     kinds = [
@@ -112,6 +114,5 @@ def test_device_names():
     assert device(ua("Mozilla/5.0 (Windows NT 10.0) Firefox/140.0")) == "Windows · Firefox"
     assert device(ua("Mozilla/5.0 (iPhone; CPU iPhone OS 18) Safari/605")) == "iPhone · Safari"
     assert device(ua("Mozilla/5.0 (Windows NT 10.0) Chrome/140 Edg/140")) == "Windows · Edge"
-    assert device(ua("okhttp/4.12.0")) == "App Android"
-    assert device(ua("PLD-App/0.13.0 (Android)")) == "Android · App"
+    assert device(ua("curl/8.0")) == "Dispositivo desconocido"
     assert device(None) == "Dispositivo desconocido"

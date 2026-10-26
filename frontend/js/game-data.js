@@ -1,4 +1,4 @@
-/* Documento de XP, racha y logros de la web (clave pld:game y /api/course-state/game, ADR-0035).
+/* Documento de XP, racha y logros de la web (clave pld:game y /api/course-state/game).
    Funciones puras (sin DOM ni localStorage): las usa game.js y se prueban con node --test. */
 
 const ID = /^[a-z0-9][a-z0-9_-]{0,60}$/;
@@ -27,7 +27,7 @@ const ids = (value, pattern = ID) =>
 
 /**
  * Valida un documento que llega de fuera (localStorage o la cuenta): solo pasan los tipos esperados
- * e ids con formato de id, para que nada manipulado acabe en el HTML ni en el cálculo de XP (ADR-0022).
+ * e ids con formato de id, para que nada manipulado acabe en el HTML ni en el cálculo de XP.
  */
 export function cleanGame(value) {
   const game = emptyGame();

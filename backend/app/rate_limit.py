@@ -1,4 +1,4 @@
-"""Límites de intentos en memoria (ventana deslizante), por IP y por cuenta (ADR-0022).
+"""Límites de intentos en memoria (ventana deslizante), por IP y por cuenta.
 
 Suficiente para una sola instancia del servidor. Con varias instancias
 habría que compartir el estado (por ejemplo, en Redis).

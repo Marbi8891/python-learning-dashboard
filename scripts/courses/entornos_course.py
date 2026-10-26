@@ -1,6 +1,6 @@
 # ruff: noqa: E501
 # (contenido didáctico: los textos largos van en una sola línea para poder leerlos y editarlos)
-"""Curso de Entornos de desarrollo (módulo 0487 de DAW) para la app Android (ADR-0016, ADR-0019).
+"""Curso de Entornos de desarrollo (módulo 0487 de DAW) para la web.
 
 Sigue la UD1 «Desarrollo de software» del temario del centro. Casi todo es teoría. Las preguntas
 con salida se ejecutan con Python, igual que los ejemplos, y se comprueba que la salida real es
@@ -10,6 +10,7 @@ preguntan qué es el código, no lo que muestra.
 
 from __future__ import annotations
 
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -20,9 +21,18 @@ from course_builder import Block, Lesson, Q, main  # noqa: E402
 # ---------------------------------------------------------------- ejecución
 
 
+# El programa escribe y se lee en UTF-8, sea cual sea la codificación del sistema
+UTF8_ENV = {**os.environ, "PYTHONIOENCODING": "utf-8"}
+
+
 def run_python(code: str) -> str:
     result = subprocess.run(
-        [sys.executable, "-c", code], capture_output=True, text=True, timeout=10, check=False
+        [sys.executable, "-c", code],
+        capture_output=True,
+        encoding="utf-8",  # mismo resultado en Windows y en Linux (ver UTF8_ENV)
+        env=UTF8_ENV,
+        timeout=10,
+        check=False,
     )
     if result.returncode != 0:
         return "Error"
@@ -971,4 +981,4 @@ BLOCKS = [
 ]
 
 if __name__ == "__main__":
-    main("entornos", BLOCKS, run_python, check_example)
+    main("entornos", BLOCKS, run_python, check_example, module="0487")

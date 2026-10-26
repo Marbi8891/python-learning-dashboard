@@ -17,7 +17,7 @@ module.exports = defineConfig({
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
   webServer: [
     {
-      command: "python -m http.server 5500 --directory frontend",
+      command: "python e2e/serve_frontend.py 5500",
       url: "http://localhost:5500/index.html",
       reuseExistingServer: !process.env.CI,
     },

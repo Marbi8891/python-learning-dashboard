@@ -74,7 +74,8 @@
     "es": "`7 / 2` son dos enteros: división entera, 3. El resto es 1. En `7 / 2.0` hay un `double`, así que da 3.5.",
     "en": "`7 / 2` son dos enteros: división entera, 3. El resto es 1. En `7 / 2.0` hay un `double`, así que da 3.5."
    },
-   "lesson": "java-tipos"
+   "lesson": "java-tipos",
+   "module": "0485"
   },
   {
    "id": "java-02",
@@ -97,7 +98,8 @@
     "es": "De izquierda a derecha: `1 + 2` es la suma 3; al llegar a `\"3\"` empieza la concatenación: \"33\", \"334\", \"3345\".",
     "en": "De izquierda a derecha: `1 + 2` es la suma 3; al llegar a `\"3\"` empieza la concatenación: \"33\", \"334\", \"3345\"."
    },
-   "lesson": "java-tipos"
+   "lesson": "java-tipos",
+   "module": "0485"
   },
   {
    "id": "java-03",
@@ -120,7 +122,8 @@
     "es": "`x++` usa 5 y deja x en 6; `++x` sube a 7 y usa 7. y = 5 + 7 = 12 y x termina en 7.",
     "en": "`x++` usa 5 y deja x en 6; `++x` sube a 7 y usa 7. y = 5 + 7 = 12 y x termina en 7."
    },
-   "lesson": "java-tipos"
+   "lesson": "java-tipos",
+   "module": "0485"
   },
   {
    "id": "java-04",
@@ -143,7 +146,8 @@
     "es": "El casting a `int` **trunca** (quita los decimales), no redondea.",
     "en": "El casting a `int` **trunca** (quita los decimales), no redondea."
    },
-   "lesson": "java-tipos"
+   "lesson": "java-tipos",
+   "module": "0485"
   },
   {
    "id": "java-05",
@@ -166,7 +170,8 @@
     "es": "Pasar de `double` a `int` puede perder información y Java no lo hace sin un casting explícito: el programa no compila.",
     "en": "Pasar de `double` a `int` puede perder información y Java no lo hace sin un casting explícito: el programa no compila."
    },
-   "lesson": "java-tipos"
+   "lesson": "java-tipos",
+   "module": "0485"
   },
   {
    "id": "java-p01",
@@ -186,7 +191,8 @@
     "es": "Entre dos `int`, `/` es la división entera: 125 / 60 = 2. Con `%` obtendrías los segundos que sobran (5). Solución: `/`.",
     "en": "Entre dos `int`, `/` es la división entera: 125 / 60 = 2. Con `%` obtendrías los segundos que sobran (5). Solución: `/`."
    },
-   "lesson": "java-tipos"
+   "lesson": "java-tipos",
+   "module": "0485"
   },
   {
    "id": "java-p02",
@@ -209,7 +215,8 @@
     "es": "Una variable tiene que estar declarada antes de usarse: primero `a`, luego `b` (que usa `a`), después la media y al final se imprime.",
     "en": "Una variable tiene que estar declarada antes de usarse: primero `a`, luego `b` (que usa `a`), después la media y al final se imprime."
    },
-   "lesson": "java-tipos"
+   "lesson": "java-tipos",
+   "module": "0485"
   },
   {
    "id": "java-p03",
@@ -233,7 +240,8 @@
     "es": "`a / b` son dos enteros: la división es entera (3) y luego se guarda como 3.0. Hay que convertir un operando a double **antes** de dividir. Corrección: `double r = (double) a / b;`.",
     "en": "`a / b` son dos enteros: la división es entera (3) y luego se guarda como 3.0. Hay que convertir un operando a double **antes** de dividir. Corrección: `double r = (double) a / b;`."
    },
-   "lesson": "java-tipos"
+   "lesson": "java-tipos",
+   "module": "0485"
   },
   {
    "id": "java-06",
@@ -256,7 +264,8 @@
     "es": "12 caracteres. `charAt(0)` es el primero (posición 0). `substring(3, 7)` coge las posiciones 3, 4, 5 y 6, porque el 7 no se incluye: A-p-l-**i-c-a-c**-iones.",
     "en": "12 caracteres. `charAt(0)` es el primero (posición 0). `substring(3, 7)` coge las posiciones 3, 4, 5 y 6, porque el 7 no se incluye: A-p-l-**i-c-a-c**-iones."
    },
-   "lesson": "java-strings"
+   "lesson": "java-strings",
+   "module": "0485"
   },
   {
    "id": "java-07",
@@ -279,7 +288,8 @@
     "es": "`new String` crea otro objeto: `==` compara referencias y da false. `equals` compara el contenido y da true.",
     "en": "`new String` crea otro objeto: `==` compara referencias y da false. `equals` compara el contenido y da true."
    },
-   "lesson": "java-strings"
+   "lesson": "java-strings",
+   "module": "0485"
   },
   {
    "id": "java-08",
@@ -302,7 +312,8 @@
     "es": "Los String son **inmutables**: `toUpperCase()` devuelve uno nuevo que aquí se pierde. Habría que escribir `s = s.toUpperCase();`.",
     "en": "Los String son **inmutables**: `toUpperCase()` devuelve uno nuevo que aquí se pierde. Habría que escribir `s = s.toUpperCase();`."
    },
-   "lesson": "java-strings"
+   "lesson": "java-strings",
+   "module": "0485"
   },
   {
    "id": "java-09",
@@ -325,7 +336,8 @@
     "es": "`parseInt` convierte cada texto en `int` y después se suman: 15.",
     "en": "`parseInt` convierte cada texto en `int` y después se suman: 15."
    },
-   "lesson": "java-strings"
+   "lesson": "java-strings",
+   "module": "0485"
   },
   {
    "id": "java-10",
@@ -348,7 +360,8 @@
     "es": "Compila (el texto podría venir del usuario), pero al ejecutar \"12a\" no es un número: lanza `NumberFormatException`.",
     "en": "Compila (el texto podría venir del usuario), pero al ejecutar \"12a\" no es un número: lanza `NumberFormatException`."
    },
-   "lesson": "java-strings"
+   "lesson": "java-strings",
+   "module": "0485"
   },
   {
    "id": "java-p04",
@@ -369,7 +382,8 @@
     "es": "`equals` compara el contenido; `==` compararía si son el mismo objeto y aquí daría false. Solución: `equals`.",
     "en": "`equals` compara el contenido; `==` compararía si son el mismo objeto y aquí daría false. Solución: `equals`."
    },
-   "lesson": "java-strings"
+   "lesson": "java-strings",
+   "module": "0485"
   },
   {
    "id": "java-p05",
@@ -392,7 +406,8 @@
     "es": "Primero el texto, luego la posición de la arroba y con ella el `substring` hasta esa posición (sin incluirla).",
     "en": "Primero el texto, luego la posición de la arroba y con ella el `substring` hasta esa posición (sin incluirla)."
    },
-   "lesson": "java-strings"
+   "lesson": "java-strings",
+   "module": "0485"
   },
   {
    "id": "java-p06",
@@ -415,7 +430,8 @@
     "es": "Los String son inmutables: `toUpperCase()` devuelve un texto nuevo que hay que guardar. Corrección: `s = s.toUpperCase();`.",
     "en": "Los String son inmutables: `toUpperCase()` devuelve un texto nuevo que hay que guardar. Corrección: `s = s.toUpperCase();`."
    },
-   "lesson": "java-strings"
+   "lesson": "java-strings",
+   "module": "0485"
   },
   {
    "id": "java-11",
@@ -438,7 +454,8 @@
     "es": "15 es múltiplo de 3 y de 5: se cumple la primera condición y el resto de la cadena `else if` ya no se evalúa.",
     "en": "15 es múltiplo de 3 y de 5: se cumple la primera condición y el resto de la cadena `else if` ya no se evalúa."
    },
-   "lesson": "java-condicionales"
+   "lesson": "java-condicionales",
+   "module": "0485"
   },
   {
    "id": "java-12",
@@ -461,7 +478,8 @@
     "es": "Entra por `case 2` y, como no hay `break`, sigue por el `case 3` (*fall-through*) hasta el `break`.",
     "en": "Entra por `case 2` y, como no hay `break`, sigue por el `case 3` (*fall-through*) hasta el `break`."
    },
-   "lesson": "java-condicionales"
+   "lesson": "java-condicionales",
+   "module": "0485"
   },
   {
    "id": "java-13",
@@ -484,7 +502,8 @@
     "es": "El switch con flechas (Java 14+) admite varias etiquetas por caso y devuelve un valor. No tiene fall-through.",
     "en": "El switch con flechas (Java 14+) admite varias etiquetas por caso y devuelve un valor. No tiene fall-through."
    },
-   "lesson": "java-condicionales"
+   "lesson": "java-condicionales",
+   "module": "0485"
   },
   {
    "id": "java-14",
@@ -507,7 +526,8 @@
     "es": "El ternario devuelve `b` porque `a > b` es falso: es una forma corta de calcular el máximo.",
     "en": "El ternario devuelve `b` porque `a > b` es falso: es una forma corta de calcular el máximo."
    },
-   "lesson": "java-condicionales"
+   "lesson": "java-condicionales",
+   "module": "0485"
   },
   {
    "id": "java-15",
@@ -530,7 +550,8 @@
     "es": "`x = 5` es una asignación y vale 5 (un `int`); un if necesita un `boolean`. En Java no compila, a diferencia de C.",
     "en": "`x = 5` es una asignación y vale 5 (un `int`); un if necesita un `boolean`. En Java no compila, a diferencia de C."
    },
-   "lesson": "java-condicionales"
+   "lesson": "java-condicionales",
+   "module": "0485"
   },
   {
    "id": "java-p07",
@@ -550,7 +571,8 @@
     "es": "`>=` incluye el 5. Con `>` un 5 saldría suspenso: es el error típico de los límites. Solución: `>=`.",
     "en": "`>=` incluye el 5. Con `>` un 5 saldría suspenso: es el error típico de los límites. Solución: `>=`."
    },
-   "lesson": "java-condicionales"
+   "lesson": "java-condicionales",
+   "module": "0485"
   },
   {
    "id": "java-p08",
@@ -577,7 +599,8 @@
     "es": "Cada println va dentro de su rama y el caso más restrictivo (múltiplo de 15) va primero. 9 no es múltiplo de 15, pero sí de 3.",
     "en": "Cada println va dentro de su rama y el caso más restrictivo (múltiplo de 15) va primero. 9 no es múltiplo de 15, pero sí de 3."
    },
-   "lesson": "java-condicionales"
+   "lesson": "java-condicionales",
+   "module": "0485"
   },
   {
    "id": "java-p09",
@@ -601,7 +624,8 @@
     "es": "`=` asigna y `==` compara. Un if necesita un boolean, así que `x = 5` no compila. Corrección: `if (x == 5) {`.",
     "en": "`=` asigna y `==` compara. Un if necesita un boolean, así que `x = 5` no compila. Corrección: `if (x == 5) {`."
    },
-   "lesson": "java-condicionales"
+   "lesson": "java-condicionales",
+   "module": "0485"
   },
   {
    "id": "java-16",
@@ -624,7 +648,8 @@
     "es": "Empieza en 0 y suma 3 mientras sea menor que 10: 0, 3, 6 y 9. Con 12 ya no entra.",
     "en": "Empieza en 0 y suma 3 mientras sea menor que 10: 0, 3, 6 y 9. Con 12 ya no entra."
    },
-   "lesson": "java-bucles-arrays"
+   "lesson": "java-bucles-arrays",
+   "module": "0485"
   },
   {
    "id": "java-17",
@@ -647,7 +672,8 @@
     "es": "El for-each suma 4 + 8 + 15 = 27; `length` es el número de elementos (3), no el último índice (2).",
     "en": "El for-each suma 4 + 8 + 15 = 27; `length` es el número de elementos (3), no el último índice (2)."
    },
-   "lesson": "java-bucles-arrays"
+   "lesson": "java-bucles-arrays",
+   "module": "0485"
   },
   {
    "id": "java-18",
@@ -670,7 +696,8 @@
     "es": "Un array de 3 posiciones tiene índices 0, 1 y 2. Compila, pero al ejecutar `v[3]` se sale del rango.",
     "en": "Un array de 3 posiciones tiene índices 0, 1 y 2. Compila, pero al ejecutar `v[3]` se sale del rango."
    },
-   "lesson": "java-bucles-arrays"
+   "lesson": "java-bucles-arrays",
+   "module": "0485"
   },
   {
    "id": "java-19",
@@ -693,7 +720,8 @@
     "es": "i pasa por 10, 6, 2 y -2. Con -2 la condición `i > 0` es falsa y el bucle termina.",
     "en": "i pasa por 10, 6, 2 y -2. Con -2 la condición `i > 0` es falsa y el bucle termina."
    },
-   "lesson": "java-bucles-arrays"
+   "lesson": "java-bucles-arrays",
+   "module": "0485"
   },
   {
    "id": "java-20",
@@ -716,7 +744,8 @@
     "es": "`do-while` ejecuta el cuerpo **antes** de comprobar la condición: una vuelta como mínimo, aunque `5 < 3` sea falso.",
     "en": "`do-while` ejecuta el cuerpo **antes** de comprobar la condición: una vuelta como mínimo, aunque `5 < 3` sea falso."
    },
-   "lesson": "java-bucles-arrays"
+   "lesson": "java-bucles-arrays",
+   "module": "0485"
   },
   {
    "id": "java-p10",
@@ -737,7 +766,8 @@
     "es": "Empezando en 0, `i < 5` da cinco vueltas: 0, 1, 2, 3 y 4. Solución: `i < 5`.",
     "en": "Empezando en 0, `i < 5` da cinco vueltas: 0, 1, 2, 3 y 4. Solución: `i < 5`."
    },
-   "lesson": "java-bucles-arrays"
+   "lesson": "java-bucles-arrays",
+   "module": "0485"
   },
   {
    "id": "java-p11",
@@ -759,7 +789,8 @@
     "es": "El for abre el bloque, dentro se acumula cada elemento y la llave lo cierra. `i` solo existe dentro del bucle.",
     "en": "El for abre el bloque, dentro se acumula cada elemento y la llave lo cierra. `i` solo existe dentro del bucle."
    },
-   "lesson": "java-bucles-arrays"
+   "lesson": "java-bucles-arrays",
+   "module": "0485"
   },
   {
    "id": "java-p12",
@@ -785,7 +816,8 @@
     "es": "Los índices van de 0 a `length - 1`. Con `<=` se intenta leer `v[3]` y salta `ArrayIndexOutOfBoundsException`. Corrección: `for (int i = 0; i < v.length; i++) {`.",
     "en": "Los índices van de 0 a `length - 1`. Con `<=` se intenta leer `v[3]` y salta `ArrayIndexOutOfBoundsException`. Corrección: `for (int i = 0; i < v.length; i++) {`."
    },
-   "lesson": "java-bucles-arrays"
+   "lesson": "java-bucles-arrays",
+   "module": "0485"
   },
   {
    "id": "java-21",
@@ -808,7 +840,8 @@
     "es": "`b = a` copia la **referencia**: solo hay un objeto Contador y se incrementa dos veces.",
     "en": "`b = a` copia la **referencia**: solo hay un objeto Contador y se incrementa dos veces."
    },
-   "lesson": "java-clases"
+   "lesson": "java-clases",
+   "module": "0485"
   },
   {
    "id": "java-22",
@@ -831,7 +864,8 @@
     "es": "Sin `this`, `nombre = nombre` asigna el parámetro a sí mismo. El atributo se queda con su valor por defecto: null.",
     "en": "Sin `this`, `nombre = nombre` asigna el parámetro a sí mismo. El atributo se queda con su valor por defecto: null."
    },
-   "lesson": "java-clases"
+   "lesson": "java-clases",
+   "module": "0485"
   },
   {
    "id": "java-23",
@@ -854,7 +888,8 @@
     "es": "Al definir `Coche(String marca)`, Java ya no crea el constructor vacío: `new Coche()` no compila.",
     "en": "Al definir `Coche(String marca)`, Java ya no crea el constructor vacío: `new Coche()` no compila."
    },
-   "lesson": "java-clases"
+   "lesson": "java-clases",
+   "module": "0485"
   },
   {
    "id": "java-24",
@@ -877,7 +912,8 @@
     "es": "`println` llama al `toString()` del objeto. Como está sobrescrito, muestra el texto propio.",
     "en": "`println` llama al `toString()` del objeto. Como está sobrescrito, muestra el texto propio."
    },
-   "lesson": "java-clases"
+   "lesson": "java-clases",
+   "module": "0485"
   },
   {
    "id": "java-25",
@@ -900,7 +936,8 @@
     "es": "Compila, pero `p` no apunta a ningún objeto: acceder a `p.x` lanza `NullPointerException`.",
     "en": "Compila, pero `p` no apunta a ningún objeto: acceder a `p.x` lanza `NullPointerException`."
    },
-   "lesson": "java-clases"
+   "lesson": "java-clases",
+   "module": "0485"
   },
   {
    "id": "java-p13",
@@ -920,7 +957,8 @@
     "es": "Sin `this`, `nombre = nombre` asignaría el parámetro a sí mismo y el atributo se quedaría en null. Solución: `this.nombre`.",
     "en": "Sin `this`, `nombre = nombre` asignaría el parámetro a sí mismo y el atributo se quedaría en null. Solución: `this.nombre`."
    },
-   "lesson": "java-clases"
+   "lesson": "java-clases",
+   "module": "0485"
   },
   {
    "id": "java-p14",
@@ -942,7 +980,8 @@
     "es": "Primero se crea el objeto, luego se cambia su atributo x a 10 y al final se calcula la suma: 10 + 3.",
     "en": "Primero se crea el objeto, luego se cambia su atributo x a 10 y al final se calcula la suma: 10 + 3."
    },
-   "lesson": "java-clases"
+   "lesson": "java-clases",
+   "module": "0485"
   },
   {
    "id": "java-p15",
@@ -973,7 +1012,8 @@
     "es": "Una referencia a null no apunta a ningún objeto: `c.sumar()` lanza `NullPointerException`. Hay que crearlo con `new`. Corrección: `Contador c = new Contador();`.",
     "en": "Una referencia a null no apunta a ningún objeto: `c.sumar()` lanza `NullPointerException`. Hay que crearlo con `new`. Corrección: `Contador c = new Contador();`."
    },
-   "lesson": "java-clases"
+   "lesson": "java-clases",
+   "module": "0485"
   },
   {
    "id": "java-26",
@@ -996,7 +1036,8 @@
     "es": "`emitidos` es static: uno solo, compartido, que llega a 3. `numero` es de cada objeto y guarda el valor en el momento de crearlo.",
     "en": "`emitidos` es static: uno solo, compartido, que llega a 3. `numero` es de cada objeto y guarda el valor en el momento de crearlo."
    },
-   "lesson": "java-encapsulacion"
+   "lesson": "java-encapsulacion",
+   "module": "0485"
   },
   {
    "id": "java-27",
@@ -1019,7 +1060,8 @@
     "es": "`saldo` es private: solo se puede usar dentro de `Cuenta`. Desde `Main` no compila.",
     "en": "`saldo` es private: solo se puede usar dentro de `Cuenta`. Desde `Main` no compila."
    },
-   "lesson": "java-encapsulacion"
+   "lesson": "java-encapsulacion",
+   "module": "0485"
   },
   {
    "id": "java-28",
@@ -1042,7 +1084,8 @@
     "es": "El método rechaza la cantidad negativa: 50 + 30 = 80. Es un `double`, así que se imprime 80.0. Eso es la encapsulación: la clase protege su estado.",
     "en": "El método rechaza la cantidad negativa: 50 + 30 = 80. Es un `double`, así que se imprime 80.0. Eso es la encapsulación: la clase protege su estado."
    },
-   "lesson": "java-encapsulacion"
+   "lesson": "java-encapsulacion",
+   "module": "0485"
   },
   {
    "id": "java-29",
@@ -1065,7 +1108,8 @@
     "es": "`total` es un atributo de instancia y `main` es static: no hay objeto del que leerlo. Habría que hacer `new Main().total`.",
     "en": "`total` es un atributo de instancia y `main` es static: no hay objeto del que leerlo. Habría que hacer `new Main().total`."
    },
-   "lesson": "java-encapsulacion"
+   "lesson": "java-encapsulacion",
+   "module": "0485"
   },
   {
    "id": "java-30",
@@ -1100,7 +1144,8 @@
     "es": "`private` es el más restrictivo. Sin modificador se permite todo el paquete; `protected` añade las subclases.",
     "en": "`private` es el más restrictivo. Sin modificador se permite todo el paquete; `protected` añade las subclases."
    },
-   "lesson": "java-encapsulacion"
+   "lesson": "java-encapsulacion",
+   "module": "0485"
   },
   {
    "id": "java-p16",
@@ -1120,7 +1165,8 @@
     "es": "Un atributo `static` pertenece a la clase: hay uno solo para todos los objetos y se usa como `Ticket.emitidos`. Solución: `static`.",
     "en": "Un atributo `static` pertenece a la clase: hay uno solo para todos los objetos y se usa como `Ticket.emitidos`. Solución: `static`."
    },
-   "lesson": "java-encapsulacion"
+   "lesson": "java-encapsulacion",
+   "module": "0485"
   },
   {
    "id": "java-p17",
@@ -1143,7 +1189,8 @@
     "es": "Se imprime después de ingresar 100 y antes del segundo ingreso: el orden de las sentencias es el orden en que ocurren las cosas.",
     "en": "Se imprime después de ingresar 100 y antes del segundo ingreso: el orden de las sentencias es el orden en que ocurren las cosas."
    },
-   "lesson": "java-encapsulacion"
+   "lesson": "java-encapsulacion",
+   "module": "0485"
   },
   {
    "id": "java-p18",
@@ -1173,7 +1220,8 @@
     "es": "`saldo` es private: desde otra clase solo se puede leer con su getter. Corrección: `System.out.println(c.getSaldo());`.",
     "en": "`saldo` es private: desde otra clase solo se puede leer con su getter. Corrección: `System.out.println(c.getSaldo());`."
    },
-   "lesson": "java-encapsulacion"
+   "lesson": "java-encapsulacion",
+   "module": "0485"
   },
   {
    "id": "java-31",
@@ -1196,7 +1244,8 @@
     "es": "Polimorfismo: aunque las variables son de tipo Animal, se ejecuta el método del objeto real de cada posición.",
     "en": "Polimorfismo: aunque las variables son de tipo Animal, se ejecuta el método del objeto real de cada posición."
    },
-   "lesson": "java-herencia"
+   "lesson": "java-herencia",
+   "module": "0485"
   },
   {
    "id": "java-32",
@@ -1219,7 +1268,8 @@
     "es": "Cada constructor llama primero a `super()`: se construye de la raíz hacia abajo, A, B y C.",
     "en": "Cada constructor llama primero a `super()`: se construye de la raíz hacia abajo, A, B y C."
    },
-   "lesson": "java-herencia"
+   "lesson": "java-herencia",
+   "module": "0485"
   },
   {
    "id": "java-33",
@@ -1242,7 +1292,8 @@
     "es": "El objeto es un Jefe: se ejecuta su versión, que reutiliza la del padre con `super.sueldo()`. Es un double: 1500.0.",
     "en": "El objeto es un Jefe: se ejecuta su versión, que reutiliza la del padre con `super.sueldo()`. Es un double: 1500.0."
    },
-   "lesson": "java-herencia"
+   "lesson": "java-herencia",
+   "module": "0485"
   },
   {
    "id": "java-34",
@@ -1265,7 +1316,8 @@
     "es": "El compilador solo mira el tipo de la variable (Animal), que no tiene `ladrar()`. Habría que hacer `((Perro) a).ladrar()`.",
     "en": "El compilador solo mira el tipo de la variable (Animal), que no tiene `ladrar()`. Habría que hacer `((Perro) a).ladrar()`."
    },
-   "lesson": "java-herencia"
+   "lesson": "java-herencia",
+   "module": "0485"
   },
   {
    "id": "java-35",
@@ -1288,7 +1340,8 @@
     "es": "El casting compila (un Animal *podría* ser un Perro), pero al ejecutar el objeto es un Gato: `ClassCastException`. Se evita comprobando antes con `instanceof`.",
     "en": "El casting compila (un Animal *podría* ser un Perro), pero al ejecutar el objeto es un Gato: `ClassCastException`. Se evita comprobando antes con `instanceof`."
    },
-   "lesson": "java-herencia"
+   "lesson": "java-herencia",
+   "module": "0485"
   },
   {
    "id": "java-p19",
@@ -1308,7 +1361,8 @@
     "es": "Empleado no tiene constructor vacío, así que la subclase tiene que llamar a `super(…)` con el nombre, y en la primera línea. Solución: `super(nombre)`.",
     "en": "Empleado no tiene constructor vacío, así que la subclase tiene que llamar a `super(…)` con el nombre, y en la primera línea. Solución: `super(nombre)`."
    },
-   "lesson": "java-herencia"
+   "lesson": "java-herencia",
+   "module": "0485"
   },
   {
    "id": "java-p20",
@@ -1331,7 +1385,8 @@
     "es": "La anotación va justo antes del método que sobrescribe, y el método, dentro de las llaves de la clase.",
     "en": "La anotación va justo antes del método que sobrescribe, y el método, dentro de las llaves de la clase."
    },
-   "lesson": "java-herencia"
+   "lesson": "java-herencia",
+   "module": "0485"
   },
   {
    "id": "java-p21",
@@ -1364,7 +1419,8 @@
     "es": "`Sonido` con mayúscula es otro método: no sobrescribe nada y `@Override` hace que no compile. Por eso conviene ponerlo siempre. Corrección: `String sonido() { return \"Guau\"; }`.",
     "en": "`Sonido` con mayúscula es otro método: no sobrescribe nada y `@Override` hace que no compile. Por eso conviene ponerlo siempre. Corrección: `String sonido() { return \"Guau\"; }`."
    },
-   "lesson": "java-herencia"
+   "lesson": "java-herencia",
+   "module": "0485"
   },
   {
    "id": "java-36",
@@ -1387,7 +1443,8 @@
     "es": "Una clase abstracta no se puede instanciar con `new`: el compilador lo impide.",
     "en": "Una clase abstracta no se puede instanciar con `new`: el compilador lo impide."
    },
-   "lesson": "java-abstractas-interfaces"
+   "lesson": "java-abstractas-interfaces",
+   "module": "0485"
   },
   {
    "id": "java-37",
@@ -1410,7 +1467,8 @@
     "es": "`describir()` está en la clase abstracta, pero llama a `area()`, que se resuelve en el objeto real (Cuadrado): 3 × 3 = 9.0.",
     "en": "`describir()` está en la clase abstracta, pero llama a `area()`, que se resuelve en el objeto real (Cuadrado): 3 × 3 = 9.0."
    },
-   "lesson": "java-abstractas-interfaces"
+   "lesson": "java-abstractas-interfaces",
+   "module": "0485"
   },
   {
    "id": "java-38",
@@ -1433,7 +1491,8 @@
     "es": "Los métodos `default` tienen cuerpo en la interfaz y los heredan quienes la implementan.",
     "en": "Los métodos `default` tienen cuerpo en la interfaz y los heredan quienes la implementan."
    },
-   "lesson": "java-abstractas-interfaces"
+   "lesson": "java-abstractas-interfaces",
+   "module": "0485"
   },
   {
    "id": "java-39",
@@ -1456,7 +1515,8 @@
     "es": "Los métodos de una interfaz son public. Implementarlo sin `public` reduce su visibilidad y no compila.",
     "en": "Los métodos de una interfaz son public. Implementarlo sin `public` reduce su visibilidad y no compila."
    },
-   "lesson": "java-abstractas-interfaces"
+   "lesson": "java-abstractas-interfaces",
+   "module": "0485"
   },
   {
    "id": "java-40",
@@ -1491,7 +1551,8 @@
     "es": "Por eso las interfaces sirven para dar varias capacidades a una misma clase.",
     "en": "Por eso las interfaces sirven para dar varias capacidades a una misma clase."
    },
-   "lesson": "java-abstractas-interfaces"
+   "lesson": "java-abstractas-interfaces",
+   "module": "0485"
   },
   {
    "id": "java-p22",
@@ -1511,7 +1572,8 @@
     "es": "Una clase **hereda** (`extends`) de otra clase e **implementa** (`implements`) interfaces. Solución: `implements`.",
     "en": "Una clase **hereda** (`extends`) de otra clase e **implementa** (`implements`) interfaces. Solución: `implements`."
    },
-   "lesson": "java-abstractas-interfaces"
+   "lesson": "java-abstractas-interfaces",
+   "module": "0485"
   },
   {
    "id": "java-p23",
@@ -1536,7 +1598,8 @@
     "es": "Cada clase abre y cierra sus llaves; el método abstracto va dentro de Figura y su implementación, dentro de Cuadrado.",
     "en": "Cada clase abre y cierra sus llaves; el método abstracto va dentro de Figura y su implementación, dentro de Cuadrado."
    },
-   "lesson": "java-abstractas-interfaces"
+   "lesson": "java-abstractas-interfaces",
+   "module": "0485"
   },
   {
    "id": "java-p24",
@@ -1567,7 +1630,8 @@
     "es": "Los métodos de una interfaz son public; al implementarlos no se puede reducir su visibilidad. Corrección: `public void volar() { System.out.println(\"vuela\"); }`.",
     "en": "Los métodos de una interfaz son public; al implementarlos no se puede reducir su visibilidad. Corrección: `public void volar() { System.out.println(\"vuela\"); }`."
    },
-   "lesson": "java-abstractas-interfaces"
+   "lesson": "java-abstractas-interfaces",
+   "module": "0485"
   },
   {
    "id": "java-41",
@@ -1590,7 +1654,8 @@
     "es": "`remove(1)` quita la posición 1 (\"b\") y `add(0, \"z\")` inserta al principio.",
     "en": "`remove(1)` quita la posición 1 (\"b\") y `add(0, \"z\")` inserta al principio."
    },
-   "lesson": "java-colecciones"
+   "lesson": "java-colecciones",
+   "module": "0485"
   },
   {
    "id": "java-42",
@@ -1613,7 +1678,8 @@
     "es": "`remove(1)` borra la **posición** 1 (el 20); `remove(Integer.valueOf(10))` borra el **valor** 10. Queda [30].",
     "en": "`remove(1)` borra la **posición** 1 (el 20); `remove(Integer.valueOf(10))` borra el **valor** 10. Queda [30]."
    },
-   "lesson": "java-colecciones"
+   "lesson": "java-colecciones",
+   "module": "0485"
   },
   {
    "id": "java-43",
@@ -1636,7 +1702,8 @@
     "es": "`getOrDefault` da 0 la primera vez; cada voto suma 1. TreeMap ordena las claves alfabéticamente.",
     "en": "`getOrDefault` da 0 la primera vez; cada voto suma 1. TreeMap ordena las claves alfabéticamente."
    },
-   "lesson": "java-colecciones"
+   "lesson": "java-colecciones",
+   "module": "0485"
   },
   {
    "id": "java-44",
@@ -1659,7 +1726,8 @@
     "es": "`get` de una clave inexistente devuelve null, sin excepción. Si lo guardas en un `int`, entonces sí fallaría (NullPointerException).",
     "en": "`get` de una clave inexistente devuelve null, sin excepción. Si lo guardas en un `int`, entonces sí fallaría (NullPointerException)."
    },
-   "lesson": "java-colecciones"
+   "lesson": "java-colecciones",
+   "module": "0485"
   },
   {
    "id": "java-45",
@@ -1682,7 +1750,8 @@
     "es": "Modificar una lista mientras la recorres con for-each lanza `ConcurrentModificationException`. Lo correcto es `l.removeIf(x -> x == 2)`.",
     "en": "Modificar una lista mientras la recorres con for-each lanza `ConcurrentModificationException`. Lo correcto es `l.removeIf(x -> x == 2)`."
    },
-   "lesson": "java-colecciones"
+   "lesson": "java-colecciones",
+   "module": "0485"
   },
   {
    "id": "java-p25",
@@ -1702,7 +1771,8 @@
     "es": "Las listas usan el método `size()`; los arrays, el atributo `length`; los String, el método `length()`. Solución: `size()`.",
     "en": "Las listas usan el método `size()`; los arrays, el atributo `length`; los String, el método `length()`. Solución: `size()`."
    },
-   "lesson": "java-colecciones"
+   "lesson": "java-colecciones",
+   "module": "0485"
   },
   {
    "id": "java-p26",
@@ -1724,7 +1794,8 @@
     "es": "Para cada palabra, se suma 1 a su cuenta (0 si todavía no estaba).",
     "en": "Para cada palabra, se suma 1 a su cuenta (0 si todavía no estaba)."
    },
-   "lesson": "java-colecciones"
+   "lesson": "java-colecciones",
+   "module": "0485"
   },
   {
    "id": "java-p27",
@@ -1747,7 +1818,8 @@
     "es": "Borrar mientras se recorre con for-each lanza `ConcurrentModificationException`. `removeIf` hace el filtrado de forma segura. Corrección: `l.removeIf(x -> x % 2 == 0);`.",
     "en": "Borrar mientras se recorre con for-each lanza `ConcurrentModificationException`. `removeIf` hace el filtrado de forma segura. Corrección: `l.removeIf(x -> x % 2 == 0);`."
    },
-   "lesson": "java-colecciones"
+   "lesson": "java-colecciones",
+   "module": "0485"
   },
   {
    "id": "java-46",
@@ -1770,7 +1842,8 @@
     "es": "`v[5]` lanza la excepción: \"A\" no llega a imprimirse. La captura el catch (B), después va finally (C) y el programa sigue (D).",
     "en": "`v[5]` lanza la excepción: \"A\" no llega a imprimirse. La captura el catch (B), después va finally (C) y el programa sigue (D)."
    },
-   "lesson": "java-excepciones"
+   "lesson": "java-excepciones",
+   "module": "0485"
   },
   {
    "id": "java-47",
@@ -1793,7 +1866,8 @@
     "es": "`finally` se ejecuta antes de que el método termine, aunque haya un `return`. Luego el main imprime el valor devuelto.",
     "en": "`finally` se ejecuta antes de que el método termine, aunque haya un `return`. Luego el main imprime el valor devuelto."
    },
-   "lesson": "java-excepciones"
+   "lesson": "java-excepciones",
+   "module": "0485"
   },
   {
    "id": "java-48",
@@ -1816,7 +1890,8 @@
     "es": "`Exception` ya captura `ArithmeticException`, así que el segundo catch es inalcanzable: no compila. El orden correcto va de específico a general.",
     "en": "`Exception` ya captura `ArithmeticException`, así que el segundo catch es inalcanzable: no compila. El orden correcto va de específico a general."
    },
-   "lesson": "java-excepciones"
+   "lesson": "java-excepciones",
+   "module": "0485"
   },
   {
    "id": "java-49",
@@ -1839,7 +1914,8 @@
     "es": "`Exception` es **comprobada**: `main` tiene que capturarla con try/catch o declarar `throws Exception`. Si no, no compila.",
     "en": "`Exception` es **comprobada**: `main` tiene que capturarla con try/catch o declarar `throws Exception`. Si no, no compila."
    },
-   "lesson": "java-excepciones"
+   "lesson": "java-excepciones",
+   "module": "0485"
   },
   {
    "id": "java-50",
@@ -1862,7 +1938,8 @@
     "es": "La excepción propia guarda el mensaje con `super(mensaje)` y el catch lo recupera con `getMessage()`. La resta de dos double da 30.0.",
     "en": "La excepción propia guarda el mensaje con `super(mensaje)` y el catch lo recupera con `getMessage()`. La resta de dos double da 30.0."
    },
-   "lesson": "java-excepciones"
+   "lesson": "java-excepciones",
+   "module": "0485"
   },
   {
    "id": "java-p28",
@@ -1885,7 +1962,8 @@
     "es": "Dividir un entero entre 0 lanza `ArithmeticException`. Capturar una superclase (RuntimeException, Exception) también funciona, pero cuanto más específico, mejor. Solución: `ArithmeticException`.",
     "en": "Dividir un entero entre 0 lanza `ArithmeticException`. Capturar una superclase (RuntimeException, Exception) también funciona, pero cuanto más específico, mejor. Solución: `ArithmeticException`."
    },
-   "lesson": "java-excepciones"
+   "lesson": "java-excepciones",
+   "module": "0485"
   },
   {
    "id": "java-p29",
@@ -1910,7 +1988,8 @@
     "es": "El código que puede fallar va dentro del try; el catch recibe la excepción `e` y solo existe dentro de su bloque.",
     "en": "El código que puede fallar va dentro del try; el catch recibe la excepción `e` y solo existe dentro de su bloque."
    },
-   "lesson": "java-excepciones"
+   "lesson": "java-excepciones",
+   "module": "0485"
   },
   {
    "id": "java-p30",
@@ -1938,7 +2017,8 @@
     "es": "`Exception` es comprobada: quien llama a `validar` tiene que capturarla (o declararla con throws). Si no, no compila. Corrección: `try { validar(-1); } catch (Exception e) { System.out.println(e.getMessage()); }`.",
     "en": "`Exception` es comprobada: quien llama a `validar` tiene que capturarla (o declararla con throws). Si no, no compila. Corrección: `try { validar(-1); } catch (Exception e) { System.out.println(e.getMessage()); }`."
    },
-   "lesson": "java-excepciones"
+   "lesson": "java-excepciones",
+   "module": "0485"
   }
  ],
  "cards": []

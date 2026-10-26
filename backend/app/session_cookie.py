@@ -1,4 +1,4 @@
-"""Sesión de la web en una cookie HttpOnly (ADR-0033).
+"""Sesión de la web en una cookie HttpOnly.
 
 La web pide este modo con la cabecera `X-PLD-Session: cookie`. Entonces el token no viaja en el
 cuerpo de la respuesta: va en una cookie que JavaScript no puede leer, así que un XSS no puede
@@ -9,7 +9,7 @@ llevárselo para usarlo fuera del navegador (T1539). La sesión sobrevive ademá
 - CSRF: la cookie solo se acepta si la petición trae también la cabecera. Una cabecera propia
   obliga al navegador a preguntar antes (preflight CORS), y CORS solo deja pasar a la web.
 
-Los clientes sin esa cabecera (la app Android, scripts) siguen con `Authorization: Bearer`.
+Los clientes sin esa cabecera (scripts, tests) siguen con `Authorization: Bearer`.
 """
 
 from fastapi import Request, Response

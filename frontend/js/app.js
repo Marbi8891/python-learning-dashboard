@@ -46,7 +46,6 @@ import { badgesHtml, renderProfile } from "./profile.js";
 import { dashboardTitle, initDashboard, renderDashboard } from "./dashboard.js";
 import { initPrivate } from "./private.js";
 import { setQuizLesson } from "./quiz.js";
-import { initTutor, openTutor } from "./tutor.js";
 import { recordAttempt, restoreSession, setCompleted, state, subscribe } from "./store.js";
 
 hljs.registerLanguage("python", python);
@@ -55,14 +54,13 @@ const DATA_URL = "data/lessons.json";
 const ROUTE_PREFIX = "#/leccion/";
 const RESET_ROUTE = "#/restablecer";
 const HOME_ROUTE = "#/inicio"; // portada del curso PCAP
-const LEARN_ROUTE = "#/aprender"; // página principal: ¿qué estudio ahora? (ADR-0031)
+const LEARN_ROUTE = "#/aprender"; // página principal: ¿qué estudio ahora?
 const PROFILE_ROUTE = "#/perfil";
 const PCAP_ROUTE = "#/pcap";
 const CERTIFICATE_ROUTE = "#/certificado";
 const PRIVATE_ROUTE = "#/cuenta"; // antigua «Mi cuenta»: ahora es la sección «Mi perfil» del panel
-const PANEL_ROUTE = "#/panel"; // panel del alumno: #/panel/<sección> (ADR-0035)
+const PANEL_ROUTE = "#/panel"; // panel del alumno: #/panel/<sección>
 const DAW_ROUTE = "#/daw";
-const TUTOR_ROUTE = "#/tutor"; // Tutor Python: agente A2A del backend (ADR-0034)
 const mobile = window.matchMedia("(max-width: 900px)");
 
 const content = {
@@ -71,7 +69,6 @@ const content = {
   lessons: new Map(), // slug -> { ...lesson, module, index }
   order: [], // slugs en el orden de la ruta
   current: null, // lección abierta (o la siguiente recomendada, en el inicio)
-  lastLesson: "", // última lección abierta: el tutor la propone al preguntar
   view: "learn", // "learn" | "home" | "profile" | "pcap" | "daw" | "lesson" …
 };
 
@@ -383,13 +380,13 @@ const VIEWS = {
   learn: { element: "#learn-view", title: "Aprender · Python Learning Dashboard", focus: null, render: null },
   home: { element: "#home-view", title: "Curso PCAP · Python Learning Dashboard", focus: "#home-title", render: () => renderHome(content, defaultSlug()) },
   profile: { element: "#profile-view", title: "Mi aprendizaje · Python Learning Dashboard", focus: "#profile-title", render: () => renderProfile(content) },
-  // Panel del alumno (ADR-0035). Reúne lo que antes era «Mi cuenta»
+  // Panel del alumno. Reúne lo que antes era «Mi cuenta»
   private: { element: "#private-view", title: dashboardTitle, focus: "#private-title", render: () => renderDashboard(content, apiEnabled) },
   certificate: {
     element: "#certificate-view",
     title: "Certificado · Python Learning Dashboard",
     focus: "#certificate-title",
-    // #/certificado (PCAP) o #/certificado/<curso> (cursos de DAW, ADR-0025)
+    // #/certificado (PCAP) o #/certificado/<curso> (cursos de DAW)
     render: () =>
       location.hash.startsWith(`${CERTIFICATE_ROUTE}/`)
         ? renderCourseCertificate(location.hash.slice(CERTIFICATE_ROUTE.length + 1))
@@ -399,8 +396,6 @@ const VIEWS = {
   pcap: { element: "#pcap-view", title: "Examen PCAP · Python Learning Dashboard", focus: null, render: null },
   // Los cursos de DAW también se pintan solos (openDaw): cargan su banco y tienen tandas en curso
   daw: { element: "#daw-view", title: "Cursos de DAW · Python Learning Dashboard", focus: null, render: null },
-  // El tutor se pinta solo (openTutor): repintarlo borraría la conversación
-  tutor: { element: "#tutor-view", title: "Tutor Python · Python Learning Dashboard", focus: null, render: null },
 };
 
 /** Muestra una vista de página completa (portada o perfil) en lugar de la lección. */
@@ -425,7 +420,7 @@ function updatePrivateNav() {
 }
 
 /** Entrada del menú que corresponde a la vista actual. */
-const NAV_OF_VIEW = { home: "pcap-curso", lesson: "pcap-curso", certificate: "pcap-curso", pcap: "pcap", daw: "daw", profile: "progreso", private: "panel", tutor: "tutor" };
+const NAV_OF_VIEW = { home: "pcap-curso", lesson: "pcap-curso", certificate: "pcap-curso", pcap: "pcap", daw: "daw", profile: "progreso", private: "panel" };
 
 function updateSiteNav() {
   const key = content.view === "learn" ? learnNavKey(location.hash) : NAV_OF_VIEW[content.view];
@@ -590,11 +585,6 @@ function defaultSlug() {
   return content.order.find((slug) => !state.completed.has(slug)) ?? content.order[0];
 }
 
-/** Lecciones sobre las que se puede preguntar al tutor (las del curso, que conoce el backend). */
-function tutorLessons() {
-  return content.order.map((slug) => ({ slug, title: content.lessons.get(slug).title }));
-}
-
 function goTo(slug) {
   location.hash = `${ROUTE_PREFIX}${slug}`;
 }
@@ -626,11 +616,6 @@ function navigate({ moveFocus = true } = {}) {
   if (location.hash === PRIVATE_ROUTE) history.replaceState(null, "", `${PANEL_ROUTE}/perfil`);
   if (location.hash === PANEL_ROUTE || location.hash.startsWith(`${PANEL_ROUTE}/`)) {
     showPage("private", { moveFocus });
-    return;
-  }
-  if (location.hash === TUTOR_ROUTE) {
-    showPage("tutor", { moveFocus: false });
-    openTutor(tutorLessons(), { moveFocus, lessonSlug: content.lastLesson });
     return;
   }
   if (location.hash === CERTIFICATE_ROUTE || location.hash.startsWith(`${CERTIFICATE_ROUTE}/`)) {
@@ -667,7 +652,6 @@ function navigate({ moveFocus = true } = {}) {
   $("#lesson-view").hidden = false;
   updateSiteNav();
   content.current = slug;
-  content.lastLesson = slug;
   const lesson = currentLesson();
   renderLesson(lesson);
   updateSidebar();
@@ -751,7 +735,7 @@ function initSkipLink() {
   });
 }
 
-/** PWA: la web se puede instalar y funciona sin conexión tras la primera visita (ADR-0010). */
+/** PWA: la web se puede instalar y funciona sin conexión tras la primera visita. */
 function registerServiceWorker() {
   if (!window.PLD_CONFIG?.serviceWorker || !("serviceWorker" in navigator)) return;
   navigator.serviceWorker.register("sw.js").catch((error) => console.warn("Sin modo sin conexión:", error.message));
@@ -768,7 +752,6 @@ async function init() {
   initAccount({ toast: showToast });
   initPrivate({ toast: showToast, refresh: refreshProgressViews });
   initDashboard({ toast: showToast, refresh: refreshProgressViews });
-  initTutor();
   initPrefs();
 
   try {
@@ -794,7 +777,6 @@ async function init() {
     updateSidebar();
     updateCompleteButton();
     refreshProgressViews();
-    if (content.view === "tutor") openTutor(tutorLessons(), { moveFocus: false }); // al entrar o salir
   });
   $("#next-step").addEventListener("click", () => nextAction().run());
   $("#private-view").addEventListener("click", (event) => {

@@ -5,19 +5,43 @@
 - Los tests de cada ejercicio son Python válido.
 
 Las soluciones de referencia NO están en el repositorio para no dar las respuestas
-a quien estudia (ver ADR-0004).
+a quien estudia.
 """
 
 import json
 import re
+import subprocess
 import sys
 
 import pytest
 
 from app.config import DEFAULT_LESSONS_FILE
 
-sys.path.insert(0, str(DEFAULT_LESSONS_FILE.parents[1] / "py"))
+RUNNER_DIR = DEFAULT_LESSONS_FILE.parents[1] / "py"
+sys.path.insert(0, str(RUNNER_DIR))
 import runner  # noqa: E402  (frontend/py/runner.py)
+
+
+def run_like_browser(code: str, stdin: str) -> dict:
+    """En Pyodide los archivos se abren en UTF-8. En Windows, sin el modo UTF-8, Python usaría
+    cp1252, así que el ejemplo se ejecuta en otro proceso con `-X utf8`."""
+    if sys.flags.utf8_mode:
+        return runner.run_code(code, stdin)
+    script = (
+        "import json, sys; sys.path.insert(0, sys.argv[1]); import runner; "
+        "data = json.load(sys.stdin); r = runner.run_code(data['code'], data['stdin']); "
+        "print(json.dumps({'output': r['output'], 'error': r['error']}))"
+    )
+    done = subprocess.run(
+        [sys.executable, "-X", "utf8", "-c", script, str(RUNNER_DIR)],
+        input=json.dumps({"code": code, "stdin": stdin}),
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        check=True,
+    )
+    return json.loads(done.stdout.splitlines()[-1])
+
 
 LESSONS = [
     lesson
@@ -47,7 +71,7 @@ def test_module_and_lesson_slugs_are_safe_for_html_attributes_and_routes():
 )
 def test_example_runs_in_browser_engine(lesson, tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
-    result = runner.run_code(lesson["example_code"], lesson["example_stdin"])
+    result = run_like_browser(lesson["example_code"], lesson["example_stdin"])
     assert result["error"] is None, result["error"]
     assert result["output"], "El ejemplo debería mostrar algo"
 

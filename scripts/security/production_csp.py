@@ -1,4 +1,4 @@
-"""CSP de la web publicada sin los orígenes de desarrollo (PLD-SEC-003).
+"""CSP de la web publicada sin los orígenes de desarrollo.
 
 `frontend/index.html` permite `http://127.0.0.1:8000` y `http://localhost:8000` en `connect-src`
 porque en desarrollo y en los e2e la web (puerto 5500) habla con la API local (puerto 8000). En

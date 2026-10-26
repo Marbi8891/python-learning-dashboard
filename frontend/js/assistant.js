@@ -1,13 +1,10 @@
 /* Asistente de la lección: respuestas preparadas por lección, pista y siguiente tema.
-   No es una IA: todo el contenido está revisado en data/lessons.json. Para dudas abiertas, código
-   o errores, enlaza con el Tutor Python (#/tutor), que ya recibe esta lección como contexto. */
+   No es una IA: todo el contenido está revisado en data/lessons.json. */
 
 import { escapeHtml, renderMarkdown } from "./markdown.js";
-import { tutorAvailable } from "./tutor.js";
 
 const $ = (selector) => document.querySelector(selector);
 let context = { lesson: null, nextLesson: null, goTo: () => {} };
-let tutorReady = false;
 
 function addMessage(html, from) {
   const item = document.createElement("li");
@@ -23,7 +20,6 @@ function renderSuggestions() {
     (item, index) => `<button type="button" class="chip" data-faq="${index}">${escapeHtml(item.q)}</button>`,
   );
   chips.push('<button type="button" class="chip" data-hint>Dame una pista del ejercicio</button>');
-  if (tutorReady) chips.push('<a class="chip" href="#/tutor" data-tutor>Otra duda o tu código: Tutor Python →</a>');
   if (nextLesson) {
     chips.push(
       `<button type="button" class="chip chip--next" data-next>Siguiente tema: ${escapeHtml(nextLesson.title)} →</button>`,
@@ -48,10 +44,6 @@ function toggle(open) {
 }
 
 export function initAssistant() {
-  tutorAvailable.then((available) => {
-    tutorReady = available;
-    if (available && context.lesson) renderSuggestions();
-  });
   $("#assistant-toggle").addEventListener("click", () => toggle($("#assistant-panel").hidden));
   $("#assistant-close").addEventListener("click", () => toggle(false));
   $("#assistant-panel").addEventListener("keydown", (event) => {

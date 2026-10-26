@@ -1,4 +1,4 @@
-// Panel del alumno (#/panel, ADR-0035) contra el backend REAL (lo arranca playwright.config.js).
+// Panel del alumno (#/panel) contra el backend REAL (lo arranca playwright.config.js).
 const AxeBuilder = require("@axe-core/playwright").default;
 const { test, expect, uniqueEmail, openLesson } = require("./fixtures");
 
@@ -190,4 +190,26 @@ test("en el móvil, el panel cabe sin desplazamiento horizontal y se navega con 
   await page.keyboard.press("Enter");
   await expect(page).toHaveURL(/#\/panel\/logros$/);
   await expect(page.locator("#private-title")).toBeFocused();
+});
+
+test("Mi progreso: cada módulo de DAW separa preguntas practicadas y dominadas", async ({ page }) => {
+  // sql-01 acertada dos veces seguidas (dominada) · sql-02 un acierto suelto · sql-03 fallada
+  await page.addInitScript(() => {
+    if (sessionStorage.getItem("seeded")) return; // solo la primera carga: después manda la cuenta
+    sessionStorage.setItem("seeded", "1");
+    localStorage.setItem("pld:course:sql", JSON.stringify({ answers: { "sql-01": [true, true], "sql-02": [true], "sql-03": [false] } }));
+  });
+  await page.goto("/#/bienvenida");
+  await register(page, uniqueEmail());
+  await page.goto("/#/panel/progreso");
+  const modules = panel(page).locator("[data-module-progress]");
+  const bd = modules.locator("li", { hasText: "0484 · Bases de datos" });
+  await expect(bd).toContainText("Practicadas: 3 de 110");
+  await expect(bd).toContainText("Dominadas: 1 de 110");
+  await expect(modules.locator("li", { hasText: "0485 · Programación" })).toContainText("Practicadas: 0 de 243");
+  await expect(modules).toContainText("13 módulos del ciclo aún no tienen preguntas en la plataforma");
+  await expect(panel(page).getByText("no una calificación del centro")).toBeVisible();
+  await audit(page);
+  await bd.getByRole("link", { name: "0484 · Bases de datos" }).click();
+  await expect(page.locator("#daw-title")).toHaveText("Bases de datos");
 });

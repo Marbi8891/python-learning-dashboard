@@ -258,7 +258,7 @@
 }
 .account-card__meta { color: var(--color-text-muted); margin: var(--space-2) 0; overflow-wrap: anywhere; }
 
-/* ---- Mi cuenta ampliada (ADR-0025) ---- */
+/* ---- Mi cuenta ampliada ---- */
 .section-subtitle { font-size: 1.05rem; margin: var(--space-4) 0 var(--space-2); }
 .goal { display: grid; gap: var(--space-2); max-width: 32rem; margin-bottom: var(--space-4); }
 .goal label { display: grid; gap: var(--space-1); font-weight: 600; }

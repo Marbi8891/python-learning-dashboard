@@ -23,11 +23,6 @@ os.environ.update(
     # SMTP "configurado" para probar la recuperación: el envío falla en segundo plano y se registra
     SMTP_HOST="127.0.0.1",
     SMTP_PORT="9",
-    # Tutor Python (ADR-0034) con el modelo simulado: sin API key ni servicios externos
-    A2A_ENABLED="true",
-    A2A_MOCK_MODEL="true",
-    # Tutor híbrido (ADR-0038): la IA avanzada, simulada (sin OpenAI ni clave)
-    A2A_ADVANCED_PROVIDER="mock",
 )
 
 import uvicorn  # noqa: E402

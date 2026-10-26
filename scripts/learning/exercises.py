@@ -1,5 +1,5 @@
 # ruff: noqa: E501
-"""Ejercicios del núcleo educativo, etiquetados por concepto y por error típico (ADR-0031).
+"""Ejercicios del núcleo educativo, etiquetados por concepto y por error típico.
 
 Tipos (`kind`):
 - choice: elegir una opción. Cada opción incorrecta puede llevar el error que delata.
@@ -1418,7 +1418,7 @@ E += [
         "El desempaquetado reparte la tupla en x e y. Un conjunto no guarda repetidos: {1, 2, 3}.",
         traps={"7\n6": "tuplas-conjuntos.set-orden"},
     ),
-    # tup-05 a tup-07: comprobaciones del tutor para «diferencia entre lista y tupla» (ADR-0038)
+    # tup-05 a tup-07: diferencia entre lista y tupla
     output(
         "tup-05",
         "tuplas-conjuntos",
@@ -2438,7 +2438,7 @@ E += [
     ),
 ]
 
-# ================================================================== PREPARACIÓN DAW (fase 2)
+# ================================================================== PREPARACIÓN DAW
 # Más ejercicios con formato de examen: encontrar errores, ordenar algoritmos y problemas completos.
 E += [
     bug(

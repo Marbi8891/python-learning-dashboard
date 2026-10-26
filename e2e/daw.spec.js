@@ -1,4 +1,4 @@
-// Cursos de DAW en la web (ADR-0021): catálogo, teoría, práctica con los tres tipos de ejercicio
+// Cursos de DAW en la web: catálogo, teoría, práctica con los tres tipos de ejercicio
 // y progreso compartido con la app a través de la cuenta.
 const AxeBuilder = require("@axe-core/playwright").default;
 const { test, expect, uniqueEmail } = require("./fixtures");
@@ -6,7 +6,7 @@ const { test, expect, uniqueEmail } = require("./fixtures");
 const API = "http://127.0.0.1:8000";
 
 test("el catálogo muestra los cinco cursos y se entra en uno", async ({ page }) => {
-  // #/daw es la Preparación DAW (ADR-0031); el catálogo de cursos sigue en #/daw/cursos
+  // #/daw es la Preparación DAW; el catálogo de cursos sigue en #/daw/cursos
   await page.goto("/#/daw");
   await page.getByRole("link", { name: "Otros módulos de DAW" }).click();
   await expect(page).toHaveURL(/#\/daw\/cursos$/);
@@ -68,11 +68,11 @@ test("ordenar líneas: se añaden y quitan pulsando, y se corrige", async ({ pag
 test("el progreso de un curso se guarda en la cuenta y conserva lo que haya puesto la app", async ({ page, request }) => {
   const email = uniqueEmail();
   const password = "contraseña-e2e-123";
-  await request.post(`${API}/api/auth/register`, { data: { email, password, display_name: "Ana", accept_privacy: true } });
-  const login = await request.post(`${API}/api/auth/login`, { form: { username: email, password } });
+  await request.post(`${API}/api/v1/auth/register`, { data: { email, password, display_name: "Ana", accept_privacy: true } });
+  const login = await request.post(`${API}/api/v1/auth/login`, { form: { username: email, password } });
   const headers = { Authorization: `Bearer ${(await login.json()).access_token}` };
   // La app ya había respondido una pregunta y guarda un campo que la web no conoce
-  await request.put(`${API}/api/course-state/sql`, { headers, data: { data: { answers: { "sql-01": [true] }, extra: 1 } } });
+  await request.put(`${API}/api/v1/course-state/sql`, { headers, data: { data: { answers: { "sql-01": [true] }, extra: 1 } } });
 
   await page.goto("/#/daw/sql/practica/bd-ud1");
   await page.getByRole("button", { name: "Iniciar sesión" }).click();
@@ -84,9 +84,9 @@ test("el progreso de un curso se guarda en la cuenta y conserva lo que haya pues
   await page.locator(".quiz__option input").first().check();
   await page.getByRole("button", { name: "Comprobar" }).click();
   await expect
-    .poll(async () => Object.keys((await (await request.get(`${API}/api/course-state/sql`, { headers })).json()).data.answers ?? {}).length)
+    .poll(async () => Object.keys((await (await request.get(`${API}/api/v1/course-state/sql`, { headers })).json()).data.answers ?? {}).length)
     .toBe(2);
-  const remote = (await (await request.get(`${API}/api/course-state/sql`, { headers })).json()).data;
+  const remote = (await (await request.get(`${API}/api/v1/course-state/sql`, { headers })).json()).data;
   expect(remote.answers["sql-01"]).toEqual([true]);
   expect(remote.extra).toBe(1);
 });

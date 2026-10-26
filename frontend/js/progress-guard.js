@@ -1,6 +1,6 @@
 /* Limpieza del progreso que llega de fuera: localStorage (lo puede tocar cualquiera con acceso al
    navegador) o la copia de la cuenta. Deja solo los tipos esperados para que ningún dato
-   manipulado acabe convertido en HTML (ADR-0022). */
+   manipulado acabe convertido en HTML. */
 
 const DAY = /^\d{4}-\d{2}-\d{2}$/;
 const ISO = /^\d{4}-\d{2}-\d{2}T[\d:.+-]+Z?$/;
@@ -51,7 +51,7 @@ export function cleanProgress(value) {
     const date = value.plan?.examDate;
     const goal = value.plan?.dailyGoal;
     clean.plan = { examDate: typeof date === "string" && DAY.test(date) ? date : null };
-    // Meta diaria de «Mi cuenta» (ADR-0025): solo en el plan del PCAP, que comparten todos los cursos
+    // Meta diaria de «Mi cuenta»: solo en el plan del PCAP, que comparten todos los cursos
     if (Number.isInteger(goal) && goal >= 1 && goal <= 200) clean.plan.dailyGoal = goal;
   }
   return clean;

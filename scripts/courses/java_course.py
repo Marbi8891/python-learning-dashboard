@@ -1,6 +1,6 @@
 # ruff: noqa: E501
 # (contenido didáctico: los textos largos van en una sola línea para poder leerlos y editarlos)
-"""Curso de Java (módulo Programación de DAW) para la app Android (ADR-0016).
+"""Curso de Java (módulo Programación de DAW) para la web.
 
 Cada pregunta de código se compila y ejecuta con el `java` del sistema (Java 17 en la CI) y su salida
 se compara con la esperada.
@@ -80,7 +80,7 @@ def tq(id: str, q: str, options: list[str], answer: int, explain: str) -> Q:
 
 
 def fq(id: str, q: str, code: str, accept: list[str], expect: str, explain: str) -> Q:
-    """Completar el hueco `___` (ADR-0017): cada respuesta aceptada se prueba ejecutándola."""
+    """Completar el hueco `___`: cada respuesta aceptada se prueba ejecutándola."""
     return Q(
         id=id,
         q=q,
@@ -1471,7 +1471,7 @@ En el main, pruébalo con `"25"`, `"abc"` y `"-3"` y captura cada error mostrand
 )
 
 
-# ---------------------------------------------------------------- ejercicios de escribir código (ADR-0017)
+# ---------------------------------------------------------------- ejercicios de escribir código
 
 MAIN_PUNTO = """
 class Punto {
@@ -1851,4 +1851,4 @@ BLOCKS = [
 ]
 
 if __name__ == "__main__":
-    main("java", BLOCKS, run_java, check_example)
+    main("java", BLOCKS, run_java, check_example, module="0485")

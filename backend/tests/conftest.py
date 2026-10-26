@@ -4,16 +4,6 @@ import os
 
 # Debe definirse antes de importar la app (la configuración se lee una sola vez)
 os.environ.setdefault("JWT_SECRET", "secreto-solo-para-tests-" + "x" * 32)
-# Agentes A2A con el modelo simulado (ADR-0034): se prueban junto al resto de la API
-os.environ.setdefault("A2A_ENABLED", "true")
-os.environ.setdefault("A2A_MOCK_MODEL", "true")
-# Los tests nunca usan una API key real (los del proveedor simulan la API de Anthropic)
-os.environ.pop("ANTHROPIC_API_KEY", None)
-# Tutor híbrido (ADR-0038): la IA avanzada, simulada (sin OpenAI ni clave). Los tests de OpenAI
-# simulan su API con un transporte HTTP falso
-os.environ.setdefault("A2A_ADVANCED_PROVIDER", "mock")
-os.environ.pop("OPENAI_API_KEY", None)
-
 import pytest  # noqa: E402
 from fastapi.testclient import TestClient  # noqa: E402
 from sqlalchemy import create_engine  # noqa: E402
@@ -45,12 +35,7 @@ def client():
             yield db
 
     app.dependency_overrides[get_db] = override_get_db
-    a2a_limiters = (
-        app.state.a2a_limiter,
-        app.state.a2a_budget.per_user,
-        app.state.a2a_budget.overall,
-    )
-    for limiter in (auth_limiter, login_failures, reset_requests, *a2a_limiters):
+    for limiter in (auth_limiter, login_failures, reset_requests):
         limiter.reset()
     with TestClient(app) as test_client:
         test_client.engine = engine
@@ -62,13 +47,13 @@ def client():
 
 def register(client, email="ana@example.com", password=PASSWORD, name="Ana"):
     return client.post(
-        "/api/auth/register",
+        "/api/v1/auth/register",
         json={"email": email, "password": password, "display_name": name, "accept_privacy": True},
     )
 
 
 def login(client, email="ana@example.com", password=PASSWORD):
-    return client.post("/api/auth/login", data={"username": email, "password": password})
+    return client.post("/api/v1/auth/login", data={"username": email, "password": password})
 
 
 @pytest.fixture

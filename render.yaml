@@ -1,5 +1,5 @@
 # Blueprint de Render: backend (Docker) en Frankfurt (UE).
-# La base de datos es PostgreSQL en Neon (plan gratuito permanente, región UE): ver ADR-0008.
+# La base de datos es PostgreSQL en Neon (plan gratuito permanente, región UE).
 # Uso: render.com → New → Blueprint → elige este repositorio. Guía: docs/DEPLOY.md
 # Plan gratuito de Render (sept. 2026): el servicio se suspende tras 15 min sin tráfico
 # y tarda ~1 min en despertar; 750 h de instancia al mes.

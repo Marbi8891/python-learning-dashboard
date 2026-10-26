@@ -98,7 +98,7 @@ async function setupPasswordRecovery() {
     : "La recuperación por email aún no está activa.";
 }
 
-/** La API deja la sesión en una cookie HttpOnly (ADR-0033). Si el navegador no la guarda
+/** La API deja la sesión en una cookie HttpOnly. Si el navegador no la guarda
     (bloquea las cookies de terceros, como Safari), se pide el token y vive solo en memoria. */
 async function login(email, password) {
   const form = { username: email, password };

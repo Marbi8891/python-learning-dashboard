@@ -15,7 +15,6 @@ from app.models import (
     LessonProgress,
     PasswordResetToken,
     PcapState,
-    TutorUsage,
     User,
 )
 from app.password_policy import weakness
@@ -45,7 +44,7 @@ def read_me(user: CurrentUser) -> User:
 
 @router.patch("", response_model=UserOut)
 def update_me(data: ProfileUpdate, user: CurrentUser, request: Request, db: DbSession) -> User:
-    """Cambiar el nombre que se muestra (ADR-0025)."""
+    """Cambiar el nombre que se muestra."""
     name = data.display_name.strip()
     if not name:
         raise HTTPException(status_code=422, detail="El nombre no puede estar vacío.")
@@ -61,7 +60,7 @@ def change_password(
     data: PasswordChange, user: CurrentUser, request: Request, response: Response, db: DbSession
 ) -> Token:
     """Cambiar la contraseña sabiendo la actual. Cierra las demás sesiones y devuelve un token
-    nuevo para seguir en esta (ADR-0025)."""
+    nuevo para seguir en esta."""
     if not verify_password(data.current_password, user.password_hash):
         record(Event.LOGIN_FAILED, request, user=user.id, action="password")
         raise HTTPException(
@@ -111,20 +110,6 @@ def export_my_data(user: CurrentUser, db: DbSession) -> UserExport:
             for c in db.scalars(select(CourseState).where(CourseState.user_id == user.id))
         },
         activity=[ActivityOut.model_validate(e) for e in activity.recent(db, user.id)],
-        tutor_usage=[
-            {
-                "day": row.day.isoformat(),
-                "mode": row.mode,
-                "requests": row.requests,
-                "input_tokens": row.input_tokens,
-                "output_tokens": row.output_tokens,
-            }
-            for row in db.scalars(
-                select(TutorUsage)
-                .where(TutorUsage.user_id == user.id)
-                .order_by(TutorUsage.day, TutorUsage.mode)
-            )
-        ],
         exported_at=datetime.now(UTC),
     )
 
@@ -176,7 +161,6 @@ def delete_my_account(
         PcapState,
         CourseState,
         AccountEvent,
-        TutorUsage,
     ):
         db.execute(delete(model).where(model.user_id == user.id))
     user_id = user.id

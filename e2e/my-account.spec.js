@@ -1,4 +1,4 @@
-// «Mi cuenta» ampliada (ADR-0025), hoy dentro del panel del alumno (ADR-0035): plan de estudio,
+// «Mi cuenta» ampliada, hoy dentro del panel del alumno: plan de estudio,
 // progreso de todos los cursos, logros y certificados, perfil y seguridad. Contra el backend real.
 const AxeBuilder = require("@axe-core/playwright").default;
 const { test, expect, uniqueEmail } = require("./fixtures");
@@ -8,7 +8,7 @@ const PASSWORD = "contraseña-e2e-123";
 
 async function signIn(page, request, section = "perfil") {
   const email = uniqueEmail();
-  await request.post(`${API}/api/auth/register`, { data: { email, password: PASSWORD, display_name: "Ana", accept_privacy: true } });
+  await request.post(`${API}/api/v1/auth/register`, { data: { email, password: PASSWORD, display_name: "Ana", accept_privacy: true } });
   await page.goto("/#/inicio");
   await page.getByRole("button", { name: "Iniciar sesión" }).click();
   await page.locator("#login-form").getByLabel("Email").fill(email);
@@ -35,7 +35,7 @@ test("plan de estudio: fecha de examen por curso y meta diaria que se guardan", 
 
   await page.getByLabel("Meta diaria").selectOption("30");
   await expect(page.locator("#toast")).toContainText("Meta diaria: 30 preguntas");
-  // La sesión sigue tras recargar (cookie HttpOnly, ADR-0033): lo que se ve sale de la cuenta
+  // La sesión sigue tras recargar (cookie HttpOnly): lo que se ve sale de la cuenta
   await page.reload();
   await expect(page.locator("#account-label")).toHaveText("Ana");
   await page.goto("/#/panel/planificacion");
@@ -85,7 +85,7 @@ test("perfil y seguridad: cambiar el nombre, la contraseña y ver la actividad",
   // Esta sesión sigue abierta y la actividad lo refleja
   await expect(page.locator("#account-activity")).toContainText("Contraseña cambiada desde Mi panel");
   await expect(page.locator("#account-label")).toHaveText("Ana María");
-  const old = await request.post(`${API}/api/auth/login`, { form: { username: email, password: PASSWORD } });
+  const old = await request.post(`${API}/api/v1/auth/login`, { form: { username: email, password: PASSWORD } });
   expect(old.status()).toBe(401);
 });
 

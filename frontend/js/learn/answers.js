@@ -1,4 +1,4 @@
-/* Corrección de las respuestas del núcleo educativo (ADR-0031).
+/* Corrección de las respuestas del núcleo educativo.
    Funciones puras: no tocan el DOM ni el almacenamiento, así que se prueban con `node --test`.
    Los ejercicios de escribir código (`code`) los corrige runner.py en el Worker de Pyodide;
    aquí solo se traduce su resultado (`codeResult`). */
@@ -13,7 +13,7 @@ export function normalizeOutput(text) {
     .replace(/\n+$/, "");
 }
 
-/** Código de un hueco: sin espacios y sin el ";" final (mismas reglas que los cursos de DAW, ADR-0017). */
+/** Código de un hueco: sin espacios y sin el ";" final (mismas reglas que los cursos de DAW). */
 export const normalizeFill = (code) => String(code ?? "").replace(/\s+/g, "").replace(/;$/, "");
 
 /** ¿Hay respuesta suficiente para corregir? Si no, devuelve el aviso para el alumno. */

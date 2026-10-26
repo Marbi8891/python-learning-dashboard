@@ -2,14 +2,14 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <!-- Seguridad (ADR-0022). GitHub Pages no permite cabeceras propias: la política va en <meta>.
+  <!-- Seguridad. GitHub Pages no permite cabeceras propias: la política va en <meta>.
        Si activas GoatCounter (config.js), añade https://gc.zgo.at a script-src y tu
        https://<código>.goatcounter.com a connect-src e img-src. -->
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://accounts.google.com/gsi/client https://cdn.jsdelivr.net/pyodide/v314.0.7/full/ 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline' https://accounts.google.com/gsi/style; img-src 'self' data:; font-src 'self'; connect-src 'self' https://pld-api.onrender.com https://accounts.google.com/gsi/ http://127.0.0.1:8000 http://localhost:8000 https://cdn.jsdelivr.net/pyodide/v314.0.7/full/; frame-src https://accounts.google.com; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Python Learning Dashboard · Aprende programación entendiendo lo que haces</title>
-  <meta name="description" content="Aprende a programar en Python paso a paso: teoría con ejemplos, ejercicios corregidos con la explicación de cada error, repaso espaciado, tutor y preparación de Programación de DAW. Gratuito y de código abierto.">
+  <meta name="description" content="Aprende a programar en Python paso a paso: teoría con ejemplos, ejercicios corregidos con la explicación de cada error, repaso espaciado y preparación de Programación de DAW. Gratuito y de código abierto.">
   <meta name="theme-color" content="#0c0d10">
   <link rel="canonical" href="https://marbi8891.github.io/python-learning-dashboard/">
   <meta property="og:type" content="website">
@@ -105,10 +105,6 @@
             <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
             <span class="site-nav__text">Progreso<span class="site-nav__hint" aria-hidden="true">Lo que ya dominas</span></span>
           </a>
-          <a href="#/tutor" data-nav="tutor" id="tutor-nav" hidden>
-            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 5h16v11H9l-5 4zM8 9h8M8 12h5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            <span class="site-nav__text">Tutor Python<span class="site-nav__hint" aria-hidden="true">Dudas y errores</span></span>
-          </a>
           <p class="site-nav__group" id="nav-more">Otros cursos</p>
           <a href="#/inicio" data-nav="pcap-curso" class="site-nav__secondary">
             <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 11l8-6l8 6v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -175,7 +171,7 @@
 
     <!-- ============ CONTENIDO PRINCIPAL ============ -->
     <main id="main" class="main" tabindex="-1">
-      <!-- ============ NÚCLEO EDUCATIVO: Aprender, Teoría, Practicar, Progreso y sesiones (ADR-0031) ============ -->
+      <!-- ============ NÚCLEO EDUCATIVO: Aprender, Teoría, Practicar, Progreso y sesiones ============ -->
       <section class="page learn" id="learn-view" aria-labelledby="learn-title" hidden></section>
 
       <!-- ============ CURSO PCAP (portada) ============ -->
@@ -193,10 +189,8 @@
       <!-- ============ MI APRENDIZAJE ============ -->
       <section class="page profile" id="profile-view" aria-labelledby="profile-title" hidden></section>
 
-      <!-- ============ TUTOR PYTHON (agente A2A, ADR-0034) ============ -->
-      <section class="page profile" id="tutor-view" aria-labelledby="tutor-title" hidden></section>
 
-      <!-- ============ MI PANEL (panel del alumno, ADR-0035; antes «Mi cuenta») ============ -->
+      <!-- ============ MI PANEL (panel del alumno; antes «Mi cuenta») ============ -->
       <section class="page profile" id="private-view" aria-labelledby="private-title" hidden></section>
 
       <!-- ============ LECCIÓN: contenido | consola ============ -->

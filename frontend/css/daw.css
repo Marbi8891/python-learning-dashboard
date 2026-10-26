@@ -1,4 +1,4 @@
-/* Cursos de DAW (ADR-0021). Reutiliza el panel, los bloques y las preguntas de la zona PCAP. */
+/* Cursos de DAW. Reutiliza el panel, los bloques y las preguntas de la zona PCAP. */
 
 .daw-crumb {
   margin: 0 0 var(--space-3);
@@ -176,4 +176,85 @@
 
 .daw-line code {
   font-family: var(--font-mono);
+}
+
+/* ---------- Currículo oficial (curriculum.js) ---------- */
+
+.curr-notice {
+  margin: 0 0 var(--space-5);
+  padding: var(--space-3) var(--space-4);
+  border-left: 3px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  background: var(--color-primary-soft);
+}
+
+/* Los nombres de módulo son largos: en esta tabla sí pueden partirse en varias líneas */
+.curr-table th[scope="row"] {
+  min-width: 16rem;
+  white-space: normal;
+}
+
+/* El estado se lee en el texto; el color solo lo refuerza */
+.curr-status {
+  display: inline-block;
+  padding: 0 var(--space-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+}
+
+.curr-status--oficial {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.curr-status--pendiente {
+  color: var(--color-text-muted);
+}
+
+.curr-facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: var(--space-3);
+  margin: 0 0 var(--space-5);
+}
+
+.curr-facts dt {
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+}
+
+.curr-facts dd {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.curr-label {
+  margin: var(--space-3) 0 var(--space-2);
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.curr-criteria {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.curr-criteria li {
+  margin-bottom: var(--space-2);
+}
+
+.curr-letter {
+  font-weight: 600;
+}
+
+.curr-muted {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.curr-sources {
+  padding-left: 1.4em;
 }

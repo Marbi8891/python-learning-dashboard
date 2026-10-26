@@ -1,5 +1,5 @@
 /* Vista de una sesión de estudio (#/sesion): concepto → ejemplo → intento → corrección →
-   explicación → nuevo intento → resumen con los errores explicados (ADR-0031). */
+   explicación → nuevo intento → resumen con los errores explicados. */
 
 import { pythonRunner } from "../console.js";
 import { codeResult, grade, missingAnswer } from "./answers.js";
