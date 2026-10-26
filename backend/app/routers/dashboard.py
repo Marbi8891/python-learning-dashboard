@@ -1,4 +1,4 @@
-"""Panel del alumno (ADR-0035): resumen de su actividad guardada en la cuenta.
+"""Panel del alumno: resumen de su actividad guardada en la cuenta.
 
 Reúne en una sola petición lo que el panel necesita y solo está en el servidor (lecciones
 completadas con su fecha, intentos de ejercicios, documentos sincronizados y el método del último

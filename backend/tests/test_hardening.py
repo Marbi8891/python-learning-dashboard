@@ -1,4 +1,4 @@
-"""Endurecimiento de seguridad (ADR-0022): IP real, bloqueos, sesiones, tamaños y datos."""
+"""Endurecimiento de seguridad: IP real, bloqueos, sesiones, tamaños y datos."""
 
 from datetime import UTC, datetime, timedelta
 
@@ -17,7 +17,7 @@ def test_forged_forwarded_for_does_not_bypass_ip_limit(client, monkeypatch):
     codes = []
     for n in range(7):
         response = client.post(
-            "/api/auth/login",
+            "/api/v1/auth/login",
             data={"username": "x@example.com", "password": "nope"},
             headers={
                 "X-Forwarded-For": f"10.0.0.{n}, 203.0.113.7"
@@ -30,7 +30,7 @@ def test_forged_forwarded_for_does_not_bypass_ip_limit(client, monkeypatch):
 def test_without_trusted_proxy_the_header_is_ignored(client):
     for n in range(5):
         client.post(
-            "/api/auth/login",
+            "/api/v1/auth/login",
             data={"username": "x@example.com", "password": "nope"},
             headers={"X-Forwarded-For": f"10.0.0.{n}"},
         )
@@ -70,9 +70,9 @@ def test_old_password_hashes_are_upgraded_on_login(client):
 
 def test_logout_all_invalidates_every_session(client, auth_headers):
     other = {"Authorization": f"Bearer {login(client).json()['access_token']}"}
-    assert client.post("/api/auth/logout-all", headers=auth_headers).status_code == 204
-    assert client.get("/api/users/me", headers=auth_headers).status_code == 401
-    assert client.get("/api/users/me", headers=other).status_code == 401
+    assert client.post("/api/v1/auth/logout-all", headers=auth_headers).status_code == 204
+    assert client.get("/api/v1/users/me", headers=auth_headers).status_code == 401
+    assert client.get("/api/v1/users/me", headers=other).status_code == 401
     auth_limiter.reset()
     assert login(client).status_code == 200  # se puede volver a entrar
 
@@ -91,7 +91,7 @@ def test_tokens_without_expiry_are_rejected(client):
 def test_oversized_bodies_are_rejected_before_parsing(client, auth_headers):
     huge = b'{"data": {"x": "' + b"a" * (get_settings().max_body_bytes + 10) + b'"}}'
     declared = client.put(
-        "/api/pcap-state",
+        "/api/v1/pcap-state",
         content=huge,
         headers={**auth_headers, "Content-Type": "application/json"},
     )
@@ -102,7 +102,7 @@ def test_oversized_bodies_are_rejected_before_parsing(client, auth_headers):
             yield b"a" * 10_000
 
     streamed = client.put(
-        "/api/pcap-state",
+        "/api/v1/pcap-state",
         content=chunks(),
         headers={**auth_headers, "Content-Type": "application/json"},
     )
@@ -110,12 +110,14 @@ def test_oversized_bodies_are_rejected_before_parsing(client, auth_headers):
 
 
 def test_small_bodies_still_work(client, auth_headers):
-    response = client.put("/api/pcap-state", json={"data": {"answers": {}}}, headers=auth_headers)
+    response = client.put(
+        "/api/v1/pcap-state", json={"data": {"answers": {}}}, headers=auth_headers
+    )
     assert response.status_code == 200
 
 
 def test_personal_data_is_never_cached(client, auth_headers):
-    response = client.get("/api/users/me/export", headers=auth_headers)
+    response = client.get("/api/v1/users/me/export", headers=auth_headers)
     assert response.headers["Cache-Control"] == "no-store"
 
 
@@ -131,7 +133,7 @@ def test_reset_emails_are_limited_per_account(client, monkeypatch):
     for _ in range(5):
         auth_limiter.reset()
         response = client.post(
-            "/api/auth/password-reset/request", json={"email": "ana@example.com"}
+            "/api/v1/auth/password-reset/request", json={"email": "ana@example.com"}
         )
         assert response.status_code == 202  # la respuesta no cambia
     assert len(sent) == 3
@@ -139,7 +141,7 @@ def test_reset_emails_are_limited_per_account(client, monkeypatch):
 
 def test_only_recent_attempts_are_kept(client, auth_headers, monkeypatch):
     monkeypatch.setattr(get_settings(), "attempts_kept_per_lesson", 3)
-    url = "/api/lessons/variables/attempts"
+    url = "/api/v1/lessons/variables/attempts"
     for n in range(5):
         client.post(url, json={"code": f"print({n})", "passed": False}, headers=auth_headers)
     with client.engine.connect() as conn:
@@ -184,5 +186,5 @@ def test_body_limit_also_protects_apps_that_do_not_catch_errors():
         sent.append(message)
 
     guarded = BodySizeLimit(reader, max_bytes=100)
-    asyncio.run(guarded({"type": "http", "path": "/api/x", "headers": []}, receive, send))
+    asyncio.run(guarded({"type": "http", "path": "/api/v1/x", "headers": []}, receive, send))
     assert [m.get("status") for m in sent if m["type"] == "http.response.start"] == [413]

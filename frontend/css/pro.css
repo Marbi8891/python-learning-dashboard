@@ -63,7 +63,7 @@
   --shadow: rgb(15 23 42 / .08);
 }
 
-/* Sin degradados ni efectos de cristal (ADR-0031): el contenido es el protagonista */
+/* Sin degradados ni efectos de cristal: el contenido es el protagonista */
 body {
   background: var(--color-bg);
   letter-spacing: -.005em;

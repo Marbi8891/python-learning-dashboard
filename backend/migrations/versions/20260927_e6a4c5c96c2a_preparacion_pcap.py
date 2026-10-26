@@ -19,7 +19,7 @@ depends_on: str | Sequence[str] | None = None
 
 
 def upgrade() -> None:
-    """Preparación del PCAP guardada en la cuenta (ADR-0010)."""
+    """Preparación del PCAP guardada en la cuenta."""
     op.create_table(
         "pcap_states",
         sa.Column("user_id", sa.Integer(), nullable=False),

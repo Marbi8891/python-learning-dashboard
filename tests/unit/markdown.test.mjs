@@ -10,7 +10,7 @@ test("escapa siempre el HTML, también dentro del código y de las tablas", () =
 
 test("bloques de código con ```", () => {
   assert.equal(renderMarkdown("Texto\n\n```\nx = 1\n  y\n```"), '<p>Texto</p><pre class="md-code" tabindex="0"><code>x = 1\n  y</code></pre>');
-  // El lenguaje del bloque se marca (solo letras y números): el tutor ofrece ejecutar los de Python
+  // El lenguaje del bloque se marca (solo letras y números)
   assert.equal(renderMarkdown("```python\nprint(1)\n```"), '<pre class="md-code" tabindex="0" data-lang="python"><code>print(1)</code></pre>');
   assert.equal(renderMarkdown('```py" onclick="x\nprint(1)\n```'), '<pre class="md-code" tabindex="0"><code>print(1)</code></pre>');
 });

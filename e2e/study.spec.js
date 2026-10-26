@@ -81,18 +81,18 @@ test("la preparación del PCAP se guarda en la cuenta y llega a otro dispositivo
   await other.close();
 });
 
-test("la web conserva el progreso de la app Android guardado en la cuenta", async ({ page, request }) => {
-  // ADR-0018: la app guarda su XP, racha y ruta en el objeto «app»; la web no debe borrarlo al guardar
+test("la web conserva el progreso guardado en la cuenta desde otro dispositivo", async ({ page, request }) => {
+  // Otro cliente guarda su XP, racha y ruta en el objeto «app»; la web no debe borrarlo al guardar
   const api = "http://127.0.0.1:8000";
   const email = uniqueEmail();
   const password = "contraseña-e2e-123";
-  await request.post(`${api}/api/auth/register`, {
+  await request.post(`${api}/api/v1/auth/register`, {
     data: { email, password, display_name: "Ana", accept_privacy: true },
   });
-  const login = await request.post(`${api}/api/auth/login`, { form: { username: email, password } });
+  const login = await request.post(`${api}/api/v1/auth/login`, { form: { username: email, password } });
   const headers = { Authorization: `Bearer ${(await login.json()).access_token}` };
   const app = { done: { "variables-1": { perfect: true, date: "2026-09-27" } }, daily: { "2026-09-27": 15 }, goal: 30 };
-  await request.put(`${api}/api/pcap-state`, { headers, data: { data: { answers: { "oop-01": [true] }, app } } });
+  await request.put(`${api}/api/v1/pcap-state`, { headers, data: { data: { answers: { "oop-01": [true] }, app } } });
 
   await page.goto("/#/pcap/fichas");
   await page.getByRole("button", { name: "Iniciar sesión" }).click();
@@ -104,9 +104,9 @@ test("la web conserva el progreso de la app Android guardado en la cuenta", asyn
   await page.getByRole("button", { name: "Ver respuesta" }).click();
   await page.getByRole("button", { name: "Lo sé →" }).click();
   await expect
-    .poll(async () => (await (await request.get(`${api}/api/pcap-state`, { headers })).json()).data.known?.length ?? 0)
+    .poll(async () => (await (await request.get(`${api}/api/v1/pcap-state`, { headers })).json()).data.known?.length ?? 0)
     .toBe(1);
-  expect((await (await request.get(`${api}/api/pcap-state`, { headers })).json()).data.app).toEqual(app);
+  expect((await (await request.get(`${api}/api/v1/pcap-state`, { headers })).json()).data.app).toEqual(app);
 });
 
 test("certificado: requisitos y certificado imprimible", async ({ page, request }) => {

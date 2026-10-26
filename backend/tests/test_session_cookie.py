@@ -1,4 +1,4 @@
-"""Sesión de la web en una cookie HttpOnly (ADR-0033)."""
+"""Sesión de la web en una cookie HttpOnly."""
 
 from app.session_cookie import COOKIE_NAME
 from tests.conftest import PASSWORD, register
@@ -38,10 +38,10 @@ def test_web_login_sets_an_httponly_cookie_and_returns_no_token(client):
 
 
 def test_clients_without_the_header_still_get_a_bearer_token(client):
-    # La app Android y los scripts no cambian
+    # Los scripts no cambian
     register(client)
     response = client.post(
-        "/api/auth/login", data={"username": "ana@example.com", "password": PASSWORD}
+        "/api/v1/auth/login", data={"username": "ana@example.com", "password": PASSWORD}
     )
     assert response.json()["token_type"] == "bearer"
     assert response.json()["access_token"]

@@ -1,4 +1,4 @@
-/* Modelo del aprendizaje por conceptos (ADR-0031). Funciones puras sobre un documento JSON:
+/* Modelo del aprendizaje por conceptos. Funciones puras sobre un documento JSON:
    no tocan el DOM ni localStorage (eso lo hace learn-store.js), así que se prueban con node --test.
 
    Documento (clave pld:learn y /api/course-state/learn):
@@ -219,7 +219,7 @@ function cleanMap(value, item) {
 
 /**
  * Valida un documento que llega de fuera (localStorage o la cuenta): solo pasan los tipos
- * esperados e ids con formato de id, para que nada manipulado acabe en el HTML (ADR-0022).
+ * esperados e ids con formato de id, para que nada manipulado acabe en el HTML.
  */
 export function cleanLearning(value) {
   const state = emptyLearning();

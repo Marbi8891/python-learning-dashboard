@@ -1,4 +1,4 @@
-/* Preparación DAW (#/daw, ADR-0031 fase 2): competencias, qué reforzar antes de avanzar,
+/* Preparación DAW (#/daw): competencias, qué reforzar antes de avanzar,
    actividades con formato de examen y simulacros. */
 
 import { allStats } from "./mastery.js";
@@ -132,6 +132,7 @@ export function renderDawPrep(index, state) {
       <ul>
         <li><a href="#/daw/programacion">Programación por unidades de trabajo (UT1-UT9)</a>: teoría y preguntas de cada UT, con su propio progreso (compartido con la app).</li>
         <li><a href="#/daw/cursos">Otros módulos de DAW</a>: Bases de datos, Entornos de desarrollo, JavaScript y Java.</li>
+        <li><a href="#/daw/curriculo">Currículo oficial del ciclo</a>: los módulos de Castilla y León con sus resultados de aprendizaje y criterios de evaluación.</li>
       </ul>
     </section>`;
 }

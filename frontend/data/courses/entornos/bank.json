@@ -77,7 +77,8 @@
     "es": "`System.out.println` es la forma de mostrar texto en Java. En JavaScript sería `console.log`.",
     "en": "`System.out.println` es la forma de mostrar texto en Java. En JavaScript sería `console.log`."
    },
-   "lesson": "ent-lenguajes-y-programas"
+   "lesson": "ent-lenguajes-y-programas",
+   "module": "0487"
   },
   {
    "id": "ent-02",
@@ -112,7 +113,8 @@
     "es": "`std::cout` y el operador `<<` son de C++.",
     "en": "`std::cout` y el operador `<<` son de C++."
    },
-   "lesson": "ent-lenguajes-y-programas"
+   "lesson": "ent-lenguajes-y-programas",
+   "module": "0487"
   },
   {
    "id": "ent-03",
@@ -147,7 +149,8 @@
     "es": "`console.log` muestra texto en la consola del navegador o de Node.js.",
     "en": "`console.log` muestra texto en la consola del navegador o de Node.js."
    },
-   "lesson": "ent-lenguajes-y-programas"
+   "lesson": "ent-lenguajes-y-programas",
+   "module": "0487"
   },
   {
    "id": "ent-04",
@@ -182,7 +185,8 @@
     "es": "El programa compilado funciona en cualquier sistema con la máquina virtual de Java (JVM).",
     "en": "El programa compilado funciona en cualquier sistema con la máquina virtual de Java (JVM)."
    },
-   "lesson": "ent-lenguajes-y-programas"
+   "lesson": "ent-lenguajes-y-programas",
+   "module": "0487"
   },
   {
    "id": "ent-05",
@@ -217,7 +221,8 @@
     "es": "C++ ofrece alto rendimiento y control de los recursos, a cambio de una sintaxis más compleja.",
     "en": "C++ ofrece alto rendimiento y control de los recursos, a cambio de una sintaxis más compleja."
    },
-   "lesson": "ent-lenguajes-y-programas"
+   "lesson": "ent-lenguajes-y-programas",
+   "module": "0487"
   },
   {
    "id": "ent-06",
@@ -252,7 +257,8 @@
     "es": "Python es fácil de leer y muy versátil, pero suele ser más lento que un lenguaje compilado como C++.",
     "en": "Python es fácil de leer y muy versátil, pero suele ser más lento que un lenguaje compilado como C++."
    },
-   "lesson": "ent-lenguajes-y-programas"
+   "lesson": "ent-lenguajes-y-programas",
+   "module": "0487"
   },
   {
    "id": "ent-07",
@@ -287,7 +293,8 @@
     "es": "Gestiona el hardware y los recursos, y permite ejecutar los demás programas.",
     "en": "Gestiona el hardware y los recursos, y permite ejecutar los demás programas."
    },
-   "lesson": "ent-lenguajes-y-programas"
+   "lesson": "ent-lenguajes-y-programas",
+   "module": "0487"
   },
   {
    "id": "ent-08",
@@ -322,7 +329,8 @@
     "es": "Están pensados para programadores: escribir, depurar y probar código.",
     "en": "Están pensados para programadores: escribir, depurar y probar código."
    },
-   "lesson": "ent-lenguajes-y-programas"
+   "lesson": "ent-lenguajes-y-programas",
+   "module": "0487"
   },
   {
    "id": "ent-09",
@@ -357,7 +365,8 @@
     "es": "Sirve para una tarea concreta del usuario: crear documentos.",
     "en": "Sirve para una tarea concreta del usuario: crear documentos."
    },
-   "lesson": "ent-lenguajes-y-programas"
+   "lesson": "ent-lenguajes-y-programas",
+   "module": "0487"
   },
   {
    "id": "ent-10",
@@ -380,7 +389,8 @@
     "es": "Entrada (la lista), proceso (sumar) y salida (print). La `f` delante de las comillas sustituye `{total}` por su valor.",
     "en": "Entrada (la lista), proceso (sumar) y salida (print). La `f` delante de las comillas sustituye `{total}` por su valor."
    },
-   "lesson": "ent-lenguajes-y-programas"
+   "lesson": "ent-lenguajes-y-programas",
+   "module": "0487"
   },
   {
    "id": "ent-11",
@@ -403,7 +413,8 @@
     "es": "26 / 4 = 6,5. En Python, `/` siempre da un número decimal.",
     "en": "26 / 4 = 6,5. En Python, `/` siempre da un número decimal."
    },
-   "lesson": "ent-lenguajes-y-programas"
+   "lesson": "ent-lenguajes-y-programas",
+   "module": "0487"
   },
   {
    "id": "ent-12",
@@ -438,7 +449,8 @@
     "es": "Después, el enlazador une el código objeto con las librerías para formar el ejecutable.",
     "en": "Después, el enlazador une el código objeto con las librerías para formar el ejecutable."
    },
-   "lesson": "ent-compilar-e-interpretar"
+   "lesson": "ent-compilar-e-interpretar",
+   "module": "0487"
   },
   {
    "id": "ent-13",
@@ -473,7 +485,8 @@
     "es": "Traducir línea a línea es lo que hace un intérprete; comprobar la sintaxis, el compilador.",
     "en": "Traducir línea a línea es lo que hace un intérprete; comprobar la sintaxis, el compilador."
    },
-   "lesson": "ent-compilar-e-interpretar"
+   "lesson": "ent-compilar-e-interpretar",
+   "module": "0487"
   },
   {
    "id": "ent-14",
@@ -508,7 +521,8 @@
     "es": "Primero se traduce (compilación) y después se une con las librerías (enlace).",
     "en": "Primero se traduce (compilación) y después se une con las librerías (enlace)."
    },
-   "lesson": "ent-compilar-e-interpretar"
+   "lesson": "ent-compilar-e-interpretar",
+   "module": "0487"
   },
   {
    "id": "ent-15",
@@ -543,7 +557,8 @@
     "es": "Con un compilador obtienes un ejecutable que funciona sin el código fuente. Con un intérprete, necesitas el código y el intérprete cada vez.",
     "en": "Con un compilador obtienes un ejecutable que funciona sin el código fuente. Con un intérprete, necesitas el código y el intérprete cada vez."
    },
-   "lesson": "ent-compilar-e-interpretar"
+   "lesson": "ent-compilar-e-interpretar",
+   "module": "0487"
   },
   {
    "id": "ent-16",
@@ -578,7 +593,8 @@
     "es": "El intérprete ejecuta línea a línea: A y B se muestran y el programa se detiene al llegar a la división por cero. Un compilador de C++ habría encontrado los errores de sintaxis antes de ejecutar nada.",
     "en": "El intérprete ejecuta línea a línea: A y B se muestran y el programa se detiene al llegar a la división por cero. Un compilador de C++ habría encontrado los errores de sintaxis antes de ejecutar nada."
    },
-   "lesson": "ent-compilar-e-interpretar"
+   "lesson": "ent-compilar-e-interpretar",
+   "module": "0487"
   },
   {
    "id": "ent-48",
@@ -613,7 +629,8 @@
     "es": "`javac` es el compilador de Java y genera bytecode. La segunda orden, `java Main`, lo ejecuta en la máquina virtual (JVM).",
     "en": "`javac` es el compilador de Java y genera bytecode. La segunda orden, `java Main`, lo ejecuta en la máquina virtual (JVM)."
    },
-   "lesson": "ent-compilar-e-interpretar"
+   "lesson": "ent-compilar-e-interpretar",
+   "module": "0487"
   },
   {
    "id": "ent-49",
@@ -648,7 +665,8 @@
     "es": "Con `-o`, g++ compila y llama al enlazador. Para quedarte solo con el código objeto se usa `g++ -c area.cpp`, que genera area.o.",
     "en": "Con `-o`, g++ compila y llama al enlazador. Para quedarte solo con el código objeto se usa `g++ -c area.cpp`, que genera area.o."
    },
-   "lesson": "ent-compilar-e-interpretar"
+   "lesson": "ent-compilar-e-interpretar",
+   "module": "0487"
   },
   {
    "id": "ent-17",
@@ -671,7 +689,8 @@
     "es": "Se ejecuta A; la división por cero salta al `except`, así que B no se muestra. El programa termina bien.",
     "en": "Se ejecuta A; la división por cero salta al `except`, así que B no se muestra. El programa termina bien."
    },
-   "lesson": "ent-compilar-e-interpretar"
+   "lesson": "ent-compilar-e-interpretar",
+   "module": "0487"
   },
   {
    "id": "ent-18",
@@ -706,7 +725,8 @@
     "es": "El bytecode es el mismo para todos los sistemas: cada sistema tiene su JVM. Por eso Java es multiplataforma.",
     "en": "El bytecode es el mismo para todos los sistemas: cada sistema tiene su JVM. Por eso Java es multiplataforma."
    },
-   "lesson": "ent-compilar-e-interpretar"
+   "lesson": "ent-compilar-e-interpretar",
+   "module": "0487"
   },
   {
    "id": "ent-19",
@@ -741,7 +761,8 @@
     "es": "La VM simula un ordenador entero. El contenedor (por ejemplo con Docker) solo aísla el programa y lo que necesita.",
     "en": "La VM simula un ordenador entero. El contenedor (por ejemplo con Docker) solo aísla el programa y lo que necesita."
    },
-   "lesson": "ent-compilar-e-interpretar"
+   "lesson": "ent-compilar-e-interpretar",
+   "module": "0487"
   },
   {
    "id": "ent-20",
@@ -776,7 +797,8 @@
     "es": "La VM ejecuta otro sistema operativo en un entorno aislado.",
     "en": "La VM ejecuta otro sistema operativo en un entorno aislado."
    },
-   "lesson": "ent-compilar-e-interpretar"
+   "lesson": "ent-compilar-e-interpretar",
+   "module": "0487"
   },
   {
    "id": "ent-21",
@@ -811,7 +833,8 @@
     "es": "Es la gran diferencia con un lenguaje interpretado: el ejecutable ya está en lenguaje máquina.",
     "en": "Es la gran diferencia con un lenguaje interpretado: el ejecutable ya está en lenguaje máquina."
    },
-   "lesson": "ent-compilar-e-interpretar"
+   "lesson": "ent-compilar-e-interpretar",
+   "module": "0487"
   },
   {
    "id": "ent-22",
@@ -846,7 +869,8 @@
     "es": "Describe los pasos uno a uno con un bucle y una variable que cambia de valor.",
     "en": "Describe los pasos uno a uno con un bucle y una variable que cambia de valor."
    },
-   "lesson": "ent-paradigmas"
+   "lesson": "ent-paradigmas",
+   "module": "0487"
   },
   {
    "id": "ent-23",
@@ -881,7 +905,8 @@
     "es": "Aplica funciones a los datos sin variables que cambien: estilo funcional.",
     "en": "Aplica funciones a los datos sin variables que cambien: estilo funcional."
    },
-   "lesson": "ent-paradigmas"
+   "lesson": "ent-paradigmas",
+   "module": "0487"
   },
   {
    "id": "ent-24",
@@ -916,7 +941,8 @@
     "es": "Dice qué datos quiere, no cómo buscarlos: eso lo decide el SGBD.",
     "en": "Dice qué datos quiere, no cómo buscarlos: eso lo decide el SGBD."
    },
-   "lesson": "ent-paradigmas"
+   "lesson": "ent-paradigmas",
+   "module": "0487"
   },
   {
    "id": "ent-25",
@@ -951,7 +977,8 @@
     "es": "Define una clase con atributos (marca, velocidad) y un método (acelerar).",
     "en": "Define una clase con atributos (marca, velocidad) y un método (acelerar)."
    },
-   "lesson": "ent-paradigmas"
+   "lesson": "ent-paradigmas",
+   "module": "0487"
   },
   {
    "id": "ent-26",
@@ -974,7 +1001,8 @@
     "es": "range(1, 6) va del 1 al 5 (el 6 no se incluye): 1 + 2 + 3 + 4 + 5 = 15.",
     "en": "range(1, 6) va del 1 al 5 (el 6 no se incluye): 1 + 2 + 3 + 4 + 5 = 15."
    },
-   "lesson": "ent-paradigmas"
+   "lesson": "ent-paradigmas",
+   "module": "0487"
   },
   {
    "id": "ent-27",
@@ -997,7 +1025,8 @@
     "es": "El objeto guarda su estado: cada llamada a acelerar() suma 10 a su atributo velocidad.",
     "en": "El objeto guarda su estado: cada llamada a acelerar() suma 10 a su atributo velocidad."
    },
-   "lesson": "ent-paradigmas"
+   "lesson": "ent-paradigmas",
+   "module": "0487"
   },
   {
    "id": "ent-28",
@@ -1020,7 +1049,8 @@
     "es": "La función `doble` se pasa como argumento a `map` (ciudadana de primera clase). La lista original no cambia: es el estilo funcional.",
     "en": "La función `doble` se pasa como argumento a `map` (ciudadana de primera clase). La lista original no cambia: es el estilo funcional."
    },
-   "lesson": "ent-paradigmas"
+   "lesson": "ent-paradigmas",
+   "module": "0487"
   },
   {
    "id": "ent-29",
@@ -1043,7 +1073,8 @@
     "es": "Esta función **no es pura**: modifica una variable global (efecto secundario). La programación funcional evita justo esto.",
     "en": "Esta función **no es pura**: modifica una variable global (efecto secundario). La programación funcional evita justo esto."
    },
-   "lesson": "ent-paradigmas"
+   "lesson": "ent-paradigmas",
+   "module": "0487"
   },
   {
    "id": "ent-30",
@@ -1078,7 +1109,8 @@
     "es": "Sin efectos secundarios: no cambia variables globales, ni ficheros, ni la pantalla.",
     "en": "Sin efectos secundarios: no cambia variables globales, ni ficheros, ni la pantalla."
    },
-   "lesson": "ent-paradigmas"
+   "lesson": "ent-paradigmas",
+   "module": "0487"
   },
   {
    "id": "ent-31",
@@ -1113,7 +1145,8 @@
     "es": "La clase es el molde (Coche); el objeto, un coche concreto creado con `new Coche()`.",
     "en": "La clase es el molde (Coche); el objeto, un coche concreto creado con `new Coche()`."
    },
-   "lesson": "ent-paradigmas"
+   "lesson": "ent-paradigmas",
+   "module": "0487"
   },
   {
    "id": "ent-32",
@@ -1148,7 +1181,8 @@
     "es": "Ejecutarse en varios sistemas es ser multiplataforma, que es otra cosa.",
     "en": "Ejecutarse en varios sistemas es ser multiplataforma, que es otra cosa."
    },
-   "lesson": "ent-paradigmas"
+   "lesson": "ent-paradigmas",
+   "module": "0487"
   },
   {
    "id": "ent-33",
@@ -1168,7 +1202,8 @@
     "es": "`sum` recibe los números del 1 al 5 y devuelve su suma, sin bucles ni variables que cambien. Solución: `sum`.",
     "en": "`sum` recibe los números del 1 al 5 y devuelve su suma, sin bucles ni variables que cambien. Solución: `sum`."
    },
-   "lesson": "ent-paradigmas"
+   "lesson": "ent-paradigmas",
+   "module": "0487"
   },
   {
    "id": "ent-34",
@@ -1191,7 +1226,8 @@
     "es": "Primero se inicializa la variable, después el bucle la actualiza y al final se muestra.",
     "en": "Primero se inicializa la variable, después el bucle la actualiza y al final se muestra."
    },
-   "lesson": "ent-paradigmas"
+   "lesson": "ent-paradigmas",
+   "module": "0487"
   },
   {
    "id": "ent-35",
@@ -1226,7 +1262,8 @@
     "es": "Describe cómo debe comportarse la aplicación, no qué hace. «Permitir hacer un pedido» sería funcional.",
     "en": "Describe cómo debe comportarse la aplicación, no qué hace. «Permitir hacer un pedido» sería funcional."
    },
-   "lesson": "ent-fases-y-agiles"
+   "lesson": "ent-fases-y-agiles",
+   "module": "0487"
   },
   {
    "id": "ent-36",
@@ -1261,7 +1298,8 @@
     "es": "Se elabora en la fase de análisis, a partir de entrevistas, encuestas y reuniones con el cliente.",
     "en": "Se elabora en la fase de análisis, a partir de entrevistas, encuestas y reuniones con el cliente."
    },
-   "lesson": "ent-fases-y-agiles"
+   "lesson": "ent-fases-y-agiles",
+   "module": "0487"
   },
   {
    "id": "ent-37",
@@ -1296,7 +1334,8 @@
     "es": "En el diseño se decide la estructura de la aplicación. UML permite representarla gráficamente.",
     "en": "En el diseño se decide la estructura de la aplicación. UML permite representarla gráficamente."
    },
-   "lesson": "ent-fases-y-agiles"
+   "lesson": "ent-fases-y-agiles",
+   "module": "0487"
   },
   {
    "id": "ent-38",
@@ -1331,7 +1370,8 @@
     "es": "Forma parte de la fase de pruebas y depuración.",
     "en": "Forma parte de la fase de pruebas y depuración."
    },
-   "lesson": "ent-fases-y-agiles"
+   "lesson": "ent-fases-y-agiles",
+   "module": "0487"
   },
   {
    "id": "ent-39",
@@ -1366,7 +1406,8 @@
     "es": "El desarrollo no acaba con el despliegue: corregir errores y añadir funciones es mantenimiento.",
     "en": "El desarrollo no acaba con el despliegue: corregir errores y añadir funciones es mantenimiento."
    },
-   "lesson": "ent-fases-y-agiles"
+   "lesson": "ent-fases-y-agiles",
+   "module": "0487"
   },
   {
    "id": "ent-40",
@@ -1401,7 +1442,8 @@
     "es": "Primero se decide qué hay que hacer y cómo, después se construye y se prueba, y por último se pone en marcha y se mantiene.",
     "en": "Primero se decide qué hay que hacer y cómo, después se construye y se prueba, y por último se pone en marcha y se mantiene."
    },
-   "lesson": "ent-fases-y-agiles"
+   "lesson": "ent-fases-y-agiles",
+   "module": "0487"
   },
   {
    "id": "ent-41",
@@ -1436,7 +1478,8 @@
     "es": "El Scrum Master se asegura de que se siga Scrum y quita obstáculos; el equipo hace el trabajo técnico.",
     "en": "El Scrum Master se asegura de que se siga Scrum y quita obstáculos; el equipo hace el trabajo técnico."
    },
-   "lesson": "ent-fases-y-agiles"
+   "lesson": "ent-fases-y-agiles",
+   "module": "0487"
   },
   {
    "id": "ent-42",
@@ -1471,7 +1514,8 @@
     "es": "Son ciclos cortos: al final de cada uno se enseña algo que funciona y se recoge la opinión del cliente.",
     "en": "Son ciclos cortos: al final de cada uno se enseña algo que funciona y se recoge la opinión del cliente."
    },
-   "lesson": "ent-fases-y-agiles"
+   "lesson": "ent-fases-y-agiles",
+   "module": "0487"
   },
   {
    "id": "ent-43",
@@ -1506,7 +1550,8 @@
     "es": "La reunión diaria es la daily stand-up.",
     "en": "La reunión diaria es la daily stand-up."
    },
-   "lesson": "ent-fases-y-agiles"
+   "lesson": "ent-fases-y-agiles",
+   "module": "0487"
   },
   {
    "id": "ent-44",
@@ -1541,7 +1586,8 @@
     "es": "Limitar el trabajo en curso mantiene un flujo constante y evita saturar al equipo. Los sprints son de Scrum y la programación en pareja, de XP.",
     "en": "Limitar el trabajo en curso mantiene un flujo constante y evita saturar al equipo. Los sprints son de Scrum y la programación en pareja, de XP."
    },
-   "lesson": "ent-fases-y-agiles"
+   "lesson": "ent-fases-y-agiles",
+   "module": "0487"
   },
   {
    "id": "ent-45",
@@ -1576,7 +1622,8 @@
     "es": "XP añade además entregas frecuentes de pequeñas partes funcionales.",
     "en": "XP añade además entregas frecuentes de pequeñas partes funcionales."
    },
-   "lesson": "ent-fases-y-agiles"
+   "lesson": "ent-fases-y-agiles",
+   "module": "0487"
   },
   {
    "id": "ent-46",
@@ -1611,7 +1658,8 @@
     "es": "Es lineal: cada fase empieza cuando acaba la anterior, así que los cambios tardíos salen caros.",
     "en": "Es lineal: cada fase empieza cuando acaba la anterior, así que los cambios tardíos salen caros."
    },
-   "lesson": "ent-fases-y-agiles"
+   "lesson": "ent-fases-y-agiles",
+   "module": "0487"
   },
   {
    "id": "ent-50",
@@ -1646,7 +1694,8 @@
     "es": "Columnas por etapa y un límite de tareas en progreso: es un tablero Kanban.",
     "en": "Columnas por etapa y un límite de tareas en progreso: es un tablero Kanban."
    },
-   "lesson": "ent-fases-y-agiles"
+   "lesson": "ent-fases-y-agiles",
+   "module": "0487"
   },
   {
    "id": "ent-51",
@@ -1681,7 +1730,8 @@
     "es": "Es una prueba automatizada con JUnit: comprueba que el cálculo del total cumple lo esperado.",
     "en": "Es una prueba automatizada con JUnit: comprueba que el cálculo del total cumple lo esperado."
    },
-   "lesson": "ent-fases-y-agiles"
+   "lesson": "ent-fases-y-agiles",
+   "module": "0487"
   },
   {
    "id": "ent-47",
@@ -1704,7 +1754,8 @@
     "es": "Con el límite de tareas en progreso, no se empieza una tarea nueva hasta terminar la que está en curso.",
     "en": "Con el límite de tareas en progreso, no se empieza una tarea nueva hasta terminar la que está en curso."
    },
-   "lesson": "ent-fases-y-agiles"
+   "lesson": "ent-fases-y-agiles",
+   "module": "0487"
   }
  ],
  "cards": []

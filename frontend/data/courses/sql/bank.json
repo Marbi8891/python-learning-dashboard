@@ -77,7 +77,8 @@
     "es": "Todo está en un único servidor: es un **punto único de fallo**. En cambio, la coherencia es justo lo más fácil de mantener en una centralizada.",
     "en": "Todo está en un único servidor: es un **punto único de fallo**. En cambio, la coherencia es justo lo más fácil de mantener en una centralizada."
    },
-   "lesson": "bd-tipos-y-modelos"
+   "lesson": "bd-tipos-y-modelos",
+   "module": "0484"
   },
   {
    "id": "bd-02",
@@ -112,7 +113,8 @@
     "es": "Reparte los datos y la carga entre servidores. A cambio, sincronizarlos y administrarla es más difícil y costoso.",
     "en": "Reparte los datos y la carga entre servidores. A cambio, sincronizarlos y administrarla es más difícil y costoso."
    },
-   "lesson": "bd-tipos-y-modelos"
+   "lesson": "bd-tipos-y-modelos",
+   "module": "0484"
   },
   {
    "id": "bd-03",
@@ -147,7 +149,8 @@
     "es": "Se reparten las **filas** según una condición (la provincia). Todas las filas conservan todas sus columnas.",
     "en": "Se reparten las **filas** según una condición (la provincia). Todas las filas conservan todas sus columnas."
    },
-   "lesson": "bd-tipos-y-modelos"
+   "lesson": "bd-tipos-y-modelos",
+   "module": "0484"
   },
   {
    "id": "bd-04",
@@ -182,7 +185,8 @@
     "es": "Se reparten las **columnas**. Cada fragmento repite la clave para poder reconstruir al empleado con un JOIN.",
     "en": "Se reparten las **columnas**. Cada fragmento repite la clave para poder reconstruir al empleado con un JOIN."
    },
-   "lesson": "bd-tipos-y-modelos"
+   "lesson": "bd-tipos-y-modelos",
+   "module": "0484"
   },
   {
    "id": "bd-05",
@@ -217,7 +221,8 @@
     "es": "Combina la horizontal (por provincia, filas) y la vertical (personal o académico, columnas).",
     "en": "Combina la horizontal (por provincia, filas) y la vertical (personal o académico, columnas)."
    },
-   "lesson": "bd-tipos-y-modelos"
+   "lesson": "bd-tipos-y-modelos",
+   "module": "0484"
   },
   {
    "id": "bd-06",
@@ -252,7 +257,8 @@
     "es": "Empresa → Departamentos → Empleados. Si un nodo pudiera tener varios padres, sería el modelo **en red**.",
     "en": "Empresa → Departamentos → Empleados. Si un nodo pudiera tener varios padres, sería el modelo **en red**."
    },
-   "lesson": "bd-tipos-y-modelos"
+   "lesson": "bd-tipos-y-modelos",
+   "module": "0484"
   },
   {
    "id": "bd-07",
@@ -287,7 +293,8 @@
     "es": "El modelo en red permite que un nodo tenga **varios padres**. Es más flexible que el jerárquico, pero más difícil de gestionar que el relacional.",
     "en": "El modelo en red permite que un nodo tenga **varios padres**. Es más flexible que el jerárquico, pero más difícil de gestionar que el relacional."
    },
-   "lesson": "bd-tipos-y-modelos"
+   "lesson": "bd-tipos-y-modelos",
+   "module": "0484"
   },
   {
    "id": "bd-08",
@@ -322,7 +329,8 @@
     "es": "Combina bases de datos y POO. Va bien cuando los datos tienen comportamiento asociado, como en simulaciones o videojuegos.",
     "en": "Combina bases de datos y POO. Va bien cuando los datos tienen comportamiento asociado, como en simulaciones o videojuegos."
    },
-   "lesson": "bd-tipos-y-modelos"
+   "lesson": "bd-tipos-y-modelos",
+   "module": "0484"
   },
   {
    "id": "bd-09",
@@ -357,7 +365,8 @@
     "es": "Las 5 V son Volumen, Velocidad, Variedad, Veracidad y Valor.",
     "en": "Las 5 V son Volumen, Velocidad, Variedad, Veracidad y Valor."
    },
-   "lesson": "bd-tipos-y-modelos"
+   "lesson": "bd-tipos-y-modelos",
+   "module": "0484"
   },
   {
    "id": "bd-10",
@@ -392,7 +401,8 @@
     "es": "Hadoop es una plataforma de código abierto para Big Data, con datos estructurados y no estructurados. Spark se usa cuando se necesita procesar muy rápido, en tiempo real.",
     "en": "Hadoop es una plataforma de código abierto para Big Data, con datos estructurados y no estructurados. Spark se usa cuando se necesita procesar muy rápido, en tiempo real."
    },
-   "lesson": "bd-tipos-y-modelos"
+   "lesson": "bd-tipos-y-modelos",
+   "module": "0484"
   },
   {
    "id": "bd-11",
@@ -415,7 +425,8 @@
     "es": "`UNION ALL` junta las filas de los dos fragmentos: 2 + 1 = 3 alumnos. Así se reconstruye la tabla completa.",
     "en": "`UNION ALL` junta las filas de los dos fragmentos: 2 + 1 = 3 alumnos. Así se reconstruye la tabla completa."
    },
-   "lesson": "bd-tipos-y-modelos"
+   "lesson": "bd-tipos-y-modelos",
+   "module": "0484"
   },
   {
    "id": "bd-12",
@@ -438,7 +449,8 @@
     "es": "Los dos fragmentos comparten la clave `id`: con un JOIN por ella se reconstruye la fila completa del empleado 2.",
     "en": "Los dos fragmentos comparten la clave `id`: con un JOIN por ella se reconstruye la fila completa del empleado 2."
    },
-   "lesson": "bd-tipos-y-modelos"
+   "lesson": "bd-tipos-y-modelos",
+   "module": "0484"
   },
   {
    "id": "bd-13",
@@ -473,7 +485,8 @@
     "es": "Es un fichero plano (de texto). Es fácil de manejar, pero con muchos datos cuesta encontrar uno concreto.",
     "en": "Es un fichero plano (de texto). Es fácil de manejar, pero con muchos datos cuesta encontrar uno concreto."
    },
-   "lesson": "bd-ficheros-rgpd-sgbd"
+   "lesson": "bd-ficheros-rgpd-sgbd",
+   "module": "0484"
   },
   {
    "id": "bd-14",
@@ -508,7 +521,8 @@
     "es": "El índice acelera las búsquedas, pero cuesta espacio y tiempo mantenerlo al día. Es el mismo equilibrio que con los índices de una base de datos.",
     "en": "El índice acelera las búsquedas, pero cuesta espacio y tiempo mantenerlo al día. Es el mismo equilibrio que con los índices de una base de datos."
    },
-   "lesson": "bd-ficheros-rgpd-sgbd"
+   "lesson": "bd-ficheros-rgpd-sgbd",
+   "module": "0484"
   },
   {
    "id": "bd-15",
@@ -543,7 +557,8 @@
     "es": "Hay que leer todos los registros en orden: el acceso secuencial es justo para eso.",
     "en": "Hay que leer todos los registros en orden: el acceso secuencial es justo para eso."
    },
-   "lesson": "bd-ficheros-rgpd-sgbd"
+   "lesson": "bd-ficheros-rgpd-sgbd",
+   "module": "0484"
   },
   {
    "id": "bd-16",
@@ -578,7 +593,8 @@
     "es": "El acceso aleatorio salta directamente al registro sin recorrer los anteriores.",
     "en": "El acceso aleatorio salta directamente al registro sin recorrer los anteriores."
    },
-   "lesson": "bd-ficheros-rgpd-sgbd"
+   "lesson": "bd-ficheros-rgpd-sgbd",
+   "module": "0484"
   },
   {
    "id": "bd-17",
@@ -613,7 +629,8 @@
     "es": "El RGPD se aplica en toda la UE desde 2018. La LOPDGDD lo adapta a España y añade derechos digitales.",
     "en": "El RGPD se aplica en toda la UE desde 2018. La LOPDGDD lo adapta a España y añade derechos digitales."
    },
-   "lesson": "bd-ficheros-rgpd-sgbd"
+   "lesson": "bd-ficheros-rgpd-sgbd",
+   "module": "0484"
   },
   {
    "id": "bd-18",
@@ -648,7 +665,8 @@
     "es": "Solo se deben recoger los datos estrictamente necesarios para la finalidad. Para descargar un archivo, la dirección y el teléfono sobran.",
     "en": "Solo se deben recoger los datos estrictamente necesarios para la finalidad. Para descargar un archivo, la dirección y el teléfono sobran."
    },
-   "lesson": "bd-ficheros-rgpd-sgbd"
+   "lesson": "bd-ficheros-rgpd-sgbd",
+   "module": "0484"
   },
   {
    "id": "bd-19",
@@ -683,7 +701,8 @@
     "es": "Es uno de los derechos digitales que la LOPDGDD añade a lo que ya establece el RGPD.",
     "en": "Es uno de los derechos digitales que la LOPDGDD añade a lo que ya establece el RGPD."
    },
-   "lesson": "bd-ficheros-rgpd-sgbd"
+   "lesson": "bd-ficheros-rgpd-sgbd",
+   "module": "0484"
   },
   {
    "id": "bd-20",
@@ -718,7 +737,8 @@
     "es": "Los usuarios tienen derecho de acceso, rectificación y supresión, y la aplicación debe facilitarlos.",
     "en": "Los usuarios tienen derecho de acceso, rectificación y supresión, y la aplicación debe facilitarlos."
    },
-   "lesson": "bd-ficheros-rgpd-sgbd"
+   "lesson": "bd-ficheros-rgpd-sgbd",
+   "module": "0484"
   },
   {
    "id": "bd-21",
@@ -753,7 +773,8 @@
     "es": "Dar y quitar permisos (GRANT y REVOKE) es control de datos. CREATE, ALTER y DROP son definición; INSERT, UPDATE, DELETE y SELECT, manipulación.",
     "en": "Dar y quitar permisos (GRANT y REVOKE) es control de datos. CREATE, ALTER y DROP son definición; INSERT, UPDATE, DELETE y SELECT, manipulación."
    },
-   "lesson": "bd-ficheros-rgpd-sgbd"
+   "lesson": "bd-ficheros-rgpd-sgbd",
+   "module": "0484"
   },
   {
    "id": "bd-22",
@@ -788,7 +809,8 @@
     "es": "El motor es el núcleo. SQL es cómo se lo pides y las herramientas de administración sirven para permisos, copias o supervisión.",
     "en": "El motor es el núcleo. SQL es cómo se lo pides y las herramientas de administración sirven para permisos, copias o supervisión."
    },
-   "lesson": "bd-ficheros-rgpd-sgbd"
+   "lesson": "bd-ficheros-rgpd-sgbd",
+   "module": "0484"
   },
   {
    "id": "bd-23",
@@ -823,7 +845,8 @@
     "es": "MongoDB es NoSQL (documentos, datos semiestructurados). Neo4j es de grafos (relaciones complejas). MySQL, PostgreSQL y Oracle son relacionales.",
     "en": "MongoDB es NoSQL (documentos, datos semiestructurados). Neo4j es de grafos (relaciones complejas). MySQL, PostgreSQL y Oracle son relacionales."
    },
-   "lesson": "bd-ficheros-rgpd-sgbd"
+   "lesson": "bd-ficheros-rgpd-sgbd",
+   "module": "0484"
   },
   {
    "id": "bd-24",
@@ -846,7 +869,8 @@
     "es": "El segundo INSERT repite la clave primaria: el SGBD lo rechaza. Evitar duplicados es parte de su función de control.",
     "en": "El segundo INSERT repite la clave primaria: el SGBD lo rechaza. Evitar duplicados es parte de su función de control."
    },
-   "lesson": "bd-ficheros-rgpd-sgbd"
+   "lesson": "bd-ficheros-rgpd-sgbd",
+   "module": "0484"
   },
   {
    "id": "sql-41",
@@ -881,7 +905,8 @@
     "es": "Una relación N:M necesita una tabla intermedia con una clave ajena hacia cada tabla. Una sola clave ajena solo permitiría un módulo por alumno (o un alumno por módulo).",
     "en": "Una relación N:M necesita una tabla intermedia con una clave ajena hacia cada tabla. Una sola clave ajena solo permitiría un módulo por alumno (o un alumno por módulo)."
    },
-   "lesson": "sql-modelo-relacional"
+   "lesson": "sql-modelo-relacional",
+   "module": "0484"
   },
   {
    "id": "sql-42",
@@ -916,7 +941,8 @@
     "es": "La clave ajena va en el lado N: cada alumno apunta a **un** ciclo. Al revés habría que guardar una lista, lo que rompe la 1FN.",
     "en": "La clave ajena va en el lado N: cada alumno apunta a **un** ciclo. Al revés habría que guardar una lista, lo que rompe la 1FN."
    },
-   "lesson": "sql-modelo-relacional"
+   "lesson": "sql-modelo-relacional",
+   "module": "0484"
   },
   {
    "id": "sql-43",
@@ -951,7 +977,8 @@
     "es": "Una celda debe tener un solo valor. Lo correcto es una tabla `telefonos(alumno_id, telefono)`.",
     "en": "Una celda debe tener un solo valor. Lo correcto es una tabla `telefonos(alumno_id, telefono)`."
    },
-   "lesson": "sql-modelo-relacional"
+   "lesson": "sql-modelo-relacional",
+   "module": "0484"
   },
   {
    "id": "sql-44",
@@ -986,7 +1013,8 @@
     "es": "`nombre_modulo` depende de **parte** de la clave. Se repetiría en cada matrícula y habría que cambiarlo en muchas filas. Va en la tabla `modulos`.",
     "en": "`nombre_modulo` depende de **parte** de la clave. Se repetiría en cada matrícula y habría que cambiarlo en muchas filas. Va en la tabla `modulos`."
    },
-   "lesson": "sql-modelo-relacional"
+   "lesson": "sql-modelo-relacional",
+   "module": "0484"
   },
   {
    "id": "sql-45",
@@ -1021,7 +1049,8 @@
     "es": "Es una **dependencia transitiva** (id → departamento_id → nombre_departamento). El nombre va en una tabla `departamentos`.",
     "en": "Es una **dependencia transitiva** (id → departamento_id → nombre_departamento). El nombre va en una tabla `departamentos`."
    },
-   "lesson": "sql-modelo-relacional"
+   "lesson": "sql-modelo-relacional",
+   "module": "0484"
   },
   {
    "id": "sql-31",
@@ -1044,7 +1073,8 @@
     "es": "El segundo INSERT repite un email en una columna `UNIQUE`: el SGBD lo rechaza con un error y el script se detiene ahí.",
     "en": "El segundo INSERT repite un email en una columna `UNIQUE`: el SGBD lo rechaza con un error y el script se detiene ahí."
    },
-   "lesson": "sql-crear-tablas"
+   "lesson": "sql-crear-tablas",
+   "module": "0484"
   },
   {
    "id": "sql-32",
@@ -1067,7 +1097,8 @@
     "es": "El INSERT no da valor a `estado`, así que se usa el `DEFAULT`. La edad 18 cumple el CHECK.",
     "en": "El INSERT no da valor a `estado`, así que se usa el `DEFAULT`. La edad 18 cumple el CHECK."
    },
-   "lesson": "sql-crear-tablas"
+   "lesson": "sql-crear-tablas",
+   "module": "0484"
   },
   {
    "id": "sql-33",
@@ -1090,7 +1121,8 @@
     "es": "15 no cumple `CHECK (edad >= 16)`: el INSERT se rechaza con un error. Así se protegen las reglas de negocio en la propia base de datos.",
     "en": "15 no cumple `CHECK (edad >= 16)`: el INSERT se rechaza con un error. Así se protegen las reglas de negocio en la propia base de datos."
    },
-   "lesson": "sql-crear-tablas"
+   "lesson": "sql-crear-tablas",
+   "module": "0484"
   },
   {
    "id": "sql-34",
@@ -1113,7 +1145,8 @@
     "es": "'DAM' no existe en `ciclos`: la clave ajena lo impide (integridad referencial). MySQL con InnoDB también lo rechaza; en SQLite hay que activar `PRAGMA foreign_keys = ON`, que la app activa siempre.",
     "en": "'DAM' no existe en `ciclos`: la clave ajena lo impide (integridad referencial). MySQL con InnoDB también lo rechaza; en SQLite hay que activar `PRAGMA foreign_keys = ON`, que la app activa siempre."
    },
-   "lesson": "sql-crear-tablas"
+   "lesson": "sql-crear-tablas",
+   "module": "0484"
   },
   {
    "id": "sql-35",
@@ -1148,7 +1181,8 @@
     "es": "`DECIMAL` guarda el número exacto. `FLOAT` y `DOUBLE` son aproximados (0,1 + 0,2 no da exactamente 0,3) y en un texto no se puede calcular.",
     "en": "`DECIMAL` guarda el número exacto. `FLOAT` y `DOUBLE` son aproximados (0,1 + 0,2 no da exactamente 0,3) y en un texto no se puede calcular."
    },
-   "lesson": "sql-crear-tablas"
+   "lesson": "sql-crear-tablas",
+   "module": "0484"
   },
   {
    "id": "bd-25",
@@ -1171,7 +1205,8 @@
     "es": "Comparar con `= NULL` nunca es verdadero, ni siquiera con otro NULL. Para encontrar a Eva hay que escribir `WHERE nota IS NULL`.",
     "en": "Comparar con `= NULL` nunca es verdadero, ni siquiera con otro NULL. Para encontrar a Eva hay que escribir `WHERE nota IS NULL`."
    },
-   "lesson": "bd-null-indices-dcl"
+   "lesson": "bd-null-indices-dcl",
+   "module": "0484"
   },
   {
    "id": "bd-26",
@@ -1194,7 +1229,8 @@
     "es": "`IS NULL` es la forma correcta de preguntar por un dato que falta.",
     "en": "`IS NULL` es la forma correcta de preguntar por un dato que falta."
    },
-   "lesson": "bd-null-indices-dcl"
+   "lesson": "bd-null-indices-dcl",
+   "module": "0484"
   },
   {
    "id": "bd-27",
@@ -1217,7 +1253,8 @@
     "es": "`COUNT(*)` cuenta las 5 filas; `COUNT(nota)` no cuenta la nota NULL de Eva.",
     "en": "`COUNT(*)` cuenta las 5 filas; `COUNT(nota)` no cuenta la nota NULL de Eva."
    },
-   "lesson": "bd-null-indices-dcl"
+   "lesson": "bd-null-indices-dcl",
+   "module": "0484"
   },
   {
    "id": "bd-28",
@@ -1240,7 +1277,8 @@
     "es": "AVG ignora los NULL: (8 + 5 + 7 + 9) / 4 = 7,25. Si contara a Eva como 0, saldría 29 / 5 = 5,8.",
     "en": "AVG ignora los NULL: (8 + 5 + 7 + 9) / 4 = 7,25. Si contara a Eva como 0, saldría 29 / 5 = 5,8."
    },
-   "lesson": "bd-null-indices-dcl"
+   "lesson": "bd-null-indices-dcl",
+   "module": "0484"
   },
   {
    "id": "bd-29",
@@ -1263,7 +1301,8 @@
     "es": "La columna nueva existe en todas las filas, pero las que ya había no tienen valor: queda a NULL.",
     "en": "La columna nueva existe en todas las filas, pero las que ya había no tienen valor: queda a NULL."
    },
-   "lesson": "bd-null-indices-dcl"
+   "lesson": "bd-null-indices-dcl",
+   "module": "0484"
   },
   {
    "id": "bd-30",
@@ -1286,7 +1325,8 @@
     "es": "Con `DEFAULT 0`, las filas que ya existían toman ese valor en la columna nueva.",
     "en": "Con `DEFAULT 0`, las filas que ya existían toman ese valor en la columna nueva."
    },
-   "lesson": "bd-null-indices-dcl"
+   "lesson": "bd-null-indices-dcl",
+   "module": "0484"
   },
   {
    "id": "bd-31",
@@ -1309,7 +1349,8 @@
     "es": "`DROP TABLE` elimina la tabla entera, estructura y datos. Después ya no existe y el SELECT falla. Para vaciarla conservando la estructura se usa `DELETE FROM`.",
     "en": "`DROP TABLE` elimina la tabla entera, estructura y datos. Después ya no existe y el SELECT falla. Para vaciarla conservando la estructura se usa `DELETE FROM`."
    },
-   "lesson": "bd-null-indices-dcl"
+   "lesson": "bd-null-indices-dcl",
+   "module": "0484"
   },
   {
    "id": "bd-32",
@@ -1344,7 +1385,8 @@
     "es": "`ALTER TABLE … MODIFY` es la sintaxis de MySQL. UPDATE cambia datos, no la estructura.",
     "en": "`ALTER TABLE … MODIFY` es la sintaxis de MySQL. UPDATE cambia datos, no la estructura."
    },
-   "lesson": "bd-null-indices-dcl"
+   "lesson": "bd-null-indices-dcl",
+   "module": "0484"
   },
   {
    "id": "bd-33",
@@ -1379,7 +1421,8 @@
     "es": "Cada escritura tiene que actualizar también el índice. Solo un índice **único** impide repetidos, y ninguno cambia el resultado.",
     "en": "Cada escritura tiene que actualizar también el índice. Solo un índice **único** impide repetidos, y ninguno cambia el resultado."
    },
-   "lesson": "bd-null-indices-dcl"
+   "lesson": "bd-null-indices-dcl",
+   "module": "0484"
   },
   {
    "id": "bd-34",
@@ -1414,7 +1457,8 @@
     "es": "Un índice compuesto cubre consultas que filtran por varias columnas a la vez. Indexarlo todo ralentizaría las escrituras sin necesidad.",
     "en": "Un índice compuesto cubre consultas que filtran por varias columnas a la vez. Indexarlo todo ralentizaría las escrituras sin necesidad."
    },
-   "lesson": "bd-null-indices-dcl"
+   "lesson": "bd-null-indices-dcl",
+   "module": "0484"
   },
   {
    "id": "bd-35",
@@ -1437,7 +1481,8 @@
     "es": "Un índice **único** acelera las búsquedas y además impide repetir el email: el segundo INSERT se rechaza.",
     "en": "Un índice **único** acelera las búsquedas y además impide repetir el email: el segundo INSERT se rechaza."
    },
-   "lesson": "bd-null-indices-dcl"
+   "lesson": "bd-null-indices-dcl",
+   "module": "0484"
   },
   {
    "id": "bd-36",
@@ -1472,7 +1517,8 @@
     "es": "GRANT privilegios ON base.tabla TO usuario. REVOKE es para quitarlos, y va con FROM.",
     "en": "GRANT privilegios ON base.tabla TO usuario. REVOKE es para quitarlos, y va con FROM."
    },
-   "lesson": "bd-null-indices-dcl"
+   "lesson": "bd-null-indices-dcl",
+   "module": "0484"
   },
   {
    "id": "bd-37",
@@ -1507,7 +1553,8 @@
     "es": "REVOKE tiene la misma estructura que GRANT, pero con **FROM** en lugar de TO.",
     "en": "REVOKE tiene la misma estructura que GRANT, pero con **FROM** en lugar de TO."
    },
-   "lesson": "bd-null-indices-dcl"
+   "lesson": "bd-null-indices-dcl",
+   "module": "0484"
   },
   {
    "id": "bd-38",
@@ -1542,7 +1589,8 @@
     "es": "Si cambian los permisos de los gestores, se cambia el rol una vez y afecta a todos los que lo tienen.",
     "en": "Si cambian los permisos de los gestores, se cambia el rol una vez y afecta a todos los que lo tienen."
    },
-   "lesson": "bd-null-indices-dcl"
+   "lesson": "bd-null-indices-dcl",
+   "module": "0484"
   },
   {
    "id": "bd-39",
@@ -1565,7 +1613,8 @@
     "es": "Una vista no guarda datos: guarda la consulta y la ejecuta cada vez. Por eso ve los pedidos insertados después de crearla.",
     "en": "Una vista no guarda datos: guarda la consulta y la ejecuta cada vez. Por eso ve los pedidos insertados después de crearla."
    },
-   "lesson": "bd-null-indices-dcl"
+   "lesson": "bd-null-indices-dcl",
+   "module": "0484"
   },
   {
    "id": "bd-40",
@@ -1600,7 +1649,8 @@
     "es": "Proteger datos sensibles es uno de los usos principales de las vistas. Combinada con GRANT, cada usuario solo ve lo que necesita.",
     "en": "Proteger datos sensibles es uno de los usos principales de las vistas. Combinada con GRANT, cada usuario solo ve lo que necesita."
    },
-   "lesson": "bd-null-indices-dcl"
+   "lesson": "bd-null-indices-dcl",
+   "module": "0484"
   },
   {
    "id": "bd-41",
@@ -1621,7 +1671,8 @@
     "es": "Con `= NULL` no saldría nadie: hay que usar `IS NULL`. Solución: `NULL`.",
     "en": "Con `= NULL` no saldría nadie: hay que usar `IS NULL`. Solución: `NULL`."
    },
-   "lesson": "bd-null-indices-dcl"
+   "lesson": "bd-null-indices-dcl",
+   "module": "0484"
   },
   {
    "id": "bd-42",
@@ -1644,7 +1695,8 @@
     "es": "`telefono = NULL` nunca es verdadero, así que no sale ninguna fila. La corrección es `WHERE telefono IS NULL`. Corrección: `SELECT id FROM clientes WHERE telefono IS NULL;`.",
     "en": "`telefono = NULL` nunca es verdadero, así que no sale ninguna fila. La corrección es `WHERE telefono IS NULL`. Corrección: `SELECT id FROM clientes WHERE telefono IS NULL;`."
    },
-   "lesson": "bd-null-indices-dcl"
+   "lesson": "bd-null-indices-dcl",
+   "module": "0484"
   },
   {
    "id": "bd-43",
@@ -1667,7 +1719,8 @@
     "es": "Primero la estructura, luego los datos, después el cambio de estructura y por último la consulta. Si el ALTER fuera antes del INSERT, faltaría un valor para `email` y el INSERT fallaría.",
     "en": "Primero la estructura, luego los datos, después el cambio de estructura y por último la consulta. Si el ALTER fuera antes del INSERT, faltaría un valor para `email` y el INSERT fallaría."
    },
-   "lesson": "bd-null-indices-dcl"
+   "lesson": "bd-null-indices-dcl",
+   "module": "0484"
   },
   {
    "id": "sql-01",
@@ -1690,7 +1743,8 @@
     "es": "`DISTINCT` deja una fila por cada ciclo distinto (DAW, DAM y ASIR) y `ORDER BY ciclo` los ordena alfabéticamente de menor a mayor.",
     "en": "`DISTINCT` deja una fila por cada ciclo distinto (DAW, DAM y ASIR) y `ORDER BY ciclo` los ordena alfabéticamente de menor a mayor."
    },
-   "lesson": "sql-select"
+   "lesson": "sql-select",
+   "module": "0484"
   },
   {
    "id": "sql-02",
@@ -1713,7 +1767,8 @@
     "es": "`DESC` ordena de mayor a menor nota (9, 8, 7, 5) y `LIMIT 2` se queda con las dos primeras: Sara y Ana. En SQLite y MySQL los NULL van al final al ordenar en descendente.",
     "en": "`DESC` ordena de mayor a menor nota (9, 8, 7, 5) y `LIMIT 2` se queda con las dos primeras: Sara y Ana. En SQLite y MySQL los NULL van al final al ordenar en descendente."
    },
-   "lesson": "sql-select"
+   "lesson": "sql-select",
+   "module": "0484"
   },
   {
    "id": "sql-03",
@@ -1736,7 +1791,8 @@
     "es": "El valor es precio × stock: Monitor 180 × 4 = 720, Teclado 250, Cable 250, Ratón 0. El alias `valor` se puede usar en ORDER BY porque este se evalúa después del SELECT.",
     "en": "El valor es precio × stock: Monitor 180 × 4 = 720, Teclado 250, Cable 250, Ratón 0. El alias `valor` se puede usar en ORDER BY porque este se evalúa después del SELECT."
    },
-   "lesson": "sql-select"
+   "lesson": "sql-select",
+   "module": "0484"
   },
   {
    "id": "sql-04",
@@ -1771,7 +1827,8 @@
     "es": "Primero elige la tabla (`FROM`), filtra filas (`WHERE`), calcula las columnas (`SELECT`) y por último ordena (`ORDER BY`). Por eso un alias del SELECT no existe todavía dentro del WHERE.",
     "en": "Primero elige la tabla (`FROM`), filtra filas (`WHERE`), calcula las columnas (`SELECT`) y por último ordena (`ORDER BY`). Por eso un alias del SELECT no existe todavía dentro del WHERE."
    },
-   "lesson": "sql-select"
+   "lesson": "sql-select",
+   "module": "0484"
   },
   {
    "id": "sql-05",
@@ -1806,7 +1863,8 @@
     "es": "`DISTINCT` afecta a la **fila completa** del resultado: dos filas solo se consideran repetidas si coinciden en todas las columnas seleccionadas.",
     "en": "`DISTINCT` afecta a la **fila completa** del resultado: dos filas solo se consideran repetidas si coinciden en todas las columnas seleccionadas."
    },
-   "lesson": "sql-select"
+   "lesson": "sql-select",
+   "module": "0484"
   },
   {
    "id": "sql-06",
@@ -1829,7 +1887,8 @@
     "es": "De DAW son Ana (8) y Eva (NULL). `NULL >= 7` da *desconocido*, no verdadero, así que Eva no pasa el filtro.",
     "en": "De DAW son Ana (8) y Eva (NULL). `NULL >= 7` da *desconocido*, no verdadero, así que Eva no pasa el filtro."
    },
-   "lesson": "sql-where"
+   "lesson": "sql-where",
+   "module": "0484"
   },
   {
    "id": "sql-07",
@@ -1852,7 +1911,8 @@
     "es": "No da error, pero no devuelve nada: comparar con NULL usando `=` nunca es verdadero. Para encontrar a Eva hay que escribir `WHERE nota IS NULL`.",
     "en": "No da error, pero no devuelve nada: comparar con NULL usando `=` nunca es verdadero. Para encontrar a Eva hay que escribir `WHERE nota IS NULL`."
    },
-   "lesson": "sql-where"
+   "lesson": "sql-where",
+   "module": "0484"
   },
   {
    "id": "sql-08",
@@ -1875,7 +1935,8 @@
     "es": "`AND` va antes que `OR`: la condición es `ciclo = 'DAM' OR (ciclo = 'DAW' AND nota > 7)`. Entran todos los de DAM (Luis y Sara) y, de DAW, solo Ana.",
     "en": "`AND` va antes que `OR`: la condición es `ciclo = 'DAM' OR (ciclo = 'DAW' AND nota > 7)`. Entran todos los de DAM (Luis y Sara) y, de DAW, solo Ana."
    },
-   "lesson": "sql-where"
+   "lesson": "sql-where",
+   "module": "0484"
   },
   {
    "id": "sql-09",
@@ -1898,7 +1959,8 @@
     "es": "`BETWEEN` incluye los dos extremos: entran el Ratón (15) y el Teclado (25).",
     "en": "`BETWEEN` incluye los dos extremos: entran el Ratón (15) y el Teclado (25)."
    },
-   "lesson": "sql-where"
+   "lesson": "sql-where",
+   "module": "0484"
   },
   {
    "id": "sql-10",
@@ -1921,7 +1983,8 @@
     "es": "`_` es exactamente un carácter y `%` cualquier resto: el patrón pide que la **segunda** letra sea una a. Solo la cumple Sara.",
     "en": "`_` es exactamente un carácter y `%` cualquier resto: el patrón pide que la **segunda** letra sea una a. Solo la cumple Sara."
    },
-   "lesson": "sql-where"
+   "lesson": "sql-where",
+   "module": "0484"
   },
   {
    "id": "sql-11",
@@ -1944,7 +2007,8 @@
     "es": "`COUNT(*)` cuenta las 5 filas; `COUNT(nota)` ignora el NULL de Eva y da 4.",
     "en": "`COUNT(*)` cuenta las 5 filas; `COUNT(nota)` ignora el NULL de Eva y da 4."
    },
-   "lesson": "sql-agregados"
+   "lesson": "sql-agregados",
+   "module": "0484"
   },
   {
    "id": "sql-12",
@@ -1967,7 +2031,8 @@
     "es": "AVG ignora los NULL: (8 + 5 + 7 + 9) / 4 = 7,25. Si contara a Eva como 0 saldría 29 / 5 = 5,8.",
     "en": "AVG ignora los NULL: (8 + 5 + 7 + 9) / 4 = 7,25. Si contara a Eva como 0 saldría 29 / 5 = 5,8."
    },
-   "lesson": "sql-agregados"
+   "lesson": "sql-agregados",
+   "module": "0484"
   },
   {
    "id": "sql-13",
@@ -1990,7 +2055,8 @@
     "es": "Hay tres ciclos distintos: DAW, DAM y ASIR.",
     "en": "Hay tres ciclos distintos: DAW, DAM y ASIR."
    },
-   "lesson": "sql-agregados"
+   "lesson": "sql-agregados",
+   "module": "0484"
   },
   {
    "id": "sql-14",
@@ -2013,7 +2079,8 @@
     "es": "El más caro cuesta 180 y el más barato 5: la diferencia es 175. Se pueden operar agregados entre sí.",
     "en": "El más caro cuesta 180 y el más barato 5: la diferencia es 175. Se pueden operar agregados entre sí."
    },
-   "lesson": "sql-agregados"
+   "lesson": "sql-agregados",
+   "module": "0484"
   },
   {
    "id": "sql-15",
@@ -2036,7 +2103,8 @@
     "es": "Devuelve una fila con NULL: SUM ignora los NULL y, si no queda ningún valor, el resultado es NULL, no 0. Para obtener 0 se escribe `COALESCE(SUM(nota), 0)`.",
     "en": "Devuelve una fila con NULL: SUM ignora los NULL y, si no queda ningún valor, el resultado es NULL, no 0. Para obtener 0 se escribe `COALESCE(SUM(nota), 0)`."
    },
-   "lesson": "sql-agregados"
+   "lesson": "sql-agregados",
+   "module": "0484"
   },
   {
    "id": "sql-16",
@@ -2059,7 +2127,8 @@
     "es": "Una fila por ciclo. `COUNT(*)` cuenta filas, así que Eva cuenta en DAW aunque no tenga nota. `ORDER BY ciclo` ordena alfabéticamente.",
     "en": "Una fila por ciclo. `COUNT(*)` cuenta filas, así que Eva cuenta en DAW aunque no tenga nota. `ORDER BY ciclo` ordena alfabéticamente."
    },
-   "lesson": "sql-group-by"
+   "lesson": "sql-group-by",
+   "module": "0484"
   },
   {
    "id": "sql-17",
@@ -2082,7 +2151,8 @@
     "es": "`HAVING` descarta los grupos con un solo alumno (ASIR).",
     "en": "`HAVING` descarta los grupos con un solo alumno (ASIR)."
    },
-   "lesson": "sql-group-by"
+   "lesson": "sql-group-by",
+   "module": "0484"
   },
   {
    "id": "sql-18",
@@ -2105,7 +2175,8 @@
     "es": "`WHERE` actúa **antes** de agrupar: quita a Sara (9) y a Eva (NULL no cumple `< 9`). En DAM solo queda Luis con 5.",
     "en": "`WHERE` actúa **antes** de agrupar: quita a Sara (9) y a Eva (NULL no cumple `< 9`). En DAM solo queda Luis con 5."
    },
-   "lesson": "sql-group-by"
+   "lesson": "sql-group-by",
+   "module": "0484"
   },
   {
    "id": "sql-19",
@@ -2140,7 +2211,8 @@
     "es": "Por eso las condiciones con agregados (`COUNT(*) > 1`, `AVG(nota) >= 5`) solo pueden ir en HAVING.",
     "en": "Por eso las condiciones con agregados (`COUNT(*) > 1`, `AVG(nota) >= 5`) solo pueden ir en HAVING."
    },
-   "lesson": "sql-group-by"
+   "lesson": "sql-group-by",
+   "module": "0484"
   },
   {
    "id": "sql-20",
@@ -2163,7 +2235,8 @@
     "es": "Medias: ASIR 7, DAM (5 + 9) / 2 = 7 y DAW 8 (el NULL de Eva no cuenta). Las tres cumplen `>= 7`. SQLite muestra los decimales como 7.0; MySQL, como 7.0000.",
     "en": "Medias: ASIR 7, DAM (5 + 9) / 2 = 7 y DAW 8 (el NULL de Eva no cuenta). Las tres cumplen `>= 7`. SQLite muestra los decimales como 7.0; MySQL, como 7.0000."
    },
-   "lesson": "sql-group-by"
+   "lesson": "sql-group-by",
+   "module": "0484"
   },
   {
    "id": "sql-21",
@@ -2186,7 +2259,8 @@
     "es": "Sale una fila por cada pareja cliente-pedido: Ana tiene dos pedidos y aparece dos veces. Eva no tiene pedidos y el INNER JOIN la descarta.",
     "en": "Sale una fila por cada pareja cliente-pedido: Ana tiene dos pedidos y aparece dos veces. Eva no tiene pedidos y el INNER JOIN la descarta."
    },
-   "lesson": "sql-inner-join"
+   "lesson": "sql-inner-join",
+   "module": "0484"
   },
   {
    "id": "sql-22",
@@ -2209,7 +2283,8 @@
     "es": "Sin condición de unión se hace el **producto cartesiano**: cada uno de los 3 clientes con cada uno de los 3 pedidos, 9 filas.",
     "en": "Sin condición de unión se hace el **producto cartesiano**: cada uno de los 3 clientes con cada uno de los 3 pedidos, 9 filas."
    },
-   "lesson": "sql-inner-join"
+   "lesson": "sql-inner-join",
+   "module": "0484"
   },
   {
    "id": "sql-23",
@@ -2232,7 +2307,8 @@
     "es": "JOIN y GROUP BY se combinan: Ana suma 30 + 20 = 50 y Luis 50. Eva no aparece porque no tiene pedidos.",
     "en": "JOIN y GROUP BY se combinan: Ana suma 30 + 20 = 50 y Luis 50. Eva no aparece porque no tiene pedidos."
    },
-   "lesson": "sql-inner-join"
+   "lesson": "sql-inner-join",
+   "module": "0484"
   },
   {
    "id": "sql-24",
@@ -2255,7 +2331,8 @@
     "es": "Pedidos de más de 25: el 1 de Ana (30) y el 3 de Luis (50). `nombre` y `total` solo existen en una tabla cada una, así que no hace falta cualificarlas.",
     "en": "Pedidos de más de 25: el 1 de Ana (30) y el 3 de Luis (50). `nombre` y `total` solo existen en una tabla cada una, así que no hace falta cualificarlas."
    },
-   "lesson": "sql-inner-join"
+   "lesson": "sql-inner-join",
+   "module": "0484"
   },
   {
    "id": "sql-25",
@@ -2278,7 +2355,8 @@
     "es": "Las dos tablas tienen una columna `id` y el SGBD no sabe cuál quieres: error de columna **ambigua**. Hay que escribir `clientes.id` o `pedidos.id`.",
     "en": "Las dos tablas tienen una columna `id` y el SGBD no sabe cuál quieres: error de columna **ambigua**. Hay que escribir `clientes.id` o `pedidos.id`."
    },
-   "lesson": "sql-inner-join"
+   "lesson": "sql-inner-join",
+   "module": "0484"
   },
   {
    "id": "sql-26",
@@ -2301,7 +2379,8 @@
     "es": "LEFT JOIN conserva a Eva aunque no tenga pedidos y rellena `total` con NULL (no con 0).",
     "en": "LEFT JOIN conserva a Eva aunque no tenga pedidos y rellena `total` con NULL (no con 0)."
    },
-   "lesson": "sql-left-join-subconsultas"
+   "lesson": "sql-left-join-subconsultas",
+   "module": "0484"
   },
   {
    "id": "sql-27",
@@ -2324,7 +2403,8 @@
     "es": "Es el patrón para encontrar filas **sin pareja**: solo Eva tiene la parte de pedidos a NULL.",
     "en": "Es el patrón para encontrar filas **sin pareja**: solo Eva tiene la parte de pedidos a NULL."
    },
-   "lesson": "sql-left-join-subconsultas"
+   "lesson": "sql-left-join-subconsultas",
+   "module": "0484"
   },
   {
    "id": "sql-28",
@@ -2347,7 +2427,8 @@
     "es": "La subconsulta calcula la media: 7,25. Superan esa nota Ana (8) y Sara (9); Juan tiene 7.",
     "en": "La subconsulta calcula la media: 7,25. Superan esa nota Ana (8) y Sara (9); Juan tiene 7."
    },
-   "lesson": "sql-left-join-subconsultas"
+   "lesson": "sql-left-join-subconsultas",
+   "module": "0484"
   },
   {
    "id": "sql-29",
@@ -2370,7 +2451,8 @@
     "es": "La subconsulta devuelve los clientes 1 (pedido de 30) y 2 (pedido de 50). Con IN cada cliente sale una sola vez, a diferencia de un JOIN.",
     "en": "La subconsulta devuelve los clientes 1 (pedido de 30) y 2 (pedido de 50). Con IN cada cliente sale una sola vez, a diferencia de un JOIN."
    },
-   "lesson": "sql-left-join-subconsultas"
+   "lesson": "sql-left-join-subconsultas",
+   "module": "0484"
   },
   {
    "id": "sql-30",
@@ -2393,7 +2475,8 @@
     "es": "Tres filas de parejas (Ana ×2, Luis) más la fila de Eva rellenada con NULL: 4.",
     "en": "Tres filas de parejas (Ana ×2, Luis) más la fila de Eva rellenada con NULL: 4."
    },
-   "lesson": "sql-left-join-subconsultas"
+   "lesson": "sql-left-join-subconsultas",
+   "module": "0484"
   },
   {
    "id": "bd-44",
@@ -2416,7 +2499,8 @@
     "es": "UNION junta los dos resultados y quita los duplicados: Ana y Luis aparecen una sola vez.",
     "en": "UNION junta los dos resultados y quita los duplicados: Ana y Luis aparecen una sola vez."
    },
-   "lesson": "bd-conjuntos-y-optimizacion"
+   "lesson": "bd-conjuntos-y-optimizacion",
+   "module": "0484"
   },
   {
    "id": "bd-45",
@@ -2439,7 +2523,8 @@
     "es": "`UNION ALL` conserva los duplicados: 3 clientes + 3 proveedores = 6 filas. Con UNION serían 4.",
     "en": "`UNION ALL` conserva los duplicados: 3 clientes + 3 proveedores = 6 filas. Con UNION serían 4."
    },
-   "lesson": "bd-conjuntos-y-optimizacion"
+   "lesson": "bd-conjuntos-y-optimizacion",
+   "module": "0484"
   },
   {
    "id": "bd-46",
@@ -2462,7 +2547,8 @@
     "es": "INTERSECT devuelve solo los nombres que aparecen en las dos consultas.",
     "en": "INTERSECT devuelve solo los nombres que aparecen en las dos consultas."
    },
-   "lesson": "bd-conjuntos-y-optimizacion"
+   "lesson": "bd-conjuntos-y-optimizacion",
+   "module": "0484"
   },
   {
    "id": "bd-47",
@@ -2485,7 +2571,8 @@
     "es": "EXCEPT devuelve lo que está en la primera consulta y no en la segunda. Al revés (proveedores EXCEPT clientes) saldría Tecnofp.",
     "en": "EXCEPT devuelve lo que está en la primera consulta y no en la segunda. Al revés (proveedores EXCEPT clientes) saldría Tecnofp."
    },
-   "lesson": "bd-conjuntos-y-optimizacion"
+   "lesson": "bd-conjuntos-y-optimizacion",
+   "module": "0484"
   },
   {
    "id": "bd-48",
@@ -2508,7 +2595,8 @@
     "es": "Para combinar selecciones, las dos consultas deben tener el mismo número de columnas. Aquí una tiene 2 y la otra 1.",
     "en": "Para combinar selecciones, las dos consultas deben tener el mismo número de columnas. Aquí una tiene 2 y la otra 1."
    },
-   "lesson": "bd-conjuntos-y-optimizacion"
+   "lesson": "bd-conjuntos-y-optimizacion",
+   "module": "0484"
   },
   {
    "id": "bd-49",
@@ -2531,7 +2619,8 @@
     "es": "Eva no tiene pedidos: el LEFT JOIN la mantiene con `p.total` a NULL, y COALESCE lo sustituye por 0.",
     "en": "Eva no tiene pedidos: el LEFT JOIN la mantiene con `p.total` a NULL, y COALESCE lo sustituye por 0."
    },
-   "lesson": "bd-conjuntos-y-optimizacion"
+   "lesson": "bd-conjuntos-y-optimizacion",
+   "module": "0484"
   },
   {
    "id": "bd-50",
@@ -2554,7 +2643,8 @@
     "es": "La subconsulta escalar calcula la media: (25 + 15 + 180 + 5) / 4 = 56,25. Solo el monitor la supera.",
     "en": "La subconsulta escalar calcula la media: (25 + 15 + 180 + 5) / 4 = 56,25. Solo el monitor la supera."
    },
-   "lesson": "bd-conjuntos-y-optimizacion"
+   "lesson": "bd-conjuntos-y-optimizacion",
+   "module": "0484"
   },
   {
    "id": "bd-51",
@@ -2577,7 +2667,8 @@
     "es": "La subconsulta devuelve varias filas (1, 1, 2) e IN comprueba si el id está entre ellas. Cada cliente sale una vez, aunque tenga varios pedidos.",
     "en": "La subconsulta devuelve varias filas (1, 1, 2) e IN comprueba si el id está entre ellas. Cada cliente sale una vez, aunque tenga varios pedidos."
    },
-   "lesson": "bd-conjuntos-y-optimizacion"
+   "lesson": "bd-conjuntos-y-optimizacion",
+   "module": "0484"
   },
   {
    "id": "bd-52",
@@ -2600,7 +2691,8 @@
     "es": "Los clientes cuyo id no aparece en ningún pedido. Es lo mismo que un LEFT JOIN con `WHERE p.id IS NULL`.",
     "en": "Los clientes cuyo id no aparece en ningún pedido. Es lo mismo que un LEFT JOIN con `WHERE p.id IS NULL`."
    },
-   "lesson": "bd-conjuntos-y-optimizacion"
+   "lesson": "bd-conjuntos-y-optimizacion",
+   "module": "0484"
   },
   {
    "id": "bd-53",
@@ -2635,7 +2727,8 @@
     "es": "LEFT conserva la izquierda; RIGHT, la derecha; FULL OUTER, las dos. INNER solo lo que coincide.",
     "en": "LEFT conserva la izquierda; RIGHT, la derecha; FULL OUTER, las dos. INNER solo lo que coincide."
    },
-   "lesson": "bd-conjuntos-y-optimizacion"
+   "lesson": "bd-conjuntos-y-optimizacion",
+   "module": "0484"
   },
   {
    "id": "bd-54",
@@ -2670,7 +2763,8 @@
     "es": "RIGHT JOIN conserva todas las filas de la tabla de la derecha. Cambiando el orden de las tablas se escribe como LEFT JOIN.",
     "en": "RIGHT JOIN conserva todas las filas de la tabla de la derecha. Cambiando el orden de las tablas se escribe como LEFT JOIN."
    },
-   "lesson": "bd-conjuntos-y-optimizacion"
+   "lesson": "bd-conjuntos-y-optimizacion",
+   "module": "0484"
   },
   {
    "id": "bd-55",
@@ -2705,7 +2799,8 @@
     "es": "El plan de ejecución ayuda a encontrar cuellos de botella, como una búsqueda que recorre toda la tabla porque falta un índice.",
     "en": "El plan de ejecución ayuda a encontrar cuellos de botella, como una búsqueda que recorre toda la tabla porque falta un índice."
    },
-   "lesson": "bd-conjuntos-y-optimizacion"
+   "lesson": "bd-conjuntos-y-optimizacion",
+   "module": "0484"
   },
   {
    "id": "bd-56",
@@ -2740,7 +2835,8 @@
     "es": "Menos columnas, menos datos que procesar. Indexar todo ralentiza las escrituras, las estadísticas deben estar al día y un JOIN suele ser más eficiente.",
     "en": "Menos columnas, menos datos que procesar. Indexar todo ralentiza las escrituras, las estadísticas deben estar al día y un JOIN suele ser más eficiente."
    },
-   "lesson": "bd-conjuntos-y-optimizacion"
+   "lesson": "bd-conjuntos-y-optimizacion",
+   "module": "0484"
   },
   {
    "id": "bd-57",
@@ -2775,7 +2871,8 @@
     "es": "Proyectar es elegir columnas; seleccionar es filtrar filas.",
     "en": "Proyectar es elegir columnas; seleccionar es filtrar filas."
    },
-   "lesson": "bd-conjuntos-y-optimizacion"
+   "lesson": "bd-conjuntos-y-optimizacion",
+   "module": "0484"
   },
   {
    "id": "bd-58",
@@ -2796,7 +2893,8 @@
     "es": "EXCEPT deja lo que está en la primera consulta y no en la segunda. Solución: `EXCEPT`.",
     "en": "EXCEPT deja lo que está en la primera consulta y no en la segunda. Solución: `EXCEPT`."
    },
-   "lesson": "bd-conjuntos-y-optimizacion"
+   "lesson": "bd-conjuntos-y-optimizacion",
+   "module": "0484"
   },
   {
    "id": "bd-59",
@@ -2819,7 +2917,8 @@
     "es": "El orden de las cláusulas es fijo: SELECT, FROM, WHERE, GROUP BY, HAVING y ORDER BY.",
     "en": "El orden de las cláusulas es fijo: SELECT, FROM, WHERE, GROUP BY, HAVING y ORDER BY."
    },
-   "lesson": "bd-conjuntos-y-optimizacion"
+   "lesson": "bd-conjuntos-y-optimizacion",
+   "module": "0484"
   },
   {
    "id": "bd-60",
@@ -2843,7 +2942,8 @@
     "es": "WHERE filtra filas antes de agrupar y no puede usar funciones de agregado. Las condiciones sobre grupos van en HAVING, después del GROUP BY. Corrección: `GROUP BY region HAVING SUM(cantidad) > 4;`.",
     "en": "WHERE filtra filas antes de agrupar y no puede usar funciones de agregado. Las condiciones sobre grupos van en HAVING, después del GROUP BY. Corrección: `GROUP BY region HAVING SUM(cantidad) > 4;`."
    },
-   "lesson": "bd-conjuntos-y-optimizacion"
+   "lesson": "bd-conjuntos-y-optimizacion",
+   "module": "0484"
   },
   {
    "id": "sql-36",
@@ -2866,7 +2966,8 @@
     "es": "Solo el Ratón tiene stock 0: su precio pasa de 15 a 30. Suma: 25 + 30 + 180 + 5 = 240.",
     "en": "Solo el Ratón tiene stock 0: su precio pasa de 15 a 30. Suma: 25 + 30 + 180 + 5 = 240."
    },
-   "lesson": "sql-modificar-datos"
+   "lesson": "sql-modificar-datos",
+   "module": "0484"
   },
   {
    "id": "sql-37",
@@ -2889,7 +2990,8 @@
     "es": "Solo se borra Luis (5). Eva tiene la nota a NULL y `NULL < 7` no es verdadero, así que **no** se borra. Quedan 4 filas.",
     "en": "Solo se borra Luis (5). Eva tiene la nota a NULL y `NULL < 7` no es verdadero, así que **no** se borra. Quedan 4 filas."
    },
-   "lesson": "sql-modificar-datos"
+   "lesson": "sql-modificar-datos",
+   "module": "0484"
   },
   {
    "id": "sql-38",
@@ -2912,7 +3014,8 @@
     "es": "Un UPDATE sin WHERE cambia **todas** las filas, incluida la de Eva, que tenía NULL.",
     "en": "Un UPDATE sin WHERE cambia **todas** las filas, incluida la de Eva, que tenía NULL."
    },
-   "lesson": "sql-modificar-datos"
+   "lesson": "sql-modificar-datos",
+   "module": "0484"
   },
   {
    "id": "sql-39",
@@ -2935,7 +3038,8 @@
     "es": "El id se genera solo (el mayor más uno: 5), como con AUTO_INCREMENT en MySQL. `stock` no tiene DEFAULT, así que queda NULL, no 0.",
     "en": "El id se genera solo (el mayor más uno: 5), como con AUTO_INCREMENT en MySQL. `stock` no tiene DEFAULT, así que queda NULL, no 0."
    },
-   "lesson": "sql-modificar-datos"
+   "lesson": "sql-modificar-datos",
+   "module": "0484"
   },
   {
    "id": "sql-40",
@@ -2970,7 +3074,8 @@
     "es": "Después de un DELETE sin WHERE la tabla sigue ahí, vacía. Después de DROP TABLE ya no existe.",
     "en": "Después de un DELETE sin WHERE la tabla sigue ahí, vacía. Después de DROP TABLE ya no existe."
    },
-   "lesson": "sql-modificar-datos"
+   "lesson": "sql-modificar-datos",
+   "module": "0484"
   },
   {
    "id": "sql-46",
@@ -2993,7 +3098,8 @@
     "es": "`ROLLBACK` deshace el UPDATE: el stock vuelve a ser 10 + 0 + 4 + 50 = 64.",
     "en": "`ROLLBACK` deshace el UPDATE: el stock vuelve a ser 10 + 0 + 4 + 50 = 64."
    },
-   "lesson": "sql-transacciones-vistas"
+   "lesson": "sql-transacciones-vistas",
+   "module": "0484"
   },
   {
    "id": "sql-47",
@@ -3016,7 +3122,8 @@
     "es": "`COMMIT` confirma el borrado de los dos alumnos de DAM: quedan 3.",
     "en": "`COMMIT` confirma el borrado de los dos alumnos de DAM: quedan 3."
    },
-   "lesson": "sql-transacciones-vistas"
+   "lesson": "sql-transacciones-vistas",
+   "module": "0484"
   },
   {
    "id": "sql-48",
@@ -3039,7 +3146,8 @@
     "es": "Una vista guarda la **consulta**, no los datos. Al consultarla después del UPDATE, Luis ya no tiene un 5: aprueban Ana, Juan y Sara.",
     "en": "Una vista guarda la **consulta**, no los datos. Al consultarla después del UPDATE, Luis ya no tiene un 5: aprueban Ana, Juan y Sara."
    },
-   "lesson": "sql-transacciones-vistas"
+   "lesson": "sql-transacciones-vistas",
+   "module": "0484"
   },
   {
    "id": "sql-49",
@@ -3074,7 +3182,8 @@
     "es": "Atómico significa indivisible: o todas las sentencias o ninguna.",
     "en": "Atómico significa indivisible: o todas las sentencias o ninguna."
    },
-   "lesson": "sql-transacciones-vistas"
+   "lesson": "sql-transacciones-vistas",
+   "module": "0484"
   },
   {
    "id": "sql-50",
@@ -3109,7 +3218,8 @@
     "es": "El índice cuesta espacio y tiempo en cada escritura; solo compensa si acelera consultas frecuentes.",
     "en": "El índice cuesta espacio y tiempo en cada escritura; solo compensa si acelera consultas frecuentes."
    },
-   "lesson": "sql-transacciones-vistas"
+   "lesson": "sql-transacciones-vistas",
+   "module": "0484"
   }
  ],
  "cards": []

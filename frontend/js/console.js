@@ -64,7 +64,7 @@ function syncLineNumbers() {
 /** Explicación en español del error (la genera runner.py) con botón para ir a la línea. */
 export function renderHint(hint) {
   if (!hint) return "";
-  // La salida del Worker no es de fiar: el código del alumno puede falsearla (ADR-0022)
+  // La salida del Worker no es de fiar: el código del alumno puede falsearla
   const number = Number.isInteger(hint.line) && hint.line > 0 ? hint.line : null;
   const line = number
     ? `<button type="button" class="error-help__line" data-go-line="${number}">Ir a la línea ${number}</button>`

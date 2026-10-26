@@ -1,6 +1,6 @@
 # Guía de despliegue
 
-La app tiene dos partes que se despliegan por separado (ver [ADR-0001](adr/0001-arquitectura.md)):
+La app tiene dos partes que se despliegan por separado:
 
 | Parte | Dónde | Coste |
 |---|---|---|
@@ -23,7 +23,7 @@ URL final: `https://marbi8891.github.io/python-learning-dashboard/`
 
 ## 2. Base de datos en Neon
 
-La base de datos gratuita de Render caduca a los 30 días, así que se usa Neon: PostgreSQL con plan gratuito permanente (0,5 GB) y servidores en la UE (ver [ADR-0008](adr/0008-backend-render-neon.md)).
+La base de datos gratuita de Render caduca a los 30 días, así que se usa Neon: PostgreSQL con plan gratuito permanente (0,5 GB) y servidores en la UE.
 
 1. Crea una cuenta en [neon.com](https://neon.com) (puedes entrar con GitHub).
 2. **New project** → nombre `pld`, **región AWS Europe Central 1 (Frankfurt)**, PostgreSQL 16 o superior.

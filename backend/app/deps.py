@@ -13,7 +13,7 @@ from app.security import decode_access_token, looks_forged
 from app.security_events import Event, record
 from app.session_cookie import cookie_token
 
-# auto_error=False: si no hay cabecera Authorization, se mira la cookie de la web (ADR-0033)
+# auto_error=False: si no hay cabecera Authorization, se mira la cookie de la web
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login", auto_error=False)
 
 DbSession = Annotated[Session, Depends(get_db)]

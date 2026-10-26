@@ -1,0 +1,3324 @@
+{
+ "source": {
+  "id": "rd-405-2023",
+  "title": "Real Decreto 405/2023, de 29 de mayo (artículo tercero, anexo I)",
+  "boe": "BOE-A-2023-13221",
+  "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2023-13221"
+ },
+ "modules": [
+  {
+   "code": "0483",
+   "name": "Sistemas informáticos",
+   "ects": 10,
+   "stateMinHours": 100,
+   "learningOutcomes": [
+    {
+     "number": 1,
+     "text": "Evalúa sistemas informáticos, identificando sus componentes y características.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se han reconocido los componentes físicos de un sistema informático y sus mecanismos de interconexión."
+      },
+      {
+       "letter": "b",
+       "text": "Se han clasificado los tipos de memorias, señalando sus características e identifcando sus prestaciones y la función que desarrollan en el conjunto del sistema."
+      },
+      {
+       "letter": "c",
+       "text": "Se ha verificado el proceso de puesta en marcha de un equipo."
+      },
+      {
+       "letter": "d",
+       "text": "Se han clasificado, instalado y configurado diferentes tipos de dispositivos periféricos."
+      },
+      {
+       "letter": "e",
+       "text": "Se han identificado los tipos de redes y sistemas de comunicación."
+      },
+      {
+       "letter": "f",
+       "text": "Se han identificado los componentes de una red informática."
+      },
+      {
+       "letter": "g",
+       "text": "Se han interpretado mapas físicos y lógicos de una red informática."
+      },
+      {
+       "letter": "h",
+       "text": "Se han reconocido las normas de seguridad y prevención de riesgos laborales en el uso de los sistemas informáticos."
+      }
+     ]
+    },
+    {
+     "number": 2,
+     "text": "Instala sistemas operativos planificando el proceso e interpretando documentación técnica.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se han identificado los elementos funcionales de un sistema informático."
+      },
+      {
+       "letter": "b",
+       "text": "Se han analizado las características, funciones y arquitectura de un sistema operativo."
+      },
+      {
+       "letter": "c",
+       "text": "Se han comparado sistemas operativos en base a sus requisitos, características, campos de aplicación y licencias de uso."
+      },
+      {
+       "letter": "d",
+       "text": "Se ha planificado el proceso de la instalación de sistemas operativos."
+      },
+      {
+       "letter": "e",
+       "text": "Se han instalado y actualizado sistemas operativos libres y propietarios."
+      },
+      {
+       "letter": "f",
+       "text": "Se han aplicado técnicas de actualización y recuperación del sistema."
+      },
+      {
+       "letter": "g",
+       "text": "Se han utilizado tecnologías de virtualización para instalar y probar sistemas operativos."
+      },
+      {
+       "letter": "h",
+       "text": "Se han instalado, desinstalado y actualizado aplicaciones."
+      },
+      {
+       "letter": "i",
+       "text": "Se han documentado los procesos realizados."
+      }
+     ]
+    },
+    {
+     "number": 3,
+     "text": "Gestiona la información del sistema identificando las estructuras de almacenamiento y aplicando medidas para asegurar la integridad de los datos.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se han comparado sistemas de archivos."
+      },
+      {
+       "letter": "b",
+       "text": "Se ha identificado la estructura y función de los directorios del sistema"
+      },
+      {
+       "letter": "c",
+       "text": "operativo."
+      },
+      {
+       "letter": "d",
+       "text": "Se han utilizado herramientas en entorno gráfico y comandos para localizar información en el sistema de archivos."
+      },
+      {
+       "letter": "e",
+       "text": "Se han creado diferentes tipos de particiones y unidades lógicas."
+      },
+      {
+       "letter": "f",
+       "text": "Se han realizado y restaurado copias de seguridad."
+      },
+      {
+       "letter": "g",
+       "text": "Se han planificado y automatizado tareas."
+      },
+      {
+       "letter": "h",
+       "text": "Se han instalado y evaluado utilidades relacionadas con la gestión de información."
+      }
+     ]
+    },
+    {
+     "number": 4,
+     "text": "Gestiona sistemas operativos utilizando comandos y herramientas gráficas y evaluando las necesidades del sistema.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se han configurado cuentas de usuario locales y grupos."
+      },
+      {
+       "letter": "b",
+       "text": "Se ha asegurado el acceso al sistema mediante el uso de directivas de cuenta y directivas de contraseñas."
+      },
+      {
+       "letter": "c",
+       "text": "Se han identificado, arrancado y detenido servicios y procesos."
+      },
+      {
+       "letter": "d",
+       "text": "Se ha protegido el acceso a la información mediante el uso de permisos locales y listas de control de acceso."
+      },
+      {
+       "letter": "e",
+       "text": "Se han utilizado comandos para realizar las tareas básicas de configuración y administración del sistema."
+      },
+      {
+       "letter": "f",
+       "text": "Se ha monitorizado el sistema."
+      },
+      {
+       "letter": "g",
+       "text": "Se han instalado y evaluado utilidades para el mantenimiento y optimización del sistema."
+      },
+      {
+       "letter": "h",
+       "text": "Se han evaluado las necesidades del sistema informático en relación con el desarrollo de aplicaciones."
+      }
+     ]
+    },
+    {
+     "number": 5,
+     "text": "Interconecta sistemas en red configurando dispositivos y protocolos.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se ha configurado el protocolo TCP/IP."
+      },
+      {
+       "letter": "b",
+       "text": "Se han configurado redes de área local cableadas."
+      },
+      {
+       "letter": "c",
+       "text": "Se han configurado redes de área local inalámbricas."
+      },
+      {
+       "letter": "d",
+       "text": "Se han utilizado dispositivos de interconexión de redes."
+      },
+      {
+       "letter": "e",
+       "text": "Se ha configurado el acceso a redes de área extensa."
+      },
+      {
+       "letter": "f",
+       "text": "Se han gestionado puertos de comunicaciones."
+      },
+      {
+       "letter": "g",
+       "text": "Se ha verificado el funcionamiento de la red mediante el uso de comandos y herramientas básicas."
+      },
+      {
+       "letter": "h",
+       "text": "Se han aplicado protocolos seguros de comunicaciones."
+      }
+     ]
+    },
+    {
+     "number": 6,
+     "text": "Opera sistemas en red gestionando sus recursos e identificando las restricciones de seguridad existentes.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se ha configurado el acceso a recursos locales y recursos de red."
+      },
+      {
+       "letter": "b",
+       "text": "Se han identificado y configurado los derechos de usuario y directivas de seguridad."
+      },
+      {
+       "letter": "c",
+       "text": "Se han explotado servidores de ficheros, servidores de impresión y servidores de aplicaciones."
+      },
+      {
+       "letter": "d",
+       "text": "Se ha accedido a los servidores utilizando técnicas de conexión remota."
+      },
+      {
+       "letter": "e",
+       "text": "Se ha evaluado la necesidad de proteger los recursos y el sistema."
+      },
+      {
+       "letter": "f",
+       "text": "Se han instalado y evaluado utilidades de seguridad básica."
+      },
+      {
+       "letter": "g",
+       "text": "Se han configurado y explotado dominios."
+      }
+     ]
+    },
+    {
+     "number": 7,
+     "text": "Elabora documentación valorando y utilizando aplicaciones informáticas de propósito general.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se ha clasificado software en función de su licencia y propósito."
+      },
+      {
+       "letter": "b",
+       "text": "Se han analizado las necesidades específicas de software asociadas al uso de sistemas informáticos en diferentes entornos productivos."
+      },
+      {
+       "letter": "c",
+       "text": "Se han realizado tareas de documentación mediante el uso de herramientas ofimáticas y de trabajo colaborativo."
+      },
+      {
+       "letter": "d",
+       "text": "Se han utilizado sistemas de correo y mensajería electrónica."
+      },
+      {
+       "letter": "e",
+       "text": "Se han utilizado los servicios de transferencia de ficheros."
+      },
+      {
+       "letter": "f",
+       "text": "Se han utilizado métodos de búsqueda de documentación técnica mediante el uso de servicios de Internet."
+      },
+      {
+       "letter": "g",
+       "text": "Se han utilizado herramientas de propósito general."
+      }
+     ]
+    }
+   ],
+   "contents": [
+    {
+     "title": "Explotación de sistemas microinformáticos",
+     "items": [
+      "Placas base. Formatos.",
+      "Estructura y componentes: procesador (Set de Instrucciones, Registros, Contador, Unidad Aritmético-Lógica, Interrupciones); memoria interna, tipos y características (RAM, xPROM y otras); interfaces de entrada/salida; discos Periféricos. Adaptadores para la conexión de dispositivos. Componentes de un sistema informático.",
+      "Periféricos. Adaptadores para la conexión de dispositivos.",
+      "Normas de seguridad y prevención de riesgos laborales.",
+      "Características de las redes. Ventajas e inconvenientes.",
+      "Tipos de redes.",
+      "Componentes de una red informática.",
+      "Topologías de red.",
+      "Tipos de cableado. Conectores.",
+      "Mapa físico y lógico de una red local."
+     ]
+    },
+    {
+     "title": "Instalación de sistemas operativos",
+     "items": [
+      "Evolución histórica y clasificación.",
+      "Funciones de un sistema operativo.",
+      "Tipos de sistemas operativos.",
+      "Tipos de aplicaciones.",
+      "Licencias y tipos de licencias.",
+      "Procedimiento de instalación.",
+      "Gestores de arranque. Configuración y reparación.",
+      "Tecnologías de virtualización. Tipos.",
+      "Consideraciones previas a la instalación de sistemas operativos libres y propietarios.",
+      "Instalación de sistemas operativos libres y propietarios. Requisitos, versiones y licencias.",
+      "Instalación/desinstalación de aplicaciones. Requisitos, versiones y licencias.",
+      "Actualización y recuperación de sistemas operativos y aplicaciones.",
+      "Documentación de la instalación y de las incidencias detectadas."
+     ]
+    },
+    {
+     "title": "Gestión de la información",
+     "items": [
+      "Gestión de sistemas de archivos mediante comandos y entornos gráficos.",
+      "Estructura de directorios de sistemas operativos libres y propietarios.",
+      "Búsqueda de información del sistema mediante comandos y herramientas gráficas.",
+      "Identificación del software instalado mediante comandos y herramientas gráficas.",
+      "Realización y restauración de copias de seguridad.",
+      "Herramientas de administración de discos. Particiones y volúmenes. Desfragmentación y chequeo. Cifrado.",
+      "Tareas automáticas. Planificación."
+     ]
+    },
+    {
+     "title": "Configuración de sistemas operativos",
+     "items": [
+      "Configuración de usuarios y grupos.",
+      "Seguridad de cuentas de usuario.",
+      "Seguridad de contraseñas.",
+      "Acceso a recursos. Permisos locales. Listas de control de acceso.",
+      "Servicios y procesos.",
+      "Comandos de sistemas operativos libres y propietarios.",
+      "Herramientas de monitorización del sistema. Registros y logs."
+     ]
+    },
+    {
+     "title": "Conexión de sistemas en red",
+     "items": [
+      "Configuración del protocolo TCP/IP en un cliente de red. Direcciones IP. Máscaras de subred. Puertas de enlace. Servidores de nombres de dominio. IPv4. IPv6. Configuración estática. Configuración dinámica automática.",
+      "Ficheros de configuración de red.",
+      "Gestión de puertos.",
+      "Resolución de problemas de conectividad en sistemas operativos en red. Herramientas de diagnóstico.",
+      "Herramientas gráficas y comandos utilizados en sistemas operativos libres y propietarios.",
+      "Monitorización de redes.",
+      "Protocolos TCP/IP.",
+      "Configuración de los adaptadores de red en sistemas operativos libres y propietarios.",
+      "Interconexión de redes: adaptadores de red y dispositivos de interconexión. Enrutamiento.",
+      "Redes cableadas. Tipos y características. Adaptadores de red. Conmutadores, enrutadores, entre otros. Seguridad.",
+      "Redes inalámbricas. Tipos y características. Adaptadores. Dispositivos de interconexión. Seguridad.",
+      "Seguridad de comunicaciones.",
+      "Tecnologías de acceso a redes de área extensa."
+     ]
+    },
+    {
+     "title": "Gestión de recursos en una red",
+     "items": [
+      "Permisos y derechos. Permisos de red. Permisos locales. Herencia. Listas de control de acceso.",
+      "Configuración de recursos compartidos. Permisos de acceso y directivas de seguridad.",
+      "Requisitos de seguridad del sistema y de los datos.",
+      "Servidores de ficheros.",
+      "Servidores de impresión.",
+      "Servidores de aplicaciones.",
+      "Técnicas de conexión remota.",
+      "Cortafuegos.",
+      "Implantación y explotación de dominios."
+     ]
+    },
+    {
+     "title": "Explotación de aplicaciones informáticas de propósito general",
+     "items": [
+      "Software: tipos, requisitos, licencias.",
+      "Herramientas ofimáticas y de trabajo colaborativo.",
+      "Utilidades de propósito general: antimalware, correo, transferencia de ficheros, recuperación de datos, mantenimiento del sistema, entre otros."
+     ]
+    }
+   ],
+   "contribution": "La formación del módulo contribuye a alcanzar los objetivos generales a), b), o), q), s), t), y x) del ciclo formativo y las competencias profesionales, personales y sociales a), b), o) y q) del título."
+  },
+  {
+   "code": "0484",
+   "name": "Bases de datos",
+   "ects": 12,
+   "stateMinHours": 105,
+   "learningOutcomes": [
+    {
+     "number": 1,
+     "text": "Reconoce los elementos de las bases de datos analizando sus funciones y valorando la utilidad de los sistemas gestores.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se han analizado los sistemas lógicos de almacenamiento y sus características."
+      },
+      {
+       "letter": "b",
+       "text": "Se han identificado los distintos tipos de bases de datos según el modelo de datos utilizado."
+      },
+      {
+       "letter": "c",
+       "text": "Se han identificado los distintos tipos de bases de datos en función de la ubicación de la información."
+      },
+      {
+       "letter": "d",
+       "text": "Se ha evaluado la utilidad de un sistema gestor de bases de datos."
+      },
+      {
+       "letter": "e",
+       "text": "Se ha reconocido la función de cada uno de los elementos de un sistema gestor de bases de datos."
+      },
+      {
+       "letter": "f",
+       "text": "Se han clasificado los sistemas gestores de bases de datos."
+      },
+      {
+       "letter": "g",
+       "text": "Se ha reconocido la utilidad de las bases de datos distribuidas."
+      },
+      {
+       "letter": "h",
+       "text": "Se han analizado las políticas de fragmentación de la información."
+      },
+      {
+       "letter": "i",
+       "text": "Se ha identificado la legislación vigente sobre protección de datos."
+      },
+      {
+       "letter": "j",
+       "text": "Se han reconocido los conceptos de Big Data y de la inteligencia de negocios."
+      }
+     ]
+    },
+    {
+     "number": 2,
+     "text": "Crea bases de datos definiendo su estructura y las características de sus elementos según el modelo relacional.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se ha analizado el formato de almacenamiento de la información."
+      },
+      {
+       "letter": "b",
+       "text": "Se han creado las tablas y las relaciones entre ellas."
+      },
+      {
+       "letter": "c",
+       "text": "Se han seleccionado los tipos de datos adecuados."
+      },
+      {
+       "letter": "d",
+       "text": "Se han definido los campos clave en las tablas."
+      },
+      {
+       "letter": "e",
+       "text": "Se han implantado las restricciones reflejadas en el diseño lógico."
+      },
+      {
+       "letter": "f",
+       "text": "Se han creado vistas."
+      },
+      {
+       "letter": "g",
+       "text": "Se han creado los usuarios y se les han asignado privilegios."
+      },
+      {
+       "letter": "h",
+       "text": "Se han utilizado asistentes, herramientas gráficas y los lenguajes de definición y control de datos."
+      }
+     ]
+    },
+    {
+     "number": 3,
+     "text": "Consulta la información almacenada en una base de datos empleando asistentes, herramientas gráficas y el lenguaje de manipulación de datos.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se han identificado las herramientas y sentencias para realizar consultas."
+      },
+      {
+       "letter": "b",
+       "text": "Se han realizado consultas simples sobre una tabla."
+      },
+      {
+       "letter": "c",
+       "text": "Se han realizado consultas sobre el contenido de varias tablas mediante composiciones internas."
+      },
+      {
+       "letter": "d",
+       "text": "Se han realizado consultas sobre el contenido de varias tablas mediante composiciones externas."
+      },
+      {
+       "letter": "e",
+       "text": "Se han realizado consultas resumen."
+      },
+      {
+       "letter": "f",
+       "text": "Se han realizado consultas con subconsultas."
+      },
+      {
+       "letter": "g",
+       "text": "Se han realizado consultas que implican múltiples selecciones."
+      },
+      {
+       "letter": "h",
+       "text": "Se han aplicado criterios de optimización de consultas."
+      }
+     ]
+    },
+    {
+     "number": 4,
+     "text": "Modifica la información almacenada en la base de datos utilizando asistentes, herramientas gráficas y el lenguaje de manipulación de datos.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se han identificado las herramientas y sentencias para modificar el contenido de la base de datos."
+      },
+      {
+       "letter": "b",
+       "text": "Se han insertado, borrado y actualizado datos en las tablas."
+      },
+      {
+       "letter": "c",
+       "text": "Se ha incluido en una tabla la información resultante de la ejecución de una consulta."
+      },
+      {
+       "letter": "d",
+       "text": "Se han diseñado guiones de sentencias para llevar a cabo tareas complejas."
+      },
+      {
+       "letter": "e",
+       "text": "Se ha reconocido el funcionamiento de las transacciones."
+      },
+      {
+       "letter": "f",
+       "text": "Se han anulado parcial o totalmente los cambios producidos por una transacción."
+      },
+      {
+       "letter": "g",
+       "text": "Se han identificado los efectos de las distintas políticas de bloqueo de registros."
+      },
+      {
+       "letter": "h",
+       "text": "Se han adoptado medidas para mantener la integridad y consistencia de la información."
+      }
+     ]
+    },
+    {
+     "number": 5,
+     "text": "Desarrolla procedimientos almacenados evaluando y utilizando las sentencias del lenguaje incorporado en el sistema gestor de bases de datos.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se han identificado las diversas formas de automatizar tareas."
+      },
+      {
+       "letter": "b",
+       "text": "Se han reconocido los métodos de ejecución de guiones."
+      },
+      {
+       "letter": "c",
+       "text": "Se han identificado las herramientas disponibles para editar guiones."
+      },
+      {
+       "letter": "d",
+       "text": "Se han definido y utilizado guiones para automatizar tareas."
+      },
+      {
+       "letter": "e",
+       "text": "Se ha hecho uso de las funciones proporcionadas por el sistema gestor."
+      },
+      {
+       "letter": "f",
+       "text": "Se han definido procedimientos y funciones de usuario."
+      },
+      {
+       "letter": "g",
+       "text": "Se han utilizado estructuras de control de flujo."
+      },
+      {
+       "letter": "h",
+       "text": "Se han definido eventos y disparadores."
+      },
+      {
+       "letter": "i",
+       "text": "Se han utilizado cursores."
+      },
+      {
+       "letter": "j",
+       "text": "Se han utilizado excepciones."
+      }
+     ]
+    },
+    {
+     "number": 6,
+     "text": "Diseña modelos relacionales normalizados interpretando diagramas entidad/relación.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se han utilizado herramientas gráficas para representar el diseño lógico."
+      },
+      {
+       "letter": "b",
+       "text": "Se han identificado las tablas del diseño lógico."
+      },
+      {
+       "letter": "c",
+       "text": "Se han identificado los campos que forman parte de las tablas del diseño lógico."
+      },
+      {
+       "letter": "d",
+       "text": "Se han analizado las relaciones entre las tablas del diseño lógico."
+      },
+      {
+       "letter": "e",
+       "text": "Se han identificado los campos clave."
+      },
+      {
+       "letter": "f",
+       "text": "Se han aplicado reglas de integridad."
+      },
+      {
+       "letter": "g",
+       "text": "Se han aplicado reglas de normalización."
+      },
+      {
+       "letter": "h",
+       "text": "Se han analizado y documentado las restricciones que no pueden plasmarse en el diseño lógico."
+      }
+     ]
+    },
+    {
+     "number": 7,
+     "text": "Gestiona la información almacenada en bases de datos no relacionales, evaluando y utilizando las posibilidades que proporciona el sistema gestor.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se han caracterizado las bases de datos no relacionales."
+      },
+      {
+       "letter": "b",
+       "text": "Se han evaluado los principales tipos de bases de datos no relacionales."
+      },
+      {
+       "letter": "c",
+       "text": "Se han identificado los elementos utilizados en estas bases de datos."
+      },
+      {
+       "letter": "d",
+       "text": "Se han identificado distintas formas de gestión de la información según el tipo de base de datos no relacionales."
+      },
+      {
+       "letter": "e",
+       "text": "Se han utilizado las herramientas del sistema gestor para la gestión de la información almacenada."
+      }
+     ]
+    }
+   ],
+   "contents": [
+    {
+     "title": "Almacenamiento de la información",
+     "items": [
+      "Ficheros (planos, indexados, acceso directo, entre otros).",
+      "Bases de datos. Conceptos, usos y tipos según el modelo de datos, la ubicación de la información.",
+      "Sistemas gestores de base de datos: Funciones, componentes y tipos.",
+      "Bases de datos centralizadas y bases de datos distribuidas. Técnicas de fragmentación.",
+      "Legislación sobre protección de datos.",
+      "Big Data: introducción, análisis de datos, inteligencia de negocios."
+     ]
+    },
+    {
+     "title": "Bases de datos relacionales",
+     "items": [
+      "Modelo de datos.",
+      "Terminología del modelo relacional.",
+      "Tipos de datos.",
+      "Claves primarias.",
+      "Restricciones de validación.",
+      "Índices. Características.",
+      "El valor NULL.",
+      "Claves ajenas.",
+      "Vistas.",
+      "Usuarios. Privilegios.",
+      "Lenguaje de descripción de datos (DDL).",
+      "Lenguaje de control de datos (DCL)."
+     ]
+    },
+    {
+     "title": "Realización de consultas",
+     "items": [
+      "Proyección, selección y ordenación de registros.",
+      "Operadores. Operadores de comparación. Operadores lógicos.",
+      "Consultas de resumen.",
+      "Agrupamiento de registros.",
+      "Composiciones internas.",
+      "Composiciones externas.",
+      "Subconsultas.",
+      "Combinación de múltiples selecciones.",
+      "Optimización de consultas."
+     ]
+    },
+    {
+     "title": "Tratamiento de datos",
+     "items": [
+      "Inserción, borrado y modificación de registros.",
+      "Integridad referencial.",
+      "Subconsultas y composiciones en órdenes de edición.",
+      "Transacciones.",
+      "Políticas de bloqueo. Concurrencia."
+     ]
+    },
+    {
+     "title": "Programación de bases de datos",
+     "items": [
+      "Introducción. Lenguaje de programación.",
+      "Variables del sistema y variables de usuario.",
+      "Funciones.",
+      "Estructuras de control de flujo.",
+      "Procedimientos almacenados. Funciones de usuario.",
+      "Eventos y disparadores.",
+      "Excepciones.",
+      "Cursores."
+     ]
+    },
+    {
+     "title": "Interpretación de Diagramas Entidad/Relación",
+     "items": [
+      "El modelo E/R. Entidades y relaciones. Cardinalidades. Debilidad.",
+      "El modelo E/R ampliado. Generalización y especialización. Agregación.",
+      "Paso del diagrama E/R al modelo relacional.",
+      "Restricciones semánticas del modelo relacional.",
+      "Normalización de modelos relacionales."
+     ]
+    },
+    {
+     "title": "Uso de bases de datos no relacionales",
+     "items": [
+      "Características de las bases de datos no relacionales.",
+      "Tipos de bases de datos no relacionales.",
+      "Elementos de las bases de datos no relacionales.",
+      "Sistemas gestores de bases de datos no relacionales.",
+      "Herramientas de los sistemas gestores de bases de datos no relacionales para la gestión de la información almacenada."
+     ]
+    }
+   ],
+   "contribution": "La formación del módulo contribuye a alcanzar los objetivos generales e), f), g), p) y r) del ciclo formativo y las competencias profesionales, personales y sociales d), e) y p), del título."
+  },
+  {
+   "code": "0485",
+   "name": "Programación",
+   "ects": 14,
+   "stateMinHours": 135,
+   "learningOutcomes": [
+    {
+     "number": 1,
+     "text": "Reconoce la estructura de un programa informático, identificando y relacionando los elementos propios del lenguaje de programación utilizado.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se han identificado los bloques que componen la estructura de un programa informático."
+      },
+      {
+       "letter": "b",
+       "text": "Se han creado proyectos de desarrollo de aplicaciones."
+      },
+      {
+       "letter": "c",
+       "text": "Se han utilizado entornos integrados de desarrollo."
+      },
+      {
+       "letter": "d",
+       "text": "Se han identificado los distintos tipos de variables y la utilidad específica de cada uno."
+      },
+      {
+       "letter": "e",
+       "text": "Se ha modificado el código de un programa para crear y utilizar variables."
+      },
+      {
+       "letter": "f",
+       "text": "Se han creado y utilizado constantes y literales."
+      },
+      {
+       "letter": "g",
+       "text": "Se han clasificado, reconocido y utilizado en expresiones los operadores del lenguaje."
+      },
+      {
+       "letter": "h",
+       "text": "Se ha comprobado el funcionamiento de las conversiones de tipo explícitas e implícitas."
+      },
+      {
+       "letter": "i",
+       "text": "Se han introducido comentarios en el código."
+      }
+     ]
+    },
+    {
+     "number": 2,
+     "text": "Escribe y prueba programas sencillos, reconociendo y aplicando los fundamentos de la programación orientada a objetos.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se han identificado los fundamentos de la programación orientada a objetos."
+      },
+      {
+       "letter": "b",
+       "text": "Se han escrito programas simples."
+      },
+      {
+       "letter": "c",
+       "text": "Se han instanciado objetos a partir de clases predefinidas."
+      },
+      {
+       "letter": "d",
+       "text": "Se han utilizado métodos y propiedades de los objetos."
+      },
+      {
+       "letter": "e",
+       "text": "Se han escrito llamadas a métodos estáticos."
+      },
+      {
+       "letter": "f",
+       "text": "Se han utilizado parámetros en la llamada a métodos."
+      },
+      {
+       "letter": "g",
+       "text": "Se han incorporado y utilizado librerías de objetos."
+      },
+      {
+       "letter": "h",
+       "text": "Se han utilizado constructores."
+      },
+      {
+       "letter": "i",
+       "text": "Se ha utilizado el entorno integrado de desarrollo en la creación y compilación de programas simples."
+      }
+     ]
+    },
+    {
+     "number": 3,
+     "text": "Escribe y depura código, analizando y utilizando las estructuras de control del lenguaje.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se ha escrito y probado código que haga uso de estructuras de selección."
+      },
+      {
+       "letter": "b",
+       "text": "Se han utilizado estructuras de repetición."
+      },
+      {
+       "letter": "c",
+       "text": "Se han reconocido las posibilidades de las sentencias de salto."
+      },
+      {
+       "letter": "d",
+       "text": "Se ha escrito código utilizando control de excepciones."
+      },
+      {
+       "letter": "e",
+       "text": "Se han creado programas ejecutables utilizando diferentes estructuras de control."
+      },
+      {
+       "letter": "f",
+       "text": "Se han probado y depurado los programas."
+      },
+      {
+       "letter": "g",
+       "text": "Se ha comentado y documentado el código."
+      },
+      {
+       "letter": "h",
+       "text": "Se han creado excepciones."
+      },
+      {
+       "letter": "i",
+       "text": "Se han utilizado aserciones para la detección y corrección de errores durante la fase de desarrollo."
+      }
+     ]
+    },
+    {
+     "number": 4,
+     "text": "Desarrolla programas organizados en clases analizando y aplicando los principios de la programación orientada a objetos.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se ha reconocido la sintaxis, estructura y componentes típicos de una clase."
+      },
+      {
+       "letter": "b",
+       "text": "Se han definido clases."
+      },
+      {
+       "letter": "c",
+       "text": "Se han definido propiedades y métodos."
+      },
+      {
+       "letter": "d",
+       "text": "Se han creado constructores."
+      },
+      {
+       "letter": "e",
+       "text": "Se han desarrollado programas que instancien y utilicen objetos de las clases creadas anteriormente."
+      },
+      {
+       "letter": "f",
+       "text": "Se han utilizado mecanismos para controlar la visibilidad de las clases y de sus miembros."
+      },
+      {
+       "letter": "g",
+       "text": "Se han definido y utilizado clases heredadas."
+      },
+      {
+       "letter": "h",
+       "text": "Se han creado y utilizado métodos estáticos."
+      },
+      {
+       "letter": "i",
+       "text": "Se han creado y utilizado conjuntos y librerías de clases."
+      }
+     ]
+    },
+    {
+     "number": 5,
+     "text": "Realiza operaciones de entrada y salida de información, utilizando procedimientos específicos del lenguaje y librerías de clases.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se ha utilizado la consola para realizar operaciones de entrada y salida de información."
+      },
+      {
+       "letter": "b",
+       "text": "Se han aplicado formatos en la visualización de la información."
+      },
+      {
+       "letter": "c",
+       "text": "Se han reconocido las posibilidades de entrada / salida del lenguaje y las librerías asociadas."
+      },
+      {
+       "letter": "d",
+       "text": "Se han utilizado ficheros para almacenar y recuperar información."
+      },
+      {
+       "letter": "e",
+       "text": "Se han creado programas que utilicen diversos métodos de acceso al contenido de los ficheros."
+      },
+      {
+       "letter": "f",
+       "text": "Se han utilizado las herramientas del entorno de desarrollo para crear interfaces gráficos de usuario simples."
+      },
+      {
+       "letter": "g",
+       "text": "Se han programado controladores de eventos."
+      },
+      {
+       "letter": "h",
+       "text": "Se han escrito programas que utilicen interfaces gráficos para la entrada y salida de información."
+      }
+     ]
+    },
+    {
+     "number": 6,
+     "text": "Escribe programas que manipulen información seleccionando y utilizando tipos avanzados de datos.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se han escrito programas que utilicen matrices (arrays)."
+      },
+      {
+       "letter": "b",
+       "text": "Se han reconocido las librerías de clases relacionadas con tipos de datos avanzados."
+      },
+      {
+       "letter": "c",
+       "text": "Se han utilizado listas para almacenar y procesar información."
+      },
+      {
+       "letter": "d",
+       "text": "Se han utilizado iteradores para recorrer los elementos de las listas."
+      },
+      {
+       "letter": "e",
+       "text": "Se han reconocido las características y ventajas de cada una de las colecciones de datos disponibles."
+      },
+      {
+       "letter": "f",
+       "text": "Se han creado clases y métodos genéricos."
+      },
+      {
+       "letter": "g",
+       "text": "Se han utilizado expresiones regulares en la búsqueda de patrones en cadenas de texto."
+      },
+      {
+       "letter": "h",
+       "text": "Se han identificado las clases relacionadas con el tratamiento de documentos escritos en diferentes lenguajes de intercambio de datos."
+      },
+      {
+       "letter": "i",
+       "text": "Se han realizado programas que realicen manipulaciones sobre documentos escritos en diferentes lenguajes de intercambio de datos."
+      },
+      {
+       "letter": "j",
+       "text": "Se han utilizado operaciones agregadas para el manejo de información almacenada en colecciones."
+      }
+     ]
+    },
+    {
+     "number": 7,
+     "text": "Desarrolla programas aplicando características avanzadas de los lenguajes orientados a objetos y del entorno de programación.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se han identificado los conceptos de herencia, superclase y subclase."
+      },
+      {
+       "letter": "b",
+       "text": "Se han utilizado modificadores para bloquear y forzar la herencia de clases y métodos."
+      },
+      {
+       "letter": "c",
+       "text": "Se ha reconocido la incidencia de los constructores en la herencia."
+      },
+      {
+       "letter": "d",
+       "text": "Se han creado clases heredadas que sobrescriben la implementación de métodos de la superclase."
+      },
+      {
+       "letter": "e",
+       "text": "Se han diseñado y aplicado jerarquías de clases."
+      },
+      {
+       "letter": "f",
+       "text": "Se han probado y depurado las jerarquías de clases."
+      },
+      {
+       "letter": "g",
+       "text": "Se han realizado programas que implementen y utilicen jerarquías de clases."
+      },
+      {
+       "letter": "h",
+       "text": "Se ha comentado y documentado el código."
+      },
+      {
+       "letter": "i",
+       "text": "Se han identificado y evaluado los escenarios de uso de interfaces."
+      },
+      {
+       "letter": "j",
+       "text": "Se han identificado y evaluado los escenarios de utilización de la herencia y la composición."
+      }
+     ]
+    },
+    {
+     "number": 8,
+     "text": "Utiliza bases de datos orientadas a objetos, analizando sus características y aplicando técnicas para mantener la persistencia de la información.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se han identificado las características de las bases de datos orientadas a objetos."
+      },
+      {
+       "letter": "b",
+       "text": "Se ha analizado su aplicación en el desarrollo de aplicaciones mediante lenguajes orientados a objetos."
+      },
+      {
+       "letter": "c",
+       "text": "Se han instalado sistemas gestores de bases de datos orientados a objetos."
+      },
+      {
+       "letter": "d",
+       "text": "Se han clasificado y analizado los distintos métodos soportados por los sistemas gestores para la gestión de la información almacenada."
+      },
+      {
+       "letter": "e",
+       "text": "Se han creado bases de datos y las estructuras necesarias para el almacenamiento de objetos."
+      },
+      {
+       "letter": "f",
+       "text": "Se han programado aplicaciones que almacenen objetos en las bases de datos creadas."
+      },
+      {
+       "letter": "g",
+       "text": "Se han realizado programas para recuperar, actualizar y eliminar objetos de las bases de datos."
+      },
+      {
+       "letter": "h",
+       "text": "Se han realizado programas para almacenar y gestionar tipos de datos estructurados, compuestos y relacionados."
+      }
+     ]
+    },
+    {
+     "number": 9,
+     "text": "Gestiona información almacenada en bases de datos manteniendo la integridad y consistencia de los datos.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se han identificado las características y métodos de acceso a sistemas gestores de bases de datos."
+      },
+      {
+       "letter": "b",
+       "text": "Se han programado conexiones con bases de datos."
+      },
+      {
+       "letter": "c",
+       "text": "Se ha escrito código para almacenar información en bases de datos."
+      },
+      {
+       "letter": "d",
+       "text": "Se han creado programas para recuperar y mostrar información almacenada en bases de datos."
+      },
+      {
+       "letter": "e",
+       "text": "Se han efectuado borrados y modificaciones sobre la información almacenada."
+      },
+      {
+       "letter": "f",
+       "text": "Se han creado aplicaciones que muestren la información almacenada en bases de datos."
+      },
+      {
+       "letter": "g",
+       "text": "Se han creado aplicaciones para gestionar la información presente en bases de datos."
+      }
+     ]
+    }
+   ],
+   "contents": [
+    {
+     "title": "Identificación de los elementos de un programa informático",
+     "items": [
+      "Estructura y bloques fundamentales.",
+      "Variables.",
+      "Tipos de datos.",
+      "Literales.",
+      "Constantes.",
+      "Operadores y expresiones.",
+      "Conversiones de tipo.",
+      "Comentarios."
+     ]
+    },
+    {
+     "title": "Utilización de objetos",
+     "items": [
+      "Características de los objetos.",
+      "Instanciación de objetos.",
+      "Utilización de métodos. Parámetros.",
+      "Utilización de propiedades.",
+      "Utilización de métodos estáticos.",
+      "Constructores.",
+      "Destrucción de objetos y liberación de memoria."
+     ]
+    },
+    {
+     "title": "Uso de estructuras de control",
+     "items": [
+      "Estructuras de selección.",
+      "Estructuras de repetición.",
+      "Estructuras de salto.",
+      "Control de excepciones.",
+      "Aserciones.",
+      "Prueba, depuración y documentación de la aplicación."
+     ]
+    },
+    {
+     "title": "Desarrollo de clases",
+     "items": [
+      "Concepto de clase.",
+      "Estructura y miembros de una clase. Visibilidad.",
+      "Creación de propiedades.",
+      "Creación de métodos.",
+      "Creación de constructores.",
+      "Utilización de clases y objetos.",
+      "Utilización de clases heredadas."
+     ]
+    },
+    {
+     "title": "Lectura y escritura de información",
+     "items": [
+      "Flujos. Tipos: bytes y caracteres. Clases relacionadas.",
+      "Ficheros de datos. Registros.",
+      "Apertura y cierre de ficheros. Modos de acceso. Escritura y lectura de información en ficheros.",
+      "Utilización de los sistemas de ficheros.",
+      "Creación y eliminación de ficheros y directorios.",
+      "Entrada desde teclado. Salida a pantalla. Formatos de visualización.",
+      "Interfaces gráficas.",
+      "Concepto de evento.",
+      "Creación de controladores de eventos."
+     ]
+    },
+    {
+     "title": "Aplicación de las estructuras de almacenamiento",
+     "items": [
+      "Estructuras estáticas y dinámicas.",
+      "Creación de matrices (arrays).",
+      "Matrices (arrays) multidimensionales.",
+      "Genericidad.",
+      "Cadenas de caracteres. Expresiones regulares.",
+      "Colecciones: Listas, Conjuntos y Diccionarios.",
+      "Operaciones agregadas: filtrado, reducción y recolección."
+     ]
+    },
+    {
+     "title": "Utilización avanzada de clases",
+     "items": [
+      "Composición de clases.",
+      "Herencia y polimorfismo.",
+      "Jerarquía de clases: Superclases y subclases.",
+      "Clases y métodos abstractos y finales.",
+      "Interfaces.",
+      "Sobreescritura de métodos.",
+      "Constructores y herencia."
+     ]
+    },
+    {
+     "title": "Mantenimiento de la persistencia de los objetos",
+     "items": [
+      "Bases de datos orientadas a objetos.",
+      "Características de las bases de datos orientadas a objetos.",
+      "Instalación del gestor de bases de datos.",
+      "Creación de bases de datos.",
+      "Mecanismos de consulta.",
+      "El lenguaje de consultas: sintaxis, expresiones, operadores.",
+      "Recuperación, modificación y borrado de información.",
+      "Tipos de datos objeto; atributos y métodos.",
+      "Tipos de datos colección."
+     ]
+    },
+    {
+     "title": "Gestión de bases de datos",
+     "items": [
+      "Acceso a bases de datos. Estándares. Características.",
+      "Establecimiento de conexiones.",
+      "Almacenamiento, recuperación, actualización y eliminación de información en bases de datos."
+     ]
+    }
+   ],
+   "contribution": "La formación del módulo contribuye a alcanzar los objetivos generales f), g), j) y q) del ciclo formativo y las competencias profesionales, personales y sociales e), f), y j) del título."
+  },
+  {
+   "code": "0373",
+   "name": "Lenguajes de marcas y sistemas de gestión de información",
+   "ects": 7,
+   "stateMinHours": 70,
+   "learningOutcomes": [
+    {
+     "number": 1,
+     "text": "Reconoce las características de lenguajes de marcas analizando e interpretando fragmentos de código.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se han identificado las características generales de los lenguajes de marcas."
+      },
+      {
+       "letter": "b",
+       "text": "Se han reconocido las ventajas que proporcionan en el tratamiento de la información."
+      },
+      {
+       "letter": "c",
+       "text": "Se han clasificado los lenguajes de marcas e identificado los más relevantes."
+      },
+      {
+       "letter": "d",
+       "text": "Se han diferenciado sus ámbitos de aplicación."
+      },
+      {
+       "letter": "e",
+       "text": "Se han reconocido la necesidad y los ámbitos específicos de aplicación de un lenguaje de marcas de propósito general."
+      },
+      {
+       "letter": "f",
+       "text": "Se han analizado las características propias de diferentes lenguajes de marcas."
+      },
+      {
+       "letter": "g",
+       "text": "Se han identificado la estructura de un documento y sus reglas sintácticas."
+      },
+      {
+       "letter": "h",
+       "text": "Se han contrastado la necesidad de crear documentos bien formados y la influencia en su procesamiento."
+      },
+      {
+       "letter": "i",
+       "text": "Se han identificado las ventajas que aportan los espacios de nombres."
+      }
+     ]
+    },
+    {
+     "number": 2,
+     "text": "Utiliza lenguajes de marcas para la transmisión y presentación de información a través de la web analizando la estructura de los documentos e identificando sus elementos.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se han identificado y clasificado los lenguajes de marcas relacionados con la web y sus diferentes versiones y estándares."
+      },
+      {
+       "letter": "b",
+       "text": "Se ha analizado la estructura de un documento HTML e identificado las secciones que lo componen."
+      },
+      {
+       "letter": "c",
+       "text": "Se han reconocido la funcionalidad de las principales etiquetas y los atributos del lenguaje HTML."
+      },
+      {
+       "letter": "d",
+       "text": "Se han establecido las semejanzas y diferencias entre las diferentes versiones de HTML."
+      },
+      {
+       "letter": "e",
+       "text": "Se han utilizado herramientas en la creación de documentos web."
+      },
+      {
+       "letter": "f",
+       "text": "Se han identificado las ventajas que aporta la utilización de hojas de estilo."
+      },
+      {
+       "letter": "g",
+       "text": "Se han aplicado hojas de estilo."
+      },
+      {
+       "letter": "h",
+       "text": "Se han validado documentos HTML y CSS."
+      },
+      {
+       "letter": "i",
+       "text": "Se han identificado las tecnologías en que se basa la sindicación de contenidos."
+      },
+      {
+       "letter": "j",
+       "text": "Se han reconocido los ámbitos de aplicación de la sindicación de contenidos."
+      }
+     ]
+    },
+    {
+     "number": 3,
+     "text": "Accede y manipula documentos web utilizando lenguajes de script de cliente.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se han identificado y clasificado los lenguajes de script de cliente relacionados con la web y sus diferentes versiones y estándares."
+      },
+      {
+       "letter": "b",
+       "text": "Se ha identificado la sintaxis básica de los lenguajes de script de cliente."
+      },
+      {
+       "letter": "c",
+       "text": "Se han utilizado métodos para la selección y acceso de los diferentes elementos de un documento web."
+      },
+      {
+       "letter": "d",
+       "text": "Se han creado y modificado elementos de documentos web."
+      },
+      {
+       "letter": "e",
+       "text": "Se han eliminado elementos de documentos web."
+      },
+      {
+       "letter": "f",
+       "text": "Se han realizado modificaciones sobre los estilos de un documento web."
+      }
+     ]
+    },
+    {
+     "number": 4,
+     "text": "Establece mecanismos de validación de documentos para el intercambio de información utilizando métodos para definir su sintaxis y estructura.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se ha establecido la necesidad de describir la información transmitida en los documentos y sus reglas."
+      },
+      {
+       "letter": "b",
+       "text": "Se han identificado las tecnologías relacionadas con la definición de documentos."
+      },
+      {
+       "letter": "c",
+       "text": "Se ha analizado la estructura y sintaxis específica utilizada en la descripción."
+      },
+      {
+       "letter": "d",
+       "text": "Se han creado descripciones de documentos."
+      },
+      {
+       "letter": "e",
+       "text": "Se han utilizado descripciones en la elaboración y validación de documentos."
+      },
+      {
+       "letter": "f",
+       "text": "Se han asociado las descripciones con los documentos."
+      },
+      {
+       "letter": "g",
+       "text": "Se han utilizado herramientas específicas."
+      }
+     ]
+    },
+    {
+     "number": 5,
+     "text": "Realiza conversiones sobre documentos para el intercambio de información utilizando técnicas, lenguajes y herramientas de procesamiento.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se ha identificado la necesidad de la conversión de documentos para el intercambio de la información."
+      },
+      {
+       "letter": "b",
+       "text": "Se han establecido ámbitos de aplicación."
+      },
+      {
+       "letter": "c",
+       "text": "Se han analizado las tecnologías implicadas y su modo de funcionamiento."
+      },
+      {
+       "letter": "d",
+       "text": "Se ha descrito la sintaxis específica utilizada en la conversión y adaptación de documentos para el intercambio de información."
+      },
+      {
+       "letter": "e",
+       "text": "Se han creado especificaciones de conversión."
+      },
+      {
+       "letter": "f",
+       "text": "Se han identificado y caracterizado herramientas específicas relacionadas con la conversión de documentos para el intercambio de información."
+      },
+      {
+       "letter": "g",
+       "text": "Se han realizado conversiones sobre documentos para el intercambio de información."
+      }
+     ]
+    },
+    {
+     "number": 6,
+     "text": "Gestiona la información en formatos de intercambio de datos analizando y utilizando tecnologías de almacenamiento y lenguajes de consulta.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se han identificado los principales métodos de almacenamiento de la información utilizados en documentos de intercambio de datos."
+      },
+      {
+       "letter": "b",
+       "text": "Se han identificado las ventajas e inconvenientes de almacenar información en formatos de intercambio de datos."
+      },
+      {
+       "letter": "c",
+       "text": "Se han establecido tecnologías eficientes de almacenamiento de información en función de sus características."
+      },
+      {
+       "letter": "d",
+       "text": "Se han identificado lenguajes y herramientas para el tratamiento y almacenamiento de información y su inclusión en documentos de intercambio de datos."
+      },
+      {
+       "letter": "e",
+       "text": "Se han utilizado lenguajes de consulta y manipulación en documentos de intercambio de datos."
+      },
+      {
+       "letter": "f",
+       "text": "Se han utilizado sistemas gestores de bases de datos relacionales en el almacenamiento de información en formatos de intercambio de datos."
+      },
+      {
+       "letter": "g",
+       "text": "Se han utilizado técnicas específicas para crear documentos de intercambio de datos a partir de información almacenada en bases de datos relacionales."
+      },
+      {
+       "letter": "h",
+       "text": "Se han identificado las características de los sistemas."
+      },
+      {
+       "letter": "i",
+       "text": "Se han utilizado herramientas para gestionar la información almacenada en bases de datos nativas."
+      }
+     ]
+    },
+    {
+     "number": 7,
+     "text": "Opera sistemas empresariales de gestión de información realizando tareas de importación, integración, aseguramiento y extracción de la información.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se han identificado los principales sistemas de gestión empresarial."
+      },
+      {
+       "letter": "b",
+       "text": "Se han reconocido las ventajas de los sistemas de gestión de información empresariales."
+      },
+      {
+       "letter": "c",
+       "text": "Se han evaluado las características de las principales aplicaciones de gestión empresarial."
+      },
+      {
+       "letter": "d",
+       "text": "Se han instalado aplicaciones de gestión de la información empresarial."
+      },
+      {
+       "letter": "e",
+       "text": "Se han configurado y administrado las aplicaciones."
+      },
+      {
+       "letter": "f",
+       "text": "Se han establecido y verificado mecanismos de acceso seguro a la información."
+      },
+      {
+       "letter": "g",
+       "text": "Se han generado informes."
+      },
+      {
+       "letter": "h",
+       "text": "Se han realizado procedimientos de extracción de información para su tratamiento e incorporación a diversos sistemas."
+      },
+      {
+       "letter": "i",
+       "text": "Se han elaborado documentos relativos a la explotación de la aplicación."
+      }
+     ]
+    }
+   ],
+   "contents": [
+    {
+     "title": "Reconocimiento de las características de lenguajes de marcas",
+     "items": [
+      "Clasificación.",
+      "Características y ámbitos de aplicación.",
+      "Estructura y sintaxis.",
+      "Herramientas de edición.",
+      "Elaboración de documentos bien formados.",
+      "Utilización de espacios de nombres."
+     ]
+    },
+    {
+     "title": "Utilización de lenguajes de marcas en entornos web",
+     "items": [
+      "Estándares web. Versiones. Clasificación.",
+      "Estructura de un documento HTML.",
+      "Identificación de etiquetas y atributos de HTML.",
+      "Herramientas de diseño web.",
+      "Hojas de estilo (CSS).",
+      "Validación de documentos HTML y CSS.",
+      "Lenguajes de marcas para la sindicación de contenidos."
+     ]
+    },
+    {
+     "title": "Manipulación de documentos web",
+     "items": [
+      "Lenguajes de script de cliente. Características y sintaxis básica. Estándares.",
+      "Selección y acceso a elementos.",
+      "Creación y modificación de elementos.",
+      "Eliminación de elementos.",
+      "Manipulación de estilos."
+     ]
+    },
+    {
+     "title": "Definición de esquemas y vocabularios en lenguajes de marcas",
+     "items": [
+      "Tecnologías para la definición de documentos. Estructura y sintaxis.",
+      "Creación de descripciones de documentos.",
+      "Asociación de descripciones con documentos. Validación.",
+      "Herramientas de creación y validación."
+     ]
+    },
+    {
+     "title": "Conversión y adaptación de documentos para el intercambio de información",
+     "items": [
+      "Tecnologías de transformación de documentos. Estándares. Ámbitos de aplicación.",
+      "Descripción de la estructura y de la sintaxis.",
+      "Creación y utilización de plantillas. Herramientas y depuración.",
+      "Conversión entre diferentes formatos de documentos."
+     ]
+    },
+    {
+     "title": "Almacenamiento de información",
+     "items": [
+      "Sistemas de almacenamiento de información. Características. Tecnologías.",
+      "Lenguajes de consulta y manipulación en documentos.",
+      "Consulta y manipulación de información.",
+      "Importación y exportación de bases de datos relacionales en diferentes formatos.",
+      "Herramientas de tratamiento y almacenamiento de información en sistemas nativos.",
+      "Almacenamiento y manipulación de información en sistemas nativos."
+     ]
+    },
+    {
+     "title": "Sistemas de gestión empresarial",
+     "items": [
+      "Aplicaciones de gestión empresarial. Tipos. Características.",
+      "Instalación.",
+      "Administración y configuración.",
+      "Integración de módulos.",
+      "Mecanismos de acceso seguro a la información. Roles y privilegios.",
+      "Elaboración de informes.",
+      "Exportación de información.",
+      "Elaboración de documentación."
+     ]
+    }
+   ],
+   "contribution": "La formación del módulo contribuye a alcanzar los objetivos generales h), i), p) y r) del ciclo formativo y las competencias profesionales, personales y sociales e), f), h) y p) del título."
+  },
+  {
+   "code": "0487",
+   "name": "Entornos de desarrollo",
+   "ects": 6,
+   "stateMinHours": 50,
+   "learningOutcomes": [
+    {
+     "number": 1,
+     "text": "Reconoce los elementos y herramientas que intervienen en el desarrollo de un programa informático, analizando sus características y las fases en las que actúan hasta llegar a su puesta en funcionamiento.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se ha reconocido la relación de los programas con los componentes del sistema informático: memoria, procesador, periféricos, entre otros."
+      },
+      {
+       "letter": "b",
+       "text": "Se han identificado las fases de desarrollo de una aplicación informática."
+      },
+      {
+       "letter": "c",
+       "text": "Se han diferenciado los conceptos de código fuente, objeto y ejecutable."
+      },
+      {
+       "letter": "d",
+       "text": "Se han reconocido las características de la generación de código intermedio para su ejecución en máquinas virtuales."
+      },
+      {
+       "letter": "e",
+       "text": "Se han clasificado los lenguajes de programación, identificando sus características."
+      },
+      {
+       "letter": "f",
+       "text": "Se ha evaluado la funcionalidad ofrecida por las herramientas utilizadas en el desarrollo de software."
+      },
+      {
+       "letter": "g",
+       "text": "Se han identificado las características y escenarios de uso de las metodologías ágiles de desarrollo de software."
+      }
+     ]
+    },
+    {
+     "number": 2,
+     "text": "Evalúa entornos integrados de desarrollo analizando sus características para editar código fuente y generar ejecutables.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se han instalado entornos de desarrollo, propietarios y libres."
+      },
+      {
+       "letter": "b",
+       "text": "Se han añadido y eliminado módulos en el entorno de desarrollo."
+      },
+      {
+       "letter": "c",
+       "text": "Se ha personalizado y automatizado el entorno de desarrollo."
+      },
+      {
+       "letter": "d",
+       "text": "Se ha configurado el sistema de actualización del entorno de desarrollo."
+      },
+      {
+       "letter": "e",
+       "text": "Se han generado ejecutables a partir de código fuente de diferentes lenguajes en un mismo entorno de desarrollo."
+      },
+      {
+       "letter": "f",
+       "text": "Se han generado ejecutables a partir de un mismo código fuente con varios entornos de desarrollo."
+      },
+      {
+       "letter": "g",
+       "text": "Se han identificado las características comunes y específicas de diversos entornos de desarrollo."
+      }
+     ]
+    },
+    {
+     "number": 3,
+     "text": "Verifica el funcionamiento de programas diseñando y realizando pruebas.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se han identificado los diferentes tipos de pruebas."
+      },
+      {
+       "letter": "b",
+       "text": "Se han definido casos de prueba."
+      },
+      {
+       "letter": "c",
+       "text": "Se han identificado las herramientas de depuración y prueba de aplicaciones"
+      },
+      {
+       "letter": "d",
+       "text": "ofrecidas por el entorno de desarrollo."
+      },
+      {
+       "letter": "e",
+       "text": "Se han utilizado herramientas de depuración para definir puntos de ruptura y seguimiento."
+      },
+      {
+       "letter": "f",
+       "text": "Se han utilizado las herramientas de depuración para examinar y modificar el comportamiento de un programa en tiempo de ejecución."
+      },
+      {
+       "letter": "g",
+       "text": "Se han efectuado pruebas unitarias de clases y funciones."
+      },
+      {
+       "letter": "h",
+       "text": "Se han implementado pruebas automáticas."
+      },
+      {
+       "letter": "i",
+       "text": "Se han documentado las incidencias detectadas."
+      },
+      {
+       "letter": "j",
+       "text": "Se han utilizado dobles de prueba para aislar los componentes durante las pruebas."
+      }
+     ]
+    },
+    {
+     "number": 4,
+     "text": "Optimiza código empleando las herramientas disponibles en el entorno de desarrollo.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se han identificado los patrones de refactorización más usuales."
+      },
+      {
+       "letter": "b",
+       "text": "Se han elaborado las pruebas asociadas a la refactorización."
+      },
+      {
+       "letter": "c",
+       "text": "Se ha revisado el código fuente usando un analizador de código."
+      },
+      {
+       "letter": "d",
+       "text": "Se han identificado las posibilidades de configuración de un analizador de código."
+      },
+      {
+       "letter": "e",
+       "text": "Se han aplicado patrones de refactorización con las herramientas que proporciona el entorno de desarrollo."
+      },
+      {
+       "letter": "f",
+       "text": "Se ha realizado el control de versiones integrado en el entorno de desarrollo."
+      },
+      {
+       "letter": "g",
+       "text": "Se han utilizado herramientas del entorno de desarrollo para documentar las clases."
+      },
+      {
+       "letter": "h",
+       "text": "Se han utilizado repositorios remotos para el desarrollo de código colaborativo."
+      },
+      {
+       "letter": "i",
+       "text": "Se han utilizado herramientas para la integración continua del código."
+      }
+     ]
+    },
+    {
+     "number": 5,
+     "text": "Genera diagramas de clases valorando su importancia en el desarrollo de aplicaciones y empleando herramientas específicas.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se han identificado los conceptos básicos de la programación orientada a objetos."
+      },
+      {
+       "letter": "b",
+       "text": "Se han utilizado herramientas para la elaboración de diagramas de clases."
+      },
+      {
+       "letter": "c",
+       "text": "Se ha interpretado el significado de diagramas de clases."
+      },
+      {
+       "letter": "d",
+       "text": "Se han trazado diagramas de clases a partir de las especificaciones de las mismas."
+      },
+      {
+       "letter": "e",
+       "text": "Se ha generado código a partir de un diagrama de clases."
+      },
+      {
+       "letter": "f",
+       "text": "Se ha generado un diagrama de clases mediante ingeniería inversa."
+      }
+     ]
+    },
+    {
+     "number": 6,
+     "text": "Genera diagramas de comportamiento valorando su importancia en el desarrollo de aplicaciones y empleando herramientas específicas.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se han identificado los distintos tipos de diagramas de comportamiento."
+      },
+      {
+       "letter": "b",
+       "text": "Se ha reconocido el significado de los diagramas de casos de uso."
+      },
+      {
+       "letter": "c",
+       "text": "Se han interpretado diagramas de interacción."
+      },
+      {
+       "letter": "d",
+       "text": "Se han elaborado diagramas de interacción sencillos."
+      },
+      {
+       "letter": "e",
+       "text": "Se ha interpretado el significado de diagramas de actividades."
+      },
+      {
+       "letter": "f",
+       "text": "Se han elaborado diagramas de actividades sencillos."
+      },
+      {
+       "letter": "g",
+       "text": "Se han interpretado diagramas de estados."
+      },
+      {
+       "letter": "h",
+       "text": "Se han planteado diagramas de estados sencillos."
+      }
+     ]
+    }
+   ],
+   "contents": [
+    {
+     "title": "Desarrollo de software",
+     "items": [
+      "Concepto de programa informático.",
+      "Código fuente, código objeto y código ejecutable; tecnologías de virtualización.",
+      "Tipos de lenguajes de programación. Paradigmas.",
+      "Características de los lenguajes más difundidos.",
+      "Fases del desarrollo de una aplicación: análisis, diseño, codificación, pruebas, documentación, explotación y mantenimiento, entre otras.",
+      "Proceso de obtención de código ejecutable a partir del código fuente; herramientas implicadas.",
+      "Metodologías ágiles. Técnicas. Características."
+     ]
+    },
+    {
+     "title": "Instalación y uso de entornos de desarrollo",
+     "items": [
+      "Funciones de un entorno de desarrollo.",
+      "Instalación de un entorno de desarrollo.",
+      "Uso básico de un entorno de desarrollo.",
+      "Personalización del entorno de desarrollo: temas, estilos de codificación, módulos y extensiones, entre otros.",
+      "Edición de programas.",
+      "Generación de ejecutables en distintos entornos.",
+      "Herramientas y automatización."
+     ]
+    },
+    {
+     "title": "Diseño y realización de pruebas",
+     "items": [
+      "Planificación de Pruebas.",
+      "Tipos de pruebas: Funcionales, estructurales, regresión, entre otras.",
+      "Procedimientos y casos de prueba.",
+      "Pruebas de Código: Cubrimiento, valores límite, clases de equivalencia, entre otras.",
+      "Pruebas unitarias; herramientas de automatización.",
+      "Documentación de las incidencias.",
+      "Dobles de prueba. Tipos. Características."
+     ]
+    },
+    {
+     "title": "Optimización y documentación",
+     "items": [
+      "Refactorización. Concepto. Limitaciones. Patrones de refactorización más usuales. Refactorización y pruebas. Herramientas de ayuda a la refactorización.",
+      "Analizadores de código.",
+      "Control de versiones. Estructura de las herramientas de control de versiones. Repositorio. Herramientas de control de versiones. Uso integrado en el entorno de desarrollo.",
+      "Repositorios remotos.",
+      "Documentación. Uso de comentarios. Alternativas.",
+      "Integración continua. Herramientas."
+     ]
+    },
+    {
+     "title": "Elaboración de diagramas de clases",
+     "items": [
+      "Clases. Atributos, métodos y visibilidad.",
+      "Objetos. Instanciación.",
+      "Relaciones. Asociación, navegabilidad y multiplicidad. Herencia, composición, agregación. Realización y dependencia.",
+      "Notación de los diagramas de clases.",
+      "Herramientas.",
+      "Generación automática de código. Ingeniería inversa."
+     ]
+    },
+    {
+     "title": "Elaboración de diagramas de comportamiento",
+     "items": [
+      "Tipos. Campo de aplicación.",
+      "Diagrama de casos de uso. Actores, escenario, relación de comunicación.",
+      "Diagrama de secuencia. Línea de vida de un objeto, activación, envío de mensajes.",
+      "Diagrama de comunicación. Objetos, mensajes.",
+      "Diagrama de actividad. Diagrama de estados."
+     ]
+    }
+   ],
+   "contribution": "La formación del módulo contribuye a alcanzar los objetivos generales d), e), h), i), j) y r) del ciclo formativo y las competencias profesionales, personales y sociales d), e), i), j), r), t), v) y w) del título."
+  },
+  {
+   "code": "0612",
+   "name": "Desarrollo web en entorno cliente",
+   "ects": 9,
+   "stateMinHours": 80,
+   "learningOutcomes": [
+    {
+     "number": 1,
+     "text": "Selecciona las arquitecturas y tecnologías de programación sobre clientes web, identificando y analizando las capacidades y características de cada una.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se han caracterizado y diferenciado los modelos de ejecución de código en el servidor y en el cliente web."
+      },
+      {
+       "letter": "b",
+       "text": "Se han identificado las capacidades y mecanismos de ejecución de código de los navegadores web."
+      },
+      {
+       "letter": "c",
+       "text": "Se han identificado y caracterizado los principales lenguajes relacionados con la programación de clientes web."
+      },
+      {
+       "letter": "d",
+       "text": "Se han reconocido las particularidades de la programación de guiones y sus ventajas y desventajas sobre la programación tradicional."
+      },
+      {
+       "letter": "e",
+       "text": "Se han verificado los mecanismos de integración de los lenguajes de marcas con los lenguajes de programación de clientes web."
+      },
+      {
+       "letter": "f",
+       "text": "Se han reconocido y evaluado las herramientas de programación y prueba sobre clientes web."
+      }
+     ]
+    },
+    {
+     "number": 2,
+     "text": "Escribe sentencias simples, aplicando la sintaxis del lenguaje y verificando su ejecución sobre navegadores web.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se ha seleccionado un lenguaje de programación de clientes web en función de sus posibilidades."
+      },
+      {
+       "letter": "b",
+       "text": "Se han utilizado los distintos tipos de variables y operadores disponibles en el lenguaje."
+      },
+      {
+       "letter": "c",
+       "text": "Se han identificado los ámbitos de utilización de las variables."
+      },
+      {
+       "letter": "d",
+       "text": "Se han reconocido y comprobado las peculiaridades del lenguaje respecto a las conversiones entre distintos tipos de datos."
+      },
+      {
+       "letter": "e",
+       "text": "Se han utilizado mecanismos de decisión en la creación de bloques de sentencias."
+      },
+      {
+       "letter": "f",
+       "text": "Se han utilizado bucles y se ha verificado su funcionamiento."
+      },
+      {
+       "letter": "g",
+       "text": "Se han añadido comentarios al código."
+      },
+      {
+       "letter": "h",
+       "text": "Se han utilizado herramientas y entornos para facilitar la programación, prueba y documentación del código."
+      }
+     ]
+    },
+    {
+     "number": 3,
+     "text": "Escribe código, identificando y aplicando las funcionalidades aportadas por los objetos predefinidos del lenguaje.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se han identificado los objetos predefinidos del lenguaje."
+      },
+      {
+       "letter": "b",
+       "text": "Se han analizado los objetos referentes a las ventanas del navegador y los documentos web que contienen."
+      },
+      {
+       "letter": "c",
+       "text": "Se han escrito sentencias que utilicen los objetos predefinidos del lenguaje para cambiar el aspecto del navegador y el documento que contiene."
+      },
+      {
+       "letter": "d",
+       "text": "Se han generado textos y etiquetas como resultado de la ejecución de código en el navegador."
+      },
+      {
+       "letter": "e",
+       "text": "Se han escrito sentencias que utilicen los objetos predefinidos del lenguaje para interactuar con el usuario."
+      },
+      {
+       "letter": "f",
+       "text": "Se han utilizado las características propias del lenguaje en documentos compuestos por varias ventanas."
+      },
+      {
+       "letter": "g",
+       "text": "Se han utilizado mecanismos del navegador web para almacenar información y recuperar su contenido."
+      },
+      {
+       "letter": "h",
+       "text": "Se ha depurado y documentado el código."
+      }
+     ]
+    },
+    {
+     "number": 4,
+     "text": "Programa código para clientes web analizando y utilizando estructuras definidas por el usuario.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se han clasificado y utilizado las funciones predefinidas del lenguaje."
+      },
+      {
+       "letter": "b",
+       "text": "Se han creado y utilizado funciones definidas por el usuario."
+      },
+      {
+       "letter": "c",
+       "text": "Se han reconocido las características del lenguaje relativas a la creación y uso de matrices (arrays)."
+      },
+      {
+       "letter": "d",
+       "text": "Se han creado y utilizado matrices (arrays)."
+      },
+      {
+       "letter": "e",
+       "text": "Se han utilizado operaciones agregadas para el manejo de información almacenada en colecciones."
+      },
+      {
+       "letter": "f",
+       "text": "Se han reconocido las características de orientación a objetos del lenguaje."
+      },
+      {
+       "letter": "g",
+       "text": "Se ha creado código para definir la estructura de objetos."
+      },
+      {
+       "letter": "h",
+       "text": "Se han creado métodos y propiedades."
+      },
+      {
+       "letter": "i",
+       "text": "Se ha creado código que haga uso de objetos definidos por el usuario."
+      },
+      {
+       "letter": "j",
+       "text": "Se han utilizado patrones de diseño de software."
+      },
+      {
+       "letter": "k",
+       "text": "Se ha depurado y documentado el código."
+      }
+     ]
+    },
+    {
+     "number": 5,
+     "text": "Desarrolla aplicaciones web interactivas integrando mecanismos de manejo de eventos.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se han reconocido las posibilidades del lenguaje de marcas relativas a la captura de los eventos producidos."
+      },
+      {
+       "letter": "b",
+       "text": "Se han identificado las características del lenguaje de programación relativas a la gestión de los eventos."
+      },
+      {
+       "letter": "c",
+       "text": "Se han diferenciado los tipos de eventos que se pueden manejar."
+      },
+      {
+       "letter": "d",
+       "text": "Se ha creado un código que capture y utilice eventos."
+      },
+      {
+       "letter": "e",
+       "text": "Se han reconocido las capacidades del lenguaje relativas a la gestión de formularios web."
+      },
+      {
+       "letter": "f",
+       "text": "Se han validado formularios web utilizando eventos."
+      },
+      {
+       "letter": "g",
+       "text": "Se han utilizado expresiones regulares para facilitar los procedimientos de validación."
+      },
+      {
+       "letter": "h",
+       "text": "Se ha probado y documentado el código."
+      }
+     ]
+    },
+    {
+     "number": 6,
+     "text": "Desarrolla aplicaciones web analizando y aplicando las características del modelo de objetos del documento.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se ha reconocido el modelo de objetos del documento de una página web."
+      },
+      {
+       "letter": "b",
+       "text": "Se han identificado los objetos del modelo, sus propiedades y métodos."
+      },
+      {
+       "letter": "c",
+       "text": "Se ha creado y verificado un código que acceda a la estructura del documento."
+      },
+      {
+       "letter": "d",
+       "text": "Se han creado nuevos elementos de la estructura y modificado elementos ya existentes."
+      },
+      {
+       "letter": "e",
+       "text": "Se han asociado acciones a los eventos del modelo."
+      },
+      {
+       "letter": "f",
+       "text": "Se han identificado las diferencias que presenta el modelo en diferentes navegadores."
+      },
+      {
+       "letter": "g",
+       "text": "Se han programado aplicaciones web de forma que funcionen en navegadores con diferentes implementaciones del modelo."
+      },
+      {
+       "letter": "h",
+       "text": "Se han independizado las tres capas de implementación (contenido, aspecto y comportamiento), en aplicaciones web."
+      }
+     ]
+    },
+    {
+     "number": 7,
+     "text": "Desarrolla aplicaciones web dinámicas, reconociendo y aplicando mecanismos de comunicación asíncrona entre cliente y servidor.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se han evaluado las ventajas e inconvenientes de utilizar mecanismos de comunicación asíncrona entre cliente y servidor web."
+      },
+      {
+       "letter": "b",
+       "text": "Se han analizado los mecanismos disponibles para el establecimiento de la comunicación asíncrona."
+      },
+      {
+       "letter": "c",
+       "text": "Se han utilizado los objetos relacionados."
+      },
+      {
+       "letter": "d",
+       "text": "Se han identificado sus propiedades y sus métodos."
+      },
+      {
+       "letter": "e",
+       "text": "Se ha utilizado comunicación asíncrona en la actualización dinámica del documento web."
+      },
+      {
+       "letter": "f",
+       "text": "Se han utilizado distintos formatos en el envío y recepción de información."
+      },
+      {
+       "letter": "g",
+       "text": "Se han programado aplicaciones web asíncronas de forma que funcionen en diferentes navegadores."
+      },
+      {
+       "letter": "h",
+       "text": "Se han clasificado, analizado y utilizado librerías y frameworks que faciliten la incorporación de las tecnologías de actualización dinámica a la programación de páginas web."
+      },
+      {
+       "letter": "i",
+       "text": "Se han creado y probado y documentado aplicaciones web que utilicen estas librerías y frameworks."
+      }
+     ]
+    }
+   ],
+   "contents": [
+    {
+     "title": "Selección de arquitecturas y tecnologías de programación",
+     "items": [
+      "Mecanismos de ejecución de código en un navegador web.",
+      "Capacidades y limitaciones de ejecución.",
+      "Lenguajes de programación en entorno cliente.",
+      "Tecnologías y lenguajes asociados.",
+      "Integración del código con las etiquetas HTML.",
+      "Herramientas de programación y prueba sobre clientes web. Librerías y frameworks."
+     ]
+    },
+    {
+     "title": "Manejo de la sintaxis del lenguaje",
+     "items": [
+      "Variables.",
+      "Tipos de datos. Conversiones.",
+      "Asignaciones.",
+      "Operadores.",
+      "Comentarios al código.",
+      "Sentencias.",
+      "Decisiones.",
+      "Bucles.",
+      "Prueba y documentación del código."
+     ]
+    },
+    {
+     "title": "Utilización de los objetos predefinidos del lenguaje",
+     "items": [
+      "Utilización de objetos. Objetos nativos del lenguaje.",
+      "Interacción con el navegador. Objetos predefinidos asociados.",
+      "Generación de texto y elementos HTML desde código.",
+      "Gestión de la apariencia de la ventana.",
+      "Creación de nuevas ventanas. Comunicación entre ventanas.",
+      "Interacción con el usuario.",
+      "Mecanismos del navegador para el almacenamiento y recuperación de información.",
+      "Depuración y documentación del código."
+     ]
+    },
+    {
+     "title": "Programación con colecciones, funciones y objetos definidos por el usuario",
+     "items": [
+      "Funciones predefinidas del lenguaje.",
+      "Llamadas a funciones. Definición de funciones.",
+      "Matrices (arrays).",
+      "Operaciones agregadas: filtrado, reducción y recolección.",
+      "Creación de objetos.",
+      "Definición de métodos y propiedades.",
+      "Patrones de diseño.",
+      "Depuración y documentación del código."
+     ]
+    },
+    {
+     "title": "Interacción con el usuario: eventos y formularios",
+     "items": [
+      "Gestión de eventos. Tipos.",
+      "Utilización de formularios desde código.",
+      "Modificación de apariencia y comportamiento.",
+      "Validación y envío.",
+      "Expresiones regulares.",
+      "Prueba y documentación del código."
+     ]
+    },
+    {
+     "title": "Utilización del modelo de objetos del documento (DOM)",
+     "items": [
+      "El modelo de objetos del documento (DOM).",
+      "Objetos del modelo. Propiedades y métodos.",
+      "Acceso al documento desde código.",
+      "Programación de eventos.",
+      "Diferencias en las implementaciones del modelo.",
+      "Independencia de las capas de implementación de aplicaciones web."
+     ]
+    },
+    {
+     "title": "Utilización de mecanismos de comunicación asíncrona",
+     "items": [
+      "Mecanismos de comunicación asíncrona.",
+      "Modificación dinámica del documento utilizando comunicación asíncrona.",
+      "Formatos para el envío y recepción de información.",
+      "Librerías y frameworks de actualización dinámica.",
+      "Integración en diferentes navegadores.",
+      "Prueba y documentación del código."
+     ]
+    }
+   ],
+   "contribution": "La formación del módulo contribuye a alcanzar los objetivos generales f), g), i), q) y r) del ciclo formativo y las competencias profesionales, personales y sociales e), k), m), n), p) y r) del título."
+  },
+  {
+   "code": "0613",
+   "name": "Desarrollo web en entorno servidor",
+   "ects": 12,
+   "stateMinHours": 100,
+   "learningOutcomes": [
+    {
+     "number": 1,
+     "text": "Selecciona las arquitecturas y tecnologías de programación web en entorno servidor, analizando sus capacidades y características propias.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se han caracterizado y diferenciado los modelos de ejecución de código en el servidor y en el cliente web."
+      },
+      {
+       "letter": "b",
+       "text": "Se han reconocido las ventajas que proporciona la generación dinámica de páginas."
+      },
+      {
+       "letter": "c",
+       "text": "Se han identificado los mecanismos de ejecución de código en los servidores web."
+      },
+      {
+       "letter": "d",
+       "text": "Se han reconocido las funcionalidades que aportan los servidores de aplicaciones y su integración con los servidores web."
+      },
+      {
+       "letter": "e",
+       "text": "Se han identificado y caracterizado los principales lenguajes y tecnologías relacionados con la programación web en entorno servidor."
+      },
+      {
+       "letter": "f",
+       "text": "Se han verificado los mecanismos de integración de los lenguajes de marcas con los lenguajes de programación en entorno servidor."
+      },
+      {
+       "letter": "g",
+       "text": "Se han reconocido y evaluado las herramientas y frameworks de programación en entorno servidor."
+      }
+     ]
+    },
+    {
+     "number": 2,
+     "text": "Escribe sentencias ejecutables por un servidor web reconociendo y aplicando procedimientos de integración del código en lenguajes de marcas.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se han reconocido los mecanismos de generación de páginas web a partir de lenguajes de marcas con código embebido."
+      },
+      {
+       "letter": "b",
+       "text": "Se han identificado las principales tecnologías asociadas."
+      },
+      {
+       "letter": "c",
+       "text": "Se han utilizado etiquetas para la inclusión de código en el lenguaje de marcas."
+      },
+      {
+       "letter": "d",
+       "text": "Se ha reconocido la sintaxis del lenguaje de programación que se ha de utilizar."
+      },
+      {
+       "letter": "e",
+       "text": "Se han escrito sentencias simples y se han comprobado sus efectos en el documento resultante."
+      },
+      {
+       "letter": "f",
+       "text": "Se han utilizado directivas para modificar el comportamiento predeterminado."
+      },
+      {
+       "letter": "g",
+       "text": "Se han utilizado los distintos tipos de variables y operadores disponibles en el lenguaje."
+      },
+      {
+       "letter": "h",
+       "text": "Se han identificado los ámbitos de utilización de las variables."
+      }
+     ]
+    },
+    {
+     "number": 3,
+     "text": "Escribe bloques de sentencias embebidos en lenguajes de marcas, seleccionando y utilizando las estructuras de programación.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se han utilizado mecanismos de decisión en la creación de bloques de sentencias."
+      },
+      {
+       "letter": "b",
+       "text": "Se han utilizado bucles y se ha verificado su funcionamiento."
+      },
+      {
+       "letter": "c",
+       "text": "Se han utilizado matrices (arrays) para almacenar y recuperar conjuntos de datos."
+      },
+      {
+       "letter": "d",
+       "text": "Se han creado y utilizado funciones."
+      },
+      {
+       "letter": "e",
+       "text": "Se han utilizado formularios web para interactuar con el usuario del navegador web."
+      },
+      {
+       "letter": "f",
+       "text": "Se han empleado métodos para recuperar la información introducida en el formulario."
+      },
+      {
+       "letter": "g",
+       "text": "Se han añadido comentarios al código."
+      }
+     ]
+    },
+    {
+     "number": 4,
+     "text": "Desarrolla aplicaciones web embebidas en lenguajes de marcas analizando e incorporando funcionalidades según especificaciones.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se han identificado los mecanismos disponibles para el mantenimiento de la información que concierne a un cliente web concreto y se han señalado sus ventajas."
+      },
+      {
+       "letter": "b",
+       "text": "Se han utilizado mecanismos para mantener el estado de las aplicaciones web."
+      },
+      {
+       "letter": "c",
+       "text": "Se han utilizado mecanismos para almacenar información en el cliente web y para recuperar su contenido."
+      },
+      {
+       "letter": "d",
+       "text": "Se han identificado y caracterizado los mecanismos disponibles para la autentificación de usuarios."
+      },
+      {
+       "letter": "e",
+       "text": "Se han escrito aplicaciones que integren mecanismos de autentificación de usuarios."
+      },
+      {
+       "letter": "f",
+       "text": "Se han utilizado herramientas y entornos para facilitar la programación, prueba y depuración del código."
+      }
+     ]
+    },
+    {
+     "number": 5,
+     "text": "Desarrolla aplicaciones web identificando y aplicando mecanismos para separar el código de presentación de la lógica de negocio.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se han identificado las ventajas de separar la lógica de negocio de los aspectos de presentación de la aplicación."
+      },
+      {
+       "letter": "b",
+       "text": "Se han analizado y utilizado mecanismos y frameworks que permiten realizar esta separación y sus características principales."
+      },
+      {
+       "letter": "c",
+       "text": "Se han utilizado objetos y controles en el servidor para generar el aspecto visual de la aplicación web en el cliente."
+      },
+      {
+       "letter": "d",
+       "text": "Se han utilizado formularios generados de forma dinámica para responder a los eventos de la aplicación web."
+      },
+      {
+       "letter": "e",
+       "text": "Se han identificado y aplicado los parámetros relativos a la configuración de la aplicación web."
+      },
+      {
+       "letter": "f",
+       "text": "Se han escrito aplicaciones web con mantenimiento de estado y separación de la lógica de negocio."
+      },
+      {
+       "letter": "g",
+       "text": "Se han aplicado los principios y patrones de diseño de la programación orientada a objetos."
+      },
+      {
+       "letter": "h",
+       "text": "Se ha probado y documentado el código."
+      }
+     ]
+    },
+    {
+     "number": 6,
+     "text": "Desarrolla aplicaciones web de acceso a almacenes de datos, aplicando medidas para mantener la seguridad y la integridad de la información.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se han analizado las tecnologías que permiten el acceso mediante programación a la información disponible en almacenes de datos."
+      },
+      {
+       "letter": "b",
+       "text": "Se han creado aplicaciones que establezcan conexiones con bases de datos."
+      },
+      {
+       "letter": "c",
+       "text": "Se ha recuperado información almacenada en bases de datos."
+      },
+      {
+       "letter": "d",
+       "text": "Se ha publicado en aplicaciones web la información recuperada."
+      },
+      {
+       "letter": "e",
+       "text": "Se han utilizado conjuntos de datos para almacenar la información."
+      },
+      {
+       "letter": "f",
+       "text": "Se han creado aplicaciones web que permitan la actualización y la eliminación de información disponible en una base de datos."
+      },
+      {
+       "letter": "g",
+       "text": "Se han probado y documentado las aplicaciones web."
+      }
+     ]
+    },
+    {
+     "number": 7,
+     "text": "Desarrolla servicios web reutilizables y accesibles mediante protocolos web, verificando su funcionamiento.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se han reconocido las características propias y el ámbito de aplicación de los servicios web."
+      },
+      {
+       "letter": "b",
+       "text": "Se han reconocido las ventajas de utilizar servicios web para proporcionar acceso a funcionalidades incorporadas a la lógica de negocio de una aplicación."
+      },
+      {
+       "letter": "c",
+       "text": "Se han identificado las tecnologías y los protocolos implicados en el consumo de servicios web."
+      },
+      {
+       "letter": "d",
+       "text": "Se han utilizado los estándares y arquitecturas más difundidos e implicados en el desarrollo de servicios web."
+      },
+      {
+       "letter": "e",
+       "text": "Se ha programado un servicio web."
+      },
+      {
+       "letter": "f",
+       "text": "Se ha verificado el funcionamiento del servicio web."
+      },
+      {
+       "letter": "g",
+       "text": "Se ha consumido el servicio web."
+      },
+      {
+       "letter": "h",
+       "text": "Se ha documentado un servicio web."
+      }
+     ]
+    },
+    {
+     "number": 8,
+     "text": "Genera páginas web dinámicas analizando y utilizando tecnologías y frameworks del servidor web que añadan código al lenguaje de marcas.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se han identificado las diferencias entre la ejecución de código en el servidor y en el cliente web."
+      },
+      {
+       "letter": "b",
+       "text": "Se han reconocido las ventajas de unir ambas tecnologías en el proceso de desarrollo de programas."
+      },
+      {
+       "letter": "c",
+       "text": "Se han identificado las tecnologías y frameworks relacionadas con la generación por parte del servidor de páginas web con guiones embebidos."
+      },
+      {
+       "letter": "d",
+       "text": "Se han utilizado estas tecnologías y frameworks para generar páginas web que incluyan interacción con el usuario."
+      },
+      {
+       "letter": "e",
+       "text": "Se han utilizado estas tecnologías y frameworks, para generar páginas web que incluyan verificación de formularios."
+      },
+      {
+       "letter": "f",
+       "text": "Se han utilizado estas tecnologías y frameworks para generar páginas web que incluyan modificación dinámica de su contenido y su estructura."
+      },
+      {
+       "letter": "g",
+       "text": "Se han aplicado estas tecnologías y frameworks en la programación de aplicaciones web."
+      }
+     ]
+    },
+    {
+     "number": 9,
+     "text": "Desarrolla aplicaciones web híbridas seleccionando y utilizando tecnologías, frameworks servidor y repositorios heterogéneos de información.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se han reconocido las ventajas que proporciona la reutilización de código y el aprovechamiento de información ya existente."
+      },
+      {
+       "letter": "b",
+       "text": "Se han identificado tecnologías y frameworks aplicables en la creación de aplicaciones web híbridas."
+      },
+      {
+       "letter": "c",
+       "text": "Se ha creado una aplicación web que recupere y procese repositorios de información ya existentes."
+      },
+      {
+       "letter": "d",
+       "text": "Se han creado repositorios específicos a partir de información existente en almacenes de información."
+      },
+      {
+       "letter": "e",
+       "text": "Se han utilizado librerías de código y frameworks para incorporar funcionalidades específicas a una aplicación web."
+      },
+      {
+       "letter": "f",
+       "text": "Se han programado servicios y aplicaciones web utilizando como base información y código generados por terceros."
+      },
+      {
+       "letter": "g",
+       "text": "Se han analizado y utilizado librerías de código relacionadas con Big Data e inteligencia de negocios, para incorporar análisis e inteligencia de datos proveniente de repositorios."
+      },
+      {
+       "letter": "h",
+       "text": "Se han probado, depurado y documentado las aplicaciones generadas."
+      }
+     ]
+    }
+   ],
+   "contents": [
+    {
+     "title": "Selección de arquitecturas y herramientas de programación",
+     "items": [
+      "Modelos de ejecución de código en entornos cliente/servidor.",
+      "Generación dinámica de páginas web.",
+      "Lenguajes de programación y tecnologías asociadas en entorno servidor.",
+      "Integración con los lenguajes de marcas.",
+      "Integración con los servidores web.",
+      "Herramientas y frameworks de programación. en entorno servidor."
+     ]
+    },
+    {
+     "title": "Inserción de código en páginas web",
+     "items": [
+      "Tecnologías asociadas.",
+      "Obtención del lenguaje de marcas para mostrar en el cliente.",
+      "Etiquetas para inserción de código.",
+      "Tipos de datos. Conversiones entre tipos de datos.",
+      "Variables. Operadores. Ámbitos de utilización."
+     ]
+    },
+    {
+     "title": "Programación basada en lenguajes de marcas con código embebido",
+     "items": [
+      "Tomas de decisión.",
+      "Bucles.",
+      "Matrices (arrays).",
+      "Tipos de datos compuestos.",
+      "Funciones.",
+      "Recuperación y utilización de información proveniente del cliente web.",
+      "Procesamiento de la información introducida en un formulario.",
+      "Comentarios."
+     ]
+    },
+    {
+     "title": "Desarrollo de aplicaciones web utilizando código embebido",
+     "items": [
+      "Mantenimiento del estado.",
+      "Almacenamiento y recuperación de información en el cliente web.",
+      "Seguridad: usuarios, perfiles, roles.",
+      "Autentificación de usuarios.",
+      "Pruebas y depuración."
+     ]
+    },
+    {
+     "title": "Generación dinámica de páginas web",
+     "items": [
+      "Mecanismos de separación de la lógica de negocio. Frameworks web servidor.",
+      "Controles de servidor.",
+      "Mecanismos de generación dinámica de la interface web.",
+      "Programación orientada a objetos. Patrones de diseño.",
+      "Prueba y documentación del código."
+     ]
+    },
+    {
+     "title": "Utilización de técnicas de acceso a datos",
+     "items": [
+      "Establecimiento de conexiones.",
+      "Recuperación y edición de información.",
+      "Utilización de conjuntos de resultados.",
+      "Actualización y eliminación de información proveniente de una base de datos.",
+      "Utilización de otros orígenes de datos.",
+      "Prueba y documentación."
+     ]
+    },
+    {
+     "title": "Programación de servicios web",
+     "items": [
+      "Tecnologías y protocolos implicados.",
+      "Estándares y arquitecturas actuales. Formatos de intercambio de datos.",
+      "Generación de un servicio web.",
+      "Interface de un servicio web.",
+      "Consumo de un servicio web. Herramientas de prueba.",
+      "Frameworks de documentación."
+     ]
+    },
+    {
+     "title": "Generación dinámica de páginas web interactivas",
+     "items": [
+      "Tecnologías y frameworks.",
+      "Generación dinámica de páginas interactivas.",
+      "Obtención remota de información.",
+      "Modificación de la estructura y contenido de la página web."
+     ]
+    },
+    {
+     "title": "Desarrollo de aplicaciones web híbridas",
+     "items": [
+      "Tecnologías y frameworks.",
+      "Reutilización de código e información.",
+      "Utilización de información proveniente de repositorios.",
+      "Incorporación de funcionalidades específicas.",
+      "Utilización de librerías de código relacionadas con Big Data e inteligencia de negocios. Extracción, proceso y análisis de datos provenientes de repositorios.",
+      "Prueba, depuración y documentación."
+     ]
+    }
+   ],
+   "contribution": "La formación del módulo contribuye a alcanzar los objetivos generales c), d), f), g), h), l), m), n), ñ), q), s) y t) del ciclo formativo y las competencias profesionales, personales y sociales c), d), f), g), h), j), k), l), m), n), ñ), y q) del título."
+  },
+  {
+   "code": "0614",
+   "name": "Despliegue de aplicaciones web",
+   "ects": 5,
+   "stateMinHours": 50,
+   "learningOutcomes": [
+    {
+     "number": 1,
+     "text": "Implanta arquitecturas web analizando y aplicando criterios de funcionalidad.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se han analizado aspectos generales de arquitecturas web, sus características, ventajas e inconvenientes."
+      },
+      {
+       "letter": "b",
+       "text": "Se han descrito los fundamentos y protocolos en los que se basa el funcionamiento de un servidor web."
+      },
+      {
+       "letter": "c",
+       "text": "Se ha realizado la instalación y configuración básica de servidores web."
+      },
+      {
+       "letter": "d",
+       "text": "Se ha realizado la instalación y configuración básica de servidores de aplicaciones."
+      },
+      {
+       "letter": "e",
+       "text": "Se ha realizado la instalación y configuración básica de tecnologías de virtualización de servidores en la nube y en contenedores."
+      },
+      {
+       "letter": "f",
+       "text": "Se han realizado pruebas de funcionamiento de los servidores web y de aplicaciones. y de tecnologías de virtualización en la nube y en contenedores."
+      },
+      {
+       "letter": "g",
+       "text": "Se ha analizado la estructura y recursos que componen una aplicación web."
+      },
+      {
+       "letter": "h",
+       "text": "Se han descrito los requerimientos del proceso de implantación de una aplicación web."
+      },
+      {
+       "letter": "i",
+       "text": "Se han documentado los procesos de instalación y configuración realizados sobre los servidores web, de aplicaciones. y sobre tecnologías de virtualización en la nube y en contenedores."
+      }
+     ]
+    },
+    {
+     "number": 2,
+     "text": "Implanta aplicaciones web en servidores web, evaluando y aplicando criterios de configuración para su funcionamiento seguro.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se han reconocido los parámetros de administración más importantes del servidor web."
+      },
+      {
+       "letter": "b",
+       "text": "Se ha ampliado la funcionalidad del servidor mediante la activación y configuración de módulos."
+      },
+      {
+       "letter": "c",
+       "text": "Se han creado y configurado sitios virtuales."
+      },
+      {
+       "letter": "d",
+       "text": "Se han configurado los mecanismos de autenticación y control de acceso del servidor."
+      },
+      {
+       "letter": "e",
+       "text": "Se han obtenido e instalado certificados digitales."
+      },
+      {
+       "letter": "f",
+       "text": "Se han establecido mecanismos para asegurar las comunicaciones entre el cliente y el servidor."
+      },
+      {
+       "letter": "g",
+       "text": "Se ha elaborado documentación relativa a la configuración, administración segura y recomendaciones de uso del servidor."
+      },
+      {
+       "letter": "h",
+       "text": "Se han realizado los ajustes necesarios para la implantación de aplicaciones en el servidor web."
+      },
+      {
+       "letter": "i",
+       "text": "Se han utilizado tecnologías de virtualización en el despliegue de servidores web en la nube y en contenedores."
+      },
+      {
+       "letter": "j",
+       "text": "Se han instalado, configurado y utilizado conjuntos de herramientas de gestión de logs, permitiendo su monitorización, consolidación y análisis en tiempo real."
+      }
+     ]
+    },
+    {
+     "number": 3,
+     "text": "Implanta aplicaciones web en servidores de aplicaciones, evaluando y aplicando criterios de configuración para su funcionamiento seguro.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se han descrito los componentes y el funcionamiento de los servicios proporcionados por el servidor de aplicaciones."
+      },
+      {
+       "letter": "b",
+       "text": "Se han identificado los principales archivos de configuración y de bibliotecas compartidas."
+      },
+      {
+       "letter": "c",
+       "text": "Se ha configurado el servidor de aplicaciones para cooperar con el servidor web."
+      },
+      {
+       "letter": "d",
+       "text": "Se han configurado y activado los mecanismos de seguridad del servidor de aplicaciones."
+      },
+      {
+       "letter": "e",
+       "text": "Se han configurado y utilizado los componentes web del servidor de aplicaciones."
+      },
+      {
+       "letter": "f",
+       "text": "Se han realizado los ajustes necesarios para el despliegue de aplicaciones sobre el servidor."
+      },
+      {
+       "letter": "g",
+       "text": "Se han realizado pruebas de funcionamiento y rendimiento de la aplicación web desplegada."
+      },
+      {
+       "letter": "h",
+       "text": "Se ha elaborado documentación relativa a la administración y recomendaciones de uso del servidor de aplicaciones."
+      },
+      {
+       "letter": "i",
+       "text": "Se han utilizado tecnologías de virtualización en el despliegue de servidores de aplicaciones en la nube y en contenedores."
+      }
+     ]
+    },
+    {
+     "number": 4,
+     "text": "Administra servidores de transferencia de archivos, evaluando y aplicando criterios de configuración que garanticen la disponibilidad del servicio.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se han instalado y configurado servidores de transferencia de archivos."
+      },
+      {
+       "letter": "b",
+       "text": "Se han creado usuarios y grupos para el acceso remoto al servidor."
+      },
+      {
+       "letter": "c",
+       "text": "Se ha comprobado el acceso al servidor, tanto en modo activo como en modo pasivo."
+      },
+      {
+       "letter": "d",
+       "text": "Se han realizado pruebas con clientes en línea de comandos y clientes en modo gráfico."
+      },
+      {
+       "letter": "e",
+       "text": "Se ha utilizado el protocolo seguro de transferencia de archivos."
+      },
+      {
+       "letter": "f",
+       "text": "Se han configurado y utilizado servicios de transferencia de archivos integrados en servidores web."
+      },
+      {
+       "letter": "g",
+       "text": "Se ha elaborado documentación relativa a la configuración y administración del servicio de transferencia de archivos."
+      },
+      {
+       "letter": "h",
+       "text": "Se han utilizado tecnologías de virtualización en el despliegue de servidores de transferencia de archivos en la nube y en contenedores."
+      }
+     ]
+    },
+    {
+     "number": 5,
+     "text": "Verifica la ejecución de aplicaciones web comprobando los parámetros de configuración de servicios de red.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se ha descrito la estructura, nomenclatura y funcionalidad de los sistemas de nombres jerárquicos."
+      },
+      {
+       "letter": "b",
+       "text": "Se han identificado las necesidades de configuración del servidor de nombres en función de los requerimientos de ejecución de las aplicaciones web desplegadas."
+      },
+      {
+       "letter": "c",
+       "text": "Se han identificado la función, elementos y estructuras lógicas del servicio de directorio."
+      },
+      {
+       "letter": "d",
+       "text": "Se ha analizado la configuración y personalización del servicio de directorio."
+      },
+      {
+       "letter": "e",
+       "text": "Se ha analizado la capacidad del servicio de directorio como mecanismo de autenticación centralizada de los usuarios en una red."
+      },
+      {
+       "letter": "f",
+       "text": "Se han especificado los parámetros de configuración en el servicio de directorios adecuados para el proceso de validación de usuarios de la aplicación web."
+      },
+      {
+       "letter": "g",
+       "text": "Se ha elaborado documentación relativa a las adaptaciones realizadas en los servicios de red."
+      },
+      {
+       "letter": "h",
+       "text": "Se han utilizado tecnologías de virtualización en el despliegue de servidores de directorios en la nube y en contenedores."
+      }
+     ]
+    },
+    {
+     "number": 6,
+     "text": "Elabora la documentación de la aplicación web evaluando y seleccionando herramientas de generación de documentación, control de versiones y de integración continua.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se han identificado diferentes herramientas de generación de documentación."
+      },
+      {
+       "letter": "b",
+       "text": "Se han documentado los componentes software utilizando los generadores específicos de las plataformas."
+      },
+      {
+       "letter": "c",
+       "text": "Se han utilizado diferentes formatos para la documentación."
+      },
+      {
+       "letter": "d",
+       "text": "Se han utilizado herramientas colaborativas para la elaboración y mantenimiento de la documentación."
+      },
+      {
+       "letter": "e",
+       "text": "Se ha instalado, configurado y utilizado un sistema de control de versiones."
+      },
+      {
+       "letter": "f",
+       "text": "Se ha garantizado la accesibilidad y seguridad de la información y código almacenada por el sistema de control de versiones."
+      },
+      {
+       "letter": "g",
+       "text": "Se ha documentado la instalación, configuración y uso del sistema de control de versiones utilizado."
+      },
+      {
+       "letter": "h",
+       "text": "Se han utilizado herramientas para la integración continua del código."
+      }
+     ]
+    }
+   ],
+   "contents": [
+    {
+     "title": "Implantación de arquitecturas web",
+     "items": [
+      "Arquitecturas web. Modelos.",
+      "Servidores web y de aplicaciones. Instalación y configuración básica.",
+      "Tecnologías de virtualización de servidores en la nube y en contenedores. Instalación y configuración básica.",
+      "Estructura y recursos que componen una aplicación web.",
+      "Documentación de los procesos realizados."
+     ]
+    },
+    {
+     "title": "Administración de servidores web",
+     "items": [
+      "Configuración avanzada del servidor web.",
+      "Módulos: instalación, configuración y uso.",
+      "Hosts virtuales. Creación, configuración y utilización.",
+      "Autenticación y control de acceso.",
+      "El protocolo HTTPS.",
+      "Certificados. Servidores de certificados.",
+      "Documentación.",
+      "Despliegue de aplicaciones sobre servidores web.",
+      "Despliegue de servidores web mediante tecnologías de virtualización en la nube y en contenedores.",
+      "Conjuntos de herramientas de gestión de logs. Instalación, configuración y utilización, para la ayuda a la toma de decisiones: Big Data."
+     ]
+    },
+    {
+     "title": "Administración de servidores de aplicaciones",
+     "items": [
+      "Arquitectura y configuración básica del servidor de aplicaciones.",
+      "Administrar aplicaciones web.",
+      "Autenticación de usuarios. Dominios de seguridad para la autenticación.",
+      "Administración de sesiones.",
+      "Configurar el servidor de aplicaciones para cooperar con servidores web.",
+      "Despliegue de aplicaciones en el servidor de aplicaciones.",
+      "Seguridad en el servidor de aplicaciones.",
+      "Documentación.",
+      "Despliegue de servidores de aplicaciones mediante tecnologías de virtualización en la nube y en contenedores."
+     ]
+    },
+    {
+     "title": "Instalación y administración de servidores de transferencia de archivos",
+     "items": [
+      "Configuración del servicio de transferencia de archivos. Permisos y cuotas.",
+      "Tipos de usuarios y accesos al servicio.",
+      "Modos de conexión del cliente.",
+      "Protocolo seguro de transferencia de archivos.",
+      "Utilización de comandos y de herramientas gráficas.",
+      "Utilización del servicio de transferencia de archivos en el proceso de despliegue de la aplicación web.",
+      "Documentación.",
+      "Despliegue de servidores de transferencia de archivos mediante tecnologías de virtualización en la nube y en contenedores."
+     ]
+    },
+    {
+     "title": "Servicios de red implicados en el despliegue de una aplicación web",
+     "items": [
+      "Resolutores de nombres. Proceso de resolución de un nombre de dominio.",
+      "Parámetros de configuración y registros del servidor de nombres afectados en el despliegue.",
+      "Servicio de directorios: características y funcionalidad.",
+      "Archivos básicos de configuración.",
+      "Autenticación de usuarios en el servicio de directorios.",
+      "Adaptación de la configuración del servidor de directorios para el despliegue de la aplicación.",
+      "Documentación.",
+      "Despliegue de servidores de directorios mediante tecnologías de virtualización en la nube y en contenedores."
+     ]
+    },
+    {
+     "title": "Documentación, sistemas de control de versiones y de integración continua",
+     "items": [
+      "Herramientas colaborativas para la generación de documentación. Instalación, configuración y USO.",
+      "Creación y utilización de plantillas.",
+      "Instalación, configuración y uso de sistemas de control de versiones.",
+      "Operaciones avanzadas.",
+      "Seguridad de los sistemas de control de versiones.",
+      "Instalación, configuración y uso de sistemas de integración continua del código. Monitorización continua de las métricas de calidad de la aplicación."
+     ]
+    }
+   ],
+   "contribution": "La formación del módulo contribuye a alcanzar los objetivos generales c), d), o), p) y r) del ciclo formativo, y las competencias profesionales, personales y sociales a), b), c), j), n), ñ) y q) del título."
+  },
+  {
+   "code": "0615",
+   "name": "Diseño de interfaces web",
+   "ects": 9,
+   "stateMinHours": 80,
+   "learningOutcomes": [
+    {
+     "number": 1,
+     "text": "Planifica la creación de una interfaz web valorando y aplicando especificaciones de diseño.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se ha reconocido la importancia de la comunicación visual y sus principios básicos."
+      },
+      {
+       "letter": "b",
+       "text": "Se han analizado y seleccionado los colores y tipografías adecuados para su visualización en pantalla."
+      },
+      {
+       "letter": "c",
+       "text": "Se han analizado alternativas para la presentación de la información en documentos web."
+      },
+      {
+       "letter": "d",
+       "text": "Se ha valorado la importancia de definir y aplicar la guía de estilo en el desarrollo de una aplicación web."
+      },
+      {
+       "letter": "e",
+       "text": "Se han utilizado y valorado distintas tecnologías para el diseño de documentos web."
+      },
+      {
+       "letter": "f",
+       "text": "Se han creado y utilizado plantillas de diseño."
+      }
+     ]
+    },
+    {
+     "number": 2,
+     "text": "Crea interfaces web homogéneos definiendo y aplicando estilos.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se han reconocido las posibilidades de modificar las etiquetas HTML."
+      },
+      {
+       "letter": "b",
+       "text": "Se han definido estilos de forma directa."
+      },
+      {
+       "letter": "c",
+       "text": "Se han definido y asociado estilos globales en hojas externas."
+      },
+      {
+       "letter": "d",
+       "text": "Se han definido hojas de estilos alternativas."
+      },
+      {
+       "letter": "e",
+       "text": "Se han redefinido estilos."
+      },
+      {
+       "letter": "f",
+       "text": "Se han identificado las distintas propiedades de cada elemento."
+      },
+      {
+       "letter": "g",
+       "text": "Se han creado clases de estilos."
+      },
+      {
+       "letter": "h",
+       "text": "Se han utilizado herramientas de validación de hojas de estilos."
+      },
+      {
+       "letter": "i",
+       "text": "Se han analizado y utilizado tecnologías y frameworks para la creación de interfaces web con un diseño responsive."
+      },
+      {
+       "letter": "j",
+       "text": "Se han analizado y utilizado preprocesadores de estilos para traducir estilos comunes a un código estándar y reconocible por los navegadores."
+      }
+     ]
+    },
+    {
+     "number": 3,
+     "text": "Prepara archivos multimedia para la web, analizando sus características y manejando herramientas específicas.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se han reconocido las implicaciones de las licencias y los derechos de autor en el uso de material multimedia."
+      },
+      {
+       "letter": "b",
+       "text": "Se han identificado los formatos de imagen, audio y vídeo a utilizar."
+      },
+      {
+       "letter": "c",
+       "text": "Se han analizado las herramientas disponibles para generar contenido multimedia."
+      },
+      {
+       "letter": "d",
+       "text": "Se han empleado herramientas para el tratamiento digital de la imagen."
+      },
+      {
+       "letter": "e",
+       "text": "Se han utilizado herramientas para manipular audio y vídeo."
+      },
+      {
+       "letter": "f",
+       "text": "Se han realizado animaciones a partir de imágenes fijas."
+      },
+      {
+       "letter": "g",
+       "text": "Se han importado y exportado imágenes, audio y vídeo en diversos formatos según su finalidad."
+      },
+      {
+       "letter": "h",
+       "text": "Se ha aplicado la guía de estilo."
+      }
+     ]
+    },
+    {
+     "number": 4,
+     "text": "Integra contenido multimedia en documentos web valorando su aportación y seleccionando adecuadamente los elementos interactivos.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se han reconocido y analizado las tecnologías relacionadas con la inclusión de contenido multimedia e interactivo."
+      },
+      {
+       "letter": "b",
+       "text": "Se han identificado las necesidades específicas de configuración de los navegadores web para soportar contenido multimedia e interactivo."
+      },
+      {
+       "letter": "c",
+       "text": "Se han utilizado herramientas gráficas para el desarrollo de contenido multimedia interactivo."
+      },
+      {
+       "letter": "d",
+       "text": "Se ha analizado el código generado por las herramientas de desarrollo de contenido interactivo."
+      },
+      {
+       "letter": "e",
+       "text": "Se han agregado elementos multimedia a documentos web."
+      },
+      {
+       "letter": "f",
+       "text": "Se ha añadido interactividad a elementos de un documento web."
+      },
+      {
+       "letter": "g",
+       "text": "Se ha verificado el funcionamiento de los elementos multimedia e interactivos en distintos navegadores y dispositivos."
+      }
+     ]
+    },
+    {
+     "number": 5,
+     "text": "Desarrolla interfaces web accesibles, analizando las pautas establecidas y aplicando técnicas de verificación.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se ha reconocido la necesidad de diseñar webs accesibles."
+      },
+      {
+       "letter": "b",
+       "text": "Se ha analizado la accesibilidad de diferentes documentos web."
+      },
+      {
+       "letter": "c",
+       "text": "Se han analizado los principios y pautas de accesibilidad al contenido, así como los niveles de conformidad."
+      },
+      {
+       "letter": "d",
+       "text": "Se han analizado los posibles errores según los puntos de verificación de prioridad."
+      },
+      {
+       "letter": "e",
+       "text": "Se ha alcanzado el nivel de conformidad deseado."
+      },
+      {
+       "letter": "f",
+       "text": "Se han verificado los niveles alcanzados mediante el uso de test externos."
+      },
+      {
+       "letter": "g",
+       "text": "Se ha verificado la visualización del interfaz con diferentes navegadores y tecnologías."
+      },
+      {
+       "letter": "h",
+       "text": "Se han analizado y utilizado herramientas y estrategias que mejoren la visibilidad y la accesibilidad de los sitios y páginas web en los resultados de los buscadores."
+      }
+     ]
+    },
+    {
+     "number": 6,
+     "text": "Desarrolla interfaces web amigables analizando y aplicando las pautas de usabilidad establecidas.",
+     "criteria": [
+      {
+       "letter": "a",
+       "text": "Se ha analizado la usabilidad de diferentes documentos web."
+      },
+      {
+       "letter": "b",
+       "text": "Se ha valorado la importancia del uso de estándares en la creación de documentos web."
+      },
+      {
+       "letter": "c",
+       "text": "Se ha modificado el interfaz web para adecuarlo al objetivo que persigue y a los usuarios a los que va dirigido."
+      },
+      {
+       "letter": "d",
+       "text": "Se ha verificado la facilidad de navegación de un documento web mediante distintos periféricos."
+      },
+      {
+       "letter": "e",
+       "text": "Se han analizado diferentes técnicas para verificar la usabilidad de un documento web."
+      },
+      {
+       "letter": "f",
+       "text": "Se ha verificado la usabilidad de la interfaz web creado en diferentes navegadores y tecnologías."
+      }
+     ]
+    }
+   ],
+   "contents": [
+    {
+     "title": "Planificación de interfaces gráficas",
+     "items": [
+      "Elementos del diseño: percepción visual.",
+      "Color, tipografía, iconos.",
+      "Interacción persona-ordenador.",
+      "Interpretación de guías de estilo. Elementos.",
+      "Generación de documentos y sitios web.",
+      "Componentes de una interfaz web.",
+      "Tecnologías para el diseño de documentos web.",
+      "Mapa de navegación. Prototipos.",
+      "Maquetación web. Elementos de ordenación.",
+      "Plantilla de diseño."
+     ]
+    },
+    {
+     "title": "Uso de estilos",
+     "items": [
+      "Estilos en línea basados en etiquetas y en clases.",
+      "Crear y vincular hojas de estilo.",
+      "Crear y vincular hojas de estilo en cascada externa.",
+      "Herramientas y test de verificación.",
+      "Tecnologías y frameworks.",
+      "Preprocesadores de estilos. Variables, mixins y funciones."
+     ]
+    },
+    {
+     "title": "Implantación de contenido multimedia",
+     "items": [
+      "Tipos de Imágenes en la web.",
+      "Derechos de la propiedad intelectual. Licencias. Ley de la propiedad intelectual. Derechos de autor.",
+      "Imágenes. Software para crear y procesar imágenes. Formatos. Conversiones (exportar e importar).",
+      "Optimización de imágenes para la web.",
+      "Audio: formatos. Conversiones de formatos (exportar e importar).",
+      "Vídeo: codificación de vídeo, conversiones de formatos (exportar e importar).",
+      "Animaciones.",
+      "Integración de audio y vídeo en una animación."
+     ]
+    },
+    {
+     "title": "Integración de contenido interactivo",
+     "items": [
+      "Elementos interactivos.",
+      "Comportamientos interactivos. Comportamiento de los elementos.",
+      "Ejecución de secuencias de comandos.",
+      "Verificación del funcionamiento en distintos navegadores y dispositivos."
+     ]
+    },
+    {
+     "title": "Diseño de webs accesibles",
+     "items": [
+      "El Consorcio World Wide Web (W3C).",
+      "Principios y Pautas de Accesibilidad al Contenido en la Web (WCAG).",
+      "Criterios de conformidad. Niveles de conformidad.",
+      "Técnicas para satisfacer los requisitos definidos en las WCAG.",
+      "Prioridades. Puntos de verificación.",
+      "Métodos para realizar revisiones preliminares y evaluaciones de adecuación o conformidad de documentos web.",
+      "Herramientas de análisis de accesibilidad web.",
+      "Chequeo de la accesibilidad web desde diferentes navegadores y dispositivos.",
+      "Posicionamiento en buscadores. Mejora de la visibilidad de un sitio web en diferentes buscadores."
+     ]
+    },
+    {
+     "title": "Implementación de la usabilidad en la web. Diseño amigable",
+     "items": [
+      "Análisis de la usabilidad. Técnicas.",
+      "Identificación del objetivo de la web.",
+      "Tipos de usuario.",
+      "Barreras identificadas por los usuarios.",
+      "Información fácilmente accesible.",
+      "Velocidad de conexión.",
+      "Importancia del uso de estándares externos.",
+      "Navegación fácilmente recordada frente a navegación redescubierta.",
+      "Facilidad de navegación en la web.",
+      "Verificación de la usabilidad en diferentes navegadores y tecnologías.",
+      "Herramientas y test de verificación."
+     ]
+    }
+   ],
+   "contribution": "La formación del módulo contribuye a alcanzar los objetivos generales i), j) k), q), x) e y) del ciclo formativo y las competencias profesionales, personales y sociales e), g), h), i), m), n), y u) del título."
+  }
+ ]
+}

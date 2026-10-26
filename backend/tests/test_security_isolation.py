@@ -1,7 +1,7 @@
 """Aislamiento entre cuentas (OWASP API1 BOLA): un alumno nunca llega a los datos de otro.
 
-Prueba de regresión del equipo AppSec (docs/security/SECURITY_TESTING.md). Ana guarda datos en
-cada ruta privada; Luis, con su propia sesión válida, intenta leerlos, sobrescribirlos y borrarlos.
+Ana guarda datos en cada ruta privada; Luis, con su propia sesión válida, intenta leerlos,
+sobrescribirlos y borrarlos.
 """
 
 from sqlalchemy import func, select

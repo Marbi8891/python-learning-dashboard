@@ -1,5 +1,6 @@
 # Calidad en cada push y pull request:
 #   backend: lint, formato, tests con cobertura del 100 % y migraciones en PostgreSQL
+#   cursos: el temario de los cursos de DAW, con cada respuesta comprobada
 #   e2e: la app completa (frontend + backend reales) en Chromium, con auditoría WCAG
 name: CI
 
@@ -8,7 +9,7 @@ on:
     branches: [main]
   pull_request:
 
-# El token de GitHub solo puede leer el repositorio (ADR-0022)
+# El token de GitHub solo puede leer el repositorio
 permissions:
   contents: read
 
@@ -45,8 +46,10 @@ jobs:
         run: pip install pip-audit && pip-audit -r requirements.txt
       - name: Tests (SQLite) con cobertura mínima del 100 %
         run: python -m pytest -q --cov=app --cov-report=term-missing --cov-fail-under=100
-      - name: Contenido del núcleo educativo al día y con cada respuesta comprobada (ADR-0031)
+      - name: Contenido del núcleo educativo al día y con cada respuesta comprobada
         run: python ../scripts/learning/build_learning.py --check
+      - name: Catálogo del currículo de DAW al día
+        run: python ../scripts/curriculum/build_curriculum.py --check
       - name: Migraciones en PostgreSQL (vacía y con datos existentes)
         env:
           MIGRATION_TEST_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/pld
@@ -83,3 +86,28 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 7
+
+  # Cursos de DAW: cada respuesta se comprueba ejecutando el código de verdad (SQLite, Node, Java y Python)
+  cursos:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - name: Cursos al día y respuestas comprobadas
+        run: |
+          python3 scripts/courses/sql_course.py --check
+          python3 scripts/courses/js_course.py --check
+          python3 scripts/courses/java_course.py --check
+          python3 scripts/courses/entornos_course.py --check
+          python3 scripts/courses/programacion_course.py --check

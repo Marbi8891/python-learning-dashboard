@@ -5,10 +5,10 @@ Cómo recupera el acceso quien ha olvidado su contraseña, y qué protege cada p
 ## Flujo
 
 1. **Login → «¿Has olvidado tu contraseña?»**: la persona escribe su correo y pulsa «Enviar instrucciones».
-2. `POST /api/v1/auth/forgot-password` (o `/auth/password-reset/request`, que usan la web y Android) responde **siempre** `202` con el mismo mensaje, exista o no la cuenta.
+2. `POST /api/v1/auth/password-reset/request` responde **siempre** `202` con el mismo mensaje, exista o no la cuenta.
 3. Si la cuenta existe, se borra cualquier enlace anterior, se crea uno nuevo y se envía por email en segundo plano: `FRONTEND_URL/#/restablecer?token=…`.
 4. La web abre el formulario «Nueva contraseña» + «Repite la nueva contraseña» y quita el token de la barra de direcciones.
-5. `POST /api/v1/auth/reset-password` (o `/auth/password-reset/confirm`) con `{token, new_password}` responde `204`. Si el enlace no vale: `400` «Este enlace de recuperación no es válido o ha caducado. Pide uno nuevo.»
+5. `POST /api/v1/auth/password-reset/confirm` con `{token, new_password}` responde `204`. Si el enlace no vale: `400` «Este enlace de recuperación no es válido o ha caducado. Pide uno nuevo.»
 6. La web muestra «Tu contraseña se ha actualizado correctamente» y vuelve al login.
 
 ## Decisiones de seguridad
@@ -42,7 +42,7 @@ Sin `BREVO_API_KEY` ni `SMTP_HOST` no se envía nada, y la web ofrece el email d
 
 ## Límites conocidos
 
-- Los límites viven en memoria: con varias instancias del backend, cada una cuenta por separado (ADR-0022). Hoy hay una sola instancia.
+- Los límites viven en memoria: con varias instancias del backend, cada una cuenta por separado. Hoy hay una sola instancia.
 - Si la cuenta existe, se escriben filas en la base de datos (unos milisegundos). Igualarlo del todo exigiría escrituras ficticias, y no compensa.
 
 ## Inicio de sesión con Google
@@ -54,9 +54,9 @@ Sin `BREVO_API_KEY` ni `SMTP_HOST` no se envía nada, y la web ofrece el email d
    biblioteca oficial (`google.oauth2.id_token.verify_oauth2_token`: firma, audiencia = `GOOGLE_CLIENT_ID`,
    caducidad) y exige `email_verified`. Cuenta nueva: hace falta aceptar la privacidad.
 3. **Cuenta existente sin email verificado** (creada con contraseña y nunca recuperada por email):
-   la contraseña se anula, se cierran las demás sesiones y se registra `google_linked` (PLD-SEC-008).
+   la contraseña se anula, se cierran las demás sesiones y se registra `google_linked`.
    Google y el enlace de recuperación rellenan `users.email_verified_at`.
-4. La sesión es la misma que con contraseña (cookie `HttpOnly` o token en memoria, ADR-0033).
+4. La sesión es la misma que con contraseña (cookie `HttpOnly` o token en memoria).
 5. **Borrar la cuenta**: `POST /api/v1/users/me/delete` con la sesión y **exactamente uno** de
    `password` o `google_credential` (un ID token del mismo email emitido hace menos de 10 minutos;
    uno más antiguo da 403). Si no, 422. La web solo envía la credencial con la sección «Eliminar mi

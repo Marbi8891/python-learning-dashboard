@@ -1,4 +1,4 @@
-"""Registro de eventos de seguridad para detectar ataques (MITRE ATT&CK M1047 «Audit», ADR-0023).
+"""Registro de eventos de seguridad para detectar ataques (MITRE ATT&CK M1047 «Audit»).
 
 Cada evento es una línea JSON en el logger `pld.security` con la técnica ATT&CK que puede indicar,
 para buscarlo y alertar en los logs de Render (o de cualquier recolector).

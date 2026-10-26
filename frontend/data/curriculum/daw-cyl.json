@@ -1,0 +1,4654 @@
+{
+ "version": 1,
+ "cycle": {
+  "id": "daw",
+  "name": "Técnico Superior en Desarrollo de Aplicaciones Web",
+  "region": "Castilla y León",
+  "hours": 2000
+ },
+ "notice": "Las actividades de la plataforma son prácticas y no son evaluaciones oficiales del centro.",
+ "sources": [
+  {
+   "id": "orden-edu-1311-2024",
+   "title": "Orden EDU/1311/2024, de 26 de noviembre (BOCYL núm. 234, 2/12/2024)",
+   "what": "Duración, curso y horas semanales de cada módulo (anexos I y II)",
+   "url": "https://bocyl.jcyl.es/boletines/2024/12/02/pdf/BOCYL-D-02122024-27.pdf"
+  },
+  {
+   "id": "rd-405-2023",
+   "title": "Real Decreto 405/2023, de 29 de mayo (artículo tercero, anexo I)",
+   "what": "ECTS, resultados de aprendizaje, criterios de evaluación y contenidos básicos",
+   "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2023-13221"
+  },
+  {
+   "id": "rd-500-2024",
+   "title": "Real Decreto 500/2024, de 21 de mayo (artículo séptimo)",
+   "what": "Suprime FOL, EIE y FCT, añade los módulos transversales y renombra el proyecto",
+   "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2024-10685"
+  },
+  {
+   "id": "rd-659-2023",
+   "title": "Real Decreto 659/2023, de 18 de julio (anexos V, VII, VIII y X)",
+   "what": "Resultados de aprendizaje de los módulos transversales (sin extraer todavía)",
+   "url": "https://www.boe.es/buscar/act.php?id=BOE-A-2023-16889"
+  }
+ ],
+ "modules": [
+  {
+   "id": "0373",
+   "code": "0373",
+   "name": "Lenguajes de marcas y sistemas de gestión de información",
+   "course": 1,
+   "hours": 102,
+   "weeklyHours": 3,
+   "source": "orden-edu-1311-2024#anexo-I",
+   "ects": 7,
+   "stateMinHours": 70,
+   "learningOutcomes": [
+    {
+     "id": "0373-RA1",
+     "number": 1,
+     "text": "Reconoce las características de lenguajes de marcas analizando e interpretando fragmentos de código.",
+     "criteria": [
+      {
+       "id": "0373-RA1-a",
+       "letter": "a",
+       "text": "Se han identificado las características generales de los lenguajes de marcas."
+      },
+      {
+       "id": "0373-RA1-b",
+       "letter": "b",
+       "text": "Se han reconocido las ventajas que proporcionan en el tratamiento de la información."
+      },
+      {
+       "id": "0373-RA1-c",
+       "letter": "c",
+       "text": "Se han clasificado los lenguajes de marcas e identificado los más relevantes."
+      },
+      {
+       "id": "0373-RA1-d",
+       "letter": "d",
+       "text": "Se han diferenciado sus ámbitos de aplicación."
+      },
+      {
+       "id": "0373-RA1-e",
+       "letter": "e",
+       "text": "Se han reconocido la necesidad y los ámbitos específicos de aplicación de un lenguaje de marcas de propósito general."
+      },
+      {
+       "id": "0373-RA1-f",
+       "letter": "f",
+       "text": "Se han analizado las características propias de diferentes lenguajes de marcas."
+      },
+      {
+       "id": "0373-RA1-g",
+       "letter": "g",
+       "text": "Se han identificado la estructura de un documento y sus reglas sintácticas."
+      },
+      {
+       "id": "0373-RA1-h",
+       "letter": "h",
+       "text": "Se han contrastado la necesidad de crear documentos bien formados y la influencia en su procesamiento."
+      },
+      {
+       "id": "0373-RA1-i",
+       "letter": "i",
+       "text": "Se han identificado las ventajas que aportan los espacios de nombres."
+      }
+     ]
+    },
+    {
+     "id": "0373-RA2",
+     "number": 2,
+     "text": "Utiliza lenguajes de marcas para la transmisión y presentación de información a través de la web analizando la estructura de los documentos e identificando sus elementos.",
+     "criteria": [
+      {
+       "id": "0373-RA2-a",
+       "letter": "a",
+       "text": "Se han identificado y clasificado los lenguajes de marcas relacionados con la web y sus diferentes versiones y estándares."
+      },
+      {
+       "id": "0373-RA2-b",
+       "letter": "b",
+       "text": "Se ha analizado la estructura de un documento HTML e identificado las secciones que lo componen."
+      },
+      {
+       "id": "0373-RA2-c",
+       "letter": "c",
+       "text": "Se han reconocido la funcionalidad de las principales etiquetas y los atributos del lenguaje HTML."
+      },
+      {
+       "id": "0373-RA2-d",
+       "letter": "d",
+       "text": "Se han establecido las semejanzas y diferencias entre las diferentes versiones de HTML."
+      },
+      {
+       "id": "0373-RA2-e",
+       "letter": "e",
+       "text": "Se han utilizado herramientas en la creación de documentos web."
+      },
+      {
+       "id": "0373-RA2-f",
+       "letter": "f",
+       "text": "Se han identificado las ventajas que aporta la utilización de hojas de estilo."
+      },
+      {
+       "id": "0373-RA2-g",
+       "letter": "g",
+       "text": "Se han aplicado hojas de estilo."
+      },
+      {
+       "id": "0373-RA2-h",
+       "letter": "h",
+       "text": "Se han validado documentos HTML y CSS."
+      },
+      {
+       "id": "0373-RA2-i",
+       "letter": "i",
+       "text": "Se han identificado las tecnologías en que se basa la sindicación de contenidos."
+      },
+      {
+       "id": "0373-RA2-j",
+       "letter": "j",
+       "text": "Se han reconocido los ámbitos de aplicación de la sindicación de contenidos."
+      }
+     ]
+    },
+    {
+     "id": "0373-RA3",
+     "number": 3,
+     "text": "Accede y manipula documentos web utilizando lenguajes de script de cliente.",
+     "criteria": [
+      {
+       "id": "0373-RA3-a",
+       "letter": "a",
+       "text": "Se han identificado y clasificado los lenguajes de script de cliente relacionados con la web y sus diferentes versiones y estándares."
+      },
+      {
+       "id": "0373-RA3-b",
+       "letter": "b",
+       "text": "Se ha identificado la sintaxis básica de los lenguajes de script de cliente."
+      },
+      {
+       "id": "0373-RA3-c",
+       "letter": "c",
+       "text": "Se han utilizado métodos para la selección y acceso de los diferentes elementos de un documento web."
+      },
+      {
+       "id": "0373-RA3-d",
+       "letter": "d",
+       "text": "Se han creado y modificado elementos de documentos web."
+      },
+      {
+       "id": "0373-RA3-e",
+       "letter": "e",
+       "text": "Se han eliminado elementos de documentos web."
+      },
+      {
+       "id": "0373-RA3-f",
+       "letter": "f",
+       "text": "Se han realizado modificaciones sobre los estilos de un documento web."
+      }
+     ]
+    },
+    {
+     "id": "0373-RA4",
+     "number": 4,
+     "text": "Establece mecanismos de validación de documentos para el intercambio de información utilizando métodos para definir su sintaxis y estructura.",
+     "criteria": [
+      {
+       "id": "0373-RA4-a",
+       "letter": "a",
+       "text": "Se ha establecido la necesidad de describir la información transmitida en los documentos y sus reglas."
+      },
+      {
+       "id": "0373-RA4-b",
+       "letter": "b",
+       "text": "Se han identificado las tecnologías relacionadas con la definición de documentos."
+      },
+      {
+       "id": "0373-RA4-c",
+       "letter": "c",
+       "text": "Se ha analizado la estructura y sintaxis específica utilizada en la descripción."
+      },
+      {
+       "id": "0373-RA4-d",
+       "letter": "d",
+       "text": "Se han creado descripciones de documentos."
+      },
+      {
+       "id": "0373-RA4-e",
+       "letter": "e",
+       "text": "Se han utilizado descripciones en la elaboración y validación de documentos."
+      },
+      {
+       "id": "0373-RA4-f",
+       "letter": "f",
+       "text": "Se han asociado las descripciones con los documentos."
+      },
+      {
+       "id": "0373-RA4-g",
+       "letter": "g",
+       "text": "Se han utilizado herramientas específicas."
+      }
+     ]
+    },
+    {
+     "id": "0373-RA5",
+     "number": 5,
+     "text": "Realiza conversiones sobre documentos para el intercambio de información utilizando técnicas, lenguajes y herramientas de procesamiento.",
+     "criteria": [
+      {
+       "id": "0373-RA5-a",
+       "letter": "a",
+       "text": "Se ha identificado la necesidad de la conversión de documentos para el intercambio de la información."
+      },
+      {
+       "id": "0373-RA5-b",
+       "letter": "b",
+       "text": "Se han establecido ámbitos de aplicación."
+      },
+      {
+       "id": "0373-RA5-c",
+       "letter": "c",
+       "text": "Se han analizado las tecnologías implicadas y su modo de funcionamiento."
+      },
+      {
+       "id": "0373-RA5-d",
+       "letter": "d",
+       "text": "Se ha descrito la sintaxis específica utilizada en la conversión y adaptación de documentos para el intercambio de información."
+      },
+      {
+       "id": "0373-RA5-e",
+       "letter": "e",
+       "text": "Se han creado especificaciones de conversión."
+      },
+      {
+       "id": "0373-RA5-f",
+       "letter": "f",
+       "text": "Se han identificado y caracterizado herramientas específicas relacionadas con la conversión de documentos para el intercambio de información."
+      },
+      {
+       "id": "0373-RA5-g",
+       "letter": "g",
+       "text": "Se han realizado conversiones sobre documentos para el intercambio de información."
+      }
+     ]
+    },
+    {
+     "id": "0373-RA6",
+     "number": 6,
+     "text": "Gestiona la información en formatos de intercambio de datos analizando y utilizando tecnologías de almacenamiento y lenguajes de consulta.",
+     "criteria": [
+      {
+       "id": "0373-RA6-a",
+       "letter": "a",
+       "text": "Se han identificado los principales métodos de almacenamiento de la información utilizados en documentos de intercambio de datos."
+      },
+      {
+       "id": "0373-RA6-b",
+       "letter": "b",
+       "text": "Se han identificado las ventajas e inconvenientes de almacenar información en formatos de intercambio de datos."
+      },
+      {
+       "id": "0373-RA6-c",
+       "letter": "c",
+       "text": "Se han establecido tecnologías eficientes de almacenamiento de información en función de sus características."
+      },
+      {
+       "id": "0373-RA6-d",
+       "letter": "d",
+       "text": "Se han identificado lenguajes y herramientas para el tratamiento y almacenamiento de información y su inclusión en documentos de intercambio de datos."
+      },
+      {
+       "id": "0373-RA6-e",
+       "letter": "e",
+       "text": "Se han utilizado lenguajes de consulta y manipulación en documentos de intercambio de datos."
+      },
+      {
+       "id": "0373-RA6-f",
+       "letter": "f",
+       "text": "Se han utilizado sistemas gestores de bases de datos relacionales en el almacenamiento de información en formatos de intercambio de datos."
+      },
+      {
+       "id": "0373-RA6-g",
+       "letter": "g",
+       "text": "Se han utilizado técnicas específicas para crear documentos de intercambio de datos a partir de información almacenada en bases de datos relacionales."
+      },
+      {
+       "id": "0373-RA6-h",
+       "letter": "h",
+       "text": "Se han identificado las características de los sistemas."
+      },
+      {
+       "id": "0373-RA6-i",
+       "letter": "i",
+       "text": "Se han utilizado herramientas para gestionar la información almacenada en bases de datos nativas."
+      }
+     ]
+    },
+    {
+     "id": "0373-RA7",
+     "number": 7,
+     "text": "Opera sistemas empresariales de gestión de información realizando tareas de importación, integración, aseguramiento y extracción de la información.",
+     "criteria": [
+      {
+       "id": "0373-RA7-a",
+       "letter": "a",
+       "text": "Se han identificado los principales sistemas de gestión empresarial."
+      },
+      {
+       "id": "0373-RA7-b",
+       "letter": "b",
+       "text": "Se han reconocido las ventajas de los sistemas de gestión de información empresariales."
+      },
+      {
+       "id": "0373-RA7-c",
+       "letter": "c",
+       "text": "Se han evaluado las características de las principales aplicaciones de gestión empresarial."
+      },
+      {
+       "id": "0373-RA7-d",
+       "letter": "d",
+       "text": "Se han instalado aplicaciones de gestión de la información empresarial."
+      },
+      {
+       "id": "0373-RA7-e",
+       "letter": "e",
+       "text": "Se han configurado y administrado las aplicaciones."
+      },
+      {
+       "id": "0373-RA7-f",
+       "letter": "f",
+       "text": "Se han establecido y verificado mecanismos de acceso seguro a la información."
+      },
+      {
+       "id": "0373-RA7-g",
+       "letter": "g",
+       "text": "Se han generado informes."
+      },
+      {
+       "id": "0373-RA7-h",
+       "letter": "h",
+       "text": "Se han realizado procedimientos de extracción de información para su tratamiento e incorporación a diversos sistemas."
+      },
+      {
+       "id": "0373-RA7-i",
+       "letter": "i",
+       "text": "Se han elaborado documentos relativos a la explotación de la aplicación."
+      }
+     ]
+    }
+   ],
+   "contents": [
+    {
+     "title": "Reconocimiento de las características de lenguajes de marcas",
+     "items": [
+      "Clasificación.",
+      "Características y ámbitos de aplicación.",
+      "Estructura y sintaxis.",
+      "Herramientas de edición.",
+      "Elaboración de documentos bien formados.",
+      "Utilización de espacios de nombres."
+     ]
+    },
+    {
+     "title": "Utilización de lenguajes de marcas en entornos web",
+     "items": [
+      "Estándares web. Versiones. Clasificación.",
+      "Estructura de un documento HTML.",
+      "Identificación de etiquetas y atributos de HTML.",
+      "Herramientas de diseño web.",
+      "Hojas de estilo (CSS).",
+      "Validación de documentos HTML y CSS.",
+      "Lenguajes de marcas para la sindicación de contenidos."
+     ]
+    },
+    {
+     "title": "Manipulación de documentos web",
+     "items": [
+      "Lenguajes de script de cliente. Características y sintaxis básica. Estándares.",
+      "Selección y acceso a elementos.",
+      "Creación y modificación de elementos.",
+      "Eliminación de elementos.",
+      "Manipulación de estilos."
+     ]
+    },
+    {
+     "title": "Definición de esquemas y vocabularios en lenguajes de marcas",
+     "items": [
+      "Tecnologías para la definición de documentos. Estructura y sintaxis.",
+      "Creación de descripciones de documentos.",
+      "Asociación de descripciones con documentos. Validación.",
+      "Herramientas de creación y validación."
+     ]
+    },
+    {
+     "title": "Conversión y adaptación de documentos para el intercambio de información",
+     "items": [
+      "Tecnologías de transformación de documentos. Estándares. Ámbitos de aplicación.",
+      "Descripción de la estructura y de la sintaxis.",
+      "Creación y utilización de plantillas. Herramientas y depuración.",
+      "Conversión entre diferentes formatos de documentos."
+     ]
+    },
+    {
+     "title": "Almacenamiento de información",
+     "items": [
+      "Sistemas de almacenamiento de información. Características. Tecnologías.",
+      "Lenguajes de consulta y manipulación en documentos.",
+      "Consulta y manipulación de información.",
+      "Importación y exportación de bases de datos relacionales en diferentes formatos.",
+      "Herramientas de tratamiento y almacenamiento de información en sistemas nativos.",
+      "Almacenamiento y manipulación de información en sistemas nativos."
+     ]
+    },
+    {
+     "title": "Sistemas de gestión empresarial",
+     "items": [
+      "Aplicaciones de gestión empresarial. Tipos. Características.",
+      "Instalación.",
+      "Administración y configuración.",
+      "Integración de módulos.",
+      "Mecanismos de acceso seguro a la información. Roles y privilegios.",
+      "Elaboración de informes.",
+      "Exportación de información.",
+      "Elaboración de documentación."
+     ]
+    }
+   ],
+   "contribution": "La formación del módulo contribuye a alcanzar los objetivos generales h), i), p) y r) del ciclo formativo y las competencias profesionales, personales y sociales e), f), h) y p) del título.",
+   "outcomesSource": "rd-405-2023#anexo-I",
+   "status": "oficial",
+   "platformCourses": [],
+   "platformQuestions": 0,
+   "platformQuestionIds": {}
+  },
+  {
+   "id": "0483",
+   "code": "0483",
+   "name": "Sistemas informáticos",
+   "course": 1,
+   "hours": 170,
+   "weeklyHours": 5,
+   "source": "orden-edu-1311-2024#anexo-I",
+   "ects": 10,
+   "stateMinHours": 100,
+   "learningOutcomes": [
+    {
+     "id": "0483-RA1",
+     "number": 1,
+     "text": "Evalúa sistemas informáticos, identificando sus componentes y características.",
+     "criteria": [
+      {
+       "id": "0483-RA1-a",
+       "letter": "a",
+       "text": "Se han reconocido los componentes físicos de un sistema informático y sus mecanismos de interconexión."
+      },
+      {
+       "id": "0483-RA1-b",
+       "letter": "b",
+       "text": "Se han clasificado los tipos de memorias, señalando sus características e identifcando sus prestaciones y la función que desarrollan en el conjunto del sistema."
+      },
+      {
+       "id": "0483-RA1-c",
+       "letter": "c",
+       "text": "Se ha verificado el proceso de puesta en marcha de un equipo."
+      },
+      {
+       "id": "0483-RA1-d",
+       "letter": "d",
+       "text": "Se han clasificado, instalado y configurado diferentes tipos de dispositivos periféricos."
+      },
+      {
+       "id": "0483-RA1-e",
+       "letter": "e",
+       "text": "Se han identificado los tipos de redes y sistemas de comunicación."
+      },
+      {
+       "id": "0483-RA1-f",
+       "letter": "f",
+       "text": "Se han identificado los componentes de una red informática."
+      },
+      {
+       "id": "0483-RA1-g",
+       "letter": "g",
+       "text": "Se han interpretado mapas físicos y lógicos de una red informática."
+      },
+      {
+       "id": "0483-RA1-h",
+       "letter": "h",
+       "text": "Se han reconocido las normas de seguridad y prevención de riesgos laborales en el uso de los sistemas informáticos."
+      }
+     ]
+    },
+    {
+     "id": "0483-RA2",
+     "number": 2,
+     "text": "Instala sistemas operativos planificando el proceso e interpretando documentación técnica.",
+     "criteria": [
+      {
+       "id": "0483-RA2-a",
+       "letter": "a",
+       "text": "Se han identificado los elementos funcionales de un sistema informático."
+      },
+      {
+       "id": "0483-RA2-b",
+       "letter": "b",
+       "text": "Se han analizado las características, funciones y arquitectura de un sistema operativo."
+      },
+      {
+       "id": "0483-RA2-c",
+       "letter": "c",
+       "text": "Se han comparado sistemas operativos en base a sus requisitos, características, campos de aplicación y licencias de uso."
+      },
+      {
+       "id": "0483-RA2-d",
+       "letter": "d",
+       "text": "Se ha planificado el proceso de la instalación de sistemas operativos."
+      },
+      {
+       "id": "0483-RA2-e",
+       "letter": "e",
+       "text": "Se han instalado y actualizado sistemas operativos libres y propietarios."
+      },
+      {
+       "id": "0483-RA2-f",
+       "letter": "f",
+       "text": "Se han aplicado técnicas de actualización y recuperación del sistema."
+      },
+      {
+       "id": "0483-RA2-g",
+       "letter": "g",
+       "text": "Se han utilizado tecnologías de virtualización para instalar y probar sistemas operativos."
+      },
+      {
+       "id": "0483-RA2-h",
+       "letter": "h",
+       "text": "Se han instalado, desinstalado y actualizado aplicaciones."
+      },
+      {
+       "id": "0483-RA2-i",
+       "letter": "i",
+       "text": "Se han documentado los procesos realizados."
+      }
+     ]
+    },
+    {
+     "id": "0483-RA3",
+     "number": 3,
+     "text": "Gestiona la información del sistema identificando las estructuras de almacenamiento y aplicando medidas para asegurar la integridad de los datos.",
+     "criteria": [
+      {
+       "id": "0483-RA3-a",
+       "letter": "a",
+       "text": "Se han comparado sistemas de archivos."
+      },
+      {
+       "id": "0483-RA3-b",
+       "letter": "b",
+       "text": "Se ha identificado la estructura y función de los directorios del sistema"
+      },
+      {
+       "id": "0483-RA3-c",
+       "letter": "c",
+       "text": "operativo."
+      },
+      {
+       "id": "0483-RA3-d",
+       "letter": "d",
+       "text": "Se han utilizado herramientas en entorno gráfico y comandos para localizar información en el sistema de archivos."
+      },
+      {
+       "id": "0483-RA3-e",
+       "letter": "e",
+       "text": "Se han creado diferentes tipos de particiones y unidades lógicas."
+      },
+      {
+       "id": "0483-RA3-f",
+       "letter": "f",
+       "text": "Se han realizado y restaurado copias de seguridad."
+      },
+      {
+       "id": "0483-RA3-g",
+       "letter": "g",
+       "text": "Se han planificado y automatizado tareas."
+      },
+      {
+       "id": "0483-RA3-h",
+       "letter": "h",
+       "text": "Se han instalado y evaluado utilidades relacionadas con la gestión de información."
+      }
+     ]
+    },
+    {
+     "id": "0483-RA4",
+     "number": 4,
+     "text": "Gestiona sistemas operativos utilizando comandos y herramientas gráficas y evaluando las necesidades del sistema.",
+     "criteria": [
+      {
+       "id": "0483-RA4-a",
+       "letter": "a",
+       "text": "Se han configurado cuentas de usuario locales y grupos."
+      },
+      {
+       "id": "0483-RA4-b",
+       "letter": "b",
+       "text": "Se ha asegurado el acceso al sistema mediante el uso de directivas de cuenta y directivas de contraseñas."
+      },
+      {
+       "id": "0483-RA4-c",
+       "letter": "c",
+       "text": "Se han identificado, arrancado y detenido servicios y procesos."
+      },
+      {
+       "id": "0483-RA4-d",
+       "letter": "d",
+       "text": "Se ha protegido el acceso a la información mediante el uso de permisos locales y listas de control de acceso."
+      },
+      {
+       "id": "0483-RA4-e",
+       "letter": "e",
+       "text": "Se han utilizado comandos para realizar las tareas básicas de configuración y administración del sistema."
+      },
+      {
+       "id": "0483-RA4-f",
+       "letter": "f",
+       "text": "Se ha monitorizado el sistema."
+      },
+      {
+       "id": "0483-RA4-g",
+       "letter": "g",
+       "text": "Se han instalado y evaluado utilidades para el mantenimiento y optimización del sistema."
+      },
+      {
+       "id": "0483-RA4-h",
+       "letter": "h",
+       "text": "Se han evaluado las necesidades del sistema informático en relación con el desarrollo de aplicaciones."
+      }
+     ]
+    },
+    {
+     "id": "0483-RA5",
+     "number": 5,
+     "text": "Interconecta sistemas en red configurando dispositivos y protocolos.",
+     "criteria": [
+      {
+       "id": "0483-RA5-a",
+       "letter": "a",
+       "text": "Se ha configurado el protocolo TCP/IP."
+      },
+      {
+       "id": "0483-RA5-b",
+       "letter": "b",
+       "text": "Se han configurado redes de área local cableadas."
+      },
+      {
+       "id": "0483-RA5-c",
+       "letter": "c",
+       "text": "Se han configurado redes de área local inalámbricas."
+      },
+      {
+       "id": "0483-RA5-d",
+       "letter": "d",
+       "text": "Se han utilizado dispositivos de interconexión de redes."
+      },
+      {
+       "id": "0483-RA5-e",
+       "letter": "e",
+       "text": "Se ha configurado el acceso a redes de área extensa."
+      },
+      {
+       "id": "0483-RA5-f",
+       "letter": "f",
+       "text": "Se han gestionado puertos de comunicaciones."
+      },
+      {
+       "id": "0483-RA5-g",
+       "letter": "g",
+       "text": "Se ha verificado el funcionamiento de la red mediante el uso de comandos y herramientas básicas."
+      },
+      {
+       "id": "0483-RA5-h",
+       "letter": "h",
+       "text": "Se han aplicado protocolos seguros de comunicaciones."
+      }
+     ]
+    },
+    {
+     "id": "0483-RA6",
+     "number": 6,
+     "text": "Opera sistemas en red gestionando sus recursos e identificando las restricciones de seguridad existentes.",
+     "criteria": [
+      {
+       "id": "0483-RA6-a",
+       "letter": "a",
+       "text": "Se ha configurado el acceso a recursos locales y recursos de red."
+      },
+      {
+       "id": "0483-RA6-b",
+       "letter": "b",
+       "text": "Se han identificado y configurado los derechos de usuario y directivas de seguridad."
+      },
+      {
+       "id": "0483-RA6-c",
+       "letter": "c",
+       "text": "Se han explotado servidores de ficheros, servidores de impresión y servidores de aplicaciones."
+      },
+      {
+       "id": "0483-RA6-d",
+       "letter": "d",
+       "text": "Se ha accedido a los servidores utilizando técnicas de conexión remota."
+      },
+      {
+       "id": "0483-RA6-e",
+       "letter": "e",
+       "text": "Se ha evaluado la necesidad de proteger los recursos y el sistema."
+      },
+      {
+       "id": "0483-RA6-f",
+       "letter": "f",
+       "text": "Se han instalado y evaluado utilidades de seguridad básica."
+      },
+      {
+       "id": "0483-RA6-g",
+       "letter": "g",
+       "text": "Se han configurado y explotado dominios."
+      }
+     ]
+    },
+    {
+     "id": "0483-RA7",
+     "number": 7,
+     "text": "Elabora documentación valorando y utilizando aplicaciones informáticas de propósito general.",
+     "criteria": [
+      {
+       "id": "0483-RA7-a",
+       "letter": "a",
+       "text": "Se ha clasificado software en función de su licencia y propósito."
+      },
+      {
+       "id": "0483-RA7-b",
+       "letter": "b",
+       "text": "Se han analizado las necesidades específicas de software asociadas al uso de sistemas informáticos en diferentes entornos productivos."
+      },
+      {
+       "id": "0483-RA7-c",
+       "letter": "c",
+       "text": "Se han realizado tareas de documentación mediante el uso de herramientas ofimáticas y de trabajo colaborativo."
+      },
+      {
+       "id": "0483-RA7-d",
+       "letter": "d",
+       "text": "Se han utilizado sistemas de correo y mensajería electrónica."
+      },
+      {
+       "id": "0483-RA7-e",
+       "letter": "e",
+       "text": "Se han utilizado los servicios de transferencia de ficheros."
+      },
+      {
+       "id": "0483-RA7-f",
+       "letter": "f",
+       "text": "Se han utilizado métodos de búsqueda de documentación técnica mediante el uso de servicios de Internet."
+      },
+      {
+       "id": "0483-RA7-g",
+       "letter": "g",
+       "text": "Se han utilizado herramientas de propósito general."
+      }
+     ]
+    }
+   ],
+   "contents": [
+    {
+     "title": "Explotación de sistemas microinformáticos",
+     "items": [
+      "Placas base. Formatos.",
+      "Estructura y componentes: procesador (Set de Instrucciones, Registros, Contador, Unidad Aritmético-Lógica, Interrupciones); memoria interna, tipos y características (RAM, xPROM y otras); interfaces de entrada/salida; discos Periféricos. Adaptadores para la conexión de dispositivos. Componentes de un sistema informático.",
+      "Periféricos. Adaptadores para la conexión de dispositivos.",
+      "Normas de seguridad y prevención de riesgos laborales.",
+      "Características de las redes. Ventajas e inconvenientes.",
+      "Tipos de redes.",
+      "Componentes de una red informática.",
+      "Topologías de red.",
+      "Tipos de cableado. Conectores.",
+      "Mapa físico y lógico de una red local."
+     ]
+    },
+    {
+     "title": "Instalación de sistemas operativos",
+     "items": [
+      "Evolución histórica y clasificación.",
+      "Funciones de un sistema operativo.",
+      "Tipos de sistemas operativos.",
+      "Tipos de aplicaciones.",
+      "Licencias y tipos de licencias.",
+      "Procedimiento de instalación.",
+      "Gestores de arranque. Configuración y reparación.",
+      "Tecnologías de virtualización. Tipos.",
+      "Consideraciones previas a la instalación de sistemas operativos libres y propietarios.",
+      "Instalación de sistemas operativos libres y propietarios. Requisitos, versiones y licencias.",
+      "Instalación/desinstalación de aplicaciones. Requisitos, versiones y licencias.",
+      "Actualización y recuperación de sistemas operativos y aplicaciones.",
+      "Documentación de la instalación y de las incidencias detectadas."
+     ]
+    },
+    {
+     "title": "Gestión de la información",
+     "items": [
+      "Gestión de sistemas de archivos mediante comandos y entornos gráficos.",
+      "Estructura de directorios de sistemas operativos libres y propietarios.",
+      "Búsqueda de información del sistema mediante comandos y herramientas gráficas.",
+      "Identificación del software instalado mediante comandos y herramientas gráficas.",
+      "Realización y restauración de copias de seguridad.",
+      "Herramientas de administración de discos. Particiones y volúmenes. Desfragmentación y chequeo. Cifrado.",
+      "Tareas automáticas. Planificación."
+     ]
+    },
+    {
+     "title": "Configuración de sistemas operativos",
+     "items": [
+      "Configuración de usuarios y grupos.",
+      "Seguridad de cuentas de usuario.",
+      "Seguridad de contraseñas.",
+      "Acceso a recursos. Permisos locales. Listas de control de acceso.",
+      "Servicios y procesos.",
+      "Comandos de sistemas operativos libres y propietarios.",
+      "Herramientas de monitorización del sistema. Registros y logs."
+     ]
+    },
+    {
+     "title": "Conexión de sistemas en red",
+     "items": [
+      "Configuración del protocolo TCP/IP en un cliente de red. Direcciones IP. Máscaras de subred. Puertas de enlace. Servidores de nombres de dominio. IPv4. IPv6. Configuración estática. Configuración dinámica automática.",
+      "Ficheros de configuración de red.",
+      "Gestión de puertos.",
+      "Resolución de problemas de conectividad en sistemas operativos en red. Herramientas de diagnóstico.",
+      "Herramientas gráficas y comandos utilizados en sistemas operativos libres y propietarios.",
+      "Monitorización de redes.",
+      "Protocolos TCP/IP.",
+      "Configuración de los adaptadores de red en sistemas operativos libres y propietarios.",
+      "Interconexión de redes: adaptadores de red y dispositivos de interconexión. Enrutamiento.",
+      "Redes cableadas. Tipos y características. Adaptadores de red. Conmutadores, enrutadores, entre otros. Seguridad.",
+      "Redes inalámbricas. Tipos y características. Adaptadores. Dispositivos de interconexión. Seguridad.",
+      "Seguridad de comunicaciones.",
+      "Tecnologías de acceso a redes de área extensa."
+     ]
+    },
+    {
+     "title": "Gestión de recursos en una red",
+     "items": [
+      "Permisos y derechos. Permisos de red. Permisos locales. Herencia. Listas de control de acceso.",
+      "Configuración de recursos compartidos. Permisos de acceso y directivas de seguridad.",
+      "Requisitos de seguridad del sistema y de los datos.",
+      "Servidores de ficheros.",
+      "Servidores de impresión.",
+      "Servidores de aplicaciones.",
+      "Técnicas de conexión remota.",
+      "Cortafuegos.",
+      "Implantación y explotación de dominios."
+     ]
+    },
+    {
+     "title": "Explotación de aplicaciones informáticas de propósito general",
+     "items": [
+      "Software: tipos, requisitos, licencias.",
+      "Herramientas ofimáticas y de trabajo colaborativo.",
+      "Utilidades de propósito general: antimalware, correo, transferencia de ficheros, recuperación de datos, mantenimiento del sistema, entre otros."
+     ]
+    }
+   ],
+   "contribution": "La formación del módulo contribuye a alcanzar los objetivos generales a), b), o), q), s), t), y x) del ciclo formativo y las competencias profesionales, personales y sociales a), b), o) y q) del título.",
+   "outcomesSource": "rd-405-2023#anexo-I",
+   "status": "oficial",
+   "platformCourses": [],
+   "platformQuestions": 0,
+   "platformQuestionIds": {}
+  },
+  {
+   "id": "0484",
+   "code": "0484",
+   "name": "Bases de datos",
+   "course": 1,
+   "hours": 170,
+   "weeklyHours": 5,
+   "source": "orden-edu-1311-2024#anexo-I",
+   "ects": 12,
+   "stateMinHours": 105,
+   "learningOutcomes": [
+    {
+     "id": "0484-RA1",
+     "number": 1,
+     "text": "Reconoce los elementos de las bases de datos analizando sus funciones y valorando la utilidad de los sistemas gestores.",
+     "criteria": [
+      {
+       "id": "0484-RA1-a",
+       "letter": "a",
+       "text": "Se han analizado los sistemas lógicos de almacenamiento y sus características."
+      },
+      {
+       "id": "0484-RA1-b",
+       "letter": "b",
+       "text": "Se han identificado los distintos tipos de bases de datos según el modelo de datos utilizado."
+      },
+      {
+       "id": "0484-RA1-c",
+       "letter": "c",
+       "text": "Se han identificado los distintos tipos de bases de datos en función de la ubicación de la información."
+      },
+      {
+       "id": "0484-RA1-d",
+       "letter": "d",
+       "text": "Se ha evaluado la utilidad de un sistema gestor de bases de datos."
+      },
+      {
+       "id": "0484-RA1-e",
+       "letter": "e",
+       "text": "Se ha reconocido la función de cada uno de los elementos de un sistema gestor de bases de datos."
+      },
+      {
+       "id": "0484-RA1-f",
+       "letter": "f",
+       "text": "Se han clasificado los sistemas gestores de bases de datos."
+      },
+      {
+       "id": "0484-RA1-g",
+       "letter": "g",
+       "text": "Se ha reconocido la utilidad de las bases de datos distribuidas."
+      },
+      {
+       "id": "0484-RA1-h",
+       "letter": "h",
+       "text": "Se han analizado las políticas de fragmentación de la información."
+      },
+      {
+       "id": "0484-RA1-i",
+       "letter": "i",
+       "text": "Se ha identificado la legislación vigente sobre protección de datos."
+      },
+      {
+       "id": "0484-RA1-j",
+       "letter": "j",
+       "text": "Se han reconocido los conceptos de Big Data y de la inteligencia de negocios."
+      }
+     ]
+    },
+    {
+     "id": "0484-RA2",
+     "number": 2,
+     "text": "Crea bases de datos definiendo su estructura y las características de sus elementos según el modelo relacional.",
+     "criteria": [
+      {
+       "id": "0484-RA2-a",
+       "letter": "a",
+       "text": "Se ha analizado el formato de almacenamiento de la información."
+      },
+      {
+       "id": "0484-RA2-b",
+       "letter": "b",
+       "text": "Se han creado las tablas y las relaciones entre ellas."
+      },
+      {
+       "id": "0484-RA2-c",
+       "letter": "c",
+       "text": "Se han seleccionado los tipos de datos adecuados."
+      },
+      {
+       "id": "0484-RA2-d",
+       "letter": "d",
+       "text": "Se han definido los campos clave en las tablas."
+      },
+      {
+       "id": "0484-RA2-e",
+       "letter": "e",
+       "text": "Se han implantado las restricciones reflejadas en el diseño lógico."
+      },
+      {
+       "id": "0484-RA2-f",
+       "letter": "f",
+       "text": "Se han creado vistas."
+      },
+      {
+       "id": "0484-RA2-g",
+       "letter": "g",
+       "text": "Se han creado los usuarios y se les han asignado privilegios."
+      },
+      {
+       "id": "0484-RA2-h",
+       "letter": "h",
+       "text": "Se han utilizado asistentes, herramientas gráficas y los lenguajes de definición y control de datos."
+      }
+     ]
+    },
+    {
+     "id": "0484-RA3",
+     "number": 3,
+     "text": "Consulta la información almacenada en una base de datos empleando asistentes, herramientas gráficas y el lenguaje de manipulación de datos.",
+     "criteria": [
+      {
+       "id": "0484-RA3-a",
+       "letter": "a",
+       "text": "Se han identificado las herramientas y sentencias para realizar consultas."
+      },
+      {
+       "id": "0484-RA3-b",
+       "letter": "b",
+       "text": "Se han realizado consultas simples sobre una tabla."
+      },
+      {
+       "id": "0484-RA3-c",
+       "letter": "c",
+       "text": "Se han realizado consultas sobre el contenido de varias tablas mediante composiciones internas."
+      },
+      {
+       "id": "0484-RA3-d",
+       "letter": "d",
+       "text": "Se han realizado consultas sobre el contenido de varias tablas mediante composiciones externas."
+      },
+      {
+       "id": "0484-RA3-e",
+       "letter": "e",
+       "text": "Se han realizado consultas resumen."
+      },
+      {
+       "id": "0484-RA3-f",
+       "letter": "f",
+       "text": "Se han realizado consultas con subconsultas."
+      },
+      {
+       "id": "0484-RA3-g",
+       "letter": "g",
+       "text": "Se han realizado consultas que implican múltiples selecciones."
+      },
+      {
+       "id": "0484-RA3-h",
+       "letter": "h",
+       "text": "Se han aplicado criterios de optimización de consultas."
+      }
+     ]
+    },
+    {
+     "id": "0484-RA4",
+     "number": 4,
+     "text": "Modifica la información almacenada en la base de datos utilizando asistentes, herramientas gráficas y el lenguaje de manipulación de datos.",
+     "criteria": [
+      {
+       "id": "0484-RA4-a",
+       "letter": "a",
+       "text": "Se han identificado las herramientas y sentencias para modificar el contenido de la base de datos."
+      },
+      {
+       "id": "0484-RA4-b",
+       "letter": "b",
+       "text": "Se han insertado, borrado y actualizado datos en las tablas."
+      },
+      {
+       "id": "0484-RA4-c",
+       "letter": "c",
+       "text": "Se ha incluido en una tabla la información resultante de la ejecución de una consulta."
+      },
+      {
+       "id": "0484-RA4-d",
+       "letter": "d",
+       "text": "Se han diseñado guiones de sentencias para llevar a cabo tareas complejas."
+      },
+      {
+       "id": "0484-RA4-e",
+       "letter": "e",
+       "text": "Se ha reconocido el funcionamiento de las transacciones."
+      },
+      {
+       "id": "0484-RA4-f",
+       "letter": "f",
+       "text": "Se han anulado parcial o totalmente los cambios producidos por una transacción."
+      },
+      {
+       "id": "0484-RA4-g",
+       "letter": "g",
+       "text": "Se han identificado los efectos de las distintas políticas de bloqueo de registros."
+      },
+      {
+       "id": "0484-RA4-h",
+       "letter": "h",
+       "text": "Se han adoptado medidas para mantener la integridad y consistencia de la información."
+      }
+     ]
+    },
+    {
+     "id": "0484-RA5",
+     "number": 5,
+     "text": "Desarrolla procedimientos almacenados evaluando y utilizando las sentencias del lenguaje incorporado en el sistema gestor de bases de datos.",
+     "criteria": [
+      {
+       "id": "0484-RA5-a",
+       "letter": "a",
+       "text": "Se han identificado las diversas formas de automatizar tareas."
+      },
+      {
+       "id": "0484-RA5-b",
+       "letter": "b",
+       "text": "Se han reconocido los métodos de ejecución de guiones."
+      },
+      {
+       "id": "0484-RA5-c",
+       "letter": "c",
+       "text": "Se han identificado las herramientas disponibles para editar guiones."
+      },
+      {
+       "id": "0484-RA5-d",
+       "letter": "d",
+       "text": "Se han definido y utilizado guiones para automatizar tareas."
+      },
+      {
+       "id": "0484-RA5-e",
+       "letter": "e",
+       "text": "Se ha hecho uso de las funciones proporcionadas por el sistema gestor."
+      },
+      {
+       "id": "0484-RA5-f",
+       "letter": "f",
+       "text": "Se han definido procedimientos y funciones de usuario."
+      },
+      {
+       "id": "0484-RA5-g",
+       "letter": "g",
+       "text": "Se han utilizado estructuras de control de flujo."
+      },
+      {
+       "id": "0484-RA5-h",
+       "letter": "h",
+       "text": "Se han definido eventos y disparadores."
+      },
+      {
+       "id": "0484-RA5-i",
+       "letter": "i",
+       "text": "Se han utilizado cursores."
+      },
+      {
+       "id": "0484-RA5-j",
+       "letter": "j",
+       "text": "Se han utilizado excepciones."
+      }
+     ]
+    },
+    {
+     "id": "0484-RA6",
+     "number": 6,
+     "text": "Diseña modelos relacionales normalizados interpretando diagramas entidad/relación.",
+     "criteria": [
+      {
+       "id": "0484-RA6-a",
+       "letter": "a",
+       "text": "Se han utilizado herramientas gráficas para representar el diseño lógico."
+      },
+      {
+       "id": "0484-RA6-b",
+       "letter": "b",
+       "text": "Se han identificado las tablas del diseño lógico."
+      },
+      {
+       "id": "0484-RA6-c",
+       "letter": "c",
+       "text": "Se han identificado los campos que forman parte de las tablas del diseño lógico."
+      },
+      {
+       "id": "0484-RA6-d",
+       "letter": "d",
+       "text": "Se han analizado las relaciones entre las tablas del diseño lógico."
+      },
+      {
+       "id": "0484-RA6-e",
+       "letter": "e",
+       "text": "Se han identificado los campos clave."
+      },
+      {
+       "id": "0484-RA6-f",
+       "letter": "f",
+       "text": "Se han aplicado reglas de integridad."
+      },
+      {
+       "id": "0484-RA6-g",
+       "letter": "g",
+       "text": "Se han aplicado reglas de normalización."
+      },
+      {
+       "id": "0484-RA6-h",
+       "letter": "h",
+       "text": "Se han analizado y documentado las restricciones que no pueden plasmarse en el diseño lógico."
+      }
+     ]
+    },
+    {
+     "id": "0484-RA7",
+     "number": 7,
+     "text": "Gestiona la información almacenada en bases de datos no relacionales, evaluando y utilizando las posibilidades que proporciona el sistema gestor.",
+     "criteria": [
+      {
+       "id": "0484-RA7-a",
+       "letter": "a",
+       "text": "Se han caracterizado las bases de datos no relacionales."
+      },
+      {
+       "id": "0484-RA7-b",
+       "letter": "b",
+       "text": "Se han evaluado los principales tipos de bases de datos no relacionales."
+      },
+      {
+       "id": "0484-RA7-c",
+       "letter": "c",
+       "text": "Se han identificado los elementos utilizados en estas bases de datos."
+      },
+      {
+       "id": "0484-RA7-d",
+       "letter": "d",
+       "text": "Se han identificado distintas formas de gestión de la información según el tipo de base de datos no relacionales."
+      },
+      {
+       "id": "0484-RA7-e",
+       "letter": "e",
+       "text": "Se han utilizado las herramientas del sistema gestor para la gestión de la información almacenada."
+      }
+     ]
+    }
+   ],
+   "contents": [
+    {
+     "title": "Almacenamiento de la información",
+     "items": [
+      "Ficheros (planos, indexados, acceso directo, entre otros).",
+      "Bases de datos. Conceptos, usos y tipos según el modelo de datos, la ubicación de la información.",
+      "Sistemas gestores de base de datos: Funciones, componentes y tipos.",
+      "Bases de datos centralizadas y bases de datos distribuidas. Técnicas de fragmentación.",
+      "Legislación sobre protección de datos.",
+      "Big Data: introducción, análisis de datos, inteligencia de negocios."
+     ]
+    },
+    {
+     "title": "Bases de datos relacionales",
+     "items": [
+      "Modelo de datos.",
+      "Terminología del modelo relacional.",
+      "Tipos de datos.",
+      "Claves primarias.",
+      "Restricciones de validación.",
+      "Índices. Características.",
+      "El valor NULL.",
+      "Claves ajenas.",
+      "Vistas.",
+      "Usuarios. Privilegios.",
+      "Lenguaje de descripción de datos (DDL).",
+      "Lenguaje de control de datos (DCL)."
+     ]
+    },
+    {
+     "title": "Realización de consultas",
+     "items": [
+      "Proyección, selección y ordenación de registros.",
+      "Operadores. Operadores de comparación. Operadores lógicos.",
+      "Consultas de resumen.",
+      "Agrupamiento de registros.",
+      "Composiciones internas.",
+      "Composiciones externas.",
+      "Subconsultas.",
+      "Combinación de múltiples selecciones.",
+      "Optimización de consultas."
+     ]
+    },
+    {
+     "title": "Tratamiento de datos",
+     "items": [
+      "Inserción, borrado y modificación de registros.",
+      "Integridad referencial.",
+      "Subconsultas y composiciones en órdenes de edición.",
+      "Transacciones.",
+      "Políticas de bloqueo. Concurrencia."
+     ]
+    },
+    {
+     "title": "Programación de bases de datos",
+     "items": [
+      "Introducción. Lenguaje de programación.",
+      "Variables del sistema y variables de usuario.",
+      "Funciones.",
+      "Estructuras de control de flujo.",
+      "Procedimientos almacenados. Funciones de usuario.",
+      "Eventos y disparadores.",
+      "Excepciones.",
+      "Cursores."
+     ]
+    },
+    {
+     "title": "Interpretación de Diagramas Entidad/Relación",
+     "items": [
+      "El modelo E/R. Entidades y relaciones. Cardinalidades. Debilidad.",
+      "El modelo E/R ampliado. Generalización y especialización. Agregación.",
+      "Paso del diagrama E/R al modelo relacional.",
+      "Restricciones semánticas del modelo relacional.",
+      "Normalización de modelos relacionales."
+     ]
+    },
+    {
+     "title": "Uso de bases de datos no relacionales",
+     "items": [
+      "Características de las bases de datos no relacionales.",
+      "Tipos de bases de datos no relacionales.",
+      "Elementos de las bases de datos no relacionales.",
+      "Sistemas gestores de bases de datos no relacionales.",
+      "Herramientas de los sistemas gestores de bases de datos no relacionales para la gestión de la información almacenada."
+     ]
+    }
+   ],
+   "contribution": "La formación del módulo contribuye a alcanzar los objetivos generales e), f), g), p) y r) del ciclo formativo y las competencias profesionales, personales y sociales d), e) y p), del título.",
+   "outcomesSource": "rd-405-2023#anexo-I",
+   "status": "oficial",
+   "platformCourses": [
+    "sql"
+   ],
+   "platformQuestions": 110,
+   "platformQuestionIds": {
+    "sql": [
+     "bd-01",
+     "bd-02",
+     "bd-03",
+     "bd-04",
+     "bd-05",
+     "bd-06",
+     "bd-07",
+     "bd-08",
+     "bd-09",
+     "bd-10",
+     "bd-11",
+     "bd-12",
+     "bd-13",
+     "bd-14",
+     "bd-15",
+     "bd-16",
+     "bd-17",
+     "bd-18",
+     "bd-19",
+     "bd-20",
+     "bd-21",
+     "bd-22",
+     "bd-23",
+     "bd-24",
+     "sql-41",
+     "sql-42",
+     "sql-43",
+     "sql-44",
+     "sql-45",
+     "sql-31",
+     "sql-32",
+     "sql-33",
+     "sql-34",
+     "sql-35",
+     "bd-25",
+     "bd-26",
+     "bd-27",
+     "bd-28",
+     "bd-29",
+     "bd-30",
+     "bd-31",
+     "bd-32",
+     "bd-33",
+     "bd-34",
+     "bd-35",
+     "bd-36",
+     "bd-37",
+     "bd-38",
+     "bd-39",
+     "bd-40",
+     "bd-41",
+     "bd-42",
+     "bd-43",
+     "sql-01",
+     "sql-02",
+     "sql-03",
+     "sql-04",
+     "sql-05",
+     "sql-06",
+     "sql-07",
+     "sql-08",
+     "sql-09",
+     "sql-10",
+     "sql-11",
+     "sql-12",
+     "sql-13",
+     "sql-14",
+     "sql-15",
+     "sql-16",
+     "sql-17",
+     "sql-18",
+     "sql-19",
+     "sql-20",
+     "sql-21",
+     "sql-22",
+     "sql-23",
+     "sql-24",
+     "sql-25",
+     "sql-26",
+     "sql-27",
+     "sql-28",
+     "sql-29",
+     "sql-30",
+     "bd-44",
+     "bd-45",
+     "bd-46",
+     "bd-47",
+     "bd-48",
+     "bd-49",
+     "bd-50",
+     "bd-51",
+     "bd-52",
+     "bd-53",
+     "bd-54",
+     "bd-55",
+     "bd-56",
+     "bd-57",
+     "bd-58",
+     "bd-59",
+     "bd-60",
+     "sql-36",
+     "sql-37",
+     "sql-38",
+     "sql-39",
+     "sql-40",
+     "sql-46",
+     "sql-47",
+     "sql-48",
+     "sql-49",
+     "sql-50"
+    ]
+   }
+  },
+  {
+   "id": "0485",
+   "code": "0485",
+   "name": "Programación",
+   "course": 1,
+   "hours": 272,
+   "weeklyHours": 8,
+   "source": "orden-edu-1311-2024#anexo-I",
+   "ects": 14,
+   "stateMinHours": 135,
+   "learningOutcomes": [
+    {
+     "id": "0485-RA1",
+     "number": 1,
+     "text": "Reconoce la estructura de un programa informático, identificando y relacionando los elementos propios del lenguaje de programación utilizado.",
+     "criteria": [
+      {
+       "id": "0485-RA1-a",
+       "letter": "a",
+       "text": "Se han identificado los bloques que componen la estructura de un programa informático."
+      },
+      {
+       "id": "0485-RA1-b",
+       "letter": "b",
+       "text": "Se han creado proyectos de desarrollo de aplicaciones."
+      },
+      {
+       "id": "0485-RA1-c",
+       "letter": "c",
+       "text": "Se han utilizado entornos integrados de desarrollo."
+      },
+      {
+       "id": "0485-RA1-d",
+       "letter": "d",
+       "text": "Se han identificado los distintos tipos de variables y la utilidad específica de cada uno."
+      },
+      {
+       "id": "0485-RA1-e",
+       "letter": "e",
+       "text": "Se ha modificado el código de un programa para crear y utilizar variables."
+      },
+      {
+       "id": "0485-RA1-f",
+       "letter": "f",
+       "text": "Se han creado y utilizado constantes y literales."
+      },
+      {
+       "id": "0485-RA1-g",
+       "letter": "g",
+       "text": "Se han clasificado, reconocido y utilizado en expresiones los operadores del lenguaje."
+      },
+      {
+       "id": "0485-RA1-h",
+       "letter": "h",
+       "text": "Se ha comprobado el funcionamiento de las conversiones de tipo explícitas e implícitas."
+      },
+      {
+       "id": "0485-RA1-i",
+       "letter": "i",
+       "text": "Se han introducido comentarios en el código."
+      }
+     ]
+    },
+    {
+     "id": "0485-RA2",
+     "number": 2,
+     "text": "Escribe y prueba programas sencillos, reconociendo y aplicando los fundamentos de la programación orientada a objetos.",
+     "criteria": [
+      {
+       "id": "0485-RA2-a",
+       "letter": "a",
+       "text": "Se han identificado los fundamentos de la programación orientada a objetos."
+      },
+      {
+       "id": "0485-RA2-b",
+       "letter": "b",
+       "text": "Se han escrito programas simples."
+      },
+      {
+       "id": "0485-RA2-c",
+       "letter": "c",
+       "text": "Se han instanciado objetos a partir de clases predefinidas."
+      },
+      {
+       "id": "0485-RA2-d",
+       "letter": "d",
+       "text": "Se han utilizado métodos y propiedades de los objetos."
+      },
+      {
+       "id": "0485-RA2-e",
+       "letter": "e",
+       "text": "Se han escrito llamadas a métodos estáticos."
+      },
+      {
+       "id": "0485-RA2-f",
+       "letter": "f",
+       "text": "Se han utilizado parámetros en la llamada a métodos."
+      },
+      {
+       "id": "0485-RA2-g",
+       "letter": "g",
+       "text": "Se han incorporado y utilizado librerías de objetos."
+      },
+      {
+       "id": "0485-RA2-h",
+       "letter": "h",
+       "text": "Se han utilizado constructores."
+      },
+      {
+       "id": "0485-RA2-i",
+       "letter": "i",
+       "text": "Se ha utilizado el entorno integrado de desarrollo en la creación y compilación de programas simples."
+      }
+     ]
+    },
+    {
+     "id": "0485-RA3",
+     "number": 3,
+     "text": "Escribe y depura código, analizando y utilizando las estructuras de control del lenguaje.",
+     "criteria": [
+      {
+       "id": "0485-RA3-a",
+       "letter": "a",
+       "text": "Se ha escrito y probado código que haga uso de estructuras de selección."
+      },
+      {
+       "id": "0485-RA3-b",
+       "letter": "b",
+       "text": "Se han utilizado estructuras de repetición."
+      },
+      {
+       "id": "0485-RA3-c",
+       "letter": "c",
+       "text": "Se han reconocido las posibilidades de las sentencias de salto."
+      },
+      {
+       "id": "0485-RA3-d",
+       "letter": "d",
+       "text": "Se ha escrito código utilizando control de excepciones."
+      },
+      {
+       "id": "0485-RA3-e",
+       "letter": "e",
+       "text": "Se han creado programas ejecutables utilizando diferentes estructuras de control."
+      },
+      {
+       "id": "0485-RA3-f",
+       "letter": "f",
+       "text": "Se han probado y depurado los programas."
+      },
+      {
+       "id": "0485-RA3-g",
+       "letter": "g",
+       "text": "Se ha comentado y documentado el código."
+      },
+      {
+       "id": "0485-RA3-h",
+       "letter": "h",
+       "text": "Se han creado excepciones."
+      },
+      {
+       "id": "0485-RA3-i",
+       "letter": "i",
+       "text": "Se han utilizado aserciones para la detección y corrección de errores durante la fase de desarrollo."
+      }
+     ]
+    },
+    {
+     "id": "0485-RA4",
+     "number": 4,
+     "text": "Desarrolla programas organizados en clases analizando y aplicando los principios de la programación orientada a objetos.",
+     "criteria": [
+      {
+       "id": "0485-RA4-a",
+       "letter": "a",
+       "text": "Se ha reconocido la sintaxis, estructura y componentes típicos de una clase."
+      },
+      {
+       "id": "0485-RA4-b",
+       "letter": "b",
+       "text": "Se han definido clases."
+      },
+      {
+       "id": "0485-RA4-c",
+       "letter": "c",
+       "text": "Se han definido propiedades y métodos."
+      },
+      {
+       "id": "0485-RA4-d",
+       "letter": "d",
+       "text": "Se han creado constructores."
+      },
+      {
+       "id": "0485-RA4-e",
+       "letter": "e",
+       "text": "Se han desarrollado programas que instancien y utilicen objetos de las clases creadas anteriormente."
+      },
+      {
+       "id": "0485-RA4-f",
+       "letter": "f",
+       "text": "Se han utilizado mecanismos para controlar la visibilidad de las clases y de sus miembros."
+      },
+      {
+       "id": "0485-RA4-g",
+       "letter": "g",
+       "text": "Se han definido y utilizado clases heredadas."
+      },
+      {
+       "id": "0485-RA4-h",
+       "letter": "h",
+       "text": "Se han creado y utilizado métodos estáticos."
+      },
+      {
+       "id": "0485-RA4-i",
+       "letter": "i",
+       "text": "Se han creado y utilizado conjuntos y librerías de clases."
+      }
+     ]
+    },
+    {
+     "id": "0485-RA5",
+     "number": 5,
+     "text": "Realiza operaciones de entrada y salida de información, utilizando procedimientos específicos del lenguaje y librerías de clases.",
+     "criteria": [
+      {
+       "id": "0485-RA5-a",
+       "letter": "a",
+       "text": "Se ha utilizado la consola para realizar operaciones de entrada y salida de información."
+      },
+      {
+       "id": "0485-RA5-b",
+       "letter": "b",
+       "text": "Se han aplicado formatos en la visualización de la información."
+      },
+      {
+       "id": "0485-RA5-c",
+       "letter": "c",
+       "text": "Se han reconocido las posibilidades de entrada / salida del lenguaje y las librerías asociadas."
+      },
+      {
+       "id": "0485-RA5-d",
+       "letter": "d",
+       "text": "Se han utilizado ficheros para almacenar y recuperar información."
+      },
+      {
+       "id": "0485-RA5-e",
+       "letter": "e",
+       "text": "Se han creado programas que utilicen diversos métodos de acceso al contenido de los ficheros."
+      },
+      {
+       "id": "0485-RA5-f",
+       "letter": "f",
+       "text": "Se han utilizado las herramientas del entorno de desarrollo para crear interfaces gráficos de usuario simples."
+      },
+      {
+       "id": "0485-RA5-g",
+       "letter": "g",
+       "text": "Se han programado controladores de eventos."
+      },
+      {
+       "id": "0485-RA5-h",
+       "letter": "h",
+       "text": "Se han escrito programas que utilicen interfaces gráficos para la entrada y salida de información."
+      }
+     ]
+    },
+    {
+     "id": "0485-RA6",
+     "number": 6,
+     "text": "Escribe programas que manipulen información seleccionando y utilizando tipos avanzados de datos.",
+     "criteria": [
+      {
+       "id": "0485-RA6-a",
+       "letter": "a",
+       "text": "Se han escrito programas que utilicen matrices (arrays)."
+      },
+      {
+       "id": "0485-RA6-b",
+       "letter": "b",
+       "text": "Se han reconocido las librerías de clases relacionadas con tipos de datos avanzados."
+      },
+      {
+       "id": "0485-RA6-c",
+       "letter": "c",
+       "text": "Se han utilizado listas para almacenar y procesar información."
+      },
+      {
+       "id": "0485-RA6-d",
+       "letter": "d",
+       "text": "Se han utilizado iteradores para recorrer los elementos de las listas."
+      },
+      {
+       "id": "0485-RA6-e",
+       "letter": "e",
+       "text": "Se han reconocido las características y ventajas de cada una de las colecciones de datos disponibles."
+      },
+      {
+       "id": "0485-RA6-f",
+       "letter": "f",
+       "text": "Se han creado clases y métodos genéricos."
+      },
+      {
+       "id": "0485-RA6-g",
+       "letter": "g",
+       "text": "Se han utilizado expresiones regulares en la búsqueda de patrones en cadenas de texto."
+      },
+      {
+       "id": "0485-RA6-h",
+       "letter": "h",
+       "text": "Se han identificado las clases relacionadas con el tratamiento de documentos escritos en diferentes lenguajes de intercambio de datos."
+      },
+      {
+       "id": "0485-RA6-i",
+       "letter": "i",
+       "text": "Se han realizado programas que realicen manipulaciones sobre documentos escritos en diferentes lenguajes de intercambio de datos."
+      },
+      {
+       "id": "0485-RA6-j",
+       "letter": "j",
+       "text": "Se han utilizado operaciones agregadas para el manejo de información almacenada en colecciones."
+      }
+     ]
+    },
+    {
+     "id": "0485-RA7",
+     "number": 7,
+     "text": "Desarrolla programas aplicando características avanzadas de los lenguajes orientados a objetos y del entorno de programación.",
+     "criteria": [
+      {
+       "id": "0485-RA7-a",
+       "letter": "a",
+       "text": "Se han identificado los conceptos de herencia, superclase y subclase."
+      },
+      {
+       "id": "0485-RA7-b",
+       "letter": "b",
+       "text": "Se han utilizado modificadores para bloquear y forzar la herencia de clases y métodos."
+      },
+      {
+       "id": "0485-RA7-c",
+       "letter": "c",
+       "text": "Se ha reconocido la incidencia de los constructores en la herencia."
+      },
+      {
+       "id": "0485-RA7-d",
+       "letter": "d",
+       "text": "Se han creado clases heredadas que sobrescriben la implementación de métodos de la superclase."
+      },
+      {
+       "id": "0485-RA7-e",
+       "letter": "e",
+       "text": "Se han diseñado y aplicado jerarquías de clases."
+      },
+      {
+       "id": "0485-RA7-f",
+       "letter": "f",
+       "text": "Se han probado y depurado las jerarquías de clases."
+      },
+      {
+       "id": "0485-RA7-g",
+       "letter": "g",
+       "text": "Se han realizado programas que implementen y utilicen jerarquías de clases."
+      },
+      {
+       "id": "0485-RA7-h",
+       "letter": "h",
+       "text": "Se ha comentado y documentado el código."
+      },
+      {
+       "id": "0485-RA7-i",
+       "letter": "i",
+       "text": "Se han identificado y evaluado los escenarios de uso de interfaces."
+      },
+      {
+       "id": "0485-RA7-j",
+       "letter": "j",
+       "text": "Se han identificado y evaluado los escenarios de utilización de la herencia y la composición."
+      }
+     ]
+    },
+    {
+     "id": "0485-RA8",
+     "number": 8,
+     "text": "Utiliza bases de datos orientadas a objetos, analizando sus características y aplicando técnicas para mantener la persistencia de la información.",
+     "criteria": [
+      {
+       "id": "0485-RA8-a",
+       "letter": "a",
+       "text": "Se han identificado las características de las bases de datos orientadas a objetos."
+      },
+      {
+       "id": "0485-RA8-b",
+       "letter": "b",
+       "text": "Se ha analizado su aplicación en el desarrollo de aplicaciones mediante lenguajes orientados a objetos."
+      },
+      {
+       "id": "0485-RA8-c",
+       "letter": "c",
+       "text": "Se han instalado sistemas gestores de bases de datos orientados a objetos."
+      },
+      {
+       "id": "0485-RA8-d",
+       "letter": "d",
+       "text": "Se han clasificado y analizado los distintos métodos soportados por los sistemas gestores para la gestión de la información almacenada."
+      },
+      {
+       "id": "0485-RA8-e",
+       "letter": "e",
+       "text": "Se han creado bases de datos y las estructuras necesarias para el almacenamiento de objetos."
+      },
+      {
+       "id": "0485-RA8-f",
+       "letter": "f",
+       "text": "Se han programado aplicaciones que almacenen objetos en las bases de datos creadas."
+      },
+      {
+       "id": "0485-RA8-g",
+       "letter": "g",
+       "text": "Se han realizado programas para recuperar, actualizar y eliminar objetos de las bases de datos."
+      },
+      {
+       "id": "0485-RA8-h",
+       "letter": "h",
+       "text": "Se han realizado programas para almacenar y gestionar tipos de datos estructurados, compuestos y relacionados."
+      }
+     ]
+    },
+    {
+     "id": "0485-RA9",
+     "number": 9,
+     "text": "Gestiona información almacenada en bases de datos manteniendo la integridad y consistencia de los datos.",
+     "criteria": [
+      {
+       "id": "0485-RA9-a",
+       "letter": "a",
+       "text": "Se han identificado las características y métodos de acceso a sistemas gestores de bases de datos."
+      },
+      {
+       "id": "0485-RA9-b",
+       "letter": "b",
+       "text": "Se han programado conexiones con bases de datos."
+      },
+      {
+       "id": "0485-RA9-c",
+       "letter": "c",
+       "text": "Se ha escrito código para almacenar información en bases de datos."
+      },
+      {
+       "id": "0485-RA9-d",
+       "letter": "d",
+       "text": "Se han creado programas para recuperar y mostrar información almacenada en bases de datos."
+      },
+      {
+       "id": "0485-RA9-e",
+       "letter": "e",
+       "text": "Se han efectuado borrados y modificaciones sobre la información almacenada."
+      },
+      {
+       "id": "0485-RA9-f",
+       "letter": "f",
+       "text": "Se han creado aplicaciones que muestren la información almacenada en bases de datos."
+      },
+      {
+       "id": "0485-RA9-g",
+       "letter": "g",
+       "text": "Se han creado aplicaciones para gestionar la información presente en bases de datos."
+      }
+     ]
+    }
+   ],
+   "contents": [
+    {
+     "title": "Identificación de los elementos de un programa informático",
+     "items": [
+      "Estructura y bloques fundamentales.",
+      "Variables.",
+      "Tipos de datos.",
+      "Literales.",
+      "Constantes.",
+      "Operadores y expresiones.",
+      "Conversiones de tipo.",
+      "Comentarios."
+     ]
+    },
+    {
+     "title": "Utilización de objetos",
+     "items": [
+      "Características de los objetos.",
+      "Instanciación de objetos.",
+      "Utilización de métodos. Parámetros.",
+      "Utilización de propiedades.",
+      "Utilización de métodos estáticos.",
+      "Constructores.",
+      "Destrucción de objetos y liberación de memoria."
+     ]
+    },
+    {
+     "title": "Uso de estructuras de control",
+     "items": [
+      "Estructuras de selección.",
+      "Estructuras de repetición.",
+      "Estructuras de salto.",
+      "Control de excepciones.",
+      "Aserciones.",
+      "Prueba, depuración y documentación de la aplicación."
+     ]
+    },
+    {
+     "title": "Desarrollo de clases",
+     "items": [
+      "Concepto de clase.",
+      "Estructura y miembros de una clase. Visibilidad.",
+      "Creación de propiedades.",
+      "Creación de métodos.",
+      "Creación de constructores.",
+      "Utilización de clases y objetos.",
+      "Utilización de clases heredadas."
+     ]
+    },
+    {
+     "title": "Lectura y escritura de información",
+     "items": [
+      "Flujos. Tipos: bytes y caracteres. Clases relacionadas.",
+      "Ficheros de datos. Registros.",
+      "Apertura y cierre de ficheros. Modos de acceso. Escritura y lectura de información en ficheros.",
+      "Utilización de los sistemas de ficheros.",
+      "Creación y eliminación de ficheros y directorios.",
+      "Entrada desde teclado. Salida a pantalla. Formatos de visualización.",
+      "Interfaces gráficas.",
+      "Concepto de evento.",
+      "Creación de controladores de eventos."
+     ]
+    },
+    {
+     "title": "Aplicación de las estructuras de almacenamiento",
+     "items": [
+      "Estructuras estáticas y dinámicas.",
+      "Creación de matrices (arrays).",
+      "Matrices (arrays) multidimensionales.",
+      "Genericidad.",
+      "Cadenas de caracteres. Expresiones regulares.",
+      "Colecciones: Listas, Conjuntos y Diccionarios.",
+      "Operaciones agregadas: filtrado, reducción y recolección."
+     ]
+    },
+    {
+     "title": "Utilización avanzada de clases",
+     "items": [
+      "Composición de clases.",
+      "Herencia y polimorfismo.",
+      "Jerarquía de clases: Superclases y subclases.",
+      "Clases y métodos abstractos y finales.",
+      "Interfaces.",
+      "Sobreescritura de métodos.",
+      "Constructores y herencia."
+     ]
+    },
+    {
+     "title": "Mantenimiento de la persistencia de los objetos",
+     "items": [
+      "Bases de datos orientadas a objetos.",
+      "Características de las bases de datos orientadas a objetos.",
+      "Instalación del gestor de bases de datos.",
+      "Creación de bases de datos.",
+      "Mecanismos de consulta.",
+      "El lenguaje de consultas: sintaxis, expresiones, operadores.",
+      "Recuperación, modificación y borrado de información.",
+      "Tipos de datos objeto; atributos y métodos.",
+      "Tipos de datos colección."
+     ]
+    },
+    {
+     "title": "Gestión de bases de datos",
+     "items": [
+      "Acceso a bases de datos. Estándares. Características.",
+      "Establecimiento de conexiones.",
+      "Almacenamiento, recuperación, actualización y eliminación de información en bases de datos."
+     ]
+    }
+   ],
+   "contribution": "La formación del módulo contribuye a alcanzar los objetivos generales f), g), j) y q) del ciclo formativo y las competencias profesionales, personales y sociales e), f), y j) del título.",
+   "outcomesSource": "rd-405-2023#anexo-I",
+   "status": "oficial",
+   "platformCourses": [
+    "programacion",
+    "java"
+   ],
+   "platformQuestions": 243,
+   "platformQuestionIds": {
+    "programacion": [
+     "prog-01",
+     "prog-02",
+     "prog-03",
+     "prog-04",
+     "prog-05",
+     "prog-06",
+     "prog-07",
+     "prog-08",
+     "prog-09",
+     "prog-10",
+     "prog-11",
+     "prog-12",
+     "prog-13",
+     "prog-14",
+     "prog-15",
+     "prog-16",
+     "prog-17",
+     "prog-18",
+     "prog-19",
+     "prog-20",
+     "prog-21",
+     "prog-22",
+     "prog-23",
+     "prog-24",
+     "prog-25",
+     "prog-26",
+     "prog-27",
+     "prog-28",
+     "prog-29",
+     "prog-30",
+     "prog-31",
+     "prog-32",
+     "prog-33",
+     "prog-34",
+     "prog-35",
+     "prog-36",
+     "prog-37",
+     "prog-38",
+     "prog-39",
+     "prog-40",
+     "prog-41",
+     "prog-42",
+     "prog-43",
+     "prog-44",
+     "prog-45",
+     "prog-46",
+     "prog-47",
+     "prog-48",
+     "prog-49",
+     "prog-50",
+     "prog-51",
+     "prog-52",
+     "prog-53",
+     "prog-54",
+     "prog-55",
+     "prog-56",
+     "prog-57",
+     "prog-58",
+     "prog-59",
+     "prog-60",
+     "prog-61",
+     "prog-62",
+     "prog-63",
+     "prog-64",
+     "prog-65",
+     "prog-66",
+     "prog-67",
+     "prog-68",
+     "prog-69",
+     "prog-70",
+     "prog-71",
+     "prog-72",
+     "prog-73",
+     "prog-74",
+     "prog-75",
+     "prog-76",
+     "prog-77",
+     "prog-78",
+     "prog-79",
+     "prog-80",
+     "prog-81",
+     "prog-82",
+     "prog-83",
+     "prog-84",
+     "prog-85",
+     "prog-86",
+     "prog-87",
+     "prog-88",
+     "prog-89",
+     "prog-90",
+     "prog-91",
+     "prog-92",
+     "prog-93",
+     "prog-94",
+     "prog-95",
+     "prog-96",
+     "prog-97",
+     "prog-98",
+     "prog-99",
+     "prog-100",
+     "prog-101",
+     "prog-102",
+     "prog-103",
+     "prog-104",
+     "prog-105",
+     "prog-106",
+     "prog-107",
+     "prog-108",
+     "prog-109",
+     "prog-110",
+     "prog-111",
+     "prog-112",
+     "prog-113",
+     "prog-114",
+     "prog-115",
+     "prog-116",
+     "prog-117",
+     "prog-118",
+     "prog-119",
+     "prog-120",
+     "prog-121",
+     "prog-122",
+     "prog-123",
+     "prog-124",
+     "prog-125",
+     "prog-126",
+     "prog-127",
+     "prog-128",
+     "prog-129",
+     "prog-130",
+     "prog-131",
+     "prog-132",
+     "prog-133",
+     "prog-134",
+     "prog-135",
+     "prog-136",
+     "prog-137",
+     "prog-138",
+     "prog-139",
+     "prog-140",
+     "prog-141",
+     "prog-142",
+     "prog-143",
+     "prog-144",
+     "prog-145",
+     "prog-146",
+     "prog-147",
+     "prog-148",
+     "prog-149",
+     "prog-150",
+     "prog-151",
+     "prog-152",
+     "prog-153",
+     "prog-154",
+     "prog-155",
+     "prog-156",
+     "prog-157",
+     "prog-158",
+     "prog-159",
+     "prog-160",
+     "prog-161",
+     "prog-162",
+     "prog-163"
+    ],
+    "java": [
+     "java-01",
+     "java-02",
+     "java-03",
+     "java-04",
+     "java-05",
+     "java-p01",
+     "java-p02",
+     "java-p03",
+     "java-06",
+     "java-07",
+     "java-08",
+     "java-09",
+     "java-10",
+     "java-p04",
+     "java-p05",
+     "java-p06",
+     "java-11",
+     "java-12",
+     "java-13",
+     "java-14",
+     "java-15",
+     "java-p07",
+     "java-p08",
+     "java-p09",
+     "java-16",
+     "java-17",
+     "java-18",
+     "java-19",
+     "java-20",
+     "java-p10",
+     "java-p11",
+     "java-p12",
+     "java-21",
+     "java-22",
+     "java-23",
+     "java-24",
+     "java-25",
+     "java-p13",
+     "java-p14",
+     "java-p15",
+     "java-26",
+     "java-27",
+     "java-28",
+     "java-29",
+     "java-30",
+     "java-p16",
+     "java-p17",
+     "java-p18",
+     "java-31",
+     "java-32",
+     "java-33",
+     "java-34",
+     "java-35",
+     "java-p19",
+     "java-p20",
+     "java-p21",
+     "java-36",
+     "java-37",
+     "java-38",
+     "java-39",
+     "java-40",
+     "java-p22",
+     "java-p23",
+     "java-p24",
+     "java-41",
+     "java-42",
+     "java-43",
+     "java-44",
+     "java-45",
+     "java-p25",
+     "java-p26",
+     "java-p27",
+     "java-46",
+     "java-47",
+     "java-48",
+     "java-49",
+     "java-50",
+     "java-p28",
+     "java-p29",
+     "java-p30"
+    ]
+   }
+  },
+  {
+   "id": "0487",
+   "code": "0487",
+   "name": "Entornos de desarrollo",
+   "course": 1,
+   "hours": 68,
+   "weeklyHours": 2,
+   "source": "orden-edu-1311-2024#anexo-I",
+   "ects": 6,
+   "stateMinHours": 50,
+   "learningOutcomes": [
+    {
+     "id": "0487-RA1",
+     "number": 1,
+     "text": "Reconoce los elementos y herramientas que intervienen en el desarrollo de un programa informático, analizando sus características y las fases en las que actúan hasta llegar a su puesta en funcionamiento.",
+     "criteria": [
+      {
+       "id": "0487-RA1-a",
+       "letter": "a",
+       "text": "Se ha reconocido la relación de los programas con los componentes del sistema informático: memoria, procesador, periféricos, entre otros."
+      },
+      {
+       "id": "0487-RA1-b",
+       "letter": "b",
+       "text": "Se han identificado las fases de desarrollo de una aplicación informática."
+      },
+      {
+       "id": "0487-RA1-c",
+       "letter": "c",
+       "text": "Se han diferenciado los conceptos de código fuente, objeto y ejecutable."
+      },
+      {
+       "id": "0487-RA1-d",
+       "letter": "d",
+       "text": "Se han reconocido las características de la generación de código intermedio para su ejecución en máquinas virtuales."
+      },
+      {
+       "id": "0487-RA1-e",
+       "letter": "e",
+       "text": "Se han clasificado los lenguajes de programación, identificando sus características."
+      },
+      {
+       "id": "0487-RA1-f",
+       "letter": "f",
+       "text": "Se ha evaluado la funcionalidad ofrecida por las herramientas utilizadas en el desarrollo de software."
+      },
+      {
+       "id": "0487-RA1-g",
+       "letter": "g",
+       "text": "Se han identificado las características y escenarios de uso de las metodologías ágiles de desarrollo de software."
+      }
+     ]
+    },
+    {
+     "id": "0487-RA2",
+     "number": 2,
+     "text": "Evalúa entornos integrados de desarrollo analizando sus características para editar código fuente y generar ejecutables.",
+     "criteria": [
+      {
+       "id": "0487-RA2-a",
+       "letter": "a",
+       "text": "Se han instalado entornos de desarrollo, propietarios y libres."
+      },
+      {
+       "id": "0487-RA2-b",
+       "letter": "b",
+       "text": "Se han añadido y eliminado módulos en el entorno de desarrollo."
+      },
+      {
+       "id": "0487-RA2-c",
+       "letter": "c",
+       "text": "Se ha personalizado y automatizado el entorno de desarrollo."
+      },
+      {
+       "id": "0487-RA2-d",
+       "letter": "d",
+       "text": "Se ha configurado el sistema de actualización del entorno de desarrollo."
+      },
+      {
+       "id": "0487-RA2-e",
+       "letter": "e",
+       "text": "Se han generado ejecutables a partir de código fuente de diferentes lenguajes en un mismo entorno de desarrollo."
+      },
+      {
+       "id": "0487-RA2-f",
+       "letter": "f",
+       "text": "Se han generado ejecutables a partir de un mismo código fuente con varios entornos de desarrollo."
+      },
+      {
+       "id": "0487-RA2-g",
+       "letter": "g",
+       "text": "Se han identificado las características comunes y específicas de diversos entornos de desarrollo."
+      }
+     ]
+    },
+    {
+     "id": "0487-RA3",
+     "number": 3,
+     "text": "Verifica el funcionamiento de programas diseñando y realizando pruebas.",
+     "criteria": [
+      {
+       "id": "0487-RA3-a",
+       "letter": "a",
+       "text": "Se han identificado los diferentes tipos de pruebas."
+      },
+      {
+       "id": "0487-RA3-b",
+       "letter": "b",
+       "text": "Se han definido casos de prueba."
+      },
+      {
+       "id": "0487-RA3-c",
+       "letter": "c",
+       "text": "Se han identificado las herramientas de depuración y prueba de aplicaciones"
+      },
+      {
+       "id": "0487-RA3-d",
+       "letter": "d",
+       "text": "ofrecidas por el entorno de desarrollo."
+      },
+      {
+       "id": "0487-RA3-e",
+       "letter": "e",
+       "text": "Se han utilizado herramientas de depuración para definir puntos de ruptura y seguimiento."
+      },
+      {
+       "id": "0487-RA3-f",
+       "letter": "f",
+       "text": "Se han utilizado las herramientas de depuración para examinar y modificar el comportamiento de un programa en tiempo de ejecución."
+      },
+      {
+       "id": "0487-RA3-g",
+       "letter": "g",
+       "text": "Se han efectuado pruebas unitarias de clases y funciones."
+      },
+      {
+       "id": "0487-RA3-h",
+       "letter": "h",
+       "text": "Se han implementado pruebas automáticas."
+      },
+      {
+       "id": "0487-RA3-i",
+       "letter": "i",
+       "text": "Se han documentado las incidencias detectadas."
+      },
+      {
+       "id": "0487-RA3-j",
+       "letter": "j",
+       "text": "Se han utilizado dobles de prueba para aislar los componentes durante las pruebas."
+      }
+     ]
+    },
+    {
+     "id": "0487-RA4",
+     "number": 4,
+     "text": "Optimiza código empleando las herramientas disponibles en el entorno de desarrollo.",
+     "criteria": [
+      {
+       "id": "0487-RA4-a",
+       "letter": "a",
+       "text": "Se han identificado los patrones de refactorización más usuales."
+      },
+      {
+       "id": "0487-RA4-b",
+       "letter": "b",
+       "text": "Se han elaborado las pruebas asociadas a la refactorización."
+      },
+      {
+       "id": "0487-RA4-c",
+       "letter": "c",
+       "text": "Se ha revisado el código fuente usando un analizador de código."
+      },
+      {
+       "id": "0487-RA4-d",
+       "letter": "d",
+       "text": "Se han identificado las posibilidades de configuración de un analizador de código."
+      },
+      {
+       "id": "0487-RA4-e",
+       "letter": "e",
+       "text": "Se han aplicado patrones de refactorización con las herramientas que proporciona el entorno de desarrollo."
+      },
+      {
+       "id": "0487-RA4-f",
+       "letter": "f",
+       "text": "Se ha realizado el control de versiones integrado en el entorno de desarrollo."
+      },
+      {
+       "id": "0487-RA4-g",
+       "letter": "g",
+       "text": "Se han utilizado herramientas del entorno de desarrollo para documentar las clases."
+      },
+      {
+       "id": "0487-RA4-h",
+       "letter": "h",
+       "text": "Se han utilizado repositorios remotos para el desarrollo de código colaborativo."
+      },
+      {
+       "id": "0487-RA4-i",
+       "letter": "i",
+       "text": "Se han utilizado herramientas para la integración continua del código."
+      }
+     ]
+    },
+    {
+     "id": "0487-RA5",
+     "number": 5,
+     "text": "Genera diagramas de clases valorando su importancia en el desarrollo de aplicaciones y empleando herramientas específicas.",
+     "criteria": [
+      {
+       "id": "0487-RA5-a",
+       "letter": "a",
+       "text": "Se han identificado los conceptos básicos de la programación orientada a objetos."
+      },
+      {
+       "id": "0487-RA5-b",
+       "letter": "b",
+       "text": "Se han utilizado herramientas para la elaboración de diagramas de clases."
+      },
+      {
+       "id": "0487-RA5-c",
+       "letter": "c",
+       "text": "Se ha interpretado el significado de diagramas de clases."
+      },
+      {
+       "id": "0487-RA5-d",
+       "letter": "d",
+       "text": "Se han trazado diagramas de clases a partir de las especificaciones de las mismas."
+      },
+      {
+       "id": "0487-RA5-e",
+       "letter": "e",
+       "text": "Se ha generado código a partir de un diagrama de clases."
+      },
+      {
+       "id": "0487-RA5-f",
+       "letter": "f",
+       "text": "Se ha generado un diagrama de clases mediante ingeniería inversa."
+      }
+     ]
+    },
+    {
+     "id": "0487-RA6",
+     "number": 6,
+     "text": "Genera diagramas de comportamiento valorando su importancia en el desarrollo de aplicaciones y empleando herramientas específicas.",
+     "criteria": [
+      {
+       "id": "0487-RA6-a",
+       "letter": "a",
+       "text": "Se han identificado los distintos tipos de diagramas de comportamiento."
+      },
+      {
+       "id": "0487-RA6-b",
+       "letter": "b",
+       "text": "Se ha reconocido el significado de los diagramas de casos de uso."
+      },
+      {
+       "id": "0487-RA6-c",
+       "letter": "c",
+       "text": "Se han interpretado diagramas de interacción."
+      },
+      {
+       "id": "0487-RA6-d",
+       "letter": "d",
+       "text": "Se han elaborado diagramas de interacción sencillos."
+      },
+      {
+       "id": "0487-RA6-e",
+       "letter": "e",
+       "text": "Se ha interpretado el significado de diagramas de actividades."
+      },
+      {
+       "id": "0487-RA6-f",
+       "letter": "f",
+       "text": "Se han elaborado diagramas de actividades sencillos."
+      },
+      {
+       "id": "0487-RA6-g",
+       "letter": "g",
+       "text": "Se han interpretado diagramas de estados."
+      },
+      {
+       "id": "0487-RA6-h",
+       "letter": "h",
+       "text": "Se han planteado diagramas de estados sencillos."
+      }
+     ]
+    }
+   ],
+   "contents": [
+    {
+     "title": "Desarrollo de software",
+     "items": [
+      "Concepto de programa informático.",
+      "Código fuente, código objeto y código ejecutable; tecnologías de virtualización.",
+      "Tipos de lenguajes de programación. Paradigmas.",
+      "Características de los lenguajes más difundidos.",
+      "Fases del desarrollo de una aplicación: análisis, diseño, codificación, pruebas, documentación, explotación y mantenimiento, entre otras.",
+      "Proceso de obtención de código ejecutable a partir del código fuente; herramientas implicadas.",
+      "Metodologías ágiles. Técnicas. Características."
+     ]
+    },
+    {
+     "title": "Instalación y uso de entornos de desarrollo",
+     "items": [
+      "Funciones de un entorno de desarrollo.",
+      "Instalación de un entorno de desarrollo.",
+      "Uso básico de un entorno de desarrollo.",
+      "Personalización del entorno de desarrollo: temas, estilos de codificación, módulos y extensiones, entre otros.",
+      "Edición de programas.",
+      "Generación de ejecutables en distintos entornos.",
+      "Herramientas y automatización."
+     ]
+    },
+    {
+     "title": "Diseño y realización de pruebas",
+     "items": [
+      "Planificación de Pruebas.",
+      "Tipos de pruebas: Funcionales, estructurales, regresión, entre otras.",
+      "Procedimientos y casos de prueba.",
+      "Pruebas de Código: Cubrimiento, valores límite, clases de equivalencia, entre otras.",
+      "Pruebas unitarias; herramientas de automatización.",
+      "Documentación de las incidencias.",
+      "Dobles de prueba. Tipos. Características."
+     ]
+    },
+    {
+     "title": "Optimización y documentación",
+     "items": [
+      "Refactorización. Concepto. Limitaciones. Patrones de refactorización más usuales. Refactorización y pruebas. Herramientas de ayuda a la refactorización.",
+      "Analizadores de código.",
+      "Control de versiones. Estructura de las herramientas de control de versiones. Repositorio. Herramientas de control de versiones. Uso integrado en el entorno de desarrollo.",
+      "Repositorios remotos.",
+      "Documentación. Uso de comentarios. Alternativas.",
+      "Integración continua. Herramientas."
+     ]
+    },
+    {
+     "title": "Elaboración de diagramas de clases",
+     "items": [
+      "Clases. Atributos, métodos y visibilidad.",
+      "Objetos. Instanciación.",
+      "Relaciones. Asociación, navegabilidad y multiplicidad. Herencia, composición, agregación. Realización y dependencia.",
+      "Notación de los diagramas de clases.",
+      "Herramientas.",
+      "Generación automática de código. Ingeniería inversa."
+     ]
+    },
+    {
+     "title": "Elaboración de diagramas de comportamiento",
+     "items": [
+      "Tipos. Campo de aplicación.",
+      "Diagrama de casos de uso. Actores, escenario, relación de comunicación.",
+      "Diagrama de secuencia. Línea de vida de un objeto, activación, envío de mensajes.",
+      "Diagrama de comunicación. Objetos, mensajes.",
+      "Diagrama de actividad. Diagrama de estados."
+     ]
+    }
+   ],
+   "contribution": "La formación del módulo contribuye a alcanzar los objetivos generales d), e), h), i), j) y r) del ciclo formativo y las competencias profesionales, personales y sociales d), e), i), j), r), t), v) y w) del título.",
+   "outcomesSource": "rd-405-2023#anexo-I",
+   "status": "oficial",
+   "platformCourses": [
+    "entornos"
+   ],
+   "platformQuestions": 51,
+   "platformQuestionIds": {
+    "entornos": [
+     "ent-01",
+     "ent-02",
+     "ent-03",
+     "ent-04",
+     "ent-05",
+     "ent-06",
+     "ent-07",
+     "ent-08",
+     "ent-09",
+     "ent-10",
+     "ent-11",
+     "ent-12",
+     "ent-13",
+     "ent-14",
+     "ent-15",
+     "ent-16",
+     "ent-48",
+     "ent-49",
+     "ent-17",
+     "ent-18",
+     "ent-19",
+     "ent-20",
+     "ent-21",
+     "ent-22",
+     "ent-23",
+     "ent-24",
+     "ent-25",
+     "ent-26",
+     "ent-27",
+     "ent-28",
+     "ent-29",
+     "ent-30",
+     "ent-31",
+     "ent-32",
+     "ent-33",
+     "ent-34",
+     "ent-35",
+     "ent-36",
+     "ent-37",
+     "ent-38",
+     "ent-39",
+     "ent-40",
+     "ent-41",
+     "ent-42",
+     "ent-43",
+     "ent-44",
+     "ent-45",
+     "ent-46",
+     "ent-50",
+     "ent-51",
+     "ent-47"
+    ]
+   }
+  },
+  {
+   "id": "0179",
+   "code": "0179",
+   "name": "Inglés profesional (GS)",
+   "course": 1,
+   "hours": 68,
+   "weeklyHours": 2,
+   "source": "orden-edu-1311-2024#anexo-I",
+   "ects": null,
+   "stateMinHours": null,
+   "learningOutcomes": [],
+   "contents": [],
+   "contribution": null,
+   "outcomesSource": "rd-659-2023#anexo-X",
+   "status": "pendiente",
+   "platformCourses": [],
+   "platformQuestions": 0,
+   "platformQuestionIds": {}
+  },
+  {
+   "id": "1709",
+   "code": "1709",
+   "name": "Itinerario personal para la empleabilidad I",
+   "course": 1,
+   "hours": 102,
+   "weeklyHours": 3,
+   "source": "orden-edu-1311-2024#anexo-I",
+   "ects": null,
+   "stateMinHours": null,
+   "learningOutcomes": [],
+   "contents": [],
+   "contribution": null,
+   "outcomesSource": "rd-659-2023#anexo-V",
+   "status": "pendiente",
+   "platformCourses": [],
+   "platformQuestions": 0,
+   "platformQuestionIds": {}
+  },
+  {
+   "id": "optativo-1",
+   "code": null,
+   "name": "Módulo optativo I",
+   "course": 1,
+   "hours": 34,
+   "weeklyHours": 2,
+   "source": "orden-edu-1311-2024#anexo-I",
+   "ects": null,
+   "stateMinHours": null,
+   "learningOutcomes": [],
+   "contents": [],
+   "contribution": null,
+   "outcomesSource": null,
+   "status": "pendiente",
+   "platformCourses": [],
+   "platformQuestions": 0,
+   "platformQuestionIds": {},
+   "note": "34 horas con 2 horas semanales: no cuadra con un curso completo. Pendiente de confirmar con el centro qué optativo se imparte."
+  },
+  {
+   "id": "1665",
+   "code": "1665",
+   "name": "Digitalización aplicada a los sectores productivos (GS)",
+   "course": 2,
+   "hours": 34,
+   "weeklyHours": 1,
+   "source": "orden-edu-1311-2024#anexo-I",
+   "ects": null,
+   "stateMinHours": null,
+   "learningOutcomes": [],
+   "contents": [],
+   "contribution": null,
+   "outcomesSource": "rd-659-2023#anexo-VII",
+   "status": "pendiente",
+   "platformCourses": [],
+   "platformQuestions": 0,
+   "platformQuestionIds": {}
+  },
+  {
+   "id": "0612",
+   "code": "0612",
+   "name": "Desarrollo web en entorno cliente",
+   "course": 2,
+   "hours": 231,
+   "weeklyHours": 7,
+   "source": "orden-edu-1311-2024#anexo-I",
+   "ects": 9,
+   "stateMinHours": 80,
+   "learningOutcomes": [
+    {
+     "id": "0612-RA1",
+     "number": 1,
+     "text": "Selecciona las arquitecturas y tecnologías de programación sobre clientes web, identificando y analizando las capacidades y características de cada una.",
+     "criteria": [
+      {
+       "id": "0612-RA1-a",
+       "letter": "a",
+       "text": "Se han caracterizado y diferenciado los modelos de ejecución de código en el servidor y en el cliente web."
+      },
+      {
+       "id": "0612-RA1-b",
+       "letter": "b",
+       "text": "Se han identificado las capacidades y mecanismos de ejecución de código de los navegadores web."
+      },
+      {
+       "id": "0612-RA1-c",
+       "letter": "c",
+       "text": "Se han identificado y caracterizado los principales lenguajes relacionados con la programación de clientes web."
+      },
+      {
+       "id": "0612-RA1-d",
+       "letter": "d",
+       "text": "Se han reconocido las particularidades de la programación de guiones y sus ventajas y desventajas sobre la programación tradicional."
+      },
+      {
+       "id": "0612-RA1-e",
+       "letter": "e",
+       "text": "Se han verificado los mecanismos de integración de los lenguajes de marcas con los lenguajes de programación de clientes web."
+      },
+      {
+       "id": "0612-RA1-f",
+       "letter": "f",
+       "text": "Se han reconocido y evaluado las herramientas de programación y prueba sobre clientes web."
+      }
+     ]
+    },
+    {
+     "id": "0612-RA2",
+     "number": 2,
+     "text": "Escribe sentencias simples, aplicando la sintaxis del lenguaje y verificando su ejecución sobre navegadores web.",
+     "criteria": [
+      {
+       "id": "0612-RA2-a",
+       "letter": "a",
+       "text": "Se ha seleccionado un lenguaje de programación de clientes web en función de sus posibilidades."
+      },
+      {
+       "id": "0612-RA2-b",
+       "letter": "b",
+       "text": "Se han utilizado los distintos tipos de variables y operadores disponibles en el lenguaje."
+      },
+      {
+       "id": "0612-RA2-c",
+       "letter": "c",
+       "text": "Se han identificado los ámbitos de utilización de las variables."
+      },
+      {
+       "id": "0612-RA2-d",
+       "letter": "d",
+       "text": "Se han reconocido y comprobado las peculiaridades del lenguaje respecto a las conversiones entre distintos tipos de datos."
+      },
+      {
+       "id": "0612-RA2-e",
+       "letter": "e",
+       "text": "Se han utilizado mecanismos de decisión en la creación de bloques de sentencias."
+      },
+      {
+       "id": "0612-RA2-f",
+       "letter": "f",
+       "text": "Se han utilizado bucles y se ha verificado su funcionamiento."
+      },
+      {
+       "id": "0612-RA2-g",
+       "letter": "g",
+       "text": "Se han añadido comentarios al código."
+      },
+      {
+       "id": "0612-RA2-h",
+       "letter": "h",
+       "text": "Se han utilizado herramientas y entornos para facilitar la programación, prueba y documentación del código."
+      }
+     ]
+    },
+    {
+     "id": "0612-RA3",
+     "number": 3,
+     "text": "Escribe código, identificando y aplicando las funcionalidades aportadas por los objetos predefinidos del lenguaje.",
+     "criteria": [
+      {
+       "id": "0612-RA3-a",
+       "letter": "a",
+       "text": "Se han identificado los objetos predefinidos del lenguaje."
+      },
+      {
+       "id": "0612-RA3-b",
+       "letter": "b",
+       "text": "Se han analizado los objetos referentes a las ventanas del navegador y los documentos web que contienen."
+      },
+      {
+       "id": "0612-RA3-c",
+       "letter": "c",
+       "text": "Se han escrito sentencias que utilicen los objetos predefinidos del lenguaje para cambiar el aspecto del navegador y el documento que contiene."
+      },
+      {
+       "id": "0612-RA3-d",
+       "letter": "d",
+       "text": "Se han generado textos y etiquetas como resultado de la ejecución de código en el navegador."
+      },
+      {
+       "id": "0612-RA3-e",
+       "letter": "e",
+       "text": "Se han escrito sentencias que utilicen los objetos predefinidos del lenguaje para interactuar con el usuario."
+      },
+      {
+       "id": "0612-RA3-f",
+       "letter": "f",
+       "text": "Se han utilizado las características propias del lenguaje en documentos compuestos por varias ventanas."
+      },
+      {
+       "id": "0612-RA3-g",
+       "letter": "g",
+       "text": "Se han utilizado mecanismos del navegador web para almacenar información y recuperar su contenido."
+      },
+      {
+       "id": "0612-RA3-h",
+       "letter": "h",
+       "text": "Se ha depurado y documentado el código."
+      }
+     ]
+    },
+    {
+     "id": "0612-RA4",
+     "number": 4,
+     "text": "Programa código para clientes web analizando y utilizando estructuras definidas por el usuario.",
+     "criteria": [
+      {
+       "id": "0612-RA4-a",
+       "letter": "a",
+       "text": "Se han clasificado y utilizado las funciones predefinidas del lenguaje."
+      },
+      {
+       "id": "0612-RA4-b",
+       "letter": "b",
+       "text": "Se han creado y utilizado funciones definidas por el usuario."
+      },
+      {
+       "id": "0612-RA4-c",
+       "letter": "c",
+       "text": "Se han reconocido las características del lenguaje relativas a la creación y uso de matrices (arrays)."
+      },
+      {
+       "id": "0612-RA4-d",
+       "letter": "d",
+       "text": "Se han creado y utilizado matrices (arrays)."
+      },
+      {
+       "id": "0612-RA4-e",
+       "letter": "e",
+       "text": "Se han utilizado operaciones agregadas para el manejo de información almacenada en colecciones."
+      },
+      {
+       "id": "0612-RA4-f",
+       "letter": "f",
+       "text": "Se han reconocido las características de orientación a objetos del lenguaje."
+      },
+      {
+       "id": "0612-RA4-g",
+       "letter": "g",
+       "text": "Se ha creado código para definir la estructura de objetos."
+      },
+      {
+       "id": "0612-RA4-h",
+       "letter": "h",
+       "text": "Se han creado métodos y propiedades."
+      },
+      {
+       "id": "0612-RA4-i",
+       "letter": "i",
+       "text": "Se ha creado código que haga uso de objetos definidos por el usuario."
+      },
+      {
+       "id": "0612-RA4-j",
+       "letter": "j",
+       "text": "Se han utilizado patrones de diseño de software."
+      },
+      {
+       "id": "0612-RA4-k",
+       "letter": "k",
+       "text": "Se ha depurado y documentado el código."
+      }
+     ]
+    },
+    {
+     "id": "0612-RA5",
+     "number": 5,
+     "text": "Desarrolla aplicaciones web interactivas integrando mecanismos de manejo de eventos.",
+     "criteria": [
+      {
+       "id": "0612-RA5-a",
+       "letter": "a",
+       "text": "Se han reconocido las posibilidades del lenguaje de marcas relativas a la captura de los eventos producidos."
+      },
+      {
+       "id": "0612-RA5-b",
+       "letter": "b",
+       "text": "Se han identificado las características del lenguaje de programación relativas a la gestión de los eventos."
+      },
+      {
+       "id": "0612-RA5-c",
+       "letter": "c",
+       "text": "Se han diferenciado los tipos de eventos que se pueden manejar."
+      },
+      {
+       "id": "0612-RA5-d",
+       "letter": "d",
+       "text": "Se ha creado un código que capture y utilice eventos."
+      },
+      {
+       "id": "0612-RA5-e",
+       "letter": "e",
+       "text": "Se han reconocido las capacidades del lenguaje relativas a la gestión de formularios web."
+      },
+      {
+       "id": "0612-RA5-f",
+       "letter": "f",
+       "text": "Se han validado formularios web utilizando eventos."
+      },
+      {
+       "id": "0612-RA5-g",
+       "letter": "g",
+       "text": "Se han utilizado expresiones regulares para facilitar los procedimientos de validación."
+      },
+      {
+       "id": "0612-RA5-h",
+       "letter": "h",
+       "text": "Se ha probado y documentado el código."
+      }
+     ]
+    },
+    {
+     "id": "0612-RA6",
+     "number": 6,
+     "text": "Desarrolla aplicaciones web analizando y aplicando las características del modelo de objetos del documento.",
+     "criteria": [
+      {
+       "id": "0612-RA6-a",
+       "letter": "a",
+       "text": "Se ha reconocido el modelo de objetos del documento de una página web."
+      },
+      {
+       "id": "0612-RA6-b",
+       "letter": "b",
+       "text": "Se han identificado los objetos del modelo, sus propiedades y métodos."
+      },
+      {
+       "id": "0612-RA6-c",
+       "letter": "c",
+       "text": "Se ha creado y verificado un código que acceda a la estructura del documento."
+      },
+      {
+       "id": "0612-RA6-d",
+       "letter": "d",
+       "text": "Se han creado nuevos elementos de la estructura y modificado elementos ya existentes."
+      },
+      {
+       "id": "0612-RA6-e",
+       "letter": "e",
+       "text": "Se han asociado acciones a los eventos del modelo."
+      },
+      {
+       "id": "0612-RA6-f",
+       "letter": "f",
+       "text": "Se han identificado las diferencias que presenta el modelo en diferentes navegadores."
+      },
+      {
+       "id": "0612-RA6-g",
+       "letter": "g",
+       "text": "Se han programado aplicaciones web de forma que funcionen en navegadores con diferentes implementaciones del modelo."
+      },
+      {
+       "id": "0612-RA6-h",
+       "letter": "h",
+       "text": "Se han independizado las tres capas de implementación (contenido, aspecto y comportamiento), en aplicaciones web."
+      }
+     ]
+    },
+    {
+     "id": "0612-RA7",
+     "number": 7,
+     "text": "Desarrolla aplicaciones web dinámicas, reconociendo y aplicando mecanismos de comunicación asíncrona entre cliente y servidor.",
+     "criteria": [
+      {
+       "id": "0612-RA7-a",
+       "letter": "a",
+       "text": "Se han evaluado las ventajas e inconvenientes de utilizar mecanismos de comunicación asíncrona entre cliente y servidor web."
+      },
+      {
+       "id": "0612-RA7-b",
+       "letter": "b",
+       "text": "Se han analizado los mecanismos disponibles para el establecimiento de la comunicación asíncrona."
+      },
+      {
+       "id": "0612-RA7-c",
+       "letter": "c",
+       "text": "Se han utilizado los objetos relacionados."
+      },
+      {
+       "id": "0612-RA7-d",
+       "letter": "d",
+       "text": "Se han identificado sus propiedades y sus métodos."
+      },
+      {
+       "id": "0612-RA7-e",
+       "letter": "e",
+       "text": "Se ha utilizado comunicación asíncrona en la actualización dinámica del documento web."
+      },
+      {
+       "id": "0612-RA7-f",
+       "letter": "f",
+       "text": "Se han utilizado distintos formatos en el envío y recepción de información."
+      },
+      {
+       "id": "0612-RA7-g",
+       "letter": "g",
+       "text": "Se han programado aplicaciones web asíncronas de forma que funcionen en diferentes navegadores."
+      },
+      {
+       "id": "0612-RA7-h",
+       "letter": "h",
+       "text": "Se han clasificado, analizado y utilizado librerías y frameworks que faciliten la incorporación de las tecnologías de actualización dinámica a la programación de páginas web."
+      },
+      {
+       "id": "0612-RA7-i",
+       "letter": "i",
+       "text": "Se han creado y probado y documentado aplicaciones web que utilicen estas librerías y frameworks."
+      }
+     ]
+    }
+   ],
+   "contents": [
+    {
+     "title": "Selección de arquitecturas y tecnologías de programación",
+     "items": [
+      "Mecanismos de ejecución de código en un navegador web.",
+      "Capacidades y limitaciones de ejecución.",
+      "Lenguajes de programación en entorno cliente.",
+      "Tecnologías y lenguajes asociados.",
+      "Integración del código con las etiquetas HTML.",
+      "Herramientas de programación y prueba sobre clientes web. Librerías y frameworks."
+     ]
+    },
+    {
+     "title": "Manejo de la sintaxis del lenguaje",
+     "items": [
+      "Variables.",
+      "Tipos de datos. Conversiones.",
+      "Asignaciones.",
+      "Operadores.",
+      "Comentarios al código.",
+      "Sentencias.",
+      "Decisiones.",
+      "Bucles.",
+      "Prueba y documentación del código."
+     ]
+    },
+    {
+     "title": "Utilización de los objetos predefinidos del lenguaje",
+     "items": [
+      "Utilización de objetos. Objetos nativos del lenguaje.",
+      "Interacción con el navegador. Objetos predefinidos asociados.",
+      "Generación de texto y elementos HTML desde código.",
+      "Gestión de la apariencia de la ventana.",
+      "Creación de nuevas ventanas. Comunicación entre ventanas.",
+      "Interacción con el usuario.",
+      "Mecanismos del navegador para el almacenamiento y recuperación de información.",
+      "Depuración y documentación del código."
+     ]
+    },
+    {
+     "title": "Programación con colecciones, funciones y objetos definidos por el usuario",
+     "items": [
+      "Funciones predefinidas del lenguaje.",
+      "Llamadas a funciones. Definición de funciones.",
+      "Matrices (arrays).",
+      "Operaciones agregadas: filtrado, reducción y recolección.",
+      "Creación de objetos.",
+      "Definición de métodos y propiedades.",
+      "Patrones de diseño.",
+      "Depuración y documentación del código."
+     ]
+    },
+    {
+     "title": "Interacción con el usuario: eventos y formularios",
+     "items": [
+      "Gestión de eventos. Tipos.",
+      "Utilización de formularios desde código.",
+      "Modificación de apariencia y comportamiento.",
+      "Validación y envío.",
+      "Expresiones regulares.",
+      "Prueba y documentación del código."
+     ]
+    },
+    {
+     "title": "Utilización del modelo de objetos del documento (DOM)",
+     "items": [
+      "El modelo de objetos del documento (DOM).",
+      "Objetos del modelo. Propiedades y métodos.",
+      "Acceso al documento desde código.",
+      "Programación de eventos.",
+      "Diferencias en las implementaciones del modelo.",
+      "Independencia de las capas de implementación de aplicaciones web."
+     ]
+    },
+    {
+     "title": "Utilización de mecanismos de comunicación asíncrona",
+     "items": [
+      "Mecanismos de comunicación asíncrona.",
+      "Modificación dinámica del documento utilizando comunicación asíncrona.",
+      "Formatos para el envío y recepción de información.",
+      "Librerías y frameworks de actualización dinámica.",
+      "Integración en diferentes navegadores.",
+      "Prueba y documentación del código."
+     ]
+    }
+   ],
+   "contribution": "La formación del módulo contribuye a alcanzar los objetivos generales f), g), i), q) y r) del ciclo formativo y las competencias profesionales, personales y sociales e), k), m), n), p) y r) del título.",
+   "outcomesSource": "rd-405-2023#anexo-I",
+   "status": "oficial",
+   "platformCourses": [
+    "js"
+   ],
+   "platformQuestions": 50,
+   "platformQuestionIds": {
+    "js": [
+     "js-01",
+     "js-02",
+     "js-03",
+     "js-04",
+     "js-05",
+     "js-06",
+     "js-07",
+     "js-08",
+     "js-09",
+     "js-10",
+     "js-11",
+     "js-12",
+     "js-13",
+     "js-14",
+     "js-15",
+     "js-16",
+     "js-17",
+     "js-18",
+     "js-19",
+     "js-20",
+     "js-21",
+     "js-22",
+     "js-23",
+     "js-24",
+     "js-25",
+     "js-26",
+     "js-27",
+     "js-28",
+     "js-29",
+     "js-30",
+     "js-31",
+     "js-32",
+     "js-33",
+     "js-34",
+     "js-35",
+     "js-36",
+     "js-37",
+     "js-38",
+     "js-39",
+     "js-40",
+     "js-41",
+     "js-42",
+     "js-43",
+     "js-44",
+     "js-45",
+     "js-46",
+     "js-47",
+     "js-48",
+     "js-49",
+     "js-50"
+    ]
+   }
+  },
+  {
+   "id": "0613",
+   "code": "0613",
+   "name": "Desarrollo web en entorno servidor",
+   "course": 2,
+   "hours": 264,
+   "weeklyHours": 8,
+   "source": "orden-edu-1311-2024#anexo-I",
+   "ects": 12,
+   "stateMinHours": 100,
+   "learningOutcomes": [
+    {
+     "id": "0613-RA1",
+     "number": 1,
+     "text": "Selecciona las arquitecturas y tecnologías de programación web en entorno servidor, analizando sus capacidades y características propias.",
+     "criteria": [
+      {
+       "id": "0613-RA1-a",
+       "letter": "a",
+       "text": "Se han caracterizado y diferenciado los modelos de ejecución de código en el servidor y en el cliente web."
+      },
+      {
+       "id": "0613-RA1-b",
+       "letter": "b",
+       "text": "Se han reconocido las ventajas que proporciona la generación dinámica de páginas."
+      },
+      {
+       "id": "0613-RA1-c",
+       "letter": "c",
+       "text": "Se han identificado los mecanismos de ejecución de código en los servidores web."
+      },
+      {
+       "id": "0613-RA1-d",
+       "letter": "d",
+       "text": "Se han reconocido las funcionalidades que aportan los servidores de aplicaciones y su integración con los servidores web."
+      },
+      {
+       "id": "0613-RA1-e",
+       "letter": "e",
+       "text": "Se han identificado y caracterizado los principales lenguajes y tecnologías relacionados con la programación web en entorno servidor."
+      },
+      {
+       "id": "0613-RA1-f",
+       "letter": "f",
+       "text": "Se han verificado los mecanismos de integración de los lenguajes de marcas con los lenguajes de programación en entorno servidor."
+      },
+      {
+       "id": "0613-RA1-g",
+       "letter": "g",
+       "text": "Se han reconocido y evaluado las herramientas y frameworks de programación en entorno servidor."
+      }
+     ]
+    },
+    {
+     "id": "0613-RA2",
+     "number": 2,
+     "text": "Escribe sentencias ejecutables por un servidor web reconociendo y aplicando procedimientos de integración del código en lenguajes de marcas.",
+     "criteria": [
+      {
+       "id": "0613-RA2-a",
+       "letter": "a",
+       "text": "Se han reconocido los mecanismos de generación de páginas web a partir de lenguajes de marcas con código embebido."
+      },
+      {
+       "id": "0613-RA2-b",
+       "letter": "b",
+       "text": "Se han identificado las principales tecnologías asociadas."
+      },
+      {
+       "id": "0613-RA2-c",
+       "letter": "c",
+       "text": "Se han utilizado etiquetas para la inclusión de código en el lenguaje de marcas."
+      },
+      {
+       "id": "0613-RA2-d",
+       "letter": "d",
+       "text": "Se ha reconocido la sintaxis del lenguaje de programación que se ha de utilizar."
+      },
+      {
+       "id": "0613-RA2-e",
+       "letter": "e",
+       "text": "Se han escrito sentencias simples y se han comprobado sus efectos en el documento resultante."
+      },
+      {
+       "id": "0613-RA2-f",
+       "letter": "f",
+       "text": "Se han utilizado directivas para modificar el comportamiento predeterminado."
+      },
+      {
+       "id": "0613-RA2-g",
+       "letter": "g",
+       "text": "Se han utilizado los distintos tipos de variables y operadores disponibles en el lenguaje."
+      },
+      {
+       "id": "0613-RA2-h",
+       "letter": "h",
+       "text": "Se han identificado los ámbitos de utilización de las variables."
+      }
+     ]
+    },
+    {
+     "id": "0613-RA3",
+     "number": 3,
+     "text": "Escribe bloques de sentencias embebidos en lenguajes de marcas, seleccionando y utilizando las estructuras de programación.",
+     "criteria": [
+      {
+       "id": "0613-RA3-a",
+       "letter": "a",
+       "text": "Se han utilizado mecanismos de decisión en la creación de bloques de sentencias."
+      },
+      {
+       "id": "0613-RA3-b",
+       "letter": "b",
+       "text": "Se han utilizado bucles y se ha verificado su funcionamiento."
+      },
+      {
+       "id": "0613-RA3-c",
+       "letter": "c",
+       "text": "Se han utilizado matrices (arrays) para almacenar y recuperar conjuntos de datos."
+      },
+      {
+       "id": "0613-RA3-d",
+       "letter": "d",
+       "text": "Se han creado y utilizado funciones."
+      },
+      {
+       "id": "0613-RA3-e",
+       "letter": "e",
+       "text": "Se han utilizado formularios web para interactuar con el usuario del navegador web."
+      },
+      {
+       "id": "0613-RA3-f",
+       "letter": "f",
+       "text": "Se han empleado métodos para recuperar la información introducida en el formulario."
+      },
+      {
+       "id": "0613-RA3-g",
+       "letter": "g",
+       "text": "Se han añadido comentarios al código."
+      }
+     ]
+    },
+    {
+     "id": "0613-RA4",
+     "number": 4,
+     "text": "Desarrolla aplicaciones web embebidas en lenguajes de marcas analizando e incorporando funcionalidades según especificaciones.",
+     "criteria": [
+      {
+       "id": "0613-RA4-a",
+       "letter": "a",
+       "text": "Se han identificado los mecanismos disponibles para el mantenimiento de la información que concierne a un cliente web concreto y se han señalado sus ventajas."
+      },
+      {
+       "id": "0613-RA4-b",
+       "letter": "b",
+       "text": "Se han utilizado mecanismos para mantener el estado de las aplicaciones web."
+      },
+      {
+       "id": "0613-RA4-c",
+       "letter": "c",
+       "text": "Se han utilizado mecanismos para almacenar información en el cliente web y para recuperar su contenido."
+      },
+      {
+       "id": "0613-RA4-d",
+       "letter": "d",
+       "text": "Se han identificado y caracterizado los mecanismos disponibles para la autentificación de usuarios."
+      },
+      {
+       "id": "0613-RA4-e",
+       "letter": "e",
+       "text": "Se han escrito aplicaciones que integren mecanismos de autentificación de usuarios."
+      },
+      {
+       "id": "0613-RA4-f",
+       "letter": "f",
+       "text": "Se han utilizado herramientas y entornos para facilitar la programación, prueba y depuración del código."
+      }
+     ]
+    },
+    {
+     "id": "0613-RA5",
+     "number": 5,
+     "text": "Desarrolla aplicaciones web identificando y aplicando mecanismos para separar el código de presentación de la lógica de negocio.",
+     "criteria": [
+      {
+       "id": "0613-RA5-a",
+       "letter": "a",
+       "text": "Se han identificado las ventajas de separar la lógica de negocio de los aspectos de presentación de la aplicación."
+      },
+      {
+       "id": "0613-RA5-b",
+       "letter": "b",
+       "text": "Se han analizado y utilizado mecanismos y frameworks que permiten realizar esta separación y sus características principales."
+      },
+      {
+       "id": "0613-RA5-c",
+       "letter": "c",
+       "text": "Se han utilizado objetos y controles en el servidor para generar el aspecto visual de la aplicación web en el cliente."
+      },
+      {
+       "id": "0613-RA5-d",
+       "letter": "d",
+       "text": "Se han utilizado formularios generados de forma dinámica para responder a los eventos de la aplicación web."
+      },
+      {
+       "id": "0613-RA5-e",
+       "letter": "e",
+       "text": "Se han identificado y aplicado los parámetros relativos a la configuración de la aplicación web."
+      },
+      {
+       "id": "0613-RA5-f",
+       "letter": "f",
+       "text": "Se han escrito aplicaciones web con mantenimiento de estado y separación de la lógica de negocio."
+      },
+      {
+       "id": "0613-RA5-g",
+       "letter": "g",
+       "text": "Se han aplicado los principios y patrones de diseño de la programación orientada a objetos."
+      },
+      {
+       "id": "0613-RA5-h",
+       "letter": "h",
+       "text": "Se ha probado y documentado el código."
+      }
+     ]
+    },
+    {
+     "id": "0613-RA6",
+     "number": 6,
+     "text": "Desarrolla aplicaciones web de acceso a almacenes de datos, aplicando medidas para mantener la seguridad y la integridad de la información.",
+     "criteria": [
+      {
+       "id": "0613-RA6-a",
+       "letter": "a",
+       "text": "Se han analizado las tecnologías que permiten el acceso mediante programación a la información disponible en almacenes de datos."
+      },
+      {
+       "id": "0613-RA6-b",
+       "letter": "b",
+       "text": "Se han creado aplicaciones que establezcan conexiones con bases de datos."
+      },
+      {
+       "id": "0613-RA6-c",
+       "letter": "c",
+       "text": "Se ha recuperado información almacenada en bases de datos."
+      },
+      {
+       "id": "0613-RA6-d",
+       "letter": "d",
+       "text": "Se ha publicado en aplicaciones web la información recuperada."
+      },
+      {
+       "id": "0613-RA6-e",
+       "letter": "e",
+       "text": "Se han utilizado conjuntos de datos para almacenar la información."
+      },
+      {
+       "id": "0613-RA6-f",
+       "letter": "f",
+       "text": "Se han creado aplicaciones web que permitan la actualización y la eliminación de información disponible en una base de datos."
+      },
+      {
+       "id": "0613-RA6-g",
+       "letter": "g",
+       "text": "Se han probado y documentado las aplicaciones web."
+      }
+     ]
+    },
+    {
+     "id": "0613-RA7",
+     "number": 7,
+     "text": "Desarrolla servicios web reutilizables y accesibles mediante protocolos web, verificando su funcionamiento.",
+     "criteria": [
+      {
+       "id": "0613-RA7-a",
+       "letter": "a",
+       "text": "Se han reconocido las características propias y el ámbito de aplicación de los servicios web."
+      },
+      {
+       "id": "0613-RA7-b",
+       "letter": "b",
+       "text": "Se han reconocido las ventajas de utilizar servicios web para proporcionar acceso a funcionalidades incorporadas a la lógica de negocio de una aplicación."
+      },
+      {
+       "id": "0613-RA7-c",
+       "letter": "c",
+       "text": "Se han identificado las tecnologías y los protocolos implicados en el consumo de servicios web."
+      },
+      {
+       "id": "0613-RA7-d",
+       "letter": "d",
+       "text": "Se han utilizado los estándares y arquitecturas más difundidos e implicados en el desarrollo de servicios web."
+      },
+      {
+       "id": "0613-RA7-e",
+       "letter": "e",
+       "text": "Se ha programado un servicio web."
+      },
+      {
+       "id": "0613-RA7-f",
+       "letter": "f",
+       "text": "Se ha verificado el funcionamiento del servicio web."
+      },
+      {
+       "id": "0613-RA7-g",
+       "letter": "g",
+       "text": "Se ha consumido el servicio web."
+      },
+      {
+       "id": "0613-RA7-h",
+       "letter": "h",
+       "text": "Se ha documentado un servicio web."
+      }
+     ]
+    },
+    {
+     "id": "0613-RA8",
+     "number": 8,
+     "text": "Genera páginas web dinámicas analizando y utilizando tecnologías y frameworks del servidor web que añadan código al lenguaje de marcas.",
+     "criteria": [
+      {
+       "id": "0613-RA8-a",
+       "letter": "a",
+       "text": "Se han identificado las diferencias entre la ejecución de código en el servidor y en el cliente web."
+      },
+      {
+       "id": "0613-RA8-b",
+       "letter": "b",
+       "text": "Se han reconocido las ventajas de unir ambas tecnologías en el proceso de desarrollo de programas."
+      },
+      {
+       "id": "0613-RA8-c",
+       "letter": "c",
+       "text": "Se han identificado las tecnologías y frameworks relacionadas con la generación por parte del servidor de páginas web con guiones embebidos."
+      },
+      {
+       "id": "0613-RA8-d",
+       "letter": "d",
+       "text": "Se han utilizado estas tecnologías y frameworks para generar páginas web que incluyan interacción con el usuario."
+      },
+      {
+       "id": "0613-RA8-e",
+       "letter": "e",
+       "text": "Se han utilizado estas tecnologías y frameworks, para generar páginas web que incluyan verificación de formularios."
+      },
+      {
+       "id": "0613-RA8-f",
+       "letter": "f",
+       "text": "Se han utilizado estas tecnologías y frameworks para generar páginas web que incluyan modificación dinámica de su contenido y su estructura."
+      },
+      {
+       "id": "0613-RA8-g",
+       "letter": "g",
+       "text": "Se han aplicado estas tecnologías y frameworks en la programación de aplicaciones web."
+      }
+     ]
+    },
+    {
+     "id": "0613-RA9",
+     "number": 9,
+     "text": "Desarrolla aplicaciones web híbridas seleccionando y utilizando tecnologías, frameworks servidor y repositorios heterogéneos de información.",
+     "criteria": [
+      {
+       "id": "0613-RA9-a",
+       "letter": "a",
+       "text": "Se han reconocido las ventajas que proporciona la reutilización de código y el aprovechamiento de información ya existente."
+      },
+      {
+       "id": "0613-RA9-b",
+       "letter": "b",
+       "text": "Se han identificado tecnologías y frameworks aplicables en la creación de aplicaciones web híbridas."
+      },
+      {
+       "id": "0613-RA9-c",
+       "letter": "c",
+       "text": "Se ha creado una aplicación web que recupere y procese repositorios de información ya existentes."
+      },
+      {
+       "id": "0613-RA9-d",
+       "letter": "d",
+       "text": "Se han creado repositorios específicos a partir de información existente en almacenes de información."
+      },
+      {
+       "id": "0613-RA9-e",
+       "letter": "e",
+       "text": "Se han utilizado librerías de código y frameworks para incorporar funcionalidades específicas a una aplicación web."
+      },
+      {
+       "id": "0613-RA9-f",
+       "letter": "f",
+       "text": "Se han programado servicios y aplicaciones web utilizando como base información y código generados por terceros."
+      },
+      {
+       "id": "0613-RA9-g",
+       "letter": "g",
+       "text": "Se han analizado y utilizado librerías de código relacionadas con Big Data e inteligencia de negocios, para incorporar análisis e inteligencia de datos proveniente de repositorios."
+      },
+      {
+       "id": "0613-RA9-h",
+       "letter": "h",
+       "text": "Se han probado, depurado y documentado las aplicaciones generadas."
+      }
+     ]
+    }
+   ],
+   "contents": [
+    {
+     "title": "Selección de arquitecturas y herramientas de programación",
+     "items": [
+      "Modelos de ejecución de código en entornos cliente/servidor.",
+      "Generación dinámica de páginas web.",
+      "Lenguajes de programación y tecnologías asociadas en entorno servidor.",
+      "Integración con los lenguajes de marcas.",
+      "Integración con los servidores web.",
+      "Herramientas y frameworks de programación. en entorno servidor."
+     ]
+    },
+    {
+     "title": "Inserción de código en páginas web",
+     "items": [
+      "Tecnologías asociadas.",
+      "Obtención del lenguaje de marcas para mostrar en el cliente.",
+      "Etiquetas para inserción de código.",
+      "Tipos de datos. Conversiones entre tipos de datos.",
+      "Variables. Operadores. Ámbitos de utilización."
+     ]
+    },
+    {
+     "title": "Programación basada en lenguajes de marcas con código embebido",
+     "items": [
+      "Tomas de decisión.",
+      "Bucles.",
+      "Matrices (arrays).",
+      "Tipos de datos compuestos.",
+      "Funciones.",
+      "Recuperación y utilización de información proveniente del cliente web.",
+      "Procesamiento de la información introducida en un formulario.",
+      "Comentarios."
+     ]
+    },
+    {
+     "title": "Desarrollo de aplicaciones web utilizando código embebido",
+     "items": [
+      "Mantenimiento del estado.",
+      "Almacenamiento y recuperación de información en el cliente web.",
+      "Seguridad: usuarios, perfiles, roles.",
+      "Autentificación de usuarios.",
+      "Pruebas y depuración."
+     ]
+    },
+    {
+     "title": "Generación dinámica de páginas web",
+     "items": [
+      "Mecanismos de separación de la lógica de negocio. Frameworks web servidor.",
+      "Controles de servidor.",
+      "Mecanismos de generación dinámica de la interface web.",
+      "Programación orientada a objetos. Patrones de diseño.",
+      "Prueba y documentación del código."
+     ]
+    },
+    {
+     "title": "Utilización de técnicas de acceso a datos",
+     "items": [
+      "Establecimiento de conexiones.",
+      "Recuperación y edición de información.",
+      "Utilización de conjuntos de resultados.",
+      "Actualización y eliminación de información proveniente de una base de datos.",
+      "Utilización de otros orígenes de datos.",
+      "Prueba y documentación."
+     ]
+    },
+    {
+     "title": "Programación de servicios web",
+     "items": [
+      "Tecnologías y protocolos implicados.",
+      "Estándares y arquitecturas actuales. Formatos de intercambio de datos.",
+      "Generación de un servicio web.",
+      "Interface de un servicio web.",
+      "Consumo de un servicio web. Herramientas de prueba.",
+      "Frameworks de documentación."
+     ]
+    },
+    {
+     "title": "Generación dinámica de páginas web interactivas",
+     "items": [
+      "Tecnologías y frameworks.",
+      "Generación dinámica de páginas interactivas.",
+      "Obtención remota de información.",
+      "Modificación de la estructura y contenido de la página web."
+     ]
+    },
+    {
+     "title": "Desarrollo de aplicaciones web híbridas",
+     "items": [
+      "Tecnologías y frameworks.",
+      "Reutilización de código e información.",
+      "Utilización de información proveniente de repositorios.",
+      "Incorporación de funcionalidades específicas.",
+      "Utilización de librerías de código relacionadas con Big Data e inteligencia de negocios. Extracción, proceso y análisis de datos provenientes de repositorios.",
+      "Prueba, depuración y documentación."
+     ]
+    }
+   ],
+   "contribution": "La formación del módulo contribuye a alcanzar los objetivos generales c), d), f), g), h), l), m), n), ñ), q), s) y t) del ciclo formativo y las competencias profesionales, personales y sociales c), d), f), g), h), j), k), l), m), n), ñ), y q) del título.",
+   "outcomesSource": "rd-405-2023#anexo-I",
+   "status": "oficial",
+   "platformCourses": [],
+   "platformQuestions": 0,
+   "platformQuestionIds": {}
+  },
+  {
+   "id": "0614",
+   "code": "0614",
+   "name": "Despliegue de aplicaciones web",
+   "course": 2,
+   "hours": 99,
+   "weeklyHours": 3,
+   "source": "orden-edu-1311-2024#anexo-I",
+   "ects": 5,
+   "stateMinHours": 50,
+   "learningOutcomes": [
+    {
+     "id": "0614-RA1",
+     "number": 1,
+     "text": "Implanta arquitecturas web analizando y aplicando criterios de funcionalidad.",
+     "criteria": [
+      {
+       "id": "0614-RA1-a",
+       "letter": "a",
+       "text": "Se han analizado aspectos generales de arquitecturas web, sus características, ventajas e inconvenientes."
+      },
+      {
+       "id": "0614-RA1-b",
+       "letter": "b",
+       "text": "Se han descrito los fundamentos y protocolos en los que se basa el funcionamiento de un servidor web."
+      },
+      {
+       "id": "0614-RA1-c",
+       "letter": "c",
+       "text": "Se ha realizado la instalación y configuración básica de servidores web."
+      },
+      {
+       "id": "0614-RA1-d",
+       "letter": "d",
+       "text": "Se ha realizado la instalación y configuración básica de servidores de aplicaciones."
+      },
+      {
+       "id": "0614-RA1-e",
+       "letter": "e",
+       "text": "Se ha realizado la instalación y configuración básica de tecnologías de virtualización de servidores en la nube y en contenedores."
+      },
+      {
+       "id": "0614-RA1-f",
+       "letter": "f",
+       "text": "Se han realizado pruebas de funcionamiento de los servidores web y de aplicaciones. y de tecnologías de virtualización en la nube y en contenedores."
+      },
+      {
+       "id": "0614-RA1-g",
+       "letter": "g",
+       "text": "Se ha analizado la estructura y recursos que componen una aplicación web."
+      },
+      {
+       "id": "0614-RA1-h",
+       "letter": "h",
+       "text": "Se han descrito los requerimientos del proceso de implantación de una aplicación web."
+      },
+      {
+       "id": "0614-RA1-i",
+       "letter": "i",
+       "text": "Se han documentado los procesos de instalación y configuración realizados sobre los servidores web, de aplicaciones. y sobre tecnologías de virtualización en la nube y en contenedores."
+      }
+     ]
+    },
+    {
+     "id": "0614-RA2",
+     "number": 2,
+     "text": "Implanta aplicaciones web en servidores web, evaluando y aplicando criterios de configuración para su funcionamiento seguro.",
+     "criteria": [
+      {
+       "id": "0614-RA2-a",
+       "letter": "a",
+       "text": "Se han reconocido los parámetros de administración más importantes del servidor web."
+      },
+      {
+       "id": "0614-RA2-b",
+       "letter": "b",
+       "text": "Se ha ampliado la funcionalidad del servidor mediante la activación y configuración de módulos."
+      },
+      {
+       "id": "0614-RA2-c",
+       "letter": "c",
+       "text": "Se han creado y configurado sitios virtuales."
+      },
+      {
+       "id": "0614-RA2-d",
+       "letter": "d",
+       "text": "Se han configurado los mecanismos de autenticación y control de acceso del servidor."
+      },
+      {
+       "id": "0614-RA2-e",
+       "letter": "e",
+       "text": "Se han obtenido e instalado certificados digitales."
+      },
+      {
+       "id": "0614-RA2-f",
+       "letter": "f",
+       "text": "Se han establecido mecanismos para asegurar las comunicaciones entre el cliente y el servidor."
+      },
+      {
+       "id": "0614-RA2-g",
+       "letter": "g",
+       "text": "Se ha elaborado documentación relativa a la configuración, administración segura y recomendaciones de uso del servidor."
+      },
+      {
+       "id": "0614-RA2-h",
+       "letter": "h",
+       "text": "Se han realizado los ajustes necesarios para la implantación de aplicaciones en el servidor web."
+      },
+      {
+       "id": "0614-RA2-i",
+       "letter": "i",
+       "text": "Se han utilizado tecnologías de virtualización en el despliegue de servidores web en la nube y en contenedores."
+      },
+      {
+       "id": "0614-RA2-j",
+       "letter": "j",
+       "text": "Se han instalado, configurado y utilizado conjuntos de herramientas de gestión de logs, permitiendo su monitorización, consolidación y análisis en tiempo real."
+      }
+     ]
+    },
+    {
+     "id": "0614-RA3",
+     "number": 3,
+     "text": "Implanta aplicaciones web en servidores de aplicaciones, evaluando y aplicando criterios de configuración para su funcionamiento seguro.",
+     "criteria": [
+      {
+       "id": "0614-RA3-a",
+       "letter": "a",
+       "text": "Se han descrito los componentes y el funcionamiento de los servicios proporcionados por el servidor de aplicaciones."
+      },
+      {
+       "id": "0614-RA3-b",
+       "letter": "b",
+       "text": "Se han identificado los principales archivos de configuración y de bibliotecas compartidas."
+      },
+      {
+       "id": "0614-RA3-c",
+       "letter": "c",
+       "text": "Se ha configurado el servidor de aplicaciones para cooperar con el servidor web."
+      },
+      {
+       "id": "0614-RA3-d",
+       "letter": "d",
+       "text": "Se han configurado y activado los mecanismos de seguridad del servidor de aplicaciones."
+      },
+      {
+       "id": "0614-RA3-e",
+       "letter": "e",
+       "text": "Se han configurado y utilizado los componentes web del servidor de aplicaciones."
+      },
+      {
+       "id": "0614-RA3-f",
+       "letter": "f",
+       "text": "Se han realizado los ajustes necesarios para el despliegue de aplicaciones sobre el servidor."
+      },
+      {
+       "id": "0614-RA3-g",
+       "letter": "g",
+       "text": "Se han realizado pruebas de funcionamiento y rendimiento de la aplicación web desplegada."
+      },
+      {
+       "id": "0614-RA3-h",
+       "letter": "h",
+       "text": "Se ha elaborado documentación relativa a la administración y recomendaciones de uso del servidor de aplicaciones."
+      },
+      {
+       "id": "0614-RA3-i",
+       "letter": "i",
+       "text": "Se han utilizado tecnologías de virtualización en el despliegue de servidores de aplicaciones en la nube y en contenedores."
+      }
+     ]
+    },
+    {
+     "id": "0614-RA4",
+     "number": 4,
+     "text": "Administra servidores de transferencia de archivos, evaluando y aplicando criterios de configuración que garanticen la disponibilidad del servicio.",
+     "criteria": [
+      {
+       "id": "0614-RA4-a",
+       "letter": "a",
+       "text": "Se han instalado y configurado servidores de transferencia de archivos."
+      },
+      {
+       "id": "0614-RA4-b",
+       "letter": "b",
+       "text": "Se han creado usuarios y grupos para el acceso remoto al servidor."
+      },
+      {
+       "id": "0614-RA4-c",
+       "letter": "c",
+       "text": "Se ha comprobado el acceso al servidor, tanto en modo activo como en modo pasivo."
+      },
+      {
+       "id": "0614-RA4-d",
+       "letter": "d",
+       "text": "Se han realizado pruebas con clientes en línea de comandos y clientes en modo gráfico."
+      },
+      {
+       "id": "0614-RA4-e",
+       "letter": "e",
+       "text": "Se ha utilizado el protocolo seguro de transferencia de archivos."
+      },
+      {
+       "id": "0614-RA4-f",
+       "letter": "f",
+       "text": "Se han configurado y utilizado servicios de transferencia de archivos integrados en servidores web."
+      },
+      {
+       "id": "0614-RA4-g",
+       "letter": "g",
+       "text": "Se ha elaborado documentación relativa a la configuración y administración del servicio de transferencia de archivos."
+      },
+      {
+       "id": "0614-RA4-h",
+       "letter": "h",
+       "text": "Se han utilizado tecnologías de virtualización en el despliegue de servidores de transferencia de archivos en la nube y en contenedores."
+      }
+     ]
+    },
+    {
+     "id": "0614-RA5",
+     "number": 5,
+     "text": "Verifica la ejecución de aplicaciones web comprobando los parámetros de configuración de servicios de red.",
+     "criteria": [
+      {
+       "id": "0614-RA5-a",
+       "letter": "a",
+       "text": "Se ha descrito la estructura, nomenclatura y funcionalidad de los sistemas de nombres jerárquicos."
+      },
+      {
+       "id": "0614-RA5-b",
+       "letter": "b",
+       "text": "Se han identificado las necesidades de configuración del servidor de nombres en función de los requerimientos de ejecución de las aplicaciones web desplegadas."
+      },
+      {
+       "id": "0614-RA5-c",
+       "letter": "c",
+       "text": "Se han identificado la función, elementos y estructuras lógicas del servicio de directorio."
+      },
+      {
+       "id": "0614-RA5-d",
+       "letter": "d",
+       "text": "Se ha analizado la configuración y personalización del servicio de directorio."
+      },
+      {
+       "id": "0614-RA5-e",
+       "letter": "e",
+       "text": "Se ha analizado la capacidad del servicio de directorio como mecanismo de autenticación centralizada de los usuarios en una red."
+      },
+      {
+       "id": "0614-RA5-f",
+       "letter": "f",
+       "text": "Se han especificado los parámetros de configuración en el servicio de directorios adecuados para el proceso de validación de usuarios de la aplicación web."
+      },
+      {
+       "id": "0614-RA5-g",
+       "letter": "g",
+       "text": "Se ha elaborado documentación relativa a las adaptaciones realizadas en los servicios de red."
+      },
+      {
+       "id": "0614-RA5-h",
+       "letter": "h",
+       "text": "Se han utilizado tecnologías de virtualización en el despliegue de servidores de directorios en la nube y en contenedores."
+      }
+     ]
+    },
+    {
+     "id": "0614-RA6",
+     "number": 6,
+     "text": "Elabora la documentación de la aplicación web evaluando y seleccionando herramientas de generación de documentación, control de versiones y de integración continua.",
+     "criteria": [
+      {
+       "id": "0614-RA6-a",
+       "letter": "a",
+       "text": "Se han identificado diferentes herramientas de generación de documentación."
+      },
+      {
+       "id": "0614-RA6-b",
+       "letter": "b",
+       "text": "Se han documentado los componentes software utilizando los generadores específicos de las plataformas."
+      },
+      {
+       "id": "0614-RA6-c",
+       "letter": "c",
+       "text": "Se han utilizado diferentes formatos para la documentación."
+      },
+      {
+       "id": "0614-RA6-d",
+       "letter": "d",
+       "text": "Se han utilizado herramientas colaborativas para la elaboración y mantenimiento de la documentación."
+      },
+      {
+       "id": "0614-RA6-e",
+       "letter": "e",
+       "text": "Se ha instalado, configurado y utilizado un sistema de control de versiones."
+      },
+      {
+       "id": "0614-RA6-f",
+       "letter": "f",
+       "text": "Se ha garantizado la accesibilidad y seguridad de la información y código almacenada por el sistema de control de versiones."
+      },
+      {
+       "id": "0614-RA6-g",
+       "letter": "g",
+       "text": "Se ha documentado la instalación, configuración y uso del sistema de control de versiones utilizado."
+      },
+      {
+       "id": "0614-RA6-h",
+       "letter": "h",
+       "text": "Se han utilizado herramientas para la integración continua del código."
+      }
+     ]
+    }
+   ],
+   "contents": [
+    {
+     "title": "Implantación de arquitecturas web",
+     "items": [
+      "Arquitecturas web. Modelos.",
+      "Servidores web y de aplicaciones. Instalación y configuración básica.",
+      "Tecnologías de virtualización de servidores en la nube y en contenedores. Instalación y configuración básica.",
+      "Estructura y recursos que componen una aplicación web.",
+      "Documentación de los procesos realizados."
+     ]
+    },
+    {
+     "title": "Administración de servidores web",
+     "items": [
+      "Configuración avanzada del servidor web.",
+      "Módulos: instalación, configuración y uso.",
+      "Hosts virtuales. Creación, configuración y utilización.",
+      "Autenticación y control de acceso.",
+      "El protocolo HTTPS.",
+      "Certificados. Servidores de certificados.",
+      "Documentación.",
+      "Despliegue de aplicaciones sobre servidores web.",
+      "Despliegue de servidores web mediante tecnologías de virtualización en la nube y en contenedores.",
+      "Conjuntos de herramientas de gestión de logs. Instalación, configuración y utilización, para la ayuda a la toma de decisiones: Big Data."
+     ]
+    },
+    {
+     "title": "Administración de servidores de aplicaciones",
+     "items": [
+      "Arquitectura y configuración básica del servidor de aplicaciones.",
+      "Administrar aplicaciones web.",
+      "Autenticación de usuarios. Dominios de seguridad para la autenticación.",
+      "Administración de sesiones.",
+      "Configurar el servidor de aplicaciones para cooperar con servidores web.",
+      "Despliegue de aplicaciones en el servidor de aplicaciones.",
+      "Seguridad en el servidor de aplicaciones.",
+      "Documentación.",
+      "Despliegue de servidores de aplicaciones mediante tecnologías de virtualización en la nube y en contenedores."
+     ]
+    },
+    {
+     "title": "Instalación y administración de servidores de transferencia de archivos",
+     "items": [
+      "Configuración del servicio de transferencia de archivos. Permisos y cuotas.",
+      "Tipos de usuarios y accesos al servicio.",
+      "Modos de conexión del cliente.",
+      "Protocolo seguro de transferencia de archivos.",
+      "Utilización de comandos y de herramientas gráficas.",
+      "Utilización del servicio de transferencia de archivos en el proceso de despliegue de la aplicación web.",
+      "Documentación.",
+      "Despliegue de servidores de transferencia de archivos mediante tecnologías de virtualización en la nube y en contenedores."
+     ]
+    },
+    {
+     "title": "Servicios de red implicados en el despliegue de una aplicación web",
+     "items": [
+      "Resolutores de nombres. Proceso de resolución de un nombre de dominio.",
+      "Parámetros de configuración y registros del servidor de nombres afectados en el despliegue.",
+      "Servicio de directorios: características y funcionalidad.",
+      "Archivos básicos de configuración.",
+      "Autenticación de usuarios en el servicio de directorios.",
+      "Adaptación de la configuración del servidor de directorios para el despliegue de la aplicación.",
+      "Documentación.",
+      "Despliegue de servidores de directorios mediante tecnologías de virtualización en la nube y en contenedores."
+     ]
+    },
+    {
+     "title": "Documentación, sistemas de control de versiones y de integración continua",
+     "items": [
+      "Herramientas colaborativas para la generación de documentación. Instalación, configuración y USO.",
+      "Creación y utilización de plantillas.",
+      "Instalación, configuración y uso de sistemas de control de versiones.",
+      "Operaciones avanzadas.",
+      "Seguridad de los sistemas de control de versiones.",
+      "Instalación, configuración y uso de sistemas de integración continua del código. Monitorización continua de las métricas de calidad de la aplicación."
+     ]
+    }
+   ],
+   "contribution": "La formación del módulo contribuye a alcanzar los objetivos generales c), d), o), p) y r) del ciclo formativo, y las competencias profesionales, personales y sociales a), b), c), j), n), ñ) y q) del título.",
+   "outcomesSource": "rd-405-2023#anexo-I",
+   "status": "oficial",
+   "platformCourses": [],
+   "platformQuestions": 0,
+   "platformQuestionIds": {}
+  },
+  {
+   "id": "0615",
+   "code": "0615",
+   "name": "Diseño de interfaces web",
+   "course": 2,
+   "hours": 165,
+   "weeklyHours": 5,
+   "source": "orden-edu-1311-2024#anexo-I",
+   "ects": 9,
+   "stateMinHours": 80,
+   "learningOutcomes": [
+    {
+     "id": "0615-RA1",
+     "number": 1,
+     "text": "Planifica la creación de una interfaz web valorando y aplicando especificaciones de diseño.",
+     "criteria": [
+      {
+       "id": "0615-RA1-a",
+       "letter": "a",
+       "text": "Se ha reconocido la importancia de la comunicación visual y sus principios básicos."
+      },
+      {
+       "id": "0615-RA1-b",
+       "letter": "b",
+       "text": "Se han analizado y seleccionado los colores y tipografías adecuados para su visualización en pantalla."
+      },
+      {
+       "id": "0615-RA1-c",
+       "letter": "c",
+       "text": "Se han analizado alternativas para la presentación de la información en documentos web."
+      },
+      {
+       "id": "0615-RA1-d",
+       "letter": "d",
+       "text": "Se ha valorado la importancia de definir y aplicar la guía de estilo en el desarrollo de una aplicación web."
+      },
+      {
+       "id": "0615-RA1-e",
+       "letter": "e",
+       "text": "Se han utilizado y valorado distintas tecnologías para el diseño de documentos web."
+      },
+      {
+       "id": "0615-RA1-f",
+       "letter": "f",
+       "text": "Se han creado y utilizado plantillas de diseño."
+      }
+     ]
+    },
+    {
+     "id": "0615-RA2",
+     "number": 2,
+     "text": "Crea interfaces web homogéneos definiendo y aplicando estilos.",
+     "criteria": [
+      {
+       "id": "0615-RA2-a",
+       "letter": "a",
+       "text": "Se han reconocido las posibilidades de modificar las etiquetas HTML."
+      },
+      {
+       "id": "0615-RA2-b",
+       "letter": "b",
+       "text": "Se han definido estilos de forma directa."
+      },
+      {
+       "id": "0615-RA2-c",
+       "letter": "c",
+       "text": "Se han definido y asociado estilos globales en hojas externas."
+      },
+      {
+       "id": "0615-RA2-d",
+       "letter": "d",
+       "text": "Se han definido hojas de estilos alternativas."
+      },
+      {
+       "id": "0615-RA2-e",
+       "letter": "e",
+       "text": "Se han redefinido estilos."
+      },
+      {
+       "id": "0615-RA2-f",
+       "letter": "f",
+       "text": "Se han identificado las distintas propiedades de cada elemento."
+      },
+      {
+       "id": "0615-RA2-g",
+       "letter": "g",
+       "text": "Se han creado clases de estilos."
+      },
+      {
+       "id": "0615-RA2-h",
+       "letter": "h",
+       "text": "Se han utilizado herramientas de validación de hojas de estilos."
+      },
+      {
+       "id": "0615-RA2-i",
+       "letter": "i",
+       "text": "Se han analizado y utilizado tecnologías y frameworks para la creación de interfaces web con un diseño responsive."
+      },
+      {
+       "id": "0615-RA2-j",
+       "letter": "j",
+       "text": "Se han analizado y utilizado preprocesadores de estilos para traducir estilos comunes a un código estándar y reconocible por los navegadores."
+      }
+     ]
+    },
+    {
+     "id": "0615-RA3",
+     "number": 3,
+     "text": "Prepara archivos multimedia para la web, analizando sus características y manejando herramientas específicas.",
+     "criteria": [
+      {
+       "id": "0615-RA3-a",
+       "letter": "a",
+       "text": "Se han reconocido las implicaciones de las licencias y los derechos de autor en el uso de material multimedia."
+      },
+      {
+       "id": "0615-RA3-b",
+       "letter": "b",
+       "text": "Se han identificado los formatos de imagen, audio y vídeo a utilizar."
+      },
+      {
+       "id": "0615-RA3-c",
+       "letter": "c",
+       "text": "Se han analizado las herramientas disponibles para generar contenido multimedia."
+      },
+      {
+       "id": "0615-RA3-d",
+       "letter": "d",
+       "text": "Se han empleado herramientas para el tratamiento digital de la imagen."
+      },
+      {
+       "id": "0615-RA3-e",
+       "letter": "e",
+       "text": "Se han utilizado herramientas para manipular audio y vídeo."
+      },
+      {
+       "id": "0615-RA3-f",
+       "letter": "f",
+       "text": "Se han realizado animaciones a partir de imágenes fijas."
+      },
+      {
+       "id": "0615-RA3-g",
+       "letter": "g",
+       "text": "Se han importado y exportado imágenes, audio y vídeo en diversos formatos según su finalidad."
+      },
+      {
+       "id": "0615-RA3-h",
+       "letter": "h",
+       "text": "Se ha aplicado la guía de estilo."
+      }
+     ]
+    },
+    {
+     "id": "0615-RA4",
+     "number": 4,
+     "text": "Integra contenido multimedia en documentos web valorando su aportación y seleccionando adecuadamente los elementos interactivos.",
+     "criteria": [
+      {
+       "id": "0615-RA4-a",
+       "letter": "a",
+       "text": "Se han reconocido y analizado las tecnologías relacionadas con la inclusión de contenido multimedia e interactivo."
+      },
+      {
+       "id": "0615-RA4-b",
+       "letter": "b",
+       "text": "Se han identificado las necesidades específicas de configuración de los navegadores web para soportar contenido multimedia e interactivo."
+      },
+      {
+       "id": "0615-RA4-c",
+       "letter": "c",
+       "text": "Se han utilizado herramientas gráficas para el desarrollo de contenido multimedia interactivo."
+      },
+      {
+       "id": "0615-RA4-d",
+       "letter": "d",
+       "text": "Se ha analizado el código generado por las herramientas de desarrollo de contenido interactivo."
+      },
+      {
+       "id": "0615-RA4-e",
+       "letter": "e",
+       "text": "Se han agregado elementos multimedia a documentos web."
+      },
+      {
+       "id": "0615-RA4-f",
+       "letter": "f",
+       "text": "Se ha añadido interactividad a elementos de un documento web."
+      },
+      {
+       "id": "0615-RA4-g",
+       "letter": "g",
+       "text": "Se ha verificado el funcionamiento de los elementos multimedia e interactivos en distintos navegadores y dispositivos."
+      }
+     ]
+    },
+    {
+     "id": "0615-RA5",
+     "number": 5,
+     "text": "Desarrolla interfaces web accesibles, analizando las pautas establecidas y aplicando técnicas de verificación.",
+     "criteria": [
+      {
+       "id": "0615-RA5-a",
+       "letter": "a",
+       "text": "Se ha reconocido la necesidad de diseñar webs accesibles."
+      },
+      {
+       "id": "0615-RA5-b",
+       "letter": "b",
+       "text": "Se ha analizado la accesibilidad de diferentes documentos web."
+      },
+      {
+       "id": "0615-RA5-c",
+       "letter": "c",
+       "text": "Se han analizado los principios y pautas de accesibilidad al contenido, así como los niveles de conformidad."
+      },
+      {
+       "id": "0615-RA5-d",
+       "letter": "d",
+       "text": "Se han analizado los posibles errores según los puntos de verificación de prioridad."
+      },
+      {
+       "id": "0615-RA5-e",
+       "letter": "e",
+       "text": "Se ha alcanzado el nivel de conformidad deseado."
+      },
+      {
+       "id": "0615-RA5-f",
+       "letter": "f",
+       "text": "Se han verificado los niveles alcanzados mediante el uso de test externos."
+      },
+      {
+       "id": "0615-RA5-g",
+       "letter": "g",
+       "text": "Se ha verificado la visualización del interfaz con diferentes navegadores y tecnologías."
+      },
+      {
+       "id": "0615-RA5-h",
+       "letter": "h",
+       "text": "Se han analizado y utilizado herramientas y estrategias que mejoren la visibilidad y la accesibilidad de los sitios y páginas web en los resultados de los buscadores."
+      }
+     ]
+    },
+    {
+     "id": "0615-RA6",
+     "number": 6,
+     "text": "Desarrolla interfaces web amigables analizando y aplicando las pautas de usabilidad establecidas.",
+     "criteria": [
+      {
+       "id": "0615-RA6-a",
+       "letter": "a",
+       "text": "Se ha analizado la usabilidad de diferentes documentos web."
+      },
+      {
+       "id": "0615-RA6-b",
+       "letter": "b",
+       "text": "Se ha valorado la importancia del uso de estándares en la creación de documentos web."
+      },
+      {
+       "id": "0615-RA6-c",
+       "letter": "c",
+       "text": "Se ha modificado el interfaz web para adecuarlo al objetivo que persigue y a los usuarios a los que va dirigido."
+      },
+      {
+       "id": "0615-RA6-d",
+       "letter": "d",
+       "text": "Se ha verificado la facilidad de navegación de un documento web mediante distintos periféricos."
+      },
+      {
+       "id": "0615-RA6-e",
+       "letter": "e",
+       "text": "Se han analizado diferentes técnicas para verificar la usabilidad de un documento web."
+      },
+      {
+       "id": "0615-RA6-f",
+       "letter": "f",
+       "text": "Se ha verificado la usabilidad de la interfaz web creado en diferentes navegadores y tecnologías."
+      }
+     ]
+    }
+   ],
+   "contents": [
+    {
+     "title": "Planificación de interfaces gráficas",
+     "items": [
+      "Elementos del diseño: percepción visual.",
+      "Color, tipografía, iconos.",
+      "Interacción persona-ordenador.",
+      "Interpretación de guías de estilo. Elementos.",
+      "Generación de documentos y sitios web.",
+      "Componentes de una interfaz web.",
+      "Tecnologías para el diseño de documentos web.",
+      "Mapa de navegación. Prototipos.",
+      "Maquetación web. Elementos de ordenación.",
+      "Plantilla de diseño."
+     ]
+    },
+    {
+     "title": "Uso de estilos",
+     "items": [
+      "Estilos en línea basados en etiquetas y en clases.",
+      "Crear y vincular hojas de estilo.",
+      "Crear y vincular hojas de estilo en cascada externa.",
+      "Herramientas y test de verificación.",
+      "Tecnologías y frameworks.",
+      "Preprocesadores de estilos. Variables, mixins y funciones."
+     ]
+    },
+    {
+     "title": "Implantación de contenido multimedia",
+     "items": [
+      "Tipos de Imágenes en la web.",
+      "Derechos de la propiedad intelectual. Licencias. Ley de la propiedad intelectual. Derechos de autor.",
+      "Imágenes. Software para crear y procesar imágenes. Formatos. Conversiones (exportar e importar).",
+      "Optimización de imágenes para la web.",
+      "Audio: formatos. Conversiones de formatos (exportar e importar).",
+      "Vídeo: codificación de vídeo, conversiones de formatos (exportar e importar).",
+      "Animaciones.",
+      "Integración de audio y vídeo en una animación."
+     ]
+    },
+    {
+     "title": "Integración de contenido interactivo",
+     "items": [
+      "Elementos interactivos.",
+      "Comportamientos interactivos. Comportamiento de los elementos.",
+      "Ejecución de secuencias de comandos.",
+      "Verificación del funcionamiento en distintos navegadores y dispositivos."
+     ]
+    },
+    {
+     "title": "Diseño de webs accesibles",
+     "items": [
+      "El Consorcio World Wide Web (W3C).",
+      "Principios y Pautas de Accesibilidad al Contenido en la Web (WCAG).",
+      "Criterios de conformidad. Niveles de conformidad.",
+      "Técnicas para satisfacer los requisitos definidos en las WCAG.",
+      "Prioridades. Puntos de verificación.",
+      "Métodos para realizar revisiones preliminares y evaluaciones de adecuación o conformidad de documentos web.",
+      "Herramientas de análisis de accesibilidad web.",
+      "Chequeo de la accesibilidad web desde diferentes navegadores y dispositivos.",
+      "Posicionamiento en buscadores. Mejora de la visibilidad de un sitio web en diferentes buscadores."
+     ]
+    },
+    {
+     "title": "Implementación de la usabilidad en la web. Diseño amigable",
+     "items": [
+      "Análisis de la usabilidad. Técnicas.",
+      "Identificación del objetivo de la web.",
+      "Tipos de usuario.",
+      "Barreras identificadas por los usuarios.",
+      "Información fácilmente accesible.",
+      "Velocidad de conexión.",
+      "Importancia del uso de estándares externos.",
+      "Navegación fácilmente recordada frente a navegación redescubierta.",
+      "Facilidad de navegación en la web.",
+      "Verificación de la usabilidad en diferentes navegadores y tecnologías.",
+      "Herramientas y test de verificación."
+     ]
+    }
+   ],
+   "contribution": "La formación del módulo contribuye a alcanzar los objetivos generales i), j) k), q), x) e y) del ciclo formativo y las competencias profesionales, personales y sociales e), g), h), i), m), n), y u) del título.",
+   "outcomesSource": "rd-405-2023#anexo-I",
+   "status": "oficial",
+   "platformCourses": [],
+   "platformQuestions": 0,
+   "platformQuestionIds": {}
+  },
+  {
+   "id": "1708",
+   "code": "1708",
+   "name": "Sostenibilidad aplicada al sistema productivo",
+   "course": 2,
+   "hours": 34,
+   "weeklyHours": 1,
+   "source": "orden-edu-1311-2024#anexo-I",
+   "ects": null,
+   "stateMinHours": null,
+   "learningOutcomes": [],
+   "contents": [],
+   "contribution": null,
+   "outcomesSource": "rd-659-2023#anexo-VIII",
+   "status": "pendiente",
+   "platformCourses": [],
+   "platformQuestions": 0,
+   "platformQuestionIds": {}
+  },
+  {
+   "id": "1710",
+   "code": "1710",
+   "name": "Itinerario personal para la empleabilidad II",
+   "course": 2,
+   "hours": 68,
+   "weeklyHours": 2,
+   "source": "orden-edu-1311-2024#anexo-I",
+   "ects": null,
+   "stateMinHours": null,
+   "learningOutcomes": [],
+   "contents": [],
+   "contribution": null,
+   "outcomesSource": "rd-659-2023#anexo-V",
+   "status": "pendiente",
+   "platformCourses": [],
+   "platformQuestions": 0,
+   "platformQuestionIds": {}
+  },
+  {
+   "id": "optativo-2",
+   "code": null,
+   "name": "Módulo optativo II",
+   "course": 2,
+   "hours": 54,
+   "weeklyHours": 3,
+   "source": "orden-edu-1311-2024#anexo-I",
+   "ects": null,
+   "stateMinHours": null,
+   "learningOutcomes": [],
+   "contents": [],
+   "contribution": null,
+   "outcomesSource": null,
+   "status": "pendiente",
+   "platformCourses": [],
+   "platformQuestions": 0,
+   "platformQuestionIds": {},
+   "note": "Pendiente de confirmar con el centro qué optativo se imparte."
+  },
+  {
+   "id": "0616",
+   "code": "0616",
+   "name": "Proyecto intermodular de desarrollo de aplicaciones web",
+   "course": null,
+   "hours": 65,
+   "weeklyHours": null,
+   "source": "orden-edu-1311-2024#anexo-I",
+   "ects": null,
+   "stateMinHours": null,
+   "learningOutcomes": [],
+   "contents": [],
+   "contribution": null,
+   "outcomesSource": null,
+   "status": "pendiente",
+   "platformCourses": [],
+   "platformQuestions": 0,
+   "platformQuestionIds": {},
+   "note": "La tabla del anexo I no indica el curso. Por la suma de horas (1.014 en 2º) sería 2º: pendiente de confirmar."
+  }
+ ]
+}

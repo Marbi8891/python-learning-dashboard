@@ -36,7 +36,7 @@ def test_password_is_stored_hashed(client):
 def test_login_and_me(client):
     register(client)
     token = login(client).json()["access_token"]
-    me = client.get("/api/users/me", headers={"Authorization": f"Bearer {token}"})
+    me = client.get("/api/v1/users/me", headers={"Authorization": f"Bearer {token}"})
     assert me.status_code == 200
     assert me.json()["display_name"] == "Ana"
 
@@ -50,9 +50,9 @@ def test_login_wrong_password_and_unknown_email_same_error(client):
 
 
 def test_protected_endpoint_rejects_missing_invalid_and_expired_tokens(client):
-    assert client.get("/api/users/me").status_code == 401
+    assert client.get("/api/v1/users/me").status_code == 401
     bad = {"Authorization": "Bearer token-falso"}
-    assert client.get("/api/users/me", headers=bad).status_code == 401
+    assert client.get("/api/v1/users/me", headers=bad).status_code == 401
 
     register(client)
     expired = jwt.encode(
@@ -61,7 +61,7 @@ def test_protected_endpoint_rejects_missing_invalid_and_expired_tokens(client):
         algorithm=ALGORITHM,
     )
     headers = {"Authorization": f"Bearer {expired}"}
-    assert client.get("/api/users/me", headers=headers).status_code == 401
+    assert client.get("/api/v1/users/me", headers=headers).status_code == 401
 
 
 def test_login_rate_limited(client):

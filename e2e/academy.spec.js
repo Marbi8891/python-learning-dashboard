@@ -31,7 +31,7 @@ test("«Mi aprendizaje» refleja lecciones, quizzes y actividad", async ({ page 
   for (let qi = 0; qi < 3; qi += 1) await page.locator(`input[name=q${qi}]`).first().check();
   await page.getByRole("button", { name: "Comprobar respuestas" }).click();
 
-  // «Mi aprendizaje» (XP, logros y lecciones del PCAP) queda enlazado desde Progreso (ADR-0031)
+  // «Mi aprendizaje» (XP, logros y lecciones del PCAP) queda enlazado desde Progreso
   await page.getByRole("link", { name: "Progreso", exact: true }).click();
   await page.getByRole("link", { name: "Mi aprendizaje" }).click();
   await expect(page).toHaveURL(/#\/perfil$/);

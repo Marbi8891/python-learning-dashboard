@@ -44,7 +44,7 @@ test("registro, sincronización del progreso local, cierre e inicio de sesión",
 
   await page.locator("#account-button").click();
   await dialog(page).getByRole("button", { name: "Cerrar sesión" }).click();
-  // Cerrar sesión borra los datos del navegador y recarga (ADR-0022): el aviso sale ya recargada
+  // Cerrar sesión borra los datos del navegador y recarga: el aviso sale ya recargada
   await expect(page.locator("#toast")).toContainText("Sesión cerrada");
   await expect(page.locator("#account-label")).toHaveText("Iniciar sesión");
 
@@ -69,7 +69,7 @@ test("errores de validación y credenciales en español", async ({ page }) => {
 });
 
 test("la sesión va en una cookie HttpOnly: sigue al recargar y JavaScript no ve el token", async ({ page }) => {
-  // ADR-0033: ni en el almacenamiento ni en document.cookie; solo la API puede leerla y borrarla
+  // El token no está ni en el almacenamiento ni en document.cookie; solo la API puede leerla y borrarla
   await openLesson(page, "variables");
   await register(page, uniqueEmail(), "Luis");
   await page.getByRole("tab", { name: "Práctica y Ejercicio" }).click();

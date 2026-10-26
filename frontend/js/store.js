@@ -90,7 +90,7 @@ function hadSession() {
   }
 }
 
-/** Sin token: la sesión va en la cookie HttpOnly. Con token: solo en memoria (ADR-0033). */
+/** Sin token: la sesión va en la cookie HttpOnly. Con token: solo en memoria. */
 export async function startSession(token = null) {
   setToken(token);
   state.user = await request("GET", "/api/users/me");
@@ -111,7 +111,7 @@ export async function restoreSession() {
 }
 
 /** Borra de este navegador todo lo personal (progreso, borradores, nombre del certificado,
-    logros…). Se conservan solo las preferencias de aspecto. Para equipos compartidos (ADR-0022). */
+    logros…). Se conservan solo las preferencias de aspecto. Para equipos compartidos. */
 export function clearLocalData() {
   try {
     for (const key of Object.keys(localStorage)) {

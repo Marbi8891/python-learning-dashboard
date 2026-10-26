@@ -1,4 +1,4 @@
-"""Actividad de la cuenta que ve el propio usuario (ADR-0025).
+"""Actividad de la cuenta que ve el propio usuario.
 
 Complementa el registro de seguridad del servidor (security_events.py): aquel es para detectar
 ataques y va seudonimizado; este es para que la persona vea si alguien ha entrado en su cuenta.
@@ -33,13 +33,11 @@ _SYSTEMS = (
     ("linux", "Linux"),
 )
 _BROWSERS = (
-    ("pld-app", "App"),  # la app Android del proyecto (ADR-0026)
     ("edg/", "Edge"),
     ("opr/", "Opera"),
     ("firefox", "Firefox"),
     ("chrome", "Chrome"),
     ("safari", "Safari"),
-    ("okhttp", "App Android"),
 )
 
 

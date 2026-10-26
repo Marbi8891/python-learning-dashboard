@@ -1,8 +1,9 @@
-/* Cursos de DAW en la web (ADR-0021): Programación, Bases de datos, Entornos, JavaScript y Java.
-   Usa los mismos JSON que la app Android (data/courses/<id>/) y el mismo formato de progreso.
+/* Cursos de DAW en la web: Programación, Bases de datos, Entornos, JavaScript y Java.
+   Lee los JSON de data/courses/<id>/.
 
-   Rutas:
-     #/daw                                  catálogo
+   Rutas (#/daw es la Preparación DAW, en learn/daw-prep.js):
+     #/daw/cursos                           catálogo
+     #/daw/curriculo[/<módulo>]             currículo oficial (curriculum.js)
      #/daw/<curso>                          panel del curso: bloques, acierto y lecciones
      #/daw/<curso>/leccion/<lección>        teoría, ejemplo, ejercicio, mini-quiz, reto y dudas
      #/daw/<curso>/practica/<bloque|repaso> tanda de práctica (test, completar el hueco y ordenar líneas) */
@@ -20,6 +21,7 @@ import {
   recordCourseAnswer,
   saveCourse,
 } from "./course-store.js";
+import { loadCurriculum, renderCurriculum } from "./curriculum.js";
 import { escapeHtml, renderInline, renderMarkdown, safeUrl } from "./markdown.js";
 
 for (const [name, language] of Object.entries({ java, javascript, sql })) {
@@ -103,7 +105,7 @@ function loadCourse(id) {
   return loaded.get(id);
 }
 
-/* ---------- Correcciones (mismas reglas que la app, ADR-0017) ---------- */
+/* ---------- Correcciones (mismas reglas que la app) ---------- */
 
 const kind = (q) => q.kind ?? "choice";
 
@@ -150,8 +152,9 @@ function renderCatalog() {
     <header class="course-hero">
       <p class="eyebrow">Ciclo DAW</p>
       <h1 class="course-hero__title" id="daw-title" tabindex="-1">Cursos de <em>DAW</em></h1>
-      <p class="course-hero__lead">Teoría, ejercicios de escribir código y práctica por bloques. Es el mismo contenido que la app Android
-        y, si inicias sesión, también el mismo progreso.</p>
+      <p class="course-hero__lead">Teoría, ejercicios de escribir código y práctica por bloques. Si inicias sesión,
+        el progreso se guarda en tu cuenta.</p>
+      <div class="course-hero__cta"><a class="btn btn--ghost" href="#/daw/curriculo">Ver el currículo oficial del ciclo</a></div>
     </header>
     <ul class="daw-grid">${cards}</ul>`;
 }
@@ -465,7 +468,10 @@ function parse(route) {
 
 async function render(route, { focus = false } = {}) {
   const { id, view, arg } = parse(route);
-  if (!id || !courseInfo(id)) {
+  if (id === "curriculo") {
+    current = null;
+    await renderCurriculumRoute(route, view);
+  } else if (!id || !courseInfo(id)) {
     current = null;
     root().innerHTML = renderCatalog();
   } else {
@@ -487,6 +493,16 @@ async function render(route, { focus = false } = {}) {
     }
   }
   if (focus) $("#daw-title")?.focus();
+}
+
+async function renderCurriculumRoute(route, moduleId) {
+  root().innerHTML = `<p class="empty-state" id="daw-title" tabindex="-1">Cargando el currículo…</p>`;
+  try {
+    const data = await loadCurriculum();
+    if (location.hash === route) root().innerHTML = renderCurriculum(data, moduleId);
+  } catch {
+    root().innerHTML = `<p class="empty-state" id="daw-title" tabindex="-1">No se pudo cargar el currículo. Comprueba la conexión y recarga.</p>`;
+  }
 }
 
 const rerender = (focus = false) => render(location.hash, { focus });

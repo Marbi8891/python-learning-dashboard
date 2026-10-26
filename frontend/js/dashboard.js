@@ -1,4 +1,4 @@
-/* Panel del alumno (ADR-0035): #/panel y #/panel/<sección>.
+/* Panel del alumno: #/panel y #/panel/<sección>.
 
    Un único espacio para la persona con sesión iniciada: resumen, cursos, progreso, actividad,
    planificación, logros y perfil. No es una segunda app: reutiliza los datos y las piezas que ya
@@ -7,12 +7,15 @@
    Nunca inventa datos: lo que no se puede calcular se dice («aún no hay…») en vez de estimarlo. */
 
 import { exportMyData, logout } from "./account.js";
+import { loadCurriculum } from "./curriculum.js";
 import { request } from "./api.js";
 import {
   dailySeries,
   examSummary,
   latestActivity,
   lastPractice,
+  MASTERY_STREAK,
+  moduleProgress,
   parseServerDate,
   PANEL_ROUTE,
   recurringErrors,
@@ -496,6 +499,12 @@ function progressHtml() {
       <h2 class="section-title" id="dash-evolution-title">Evolución</h2>
       ${srv || remote.error ? chartHtml(series) : `<p class="dash-status">Cargando…</p>`}
     </section>
+    <section class="course-section" aria-labelledby="dash-modules-title">
+      <h2 class="section-title" id="dash-modules-title">Módulos de DAW</h2>
+      <p class="readiness__note">Practicada: la has respondido al menos una vez. Dominada: has acertado sus ${MASTERY_STREAK} últimos intentos.
+        Es una orientación de la plataforma, no una calificación del centro.</p>
+      <div data-module-progress><p class="dash-status">Cargando…</p></div>
+    </section>
     <div class="course-columns">
       <section class="course-section" aria-labelledby="dash-mastered-title">
         <h2 class="section-title" id="dash-mastered-title">Temas dominados</h2>
@@ -704,10 +713,44 @@ function bodyHtml(section, content = lastContent) {
   return `${statusHtml()}${html}`;
 }
 
+/** Progreso por módulo oficial: se calcula con el catálogo del currículo y el progreso de los cursos. */
+async function fillModules() {
+  const target = () => $("[data-module-progress]");
+  let data;
+  try {
+    data = await loadCurriculum();
+  } catch {
+    if (target()) target().innerHTML = `<p class="empty-state">No se pudo cargar el currículo. Comprueba la conexión y recarga.</p>`;
+    return;
+  }
+  if (!target()) return; // el alumno cambió de sección mientras cargaba
+  const rows = moduleProgress(data.modules, (course) => stateOf(course).answers);
+  const withoutContent = data.modules.length - rows.length;
+  const items = rows
+    .map((m) => {
+      const label = `${m.code} · ${m.name}`;
+      return `
+        <li class="course-progress">
+          <h3 class="course-progress__title"><a href="#/daw/curriculo/${encodeURIComponent(m.id)}">${escapeHtml(label)}</a>
+            <span class="account-card__meta">${m.course ? `${m.course}º curso` : ""} · ${plural(m.total, "pregunta", "preguntas")}</span></h3>
+          ${meter(safePercent(m.practiced, m.total), `Preguntas practicadas de ${label}`)}
+          <p class="account-card__meta">Practicadas: <strong>${m.practiced} de ${m.total}</strong> (${safePercent(m.practiced, m.total)} %)</p>
+          ${meter(safePercent(m.mastered, m.total), `Preguntas dominadas de ${label}`)}
+          <p class="account-card__meta">Dominadas: <strong>${m.mastered} de ${m.total}</strong> (${safePercent(m.mastered, m.total)} %)</p>
+        </li>`;
+    })
+    .join("");
+  target().innerHTML = `
+    <ul class="course-progress-list">${items}</ul>
+    <p class="account-card__meta">${plural(withoutContent, "módulo del ciclo aún no tiene", "módulos del ciclo aún no tienen")} preguntas en la plataforma.
+      <a href="#/daw/curriculo">Ver el currículo completo</a></p>`;
+}
+
 /** Lo que llega después (dominio de los cursos y actividad de la cuenta) se rellena al pintar. */
 function afterPaint(section) {
   if (section === "cursos" || section === "logros") for (const c of COURSES) fillCourse(c).catch(() => {});
   if (section === "perfil") fillActivity();
+  if (section === "progreso") fillModules();
 }
 
 let lastContent = null;

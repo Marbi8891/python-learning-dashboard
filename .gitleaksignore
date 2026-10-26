@@ -1,7 +1,0 @@
-# Falsos positivos de Gitleaks revisados por el equipo AppSec (docs/security/SECURITY_TESTING.md).
-# Una línea por huella («Fingerprint» del informe): commit:archivo:regla:línea. Nunca valores reales.
-# Contraseña ficticia de un test de fuerza bruta (backend/tests/test_auth.py), no es una credencial.
-01a556c9e37ad37129f777be3e84269d4b839040:backend/tests/test_auth.py:generic-api-key:69
-backend/tests/test_auth.py:generic-api-key:69
-# Contraseña ficticia «incorrecta-123» en un test del borrado de cuenta (PR #55), no es una credencial.
-9ff41f688a049049d7bf47bc3ee65a24873c1e3d:backend/tests/test_google_auth.py:generic-api-key:226

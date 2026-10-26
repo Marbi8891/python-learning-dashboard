@@ -1,4 +1,4 @@
-/* Cálculos del panel del alumno (ADR-0035). Funciones puras, sin DOM ni almacenamiento:
+/* Cálculos del panel del alumno. Funciones puras, sin DOM ni almacenamiento:
    se prueban con node --test. Nunca inventan datos: si algo no se puede calcular, devuelven null. */
 
 /** Secciones del panel, en el orden del menú. La primera es la de entrada. */
@@ -100,3 +100,34 @@ export function recurringErrors(errors = {}, { min = 2, limit = 5 } = {}) {
 
 /** Porcentaje entero solo si el denominador se conoce y no es cero. */
 export const safePercent = (done, total) => (Number.isInteger(total) && total > 0 ? Math.round((done / total) * 100) : null);
+
+/** Aciertos seguidos al final del historial para dar una pregunta por dominada. */
+export const MASTERY_STREAK = 2;
+
+/**
+ * Progreso por módulo oficial de DAW a partir de las preguntas etiquetadas del catálogo.
+ * - Practicada: respondida al menos una vez («completado»).
+ * - Dominada: sus MASTERY_STREAK últimas respuestas son correctas. Un acierto suelto en un test
+ *   puede ser suerte; por eso completar no es lo mismo que dominar.
+ * @param modules módulos de daw-cyl.json (con platformQuestionIds)
+ * @param answersOf (curso) => { idPregunta: [true, false, …] } del progreso guardado
+ * @returns solo los módulos con preguntas en la plataforma, en el orden del catálogo
+ */
+export function moduleProgress(modules, answersOf) {
+  return modules
+    .filter((m) => m.platformQuestions > 0)
+    .map((m) => {
+      let practiced = 0;
+      let mastered = 0;
+      for (const [course, ids] of Object.entries(m.platformQuestionIds ?? {})) {
+        const answers = answersOf(course) ?? {};
+        for (const id of ids) {
+          const history = Array.isArray(answers[id]) ? answers[id] : [];
+          if (!history.length) continue;
+          practiced += 1;
+          if (history.length >= MASTERY_STREAK && history.slice(-MASTERY_STREAK).every((ok) => ok === true)) mastered += 1;
+        }
+      }
+      return { id: m.id, code: m.code, name: m.name, course: m.course, total: m.platformQuestions, practiced, mastered };
+    });
+}

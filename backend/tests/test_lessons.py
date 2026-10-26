@@ -26,8 +26,8 @@ def test_health_reports_email_when_smtp_is_configured(client, monkeypatch):
 
 
 def test_modules_are_ordered_with_lessons(client):
-    modules = client.get("/api/modules").json()
-    # Temario organizado por los bloques del examen PCAP (ver ADR-0009)
+    modules = client.get("/api/v1/modules").json()
+    # Temario organizado por los bloques del examen PCAP
     assert [m["slug"] for m in modules] == [
         "fundamentos",
         "modulos",
@@ -48,12 +48,12 @@ def test_modules_are_ordered_with_lessons(client):
 def test_modules_endpoint_avoids_n_plus_one(client):
     queries = []
     event.listen(client.engine, "before_cursor_execute", lambda *args: queries.append(args[2]))
-    client.get("/api/modules")
+    client.get("/api/v1/modules")
     assert len(queries) == 2  # módulos + lecciones, sin importar cuántos módulos haya
 
 
 def test_lesson_detail(client):
-    lesson = client.get("/api/lessons/variables").json()
+    lesson = client.get("/api/v1/lessons/variables").json()
     assert lesson["title"] == "Variables y print()"
     assert lesson["module_slug"] == "fundamentos"
     assert "print(" in lesson["example_code"]
@@ -62,10 +62,10 @@ def test_lesson_detail(client):
 
 
 def test_every_lesson_has_content_and_sources(client):
-    modules = client.get("/api/modules").json()
+    modules = client.get("/api/v1/modules").json()
     for module in modules:
         for summary in module["lessons"]:
-            lesson = client.get(f"/api/lessons/{summary['slug']}").json()
+            lesson = client.get(f"/api/v1/lessons/{summary['slug']}").json()
             assert lesson["theory"] and lesson["example_code"] and lesson["exercise"]
             assert lesson["sources"], f"{summary['slug']} no cita ninguna fuente"
             assert all(s["url"].startswith("https://") for s in lesson["sources"])
@@ -76,14 +76,14 @@ def test_every_lesson_has_content_and_sources(client):
 
 
 def test_unknown_lesson_returns_404(client):
-    response = client.get("/api/lessons/no-existe")
+    response = client.get("/api/v1/lessons/no-existe")
     assert response.status_code == 404
 
 
 def test_seed_is_idempotent(client):
     with sessionmaker(bind=client.engine)() as db:
         seed(db)  # segunda ejecución: no debe duplicar nada
-    modules = client.get("/api/modules").json()
+    modules = client.get("/api/v1/modules").json()
     assert sum(len(m["lessons"]) for m in modules) == 27
 
 
@@ -105,8 +105,8 @@ def test_seed_moves_lessons_and_removes_empty_modules(client, tmp_path):
     path.write_text(json.dumps(data), encoding="utf-8")
     with sessionmaker(bind=client.engine)() as db:
         seed(db, path)
-    modules = client.get("/api/modules").json()
+    modules = client.get("/api/v1/modules").json()
     slugs = {m["slug"] for m in modules}
     assert "nuevo" in slugs and "fundamentos" in slugs  # fundamentos aún tiene otras lecciones
-    assert client.get("/api/lessons/variables").json()["module_slug"] == "nuevo"
+    assert client.get("/api/v1/lessons/variables").json()["module_slug"] == "nuevo"
     assert "especializacion" not in slugs  # se quedó sin lecciones

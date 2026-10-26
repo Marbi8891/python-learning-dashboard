@@ -32,9 +32,6 @@ from app.session_cookie import MODE_HEADER
 
 logging.basicConfig(level=logging.INFO)
 
-# Versión del protocolo que manda un cliente A2A (ADR-0034); la web la necesita en CORS
-A2A_VERSION_HEADER = "A2A-Version"
-
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
@@ -57,8 +54,8 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=get_settings().cors_origins,
     allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE"],
-    allow_headers=["Authorization", "Content-Type", MODE_HEADER, A2A_VERSION_HEADER],
-    # La web envía la cookie de sesión HttpOnly a la API, que está en otro dominio (ADR-0033)
+    allow_headers=["Authorization", "Content-Type", MODE_HEADER],
+    # La web envía la cookie de sesión HttpOnly a la API, que está en otro dominio
     allow_credentials=True,
 )
 
@@ -79,8 +76,8 @@ API_SECURITY_HEADERS = {
 }
 
 
-# Rutas de la API: la REST y las de los agentes A2A (ADR-0034)
-API_PATHS = ("/api/", "/a2a/", "/.well-known/agent-card.json")
+# Rutas de la API
+API_PATHS = ("/api/",)
 
 
 @app.middleware("http")
@@ -98,7 +95,7 @@ def _log_too_large(scope) -> None:
 
 class BodySizeLimit:
     """Rechaza con 413 los cuerpos mayores que MAX_BODY_BYTES, contando lo que llega realmente
-    (también sin Content-Length), antes de que nadie lo lea entero en memoria (ADR-0022)."""
+    (también sin Content-Length), antes de que nadie lo lea entero en memoria."""
 
     def __init__(self, app, max_bytes: int):
         self.app = app
@@ -161,9 +158,8 @@ app.add_middleware(BodySizeLimit, max_bytes=get_settings().max_body_bytes)
 
 
 API_V1_PREFIX = "/api/v1"
-LEGACY_API_PREFIX = "/api"
 
-# API pública versionada. Es la superficie que debe consumir el frontend y cualquier cliente nuevo.
+# Todas las rutas de la API cuelgan de /api/v1
 for router in (
     lessons.router,
     auth.router,
@@ -176,27 +172,9 @@ for router in (
 ):
     app.include_router(router, prefix=API_V1_PREFIX)
 
-# Compatibilidad con clientes existentes (incluida la app Android). Estas rutas no aparecen
-# en OpenAPI y quedan marcadas como deprecated para no convertir la migración en un corte brusco.
-for router in (
-    lessons.router,
-    auth.router,
-    account.router,
-    progress.router,
-    attempts.router,
-    pcap.router,
-    course_state.router,
-):
-    app.include_router(
-        router,
-        prefix=LEGACY_API_PREFIX,
-        deprecated=True,
-        include_in_schema=False,
-    )
-
 
 @app.get("/api/v1/health", tags=["sistema"])
-@app.get("/api/health", tags=["sistema"], include_in_schema=False)
+@app.get("/api/health", tags=["sistema"], include_in_schema=False)  # healthCheckPath de Render
 def health() -> dict[str, str | bool]:
     # "email": el frontend solo ofrece la recuperación por email si se pueden enviar (Brevo o SMTP)
     # "google": y solo enseña «Continuar con Google» si el servidor tiene GOOGLE_CLIENT_ID
@@ -206,13 +184,6 @@ def health() -> dict[str, str | bool]:
         "google": bool(get_settings().google_client_id),
     }
 
-
-# Agentes A2A: una capacidad más junto a la API REST, no un sustituto (ADR-0034).
-# El SDK solo se importa si se activa: sin A2A, la API no gasta memoria en él.
-if get_settings().a2a_enabled:
-    from app.a2a.server import mount_a2a
-
-    mount_a2a(app, get_settings())
 
 if get_settings().serve_frontend:
     mount_frontend(app, get_settings().frontend_dir)

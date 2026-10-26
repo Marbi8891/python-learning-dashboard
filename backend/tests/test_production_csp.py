@@ -1,4 +1,4 @@
-"""CSP de la web publicada (PLD-SEC-003): sin orígenes de desarrollo y sin debilitar nada más."""
+"""CSP de la web publicada: sin orígenes de desarrollo y sin debilitar nada más."""
 
 import sys
 
@@ -64,16 +64,18 @@ def test_rejects_insecure_origins_or_a_missing_policy():
 def test_command_line_checks_and_rewrites_a_copy(tmp_path, monkeypatch, capsys):
     site = tmp_path / "site"
     site.mkdir()
-    (site / "index.html").write_text((FRONTEND / "index.html").read_text(encoding="utf-8"))
+    (site / "index.html").write_text(
+        (FRONTEND / "index.html").read_text(encoding="utf-8"), encoding="utf-8"
+    )
 
     monkeypatch.setattr(sys, "argv", ["production_csp", "--check", str(site)])
     assert production_csp.main() == 0
-    assert "http://localhost:8000" in (site / "index.html").read_text()
+    assert "http://localhost:8000" in (site / "index.html").read_text(encoding="utf-8")
 
     monkeypatch.setattr(sys, "argv", ["production_csp", str(site)])
     assert production_csp.main() == 0
-    assert "localhost:8000" not in (site / "index.html").read_text()
+    assert "localhost:8000" not in (site / "index.html").read_text(encoding="utf-8")
     assert "sin orígenes de desarrollo" in capsys.readouterr().out
 
-    (site / "index.html").write_text("<html></html>")
+    (site / "index.html").write_text("<html></html>", encoding="utf-8")
     assert production_csp.main() == 1

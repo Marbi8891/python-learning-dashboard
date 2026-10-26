@@ -23,7 +23,7 @@ USER app
 
 EXPOSE 8000
 
-# Detrás del proxy de Render: la IP real del cliente es la última de X-Forwarded-For (ADR-0022).
+# Detrás del proxy de Render: la IP real del cliente es la última de X-Forwarded-For.
 # No se usa --proxy-headers con --forwarded-allow-ips='*': uvicorn tomaría la PRIMERA IP de la
 # cabecera, que la escribe el propio cliente, y el límite de intentos se podría saltar.
 ENV TRUSTED_PROXY_HOPS=1

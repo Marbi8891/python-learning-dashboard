@@ -13,7 +13,7 @@
 @font-face { font-family: "Fraunces"; font-weight: 500; font-display: swap; src: url("../fonts/fraunces-latin-500-normal.woff2") format("woff2"); }
 @font-face { font-family: "Fraunces"; font-weight: 500; font-style: italic; font-display: swap; src: url("../fonts/fraunces-latin-500-italic.woff2") format("woff2"); }
 
-/* Estética editorial (ADR-0007): tinta casi negra, marfil, dorado para lo
+/* Estética editorial: tinta casi negra, marfil, dorado para lo
    importante y verde para el progreso. Contrastes WCAG AA calculados. */
 :root {
   /* Superficies */

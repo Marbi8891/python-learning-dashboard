@@ -111,7 +111,7 @@ def login_google(
             user.email_verified_at = datetime.now(UTC)
             activity.log(db, user.id, "google_linked", request)
         db.commit()
-    # Tipo propio: el panel del alumno muestra con qué método entró (ADR-0035)
+    # Tipo propio: el panel del alumno muestra con qué método entró
     activity.log(db, user.id, "login_google", request)
     db.commit()
     record(Event.LOGIN_OK, request, user=user.id)
@@ -154,10 +154,10 @@ def login(
     """Login con formulario OAuth2: el campo `username` es el email.
 
     Con la cabecera `X-PLD-Session: cookie` (la web), el token va en una cookie HttpOnly y no en
-    la respuesta (ADR-0033).
+    la respuesta.
 
     Además del límite por IP, una cuenta con demasiados fallos seguidos se bloquea un rato,
-    aunque los intentos lleguen de muchas IPs distintas (ADR-0022)."""
+    aunque los intentos lleguen de muchas IPs distintas."""
     email = form.username.strip().lower()
     account = pseudonym(email)
     if login_failures.blocked(email):
@@ -167,7 +167,7 @@ def login(
     if not verify_password(form.password, user.password_hash if user else None):
         login_failures.record(email)
         record(Event.LOGIN_FAILED, request, account=account, known=user is not None)
-        if user is not None:  # el titular lo verá en «Actividad de la cuenta» (ADR-0025)
+        if user is not None:  # el titular lo verá en «Actividad de la cuenta»
             activity.log(db, user.id, "login_failed", request)
             db.commit()
         raise HTTPException(
@@ -210,15 +210,8 @@ RESET_ACCEPTED = {
 }
 
 
-# Cada paso tiene dos rutas: la original (la usan la web y la app Android) y el alias con el
-# nombre más habitual. Comparten la misma función, límites y eventos.
 @router.post(
     "/auth/password-reset/request",
-    status_code=status.HTTP_202_ACCEPTED,
-    dependencies=[Depends(limit_auth_attempts)],
-)
-@router.post(
-    "/auth/forgot-password",
     status_code=status.HTTP_202_ACCEPTED,
     dependencies=[Depends(limit_auth_attempts)],
 )
@@ -250,11 +243,6 @@ def request_password_reset(
 
 @router.post(
     "/auth/password-reset/confirm",
-    status_code=status.HTTP_204_NO_CONTENT,
-    dependencies=[Depends(limit_auth_attempts)],
-)
-@router.post(
-    "/auth/reset-password",
     status_code=status.HTTP_204_NO_CONTENT,
     dependencies=[Depends(limit_auth_attempts)],
 )
@@ -299,7 +287,7 @@ def _as_utc(moment: datetime) -> datetime:
 
 
 def _reject_weak(password: str, email: str, name: str) -> None:
-    """Contraseñas comunes o con datos personales: 422 con el motivo (ADR-0023, M1027)."""
+    """Contraseñas comunes o con datos personales: 422 con el motivo (M1027)."""
     problem = weakness(password, email, name)
     if problem:
         raise HTTPException(status_code=422, detail=problem)

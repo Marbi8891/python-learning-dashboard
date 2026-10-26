@@ -1,5 +1,5 @@
 /* Progreso por conceptos: se guarda en este navegador (pld:learn) y, con sesión iniciada, en la
-   cuenta (/api/course-state/learn), con el mismo documento que leerá la app Android (ADR-0031).
+   cuenta (/api/course-state/learn).
    El contenido (learning.json) se descarga una vez por visita. */
 
 import { request } from "../api.js";

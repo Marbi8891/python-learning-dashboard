@@ -7,24 +7,23 @@
 1. [Informe privado de vulnerabilidad](../../security/advisories/new) en GitHub.
 2. Email a **mrabehfathiprofesional@gmail.com**, con el asunto «Seguridad».
 
-Recibirás respuesta en un plazo de 7 días. Las correcciones se publican en el `CHANGELOG.md`.
+Recibirás respuesta en un plazo de 7 días.
 
 ## Versiones con soporte
 
 Solo la última versión de `main`, que es la que está desplegada:
 
 - la web (GitHub Pages);
-- la API (Render);
-- el último APK firmado.
+- la API (Render).
 
-## Medidas del proyecto (ADR-0022)
+## Medidas del proyecto
 
 **Contraseñas**
 - Se guardan como hash con Argon2id.
 - El login tarda lo mismo aunque el email no exista y da un mensaje genérico.
 
 **Sesiones**
-- El token JWT caduca a los 30 minutos. En la web va en una cookie `HttpOnly; Secure; SameSite=None; Partitioned` que JavaScript no puede leer, y la API solo la acepta junto con la cabecera `X-PLD-Session` (protección CSRF). Si el navegador bloquea la cookie, el token se guarda solo en memoria, nunca en `localStorage` (ADR-0033).
+- El token JWT caduca a los 30 minutos. En la web va en una cookie `HttpOnly; Secure; SameSite=None; Partitioned` que JavaScript no puede leer, y la API solo la acepta junto con la cabecera `X-PLD-Session` (protección CSRF). Si el navegador bloquea la cookie, el token se guarda solo en memoria, nunca en `localStorage`.
 - Se puede cerrar la sesión en todos los dispositivos (`/api/auth/logout-all`).
 - Cambiar la contraseña invalida todos los tokens emitidos.
 
@@ -52,57 +51,15 @@ Solo la última versión de `main`, que es la que está desplegada:
 - Todo lo que viene de fuera, es decir, del navegador, de la cuenta o del código del alumno, se valida o se escapa antes de convertirlo en HTML.
 - Python se ejecuta en un Web Worker aislado.
 
-**Cadena de suministro**
-- Dependabot vigila pip, npm, Gradle, Docker y GitHub Actions.
+**Dependencias**
 - La CI pasa `pip-audit` y `npm audit`.
-- El token de las Actions es de solo lectura.
-- Se valida el wrapper de Gradle.
-- La clave de firma solo existe en los secretos de GitHub y se borra del runner siempre.
+- El token de las GitHub Actions es de solo lectura.
 
 **Secretos**
-- `backend/.env`, las claves y los keystores están en `.gitignore`.
+- `backend/.env` y las claves están en `.gitignore`.
 - `JWT_SECRET` es obligatorio y tiene al menos 32 caracteres.
 
-## Modelo de amenazas MITRE ATT&CK (ADR-0023)
-
-Las amenazas se revisan técnica por técnica con la matriz MITRE ATT&CK Enterprise v19 en [`docs/security/mitre-attack.md`](docs/security/mitre-attack.md), con una capa para ATT&CK Navigator.
-
-**Detección**
-- El logger `pld.security` escribe una línea JSON por evento, con el ID de la técnica (`"attack": "T1110"`).
-- Eventos: fallos de login, bloqueos, tokens falsificados o revocados, recuperaciones y borrados.
+**Registro de eventos**
+- El logger `pld.security` escribe una línea JSON por evento: fallos de login, bloqueos, tokens falsos o revocados, recuperaciones y borrados.
 - La IP y el email van seudonimizados (HMAC con el secreto del servidor).
-
-**Contraseñas**
-- No se aceptan las más comunes ni las que contienen el email o el nombre.
-
-**Bloqueos**
-- Restablecer la contraseña levanta el bloqueo de la cuenta, para que un atacante no pueda echar a nadie (T1531).
-
-**Consola**
-- Avisa al pegar código que toca el navegador o la red (T1204.004).
-
-## Revisión de octubre de 2026 (ADR-0031)
-
-Qué se ha comprobado al añadir el núcleo educativo y **qué riesgos siguen abiertos** (CSP en `<meta>`, Pyodide sin SRI, progreso declarado por el alumno…): [`docs/security/revision-2026-10.md`](docs/security/revision-2026-10.md).
-
-## Equipo AppSec y comprobaciones automáticas
-
-Ocho agentes de Claude Code revisan la seguridad (`.claude/agents/`, ver [`CLAUDE.md`](CLAUDE.md)).
-Registro de hallazgos, plan de corrección y herramientas en [`docs/security/`](docs/security/):
-[línea base](docs/security/SECURITY_BASELINE.md), [hallazgos](docs/security/SECURITY_FINDINGS.md),
-[plan](docs/security/REMEDIATION_PLAN.md), [pruebas y herramientas](docs/security/SECURITY_TESTING.md) y
-[flujo de trabajo](docs/security/AGENT_WORKFLOW.md). La CI pasa además Bandit, Semgrep y Gitleaks
-(`.github/workflows/security.yml`); en local: `python scripts/security/run_checks.py`.
-
-## Ajustes que hay que activar en GitHub
-
-No se pueden versionar, así que se activan a mano en *Settings*:
-
-- *Code security*:
-  - Dependabot alerts y security updates;
-  - Secret scanning y Push protection;
-  - Private vulnerability reporting;
-  - CodeQL (*default setup*).
-- Pasos detallados y checks obligatorios: [`docs/security/SECURITY_TESTING.md`](docs/security/SECURITY_TESTING.md) §6.
-- *Actions → General*: *Workflow permissions* en «Read repository contents».
-- *Rules*: proteger `main` con pull request obligatorio, checks obligatorios y sin *force push*.
+- No se aceptan las contraseñas más comunes ni las que contienen el email o el nombre.

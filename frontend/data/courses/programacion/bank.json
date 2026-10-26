@@ -122,7 +122,8 @@
     "es": "Además tiene entradas y salidas definidas, termina en un tiempo finito y cada paso es preciso.",
     "en": "Además tiene entradas y salidas definidas, termina en un tiempo finito y cada paso es preciso."
    },
-   "lesson": "prog-ut1-algoritmos"
+   "lesson": "prog-ut1-algoritmos",
+   "module": "0485"
   },
   {
    "id": "prog-02",
@@ -157,7 +158,8 @@
     "es": "Cada operación tiene que ser precisa y sin ambigüedad: el ordenador no interpreta intenciones.",
     "en": "Cada operación tiene que ser precisa y sin ambigüedad: el ordenador no interpreta intenciones."
    },
-   "lesson": "prog-ut1-algoritmos"
+   "lesson": "prog-ut1-algoritmos",
+   "module": "0485"
   },
   {
    "id": "prog-03",
@@ -192,7 +194,8 @@
     "es": "Con esas tres se puede escribir cualquier algoritmo, sin saltos incondicionales.",
     "en": "Con esas tres se puede escribir cualquier algoritmo, sin saltos incondicionales."
    },
-   "lesson": "prog-ut1-algoritmos"
+   "lesson": "prog-ut1-algoritmos",
+   "module": "0485"
   },
   {
    "id": "prog-04",
@@ -227,7 +230,8 @@
     "es": "Cohesión: la función hace una sola cosa bien. Acoplamiento: depende lo menos posible de las demás. Así funciona como una caja negra.",
     "en": "Cohesión: la función hace una sola cosa bien. Acoplamiento: depende lo menos posible de las demás. Así funciona como una caja negra."
    },
-   "lesson": "prog-ut1-algoritmos"
+   "lesson": "prog-ut1-algoritmos",
+   "module": "0485"
   },
   {
    "id": "prog-05",
@@ -262,7 +266,8 @@
     "es": "Se empieza arriba y se acaba abajo, el flujo va de arriba abajo y de izquierda a derecha, y los cruces se evitan con conectores.",
     "en": "Se empieza arriba y se acaba abajo, el flujo va de arriba abajo y de izquierda a derecha, y los cruces se evitan con conectores."
    },
-   "lesson": "prog-ut1-algoritmos"
+   "lesson": "prog-ut1-algoritmos",
+   "module": "0485"
   },
   {
    "id": "prog-06",
@@ -297,7 +302,8 @@
     "es": "Permite probar el algoritmo en pseudocódigo antes de pasarlo a un lenguaje real.",
     "en": "Permite probar el algoritmo en pseudocódigo antes de pasarlo a un lenguaje real."
    },
-   "lesson": "prog-ut1-algoritmos"
+   "lesson": "prog-ut1-algoritmos",
+   "module": "0485"
   },
   {
    "id": "prog-07",
@@ -332,7 +338,8 @@
     "es": "La flecha es la asignación. En Python se escribe `c = a`, y la comparación de igualdad es `==`.",
     "en": "La flecha es la asignación. En Python se escribe `c = a`, y la comparación de igualdad es `==`."
    },
-   "lesson": "prog-ut1-algoritmos"
+   "lesson": "prog-ut1-algoritmos",
+   "module": "0485"
   },
   {
    "id": "prog-08",
@@ -367,7 +374,8 @@
     "es": "En el peor caso hay que mirar los n elementos. Acceder por índice es O(1) y la búsqueda binaria en una lista ordenada, O(log n).",
     "en": "En el peor caso hay que mirar los n elementos. Acceder por índice es O(1) y la búsqueda binaria en una lista ordenada, O(log n)."
    },
-   "lesson": "prog-ut1-algoritmos"
+   "lesson": "prog-ut1-algoritmos",
+   "module": "0485"
   },
   {
    "id": "prog-09",
@@ -402,7 +410,8 @@
     "es": "El bytecode no depende del procesador: se gana portabilidad a cambio de algo de velocidad.",
     "en": "El bytecode no depende del procesador: se gana portabilidad a cambio de algo de velocidad."
    },
-   "lesson": "prog-ut1-algoritmos"
+   "lesson": "prog-ut1-algoritmos",
+   "module": "0485"
   },
   {
    "id": "prog-10",
@@ -437,7 +446,8 @@
     "es": "La externa son los documentos aparte: diseño, manual de usuario y manual de mantenimiento.",
     "en": "La externa son los documentos aparte: diseño, manual de usuario y manual de mantenimiento."
    },
-   "lesson": "prog-ut1-algoritmos"
+   "lesson": "prog-ut1-algoritmos",
+   "module": "0485"
   },
   {
    "id": "prog-11",
@@ -472,7 +482,8 @@
     "es": "Del mantenimiento se puede volver al análisis para una nueva versión.",
     "en": "Del mantenimiento se puede volver al análisis para una nueva versión."
    },
-   "lesson": "prog-ut1-algoritmos"
+   "lesson": "prog-ut1-algoritmos",
+   "module": "0485"
   },
   {
    "id": "prog-12",
@@ -507,7 +518,8 @@
     "es": "Las tarjetas perforadas son de Jacquard (1802), la máquina de Turing de Alan Turing y el transistor de los laboratorios Bell (1947).",
     "en": "Las tarjetas perforadas son de Jacquard (1802), la máquina de Turing de Alan Turing y el transistor de los laboratorios Bell (1947)."
    },
-   "lesson": "prog-ut1-algoritmos"
+   "lesson": "prog-ut1-algoritmos",
+   "module": "0485"
   },
   {
    "id": "prog-13",
@@ -530,7 +542,8 @@
     "es": "La variable auxiliar guarda el valor de `a` antes de perderlo. Sin ella, `a = b; b = a` dejaría las dos a 2.",
     "en": "La variable auxiliar guarda el valor de `a` antes de perderlo. Sin ella, `a = b; b = a` dejaría las dos a 2."
    },
-   "lesson": "prog-ut1-algoritmos"
+   "lesson": "prog-ut1-algoritmos",
+   "module": "0485"
   },
   {
    "id": "prog-14",
@@ -553,7 +566,8 @@
     "es": "Tras imprimir 6, c pasa a 8, la condición 8 <= 7 es falsa y el bucle termina.",
     "en": "Tras imprimir 6, c pasa a 8, la condición 8 <= 7 es falsa y el bucle termina."
    },
-   "lesson": "prog-ut1-algoritmos"
+   "lesson": "prog-ut1-algoritmos",
+   "module": "0485"
   },
   {
    "id": "prog-15",
@@ -588,7 +602,8 @@
     "es": "7 % 2 vale 1, distinto de 0, así que se ejecuta la rama SiNo. En pseudocódigo `=` compara; en Python sería `==`.",
     "en": "7 % 2 vale 1, distinto de 0, así que se ejecuta la rama SiNo. En pseudocódigo `=` compara; en Python sería `==`."
    },
-   "lesson": "prog-ut1-algoritmos"
+   "lesson": "prog-ut1-algoritmos",
+   "module": "0485"
   },
   {
    "id": "prog-16",
@@ -611,7 +626,8 @@
     "es": "`/` siempre da float; `//` es la división entera, `%` el resto y `**` la potencia.",
     "en": "`/` siempre da float; `//` es la división entera, `%` el resto y `**` la potencia."
    },
-   "lesson": "prog-ut2-elementos"
+   "lesson": "prog-ut2-elementos",
+   "module": "0485"
   },
   {
    "id": "prog-17",
@@ -634,7 +650,8 @@
     "es": "Cortocircuito: `or` devuelve el primer valor verdadero (o el último); `and` devuelve el primer valor falso (o el último).",
     "en": "Cortocircuito: `or` devuelve el primer valor verdadero (o el último); `and` devuelve el primer valor falso (o el último)."
    },
-   "lesson": "prog-ut2-elementos"
+   "lesson": "prog-ut2-elementos",
+   "module": "0485"
   },
   {
    "id": "prog-18",
@@ -657,7 +674,8 @@
     "es": "Una cadena por 2 se repite; primero hay que convertirla con `int()`.",
     "en": "Una cadena por 2 se repite; primero hay que convertirla con `int()`."
    },
-   "lesson": "prog-ut2-elementos"
+   "lesson": "prog-ut2-elementos",
+   "module": "0485"
   },
   {
    "id": "prog-19",
@@ -680,7 +698,8 @@
     "es": "`print` separa los argumentos con un espacio (`sep`) y termina con `end`, que aquí es un guion en lugar del salto de línea.",
     "en": "`print` separa los argumentos con un espacio (`sep`) y termina con `end`, que aquí es un guion en lugar del salto de línea."
    },
-   "lesson": "prog-ut2-elementos"
+   "lesson": "prog-ut2-elementos",
+   "module": "0485"
   },
   {
    "id": "prog-20",
@@ -703,7 +722,8 @@
     "es": "Índices desde 0, negativos desde el final; en la rebanada el fin (4) no se incluye; `[::-1]` recorre al revés.",
     "en": "Índices desde 0, negativos desde el final; en la rebanada el fin (4) no se incluye; `[::-1]` recorre al revés."
    },
-   "lesson": "prog-ut2-elementos"
+   "lesson": "prog-ut2-elementos",
+   "module": "0485"
   },
   {
    "id": "prog-21",
@@ -726,7 +746,8 @@
     "es": "No se puede cambiar un carácter de una cadena. Se crea otra: `s = \"H\" + s[1:]`.",
     "en": "No se puede cambiar un carácter de una cadena. Se crea otra: `s = \"H\" + s[1:]`."
    },
-   "lesson": "prog-ut2-elementos"
+   "lesson": "prog-ut2-elementos",
+   "module": "0485"
   },
   {
    "id": "prog-22",
@@ -761,7 +782,8 @@
     "es": "Empieza por letra o `_` y solo lleva letras, dígitos y `_`. El guion se leería como una resta.",
     "en": "Empieza por letra o `_` y solo lleva letras, dígitos y `_`. El guion se leería como una resta."
    },
-   "lesson": "prog-ut2-elementos"
+   "lesson": "prog-ut2-elementos",
+   "module": "0485"
   },
   {
    "id": "prog-23",
@@ -796,7 +818,8 @@
     "es": "Clases en CamelCase, funciones y variables en snake_case, constantes en MAYÚSCULAS.",
     "en": "Clases en CamelCase, funciones y variables en snake_case, constantes en MAYÚSCULAS."
    },
-   "lesson": "prog-ut2-elementos"
+   "lesson": "prog-ut2-elementos",
+   "module": "0485"
   },
   {
    "id": "prog-24",
@@ -819,7 +842,8 @@
     "es": "Aunque la división sea exacta, `/` devuelve float (2.0). `//` entre enteros devuelve int.",
     "en": "Aunque la división sea exacta, `/` devuelve float (2.0). `//` entre enteros devuelve int."
    },
-   "lesson": "prog-ut2-elementos"
+   "lesson": "prog-ut2-elementos",
+   "module": "0485"
   },
   {
    "id": "prog-25",
@@ -842,7 +866,8 @@
     "es": "`:.2f` redondea a dos decimales. Sin la `f`, `:.2` serían dos cifras significativas (3.1).",
     "en": "`:.2f` redondea a dos decimales. Sin la `f`, `:.2` serían dos cifras significativas (3.1)."
    },
-   "lesson": "prog-ut2-elementos"
+   "lesson": "prog-ut2-elementos",
+   "module": "0485"
   },
   {
    "id": "prog-26",
@@ -865,7 +890,8 @@
     "es": "Python evalúa primero el lado derecho (la tupla `b, a`) y luego asigna: intercambio sin variable auxiliar.",
     "en": "Python evalúa primero el lado derecho (la tupla `b, a`) y luego asigna: intercambio sin variable auxiliar."
    },
-   "lesson": "prog-ut2-elementos"
+   "lesson": "prog-ut2-elementos",
+   "module": "0485"
   },
   {
    "id": "prog-27",
@@ -888,7 +914,8 @@
     "es": "`0b` es binario, `0x` hexadecimal y `_` solo separa dígitos para leerlos mejor.",
     "en": "`0b` es binario, `0x` hexadecimal y `_` solo separa dígitos para leerlos mejor."
    },
-   "lesson": "prog-ut2-elementos"
+   "lesson": "prog-ut2-elementos",
+   "module": "0485"
   },
   {
    "id": "prog-28",
@@ -923,7 +950,8 @@
     "es": "Empezó en las navidades de 1989. Python 3.0 salió en 2008.",
     "en": "Empezó en las navidades de 1989. Python 3.0 salió en 2008."
    },
-   "lesson": "prog-ut2-elementos"
+   "lesson": "prog-ut2-elementos",
+   "module": "0485"
   },
   {
    "id": "prog-29",
@@ -958,7 +986,8 @@
     "es": "El tipo va con el objeto. Además es fuerte: `\"3\" + 4` da TypeError en lugar de convertir solo.",
     "en": "El tipo va con el objeto. Además es fuerte: `\"3\" + 4` da TypeError en lugar de convertir solo."
    },
-   "lesson": "prog-ut2-elementos"
+   "lesson": "prog-ut2-elementos",
+   "module": "0485"
   },
   {
    "id": "prog-30",
@@ -993,7 +1022,8 @@
     "es": "Python se considera interpretado, pero antes compila a bytecode que ejecuta su máquina virtual. Los `.class` son de Java.",
     "en": "Python se considera interpretado, pero antes compila a bytecode que ejecuta su máquina virtual. Los `.class` son de Java."
    },
-   "lesson": "prog-ut2-elementos"
+   "lesson": "prog-ut2-elementos",
+   "module": "0485"
   },
   {
    "id": "prog-31",
@@ -1013,7 +1043,8 @@
     "es": "`10 / 3` daría 3.3333333333333335; `//` descarta los decimales. Solución: `//`.",
     "en": "`10 / 3` daría 3.3333333333333335; `//` descarta los decimales. Solución: `//`."
    },
-   "lesson": "prog-ut2-elementos"
+   "lesson": "prog-ut2-elementos",
+   "module": "0485"
   },
   {
    "id": "prog-32",
@@ -1036,7 +1067,8 @@
     "es": "Empieza en 0, avanza de 3 en 3 y se detiene antes de 10.",
     "en": "Empieza en 0, avanza de 3 en 3 y se detiene antes de 10."
    },
-   "lesson": "prog-ut3-control"
+   "lesson": "prog-ut3-control",
+   "module": "0485"
   },
   {
    "id": "prog-33",
@@ -1059,7 +1091,8 @@
     "es": "5 + 6 + 7 + 8 + 9 = 35: el 10 no se incluye.",
     "en": "5 + 6 + 7 + 8 + 9 = 35: el 10 no se incluye."
    },
-   "lesson": "prog-ut3-control"
+   "lesson": "prog-ut3-control",
+   "module": "0485"
   },
   {
    "id": "prog-34",
@@ -1082,7 +1115,8 @@
     "es": "Con divisor 3 se cumple la condición, se imprime y `break` sale del bucle: el `else` ya no se ejecuta.",
     "en": "Con divisor 3 se cumple la condición, se imprime y `break` sale del bucle: el `else` ya no se ejecuta."
    },
-   "lesson": "prog-ut3-control"
+   "lesson": "prog-ut3-control",
+   "module": "0485"
   },
   {
    "id": "prog-35",
@@ -1105,7 +1139,8 @@
     "es": "`i % 2` vale 1 (verdadero) para los impares: `continue` los salta antes de añadirlos.",
     "en": "`i % 2` vale 1 (verdadero) para los impares: `continue` los salta antes de añadirlos."
    },
-   "lesson": "prog-ut3-control"
+   "lesson": "prog-ut3-control",
+   "module": "0485"
   },
   {
    "id": "prog-36",
@@ -1128,7 +1163,8 @@
     "es": "10 → 5 → 2 → 1: tres vueltas. Al llegar a 1, la condición es falsa.",
     "en": "10 → 5 → 2 → 1: tres vueltas. Al llegar a 1, la condición es falsa."
    },
-   "lesson": "prog-ut3-control"
+   "lesson": "prog-ut3-control",
+   "module": "0485"
   },
   {
    "id": "prog-37",
@@ -1151,7 +1187,8 @@
     "es": "`5 < x < 15` equivale a `5 < x and x < 15`: 20 no es menor que 15.",
     "en": "`5 < x < 15` equivale a `5 < x and x < 15`: 20 no es menor que 15."
    },
-   "lesson": "prog-ut3-control"
+   "lesson": "prog-ut3-control",
+   "module": "0485"
   },
   {
    "id": "prog-38",
@@ -1174,7 +1211,8 @@
     "es": "Es el condicional en una línea de Python: `valor_si if condición else valor_no`.",
     "en": "Es el condicional en una línea de Python: `valor_si if condición else valor_no`."
    },
-   "lesson": "prog-ut3-control"
+   "lesson": "prog-ut3-control",
+   "module": "0485"
   },
   {
    "id": "prog-39",
@@ -1197,7 +1235,8 @@
     "es": "1900 es múltiplo de 4 y de 100, pero no de 400: no es bisiesto. `not anio % 4` es verdadero cuando el resto es 0.",
     "en": "1900 es múltiplo de 4 y de 100, pero no de 400: no es bisiesto. `not anio % 4` es verdadero cuando el resto es 0."
    },
-   "lesson": "prog-ut3-control"
+   "lesson": "prog-ut3-control",
+   "module": "0485"
   },
   {
    "id": "prog-40",
@@ -1220,7 +1259,8 @@
     "es": "`|` junta varios patrones en un `case`; `case _` recoge todo lo demás.",
     "en": "`|` junta varios patrones en un `case`; `case _` recoge todo lo demás."
    },
-   "lesson": "prog-ut3-control"
+   "lesson": "prog-ut3-control",
+   "module": "0485"
   },
   {
    "id": "prog-41",
@@ -1243,7 +1283,8 @@
     "es": "La morsa asigna y compara a la vez. Al leer \"FIN\", el bucle termina y \"extra\" ni se lee.",
     "en": "La morsa asigna y compara a la vez. Al leer \"FIN\", el bucle termina y \"extra\" ni se lee."
    },
-   "lesson": "prog-ut3-control"
+   "lesson": "prog-ut3-control",
+   "module": "0485"
   },
   {
    "id": "prog-42",
@@ -1278,7 +1319,8 @@
     "es": "Step Out (Mayús+F8) termina la función actual y vuelve a quien la llamó.",
     "en": "Step Out (Mayús+F8) termina la función actual y vuelve a quien la llamó."
    },
-   "lesson": "prog-ut3-control"
+   "lesson": "prog-ut3-control",
+   "module": "0485"
   },
   {
    "id": "prog-43",
@@ -1313,7 +1355,8 @@
     "es": "Se lee con `__doc__` o `help()`. PEP 257 pide una primera línea de resumen acabada en punto.",
     "en": "Se lee con `__doc__` o `help()`. PEP 257 pide una primera línea de resumen acabada en punto."
    },
-   "lesson": "prog-ut3-control"
+   "lesson": "prog-ut3-control",
+   "module": "0485"
   },
   {
    "id": "prog-44",
@@ -1348,7 +1391,8 @@
     "es": "Son convenciones de estilo: el código se lee muchas más veces de las que se escribe.",
     "en": "Son convenciones de estilo: el código se lee muchas más veces de las que se escribe."
    },
-   "lesson": "prog-ut3-control"
+   "lesson": "prog-ut3-control",
+   "module": "0485"
   },
   {
    "id": "prog-45",
@@ -1372,7 +1416,8 @@
     "es": "Inicializar, recorrer, filtrar, acumular y mostrar al final (fuera del bucle).",
     "en": "Inicializar, recorrer, filtrar, acumular y mostrar al final (fuera del bucle)."
    },
-   "lesson": "prog-ut3-control"
+   "lesson": "prog-ut3-control",
+   "module": "0485"
   },
   {
    "id": "prog-46",
@@ -1396,7 +1441,8 @@
     "es": "Para sumar del 1 al 5 el fin del range debe ser 6: el fin no se incluye. Con `range(1, 5)` suma 1 + 2 + 3 + 4 = 10. Corrección: `for i in range(1, 6):`.",
     "en": "Para sumar del 1 al 5 el fin del range debe ser 6: el fin no se incluye. Con `range(1, 5)` suma 1 + 2 + 3 + 4 = 10. Corrección: `for i in range(1, 6):`."
    },
-   "lesson": "prog-ut3-control"
+   "lesson": "prog-ut3-control",
+   "module": "0485"
   },
   {
    "id": "prog-47",
@@ -1419,7 +1465,8 @@
     "es": "La función imprime, pero no tiene `return`: devuelve None.",
     "en": "La función imprime, pero no tiene `return`: devuelve None."
    },
-   "lesson": "prog-ut3-funciones"
+   "lesson": "prog-ut3-funciones",
+   "module": "0485"
   },
   {
    "id": "prog-48",
@@ -1442,7 +1489,8 @@
     "es": "Python no devuelve dos valores sueltos: los empaqueta en una tupla. Se desempaqueta con `a, b = f()`.",
     "en": "Python no devuelve dos valores sueltos: los empaqueta en una tupla. Se desempaqueta con `a, b = f()`."
    },
-   "lesson": "prog-ut3-funciones"
+   "lesson": "prog-ut3-funciones",
+   "module": "0485"
   },
   {
    "id": "prog-49",
@@ -1465,7 +1513,8 @@
     "es": "`nonlocal b` modifica la `b` de `mi_func`; `global g` modifica la `g` del programa principal.",
     "en": "`nonlocal b` modifica la `b` de `mi_func`; `global g` modifica la `g` del programa principal."
    },
-   "lesson": "prog-ut3-funciones"
+   "lesson": "prog-ut3-funciones",
+   "module": "0485"
   },
   {
    "id": "prog-50",
@@ -1488,7 +1537,8 @@
     "es": "Sin `global`, la asignación crea una variable local `g` que desaparece al terminar la función.",
     "en": "Sin `global`, la asignación crea una variable local `g` que desaparece al terminar la función."
    },
-   "lesson": "prog-ut3-funciones"
+   "lesson": "prog-ut3-funciones",
+   "module": "0485"
   },
   {
    "id": "prog-51",
@@ -1511,7 +1561,8 @@
     "es": "Como la función asigna `contador`, es local en toda la función, y `+=` necesita leerla antes de tener valor. Falta `global contador`.",
     "en": "Como la función asigna `contador`, es local en toda la función, y `+=` necesita leerla antes de tener valor. Falta `global contador`."
    },
-   "lesson": "prog-ut3-funciones"
+   "lesson": "prog-ut3-funciones",
+   "module": "0485"
   },
   {
    "id": "prog-52",
@@ -1534,7 +1585,8 @@
     "es": "La función recibe una referencia al mismo objeto y lo modifica: el cambio se ve fuera. Para evitarlo se trabaja con `lista.copy()`.",
     "en": "La función recibe una referencia al mismo objeto y lo modifica: el cambio se ve fuera. Para evitarlo se trabaja con `lista.copy()`."
    },
-   "lesson": "prog-ut3-funciones"
+   "lesson": "prog-ut3-funciones",
+   "module": "0485"
   },
   {
    "id": "prog-53",
@@ -1557,7 +1609,8 @@
     "es": "Reasignar el parámetro solo cambia a qué apunta el nombre local: el objeto de fuera no se toca. Por eso los apuntes dicen que los parámetros son de entrada.",
     "en": "Reasignar el parámetro solo cambia a qué apunta el nombre local: el objeto de fuera no se toca. Por eso los apuntes dicen que los parámetros son de entrada."
    },
-   "lesson": "prog-ut3-funciones"
+   "lesson": "prog-ut3-funciones",
+   "module": "0485"
   },
   {
    "id": "prog-54",
@@ -1592,7 +1645,8 @@
     "es": "En otros lenguajes (Pascal, por ejemplo) sí se distinguen.",
     "en": "En otros lenguajes (Pascal, por ejemplo) sí se distinguen."
    },
-   "lesson": "prog-ut3-funciones"
+   "lesson": "prog-ut3-funciones",
+   "module": "0485"
   },
   {
    "id": "prog-55",
@@ -1627,7 +1681,8 @@
     "es": "Se descompone hasta que cada acción sea inmediata de programar.",
     "en": "Se descompone hasta que cada acción sea inmediata de programar."
    },
-   "lesson": "prog-ut3-funciones"
+   "lesson": "prog-ut3-funciones",
+   "module": "0485"
   },
   {
    "id": "prog-56",
@@ -1647,7 +1702,8 @@
     "es": "Sin `return`, la función devolvería None y se imprimiría None. Solución: `return`.",
     "en": "Sin `return`, la función devolvería None y se imprimiría None. Solución: `return`."
    },
-   "lesson": "prog-ut3-funciones"
+   "lesson": "prog-ut3-funciones",
+   "module": "0485"
   },
   {
    "id": "prog-57",
@@ -1682,7 +1738,8 @@
     "es": "Los objetos son las instancias concretas creadas a partir de ese molde.",
     "en": "Los objetos son las instancias concretas creadas a partir de ese molde."
    },
-   "lesson": "prog-ut4-poo"
+   "lesson": "prog-ut4-poo",
+   "module": "0485"
   },
   {
    "id": "prog-58",
@@ -1717,7 +1774,8 @@
     "es": "Dos objetos de la misma clase tienen los mismos atributos pero, normalmente, distinto estado.",
     "en": "Dos objetos de la misma clase tienen los mismos atributos pero, normalmente, distinto estado."
    },
-   "lesson": "prog-ut4-poo"
+   "lesson": "prog-ut4-poo",
+   "module": "0485"
   },
   {
    "id": "prog-59",
@@ -1752,7 +1810,8 @@
     "es": "Protegida: accesible desde la clase y sus herederas.",
     "en": "Protegida: accesible desde la clase y sus herederas."
    },
-   "lesson": "prog-ut4-poo"
+   "lesson": "prog-ut4-poo",
+   "module": "0485"
   },
   {
    "id": "prog-60",
@@ -1787,7 +1846,8 @@
     "es": "Ignorar lo que no importa es la abstracción. Proteger los datos internos es la ocultación.",
     "en": "Ignorar lo que no importa es la abstracción. Proteger los datos internos es la ocultación."
    },
-   "lesson": "prog-ut4-poo"
+   "lesson": "prog-ut4-poo",
+   "module": "0485"
   },
   {
    "id": "prog-61",
@@ -1822,7 +1882,8 @@
     "es": "Nos quedamos con lo relevante (nombre, edad, emitir sonido) e ignoramos los detalles de cada especie.",
     "en": "Nos quedamos con lo relevante (nombre, edad, emitir sonido) e ignoramos los detalles de cada especie."
    },
-   "lesson": "prog-ut4-poo"
+   "lesson": "prog-ut4-poo",
+   "module": "0485"
   },
   {
    "id": "prog-62",
@@ -1857,7 +1918,8 @@
     "es": "Las partes pertenecen de forma exclusiva y no existen sin el todo: si se borra la temporada, se borran sus capítulos.",
     "en": "Las partes pertenecen de forma exclusiva y no existen sin el todo: si se borra la temporada, se borran sus capítulos."
    },
-   "lesson": "prog-ut4-poo"
+   "lesson": "prog-ut4-poo",
+   "module": "0485"
   },
   {
    "id": "prog-63",
@@ -1892,7 +1954,8 @@
     "es": "Forma parte de otras clases, pero no de forma exclusiva.",
     "en": "Forma parte de otras clases, pero no de forma exclusiva."
    },
-   "lesson": "prog-ut4-poo"
+   "lesson": "prog-ut4-poo",
+   "module": "0485"
   },
   {
    "id": "prog-64",
@@ -1927,7 +1990,8 @@
     "es": "`class Hija(Padre1, Padre2):`. Java solo permite un padre (y varias interfaces).",
     "en": "`class Hija(Padre1, Padre2):`. Java solo permite un padre (y varias interfaces)."
    },
-   "lesson": "prog-ut4-poo"
+   "lesson": "prog-ut4-poo",
+   "module": "0485"
   },
   {
    "id": "prog-65",
@@ -1950,7 +2014,8 @@
     "es": "El segundo `def` sustituye al primero: ya solo existe `area(base, altura)`, y falta un argumento. Se simula con parámetros por defecto: `def area(base, altura=None)`.",
     "en": "El segundo `def` sustituye al primero: ya solo existe `area(base, altura)`, y falta un argumento. Se simula con parámetros por defecto: `def area(base, altura=None)`."
    },
-   "lesson": "prog-ut4-poo"
+   "lesson": "prog-ut4-poo",
+   "module": "0485"
   },
   {
    "id": "prog-66",
@@ -1985,7 +2050,8 @@
     "es": "Después llegó Smalltalk (Xerox PARC). La POO se popularizó en los 80 con C++.",
     "en": "Después llegó Smalltalk (Xerox PARC). La POO se popularizó en los 80 con C++."
    },
-   "lesson": "prog-ut4-poo"
+   "lesson": "prog-ut4-poo",
+   "module": "0485"
   },
   {
    "id": "prog-67",
@@ -2020,7 +2086,8 @@
     "es": "Es la «O» de SOLID: se añade funcionalidad heredando o componiendo, sin tocar el código que ya funciona.",
     "en": "Es la «O» de SOLID: se añade funcionalidad heredando o componiendo, sin tocar el código que ya funciona."
    },
-   "lesson": "prog-ut4-poo"
+   "lesson": "prog-ut4-poo",
+   "module": "0485"
   },
   {
    "id": "prog-68",
@@ -2043,7 +2110,8 @@
     "es": "`p2 = p1` no copia: crea un alias del mismo objeto. `p2 = Punto()` crea otro objeto distinto.",
     "en": "`p2 = p1` no copia: crea un alias del mismo objeto. `p2 = Punto()` crea otro objeto distinto."
    },
-   "lesson": "prog-ut4-poo"
+   "lesson": "prog-ut4-poo",
+   "module": "0485"
   },
   {
    "id": "prog-69",
@@ -2078,7 +2146,8 @@
     "es": "Se consigue sobrescribiendo en cada clase hija un método heredado: `animal.hablar()` ladra o maúlla según el objeto.",
     "en": "Se consigue sobrescribiendo en cada clase hija un método heredado: `animal.hablar()` ladra o maúlla según el objeto."
    },
-   "lesson": "prog-ut4-poo"
+   "lesson": "prog-ut4-poo",
+   "module": "0485"
   },
   {
    "id": "prog-70",
@@ -2101,7 +2170,8 @@
     "es": "`self` es el propio objeto `p`: `self.nombre` vale \"Ana\". Al llamar `p.saludar()`, Python pasa `p` como `self`.",
     "en": "`self` es el propio objeto `p`: `self.nombre` vale \"Ana\". Al llamar `p.saludar()`, Python pasa `p` como `self`."
    },
-   "lesson": "prog-ut5-clases"
+   "lesson": "prog-ut5-clases",
+   "module": "0485"
   },
   {
    "id": "prog-71",
@@ -2124,7 +2194,8 @@
     "es": "El doble subrayado cambia el nombre a `_Cuenta__saldo` (name mangling). Sigue siendo accesible: no es privado de verdad.",
     "en": "El doble subrayado cambia el nombre a `_Cuenta__saldo` (name mangling). Sigue siendo accesible: no es privado de verdad."
    },
-   "lesson": "prog-ut5-clases"
+   "lesson": "prog-ut5-clases",
+   "module": "0485"
   },
   {
    "id": "prog-72",
@@ -2147,7 +2218,8 @@
     "es": "La asignación `t.grados = -300` pasa por el setter, que valida y lanza la excepción. Así se protege el dato sin cambiar cómo se usa.",
     "en": "La asignación `t.grados = -300` pasa por el setter, que valida y lanza la excepción. Así se protege el dato sin cambiar cómo se usa."
    },
-   "lesson": "prog-ut5-clases"
+   "lesson": "prog-ut5-clases",
+   "module": "0485"
   },
   {
    "id": "prog-73",
@@ -2170,7 +2242,8 @@
     "es": "Sin `@radio.setter` no se puede asignar: da AttributeError y el valor no cambia.",
     "en": "Sin `@radio.setter` no se puede asignar: da AttributeError y el valor no cambia."
    },
-   "lesson": "prog-ut5-clases"
+   "lesson": "prog-ut5-clases",
+   "module": "0485"
   },
   {
    "id": "prog-74",
@@ -2193,7 +2266,8 @@
     "es": "El valor por defecto se calcula una vez, cuando se ejecuta el `def`. Cambiar `i` después no le afecta.",
     "en": "El valor por defecto se calcula una vez, cuando se ejecuta el `def`. Cambiar `i` después no le afecta."
    },
-   "lesson": "prog-ut5-clases"
+   "lesson": "prog-ut5-clases",
+   "module": "0485"
   },
   {
    "id": "prog-75",
@@ -2216,7 +2290,8 @@
     "es": "La lista por defecto se crea una sola vez y se comparte entre llamadas. Solución: `lista=None` y crearla dentro.",
     "en": "La lista por defecto se crea una sola vez y se comparte entre llamadas. Solución: `lista=None` y crearla dentro."
    },
-   "lesson": "prog-ut5-clases"
+   "lesson": "prog-ut5-clases",
+   "module": "0485"
   },
   {
    "id": "prog-76",
@@ -2239,7 +2314,8 @@
     "es": "`*args` recoge los argumentos posicionales sobrantes en una tupla.",
     "en": "`*args` recoge los argumentos posicionales sobrantes en una tupla."
    },
-   "lesson": "prog-ut5-clases"
+   "lesson": "prog-ut5-clases",
+   "module": "0485"
   },
   {
    "id": "prog-77",
@@ -2262,7 +2338,8 @@
     "es": "`**kwargs` recoge los argumentos pasados por nombre en un diccionario. Va siempre al final.",
     "en": "`**kwargs` recoge los argumentos pasados por nombre en un diccionario. Va siempre al final."
    },
-   "lesson": "prog-ut5-clases"
+   "lesson": "prog-ut5-clases",
+   "module": "0485"
   },
   {
    "id": "prog-78",
@@ -2285,7 +2362,8 @@
     "es": "Pasados por nombre, el orden de la llamada no importa: a = 10 y b = 2.",
     "en": "Pasados por nombre, el orden de la llamada no importa: a = 10 y b = 2."
    },
-   "lesson": "prog-ut5-clases"
+   "lesson": "prog-ut5-clases",
+   "module": "0485"
   },
   {
    "id": "prog-79",
@@ -2308,7 +2386,8 @@
     "es": "Python no comprueba los tipos al ejecutar: las anotaciones documentan y ayudan al IDE o a herramientas como mypy.",
     "en": "Python no comprueba los tipos al ejecutar: las anotaciones documentan y ayudan al IDE o a herramientas como mypy."
    },
-   "lesson": "prog-ut5-clases"
+   "lesson": "prog-ut5-clases",
+   "module": "0485"
   },
   {
    "id": "prog-80",
@@ -2331,7 +2410,8 @@
     "es": "La lambda recuerda el `n` con el que se creó. `suma5` es una función que suma 5.",
     "en": "La lambda recuerda el `n` con el que se creó. `suma5` es una función que suma 5."
    },
-   "lesson": "prog-ut5-clases"
+   "lesson": "prog-ut5-clases",
+   "module": "0485"
   },
   {
    "id": "prog-81",
@@ -2354,7 +2434,8 @@
     "es": "`print` llama a `__str__`. Sin él, se vería algo como `<__main__.Punto object at 0x…>`.",
     "en": "`print` llama a `__str__`. Sin él, se vería algo como `<__main__.Punto object at 0x…>`."
    },
-   "lesson": "prog-ut5-clases"
+   "lesson": "prog-ut5-clases",
+   "module": "0485"
   },
   {
    "id": "prog-82",
@@ -2377,7 +2458,8 @@
     "es": "`a.IVA = 10` crea un atributo de instancia solo en `a`, que oculta el de clase. Para cambiarlo para todos: `Articulo.IVA = 10`.",
     "en": "`a.IVA = 10` crea un atributo de instancia solo en `a`, que oculta el de clase. Para cambiarlo para todos: `Articulo.IVA = 10`."
    },
-   "lesson": "prog-ut5-clases"
+   "lesson": "prog-ut5-clases",
+   "module": "0485"
   },
   {
    "id": "prog-83",
@@ -2412,7 +2494,8 @@
     "es": "Equivale al `this` de Java. Python lo pasa automáticamente: `p.saludar()` es `Persona.saludar(p)`.",
     "en": "Equivale al `this` de Java. Python lo pasa automáticamente: `p.saludar()` es `Persona.saludar(p)`."
    },
-   "lesson": "prog-ut5-clases"
+   "lesson": "prog-ut5-clases",
+   "module": "0485"
   },
   {
    "id": "prog-84",
@@ -2432,7 +2515,8 @@
     "es": "El primer parámetro de todo método de instancia es la referencia al objeto; por convenio se llama `self`. Solución: `self`.",
     "en": "El primer parámetro de todo método de instancia es la referencia al objeto; por convenio se llama `self`. Solución: `self`."
    },
-   "lesson": "prog-ut5-clases"
+   "lesson": "prog-ut5-clases",
+   "module": "0485"
   },
   {
    "id": "prog-85",
@@ -2455,7 +2539,8 @@
     "es": "`__name__` vale \"__main__\" en el fichero que se ejecuta; si el módulo se importa, vale el nombre del módulo.",
     "en": "`__name__` vale \"__main__\" en el fichero que se ejecuta; si el módulo se importa, vale el nombre del módulo."
    },
-   "lesson": "prog-ut5-modulos-cadenas"
+   "lesson": "prog-ut5-modulos-cadenas",
+   "module": "0485"
   },
   {
    "id": "prog-86",
@@ -2478,7 +2563,8 @@
     "es": "`ceil` redondea hacia arriba, `floor` hacia abajo y `sqrt` devuelve siempre un float.",
     "en": "`ceil` redondea hacia arriba, `floor` hacia abajo y `sqrt` devuelve siempre un float."
    },
-   "lesson": "prog-ut5-modulos-cadenas"
+   "lesson": "prog-ut5-modulos-cadenas",
+   "module": "0485"
   },
   {
    "id": "prog-87",
@@ -2501,7 +2587,8 @@
     "es": "Cada método devuelve una cadena nueva y se encadenan: se quitan los espacios, se pasa a minúsculas y se reemplaza.",
     "en": "Cada método devuelve una cadena nueva y se encadenan: se quitan los espacios, se pasa a minúsculas y se reemplaza."
    },
-   "lesson": "prog-ut5-modulos-cadenas"
+   "lesson": "prog-ut5-modulos-cadenas",
+   "module": "0485"
   },
   {
    "id": "prog-88",
@@ -2524,7 +2611,8 @@
     "es": "`find` da la posición de la primera coincidencia o -1 si no la encuentra.",
     "en": "`find` da la posición de la primera coincidencia o -1 si no la encuentra."
    },
-   "lesson": "prog-ut5-modulos-cadenas"
+   "lesson": "prog-ut5-modulos-cadenas",
+   "module": "0485"
   },
   {
    "id": "prog-89",
@@ -2547,7 +2635,8 @@
     "es": "`split()` sin argumento separa por cualquier cantidad de espacios. `split(\" \")` daría una cadena vacía entre los dos espacios.",
     "en": "`split()` sin argumento separa por cualquier cantidad de espacios. `split(\" \")` daría una cadena vacía entre los dos espacios."
    },
-   "lesson": "prog-ut5-modulos-cadenas"
+   "lesson": "prog-ut5-modulos-cadenas",
+   "module": "0485"
   },
   {
    "id": "prog-90",
@@ -2570,7 +2659,8 @@
     "es": "`\\d+` es uno o más dígitos seguidos. `findall` devuelve una lista de cadenas.",
     "en": "`\\d+` es uno o más dígitos seguidos. `findall` devuelve una lista de cadenas."
    },
-   "lesson": "prog-ut5-modulos-cadenas"
+   "lesson": "prog-ut5-modulos-cadenas",
+   "module": "0485"
   },
   {
    "id": "prog-91",
@@ -2593,7 +2683,8 @@
     "es": "`match` solo mira el principio (una «a»); `search` encuentra el 1 en cualquier posición.",
     "en": "`match` solo mira el principio (una «a»); `search` encuentra el 1 en cualquier posición."
    },
-   "lesson": "prog-ut5-modulos-cadenas"
+   "lesson": "prog-ut5-modulos-cadenas",
+   "module": "0485"
   },
   {
    "id": "prog-92",
@@ -2616,7 +2707,8 @@
     "es": "Ocho dígitos exactos y una mayúscula. El segundo solo tiene siete dígitos.",
     "en": "Ocho dígitos exactos y una mayúscula. El segundo solo tiene siete dígitos."
    },
-   "lesson": "prog-ut5-modulos-cadenas"
+   "lesson": "prog-ut5-modulos-cadenas",
+   "module": "0485"
   },
   {
    "id": "prog-93",
@@ -2651,7 +2743,8 @@
     "es": "Un módulo es un fichero `.py`; un paquete, una carpeta de módulos.",
     "en": "Un módulo es un fichero `.py`; un paquete, una carpeta de módulos."
    },
-   "lesson": "prog-ut5-modulos-cadenas"
+   "lesson": "prog-ut5-modulos-cadenas",
+   "module": "0485"
   },
   {
    "id": "prog-94",
@@ -2686,7 +2779,8 @@
     "es": "Con `import math` sería `math.sqrt(16)`.",
     "en": "Con `import math` sería `math.sqrt(16)`."
    },
-   "lesson": "prog-ut5-modulos-cadenas"
+   "lesson": "prog-ut5-modulos-cadenas",
+   "module": "0485"
   },
   {
    "id": "prog-95",
@@ -2709,7 +2803,8 @@
     "es": "`sort()` ordena la propia lista y devuelve None. `sorted(lista)` devolvería una lista nueva.",
     "en": "`sort()` ordena la propia lista y devuelve None. `sorted(lista)` devolvería una lista nueva."
    },
-   "lesson": "prog-ut6-colecciones"
+   "lesson": "prog-ut6-colecciones",
+   "module": "0485"
   },
   {
    "id": "prog-96",
@@ -2732,7 +2827,8 @@
     "es": "Aquí coinciden: las mayúsculas van antes que las minúsculas y «A» ya es la primera. Con `key=str.lower` se compara sin distinguir mayúsculas.",
     "en": "Aquí coinciden: las mayúsculas van antes que las minúsculas y «A» ya es la primera. Con `key=str.lower` se compara sin distinguir mayúsculas."
    },
-   "lesson": "prog-ut6-colecciones"
+   "lesson": "prog-ut6-colecciones",
+   "module": "0485"
   },
   {
    "id": "prog-97",
@@ -2755,7 +2851,8 @@
     "es": "`list()` recorre la cadena letra a letra; `[\"abc\"]` es una lista con un solo elemento.",
     "en": "`list()` recorre la cadena letra a letra; `[\"abc\"]` es una lista con un solo elemento."
    },
-   "lesson": "prog-ut6-colecciones"
+   "lesson": "prog-ut6-colecciones",
+   "module": "0485"
   },
   {
    "id": "prog-98",
@@ -2778,7 +2875,8 @@
     "es": "`remove(2)` quita la primera aparición; `pop()` quita y devuelve el último (el otro 2).",
     "en": "`remove(2)` quita la primera aparición; `pop()` quita y devuelve el último (el otro 2)."
    },
-   "lesson": "prog-ut6-colecciones"
+   "lesson": "prog-ut6-colecciones",
+   "module": "0485"
   },
   {
    "id": "prog-99",
@@ -2801,7 +2899,8 @@
     "es": "`b` es la misma lista que `a` (alias); `c` es una copia independiente.",
     "en": "`b` es la misma lista que `a` (alias); `c` es una copia independiente."
    },
-   "lesson": "prog-ut6-colecciones"
+   "lesson": "prog-ut6-colecciones",
+   "module": "0485"
   },
   {
    "id": "prog-100",
@@ -2824,7 +2923,8 @@
     "es": "Las tuplas son inmutables: no se puede cambiar un elemento.",
     "en": "Las tuplas son inmutables: no se puede cambiar un elemento."
    },
-   "lesson": "prog-ut6-colecciones"
+   "lesson": "prog-ut6-colecciones",
+   "module": "0485"
   },
   {
    "id": "prog-101",
@@ -2847,7 +2947,8 @@
     "es": "`get` devuelve el valor por defecto si la clave no existe; los corchetes lanzan KeyError.",
     "en": "`get` devuelve el valor por defecto si la clave no existe; los corchetes lanzan KeyError."
    },
-   "lesson": "prog-ut6-colecciones"
+   "lesson": "prog-ut6-colecciones",
+   "module": "0485"
   },
   {
    "id": "prog-102",
@@ -2870,7 +2971,8 @@
     "es": "Los diccionarios conservan el orden de inserción (desde Python 3.7): b, a, n.",
     "en": "Los diccionarios conservan el orden de inserción (desde Python 3.7): b, a, n."
    },
-   "lesson": "prog-ut6-colecciones"
+   "lesson": "prog-ut6-colecciones",
+   "module": "0485"
   },
   {
    "id": "prog-103",
@@ -2893,7 +2995,8 @@
     "es": "Unión, intersección, diferencia (en a y no en b) y diferencia simétrica (en uno solo de los dos).",
     "en": "Unión, intersección, diferencia (en a y no en b) y diferencia simétrica (en uno solo de los dos)."
    },
-   "lesson": "prog-ut6-colecciones"
+   "lesson": "prog-ut6-colecciones",
+   "module": "0485"
   },
   {
    "id": "prog-104",
@@ -2916,7 +3019,8 @@
     "es": "`{}` es un diccionario vacío; el conjunto vacío es `set()`. Los repetidos se eliminan.",
     "en": "`{}` es un diccionario vacío; el conjunto vacío es `set()`. Los repetidos se eliminan."
    },
-   "lesson": "prog-ut6-colecciones"
+   "lesson": "prog-ut6-colecciones",
+   "module": "0485"
   },
   {
    "id": "prog-105",
@@ -2939,7 +3043,8 @@
     "es": "Se filtran los pares (0, 2, 4) y se eleva cada uno al cuadrado.",
     "en": "Se filtran los pares (0, 2, 4) y se eleva cada uno al cuadrado."
    },
-   "lesson": "prog-ut6-colecciones"
+   "lesson": "prog-ut6-colecciones",
+   "module": "0485"
   },
   {
    "id": "prog-106",
@@ -2962,7 +3067,8 @@
     "es": "Comprensión de diccionario: `clave: valor for …`.",
     "en": "Comprensión de diccionario: `clave: valor for …`."
    },
-   "lesson": "prog-ut6-colecciones"
+   "lesson": "prog-ut6-colecciones",
+   "module": "0485"
   },
   {
    "id": "prog-107",
@@ -2985,7 +3091,8 @@
     "es": "0, 1, 1, 2, 3, 5, 8, 13: fibo(7) es 13. El caso base (n <= 1) detiene la recursión.",
     "en": "0, 1, 1, 2, 3, 5, 8, 13: fibo(7) es 13. El caso base (n <= 1) detiene la recursión."
    },
-   "lesson": "prog-ut6-colecciones"
+   "lesson": "prog-ut6-colecciones",
+   "module": "0485"
   },
   {
    "id": "prog-108",
@@ -3008,7 +3115,8 @@
     "es": "`matriz[1]` es la segunda fila y `[0]`, su primer elemento. Hay 2 filas de 3 columnas.",
     "en": "`matriz[1]` es la segunda fila y `[0]`, su primer elemento. Hay 2 filas de 3 columnas."
    },
-   "lesson": "prog-ut6-colecciones"
+   "lesson": "prog-ut6-colecciones",
+   "module": "0485"
   },
   {
    "id": "prog-109",
@@ -3031,7 +3139,8 @@
     "es": "`enumerate` da el índice y el elemento; los apuntes lo prefieren a `for i in range(len(lista))`.",
     "en": "`enumerate` da el índice y el elemento; los apuntes lo prefieren a `for i in range(len(lista))`."
    },
-   "lesson": "prog-ut6-colecciones"
+   "lesson": "prog-ut6-colecciones",
+   "module": "0485"
   },
   {
    "id": "prog-110",
@@ -3055,7 +3164,8 @@
     "es": "Primero el caso base, después la llamada recursiva que se acerca a él.",
     "en": "Primero el caso base, después la llamada recursiva que se acerca a él."
    },
-   "lesson": "prog-ut6-colecciones"
+   "lesson": "prog-ut6-colecciones",
+   "module": "0485"
   },
   {
    "id": "prog-111",
@@ -3078,7 +3188,8 @@
     "es": "`super().__init__` inicializa la parte de Persona y `super().__str__()` reutiliza el método del padre en la sobrescritura.",
     "en": "`super().__init__` inicializa la parte de Persona y `super().__str__()` reutiliza el método del padre en la sobrescritura."
    },
-   "lesson": "prog-ut6-herencia-excepciones"
+   "lesson": "prog-ut6-herencia-excepciones",
+   "module": "0485"
   },
   {
    "id": "prog-112",
@@ -3101,7 +3212,8 @@
     "es": "Polimorfismo: la misma llamada ejecuta el método de la clase real de cada objeto.",
     "en": "Polimorfismo: la misma llamada ejecuta el método de la clase real de cada objeto."
    },
-   "lesson": "prog-ut6-herencia-excepciones"
+   "lesson": "prog-ut6-herencia-excepciones",
+   "module": "0485"
   },
   {
    "id": "prog-113",
@@ -3124,7 +3236,8 @@
     "es": "Un Alumno es también una Persona (y un object), pero su tipo exacto es Alumno.",
     "en": "Un Alumno es también una Persona (y un object), pero su tipo exacto es Alumno."
    },
-   "lesson": "prog-ut6-herencia-excepciones"
+   "lesson": "prog-ut6-herencia-excepciones",
+   "module": "0485"
   },
   {
    "id": "prog-114",
@@ -3147,7 +3260,8 @@
     "es": "El método de clase es un constructor alternativo (`cls(...)` crea el objeto). El estático no necesita objeto ni clase.",
     "en": "El método de clase es un constructor alternativo (`cls(...)` crea el objeto). El estático no necesita objeto ni clase."
    },
-   "lesson": "prog-ut6-herencia-excepciones"
+   "lesson": "prog-ut6-herencia-excepciones",
+   "module": "0485"
   },
   {
    "id": "prog-115",
@@ -3170,7 +3284,8 @@
     "es": "Una clase con métodos abstractos sin implementar no se puede instanciar: sirve de molde para las hijas.",
     "en": "Una clase con métodos abstractos sin implementar no se puede instanciar: sirve de molde para las hijas."
    },
-   "lesson": "prog-ut6-herencia-excepciones"
+   "lesson": "prog-ut6-herencia-excepciones",
+   "module": "0485"
   },
   {
    "id": "prog-116",
@@ -3193,7 +3308,8 @@
     "es": "El operador `+` llama a `__add__`: sobrecarga de operadores con métodos mágicos.",
     "en": "El operador `+` llama a `__add__`: sobrecarga de operadores con métodos mágicos."
    },
-   "lesson": "prog-ut6-herencia-excepciones"
+   "lesson": "prog-ut6-herencia-excepciones",
+   "module": "0485"
   },
   {
    "id": "prog-117",
@@ -3216,7 +3332,8 @@
     "es": "Cada `yield` entrega un valor y pausa la función hasta que se pide el siguiente.",
     "en": "Cada `yield` entrega un valor y pausa la función hasta que se pide el siguiente."
    },
-   "lesson": "prog-ut6-herencia-excepciones"
+   "lesson": "prog-ut6-herencia-excepciones",
+   "module": "0485"
   },
   {
    "id": "prog-118",
@@ -3239,7 +3356,8 @@
     "es": "`else` solo se ejecuta si no hubo excepción; `finally`, siempre.",
     "en": "`else` solo se ejecuta si no hubo excepción; `finally`, siempre."
    },
-   "lesson": "prog-ut6-herencia-excepciones"
+   "lesson": "prog-ut6-herencia-excepciones",
+   "module": "0485"
   },
   {
    "id": "prog-119",
@@ -3262,7 +3380,8 @@
     "es": "El primer `except` compatible gana y captura también a las hijas. Las excepciones más concretas deben ir primero.",
     "en": "El primer `except` compatible gana y captura también a las hijas. Las excepciones más concretas deben ir primero."
    },
-   "lesson": "prog-ut6-herencia-excepciones"
+   "lesson": "prog-ut6-herencia-excepciones",
+   "module": "0485"
   },
   {
    "id": "prog-120",
@@ -3285,7 +3404,8 @@
     "es": "Una excepción propia hereda de Exception. `print(e)` muestra su mensaje.",
     "en": "Una excepción propia hereda de Exception. `print(e)` muestra su mensaje."
    },
-   "lesson": "prog-ut6-herencia-excepciones"
+   "lesson": "prog-ut6-herencia-excepciones",
+   "module": "0485"
   },
   {
    "id": "prog-121",
@@ -3308,7 +3428,8 @@
     "es": "Pila LIFO: sale el último en entrar. Cola FIFO: sale el primero. `deque.popleft()` es eficiente; `lista.pop(0)` no.",
     "en": "Pila LIFO: sale el último en entrar. Cola FIFO: sale el primero. `deque.popleft()` es eficiente; `lista.pop(0)` no."
    },
-   "lesson": "prog-ut6-herencia-excepciones"
+   "lesson": "prog-ut6-herencia-excepciones",
+   "module": "0485"
   },
   {
    "id": "prog-122",
@@ -3331,7 +3452,8 @@
     "es": "Con herencia múltiple, Python busca de izquierda a derecha (MRO: D, B, C, A, object).",
     "en": "Con herencia múltiple, Python busca de izquierda a derecha (MRO: D, B, C, A, object)."
    },
-   "lesson": "prog-ut6-herencia-excepciones"
+   "lesson": "prog-ut6-herencia-excepciones",
+   "module": "0485"
   },
   {
    "id": "prog-123",
@@ -3366,7 +3488,8 @@
     "es": "Las pruebas son métodos que empiezan por `test_` en una clase que hereda de `unittest.TestCase`.",
     "en": "Las pruebas son métodos que empiezan por `test_` en una clase que hereda de `unittest.TestCase`."
    },
-   "lesson": "prog-ut6-herencia-excepciones"
+   "lesson": "prog-ut6-herencia-excepciones",
+   "module": "0485"
   },
   {
    "id": "prog-124",
@@ -3401,7 +3524,8 @@
     "es": "Python no lanza ningún error al ejecutar si una hija lo sobrescribe: es una indicación para los analizadores de código.",
     "en": "Python no lanza ningún error al ejecutar si una hija lo sobrescribe: es una indicación para los analizadores de código."
    },
-   "lesson": "prog-ut6-herencia-excepciones"
+   "lesson": "prog-ut6-herencia-excepciones",
+   "module": "0485"
   },
   {
    "id": "prog-125",
@@ -3429,7 +3553,8 @@
     "es": "El inicializador de Alumno no llama al del padre, así que el objeto no tiene `nombre` (AttributeError). Hay que empezar por `super().__init__(nombre)`. Corrección: `super().__init__(nombre); self.nia = nia`.",
     "en": "El inicializador de Alumno no llama al del padre, así que el objeto no tiene `nombre` (AttributeError). Hay que empezar por `super().__init__(nombre)`. Corrección: `super().__init__(nombre); self.nia = nia`."
    },
-   "lesson": "prog-ut6-herencia-excepciones"
+   "lesson": "prog-ut6-herencia-excepciones",
+   "module": "0485"
   },
   {
    "id": "prog-126",
@@ -3452,7 +3577,8 @@
     "es": "10 + 11 + … + 20 = 165. Para incluir el 20, el range acaba en 21.",
     "en": "10 + 11 + … + 20 = 165. Para incluir el 20, el range acaba en 21."
    },
-   "lesson": "prog-ut7-proyecto"
+   "lesson": "prog-ut7-proyecto",
+   "module": "0485"
   },
   {
    "id": "prog-127",
@@ -3475,7 +3601,8 @@
     "es": "5 × 6 × 7 × 8 × 9 × 10 = 151200.",
     "en": "5 × 6 × 7 × 8 × 9 × 10 = 151200."
    },
-   "lesson": "prog-ut7-proyecto"
+   "lesson": "prog-ut7-proyecto",
+   "module": "0485"
   },
   {
    "id": "prog-128",
@@ -3498,7 +3625,8 @@
     "es": "78 // 10 = 7 (redondeo hacia abajo) y 7! = 5040.",
     "en": "78 // 10 = 7 (redondeo hacia abajo) y 7! = 5040."
    },
-   "lesson": "prog-ut7-proyecto"
+   "lesson": "prog-ut7-proyecto",
+   "module": "0485"
   },
   {
    "id": "prog-129",
@@ -3521,7 +3649,8 @@
     "es": "97 es primo; 91 = 7 × 13 no lo es.",
     "en": "97 es primo; 91 = 7 × 13 no lo es."
    },
-   "lesson": "prog-ut7-proyecto"
+   "lesson": "prog-ut7-proyecto",
+   "module": "0485"
   },
   {
    "id": "prog-130",
@@ -3544,7 +3673,8 @@
     "es": "7! = 5040 y 5! = 120: la suma es 5160.",
     "en": "7! = 5040 y 5! = 120: la suma es 5160."
    },
-   "lesson": "prog-ut7-proyecto"
+   "lesson": "prog-ut7-proyecto",
+   "module": "0485"
   },
   {
    "id": "prog-131",
@@ -3579,7 +3709,8 @@
     "es": "Para enteros se usa `randint(a, b)`, que sí incluye los dos extremos.",
     "en": "Para enteros se usa `randint(a, b)`, que sí incluye los dos extremos."
    },
-   "lesson": "prog-ut7-proyecto"
+   "lesson": "prog-ut7-proyecto",
+   "module": "0485"
   },
   {
    "id": "prog-132",
@@ -3614,7 +3745,8 @@
     "es": "Cualquier fallo lleva a Perder; acertar los cinco lleva a Ganar.",
     "en": "Cualquier fallo lleva a Perder; acertar los cinco lleva a Ganar."
    },
-   "lesson": "prog-ut7-proyecto"
+   "lesson": "prog-ut7-proyecto",
+   "module": "0485"
   },
   {
    "id": "prog-133",
@@ -3649,7 +3781,8 @@
     "es": "Sirve para elegir el enunciado de cada nivel de entre varios.",
     "en": "Sirve para elegir el enunciado de cada nivel de entre varios."
    },
-   "lesson": "prog-ut7-proyecto"
+   "lesson": "prog-ut7-proyecto",
+   "module": "0485"
   },
   {
    "id": "prog-134",
@@ -3669,7 +3802,8 @@
     "es": "El fin de range no se incluye: para llegar al 20 hay que poner 21. Solución: `21`.",
     "en": "El fin de range no se incluye: para llegar al 20 hay que poner 21. Solución: `21`."
    },
-   "lesson": "prog-ut7-proyecto"
+   "lesson": "prog-ut7-proyecto",
+   "module": "0485"
   },
   {
    "id": "prog-135",
@@ -3692,7 +3826,8 @@
     "es": "`readlines()` devuelve una lista con cada línea, incluido su salto de línea.",
     "en": "`readlines()` devuelve una lista con cada línea, incluido su salto de línea."
    },
-   "lesson": "prog-ut8-ficheros-bd"
+   "lesson": "prog-ut8-ficheros-bd",
+   "module": "0485"
   },
   {
    "id": "prog-136",
@@ -3715,7 +3850,8 @@
     "es": "`a` añade (queda «AB»), pero el último `w` vacía el fichero antes de escribir «C».",
     "en": "`a` añade (queda «AB»), pero el último `w` vacía el fichero antes de escribir «C»."
    },
-   "lesson": "prog-ut8-ficheros-bd"
+   "lesson": "prog-ut8-ficheros-bd",
+   "module": "0485"
   },
   {
    "id": "prog-137",
@@ -3738,7 +3874,8 @@
     "es": "`write` devuelve cuántos caracteres escribió: 4 letras y el salto de línea.",
     "en": "`write` devuelve cuántos caracteres escribió: 4 letras y el salto de línea."
    },
-   "lesson": "prog-ut8-ficheros-bd"
+   "lesson": "prog-ut8-ficheros-bd",
+   "module": "0485"
   },
   {
    "id": "prog-138",
@@ -3761,7 +3898,8 @@
     "es": "Tras leer todo, el puntero está al final: la siguiente lectura devuelve una cadena vacía.",
     "en": "Tras leer todo, el puntero está al final: la siguiente lectura devuelve una cadena vacía."
    },
-   "lesson": "prog-ut8-ficheros-bd"
+   "lesson": "prog-ut8-ficheros-bd",
+   "module": "0485"
   },
   {
    "id": "prog-139",
@@ -3784,7 +3922,8 @@
     "es": "El modo `x` solo crea ficheros nuevos: si ya existe, falla. Evita machacar datos por accidente.",
     "en": "El modo `x` solo crea ficheros nuevos: si ya existe, falla. Evita machacar datos por accidente."
    },
-   "lesson": "prog-ut8-ficheros-bd"
+   "lesson": "prog-ut8-ficheros-bd",
+   "module": "0485"
   },
   {
    "id": "prog-140",
@@ -3807,7 +3946,8 @@
     "es": "El modo `r` (por defecto) exige que el fichero exista. `with` no captura la excepción.",
     "en": "El modo `r` (por defecto) exige que el fichero exista. `with` no captura la excepción."
    },
-   "lesson": "prog-ut8-ficheros-bd"
+   "lesson": "prog-ut8-ficheros-bd",
+   "module": "0485"
   },
   {
    "id": "prog-141",
@@ -3830,7 +3970,8 @@
     "es": "`for linea in f` recorre el fichero línea a línea. Al salir del `with`, el fichero queda cerrado.",
     "en": "`for linea in f` recorre el fichero línea a línea. Al salir del `with`, el fichero queda cerrado."
    },
-   "lesson": "prog-ut8-ficheros-bd"
+   "lesson": "prog-ut8-ficheros-bd",
+   "module": "0485"
   },
   {
    "id": "prog-142",
@@ -3853,7 +3994,8 @@
     "es": "En binario se leen bytes, no cadenas. 65 y 66 son los códigos de «A» y «B».",
     "en": "En binario se leen bytes, no cadenas. 65 y 66 son los códigos de «A» y «B»."
    },
-   "lesson": "prog-ut8-ficheros-bd"
+   "lesson": "prog-ut8-ficheros-bd",
+   "module": "0485"
   },
   {
    "id": "prog-143",
@@ -3876,7 +4018,8 @@
     "es": "Deserializar crea un clon: tiene el mismo contenido (`==`) pero es otro objeto (`is` es False).",
     "en": "Deserializar crea un clon: tiene el mismo contenido (`==`) pero es otro objeto (`is` es False)."
    },
-   "lesson": "prog-ut8-ficheros-bd"
+   "lesson": "prog-ut8-ficheros-bd",
+   "module": "0485"
   },
   {
    "id": "prog-144",
@@ -3899,7 +4042,8 @@
     "es": "`fetchone()` devuelve una fila como tupla. Los `?` reciben los valores de forma segura.",
     "en": "`fetchone()` devuelve una fila como tupla. Los `?` reciben los valores de forma segura."
    },
-   "lesson": "prog-ut8-ficheros-bd"
+   "lesson": "prog-ut8-ficheros-bd",
+   "module": "0485"
   },
   {
    "id": "prog-145",
@@ -3922,7 +4066,8 @@
     "es": "Con parámetros, la entrada se trata como texto y no coincide con nadie. Concatenada, la condición `OR '1'='1'` es siempre verdadera: inyección SQL.",
     "en": "Con parámetros, la entrada se trata como texto y no coincide con nadie. Concatenada, la condición `OR '1'='1'` es siempre verdadera: inyección SQL."
    },
-   "lesson": "prog-ut8-ficheros-bd"
+   "lesson": "prog-ut8-ficheros-bd",
+   "module": "0485"
   },
   {
    "id": "prog-146",
@@ -3945,7 +4090,8 @@
     "es": "`pathlib` trata las rutas como objetos y usa el separador correcto de cada sistema.",
     "en": "`pathlib` trata las rutas como objetos y usa el separador correcto de cada sistema."
    },
-   "lesson": "prog-ut8-ficheros-bd"
+   "lesson": "prog-ut8-ficheros-bd",
+   "module": "0485"
   },
   {
    "id": "prog-147",
@@ -3980,7 +4126,8 @@
     "es": "En el acceso directo se va a cualquier posición con `seek`.",
     "en": "En el acceso directo se va a cualquier posición con `seek`."
    },
-   "lesson": "prog-ut8-ficheros-bd"
+   "lesson": "prog-ut8-ficheros-bd",
+   "module": "0485"
   },
   {
    "id": "prog-148",
@@ -4015,7 +4162,8 @@
     "es": "SAX gasta poca memoria pero no permite volver atrás; DOM permite ir a cualquier nodo.",
     "en": "SAX gasta poca memoria pero no permite volver atrás; DOM permite ir a cualquier nodo."
    },
-   "lesson": "prog-ut8-ficheros-bd"
+   "lesson": "prog-ut8-ficheros-bd",
+   "module": "0485"
   },
   {
    "id": "prog-149",
@@ -4050,7 +4198,8 @@
     "es": "`a` añade al final, `r` solo lee y `x` falla si el fichero ya existe.",
     "en": "`a` añade al final, `r` solo lee y `x` falla si el fichero ya existe."
    },
-   "lesson": "prog-ut8-ficheros-bd"
+   "lesson": "prog-ut8-ficheros-bd",
+   "module": "0485"
   },
   {
    "id": "prog-150",
@@ -4085,7 +4234,8 @@
     "es": "Por eso sqlite3, mysql.connector o psycopg2 se usan casi igual: conexión, cursor, execute, fetch y commit.",
     "en": "Por eso sqlite3, mysql.connector o psycopg2 se usan casi igual: conexión, cursor, execute, fetch y commit."
    },
-   "lesson": "prog-ut8-ficheros-bd"
+   "lesson": "prog-ut8-ficheros-bd",
+   "module": "0485"
   },
   {
    "id": "prog-151",
@@ -4120,7 +4270,8 @@
     "es": "El programa espera en un bucle de eventos y reacciona llamando a las funciones asociadas.",
     "en": "El programa espera en un bucle de eventos y reacciona llamando a las funciones asociadas."
    },
-   "lesson": "prog-ut9-interfaces"
+   "lesson": "prog-ut9-interfaces",
+   "module": "0485"
   },
   {
    "id": "prog-152",
@@ -4155,7 +4306,8 @@
     "es": "La fuente es el control cuyo estado cambia; el objeto evento lleva la información.",
     "en": "La fuente es el control cuyo estado cambia; el objeto evento lleva la información."
    },
-   "lesson": "prog-ut9-interfaces"
+   "lesson": "prog-ut9-interfaces",
+   "module": "0485"
   },
   {
    "id": "prog-153",
@@ -4190,7 +4342,8 @@
     "es": "Qt ofrece más controles, señales y slots y Qt Designer, a cambio de más curva de aprendizaje.",
     "en": "Qt ofrece más controles, señales y slots y Qt Designer, a cambio de más curva de aprendizaje."
    },
-   "lesson": "prog-ut9-interfaces"
+   "lesson": "prog-ut9-interfaces",
+   "module": "0485"
   },
   {
    "id": "prog-154",
@@ -4225,7 +4378,8 @@
     "es": "Las dos envuelven la misma biblioteca Qt con una API casi idéntica.",
     "en": "Las dos envuelven la misma biblioteca Qt con una API casi idéntica."
    },
-   "lesson": "prog-ut9-interfaces"
+   "lesson": "prog-ut9-interfaces",
+   "module": "0485"
   },
   {
    "id": "prog-155",
@@ -4260,7 +4414,8 @@
     "es": "Es el mecanismo de señales y slots de Qt: `señal.connect(función)`. Sin paréntesis, porque se pasa la función, no su resultado.",
     "en": "Es el mecanismo de señales y slots de Qt: `señal.connect(función)`. Sin paréntesis, porque se pasa la función, no su resultado."
    },
-   "lesson": "prog-ut9-interfaces"
+   "lesson": "prog-ut9-interfaces",
+   "module": "0485"
   },
   {
    "id": "prog-156",
@@ -4295,7 +4450,8 @@
     "es": "El bucle espera eventos y los reparte a los controles hasta que se cierra la aplicación.",
     "en": "El bucle espera eventos y los reparte a los controles hasta que se cierra la aplicación."
    },
-   "lesson": "prog-ut9-interfaces"
+   "lesson": "prog-ut9-interfaces",
+   "module": "0485"
   },
   {
    "id": "prog-157",
@@ -4330,7 +4486,8 @@
     "es": "`addWidget(widget, fila, columna)`, empezando en 0. Se le pueden añadir cuántas filas y columnas ocupa.",
     "en": "`addWidget(widget, fila, columna)`, empezando en 0. Se le pueden añadir cuántas filas y columnas ocupa."
    },
-   "lesson": "prog-ut9-interfaces"
+   "lesson": "prog-ut9-interfaces",
+   "module": "0485"
   },
   {
    "id": "prog-158",
@@ -4365,7 +4522,8 @@
     "es": "Por eso se prefieren los layouts: QHBoxLayout, QVBoxLayout y QGridLayout.",
     "en": "Por eso se prefieren los layouts: QHBoxLayout, QVBoxLayout y QGridLayout."
    },
-   "lesson": "prog-ut9-interfaces"
+   "lesson": "prog-ut9-interfaces",
+   "module": "0485"
   },
   {
    "id": "prog-159",
@@ -4400,7 +4558,8 @@
     "es": "Así un solo slot sirve para toda una calculadora: se mira el texto del botón pulsado.",
     "en": "Así un solo slot sirve para toda una calculadora: se mira el texto del botón pulsado."
    },
-   "lesson": "prog-ut9-interfaces"
+   "lesson": "prog-ut9-interfaces",
+   "module": "0485"
   },
   {
    "id": "prog-160",
@@ -4435,7 +4594,8 @@
     "es": "Los eventos de la propia ventana se tratan sobrescribiendo métodos como `closeEvent`; `ignore()` cancela el cierre.",
     "en": "Los eventos de la propia ventana se tratan sobrescribiendo métodos como `closeEvent`; `ignore()` cancela el cierre."
    },
-   "lesson": "prog-ut9-interfaces"
+   "lesson": "prog-ut9-interfaces",
+   "module": "0485"
   },
   {
    "id": "prog-161",
@@ -4470,7 +4630,8 @@
     "es": "`textChanged` se emite con cada cambio y pasa el texto nuevo al slot. Para reaccionar solo a Intro está `returnPressed`.",
     "en": "`textChanged` se emite con cada cambio y pasa el texto nuevo al slot. Para reaccionar solo a Intro está `returnPressed`."
    },
-   "lesson": "prog-ut9-interfaces"
+   "lesson": "prog-ut9-interfaces",
+   "module": "0485"
   },
   {
    "id": "prog-162",
@@ -4505,7 +4666,8 @@
     "es": "Los apuntes los ponen en QtGui en algunos ejemplos, que es de Qt4. En Qt6, QtGui tiene iconos, fuentes y QAction; QtCore, señales y temporizadores.",
     "en": "Los apuntes los ponen en QtGui en algunos ejemplos, que es de Qt4. En Qt6, QtGui tiene iconos, fuentes y QAction; QtCore, señales y temporizadores."
    },
-   "lesson": "prog-ut9-interfaces"
+   "lesson": "prog-ut9-interfaces",
+   "module": "0485"
   },
   {
    "id": "prog-163",
@@ -4528,7 +4690,8 @@
     "es": "Una señal puede tener varios oyentes: al emitirse, se llama a todos en el orden en que se conectaron.",
     "en": "Una señal puede tener varios oyentes: al emitirse, se llama a todos en el orden en que se conectaron."
    },
-   "lesson": "prog-ut9-interfaces"
+   "lesson": "prog-ut9-interfaces",
+   "module": "0485"
   }
  ],
  "cards": []

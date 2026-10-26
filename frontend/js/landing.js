@@ -122,15 +122,7 @@ const FEATURES = [
     text: "Las competencias del módulo con avisos de qué reforzar antes de avanzar, actividades tipo examen y simulacros cronometrados que se corrigen al final.",
     solves: "Practicas en condiciones parecidas a las del examen y sabes qué te falta.",
   },
-  {
-    icon: "chat",
-    title: "Tutor Python",
-    href: "#/tutor",
-    link: "Abrir el tutor",
-    tag: "Requiere cuenta y que el servidor lo tenga activado",
-    text: "Explica conceptos y errores, revisa tu código y da pistas sin resolver el ejercicio por ti. Según la configuración del servidor responde un modelo de IA (por defecto, uno gratuito que se ejecuta con Ollama) o un tutor sin IA basado en el contenido revisado, y cada respuesta indica su origen.",
-    solves: "Resuelves dudas concretas sobre tu código sin que te den la solución hecha.",
-  },
+
   {
     icon: "user",
     title: "Cuenta opcional y panel del alumno",
@@ -164,8 +156,8 @@ const STEPS = [
     link: "Teoría",
   },
   {
-    title: "Practica y resuelve dudas",
-    text: "Haz los ejercicios: se corrigen al momento y cada error trae su explicación y un nuevo intento. Si tienes cuenta y el tutor está activo, pregúntale.",
+    title: "Practica",
+    text: "Haz los ejercicios: se corrigen al momento y cada error trae su explicación y un nuevo intento.",
     href: "#/practicar",
     link: "Practicar",
   },
@@ -191,18 +183,14 @@ const TECH = [
   {
     icon: "server",
     title: "Python y FastAPI",
-    text: "La API de cuentas, progreso, panel y tutor. Contraseñas con Argon2, sesión en una cookie HttpOnly y límites de peticiones. Está preparada para desplegarse en Render.",
+    text: "La API de cuentas, progreso y panel. Contraseñas con Argon2, sesión en una cookie HttpOnly y límites de peticiones. Está preparada para desplegarse en Render.",
   },
   {
     icon: "database",
     title: "PostgreSQL",
     text: "Guarda las cuentas y el progreso sincronizado, con migraciones de Alembic. En local y en las pruebas se usa SQLite.",
   },
-  {
-    icon: "chat",
-    title: "Tutor con A2A",
-    text: "El tutor es un agente del protocolo A2A dentro del mismo backend. Por defecto usa un modelo local y gratuito con Ollama, o un modo sin IA; no hay ningún servicio de pago activado.",
-  },
+
   {
     icon: "shield",
     title: "Git, GitHub y pruebas",
@@ -278,7 +266,7 @@ function heroHtml(concept) {
         <div class="lp-hero__text">
           <p class="lp-eyebrow">Python, Programación de DAW y PCAP</p>
           <h1 class="lp-hero__title" id="lp-title" tabindex="-1">Aprende programación <em>entendiendo</em> lo que haces</h1>
-          <p class="lp-hero__lead">Practica con ejercicios que se corrigen al momento, resuelve dudas con el tutor y sigue tu progreso en una plataforma diseñada para aprender programación paso a paso.</p>
+          <p class="lp-hero__lead">Practica con ejercicios que se corrigen al momento y sigue tu progreso en una plataforma diseñada para aprender programación paso a paso.</p>
           <div class="lp-actions">
             <a class="lp-btn lp-btn--primary lp-btn--lg" href="#/aprender">Empezar a aprender ${icon("arrow", 18)}</a>
             <a class="lp-btn lp-btn--ghost lp-btn--lg" href="${LANDING_ROUTE}/como-funciona" data-lp-section="como-funciona">Descubrir cómo funciona</a>
@@ -355,7 +343,7 @@ function demoHtml(index) {
                 <p><strong>Para pensarlo:</strong> ${renderInline(range?.think ?? "")}</p>
               </div>
             </div>
-            <p class="lp-note">Ejemplo ilustrativo, no es una conversación real: el texto es la explicación de este error en el temario. En el tutor real cada respuesta indica si la ha escrito un modelo de IA o el modo sin IA.</p>
+            <p class="lp-note">Ejemplo ilustrativo, no es una conversación real: el texto es la explicación de este error en el temario.</p>
           </li>
           <li class="lp-demo__step">
             <p class="lp-demo__n">4 · Ejercicio</p>
@@ -531,10 +519,6 @@ function faqHtml(index) {
       `No. La ruta empieza por cómo plantear un problema y por las variables${concepts ? `, y avanza por ${concepts} conceptos` : ""}. Si ya sabes algo, la prueba de nivel coloca tu punto de partida.`,
     ],
     [
-      "¿Cómo funciona el tutor de IA?",
-      "Necesitas una cuenta y que el servidor tenga el tutor activado. Según su configuración responde un modelo de IA que se ejecuta con Ollama o un tutor sin IA basado en el contenido revisado del curso, y cada respuesta dice cuál ha sido. No ejecuta tu código en el servidor y la conversación no se guarda en tu cuenta. Una respuesta de IA puede equivocarse: compruébala en la consola.",
-    ],
-    [
       "¿Puedo seguir mi progreso?",
       "Sí. Sin cuenta, el progreso se guarda en tu navegador. Con cuenta, se guarda también en el servidor, se sincroniza entre dispositivos y tienes un panel con tu resumen.",
     ],
@@ -544,7 +528,7 @@ function faqHtml(index) {
     ],
     [
       "¿Puedo utilizar la plataforma desde el móvil?",
-      "Sí, la web se adapta a móviles y tabletas y se puede instalar como aplicación. El repositorio incluye también una app Android que se instala desde GitHub (no está en Google Play).",
+      "Sí, la web se adapta a móviles y tabletas y se puede instalar como aplicación.",
     ],
     [
       "¿Cómo se gestionan mis datos?",

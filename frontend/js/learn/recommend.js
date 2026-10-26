@@ -1,4 +1,4 @@
-/* ¿Qué estudio ahora? Recomendación y selección de ejercicios (ADR-0031). Funciones puras.
+/* ¿Qué estudio ahora? Recomendación y selección de ejercicios. Funciones puras.
 
    Prioridad del plan de «Hoy» (la pidió el autor):
      1. conceptos con repaso pendiente;

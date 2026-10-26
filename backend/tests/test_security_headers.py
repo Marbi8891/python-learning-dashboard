@@ -10,7 +10,7 @@ def test_api_responses_include_security_headers(client):
 
 
 def test_error_responses_include_security_headers(client):
-    response = client.get("/api/users/me")  # sin token: 401
+    response = client.get("/api/v1/users/me")  # sin token: 401
     assert response.status_code == 401
     assert response.headers["X-Content-Type-Options"] == "nosniff"
 

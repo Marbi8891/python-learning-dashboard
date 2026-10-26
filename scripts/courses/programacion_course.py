@@ -1,13 +1,13 @@
 # ruff: noqa: E501
 # (contenido didáctico: los textos largos van en una sola línea para poder leerlos y editarlos)
-"""Curso de Programación (módulo 0485 de DAW, en Python) para la app Android (ADR-0020).
+"""Curso de Programación (módulo 0485 de DAW, en Python) para la web.
 
 Sigue las unidades de trabajo UT1-UT9 del curso «DAW-Programacion» de César San Juan Pastor
 (IES Arcipreste de Hita), publicado con licencia Creative Commons no comercial:
 https://github.com/csanjuanp-ies/DAW-Programacion
 
 La teoría y las preguntas son propias: siguen el orden y los contenidos de esas unidades, sin copiar
-su texto. Donde los apuntes simplifican o se equivocan, se enseña lo correcto (ADR-0020).
+su texto. Donde los apuntes simplifican o se equivocan, se enseña lo correcto.
 
 Las preguntas con salida se ejecutan con Python en una carpeta temporal (las de ficheros escriben
 allí) y se comprueba que la salida real es la esperada. Las de interfaces gráficas (PySide6) no se
@@ -16,6 +16,7 @@ ejecutan: preguntan qué hace el código.
 
 from __future__ import annotations
 
+import os
 import subprocess
 import sys
 import tempfile
@@ -27,12 +28,17 @@ from course_builder import Block, Lesson, Q, main  # noqa: E402
 # ---------------------------------------------------------------- ejecución
 
 
+# El programa escribe y se lee en UTF-8, sea cual sea la codificación del sistema
+UTF8_ENV = {**os.environ, "PYTHONIOENCODING": "utf-8"}
+
+
 def run_python(code: str) -> str:
     with tempfile.TemporaryDirectory() as folder:
         result = subprocess.run(
             [sys.executable, "-c", code],
             capture_output=True,
-            text=True,
+            encoding="utf-8",  # mismo resultado en Windows y en Linux (ver UTF8_ENV)
+            env=UTF8_ENV,
             timeout=10,
             check=False,
             cwd=folder,
@@ -3196,4 +3202,4 @@ BLOCKS = [
 ]
 
 if __name__ == "__main__":
-    main("programacion", BLOCKS, run_python, check_example)
+    main("programacion", BLOCKS, run_python, check_example, module="0485")

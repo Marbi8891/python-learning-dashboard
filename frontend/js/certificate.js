@@ -82,7 +82,7 @@ export function renderCertificate(content) {
     </article>`;
 }
 
-/* ---------- Certificados de los cursos de DAW (ADR-0025) ---------- */
+/* ---------- Certificados de los cursos de DAW ---------- */
 
 export const COURSE_PASS = 70; // dominio mínimo del curso, en %
 export const COURSE_BLOCK_ANSWERED = 5; // preguntas respondidas como mínimo en cada bloque

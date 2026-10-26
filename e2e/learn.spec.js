@@ -1,4 +1,4 @@
-// Núcleo educativo (ADR-0031): Aprender, Teoría, Practicar, Progreso y sesiones con
+// Núcleo educativo: Aprender, Teoría, Practicar, Progreso y sesiones con
 // corrección, explicación de errores, nuevo intento, repaso y sincronización con la cuenta.
 const AxeBuilder = require("@axe-core/playwright").default;
 const { test, expect, uniqueEmail } = require("./fixtures");
@@ -305,8 +305,8 @@ test("simulacro de sesión: sin explicación entre preguntas y corrección al fi
 
 test("el progreso por conceptos se sincroniza con la cuenta y se fusiona con el de otro dispositivo", async ({ page, request }) => {
   const email = uniqueEmail();
-  await request.post(`${API}/api/auth/register`, { data: { email, password: "contraseña-segura", display_name: "Ana", accept_privacy: true } });
-  const login = await request.post(`${API}/api/auth/login`, { form: { username: email, password: "contraseña-segura" } });
+  await request.post(`${API}/api/v1/auth/register`, { data: { email, password: "contraseña-segura", display_name: "Ana", accept_privacy: true } });
+  const login = await request.post(`${API}/api/v1/auth/login`, { form: { username: email, password: "contraseña-segura" } });
   const { access_token: token } = await login.json();
   const headers = { Authorization: `Bearer ${token}` };
   // «Otro dispositivo» (la app) ya guardó un error en la cuenta
@@ -316,7 +316,7 @@ test("el progreso por conceptos se sincroniza con la cuenta y se fusiona con el 
     errors: { "variables.orden-asignacion": { n: 1, last: new Date().toISOString(), streak: 0 } },
     log: [{ at: new Date().toISOString(), ex: "var-01", ok: false, err: "variables.orden-asignacion" }],
   };
-  await request.put(`${API}/api/course-state/learn`, { headers, data: { data: remote } });
+  await request.put(`${API}/api/v1/course-state/learn`, { headers, data: { data: remote } });
 
   // El token de la web solo vive en memoria: se inicia sesión por la interfaz
   await page.goto("/#/aprender");
@@ -332,7 +332,7 @@ test("el progreso por conceptos se sincroniza con la cuenta y se fusiona con el 
 
   await expect
     .poll(async () => {
-      const saved = await (await request.get(`${API}/api/course-state/learn`, { headers })).json();
+      const saved = await (await request.get(`${API}/api/v1/course-state/learn`, { headers })).json();
       return Object.keys(saved.data.ex ?? {}).sort();
     }, { timeout: 15_000 })
     .toEqual(["buc-01", "var-01"]);

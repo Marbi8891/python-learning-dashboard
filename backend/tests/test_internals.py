@@ -109,7 +109,7 @@ def smtp(monkeypatch):
 def test_send_email_via_smtp_with_tls(smtp):
     mailer.send_email("ana@example.com", "Asunto", "Cuerpo")
     server, message = smtp.sent[0]
-    # El certificado del servidor SMTP se verifica (contexto por defecto, ADR-0022)
+    # El certificado del servidor SMTP se verifica (contexto por defecto)
     assert server.tls.verify_mode == ssl.CERT_REQUIRED and server.tls.check_hostname
     assert server.credentials == ("usuario", "clave")
     assert message["To"] == "ana@example.com" and message["Subject"] == "Asunto"

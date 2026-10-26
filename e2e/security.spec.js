@@ -1,4 +1,4 @@
-// Seguridad del frontend (ADR-0022): CSP sin bloqueos, datos manipulados, cierre de sesión y marcos.
+// Seguridad del frontend: CSP sin bloqueos, datos manipulados, cierre de sesión y marcos.
 const { test, expect, uniqueEmail, openLesson } = require("./fixtures");
 
 const API = "http://127.0.0.1:8000";
@@ -40,7 +40,7 @@ test("un dato manipulado en el navegador no se convierte en HTML", async ({ page
 test("cerrar sesión borra del navegador los datos personales, salvo las preferencias", async ({ page, request }) => {
   const email = uniqueEmail();
   const password = "contraseña-e2e-123";
-  await request.post(`${API}/api/auth/register`, { data: { email, password, display_name: "Ana", accept_privacy: true } });
+  await request.post(`${API}/api/v1/auth/register`, { data: { email, password, display_name: "Ana", accept_privacy: true } });
   await page.addInitScript(() => {
     if (sessionStorage.getItem("seeded")) return;
     sessionStorage.setItem("seeded", "1");
@@ -64,9 +64,9 @@ test("cerrar sesión borra del navegador los datos personales, salvo las prefere
   expect(left.filter((k) => !["pld:prefs", "pld:game"].includes(k))).toEqual([]);
   expect(left).toContain("pld:prefs");
   // El progreso del curso sí se subió a la cuenta antes de borrarlo del navegador
-  const login = await request.post(`${API}/api/auth/login`, { form: { username: email, password } });
+  const login = await request.post(`${API}/api/v1/auth/login`, { form: { username: email, password } });
   const headers = { Authorization: `Bearer ${(await login.json()).access_token}` };
-  const sql = await (await request.get(`${API}/api/course-state/sql`, { headers })).json();
+  const sql = await (await request.get(`${API}/api/v1/course-state/sql`, { headers })).json();
   expect(sql.data.answers["sql-01"]).toEqual([true]);
 });
 
@@ -107,7 +107,7 @@ test("el registro rechaza una contraseña de las más usadas y explica por qué"
   await expect(page.locator("#account-label")).toHaveText("Iniciar sesión");
 });
 
-test("el código Python del alumno no puede enviar datos a otros servidores (PLD-SEC-004)", async ({ page, context }) => {
+test("el código Python del alumno no puede enviar datos a otros servidores", async ({ page, context }) => {
   // La CSP del <meta> no llega al Worker de Pyodide: el Worker cierra su red antes de ejecutar código
   const hits = [];
   await context.route("https://exfil.example/**", (route) => {

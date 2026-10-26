@@ -143,7 +143,7 @@ class DeleteConfirm(BaseModel):
 
 
 class Token(BaseModel):
-    # Sin token cuando va en la cookie HttpOnly (token_type "cookie", ADR-0033)
+    # Sin token cuando va en la cookie HttpOnly (token_type "cookie")
     access_token: str | None = None
     token_type: str = "bearer"
 
@@ -183,9 +183,9 @@ class AttemptOut(BaseModel):
 
 MAX_PCAP_STATE_BYTES = 200_000  # ~1000 simulacros y todas las respuestas caben de sobra
 
-# Cursos de DAW de la app Android que se pueden guardar en la cuenta (ADR-0016 y ADR-0018),
-# más "learn": el progreso por conceptos del núcleo educativo (ADR-0031) y "game": XP, racha y
-# logros de la web, que antes solo vivían en el navegador (ADR-0035).
+# Cursos de DAW que se pueden guardar en la cuenta,
+# más "learn": el progreso por conceptos del núcleo educativo y "game": XP, racha y
+# logros de la web, que antes solo vivían en el navegador.
 # Lista cerrada: evita que un cliente cree documentos con nombres arbitrarios.
 COURSES = ("sql", "js", "java", "entornos", "programacion", "learn", "game")
 
@@ -219,7 +219,7 @@ class PasswordChange(BaseModel):
 
 
 class ActivityOut(BaseModel):
-    """Un evento de «Actividad de la cuenta» (ADR-0025)."""
+    """Un evento de «Actividad de la cuenta»."""
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -237,8 +237,6 @@ class UserExport(BaseModel):
     pcap: dict | None = None
     courses: dict[str, dict] = {}
     activity: list[ActivityOut] = []
-    # Consultas al tutor por día y modalidad (ADR-0038): solo recuentos, sin preguntas
-    tutor_usage: list[dict] = []
     exported_at: datetime
 
 

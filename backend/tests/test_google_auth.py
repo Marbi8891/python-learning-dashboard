@@ -33,13 +33,13 @@ def test_google_login_creates_account_and_session(client, monkeypatch):
         },
     )
     response = client.post(
-        "/api/auth/google",
+        "/api/v1/auth/google",
         json={"credential": "x" * 40, "accept_privacy": True},
     )
     assert response.status_code == 200
     assert response.json()["access_token"]
     me = client.get(
-        "/api/users/me",
+        "/api/v1/users/me",
         headers={"Authorization": f"Bearer {response.json()['access_token']}"},
     )
     assert me.status_code == 200
@@ -63,12 +63,12 @@ def test_google_login_reuses_existing_account(client, monkeypatch):
         },
     )
     response = client.post(
-        "/api/auth/google",
+        "/api/v1/auth/google",
         json={"credential": "x" * 40, "accept_privacy": True},
     )
     assert response.status_code == 200
     me = client.get(
-        "/api/users/me",
+        "/api/v1/users/me",
         headers={"Authorization": f"Bearer {response.json()['access_token']}"},
     )
     assert me.status_code == 200
@@ -86,7 +86,7 @@ def test_google_login_rejects_unverified_email(client, monkeypatch):
         },
     )
     response = client.post(
-        "/api/auth/google",
+        "/api/v1/auth/google",
         json={"credential": "x" * 40, "accept_privacy": True},
     )
     assert response.status_code == 401
@@ -103,7 +103,7 @@ def test_google_login_requires_privacy_for_new_account(client, monkeypatch):
         },
     )
     response = client.post(
-        "/api/auth/google",
+        "/api/v1/auth/google",
         json={"credential": "x" * 40, "accept_privacy": False},
     )
     assert response.status_code == 400
@@ -117,7 +117,7 @@ def test_google_login_rejects_invalid_id_token(client, monkeypatch):
 
     monkeypatch.setattr(auth, "verify_oauth2_token", invalid_token)
     response = client.post(
-        "/api/auth/google",
+        "/api/v1/auth/google",
         json={"credential": "x" * 40, "accept_privacy": True},
     )
     assert response.status_code == 401
@@ -126,7 +126,7 @@ def test_google_login_rejects_invalid_id_token(client, monkeypatch):
 def test_google_login_unconfigured(client, monkeypatch):
     monkeypatch.setattr(auth, "get_settings", lambda: SimpleNamespace(google_client_id=None))
     response = client.post(
-        "/api/auth/google",
+        "/api/v1/auth/google",
         json={"credential": "x" * 40, "accept_privacy": True},
     )
     assert response.status_code == 503
@@ -154,7 +154,7 @@ def test_google_login_handles_concurrent_account_creation(client, monkeypatch):
 
     monkeypatch.setattr(Session, "commit", conflict_once)
     response = client.post(
-        "/api/auth/google",
+        "/api/v1/auth/google",
         json={"credential": "x" * 40, "accept_privacy": True},
     )
     assert response.status_code == 409
@@ -168,7 +168,7 @@ def google_account(client, monkeypatch, email="google@example.com"):
     claims = {"email": email, "email_verified": True, "name": "G", "sub": "s"}
     configure_google(monkeypatch, claims)
     response = client.post(
-        "/api/auth/google", json={"credential": "x" * 40, "accept_privacy": True}
+        "/api/v1/auth/google", json={"credential": "x" * 40, "accept_privacy": True}
     )
     return {"Authorization": f"Bearer {response.json()['access_token']}"}
 
@@ -180,7 +180,7 @@ def fresh_claims(email="google@example.com", age_seconds=0):
 
 def delete_with_google(client, headers):
     return client.post(
-        "/api/users/me/delete", json={"google_credential": "y" * 40}, headers=headers
+        "/api/v1/users/me/delete", json={"google_credential": "y" * 40}, headers=headers
     )
 
 
@@ -188,7 +188,7 @@ def test_google_account_can_be_deleted_by_confirming_with_google(client, monkeyp
     headers = google_account(client, monkeypatch)
     configure_google(monkeypatch, fresh_claims(email="GOOGLE@example.com"))
     assert delete_with_google(client, headers).status_code == 204
-    assert client.get("/api/users/me", headers=headers).status_code == 401
+    assert client.get("/api/v1/users/me", headers=headers).status_code == 401
     with Session(client.engine) as db:
         assert db.scalar(select(User)) is None
 
@@ -198,7 +198,7 @@ def test_google_confirmation_must_be_from_the_same_account(client, monkeypatch):
     configure_google(monkeypatch, fresh_claims(email="otra@example.com"))
     response = delete_with_google(client, headers)
     assert response.status_code == 403
-    assert client.get("/api/users/me", headers=headers).status_code == 200
+    assert client.get("/api/v1/users/me", headers=headers).status_code == 200
 
 
 def test_google_confirmation_must_be_recent(client, monkeypatch):
@@ -207,7 +207,7 @@ def test_google_confirmation_must_be_recent(client, monkeypatch):
     assert delete_with_google(client, headers).status_code == 403
     configure_google(monkeypatch, {"email": "google@example.com", "email_verified": True})
     assert delete_with_google(client, headers).status_code == 403  # sin iat
-    assert client.get("/api/users/me", headers=headers).status_code == 200
+    assert client.get("/api/v1/users/me", headers=headers).status_code == 200
 
 
 def test_google_confirmation_rejects_an_invalid_token(client, monkeypatch):
@@ -218,7 +218,7 @@ def test_google_confirmation_rejects_an_invalid_token(client, monkeypatch):
 
     monkeypatch.setattr(auth, "verify_oauth2_token", invalid)
     assert delete_with_google(client, headers).status_code == 401
-    assert client.get("/api/users/me", headers=headers).status_code == 200
+    assert client.get("/api/v1/users/me", headers=headers).status_code == 200
 
 
 def test_google_confirmation_needs_google_configured(client, monkeypatch):
@@ -229,20 +229,20 @@ def test_google_confirmation_needs_google_configured(client, monkeypatch):
 
 def test_delete_needs_exactly_one_confirmation(client, auth_headers):
     for body in ({}, {"password": "x", "google_credential": "y" * 40}):
-        response = client.post("/api/users/me/delete", json=body, headers=auth_headers)
+        response = client.post("/api/v1/users/me/delete", json=body, headers=auth_headers)
         assert response.status_code == 422
 
 
 def test_delete_with_null_fields_is_refused(client, auth_headers):
     body = {"password": None, "google_credential": None}
-    response = client.post("/api/users/me/delete", json=body, headers=auth_headers)
+    response = client.post("/api/v1/users/me/delete", json=body, headers=auth_headers)
     assert response.status_code == 422
-    assert client.get("/api/users/me", headers=auth_headers).status_code == 200
+    assert client.get("/api/v1/users/me", headers=auth_headers).status_code == 200
 
 
 def test_delete_requires_an_open_session_even_with_google(client, monkeypatch):
     configure_google(monkeypatch, fresh_claims(email="g@example.com"))
-    response = client.post("/api/users/me/delete", json={"google_credential": "y" * 40})
+    response = client.post("/api/v1/users/me/delete", json={"google_credential": "y" * 40})
     assert response.status_code == 401
 
 
@@ -255,34 +255,36 @@ def test_google_login_on_unverified_account_voids_password_and_sessions(client, 
     intruder = {"Authorization": f"Bearer {login(client).json()['access_token']}"}
     owner = google_account(client, monkeypatch, email="ana@example.com")
     # La contraseña y la sesión del intruso dejan de valer; Ana sigue dentro
-    assert client.get("/api/users/me", headers=intruder).status_code == 401
+    assert client.get("/api/v1/users/me", headers=intruder).status_code == 401
     assert login(client).status_code == 401
-    assert client.get("/api/users/me", headers=owner).status_code == 200
-    kinds = [e["kind"] for e in client.get("/api/users/me/activity", headers=owner).json()]
+    assert client.get("/api/v1/users/me", headers=owner).status_code == 200
+    kinds = [e["kind"] for e in client.get("/api/v1/users/me/activity", headers=owner).json()]
     assert "google_linked" in kinds
-    exported = client.get("/api/users/me/export", headers=owner).json()
+    exported = client.get("/api/v1/users/me/export", headers=owner).json()
     assert exported["email_verified_at"] is not None
 
 
 def test_later_google_logins_do_not_close_sessions_again(client, monkeypatch):
     first = google_account(client, monkeypatch, email="nuevo@example.com")
     google_account(client, monkeypatch, email="nuevo@example.com")
-    assert client.get("/api/users/me", headers=first).status_code == 200
+    assert client.get("/api/v1/users/me", headers=first).status_code == 200
 
 
 def test_password_set_by_email_link_survives_google_login(client, monkeypatch):
     sent = []
     monkeypatch.setattr(auth, "send_email", lambda to, subject, body: sent.append(body))
     assert register(client, email="ana@example.com", name="Ana").status_code == 201
-    client.post("/api/v1/auth/forgot-password", json={"email": "ana@example.com"})
+    client.post("/api/v1/auth/password-reset/request", json={"email": "ana@example.com"})
     token = sent[0].split("token=")[1].split()[0]
     new = "otra-clave-muy-segura-789"
-    done = client.post("/api/v1/auth/reset-password", json={"token": token, "new_password": new})
+    done = client.post(
+        "/api/v1/auth/password-reset/confirm", json={"token": token, "new_password": new}
+    )
     assert done.status_code == 204
     session = {"Authorization": f"Bearer {login(client, password=new).json()['access_token']}"}
     google_account(client, monkeypatch, email="ana@example.com")
     auth_limiter.reset()  # todas las peticiones del test llegan desde la misma IP
     # El enlace llegó a su email: la contraseña es suya y no se anula
     assert login(client, password=new).status_code == 200
-    assert client.get("/api/users/me", headers=session).status_code == 200
+    assert client.get("/api/v1/users/me", headers=session).status_code == 200
     assert login(client, password=PASSWORD).status_code == 401

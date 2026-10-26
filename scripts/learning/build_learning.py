@@ -1,7 +1,5 @@
 """Genera frontend/data/learning.json (conceptos y ejercicios) y comprueba las respuestas.
 
-Ver ADR-0031.
-
 Nada se escribe «a ojo»: el script ejecuta con el mismo runner que usa el navegador
 (frontend/py/runner.py) cada salida esperada, cada hueco, cada línea corregida y cada solución,
 y comprueba que las soluciones equivocadas típicas fallan en el test que deben.
@@ -299,7 +297,7 @@ def main() -> None:
             f"{len(data['exercises'])} ejercicios comprobados"
         )
         return
-    OUT.write_text(text, "utf-8")
+    OUT.write_text(text, "utf-8", newline="\n")  # LF también en Windows
     print(
         f"Escrito {OUT.relative_to(ROOT)}: {len(data['concepts'])} conceptos, "
         f"{len(data['exercises'])} ejercicios"

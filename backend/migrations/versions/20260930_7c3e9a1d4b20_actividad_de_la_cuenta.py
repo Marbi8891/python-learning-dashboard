@@ -19,7 +19,7 @@ depends_on: str | Sequence[str] | None = None
 
 
 def upgrade() -> None:
-    """Actividad de seguridad visible para el usuario en «Mi cuenta» (ADR-0025)."""
+    """Actividad de seguridad visible para el usuario en «Mi cuenta»."""
     op.create_table(
         "account_events",
         sa.Column("id", sa.Integer(), nullable=False),

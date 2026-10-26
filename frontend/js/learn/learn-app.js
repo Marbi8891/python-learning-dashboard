@@ -1,4 +1,4 @@
-/* Núcleo educativo en la web (ADR-0031): Aprender (Hoy), Teoría, Practicar y Progreso.
+/* Núcleo educativo en la web: Aprender (Hoy), Teoría, Practicar y Progreso.
 
    Rutas:
      #/bienvenida           presentación como mapa con paradas (welcome.js)

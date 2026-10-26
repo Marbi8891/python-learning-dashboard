@@ -1,4 +1,4 @@
-"""Panel del alumno: /api/v1/dashboard y /api/v1/dashboard/activity (ADR-0035)."""
+"""Panel del alumno: /api/v1/dashboard y /api/v1/dashboard/activity."""
 
 from datetime import UTC, date, datetime, timedelta
 
@@ -61,18 +61,18 @@ def test_new_student_gets_an_empty_dashboard(client, auth_headers):
 
 def test_dashboard_reflects_progress_attempts_and_synced_states(client, auth_headers):
     client.post(
-        "/api/lessons/variables/attempts",
+        "/api/v1/lessons/variables/attempts",
         json={"code": "x = 1", "passed": False},
         headers=auth_headers,
     )
     client.post(
-        "/api/lessons/variables/attempts",
+        "/api/v1/lessons/variables/attempts",
         json={"code": "x = 2", "passed": True},  # aprobar completa la lección
         headers=auth_headers,
     )
-    client.put("/api/progress/tipos", headers=auth_headers)
-    client.put("/api/pcap-state", json={"data": {"bestCombo": 2}}, headers=auth_headers)
-    client.put("/api/course-state/learn", json={"data": {"v": 1}}, headers=auth_headers)
+    client.put("/api/v1/progress/tipos", headers=auth_headers)
+    client.put("/api/v1/pcap-state", json={"data": {"bestCombo": 2}}, headers=auth_headers)
+    client.put("/api/v1/course-state/learn", json={"data": {"v": 1}}, headers=auth_headers)
 
     data = client.get(DASHBOARD, headers=auth_headers).json()
     assert data["lessons"]["completed"] == 2
@@ -89,7 +89,7 @@ def test_dashboard_reflects_progress_attempts_and_synced_states(client, auth_hea
     assert today["lessons_completed"] == 2 and today["attempts"] == 2 and today["passed"] == 1
 
     # Completar una actividad más se refleja al volver a pedir el panel
-    client.put("/api/progress/operadores", headers=auth_headers)
+    client.put("/api/v1/progress/operadores", headers=auth_headers)
     again = client.get(DASHBOARD, headers=auth_headers).json()
     assert again["lessons"]["completed"] == 3
 
@@ -97,11 +97,11 @@ def test_dashboard_reflects_progress_attempts_and_synced_states(client, auth_hea
 def test_activity_is_paginated_newest_first(client, auth_headers):
     for code in ("a", "b", "c"):
         client.post(
-            "/api/lessons/variables/attempts",
+            "/api/v1/lessons/variables/attempts",
             json={"code": code, "passed": False},
             headers=auth_headers,
         )
-    client.put("/api/progress/tipos", headers=auth_headers)
+    client.put("/api/v1/progress/tipos", headers=auth_headers)
     first = client.get(ACTIVITY, params={"limit": 3}, headers=auth_headers).json()
     assert first["total"] == 4 and first["limit"] == 3 and len(first["items"]) == 3
     second = client.get(ACTIVITY, params={"limit": 3, "offset": 3}, headers=auth_headers).json()
@@ -129,9 +129,9 @@ def test_rejects_invalid_parameters(client, auth_headers):
 def test_a_student_cannot_see_another_students_data(client):
     ana = headers_for(client, "ana@example.com", "Ana")
     luis = headers_for(client, "luis@example.com", "Luis")
-    client.put("/api/progress/variables", headers=ana)
+    client.put("/api/v1/progress/variables", headers=ana)
     client.post(
-        "/api/lessons/variables/attempts",
+        "/api/v1/lessons/variables/attempts",
         json={"code": "secreto = 'de Ana'", "passed": True},
         headers=ana,
     )
@@ -157,10 +157,10 @@ def test_sign_in_method_follows_the_last_login(client, monkeypatch):
         monkeypatch,
         {"email": "google@example.com", "email_verified": True, "name": "Ana"},
     )
-    response = client.post("/api/auth/google", json={"credential": "x" * 40})
+    response = client.post("/api/v1/auth/google", json={"credential": "x" * 40})
     google = {"Authorization": f"Bearer {response.json()['access_token']}"}
     assert client.get(DASHBOARD, headers=google).json()["user"]["sign_in_method"] == "google"
-    events = client.get("/api/users/me/activity", headers=google).json()
+    events = client.get("/api/v1/users/me/activity", headers=google).json()
     assert events[0]["kind"] == "login_google"
 
 

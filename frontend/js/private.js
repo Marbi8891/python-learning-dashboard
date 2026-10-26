@@ -1,4 +1,4 @@
-/* Piezas del área privada (ADR-0025) que usa el panel del alumno (dashboard.js, ADR-0035):
+/* Piezas del área privada que usa el panel del alumno (dashboard.js):
    1. Plan de estudio: fecha de examen por curso, repasos pendientes y meta diaria.
    2. Historial de simulacros y dominio de cada curso (web y app juntos).
    3. Logros y certificados.

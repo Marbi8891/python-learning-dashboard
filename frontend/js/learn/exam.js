@@ -1,4 +1,4 @@
-/* Preparación DAW (ADR-0031, fase 2): competencias, avisos de qué reforzar y composición de
+/* Preparación DAW: competencias, avisos de qué reforzar y composición de
    simulacros. Funciones puras, probadas con node --test. */
 
 import { allStats } from "./mastery.js";

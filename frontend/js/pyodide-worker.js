@@ -3,7 +3,7 @@
 
 let pyodide = null;
 
-// APIs con las que el código de un Worker puede hablar con otros servidores (PLD-SEC-004).
+// APIs con las que el código de un Worker puede hablar con otros servidores.
 const NETWORK_APIS = [
   "fetch",
   "XMLHttpRequest",
@@ -25,7 +25,7 @@ const blocked = (name) =>
 const lock = (target, name) =>
   Object.defineProperty(target, name, { value: blocked(name), writable: false, configurable: false });
 
-/** Cierra la red del Worker antes de ejecutar código del alumno (PLD-SEC-004).
+/** Cierra la red del Worker antes de ejecutar código del alumno.
 
     La CSP de la página va en un <meta> y no llega a este Worker (comprobado en Chromium): sin esto,
     un programa pegado en la consola podría enviar datos a cualquier servidor. Python ya está
