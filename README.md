@@ -145,6 +145,10 @@ Todas las pruebas y qué ejecutar según lo que cambies: [docs/TESTING.md](docs/
 - [API](docs/API.md)
 - [Recuperación de contraseña y login con Google](docs/auth.md)
 - [Despliegue](docs/DEPLOY.md)
+- [Pruebas](docs/TESTING.md)
+- [Ejecutar en Windows](docs/EJECUTAR-EN-WINDOWS.md)
+- [Plan del currículo oficial de DAW](docs/PLAN-CURRICULO-DAW.md)
+- [Auditoría y licencias de fuentes](docs/AUDITORIA-Y-LICENCIAS.md)
 - [Seguridad](SECURITY.md)
 
 ## Licencia
