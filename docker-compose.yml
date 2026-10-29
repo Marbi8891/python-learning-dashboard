@@ -1,44 +1,75 @@
-# Todo el proyecto en local con PostgreSQL:
-#   JWT_SECRET=<valor> docker compose up --build
-# Frontend: http://localhost:5500 · API: http://localhost:8000/docs
+# Entorno local completo. No afecta al despliegue de Render.
+# PowerShell:
+#   docker compose up --build
+# Frontend: http://localhost:5500 · API: http://localhost:8000/api/health
 services:
   db:
     image: postgres:16
+    restart: unless-stopped
+    env_file:
+      - .env
     environment:
-      POSTGRES_USER: pld
-      POSTGRES_PASSWORD: pld
-      POSTGRES_DB: pld
+      POSTGRES_USER: ${POSTGRES_USER:-pld}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Define POSTGRES_PASSWORD en .env}
+      POSTGRES_DB: ${POSTGRES_DB:-pld}
     volumes:
       - db-data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U pld"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-pld} -d ${POSTGRES_DB:-pld}"]
       interval: 5s
+      timeout: 3s
       retries: 10
+      start_period: 5s
+    networks:
+      - backend
 
   api:
     build:
       context: .
       dockerfile: backend/Dockerfile
+    restart: unless-stopped
+    env_file:
+      - .env
     environment:
-      DATABASE_URL: postgresql+psycopg://pld:pld@db:5432/pld
-      JWT_SECRET: ${JWT_SECRET:?Define JWT_SECRET (mínimo 32 caracteres)}
-      CORS_ORIGINS: '["http://localhost:5500"]'
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-pld}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-pld}
+      JWT_SECRET: ${JWT_SECRET:?Define JWT_SECRET (mínimo 32 caracteres) en .env}
+      CORS_ORIGINS: '["http://localhost:5500","http://127.0.0.1:5500"]'
       FRONTEND_URL: http://localhost:5500
-      TRUSTED_PROXY_HOPS: "0"  # en local no hay proxy delante
+      TRUSTED_PROXY_HOPS: "0"
       ENABLE_DOCS: "true"
+      SERVE_FRONTEND: "false"
     ports:
-      - "8000:8000"
+      - "127.0.0.1:8000:8000"
     depends_on:
       db:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health', timeout=3)"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    networks:
+      - backend
 
   web:
     image: python:3.12-slim
-    command: python -m http.server 5500 --directory /srv
+    restart: unless-stopped
+    command: ["python", "-m", "http.server", "5500", "--bind", "0.0.0.0", "--directory", "/srv"]
     volumes:
       - ./frontend:/srv:ro
     ports:
-      - "5500:5500"
+      - "127.0.0.1:5500:5500"
+    depends_on:
+      api:
+        condition: service_healthy
+    networks:
+      - frontend
 
 volumes:
   db-data:
+
+networks:
+  frontend:
+  backend:
+    internal: true
