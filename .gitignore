@@ -34,3 +34,6 @@ playwright-report/
 # Versión local para Windows (Iniciar-Dashboard.bat)
 .venv-local/
 backend/.local-secret
+
+# Informes locales del agente buscador-mejoras
+.claude/informes/

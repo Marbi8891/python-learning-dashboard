@@ -14,3 +14,10 @@ Instrucciones para Claude Code en este repositorio. La descripción del proyecto
 - Nadie edita a mano un JSON generado de `frontend/data/`: se cambia su script y se regenera.
 - Una tarea no está terminada hasta que pasan las pruebas de `docs/TESTING.md` que le tocan.
   Prohibido saltar o debilitar un test para que pase.
+
+## Agentes
+
+- `revisor-daw`: revisa el código o unos cambios y devuelve fallos con evidencia.
+- `buscador-mejoras`: propone mejoras priorizadas por impacto y esfuerzo. Se lanza con `/mejoras`
+  (o `/mejoras accesibilidad` para un área) y guarda el informe en `.claude/informes/`.
+- Los dos son de solo lectura: lo que propongan se implementa después, en otra rama, si el autor lo elige.
