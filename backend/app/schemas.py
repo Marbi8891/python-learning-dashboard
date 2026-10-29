@@ -237,6 +237,8 @@ class UserExport(BaseModel):
     pcap: dict | None = None
     courses: dict[str, dict] = {}
     activity: list[ActivityOut] = []
+    # Consultas al tutor por día y modalidad: solo recuentos, sin preguntas
+    tutor_usage: list[dict] = []
     exported_at: datetime
 
 

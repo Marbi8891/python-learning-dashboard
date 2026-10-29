@@ -40,6 +40,9 @@ async def lifespan(_: FastAPI):
 
 
 _docs = get_settings().enable_docs
+# Versión del protocolo que manda un cliente A2A; la web la necesita en CORS
+A2A_VERSION_HEADER = "A2A-Version"
+
 app = FastAPI(
     title="Python Learning Dashboard API",
     version="1.0.0",
@@ -54,7 +57,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=get_settings().cors_origins,
     allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE"],
-    allow_headers=["Authorization", "Content-Type", MODE_HEADER],
+    allow_headers=["Authorization", "Content-Type", MODE_HEADER, A2A_VERSION_HEADER],
     # La web envía la cookie de sesión HttpOnly a la API, que está en otro dominio
     allow_credentials=True,
 )
@@ -77,7 +80,7 @@ API_SECURITY_HEADERS = {
 
 
 # Rutas de la API
-API_PATHS = ("/api/",)
+API_PATHS = ("/api/", "/a2a/", "/.well-known/agent-card.json")
 
 
 @app.middleware("http")
@@ -184,6 +187,13 @@ def health() -> dict[str, str | bool]:
         "google": bool(get_settings().google_client_id),
     }
 
+
+# Agentes A2A: una capacidad más junto a la API REST, no un sustituto (docs/a2a.md).
+# El SDK solo se importa si se activa: sin A2A, la API no gasta memoria en él.
+if get_settings().a2a_enabled:
+    from app.a2a.server import mount_a2a
+
+    mount_a2a(app, get_settings())
 
 if get_settings().serve_frontend:
     mount_frontend(app, get_settings().frontend_dir)
