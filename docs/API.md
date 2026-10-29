@@ -25,6 +25,21 @@ Interactive OpenAPI documentation is available at /docs when ENABLE_DOCS=true.
 | DAW course state | /api/v1/course-state/{course} (`sql`, `js`, `java`, `entornos`, `programacion`, `learn`, `game`) |
 | Student dashboard | GET /api/v1/dashboard?utc_offset_minutes=, GET /api/v1/dashboard/activity?limit=&offset= |
 
+## A2A agents
+
+When `A2A_ENABLED=true`, the same FastAPI app also serves A2A 1.0 agents under `/a2a/*`. They don't replace any REST endpoint.
+
+| Resource | Endpoints |
+| --- | --- |
+| Agent Card (public) | /.well-known/agent-card.json, /a2a/python-tutor/.well-known/agent-card.json |
+| Python Tutor (JSON-RPC, session required) | POST /a2a/python-tutor with header `A2A-Version: 1.0` |
+
+The default model provider is a free local model through Ollama (`A2A_MODEL_PROVIDER=ollama`); Anthropic is available but only used when chosen explicitly (`A2A_MODEL_PROVIDER=anthropic`, key only in `ANTHROPIC_API_KEY`); tests use the mock model (`A2A_MOCK_MODEL=true`). The agent only depends on the `AgentModelProvider` interface.
+
+**Hybrid tutor** ([tutor-hibrido.md](tutor-hibrido.md)): `GET /api/v1/tutor/modes` (session required) tells the client which tutor modes the backend offers — `free` (always available) and `advanced` (optional OpenAI, disabled by default) — plus the student's advanced quota for today (`daily_limit`, `used_today`, `remaining`, `global_available`, `max_input_chars`, `max_output_tokens`). The tutor message accepts two new optional data fields: `mode` (`free` or `advanced`, default `free`) and `alternative` (boolean). The backend validates the mode: an unavailable mode, a message over the advanced input limit or an exhausted quota ends the task as `TASK_STATE_REJECTED` with reason `advanced_unavailable`, `advanced_input_too_long`, `advanced_limit_reached` or `advanced_global_limit`, and still includes the free answer. The artifact metadata gains `mode` and, for advanced answers, `quota_remaining`. Existing clients that send neither field keep the previous behaviour.
+
+See [a2a.md](a2a.md) (in Spanish) for the message format, examples, security, data minimization and cost limits.
+
 ## Authentication
 
 Authenticated endpoints accept a Bearer access token:
