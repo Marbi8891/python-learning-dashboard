@@ -15,6 +15,7 @@ from app.models import (
     LessonProgress,
     PasswordResetToken,
     PcapState,
+    TutorUsage,
     User,
 )
 from app.password_policy import weakness
@@ -110,6 +111,20 @@ def export_my_data(user: CurrentUser, db: DbSession) -> UserExport:
             for c in db.scalars(select(CourseState).where(CourseState.user_id == user.id))
         },
         activity=[ActivityOut.model_validate(e) for e in activity.recent(db, user.id)],
+        tutor_usage=[
+            {
+                "day": row.day.isoformat(),
+                "mode": row.mode,
+                "requests": row.requests,
+                "input_tokens": row.input_tokens,
+                "output_tokens": row.output_tokens,
+            }
+            for row in db.scalars(
+                select(TutorUsage)
+                .where(TutorUsage.user_id == user.id)
+                .order_by(TutorUsage.day, TutorUsage.mode)
+            )
+        ],
         exported_at=datetime.now(UTC),
     )
 
@@ -161,6 +176,7 @@ def delete_my_account(
         PcapState,
         CourseState,
         AccountEvent,
+        TutorUsage,
     ):
         db.execute(delete(model).where(model.user_id == user.id))
     user_id = user.id
