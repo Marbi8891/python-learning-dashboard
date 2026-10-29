@@ -12,7 +12,7 @@ lang: es-ES
 
 Python Learning Dashboard es una web para aprender a programar en Python y preparar el examen PCAP (Certified Associate in Python Programming) y la parte de programación de DAW. Tiene teoría propia, una consola de Python que funciona en el navegador, ejercicios que se corrigen solos, simulacros del examen y repaso espaciado. También incluye cursos de otros módulos del ciclo (Bases de datos, Entornos de desarrollo, JavaScript y Java).
 
-Se puede usar sin cuenta. Si el alumno se registra, su progreso se guarda en el servidor y puede verlo desde cualquier dispositivo.
+Se puede usar sin cuenta. Si el alumno se registra, su progreso se guarda en el servidor y puede verlo desde cualquier dispositivo. Además, muestra el currículo oficial de DAW de Castilla y León y relaciona cada módulo con las preguntas que el alumno ha practicado.
 
 Técnicamente es un frontend estático (HTML, CSS y JavaScript) publicado en GitHub Pages y una API REST hecha con FastAPI y PostgreSQL.
 
@@ -58,7 +58,7 @@ En el proyecto he usado contenidos de varios módulos:
 6. Que sea accesible (WCAG 2.1 AA) y funcione en móvil.
 7. Tener pruebas automáticas y despliegue continuo.
 
-**Fuera de alcance.** Certificados oficiales, pagos, tutorías en directo, ejecutar código en el servidor y una app móvil nativa.
+**Fuera de alcance.** Certificados oficiales, pagos, tutorías en directo, ejecutar código en el servidor, un tutor con IA y una app móvil nativa. En el móvil se usa la web, que es adaptable y se puede instalar como PWA. Durante el desarrollo hice un prototipo de app Android y un tutor con IA, pero los retiré el 26 de octubre de 2026 para simplificar el proyecto (ver 9.1).
 
 # 3. Análisis
 
@@ -88,6 +88,8 @@ En el proyecto he usado contenidos de varios módulos:
 | RF-14 | Panel del alumno con resumen, progreso y actividad. |
 | RF-15 | Descargar los datos personales en JSON y borrar la cuenta. |
 | RF-16 | Tema claro, oscuro o automático y tres tamaños de letra. |
+| RF-17 | Currículo oficial de DAW (17 módulos, con sus resultados de aprendizaje y criterios de evaluación) y cuántas preguntas de cada módulo ha practicado y domina el alumno. |
+| RF-18 | Portada pública (`#/portada`) que presenta la web, y asistente de cada lección con respuestas preparadas y una pista del ejercicio. |
 
 ## 3.3 Requisitos no funcionales
 
@@ -122,7 +124,7 @@ El frontend es estático y se publica en GitHub Pages. El backend en FastAPI se 
 
 ![Modelo entidad-relación](img/er.png)
 
-Las tablas de contenido (`modules`, `lessons`) se rellenan desde `lessons.json` con un script (`seed.py`). El progreso, los intentos y los tokens dependen del usuario y se borran con él. La preparación del PCAP y el estado de los cursos se guardan como un JSON por usuario, porque su formato cambia a menudo y así no hace falta una migración cada vez. Los tokens de recuperación se guardan como hash y caducan a los 30 minutos.
+Las tablas de contenido (`modules`, `lessons`) se rellenan desde `lessons.json` con un script (`seed.py`). El progreso, los intentos, los tokens y el historial de la cuenta (`account_events`: inicios de sesión y cambios de seguridad, que se ven en el panel) dependen del usuario y se borran con él. `users.email_verified_at` indica si el email está comprobado (por Google o por un enlace de recuperación). La preparación del PCAP y el estado de los cursos se guardan como un JSON por usuario, porque su formato cambia a menudo y así no hace falta una migración cada vez. Los tokens de recuperación se guardan como hash y caducan a los 30 minutos.
 
 ## 4.3 API REST
 
@@ -134,21 +136,25 @@ Las tablas de contenido (`modules`, `lessons`) se rellenan desde `lessons.json` 
 | POST | `/api/v1/auth/register` | Crear cuenta (hay que aceptar la privacidad) |
 | POST | `/api/v1/auth/login` | Iniciar sesión |
 | POST | `/api/v1/auth/google` | Entrar con Google |
+| POST | `/api/v1/auth/logout`, `/logout-all` | Cerrar la sesión, o todas las sesiones |
 | POST | `/api/v1/auth/password-reset/request` y `/confirm` | Recuperar la contraseña |
-| GET | `/api/v1/users/me`, `/me/export` | Datos del usuario y exportación RGPD |
-| POST | `/api/v1/users/me/delete` | Borrar la cuenta (pide la contraseña) |
-| GET, PUT, DELETE | `/api/v1/progress`, `/api/v1/progress/{slug}` | Progreso de las lecciones |
+| GET | `/api/v1/users/me`, `/me/activity`, `/me/export` | Datos del usuario, historial de la cuenta y exportación RGPD |
+| POST | `/api/v1/users/me/password` | Cambiar la contraseña |
+| POST | `/api/v1/users/me/delete` | Borrar la cuenta (pide la contraseña o, en cuentas de Google, una credencial reciente de Google) |
+| GET | `/api/v1/progress` | Progreso de las lecciones |
+| PUT, DELETE | `/api/v1/progress/{slug}` | Marcar o desmarcar una lección |
+| POST | `/api/v1/progress/import` | Subir el progreso local al iniciar sesión |
 | POST, GET | `/api/v1/lessons/{slug}/attempts` | Intentos de ejercicio |
 | GET, PUT | `/api/v1/pcap-state` | Preparación del PCAP |
-| GET, PUT | `/api/v1/course-state/{curso}` | Progreso de los cursos de DAW |
-| GET | `/api/v1/dashboard` | Datos del panel del alumno |
+| GET, PUT | `/api/v1/course-state/{curso}` | Progreso de los cursos de DAW, del núcleo por conceptos (`learn`) y de la gamificación (`game`) |
+| GET | `/api/v1/dashboard`, `/dashboard/activity` | Datos del panel del alumno e historial de aprendizaje |
 
 FastAPI genera la documentación interactiva (OpenAPI) en `/docs`.
 
 ## 4.4 Seguridad
 
 - Las contraseñas se guardan con Argon2.
-- La sesión es un JWT dentro de una cookie `HttpOnly`, así JavaScript no puede leer el token. Como la cookie se envía sola, las peticiones que cambian datos llevan una cabecera extra para evitar CSRF.
+- La sesión es un JWT dentro de una cookie `HttpOnly` (`__Host-pld_session`) que caduca a los 30 minutos, así JavaScript no puede leer el token. Como la cookie se envía sola, las peticiones que cambian datos llevan una cabecera extra para evitar CSRF.
 - Al cambiar la contraseña se cierran todas las sesiones (campo `token_version`).
 - Hay un límite de intentos de inicio de sesión por IP y por cuenta.
 - CORS solo deja pasar los orígenes del frontend.
@@ -186,6 +192,10 @@ Elegí un diseño tipo editorial (colores tinta, marfil y dorado y titulares con
 
 **Temario comprobado.** El temario no se escribe a mano en los JSON: se genera con scripts de Python (`scripts/courses/` y `scripts/learning/`). Los scripts ejecutan el código de cada pregunta y fallan si la salida no es la que se espera, así no hay respuestas mal puestas. En la integración continua se comprueba que el JSON publicado está al día.
 
+**Asistente de la lección.** Cada lección tiene un asistente con preguntas frecuentes, una pista del ejercicio y un enlace al tema siguiente (`frontend/js/assistant.js`). No es una IA: las respuestas están escritas y revisadas en `lessons.json`, así que no hace falta ningún servicio externo.
+
+**Currículo oficial de DAW.** `scripts/curriculum/` genera el catálogo de los 17 módulos de la Orden EDU/1311/2024 con los resultados de aprendizaje del Real Decreto 405/2023 (`#/daw/curriculo`). Cada pregunta de los cursos está asociada a un módulo, y el panel del alumno muestra cuántas ha practicado y domina por módulo.
+
 **Funciona sin cuenta.** Si no hay sesión, todo se guarda en `localStorage`. Al iniciar sesión se juntan el progreso local y el del servidor.
 
 **PWA.** El service worker sirve la web pidiendo primero a la red y, si no hay conexión, desde la caché. Pyodide (unos 10 MB) se guarda en una caché aparte para no descargarlo cada vez.
@@ -198,9 +208,9 @@ Elegí un diseño tipo editorial (colores tinta, marfil y dorado y titulares con
 
 | Tipo | Qué prueba | Resultado |
 |---|---|---|
-| Backend (pytest) | API, autenticación, RGPD, migraciones y contenido | 542 pruebas, 100 % de cobertura |
-| Frontend (node --test) | Lógica del aprendizaje, repaso, panel y corrección | 67 pruebas |
-| End-to-end (Playwright) | La web entera con el backend de verdad | 16 ficheros de pruebas |
+| Backend (pytest) | API, autenticación, RGPD, migraciones, contenido y currículo | 557 pruebas, 100 % de cobertura |
+| Frontend (node --test) | Lógica del aprendizaje, repaso, panel, corrección y gamificación | 68 pruebas |
+| End-to-end (Playwright) | La web entera con el backend de verdad | 17 ficheros de pruebas |
 | Accesibilidad | WCAG 2.1 AA en tema claro y oscuro | Automática |
 | Estilo de código | Ruff | Sin errores |
 | Migraciones | Alembic contra PostgreSQL 16 | Automática en CI |
@@ -211,14 +221,14 @@ En cada `push` y pull request GitHub Actions pasa el lint, las pruebas del backe
 
 ## 6.3 Pruebas manuales
 
-[VERIFY: completar después de probar en dispositivos reales]
+Algunas de estas comprobaciones ya las hace una prueba automática en Chromium (columna «Prueba automática»). Las pruebas manuales en un dispositivo real están pendientes y se anotarán aquí con la fecha y el resultado.
 
-| Prueba | Dispositivo | Resultado |
-|---|---|---|
-| Navegación completa a 375 px | [VERIFY] | [VERIFY] |
-| Recorrido solo con teclado | [VERIFY] | [VERIFY] |
-| Página 404 | [VERIFY] | [VERIFY] |
-| Uso sin conexión (PWA) | [VERIFY] | [VERIFY] |
+| Prueba | Prueba automática | Dispositivo | Resultado manual |
+|---|---|---|---|
+| Navegación completa a 375 px | Sí: `e2e/learn.spec.js` y `e2e/landing.spec.js` comprueban que no hay desbordamiento a 375 px, y `e2e/a11y.spec.js` audita a 390 px | [VERIFY] | [VERIFY] |
+| Recorrido solo con teclado | En parte: `e2e/landing.spec.js` comprueba el enlace «Saltar al contenido» con Tab y el cierre del menú con Escape | [VERIFY] | [VERIFY] |
+| Página 404 | No | [VERIFY] | [VERIFY] |
+| Uso sin conexión (PWA) | Sí: `e2e/study.spec.js` instala el service worker, corta la red y recarga «¿Qué estudio ahora?» | [VERIFY] | [VERIFY] |
 
 ## 6.4 Accesibilidad
 
@@ -226,7 +236,14 @@ Además de la auditoría automática, he añadido el enlace para saltar al conte
 
 ## 6.5 Rendimiento
 
-[VERIFY: ejecutar Lighthouse en Chrome y anotar rendimiento, accesibilidad, buenas prácticas y SEO.]
+Todavía no he medido la web publicada con Lighthouse. Se hará en Chrome (DevTools → Lighthouse, modo móvil y escritorio) sobre la demo pública y se anotarán aquí las cuatro puntuaciones con la fecha:
+
+| Fecha | Modo | Rendimiento | Accesibilidad | Buenas prácticas | SEO |
+|---|---|---|---|---|---|
+| [VERIFY] | Móvil | [VERIFY] | [VERIFY] | [VERIFY] | [VERIFY] |
+| [VERIFY] | Escritorio | [VERIFY] | [VERIFY] | [VERIFY] | [VERIFY] |
+
+Lo que sí se sabe del código: la web no usa framework, las fuentes están en el propio proyecto y Pyodide (unos 10 MB) solo se descarga al abrir la consola y luego se guarda en caché.
 
 # 7. Despliegue
 
@@ -237,7 +254,7 @@ El frontend se publica en GitHub Pages con el workflow `pages.yml`. El backend e
 - **RGPD:** hay política de privacidad con el responsable, para qué se usan los datos, la base legal, los proveedores, los plazos y los derechos. El alumno puede descargar sus datos en JSON y borrar su cuenta.
 - **LSSI:** aviso legal con los datos del titular.
 - **Cookies:** solo hay una, la de sesión, y solo si inicias sesión. Es técnica y necesaria, así que no hace falta banner de cookies.
-- **Analítica:** GoatCounter, que no usa cookies ni guarda la IP.
+- **Analítica:** está preparada con GoatCounter, que no usa cookies ni guarda la IP, pero está desactivada (`goatcounter: ""` en `frontend/config.js`). Mientras siga así, la política de privacidad oculta ese apartado y no se mide nada.
 - **Terceros:** Pyodide se descarga de jsDelivr la primera vez que se usa la consola, así que jsDelivr recibe la IP. Está indicado en la política.
 - **Licencias:** el código es MIT y las fuentes (Inter, JetBrains Mono y Fraunces) son OFL. PCAP es una marca de Python Institute y el proyecto no tiene relación con ellos; el certificado que genera la web no es oficial.
 - **Contenido:** las explicaciones y las preguntas son propias, con las fuentes enlazadas.
@@ -246,17 +263,19 @@ El frontend se publica en GitHub Pages con el workflow `pages.yml`. El backend e
 
 ## 9.1 Planificación
 
-[VERIFY: el historial de Git empieza el 25 de septiembre de 2026. Si trabajaste antes en otro repositorio o en local, pon aquí las fechas reales; el tribunal puede preguntarlo.]
+Las fechas salen del historial de Git, que empieza el 25 de septiembre de 2026 y tiene commits en 16 días distintos hasta el 26 de octubre. [VERIFY: si trabajaste antes en otro repositorio o en local, añade esas fechas; el tribunal puede preguntarlo.]
 
-| Fase | Contenido | Fechas | Horas |
+| Fase | Contenido | Fechas (según Git) | Horas |
 |---|---|---|---|
-| Análisis y diseño | Requisitos, arquitectura, modelo de datos | [VERIFY] | [VERIFY] |
-| Web | Lecciones, consola, ejercicios | [VERIFY] | [VERIFY] |
-| Backend y cuentas | API, autenticación, RGPD | [VERIFY] | [VERIFY] |
-| Examen PCAP | Simulacros, fichas, repaso | [VERIFY] | [VERIFY] |
-| Cursos de DAW y núcleo por conceptos | Temario, scripts que lo generan | [VERIFY] | [VERIFY] |
-| Pruebas y despliegue | Pruebas, CI, accesibilidad, publicación | [VERIFY] | [VERIFY] |
-| Memoria y defensa | Documentación y presentación | [VERIFY] | [VERIFY] |
+| Análisis y diseño | Requisitos, arquitectura, modelo de datos | Antes del 25/09/2026 (no queda en Git) [VERIFY] | [VERIFY] |
+| Web | Lecciones, consola, ejercicios | 25/09 – 05/10 (de la v0.1.0 a los números de línea en el código) | [VERIFY] |
+| Backend y cuentas | API, autenticación, RGPD | 26/09 – 20/10 (Render y Neon, cookie `HttpOnly`, recuperación de contraseña, Google) | [VERIFY] |
+| Examen PCAP | Simulacros, fichas, repaso | 27/09 (v0.9.0 y v1.0.0) | [VERIFY] |
+| Cursos de DAW y núcleo por conceptos | Temario, scripts que lo generan | 29/09 – 26/10 (cursos de DAW, núcleo por conceptos el 04/10 y currículo oficial el 26/10) | [VERIFY] |
+| Pruebas y despliegue | Pruebas, CI, accesibilidad, publicación | Todo el proyecto; versión 1.0.0 el 29/09 | [VERIFY] |
+| Memoria y defensa | Documentación y presentación | 29/09 (primera memoria y diagramas) – 26/10 | [VERIFY] |
+
+También hubo trabajo que no ha llegado a la versión final: una app Android (27/09 – 04/10) y un tutor con IA (06/10 – 20/10). Los retiré el 26 de octubre (pull request #62) para simplificar el proyecto; además, el tutor necesitaba un modelo de IA de pago o instalado en local.
 
 ## 9.2 Costes
 
@@ -265,13 +284,15 @@ El frontend se publica en GitHub Pages con el workflow `pages.yml`. El backend e
 | Frontend | GitHub Pages | 0 € |
 | API | Render (plan gratuito) | 0 € |
 | Base de datos | Neon (plan gratuito) | 0 € |
-| Email | Brevo (plan gratuito) | 0 € [VERIFY] |
+| Email | Brevo (plan gratuito, 300 emails al día) | 0 € |
 
-El plan gratuito de Render apaga el servidor cuando no se usa, así que la primera petición puede tardar un poco. Sin cuenta, la web no depende del backend.
+El plan gratuito de Render apaga el servidor tras 15 minutos sin tráfico, y la primera petición tarda cerca de un minuto en despertarlo. Ese plan también bloquea los puertos SMTP, por eso los emails se envían por la API HTTPS de Brevo. Sin cuenta, la web no depende del backend.
 
 ## 9.3 Herramientas utilizadas
 
-[VERIFY: indica aquí qué herramientas has usado para hacer el proyecto (editor, PyCharm, GitHub, Claude Code u otros asistentes de IA) y para qué partes, siguiendo lo que pida tu centro sobre el uso de IA.]
+- **Git y GitHub:** control de versiones, pull requests, GitHub Actions (CI) y GitHub Pages.
+- **Claude Code (asistente de IA):** 63 de los 93 commits del historial llevan la línea `Co-Authored-By: Claude`, es decir, se hicieron con su ayuda.
+- [VERIFY: completa el editor o IDE que has usado (por ejemplo, PyCharm) y explica con tus palabras para qué partes usaste la IA y qué hiciste tú: decidir qué construir, revisar, probar y aprobar cada cambio. Sigue lo que pida tu centro sobre el uso de IA.]
 
 # 10. Conclusiones
 
@@ -284,13 +305,16 @@ He hecho una web con su API que cumple los objetivos: el temario del PCAP y de D
 - Falta una revisión manual de accesibilidad con lector de pantalla.
 - El backend gratuito tarda en arrancar después de un rato sin uso.
 - El temario del PCAP puede quedarse desactualizado si cambia el examen.
+- El progreso y la XP los calcula el navegador: el servidor los guarda, pero no comprueba que sean ciertos.
+- Los límites de intentos de inicio de sesión se guardan en memoria, así que solo valen con un servidor.
+- Cuatro módulos oficiales de 2.º (0613, 0614, 0615 y 0373) aún no tienen curso en la web.
 
 ## 10.3 Líneas futuras
 
-- Un curso de HTML y CSS.
-- Estadísticas de uso a partir de la analítica sin cookies.
-- Un asistente que ayude con las dudas de los ejercicios.
-- Una app móvil.
+- Un curso de HTML y CSS, que cubriría parte de Lenguajes de marcas (0373) y de Diseño de interfaces web (0615).
+- Activar la analítica sin cookies, que ya está preparada, para saber qué lecciones se usan más.
+- Ampliar el asistente de la lección con más preguntas y pistas, sin usar IA.
+- Revisar la accesibilidad con lector de pantalla y medir el rendimiento con Lighthouse.
 
 # Bibliografía y fuentes
 

@@ -50,7 +50,7 @@ No se encontraron dependencias funcionales de los componentes eliminados: el bac
 | P6 | Pyodide se carga de jsDelivr sin SRI, y la CSP va en `<meta>` con `style-src 'unsafe-inline'`. GitHub Pages no permite cabeceras propias, así que `frame-ancestors` no se puede aplicar por `<meta>`. | Medio | Medio |
 | P7 | El modelo de ejercicio (`learning.json`) no tiene campos de procedencia ni de licencia. Hacen falta si algún día se incorpora material de terceros. | Medio | Bajo |
 | P8 | ~~Dos pruebas fallaban en Windows sin `PYTHONUTF8=1`~~. **Resuelto:** las pruebas abren los archivos en UTF-8 y ejecutan los ejemplos en modo UTF-8, como Pyodide. | Bajo | Bajo |
-| P9 | Las imágenes de la memoria (`docs/memoria/img/*.png`) siguen mostrando la app Android. El `.dot` ya está corregido, pero falta regenerar el PNG con Graphviz. | Bajo | Bajo |
+| P9 | ~~Las imágenes de la memoria (`docs/memoria/img/*.png`) siguen mostrando la app Android~~. **Resuelto:** los PNG se han regenerado con Graphviz desde los `.dot`, y el modelo de datos incluye ya `account_events` y `email_verified_at`. | Bajo | Bajo |
 | P10 | ~~Rutas antiguas `/api/...` mantenidas por la app Android~~. **Resuelto:** se han quitado; solo queda `/api/health` porque Render la usa como `healthCheckPath`. | Bajo | Bajo |
 
 Límites conocidos del Web Worker: es aislamiento de hilo, no una barrera de seguridad completa. El código del alumno se ejecuta en el mismo origen que la web, el corte de red depende de sobrescribir APIs del worker y la memoria no está limitada más allá de lo que imponga el navegador.

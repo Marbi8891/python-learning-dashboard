@@ -45,8 +45,11 @@ En un portátil, las e2e en paralelo pueden agotar el tiempo de espera, porque c
 | `scripts/learning/**` | `python scripts/learning/build_learning.py` y después `--check` |
 | `scripts/courses/**` | `python scripts/courses/<curso>_course.py --check` |
 | `backend/**` | Lint, formato y pytest con cobertura |
+| `scripts/curriculum/**` | `python scripts/curriculum/build_curriculum.py --check` y `cd backend && python -m pytest -q tests/test_curriculum.py` |
+| `docs/memoria/img/*.dot` | `dot -Tpng <archivo>.dot -o <archivo>.png` (Graphviz) para regenerar el diagrama |
 
 ## Lo que falta
 
 - Pruebas manuales de accesibilidad (lector de pantalla, solo teclado, zoom al 200 %).
-- Pruebas del modo sin conexión (service worker) y de rendimiento.
+- Pruebas en un móvil real y medición de rendimiento con Lighthouse (memoria, 6.3 y 6.5).
+- El modo sin conexión tiene una prueba automática (`e2e/study.spec.js`, «PWA») que recarga «¿Qué estudio ahora?» sin red, pero no cubre abrir una lección que no se había visitado antes.

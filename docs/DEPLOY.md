@@ -17,7 +17,7 @@ La app tiene dos partes que se despliegan por separado:
 powershell -ExecutionPolicy Bypass -File .\deploy.ps1 -Message "feat: versión 0.3.0"
 ```
 
-El script crea el repositorio, activa Pages (vía GitHub Actions) y sube el código.
+El script crea el repositorio, activa Pages (vía GitHub Actions) y sube el código. Solo hace falta la primera vez: después, cada merge a `main` que cambie `frontend/` publica la web sola con `.github/workflows/pages.yml`.
 
 URL final: `https://marbi8891.github.io/python-learning-dashboard/`
 
@@ -83,7 +83,7 @@ Sin SMTP no se envía el enlace de recuperación (tampoco se escribe en los logs
 
 ### Opción A: Brevo por HTTPS (gratis, funciona en el plan gratuito de Render)
 
-1. Crea una cuenta gratuita en [brevo.com](https://www.brevo.com) (VERIFY: el plan gratuito permite unos 300 emails al día).
+1. Crea una cuenta gratuita en [brevo.com](https://www.brevo.com) (el plan gratuito permite 300 emails al día).
 2. **Senders, domains & dedicated IPs → Senders → Add a sender**: tu dirección (por ejemplo, tu Gmail). Brevo te envía un email para verificarla.
 3. **SMTP & API → API keys → Generate a new API key**. Cópiala: es un secreto, no la guardes en el repositorio.
 4. En Render → `pld-api` → **Environment**:
@@ -113,7 +113,7 @@ Las variables `SMTP_HOST`, `SMTP_USER` y `SMTP_PASSWORD` sobran: si `BREVO_API_K
 
 4. Para comprobar que el email llega de verdad: `python -m app.mailer tu-direccion@gmail.com` (en local con las variables en `backend/.env`, o en la **Shell** del servidor). Si falla, muestra el error del servidor SMTP.
 
-VERIFY: Gmail limita los envíos diarios de una cuenta personal (del orden de cientos). Para un proyecto de clase sobra.
+Gmail corta los envíos de una cuenta personal a partir de unos 500 emails al día. Para un proyecto de clase sobra.
 
 ### Después de activarlo (RGPD)
 
