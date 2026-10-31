@@ -190,12 +190,32 @@ MAX_PCAP_STATE_BYTES = 200_000  # ~1000 simulacros y todas las respuestas caben 
 COURSES = ("sql", "js", "java", "entornos", "programacion", "learn", "game")
 
 
+MAX_STATE_DEPTH = 20  # los documentos reales llegan a 5 niveles (medido en las pruebas e2e)
+
+
+def _too_deep(data: dict) -> bool:
+    """¿Supera el anidamiento permitido? Iterativo: un JSON muy profundo no puede romperlo."""
+    pending = [(data, 1)]
+    while pending:
+        node, level = pending.pop()
+        children = (
+            node.values() if isinstance(node, dict) else node if isinstance(node, list) else ()
+        )
+        if children and level >= MAX_STATE_DEPTH:
+            return True
+        pending.extend((child, level + 1) for child in children)
+    return False
+
+
 class PcapStateIn(BaseModel):
     data: dict
 
     @field_validator("data")
     @classmethod
     def not_too_big(cls, data: dict) -> dict:
+        # Antes de serializar: con cientos de niveles, pydantic fallaba con un 500
+        if _too_deep(data):
+            raise ValueError("Los datos de preparación están demasiado anidados")
         if len(json.dumps(data)) > MAX_PCAP_STATE_BYTES:
             raise ValueError("Los datos de preparación son demasiado grandes")
         return data

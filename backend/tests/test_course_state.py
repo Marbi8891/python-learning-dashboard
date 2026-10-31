@@ -71,3 +71,11 @@ def test_game_state_is_saved_per_user(client, auth_headers):
     assert saved.status_code == 200
     assert client.get("/api/v1/course-state/game", headers=auth_headers).json()["data"] == game
     assert client.get("/api/v1/course-state/game").status_code == 401
+
+
+def test_rejects_deeply_nested_course_state_with_422(client, auth_headers):
+    nested = '{"data":' + '{"a":' * 400 + "1" + "}" * 400 + "}"
+    headers = {**auth_headers, "Content-Type": "application/json"}
+    assert (
+        client.put("/api/v1/course-state/sql", content=nested, headers=headers).status_code == 422
+    )

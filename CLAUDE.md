@@ -20,4 +20,7 @@ Instrucciones para Claude Code en este repositorio. La descripción del proyecto
 - `revisor-daw`: revisa el código o unos cambios y devuelve fallos con evidencia.
 - `buscador-mejoras`: propone mejoras priorizadas por impacto y esfuerzo. Se lanza con `/mejoras`
   (o `/mejoras accesibilidad` para un área) y guarda el informe en `.claude/informes/`.
-- Los dos son de solo lectura: lo que propongan se implementa después, en otra rama, si el autor lo elige.
+- `red-teamer`: auditoría de seguridad con evidencias (estática y, si se autoriza, en un laboratorio local).
+- `python-reviewer`: revisión de estilo y buenas prácticas de Python, copiado de Everything Claude Code
+  (versión de oct 2026). Sus comprobaciones de `mypy`, `black` y `bandit` no se ejecutan: no están en el proyecto.
+- Todos son de solo lectura: lo que propongan se implementa después, en otra rama, si el autor lo elige.

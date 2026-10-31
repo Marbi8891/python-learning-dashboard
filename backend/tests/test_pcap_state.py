@@ -34,3 +34,13 @@ def test_export_and_delete_include_pcap_state(client, auth_headers):
     assert client.get("/api/v1/users/me/export", headers=auth_headers).json()["pcap"] == {
         "known": ["oop-f01"]
     }
+
+
+def test_rejects_deeply_nested_state_with_422(client, auth_headers):
+    """Un JSON muy anidado daba un 500 (recursión): ahora es un 422 controlado."""
+    nested = '{"data":' + '{"a":' * 400 + "1" + "}" * 400 + "}"
+    headers = {**auth_headers, "Content-Type": "application/json"}
+    assert client.put("/api/v1/pcap-state", content=nested, headers=headers).status_code == 422
+    # La API sigue respondiendo con normalidad
+    ok = client.put("/api/v1/pcap-state", json={"data": {"a": {"b": [1, 2]}}}, headers=auth_headers)
+    assert ok.status_code == 200
