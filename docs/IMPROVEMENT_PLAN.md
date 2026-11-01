@@ -17,7 +17,7 @@ Este documento es la fuente de verdad del estado real: cada hallazgo indica si e
 | Arquitectura | Frontend estático (HTML/CSS/ES Modules, rutas con hash, Pyodide en Web Worker, PWA) en GitHub Pages; API FastAPI + SQLAlchemy + Alembic en Render; PostgreSQL (Neon) en producción, SQLite en local. Coincide con `README.md`. |
 | Funcionalidades | Conceptos con ejercicios (22 / 131, coincide con el README), curso PCAP, cursos de DAW (SQL, JS, Java, Entornos, Programación), currículo oficial, repaso espaciado, XP/logros, cuenta opcional (email y Google), RGPD (exportar/borrar), PWA. |
 | Tutor con IA | **No existe.** Se añadió con la migración `20261020_d7e2a9c4f1b8_uso_del_tutor` y se retiró con `20261026_e1a2b3c4d5f6_quitar_tutor` (borra la tabla `tutor_usage`). |
-| Documentos | Existen `README.md`, `CLAUDE.md`, `SECURITY.md` y `docs/{API,AUDITORIA-Y-LICENCIAS,DEMO-Y-DEFENSA,DEPLOY,EJECUTAR-EN-WINDOWS,PLAN-CURRICULO-DAW,TESTING,auth}.md` + `docs/memoria/`. **No existen** `AUDIT.md`, `ROADMAP.md`, `ARCHITECTURE.md` ni `CHANGELOG.md`. |
+| Documentos | Existen `README.md`, `SECURITY.md` y `docs/{API,AUDITORIA-Y-LICENCIAS,DEMO-Y-DEFENSA,DEPLOY,EJECUTAR-EN-WINDOWS,PLAN-CURRICULO-DAW,TESTING,auth}.md` + `docs/memoria/`. **No existen** `AUDIT.md`, `ROADMAP.md`, `ARCHITECTURE.md` ni `CHANGELOG.md`. |
 | CI | `ci.yml` (backend + migraciones PostgreSQL + cursos + e2e) y `pages.yml`. Último push a `main` (#67): CI en verde. |
 
 ## 3. Pruebas ejecutadas en esta iteración
@@ -110,7 +110,7 @@ Entorno: Linux, Python 3.13.18 (la CI usa 3.12), Node 22.23.4, Playwright 1.63.0
 
 1. **Tutor con IA (Fase 8):** se retiró el 26 de octubre. ¿Se quiere reintroducir? Si no, la Fase 8 queda cerrada como «no aplica». No se ha construido nada.
 2. **H-04:** si se confirma, cambiar el contrato de `PUT /course-state` y `/pcap-state` (API compatible hacia atrás con parámetro opcional).
-3. **Ramas y despliegue:** este trabajo va en la rama `docs/plan-mejora-auditoria`. Fusionar a `main` publica la web, así que el merge lo hace siempre la persona (regla de `CLAUDE.md`).
+3. **Ramas y despliegue:** este trabajo va en la rama `docs/plan-mejora-auditoria`. Fusionar a `main` publica la web, así que el merge lo hace siempre la persona (regla del proyecto).
 
 ## 7. Estado por fases del plan maestro
 
