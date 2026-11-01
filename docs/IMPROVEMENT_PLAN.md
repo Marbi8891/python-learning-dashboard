@@ -5,9 +5,9 @@ Este documento es la fuente de verdad del estado real: cada hallazgo indica si e
 
 ## 1. Resumen
 
-- **P0 verificados: 0. P1 verificados: 0.** No se ha tocado código de producto en esta iteración.
+- **P0 verificados: 0. P1 verificados: 1 (F-04, pérdida de progreso entre dos sesiones de la misma cuenta).** Está corregido en la rama `fix/sync-cursos-dos-sesiones`, **pendiente de revisión y de fusión por el autor**: lo que hay en `main` y en la web publicada sigue sin la corrección. Este documento no cambia código.
 - Todas las comprobaciones de `docs/TESTING.md` que se podían ejecutar en este entorno pasan (ver §3).
-- Hay 1 test e2e intermitente (F-01), 1 riesgo de integridad de datos no verificado (H-04) y varias mejoras P2/P3.
+- Hay 1 test e2e que falló dos veces y no se ha vuelto a reproducir (F-01), 3 puntos de subida con el mismo patrón que F-04 sin verificar (F-04b) y varias mejoras P2/P3.
 - El plan maestro asume documentos y un tutor con IA que **no existen** en el repositorio (ver §5): se necesita una decisión del autor antes de continuar con la Fase 8.
 
 ## 2. Inventario
@@ -34,7 +34,9 @@ Entorno: Linux, Python 3.13.18 (la CI usa 3.12), Node 22.23.4, Playwright 1.63.0
 | `npm run test:unit` | OK: 68 de 68 |
 | `npm audit --audit-level=high` | 0 vulnerabilidades |
 | `pip-audit -r backend/requirements.txt` | Sin vulnerabilidades conocidas |
-| `npx playwright test --workers=1` | 135 pasan, 1 falla (F-01). El test que falló pasó 10 de 10 en repeticiones posteriores. |
+| `npx playwright test --workers=1` (sobre `main`) | 135 pasan, 1 falla (F-01). El test que falló pasó 10 de 10 en repeticiones posteriores. |
+| `npx playwright test --workers=1` (rama `fix/sync-cursos-dos-sesiones`) | 137 pasan, 0 fallan (las 136 anteriores + `e2e/sync.spec.js`). |
+| `e2e/sync.spec.js` (dos contextos, misma cuenta) | Sin la corrección: falla 3 de 3. Con la corrección: 10 de 10 sin reintentos. |
 
 **No ejecutado** (no se marca como superado):
 
@@ -44,15 +46,14 @@ Entorno: Linux, Python 3.13.18 (la CI usa 3.12), Node 22.23.4, Playwright 1.63.0
 
 ## 4. Hallazgos
 
-### F-01 · P2 · Test e2e intermitente en el menú móvil de la portada — VERIFICADO (causa raíz parcial)
+### F-01 · P2 · Test e2e que falló dos veces en el menú móvil de la portada — NO REPRODUCIBLE DESPUÉS
 
 - **Componente:** `e2e/landing.spec.js:117` («móvil › menú accesible…»), `frontend/js/landing.js`, `frontend/index.html`.
 - **Evidencia:** falló 2 veces seguidas (la suite completa y una repetición aislada) con `locator.click: Test timeout` porque el selector resolvió a `#menu-toggle` (el botón de la barra de la app), «element is not visible». Después pasó 10 de 10 (5 sin y 5 con `PYODIDE_URL`). La CI de `main` pasa (allí `retries: 1`; en local `retries: 0`).
 - **Mecanismo observado:** justo después de `page.goto("/#/portada")` a 375 px, `getByRole("button", { name: "Menú" })` casa unas veces con `#menu-toggle` (visible, 97×42, mientras `#lp-menu-toggle` aún no existe) y otras con `#lp-menu-toggle`. En una réplica con 4 intentos el clic se recuperó en todos, así que **no se ha reproducido el bloqueo de 60 s fuera del test real**.
-- **Solución propuesta:** en el test, esperar a que exista `#lp-menu-toggle` antes de localizar el botón (selector determinista). No es debilitar el test: mantiene todas las aserciones.
-- **Riesgo:** bajo (solo toca el test). Hay que evitar que la espera enmascare F-02.
-- **Pruebas necesarias:** repetir ese test con `--repeat-each=20 --retries=0`, en serie y con `--workers=4`.
-- **Criterio de aceptación:** 0 fallos en 20 repeticiones sin reintentos.
+- **Intento de línea base (sin éxito):** con el test original y sin reintentos, 0 fallos en 20 repeticiones con `--workers=4`, 0 fallos en 20 con la CPU saturada, y pasa en la suite completa posterior (137 de 137). Sin un caso que falle no se puede demostrar que un cambio lo arregla, **así que no se ha modificado el test**.
+- **Solución candidata (sin aplicar):** esperar a que exista `#lp-menu-toggle` antes de localizar el botón. Mantiene todas las aserciones, pero habría que aplicarla solo si el fallo vuelve a aparecer, y comprobar antes que no enmascara F-02.
+- **Criterio de aceptación:** 0 fallos en 20 repeticiones sin reintentos tras el cambio, con una línea base que falle antes.
 
 ### F-02 · P3 · Destello de la barra de la app en la portada móvil — VERIFICADO (impacto no medido)
 
@@ -73,15 +74,21 @@ Entorno: Linux, Python 3.13.18 (la CI usa 3.12), Node 22.23.4, Playwright 1.63.0
 - **Solución propuesta:** mantener y documentar. Si se añade un ranking, validar en el servidor una puntuación máxima plausible por acción.
 - **Pruebas necesarias:** test de aislamiento entre usuarios (comprobar si ya está cubierto antes de añadirlo).
 
-### H-04 · P2 · Posible pérdida de datos por «última escritura gana» al sincronizar dos dispositivos — HIPÓTESIS
+### F-04 · P1 · Dos sesiones abiertas de la misma cuenta se pisan el progreso de un curso — VERIFICADO Y CORREGIDO EN RAMA (sin fusionar)
 
-- **Componente:** `PUT /course-state/{course}` y `PUT /pcap-state` (`backend/app/routers/course_state.py`, `pcap.py`).
-- **Evidencia:** el `PUT` sustituye el documento completo y el docstring dice que «la app ya lo ha fusionado»; el servidor no recibe ni comprueba ningún token de versión (`updated_at` solo se devuelve).
-- **No verificado:** que dos dispositivos con sesión abierta pierdan datos en la práctica (depende de cuándo fusiona el cliente).
-- **Verificación propuesta:** test e2e con dos contextos de Playwright sobre la misma cuenta, guardando progreso distinto casi a la vez.
-- **Solución propuesta si se confirma:** parámetro opcional `expected_updated_at` en el `PUT`; si no coincide, 409 y el cliente vuelve a fusionar.
-- **Riesgo:** medio. Cambia el contrato de la API: **requiere aprobación** (ver §6).
-- **Criterio de aceptación:** el test de dos contextos conserva ambos cambios.
+- **Componente:** `frontend/js/course-store.js` (`push`), `PUT /course-state/{course}` (`backend/app/routers/course_state.py`).
+- **Evidencia (sobre `main`):** el cliente fusiona con la cuenta solo al iniciar sesión y después sube el documento local completo, sin volver a leer. Con dos contextos de navegador de la misma cuenta: la sesión A guarda `bd-01` (el servidor tiene `["bd-01"]`), la sesión B guarda `bd-02` y el servidor queda con `["bd-02"]`; las copias locales divergen. El servidor no recibe ni comprueba ningún token de versión.
+- **Por qué P1:** afecta al progreso del alumno y el README dice que la web y la app comparten ese documento. No es P0 porque cada sesión conserva su copia local y no hay borrado de cuentas ni de otros datos.
+- **Corrección (rama `fix/sync-cursos-dos-sesiones`, commit `a26a59d`, no fusionada):** `push` trae la copia de la cuenta, la fusiona con `mergeCourse` (ya existente) y después sube; si no puede leer la cuenta, no sube. Sin cambios en la API ni en el esquema. Coste: un `GET` más por cada subida (ya agrupada con un retardo de 1,5 s).
+- **Prueba:** `e2e/sync.spec.js`. Falla 3 de 3 sin el cambio y pasa 10 de 10 con él. Suite completa en esa rama: 137 de 137.
+- **Riesgo residual (VERIFICADO como causa de un fallo de mi primera versión de la prueba):** sigue habiendo una ventana entre leer y escribir. Si dos sesiones suben en el mismo instante, ambas leen la cuenta antes de que ninguna escriba y gana la última. La prueba espera a que termine la subida de inicio de sesión de cada sesión para no depender de ese instante.
+- **Cierre completo (requiere aprobación, ver §6):** parámetro opcional `expected_updated_at` en el `PUT`; si no coincide, 409 y el cliente vuelve a fusionar. Cambia el contrato de la API (compatible hacia atrás).
+
+### F-04b · P2 · Otros tres puntos de subida con el mismo patrón — HIPÓTESIS (sin verificar)
+
+- **Componente:** `frontend/js/pcap-sync.js`, `frontend/js/game.js`, `frontend/js/learn/learn-store.js`. Cada uno hace `PUT` del documento local completo con la misma estructura (fusión solo al iniciar sesión).
+- **No verificado:** que pierdan datos como `course-store.js`; ni siquiera se ha ejecutado una prueba de dos sesiones sobre ellos. La fusión de cada documento es distinta (`mergePcap`, etc.) y `pcap-sync.js` usa un indicador `merging` para no encadenar subidas, así que la corrección no se puede copiar sin más.
+- **Verificación propuesta:** una prueba de dos contextos por cada uno, que debe fallar antes de tocar el código.
 
 ### F-05 · P3 · La CSP de producción permite conectar a `localhost:8000` — VERIFICADO
 
@@ -109,15 +116,15 @@ Entorno: Linux, Python 3.13.18 (la CI usa 3.12), Node 22.23.4, Playwright 1.63.0
 ## 6. Decisiones pendientes del autor (NEEDS_HUMAN)
 
 1. **Tutor con IA (Fase 8):** se retiró el 26 de octubre. ¿Se quiere reintroducir? Si no, la Fase 8 queda cerrada como «no aplica». No se ha construido nada.
-2. **H-04:** si se confirma, cambiar el contrato de `PUT /course-state` y `/pcap-state` (API compatible hacia atrás con parámetro opcional).
-3. **Ramas y despliegue:** este trabajo va en la rama `docs/plan-mejora-auditoria`. Fusionar a `main` publica la web, así que el merge lo hace siempre la persona (regla del proyecto).
+2. **F-04, cierre completo:** añadir `expected_updated_at` al `PUT /course-state` y `/pcap-state` (compatible hacia atrás) para eliminar la ventana residual. Sin esta decisión, la corrección del cliente queda como mitigación.
+3. **Ramas y despliegue:** hay dos ramas sin fusionar: `docs/plan-mejora-auditoria` (este documento) y `fix/sync-cursos-dos-sesiones` (código y prueba de F-04). Fusionar a `main` publica la web, así que el merge lo hace siempre la persona (regla del proyecto).
 
 ## 7. Estado por fases del plan maestro
 
 | Fase | Estado |
 |---|---|
 | 0 Auditoría | Hecha (este documento). Quedan sin auditar a fondo: los 53 `innerHTML`, `rate_limit.py` y las migraciones. |
-| 1 Estabilidad | Cobertura automática verde. Pendiente: H-04 y los flujos de red caída / actualización de la PWA con una prueba propia. |
+| 1 Estabilidad | Cobertura automática verde. F-04 corregido en rama (sin fusionar). Pendiente: F-04b y los flujos de red caída / actualización de la PWA con una prueba propia. |
 | 2 UX | Sin empezar (F-02 es lo único detectado). |
 | 3 Calidad del aprendizaje | Los `--check` de contenido pasan (respuestas ejecutadas). Pendiente revisar el formato de ejercicios contra la lista de campos del plan. |
 | 4 Progreso | Sin empezar. |
@@ -130,6 +137,7 @@ Entorno: Linux, Python 3.13.18 (la CI usa 3.12), Node 22.23.4, Playwright 1.63.0
 
 ## 8. Siguiente paso recomendado
 
-1. Confirmar la decisión sobre el tutor y sobre H-04.
-2. Estabilizar F-01 (cambio mínimo en el test, 20 repeticiones sin reintentos).
-3. Verificar H-04 con el test de dos contextos antes de tocar la API.
+1. Revisar y fusionar `fix/sync-cursos-dos-sesiones` (la fusión la hace el autor).
+2. Verificar F-04b con una prueba de dos contextos por cada sincronizador (`pcap-sync.js`, `game.js`, `learn-store.js`) antes de tocar su código.
+3. Decidir sobre el tutor y sobre el cierre completo de F-04 en el servidor.
+4. F-01: solo actuar si el fallo vuelve a aparecer (hoy no hay línea base que lo reproduzca).
