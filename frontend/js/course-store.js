@@ -61,8 +61,21 @@ export function courseState(id) {
 const timers = new Map();
 const PUSH_DELAY_MS = 1500;
 
+function storeLocal(id) {
+  try {
+    localStorage.setItem(key(id), JSON.stringify(courseState(id)));
+  } catch {
+    // sin almacenamiento: dura hasta recargar
+  }
+}
+
 async function push(id) {
   try {
+    // Otra sesión (web o app) pudo guardar progreso que este navegador no tiene. Se fusiona con la cuenta
+    // antes de subir para no pisarlo; si no se puede leer la cuenta, no se sube (subir lo local la pisaría).
+    const remote = await request("GET", `/api/course-state/${id}`);
+    mergeCourse(id, remote.data);
+    storeLocal(id);
     await request("PUT", `/api/course-state/${id}`, { json: { data: courseState(id) } });
   } catch (error) {
     console.warn(`No se pudo guardar el curso ${id} en la cuenta:`, error.message);
@@ -70,11 +83,7 @@ async function push(id) {
 }
 
 export function saveCourse(id) {
-  try {
-    localStorage.setItem(key(id), JSON.stringify(courseState(id)));
-  } catch {
-    // sin almacenamiento: dura hasta recargar
-  }
+  storeLocal(id);
   if (!state.user) return;
   clearTimeout(timers.get(id));
   timers.set(id, setTimeout(() => push(id), PUSH_DELAY_MS));
