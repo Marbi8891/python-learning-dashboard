@@ -818,7 +818,7 @@ async function runDemo(button) {
   const output = button.parentElement.querySelector("[data-lp-output]");
   output.hidden = false;
   button.disabled = true;
-  output.textContent = "Cargando Python en tu navegador (solo la primera vez, unos segundos)…";
+  output.textContent = "Cargando Python en tu navegador (la primera vez se descargan unos 10 MB)…";
   try {
     const result = await pythonRunner.run(exerciseData.concept.example.code, "");
     const text = [result.output, result.error].filter(Boolean).join("\n");

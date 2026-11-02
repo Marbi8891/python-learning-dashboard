@@ -2,7 +2,7 @@
 
 import { MOD_KEY, RUN_KEYS_HTML } from "./keys.js";
 import { escapeHtml, renderInline } from "./markdown.js";
-import { PythonRunner, StoppedError, TimeoutError } from "./python-runner.js";
+import { PythonRunner, StoppedError, TimeoutError, isPythonCached } from "./python-runner.js";
 
 const $ = (selector) => document.querySelector(selector);
 const DRAFT_PREFIX = "pld:draft:";
@@ -10,24 +10,52 @@ const config = window.PLD_CONFIG ?? {};
 
 const STATUS_TEXT = {
   idle: "Python se carga al ejecutar por primera vez",
-  loading: "Cargando Python… (solo la primera vez, unos segundos)",
+  loading: "Cargando Python…",
   ready: "Python 3 listo",
   running: "Ejecutando…",
   error: "No se pudo cargar Python. Revisa tu conexión y vuelve a intentarlo.",
 };
 
+// La primera vez Python se descarga (unos 10 MB): se dice antes de gastar los datos del alumno
+const DOWNLOAD_TEXT = {
+  idle: "Python se descarga al ejecutar por primera vez (unos 10 MB)",
+  loading: "Descargando Python (unos 10 MB, solo la primera vez)…",
+  "slow-loading": "Sigue descargando Python: con una conexión lenta puede tardar unos minutos…",
+};
+
+/** Ahorro de datos activado o red 2G (solo lo informan algunos navegadores). */
+export function isSlowConnection(connection = navigator.connection) {
+  return Boolean(connection?.saveData) || ["slow-2g", "2g"].includes(connection?.effectiveType);
+}
+
+let pythonCached = false;
+let currentStatus = "idle";
+
+export function statusText(status, { cached = pythonCached, slow = isSlowConnection() } = {}) {
+  if (status === "slow-loading") return cached ? "Python está tardando en arrancar…" : DOWNLOAD_TEXT[status];
+  if (cached) return STATUS_TEXT[status];
+  if (status === "idle" && !slow) return STATUS_TEXT.idle;
+  return DOWNLOAD_TEXT[status] ?? STATUS_TEXT[status];
+}
+
 /** Indicador de estado de la cabecera de la consola (punto de color y texto, anunciado con aria-live). */
 function setStatus(status) {
+  currentStatus = status;
   const box = $("#console-status");
   if (!box) return;
-  box.textContent = STATUS_TEXT[status];
-  box.dataset.status = status;
+  box.textContent = statusText(status);
+  box.dataset.status = status === "slow-loading" ? "loading" : status;
 }
 
 const runner = new PythonRunner({
   indexURL: config.pyodideUrl,
   timeoutMs: config.runTimeoutMs ?? 10_000,
   onStatus: setStatus,
+});
+
+isPythonCached(config.pyodideUrl || undefined).then((cached) => {
+  pythonCached = cached;
+  if (currentStatus === "idle") setStatus("idle");
 });
 
 /** El mismo Python (un solo Worker) para la consola y para los ejercicios del núcleo educativo. */
