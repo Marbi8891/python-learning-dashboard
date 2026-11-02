@@ -47,6 +47,18 @@
   transition: color var(--transition);
 }
 
+/* MW-006: en el móvil, las tres pestañas se reparten el ancho (el texto puede ir en dos líneas) */
+@media (max-width: 600px) {
+  .tabs__tab {
+    flex: 1 1 0;
+    min-width: 0;
+    padding-inline: var(--space-2);
+    line-height: 1.3;
+    text-align: center;
+    white-space: normal;
+  }
+}
+
 .tabs__tab:hover {
   color: var(--color-text);
 }

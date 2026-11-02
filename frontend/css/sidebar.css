@@ -337,6 +337,12 @@ a.lesson:hover {
 
 /* ---------- Móvil: menú lateral deslizante ---------- */
 @media (max-width: 900px) {
+  /* MW-002: zona táctil de al menos 24 px de alto en los enlaces del pie */
+  .sidebar__footer a {
+    display: inline-block;
+    padding-block: var(--space-1);
+  }
+
   .sidebar {
     position: fixed;
     top: 0;

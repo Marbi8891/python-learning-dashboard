@@ -207,6 +207,11 @@
   border: 0;
   border-radius: 0;
   background: transparent;
+  /* MW-007: sin ajuste de línea, como un editor de código. Con ajuste, una línea larga ocupaba dos
+     y los números de línea dejaban de coincidir con el código (sobre todo en el móvil) */
+  white-space: pre;
+  overflow-wrap: normal;
+  overflow-x: auto;
 }
 
 .console__editor-shell:focus-within {

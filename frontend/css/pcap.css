@@ -23,10 +23,15 @@
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
+  min-height: 24px; /* MW-003: la etiqueta entera es la zona táctil */
+  padding-block: var(--space-1);
   cursor: pointer;
 }
 
 .lang-switch input {
+  width: 20px; /* MW-003: antes 13 × 13 px */
+  height: 20px;
+  margin: 0;
   accent-color: var(--color-primary);
 }
 

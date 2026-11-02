@@ -13,6 +13,7 @@
 //   node scripts/web/inspeccionar_web.mjs --rutas portada,pcap # solo esas rutas
 //   node scripts/web/inspeccionar_web.mjs --url http://localhost:5500   # web ya arrancada
 //   node scripts/web/inspeccionar_web.mjs --comparar <carpeta de una inspección anterior>
+//   node scripts/web/inspeccionar_web.mjs --tema ambos        # tema claro y oscuro (claro, oscuro o ambos)
 //
 // Solo inspecciona localhost: el objetivo es medir el código de la rama, no la web publicada.
 // No modifica el repositorio: todo se guarda en una carpeta temporal (o en --salida).
@@ -35,7 +36,7 @@ const VISTAS = {
 const BACKEND = /127\.0\.0\.1:8000|localhost:8000/;
 
 function leerArgumentos(argv) {
-  const args = { rutas: RUTAS, url: "", salida: "", comparar: "", puerto: 5500 };
+  const args = { rutas: RUTAS, url: "", salida: "", comparar: "", puerto: 5500, temas: ["claro"] };
   for (let i = 0; i < argv.length; i += 1) {
     const valor = argv[i + 1];
     if (argv[i] === "--rutas") args.rutas = valor.split(",").map((r) => r.trim().replace(/^#?\/?/, ""));
@@ -43,8 +44,15 @@ function leerArgumentos(argv) {
     else if (argv[i] === "--salida") args.salida = valor;
     else if (argv[i] === "--comparar") args.comparar = valor;
     else if (argv[i] === "--puerto") args.puerto = Number(valor);
+    else if (argv[i] === "--tema") {
+      if (!["claro", "oscuro", "ambos"].includes(valor)) {
+        console.error("--tema admite claro, oscuro o ambos.");
+        process.exit(2);
+      }
+      args.temas = valor === "ambos" ? ["claro", "oscuro"] : [valor];
+    }
     else if (argv[i] === "--help" || argv[i] === "-h") {
-      console.log(readFileSync(new URL(import.meta.url), "utf8").split("\n").slice(0, 20).join("\n"));
+      console.log(readFileSync(new URL(import.meta.url), "utf8").split("\n").slice(0, 21).join("\n"));
       process.exit(0);
     } else continue;
     i += 1;
@@ -140,8 +148,11 @@ async function medirPagina(page, esMovil) {
   }, esMovil);
 }
 
-async function inspeccionarRuta(navegador, base, ruta, nombreVista, salida) {
-  const contexto = await navegador.newContext(VISTAS[nombreVista]);
+async function inspeccionarRuta(navegador, base, ruta, nombreVista, salida, tema = "claro") {
+  const contexto = await navegador.newContext({
+    ...VISTAS[nombreVista],
+    colorScheme: tema === "oscuro" ? "dark" : "light",
+  });
   // Cada ruta empieza como en una primera visita: sin progreso guardado ni service worker
   const page = await contexto.newPage();
   const errores = [];
@@ -160,13 +171,14 @@ async function inspeccionarRuta(navegador, base, ruta, nombreVista, salida) {
   await esperarQuieta(page);
   const medidas = await medirPagina(page, nombreVista === "movil");
   const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"]).analyze();
-  const captura = `${ruta}-${nombreVista}.png`;
+  const captura = `${ruta}-${nombreVista}${tema === "oscuro" ? "-oscuro" : ""}.png`;
   await page.screenshot({ path: join(salida, captura), fullPage: true });
   await contexto.close();
 
   return {
     ruta,
     vista: nombreVista,
+    tema,
     captura,
     errores,
     sinBackend,
@@ -178,11 +190,12 @@ async function inspeccionarRuta(navegador, base, ruta, nombreVista, salida) {
 function fila(r) {
   const axe = r.axe.length ? r.axe.map((v) => `${v.id} (${v.nodos})`).join(", ") : "0";
   const desborde = r.desborde ? `**${r.desborde} px**` : "0";
-  return `| #/${r.ruta} | ${r.vista} | ${axe} | ${r.errores.length} | ${desborde} | ${r.vista === "movil" ? r.pequenas.length : "—"} | ${r.peticiones} | ${r.kb} | ${r.cargaMs} |`;
+  const vista = r.tema === "oscuro" ? `${r.vista} (oscuro)` : r.vista;
+  return `| #/${r.ruta} | ${vista} | ${axe} | ${r.errores.length} | ${desborde} | ${r.vista === "movil" ? r.pequenas.length : "—"} | ${r.peticiones} | ${r.kb} | ${r.cargaMs} |`;
 }
 
 function comparar(actual, anterior) {
-  const clave = (r) => `${r.ruta}|${r.vista}`;
+  const clave = (r) => `${r.ruta}|${r.vista}|${r.tema ?? "claro"}`;
   const previos = new Map(anterior.map((r) => [clave(r), r]));
   const lineas = [];
   for (const r of actual) {
@@ -200,7 +213,8 @@ function comparar(actual, anterior) {
     ]) {
       if (a !== b) cambios.push(`${nombre} ${a} → ${b}`);
     }
-    if (cambios.length) lineas.push(`- #/${r.ruta} (${r.vista}): ${cambios.join(", ")}`);
+    const vista = r.tema === "oscuro" ? `${r.vista}, oscuro` : r.vista;
+    if (cambios.length) lineas.push(`- #/${r.ruta} (${vista}): ${cambios.join(", ")}`);
   }
   return lineas.length ? lineas : ["- Sin cambios medibles."];
 }
@@ -213,7 +227,8 @@ function informe(resultados, commit, base, lineasComparacion) {
     for (const e of r.errores) partes.push(`  - consola: ${e}`);
     if (r.desborde) partes.push(`  - se desborda ${r.desborde} px; elementos que se salen: ${r.culpables.join(", ")}`);
     for (const p of r.pequenas.slice(0, 5)) partes.push(`  - zona táctil pequeña: ${p}`);
-    if (partes.length) detalle.push(`- **#/${r.ruta} · ${r.vista}** (\`${r.captura}\`)`, ...partes);
+    const vista = r.tema === "oscuro" ? `${r.vista} · oscuro` : r.vista;
+    if (partes.length) detalle.push(`- **#/${r.ruta} · ${vista}** (\`${r.captura}\`)`, ...partes);
   }
   const sinBackend = resultados.reduce((t, r) => t + r.sinBackend, 0);
   return [
@@ -254,11 +269,13 @@ async function main() {
   const resultados = [];
   try {
     for (const ruta of args.rutas) {
-      for (const vista of Object.keys(VISTAS)) {
-        process.stdout.write(`· #/${ruta} (${vista})… `);
-        const r = await inspeccionarRuta(navegador, base, ruta, vista, salida);
-        console.log(`axe ${r.axe.length} · errores ${r.errores.length} · desborde ${r.desborde} px`);
-        resultados.push(r);
+      for (const tema of args.temas) {
+        for (const vista of Object.keys(VISTAS)) {
+          process.stdout.write(`· #/${ruta} (${vista}${tema === "oscuro" ? ", oscuro" : ""})… `);
+          const r = await inspeccionarRuta(navegador, base, ruta, vista, salida, tema);
+          console.log(`axe ${r.axe.length} · errores ${r.errores.length} · desborde ${r.desborde} px`);
+          resultados.push(r);
+        }
       }
     }
   } finally {

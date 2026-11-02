@@ -45,12 +45,13 @@ Si la mejora es de seguridad, del backend o del contenido educativo, no es tuya:
 
 ## 3. Herramienta: inspección de la web
 
-`scripts/web/inspeccionar_web.mjs` abre cada ruta en móvil (390 × 844) y escritorio (1366 × 900) con el Chromium de Playwright y guarda capturas y un informe con: infracciones WCAG de axe-core, errores de consola, desbordamiento horizontal (con los elementos que lo causan), controles táctiles pequeños, peticiones, KB y tiempos de carga. No modifica el repositorio.
+`scripts/web/inspeccionar_web.mjs` abre cada ruta en móvil (390 × 844) y escritorio (1366 × 900) con el Chromium de Playwright y guarda capturas y un informe con: infracciones WCAG de axe-core, errores de consola, desbordamiento horizontal (con los elementos que lo causan), controles táctiles pequeños, peticiones, KB y tiempos de carga. Con `--tema oscuro` o `--tema ambos` repite todo con `prefers-color-scheme: dark`: úsalo siempre que el cambio toque colores, fondos o bordes. No modifica el repositorio.
 
 ```bash
 node scripts/web/inspeccionar_web.mjs --salida "$TMP/antes"                       # todas las rutas
 node scripts/web/inspeccionar_web.mjs --rutas practicar,pcap --salida "$TMP/antes" # solo unas
 node scripts/web/inspeccionar_web.mjs --rutas practicar --salida "$TMP/despues" --comparar "$TMP/antes"
+node scripts/web/inspeccionar_web.mjs --rutas practicar --tema ambos --salida "$TMP/antes"  # también en tema oscuro
 ```
 
 Usa como `$TMP` una carpeta creada con `mktemp -d` (fuera del repositorio). Necesita `npm ci` hecho. Sin backend arrancado, las vistas con sesión no se ven completas; si la mejora es de una de ellas, arranca la web con `python scripts/run_local.py` y pasa `--url http://localhost:5500`.
