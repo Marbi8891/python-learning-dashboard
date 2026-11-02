@@ -11,16 +11,22 @@ const STATUS_TEXT = {
   idle: "Python se carga al ejecutar por primera vez",
   loading: "Cargando Python… (solo la primera vez, unos segundos)",
   ready: "Python 3 listo",
+  running: "Ejecutando…",
   error: "No se pudo cargar Python. Revisa tu conexión y vuelve a intentarlo.",
 };
+
+/** Indicador de estado de la cabecera de la consola (punto de color y texto, anunciado con aria-live). */
+function setStatus(status) {
+  const box = $("#console-status");
+  if (!box) return;
+  box.textContent = STATUS_TEXT[status];
+  box.dataset.status = status;
+}
 
 const runner = new PythonRunner({
   indexURL: config.pyodideUrl,
   timeoutMs: config.runTimeoutMs ?? 10_000,
-  onStatus: (status) => {
-    $("#console-status").textContent = STATUS_TEXT[status];
-    $("#console-status").dataset.status = status;
-  },
+  onStatus: setStatus,
 });
 
 /** El mismo Python (un solo Worker) para la consola y para los ejercicios del núcleo educativo. */
@@ -85,8 +91,9 @@ function showOutput({ output = "", error = null, hint = null }) {
   const box = $("#console-output");
   const parts = [];
   if (output) parts.push(`<span>${escapeHtml(String(output))}</span>`);
-  if (error) parts.push(`<span class="console__error">${escapeHtml(String(error))}</span>${renderHint(hint)}`);
+  if (error) parts.push(`<span class="console__error"><span class="console__error-label">Error</span>${escapeHtml(String(error))}</span>${renderHint(hint)}`);
   box.innerHTML = parts.join("") || '<span class="console__muted">(El programa no ha mostrado nada)</span>';
+  box.dataset.state = error ? "error" : output ? "ok" : "empty";
 }
 
 async function withRunner(button, label, action) {
@@ -109,9 +116,15 @@ async function withRunner(button, label, action) {
 
 export function runConsole() {
   return withRunner($("#console-run"), "Ejecutando…", async () => {
-    const result = await runner.run($("#console-editor").value, $("#console-stdin").value);
-    showOutput(result);
-    onRun(!result.error);
+    // «Ejecutando…» solo si Python ya está cargado; si no, el runner muestra «Cargando Python…»
+    if ($("#console-status")?.dataset.status === "ready") setStatus("running");
+    try {
+      const result = await runner.run($("#console-editor").value, $("#console-stdin").value);
+      showOutput(result);
+      onRun(!result.error);
+    } finally {
+      if ($("#console-status")?.dataset.status === "running") setStatus("ready");
+    }
   });
 }
 
@@ -136,10 +149,12 @@ export function checkCode({ checks, button, box, onResult }) {
 /** Cambia la lección: carga el borrador guardado o el ejemplo. */
 export function setLesson(next) {
   lesson = next;
+  $("#console-file").textContent = `${next.slug.replace(/-/g, "_")}.py`;
   $("#console-editor").value = readDraft(next.slug) ?? next.example_code;
   syncLineNumbers();
   $("#console-stdin").value = next.example_stdin;
   $("#console-stdin-box").open = Boolean(next.example_stdin);
+  delete $("#console-output").dataset.state;
   $("#console-output").innerHTML = next.example_in_browser
     ? '<span class="console__muted">Pulsa «Ejecutar» o Ctrl+Enter para ver el resultado.</span>'
     : '<span class="console__muted">El ejemplo de esta lección usa un paquete externo: ejecútalo en PyCharm. Aquí puedes practicar el ejercicio.</span>';
@@ -225,6 +240,7 @@ export function initConsole() {
     }
   });
   $("#console-clear").addEventListener("click", () => {
+    delete $("#console-output").dataset.state;
     $("#console-output").innerHTML = '<span class="console__muted">(Sin salida)</span>';
   });
   syncLineNumbers();

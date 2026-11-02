@@ -457,15 +457,13 @@ body {
 }
 
 /* Código y consola */
-.code-block,
-.console {
+.code-block {
   border-color: var(--color-border);
   border-radius: var(--radius-lg);
   box-shadow: 0 16px 40px -34px var(--shadow);
 }
 
-.code-block__bar,
-.console__head {
+.code-block__bar {
   background: var(--color-surface-2);
 }
 
@@ -473,16 +471,6 @@ body {
 .code-block pre code {
   font-size: 13.5px;
   line-height: 1.7;
-}
-
-.console {
-  background: var(--color-surface);
-}
-
-.console__title {
-  font-family: var(--font-sans);
-  font-size: 15px;
-  font-weight: 700;
 }
 
 .console__editor,

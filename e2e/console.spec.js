@@ -27,6 +27,13 @@ test("muestra errores con la línea del alumno y pistas", async ({ page }) => {
   await run(page, "x = 1\nprint(x / 0)");
   await expect(output(page)).toContainText("line 2");
   await expect(output(page)).toContainText("ZeroDivisionError");
+  // El error se distingue de la salida normal: bloque propio con su etiqueta
+  await expect(output(page)).toHaveAttribute("data-state", "error");
+  await expect(output(page).locator(".console__error-label")).toHaveText("Error");
+  await expect(page.locator("#console-file")).toHaveText("variables.py");
+  await run(page, 'print("hola")');
+  await expect(output(page)).toHaveAttribute("data-state", "ok");
+  await expect(page.locator("#console-status")).toHaveText("Python 3 listo");
 
   await run(page, "nombre = input()");
   await expect(output(page)).toContainText("EOFError");
@@ -66,7 +73,7 @@ test("el borrador del editor se conserva al recargar", async ({ page }) => {
   await page.reload();
   await page.locator(".lesson[data-slug]").first().waitFor({ state: "attached" });
   await expect(page.locator("#console-editor")).toHaveValue("# mi borrador\nprint(1)");
-  await page.getByRole("button", { name: "Cargar ejemplo" }).click();
+  await page.getByRole("button", { name: "Restablecer el ejemplo" }).click();
   await expect(page.locator("#console-editor")).toHaveValue(/precio = float/);
 });
 
