@@ -11,6 +11,7 @@ import { request } from "./api.js";
 import { cleanGame, emptyGame, mergeGame } from "./game-data.js";
 import { examsPassed, pcap, questionsMastered } from "./pcap-store.js";
 import { state as store, subscribe as onStore } from "./store.js";
+import { createDocSync } from "./doc-sync.js";
 import { createSyncGate } from "./sync-gate.js";
 
 const KEY = "pld:game";
@@ -53,14 +54,28 @@ const COURSE = "game";
 const PUSH_DELAY_MS = 1500; // agrupa los cambios seguidos en un envío
 let pushTimer = null;
 
+function mergeRemote(remote) {
+  mergeGame(game, remote.data);
+  commit();
+}
+
+// Sube con la versión leída: si otra pestaña guardó antes (409), relee, fusiona y reintenta
+const doc = createDocSync({
+  path: `/api/course-state/${COURSE}`,
+  request,
+  data: () => game,
+  merge: mergeRemote,
+  valid: () => gate.ready,
+});
+
 // No se suben los logros hasta haber fusionado la copia de la cuenta (AUD-001)
 const gate = createSyncGate({
   name: "los logros",
   active: () => Boolean(store.user),
   load: () => request("GET", `/api/course-state/${COURSE}`),
   merge: (remote) => {
-    mergeGame(game, remote.data);
-    commit();
+    mergeRemote(remote);
+    doc.adopt(remote);
   },
   onSynced: () => {
     clearTimeout(pushTimer);
@@ -72,7 +87,7 @@ async function push() {
   pushTimer = null;
   if (!gate.ready) return;
   try {
-    await request("PUT", `/api/course-state/${COURSE}`, { json: { data: game } });
+    await doc.push();
   } catch (error) {
     console.warn("No se pudieron guardar los logros en la cuenta:", error.message);
   }

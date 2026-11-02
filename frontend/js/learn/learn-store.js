@@ -4,6 +4,7 @@
 
 import { request } from "../api.js";
 import { state as session, subscribe } from "../store.js";
+import { createDocSync } from "../doc-sync.js";
 import { createSyncGate } from "../sync-gate.js";
 import { buildIndex, cleanLearning, mergeLearning } from "./mastery.js";
 
@@ -27,14 +28,28 @@ export const onLearningChange = (listener) => listeners.add(listener);
 
 let timer = null;
 
+function mergeRemote(remote) {
+  mergeLearning(learning, remote.data);
+  saveLearning();
+}
+
+// Sube con la versión leída: si otra pestaña guardó antes (409), relee, fusiona y reintenta
+const doc = createDocSync({
+  path: `/api/course-state/${COURSE}`,
+  request,
+  data: () => learning,
+  merge: mergeRemote,
+  valid: () => gate.ready,
+});
+
 // No se sube nada hasta haber fusionado la copia de la cuenta (AUD-001)
 const gate = createSyncGate({
   name: "el progreso de aprendizaje",
   active: () => Boolean(session.user),
   load: () => request("GET", `/api/course-state/${COURSE}`),
   merge: (remote) => {
-    mergeLearning(learning, remote.data);
-    saveLearning();
+    mergeRemote(remote);
+    doc.adopt(remote);
   },
   onSynced: () => {
     clearTimeout(timer);
@@ -46,7 +61,7 @@ async function push() {
   timer = null;
   if (!gate.ready) return;
   try {
-    await request("PUT", `/api/course-state/${COURSE}`, { json: { data: learning } });
+    await doc.push();
   } catch (error) {
     console.warn("No se pudo guardar el progreso de aprendizaje en la cuenta:", error.message);
   }

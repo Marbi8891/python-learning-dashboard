@@ -22,6 +22,7 @@ def test_each_course_is_a_separate_document(client, auth_headers):
     assert client.get("/api/v1/course-state/java", headers=auth_headers).json() == {
         "data": {},
         "updated_at": None,
+        "version": 0,
     }
     java = {"answers": {"java-01": [False, True]}}
     saved = client.put("/api/v1/course-state/java", json={"data": java}, headers=auth_headers)
