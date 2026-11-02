@@ -367,11 +367,14 @@ function renderPractice() {
     <section class="lx-section" aria-labelledby="lx-activity-title">
       <h2 class="lx-section__title" id="lx-activity-title">Por tipo de actividad</h2>
       <p class="lx-muted">Sobre los conceptos que ya has empezado: ${scope.map((id) => escapeHtml(title(id))).join(", ")}.</p>
-      <ul class="lx-cards">
+      <ul class="lx-activities">
         ${ACTIVITIES.map((a) => {
           const available = selectExercises(index, learning, scope, 6, { kinds: a.kinds, now }).length;
-          return `<li class="lx-card"><h3 class="lx-card__title">${a.label}</h3><p class="lx-muted">${a.text}</p>
-            <button class="btn btn--ghost" type="button" data-learn="activity" data-activity="${a.id}"${available ? "" : " disabled"}>${available ? `Practicar (${available})` : "Aún no hay ejercicios"}</button></li>`;
+          // Sin ejercicios no se pinta un botón desactivado: se dice en texto (RP-07)
+          const action = available
+            ? `<button class="btn btn--ghost" type="button" data-learn="activity" data-activity="${a.id}">Practicar (${available})</button>`
+            : '<span class="lx-activities__none">Aún sin ejercicios en estos conceptos</span>';
+          return `<li class="lx-activities__item" data-available="${available ? "true" : "false"}"><div><h3 class="lx-activities__title">${a.label}</h3><p class="lx-muted">${a.text}</p></div>${action}</li>`;
         }).join("")}
       </ul>
     </section>`;
@@ -394,14 +397,14 @@ function renderProgress() {
       (area) => `
       <section class="lx-section" aria-labelledby="pa-${area.id}">
         <h2 class="lx-section__title" id="pa-${area.id}">${escapeHtml(area.title)} <span class="lx-muted">· ${area.mastered}/${area.total}</span></h2>
-        <div class="table-wrap" tabindex="0"><table class="lx-table">
-          <thead><tr><th scope="col">Concepto</th><th scope="col">Estado</th><th scope="col">Dominio</th><th scope="col">Última vez</th><th scope="col">Próximo repaso</th></tr></thead>
-          <tbody>${area.ids
+        <div class="table-wrap" tabindex="0" role="region" aria-labelledby="pa-${area.id}"><table class="lx-table lx-table--reflow" role="table">
+          <thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">Concepto</th><th scope="col" role="columnheader">Estado</th><th scope="col" role="columnheader">Dominio</th><th scope="col" role="columnheader">Última vez</th><th scope="col" role="columnheader">Próximo repaso</th></tr></thead>
+          <tbody role="rowgroup">${area.ids
             .map((id) => {
               const s = stats.get(id);
-              return `<tr><th scope="row"><a href="#/teoria/${id}">${escapeHtml(title(id))}</a></th><td>${statusBadge(s)}</td>
-                <td>${meter(s.score, `Dominio de ${title(id)}`)} <span class="lx-row__value">${percent(s.score)}</span></td>
-                <td>${s.last ? ago(s.last, now) : "—"}</td><td>${s.nextReview ? formatDay(s.nextReview) : "—"}</td></tr>`;
+              return `<tr role="row"><th scope="row" role="rowheader"><a href="#/teoria/${id}">${escapeHtml(title(id))}</a></th><td role="cell" data-label="Estado">${statusBadge(s)}</td>
+                <td role="cell" data-label="Dominio">${meter(s.score, `Dominio de ${title(id)}`)} <span class="lx-row__value">${percent(s.score)}</span></td>
+                <td role="cell" data-label="Última vez">${s.last ? ago(s.last, now) : "—"}</td><td role="cell" data-label="Próximo repaso">${s.nextReview ? formatDay(s.nextReview) : "—"}</td></tr>`;
             })
             .join("")}</tbody>
         </table></div>
