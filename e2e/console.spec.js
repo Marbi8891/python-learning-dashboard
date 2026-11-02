@@ -109,3 +109,15 @@ test("superar los tests completa la lección", async ({ page }) => {
   await expect(page.locator("#progress-value")).toHaveText("13%");
   await expect(page.getByRole("button", { name: "Marcar como pendiente" })).toBeVisible();
 });
+
+test("la primera ejecución avisa de que Python se descarga y de cuánto ocupa", async ({ page }) => {
+  // Retrasa Pyodide para ver el estado mientras se descarga (como en una conexión lenta)
+  await page.route("**/pyodide.mjs", async (route) => {
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+    await route.continue();
+  });
+  await openLesson(page, "variables");
+  await page.locator("#console-run").click();
+  await expect(page.locator("#console-status")).toHaveText("Descargando Python (unos 10 MB, solo la primera vez)…");
+  await expect(page.locator("#console-status")).toHaveText("Python 3 listo", { timeout: 90_000 });
+});
