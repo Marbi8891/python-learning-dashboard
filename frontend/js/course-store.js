@@ -15,6 +15,7 @@ export const DAW_COURSES = [
   { id: "programacion", title: "Programación", subtitle: "Módulo 0485 en Python · UT1-UT9", lang: "python" },
   { id: "sql", title: "Bases de datos", subtitle: "Módulo 0484 · SQL · UD1-UD3 del centro", lang: "sql" },
   { id: "entornos", title: "Entornos de desarrollo", subtitle: "Módulo 0487 · UD1 del centro", lang: "python" },
+  { id: "marcas", title: "Lenguajes de marcas", subtitle: "Módulo 0373 · XML, HTML, JSON y XPath", lang: "python" },
   { id: "js", title: "JavaScript", subtitle: "Entorno cliente", lang: "javascript" },
   { id: "java", title: "Java", subtitle: "Para más adelante: Java desde cero", lang: "java" },
 ];

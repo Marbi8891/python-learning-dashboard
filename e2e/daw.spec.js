@@ -5,14 +5,14 @@ const { test, expect, uniqueEmail } = require("./fixtures");
 
 const API = "http://127.0.0.1:8000";
 
-test("el catálogo muestra los cinco cursos y se entra en uno", async ({ page }) => {
+test("el catálogo muestra los seis cursos y se entra en uno", async ({ page }) => {
   // #/daw es la Preparación DAW; el catálogo de cursos sigue en #/daw/cursos
   await page.goto("/#/daw");
   await page.getByRole("link", { name: "Otros módulos de DAW" }).click();
   await expect(page).toHaveURL(/#\/daw\/cursos$/);
   await expect(page.locator("#daw-title")).toContainText("Cursos de DAW");
   await expect(page.getByRole("navigation", { name: "Secciones" }).getByRole("link", { name: "DAW", exact: true })).toHaveAttribute("aria-current", "page");
-  await expect(page.locator(".daw-card")).toHaveCount(5);
+  await expect(page.locator(".daw-card")).toHaveCount(6);
   await page.getByRole("link", { name: "Programación" }).click();
   await expect(page.locator("#daw-title")).toHaveText("Programación");
   await expect(page.locator(".block-row")).toHaveCount(9);
@@ -91,8 +91,23 @@ test("el progreso de un curso se guarda en la cuenta y conserva lo que haya pues
   expect(remote.extra).toBe(1);
 });
 
+test("Lenguajes de marcas: enlace directo a una lección, mini-quiz y práctica del bloque", async ({ page }) => {
+  await page.goto("/#/daw/marcas/leccion/mar-xml-bien-formado");
+  await expect(page.locator("#daw-title")).toHaveText("Lenguajes de marcas y XML bien formado");
+  await expect(page.locator(".daw-theory")).toContainText("Espacios de nombres");
+  await page.reload(); // la ruta directa también funciona al recargar
+  await expect(page.locator("#daw-title")).toHaveText("Lenguajes de marcas y XML bien formado");
+  await page.locator("#daw-quiz fieldset").first().locator("input").first().check();
+  await page.getByRole("button", { name: "Corregir" }).click();
+  await expect(page.locator("#daw-quiz-result")).toContainText("de 2 correctas");
+  await page.getByRole("link", { name: "Practicar este bloque" }).click();
+  await expect(page.locator("#daw-title")).toContainText("Práctica · XML bien formado");
+  await page.goto("/#/daw/marcas");
+  await expect(page.locator(".block-row")).toHaveCount(6);
+});
+
 test("catálogo, lección y práctica sin infracciones WCAG", async ({ page }) => {
-  for (const route of ["/#/daw/cursos", "/#/daw/programacion/leccion/prog-ut2-elementos", "/#/daw/js/practica/js-fundamentos"]) {
+  for (const route of ["/#/daw/cursos", "/#/daw/programacion/leccion/prog-ut2-elementos", "/#/daw/js/practica/js-fundamentos", "/#/daw/marcas/leccion/mar-dtd-xsd"]) {
     await page.goto(route);
     await expect(page.locator("#daw-title")).toBeVisible();
     await page.waitForFunction(() => document.getAnimations().every((a) => a.playState !== "running"));

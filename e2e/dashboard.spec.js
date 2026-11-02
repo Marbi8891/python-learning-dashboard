@@ -207,7 +207,7 @@ test("Mi progreso: cada módulo de DAW separa preguntas practicadas y dominadas"
   await expect(bd).toContainText("Practicadas: 3 de 110");
   await expect(bd).toContainText("Dominadas: 1 de 110");
   await expect(modules.locator("li", { hasText: "0485 · Programación" })).toContainText("Practicadas: 0 de 243");
-  await expect(modules).toContainText("13 módulos del ciclo aún no tienen preguntas en la plataforma");
+  await expect(modules).toContainText("12 módulos del ciclo aún no tienen preguntas en la plataforma");
   await expect(panel(page).getByText("no una calificación del centro")).toBeVisible();
   await audit(page);
   await bd.getByRole("link", { name: "0484 · Bases de datos" }).click();

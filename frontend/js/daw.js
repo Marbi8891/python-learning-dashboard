@@ -302,6 +302,7 @@ function renderLesson(course, slug) {
 const TRY = {
   programacion: "Para probarlo, pégalo en un archivo .py y ejecútalo con «python archivo.py» o en PyCharm.",
   entornos: "Para probarlo, pégalo en un archivo .py y ejecútalo con «python archivo.py».",
+  marcas: "Para probarlo, pégalo en un archivo .py y ejecútalo con «python archivo.py». Los fragmentos de XML, HTML o JSON se pueden comprobar con el validador del W3C o con xmllint.",
   sql: "Para probarlo, cópialo en tu gestor de bases de datos (MySQL Workbench, DBeaver, SQLite…).",
   js: "Para probarlo, pégalo en la consola del navegador (F12) o ejecútalo con Node.",
   java: "Para probarlo, guárdalo en Main.java y ejecuta «java Main.java», o pégalo en tu IDE.",

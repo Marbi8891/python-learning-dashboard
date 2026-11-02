@@ -12,7 +12,7 @@ Proyecto de 2º de DAW: una web para **aprender Python entendiendo lo que haces*
 - **Teoría y ejercicios por conceptos:** 22 conceptos con explicación, ejemplo línea a línea y 131 ejercicios. Cuando fallas, te explica el error típico y te pone otro ejercicio parecido.
 - **Consola de Python en el navegador** con [Pyodide](https://pyodide.org). No hay que instalar nada. Admite `input()` y corta los bucles infinitos a los 10 segundos.
 - **Curso del PCAP:** 27 lecciones, mini-quiz en cada una, retos y un simulacro de 40 preguntas en 65 minutos con el reparto oficial del examen. 126 preguntas en español o inglés.
-- **Cursos de DAW:** Programación, Bases de datos, Entornos de desarrollo, JavaScript y Java.
+- **Cursos de DAW:** Programación, Bases de datos, Entornos de desarrollo, Lenguajes de marcas, JavaScript y Java.
 - **Currículo oficial de DAW en Castilla y León** (`#/daw/curriculo`): los 17 módulos de la Orden EDU/1311/2024 y los resultados de aprendizaje y criterios de evaluación literales del Real Decreto 405/2023. Se genera con `scripts/curriculum/` (ver [docs/PLAN-CURRICULO-DAW.md](docs/PLAN-CURRICULO-DAW.md)). En «Mi panel › Mi progreso» se ve cuántas preguntas de cada módulo has practicado y cuántas dominas.
 - **Repaso espaciado** y plan de estudio según la fecha del examen.
 - **XP, niveles, racha y logros.**

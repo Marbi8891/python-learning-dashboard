@@ -1,0 +1,2209 @@
+{
+ "exam": {
+  "code": "MARCAS",
+  "questions": 0,
+  "minutes": 0,
+  "pass": 0,
+  "blocks": [
+   {
+    "slug": "mar-xml",
+    "weight": 20,
+    "items": 13,
+    "title": {
+     "es": "XML bien formado",
+     "en": "XML bien formado"
+    }
+   },
+   {
+    "slug": "mar-html",
+    "weight": 20,
+    "items": 12,
+    "title": {
+     "es": "HTML y CSS",
+     "en": "HTML y CSS"
+    }
+   },
+   {
+    "slug": "mar-validacion",
+    "weight": 15,
+    "items": 10,
+    "title": {
+     "es": "Validación: DTD y XML Schema",
+     "en": "Validación: DTD y XML Schema"
+    }
+   },
+   {
+    "slug": "mar-consultas",
+    "weight": 15,
+    "items": 11,
+    "title": {
+     "es": "XPath, XSLT y XQuery",
+     "en": "XPath, XSLT y XQuery"
+    }
+   },
+   {
+    "slug": "mar-json",
+    "weight": 15,
+    "items": 11,
+    "title": {
+     "es": "JSON e intercambio de datos",
+     "en": "JSON e intercambio de datos"
+    }
+   },
+   {
+    "slug": "mar-gestion",
+    "weight": 15,
+    "items": 9,
+    "title": {
+     "es": "Sindicación y gestión empresarial",
+     "en": "Sindicación y gestión empresarial"
+    }
+   }
+  ]
+ },
+ "questions": [
+  {
+   "id": "mar-01",
+   "block": "mar-xml",
+   "q": {
+    "es": "¿Qué tipo de lenguaje de marcas son XML y HTML?",
+    "en": "¿Qué tipo de lenguaje de marcas son XML y HTML?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Descriptivos: dicen qué es cada parte del documento",
+     "en": "Descriptivos: dicen qué es cada parte del documento"
+    },
+    {
+     "es": "De procedimiento, como LaTeX",
+     "en": "De procedimiento, como LaTeX"
+    },
+    {
+     "es": "De presentación, como RTF",
+     "en": "De presentación, como RTF"
+    },
+    {
+     "es": "Lenguajes de programación compilados",
+     "en": "Lenguajes de programación compilados"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Las marcas de XML y HTML describen la estructura y el significado. Cómo se ve lo decide otra capa (CSS, XSLT).",
+    "en": "Las marcas de XML y HTML describen la estructura y el significado. Cómo se ve lo decide otra capa (CSS, XSLT)."
+   },
+   "lesson": "mar-xml-bien-formado",
+   "module": "0373"
+  },
+  {
+   "id": "mar-02",
+   "block": "mar-xml",
+   "q": {
+    "es": "¿Por qué se dice que XML es un metalenguaje?",
+    "en": "¿Por qué se dice que XML es un metalenguaje?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Porque sirve para definir otros lenguajes de marcas, como SVG o RSS",
+     "en": "Porque sirve para definir otros lenguajes de marcas, como SVG o RSS"
+    },
+    {
+     "es": "Porque solo se usa para metadatos",
+     "en": "Porque solo se usa para metadatos"
+    },
+    {
+     "es": "Porque lo ejecuta una máquina virtual",
+     "en": "Porque lo ejecuta una máquina virtual"
+    },
+    {
+     "es": "Porque tiene un conjunto fijo de etiquetas",
+     "en": "Porque tiene un conjunto fijo de etiquetas"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "XML no tiene etiquetas predefinidas: cada vocabulario (SVG, MathML, RSS…) define las suyas con sus reglas.",
+    "en": "XML no tiene etiquetas predefinidas: cada vocabulario (SVG, MathML, RSS…) define las suyas con sus reglas."
+   },
+   "lesson": "mar-xml-bien-formado",
+   "module": "0373"
+  },
+  {
+   "id": "mar-03",
+   "block": "mar-xml",
+   "q": {
+    "es": "¿Está bien formado este documento XML?",
+    "en": "¿Está bien formado este documento XML?"
+   },
+   "code": "<libro><titulo>Dune</libro></titulo>",
+   "options": [
+    {
+     "es": "Sí, está bien formado",
+     "en": "Sí, está bien formado"
+    },
+    {
+     "es": "No: las etiquetas se cruzan",
+     "en": "No: las etiquetas se cruzan"
+    },
+    {
+     "es": "No: falta el prólogo",
+     "en": "No: falta el prólogo"
+    },
+    {
+     "es": "No: hay más de un elemento raíz",
+     "en": "No: hay más de un elemento raíz"
+    }
+   ],
+   "answer": [
+    1
+   ],
+   "explain": {
+    "es": "`<titulo>` se abre dentro de `<libro>`, así que tiene que cerrarse antes. El prólogo es opcional.",
+    "en": "`<titulo>` se abre dentro de `<libro>`, así que tiene que cerrarse antes. El prólogo es opcional."
+   },
+   "lesson": "mar-xml-bien-formado",
+   "module": "0373"
+  },
+  {
+   "id": "mar-04",
+   "block": "mar-xml",
+   "q": {
+    "es": "¿Está bien formado este documento XML?",
+    "en": "¿Está bien formado este documento XML?"
+   },
+   "code": "<libro>Dune</libro>\n<libro>Ficciones</libro>",
+   "options": [
+    {
+     "es": "No: hay más de un elemento raíz",
+     "en": "No: hay más de un elemento raíz"
+    },
+    {
+     "es": "No: las etiquetas se cruzan",
+     "en": "No: las etiquetas se cruzan"
+    },
+    {
+     "es": "Sí, está bien formado",
+     "en": "Sí, está bien formado"
+    },
+    {
+     "es": "No: un atributo no lleva comillas",
+     "en": "No: un atributo no lleva comillas"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Un documento XML tiene un único elemento raíz. Habría que envolverlos en, por ejemplo, `<libros>`.",
+    "en": "Un documento XML tiene un único elemento raíz. Habría que envolverlos en, por ejemplo, `<libros>`."
+   },
+   "lesson": "mar-xml-bien-formado",
+   "module": "0373"
+  },
+  {
+   "id": "mar-05",
+   "block": "mar-xml",
+   "q": {
+    "es": "¿Está bien formado este documento XML?",
+    "en": "¿Está bien formado este documento XML?"
+   },
+   "code": "<libro id=2><titulo>Dune</titulo></libro>",
+   "options": [
+    {
+     "es": "Sí, está bien formado",
+     "en": "Sí, está bien formado"
+    },
+    {
+     "es": "No: falta el prólogo",
+     "en": "No: falta el prólogo"
+    },
+    {
+     "es": "No: un atributo no lleva comillas",
+     "en": "No: un atributo no lleva comillas"
+    },
+    {
+     "es": "No: hay más de un elemento raíz",
+     "en": "No: hay más de un elemento raíz"
+    }
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "En XML el valor de un atributo va siempre entre comillas: `id=\"2\"` o `id='2'`.",
+    "en": "En XML el valor de un atributo va siempre entre comillas: `id=\"2\"` o `id='2'`."
+   },
+   "lesson": "mar-xml-bien-formado",
+   "module": "0373"
+  },
+  {
+   "id": "mar-06",
+   "block": "mar-xml",
+   "q": {
+    "es": "¿Está bien formado este documento XML?",
+    "en": "¿Está bien formado este documento XML?"
+   },
+   "code": "<Nombre>Ana</nombre>",
+   "options": [
+    {
+     "es": "No: XML distingue mayúsculas y minúsculas",
+     "en": "No: XML distingue mayúsculas y minúsculas"
+    },
+    {
+     "es": "Sí, está bien formado",
+     "en": "Sí, está bien formado"
+    },
+    {
+     "es": "No: falta el prólogo",
+     "en": "No: falta el prólogo"
+    },
+    {
+     "es": "No: los nombres no pueden empezar por mayúscula",
+     "en": "No: los nombres no pueden empezar por mayúscula"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "`<Nombre>` y `</nombre>` son etiquetas distintas. Los nombres sí pueden empezar por mayúscula.",
+    "en": "`<Nombre>` y `</nombre>` son etiquetas distintas. Los nombres sí pueden empezar por mayúscula."
+   },
+   "lesson": "mar-xml-bien-formado",
+   "module": "0373"
+  },
+  {
+   "id": "mar-07",
+   "block": "mar-xml",
+   "q": {
+    "es": "¿Está bien formado este documento XML?",
+    "en": "¿Está bien formado este documento XML?"
+   },
+   "code": "<tienda>\n  <!-- productos -->\n  <producto stock=\"0\"/>\n  <nota>Precio &lt; 10 &amp; envío gratis</nota>\n</tienda>",
+   "options": [
+    {
+     "es": "No: el elemento vacío debe cerrarse con </producto>",
+     "en": "No: el elemento vacío debe cerrarse con </producto>"
+    },
+    {
+     "es": "No: los comentarios no se permiten dentro del raíz",
+     "en": "No: los comentarios no se permiten dentro del raíz"
+    },
+    {
+     "es": "Sí, está bien formado",
+     "en": "Sí, está bien formado"
+    },
+    {
+     "es": "No: & no se puede usar nunca",
+     "en": "No: & no se puede usar nunca"
+    }
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "`<producto/>` es un elemento vacío correcto, el comentario es válido y `&lt;` y `&amp;` son las entidades de < y &.",
+    "en": "`<producto/>` es un elemento vacío correcto, el comentario es válido y `&lt;` y `&amp;` son las entidades de < y &."
+   },
+   "lesson": "mar-xml-bien-formado",
+   "module": "0373"
+  },
+  {
+   "id": "mar-08",
+   "block": "mar-xml",
+   "q": {
+    "es": "¿Está bien formado este documento XML?",
+    "en": "¿Está bien formado este documento XML?"
+   },
+   "code": "<nota>Tom & Jerry</nota>",
+   "options": [
+    {
+     "es": "Sí, está bien formado",
+     "en": "Sí, está bien formado"
+    },
+    {
+     "es": "No: & tiene que escribirse &amp;",
+     "en": "No: & tiene que escribirse &amp;"
+    },
+    {
+     "es": "No: falta un atributo",
+     "en": "No: falta un atributo"
+    },
+    {
+     "es": "No: las etiquetas se cruzan",
+     "en": "No: las etiquetas se cruzan"
+    }
+   ],
+   "answer": [
+    1
+   ],
+   "explain": {
+    "es": "El `&` inicia una entidad. Suelto, el analizador da error: se escribe `&amp;` o se mete en una sección CDATA.",
+    "en": "El `&` inicia una entidad. Suelto, el analizador da error: se escribe `&amp;` o se mete en una sección CDATA."
+   },
+   "lesson": "mar-xml-bien-formado",
+   "module": "0373"
+  },
+  {
+   "id": "mar-09",
+   "block": "mar-xml",
+   "q": {
+    "es": "¿Qué diferencia hay entre un XML bien formado y uno válido?",
+    "en": "¿Qué diferencia hay entre un XML bien formado y uno válido?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Bien formado cumple la sintaxis de XML; válido además cumple una DTD o un XML Schema",
+     "en": "Bien formado cumple la sintaxis de XML; válido además cumple una DTD o un XML Schema"
+    },
+    {
+     "es": "Son lo mismo",
+     "en": "Son lo mismo"
+    },
+    {
+     "es": "Válido cumple la sintaxis; bien formado además tiene una DTD",
+     "en": "Válido cumple la sintaxis; bien formado además tiene una DTD"
+    },
+    {
+     "es": "Bien formado significa que tiene prólogo",
+     "en": "Bien formado significa que tiene prólogo"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Todo XML válido está bien formado, pero no al revés.",
+    "en": "Todo XML válido está bien formado, pero no al revés."
+   },
+   "lesson": "mar-xml-bien-formado",
+   "module": "0373"
+  },
+  {
+   "id": "mar-10",
+   "block": "mar-xml",
+   "q": {
+    "es": "¿Para qué sirven los espacios de nombres (xmlns)?",
+    "en": "¿Para qué sirven los espacios de nombres (xmlns)?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Para distinguir elementos con el mismo nombre que vienen de vocabularios distintos",
+     "en": "Para distinguir elementos con el mismo nombre que vienen de vocabularios distintos"
+    },
+    {
+     "es": "Para cifrar el documento",
+     "en": "Para cifrar el documento"
+    },
+    {
+     "es": "Para indicar la codificación de caracteres",
+     "en": "Para indicar la codificación de caracteres"
+    },
+    {
+     "es": "Para enlazar la hoja de estilos",
+     "en": "Para enlazar la hoja de estilos"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Cada vocabulario se asocia a una URI y sus elementos llevan un prefijo, como `lib:titulo` y `per:titulo`.",
+    "en": "Cada vocabulario se asocia a una URI y sus elementos llevan un prefijo, como `lib:titulo` y `per:titulo`."
+   },
+   "lesson": "mar-xml-bien-formado",
+   "module": "0373"
+  },
+  {
+   "id": "mar-11",
+   "block": "mar-xml",
+   "q": {
+    "es": "¿Qué muestra este código de Python?",
+    "en": "¿Qué muestra este código de Python?"
+   },
+   "code": "import xml.etree.ElementTree as ET\nraiz = ET.fromstring('<biblioteca><libro/><libro/><revista/></biblioteca>')\nprint(raiz.tag, len(raiz))",
+   "options": [
+    "biblioteca 2",
+    "libro 3",
+    "Error",
+    "biblioteca 3"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "`len(raiz)` cuenta los hijos directos del elemento raíz: dos libros y una revista.",
+    "en": "`len(raiz)` cuenta los hijos directos del elemento raíz: dos libros y una revista."
+   },
+   "lesson": "mar-xml-bien-formado",
+   "module": "0373"
+  },
+  {
+   "id": "mar-12",
+   "block": "mar-xml",
+   "q": {
+    "es": "¿Qué muestra este código de Python?",
+    "en": "¿Qué muestra este código de Python?"
+   },
+   "code": "import xml.etree.ElementTree as ET\nlibro = ET.fromstring('<libro id=\"2\" idioma=\"en\"><titulo>Dune</titulo></libro>')\nprint(libro.get(\"idioma\"), libro.find(\"titulo\").text)",
+   "options": [
+    "idioma titulo",
+    "Error",
+    "en Dune",
+    "2 Dune"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "`get` lee un atributo y `find(...).text` el texto del primer hijo con ese nombre.",
+    "en": "`get` lee un atributo y `find(...).text` el texto del primer hijo con ese nombre."
+   },
+   "lesson": "mar-xml-bien-formado",
+   "module": "0373"
+  },
+  {
+   "id": "mar-13",
+   "block": "mar-xml",
+   "q": {
+    "es": "Completa el hueco para mostrar el texto del título.",
+    "en": "Completa el hueco para mostrar el texto del título."
+   },
+   "kind": "fill",
+   "code": "import xml.etree.ElementTree as ET\nlibro = ET.fromstring(\"<libro><titulo>Rayuela</titulo></libro>\")\nprint(libro.find(\"titulo\").___)",
+   "accept": [
+    "text"
+   ],
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "El contenido de texto de un elemento está en su atributo `.text`. Solución: `text`.",
+    "en": "El contenido de texto de un elemento está en su atributo `.text`. Solución: `text`."
+   },
+   "lesson": "mar-xml-bien-formado",
+   "module": "0373"
+  },
+  {
+   "id": "mar-14",
+   "block": "mar-html",
+   "q": {
+    "es": "¿Qué contiene la sección `<head>` de un documento HTML?",
+    "en": "¿Qué contiene la sección `<head>` de un documento HTML?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Información sobre la página: título, codificación, hojas de estilo",
+     "en": "Información sobre la página: título, codificación, hojas de estilo"
+    },
+    {
+     "es": "El contenido visible de la página",
+     "en": "El contenido visible de la página"
+    },
+    {
+     "es": "Solo el menú de navegación",
+     "en": "Solo el menú de navegación"
+    },
+    {
+     "es": "Los scripts que se ejecutan al final",
+     "en": "Los scripts que se ejecutan al final"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "El contenido visible va en `<body>`. `<head>` describe la página.",
+    "en": "El contenido visible va en `<body>`. `<head>` describe la página."
+   },
+   "lesson": "mar-html-css",
+   "module": "0373"
+  },
+  {
+   "id": "mar-15",
+   "block": "mar-html",
+   "q": {
+    "es": "¿Para qué sirve el atributo `alt` de `<img>`?",
+    "en": "¿Para qué sirve el atributo `alt` de `<img>`?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Para describir la imagen a quien no puede verla o si no carga",
+     "en": "Para describir la imagen a quien no puede verla o si no carga"
+    },
+    {
+     "es": "Para indicar la altura",
+     "en": "Para indicar la altura"
+    },
+    {
+     "es": "Para poner un título que aparece al pasar el ratón",
+     "en": "Para poner un título que aparece al pasar el ratón"
+    },
+    {
+     "es": "Para enlazar la imagen a otra página",
+     "en": "Para enlazar la imagen a otra página"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Lo leen los lectores de pantalla y se muestra si la imagen falla. Es obligatorio para la accesibilidad.",
+    "en": "Lo leen los lectores de pantalla y se muestra si la imagen falla. Es obligatorio para la accesibilidad."
+   },
+   "lesson": "mar-html-css",
+   "module": "0373"
+  },
+  {
+   "id": "mar-16",
+   "block": "mar-html",
+   "q": {
+    "es": "¿Qué etiqueta de HTML5 marca el contenido principal de la página?",
+    "en": "¿Qué etiqueta de HTML5 marca el contenido principal de la página?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "<main>",
+     "en": "<main>"
+    },
+    {
+     "es": "<section>",
+     "en": "<section>"
+    },
+    {
+     "es": "<div>",
+     "en": "<div>"
+    },
+    {
+     "es": "<body>",
+     "en": "<body>"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "`<main>` aparece una vez y deja fuera la cabecera, la navegación y el pie.",
+    "en": "`<main>` aparece una vez y deja fuera la cabecera, la navegación y el pie."
+   },
+   "lesson": "mar-html-css",
+   "module": "0373"
+  },
+  {
+   "id": "mar-17",
+   "block": "mar-html",
+   "q": {
+    "es": "¿Cuál es la declaración de tipo de documento de HTML5?",
+    "en": "¿Cuál es la declaración de tipo de documento de HTML5?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "<!DOCTYPE html>",
+     "en": "<!DOCTYPE html>"
+    },
+    {
+     "es": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\">",
+     "en": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\">"
+    },
+    {
+     "es": "<?xml version=\"1.0\"?>",
+     "en": "<?xml version=\"1.0\"?>"
+    },
+    {
+     "es": "<html5>",
+     "en": "<html5>"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "HTML5 simplificó el DOCTYPE. La segunda es la de HTML 4.01.",
+    "en": "HTML5 simplificó el DOCTYPE. La segunda es la de HTML 4.01."
+   },
+   "lesson": "mar-html-css",
+   "module": "0373"
+  },
+  {
+   "id": "mar-18",
+   "block": "mar-html",
+   "q": {
+    "es": "Un elemento `<p class=\"aviso\">` recibe estas dos reglas. ¿De qué color se ve?",
+    "en": "Un elemento `<p class=\"aviso\">` recibe estas dos reglas. ¿De qué color se ve?"
+   },
+   "code": ".aviso { color: orange; }\np { color: black; }",
+   "options": [
+    {
+     "es": "Naranja",
+     "en": "Naranja"
+    },
+    {
+     "es": "Negro",
+     "en": "Negro"
+    },
+    {
+     "es": "Del color por defecto",
+     "en": "Del color por defecto"
+    },
+    {
+     "es": "Depende del navegador",
+     "en": "Depende del navegador"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Una clase es más específica que una etiqueta, aunque la regla de `p` vaya después.",
+    "en": "Una clase es más específica que una etiqueta, aunque la regla de `p` vaya después."
+   },
+   "lesson": "mar-html-css",
+   "module": "0373"
+  },
+  {
+   "id": "mar-19",
+   "block": "mar-html",
+   "q": {
+    "es": "Las dos reglas tienen la misma especificidad. ¿De qué color se ve un `<p class=\"nota\">`?",
+    "en": "Las dos reglas tienen la misma especificidad. ¿De qué color se ve un `<p class=\"nota\">`?"
+   },
+   "code": ".nota { color: green; }\n.nota { color: purple; }",
+   "options": [
+    {
+     "es": "Morado",
+     "en": "Morado"
+    },
+    {
+     "es": "Verde",
+     "en": "Verde"
+    },
+    {
+     "es": "Mezcla de los dos",
+     "en": "Mezcla de los dos"
+    },
+    {
+     "es": "Negro",
+     "en": "Negro"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Con la misma especificidad gana la última regla de la cascada.",
+    "en": "Con la misma especificidad gana la última regla de la cascada."
+   },
+   "lesson": "mar-html-css",
+   "module": "0373"
+  },
+  {
+   "id": "mar-20",
+   "block": "mar-html",
+   "q": {
+    "es": "¿Qué selecciona este selector?",
+    "en": "¿Qué selecciona este selector?"
+   },
+   "code": "nav a { text-decoration: none; }",
+   "options": [
+    {
+     "es": "Los enlaces que están dentro de un <nav>",
+     "en": "Los enlaces que están dentro de un <nav>"
+    },
+    {
+     "es": "Los <nav> que están dentro de un enlace",
+     "en": "Los <nav> que están dentro de un enlace"
+    },
+    {
+     "es": "Los <nav> y todos los enlaces",
+     "en": "Los <nav> y todos los enlaces"
+    },
+    {
+     "es": "Solo el primer enlace del <nav>",
+     "en": "Solo el primer enlace del <nav>"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "El espacio es el combinador descendiente: elementos `a` en cualquier nivel dentro de `nav`.",
+    "en": "El espacio es el combinador descendiente: elementos `a` en cualquier nivel dentro de `nav`."
+   },
+   "lesson": "mar-html-css",
+   "module": "0373"
+  },
+  {
+   "id": "mar-21",
+   "block": "mar-html",
+   "q": {
+    "es": "¿Cuál es la forma recomendada de aplicar CSS a todo un sitio?",
+    "en": "¿Cuál es la forma recomendada de aplicar CSS a todo un sitio?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Una hoja externa enlazada con <link>",
+     "en": "Una hoja externa enlazada con <link>"
+    },
+    {
+     "es": "Un atributo style en cada etiqueta",
+     "en": "Un atributo style en cada etiqueta"
+    },
+    {
+     "es": "Un <style> repetido en cada página",
+     "en": "Un <style> repetido en cada página"
+    },
+    {
+     "es": "Etiquetas <font>",
+     "en": "Etiquetas <font>"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Una hoja externa se reutiliza en todas las páginas, se guarda en caché y separa contenido y presentación.",
+    "en": "Una hoja externa se reutiliza en todas las páginas, se guarda en caché y separa contenido y presentación."
+   },
+   "lesson": "mar-html-css",
+   "module": "0373"
+  },
+  {
+   "id": "mar-22",
+   "block": "mar-html",
+   "q": {
+    "es": "En el modelo de caja, ¿qué es el `padding`?",
+    "en": "En el modelo de caja, ¿qué es el `padding`?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "El espacio entre el contenido y el borde",
+     "en": "El espacio entre el contenido y el borde"
+    },
+    {
+     "es": "El espacio fuera del borde",
+     "en": "El espacio fuera del borde"
+    },
+    {
+     "es": "El grosor del borde",
+     "en": "El grosor del borde"
+    },
+    {
+     "es": "El ancho total del elemento",
+     "en": "El ancho total del elemento"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "El margen (`margin`) es el espacio exterior; el relleno (`padding`), el interior.",
+    "en": "El margen (`margin`) es el espacio exterior; el relleno (`padding`), el interior."
+   },
+   "lesson": "mar-html-css",
+   "module": "0373"
+  },
+  {
+   "id": "mar-23",
+   "block": "mar-html",
+   "q": {
+    "es": "¿Qué herramienta comprueba que un HTML cumple el estándar?",
+    "en": "¿Qué herramienta comprueba que un HTML cumple el estándar?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "El validador del W3C (validator.w3.org)",
+     "en": "El validador del W3C (validator.w3.org)"
+    },
+    {
+     "es": "Un compilador de Java",
+     "en": "Un compilador de Java"
+    },
+    {
+     "es": "El inspector de red del navegador",
+     "en": "El inspector de red del navegador"
+    },
+    {
+     "es": "Un gestor de bases de datos",
+     "en": "Un gestor de bases de datos"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Para CSS está el validador de hojas de estilo del W3C (jigsaw).",
+    "en": "Para CSS está el validador de hojas de estilo del W3C (jigsaw)."
+   },
+   "lesson": "mar-html-css",
+   "module": "0373"
+  },
+  {
+   "id": "mar-24",
+   "block": "mar-html",
+   "q": {
+    "es": "¿Qué muestra este código de Python?",
+    "en": "¿Qué muestra este código de Python?"
+   },
+   "code": "from html.parser import HTMLParser\n\nclass Contador(HTMLParser):\n    enlaces = 0\n    def handle_starttag(self, tag, attrs):\n        if tag == \"a\":\n            self.enlaces += 1\n\nc = Contador()\nc.feed('<nav><a href=\"/\">Inicio</a> <a href=\"/blog\">Blog</a></nav><p>Sin enlace</p>')\nprint(c.enlaces)",
+   "options": [
+    "1",
+    "Error",
+    "3",
+    "2"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "`handle_starttag` se llama con cada etiqueta de apertura; solo hay dos `<a>`.",
+    "en": "`handle_starttag` se llama con cada etiqueta de apertura; solo hay dos `<a>`."
+   },
+   "lesson": "mar-html-css",
+   "module": "0373"
+  },
+  {
+   "id": "mar-25",
+   "block": "mar-html",
+   "q": {
+    "es": "Ordena las líneas para mostrar la etiqueta de cada elemento de apertura.",
+    "en": "Ordena las líneas para mostrar la etiqueta de cada elemento de apertura."
+   },
+   "kind": "order",
+   "code": "___",
+   "lines": [
+    "from html.parser import HTMLParser",
+    "class Etiquetas(HTMLParser):",
+    "    def handle_starttag(self, tag, attrs):",
+    "        print(tag)",
+    "Etiquetas().feed(\"<ul><li>Uno</li></ul>\")"
+   ],
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "Primero el import, después la clase con su método y al final se usa.",
+    "en": "Primero el import, después la clase con su método y al final se usa."
+   },
+   "lesson": "mar-html-css",
+   "module": "0373"
+  },
+  {
+   "id": "mar-26",
+   "block": "mar-validacion",
+   "q": {
+    "es": "Con esta declaración, ¿qué hijos de `<libro>` son válidos, en este orden?",
+    "en": "Con esta declaración, ¿qué hijos de `<libro>` son válidos, en este orden?"
+   },
+   "code": "<!ELEMENT libro (titulo, autor+, anio?)>",
+   "options": [
+    {
+     "es": "<titulo> <autor> <autor>",
+     "en": "<titulo> <autor> <autor>"
+    },
+    {
+     "es": "<titulo> <anio>",
+     "en": "<titulo> <anio>"
+    },
+    {
+     "es": "<autor> <titulo>",
+     "en": "<autor> <titulo>"
+    },
+    {
+     "es": "<titulo> <anio> <autor>",
+     "en": "<titulo> <anio> <autor>"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "`autor+` exige al menos un autor y el orden de la secuencia es obligatorio; `anio?` puede faltar.",
+    "en": "`autor+` exige al menos un autor y el orden de la secuencia es obligatorio; `anio?` puede faltar."
+   },
+   "lesson": "mar-dtd-xsd",
+   "module": "0373"
+  },
+  {
+   "id": "mar-27",
+   "block": "mar-validacion",
+   "q": {
+    "es": "Con esta declaración, ¿qué hijos de `<contacto>` son válidos, en este orden?",
+    "en": "Con esta declaración, ¿qué hijos de `<contacto>` son válidos, en este orden?"
+   },
+   "code": "<!ELEMENT contacto (nombre, (telefono | email)*)>",
+   "options": [
+    {
+     "es": "<nombre> <telefono> <telefono>",
+     "en": "<nombre> <telefono> <telefono>"
+    },
+    {
+     "es": "<email> <nombre>",
+     "en": "<email> <nombre>"
+    },
+    {
+     "es": "<telefono>",
+     "en": "<telefono>"
+    },
+    {
+     "es": "<nombre> <nombre> <email>",
+     "en": "<nombre> <nombre> <email>"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Un nombre al principio y después cualquier número de teléfonos o emails, en cualquier orden entre ellos.",
+    "en": "Un nombre al principio y después cualquier número de teléfonos o emails, en cualquier orden entre ellos."
+   },
+   "lesson": "mar-dtd-xsd",
+   "module": "0373"
+  },
+  {
+   "id": "mar-28",
+   "block": "mar-validacion",
+   "q": {
+    "es": "Con esta declaración, ¿qué hijos de `<mensaje>` son válidos, en este orden?",
+    "en": "Con esta declaración, ¿qué hijos de `<mensaje>` son válidos, en este orden?"
+   },
+   "code": "<!ELEMENT mensaje (cabecera?, cuerpo)>",
+   "options": [
+    {
+     "es": "<cabecera>",
+     "en": "<cabecera>"
+    },
+    {
+     "es": "<cuerpo> <cabecera>",
+     "en": "<cuerpo> <cabecera>"
+    },
+    {
+     "es": "<cuerpo>",
+     "en": "<cuerpo>"
+    },
+    {
+     "es": "<cabecera> <cuerpo> <cuerpo>",
+     "en": "<cabecera> <cuerpo> <cuerpo>"
+    }
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "`cuerpo` sin símbolo aparece exactamente una vez; la cabecera es opcional y va antes.",
+    "en": "`cuerpo` sin símbolo aparece exactamente una vez; la cabecera es opcional y va antes."
+   },
+   "lesson": "mar-dtd-xsd",
+   "module": "0373"
+  },
+  {
+   "id": "mar-29",
+   "block": "mar-validacion",
+   "q": {
+    "es": "En una DTD, ¿qué significa `*` detrás de un elemento?",
+    "en": "En una DTD, ¿qué significa `*` detrás de un elemento?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Cero o más veces",
+     "en": "Cero o más veces"
+    },
+    {
+     "es": "Una o más veces",
+     "en": "Una o más veces"
+    },
+    {
+     "es": "Cero o una vez",
+     "en": "Cero o una vez"
+    },
+    {
+     "es": "Exactamente una vez",
+     "en": "Exactamente una vez"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "`?` es cero o una, `+` una o más y sin símbolo, exactamente una.",
+    "en": "`?` es cero o una, `+` una o más y sin símbolo, exactamente una."
+   },
+   "lesson": "mar-dtd-xsd",
+   "module": "0373"
+  },
+  {
+   "id": "mar-30",
+   "block": "mar-validacion",
+   "q": {
+    "es": "¿Qué indica esta declaración?",
+    "en": "¿Qué indica esta declaración?"
+   },
+   "code": "<!ATTLIST libro isbn ID #REQUIRED formato (papel|digital) \"papel\">",
+   "options": [
+    {
+     "es": "isbn es obligatorio y único; formato vale papel o digital, y papel por defecto",
+     "en": "isbn es obligatorio y único; formato vale papel o digital, y papel por defecto"
+    },
+    {
+     "es": "isbn es opcional; formato puede tener cualquier texto",
+     "en": "isbn es opcional; formato puede tener cualquier texto"
+    },
+    {
+     "es": "isbn y formato son elementos hijos de libro",
+     "en": "isbn y formato son elementos hijos de libro"
+    },
+    {
+     "es": "formato es obligatorio y no tiene valor por defecto",
+     "en": "formato es obligatorio y no tiene valor por defecto"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "`ID` exige un valor único en el documento y `#REQUIRED` lo hace obligatorio. La lista entre paréntesis limita los valores.",
+    "en": "`ID` exige un valor único en el documento y `#REQUIRED` lo hace obligatorio. La lista entre paréntesis limita los valores."
+   },
+   "lesson": "mar-dtd-xsd",
+   "module": "0373"
+  },
+  {
+   "id": "mar-31",
+   "block": "mar-validacion",
+   "q": {
+    "es": "¿Cómo se asocia esta DTD al documento?",
+    "en": "¿Cómo se asocia esta DTD al documento?"
+   },
+   "code": "<?xml version=\"1.0\"?>\n<!DOCTYPE biblioteca SYSTEM \"biblioteca.dtd\">\n<biblioteca>...</biblioteca>",
+   "options": [
+    {
+     "es": "Es una DTD externa, en el archivo biblioteca.dtd",
+     "en": "Es una DTD externa, en el archivo biblioteca.dtd"
+    },
+    {
+     "es": "Es una DTD interna",
+     "en": "Es una DTD interna"
+    },
+    {
+     "es": "Es un XML Schema",
+     "en": "Es un XML Schema"
+    },
+    {
+     "es": "Es una hoja de estilos",
+     "en": "Es una hoja de estilos"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Con `SYSTEM` y una ruta, las reglas están en otro archivo. Una DTD interna va entre corchetes.",
+    "en": "Con `SYSTEM` y una ruta, las reglas están en otro archivo. Una DTD interna va entre corchetes."
+   },
+   "lesson": "mar-dtd-xsd",
+   "module": "0373"
+  },
+  {
+   "id": "mar-32",
+   "block": "mar-validacion",
+   "q": {
+    "es": "¿Qué ventaja tiene XML Schema frente a una DTD?",
+    "en": "¿Qué ventaja tiene XML Schema frente a una DTD?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Tiene tipos de datos y restricciones, y está escrito en XML",
+     "en": "Tiene tipos de datos y restricciones, y está escrito en XML"
+    },
+    {
+     "es": "Es más corto y no usa XML",
+     "en": "Es más corto y no usa XML"
+    },
+    {
+     "es": "No necesita que el documento esté bien formado",
+     "en": "No necesita que el documento esté bien formado"
+    },
+    {
+     "es": "Lo entienden los navegadores sin descargarlo",
+     "en": "Lo entienden los navegadores sin descargarlo"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Con XSD puedes exigir que `<precio>` sea un decimal positivo; con una DTD, solo que tenga texto.",
+    "en": "Con XSD puedes exigir que `<precio>` sea un decimal positivo; con una DTD, solo que tenga texto."
+   },
+   "lesson": "mar-dtd-xsd",
+   "module": "0373"
+  },
+  {
+   "id": "mar-33",
+   "block": "mar-validacion",
+   "q": {
+    "es": "¿Cuántas veces puede aparecer `<telefono>`?",
+    "en": "¿Cuántas veces puede aparecer `<telefono>`?"
+   },
+   "code": "<xs:element name=\"telefono\" type=\"xs:string\" minOccurs=\"0\" maxOccurs=\"3\"/>",
+   "options": [
+    {
+     "es": "Entre 0 y 3",
+     "en": "Entre 0 y 3"
+    },
+    {
+     "es": "Exactamente 3",
+     "en": "Exactamente 3"
+    },
+    {
+     "es": "Entre 1 y 3",
+     "en": "Entre 1 y 3"
+    },
+    {
+     "es": "Las que se quiera",
+     "en": "Las que se quiera"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "`minOccurs` y `maxOccurs` fijan el mínimo y el máximo. Por defecto valen 1.",
+    "en": "`minOccurs` y `maxOccurs` fijan el mínimo y el máximo. Por defecto valen 1."
+   },
+   "lesson": "mar-dtd-xsd",
+   "module": "0373"
+  },
+  {
+   "id": "mar-34",
+   "block": "mar-validacion",
+   "q": {
+    "es": "¿Qué valores acepta este tipo?",
+    "en": "¿Qué valores acepta este tipo?"
+   },
+   "code": "<xs:simpleType name=\"talla\">\n  <xs:restriction base=\"xs:string\">\n    <xs:enumeration value=\"S\"/>\n    <xs:enumeration value=\"M\"/>\n    <xs:enumeration value=\"L\"/>\n  </xs:restriction>\n</xs:simpleType>",
+   "options": [
+    {
+     "es": "Solo S, M o L",
+     "en": "Solo S, M o L"
+    },
+    {
+     "es": "Cualquier texto",
+     "en": "Cualquier texto"
+    },
+    {
+     "es": "Cualquier letra mayúscula",
+     "en": "Cualquier letra mayúscula"
+    },
+    {
+     "es": "Números del 1 al 3",
+     "en": "Números del 1 al 3"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "`xs:enumeration` restringe el tipo base a una lista cerrada de valores.",
+    "en": "`xs:enumeration` restringe el tipo base a una lista cerrada de valores."
+   },
+   "lesson": "mar-dtd-xsd",
+   "module": "0373"
+  },
+  {
+   "id": "mar-35",
+   "block": "mar-validacion",
+   "q": {
+    "es": "¿Qué atributo enlaza un documento sin espacio de nombres con su XML Schema?",
+    "en": "¿Qué atributo enlaza un documento sin espacio de nombres con su XML Schema?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "xsi:noNamespaceSchemaLocation",
+     "en": "xsi:noNamespaceSchemaLocation"
+    },
+    {
+     "es": "xmlns:xs",
+     "en": "xmlns:xs"
+    },
+    {
+     "es": "xml:lang",
+     "en": "xml:lang"
+    },
+    {
+     "es": "<!DOCTYPE>",
+     "en": "<!DOCTYPE>"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Se pone en el elemento raíz, junto a `xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"`.",
+    "en": "Se pone en el elemento raíz, junto a `xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"`."
+   },
+   "lesson": "mar-dtd-xsd",
+   "module": "0373"
+  },
+  {
+   "id": "mar-36",
+   "block": "mar-consultas",
+   "q": {
+    "es": "¿Qué muestra este código de Python?",
+    "en": "¿Qué muestra este código de Python?"
+   },
+   "code": "import xml.etree.ElementTree as ET\nraiz = ET.fromstring(\"\"\"<biblioteca>\n  <libro id=\"1\" idioma=\"es\"><titulo>Ficciones</titulo><precio>12</precio></libro>\n  <libro id=\"2\" idioma=\"en\"><titulo>Dune</titulo><precio>25</precio></libro>\n  <libro id=\"3\" idioma=\"es\"><titulo>Rayuela</titulo><precio>18</precio></libro>\n</biblioteca>\"\"\")\nprint(len(raiz.findall(\"libro[@idioma='es']\")))",
+   "options": [
+    "1",
+    "Error",
+    "2",
+    "3"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "El predicado `[@idioma='es']` deja los libros 1 y 3.",
+    "en": "El predicado `[@idioma='es']` deja los libros 1 y 3."
+   },
+   "lesson": "mar-xpath-xslt",
+   "module": "0373"
+  },
+  {
+   "id": "mar-37",
+   "block": "mar-consultas",
+   "q": {
+    "es": "¿Qué muestra este código de Python?",
+    "en": "¿Qué muestra este código de Python?"
+   },
+   "code": "import xml.etree.ElementTree as ET\nraiz = ET.fromstring(\"\"\"<biblioteca>\n  <libro id=\"1\" idioma=\"es\"><titulo>Ficciones</titulo><precio>12</precio></libro>\n  <libro id=\"2\" idioma=\"en\"><titulo>Dune</titulo><precio>25</precio></libro>\n  <libro id=\"3\" idioma=\"es\"><titulo>Rayuela</titulo><precio>18</precio></libro>\n</biblioteca>\"\"\")\nprint(raiz.find(\"libro[last()]/titulo\").text)",
+   "options": [
+    "Error",
+    "Rayuela",
+    "Dune",
+    "Ficciones"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": {
+    "es": "`last()` es la posición del último libro.",
+    "en": "`last()` es la posición del último libro."
+   },
+   "lesson": "mar-xpath-xslt",
+   "module": "0373"
+  },
+  {
+   "id": "mar-38",
+   "block": "mar-consultas",
+   "q": {
+    "es": "¿Qué muestra este código de Python?",
+    "en": "¿Qué muestra este código de Python?"
+   },
+   "code": "import xml.etree.ElementTree as ET\nraiz = ET.fromstring(\"\"\"<biblioteca>\n  <libro id=\"1\" idioma=\"es\"><titulo>Ficciones</titulo><precio>12</precio></libro>\n  <libro id=\"2\" idioma=\"en\"><titulo>Dune</titulo><precio>25</precio></libro>\n  <libro id=\"3\" idioma=\"es\"><titulo>Rayuela</titulo><precio>18</precio></libro>\n</biblioteca>\"\"\")\nprint(raiz.find(\"libro[2]\").get(\"id\"))",
+   "options": [
+    "Error",
+    "3",
+    "2",
+    "1"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "Como en XPath, la posición `[2]` cuenta desde 1: es el segundo libro.",
+    "en": "Como en XPath, la posición `[2]` cuenta desde 1: es el segundo libro."
+   },
+   "lesson": "mar-xpath-xslt",
+   "module": "0373"
+  },
+  {
+   "id": "mar-39",
+   "block": "mar-consultas",
+   "q": {
+    "es": "¿Qué muestra este código de Python?",
+    "en": "¿Qué muestra este código de Python?"
+   },
+   "code": "import xml.etree.ElementTree as ET\nraiz = ET.fromstring(\"\"\"<biblioteca>\n  <libro id=\"1\" idioma=\"es\"><titulo>Ficciones</titulo><precio>12</precio></libro>\n  <libro id=\"2\" idioma=\"en\"><titulo>Dune</titulo><precio>25</precio></libro>\n  <libro id=\"3\" idioma=\"es\"><titulo>Rayuela</titulo><precio>18</precio></libro>\n</biblioteca>\"\"\")\nprint(sum(int(p.text) for p in raiz.iter(\"precio\")))",
+   "options": [
+    "Error",
+    "3",
+    "55",
+    "12"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "`iter` recorre todos los descendientes con ese nombre: 12 + 25 + 18. En XPath sería `sum(//precio)`.",
+    "en": "`iter` recorre todos los descendientes con ese nombre: 12 + 25 + 18. En XPath sería `sum(//precio)`."
+   },
+   "lesson": "mar-xpath-xslt",
+   "module": "0373"
+  },
+  {
+   "id": "mar-40",
+   "block": "mar-consultas",
+   "q": {
+    "es": "Completa el hueco para seleccionar todos los títulos, estén donde estén.",
+    "en": "Completa el hueco para seleccionar todos los títulos, estén donde estén."
+   },
+   "kind": "fill",
+   "code": "import xml.etree.ElementTree as ET\nraiz = ET.fromstring(\"\"\"<biblioteca>\n  <libro id=\"1\" idioma=\"es\"><titulo>Ficciones</titulo><precio>12</precio></libro>\n  <libro id=\"2\" idioma=\"en\"><titulo>Dune</titulo><precio>25</precio></libro>\n  <libro id=\"3\" idioma=\"es\"><titulo>Rayuela</titulo><precio>18</precio></libro>\n</biblioteca>\"\"\")\nprint(len(raiz.findall(\"___\")))",
+   "accept": [
+    ".//titulo"
+   ],
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "`.//titulo` busca a cualquier profundidad desde el nodo actual. Solución: `.//titulo`.",
+    "en": "`.//titulo` busca a cualquier profundidad desde el nodo actual. Solución: `.//titulo`."
+   },
+   "lesson": "mar-xpath-xslt",
+   "module": "0373"
+  },
+  {
+   "id": "mar-41",
+   "block": "mar-consultas",
+   "q": {
+    "es": "¿Qué selecciona la expresión XPath `//libro[precio > 20]/titulo`?",
+    "en": "¿Qué selecciona la expresión XPath `//libro[precio > 20]/titulo`?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Los títulos de los libros que cuestan más de 20",
+     "en": "Los títulos de los libros que cuestan más de 20"
+    },
+    {
+     "es": "Los precios mayores que 20",
+     "en": "Los precios mayores que 20"
+    },
+    {
+     "es": "El libro número 20",
+     "en": "El libro número 20"
+    },
+    {
+     "es": "Todos los títulos, ordenados por precio",
+     "en": "Todos los títulos, ordenados por precio"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "El predicado filtra los libros y la ruta sigue hasta su `titulo`.",
+    "en": "El predicado filtra los libros y la ruta sigue hasta su `titulo`."
+   },
+   "lesson": "mar-xpath-xslt",
+   "module": "0373"
+  },
+  {
+   "id": "mar-42",
+   "block": "mar-consultas",
+   "q": {
+    "es": "¿Qué devuelve `count(//libro)`?",
+    "en": "¿Qué devuelve `count(//libro)`?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "El número de elementos libro del documento",
+     "en": "El número de elementos libro del documento"
+    },
+    {
+     "es": "El primer libro",
+     "en": "El primer libro"
+    },
+    {
+     "es": "La suma de los precios",
+     "en": "La suma de los precios"
+    },
+    {
+     "es": "El número de atributos",
+     "en": "El número de atributos"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "`count()` cuenta los nodos de una secuencia.",
+    "en": "`count()` cuenta los nodos de una secuencia."
+   },
+   "lesson": "mar-xpath-xslt",
+   "module": "0373"
+  },
+  {
+   "id": "mar-43",
+   "block": "mar-consultas",
+   "q": {
+    "es": "¿Qué hace esta instrucción de una hoja XSLT?",
+    "en": "¿Qué hace esta instrucción de una hoja XSLT?"
+   },
+   "code": "<xsl:value-of select=\"titulo\"/>",
+   "options": [
+    {
+     "es": "Escribe en la salida el texto del elemento titulo",
+     "en": "Escribe en la salida el texto del elemento titulo"
+    },
+    {
+     "es": "Crea un elemento titulo vacío",
+     "en": "Crea un elemento titulo vacío"
+    },
+    {
+     "es": "Recorre todos los títulos",
+     "en": "Recorre todos los títulos"
+    },
+    {
+     "es": "Ordena por título",
+     "en": "Ordena por título"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Para recorrer se usa `xsl:for-each` y para ordenar, `xsl:sort`.",
+    "en": "Para recorrer se usa `xsl:for-each` y para ordenar, `xsl:sort`."
+   },
+   "lesson": "mar-xpath-xslt",
+   "module": "0373"
+  },
+  {
+   "id": "mar-44",
+   "block": "mar-consultas",
+   "q": {
+    "es": "¿Para qué sirve XSLT?",
+    "en": "¿Para qué sirve XSLT?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Para transformar un XML en otro XML, en HTML o en texto",
+     "en": "Para transformar un XML en otro XML, en HTML o en texto"
+    },
+    {
+     "es": "Para validar un XML contra una DTD",
+     "en": "Para validar un XML contra una DTD"
+    },
+    {
+     "es": "Para dar estilos a una página HTML como CSS",
+     "en": "Para dar estilos a una página HTML como CSS"
+    },
+    {
+     "es": "Para guardar XML en una base de datos relacional",
+     "en": "Para guardar XML en una base de datos relacional"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "XSLT transforma; la validación es cosa de la DTD o el XSD.",
+    "en": "XSLT transforma; la validación es cosa de la DTD o el XSD."
+   },
+   "lesson": "mar-xpath-xslt",
+   "module": "0373"
+  },
+  {
+   "id": "mar-45",
+   "block": "mar-consultas",
+   "q": {
+    "es": "¿Qué significan las letras de FLWOR en XQuery?",
+    "en": "¿Qué significan las letras de FLWOR en XQuery?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "for, let, where, order by, return",
+     "en": "for, let, where, order by, return"
+    },
+    {
+     "es": "find, load, write, open, read",
+     "en": "find, load, write, open, read"
+    },
+    {
+     "es": "from, list, with, or, run",
+     "en": "from, list, with, or, run"
+    },
+    {
+     "es": "for, loop, while, or, return",
+     "en": "for, loop, while, or, return"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Recorre (`for`), asigna (`let`), filtra (`where`), ordena (`order by`) y devuelve (`return`).",
+    "en": "Recorre (`for`), asigna (`let`), filtra (`where`), ordena (`order by`) y devuelve (`return`)."
+   },
+   "lesson": "mar-xpath-xslt",
+   "module": "0373"
+  },
+  {
+   "id": "mar-46",
+   "block": "mar-consultas",
+   "q": {
+    "es": "¿Qué es una base de datos XML nativa?",
+    "en": "¿Qué es una base de datos XML nativa?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Una que guarda y consulta documentos XML directamente, como BaseX o eXist-db",
+     "en": "Una que guarda y consulta documentos XML directamente, como BaseX o eXist-db"
+    },
+    {
+     "es": "Una base de datos relacional con una columna de texto",
+     "en": "Una base de datos relacional con una columna de texto"
+    },
+    {
+     "es": "Un archivo XML muy grande",
+     "en": "Un archivo XML muy grande"
+    },
+    {
+     "es": "Una hoja de cálculo exportada a XML",
+     "en": "Una hoja de cálculo exportada a XML"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Se consultan con XPath y XQuery, sin pasar los datos a tablas.",
+    "en": "Se consultan con XPath y XQuery, sin pasar los datos a tablas."
+   },
+   "lesson": "mar-xpath-xslt",
+   "module": "0373"
+  },
+  {
+   "id": "mar-47",
+   "block": "mar-json",
+   "q": {
+    "es": "¿Es válido este JSON?",
+    "en": "¿Es válido este JSON?"
+   },
+   "code": "{'nombre': 'Ana'}",
+   "options": [
+    {
+     "es": "Sí, es JSON válido",
+     "en": "Sí, es JSON válido"
+    },
+    {
+     "es": "No: las cadenas van entre comillas dobles",
+     "en": "No: las cadenas van entre comillas dobles"
+    },
+    {
+     "es": "No: falta un array",
+     "en": "No: falta un array"
+    },
+    {
+     "es": "No: un objeto no puede tener una sola clave",
+     "en": "No: un objeto no puede tener una sola clave"
+    }
+   ],
+   "answer": [
+    1
+   ],
+   "explain": {
+    "es": "JSON solo admite comillas dobles en claves y cadenas.",
+    "en": "JSON solo admite comillas dobles en claves y cadenas."
+   },
+   "lesson": "mar-json-intercambio",
+   "module": "0373"
+  },
+  {
+   "id": "mar-48",
+   "block": "mar-json",
+   "q": {
+    "es": "¿Es válido este JSON?",
+    "en": "¿Es válido este JSON?"
+   },
+   "code": "{\"notas\": [7, 8, 9,]}",
+   "options": [
+    {
+     "es": "No: sobra la coma final",
+     "en": "No: sobra la coma final"
+    },
+    {
+     "es": "Sí, es JSON válido",
+     "en": "Sí, es JSON válido"
+    },
+    {
+     "es": "No: los números van entre comillas",
+     "en": "No: los números van entre comillas"
+    },
+    {
+     "es": "No: los arrays no pueden ir dentro de objetos",
+     "en": "No: los arrays no pueden ir dentro de objetos"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Las comas finales son válidas en JavaScript, pero no en JSON.",
+    "en": "Las comas finales son válidas en JavaScript, pero no en JSON."
+   },
+   "lesson": "mar-json-intercambio",
+   "module": "0373"
+  },
+  {
+   "id": "mar-49",
+   "block": "mar-json",
+   "q": {
+    "es": "¿Es válido este JSON?",
+    "en": "¿Es válido este JSON?"
+   },
+   "code": "{\"activo\": true, \"padre\": null, \"etiquetas\": [], \"precio\": 9.5}",
+   "options": [
+    {
+     "es": "No: null no existe en JSON",
+     "en": "No: null no existe en JSON"
+    },
+    {
+     "es": "No: un array no puede estar vacío",
+     "en": "No: un array no puede estar vacío"
+    },
+    {
+     "es": "Sí, es JSON válido",
+     "en": "Sí, es JSON válido"
+    },
+    {
+     "es": "No: true va entre comillas",
+     "en": "No: true va entre comillas"
+    }
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "`true`, `null`, los arrays vacíos y los decimales son JSON válido.",
+    "en": "`true`, `null`, los arrays vacíos y los decimales son JSON válido."
+   },
+   "lesson": "mar-json-intercambio",
+   "module": "0373"
+  },
+  {
+   "id": "mar-50",
+   "block": "mar-json",
+   "q": {
+    "es": "¿Es válido este JSON?",
+    "en": "¿Es válido este JSON?"
+   },
+   "code": "{\"nombre\": \"Ana\" // alumna\n}",
+   "options": [
+    {
+     "es": "Sí, es JSON válido",
+     "en": "Sí, es JSON válido"
+    },
+    {
+     "es": "No: JSON no admite comentarios",
+     "en": "No: JSON no admite comentarios"
+    },
+    {
+     "es": "No: falta una coma",
+     "en": "No: falta una coma"
+    },
+    {
+     "es": "No: las claves no llevan comillas",
+     "en": "No: las claves no llevan comillas"
+    }
+   ],
+   "answer": [
+    1
+   ],
+   "explain": {
+    "es": "JSON no tiene comentarios. Si se necesitan, se usa otro formato (YAML) o una clave como `\"_nota\"`.",
+    "en": "JSON no tiene comentarios. Si se necesitan, se usa otro formato (YAML) o una clave como `\"_nota\"`."
+   },
+   "lesson": "mar-json-intercambio",
+   "module": "0373"
+  },
+  {
+   "id": "mar-51",
+   "block": "mar-json",
+   "q": {
+    "es": "¿Qué muestra este código de Python?",
+    "en": "¿Qué muestra este código de Python?"
+   },
+   "code": "import json\ndatos = json.loads('{\"alumnos\": [{\"nombre\": \"Ana\"}, {\"nombre\": \"Íker\"}]}')\nprint(len(datos[\"alumnos\"]), datos[\"alumnos\"][1][\"nombre\"])",
+   "options": [
+    "Error",
+    "2 Íker",
+    "2 Ana",
+    "1 Íker"
+   ],
+   "answer": [
+    1
+   ],
+   "explain": {
+    "es": "Un array de JSON es una lista de Python y un objeto, un diccionario.",
+    "en": "Un array de JSON es una lista de Python y un objeto, un diccionario."
+   },
+   "lesson": "mar-json-intercambio",
+   "module": "0373"
+  },
+  {
+   "id": "mar-52",
+   "block": "mar-json",
+   "q": {
+    "es": "¿Qué muestra este código de Python?",
+    "en": "¿Qué muestra este código de Python?"
+   },
+   "code": "import json\nprint(json.dumps({\"ok\": True, \"valor\": None, \"lista\": (1, 2)}))",
+   "options": [
+    "{\"ok\": True, \"valor\": None, \"lista\": (1, 2)}",
+    "{'ok': true, 'valor': null, 'lista': [1, 2]}",
+    "{\"ok\": true, \"valor\": null, \"lista\": [1, 2]}",
+    "Error"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "`dumps` traduce `True` a `true`, `None` a `null` y las tuplas a arrays.",
+    "en": "`dumps` traduce `True` a `true`, `None` a `null` y las tuplas a arrays."
+   },
+   "lesson": "mar-json-intercambio",
+   "module": "0373"
+  },
+  {
+   "id": "mar-53",
+   "block": "mar-json",
+   "q": {
+    "es": "¿Qué muestra este código de Python?",
+    "en": "¿Qué muestra este código de Python?"
+   },
+   "code": "import json\nprint(json.dumps({\"ciudad\": \"Málaga\"}))",
+   "options": [
+    "Error",
+    "{'ciudad': 'Málaga'}",
+    "{\"ciudad\": \"Málaga\"}",
+    "{\"ciudad\": \"M\\u00e1laga\"}"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "Por defecto `dumps` escapa lo que no es ASCII. Con `ensure_ascii=False` sale «Málaga».",
+    "en": "Por defecto `dumps` escapa lo que no es ASCII. Con `ensure_ascii=False` sale «Málaga»."
+   },
+   "lesson": "mar-json-intercambio",
+   "module": "0373"
+  },
+  {
+   "id": "mar-54",
+   "block": "mar-json",
+   "q": {
+    "es": "¿Qué muestra este código de Python?",
+    "en": "¿Qué muestra este código de Python?"
+   },
+   "code": "import json\nimport xml.etree.ElementTree as ET\nraiz = ET.fromstring('<alumnos><alumno nota=\"8\">Ana</alumno><alumno nota=\"6\">Íker</alumno></alumnos>')\nlista = [{\"nombre\": a.text, \"nota\": int(a.get(\"nota\"))} for a in raiz]\nprint(json.dumps(lista, ensure_ascii=False))",
+   "options": [
+    "Error",
+    "{\"alumnos\": [\"Ana\", \"Íker\"]}",
+    "[{\"nombre\": \"Ana\", \"nota\": \"8\"}, {\"nombre\": \"Íker\", \"nota\": \"6\"}]",
+    "[{\"nombre\": \"Ana\", \"nota\": 8}, {\"nombre\": \"Íker\", \"nota\": 6}]"
+   ],
+   "answer": [
+    3
+   ],
+   "explain": {
+    "es": "Una conversión de XML a JSON: cada elemento pasa a ser un objeto. `int()` convierte el atributo, que en XML siempre es texto.",
+    "en": "Una conversión de XML a JSON: cada elemento pasa a ser un objeto. `int()` convierte el atributo, que en XML siempre es texto."
+   },
+   "lesson": "mar-json-intercambio",
+   "module": "0373"
+  },
+  {
+   "id": "mar-55",
+   "block": "mar-json",
+   "q": {
+    "es": "¿Qué muestra este código de Python?",
+    "en": "¿Qué muestra este código de Python?"
+   },
+   "code": "import json\nimport sqlite3\nbd = sqlite3.connect(\":memory:\")\nbd.execute(\"CREATE TABLE ciudad (nombre TEXT, habitantes INTEGER)\")\nbd.executemany(\"INSERT INTO ciudad VALUES (?, ?)\", [(\"Soria\", 40), (\"León\", 120), (\"Ávila\", 58)])\nfilas = bd.execute(\"SELECT nombre FROM ciudad WHERE habitantes > 50 ORDER BY nombre\").fetchall()\nprint(json.dumps([n for (n,) in filas], ensure_ascii=False))",
+   "options": [
+    "[\"León\", \"Ávila\"]",
+    "[\"León\", \"Ávila\", \"Soria\"]",
+    "[\"Ávila\", \"León\"]",
+    "Error"
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "SQLite ordena el texto por su código: «L» va antes que «Á», que no es una letra ASCII. Para ordenar como un diccionario hace falta una intercalación (COLLATE).",
+    "en": "SQLite ordena el texto por su código: «L» va antes que «Á», que no es una letra ASCII. Para ordenar como un diccionario hace falta una intercalación (COLLATE)."
+   },
+   "lesson": "mar-json-intercambio",
+   "module": "0373"
+  },
+  {
+   "id": "mar-56",
+   "block": "mar-json",
+   "q": {
+    "es": "Completa el hueco para convertir el texto JSON en un diccionario.",
+    "en": "Completa el hueco para convertir el texto JSON en un diccionario."
+   },
+   "kind": "fill",
+   "code": "import json\ntexto = '{\"curso\": \"DAW\", \"anio\": 1}'\ndatos = json.___(texto)\nprint(datos[\"curso\"])",
+   "accept": [
+    "loads"
+   ],
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "`loads` (load string) lee un texto; `load`, un archivo abierto. Solución: `loads`.",
+    "en": "`loads` (load string) lee un texto; `load`, un archivo abierto. Solución: `loads`."
+   },
+   "lesson": "mar-json-intercambio",
+   "module": "0373"
+  },
+  {
+   "id": "mar-57",
+   "block": "mar-json",
+   "q": {
+    "es": "¿Qué inconveniente tiene guardar los datos de una aplicación solo en archivos JSON o XML?",
+    "en": "¿Qué inconveniente tiene guardar los datos de una aplicación solo en archivos JSON o XML?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "No tienen índices, transacciones ni control de acceso como un gestor de bases de datos",
+     "en": "No tienen índices, transacciones ni control de acceso como un gestor de bases de datos"
+    },
+    {
+     "es": "No se pueden leer con un editor de texto",
+     "en": "No se pueden leer con un editor de texto"
+    },
+    {
+     "es": "Dependen del sistema operativo",
+     "en": "Dependen del sistema operativo"
+    },
+    {
+     "es": "Solo admiten números",
+     "en": "Solo admiten números"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Por eso se guardan en un gestor y se exportan a JSON o XML para intercambiarlos.",
+    "en": "Por eso se guardan en un gestor y se exportan a JSON o XML para intercambiarlos."
+   },
+   "lesson": "mar-json-intercambio",
+   "module": "0373"
+  },
+  {
+   "id": "mar-58",
+   "block": "mar-gestion",
+   "q": {
+    "es": "¿Qué es la sindicación de contenidos?",
+    "en": "¿Qué es la sindicación de contenidos?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Publicar un canal XML con las novedades para que otros programas las lean",
+     "en": "Publicar un canal XML con las novedades para que otros programas las lean"
+    },
+    {
+     "es": "Copiar una web entera en otro servidor",
+     "en": "Copiar una web entera en otro servidor"
+    },
+    {
+     "es": "Enviar un boletín por correo",
+     "en": "Enviar un boletín por correo"
+    },
+    {
+     "es": "Enlazar una hoja de estilos",
+     "en": "Enlazar una hoja de estilos"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Los lectores de noticias y las aplicaciones de pódcast consultan esos canales.",
+    "en": "Los lectores de noticias y las aplicaciones de pódcast consultan esos canales."
+   },
+   "lesson": "mar-sindicacion-erp",
+   "module": "0373"
+  },
+  {
+   "id": "mar-59",
+   "block": "mar-gestion",
+   "q": {
+    "es": "¿Qué elemento de RSS 2.0 representa cada noticia?",
+    "en": "¿Qué elemento de RSS 2.0 representa cada noticia?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "<item>",
+     "en": "<item>"
+    },
+    {
+     "es": "<entry>",
+     "en": "<entry>"
+    },
+    {
+     "es": "<channel>",
+     "en": "<channel>"
+    },
+    {
+     "es": "<article>",
+     "en": "<article>"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "`<entry>` es el equivalente en Atom; `<channel>` contiene a todos los `<item>`.",
+    "en": "`<entry>` es el equivalente en Atom; `<channel>` contiene a todos los `<item>`."
+   },
+   "lesson": "mar-sindicacion-erp",
+   "module": "0373"
+  },
+  {
+   "id": "mar-60",
+   "block": "mar-gestion",
+   "q": {
+    "es": "¿Qué muestra este código de Python?",
+    "en": "¿Qué muestra este código de Python?"
+   },
+   "code": "import xml.etree.ElementTree as ET\ncanal = ET.fromstring(\"\"\"<rss version=\"2.0\"><channel>\n  <title>Blog de DAW</title><link>https://ejemplo.org/</link><description>Apuntes</description>\n  <item><title>XPath en 5 minutos</title><link>https://ejemplo.org/xpath</link></item>\n  <item><title>JSON frente a XML</title><link>https://ejemplo.org/json</link></item>\n</channel></rss>\"\"\")\nprint(len(canal.findall(\"channel/item\")), canal.find(\"channel/item/title\").text)",
+   "options": [
+    "2 XPath en 5 minutos",
+    "2 Blog de DAW",
+    "3 XPath en 5 minutos",
+    "Error"
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Hay dos `<item>`; `find` devuelve el primero que encaja con la ruta.",
+    "en": "Hay dos `<item>`; `find` devuelve el primero que encaja con la ruta."
+   },
+   "lesson": "mar-sindicacion-erp",
+   "module": "0373"
+  },
+  {
+   "id": "mar-61",
+   "block": "mar-gestion",
+   "q": {
+    "es": "¿Qué muestra este código de Python?",
+    "en": "¿Qué muestra este código de Python?"
+   },
+   "code": "import xml.etree.ElementTree as ET\nfeed = ET.fromstring('<feed xmlns=\"http://www.w3.org/2005/Atom\"><entry><title>Hola</title></entry></feed>')\nprint(feed.find(\"entry\"), feed.find(\"{http://www.w3.org/2005/Atom}entry/{http://www.w3.org/2005/Atom}title\").text)",
+   "options": [
+    "Error",
+    "entry Hola",
+    "None Hola",
+    "None None"
+   ],
+   "answer": [
+    2
+   ],
+   "explain": {
+    "es": "Con el espacio de nombres por defecto, el nombre real es `{URI}entry`: sin la URI, `find` no lo encuentra.",
+    "en": "Con el espacio de nombres por defecto, el nombre real es `{URI}entry`: sin la URI, `find` no lo encuentra."
+   },
+   "lesson": "mar-sindicacion-erp",
+   "module": "0373"
+  },
+  {
+   "id": "mar-62",
+   "block": "mar-gestion",
+   "q": {
+    "es": "¿Qué es un ERP?",
+    "en": "¿Qué es un ERP?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Una aplicación que integra la gestión de contabilidad, compras, ventas, inventario y personal",
+     "en": "Una aplicación que integra la gestión de contabilidad, compras, ventas, inventario y personal"
+    },
+    {
+     "es": "Un lenguaje de marcas para facturas",
+     "en": "Un lenguaje de marcas para facturas"
+    },
+    {
+     "es": "Un lector de canales RSS",
+     "en": "Un lector de canales RSS"
+    },
+    {
+     "es": "Un tipo de servidor web",
+     "en": "Un tipo de servidor web"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Todas las áreas comparten una base de datos y se activan como módulos.",
+    "en": "Todas las áreas comparten una base de datos y se activan como módulos."
+   },
+   "lesson": "mar-sindicacion-erp",
+   "module": "0373"
+  },
+  {
+   "id": "mar-63",
+   "block": "mar-gestion",
+   "q": {
+    "es": "¿Qué gestiona principalmente un CRM?",
+    "en": "¿Qué gestiona principalmente un CRM?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "La relación con los clientes: contactos, oportunidades y campañas",
+     "en": "La relación con los clientes: contactos, oportunidades y campañas"
+    },
+    {
+     "es": "Las nóminas",
+     "en": "Las nóminas"
+    },
+    {
+     "es": "Los servidores de la empresa",
+     "en": "Los servidores de la empresa"
+    },
+    {
+     "es": "El código fuente",
+     "en": "El código fuente"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Muchos ERP incluyen un módulo de CRM.",
+    "en": "Muchos ERP incluyen un módulo de CRM."
+   },
+   "lesson": "mar-sindicacion-erp",
+   "module": "0373"
+  },
+  {
+   "id": "mar-64",
+   "block": "mar-gestion",
+   "q": {
+    "es": "¿Cuál de estos es un ERP de software libre?",
+    "en": "¿Cuál de estos es un ERP de software libre?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Dolibarr",
+     "en": "Dolibarr"
+    },
+    {
+     "es": "SAP S/4HANA",
+     "en": "SAP S/4HANA"
+    },
+    {
+     "es": "Microsoft Dynamics 365",
+     "en": "Microsoft Dynamics 365"
+    },
+    {
+     "es": "Salesforce",
+     "en": "Salesforce"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Odoo Community y ERPNext también lo son. Los otros tres son comerciales.",
+    "en": "Odoo Community y ERPNext también lo son. Los otros tres son comerciales."
+   },
+   "lesson": "mar-sindicacion-erp",
+   "module": "0373"
+  },
+  {
+   "id": "mar-65",
+   "block": "mar-gestion",
+   "q": {
+    "es": "Al configurar un ERP, ¿qué permisos debe tener cada usuario?",
+    "en": "Al configurar un ERP, ¿qué permisos debe tener cada usuario?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Solo los que necesita para su trabajo",
+     "en": "Solo los que necesita para su trabajo"
+    },
+    {
+     "es": "Todos, para que nadie se quede bloqueado",
+     "en": "Todos, para que nadie se quede bloqueado"
+    },
+    {
+     "es": "Los mismos que el administrador",
+     "en": "Los mismos que el administrador"
+    },
+    {
+     "es": "Ninguno hasta que lo pida",
+     "en": "Ninguno hasta que lo pida"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Es el principio de mínimo privilegio: limita el daño de un error o de una cuenta robada.",
+    "en": "Es el principio de mínimo privilegio: limita el daño de un error o de una cuenta robada."
+   },
+   "lesson": "mar-sindicacion-erp",
+   "module": "0373"
+  },
+  {
+   "id": "mar-66",
+   "block": "mar-gestion",
+   "q": {
+    "es": "Ordena las líneas para exportar los productos a CSV.",
+    "en": "Ordena las líneas para exportar los productos a CSV."
+   },
+   "kind": "order",
+   "code": "___",
+   "lines": [
+    "import csv, io",
+    "salida = io.StringIO()",
+    "escritor = csv.writer(salida, lineterminator='\\n')",
+    "escritor.writerow(['id', 'nombre'])",
+    "escritor.writerow([1, 'Teclado'])",
+    "print(salida.getvalue().strip())"
+   ],
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "Se importa, se crea el destino, el escritor, la cabecera, las filas y al final se muestra.",
+    "en": "Se importa, se crea el destino, el escritor, la cabecera, las filas y al final se muestra."
+   },
+   "lesson": "mar-sindicacion-erp",
+   "module": "0373"
+  }
+ ],
+ "cards": []
+}

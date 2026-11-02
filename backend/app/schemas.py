@@ -187,7 +187,7 @@ MAX_PCAP_STATE_BYTES = 200_000  # ~1000 simulacros y todas las respuestas caben 
 # más "learn": el progreso por conceptos del núcleo educativo y "game": XP, racha y
 # logros de la web, que antes solo vivían en el navegador.
 # Lista cerrada: evita que un cliente cree documentos con nombres arbitrarios.
-COURSES = ("sql", "js", "java", "entornos", "programacion", "learn", "game")
+COURSES = ("sql", "js", "java", "entornos", "marcas", "programacion", "learn", "game")
 
 
 class PcapStateIn(BaseModel):

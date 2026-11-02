@@ -1,0 +1,430 @@
+{
+ "modules": [
+  {
+   "slug": "mar-xml",
+   "title": "XML bien formado",
+   "summary": "Lenguajes de marcas, estructura de XML, reglas sintácticas y espacios de nombres.",
+   "lessons": [
+    {
+     "slug": "mar-xml-bien-formado",
+     "title": "Lenguajes de marcas y XML bien formado",
+     "theory": "Un **lenguaje de marcas** mezcla en un documento de **texto plano** el contenido y unas **marcas** (etiquetas) que dicen qué es cada parte o cómo se presenta. Al ser texto, se lee con cualquier editor, no depende del sistema operativo y lo procesan muchos programas.\n\n**Clasificación:**\n- **De presentación:** dicen cómo se ve el texto (el formato RTF de los procesadores de textos).\n- **De procedimiento:** instrucciones para componer el documento (TeX, LaTeX).\n- **Descriptivos o semánticos:** dicen **qué es** cada parte, no cómo se ve. **XML** y **HTML** son de este tipo.\n\n**Los más relevantes:** SGML (el antecesor), **HTML** (páginas web), **XML** (metalenguaje para crear otros lenguajes), y lenguajes creados con XML como **SVG** (gráficos), **MathML** (fórmulas), **RSS** y **Atom** (sindicación), **XHTML** u **Office Open XML** (los `.docx`). **Markdown** es un lenguaje de marcas ligero.\n\n**XML** es de **propósito general**: no tiene etiquetas fijas, cada aplicación define las suyas. Sirve para intercambiar datos entre programas, configuraciones (el `pom.xml` de Maven) o documentos.\n\n**Estructura de un documento XML:**\n- **Prólogo** (opcional): `<?xml version=\"1.0\" encoding=\"UTF-8\"?>`.\n- **Un único elemento raíz** que contiene a todos los demás.\n- **Elementos:** `<titulo>Dune</titulo>`. Los vacíos se pueden cerrar así: `<br/>`.\n- **Atributos** dentro de la etiqueta de apertura, **siempre entre comillas**: `<libro id=\"2\">`.\n- **Comentarios** `<!-- ... -->` y secciones `<![CDATA[ ... ]]>` para texto que no se analiza.\n- **Entidades** para los caracteres reservados: `&lt;` (<), `&gt;` (>), `&amp;` (&), `&quot;` (\") y `&apos;` (').\n\n**Reglas para que esté bien formado:** toda etiqueta se cierra, se anidan sin cruzarse (`<a><b></b></a>`), XML **distingue mayúsculas** (`<Nombre>` no cierra con `</nombre>`), un atributo no se repite en el mismo elemento y los nombres no empiezan por número.\n\n**Bien formado** significa que cumple la sintaxis de XML: si no lo está, el analizador **se detiene con un error** y no se puede procesar. **Válido** es más: además cumple las reglas de una DTD o un XML Schema (lo verás en el bloque de validación).\n\n**Espacios de nombres:** si mezclas vocabularios con el mismo nombre de etiqueta (un `<titulo>` de libro y otro de persona), se distinguen con un prefijo asociado a una URI: `<lib:titulo xmlns:lib=\"https://ejemplo.org/libros\">`. La URI es solo un identificador único, no hace falta que exista.",
+     "example_code": "import xml.etree.ElementTree as ET\n\ndocumento = '''<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<biblioteca>\n  <libro id=\"1\"><titulo>Ficciones</titulo></libro>\n  <libro id=\"2\"><titulo>Dune</titulo></libro>\n</biblioteca>'''\n\nraiz = ET.fromstring(documento)          # falla si no está bien formado\nprint(\"Raíz:\", raiz.tag)\nfor libro in raiz:\n    print(libro.get(\"id\"), libro.find(\"titulo\").text)\n\ntry:\n    ET.fromstring(\"<a><b></a></b>\")      # etiquetas cruzadas\nexcept ET.ParseError as error:\n    print(\"Mal formado:\", error)",
+     "exercise": "Escribe a mano un documento XML `agenda.xml` con:\n\n1. el prólogo con la versión y la codificación;\n2. un elemento raíz `<agenda>`;\n3. tres `<contacto>` con un atributo `id` y los hijos `<nombre>` y `<telefono>`;\n4. un contacto cuyo nombre lleve el carácter `&` (por ejemplo «Pérez & Hijos»).\n\nDespués compruébalo con el programa de partida: si está bien formado, mostrará los nombres.",
+     "starter": "import xml.etree.ElementTree as ET\n\nraiz = ET.parse(\"agenda.xml\").getroot()\nfor contacto in raiz:\n    print(contacto.get(\"id\"), contacto.find(\"nombre\").text)\n",
+     "quiz": [
+      {
+       "q": "¿Cuántos elementos raíz puede tener un documento XML?",
+       "options": [
+        "Uno",
+        "Dos como máximo",
+        "Los que se quiera",
+        "Ninguno si tiene prólogo"
+       ],
+       "answer": 0,
+       "explain": "Un único elemento raíz contiene a todos los demás."
+      },
+      {
+       "q": "¿Cómo se escribe el carácter < dentro del texto de un elemento XML?",
+       "options": [
+        "&lt;",
+        "&gt;",
+        "\\<",
+        "<<"
+       ],
+       "answer": 0,
+       "explain": "`&lt;` (less than). `&gt;` es >."
+      }
+     ],
+     "challenge": {
+      "title": "Arregla el documento",
+      "stars": 2,
+      "exercise": "Este XML tiene cuatro errores. Encuéntralos y corrígelos: `<Pedido><cliente id=7>Ana</Cliente><total>20 & 5</total></pedido><pedido/>`.",
+      "starter": "<Pedido><cliente id=7>Ana</Cliente><total>20 & 5</total></pedido><pedido/>\n",
+      "hint": "Comillas en `id`, mayúsculas iguales al abrir y cerrar, `&amp;` en lugar de `&` y un solo elemento raíz."
+     },
+     "assistant": {
+      "hint": "El `&` del nombre se escribe `&amp;`. Revisa que cada `<contacto>` se cierre y que los `id` vayan entre comillas.",
+      "faq": [
+       {
+        "q": "¿HTML es XML?",
+        "a": "No. HTML viene de SGML y el navegador perdona errores (etiquetas sin cerrar, atributos sin comillas). XHTML es HTML escrito con las reglas estrictas de XML."
+       },
+       {
+        "q": "¿Es seguro abrir cualquier XML con Python?",
+        "a": "La documentación de Python avisa de que los módulos XML no están protegidos frente a datos maliciosos (por ejemplo, entidades que se expanden sin fin). Para XML de origen no fiable se recomienda `defusedxml`."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "W3C — Extensible Markup Language (XML) 1.0",
+       "url": "https://www.w3.org/TR/xml/"
+      },
+      {
+       "title": "Documentación de Python — xml.etree.ElementTree",
+       "url": "https://docs.python.org/es/3/library/xml.etree.elementtree.html"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "mar-html",
+   "title": "HTML y CSS",
+   "summary": "Estructura de HTML5, etiquetas semánticas, selectores, cascada y validación.",
+   "lessons": [
+    {
+     "slug": "mar-html-css",
+     "title": "HTML y hojas de estilo CSS",
+     "theory": "**HTML** es el lenguaje de marcas de las páginas web. Sus versiones: HTML 4.01 (1999), **XHTML** (HTML con las reglas de XML) y **HTML5**, que hoy mantiene el WHATWG como un estándar vivo (*HTML Living Standard*). HTML5 añadió etiquetas semánticas, audio y vídeo sin complementos, nuevos tipos de `input` y un `<!DOCTYPE html>` mucho más corto.\n\n**Estructura de un documento:**\n```\n<!DOCTYPE html>\n<html lang=\"es\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Mi página</title>\n    <link rel=\"stylesheet\" href=\"estilos.css\">\n  </head>\n  <body>...</body>\n</html>\n```\n`<head>` tiene la información **sobre** la página (no se ve en ella); `<body>`, el contenido visible.\n\n**Etiquetas principales:** títulos `<h1>`…`<h6>`, párrafos `<p>`, enlaces `<a href=\"...\">`, imágenes `<img src=\"...\" alt=\"...\">` (el `alt` describe la imagen a quien no la ve), listas `<ul>`/`<ol>` con `<li>`, tablas `<table>` con `<tr>`, `<th>` y `<td>`, y formularios `<form>` con `<label>` e `<input>`.\n\n**Etiquetas semánticas de HTML5:** `<header>`, `<nav>`, `<main>` (una por página), `<article>`, `<section>`, `<aside>` y `<footer>`. Ayudan a los lectores de pantalla y a los buscadores; un `<div>` no dice nada de su contenido.\n\n**CSS** separa la presentación del contenido: el mismo HTML puede verse de muchas formas y una sola hoja cambia todo el sitio. Una regla es `selector { propiedad: valor; }`. Se puede escribir en un atributo `style` (en línea), en un `<style>` del `<head>` o en un archivo externo con `<link>`, que es lo recomendable.\n\n**Selectores:** de etiqueta (`p`), de clase (`.aviso`), de id (`#cabecera`), descendiente (`nav a`), hijo (`ul > li`) y pseudoclases (`a:hover`, `li:first-child`).\n\n**Cascada y especificidad:** si dos reglas chocan, gana la más **específica**: estilo en línea > id > clase, atributo o pseudoclase > etiqueta. Con la misma especificidad, gana **la última** que aparece. `!important` se salta este orden y conviene evitarlo.\n\n**Modelo de caja:** cada elemento es una caja con contenido, `padding` (relleno), `border` y `margin` (margen exterior). Con `box-sizing: border-box`, el `width` incluye el relleno y el borde.\n\n**Validación:** el validador del W3C (validator.w3.org) revisa el HTML y el de CSS (jigsaw.w3.org/css-validator) las hojas de estilo. Los navegadores toleran errores, pero cada uno los «arregla» a su manera.\n\nPara acceder a la página y cambiarla desde un script (el DOM), mira el curso de JavaScript.",
+     "example_code": "from html.parser import HTMLParser\n\npagina = '''<main>\n  <h1>Catálogo</h1>\n  <img src=\"dune.jpg\" alt=\"Portada de Dune\">\n  <img src=\"logo.png\">\n  <a href=\"https://www.w3.org/\">W3C</a>\n</main>'''\n\nclass Revisor(HTMLParser):\n    def handle_starttag(self, tag, attrs):\n        datos = dict(attrs)\n        if tag == \"img\" and not datos.get(\"alt\"):\n            print(\"Imagen sin alt:\", datos[\"src\"])\n        if tag == \"a\":\n            print(\"Enlace a\", datos[\"href\"])\n\nRevisor().feed(pagina)",
+     "exercise": "Crea `index.html` y `estilos.css` para una ficha de un libro:\n\n1. estructura completa con `<!DOCTYPE html>`, `lang=\"es\"`, `meta charset` y `<title>`;\n2. `<header>` con el título, `<main>` con un `<article>` (portada con `alt`, autor y una lista de géneros) y `<footer>`;\n3. en el CSS: una fuente para `body`, la clase `.destacado` en rojo y un margen para `article`;\n4. pásalo por el validador del W3C hasta que no dé errores.",
+     "starter": "<!DOCTYPE html>\n<html lang=\"es\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <title>Ficha</title>\n    <link rel=\"stylesheet\" href=\"estilos.css\">\n  </head>\n  <body>\n  </body>\n</html>\n",
+     "quiz": [
+      {
+       "q": "¿Qué gana en la cascada de CSS entre un selector de id y uno de clase?",
+       "options": [
+        "El de id",
+        "El de clase",
+        "El que va primero",
+        "Ninguno"
+       ],
+       "answer": 0,
+       "explain": "Estilo en línea > id > clase > etiqueta."
+      },
+      {
+       "q": "¿Qué ventaja tiene usar hojas de estilo?",
+       "options": [
+        "Separar presentación y contenido, y cambiar el aspecto de todo el sitio desde un archivo",
+        "Que la página cargue sin HTML",
+        "Que el servidor ejecute la página",
+        "Que no haga falta el navegador"
+       ],
+       "answer": 0,
+       "explain": "El mismo HTML puede tener varias presentaciones (pantalla, impresión, móvil)."
+      }
+     ],
+     "challenge": {
+      "title": "Gana la regla",
+      "stars": 2,
+      "exercise": "Un `<p id=\"intro\" class=\"aviso\">` tiene estas reglas: `p { color: black; }`, `.aviso { color: orange; }`, `#intro { color: blue; }` y `p.aviso { color: green; }`. ¿De qué color se ve? Explica por qué y qué pasaría si quitaras la regla del id.",
+      "starter": "/* color final: ... */\n",
+      "hint": "El id es lo más específico. Sin él, `p.aviso` (clase + etiqueta) gana a `.aviso`."
+     },
+     "assistant": {
+      "hint": "Primero el HTML sin estilos; luego enlaza el CSS. El validador te dirá la línea exacta de cada error.",
+      "faq": [
+       {
+        "q": "¿Uso `<b>` o `<strong>`?",
+        "a": "`<strong>` indica importancia y lo anuncian los lectores de pantalla; `<b>` solo resalta. Para el aspecto, mejor CSS."
+       },
+       {
+        "q": "¿Clase o id?",
+        "a": "Un id es único en la página; una clase se repite. Para dar estilos se usan casi siempre clases."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "MDN Web Docs — HTML",
+       "url": "https://developer.mozilla.org/es/docs/Web/HTML"
+      },
+      {
+       "title": "MDN Web Docs — CSS",
+       "url": "https://developer.mozilla.org/es/docs/Web/CSS"
+      },
+      {
+       "title": "Validador HTML del W3C",
+       "url": "https://validator.w3.org/"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "mar-validacion",
+   "title": "Validación: DTD y XML Schema",
+   "summary": "Modelos de contenido, atributos, tipos de datos y restricciones.",
+   "lessons": [
+    {
+     "slug": "mar-dtd-xsd",
+     "title": "Validación con DTD y XML Schema",
+     "theory": "Dos programas que se intercambian XML tienen que ponerse de acuerdo: qué elementos hay, en qué orden, cuáles son obligatorios y qué tipo de dato lleva cada uno. Esa **descripción** se escribe en una **DTD** o en un **XML Schema (XSD)**, y un documento que la cumple es **válido**.\n\n**DTD (Document Type Definition)** — la forma clásica, con sintaxis propia (no es XML).\n\nSe asocia al documento con `<!DOCTYPE raiz SYSTEM \"biblioteca.dtd\">` (externa) o escribiendo las reglas entre corchetes dentro del `<!DOCTYPE raiz [ ... ]>` (interna).\n\n`<!ELEMENT libro (titulo, autor+, anio?)>` define el **modelo de contenido**:\n- `,` secuencia (en ese orden) y `|` alternativa (uno u otro);\n- cardinalidad: sin símbolo, **exactamente uno**; `?` cero o uno; `*` cero o más; `+` uno o más;\n- `(#PCDATA)` texto, `EMPTY` elemento vacío, `ANY` cualquier contenido.\n\n`<!ATTLIST libro id ID #REQUIRED idioma CDATA \"es\">` define atributos: tipo (`CDATA` texto, `ID` identificador único, `IDREF` referencia a un ID, una lista `(si|no)`) y valor por defecto (`#REQUIRED` obligatorio, `#IMPLIED` opcional, `#FIXED \"valor\"` o un valor por defecto).\n\n**XML Schema (XSD)** — más potente y escrito en XML:\n```\n<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\">\n  <xs:element name=\"libro\">\n    <xs:complexType>\n      <xs:sequence>\n        <xs:element name=\"titulo\" type=\"xs:string\"/>\n        <xs:element name=\"autor\" type=\"xs:string\" maxOccurs=\"unbounded\"/>\n        <xs:element name=\"anio\" type=\"xs:gYear\" minOccurs=\"0\"/>\n      </xs:sequence>\n      <xs:attribute name=\"id\" type=\"xs:positiveInteger\" use=\"required\"/>\n    </xs:complexType>\n  </xs:element>\n</xs:schema>\n```\n- **Tipos de datos**: `xs:string`, `xs:integer`, `xs:decimal`, `xs:date`, `xs:boolean`… (la DTD solo conoce texto).\n- `minOccurs` y `maxOccurs` (por defecto, 1) sustituyen a `?`, `*` y `+`.\n- `xs:sequence` (en orden), `xs:choice` (uno de ellos), `xs:all` (en cualquier orden).\n- **Restricciones** con `xs:simpleType` y `xs:restriction`: `xs:minInclusive`, `xs:maxLength`, `xs:pattern` (expresión regular) o `xs:enumeration` (lista de valores).\n- Se asocia con `xsi:noNamespaceSchemaLocation=\"libro.xsd\"` en el elemento raíz.\n\n**Herramientas:** `xmllint --dtdvalid biblioteca.dtd doc.xml` o `xmllint --schema libro.xsd doc.xml` (libxml2), editores como XML Copy Editor o la extensión XML de Red Hat para VS Code, y en Python la biblioteca `lxml`.",
+     "example_code": "import re\n\n# Cómo «piensa» un validador: el modelo (titulo, autor+, anio?) es casi una expresión regular\nmodelo = re.compile(r\"(titulo )(autor )+(anio )?\")\n\nfor hijos in ([\"titulo\", \"autor\"], [\"titulo\", \"autor\", \"autor\", \"anio\"], [\"autor\", \"titulo\"]):\n    texto = \"\".join(h + \" \" for h in hijos)\n    print(hijos, \"válido\" if modelo.fullmatch(texto) else \"no válido\")",
+     "exercise": "Escribe una DTD interna para un `<pedido>` que tenga:\n\n1. un `<cliente>` (texto) y uno o más `<linea>`;\n2. cada `<linea>` con `<producto>` y `<cantidad>`, y un atributo `ref` obligatorio;\n3. un `<nota>` opcional al final.\n\nEscribe después un pedido válido y otro no válido, y compruébalos con `xmllint --valid --noout pedido.xml`.",
+     "starter": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE pedido [\n  <!ELEMENT pedido (cliente, linea+, nota?)>\n  <!-- completa el resto -->\n]>\n<pedido>\n</pedido>\n",
+     "quiz": [
+      {
+       "q": "¿Qué es un documento XML válido?",
+       "options": [
+        "Uno bien formado que además cumple su DTD o su XML Schema",
+        "Uno que tiene prólogo",
+        "Uno que se ve bien en el navegador",
+        "Uno sin atributos"
+       ],
+       "answer": 0,
+       "explain": "La validez se comprueba contra una descripción del documento."
+      },
+      {
+       "q": "En XSD, ¿qué grupo obliga a que los hijos aparezcan en un orden concreto?",
+       "options": [
+        "xs:sequence",
+        "xs:choice",
+        "xs:all",
+        "xs:any"
+       ],
+       "answer": 0,
+       "explain": "`xs:choice` es uno de ellos y `xs:all`, todos en cualquier orden."
+      }
+     ],
+     "challenge": {
+      "title": "De DTD a XSD",
+      "stars": 3,
+      "exercise": "Traduce a XML Schema esta DTD: `<!ELEMENT alumno (nombre, nota*)>`, `<!ELEMENT nombre (#PCDATA)>`, `<!ELEMENT nota (#PCDATA)>`. Añade que cada nota sea un decimal entre 0 y 10.",
+      "starter": "<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\">\n  <!-- ... -->\n</xs:schema>\n",
+      "hint": "`nota*` es `minOccurs=\"0\" maxOccurs=\"unbounded\"`. El rango, con `xs:restriction base=\"xs:decimal\"`, `xs:minInclusive` y `xs:maxInclusive`."
+     },
+     "assistant": {
+      "hint": "`<!ELEMENT linea (producto, cantidad)>`, `<!ATTLIST linea ref CDATA #REQUIRED>` y cada hoja con `(#PCDATA)`.",
+      "faq": [
+       {
+        "q": "¿DTD o XSD?",
+        "a": "XSD si necesitas tipos de datos (números, fechas) o restricciones. La DTD es más sencilla y aún aparece en documentos antiguos y en el `<!DOCTYPE>`."
+       },
+       {
+        "q": "¿Python valida contra una DTD?",
+        "a": "La biblioteca estándar no. Con `lxml` se puede: `etree.DTD(...)` y `etree.XMLSchema(...)` tienen un método `validate`."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "W3C — Extensible Markup Language (XML) 1.0",
+       "url": "https://www.w3.org/TR/xml/"
+      },
+      {
+       "title": "W3C — XML Schema 1.1, parte 1: estructuras",
+       "url": "https://www.w3.org/TR/xmlschema11-1/"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "mar-consultas",
+   "title": "XPath, XSLT y XQuery",
+   "summary": "Seleccionar nodos, transformar documentos y consultar bases de datos XML.",
+   "lessons": [
+    {
+     "slug": "mar-xpath-xslt",
+     "title": "Consultas y conversiones: XPath, XSLT y XQuery",
+     "theory": "**XPath** es el lenguaje para **seleccionar partes** de un documento XML, que se ve como un árbol de nodos (elementos, atributos, texto). Lo usan XSLT, XQuery, XML Schema y muchas bibliotecas.\n\n**Rutas:**\n- `/biblioteca/libro`: ruta absoluta desde la raíz.\n- `//titulo`: todos los `titulo`, estén donde estén.\n- `.` el nodo actual, `..` el padre, `*` cualquier elemento.\n- `@id`: el atributo `id`.\n\n**Predicados**, entre corchetes, filtran: `libro[1]` (el primero: en XPath se cuenta desde 1), `libro[last()]`, `libro[@idioma='es']`, `libro[precio > 15]`.\n\n**Funciones:** `count(//libro)`, `text()`, `contains(titulo, 'Du')`, `sum(//precio)`, `string-length()`.\n\nElementTree de Python entiende un **subconjunto** de XPath en `find` y `findall`: rutas, `//`, `*`, `..`, `[@atr]`, `[@atr='v']`, `[hijo]`, `[n]` y `[last()]`. No tiene funciones como `count()` ni comparaciones numéricas: para eso hace falta `lxml` o una herramienta XPath completa.\n\n**XSLT** convierte un XML en otro XML, en HTML o en texto. Es una hoja de estilos **escrita en XML** que procesa un **procesador XSLT** (xsltproc, Saxon o el propio navegador):\n```\n<xsl:stylesheet version=\"1.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\">\n  <xsl:template match=\"/\">\n    <ul>\n      <xsl:for-each select=\"biblioteca/libro\">\n        <xsl:sort select=\"titulo\"/>\n        <li><xsl:value-of select=\"titulo\"/></li>\n      </xsl:for-each>\n    </ul>\n  </xsl:template>\n</xsl:stylesheet>\n```\n- `xsl:template match=\"...\"`: qué hacer con los nodos que encajan.\n- `xsl:value-of select=\"...\"`: escribe el texto del nodo.\n- `xsl:for-each`, `xsl:sort`, `xsl:if test=\"...\"` y `xsl:choose` / `xsl:when` / `xsl:otherwise`.\n- Se asocia a un XML con `<?xml-stylesheet type=\"text/xsl\" href=\"libros.xsl\"?>`.\n\n**¿Por qué convertir?** Un mismo dato se publica en una web (HTML), se envía a otro programa con otro vocabulario (XML) o se exporta a CSV o a texto.\n\n**XQuery** consulta colecciones de XML como SQL consulta tablas. Sus expresiones **FLWOR** (`for`, `let`, `where`, `order by`, `return`) recorren, filtran y devuelven resultados. Lo usan las **bases de datos XML nativas**, como BaseX o eXist-db.",
+     "example_code": "import xml.etree.ElementTree as ET\n\nraiz = ET.fromstring('''<biblioteca>\n  <libro id=\"1\" idioma=\"es\"><titulo>Ficciones</titulo><precio>12</precio></libro>\n  <libro id=\"2\" idioma=\"en\"><titulo>Dune</titulo><precio>25</precio></libro>\n</biblioteca>''')\n\nprint([t.text for t in raiz.findall(\".//titulo\")])         # //titulo\nprint(raiz.find(\"libro[@idioma='en']/titulo\").text)        # predicado de atributo\n\n# Una «conversión» a HTML como la de XSLT, escrita en Python\nfilas = [f\"<li>{l.find('titulo').text}: {l.find('precio').text} €</li>\" for l in raiz]\nprint(\"<ul>\" + \"\".join(filas) + \"</ul>\")",
+     "exercise": "Con el documento de la biblioteca del ejemplo (añade un tercer libro):\n\n1. escribe las expresiones XPath para: todos los títulos, el título del libro con `id=\"2\"`, los libros en español y el número de libros;\n2. pruébalas en una herramienta XPath (por ejemplo `xmllint --xpath \"count(//libro)\" biblioteca.xml`);\n3. escribe una hoja XSLT que genere una tabla HTML con título y precio, ordenada por precio.",
+     "starter": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xsl:stylesheet version=\"1.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\">\n  <xsl:template match=\"/\">\n    <table>\n      <!-- xsl:for-each + xsl:sort + xsl:value-of -->\n    </table>\n  </xsl:template>\n</xsl:stylesheet>\n",
+     "quiz": [
+      {
+       "q": "En XPath, ¿qué selecciona `@id`?",
+       "options": [
+        "El atributo id",
+        "El elemento id",
+        "El primer hijo",
+        "El texto del nodo"
+       ],
+       "answer": 0,
+       "explain": "La arroba indica un atributo."
+      },
+      {
+       "q": "¿Qué programa aplica una hoja XSLT a un XML?",
+       "options": [
+        "Un procesador XSLT, como xsltproc o Saxon",
+        "Un validador de DTD",
+        "Un compilador de C",
+        "Un servidor DNS"
+       ],
+       "answer": 0,
+       "explain": "Los navegadores también traen un procesador de XSLT 1.0."
+      }
+     ],
+     "challenge": {
+      "title": "La consulta FLWOR",
+      "stars": 3,
+      "exercise": "Escribe una consulta XQuery que devuelva el título de los libros de más de 15 €, ordenados por precio de mayor a menor. Pruébala en BaseX.",
+      "starter": "for $l in doc(\"biblioteca.xml\")//libro\n(: where ... order by ... return ... :)\n",
+      "hint": "`where $l/precio > 15`, `order by number($l/precio) descending`, `return $l/titulo/text()`."
+     },
+     "assistant": {
+      "hint": "Para ordenar por número: `<xsl:sort select=\"precio\" data-type=\"number\"/>`.",
+      "faq": [
+       {
+        "q": "¿Por qué `libro[1]` y no `libro[0]`?",
+        "a": "En XPath las posiciones empiezan en 1. En las listas de Python, en 0: no los mezcles."
+       },
+       {
+        "q": "¿XSLT sigue usándose?",
+        "a": "Sí, en integraciones entre sistemas, facturación electrónica, publicación de documentos y en sistemas que intercambian XML. Los navegadores aún entienden XSLT 1.0."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "W3C — XPath 3.1",
+       "url": "https://www.w3.org/TR/xpath-31/"
+      },
+      {
+       "title": "W3C — XSLT 3.0",
+       "url": "https://www.w3.org/TR/xslt-30/"
+      },
+      {
+       "title": "Documentación de Python — xml.etree.ElementTree",
+       "url": "https://docs.python.org/es/3/library/xml.etree.elementtree.html"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "mar-json",
+   "title": "JSON e intercambio de datos",
+   "summary": "Sintaxis de JSON, comparación de formatos y exportar desde una base de datos.",
+   "lessons": [
+    {
+     "slug": "mar-json-intercambio",
+     "title": "JSON e intercambio de datos",
+     "theory": "**JSON** (JavaScript Object Notation) es hoy el formato de intercambio más usado en la web: lo devuelven casi todas las API REST. Es texto, ligero y fácil de leer para personas y programas.\n\n**Sintaxis:**\n- **Objeto**: pares clave-valor entre llaves, `{\"nombre\": \"Ana\", \"edad\": 20}`. Las claves van **siempre entre comillas dobles**.\n- **Array**: lista ordenada entre corchetes, `[1, 2, 3]`.\n- **Valores**: cadena (comillas dobles), número, `true`, `false`, `null`, objeto o array.\n- **No admite** comentarios, comas al final (`[1, 2,]`) ni comillas simples.\n\n**XML, JSON, CSV o YAML:**\n- **XML**: atributos, espacios de nombres, validación madura (XSD) y transformaciones (XSLT). Más verboso.\n- **JSON**: más compacto y nativo en JavaScript; se valida con JSON Schema.\n- **CSV**: tablas planas, ideal para hojas de cálculo; sin jerarquía ni tipos.\n- **YAML**: muy legible, usado en configuraciones (Docker Compose, GitHub Actions).\n\n**Guardar datos en formatos de intercambio** tiene ventajas (portables, legibles, independientes del programa) e inconvenientes: no hay índices, consultas eficientes, transacciones ni control de acceso como en un gestor de bases de datos. Por eso lo habitual es **guardar en una base de datos y exportar** a JSON o XML para enviar.\n\n**De una base de datos relacional a JSON o XML:** se consulta con SQL y se convierte cada fila en un objeto o un elemento. Muchos gestores lo hacen ellos mismos: `JSON_OBJECT` en MySQL, `json_agg` en PostgreSQL o las funciones SQL/XML (`XMLELEMENT`). Los gestores también pueden **guardar** JSON en columnas de tipo JSON y consultarlo.\n\nEn Python, el módulo `json` convierte: `json.loads` (texto → diccionarios y listas) y `json.dumps` (al revés). `json.dumps(datos, ensure_ascii=False, indent=2)` deja las tildes tal cual y sangra el resultado.",
+     "example_code": "import json\nimport sqlite3\n\n# De una base de datos relacional a JSON\nbd = sqlite3.connect(\":memory:\")\nbd.execute(\"CREATE TABLE alumno (id INTEGER, nombre TEXT, nota REAL)\")\nbd.executemany(\"INSERT INTO alumno VALUES (?, ?, ?)\", [(1, \"Ana\", 8.5), (2, \"Íker\", 6.0)])\n\nfilas = bd.execute(\"SELECT id, nombre, nota FROM alumno ORDER BY id\").fetchall()\nalumnos = [{\"id\": i, \"nombre\": n, \"nota\": nota} for i, n, nota in filas]\ntexto = json.dumps({\"alumnos\": alumnos}, ensure_ascii=False, indent=2)\nprint(texto)\n\n# Y de vuelta: de JSON a objetos de Python\nprint(json.loads(texto)[\"alumnos\"][1][\"nombre\"])",
+     "exercise": "1. Escribe a mano un `catalogo.json` con un array de tres productos (`id`, `nombre`, `precio`, `etiquetas` como array y `oferta` como booleano).\n2. Léelo con Python y muestra los productos que están en oferta.\n3. Convierte el mismo catálogo a XML con `xml.etree.ElementTree` y guárdalo en `catalogo.xml`.\n4. Compara el tamaño de los dos archivos.",
+     "starter": "import json\n\nwith open(\"catalogo.json\", encoding=\"utf-8\") as archivo:\n    catalogo = json.load(archivo)\n\nfor producto in catalogo:\n    pass  # muestra los que estén en oferta\n",
+     "quiz": [
+      {
+       "q": "¿Qué formato devuelve hoy la mayoría de las API REST?",
+       "options": [
+        "JSON",
+        "CSV",
+        "RTF",
+        "SGML"
+       ],
+       "answer": 0,
+       "explain": "Algunas también ofrecen XML, pero JSON es el más común."
+      },
+      {
+       "q": "¿Qué función de Python convierte un diccionario en texto JSON?",
+       "options": [
+        "json.dumps",
+        "json.loads",
+        "json.parse",
+        "json.read"
+       ],
+       "answer": 0,
+       "explain": "`dumps` escribe; `loads` lee."
+      }
+     ],
+     "challenge": {
+      "title": "Exporta una consulta",
+      "stars": 2,
+      "exercise": "Crea con `sqlite3` una tabla de pedidos (cliente, total) con cinco filas. Exporta a JSON un objeto por cliente con su número de pedidos y la suma total, usando `GROUP BY`.",
+      "starter": "import json\nimport sqlite3\n\nbd = sqlite3.connect(\":memory:\")\n",
+      "hint": "`SELECT cliente, COUNT(*), SUM(total) FROM pedido GROUP BY cliente` y un diccionario por fila."
+     },
+     "assistant": {
+      "hint": "`if producto[\"oferta\"]:`. Para el XML: `ET.SubElement(raiz, \"producto\", id=str(p[\"id\"]))`.",
+      "faq": [
+       {
+        "q": "¿JSON ha sustituido a XML?",
+        "a": "En las API web, casi. XML sigue en documentos (ofimática), configuración, facturación electrónica y en muchos sistemas empresariales."
+       },
+       {
+        "q": "¿Por qué `True` de Python sale como `true`?",
+        "a": "`json.dumps` traduce a la sintaxis de JSON: `True` → `true`, `None` → `null`, tuplas → arrays."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "RFC 8259 — The JSON Data Interchange Format",
+       "url": "https://www.rfc-editor.org/rfc/rfc8259"
+      },
+      {
+       "title": "Documentación de Python — json",
+       "url": "https://docs.python.org/es/3/library/json.html"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "mar-gestion",
+   "title": "Sindicación y gestión empresarial",
+   "summary": "RSS y Atom; ERP y CRM: instalación, permisos, informes e importación.",
+   "lessons": [
+    {
+     "slug": "mar-sindicacion-erp",
+     "title": "Sindicación y sistemas de gestión empresarial",
+     "theory": "**Sindicación de contenidos:** un sitio publica un archivo XML (un **canal** o *feed*) con sus últimas novedades y los programas lo consultan cada cierto tiempo. Así puedes seguir muchos blogs o medios desde un **lector de noticias** (Feedly, Thunderbird, NetNewsWire) sin visitarlos uno a uno. Los **pódcast** se distribuyen así: cada episodio es una entrada con el audio adjunto.\n\n- **RSS 2.0**: `<rss version=\"2.0\">` con un `<channel>` (con `title`, `link` y `description` obligatorios) y un `<item>` por noticia (`title`, `link`, `description`, `pubDate`, `guid`).\n- **Atom** (RFC 4287): `<feed xmlns=\"http://www.w3.org/2005/Atom\">` con varias `<entry>`, cada una con `id`, `title` y `updated` obligatorios. Más estricto y con espacio de nombres propio.\n- La página anuncia su canal en el `<head>`: `<link rel=\"alternate\" type=\"application/rss+xml\" href=\"/feed.xml\">`.\n\n**Sistemas de gestión empresarial:**\n- **ERP** (planificación de recursos empresariales): integra en una sola aplicación y una sola base de datos la contabilidad, las compras, las ventas, el inventario, la facturación y los recursos humanos. Cada área es un **módulo** que se activa según la empresa.\n- **CRM** (gestión de la relación con clientes): contactos, oportunidades de venta, campañas y atención al cliente.\n- **Ventajas**: los datos se introducen una vez y los comparten todos los departamentos, se evitan errores al copiar, hay informes en tiempo real y procesos comunes.\n- **Ejemplos de software libre**: **Odoo** (edición Community), **Dolibarr** y **ERPNext**. Comerciales: SAP, Microsoft Dynamics.\n- **Instalación**: en un servidor propio (*on-premise*), en un contenedor Docker o como servicio en la nube (SaaS). Se configura la empresa, los módulos, los usuarios y sus **roles y permisos** (cada usuario ve solo lo que necesita).\n- **Seguridad**: contraseñas robustas y doble factor, permisos mínimos, HTTPS, **copias de seguridad** de la base de datos probadas y registro de accesos.\n- **Explotación**: generar **informes**, **importar** datos (clientes o productos desde CSV o Excel) y **exportarlos** o conectarlos con otros sistemas mediante su **API** (Odoo ofrece XML-RPC y JSON-RPC). Se documenta todo en un manual de usuario y uno de administración.",
+     "example_code": "import csv\nimport io\nimport xml.etree.ElementTree as ET\n\ncanal = ET.fromstring('''<rss version=\"2.0\"><channel>\n  <title>Blog de DAW</title><link>https://ejemplo.org/</link><description>Apuntes</description>\n  <item><title>XPath en 5 minutos</title><link>https://ejemplo.org/xpath</link></item>\n  <item><title>JSON frente a XML</title><link>https://ejemplo.org/json</link></item>\n</channel></rss>''')\n\nprint(\"Canal:\", canal.find(\"channel/title\").text)\n\n# Exportar las entradas a CSV, como se importarían en otra aplicación\nsalida = io.StringIO()\nescritor = csv.writer(salida)\nescritor.writerow([\"titulo\", \"enlace\"])\nfor item in canal.iter(\"item\"):\n    escritor.writerow([item.find(\"title\").text, item.find(\"link\").text])\nprint(salida.getvalue())",
+     "exercise": "1. Escribe a mano un canal RSS 2.0 con tres entradas sobre lo que estudias esta semana y valídalo en validator.w3.org/feed.\n2. Ábrelo en un lector de noticias.\n3. Instala Odoo Community o Dolibarr en un contenedor Docker, crea una empresa, activa los módulos de ventas e inventario y dos usuarios con permisos distintos.\n4. Importa diez productos desde un CSV y genera un informe de ventas.",
+     "starter": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<rss version=\"2.0\">\n  <channel>\n    <title>Mi semana en DAW</title>\n    <link>https://ejemplo.org/</link>\n    <description>Lo que estudio</description>\n    <!-- tres <item> -->\n  </channel>\n</rss>\n",
+     "quiz": [
+      {
+       "q": "¿Qué ventaja principal tiene un ERP frente a una aplicación distinta por departamento?",
+       "options": [
+        "Los datos se introducen una vez y los comparten todos los departamentos",
+        "Es siempre gratuito",
+        "No necesita base de datos",
+        "No hace falta configurarlo"
+       ],
+       "answer": 0,
+       "explain": "Se evitan duplicados y errores al copiar datos de un programa a otro."
+      },
+      {
+       "q": "¿Qué formato de sindicación usa el espacio de nombres http://www.w3.org/2005/Atom?",
+       "options": [
+        "Atom",
+        "RSS 2.0",
+        "JSON",
+        "SVG"
+       ],
+       "answer": 0,
+       "explain": "RSS 2.0 no usa espacio de nombres en sus elementos básicos."
+      }
+     ],
+     "challenge": {
+      "title": "Lector de noticias mínimo",
+      "stars": 2,
+      "exercise": "Escribe un programa que lea un canal RSS guardado en un archivo, muestre el título del canal y, de cada entrada, el título y el enlace. Después haz que también lea un canal Atom (recuerda el espacio de nombres).",
+      "starter": "import xml.etree.ElementTree as ET\n\ncanal = ET.parse(\"feed.xml\").getroot()\n",
+      "hint": "En Atom, busca con el espacio de nombres: `raiz.findall(\"{http://www.w3.org/2005/Atom}entry\")`."
+     },
+     "assistant": {
+      "hint": "Cada `<item>` necesita al menos `title` o `description`. Añade `pubDate` en formato RFC 822: `Mon, 02 Nov 2026 10:00:00 GMT`.",
+      "faq": [
+       {
+        "q": "¿Siguen usándose los RSS?",
+        "a": "Sí: los pódcast, muchos medios, blogs y repositorios (GitHub publica un Atom de los lanzamientos de cada proyecto)."
+       },
+       {
+        "q": "¿Odoo es gratis?",
+        "a": "La edición Community es software libre (LGPL). La Enterprise y el alojamiento en la nube de Odoo son de pago."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "RSS 2.0 Specification (RSS Advisory Board)",
+       "url": "https://www.rssboard.org/rss-specification"
+      },
+      {
+       "title": "RFC 4287 — The Atom Syndication Format",
+       "url": "https://www.rfc-editor.org/rfc/rfc4287"
+      },
+      {
+       "title": "Documentación de Odoo",
+       "url": "https://www.odoo.com/documentation/"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

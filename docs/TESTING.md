@@ -25,7 +25,7 @@ Las e2e arrancan solas el frontend (`e2e/serve_frontend.py`, un `http.server` co
 | Backend | `cd backend && python -m pytest -q --cov=app --cov-fail-under=100` | API, autenticación, RGPD, contenido y banco del PCAP |
 | Núcleo por conceptos | `python scripts/learning/build_learning.py --check` | `learning.json` al día y cada respuesta comprobada |
 | Currículo de DAW | `python scripts/curriculum/build_curriculum.py --check` | Catálogo al día; las pruebas están en `test_curriculum.py` |
-| Cursos de DAW | `python scripts/courses/<curso>_course.py --check` (`sql`, `js`, `java`, `entornos`, `programacion`) | Cada respuesta de código se ejecuta (SQLite, Node, Java y Python) |
+| Cursos de DAW | `python scripts/courses/<curso>_course.py --check` (`sql`, `js`, `java`, `entornos`, `marcas`, `programacion`) | Cada respuesta de código se ejecuta (SQLite, Node, Java y Python) |
 | Frontend | `npm run test:unit` | Lógica del aprendizaje, repaso, recomendación, panel y Markdown seguro |
 | End-to-end y WCAG | `npm run test:e2e` | La web entera con el backend real y auditoría de accesibilidad |
 | Migraciones en PostgreSQL | `MIGRATION_TEST_DATABASE_URL=postgresql://… python -m pytest -q tests/test_migrations.py` (en `backend/`) | Migraciones sobre una BD vacía y con datos |
