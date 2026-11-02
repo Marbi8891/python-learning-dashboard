@@ -55,6 +55,28 @@ test("corta un bucle infinito y la consola sigue funcionando", async ({ page }) 
   await expect(output(page)).toContainText("sigo vivo");
 });
 
+test("«Detener» corta el programa al momento y la consola sigue funcionando (PY-01)", async ({ page }) => {
+  await openLesson(page, "bucles");
+  const stop = page.locator("#console-stop");
+  await expect(stop).toBeHidden(); // solo aparece mientras algo se ejecuta
+  await run(page, "print('calentando')"); // primera carga de Pyodide
+  await page.locator("#console-editor").fill("while True:\n    pass");
+  await page.locator("#console-run").focus();
+  await page.keyboard.press("Enter");
+  // El foco pasa del botón Ejecutar (desactivado) a Detener, para seguir con el teclado
+  await expect(stop).toBeVisible();
+  await expect(stop).toBeFocused();
+  const started = Date.now();
+  await page.keyboard.press("Enter");
+  await expect(output(page)).toContainText("Has detenido el programa", { timeout: 3000 });
+  expect(Date.now() - started).toBeLessThan(3000); // sin esperar al límite de 10 s
+  await expect(output(page)).not.toContainText("Error");
+  await expect(stop).toBeHidden();
+  await expect(page.locator("#console-run")).toBeFocused();
+  await run(page, "print('sigo vivo')");
+  await expect(output(page)).toContainText("sigo vivo");
+});
+
 test("Ctrl+Enter ejecuta y Tab inserta 4 espacios", async ({ page }) => {
   await openLesson(page, "variables");
   const editor = page.locator("#console-editor");
