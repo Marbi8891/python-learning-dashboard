@@ -7,6 +7,9 @@
    - Hasta que la fusión inicial (GET + fusión) sale bien, `ready` es false y no se sube nada.
    - Si la fusión falla (el servidor está despertando, un 5xx, sin red), se reintenta con espera.
    - Al cerrar o cambiar de sesión se vuelve a cerrar la puerta.
+   - La lectura (`load`) y la fusión (`merge`) van separadas: si la sesión cambia mientras se lee,
+     la copia leída se descarta sin tocar los datos locales (no se mezcla la cuenta de otro usuario
+     ni se vuelve a escribir en el navegador después de borrarlo al cerrar sesión).
 
    No depende del DOM ni de la API, para poder probarlo con node --test. */
 
@@ -15,7 +18,8 @@ export const RETRY_DELAYS_MS = [2_000, 10_000, 30_000, 60_000];
 /**
  * @param {object} options
  * @param {string} options.name qué se sincroniza (para los avisos de la consola)
- * @param {() => Promise<void>} options.merge trae la copia de la cuenta y la fusiona con la local
+ * @param {() => Promise<any>} options.load trae la copia de la cuenta (no toca los datos locales)
+ * @param {(remote: any) => void} options.merge fusiona esa copia con la local (solo si la sesión sigue)
  * @param {() => (void|Promise<void>)} options.onSynced sube el resultado y repinta
  * @param {() => boolean} options.active si hay sesión iniciada
  * @param {number[]} [options.delays] esperas entre reintentos
@@ -24,6 +28,7 @@ export const RETRY_DELAYS_MS = [2_000, 10_000, 30_000, 60_000];
  */
 export function createSyncGate({
   name,
+  load,
   merge,
   onSynced,
   active,
@@ -39,12 +44,13 @@ export function createSyncGate({
 
   async function attemptSync(current) {
     try {
-      await merge();
+      const remote = await load();
+      if (current !== session || !active()) return false; // la sesión cambió mientras se leía
+      merge(remote);
     } catch (error) {
       console.warn(`No se pudo sincronizar ${name}:`, error?.message ?? error);
       return false;
     }
-    if (current !== session || !active()) return false; // la sesión cambió mientras tanto
     ready = true;
     attempt = 0;
     await onSynced();

@@ -90,11 +90,11 @@ export function saveCourse(id) {
     Los cursos que aún no se habían fusionado lo intentan ahora (y, si sale bien, se suben). */
 export async function flushCourseSync() {
   if (!state.user) return;
+  await Promise.allSettled([...gates.values()].filter((gate) => !gate.ready).map((gate) => gate.sync()));
   const pending = [...timers.keys()];
   for (const id of pending) clearTimeout(timers.get(id));
   timers.clear();
-  const unsynced = [...gates.values()].filter((gate) => !gate.ready);
-  await Promise.allSettled([...pending.map(push), ...unsynced.map((gate) => gate.sync())]);
+  await Promise.allSettled(pending.map(push));
 }
 
 function addDays(days) {
@@ -164,14 +164,13 @@ export function initCourseSync(onMerged) {
       createSyncGate({
         name: `el curso ${id}`,
         active: () => Boolean(state.user),
-        merge: async () => {
-          const remote = await request("GET", `/api/course-state/${id}`);
+        load: () => request("GET", `/api/course-state/${id}`),
+        merge: (remote) => {
           mergeCourse(id, remote.data);
           saveCourse(id);
         },
-        onSynced: async () => {
-          clearTimeout(timers.get(id));
-          await push(id);
+        onSynced: () => {
+          saveCourse(id); // ya abierta: sube el resultado con la misma espera que cualquier cambio
           onMerged();
         },
       }),

@@ -27,18 +27,22 @@ function fakeClock() {
 
 function setup({ failures = 0, user = true } = {}) {
   const session = { user };
-  const calls = { merge: 0, synced: 0 };
+  const calls = { load: 0, merge: 0, synced: 0 };
   const clock = fakeClock();
   let left = failures;
   const gate = createSyncGate({
     name: "prueba",
     active: () => session.user,
-    merge: async () => {
-      calls.merge += 1;
+    load: async () => {
+      calls.load += 1;
       if (left > 0) {
         left -= 1;
         throw new Error("503");
       }
+      return { data: {} };
+    },
+    merge: () => {
+      calls.merge += 1;
     },
     onSynced: () => {
       calls.synced += 1;
@@ -65,7 +69,7 @@ test("cerrada hasta que la fusión inicial sale bien; entonces sube una vez", as
   assert.equal(gate.ready, false);
   await gate.restart();
   assert.equal(gate.ready, true);
-  assert.deepEqual(calls, { merge: 1, synced: 1 });
+  assert.deepEqual(calls, { load: 1, merge: 1, synced: 1 });
 });
 
 test(
@@ -81,7 +85,7 @@ test(
     assert.equal(clock.pending()[0].ms, 20);
     await clock.fireNext();
     assert.equal(gate.ready, true);
-    assert.deepEqual(calls, { merge: 3, synced: 1 });
+    assert.deepEqual(calls, { load: 3, merge: 1, synced: 1 });
   }),
 );
 
@@ -95,7 +99,7 @@ test(
     assert.equal(clock.pending().length, 0);
     assert.equal(gate.ready, false);
     assert.equal(await gate.sync(), true); // p. ej. al cerrar sesión
-    assert.deepEqual(calls, { merge: 4, synced: 1 });
+    assert.deepEqual(calls, { load: 4, merge: 1, synced: 1 });
   }),
 );
 
@@ -103,7 +107,7 @@ test("sin sesión no fusiona ni sube", async () => {
   const { gate, calls } = setup({ user: false });
   await gate.restart();
   assert.equal(await gate.sync(), false);
-  assert.deepEqual(calls, { merge: 0, synced: 0 });
+  assert.deepEqual(calls, { load: 0, merge: 0, synced: 0 });
 });
 
 test(
@@ -126,7 +130,8 @@ test("una fusión que termina después de cerrar sesión no abre la puerta", asy
   const gate = createSyncGate({
     name: "prueba",
     active: () => session.user,
-    merge: () => new Promise((resolve) => (release = resolve)),
+    load: () => new Promise((resolve) => (release = resolve)),
+    merge: () => {},
     onSynced: () => {
       synced += 1;
     },
@@ -143,5 +148,47 @@ test("una fusión que termina después de cerrar sesión no abre la puerta", asy
 test("dos sync() a la vez hacen una sola fusión", async () => {
   const { gate, calls } = setup();
   await Promise.all([gate.sync(), gate.sync()]);
-  assert.deepEqual(calls, { merge: 1, synced: 1 });
+  assert.deepEqual(calls, { load: 1, merge: 1, synced: 1 });
 });
+
+test("la copia leída de una sesión que ya cambió no se fusiona con los datos locales", async () => {
+  // Usuario A empieza a leer; cierra sesión y entra B antes de que llegue la respuesta de A.
+  const session = { user: "A" };
+  const local = [];
+  const pending = [];
+  const gate = createSyncGate({
+    name: "prueba",
+    active: () => Boolean(session.user),
+    load: () => new Promise((resolve) => pending.push({ user: session.user, resolve })),
+    merge: (remote) => local.push(remote),
+    onSynced: () => {},
+  });
+  const first = gate.restart();
+  session.user = "B";
+  const second = gate.restart();
+  pending[0].resolve("cuenta de A"); // llega tarde
+  await first;
+  assert.deepEqual(local, [], "la copia de A no debe tocar los datos locales de B");
+  pending[1].resolve("cuenta de B");
+  await second;
+  assert.deepEqual(local, ["cuenta de B"]);
+  assert.equal(gate.ready, true);
+});
+
+test(
+  "un fallo al fusionar deja la puerta cerrada",
+  quiet(async () => {
+    const gate = createSyncGate({
+      name: "prueba",
+      active: () => true,
+      load: async () => ({ data: "corrupto" }),
+      merge: () => {
+        throw new Error("formato inesperado");
+      },
+      onSynced: () => assert.fail("no debe subir"),
+      delays: [],
+    });
+    await gate.restart();
+    assert.equal(gate.ready, false);
+  }),
+);

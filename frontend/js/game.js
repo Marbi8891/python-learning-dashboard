@@ -57,14 +57,14 @@ let pushTimer = null;
 const gate = createSyncGate({
   name: "los logros",
   active: () => Boolean(store.user),
-  merge: async () => {
-    const remote = await request("GET", `/api/course-state/${COURSE}`);
+  load: () => request("GET", `/api/course-state/${COURSE}`),
+  merge: (remote) => {
     mergeGame(game, remote.data);
     commit();
   },
-  onSynced: async () => {
+  onSynced: () => {
     clearTimeout(pushTimer);
-    await push();
+    pushTimer = setTimeout(push, PUSH_DELAY_MS); // sube el resultado con la misma espera que cualquier cambio
   },
 });
 
@@ -92,10 +92,7 @@ function save() {
 /** Sube ya el cambio pendiente (antes de cerrar sesión). */
 export async function flushGameSync() {
   if (!store.user) return;
-  if (!gate.ready) {
-    await gate.sync(); // al salir bien, sube el documento fusionado
-    return;
-  }
+  if (!gate.ready && !(await gate.sync())) return; // sin fusionar no se sube nada
   if (!pushTimer) return;
   clearTimeout(pushTimer);
   await push();

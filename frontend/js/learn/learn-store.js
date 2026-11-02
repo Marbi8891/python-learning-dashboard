@@ -31,14 +31,14 @@ let timer = null;
 const gate = createSyncGate({
   name: "el progreso de aprendizaje",
   active: () => Boolean(session.user),
-  merge: async () => {
-    const remote = await request("GET", `/api/course-state/${COURSE}`);
+  load: () => request("GET", `/api/course-state/${COURSE}`),
+  merge: (remote) => {
     mergeLearning(learning, remote.data);
     saveLearning();
   },
-  onSynced: async () => {
+  onSynced: () => {
     clearTimeout(timer);
-    await push();
+    timer = setTimeout(push, PUSH_DELAY_MS); // sube el resultado con la misma espera que cualquier cambio
   },
 });
 
@@ -68,10 +68,7 @@ export function saveLearning() {
 /** Sube ya el cambio pendiente (antes de cerrar sesión). */
 export async function flushLearnSync() {
   if (!session.user) return;
-  if (!gate.ready) {
-    await gate.sync(); // al salir bien, sube el documento fusionado
-    return;
-  }
+  if (!gate.ready && !(await gate.sync())) return; // sin fusionar no se sube nada
   if (!timer) return;
   clearTimeout(timer);
   await push();

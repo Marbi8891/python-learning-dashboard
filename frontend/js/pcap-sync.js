@@ -38,8 +38,8 @@ export function initPcapSync(onMerged) {
   gate = createSyncGate({
     name: "la preparación del PCAP",
     active: () => Boolean(state.user),
-    merge: async () => {
-      const remote = await request("GET", "/api/pcap-state");
+    load: () => request("GET", "/api/pcap-state"),
+    merge: (remote) => {
       mergePcap(remote.data);
       savePcap();
     },
