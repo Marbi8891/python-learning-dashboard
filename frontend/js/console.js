@@ -1,7 +1,7 @@
 /* Consola interactiva y comprobación de ejercicios. */
 
 import { escapeHtml, renderInline } from "./markdown.js";
-import { PythonRunner, TimeoutError } from "./python-runner.js";
+import { PythonRunner, StoppedError, TimeoutError } from "./python-runner.js";
 
 const $ = (selector) => document.querySelector(selector);
 const DRAFT_PREFIX = "pld:draft:";
@@ -96,21 +96,42 @@ function showOutput({ output = "", error = null, hint = null }) {
   box.dataset.state = error ? "error" : output ? "ok" : "empty";
 }
 
+/** Mientras se ejecuta, «Detener» aparece junto a Ejecutar. Si el foco estaba en el botón que se
+    desactiva, pasa a «Detener» (y vuelve al terminar) para no perderlo con el teclado. */
+function toggleStop(running, button, moveFocus) {
+  const stop = $("#console-stop");
+  if (!stop) return;
+  const focusOnStop = document.activeElement === stop;
+  stop.hidden = !running;
+  if (running && moveFocus) stop.focus();
+  if (!running && focusOnStop) button.focus();
+}
+
 async function withRunner(button, label, action) {
   if (busy) return;
   busy = true;
   const original = button.innerHTML;
+  // Un botón desactivado pierde el foco: si lo tenía, pasa a «Detener»
+  const hadFocus = document.activeElement === button;
   button.disabled = true;
   button.textContent = label;
+  toggleStop(true, button, hadFocus);
   try {
     await action();
   } catch (error) {
-    const message = error instanceof TimeoutError ? `${error.message} ¿Hay un bucle infinito?` : error.message;
-    showOutput({ error: message });
+    if (error instanceof StoppedError) {
+      const box = $("#console-output");
+      box.innerHTML = `<span class="console__muted">${escapeHtml(error.message)} Puedes cambiar el código y volver a ejecutarlo.</span>`;
+      box.dataset.state = "empty";
+    } else {
+      const message = error instanceof TimeoutError ? `${error.message} ¿Hay un bucle infinito?` : error.message;
+      showOutput({ error: message });
+    }
   } finally {
     busy = false;
     button.disabled = false;
     button.innerHTML = original;
+    toggleStop(false, button, false);
   }
 }
 
@@ -223,6 +244,7 @@ export function initConsole() {
   });
 
   $("#console-run").addEventListener("click", runConsole);
+  $("#console-stop").addEventListener("click", () => runner.stop());
   // «Ir a la línea N» funciona tanto en la salida como en el resultado de la comprobación
   document.addEventListener("click", (event) => {
     const button = event.target.closest("[data-go-line]");

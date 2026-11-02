@@ -2,12 +2,15 @@
 
    - El Worker evita que un bucle largo congele la página.
    - Si el código tarda más que timeoutMs (por ejemplo, un bucle infinito),
-     se destruye el Worker y la siguiente ejecución lo vuelve a crear. */
+     se destruye el Worker y la siguiente ejecución lo vuelve a crear.
+   - stop() hace lo mismo a petición del alumno (botón «Detener»): un Worker ocupado en un bucle
+     no atiende mensajes, así que la única forma fiable de pararlo es terminarlo. */
 
 export const PYODIDE_VERSION = "314.0.7";
 const DEFAULT_INDEX_URL = `https://cdn.jsdelivr.net/pyodide/v${PYODIDE_VERSION}/full/`;
 
 export class TimeoutError extends Error {}
+export class StoppedError extends Error {}
 
 export class PythonRunner {
   constructor({ indexURL, timeoutMs = 10_000, onStatus = () => {} } = {}) {
@@ -18,6 +21,24 @@ export class PythonRunner {
     this.ready = null;
     this.pending = new Map();
     this.nextId = 0;
+  }
+
+  /** true mientras hay una ejecución o una comprobación en curso. */
+  get busy() {
+    return this.pending.size > 0;
+  }
+
+  /** Detiene lo que se esté ejecutando. Devuelve false si no había nada que detener. */
+  stop() {
+    if (!this.busy) return false;
+    for (const job of this.pending.values()) {
+      clearTimeout(job.timer);
+      job.reject(new StoppedError("Has detenido el programa."));
+    }
+    this.pending.clear();
+    this.#reset();
+    this.onStatus("idle");
+    return true;
   }
 
   run(code, stdin = "") {
@@ -56,18 +77,25 @@ export class PythonRunner {
   }
 
   async #call(message) {
-    await this.#start();
-    return new Promise((resolve, reject) => {
-      const id = ++this.nextId;
-      const timer = setTimeout(() => {
-        this.pending.delete(id);
-        this.#reset();
-        this.onStatus("idle");
-        reject(new TimeoutError(`Tu programa ha tardado más de ${this.timeoutMs / 1000} s y se ha detenido.`));
-      }, this.timeoutMs);
-      this.pending.set(id, { resolve, reject, timer });
-      this.worker.postMessage({ ...message, id });
+    // El trabajo cuenta como pendiente desde el principio, también mientras Pyodide se carga,
+    // para que «Detener» funcione en cualquier momento
+    const id = ++this.nextId;
+    const job = { timer: null };
+    const done = new Promise((resolve, reject) => Object.assign(job, { resolve, reject }));
+    this.pending.set(id, job);
+    // Si se detiene durante la carga, el Worker se destruye y #start() no termina nunca: gana `done`
+    await Promise.race([this.#start(), done]).catch((error) => {
+      this.pending.delete(id);
+      throw error;
     });
+    job.timer = setTimeout(() => {
+      this.pending.delete(id);
+      this.#reset();
+      this.onStatus("idle");
+      job.reject(new TimeoutError(`Tu programa ha tardado más de ${this.timeoutMs / 1000} s y se ha detenido.`));
+    }, this.timeoutMs);
+    this.worker.postMessage({ ...message, id });
+    return done;
   }
 
   #settle({ id, result, error }) {
