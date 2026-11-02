@@ -539,11 +539,11 @@ de usuario.
 
 | Id | Dato que debe aportar el titular | Afecta a |
 |---|---|---|
-| DF-01 | Identidad confirmada del responsable, país de residencia y si actúa como particular o como profesional (autónomo, empresa) | Aplicación de LOPDGDD y LSSI (LEG-021, LEG-025); quién firma los contratos |
+| DF-01 | **Respondido el 2/11/2026:** reside en España y publica como particular. LOPDGDD aplicable; LSSI art. 10 sigue condicionado a que haya actividad económica (hoy no) | Aplicación de LOPDGDD y LSSI (LEG-021, LEG-025); quién firma los contratos |
 | DF-02 | Domicilio o dirección de contacto postal y NIF, **solo si** hay actividad económica | LSSI art. 10 (LEG-025). No se publicará nada sin su decisión |
-| DF-03 | Proveedor real de email en Render (Brevo o SMTP, y cuál) | LEG-002, LEG-012 |
+| DF-03 | Proveedor real de email en Render. El titular indica «un correo profesional de Gmail» (2/11/2026); falta confirmar si se envía por el SMTP de Gmail o por Brevo con esa dirección como remitente | LEG-002, LEG-012 |
 | DF-04 | Confirmación de que las cuentas de Render, Neon y el proveedor de email aceptaron sus DPA, con copia y fecha | LEG-010, LEG-011, LEG-012, LEG-013 |
-| DF-05 | Plan de Neon y región real; retención de logs de Render | LEG-005, LEG-017 |
+| DF-05 | **Plan de Neon respondido el 2/11/2026: gratuito** (historial de 6 h, ya en la política). Faltan la región real y la retención de logs de Render | LEG-005, LEG-017 |
 | DF-06 | Público objetivo y edad mínima que quiere fijar | LEG-022 |
 | DF-07 | Modelo de negocio y calendario (donaciones, Pack PCAP, cursos, suscripción) | Todo el bloque P1-C del plan |
 | DF-08 | Países a los que se dirige el servicio | Consumo, IVA, idioma de los textos |

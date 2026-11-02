@@ -14,8 +14,8 @@ fuera del repositorio (acción A-03 del [plan](PLAN_ADECUACION_LEGAL.md)).
 
 | Campo | Valor |
 |---|---|
-| Responsable | Mrabeh Fathi Boussayff (declarado en `frontend/privacidad.html`) · `[[TITULAR: confirmar si actúa como particular, autónomo o sociedad]]` |
-| País de establecimiento | `[[TITULAR: confirmar España]]` |
+| Responsable | Mrabeh Fathi Boussayff (declarado en `frontend/privacidad.html`) · persona física que publica el proyecto como particular (confirmado por el titular el 2/11/2026) |
+| País de establecimiento | España (confirmado el 2/11/2026) |
 | Contacto de privacidad | El email publicado en la política de privacidad |
 | Delegado de protección de datos | No designado: no es obligatorio (auditoría, LEG-021) |
 
@@ -36,7 +36,7 @@ apartado 7.G de la auditoría.
 | Datos | Email, nombre, hash de la contraseña, fechas de alta, de lectura de la política y de verificación del email; hash del enlace de recuperación |
 | Destinatarios | Render (servidor, encargado), Neon (base de datos, encargado), proveedor de envío de email `[[TITULAR: nombre del proveedor]]` (encargado). Google interviene como responsable independiente cuando el usuario elige entrar con Google |
 | Transferencias | Render: DPA con Marco UE-EE. UU. y cláusulas tipo. Neon: `[[TITULAR: garantía según su DPA]]`. Email: `[[TITULAR: ubicación y garantía]]` |
-| Conservación | Mientras exista la cuenta. Cuentas inactivas: `[[TITULAR: plazo, si se decide]]`. Enlaces de recuperación: 30 minutos. Copias de Neon: `[[TITULAR: historial del plan contratado]]` |
+| Conservación | Mientras exista la cuenta. Cuentas inactivas: `[[TITULAR: plazo, si se decide]]`. Enlaces de recuperación: 30 minutos. Copias de Neon: historial de 6 horas (plan gratuito, confirmado el 2/11/2026) |
 | Código | `backend/app/models.py` (`User`, `PasswordResetToken`), `backend/app/routers/auth.py` |
 
 ### RAT-2. Progreso de estudio
