@@ -95,7 +95,7 @@ body[data-page="landing"] .assistant {
 }
 
 .lp-btn--ghost {
-  border-color: var(--color-border);
+  border-color: var(--color-border-control);
   background: var(--color-surface);
   color: var(--color-text);
 }
@@ -318,9 +318,7 @@ body[data-page="landing"] .assistant {
 /* ---------- Hero ---------- */
 .lp-hero {
   padding-block: clamp(40px, 8vw, 96px) clamp(40px, 6vw, 80px);
-  background:
-    radial-gradient(60% 60% at 85% 20%, var(--color-primary-soft), transparent 70%),
-    var(--color-bg);
+  background: var(--color-bg);
 }
 
 .lp-hero__grid {
@@ -965,9 +963,7 @@ body[data-page="landing"] .assistant {
 .lp-cta {
   padding-block: clamp(56px, 8vw, 96px);
   border-top: 1px solid var(--color-border);
-  background:
-    radial-gradient(50% 80% at 50% 0%, var(--color-primary-soft), transparent 70%),
-    var(--color-surface);
+  background: var(--color-surface);
   text-align: center;
 }
 
