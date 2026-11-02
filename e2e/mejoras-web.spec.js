@@ -74,4 +74,16 @@ test.describe("móvil", () => {
       expect((await rect(link)).height, await link.textContent()).toBeGreaterThanOrEqual(24);
     }
   });
+
+  test("MW-003: los botones de idioma del PCAP tienen una zona táctil de al menos 24 px", async ({ page }) => {
+    await page.goto("/#/pcap");
+    const radios = page.locator('input[name="pcap-lang"]');
+    await expect(radios.first()).toBeVisible();
+    for (const radio of await radios.all()) {
+      const box = await rect(radio);
+      expect(box.width).toBeGreaterThanOrEqual(20);
+      const label = await rect(radio.locator("xpath=ancestor::label"));
+      expect(label.height).toBeGreaterThanOrEqual(24);
+    }
+  });
 });
