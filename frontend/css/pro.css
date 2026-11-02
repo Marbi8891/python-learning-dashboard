@@ -443,30 +443,6 @@ body {
   margin-top: 8px;
 }
 
-.guide {
-  position: sticky;
-  top: 12px;
-  z-index: 4;
-  padding: 10px;
-  border-radius: var(--radius-md);
-  background: var(--color-surface);
-  box-shadow: 0 12px 30px -24px var(--shadow);
-}
-
-.step {
-  border-color: var(--color-border);
-  background: var(--color-surface-2);
-}
-
-.step[data-state="current"] {
-  border-color: color-mix(in srgb, var(--color-primary) 35%, transparent);
-  background: var(--color-primary-soft);
-}
-
-.step[data-state="done"] {
-  border-color: rgb(34 197 94 / .35);
-}
-
 .tabs {
   margin-top: 20px;
   border-bottom-color: var(--color-border);

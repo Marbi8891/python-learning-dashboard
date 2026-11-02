@@ -122,6 +122,14 @@
           <span id="account-label">Iniciar sesión</span>
         </button>
 
+      </header>
+
+      <nav class="path" aria-label="Ruta de aprendizaje">
+        <h2 class="path__title">Lecciones del curso PCAP</h2>
+        <div id="modules"><!-- Se genera desde data/lessons.json --></div>
+      </nav>
+
+      <!-- Progreso y juego: después del índice del curso, para que en la lección se vea primero dónde estás -->
         <div class="stats-card">
         <div class="progress" id="progress"
              role="progressbar"
@@ -151,12 +159,6 @@
         </div>
       </section>
         </div>
-      </header>
-
-      <nav class="path" aria-label="Ruta de aprendizaje">
-        <h2 class="path__title">Lecciones del curso PCAP</h2>
-        <div id="modules"><!-- Se genera desde data/lessons.json --></div>
-      </nav>
 
       <footer class="sidebar__footer">
         <button class="appearance-button" id="appearance-button" type="button">

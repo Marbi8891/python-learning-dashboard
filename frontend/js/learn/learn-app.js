@@ -229,7 +229,21 @@ function renderConcept(id) {
   const position = index.path.indexOf(id);
   const prev = index.path[position - 1];
   const next = index.path[position + 1];
+  // Índice «En esta página» (columna derecha en pantallas anchas). Son enlaces a la propia ruta:
+  // el clic desplaza hasta la sección sin cambiar el hash (el enrutador usa el hash).
+  const toc = [
+    ["lx-expl", "Explicación"],
+    ["lx-example", "Ejemplo, línea a línea"],
+    ["lx-when", "Cuándo usarlo"],
+    ["lx-errors", "Errores habituales"],
+    ["lx-practice", "Comprueba que lo entiendes"],
+    ...(concept.related?.length ? [["lx-related", "Relacionado"]] : []),
+  ]
+    .map(([section, label]) => `<li><a href="#/teoria/${id}" data-learn="toc" data-section="${section}">${label}</a></li>`)
+    .join("");
   return `
+    <div class="lx-doc">
+    <div class="lx-doc__main">
     <p class="daw-crumb"><a href="#/teoria">Teoría</a> › ${escapeHtml(index.areas.find((a) => a.id === concept.area).title)}</p>
     <header class="lx-head">
       <p class="eyebrow">Concepto ${position + 1} de ${index.path.length} · ${concept.daw === 3 ? "Imprescindible para DAW" : "Importante para DAW"}</p>
@@ -282,7 +296,13 @@ function renderConcept(id) {
     <nav class="daw-pager" aria-label="Conceptos">
       ${prev ? `<a class="btn btn--ghost" href="#/teoria/${prev}">← ${escapeHtml(title(prev))}</a>` : "<span></span>"}
       ${next ? `<a class="btn btn--ghost" href="#/teoria/${next}">${escapeHtml(title(next))} →</a>` : "<span></span>"}
-    </nav>`;
+    </nav>
+    </div>
+    <nav class="lx-toc" aria-label="En esta página">
+      <p class="lx-toc__title">En esta página</p>
+      <ol class="lx-toc__list">${toc}</ol>
+    </nav>
+    </div>`;
 }
 
 /* ---------- Practicar ---------- */
@@ -489,6 +509,15 @@ function onClick(event) {
   if (onWelcomeClick(target)) return;
   const { concept } = target.dataset;
   switch (target.dataset.learn) {
+    case "toc": {
+      event.preventDefault();
+      const heading = document.getElementById(target.dataset.section); // el <h2> de la sección
+      if (!heading) break;
+      heading.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
+      heading.setAttribute("tabindex", "-1");
+      heading.focus({ preventScroll: true });
+      break;
+    }
     case "duration":
       saveDailyBudget(target.dataset.minutes);
       render(location.hash);
