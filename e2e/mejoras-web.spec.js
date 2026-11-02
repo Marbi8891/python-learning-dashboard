@@ -53,7 +53,7 @@ test.describe("móvil", () => {
   test("MW-007: el editor no parte las líneas y los números de línea coinciden con el código", async ({ page }) => {
     await openLesson(page, "variables");
     await page.getByRole("tab", { name: "Práctica y Ejercicio" }).click();
-    await page.getByRole("button", { name: "Cargar ejemplo" }).click();
+    await page.getByRole("button", { name: "Restablecer el ejemplo" }).click();
     const medida = await page.locator("#console-editor").evaluate((editor) => {
       const style = getComputedStyle(editor);
       const lines = editor.value.split("\n").length;
