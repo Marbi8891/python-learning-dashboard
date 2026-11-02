@@ -9,6 +9,7 @@
      #/progreso             dominio por concepto, errores y actividad
      #/sesion               sesión de estudio en curso (session-view.js) */
 
+import { prefersReducedMotion } from "../prefs.js";
 import { learning, loadLearningContent, onLearningChange, saveLearning } from "./learn-store.js";
 import { onWelcomeClick, onWelcomeKeydown, renderWelcome } from "./welcome.js";
 import { activeErrors, allStats, areaSummary, daysBetween, lastActivity, markRead } from "./mastery.js";
@@ -516,7 +517,7 @@ function onClick(event) {
       event.preventDefault();
       const heading = document.getElementById(target.dataset.section); // el <h2> de la sección
       if (!heading) break;
-      heading.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
+      heading.scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth", block: "start" });
       heading.setAttribute("tabindex", "-1");
       heading.focus({ preventScroll: true });
       break;
