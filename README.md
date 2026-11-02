@@ -7,6 +7,15 @@ Proyecto de 2º de DAW: una web para **aprender Python entendiendo lo que haces*
 
 **Demo:** https://marbi8891.github.io/python-learning-dashboard/
 
+## Dirección del producto
+
+La estrategia actual plantea evolucionar el proyecto hacia una plataforma de aprendizaje tecnológico práctico, empezando por Python y DAW, y validando la experiencia con alumnos antes de ampliar funciones comerciales o para academias. Estos documentos son la referencia de planificación; las funcionalidades futuras no se consideran implementadas hasta que se desarrollen y validen.
+
+- [Estrategia de producto](docs/PRODUCT_STRATEGY.md)
+- [Hoja de ruta de arquitectura](docs/ARCHITECTURE_ROADMAP.md)
+- [Roadmap noviembre 2026–octubre 2027](docs/ROADMAP_2026_2027.md)
+- [Modelo de negocio e hipótesis de precios](docs/BUSINESS_MODEL.md)
+
 ## Qué tiene
 
 - **Teoría y ejercicios por conceptos:** 22 conceptos con explicación, ejemplo línea a línea y 131 ejercicios. Cuando fallas, te explica el error típico y te pone otro ejercicio parecido.
@@ -40,7 +49,7 @@ backend/    la API en FastAPI, migraciones y pruebas
 scripts/    generan y comprueban el temario; run_local.py arranca todo en local
 e2e/        pruebas end-to-end con Playwright
 tests/unit/ pruebas unitarias del JavaScript
-docs/       memoria, despliegue, API y pruebas
+docs/       memoria, despliegue, API, pruebas y estrategia de producto
 ```
 
 ## Cómo funciona
@@ -96,7 +105,7 @@ En Linux o macOS: `pip install -r backend/requirements.txt && python scripts/run
 ```bash
 cd backend
 python -m venv .venv
-.venv\Scripts\activate            # Linux/Mac: source .venv/bin/activate
+.venv\\Scripts\\activate            # Linux/Mac: source .venv/bin/activate
 pip install -r requirements-dev.txt
 copy .env.example .env            # Linux/Mac: cp .env.example .env
 python -c "import secrets; print(secrets.token_urlsafe(48))"   # pégalo en JWT_SECRET del .env
@@ -138,7 +147,7 @@ Todas las pruebas y qué ejecutar según lo que cambies: [docs/TESTING.md](docs/
 - En la consola no hay red (por seguridad), así que los ejemplos con `requests`, Flask o pytest se ejecutan en el ordenador (PyCharm), no en el navegador.
 - Falta revisar la accesibilidad a mano con un lector de pantalla; ahora solo se comprueba con axe-core.
 
-## Documentación
+## Documentación técnica y académica
 
 - [Memoria del proyecto](docs/memoria/memoria.md)
 - [Guion de la defensa](docs/DEMO-Y-DEFENSA.md)
