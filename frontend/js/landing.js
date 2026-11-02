@@ -4,8 +4,9 @@
      #/portada/<sección>    la misma página, desplazada a esa sección (enlaces del menú)
 
    Todo el texto es fijo o sale de data/learning.json y data/lessons.json (contenido del propio
-   repositorio): no se pinta nada que venga del usuario ni de la red. La demostración usa un
-   concepto y un ejercicio reales del temario; lo que es un ejemplo se dice en la propia página. */
+   repositorio), salvo el bloque «Continúa donde lo dejaste», que resume el progreso real guardado
+   y no aparece si no hay actividad. La demostración usa un concepto y un ejercicio reales del
+   temario y no muestra progreso inventado. */
 
 import { apiEnabled } from "./api.js";
 import { openAccount } from "./account.js";
@@ -14,8 +15,9 @@ import { pythonRunner } from "./console.js";
 import { TimeoutError } from "./python-runner.js";
 import { escapeHtml, renderInline } from "./markdown.js";
 import { codeBlock, highlight } from "./learn/ui.js";
-import { loadLearningContent } from "./learn/learn-store.js";
-import { INTERVAL_DAYS } from "./learn/mastery.js";
+import { activitySummary } from "./learn/activity.js";
+import { learning, loadLearningContent, onLearningChange } from "./learn/learn-store.js";
+import { daysBetween, INTERVAL_DAYS } from "./learn/mastery.js";
 import { state, subscribe } from "./store.js";
 
 export const LANDING_ROUTE = "#/portada";
@@ -28,12 +30,12 @@ const DEMO_EXERCISE = "buc-01";
 
 /** Secciones con ruta propia: #/portada/<id>. El orden es el del menú. */
 const NAV = [
-  { id: "funcionalidades", label: "Funcionalidades" },
-  { id: "como-funciona", label: "Cómo funciona" },
   { id: "temario", label: "Temario" },
+  { id: "como-funciona", label: "Cómo funciona" },
+  { id: "funcionalidades", label: "Funcionalidades" },
   { id: "tecnologia", label: "Tecnología" },
 ];
-const SECTIONS = new Set(["demo", "codefeed", "preguntas", ...NAV.map((n) => n.id)]);
+const SECTIONS = new Set(["actividad", "demo", "codefeed", "preguntas", ...NAV.map((n) => n.id)]);
 
 const $ = (selector) => document.querySelector(selector);
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -249,24 +251,34 @@ function heroVisual(concept) {
             ? `<div class="lp-window__note"><p class="lp-chip">Error habitual</p><p>${renderInline(trap.label)}</p></div>`
             : ""
         }
-        <div class="lp-window__progress">
-          <div class="lp-window__progress-head"><span>Bucles</span><span>En progreso · 60 %</span></div>
-          <span class="lp-meter" aria-hidden="true"><span style="--value: 60%"></span></span>
-          <p>Próximo repaso: dentro de 3 días</p>
-        </div>
       </div>
-      <figcaption class="lp-window__caption" id="lp-window-caption">Vista de demostración: el código y el error son del temario real; el progreso es un ejemplo.</figcaption>
+      <figcaption class="lp-window__caption" id="lp-window-caption">Así es un concepto del temario: el código, su salida real y un error habitual de «${escapeHtml(concept?.title ?? "Bucles")}».</figcaption>
     </figure>`;
 }
 
-function heroHtml(concept) {
+/** Cuánto contenido hay, contado del propio temario (si algo no se ha podido cargar, no se cuenta). */
+function statsHtml(index, content) {
+  const items = [
+    [index?.concepts.size, "conceptos de Python", "#/teoria"],
+    [index?.exercises.size, "ejercicios corregidos", "#/practicar"],
+    [content?.order?.length, "lecciones del curso PCAP", "#/inicio"],
+    [DAW_COURSES.length, "cursos de otros módulos de DAW", "#/daw/cursos"],
+  ].filter(([n]) => n > 0);
+  if (!items.length) return "";
+  return `
+    <ul class="lp-stats" aria-label="Contenido disponible">
+      ${items.map(([n, label, href]) => `<li><a href="${href}"><strong>${n}</strong> ${label}</a></li>`).join("")}
+    </ul>`;
+}
+
+function heroHtml(concept, index, content) {
   return `
     <section class="lp-hero" aria-labelledby="lp-title">
       <div class="lp-wrap lp-hero__grid">
         <div class="lp-hero__text">
           <p class="lp-eyebrow">Python, Programación de DAW y PCAP</p>
           <h1 class="lp-hero__title" id="lp-title" tabindex="-1">Aprende programación <em>entendiendo</em> lo que haces</h1>
-          <p class="lp-hero__lead">Practica con ejercicios que se corrigen al momento y sigue tu progreso en una plataforma diseñada para aprender programación paso a paso.</p>
+          <p class="lp-hero__lead">Una web gratuita para aprender Python por conceptos: teoría con ejemplos que se ejecutan en tu navegador, ejercicios que explican cada error y un plan diario que te dice qué repasar. Incluye la preparación del módulo de Programación de DAW y del examen PCAP.</p>
           <div class="lp-actions">
             <a class="lp-btn lp-btn--primary lp-btn--lg" href="#/aprender">Empezar a aprender ${icon("arrow", 18)}</a>
             <a class="lp-btn lp-btn--ghost lp-btn--lg" href="${LANDING_ROUTE}/como-funciona" data-lp-section="como-funciona">Descubrir cómo funciona</a>
@@ -276,6 +288,7 @@ function heroHtml(concept) {
             <li>${icon("check", 16)} Sin registro para empezar</li>
             <li>${icon("check", 16)} Código abierto (MIT)</li>
           </ul>
+          ${statsHtml(index, content)}
         </div>
         ${heroVisual(concept)}
       </div>
@@ -294,7 +307,7 @@ function demoHtml(index) {
   const exercise = index?.exercises.get(DEMO_EXERCISE);
   if (!concept || !exercise) {
     return `
-      <section class="lp-section" id="lp-demo" aria-labelledby="lp-demo-title">
+      <section class="lp-section lp-section--alt" id="lp-demo" aria-labelledby="lp-demo-title">
         <div class="lp-wrap">
           <h2 class="lp-section__title" id="lp-demo-title" tabindex="-1">Así se estudia un concepto</h2>
           <p class="lp-muted">No se ha podido cargar el ejemplo. Puedes verlo directamente en <a href="#/teoria">la teoría</a>.</p>
@@ -309,7 +322,7 @@ function demoHtml(index) {
     .join("");
   const range = concept.errors.find((e) => e.id === "bucles.range-fin");
   return `
-    <section class="lp-section" id="lp-demo" aria-labelledby="lp-demo-title">
+    <section class="lp-section lp-section--alt" id="lp-demo" aria-labelledby="lp-demo-title">
       <div class="lp-wrap">
         <header class="lp-section__head">
           <p class="lp-eyebrow">Demostración</p>
@@ -360,15 +373,82 @@ function demoHtml(index) {
           <li class="lp-demo__step">
             <p class="lp-demo__n">5 · Progreso</p>
             <h3>Dominio y repaso</h3>
+            <p>El dominio de un concepto sale de tus aciertos en sus ejercicios, contando más los difíciles.</p>
             <dl class="lp-mastery">
-              <div><dt>Bucles</dt><dd><span class="lp-meter" aria-hidden="true"><span style="--value: 60%"></span></span> En progreso · 60 %</dd></div>
-              <div><dt>Condicionales</dt><dd><span class="lp-meter" aria-hidden="true"><span style="--value: 100%"></span></span> Dominado · 100 %</dd></div>
-              <div><dt>Funciones</dt><dd><span class="lp-meter" aria-hidden="true"><span style="--value: 0%"></span></span> Sin empezar · 0 %</dd></div>
+              <div><dt>Aprendiendo</dt><dd>Menos de la mitad de sus ejercicios acertados.</dd></div>
+              <div><dt>En progreso</dt><dd>La mitad o más.</dd></div>
+              <div><dt>Dominado</dt><dd>Un 80 % o más, con algún ejercicio de aplicación bien resuelto y sin errores recientes sin corregir.</dd></div>
             </dl>
+            <p>Si aciertas al repasar, el siguiente repaso se aleja:</p>
             <ol class="lp-days" aria-label="Días de repaso de un concepto">${INTERVAL_DAYS.map((d) => `<li>${d === 0 ? "Hoy" : d === 1 ? "1 día" : `${d} días`}</li>`).join("")}</ol>
-            <p class="lp-note">Datos de ejemplo. Tu progreso real aparece en <a href="#/progreso">Progreso</a>.</p>
+            <p class="lp-note">Aquí no se muestra el progreso de nadie: el tuyo aparece en <a href="#/progreso">Progreso</a>.</p>
           </li>
         </ol>
+      </div>
+    </section>`;
+}
+
+/* ---------- Tu actividad (solo con datos reales) ---------- */
+
+function ago(iso) {
+  const days = daysBetween(iso);
+  if (days <= 0) return "hoy";
+  if (days === 1) return "ayer";
+  return `hace ${days} días`;
+}
+
+const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
+
+/** «Continúa donde lo dejaste»: vacío si no hay progreso guardado (la sección no aparece). */
+function activityHtml(index, content) {
+  const summary = activitySummary(index, learning, { completed: state.completed, lessons: content?.order ?? [] });
+  if (!summary) return "";
+  const { learn, pcap } = summary;
+  const cards = [];
+  if (learn) {
+    const facts = [
+      `<strong>${learn.mastered}</strong> de ${learn.total} conceptos dominados`,
+      learn.due ? plural(learn.due, "repaso para hoy", "repasos para hoy") : "Sin repasos para hoy",
+      learn.errors ? plural(learn.errors, "error reciente por corregir", "errores recientes por corregir") : "",
+      learn.last ? `Última actividad: ${ago(learn.last.at)}, en ${escapeHtml(learn.last.title)}` : "",
+    ].filter(Boolean);
+    const next = learn.next
+      ? `<p class="lp-activity__next">Siguiente paso · ${learn.next.action}: <strong>${escapeHtml(learn.next.title)}</strong></p>
+         <p class="lp-muted">${escapeHtml(learn.next.reason)}</p>`
+      : `<p class="lp-activity__next">Has dominado todo el temario.</p>
+         <p class="lp-muted">Haz un simulacro de DAW o repasa en Practicar.</p>`;
+    cards.push(`
+      <article class="lp-activity__card">
+        <h3>Python por conceptos</h3>
+        ${next}
+        <ul class="lp-activity__facts">${facts.map((f) => `<li>${f}</li>`).join("")}</ul>
+        <a class="lp-btn lp-btn--primary" href="#/aprender">Ver el plan de hoy ${icon("arrow", 16)}</a>
+      </article>`);
+  }
+  if (pcap) {
+    const lesson = pcap.next ? content.lessons.get(pcap.next) : null;
+    const percent = Math.round((pcap.done / pcap.total) * 100);
+    cards.push(`
+      <article class="lp-activity__card">
+        <h3>Curso PCAP</h3>
+        <p class="lp-activity__next"><strong>${pcap.done}</strong> de ${pcap.total} lecciones completadas</p>
+        <span class="lp-meter" aria-hidden="true"><span style="--value: ${percent}%"></span></span>
+        ${
+          lesson
+            ? `<a class="lp-btn lp-btn--ghost" href="#/leccion/${escapeHtml(lesson.slug)}">Seguir con «${escapeHtml(lesson.title)}»</a>`
+            : `<p class="lp-muted">Has completado todas las lecciones.</p><a class="lp-btn lp-btn--ghost" href="#/pcap">Hacer un simulacro PCAP</a>`
+        }
+      </article>`);
+  }
+  return `
+    <section class="lp-section lp-activity" id="lp-actividad" aria-labelledby="lp-actividad-title">
+      <div class="lp-wrap">
+        <header class="lp-section__head">
+          <p class="lp-eyebrow">Tu actividad</p>
+          <h2 class="lp-section__title" id="lp-actividad-title" tabindex="-1">Continúa donde lo dejaste</h2>
+          <p class="lp-section__lead">Resumen de tu progreso guardado ${state.user ? "en tu cuenta" : "en este navegador"}.</p>
+        </header>
+        <div class="lp-activity__grid">${cards.join("")}</div>
       </div>
     </section>`;
 }
@@ -386,7 +466,7 @@ function featuresHtml() {
       </li>`,
   ).join("");
   return `
-    <section class="lp-section lp-section--alt" id="lp-funcionalidades" aria-labelledby="lp-funcionalidades-title">
+    <section class="lp-section" id="lp-funcionalidades" aria-labelledby="lp-funcionalidades-title">
       <div class="lp-wrap">
         <header class="lp-section__head">
           <p class="lp-eyebrow">Funcionalidades</p>
@@ -467,7 +547,7 @@ function catalogHtml(index, content) {
 
 function codefeedHtml() {
   return `
-    <section class="lp-section" id="lp-codefeed" aria-labelledby="lp-codefeed-title">
+    <section class="lp-section lp-section--alt" id="lp-codefeed" aria-labelledby="lp-codefeed-title">
       <div class="lp-wrap lp-codefeed">
         <div>
           <p class="lp-eyebrow">En desarrollo</p>
@@ -494,7 +574,7 @@ function techHtml() {
       </li>`,
   ).join("");
   return `
-    <section class="lp-section lp-section--alt" id="lp-tecnologia" aria-labelledby="lp-tecnologia-title">
+    <section class="lp-section" id="lp-tecnologia" aria-labelledby="lp-tecnologia-title">
       <div class="lp-wrap">
         <header class="lp-section__head">
           <p class="lp-eyebrow">Tecnología</p>
@@ -544,7 +624,7 @@ function faqHtml(index) {
     .map(([q, a]) => `<details class="lp-faq__item"><summary>${q}</summary><p>${a}</p></details>`)
     .join("");
   return `
-    <section class="lp-section" id="lp-preguntas" aria-labelledby="lp-preguntas-title">
+    <section class="lp-section lp-section--alt" id="lp-preguntas" aria-labelledby="lp-preguntas-title">
       <div class="lp-wrap lp-faq">
         <header class="lp-section__head">
           <p class="lp-eyebrow">Preguntas frecuentes</p>
@@ -608,11 +688,12 @@ function pageHtml(index, content) {
   return `
     ${headerHtml()}
     <main class="lp-main" id="landing-main" tabindex="-1">
-      ${heroHtml(concept)}
+      ${heroHtml(concept, index, content)}
+      <div data-lp-activity>${activityHtml(index, content)}</div>
+      ${catalogHtml(index, content)}
+      ${stepsHtml()}
       ${demoHtml(index)}
       ${featuresHtml()}
-      ${stepsHtml()}
-      ${catalogHtml(index, content)}
       ${codefeedHtml()}
       ${techHtml()}
       ${faqHtml(index)}
@@ -625,6 +706,18 @@ function pageHtml(index, content) {
 
 let rendered = false;
 let exerciseData = null; // { exercise, concept, options }
+let source = { index: null, content: null }; // para volver a pintar «Tu actividad»
+let activityShown = null; // último HTML pintado (no se repinta si no cambia: no se pierde el foco)
+
+/** Vuelve a pintar «Tu actividad» con el progreso actual (solo si la portada está a la vista). */
+function refreshActivity() {
+  const slot = $("[data-lp-activity]");
+  if (!slot || $("#landing-view").hidden) return;
+  const html = activityHtml(source.index, source.content);
+  if (html === activityShown) return;
+  slot.innerHTML = html;
+  activityShown = html;
+}
 
 function setMenu(open) {
   const toggle = $("#lp-menu-toggle");
@@ -709,7 +802,11 @@ function bind(view) {
     event.preventDefault();
     checkAnswer(event.target);
   });
-  subscribe(updateAccount);
+  subscribe(() => {
+    updateAccount();
+    refreshActivity();
+  });
+  onLearningChange(refreshActivity);
 }
 
 function scrollToSection(section, { moveFocus }) {
@@ -731,6 +828,7 @@ export async function openLanding(hash, { content, moveFocus = true } = {}) {
     // También espera a lessons.json (si se está cargando) para poder decir cuántas lecciones hay
     const [index] = await Promise.all([loadLearningContent().catch(() => null), content?.ready]);
     if (!isLandingRoute(location.hash)) return; // el usuario ya se ha ido a otra parte
+    source = { index, content };
     view.innerHTML = pageHtml(index, content);
     const exercise = index?.exercises.get(DEMO_EXERCISE);
     if (exercise) {
@@ -742,6 +840,7 @@ export async function openLanding(hash, { content, moveFocus = true } = {}) {
   updateAccount();
   setMenu(false);
   view.hidden = false;
+  refreshActivity();
   document.body.dataset.page = "landing";
   document.title = LANDING_TITLE;
   scrollToSection(hash.slice(LANDING_ROUTE.length + 1), { moveFocus });

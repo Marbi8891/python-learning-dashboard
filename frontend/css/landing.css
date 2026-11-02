@@ -376,6 +376,41 @@ body[data-page="landing"] .assistant {
   color: var(--color-accent);
 }
 
+/* Contenido disponible (contado del temario) */
+.lp-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2);
+  margin: var(--space-6) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lp-stats a {
+  display: block;
+  height: 100%;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  line-height: 1.35;
+  text-decoration: none;
+}
+
+.lp-stats a:hover {
+  border-color: var(--color-primary);
+  color: var(--color-text);
+}
+
+.lp-stats strong {
+  display: block;
+  color: var(--color-strong);
+  font-size: var(--text-xl);
+  font-variant-numeric: tabular-nums;
+}
+
 /* Ventana de producto */
 .lp-window {
   margin: 0;
@@ -454,24 +489,6 @@ body[data-page="landing"] .assistant {
   border-radius: 0 10px 10px 0;
   background: var(--color-primary-soft);
   font-size: 14px;
-}
-
-.lp-window__progress {
-  display: grid;
-  gap: var(--space-2);
-  font-size: 14px;
-}
-
-.lp-window__progress-head {
-  display: flex;
-  justify-content: space-between;
-  gap: var(--space-3);
-  font-weight: 600;
-}
-
-.lp-window__progress p {
-  color: var(--color-text-muted);
-  font-size: 13px;
 }
 
 .lp-window__caption {
@@ -727,6 +744,47 @@ body[data-page="landing"] .assistant {
   margin: 0;
   color: var(--color-text-muted);
   font-size: 14px;
+}
+
+/* Tu actividad (solo con progreso real) */
+.lp-activity__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  gap: var(--space-4);
+}
+
+.lp-activity__card {
+  display: grid;
+  align-content: start;
+  justify-items: start;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-1);
+}
+
+.lp-activity__card h3 {
+  color: var(--color-strong);
+  font-size: var(--text-lg);
+}
+
+.lp-activity__next {
+  color: var(--color-text);
+}
+
+.lp-activity__facts {
+  display: grid;
+  gap: var(--space-1);
+  margin: 0;
+  padding-left: 1.1em;
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+.lp-activity__card .lp-meter {
+  max-width: 320px;
 }
 
 .lp-days {
