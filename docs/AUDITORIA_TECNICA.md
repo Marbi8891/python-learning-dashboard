@@ -102,7 +102,7 @@ Los IDs `AUD-*` vienen de la auditoría del 29/10 y siguen abiertos en `f6a475b`
 - `pcap-sync.js:30-49`, `course-store.js:150-165`, `learn/learn-store.js:38-48` y `:77-88`, `game.js:58` y `:264`; en el backend `pcap.py:28` y `course_state.py:46` hacen `state.data = body.data` (sustitución completa, sin comprobar versión).
 - Caso 1: si el `GET` inicial falla (Render despertando, 5xx), el `catch` solo escribe en consola, y a partir de ahí cada cambio local hace un `PUT` con el documento local entero, que pisa el de la cuenta.
 - Caso 2 (nuevo, sin fallo de red): en `learn-store.js` no hay guarda `merging`. Si el alumno hace algo en los 1,5 s de `PUSH_DELAY_MS` mientras el `GET` aún no ha vuelto, el `PUT` puede llegar antes de la fusión.
-- Caso 3: dos pestañas o dispositivos a la vez: gana el último que escribe.
+- Caso 3: dos pestañas o dispositivos a la vez: gana el último que escribe. *(Corregido el 02/11/2026: columna `version` y 409 si la cuenta cambió; la app relee, fusiona y reintenta. Los casos 1 y 2 se corrigieron con `sync-gate.js`, PR #72.)*
 - **Impacto:** pérdida de progreso sin aviso.
 
 ### 4.2 Ejecución de Python
