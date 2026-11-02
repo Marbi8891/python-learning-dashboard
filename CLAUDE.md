@@ -20,4 +20,8 @@ Instrucciones para Claude Code en este repositorio. La descripción del proyecto
 - `revisor-daw`: revisa el código o unos cambios y devuelve fallos con evidencia.
 - `buscador-mejoras`: propone mejoras priorizadas por impacto y esfuerzo. Se lanza con `/mejoras`
   (o `/mejoras accesibilidad` para un área) y guarda el informe en `.claude/informes/`.
-- Los dos son de solo lectura: lo que propongan se implementa después, en otra rama, si el autor lo elige.
+- `red-teamer`: audita la seguridad (solo lectura, pruebas activas solo en local).
+- `mejorador-web`: inspecciona la web en local (`scripts/web/inspeccionar_web.mjs`) y aplica **una** mejora
+  pequeña del frontend en una rama `mejora/…`, con antes y después y pruebas. Se lanza con `/mejorar-web`
+  (vacío: solo propone candidatas MW-NNN; con `MJ-NNN` o una descripción: la aplica). No hace push ni merge.
+- Los demás son de solo lectura: lo que propongan se implementa después, en otra rama, si el autor lo elige.
