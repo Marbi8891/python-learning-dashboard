@@ -131,3 +131,17 @@ test("superar los tests completa la lección", async ({ page }) => {
   await expect(page.locator("#progress-value")).toHaveText("13%");
   await expect(page.getByRole("button", { name: "Marcar como pendiente" })).toBeVisible();
 });
+
+test("los atajos muestran ⌘ Cmd en Mac y Ctrl en el resto", async ({ page }) => {
+  await openLesson(page, "variables");
+  await expect(page.locator("#console-help")).toContainText("Ctrl+Enter ejecuta");
+  await page.addInitScript(() => {
+    Object.defineProperty(Navigator.prototype, "userAgentData", { get: () => ({ platform: "macOS" }) });
+  });
+  await page.reload();
+  await expect(page.locator("#console-help")).toContainText("⌘ Cmd+Enter ejecuta");
+  // El atajo funciona con la tecla Cmd (Meta)
+  await page.locator("#console-editor").fill("print('con cmd')");
+  await page.locator("#console-editor").press("Meta+Enter");
+  await expect(output(page)).toContainText("con cmd", { timeout: 90_000 });
+});

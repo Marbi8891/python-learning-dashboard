@@ -358,6 +358,22 @@ for (const colorScheme of ["light", "dark"]) {
   });
 }
 
+test("cada pantalla del núcleo tiene su propio título de pestaña (WCAG 2.4.2)", async ({ page }) => {
+  const cases = [
+    ["/#/aprender", /^Aprender · /],
+    ["/#/teoria", /^Teoría · /],
+    ["/#/teoria/bucles", /· Teoría · Python Learning Dashboard$/],
+    ["/#/practicar", /^Practicar · /],
+    ["/#/progreso", /^Tu progreso · /],
+    ["/#/daw", /^Preparación DAW · /],
+  ];
+  for (const [url, title] of cases) {
+    await page.goto(url);
+    await page.locator("#learn-title").waitFor();
+    await expect(page).toHaveTitle(title);
+  }
+});
+
 test("en el móvil el plan de hoy se lee sin desbordarse", async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 800 });
   await page.goto("/#/aprender");
