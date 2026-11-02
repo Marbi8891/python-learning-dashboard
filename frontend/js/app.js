@@ -375,10 +375,24 @@ function renderGuide() {
 
 /* ---------- Inicio ---------- */
 
+/** Selector para volver a encontrar el control que tiene el foco después de repintar. */
+function focusSelector(container) {
+  const active = document.activeElement;
+  if (!active || active === document.body || !container.contains(active)) return null;
+  if (active.id) return `#${CSS.escape(active.id)}`;
+  const data = [...active.attributes].find((a) => a.name.startsWith("data-"));
+  return data ? `[${data.name}="${CSS.escape(data.value)}"]` : null;
+}
+
 function refreshProgressViews() {
   renderGuide();
   const view = VIEWS[content.view];
-  if (view?.render) $(view.element).innerHTML = view.render();
+  if (!view?.render) return;
+  const container = $(view.element);
+  // Al llegar el progreso de la cuenta se repinta en segundo plano: el foco no se puede perder
+  const focused = focusSelector(container);
+  container.innerHTML = view.render();
+  if (focused) container.querySelector(focused)?.focus();
 }
 
 const VIEWS = {
@@ -409,11 +423,14 @@ const VIEWS = {
 /** Muestra una vista de página completa (portada o perfil) en lugar de la lección. */
 function showPage(name, { moveFocus = true } = {}) {
   const view = VIEWS[name];
+  // Si se vuelve a pintar la misma vista (p. ej. cuando termina de cargar el temario), el foco se queda donde estaba
+  const focused = content.view === name && !moveFocus ? focusSelector($(view.element)) : null;
   content.view = name;
   content.current = defaultSlug();
   $("#lesson-view").hidden = true;
   for (const [key, other] of Object.entries(VIEWS)) $(other.element).hidden = key !== name;
   if (view.render) $(view.element).innerHTML = view.render();
+  if (focused) $(view.element).querySelector(focused)?.focus();
   document.title = typeof view.title === "function" ? view.title() : view.title;
   updateSidebar();
   updateSiteNav();
