@@ -1,5 +1,6 @@
 /* Consola interactiva y comprobación de ejercicios. */
 
+import { MOD_KEY, RUN_KEYS_HTML } from "./keys.js";
 import { escapeHtml, renderInline } from "./markdown.js";
 import { PythonRunner, StoppedError, TimeoutError } from "./python-runner.js";
 
@@ -177,7 +178,7 @@ export function setLesson(next) {
   $("#console-stdin-box").open = Boolean(next.example_stdin);
   delete $("#console-output").dataset.state;
   $("#console-output").innerHTML = next.example_in_browser
-    ? '<span class="console__muted">Pulsa «Ejecutar» o Ctrl+Enter para ver el resultado.</span>'
+    ? `<span class="console__muted">Pulsa «Ejecutar» o ${MOD_KEY}+Enter para ver el resultado.</span>`
     : '<span class="console__muted">El ejemplo de esta lección usa un paquete externo: ejecútalo en PyCharm. Aquí puedes practicar el ejercicio.</span>';
 }
 
@@ -212,6 +213,8 @@ export function isRiskyPaste(text) {
 
 export function initConsole() {
   const editor = $("#console-editor");
+  const help = $("#console-help");
+  if (help) help.innerHTML = `<kbd>Tab</kbd> inserta 4 espacios · <kbd>Esc</kbd> y después <kbd>Tab</kbd> para salir del editor · ${RUN_KEYS_HTML} ejecuta`;
   let tabInsertsSpaces = true;
 
   editor.addEventListener("keydown", (event) => {

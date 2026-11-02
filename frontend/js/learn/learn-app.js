@@ -397,7 +397,7 @@ function renderProgress() {
       (area) => `
       <section class="lx-section" aria-labelledby="pa-${area.id}">
         <h2 class="lx-section__title" id="pa-${area.id}">${escapeHtml(area.title)} <span class="lx-muted">· ${area.mastered}/${area.total}</span></h2>
-        <div class="table-wrap" tabindex="0" role="region" aria-labelledby="pa-${area.id}"><table class="lx-table lx-table--reflow" role="table">
+        <div class="table-wrap" tabindex="0"><table class="lx-table lx-table--reflow" role="table" aria-labelledby="pa-${area.id}">
           <thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">Concepto</th><th scope="col" role="columnheader">Estado</th><th scope="col" role="columnheader">Dominio</th><th scope="col" role="columnheader">Última vez</th><th scope="col" role="columnheader">Próximo repaso</th></tr></thead>
           <tbody role="rowgroup">${area.ids
             .map((id) => {
@@ -615,6 +615,14 @@ function render(route) {
   else if (section === "daw") html = renderDawPrep(index, learning);
   else html = renderToday();
   root().innerHTML = html;
+  document.title = `${pageTitle(section, arg)} · Python Learning Dashboard`;
+}
+
+/** Título de la pestaña propio de cada pantalla (WCAG 2.4.2): el lector de pantalla lo anuncia al
+    cambiar de ruta y sirve para distinguir pestañas. Antes todas se llamaban «Aprender». */
+function pageTitle(section, arg) {
+  if (section === "teoria") return arg && index.concepts.has(arg) ? `${title(arg)} · Teoría` : "Teoría";
+  return { bienvenida: "Bienvenida", practicar: "Practicar", progreso: "Tu progreso", daw: "Preparación DAW" }[section] ?? "Aprender";
 }
 
 export const LEARN_ROUTES = ["#/bienvenida", "#/aprender", "#/teoria", "#/practicar", "#/progreso", "#/sesion"];
