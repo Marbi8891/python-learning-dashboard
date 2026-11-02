@@ -689,32 +689,43 @@ body[data-zone="core"] .path {
   color: var(--color-danger);
 }
 
-/* Tarjetas de actividad (Practicar) */
-.lx-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: var(--space-3);
+/* Tipos de actividad (Practicar y preparación DAW): una lista con filetes, no tarjetas (RP-06).
+   Si un tipo no tiene ejercicios se dice en texto en vez de mostrar un botón desactivado (RP-07). */
+.lx-activities {
+  margin: var(--space-3) 0 0;
   padding: 0;
   list-style: none;
+  border-top: var(--border-width) solid var(--color-border);
 }
 
-.lx-card {
-  display: grid;
-  gap: var(--space-2);
-  align-content: start;
-  padding: var(--space-4);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  background: var(--color-surface);
+.lx-activities__item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-4);
+  padding: var(--space-4) 0;
+  border-bottom: var(--border-width) solid var(--color-border);
 }
 
-.lx-card__title {
+.lx-activities__item > div {
+  flex: 1 1 260px;
+  min-width: 0;
+}
+
+.lx-activities__title {
+  margin: 0 0 var(--space-1);
   color: var(--color-strong);
   font-size: 1rem;
 }
 
-.lx-card .btn {
-  justify-self: start;
+.lx-activities__item p {
+  margin: 0;
+}
+
+.lx-activities__none {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
 }
 
 .lx-inline-form {
@@ -745,6 +756,53 @@ body[data-zone="core"] .path {
 }
 
 @media (max-width: 600px) {
+  /* El selector de concepto ocupa toda la fila y el botón va debajo: el nombre se lee entero */
+  .lx-inline-form select {
+    flex-basis: 100%;
+  }
+
+  /* Tablas de progreso: cada concepto se lee como una ficha con sus etiquetas (sin scroll lateral).
+     Los roles ARIA del marcado mantienen la semántica de tabla aunque cambie el display. */
+  .lx-table--reflow thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .lx-table--reflow tr {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--space-1) var(--space-3);
+    padding: var(--space-3);
+    border-bottom: var(--border-width) solid var(--color-border);
+  }
+
+  .lx-table--reflow tr:last-child {
+    border-bottom: 0;
+  }
+
+  .lx-table--reflow th,
+  .lx-table--reflow td {
+    display: block;
+    padding: 0;
+    border: 0;
+  }
+
+  .lx-table--reflow th[scope="row"] {
+    grid-column: 1 / -1;
+    font-weight: 600;
+  }
+
+  .lx-table--reflow td[data-label]::before {
+    content: attr(data-label);
+    display: block;
+    color: var(--color-text-muted);
+    font-size: var(--text-xs);
+  }
+
   .lx-plan__item {
     grid-template-columns: 28px minmax(0, 1fr);
   }

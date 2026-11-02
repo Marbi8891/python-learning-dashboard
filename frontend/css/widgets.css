@@ -45,19 +45,22 @@
 .assistant__toggle {
   display: grid;
   place-items: center;
-  width: 60px;
-  height: 60px;
-  border: none;
+  /* RP-09: más pequeño y con sombra discreta, para que tape menos el texto */
+  width: 52px;
+  height: 52px;
+  border: var(--border-width) solid color-mix(in srgb, var(--color-on-primary) 25%, transparent);
   border-radius: 50%;
   background: var(--color-primary-strong);
   color: var(--color-on-primary);
-  box-shadow: 0 10px 30px var(--shadow);
+  box-shadow: var(--shadow-2), var(--shadow-1);
   cursor: pointer;
   transition: transform var(--transition);
 }
 
-.assistant__toggle:hover {
-  transform: scale(1.06);
+@media (prefers-reduced-motion: no-preference) {
+  .assistant__toggle:hover {
+    transform: translateY(-1px);
+  }
 }
 
 .assistant__panel {

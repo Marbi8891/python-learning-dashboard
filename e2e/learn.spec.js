@@ -384,6 +384,35 @@ test("en el móvil el selector «Por concepto» de Practicar cabe en la pantalla
   }
 });
 
+test("Practicar no muestra botones desactivados: si un tipo no tiene ejercicios lo dice en texto (RP-07)", async ({ page }) => {
+  await page.goto("/#/practicar");
+  const items = page.locator(".lx-activities__item");
+  await expect(items).toHaveCount(5);
+  await expect(page.locator(".lx-activities button:disabled")).toHaveCount(0);
+  // Cada tipo tiene o un botón para practicar o el aviso en texto, nunca los dos
+  for (const item of await items.all()) {
+    const available = (await item.getAttribute("data-available")) === "true";
+    await expect(item.getByRole("button", { name: /^Practicar \(\d+\)$/ })).toHaveCount(available ? 1 : 0);
+    await expect(item.locator(".lx-activities__none")).toHaveCount(available ? 0 : 1);
+  }
+});
+
+test("en el móvil la tabla de Progreso se lee sin scroll lateral y conserva su semántica", async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 700 });
+  await page.goto("/#/progreso");
+  const table = page.getByRole("table").first();
+  await expect(table).toBeVisible();
+  // Sigue siendo una tabla para el lector de pantalla: filas, encabezado de fila y celdas
+  await expect(table.getByRole("rowheader").first()).toBeVisible();
+  await expect(table.getByRole("cell").first()).toBeVisible();
+  // Nada se sale: ni la página ni el contenedor de la tabla necesitan scroll horizontal
+  expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(0);
+  const wrap = page.locator(".table-wrap").first();
+  expect(await wrap.evaluate((el) => el.scrollWidth - el.clientWidth)).toBeLessThanOrEqual(0);
+  // Cada dato lleva su etiqueta visible al ocultarse la cabecera
+  await expect(table.locator('td[data-label="Próximo repaso"]').first()).toBeVisible();
+});
+
 test.describe("Preparación DAW", () => {
   test("competencias, aviso de qué reforzar y temario del centro", async ({ page }) => {
     // Fundamentos empezado y flojo, Programación empezada: debe pedir reforzar Fundamentos
