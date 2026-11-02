@@ -11,6 +11,7 @@ import { request } from "./api.js";
 import { cleanGame, emptyGame, mergeGame } from "./game-data.js";
 import { examsPassed, pcap, questionsMastered } from "./pcap-store.js";
 import { state as store, subscribe as onStore } from "./store.js";
+import { createSyncGate } from "./sync-gate.js";
 
 const KEY = "pld:game";
 const XP = {
@@ -52,8 +53,24 @@ const COURSE = "game";
 const PUSH_DELAY_MS = 1500; // agrupa los cambios seguidos en un envío
 let pushTimer = null;
 
+// No se suben los logros hasta haber fusionado la copia de la cuenta (AUD-001)
+const gate = createSyncGate({
+  name: "los logros",
+  active: () => Boolean(store.user),
+  merge: async () => {
+    const remote = await request("GET", `/api/course-state/${COURSE}`);
+    mergeGame(game, remote.data);
+    commit();
+  },
+  onSynced: async () => {
+    clearTimeout(pushTimer);
+    await push();
+  },
+});
+
 async function push() {
   pushTimer = null;
+  if (!gate.ready) return;
   try {
     await request("PUT", `/api/course-state/${COURSE}`, { json: { data: game } });
   } catch (error) {
@@ -67,14 +84,19 @@ function save() {
   } catch {
     // sin almacenamiento: el juego dura hasta recargar
   }
-  if (!store.user) return;
+  if (!store.user || !gate.ready) return;
   clearTimeout(pushTimer);
   pushTimer = setTimeout(push, PUSH_DELAY_MS);
 }
 
 /** Sube ya el cambio pendiente (antes de cerrar sesión). */
 export async function flushGameSync() {
-  if (!pushTimer || !store.user) return;
+  if (!store.user) return;
+  if (!gate.ready) {
+    await gate.sync(); // al salir bien, sube el documento fusionado
+    return;
+  }
+  if (!pushTimer) return;
   clearTimeout(pushTimer);
   await push();
 }
@@ -258,15 +280,8 @@ export function initGame(allLessons) {
       commit();
       return;
     }
-    if (change.type !== "user" || !store.user) return;
-    // Al iniciar sesión: se fusiona con la copia de la cuenta y se sube el resultado
-    try {
-      const remote = await request("GET", `/api/course-state/${COURSE}`);
-      mergeGame(game, remote.data);
-      commit();
-    } catch (error) {
-      console.warn("No se pudieron sincronizar los logros:", error.message);
-    }
+    // Al iniciar sesión: se fusiona con la copia de la cuenta y se sube el resultado (con reintentos)
+    if (change.type === "user") gate.restart();
   });
   commit();
 }

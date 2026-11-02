@@ -7,6 +7,7 @@ import { request } from "./api.js";
 import { cleanProgress } from "./progress-guard.js";
 import { isoDay } from "./pcap-store.js";
 import { state, subscribe } from "./store.js";
+import { createSyncGate } from "./sync-gate.js";
 
 /** Cursos de DAW, en el orden del catálogo. `lang` es el lenguaje para resaltar el código. */
 export const DAW_COURSES = [
@@ -60,8 +61,13 @@ export function courseState(id) {
 
 const timers = new Map();
 const PUSH_DELAY_MS = 1500;
+// Una puerta por curso: no se sube un curso hasta haber fusionado su copia de la cuenta (AUD-001)
+const gates = new Map();
+const isReady = (id) => gates.get(id)?.ready === true;
 
 async function push(id) {
+  timers.delete(id);
+  if (!isReady(id)) return;
   try {
     await request("PUT", `/api/course-state/${id}`, { json: { data: courseState(id) } });
   } catch (error) {
@@ -75,17 +81,20 @@ export function saveCourse(id) {
   } catch {
     // sin almacenamiento: dura hasta recargar
   }
-  if (!state.user) return;
+  if (!state.user || !isReady(id)) return;
   clearTimeout(timers.get(id));
   timers.set(id, setTimeout(() => push(id), PUSH_DELAY_MS));
 }
 
-/** Sube ya los cambios pendientes de todos los cursos (antes de cerrar sesión). */
+/** Sube ya los cambios pendientes de todos los cursos (antes de cerrar sesión).
+    Los cursos que aún no se habían fusionado lo intentan ahora (y, si sale bien, se suben). */
 export async function flushCourseSync() {
+  if (!state.user) return;
   const pending = [...timers.keys()];
   for (const id of pending) clearTimeout(timers.get(id));
   timers.clear();
-  if (state.user) await Promise.allSettled(pending.map(push));
+  const unsynced = [...gates.values()].filter((gate) => !gate.ready);
+  await Promise.allSettled([...pending.map(push), ...unsynced.map((gate) => gate.sync())]);
 }
 
 function addDays(days) {
@@ -146,20 +155,30 @@ export function mergeCourse(id, remote = {}) {
   local.plan.examDate ??= base.plan?.examDate ?? null;
 }
 
-/** Al iniciar sesión, trae y fusiona el progreso de cada curso guardado en la cuenta. */
+/** Al iniciar sesión, trae y fusiona el progreso de cada curso guardado en la cuenta.
+    Cada curso se sube solo después de fusionarse bien; si falla, se reintenta. */
 export function initCourseSync(onMerged) {
-  subscribe(async (change) => {
-    if (change.type !== "user" || !state.user) return;
-    const results = await Promise.allSettled(
-      DAW_COURSES.map(async ({ id }) => {
-        const remote = await request("GET", `/api/course-state/${id}`);
-        mergeCourse(id, remote.data);
-        saveCourse(id);
+  for (const { id } of DAW_COURSES) {
+    gates.set(
+      id,
+      createSyncGate({
+        name: `el curso ${id}`,
+        active: () => Boolean(state.user),
+        merge: async () => {
+          const remote = await request("GET", `/api/course-state/${id}`);
+          mergeCourse(id, remote.data);
+          saveCourse(id);
+        },
+        onSynced: async () => {
+          clearTimeout(timers.get(id));
+          await push(id);
+          onMerged();
+        },
       }),
     );
-    for (const failed of results.filter((r) => r.status === "rejected")) {
-      console.warn("No se pudo sincronizar un curso de DAW:", failed.reason?.message);
-    }
-    onMerged();
+  }
+  subscribe((change) => {
+    if (change.type !== "user") return;
+    for (const gate of gates.values()) gate.restart();
   });
 }

@@ -4,6 +4,7 @@
 
 import { request } from "../api.js";
 import { state as session, subscribe } from "../store.js";
+import { createSyncGate } from "../sync-gate.js";
 import { buildIndex, cleanLearning, mergeLearning } from "./mastery.js";
 
 const KEY = "pld:learn";
@@ -26,8 +27,24 @@ export const onLearningChange = (listener) => listeners.add(listener);
 
 let timer = null;
 
+// No se sube nada hasta haber fusionado la copia de la cuenta (AUD-001)
+const gate = createSyncGate({
+  name: "el progreso de aprendizaje",
+  active: () => Boolean(session.user),
+  merge: async () => {
+    const remote = await request("GET", `/api/course-state/${COURSE}`);
+    mergeLearning(learning, remote.data);
+    saveLearning();
+  },
+  onSynced: async () => {
+    clearTimeout(timer);
+    await push();
+  },
+});
+
 async function push() {
   timer = null;
+  if (!gate.ready) return;
   try {
     await request("PUT", `/api/course-state/${COURSE}`, { json: { data: learning } });
   } catch (error) {
@@ -42,7 +59,7 @@ export function saveLearning() {
     // sin almacenamiento: dura hasta recargar
   }
   for (const listener of listeners) listener();
-  if (!session.user) return;
+  if (!session.user || !gate.ready) return;
   clearTimeout(timer);
   timer = setTimeout(push, PUSH_DELAY_MS);
 }
@@ -50,7 +67,12 @@ export function saveLearning() {
 
 /** Sube ya el cambio pendiente (antes de cerrar sesión). */
 export async function flushLearnSync() {
-  if (!timer || !session.user) return;
+  if (!session.user) return;
+  if (!gate.ready) {
+    await gate.sync(); // al salir bien, sube el documento fusionado
+    return;
+  }
+  if (!timer) return;
   clearTimeout(timer);
   await push();
 }
@@ -73,16 +95,9 @@ export function loadLearningContent() {
   return content;
 }
 
-/** Al iniciar sesión, trae la copia de la cuenta, la fusiona y sube el resultado. */
+/** Al iniciar sesión, trae la copia de la cuenta, la fusiona y sube el resultado (con reintentos). */
 export function initLearnSync() {
-  subscribe(async (change) => {
-    if (change.type !== "user" || !session.user) return;
-    try {
-      const remote = await request("GET", `/api/course-state/${COURSE}`);
-      mergeLearning(learning, remote.data);
-      saveLearning();
-    } catch (error) {
-      console.warn("No se pudo sincronizar el progreso de aprendizaje:", error.message);
-    }
+  subscribe((change) => {
+    if (change.type === "user") gate.restart();
   });
 }
