@@ -369,6 +369,21 @@ test("en el móvil el plan de hoy se lee sin desbordarse", async ({ page }) => {
   expect(main.width).toBe(375);
 });
 
+test("en el móvil el selector «Por concepto» de Practicar cabe en la pantalla (MW-001)", async ({ page }) => {
+  for (const width of [320, 390]) {
+    await page.setViewportSize({ width, height: 800 });
+    await page.goto("/#/practicar");
+    const select = page.locator("#lx-concept-select");
+    await expect(select).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(0);
+    // El selector no se sale de su formulario y sigue usable: nombre accesible y altura táctil
+    const [box, form] = [await select.boundingBox(), await page.locator("#lx-concept-form").boundingBox()];
+    expect(box.x + box.width).toBeLessThanOrEqual(form.x + form.width + 1);
+    expect(box.height).toBeGreaterThanOrEqual(40);
+    await expect(page.getByRole("combobox", { name: "Concepto" })).toBeVisible();
+  }
+});
+
 test.describe("Preparación DAW", () => {
   test("competencias, aviso de qué reforzar y temario del centro", async ({ page }) => {
     // Fundamentos empezado y flojo, Programación empezada: debe pedir reforzar Fundamentos
