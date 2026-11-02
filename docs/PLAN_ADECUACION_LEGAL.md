@@ -18,6 +18,17 @@ Una acción **no se da por cumplida** porque exista un archivo: hace falta la pr
 indicadas. Ningún texto legal se publica sin que el titular lo apruebe, y el merge a `main` (que
 publica la web) lo hace siempre él.
 
+## Estado de ejecución (2/11/2026)
+
+| Acción | Estado | Dónde |
+|---|---|---|
+| A-01 Política y aviso legal | **Hecha en la rama**, pendiente de merge y de comprobar la versión publicada. El proveedor de email se nombra como categoría hasta que el titular diga cuál es | `frontend/privacidad.html`, `frontend/aviso-legal.html`, casillas de `frontend/index.html` |
+| A-04 Prueba de coherencia | **Hecha**: falla con la política anterior y pasa con la nueva | `backend/tests/test_privacy_policy.py` |
+| A-06 Registro y procedimiento de derechos | **Plantilla**: faltan los campos `[[TITULAR: …]]` | [REGISTRO_TRATAMIENTOS.md](REGISTRO_TRATAMIENTOS.md) |
+| A-08 Incidentes | **Hecho**, falta el contacto de urgencia y el primer simulacro | [INCIDENTES.md](INCIDENTES.md) |
+| A-18 README | **Hecha** | `README.md` |
+| Resto | Pendiente de datos del titular, de revisión jurídica o de autorización | Apartados siguientes |
+
 ## 1. Las cuatro categorías de la fase 2
 
 | Categoría | Acciones |
