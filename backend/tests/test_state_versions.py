@@ -63,3 +63,24 @@ def test_versions_are_per_user_and_per_course(client, auth_headers):
         "/api/v1/course-state/java", json={"data": {}, "version": 0}, headers=auth_headers
     )
     assert java.status_code == 200 and java.json()["version"] == 1
+
+
+def test_two_first_saves_at_the_same_time_only_one_creates_it(client, auth_headers, monkeypatch):
+    """Dos pestañas crean el documento a la vez: la segunda no lo ve al leer y choca al insertar."""
+    from sqlalchemy.orm import Session
+
+    from app.models import PcapState
+
+    path = "/api/v1/pcap-state"
+    client.put(path, json={"data": {"tab": "A"}, "version": 0}, headers=auth_headers)
+    real_get = Session.get
+
+    def get_before_the_other_tab_committed(self, model, *args, **kwargs):
+        return None if model is PcapState else real_get(self, model, *args, **kwargs)
+
+    monkeypatch.setattr(Session, "get", get_before_the_other_tab_committed)
+    late = client.put(path, json={"data": {"tab": "B"}, "version": 0}, headers=auth_headers)
+    assert late.status_code == 409
+    monkeypatch.undo()
+    current = client.get(path, headers=auth_headers).json()
+    assert current["data"] == {"tab": "A"} and current["version"] == 1
