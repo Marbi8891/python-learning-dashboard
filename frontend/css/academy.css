@@ -189,9 +189,7 @@
   padding: var(--space-7) var(--space-6) var(--space-6);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  background:
-    radial-gradient(120% 90% at 100% 0%, var(--color-primary-soft), transparent 60%),
-    var(--color-surface);
+  background: var(--color-surface);
   overflow: hidden;
 }
 

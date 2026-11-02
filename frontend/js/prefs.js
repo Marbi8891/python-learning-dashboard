@@ -19,7 +19,7 @@ function apply() {
   const theme = prefs.theme === "auto" ? (systemLight.matches ? "light" : "dark") : prefs.theme;
   document.documentElement.dataset.theme = theme;
   document.documentElement.dataset.font = prefs.font;
-  document.querySelector('meta[name="theme-color"]')?.setAttribute("content", theme === "light" ? "#f7f4ec" : "#0c0d10");
+  document.querySelector('meta[name="theme-color"]')?.setAttribute("content", theme === "light" ? "#f6f4ef" : "#121417");
 }
 
 function save() {

@@ -4,43 +4,53 @@ Guía del diseño de la web. Los valores están en **`frontend/css/tokens.css`**
 
 ## Principios
 
-1. **El contenido manda.** Primero el texto, el código y el ejercicio. Sin degradados, cristal ni animaciones decorativas.
-2. **Un color, un significado.** El azul es para la acción principal y el foco. El verde, para el progreso y los aciertos. El rojo, para los errores. El color nunca va solo: siempre lo acompaña un texto o un icono (✓, ✗).
+1. **El contenido manda.** Primero el texto, el código y el ejercicio. Sin degradados de fondo, brillos, cristal ni animaciones decorativas. La jerarquía la dan la tipografía y el espacio antes que las cajas.
+2. **Un color, un significado.** El ámbar es para la acción principal, los enlaces y el foco. El verde, para el progreso y los aciertos. El rojo, para los errores. El color nunca va solo: siempre lo acompaña un texto o un icono (✓, ✗).
 3. **Datos reales.** No se muestran cifras que la web no pueda calcular: ni horas, ni porcentajes inventados, ni estadísticas de usuarios.
 4. **Accesible por defecto.** Contraste AA, foco visible, objetivos táctiles de 44 px y respeto por `prefers-reduced-motion`.
 
+## Identidad
+
+- **Grafito y ámbar Python.** El fondo oscuro es un grafito (`#121417`), no negro, con superficies un punto más claras. El acento es un ámbar cálido que recuerda a Python y no se confunde con el verde de acierto ni con el rojo de error.
+- **Texto sobre el ámbar siempre oscuro** (`--color-on-primary`), en los dos temas: los botones principales son ámbar con texto casi negro.
+- **El tema claro no es una inversión.** Es un papel cálido (`#f6f4ef`) con superficies blancas. El ámbar claro solo se usa de fondo de botón; para texto, enlaces y marcas se usa un ámbar oscuro (`#8a5300`) que llega a AA. El código sigue en oscuro en los dos temas.
+
 ## Color
 
-Hay dos temas. El claro y el oscuro se eligen en «Preferencias» o siguen al sistema (`theme-init.js` pone `data-theme` en `<html>`).
+Hay dos temas. El claro y el oscuro se eligen en «Aspecto» o siguen al sistema (`theme-init.js` pone `data-theme` en `<html>`).
 
 | Token | Uso | Oscuro | Claro |
 |---|---|---|---|
-| `--color-bg` | Fondo de la página | `#0b0f14` | `#f5f7fa` |
-| `--color-surface` | Tarjetas y paneles | `#111720` | `#ffffff` |
-| `--color-surface-2` | Superficie secundaria | `#17202b` | `#f0f3f7` |
-| `--color-border` | Separadores | `#263241` | `#dce3eb` |
-| `--color-text` | Texto | `#edf2f7` | `#17202b` |
-| `--color-text-muted` | Texto secundario | `#9aa8b8` | `#5d6b7b` |
-| `--color-primary` | Enlaces destacados, foco | `#60a5fa` | `#2563eb` |
-| `--color-primary-strong` | Fondo del botón principal | `#2563eb` | `#1d4ed8` |
-| `--color-accent` | Progreso, aciertos | `#22c55e` | `#166534` |
+| `--color-bg` | Fondo de la página | `#121417` | `#f6f4ef` |
+| `--color-surface` | Tarjetas y paneles | `#181b1f` | `#ffffff` |
+| `--color-surface-2` | Superficie secundaria | `#20242a` | `#eeebe4` |
+| `--color-border` | Separadores (decorativo) | `#2e333b` | `#dbd6cb` |
+| `--color-border-control` | Borde de campos y botones secundarios | `#6a727e` | `#8b867b` |
+| `--color-text` | Texto | `#ebe7df` | `#1c1e22` |
+| `--color-text-muted` | Texto secundario | `#a7abb2` | `#575c64` |
+| `--color-primary` | Enlaces destacados, marcas, foco | `#f2b443` | `#8a5300` |
+| `--color-primary-strong` | Fondo del botón principal | `#f2b443` | `#e5a52b` |
+| `--color-on-primary` | Texto sobre el botón principal | `#1b1405` | `#1b1405` |
+| `--color-link` | Enlaces | `#f5c66b` | `#8a5300` |
+| `--color-accent` | Progreso, aciertos | `#3ccb72` | `#166534` |
 | `--color-danger` | Errores | `#f87171` | `#b91c1c` |
-| `--color-code-bg` | Fondo del código (oscuro en los dos temas) | `#080c11` | `#0b1118` |
+| `--color-code-bg` | Fondo del código (oscuro en los dos temas) | `#0e1013` | `#16181c` |
 
 Contrastes calculados (WCAG 2.x, sobre `--color-surface` salvo que se indique otra cosa):
 
 | Par | Oscuro | Claro | Mínimo AA |
 |---|---|---|---|
-| Texto | 16,0:1 | 16,4:1 | 4,5:1 |
-| Texto secundario | 7,4:1 | 5,4:1 | 4,5:1 |
-| Texto tenue sobre `surface-2` | 5,6:1 | 4,9:1 | 4,5:1 |
-| Enlace | 10,0:1 | 6,7:1 | 4,5:1 |
-| Texto del botón principal | 5,2:1 | 6,7:1 | 4,5:1 |
-| Verde de progreso | 7,9:1 | 7,1:1 | 3:1 (gráficos) |
-| Rojo de error | 6,5:1 | 6,5:1 | 4,5:1 |
-| **Borde** | **1,4:1** | **1,3:1** | 3:1 si es el único límite de un control |
+| Texto | 14,0:1 | 16,7:1 | 4,5:1 |
+| Texto secundario | 7,5:1 | 6,7:1 | 4,5:1 |
+| Texto tenue sobre `surface-2` | 5,7:1 | 5,7:1 | 4,5:1 |
+| Enlace | 10,8:1 | 6,3:1 | 4,5:1 |
+| Texto del botón principal | 9,9:1 | 8,5:1 | 4,5:1 |
+| Verde de progreso | 8,2:1 | 7,1:1 | 3:1 (gráficos) |
+| Rojo de error | 6,2:1 | 6,5:1 | 4,5:1 |
+| Borde de controles (peor caso: fondo, superficie o `surface-2`) | 3,2:1 | 3,0:1 | 3:1 (WCAG 1.4.11) |
+| Borde decorativo | 1,4:1 | 1,4:1 | No aplica: no es el único límite de un control |
 
-El borde no llega a 3:1. Vale para separar tarjetas, pero no como único contorno de un campo de formulario (WCAG 1.4.11). Está anotado como AUD-035 y se corrige en la fase de accesibilidad.
+Los campos de formulario, el editor y los botones secundarios usan `--color-border-control` (corrige AUD-035). `--color-border` queda para separar tarjetas y secciones.
 
 ## Tipografía
 
@@ -71,6 +81,8 @@ Interlineado: `--leading-body` (1,6) para leer y `--leading-tight` (1,2) para t�
 ## Espaciado, bordes y sombras
 
 - **Espaciado:** múltiplos de 4 px, de `--space-1` (4 px) a `--space-7` (48 px).
+- **Anchos y alturas:** `--measure` (70ch, línea de lectura), `--content-max` (1180 px, contenido de la app), `--page-max` (1240 px, portada), `--nav-height` (64 px) y `--sidebar-width` (272 px).
+- **Bordes:** `--border-width` (1 px), finos siempre.
 - **Radios:** `--radius-sm` (8 px) para controles, `--radius-md` (12 px) para tarjetas, `--radius-lg` (16 px) para bloques grandes y `--radius-pill` para etiquetas.
 - **Sombras:** solo dos, moderadas: `--shadow-1` (relieve mínimo) y `--shadow-2` (elementos flotantes: menús, avisos).
 
@@ -80,11 +92,13 @@ Interlineado: `--leading-body` (1,6) para leer y `--leading-tight` (1,2) para t�
 |---|---|
 | Hover | Fondo `*-hover` o subrayado del enlace |
 | Foco | Contorno de 2 px en `--color-primary` (`:focus-visible`, `base.css`) y `--focus-ring` en los campos |
-| Desactivado u ocupado | Opacidad reducida (`.btn:disabled`, `widgets.css`) y el texto del botón dice qué pasa («Ejecutando…», «Comprobando…») |
+| Desactivado u ocupado | Opacidad reducida (`--state-disabled-opacity`; `.btn:disabled`, `widgets.css`) y el texto del botón dice qué pasa («Ejecutando…», «Comprobando…») |
 | Cargando | Texto que dice qué se carga («Cargando Python…», «Cargando el curso…»). El estado de la consola se anuncia con `aria-live`; el resto de zonas aún no (pendiente de la fase de accesibilidad) |
 | Error | Texto en `--color-danger` con la causa y qué hacer; nunca solo el color |
 | Vacío | `.empty-state`: borde discontinuo y una frase con el siguiente paso |
 | No encontrado | `not-found.js`: título, la ruta pedida y enlaces para volver |
+
+**Movimiento:** `--duration-fast` (120 ms), `--duration` (180 ms) y `--duration-slow` (320 ms) con la curva `--ease`; `--transition` las combina. Solo para responder a una acción (hover, abrir, progreso), nunca de adorno, y se anulan con `prefers-reduced-motion`.
 
 ## Componentes
 
