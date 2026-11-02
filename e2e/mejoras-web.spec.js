@@ -26,4 +26,16 @@ test.describe("móvil", () => {
     });
     expect(last).toBeLessThanOrEqual((await rect(toggle)).top);
   });
+
+  test("MW-006: las tres pestañas de la lección caben en la pantalla", async ({ page }) => {
+    for (const width of [320, 390]) {
+      await page.setViewportSize({ width, height: 844 });
+      await openLesson(page, "variables");
+      for (const name of ["Teoría y Ejemplos", "Práctica y Ejercicio", "Quiz"]) {
+        const box = await rect(page.getByRole("tab", { name }));
+        expect(box.right, `${name} a ${width} px`).toBeLessThanOrEqual(width);
+        expect(box.height).toBeGreaterThanOrEqual(24);
+      }
+    }
+  });
 });
