@@ -281,3 +281,34 @@
 .curr-sources {
   padding-left: 1.4em;
 }
+
+/* Progreso por lección: completadas, objetivos, errores frecuentes y botón de completar */
+.daw-units {
+  margin: var(--space-3) 0 var(--space-2);
+  font-size: var(--text-sm);
+}
+
+.daw-done {
+  margin: 0;
+  color: var(--color-accent);
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.daw-lessons .daw-done {
+  display: inline;
+}
+
+.daw-goals,
+.daw-mistakes {
+  padding-left: 1.4em;
+}
+
+.daw-goals li,
+.daw-mistakes li {
+  margin-bottom: var(--space-2);
+}
+
+.daw-complete .btn {
+  margin-bottom: var(--space-2);
+}

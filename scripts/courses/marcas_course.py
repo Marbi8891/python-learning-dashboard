@@ -178,6 +178,123 @@ BIBLIOTECA = """<biblioteca>
   <libro id="3" idioma="es"><titulo>Rayuela</titulo><precio>18</precio></libro>
 </biblioteca>"""
 
+# ---------------------------------------------------------------- soluciones de los ejercicios
+
+AGENDA = """<?xml version="1.0" encoding="UTF-8"?>
+<agenda>
+  <contacto id="1"><nombre>Ana Gil</nombre><telefono>600111222</telefono></contacto>
+  <contacto id="2"><nombre>Pérez &amp; Hijos</nombre><telefono>983000111</telefono></contacto>
+  <contacto id="3"><nombre>Íker Sanz</nombre><telefono>611222333</telefono></contacto>
+</agenda>"""
+
+FICHA = """<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ficha · Dune</title>
+    <link rel="stylesheet" href="estilos.css">
+  </head>
+  <body>
+    <header><h1>Dune</h1></header>
+    <main>
+      <article>
+        <img src="dune.jpg" alt="Portada de Dune: un desierto bajo dos lunas">
+        <p>Autor: <span class="destacado">Frank Herbert</span></p>
+        <h2>Géneros</h2>
+        <ul><li>Ciencia ficción</li><li>Aventuras</li></ul>
+      </article>
+    </main>
+    <footer><p>Ficha de ejemplo</p></footer>
+  </body>
+</html>
+
+<!-- estilos.css
+body { font-family: system-ui, sans-serif; line-height: 1.5; }
+.destacado { color: #b91c1c; }
+article { margin: 1rem 0; }
+-->"""
+
+PEDIDO = """<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pedido [
+  <!ELEMENT pedido (cliente, linea+, nota?)>
+  <!ELEMENT cliente (#PCDATA)>
+  <!ELEMENT linea (producto, cantidad)>
+  <!ATTLIST linea ref CDATA #REQUIRED>
+  <!ELEMENT producto (#PCDATA)>
+  <!ELEMENT cantidad (#PCDATA)>
+  <!ELEMENT nota (#PCDATA)>
+]>
+<pedido>
+  <cliente>Ana Gil</cliente>
+  <linea ref="T-01"><producto>Teclado</producto><cantidad>2</cantidad></linea>
+  <linea ref="R-07"><producto>Ratón</producto><cantidad>1</cantidad></linea>
+  <nota>Entregar por la mañana</nota>
+</pedido>"""
+
+TABLA_XSL = """<?xml version="1.0" encoding="UTF-8"?>
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+  <xsl:output method="html" encoding="UTF-8"/>
+  <xsl:template match="/">
+    <table>
+      <tr><th>Título</th><th>Precio</th></tr>
+      <xsl:for-each select="biblioteca/libro">
+        <xsl:sort select="precio" data-type="number"/>
+        <tr><td><xsl:value-of select="titulo"/></td><td><xsl:value-of select="precio"/> €</td></tr>
+      </xsl:for-each>
+    </table>
+  </xsl:template>
+</xsl:stylesheet>"""
+
+CATALOGO_PY = """import json
+import xml.etree.ElementTree as ET
+
+texto = '''[
+  {"id": 1, "nombre": "Teclado", "precio": 25.5, "etiquetas": ["usb"], "oferta": true},
+  {"id": 2, "nombre": "Ratón", "precio": 12, "etiquetas": [], "oferta": false},
+  {"id": 3, "nombre": "Monitor", "precio": 149.9, "etiquetas": ["hdmi", "24 pulgadas"], "oferta": true}
+]'''
+catalogo = json.loads(texto)  # con un archivo: json.load(open("catalogo.json", encoding="utf-8"))
+
+for producto in catalogo:
+    if producto["oferta"]:
+        print(producto["nombre"], producto["precio"])
+
+raiz = ET.Element("catalogo")
+for p in catalogo:
+    nodo = ET.SubElement(raiz, "producto", id=str(p["id"]), oferta=str(p["oferta"]).lower())
+    ET.SubElement(nodo, "nombre").text = p["nombre"]
+    ET.SubElement(nodo, "precio").text = str(p["precio"])
+print(ET.tostring(raiz, encoding="unicode"))"""
+
+CANAL_RSS = """<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Mi semana en DAW</title>
+    <link>https://ejemplo.org/</link>
+    <description>Lo que estudio</description>
+    <item>
+      <title>XML bien formado</title>
+      <link>https://ejemplo.org/xml</link>
+      <guid>https://ejemplo.org/xml</guid>
+      <pubDate>Mon, 02 Nov 2026 10:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>Validar con una DTD</title>
+      <link>https://ejemplo.org/dtd</link>
+      <guid>https://ejemplo.org/dtd</guid>
+      <pubDate>Wed, 04 Nov 2026 10:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>De XML a JSON</title>
+      <link>https://ejemplo.org/json</link>
+      <guid>https://ejemplo.org/json</guid>
+      <pubDate>Fri, 06 Nov 2026 10:00:00 GMT</pubDate>
+    </item>
+  </channel>
+</rss>"""
+
+
 # ---------------------------------------------------------------- lecciones
 
 L_XML = Lesson(
@@ -419,6 +536,42 @@ Después compruébalo con el programa de partida: si está bien formado, mostrar
             "`&lt;` (less than). `&gt;` es >.",
         ),
     ],
+    objectives=[
+        "Clasificar los lenguajes de marcas y reconocer los más usados y sus ámbitos (RA1 a-f).",
+        "Identificar la estructura de un documento XML y sus reglas sintácticas (RA1 g).",
+        "Explicar por qué un documento tiene que estar bien formado para poder procesarse (RA1 h).",
+        "Usar espacios de nombres para mezclar vocabularios sin choques de nombres (RA1 i).",
+    ],
+    mistakes=[
+        (
+            "Dejar un `&` suelto en el texto.",
+            "Escribe `&amp;` o mete el texto en una sección `<![CDATA[ ... ]]>`.",
+        ),
+        (
+            "Cerrar con otras mayúsculas: `<Nombre>…</nombre>`.",
+            "XML distingue mayúsculas y minúsculas: copia el nombre exacto.",
+        ),
+        ("Poner dos elementos en el nivel superior.", "Envuelve todo en un único elemento raíz."),
+        (
+            "Escribir atributos sin comillas, como en HTML.",
+            'En XML van siempre entre comillas: `id="2"`.',
+        ),
+        (
+            "Confundir «bien formado» con «válido».",
+            "Bien formado es la sintaxis de XML; válido es, además, cumplir una DTD o un XML Schema.",
+        ),
+    ],
+    summary=[
+        "Un lenguaje de marcas mezcla contenido y etiquetas en texto plano; XML y HTML son descriptivos.",
+        "XML es un metalenguaje: SVG, RSS o MathML están hechos con XML.",
+        "Un XML bien formado tiene un solo raíz, etiquetas cerradas y bien anidadas, atributos entre comillas y entidades para `<` y `&`.",
+        "Si no está bien formado, el analizador se detiene: no se puede procesar.",
+        "Los espacios de nombres distinguen elementos con el mismo nombre que vienen de vocabularios distintos.",
+    ],
+    solution=(
+        AGENDA,
+        "Un único elemento raíz (`<agenda>`), los `id` entre comillas y el `&` escrito como `&amp;`. Con el programa de partida se ve `2 Pérez & Hijos`: el analizador vuelve a convertir la entidad en `&`.",
+    ),
     sources=[W3C_XML, ETREE],
 )
 
@@ -658,6 +811,45 @@ Crea `index.html` y `estilos.css` para una ficha de un libro:
             "El mismo HTML puede tener varias presentaciones (pantalla, impresión, móvil).",
         ),
     ],
+    objectives=[
+        "Reconocer las versiones de HTML y las diferencias de HTML5 (RA2 a, d).",
+        "Analizar la estructura de un documento HTML y la función de sus etiquetas y atributos principales (RA2 b, c).",
+        "Aplicar hojas de estilo y explicar la cascada y la especificidad (RA2 f, g).",
+        "Validar documentos HTML y CSS con las herramientas del W3C (RA2 e, h).",
+    ],
+    mistakes=[
+        (
+            "Olvidar el `alt` de las imágenes.",
+            'Describe la imagen; si es decorativa, `alt=""` para que el lector de pantalla la ignore.',
+        ),
+        (
+            "Usar `<div>` para todo.",
+            "Elige la etiqueta semántica: `<nav>`, `<main>`, `<article>`, `<button>`…",
+        ),
+        (
+            "Usar títulos por su tamaño (`<h4>` porque es pequeño).",
+            "Los títulos van en orden (`h1`, `h2`, `h3`); el tamaño se cambia con CSS.",
+        ),
+        (
+            "Abusar de `!important` para «ganar» la cascada.",
+            "Sube la especificidad del selector o reordena las reglas.",
+        ),
+        (
+            "Repetir un mismo `id` en la página.",
+            "Un id es único; para repetir un estilo usa una clase.",
+        ),
+    ],
+    summary=[
+        "Un documento HTML5 empieza por `<!DOCTYPE html>` y tiene `<head>` (información sobre la página) y `<body>` (contenido).",
+        "Las etiquetas semánticas (`header`, `nav`, `main`, `article`, `footer`) describen cada parte.",
+        "CSS separa presentación y contenido; lo recomendable es una hoja externa enlazada con `<link>`.",
+        "En la cascada gana lo más específico (en línea > id > clase > etiqueta) y, a igualdad, la última regla.",
+        "El validador del W3C comprueba el HTML y el de jigsaw, las hojas de estilo.",
+    ],
+    solution=(
+        FICHA,
+        "La estructura completa pasa el validador: `lang`, `meta charset`, un solo `<main>` y la imagen con `alt`. Los estilos van en `estilos.css` (aquí, al final, como comentario) y la clase `.destacado` se reutiliza donde haga falta.",
+    ),
     sources=[MDN_HTML, MDN_CSS, VALIDATOR],
 )
 
@@ -866,6 +1058,37 @@ Escribe después un pedido válido y otro no válido, y compruébalos con `xmlli
             "`xs:choice` es uno de ellos y `xs:all`, todos en cualquier orden.",
         ),
     ],
+    objectives=[
+        "Explicar por qué hay que describir los documentos que se intercambian (RA4 a, b).",
+        "Leer y escribir modelos de contenido y atributos en una DTD (RA4 c, d).",
+        "Escribir un XML Schema con tipos de datos, cardinalidades y restricciones (RA4 c, d).",
+        "Asociar la descripción a un documento y validarlo con herramientas (RA4 e, f, g).",
+    ],
+    mistakes=[
+        (
+            "Olvidar declarar un elemento hoja.",
+            "Cada elemento necesita su `<!ELEMENT … (#PCDATA)>`, también los que solo tienen texto.",
+        ),
+        ("Confundir `+` con `*`.", "`+` exige al menos uno; `*` admite ninguno."),
+        (
+            "Pensar que una DTD comprueba que `<precio>` es un número.",
+            "La DTD solo conoce texto; para tipos de datos hace falta XML Schema.",
+        ),
+        (
+            "Cambiar el orden de los hijos en una secuencia.",
+            "Con `,` (o `xs:sequence`) el orden es obligatorio; si no importa, usa `xs:all`.",
+        ),
+    ],
+    summary=[
+        "Un XML válido está bien formado y cumple su DTD o su XML Schema.",
+        "DTD: `<!ELEMENT>` con `,` (secuencia), `|` (alternativa) y `?`, `*`, `+`; `<!ATTLIST>` con `CDATA`, `ID`, `#REQUIRED`, `#IMPLIED`.",
+        "XSD está escrito en XML y añade tipos (`xs:integer`, `xs:date`), `minOccurs`/`maxOccurs` y restricciones.",
+        "Se valida con `xmllint` (`--valid`, `--dtdvalid`, `--schema`) o con `lxml` en Python.",
+    ],
+    solution=(
+        PEDIDO,
+        "`linea+` exige al menos una línea y `nota?` la deja opcional al final. Cada hoja se declara con `(#PCDATA)` y `ref` es obligatorio con `#REQUIRED`. Si quitas todas las `<linea>`, `xmllint --valid` da error.",
+    ),
     sources=[W3C_XML, XSD],
 )
 
@@ -1086,6 +1309,35 @@ Con el documento de la biblioteca del ejemplo (añade un tercer libro):
             "Los navegadores también traen un procesador de XSLT 1.0.",
         ),
     ],
+    objectives=[
+        "Seleccionar nodos de un documento XML con expresiones XPath (RA6 e).",
+        "Escribir una hoja XSLT que convierta un XML en HTML (RA5 c-g).",
+        "Reconocer XQuery y las bases de datos XML nativas (RA6 h, i).",
+    ],
+    mistakes=[
+        ("Contar las posiciones desde 0: `libro[0]`.", "En XPath la primera posición es `[1]`."),
+        (
+            "Olvidar la `@` de los atributos: `libro[idioma='es']`.",
+            "Eso busca un hijo `<idioma>`; el atributo es `@idioma`.",
+        ),
+        (
+            "Esperar en ElementTree todo XPath (`count()`, `precio > 20`).",
+            "ElementTree admite un subconjunto; para el resto usa `lxml` o `xmllint --xpath`.",
+        ),
+        (
+            "Olvidar el espacio de nombres `xsl:` en la hoja.",
+            'Declara `xmlns:xsl="http://www.w3.org/1999/XSL/Transform"` en `xsl:stylesheet`.',
+        ),
+    ],
+    summary=[
+        "XPath recorre el árbol: `/` desde la raíz, `//` a cualquier profundidad, `@` para atributos y `[…]` para filtrar.",
+        "XSLT transforma XML en XML, HTML o texto con plantillas (`xsl:template`), bucles (`xsl:for-each`) y `xsl:value-of`.",
+        "XQuery consulta colecciones de XML con expresiones FLWOR; lo usan BaseX y eXist-db.",
+    ],
+    solution=(
+        TABLA_XSL,
+        "La plantilla de `/` crea la tabla y `xsl:for-each` genera una fila por libro, ordenada por precio como número. `xsl:value-of` escribe el texto de cada hijo.",
+    ),
     sources=[XPATH, XSLT, ETREE],
 )
 
@@ -1289,6 +1541,33 @@ print(json.loads(texto)["alumnos"][1]["nombre"])
             "`dumps` escribe; `loads` lee.",
         ),
     ],
+    objectives=[
+        "Escribir JSON válido y distinguirlo de un objeto de JavaScript o de Python (RA6 a, d).",
+        "Comparar XML, JSON, CSV y YAML y elegir el adecuado (RA6 b, c).",
+        "Exportar a JSON los datos de una base de datos relacional y convertir entre XML y JSON (RA5 g, RA6 f, g).",
+    ],
+    mistakes=[
+        (
+            "Escribir las claves o las cadenas con comillas simples.",
+            "JSON solo admite comillas dobles.",
+        ),
+        ("Dejar una coma después del último elemento.", "JSON no admite comas finales."),
+        ("Añadir comentarios con `//`.", "JSON no tiene comentarios."),
+        (
+            "Confundir `json.load` con `json.loads`.",
+            "`load` lee un archivo abierto; `loads`, un texto.",
+        ),
+    ],
+    summary=[
+        "JSON tiene objetos, arrays, cadenas, números, `true`, `false` y `null`.",
+        "Es el formato de casi todas las API REST; XML sigue en documentos y sistemas empresariales.",
+        "Los formatos de intercambio sirven para mover datos; para guardarlos con índices y transacciones está la base de datos.",
+        "En Python, `json.loads` lee, `json.dumps` escribe y `ensure_ascii=False` conserva las tildes.",
+    ],
+    solution=(
+        CATALOGO_PY,
+        '`json.loads` convierte el texto en una lista de diccionarios. Después se filtra por `oferta` y se construye el XML con `ET.SubElement`: los atributos de XML siempre son texto, por eso `str(p["id"])`.',
+    ),
     sources=[JSON_RFC, PY_JSON],
 )
 
@@ -1478,6 +1757,39 @@ print(salida.getvalue())
             "RSS 2.0 no usa espacio de nombres en sus elementos básicos.",
         ),
     ],
+    objectives=[
+        "Reconocer las tecnologías de sindicación (RSS y Atom) y sus usos (RA2 i, j).",
+        "Identificar los sistemas de gestión empresarial y sus ventajas (RA7 a-c).",
+        "Describir la instalación, la configuración de usuarios y permisos, los informes y la importación de datos de un ERP (RA7 d-i).",
+    ],
+    mistakes=[
+        (
+            "Buscar `entry` en un canal Atom sin el espacio de nombres.",
+            "En ElementTree el nombre real es `{http://www.w3.org/2005/Atom}entry`.",
+        ),
+        (
+            "Olvidar `title`, `link` o `description` en el `<channel>`.",
+            "Son obligatorios en RSS 2.0: el validador de canales lo avisa.",
+        ),
+        (
+            "Dar a todos los usuarios del ERP permisos de administrador.",
+            "Aplica el mínimo privilegio: cada rol ve solo lo que necesita.",
+        ),
+        (
+            "No probar las copias de seguridad.",
+            "Restaura de vez en cuando una copia en otro entorno para comprobar que sirve.",
+        ),
+    ],
+    summary=[
+        "Un canal RSS o Atom es un XML con las últimas novedades que leen los lectores de noticias y las aplicaciones de pódcast.",
+        "Un ERP integra contabilidad, compras, ventas, inventario y personal en una base de datos; un CRM, la relación con los clientes.",
+        "Odoo Community, Dolibarr y ERPNext son ERP de software libre.",
+        "Explotar un ERP es configurar roles, generar informes, importar y exportar datos y conectarlo por su API.",
+    ],
+    solution=(
+        CANAL_RSS,
+        "Un `<channel>` con sus tres campos obligatorios y un `<item>` por entrada, con `guid` único y `pubDate` en formato RFC 822. Pásalo por validator.w3.org/feed antes de publicarlo.",
+    ),
     sources=[RSS, ATOM, ODOO],
 )
 
@@ -1526,5 +1838,20 @@ BLOCKS = [
     ),
 ]
 
+
+def check_solutions() -> None:
+    """Las soluciones también se comprueban: XML bien formado, DTD cumplida y Python que funciona."""
+    for xml in (AGENDA, PEDIDO, TABLA_XSL, CANAL_RSS):
+        assert xml_ok(xml), f"una solución XML no está bien formada:\n{xml[:80]}"
+    pedido = ET.fromstring(PEDIDO)
+    assert dtd_matches("(cliente, linea+, nota?)", [hijo.tag for hijo in pedido])
+    assert all(linea.get("ref") for linea in pedido.iter("linea"))
+    assert ET.fromstring(CANAL_RSS).find("channel/title") is not None
+    assert FICHA.startswith("<!DOCTYPE html>") and 'alt="' in FICHA and FICHA.count("<main>") == 1
+    check_example(CATALOGO_PY)
+    assert run_python(CATALOGO_PY).splitlines()[:2] == ["Teclado 25.5", "Monitor 149.9"]
+
+
 if __name__ == "__main__":
+    check_solutions()
     main("marcas", BLOCKS, run_python, check_example, module="0373")

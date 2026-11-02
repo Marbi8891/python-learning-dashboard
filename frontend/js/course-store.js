@@ -9,6 +9,7 @@ import { isoDay } from "./pcap-store.js";
 import { state, subscribe } from "./store.js";
 import { createDocSync } from "./doc-sync.js";
 import { createSyncGate } from "./sync-gate.js";
+import { mergeLessonProgress } from "./lesson-progress.js";
 
 /** Cursos de DAW, en el orden del catálogo. `lang` es el lenguaje para resaltar el código. */
 export const DAW_COURSES = [
@@ -42,7 +43,7 @@ const MAX_BOX = INTERVAL_DAYS.length - 1;
 const HISTORY = 5;
 
 function empty() {
-  return { lang: "es", answers: {}, exams: [], known: [], bestCombo: 0, flags: {}, srs: {}, plan: { examDate: null } };
+  return { lang: "es", answers: {}, exams: [], known: [], bestCombo: 0, flags: {}, srs: {}, plan: { examDate: null }, done: {}, lastLesson: null };
 }
 
 const states = new Map();
@@ -157,6 +158,7 @@ export function mergeCourse(id, remote = {}) {
   for (const [flag, value] of Object.entries(base.flags ?? {})) local.flags[flag] ||= Boolean(value);
   for (const [q, item] of Object.entries(base.srs)) local.srs[q] = later(local.srs[q], item);
   local.plan.examDate ??= base.plan?.examDate ?? null;
+  mergeLessonProgress(local, clean); // lecciones completadas (unión) y última lección (la más reciente)
 }
 
 /** Al iniciar sesión, trae y fusiona el progreso de cada curso guardado en la cuenta.

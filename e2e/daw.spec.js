@@ -106,8 +106,57 @@ test("Lenguajes de marcas: enlace directo a una lección, mini-quiz y práctica 
   await expect(page.locator(".block-row")).toHaveCount(6);
 });
 
+test("unidad completa: objetivos, solución, errores frecuentes, completar y continuar", async ({ page }) => {
+  await page.goto("/#/daw/marcas/leccion/mar-dtd-xsd");
+  await expect(page.getByRole("heading", { name: "Al terminar sabrás" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Errores frecuentes" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Resumen" })).toBeVisible();
+  await page.getByText("Ver una solución explicada").click();
+  await expect(page.locator(".daw-solution-box")).toContainText("<!ELEMENT linea (producto, cantidad)>");
+  await page.getByRole("button", { name: "Marcar la lección como completada" }).click();
+  await expect(page.locator(".daw-complete .daw-done")).toBeFocused();
+  await expect(page.locator(".daw-complete")).toContainText("Completada");
+  const saved = await page.evaluate(() => JSON.parse(localStorage.getItem("pld:course:marcas")));
+  expect(Object.keys(saved.done)).toEqual(["mar-dtd-xsd"]);
+  expect(saved.lastLesson.slug).toBe("mar-dtd-xsd");
+
+  // En el panel: 1 de 6 y «Continuar» lleva a la primera lección pendiente
+  await page.goto("/#/daw/marcas");
+  await expect(page.locator("#daw-units")).toHaveText("1 de 6 lecciones completadas");
+  await expect(page.locator(".daw-lessons li.is-done")).toHaveCount(1);
+  await page.getByRole("link", { name: /^Continuar: Lenguajes de marcas y XML bien formado/ }).click();
+  await expect(page.locator("#daw-title")).toHaveText("Lenguajes de marcas y XML bien formado");
+  await page.goto("/#/daw/marcas");
+  await expect(page.getByRole("link", { name: /^Continuar: Lenguajes de marcas y XML bien formado/ })).toBeVisible();
+});
+
+test("las lecciones completadas se guardan en la cuenta y no borran las de otro dispositivo", async ({ page, request }) => {
+  const email = uniqueEmail();
+  const password = "contraseña-e2e-123";
+  await request.post(`${API}/api/v1/auth/register`, { data: { email, password, display_name: "Ana", accept_privacy: true } });
+  const login = await request.post(`${API}/api/v1/auth/login`, { form: { username: email, password } });
+  const headers = { Authorization: `Bearer ${(await login.json()).access_token}` };
+  // Otro dispositivo ya completó una lección
+  const before = { done: { "mar-html-css": "2026-11-01T10:00:00.000Z" }, lastLesson: { slug: "mar-html-css", at: "2026-11-01T10:00:00.000Z" } };
+  await request.put(`${API}/api/v1/course-state/marcas`, { headers, data: { data: before } });
+
+  await page.goto("/#/daw/marcas/leccion/mar-json-intercambio");
+  await page.getByRole("button", { name: "Iniciar sesión" }).click();
+  await page.locator("#login-form").getByLabel("Email").fill(email);
+  await page.locator("#login-form").getByLabel("Contraseña").fill(password);
+  await page.locator("#login-form").getByRole("button", { name: "Entrar" }).click();
+  await expect(page.locator("#account-label")).toHaveText("Ana");
+  await page.getByRole("button", { name: "Marcar la lección como completada" }).click();
+
+  const remoteDone = async () => (await (await request.get(`${API}/api/v1/course-state/marcas`, { headers })).json()).data.done ?? {};
+  await expect.poll(async () => Object.keys(await remoteDone()).sort()).toEqual(["mar-html-css", "mar-json-intercambio"]);
+  expect((await remoteDone())["mar-html-css"]).toBe("2026-11-01T10:00:00.000Z");
+  await page.goto("/#/daw/marcas");
+  await expect(page.locator("#daw-units")).toHaveText("2 de 6 lecciones completadas");
+});
+
 test("catálogo, lección y práctica sin infracciones WCAG", async ({ page }) => {
-  for (const route of ["/#/daw/cursos", "/#/daw/programacion/leccion/prog-ut2-elementos", "/#/daw/js/practica/js-fundamentos", "/#/daw/marcas/leccion/mar-dtd-xsd"]) {
+  for (const route of ["/#/daw/cursos", "/#/daw/programacion/leccion/prog-ut2-elementos", "/#/daw/js/practica/js-fundamentos", "/#/daw/marcas/leccion/mar-dtd-xsd", "/#/daw/marcas"]) {
     await page.goto(route);
     await expect(page.locator("#daw-title")).toBeVisible();
     await page.waitForFunction(() => document.getAnimations().every((a) => a.playState !== "running"));
