@@ -167,6 +167,12 @@
     right: var(--space-4);
     bottom: var(--space-4);
   }
+
+  /* MW-005: en el móvil, más pequeño (sigue ≥ 44 px) para tapar menos texto al desplazarse */
+  .assistant__toggle {
+    width: 48px;
+    height: 48px;
+  }
 }
 
 /* ---------- Diálogo de cuenta ---------- */
