@@ -86,4 +86,17 @@ test.describe("móvil", () => {
       expect(label.height).toBeGreaterThanOrEqual(24);
     }
   });
+
+  test("MW-008: los tres pasos de la lección van en la misma fila", async ({ page }) => {
+    for (const width of [320, 390]) {
+      await page.setViewportSize({ width, height: 844 });
+      await openLesson(page, "variables");
+      const steps = page.locator(".guide__steps .step");
+      await expect(steps).toHaveCount(3);
+      const tops = await steps.evaluateAll((els) => els.map((el) => Math.round(el.getBoundingClientRect().top)));
+      expect(new Set(tops).size, `a ${width} px`).toBe(1);
+      const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+      expect(overflow).toBeLessThanOrEqual(0);
+    }
+  });
 });

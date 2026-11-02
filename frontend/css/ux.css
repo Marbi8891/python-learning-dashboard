@@ -281,3 +281,22 @@
 .activity-list li { display: grid; border-left: 3px solid var(--color-border); padding-left: var(--space-3); }
 .activity-list li[data-kind="login_failed"] { border-left-color: var(--color-danger); }
 .activity-list .account-card__meta { margin: 0; }
+
+/* MW-008: en el móvil, los tres pasos de la lección en una fila de columnas iguales (número encima
+   del texto), para que «3 Comprueba» no quede solo en una segunda fila */
+@media (max-width: 600px) {
+  .guide__steps {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    width: 100%;
+  }
+
+  .step {
+    flex-direction: column;
+    gap: 2px;
+    padding: var(--space-1);
+    border-radius: var(--radius-md);
+    font-size: 13px;
+    text-align: center;
+  }
+}
