@@ -1,7 +1,8 @@
 /* Consola interactiva y comprobación de ejercicios. */
 
+import { MOD_KEY, RUN_KEYS_HTML } from "./keys.js";
 import { escapeHtml, renderInline } from "./markdown.js";
-import { PythonRunner, TimeoutError, isPythonCached } from "./python-runner.js";
+import { PythonRunner, StoppedError, TimeoutError, isPythonCached } from "./python-runner.js";
 
 const $ = (selector) => document.querySelector(selector);
 const DRAFT_PREFIX = "pld:draft:";
@@ -124,21 +125,42 @@ function showOutput({ output = "", error = null, hint = null }) {
   box.dataset.state = error ? "error" : output ? "ok" : "empty";
 }
 
+/** Mientras se ejecuta, «Detener» aparece junto a Ejecutar. Si el foco estaba en el botón que se
+    desactiva, pasa a «Detener» (y vuelve al terminar) para no perderlo con el teclado. */
+function toggleStop(running, button, moveFocus) {
+  const stop = $("#console-stop");
+  if (!stop) return;
+  const focusOnStop = document.activeElement === stop;
+  stop.hidden = !running;
+  if (running && moveFocus) stop.focus();
+  if (!running && focusOnStop) button.focus();
+}
+
 async function withRunner(button, label, action) {
   if (busy) return;
   busy = true;
   const original = button.innerHTML;
+  // Un botón desactivado pierde el foco: si lo tenía, pasa a «Detener»
+  const hadFocus = document.activeElement === button;
   button.disabled = true;
   button.textContent = label;
+  toggleStop(true, button, hadFocus);
   try {
     await action();
   } catch (error) {
-    const message = error instanceof TimeoutError ? `${error.message} ¿Hay un bucle infinito?` : error.message;
-    showOutput({ error: message });
+    if (error instanceof StoppedError) {
+      const box = $("#console-output");
+      box.innerHTML = `<span class="console__muted">${escapeHtml(error.message)} Puedes cambiar el código y volver a ejecutarlo.</span>`;
+      box.dataset.state = "empty";
+    } else {
+      const message = error instanceof TimeoutError ? `${error.message} ¿Hay un bucle infinito?` : error.message;
+      showOutput({ error: message });
+    }
   } finally {
     busy = false;
     button.disabled = false;
     button.innerHTML = original;
+    toggleStop(false, button, false);
   }
 }
 
@@ -184,7 +206,7 @@ export function setLesson(next) {
   $("#console-stdin-box").open = Boolean(next.example_stdin);
   delete $("#console-output").dataset.state;
   $("#console-output").innerHTML = next.example_in_browser
-    ? '<span class="console__muted">Pulsa «Ejecutar» o Ctrl+Enter para ver el resultado.</span>'
+    ? `<span class="console__muted">Pulsa «Ejecutar» o ${MOD_KEY}+Enter para ver el resultado.</span>`
     : '<span class="console__muted">El ejemplo de esta lección usa un paquete externo: ejecútalo en PyCharm. Aquí puedes practicar el ejercicio.</span>';
 }
 
@@ -219,6 +241,8 @@ export function isRiskyPaste(text) {
 
 export function initConsole() {
   const editor = $("#console-editor");
+  const help = $("#console-help");
+  if (help) help.innerHTML = `<kbd>Tab</kbd> inserta 4 espacios · <kbd>Esc</kbd> y después <kbd>Tab</kbd> para salir del editor · ${RUN_KEYS_HTML} ejecuta`;
   let tabInsertsSpaces = true;
 
   editor.addEventListener("keydown", (event) => {
@@ -251,6 +275,7 @@ export function initConsole() {
   });
 
   $("#console-run").addEventListener("click", runConsole);
+  $("#console-stop").addEventListener("click", () => runner.stop());
   // «Ir a la línea N» funciona tanto en la salida como en el resultado de la comprobación
   document.addEventListener("click", (event) => {
     const button = event.target.closest("[data-go-line]");

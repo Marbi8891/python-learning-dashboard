@@ -82,3 +82,33 @@ test("detecta el ahorro de datos y las redes 2G", () => {
   assert.equal(isSlowConnection({ effectiveType: "slow-2g" }), true);
   assert.equal(isSlowConnection({ effectiveType: "4g", saveData: false }), false);
 });
+
+test("Detener durante la descarga cancela los avisos y no rompe la siguiente carga", async () => {
+  mock.timers.enable({ apis: ["setTimeout"] });
+  try {
+    const statuses = [];
+    const runner = new PythonRunner({ onStatus: (s) => statuses.push(s), slowLoadMs: 1000, loadTimeoutMs: 5000 });
+    const first = runner.run("print(1)");
+    await Promise.resolve();
+    assert.equal(runner.stop(), true);
+    await assert.rejects(first, /detenido/);
+    const firstWorker = FakeWorker.last;
+    assert.ok(firstWorker.terminated);
+
+    // Nueva ejecución: su carga no debe verse afectada por los temporizadores de la anterior
+    const second = runner.run("print(2)");
+    second.catch(() => {});
+    await Promise.resolve();
+    const secondWorker = FakeWorker.last;
+    mock.timers.tick(999);
+    secondWorker.onmessage({ data: { type: "ready" } });
+    await new Promise((resolve) => setImmediate(resolve));
+    mock.timers.tick(4_100); // pasa el límite de 5 s de la primera carga, no el de ejecución
+    assert.ok(!secondWorker.terminated, "el Worker nuevo sigue vivo");
+    assert.ok(!statuses.includes("slow-loading"));
+    assert.ok(!statuses.includes("error"));
+    runner.stop();
+  } finally {
+    mock.timers.reset();
+  }
+});
