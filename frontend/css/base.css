@@ -183,3 +183,32 @@ button {
   letter-spacing: normal;
   word-spacing: normal;
 }
+
+/* ---------- Idioma ---------- */
+/* Mientras llega el diccionario de otro idioma (como mucho 2 s, ver theme-init.js) */
+:root[data-i18n-pending] body {
+  visibility: hidden;
+}
+
+/* Aviso único para navegadores que no están en español (i18n.js) */
+.lang-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2) var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-surface-2);
+  border-bottom: 1px solid var(--color-border-control);
+  color: var(--color-text);
+}
+
+.lang-banner p {
+  margin: 0;
+  max-width: 60ch;
+}
+
+.lang-banner__actions {
+  display: flex;
+  gap: var(--space-2);
+}

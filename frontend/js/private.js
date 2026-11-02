@@ -6,6 +6,7 @@
    Los datos que dependen del banco de preguntas o del servidor se rellenan cuando llegan.
    Las acciones (fechas, meta, nombre, contraseña) se enganchan aquí, en initPrivate. */
 
+import { locale } from "./i18n.js";
 import { request, setToken } from "./api.js";
 import { certificateStatus, courseCertificateStatus } from "./certificate.js";
 import { courseBlockStats, courseReadiness, courseState, DAW_COURSES, loadCourseBank, saveCourse } from "./course-store.js";
@@ -15,8 +16,8 @@ import { blockStats, examsPassed, isoDay, pcap, questionsMastered, readiness, sa
 import { badgesHtml } from "./profile.js";
 import { updateUser } from "./store.js";
 
-const WHEN = new Intl.DateTimeFormat("es-ES", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
-const DAY = new Intl.DateTimeFormat("es-ES", { day: "numeric", month: "short", year: "numeric" });
+const WHEN = new Intl.DateTimeFormat(locale, { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
+const DAY = new Intl.DateTimeFormat(locale, { day: "numeric", month: "short", year: "numeric" });
 const GOALS = [10, 20, 30, 50];
 const DEFAULT_GOAL = 20;
 const $ = (selector) => document.querySelector(selector);

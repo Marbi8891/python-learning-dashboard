@@ -21,4 +21,12 @@
   if (prefs.spacing) document.documentElement.dataset.spacing = "amplio";
   if (prefs.contrast) document.documentElement.dataset.contrast = "alto";
   if (prefs.motion) document.documentElement.dataset.motion = "reducido";
+  // Otro idioma: se oculta la página hasta traducirla (i18n.js), como mucho 2 s
+  if (prefs.lang && prefs.lang !== "es") {
+    document.documentElement.lang = prefs.lang;
+    document.documentElement.dataset.i18nPending = "";
+    setTimeout(function () {
+      delete document.documentElement.dataset.i18nPending;
+    }, 2000);
+  }
 })();

@@ -6,6 +6,7 @@
    solo está en el servidor con /api/v1/dashboard (una petición) y su historial paginado.
    Nunca inventa datos: lo que no se puede calcular se dice («aún no hay…») en vez de estimarlo. */
 
+import { locale } from "./i18n.js";
 import { exportMyData, logout } from "./account.js";
 import { loadCurriculum } from "./curriculum.js";
 import { request } from "./api.js";
@@ -47,10 +48,10 @@ import { state, subscribe } from "./store.js";
 
 const FEED_PAGE = 10;
 const CHART_DAYS = 30;
-const TODAY = new Intl.DateTimeFormat("es-ES", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
-const WHEN = new Intl.DateTimeFormat("es-ES", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
-const SHORT_DAY = new Intl.DateTimeFormat("es-ES", { day: "numeric", month: "short" });
-const MEMBER_SINCE = new Intl.DateTimeFormat("es-ES", { month: "long", year: "numeric" });
+const TODAY = new Intl.DateTimeFormat(locale, { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+const WHEN = new Intl.DateTimeFormat(locale, { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
+const SHORT_DAY = new Intl.DateTimeFormat(locale, { day: "numeric", month: "short" });
+const MEMBER_SINCE = new Intl.DateTimeFormat(locale, { month: "long", year: "numeric" });
 const METHOD = { google: "Google", password: "Email y contraseña" };
 const THEME = { auto: "automático", light: "claro", dark: "oscuro" };
 const FONT = { normal: "normal", grande: "grande", "muy-grande": "muy grande" };

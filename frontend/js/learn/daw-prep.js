@@ -1,6 +1,7 @@
 /* Preparación DAW (#/daw): competencias, qué reforzar antes de avanzar,
    actividades con formato de examen y simulacros. */
 
+import { locale } from "../i18n.js";
 import { allStats } from "./mastery.js";
 import { buildExam, competencyAdvice, competencyStats, examByCompetency, examMinutes, examReadiness } from "./exam.js";
 import { selectExercises } from "./recommend.js";
@@ -15,7 +16,7 @@ export const EXAM_ACTIVITIES = [
   { id: "algoritmos", label: "Del enunciado al algoritmo", text: "Ordena pseudocódigo y tradúcelo a Python.", kinds: ["order", "code"], size: 4, minutes: null, concepts: ["algoritmos", "pseudocodigo"] },
 ];
 
-const formatDay = (iso) => new Date(iso).toLocaleDateString("es-ES", { day: "numeric", month: "short" });
+const formatDay = (iso) => new Date(iso).toLocaleDateString(locale, { day: "numeric", month: "short" });
 
 /** Conceptos de DAW sobre los que practicar: los empezados (o, si no hay, los primeros de la ruta). */
 export function dawScope(index, stats) {
