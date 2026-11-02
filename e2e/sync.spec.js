@@ -69,7 +69,13 @@ test("núcleo por conceptos: con la primera lectura fallida se fusiona al reinte
 
   await page.goto("/#/aprender");
   await page.waitForSelector("#learn-title");
+  // El reintento (a los 2 s) fusiona y repinta #/aprender: se espera a que llegue antes de empezar
+  // la sesión, para que el repintado no la sustituya a mitad del ejercicio
+  const retried = page.waitForResponse(
+    (r) => r.url().endsWith("/course-state/learn") && r.request().method() === "GET" && r.ok(),
+  );
   await login(page, email);
+  await retried;
   await page.evaluate(async () => {
     const view = await import("./js/learn/session-view.js");
     view.startSession({ kind: "practice", title: "Bucles", exercises: ["buc-01"] });
