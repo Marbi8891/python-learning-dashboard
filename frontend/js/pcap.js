@@ -1,6 +1,7 @@
 /* Zona de examen PCAP: panel de preparación, simulacro cronometrado, práctica por bloque y fichas.
    Rutas: #/pcap · #/pcap/simulacro · #/pcap/practica/<bloque> · #/pcap/fichas[/<bloque>] */
 
+import { locale } from "./i18n.js";
 import hljs from "../vendor/highlight/core.min.js";
 import { recordPcap } from "./game.js";
 import { escapeHtml, renderInline } from "./markdown.js";
@@ -94,7 +95,7 @@ function commit(events = []) {
 /* ---------- Panel ---------- */
 
 const DAY_MS = 86_400_000;
-const longDate = (day) => new Date(`${day}T00:00`).toLocaleDateString("es-ES", { day: "numeric", month: "long", year: "numeric" });
+const longDate = (day) => new Date(`${day}T00:00`).toLocaleDateString(locale, { day: "numeric", month: "long", year: "numeric" });
 
 function renderToday() {
   const questions = dueQuestions().length;
@@ -193,7 +194,7 @@ function renderPanel() {
     .slice(-8)
     .reverse()
     .map(
-      (e) => `<tr><td>${new Date(e.date).toLocaleDateString("es-ES", { day: "numeric", month: "short" })}</td>
+      (e) => `<tr><td>${new Date(e.date).toLocaleDateString(locale, { day: "numeric", month: "short" })}</td>
         <td>${e.score} %</td><td>${e.correct}/${e.total}</td><td>${clock(e.seconds)}</td>
         <td class="${e.score >= data.exam.pass ? "is-pass" : "is-fail"}">${e.score >= data.exam.pass ? "Aprobado" : "No aprobado"}</td></tr>`,
     )

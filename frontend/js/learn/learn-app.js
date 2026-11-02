@@ -9,6 +9,7 @@
      #/progreso             dominio por concepto, errores y actividad
      #/sesion               sesión de estudio en curso (session-view.js) */
 
+import { locale } from "../i18n.js";
 import { prefersReducedMotion } from "../prefs.js";
 import { learning, loadLearningContent, onLearningChange, saveLearning } from "./learn-store.js";
 import { onWelcomeClick, onWelcomeKeydown, renderWelcome } from "./welcome.js";
@@ -42,7 +43,7 @@ function ago(iso, now = new Date()) {
   return `hace ${days} días`;
 }
 
-const formatDay = (iso) => new Date(iso).toLocaleDateString("es-ES", { day: "numeric", month: "short" });
+const formatDay = (iso) => new Date(iso).toLocaleDateString(locale, { day: "numeric", month: "short" });
 
 const DAILY_BUDGET_KEY = "pld:daily-study-minutes";
 const DAILY_BUDGET_OPTIONS = [15, 30, 45, 60];
@@ -78,7 +79,7 @@ function renderToday() {
   const mastered = all.filter((s) => s.status === "dominado").length;
   const due = all.filter((s) => s.due);
   const last = lastActivity(index, learning);
-  const date = now.toLocaleDateString("es-ES", { weekday: "long", day: "numeric", month: "long" });
+  const date = now.toLocaleDateString(locale, { weekday: "long", day: "numeric", month: "long" });
   const [first, ...rest] = plan;
   const startButton = (item, label, primary) =>
     `<button class="btn ${primary ? "btn--primary btn--lg" : "btn--ghost"}" type="button" data-learn="plan" data-type="${item.type}" data-concept="${escapeHtml(item.concept)}"${item.errors ? ` data-errors="${escapeHtml(item.errors.join(","))}"` : ""}>${label}<span class="visually-hidden">: ${ACTION[item.type]} ${escapeHtml(title(item.concept))}</span></button>`;

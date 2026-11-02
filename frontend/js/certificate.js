@@ -1,5 +1,6 @@
 /* Certificado de finalización (no oficial) que se imprime o guarda como PDF desde el navegador. */
 
+import { locale } from "./i18n.js";
 import { courseBlockStats, courseReadiness, DAW_COURSES, loadCourseBank } from "./course-store.js";
 import { escapeHtml } from "./markdown.js";
 import { pcap } from "./pcap-store.js";
@@ -57,7 +58,7 @@ export function renderCertificate(content) {
   }
 
   const name = state.user?.display_name ?? savedName();
-  const date = new Date().toLocaleDateString("es-ES", { day: "numeric", month: "long", year: "numeric" });
+  const date = new Date().toLocaleDateString(locale, { day: "numeric", month: "long", year: "numeric" });
   return `${header}
     <section class="course-section no-print">
       <form class="plan-form" id="certificate-form">
@@ -135,7 +136,7 @@ function courseCertificateBody(course, status, bank) {
       </section>`;
   }
   const name = state.user?.display_name ?? savedName();
-  const date = new Date().toLocaleDateString("es-ES", { day: "numeric", month: "long", year: "numeric" });
+  const date = new Date().toLocaleDateString(locale, { day: "numeric", month: "long", year: "numeric" });
   return `
     <section class="course-section no-print">
       <p><button class="btn btn--primary" type="button" data-action="print-certificate">Descargar en PDF o imprimir</button></p>

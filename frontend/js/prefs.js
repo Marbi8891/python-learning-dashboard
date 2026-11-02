@@ -2,6 +2,8 @@
    (texto espaciado, contraste alto y sin animaciones).
    index.html las aplica antes de pintar la página; aquí se gestionan los cambios. */
 
+import { language, setLanguage } from "./i18n.js";
+
 const KEY = "pld:prefs";
 const DEFAULTS = { theme: "auto", font: "normal", spacing: false, contrast: false, motion: false };
 const systemReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -60,11 +62,17 @@ export function initPrefs() {
   $("#appearance-button").addEventListener("click", () => {
     form.elements.theme.value = prefs.theme;
     form.elements.font.value = prefs.font;
+    form.elements.lang.value = language;
     for (const name of ["spacing", "contrast", "motion"]) form.elements[name].checked = prefs[name];
     $("#appearance-dialog").showModal();
   });
   $("#appearance-close").addEventListener("click", () => $("#appearance-dialog").close());
-  form.addEventListener("change", () => {
+  form.addEventListener("change", (event) => {
+    // El idioma recarga la página: así todo se pinta ya traducido
+    if (event.target.name === "lang") {
+      if (event.target.value !== language) setLanguage(event.target.value);
+      return;
+    }
     prefs.theme = form.elements.theme.value;
     prefs.font = form.elements.font.value;
     for (const name of ["spacing", "contrast", "motion"]) prefs[name] = form.elements[name].checked;

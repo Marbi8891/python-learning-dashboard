@@ -1,5 +1,6 @@
 /* «Mi aprendizaje»: nivel, estadísticas, progreso por módulo, actividad, logros e historial por lección. */
 
+import { locale } from "./i18n.js";
 import { certificateStatus } from "./certificate.js";
 import { stars } from "./course.js";
 import { BADGES, game, levelInfo, streak, today } from "./game.js";
@@ -7,7 +8,7 @@ import { escapeHtml } from "./markdown.js";
 import { state } from "./store.js";
 
 const WEEKS = 12;
-const DAY_NAMES = new Intl.DateTimeFormat("es-ES", { weekday: "long", day: "numeric", month: "long" });
+const DAY_NAMES = new Intl.DateTimeFormat(locale, { weekday: "long", day: "numeric", month: "long" });
 
 /** Lista de logros (la usan el perfil y la vitrina). */
 export function badgesHtml() {
