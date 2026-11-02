@@ -87,3 +87,32 @@ test("núcleo por conceptos: con la primera lectura fallida se fusiona al reinte
   expect(log[0]).toBe("GET 503");
   expect(log.indexOf("PUT")).toBeGreaterThan(log.indexOf("GET"));
 });
+
+// Dos pestañas o dispositivos a la vez: el último en guardar ya no borra lo del otro.
+test("PCAP: si otro dispositivo guardó después de entrar, se fusiona en vez de pisarlo", async ({ page, request }) => {
+  const { email, headers } = await account(request);
+  await page.goto("/#/pcap/fichas");
+  const merged = page.waitForResponse((r) => r.url().endsWith("/pcap-state") && r.request().method() === "PUT");
+  await login(page, email);
+  await merged; // la web ya leyó la cuenta y subió su copia fusionada
+
+  // Otro dispositivo guarda con la versión actual de la cuenta (la web no se entera)
+  const current = await (await request.get(`${API}/api/v1/pcap-state`, { headers })).json();
+  const other = await request.put(`${API}/api/v1/pcap-state`, {
+    headers,
+    data: { data: { ...current.data, answers: { "oop-01": [true] } }, version: current.version },
+  });
+  expect(other.status()).toBe(200);
+
+  // La web guarda una ficha con la versión que leyó: recibe 409, relee, fusiona y reintenta
+  const conflict = page.waitForResponse((r) => r.url().endsWith("/pcap-state") && r.status() === 409);
+  await page.getByRole("button", { name: "Ver respuesta" }).click();
+  await page.getByRole("button", { name: "Lo sé →" }).click();
+  await conflict;
+  await expect
+    .poll(async () => {
+      const { data } = await (await request.get(`${API}/api/v1/pcap-state`, { headers })).json();
+      return { known: data.known?.length ?? 0, other: data.answers?.["oop-01"] ?? null };
+    }, { timeout: 20_000 })
+    .toEqual({ known: 1, other: [true] });
+});

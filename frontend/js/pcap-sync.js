@@ -5,17 +5,32 @@
 import { request } from "./api.js";
 import { mergePcap, onPcapSave, pcap, savePcap } from "./pcap-store.js";
 import { state, subscribe } from "./store.js";
+import { createDocSync } from "./doc-sync.js";
 import { createSyncGate } from "./sync-gate.js";
 
 const DEBOUNCE_MS = 1500; // agrupa los cambios seguidos (p. ej. una tanda de práctica) en un envío
 let timer = null;
 let gate = null;
 
+function mergeRemote(remote) {
+  mergePcap(remote.data);
+  savePcap();
+}
+
+// Sube con la versión leída: si otra pestaña guardó antes (409), relee, fusiona y reintenta
+const doc = createDocSync({
+  path: "/api/pcap-state",
+  request,
+  data: () => pcap,
+  merge: mergeRemote,
+  valid: () => gate?.ready === true,
+});
+
 async function push() {
   timer = null;
   if (!gate?.ready) return;
   try {
-    await request("PUT", "/api/pcap-state", { json: { data: pcap } });
+    await doc.push();
   } catch (error) {
     console.warn("No se pudo guardar la preparación en la cuenta:", error.message);
   }
@@ -40,8 +55,8 @@ export function initPcapSync(onMerged) {
     active: () => Boolean(state.user),
     load: () => request("GET", "/api/pcap-state"),
     merge: (remote) => {
-      mergePcap(remote.data);
-      savePcap();
+      mergeRemote(remote);
+      doc.adopt(remote);
     },
     onSynced: async () => {
       clearTimeout(timer);
