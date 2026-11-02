@@ -116,9 +116,21 @@ python -m http.server 5500        # http://localhost:5500
 
 ### Con Docker
 
-```bash
-JWT_SECRET=<valor> docker compose up --build
+Consulta la [guía de Docker](docs/DOCKER.md). Incluye la preparación de variables de entorno, el inicio de servicios, verificaciones y cómo detener el entorno sin borrar datos.
+
+En Windows PowerShell, desde la raíz del proyecto:
+
+```powershell
+Copy-Item .env.docker.example .env
+# Edita .env y define una contraseña PostgreSQL única y JWT_SECRET.
+docker compose config
+docker compose up --build -d
+docker compose ps
 ```
+
+Frontend: http://localhost:5500 · Salud de la API: http://localhost:8000/api/health · Docs locales: http://localhost:8000/docs
+
+No subas el archivo `.env` con secretos. Para conservar los datos, usa `docker compose down`; evita `docker compose down -v`, que elimina el volumen de la base de datos.
 
 ## Pruebas
 
@@ -145,6 +157,7 @@ Todas las pruebas y qué ejecutar según lo que cambies: [docs/TESTING.md](docs/
 - [API](docs/API.md)
 - [Recuperación de contraseña y login con Google](docs/auth.md)
 - [Despliegue](docs/DEPLOY.md)
+- [Docker local](docs/DOCKER.md)
 - [Pruebas](docs/TESTING.md)
 - [Ejecutar en Windows](docs/EJECUTAR-EN-WINDOWS.md)
 - [Plan del currículo oficial de DAW](docs/PLAN-CURRICULO-DAW.md)
