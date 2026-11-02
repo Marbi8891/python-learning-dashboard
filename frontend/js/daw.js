@@ -23,6 +23,7 @@ import {
 } from "./course-store.js";
 import { loadCurriculum, renderCurriculum } from "./curriculum.js";
 import { escapeHtml, renderInline, renderMarkdown, safeUrl } from "./markdown.js";
+import { notFoundHtml } from "./not-found.js";
 
 for (const [name, language] of Object.entries({ java, javascript, sql })) {
   if (!hljs.getLanguage(name)) hljs.registerLanguage(name, language);
@@ -466,14 +467,19 @@ function parse(route) {
   return { id, view, arg };
 }
 
+const DAW_BACK = { href: "#/daw", label: "Ver los cursos de DAW" };
+
 async function render(route, { focus = false } = {}) {
   const { id, view, arg } = parse(route);
   if (id === "curriculo") {
     current = null;
     await renderCurriculumRoute(route, view);
-  } else if (!id || !courseInfo(id)) {
+  } else if (!id || id === "cursos") {
     current = null;
     root().innerHTML = renderCatalog();
+  } else if (!courseInfo(id)) {
+    current = null;
+    root().innerHTML = notFoundHtml({ titleId: "daw-title", route, what: "este curso", back: DAW_BACK });
   } else {
     if (current?.id !== id) root().innerHTML = `<p class="empty-state" id="daw-title" tabindex="-1">Cargando el curso…</p>`;
     try {
@@ -488,6 +494,9 @@ async function render(route, { focus = false } = {}) {
     } else if (view === "practica" && (arg === "repaso" || current.bank.exam.blocks.some((b) => b.slug === arg))) {
       if (session?.course !== id || session.block !== arg) startPractice(current, arg);
       root().innerHTML = renderPractice(current);
+    } else if (view) {
+      // #/daw/<curso>/<algo que no existe>: lección, bloque o sección mal escritos
+      root().innerHTML = notFoundHtml({ titleId: "daw-title", route, back: { href: `#/daw/${id}`, label: "Volver al curso" } });
     } else {
       root().innerHTML = renderPanel(current);
     }
