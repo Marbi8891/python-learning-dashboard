@@ -64,4 +64,14 @@ test.describe("móvil", () => {
     expect(medida.whiteSpace).toBe("pre");
     expect(medida.visualLines).toBeLessThanOrEqual(Math.max(medida.lines, 10)); // rows="10" como mínimo
   });
+
+  test("MW-004: los enlaces de las listas de la portada miden al menos 24 px de alto", async ({ page }) => {
+    await page.goto("/#/portada");
+    const links = page.locator(".lp-area li > a, .lp-courses li > a, .lp-footer li > a");
+    await expect(links.nth(10)).toBeAttached(); // la portada pinta el temario al cargar los datos
+    expect(await links.count()).toBeGreaterThan(10);
+    for (const link of await links.all()) {
+      expect((await rect(link)).height, await link.textContent()).toBeGreaterThanOrEqual(24);
+    }
+  });
 });

@@ -1088,6 +1088,14 @@ body[data-page="landing"] .assistant {
     white-space: normal;
     text-align: center;
   }
+
+  /* MW-004: zona táctil de al menos 24 px en las listas de enlaces (temario, cursos y pie) */
+  .lp-area li > a,
+  .lp-courses li > a,
+  .lp-footer li > a {
+    display: inline-block;
+    padding-block: var(--space-1);
+  }
 }
 
 @media (max-width: 420px) {
