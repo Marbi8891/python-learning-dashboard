@@ -7,6 +7,7 @@ import { request } from "./api.js";
 import { cleanProgress } from "./progress-guard.js";
 import { isoDay } from "./pcap-store.js";
 import { state, subscribe } from "./store.js";
+import { createDocSync } from "./doc-sync.js";
 import { createSyncGate } from "./sync-gate.js";
 
 /** Cursos de DAW, en el orden del catálogo. `lang` es el lenguaje para resaltar el código. */
@@ -64,12 +65,14 @@ const PUSH_DELAY_MS = 1500;
 // Una puerta por curso: no se sube un curso hasta haber fusionado su copia de la cuenta (AUD-001)
 const gates = new Map();
 const isReady = (id) => gates.get(id)?.ready === true;
+// Y un documento con versión por curso: si otra pestaña guardó antes (409), relee, fusiona y reintenta
+const docs = new Map();
 
 async function push(id) {
   timers.delete(id);
   if (!isReady(id)) return;
   try {
-    await request("PUT", `/api/course-state/${id}`, { json: { data: courseState(id) } });
+    await docs.get(id).push();
   } catch (error) {
     console.warn(`No se pudo guardar el curso ${id} en la cuenta:`, error.message);
   }
@@ -159,6 +162,20 @@ export function mergeCourse(id, remote = {}) {
     Cada curso se sube solo después de fusionarse bien; si falla, se reintenta. */
 export function initCourseSync(onMerged) {
   for (const { id } of DAW_COURSES) {
+    const mergeRemote = (remote) => {
+      mergeCourse(id, remote.data);
+      saveCourse(id);
+    };
+    docs.set(
+      id,
+      createDocSync({
+        path: `/api/course-state/${id}`,
+        request,
+        data: () => courseState(id),
+        merge: mergeRemote,
+        valid: () => isReady(id),
+      }),
+    );
     gates.set(
       id,
       createSyncGate({
@@ -166,8 +183,8 @@ export function initCourseSync(onMerged) {
         active: () => Boolean(state.user),
         load: () => request("GET", `/api/course-state/${id}`),
         merge: (remote) => {
-          mergeCourse(id, remote.data);
-          saveCourse(id);
+          mergeRemote(remote);
+          docs.get(id).adopt(remote);
         },
         onSynced: () => {
           saveCourse(id); // ya abierta: sube el resultado con la misma espera que cualquier cambio

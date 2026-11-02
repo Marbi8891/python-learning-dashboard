@@ -149,6 +149,10 @@ Las tablas de contenido (`modules`, `lessons`) se rellenan desde `lessons.json` 
 | GET, PUT | `/api/v1/course-state/{curso}` | Progreso de los cursos de DAW, del núcleo por conceptos (`learn`) y de la gamificación (`game`) |
 | GET | `/api/v1/dashboard`, `/dashboard/activity` | Datos del panel del alumno e historial de aprendizaje |
 
+Los documentos de `pcap-state` y `course-state` llevan un número de versión. Cada `PUT` dice qué
+versión leyó la app; si otra pestaña o dispositivo guardó entre medias, el servidor responde 409 y la
+app vuelve a leer, fusiona y reintenta, así que no se pierde lo guardado desde el otro sitio.
+
 FastAPI genera la documentación interactiva (OpenAPI) en `/docs`.
 
 ## 4.4 Seguridad

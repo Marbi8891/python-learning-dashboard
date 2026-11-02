@@ -9,6 +9,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, HTTPException, Path, status
 
+from app import state_documents
 from app.deps import CurrentUser, DbSession
 from app.models import CourseState
 from app.schemas import COURSES, PcapStateIn, PcapStateOut
@@ -26,24 +27,16 @@ def _check(course: str) -> None:
 @router.get("/{course}", response_model=PcapStateOut)
 def get_course_state(course: CourseId, user: CurrentUser, db: DbSession) -> PcapStateOut:
     _check(course)
-    state = db.get(CourseState, (user.id, course))
-    if state is None:
-        return PcapStateOut(data={}, updated_at=None)
-    return PcapStateOut(data=state.data, updated_at=state.updated_at)
+    return state_documents.to_out(db.get(CourseState, (user.id, course)))
 
 
-@router.put("/{course}", response_model=PcapStateOut)
+@router.put(
+    "/{course}", response_model=PcapStateOut, responses={409: {"description": "La cuenta cambió"}}
+)
 def save_course_state(
     course: CourseId, body: PcapStateIn, user: CurrentUser, db: DbSession
 ) -> PcapStateOut:
-    """Guarda el documento completo. La app ya lo ha fusionado con el de la cuenta."""
+    """Guarda el documento completo. La app ya lo ha fusionado con el de la cuenta.
+    Con `version`, responde 409 si otra pestaña o dispositivo guardó entre medias."""
     _check(course)
-    state = db.get(CourseState, (user.id, course))
-    if state is None:
-        state = CourseState(user_id=user.id, course=course, data=body.data)
-        db.add(state)
-    else:
-        state.data = body.data
-    db.commit()
-    db.refresh(state)
-    return PcapStateOut(data=state.data, updated_at=state.updated_at)
+    return state_documents.save(db, CourseState, {"user_id": user.id, "course": course}, body)
