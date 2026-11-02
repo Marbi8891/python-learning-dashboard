@@ -3,65 +3,7 @@
    Mantiene la arquitectura y los componentes existentes.
    ========================================================= */
 
-:root {
-  --color-bg: #0b0f14;
-  --color-surface: #111720;
-  --color-surface-2: #17202b;
-  --color-code-bg: #080c11;
-  --color-border: #263241;
-  --color-text: #edf2f7;
-  --color-text-muted: #9aa8b8;
-  --color-text-faint: #8b98aa; /* 5,6:1 sobre --color-surface-2 (WCAG AA) */
-  --color-strong: #ffffff;
-
-  --color-accent: #22c55e;
-  --color-accent-soft: rgb(34 197 94 / .12);
-  --color-accent-hover: #34d399;
-  --color-on-accent: #06130b;
-
-  --color-primary: #60a5fa;
-  --color-primary-soft: rgb(96 165 250 / .12);
-  --color-primary-strong: #2563eb;
-  --color-primary-hover: #3b82f6;
-  --color-on-primary: #ffffff;
-
-  --color-link: #93c5fd;
-  --color-code-inline: #86efac;
-  --color-gold: #fbbf24;
-  --shadow: rgb(0 0 0 / .28);
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --sidebar-width: 272px;
-}
-
-:root[data-theme="light"] {
-  --color-bg: #f5f7fa;
-  --color-surface: #ffffff;
-  --color-surface-2: #f0f3f7;
-  --color-code-bg: #0b1118;
-  --color-border: #dce3eb;
-  --color-text: #17202b;
-  --color-text-muted: #5d6b7b;
-  --color-text-faint: #5d6b7b; /* 4,9:1 sobre --color-surface-2 (WCAG AA) */
-  --color-strong: #0f1720;
-
-  --color-accent: #166534; /* 5,6:1 sobre --color-accent-soft (WCAG AA) */
-  --color-accent-soft: rgb(21 128 61 / .10);
-  --color-accent-hover: #14532d;
-  --color-on-accent: #ffffff;
-
-  --color-primary: #2563eb;
-  --color-primary-soft: rgb(37 99 235 / .09);
-  --color-primary-strong: #1d4ed8;
-  --color-primary-hover: #2563eb;
-  --color-on-primary: #ffffff;
-
-  --color-link: #1d4ed8;
-  --color-code-inline: #15803d;
-  --color-gold: #854d0e; /* 6,1:1 sobre --color-surface-2 */
-  --shadow: rgb(15 23 42 / .08);
-}
+/* Sus colores y radios pasaron a tokens.css */
 
 /* Sin degradados ni efectos de cristal: el contenido es el protagonista */
 body {

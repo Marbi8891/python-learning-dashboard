@@ -1,0 +1,146 @@
+/* =========================================================
+   tokens.css — sistema visual de toda la web (docs/DISENO.md)
+   Un único sitio para colores, tipografía, tamaños, espaciado,
+   radios y sombras. Se carga antes que cualquier otra hoja.
+   Antes estaban repartidos entre base.css (paleta dorada) y
+   pro.css (la azul que se veía): ahora solo queda la que se ve.
+   ========================================================= */
+
+/* ---------- Tema oscuro (por defecto) ---------- */
+:root {
+  /* Superficies */
+  --color-bg: #0b0f14;
+  --color-surface: #111720;
+  --color-surface-2: #17202b;
+  --color-code-bg: #080c11;
+  --color-border: #263241;
+  --color-input-bg: #0a0b0e;
+
+  /* Texto */
+  --color-text: #edf2f7;
+  --color-text-muted: #9aa8b8;
+  --color-text-faint: #8b98aa; /* 5,6:1 sobre --color-surface-2 (WCAG AA) */
+  --color-strong: #ffffff;
+  --color-link: #93c5fd;
+  --color-code-inline: #86efac;
+  --color-code-text: #e6ebf5;
+
+  /* Acción principal (azul): botones, enlaces destacados y foco */
+  --color-primary: #60a5fa;
+  --color-primary-soft: rgb(96 165 250 / .12);
+  --color-primary-strong: #2563eb;
+  --color-primary-hover: #3b82f6;
+  --color-on-primary: #ffffff;
+
+  /* Progreso y acierto (verde) */
+  --color-accent: #22c55e;
+  --color-accent-soft: rgb(34 197 94 / .12);
+  --color-accent-hover: #34d399;
+  --color-on-accent: #06130b;
+
+  /* Estados y detalles */
+  --color-danger: #f87171;
+  --color-danger-strong: #dc2626;
+  --color-gold: #fbbf24;
+  --color-streak: #f4a66a;
+  --color-hint: #f1d98f;
+  --shadow: rgb(0 0 0 / .28);
+  --hairline: linear-gradient(90deg, transparent, rgb(212 175 106 / 0.45), transparent);
+
+  /* Tipografía */
+  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Fraunces", Georgia, "Times New Roman", serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+
+  /* Escala de tamaños de letra (rem: respeta el tamaño que elige el navegador).
+     Las hojas antiguas aún usan px sueltos; se pasan a esta escala al rediseñar cada zona. */
+  --text-xs: 0.75rem;   /* 12px: etiquetas y contadores */
+  --text-sm: 0.875rem;  /* 14px: texto secundario, menús */
+  --text-md: 1rem;      /* 16px: texto de estudio */
+  --text-lg: 1.125rem;  /* 18px: entradillas */
+  --text-xl: 1.375rem;  /* 22px: títulos de sección */
+  --text-2xl: 1.75rem;  /* 28px: títulos de página */
+  --text-3xl: clamp(1.875rem, 4vw, 2.625rem); /* 30-42px: portada */
+  --leading-tight: 1.2;
+  --leading-body: 1.6;
+
+  /* Tamaño de letra del área de estudio (preferencia del alumno) */
+  --ui-zoom: 1;
+
+  /* Espaciado (múltiplos de 4px) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+
+  /* Bordes y sombras moderadas */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-pill: 999px;
+  --shadow-1: 0 1px 2px var(--shadow);
+  --shadow-2: 0 8px 24px -16px var(--shadow);
+  --focus-ring: 0 0 0 3px var(--color-primary-soft);
+
+  /* Layout y movimiento */
+  --sidebar-width: 272px;
+  --transition: 180ms ease;
+  --tap-target: 44px; /* tamaño mínimo de los objetivos táctiles */
+
+  color-scheme: dark;
+}
+
+/* ---------- Tema claro ---------- */
+:root[data-theme="light"] {
+  /* Superficies */
+  --color-bg: #f5f7fa;
+  --color-surface: #ffffff;
+  --color-surface-2: #f0f3f7;
+  --color-code-bg: #0b1118;
+  --color-border: #dce3eb;
+  --color-input-bg: #ffffff;
+
+  /* Texto */
+  --color-text: #17202b;
+  --color-text-muted: #5d6b7b;
+  --color-text-faint: #5d6b7b; /* 4,9:1 sobre --color-surface-2 (WCAG AA) */
+  --color-strong: #0f1720;
+  --color-link: #1d4ed8;
+  --color-code-inline: #15803d;
+
+  /* Acción principal (azul): botones, enlaces destacados y foco */
+  --color-primary: #2563eb;
+  --color-primary-soft: rgb(37 99 235 / .09);
+  --color-primary-strong: #1d4ed8;
+  --color-primary-hover: #2563eb;
+  --color-on-primary: #ffffff;
+
+  /* Progreso y acierto (verde) */
+  --color-accent: #166534; /* 5,6:1 sobre --color-accent-soft (WCAG AA) */
+  --color-accent-soft: rgb(21 128 61 / .10);
+  --color-accent-hover: #14532d;
+  --color-on-accent: #ffffff;
+
+  /* Estados y detalles */
+  --color-danger: #b91c1c;
+  --color-danger-strong: #b91c1c;
+  --color-gold: #854d0e; /* 6,1:1 sobre --color-surface-2 */
+  --color-streak: #b4410c;
+  --color-hint: #7c4a03;
+  --shadow: rgb(15 23 42 / .08);
+  --hairline: linear-gradient(90deg, transparent, rgb(122 90 16 / 0.35), transparent);
+
+  color-scheme: light;
+}
+
+/* ---------- Tamaño de letra elegido por el alumno ---------- */
+:root[data-font="grande"] {
+  --ui-zoom: 1.12;
+}
+
+:root[data-font="muy-grande"] {
+  --ui-zoom: 1.25;
+}
