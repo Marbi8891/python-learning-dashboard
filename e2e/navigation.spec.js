@@ -17,9 +17,59 @@ test("la portada del curso PCAP lleva a la primera lección pendiente y la barra
   await expect(page.locator("#panel-theory code.hljs")).toHaveCount(1); // resaltado de sintaxis
 });
 
-test("una URL desconocida redirige a una lección válida", async ({ page }) => {
+test("una lección que no existe dice que no existe y deja volver", async ({ page }) => {
+  // Antes abría otra lección sin avisar (NAV-01)
   await openLesson(page, "no-existe");
+  await expect(page).toHaveURL(/#\/leccion\/no-existe$/);
+  await expect(page.locator("#notfound-title")).toHaveText("No encontramos esta lección");
+  await expect(page.locator("#notfound-view")).toContainText("#/leccion/no-existe");
+  await expect(page).toHaveTitle(/Página no encontrada/);
+  await page.getByRole("link", { name: "Ver las lecciones del curso" }).click();
+  await expect(page).toHaveURL(/#\/inicio$/);
+  await expect(page.locator("#home-title")).toBeVisible();
+  await page.goBack();
+  await expect(page.locator("#notfound-title")).toBeVisible();
+});
+
+test("#/leccion/ sin nombre abre la lección por la que vas", async ({ page }) => {
+  await openLesson(page);
+  await page.goto("/#/leccion/");
   await expect(page).toHaveURL(/#\/leccion\/variables$/);
+  await expect(page.locator("#lesson-title")).toHaveText("Variables y print()");
+});
+
+for (const [route, title, zone] of [
+  ["#/no-existe", "#notfound-title", "#notfound-view"],
+  ["#/pcapx", "#notfound-title", "#notfound-view"],
+  ["#/pcap/no-existe", "#pcap-title", "#pcap-view"],
+  ["#/pcap/practica/no-existe", "#pcap-title", "#pcap-view"],
+  ["#/daw/no-existe", "#daw-title", "#daw-view"],
+  ["#/daw/sql/leccion/no-existe", "#daw-title", "#daw-view"],
+]) {
+  test(`${route} muestra «no encontrada» sin cambiar la dirección`, async ({ page }) => {
+    await page.goto(`/${route}`);
+    await expect(page.locator(`${zone} [data-not-found]`)).toBeVisible();
+    await expect(page.locator(title)).toContainText("No encontramos");
+    expect(new URL(page.url()).hash).toBe(route);
+    await expect(page.locator(zone).getByRole("link", { name: "¿Qué estudio ahora?" })).toBeVisible();
+  });
+}
+
+test("la raíz sigue abriendo la portada", async ({ page }) => {
+  await page.goto("/");
+  await expect(page).toHaveURL(/#\/portada$/);
+});
+
+test("sin lessons.json, la portada y «¿Qué estudio ahora?» funcionan y el curso PCAP lo explica", async ({ page }) => {
+  // AUD-010: antes, si fallaba lessons.json, no se registraba el enrutador y no funcionaba nada
+  await page.route("**/data/lessons.json", (route) => route.abort());
+  await page.goto("/#/aprender");
+  await expect(page.locator("#learn-title")).toBeVisible();
+  await page.goto("/#/inicio");
+  await expect(page.locator("#notfound-title")).toHaveText("No se pudo cargar el contenido");
+  await page.locator("#notfound-view").getByRole("link", { name: "Cursos de DAW" }).click();
+  await expect(page).toHaveURL(/#\/daw$/);
+  await expect(page.locator("#learn-title")).toBeVisible(); // la Preparación DAW no usa lessons.json
 });
 
 test("pestañas accesibles con teclado", async ({ page }) => {

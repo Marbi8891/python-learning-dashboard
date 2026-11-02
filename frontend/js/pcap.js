@@ -4,6 +4,7 @@
 import hljs from "../vendor/highlight/core.min.js";
 import { recordPcap } from "./game.js";
 import { escapeHtml, renderInline } from "./markdown.js";
+import { notFoundHtml } from "./not-found.js";
 import { blockStats, dueIds, isoDay, pcap, readiness, recordAnswer, review, savePcap } from "./pcap-store.js";
 import { state as progress } from "./store.js";
 
@@ -625,6 +626,9 @@ function render(route, { focus = false } = {}) {
     const slug = block(arg) || arg === "repaso" ? arg : null;
     if (session?.kind !== "cards" || session.block !== slug) startCards(slug);
     html = renderCards();
+  } else if (view) {
+    // #/pcap/<algo que no existe> (por ejemplo, un bloque mal escrito)
+    html = notFoundHtml({ titleId: "pcap-title", route, back: { href: "#/pcap", label: "Ver la preparación del PCAP" } });
   } else {
     html = renderPanel();
   }

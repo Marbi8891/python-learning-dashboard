@@ -17,6 +17,7 @@ import {
   setRunListener,
 } from "./console.js";
 import { lessonMinutes, stars } from "./course.js";
+import { notFoundHtml } from "./not-found.js";
 import {
   BADGES,
   game,
@@ -69,7 +70,12 @@ const content = {
   lessons: new Map(), // slug -> { ...lesson, module, index }
   order: [], // slugs en el orden de la ruta
   current: null, // lección abierta (o la siguiente recomendada, en el inicio)
-  view: "learn", // "learn" | "home" | "profile" | "pcap" | "daw" | "lesson" …
+  view: "learn", // "learn" | "home" | "profile" | "pcap" | "daw" | "lesson" | "notfound" …
+  loaded: false, // lessons.json ya está cargado
+  failed: false, // no se pudo cargar lessons.json
+  statusHtml: "", // contenido de la vista «notfound» (página no encontrada o error de carga)
+  statusTitle: "",
+  ready: null, // promesa de la carga de lessons.json (la portada la espera para contar lecciones)
 };
 
 const $ = (selector) => document.querySelector(selector);
@@ -396,6 +402,8 @@ const VIEWS = {
   pcap: { element: "#pcap-view", title: "Examen PCAP · Python Learning Dashboard", focus: null, render: null },
   // Los cursos de DAW también se pintan solos (openDaw): cargan su banco y tienen tandas en curso
   daw: { element: "#daw-view", title: "Cursos de DAW · Python Learning Dashboard", focus: null, render: null },
+  // Página no encontrada (NAV-01) o contenido que no se pudo cargar
+  notfound: { element: "#notfound-view", title: () => content.statusTitle, focus: "#notfound-title", render: () => content.statusHtml },
 };
 
 /** Muestra una vista de página completa (portada o perfil) en lugar de la lección. */
@@ -589,12 +597,28 @@ function goTo(slug) {
   location.hash = `${ROUTE_PREFIX}${slug}`;
 }
 
+/** Rutas que necesitan lessons.json (curso PCAP, perfil, panel, certificado y lecciones). */
+const needsLessons = (hash) =>
+  [HOME_ROUTE, PROFILE_ROUTE, PRIVATE_ROUTE, PANEL_ROUTE, CERTIFICATE_ROUTE, PCAP_ROUTE].some(
+    (route) => hash === route || hash.startsWith(`${route}/`),
+  ) || hash.startsWith(ROUTE_PREFIX);
+
+/** Muestra «Página no encontrada» sin cambiar la dirección (así se ve qué estaba mal escrito). */
+function showNotFound(options = {}, { moveFocus = true } = {}) {
+  content.statusTitle = "Página no encontrada · Python Learning Dashboard";
+  content.statusHtml = notFoundHtml({ titleId: "notfound-title", route: location.hash, ...options });
+  showPage("notfound", { moveFocus });
+}
+
 function navigate({ moveFocus = true } = {}) {
   if (location.hash.startsWith(RESET_ROUTE)) {
     const token = new URLSearchParams(location.hash.split("?")[1] ?? "").get("token");
     history.replaceState(null, "", LEARN_ROUTE);
     openPasswordReset(token);
   }
+
+  // La raíz enseña siempre la portada; «Empezar a aprender» lleva a «¿Qué estudio ahora?»
+  if (["", "#", "#/"].includes(location.hash)) history.replaceState(null, "", LANDING_ROUTE);
 
   if (isLandingRoute(location.hash)) {
     content.view = "landing";
@@ -609,6 +633,21 @@ function navigate({ moveFocus = true } = {}) {
     openLearn(location.hash, { moveFocus });
     return;
   }
+  if (location.hash === DAW_ROUTE || location.hash.startsWith(`${DAW_ROUTE}/`)) {
+    showPage("daw", { moveFocus: false });
+    openDaw(location.hash, { moveFocus });
+    return;
+  }
+  if (!needsLessons(location.hash)) {
+    showNotFound({}, { moveFocus });
+    return;
+  }
+  // El resto necesita lessons.json: si aún no ha llegado, se vuelve a navegar al cargarlo (init)
+  if (!content.loaded) {
+    if (content.failed) showLoadError({ moveFocus });
+    return;
+  }
+
   if (location.hash === PROFILE_ROUTE) {
     showPage("profile", { moveFocus });
     return;
@@ -622,12 +661,7 @@ function navigate({ moveFocus = true } = {}) {
     showPage("certificate", { moveFocus });
     return;
   }
-  if (location.hash === DAW_ROUTE || location.hash.startsWith(`${DAW_ROUTE}/`)) {
-    showPage("daw", { moveFocus: false });
-    openDaw(location.hash, { moveFocus });
-    return;
-  }
-  if (location.hash.startsWith(PCAP_ROUTE)) {
+  if (location.hash === PCAP_ROUTE || location.hash.startsWith(`${PCAP_ROUTE}/`)) {
     showPage("pcap", { moveFocus: false });
     openPcap(location.hash, content.modules, { moveFocus });
     return;
@@ -636,15 +670,14 @@ function navigate({ moveFocus = true } = {}) {
     showPage("home", { moveFocus });
     return;
   }
-  if (!location.hash.startsWith(ROUTE_PREFIX)) {
-    // La raíz enseña siempre la portada; «Empezar a aprender» lleva a «¿Qué estudio ahora?»
-    history.replaceState(null, "", LANDING_ROUTE);
-    openLanding(LANDING_ROUTE, { content, moveFocus });
+
+  // #/leccion/ sin nombre abre la lección por la que vas; un nombre que no existe, «no encontrada»
+  const requested = decodeURIComponent(location.hash.slice(ROUTE_PREFIX.length));
+  if (requested && !content.lessons.has(requested)) {
+    showNotFound({ what: "esta lección", back: { href: HOME_ROUTE, label: "Ver las lecciones del curso" } }, { moveFocus });
     return;
   }
-
-  const requested = decodeURIComponent(location.hash.slice(ROUTE_PREFIX.length));
-  const slug = content.lessons.has(requested) ? requested : defaultSlug();
+  const slug = requested || defaultSlug();
   if (location.hash !== `${ROUTE_PREFIX}${slug}`) history.replaceState(null, "", `${ROUTE_PREFIX}${slug}`);
 
   content.view = "lesson";
@@ -715,15 +748,22 @@ function indexLessons(modules) {
   }
 }
 
-function showLoadError() {
-  $("#lesson-title").textContent = "No se pudo cargar el contenido";
-  $("#panel-theory").innerHTML = `
-    <div class="hint">
-      <p>Si abriste <code>index.html</code> con doble clic, el navegador bloquea la lectura de <code>data/lessons.json</code>.
-      Sírvelo con un servidor local desde la carpeta <code>frontend</code>:</p>
-      <pre><code>python -m http.server 5500</code></pre>
-      <p>y abre <a href="http://localhost:5500">http://localhost:5500</a>.</p>
-    </div>`;
+/** lessons.json no se pudo cargar: las rutas que lo necesitan lo explican; el resto funciona igual. */
+function showLoadError({ moveFocus = true } = {}) {
+  content.statusTitle = "No se pudo cargar el contenido · Python Learning Dashboard";
+  const local = location.protocol === "file:";
+  content.statusHtml = `
+    <header class="course-hero" data-load-error>
+      <p class="eyebrow">Sin contenido</p>
+      <h1 class="course-hero__title" id="notfound-title" tabindex="-1">No se pudo cargar el contenido</h1>
+      <p class="course-hero__lead">${
+        local
+          ? "Abriste <code>index.html</code> con doble clic y el navegador bloquea la lectura de <code>data/lessons.json</code>. Sírvelo con un servidor local desde la carpeta <code>frontend</code>: <code>python -m http.server 5500</code>, y abre <a href=\"http://localhost:5500\">http://localhost:5500</a>."
+          : "Comprueba tu conexión y recarga la página. Mientras tanto, «¿Qué estudio ahora?», los cursos de DAW y la portada siguen funcionando."
+      }</p>
+      <div class="course-hero__cta"><a class="btn btn--primary" href="#/aprender">¿Qué estudio ahora?</a><a class="btn btn--ghost" href="#/daw">Cursos de DAW</a></div>
+    </header>`;
+  showPage("notfound", { moveFocus });
 }
 
 /** «Saltar al contenido» lleva el foco al contenido visible sin cambiar el hash (que es la ruta). */
@@ -741,6 +781,23 @@ function registerServiceWorker() {
   navigator.serviceWorker.register("sw.js").catch((error) => console.warn("Sin modo sin conexión:", error.message));
 }
 
+/** Carga lessons.json. Devuelve si se pudo; si no, las rutas que lo necesitan muestran el error. */
+async function loadLessons() {
+  try {
+    const response = await fetch(DATA_URL);
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const data = await response.json();
+    content.course = data.course;
+    content.modules = data.modules;
+    indexLessons(content.modules);
+    content.loaded = true;
+  } catch (error) {
+    console.error("Error cargando las lecciones:", error);
+    content.failed = true;
+  }
+  return content.loaded;
+}
+
 async function init() {
   registerServiceWorker();
   initSkipLink();
@@ -754,30 +811,25 @@ async function init() {
   initDashboard({ toast: showToast, refresh: refreshProgressViews });
   initPrefs();
 
-  try {
-    const response = await fetch(DATA_URL);
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    const data = await response.json();
-    content.course = data.course;
-    content.modules = data.modules;
-  } catch (error) {
-    console.error("Error cargando las lecciones:", error);
-    showLoadError();
-    return;
-  }
-
-  indexLessons(content.modules);
-  renderSidebar();
-  initGameUi();
-  initGame([...content.lessons.values()]);
+  // El enrutador no espera a lessons.json: la portada, «¿Qué estudio ahora?» y DAW no lo usan (AUD-010)
+  content.ready = loadLessons();
+  const lessonsLoaded = content.ready;
   navigate({ moveFocus: false });
   window.addEventListener("hashchange", () => navigate());
+
+  if (await lessonsLoaded) {
+    renderSidebar();
+    initGameUi();
+    initGame([...content.lessons.values()]);
+  }
   subscribe(() => {
     updatePrivateNav();
     updateSidebar();
     updateCompleteButton();
     refreshProgressViews();
   });
+  // Ahora sí se pueden abrir las rutas que esperaban a lessons.json
+  if (needsLessons(location.hash)) navigate({ moveFocus: false });
   $("#next-step").addEventListener("click", () => nextAction().run());
   $("#private-view").addEventListener("click", (event) => {
     if (event.target.closest("[data-open-account]")) openAccount();
@@ -789,7 +841,7 @@ async function init() {
     showPage("certificate");
   });
   initPcapSync(() => {
-    refreshGame();
+    if (content.loaded) refreshGame();
     refreshPcap();
   });
   initCourseSync(refreshDaw);
