@@ -312,3 +312,31 @@
 .daw-complete .btn {
   margin-bottom: var(--space-2);
 }
+
+/* Recursos complementarios (data/resources.json) */
+.daw-resources {
+  display: grid;
+  gap: var(--space-4);
+  margin: 0 0 var(--space-3);
+  padding: 0;
+  list-style: none;
+}
+
+.daw-resource {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.daw-resource a {
+  font-weight: 600;
+}
+
+.daw-resource__meta,
+.daw-resource__desc {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+.daw-resource__desc {
+  color: var(--color-text);
+}

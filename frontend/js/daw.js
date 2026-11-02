@@ -86,10 +86,26 @@ async function fetchJson(url) {
   return response.json();
 }
 
+// Recursos complementarios del ciclo: si no cargan, el curso funciona igual (sin la lista)
+let resourcesLoading = null;
+function loadResources() {
+  resourcesLoading ??= fetchJson("data/resources.json")
+    .then((data) => data.resources ?? [])
+    .catch(() => {
+      resourcesLoading = null; // se reintenta en la siguiente visita
+      return [];
+    });
+  return resourcesLoading;
+}
+
 function loadCourse(id) {
   if (!loaded.has(id)) {
-    const promise = Promise.all([fetchJson(`data/courses/${id}/bank.json`), fetchJson(`data/courses/${id}/lessons.json`)]).then(
-      ([bank, { modules }]) => {
+    const promise = Promise.all([
+      fetchJson(`data/courses/${id}/bank.json`),
+      fetchJson(`data/courses/${id}/lessons.json`),
+      loadResources(),
+    ]).then(
+      ([bank, { modules }, resources]) => {
         const lessons = new Map();
         const order = [];
         for (const module of modules) {
@@ -98,7 +114,8 @@ function loadCourse(id) {
             order.push(lesson.slug);
           }
         }
-        return { id, info: courseInfo(id), bank, modules, lessons, order };
+        const info = courseInfo(id);
+        return { id, info, bank, modules, lessons, order, resources: resources.filter((r) => r.modules?.includes(info.module)) };
       },
     );
     promise.catch(() => loaded.delete(id)); // se reintenta en la siguiente visita
@@ -167,6 +184,40 @@ function renderCatalog() {
     <ul class="daw-grid">${cards}</ul>`;
 }
 
+/* ---------- Recursos complementarios ---------- */
+
+const ACCESS_LABEL = {
+  accesible: "Accesible",
+  descargable: "Descargable",
+  registro: "Necesita registro",
+  pago: "De pago",
+  "licencia-no-identificada": "Licencia no identificada",
+  obsoleto: "Obsoleto",
+  "no-disponible": "No disponible",
+  "no-verificado": "Sin verificar",
+};
+
+function resourcesHtml(resources, title, id) {
+  if (!resources.length) return "";
+  const items = resources
+    .map(
+      (r) => `<li class="daw-resource">
+        <a href="${safeUrl(r.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(r.title)}</a>
+        <span class="daw-resource__meta">${escapeHtml(r.author)} · ${escapeHtml(r.lang === "en" ? "En inglés" : "En español")} ·
+          ${escapeHtml(ACCESS_LABEL[r.access] ?? r.access)}</span>
+        <span class="daw-resource__desc">${escapeHtml(r.description)}</span>
+        <span class="daw-resource__meta">Licencia: ${escapeHtml(r.license)}</span>
+      </li>`,
+    )
+    .join("");
+  return `<section class="course-section" aria-labelledby="${id}">
+      <h2 class="section-title" id="${id}">${title}</h2>
+      <ul class="daw-resources">${items}</ul>
+      <p class="readiness__note">Material externo que la plataforma solo enlaza. Licencias revisadas el
+        ${escapeHtml(resources[0].checked ?? "")}; compruébalas antes de reutilizar nada.</p>
+    </section>`;
+}
+
 /* ---------- Panel de un curso ---------- */
 
 function renderPanel(course) {
@@ -232,7 +283,8 @@ function renderPanel(course) {
       <h2 class="section-title" id="daw-blocks-title">Tu dominio: ${score} %</h2>
       <p class="readiness__note">Acierto de cada bloque ponderado por su peso. Orientativo.</p>
       <ul class="block-list">${blocks}</ul>
-    </section>`;
+    </section>
+    ${resourcesHtml(course.resources, "Recursos complementarios", "daw-resources-title")}`;
 }
 
 /* ---------- Lección ---------- */
@@ -342,6 +394,11 @@ function renderLesson(course, slug) {
         : ""
     }
     ${faq ? `<section class="course-section" aria-labelledby="daw-faq-title"><h2 class="section-title" id="daw-faq-title">Dudas frecuentes</h2>${faq}</section>` : ""}
+    ${resourcesHtml(
+      course.resources.filter((r) => r.lessons?.includes(`${course.id}/${lesson.slug}`)),
+      "Recursos complementarios",
+      "daw-lesson-resources-title",
+    )}
     ${sources ? `<section class="course-section" aria-labelledby="daw-sources-title"><h2 class="section-title" id="daw-sources-title">Fuentes</h2><ul>${sources}</ul></section>` : ""}
     <section class="course-section daw-complete" aria-labelledby="daw-complete-title">
       <h2 class="section-title" id="daw-complete-title">¿Has terminado la lección?</h2>

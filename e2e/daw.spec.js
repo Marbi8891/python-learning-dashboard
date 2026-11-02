@@ -104,6 +104,13 @@ test("Lenguajes de marcas: enlace directo a una lección, mini-quiz y práctica 
   await expect(page.locator("#daw-title")).toContainText("Práctica · XML bien formado");
   await page.goto("/#/daw/marcas");
   await expect(page.locator(".block-row")).toHaveCount(6);
+  // Recursos complementarios del módulo, con autor y licencia revisada
+  const resources = page.getByRole("region", { name: "Recursos complementarios" });
+  await expect(resources.getByRole("link", { name: "MDN Web Docs: HTML" })).toHaveAttribute("rel", "noopener noreferrer");
+  await expect(resources).toContainText("Licencia: CC BY-SA 2.5");
+  await expect(resources).toContainText("Licencia no identificada");
+  await page.goto("/#/daw/marcas/leccion/mar-xpath-xslt");
+  await expect(page.getByRole("region", { name: "Recursos complementarios" }).getByRole("link")).toHaveCount(3);
 });
 
 test("unidad completa: objetivos, solución, errores frecuentes, completar y continuar", async ({ page }) => {
