@@ -18,7 +18,7 @@ Proyecto de 2º de DAW: una web para **aprender Python entendiendo lo que haces*
 - **XP, niveles, racha y logros.**
 - **Cuenta opcional:** registro con email o con Google, recuperación de contraseña y panel del alumno. Puedes descargar tus datos o borrar la cuenta (RGPD).
 - **PWA:** se puede instalar y funciona sin conexión después de la primera visita.
-- **Tema claro y oscuro** y accesibilidad WCAG 2.1 AA.
+- **Tema claro y oscuro** y accesibilidad con objetivo WCAG 2.1 AA, comprobada con pruebas automáticas (axe-core). No se ha hecho una auditoría manual con lector de pantalla.
 
 Todo el temario se genera con los scripts de `scripts/`, que ejecutan el código de cada pregunta para comprobar que la respuesta es correcta.
 
