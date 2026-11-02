@@ -75,6 +75,7 @@ const content = {
   failed: false, // no se pudo cargar lessons.json
   statusHtml: "", // contenido de la vista «notfound» (página no encontrada o error de carga)
   statusTitle: "",
+  ready: null, // promesa de la carga de lessons.json (la portada la espera para contar lecciones)
 };
 
 const $ = (selector) => document.querySelector(selector);
@@ -811,7 +812,8 @@ async function init() {
   initPrefs();
 
   // El enrutador no espera a lessons.json: la portada, «¿Qué estudio ahora?» y DAW no lo usan (AUD-010)
-  const lessonsLoaded = loadLessons();
+  content.ready = loadLessons();
+  const lessonsLoaded = content.ready;
   navigate({ moveFocus: false });
   window.addEventListener("hashchange", () => navigate());
 

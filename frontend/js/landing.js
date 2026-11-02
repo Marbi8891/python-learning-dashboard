@@ -728,7 +728,8 @@ function scrollToSection(section, { moveFocus }) {
 export async function openLanding(hash, { content, moveFocus = true } = {}) {
   const view = $("#landing-view");
   if (!rendered) {
-    const index = await loadLearningContent().catch(() => null);
+    // También espera a lessons.json (si se está cargando) para poder decir cuántas lecciones hay
+    const [index] = await Promise.all([loadLearningContent().catch(() => null), content?.ready]);
     if (!isLandingRoute(location.hash)) return; // el usuario ya se ha ido a otra parte
     view.innerHTML = pageHtml(index, content);
     const exercise = index?.exercises.get(DEMO_EXERCISE);
