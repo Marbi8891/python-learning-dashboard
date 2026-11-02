@@ -29,6 +29,7 @@ Las e2e arrancan solas el frontend (`e2e/serve_frontend.py`, un `http.server` co
 | Frontend | `npm run test:unit` | Lógica del aprendizaje, repaso, recomendación, panel y Markdown seguro |
 | End-to-end y WCAG | `npm run test:e2e` | La web entera con el backend real y auditoría de accesibilidad |
 | Migraciones en PostgreSQL | `MIGRATION_TEST_DATABASE_URL=postgresql://… python -m pytest -q tests/test_migrations.py` (en `backend/`) | Migraciones sobre una BD vacía y con datos |
+| Inspección de la web | `node scripts/web/inspeccionar_web.mjs [--rutas a,b] [--comparar <carpeta>]` | Capturas en móvil y escritorio, axe, errores de consola, desbordamiento y peso de cada ruta (no es una prueba que falle: es evidencia de antes y después) |
 | Dependencias | `pip-audit -r backend/requirements.txt` y `npm audit --audit-level=high` | Vulnerabilidades conocidas |
 
 GitHub Actions (`ci.yml`) lo pasa todo en cada push y pull request.
