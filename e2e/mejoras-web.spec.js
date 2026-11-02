@@ -49,4 +49,19 @@ test.describe("móvil", () => {
       expect((await rect(link)).height, await link.textContent()).toBeGreaterThanOrEqual(24);
     }
   });
+
+  test("MW-007: el editor no parte las líneas y los números de línea coinciden con el código", async ({ page }) => {
+    await openLesson(page, "variables");
+    await page.getByRole("tab", { name: "Práctica y Ejercicio" }).click();
+    await page.getByRole("button", { name: "Cargar ejemplo" }).click();
+    const medida = await page.locator("#console-editor").evaluate((editor) => {
+      const style = getComputedStyle(editor);
+      const lines = editor.value.split("\n").length;
+      const content = editor.scrollHeight - parseFloat(style.paddingTop) - parseFloat(style.paddingBottom);
+      return { lines, visualLines: Math.round(content / parseFloat(style.lineHeight)), whiteSpace: style.whiteSpace };
+    });
+    // Con ajuste de línea, una línea larga ocupaba dos y el número 5 salía al lado de la mitad de la línea 4
+    expect(medida.whiteSpace).toBe("pre");
+    expect(medida.visualLines).toBeLessThanOrEqual(Math.max(medida.lines, 10)); // rows="10" como mínimo
+  });
 });
