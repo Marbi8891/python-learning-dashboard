@@ -38,4 +38,15 @@ test.describe("móvil", () => {
       }
     }
   });
+
+  test("MW-002: los enlaces del pie del menú lateral miden al menos 24 px de alto", async ({ page }) => {
+    await openLesson(page);
+    await page.locator("#menu-toggle").click();
+    const links = page.locator(".sidebar__footer a");
+    expect(await links.count()).toBeGreaterThan(0);
+    for (const link of await links.all()) {
+      if (!(await link.isVisible())) continue;
+      expect((await rect(link)).height, await link.textContent()).toBeGreaterThanOrEqual(24);
+    }
+  });
 });
