@@ -107,7 +107,7 @@ class UserCreate(BaseModel):
     @classmethod
     def must_accept(cls, accepted: bool) -> bool:
         if not accepted:
-            raise ValueError("Debes aceptar la política de privacidad")
+            raise ValueError("Debes confirmar que has leído la política de privacidad")
         return accepted
 
 

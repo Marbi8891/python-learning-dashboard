@@ -41,7 +41,7 @@ const FIELD_MESSAGES = {
   password: "La contraseña debe tener entre 8 y 128 caracteres",
   new_password: "La contraseña debe tener entre 8 y 128 caracteres",
   display_name: "Escribe tu nombre (máximo 80 caracteres)",
-  accept_privacy: "Debes aceptar la política de privacidad",
+  accept_privacy: "Debes confirmar que has leído la política de privacidad",
   token: "Este enlace de recuperación no es válido o ha caducado. Pide uno nuevo.",
 };
 

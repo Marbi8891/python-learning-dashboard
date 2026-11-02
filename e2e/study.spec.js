@@ -61,7 +61,7 @@ test("la preparación del PCAP se guarda en la cuenta y llega a otro dispositivo
   await form.getByLabel("Nombre").fill("Ana");
   await form.getByLabel("Email").fill(email);
   await form.getByLabel(/Contraseña/).fill(password);
-  await form.getByLabel(/acepto la/).check();
+  await form.getByLabel(/He leído la política/).check();
   await form.getByRole("button", { name: "Crear cuenta" }).click();
   await expect(page.locator("#account-label")).toHaveText("Ana");
   await expect

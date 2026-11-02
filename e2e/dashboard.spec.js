@@ -14,7 +14,7 @@ async function register(page, email, name = "Ana") {
   await form.getByLabel("Nombre").fill(name);
   await form.getByLabel("Email").fill(email);
   await form.getByLabel(/Contraseña/).fill(PASSWORD);
-  await form.getByLabel(/acepto la/).check();
+  await form.getByLabel(/He leído la política/).check();
   await form.getByRole("button", { name: "Crear cuenta" }).click();
   await expect(page.locator("#account-label")).toHaveText(name);
 }
