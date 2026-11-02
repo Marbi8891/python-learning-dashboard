@@ -134,6 +134,9 @@ const missing = (q) =>
 
 /* ---------- Catálogo ---------- */
 
+/** Lenguaje en que se escribe el código de cada curso (se ve en el catálogo). */
+const LANG_LABEL = { python: "Python", sql: "SQL", javascript: "JavaScript", java: "Java" };
+
 function renderCatalog() {
   const cards = DAW_COURSES.map((course) => {
     const answers = Object.values(courseState(course.id).answers);
@@ -142,9 +145,12 @@ function renderCatalog() {
       ? `${answers.length} preguntas respondidas · ${percent(right / answers.length)} de acierto`
       : "Sin empezar";
     return `
-      <li class="daw-card">
-        <h2 class="daw-card__title"><a href="#/daw/${course.id}">${escapeHtml(course.title)}</a></h2>
-        <p class="daw-card__subtitle">${escapeHtml(course.subtitle)}</p>
+      <li class="daw-card" data-started="${answers.length > 0}">
+        <div>
+          <h2 class="daw-card__title"><a href="#/daw/${course.id}">${escapeHtml(course.title)}</a></h2>
+          <p class="daw-card__subtitle">${escapeHtml(course.subtitle)}</p>
+        </div>
+        <p class="daw-card__lang">${LANG_LABEL[course.lang] ?? escapeHtml(course.lang)}</p>
         <p class="daw-card__progress">${progress}</p>
       </li>`;
   }).join("");

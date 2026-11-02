@@ -446,3 +446,23 @@ test("prueba de nivel: se ofrece al empezar y lo acertado se salta en la ruta pe
   await expect(page.locator('.lx-route__item[data-status="next"]')).toContainText("antes refuerza Tipos de datos");
   await expect(page.locator(".lx-route__item").nth(1)).toContainText("Superado en la prueba de nivel");
 });
+
+test.describe("pantalla ancha (tres áreas)", () => {
+  test.use({ viewport: { width: 1440, height: 900 } });
+
+  test("el índice «En esta página» del concepto desplaza sin cambiar la ruta", async ({ page }) => {
+    await page.goto("/#/teoria/bucles");
+    const toc = page.getByRole("navigation", { name: "En esta página" });
+    await expect(toc).toBeVisible();
+    await toc.getByRole("link", { name: "Errores habituales" }).click();
+    await expect(page).toHaveURL(/#\/teoria\/bucles$/);
+    await expect(page.locator("#lx-errors")).toBeFocused();
+    await expect(page.locator("#lx-errors")).toBeInViewport();
+  });
+
+  test("en la lección se ve el índice del curso sin desplazar el menú lateral", async ({ page }) => {
+    await page.goto("/#/leccion/variables");
+    await expect(page.getByRole("heading", { name: "Lecciones del curso PCAP" })).toBeInViewport();
+    await expect(page.locator("#console-editor")).toBeInViewport();
+  });
+});
