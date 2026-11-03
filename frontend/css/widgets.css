@@ -252,6 +252,12 @@
   font-weight: 400;
 }
 
+/* Campo con error (AUD-023): borde rojo y el mensaje de arriba enlazado con aria-describedby */
+.account__form input[aria-invalid="true"] {
+  border-color: var(--color-danger);
+  box-shadow: inset 0 0 0 1px var(--color-danger);
+}
+
 .account__form .account__check {
   flex-direction: row;
   align-items: flex-start;
