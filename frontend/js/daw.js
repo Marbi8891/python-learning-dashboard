@@ -284,7 +284,29 @@ function renderPanel(course) {
       <p class="readiness__note">Acierto de cada bloque ponderado por su peso. Orientativo.</p>
       <ul class="block-list">${blocks}</ul>
     </section>
-    ${resourcesHtml(course.resources, "Recursos complementarios", "daw-resources-title")}`;
+    ${resourcesHtml(course.resources, "Recursos complementarios", "daw-resources-title")}
+    ${originHtml(course.info)}`;
+}
+
+/** De dónde sale cada parte del curso (Fase D, 6.1): nada propio se presenta como oficial. */
+function originHtml(info) {
+  return `<section class="course-section" aria-labelledby="daw-origin-title">
+      <h2 class="section-title" id="daw-origin-title">De dónde sale este contenido</h2>
+      <p>${escapeHtml(info.structure)}</p>
+      <dl class="daw-origin">
+        <dt>Texto oficial</dt>
+        <dd>Solo los resultados de aprendizaje y los criterios de evaluación, copiados literalmente del BOE en el
+          <a href="#/daw/curriculo/${escapeHtml(info.module)}">currículo del módulo ${escapeHtml(info.module)}</a>.</dd>
+        <dt>Resumen propio</dt>
+        <dd>Los objetivos de cada lección. Cuando citan un RA, la relación la propone la plataforma: no es oficial.</dd>
+        <dt>Explicaciones y ejemplos</dt>
+        <dd>Escritos para la plataforma.</dd>
+        <dt>Ejercicios y preguntas</dt>
+        <dd>Creados para la plataforma, con las respuestas de código comprobadas al ejecutarlas. Son práctica: no son evaluaciones del centro.</dd>
+        <dt>Recursos de terceros</dt>
+        <dd>Las fuentes y los recursos complementarios solo se enlazan, con su autor y su licencia.</dd>
+      </dl>
+    </section>`;
 }
 
 /* ---------- Lección ---------- */
@@ -348,7 +370,13 @@ function renderLesson(course, slug) {
     ${
       objectives
         ? `<section class="course-section" aria-labelledby="daw-goals-title">
-            <h2 class="section-title" id="daw-goals-title">Al terminar sabrás</h2><ul class="daw-goals">${objectives}</ul></section>`
+            <h2 class="section-title" id="daw-goals-title">Al terminar sabrás</h2><ul class="daw-goals">${objectives}</ul>
+            ${
+              /\bRA ?\d/.test(lesson.objectives.join(" "))
+                ? `<p class="readiness__note">Resumen propio de la plataforma. Los RA y criterios citados están, con su texto oficial, en el
+                    <a href="#/daw/curriculo/${escapeHtml(course.info.module)}">currículo del módulo ${escapeHtml(course.info.module)}</a>.</p>`
+                : ""
+            }</section>`
         : ""
     }
     <section class="course-section daw-theory" aria-label="Teoría">${renderMarkdown(lesson.theory)}</section>

@@ -115,3 +115,12 @@ Para añadir uno: añade su ficha a `RESOURCES`, ejecuta `python scripts/resourc
 - Las preguntas de HTML, CSS, XSD y XSLT que Python no procesa son teóricas: su respuesta la ha revisado una persona, no un programa.
 
 **Siguiente asignatura recomendada:** Diseño de interfaces web (0615). Reutiliza HTML y CSS de Lenguajes de marcas y tiene buena documentación abierta (MDN).
+
+## Antes de abrir el PR de un curso nuevo o ampliado
+
+1. Regenera el curso y comprueba que está al día: `python scripts/courses/<curso>_course.py` y después `--check`.
+2. Registra los ids nuevos: `python scripts/courses/lock_ids.py`. Nunca borres ni renombres un id registrado sin un plan de migración, porque el progreso del alumno se guarda por id.
+3. Pasa `cd backend && python -m pytest -q tests/test_daw_courses.py`: detecta contenidos vacíos, preguntas repetidas, referencias a RA o criterios que no existen y enlaces rotos.
+4. Mira qué elementos pedagógicos faltan: `python scripts/courses/audit_pedagogy.py`.
+
+La auditoría completa del temario está en [`AUDITORIA_TEMARIO_DAW.md`](AUDITORIA_TEMARIO_DAW.md).

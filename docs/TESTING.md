@@ -26,6 +26,7 @@ Las e2e arrancan solas el frontend (`e2e/serve_frontend.py`, un `http.server` co
 | Núcleo por conceptos | `python scripts/learning/build_learning.py --check` | `learning.json` al día y cada respuesta comprobada |
 | Currículo de DAW | `python scripts/curriculum/build_curriculum.py --check` | Catálogo al día; las pruebas están en `test_curriculum.py` |
 | Cursos de DAW | `python scripts/courses/<curso>_course.py --check` (`sql`, `js`, `java`, `entornos`, `marcas`, `programacion`) | Cada respuesta de código se ejecuta (SQLite, Node, Java y Python) |
+| Coherencia de los cursos de DAW | `cd backend && python -m pytest -q tests/test_daw_courses.py` | Ids estables (`scripts/courses/ids.lock.json`), contenidos vacíos, preguntas repetidas, referencias a unidades, lecciones, módulos y RA, enlaces y soluciones |
 | Recursos de DAW | `python scripts/resources/build_resources.py --check` | Catálogo de recursos al día y válido (ids, módulos, lecciones, URL, licencias); las pruebas están en `test_resources.py` |
 | Frontend | `npm run test:unit` | Lógica del aprendizaje, repaso, recomendación, panel y Markdown seguro |
 | End-to-end y WCAG | `npm run test:e2e` | La web entera con el backend real y auditoría de accesibilidad (axe-core con las reglas de WCAG 2.2 A/AA, foco y letra al 200 %) |
@@ -56,7 +57,7 @@ rm frontend/_pyo
 | HTML o CSS | `npm run test:e2e` |
 | `frontend/data/lessons.json` o `pcap.json` | `cd backend && python -m pytest -q tests/test_content.py tests/test_pcap.py` |
 | `scripts/learning/**` | `python scripts/learning/build_learning.py` y después `--check` |
-| `scripts/courses/**` | `python scripts/courses/<curso>_course.py --check` |
+| `scripts/courses/**` | `python scripts/courses/<curso>_course.py --check`, `python scripts/courses/lock_ids.py` si hay ids nuevos y `cd backend && python -m pytest -q tests/test_daw_courses.py` |
 | `backend/**` | Lint, formato y pytest con cobertura |
 | `scripts/resources/**` | `python scripts/resources/build_resources.py --check` y `cd backend && python -m pytest -q tests/test_resources.py` |
 | `scripts/curriculum/**` | `python scripts/curriculum/build_curriculum.py --check` y `cd backend && python -m pytest -q tests/test_curriculum.py` |
