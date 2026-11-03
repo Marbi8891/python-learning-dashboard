@@ -73,7 +73,9 @@ def login_google(
         if not data.accept_privacy:
             raise HTTPException(
                 status_code=400,
-                detail="Debes aceptar la política de privacidad para crear tu cuenta.",
+                detail=(
+                    "Debes confirmar que has leído la política de privacidad para crear tu cuenta."
+                ),
             )
         fallback_name = email.split("@", 1)[0]
         name = str(claims.get("name") or fallback_name).strip()[:80] or fallback_name

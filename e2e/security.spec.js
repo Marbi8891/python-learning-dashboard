@@ -101,7 +101,7 @@ test("el registro rechaza una contraseña de las más usadas y explica por qué"
   await form.getByLabel("Nombre").fill("Ana");
   await form.getByLabel("Email").fill(uniqueEmail());
   await form.getByLabel(/Contraseña/).fill("password123");
-  await form.getByLabel(/acepto la/).check();
+  await form.getByLabel(/He leído la política/).check();
   await form.getByRole("button", { name: "Crear cuenta" }).click();
   await expect(page.locator("#account-dialog")).toContainText("de las más usadas");
   await expect(page.locator("#account-label")).toHaveText("Iniciar sesión");

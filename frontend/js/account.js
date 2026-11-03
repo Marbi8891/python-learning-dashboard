@@ -119,7 +119,7 @@ async function login(email, password) {
 
 async function loginWithGoogle(credential) {
   if (!$("#google-privacy").checked) {
-    setMessage("Acepta la política de privacidad para continuar con Google.");
+    setMessage("Confirma que has leído la política de privacidad para continuar con Google.");
     return;
   }
   const payload = { credential, accept_privacy: true };

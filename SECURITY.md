@@ -9,6 +9,8 @@
 
 Recibirás respuesta en un plazo de 7 días.
 
+Si el aviso supone una brecha de datos personales, se sigue el [procedimiento de incidentes](docs/INCIDENTES.md).
+
 ## Versiones con soporte
 
 Solo la última versión de `main`, que es la que está desplegada:

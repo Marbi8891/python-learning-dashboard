@@ -13,7 +13,7 @@ async function register(page, email, name = "Ana") {
   await form.getByLabel("Nombre").fill(name);
   await form.getByLabel("Email").fill(email);
   await form.getByLabel(/Contraseña/).fill(PASSWORD);
-  await form.getByLabel(/acepto la/).check();
+  await form.getByLabel(/He leído la política/).check();
   await form.getByRole("button", { name: "Crear cuenta" }).click();
   await expect(page.locator("#account-label")).toHaveText(name);
 }
@@ -328,12 +328,12 @@ test("entrar con Google simulado exige la privacidad y abre la sesión", async (
   await page.getByRole("button", { name: "Iniciar sesión" }).click();
   const google = dialog(page).getByRole("button", { name: "Google de prueba" });
   await google.click();
-  await expect(page.locator("#account-message")).toHaveText("Acepta la política de privacidad para continuar con Google.");
+  await expect(page.locator("#account-message")).toHaveText("Confirma que has leído la política de privacidad para continuar con Google.");
   expect(bodies).toEqual([]);
   // Accesible con el bloque de Google visible
   const axe = await new AxeBuilder({ page }).include("#account-dialog").withTags(["wcag2a", "wcag2aa"]).analyze();
   expect(axe.violations.map((v) => v.id)).toEqual([]);
-  await page.locator("[data-google-login]").getByLabel(/acepto la/).check();
+  await page.locator("[data-google-login]").getByLabel(/He leído la política/).check();
   await google.click();
   await expect(page.locator("#account-label")).toHaveText("Gala");
   expect(bodies[0]).toEqual({ credential: "x".repeat(40), accept_privacy: true });
