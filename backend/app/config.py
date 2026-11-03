@@ -27,6 +27,9 @@ class Settings(BaseSettings):
     google_client_id: str | None = None
     access_token_minutes: int = 30
     auth_rate_limit_per_minute: int = 5
+    # Guardados de progreso por usuario y minuto (AUD-009). La web agrupa los cambios (uno cada
+    # 1,5 s por almacén como mucho), así que un alumno real no llega; frena a quien llene la BD.
+    write_rate_limit_per_minute: int = 120
     # Fallos de login seguidos por cuenta antes de bloquearla un rato (aunque cambien de IP)
     login_failures_per_account: int = 10
     login_lockout_minutes: int = 15

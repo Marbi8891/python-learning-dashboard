@@ -9,6 +9,7 @@ from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.models import Lesson, User
+from app.rate_limit import TOO_MANY_WRITES, write_limiter
 from app.security import decode_access_token, looks_forged
 from app.security_events import Event, record
 from app.session_cookie import cookie_token
@@ -47,6 +48,18 @@ def get_current_user(
 
 
 CurrentUser = Annotated[User, Depends(get_current_user)]
+
+
+def get_writing_user(user: CurrentUser, request: Request) -> User:
+    """Quien guarda progreso, con límite de guardados por minuto (AUD-009)."""
+    if not write_limiter.hit(str(user.id)):
+        record(Event.WRITES_LIMITED, request, user=user.id)
+        raise HTTPException(status_code=status.HTTP_429_TOO_MANY_REQUESTS, detail=TOO_MANY_WRITES)
+    return user
+
+
+# Para los endpoints que escriben progreso (estado de cursos y PCAP, lecciones e intentos)
+WritingUser = Annotated[User, Depends(get_writing_user)]
 
 
 def get_lesson_or_404(db: Session, slug: str) -> Lesson:

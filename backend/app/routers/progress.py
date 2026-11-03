@@ -5,7 +5,7 @@ from sqlalchemy import delete, select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
-from app.deps import CurrentUser, DbSession, get_lesson_or_404
+from app.deps import CurrentUser, DbSession, WritingUser, get_lesson_or_404
 from app.models import Lesson, LessonProgress
 from app.schemas import ProgressImport, ProgressItem
 
@@ -45,14 +45,14 @@ def get_progress(user: CurrentUser, db: DbSession) -> list[ProgressItem]:
 
 
 @router.put("/{slug}", response_model=ProgressItem)
-def complete_lesson(slug: str, user: CurrentUser, db: DbSession) -> ProgressItem:
+def complete_lesson(slug: str, user: WritingUser, db: DbSession) -> ProgressItem:
     lesson = get_lesson_or_404(db, slug)
     progress = mark_completed(db, user.id, lesson.id)
     return ProgressItem(lesson_slug=lesson.slug, completed_at=progress.completed_at)
 
 
 @router.delete("/{slug}", status_code=status.HTTP_204_NO_CONTENT)
-def uncomplete_lesson(slug: str, user: CurrentUser, db: DbSession) -> Response:
+def uncomplete_lesson(slug: str, user: WritingUser, db: DbSession) -> Response:
     lesson = get_lesson_or_404(db, slug)
     db.execute(
         delete(LessonProgress).where(
@@ -64,7 +64,7 @@ def uncomplete_lesson(slug: str, user: CurrentUser, db: DbSession) -> Response:
 
 
 @router.post("/import", response_model=list[ProgressItem])
-def import_progress(data: ProgressImport, user: CurrentUser, db: DbSession) -> list[ProgressItem]:
+def import_progress(data: ProgressImport, user: WritingUser, db: DbSession) -> list[ProgressItem]:
     """Fusiona el progreso del navegador con el de la cuenta. Ignora slugs desconocidos."""
     slugs = set(data.lesson_slugs)
     lesson_ids = set(db.scalars(select(Lesson.id).where(Lesson.slug.in_(slugs))))
