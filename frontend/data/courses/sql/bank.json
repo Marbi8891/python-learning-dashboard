@@ -1897,19 +1897,19 @@
     "es": "¿Qué devuelve esta consulta?",
     "en": "¿Qué devuelve esta consulta?"
    },
-   "code": "-- alumnos\n-- id | nombre | ciclo | nota\n-- 1  | Ana    | DAW   | 8\n-- 2  | Luis   | DAM   | 5\n-- 3  | Eva    | DAW   | NULL\n-- 4  | Juan   | ASIR  | 7\n-- 5  | Sara   | DAM   | 9\n\nSELECT nombre FROM alumnos WHERE nota = NULL;",
+   "code": "-- alumnos\n-- id | nombre | ciclo | nota\n-- 1  | Ana    | DAW   | 8\n-- 2  | Luis   | DAM   | 5\n-- 3  | Eva    | DAW   | NULL\n-- 4  | Juan   | ASIR  | 7\n-- 5  | Sara   | DAM   | 9\n\nSELECT nombre FROM alumnos\nWHERE nota IS NULL OR nota < 6\nORDER BY id;",
    "options": [
-    "Ana\nLuis\nJuan\nSara",
+    "(sin filas)",
+    "Luis",
     "Eva",
-    "Error",
-    "(sin filas)"
+    "Luis\nEva"
    ],
    "answer": [
     3
    ],
    "explain": {
-    "es": "No da error, pero no devuelve nada: comparar con NULL usando `=` nunca es verdadero. Para encontrar a Eva hay que escribir `WHERE nota IS NULL`.",
-    "en": "No da error, pero no devuelve nada: comparar con NULL usando `=` nunca es verdadero. Para encontrar a Eva hay que escribir `WHERE nota IS NULL`."
+    "es": "`IS NULL` encuentra a Eva, que no tiene nota, y `nota < 6` a Luis (5). Con `nota = NULL` Eva no saldría: comparar con NULL usando `=` nunca es verdadero.",
+    "en": "`IS NULL` encuentra a Eva, que no tiene nota, y `nota < 6` a Luis (5). Con `nota = NULL` Eva no saldría: comparar con NULL usando `=` nunca es verdadero."
    },
    "lesson": "sql-where",
    "module": "0484"
@@ -2017,19 +2017,19 @@
     "es": "¿Qué devuelve esta consulta?",
     "en": "¿Qué devuelve esta consulta?"
    },
-   "code": "-- alumnos\n-- id | nombre | ciclo | nota\n-- 1  | Ana    | DAW   | 8\n-- 2  | Luis   | DAM   | 5\n-- 3  | Eva    | DAW   | NULL\n-- 4  | Juan   | ASIR  | 7\n-- 5  | Sara   | DAM   | 9\n\nSELECT AVG(nota) FROM alumnos;",
+   "code": "-- alumnos\n-- id | nombre | ciclo | nota\n-- 1  | Ana    | DAW   | 8\n-- 2  | Luis   | DAM   | 5\n-- 3  | Eva    | DAW   | NULL\n-- 4  | Juan   | ASIR  | 7\n-- 5  | Sara   | DAM   | 9\n\nSELECT AVG(COALESCE(nota, 0)) FROM alumnos;",
    "options": [
     "7",
-    "5.8",
+    "7.25",
     "NULL",
-    "7.25"
+    "5.8"
    ],
    "answer": [
     3
    ],
    "explain": {
-    "es": "AVG ignora los NULL: (8 + 5 + 7 + 9) / 4 = 7,25. Si contara a Eva como 0 saldría 29 / 5 = 5,8.",
-    "en": "AVG ignora los NULL: (8 + 5 + 7 + 9) / 4 = 7,25. Si contara a Eva como 0 saldría 29 / 5 = 5,8."
+    "es": "`COALESCE(nota, 0)` cambia el NULL de Eva por 0, así que la media cuenta las 5 filas: 29 / 5 = 5,8. Sin COALESCE, AVG ignoraría a Eva y daría 7,25.",
+    "en": "`COALESCE(nota, 0)` cambia el NULL de Eva por 0, así que la media cuenta las 5 filas: 29 / 5 = 5,8. Sin COALESCE, AVG ignoraría a Eva y daría 7,25."
    },
    "lesson": "sql-agregados",
    "module": "0484"

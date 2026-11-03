@@ -340,10 +340,11 @@ Con la tabla `productos(id, nombre, precio, stock)`:
             "sql-07",
             QUE,
             [ALUMNOS],
-            "SELECT nombre FROM alumnos WHERE nota = NULL;",
-            "(sin filas)",
-            ["Eva", "Error", "Ana\nLuis\nJuan\nSara"],
-            "No da error, pero no devuelve nada: comparar con NULL usando `=` nunca es verdadero. Para encontrar a Eva hay que escribir `WHERE nota IS NULL`.",
+            # Antes era la misma pregunta que bd-25 (`WHERE nota = NULL`); ahora practica IS NULL con OR
+            "SELECT nombre FROM alumnos\nWHERE nota IS NULL OR nota < 6\nORDER BY id;",
+            "Luis\nEva",
+            ["Luis", "Eva", "(sin filas)"],
+            "`IS NULL` encuentra a Eva, que no tiene nota, y `nota < 6` a Luis (5). Con `nota = NULL` Eva no saldría: comparar con NULL usando `=` nunca es verdadero.",
         ),
         cq(
             "sql-08",
@@ -465,10 +466,11 @@ Pista: son dos consultas distintas o, si te atreves, una con dos subconsultas.
             "sql-12",
             QUE,
             [ALUMNOS],
-            "SELECT AVG(nota) FROM alumnos;",
-            "7.25",
-            ["5.8", "7", "NULL"],
-            "AVG ignora los NULL: (8 + 5 + 7 + 9) / 4 = 7,25. Si contara a Eva como 0 saldría 29 / 5 = 5,8.",
+            # Antes era la misma pregunta que bd-28 (`AVG(nota)`); ahora practica COALESCE
+            "SELECT AVG(COALESCE(nota, 0)) FROM alumnos;",
+            "5.8",
+            ["7.25", "7", "NULL"],
+            "`COALESCE(nota, 0)` cambia el NULL de Eva por 0, así que la media cuenta las 5 filas: 29 / 5 = 5,8. Sin COALESCE, AVG ignoraría a Eva y daría 7,25.",
         ),
         cq(
             "sql-13",
