@@ -1,5 +1,6 @@
 /* Diálogo de cuenta: login, registro, recuperación, perfil, exportación y borrado. */
 
+import { errorFields, markInvalid } from "./form-errors.js";
 import { ApiError, apiEnabled, request, serverInfo } from "./api.js";
 import { escapeHtml } from "./markdown.js";
 import { renderGoogleButton } from "./google-identity.js";
@@ -26,6 +27,7 @@ function showView(name) {
   const googleLogin = dialog().querySelector("[data-google-login]");
   if (googleLogin) googleLogin.hidden = name !== "login" || !withGoogle;
   setMessage("");
+  for (const form of dialog().querySelectorAll("form")) markInvalid(form, [], MESSAGE_ID); // el mensaje de error ya no está
   if (name === "login" && withGoogle) showGoogleButton($("#google-signin"), loginWithGoogle);
   const heading = dialog().querySelector(`[data-view="${name}"] h2`);
   $("#account-title").textContent = heading?.dataset.title ?? "Tu cuenta";
@@ -41,8 +43,13 @@ function setMessage(text, kind = "error") {
 
 const SLOW_MS = 4000;
 
-async function submitting(form, action) {
+const MESSAGE_ID = "account-message";
+
+/** Envía un formulario de la cuenta. `fieldsFor(error)` dice qué campos causaron un error que el
+    servidor no asocia a ninguno (p. ej. «Ese email ya está registrado» → email). */
+async function submitting(form, action, { fieldsFor = () => [] } = {}) {
   const button = form.querySelector("button[type=submit]");
+  markInvalid(form, [], MESSAGE_ID);
   button.disabled = true;
   setMessage("Conectando con el servidor…", "info");
   // El servidor gratuito se duerme sin uso y tarda hasta un minuto en despertar
@@ -50,14 +57,17 @@ async function submitting(form, action) {
     () => setMessage("El servidor se está despertando: la primera vez puede tardar hasta un minuto. No cierres esta ventana.", "info"),
     SLOW_MS,
   );
+  let invalid = [];
   try {
     await action(new FormData(form));
   } catch (error) {
     setMessage(error.message);
+    invalid = errorFields(error, fieldsFor(error));
   } finally {
     clearTimeout(slow);
     button.disabled = false;
   }
+  markInvalid(form, invalid, MESSAGE_ID); // después de reactivar el botón, para poder llevar el foco al campo
 }
 
 /** Cierra la sesión y borra de este navegador los datos personales (equipos compartidos).
@@ -310,6 +320,9 @@ export function initAccount({ toast }) {
       await login(data.get("email"), data.get("password"));
       dialog().close();
       showToast("Cuenta creada. Tu progreso se guardará en la nube.");
+    }, {
+      // 409: el email ya existe; 422 sin campos: contraseña demasiado común o con tus datos
+      fieldsFor: (error) => (error.status === 409 ? ["email"] : error.status === 422 && !error.fields?.length ? ["password"] : []),
     });
   });
 
@@ -328,7 +341,7 @@ export function initAccount({ toast }) {
     event.preventDefault();
     submitting(event.target, async (data) => {
       if (data.get("new_password") !== data.get("confirm_password")) {
-        throw new Error("Las dos contraseñas no coinciden.");
+        throw Object.assign(new Error("Las dos contraseñas no coinciden."), { fields: ["confirm_password"] });
       }
       await request("POST", "/api/auth/password-reset/confirm", {
         auth: false,
@@ -338,6 +351,8 @@ export function initAccount({ toast }) {
       endSession();
       showView("login");
       setMessage("Tu contraseña se ha actualizado correctamente. Ya puedes iniciar sesión.", "success");
+    }, {
+      fieldsFor: (error) => (error.status === 422 && !error.fields?.length ? ["new_password"] : []),
     });
   });
 

@@ -94,7 +94,7 @@ Interlineado: `--leading-body` (1,6) para leer y `--leading-tight` (1,2) para t�
 | Foco | Contorno de 2 px en `--color-primary` (`:focus-visible`, `base.css`) y `--focus-ring` en los campos |
 | Desactivado u ocupado | Opacidad reducida (`--state-disabled-opacity`; `.btn:disabled`, `widgets.css`) y el texto del botón dice qué pasa («Ejecutando…», «Comprobando…») |
 | Cargando | Texto que dice qué se carga («Cargando Python…», «Cargando el curso…»). El estado de la consola se anuncia con `aria-live`; el resto de zonas aún no (pendiente de la fase de accesibilidad) |
-| Error | Texto en `--color-danger` con la causa y qué hacer; nunca solo el color |
+| Error | Texto en `--color-danger` con la causa y qué hacer; nunca solo el color. En un formulario, el campo que falla lleva `aria-invalid="true"`, borde rojo y `aria-describedby` al mensaje, y recibe el foco (`js/form-errors.js`) |
 | Vacío | `.empty-state`: borde discontinuo y una frase con el siguiente paso |
 | No encontrado | `not-found.js`: título, la ruta pedida y enlaces para volver |
 
@@ -113,6 +113,8 @@ Componentes que ya existen y se reutilizan (no se crean otros parecidos):
 | Aviso flotante | `.toast` | `content.css` |
 | Chips de filtro | `.chips`, `.chip` | `pcap.css` |
 | Página no encontrada | `notFoundHtml()` | `js/not-found.js` |
+| Corrección de un ejercicio | `.check`, `.check__label`, `.check__retry` | `console.css` y `console.js`. Si falla, por partes: «Qué falta» (o «Error al ejecutar»), «Con esta entrada», «Lo que mostró tu programa» y cómo seguir. Nunca enseña la solución |
+| Confirmación dentro de la página | `.exam-confirm` (`role="alertdialog"`) | `pcap.js`. El foco va al botón principal, Esc la cierra y el foco vuelve al botón que la abrió |
 
 **Deuda conocida:** `.btn` y `.course-hero` se definen en varias hojas, que se pisan por orden de carga. En los siguientes PR de la Fase 2 se reúnen en un solo sitio, comprobándolo con capturas de pantalla como se hizo con `tokens.css`.
 
@@ -120,7 +122,8 @@ Componentes que ya existen y se reutilizan (no se crean otros parecidos):
 
 - Móvil primero. La barra lateral pasa a ser un menú deslizante por debajo de **900 px** (`base.css`, `pro.css`).
 - Puntos de corte que se usan: 600, 900 y 1280 px. Hay otros sueltos (420, 680, 700, 800, 1020, 1100, 1140) que se irán unificando.
-- Sin desplazamiento horizontal: comprobado a 375 px en las vistas principales (ver `docs/AUDITORIA_TECNICA.md`, §4.5).
+- Sin desplazamiento horizontal: comprobado a 375 px en las vistas principales (ver `docs/AUDITORIA_TECNICA.md`, §4.5), y con la letra al 200 % a 768 px (`e2e/a11y.spec.js`).
+- El texto se mide en `rem` (también el de `body`), para que crezca si el alumno agranda la letra en el navegador. Un elemento de rejilla que contiene código lleva `minmax(0, 1fr)`: si no, el código ancho ensancha la tarjeta en vez de desplazarse dentro.
 
 ## Cómo comprobar un cambio visual
 

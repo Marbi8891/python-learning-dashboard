@@ -322,3 +322,49 @@ El Web Worker evita que la página se congele, **pero no es una barrera de segur
 - **Lecciones desmarcadas:** si desmarcar una lección falla, no se reintenta (la importación solo añade).
 - **Límites de intentos:** se guardan en memoria (una sola instancia de Render) y se reinician al reiniciar el servidor.
 - **Siguen abiertos:** AUD-008 (PWA sin conexión), AUD-002 a AUD-007 (lógica de aprendizaje), RT-001 a RT-006 y AUD-023 (`aria-invalid`). Se tratan en las fases siguientes.
+
+## 12. Actualización del 3 de noviembre de 2026: experiencia de estudio, accesibilidad y rendimiento (Fase C)
+
+Sobre `main` en `97b2d5f`. La Fase C no rehace el diseño: el sistema visual (`tokens.css`, `docs/DISENO.md`), la portada con actividad real y las vistas de lección y sesión ya venían del rediseño de noviembre (#78 a #86). Aquí se mide lo que hay y se corrige lo que falla.
+
+### 12.1 Cómo se ha medido
+
+- **axe-core con WCAG 2.2 A/AA** (antes solo 2.1): 15 rutas, en móvil y escritorio, en tema claro y oscuro, con `scripts/web/inspeccionar_web.mjs --tema ambos`. Resultado: **0 infracciones en las 60 combinaciones**, sin errores de consola y sin desplazamiento horizontal.
+- **Comprobaciones con Playwright de lo que axe no ve:** dónde queda el foco después de cada acción, cerrar con Esc, la letra al 200 % a 1280 y 768 px, reflujo a 320 px y `prefers-reduced-motion`.
+- **Rendimiento** en Chromium, sin y con un móvil modesto simulado (CPU 4 veces más lenta y red de 1,6 Mb/s con 150 ms de latencia), con el servidor local (sin compresión, a diferencia de GitHub Pages).
+
+Que axe no encuentre errores **no significa que la web cumpla WCAG 2.2 AA**. Falta la revisión manual con lector de pantalla (la guía para VoiceOver está en los archivos del proyecto, pendiente de que la pase el autor) y con usuarios reales.
+
+### 12.2 Hallazgos y estado
+
+| ID | Prioridad | Problema | Evidencia | Estado |
+|---|---|---|---|---|
+| C-01 | P2 | Al pulsar «Comprobar respuestas» en el quiz, el botón se oculta y el foco cae en `<body>`: con teclado o lector de pantalla hay que volver a empezar desde arriba (WCAG 2.4.3) | Playwright: `document.activeElement` = `BODY` | **Corregido.** El foco pasa a la nota (`#quiz-score`, `tabindex="-1"`). Prueba en `a11y.spec.js`, que falla con el código anterior |
+| C-02 | P2 | En el simulacro PCAP, «Seguir con el examen» ocultaba la confirmación con el foco dentro, y Esc no la cerraba | Código y Playwright | **Corregido.** Esc la cierra y el foco vuelve al botón «Terminar examen» que la abrió. `a11y.spec.js` |
+| C-03 | P2 | Con la letra al 200 %, la demostración de la portada se salía 12 px por la derecha a 768 px: una rejilla de una columna `auto` se ensanchaba con el código (WCAG 1.4.4) | Playwright | **Corregido** con `grid-template-columns: minmax(0, 1fr)`. Además, `body` pasa de `15px` a `0.9375rem` (crece con la letra del navegador) y `fieldset` no se ensancha por su contenido. Prueba en 5 rutas, que falla con el código anterior |
+| C-04 | P2 | Al fallar un ejercicio, la corrección decía qué test fallaba, pero no qué había mostrado el programa ni con qué entrada se probó. El alumno no veía la diferencia entre lo esperado y lo obtenido | Código | **Corregido.** Por partes: «Qué falta» (o «Error al ejecutar» con la pista), «Con esta entrada», «Lo que mostró tu programa» y «Corrige el código en la consola y vuelve a comprobarlo». Sigue sin enseñar la solución. `console.spec.js` |
+| AUD-023 | P2 | Los errores de los formularios no se asociaban al campo (WCAG 3.3.1) | `grep aria-invalid` → 0 | **Corregido.** `form-errors.js` marca el campo con `aria-invalid`, lo enlaza con el mensaje y le lleva el foco: errores 422, email ya registrado, contraseñas que no coinciden, contraseña común y contraseña actual incorrecta. `account.spec.js` y `my-account.spec.js` |
+
+**Revisado sin fallos:** foco visible (contorno de 2 px), foco nunca tapado entero por las barras fijas al tabular (WCAG 2.4.11; lección, simulacro, DAW y «Aprender», en móvil y escritorio), salto al contenido, orden de tabulación, temas claro y oscuro, movimiento reducido (en la portada no queda ninguna animación con `reduce`), reflujo a 320 px con la letra normal, el editor (Tab inserta espacios y Esc permite salir) y el color nunca va solo (✓ y ✗ con texto).
+
+**Zonas táctiles:** el inspector marca enlaces de unos 19 px de alto en las listas de conceptos y de lecciones. La regla `target-size` de axe (WCAG 2.5.8) no los da por malos, porque tienen espacio libre alrededor. Se dejan como están.
+
+### 12.3 Rendimiento
+
+| Medida | Equipo normal | Móvil modesto simulado |
+|---|---|---|
+| Primer contenido en pantalla (FCP) | 0,3 s | 1,8 s |
+| Mayor contenido en pantalla (LCP) en la portada | 0,9 s | 5,9 s |
+| Cambio de ruta (aprender, PCAP, DAW, lección y progreso) | 30-80 ms | 50-210 ms |
+| Memoria de JavaScript (heap) | 10 MB | 10 MB |
+| Primera ejecución de Python (descarga y arranque de Pyodide) | 4 s | 72 s sin comprimir (unos 6 MB comprimidos en el CDN: unos 30 s) |
+
+- **Pyodide ya se carga solo cuando el alumno ejecuta código.** Con una red lenta, la consola avisa a los 20 s de que sigue descargando, y el límite es de 5 minutos.
+- **Lo que más pesa en la primera carga son los bytes**, no el número de peticiones. La portada pide 87 recursos: `lessons.json` (58 KB comprimido), `learning.json` (39 KB) y unos 150 KB de JavaScript comprimido. Se probó `rel="modulepreload"` para los 55 módulos y **no mejoró ninguna medida**, así que no se ha incluido.
+- **Candidato para una fase posterior:** no descargar `lessons.json` en la portada. Exige cambiar cuándo se pinta la barra lateral y el juego, así que no es un cambio pequeño.
+
+### 12.4 Pendiente
+
+- Revisión manual con lector de pantalla (VoiceOver y NVDA) y con zoom real del navegador al 200 y al 400 %.
+- Medir con Lighthouse la web publicada (con compresión y HTTP/2) en un móvil real.
+- Los textos nuevos de la corrección de ejercicios están solo en español, como el resto de la vista de lección.

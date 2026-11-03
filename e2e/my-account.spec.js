@@ -78,6 +78,9 @@ test("perfil y seguridad: cambiar el nombre, la contraseña y ver la actividad",
   await form.getByLabel("Repite la nueva").fill("otra-distinta-123");
   await form.getByRole("button", { name: "Cambiar contraseña" }).click();
   await expect(form.locator(".form-message")).toHaveText("Las dos contraseñas nuevas no coinciden.");
+  await expect(form.getByLabel("Repite la nueva")).toHaveAttribute("aria-invalid", "true");
+  await expect(form.getByLabel("Repite la nueva")).toHaveAttribute("aria-describedby", "password-form-message");
+  await expect(form.getByLabel("Repite la nueva")).toBeFocused();
 
   await form.getByLabel("Repite la nueva").fill("tortuga-azul-en-bici");
   await form.getByRole("button", { name: "Cambiar contraseña" }).click();

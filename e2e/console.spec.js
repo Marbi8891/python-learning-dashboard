@@ -123,6 +123,39 @@ test("la plantilla de un ejercicio no supera los tests", async ({ page }) => {
   await expect(page.locator(".lesson[data-slug=funciones]")).toHaveAttribute("data-status", "active");
 });
 
+test("un ejercicio fallado separa qué falta, la salida del alumno y cómo seguir, sin dar la solución", async ({ page }) => {
+  await page.route("**/data/lessons.json", async (route) => {
+    const data = await (await route.fetch()).json();
+    data.modules[0].lessons[0].checks = [
+      { stdin: "", test: "assert True" },
+      { stdin: "5\n", test: "assert '10' in __output__, 'Debe mostrar el doble del número leído'" },
+    ];
+    await route.fulfill({ json: data });
+  });
+  await openLesson(page, "variables");
+  await page.getByRole("tab", { name: "Práctica y Ejercicio" }).click();
+  await page.locator("#console-editor").fill("print('hola')");
+  await page.getByRole("button", { name: "Comprobar solución" }).click();
+  const result = page.locator("#check-result");
+  await expect(result).toHaveAttribute("data-passed", "false", { timeout: 90_000 });
+  await expect(result).toBeFocused();
+  await expect(result.locator(".check__title")).toHaveText("✗ Todavía no (prueba 2 de 2)");
+  await expect(result).toContainText("Qué falta");
+  await expect(result).toContainText("Debe mostrar el doble del número leído");
+  await expect(result).toContainText("Con esta entrada");
+  await expect(result.locator("pre").first()).toHaveText("5");
+  await expect(result).toContainText("Lo que mostró tu programa");
+  await expect(result.locator("pre").nth(1)).toHaveText("hola");
+  await expect(result.locator(".check__retry")).toHaveText("Corrige el código en la consola y vuelve a comprobarlo.");
+
+  // Si el código da error, se ve el error explicado en vez de la salida
+  await page.locator("#console-editor").fill("print(x)");
+  await page.getByRole("button", { name: "Comprobar solución" }).click();
+  await expect(result).toContainText("Error al ejecutar");
+  await expect(result).toContainText("NameError");
+  await expect(result).not.toContainText("Lo que mostró tu programa");
+});
+
 test("superar los tests completa la lección", async ({ page }) => {
   // Ejercicio de prueba propio (así el repositorio no contiene soluciones de los reales)
   await page.route("**/data/lessons.json", async (route) => {

@@ -637,6 +637,7 @@ body[data-page="landing"] .assistant {
 
 .lp-demo__step {
   display: grid;
+  grid-template-columns: minmax(0, 1fr); /* el código ancho se desplaza dentro, no ensancha la tarjeta */
   align-content: start;
   gap: var(--space-3);
   min-width: 0;

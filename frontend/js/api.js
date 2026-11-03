@@ -21,9 +21,11 @@ export const serverInfo = apiEnabled
   : Promise.resolve(null);
 
 export class ApiError extends Error {
-  constructor(status, message) {
+  /** `fields`: campos del formulario a los que se refiere el error (los 422 de validación los traen). */
+  constructor(status, message, fields = []) {
     super(message);
     this.status = status;
+    this.fields = fields;
   }
 }
 
@@ -99,7 +101,8 @@ export async function request(method, path, { json, form, auth = true, cookie = 
     } catch {
       // respuesta sin JSON
     }
-    throw new ApiError(response.status, formatDetail(detail, response.status));
+    const fields = Array.isArray(detail) ? detail.map((item) => item?.loc?.at(-1)).filter((f) => typeof f === "string") : [];
+    throw new ApiError(response.status, formatDetail(detail, response.status), fields);
   }
   return response.status === 204 ? null : response.json();
 }

@@ -6,6 +6,7 @@
    Los datos que dependen del banco de preguntas o del servidor se rellenan cuando llegan.
    Las acciones (fechas, meta, nombre, contraseña) se enganchan aquí, en initPrivate. */
 
+import { errorFields, markInvalid } from "./form-errors.js";
 import { locale } from "./i18n.js";
 import { request, setToken } from "./api.js";
 import { certificateStatus, courseCertificateStatus } from "./certificate.js";
@@ -226,7 +227,7 @@ export function securityHtml(user, { google = false } = {}) {
           <h3 class="section-subtitle">Tu nombre</h3>
           <label>Nombre que se muestra <input name="display_name" maxlength="80" autocomplete="nickname" value="${escapeHtml(user.display_name)}" required></label>
           <button class="btn btn--ghost" type="submit">Guardar nombre</button>
-          <p class="form-message" role="status"></p>
+          <p class="form-message" id="name-form-message" role="status"></p>
         </form>
         ${google ? `<div class="account-form">
           <h3 class="section-subtitle">Contraseña</h3>
@@ -237,7 +238,7 @@ export function securityHtml(user, { google = false } = {}) {
           <label>Nueva contraseña (mínimo 8 caracteres) <input name="new_password" type="password" autocomplete="new-password" minlength="8" maxlength="128" required></label>
           <label>Repite la nueva <input name="confirm_password" type="password" autocomplete="new-password" minlength="8" maxlength="128" required></label>
           <button class="btn btn--ghost" type="submit">Cambiar contraseña</button>
-          <p class="form-message" role="status"></p>
+          <p class="form-message" id="password-form-message" role="status"></p>
         </form>`}
       </div>
       <h3 class="section-subtitle">Actividad reciente de la cuenta</h3>
@@ -314,8 +315,11 @@ export function initPrivate({ toast, refresh }) {
     if (!["name-form", "password-form"].includes(form.id)) return;
     event.preventDefault();
     const data = new FormData(form);
+    const messageId = `${form.id}-message`;
+    markInvalid(form, [], messageId);
     if (form.id === "password-form" && data.get("new_password") !== data.get("confirm_password")) {
       formMessage(form, "Las dos contraseñas nuevas no coinciden.");
+      markInvalid(form, ["confirm_password"], messageId);
       return;
     }
     const button = form.querySelector("button[type=submit]");
@@ -336,7 +340,13 @@ export function initPrivate({ toast, refresh }) {
         refresh();
       }
     } catch (error) {
-      if (form.isConnected) formMessage(form, error.message);
+      if (form.isConnected) {
+        formMessage(form, error.message);
+        // 403: la contraseña actual no es esa; 422 sin campos: la nueva es demasiado común o lleva tus datos
+        const extra = error.status === 403 ? ["current_password"] : error.status === 422 && !error.fields?.length ? ["new_password"] : [];
+        button.disabled = false; // antes de mover el foco
+        markInvalid(form, errorFields(error, extra), messageId);
+      }
     } finally {
       button.disabled = false;
     }

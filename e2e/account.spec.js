@@ -179,6 +179,41 @@ test("recuperar contraseña: las dos contraseñas deben coincidir", async ({ pag
   await form.getByRole("button", { name: "Guardar contraseña" }).click();
   await expect(page.locator("#account-message")).toHaveText("Las dos contraseñas no coinciden.");
   expect(called).toBe(false); // ni siquiera se llama a la API
+  // El campo que falla queda marcado, enlazado con el mensaje y con el foco (AUD-023)
+  const confirm = form.getByLabel("Repite la nueva contraseña");
+  await expect(confirm).toHaveAttribute("aria-invalid", "true");
+  await expect(confirm).toHaveAttribute("aria-describedby", "account-message");
+  await expect(confirm).toBeFocused();
+  await expect(form.getByLabel("Nueva contraseña", { exact: true })).not.toHaveAttribute("aria-invalid");
+  // Al corregirlo y volver a enviar, la marca desaparece
+  await confirm.fill("nueva-contraseña-456");
+  await form.getByRole("button", { name: "Guardar contraseña" }).click();
+  await expect(confirm).not.toHaveAttribute("aria-invalid");
+});
+
+test("registro: un email ya registrado marca el campo del email (AUD-023)", async ({ page }) => {
+  const email = uniqueEmail();
+  await openLesson(page);
+  await register(page, email);
+  await page.locator("#account-button").click();
+  await dialog(page).getByRole("button", { name: "Cerrar sesión" }).click();
+  await expect(page.locator("#account-label")).toHaveText("Iniciar sesión");
+
+  await page.getByRole("button", { name: "Iniciar sesión" }).click();
+  await dialog(page).getByRole("link", { name: "Crea una" }).click();
+  const form = page.locator("#register-form");
+  await form.getByLabel("Nombre").fill("Otra");
+  await form.getByLabel("Email").fill(email);
+  await form.getByLabel(/Contraseña/).fill(PASSWORD);
+  await form.getByLabel(/He leído la política/).check();
+  await form.getByRole("button", { name: "Crear cuenta" }).click();
+  await expect(page.locator("#account-message")).toHaveText("Ese email ya está registrado");
+  await expect(form.getByLabel("Email")).toHaveAttribute("aria-invalid", "true");
+  await expect(form.getByLabel("Email")).toBeFocused();
+  await expect(form.getByLabel(/Contraseña/)).not.toHaveAttribute("aria-invalid");
+  // Al cambiar de vista el mensaje se va y la marca también
+  await dialog(page).getByRole("link", { name: "Inicia sesión" }).click();
+  await expect(form.getByLabel("Email")).not.toHaveAttribute("aria-invalid");
 });
 
 test("recuperar contraseña: un enlace incompleto lleva a pedir otro", async ({ page }) => {
