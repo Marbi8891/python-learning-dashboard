@@ -18,7 +18,6 @@ La memoria ([`memoria.md`](memoria.md)) y la guía de defensa ([`../DEMO-Y-DEFEN
 
 - Si trabajaste antes del 25/09/2026 en otro repositorio o en local.
 - Las horas reales de cada fase (11 filas).
-- Qué proveedor envía el email de recuperación en producción: Brevo (variable `BREVO_API_KEY` en Render) o Gmail (`SMTP_HOST`). No hace falta que me digas la clave, solo cuál de las dos variables está puesta.
 
 ## Interfaz y manual (memoria, 4.5 y 8)
 

@@ -157,10 +157,10 @@ También hubo trabajo que no ha llegado a la versión final: una app Android (27
 | Frontend | GitHub Pages | 0 € |
 | API | Render (plan gratuito, Frankfurt) | 0 € |
 | Base de datos | Neon (plan gratuito, Frankfurt) | 0 € |
-| Email de recuperación | [VERIFY: Brevo (API HTTPS) o Gmail (SMTP); el código admite los dos] | 0 € |
+| Email de recuperación | Gmail por SMTP (`SMTP_HOST` en Render). El código también admite Brevo por HTTPS | 0 € |
 | Dominio | No tiene: usa el de GitHub Pages | 0 € |
 
-El plan gratuito de Render apaga el servidor tras 15 minutos sin tráfico, y la primera petición tarda cerca de un minuto en despertarlo. Ese plan también bloquea los puertos SMTP, por eso el código puede enviar los emails por la API HTTPS de Brevo. Sin cuenta, la web no depende del backend.
+El plan gratuito de Render apaga el servidor tras 15 minutos sin tráfico, y la primera petición tarda cerca de un minuto en despertarlo. Ese plan también bloquea los puertos SMTP, así que con Gmail por SMTP el email de recuperación no llega a salir (ver 9.2). Para eso el código puede enviar por la API HTTPS de Brevo, también gratuita. Sin cuenta, la web no depende del backend.
 
 ## 3.7 Marco legal
 
@@ -408,6 +408,7 @@ Lo que más he aprendido es a separar un frontend estático y ligero de un backe
 - El Web Worker evita que la página se congele, pero no es una barrera de seguridad completa (RT-002, RT-005): solo afecta al propio navegador del alumno.
 - Los límites de intentos se guardan en memoria, así que solo valen con una instancia del servidor.
 - Un `PUT` sin versión todavía sobrescribe (SYNC-03), para no romper pestañas abiertas con una versión antigua.
+- El email de recuperación está configurado con Gmail por SMTP, y el plan gratuito de Render bloquea esos puertos: hasta cambiarlo a Brevo (`BREVO_API_KEY`, ver `docs/DEPLOY.md`), la recuperación de contraseña no envía el enlace.
 - Las lecciones están solo en español.
 - Cuatro módulos técnicos del ciclo (0483, 0613, 0614 y 0615) aún no tienen curso en la web.
 
