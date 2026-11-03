@@ -41,7 +41,8 @@ Solo la última versión de `main`, que es la que está desplegada:
 
 **Datos personales (RGPD)**
 - Se puede descargar y borrar todo desde la cuenta.
-- Al cerrar sesión se borran también del navegador.
+- Al cerrar sesión se borran también del navegador, pero solo después de comprobar que la cuenta tiene todo. Si algo no se ha podido guardar, se avisa y el alumno elige si reintentar, conservarlo en el navegador o borrarlo.
+- Si en el mismo navegador entra otra cuenta, el progreso de la anterior no se mezcla: se aparta y vuelve cuando esa cuenta entra de nuevo.
 - Solo se guardan los 50 intentos de ejercicio más recientes por lección.
 - Los emails se enmascaran en los logs, y los enlaces de recuperación no se escriben nunca en ellos.
 
