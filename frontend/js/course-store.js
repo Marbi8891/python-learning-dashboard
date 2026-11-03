@@ -5,7 +5,7 @@
 
 import { request } from "./api.js";
 import { cleanProgress } from "./progress-guard.js";
-import { isoDay } from "./pcap-store.js";
+import { isoDay, newerHistory } from "./pcap-store.js";
 import { state, subscribe } from "./store.js";
 import { createDocSync } from "./doc-sync.js";
 import { createSyncGate } from "./sync-gate.js";
@@ -133,7 +133,7 @@ export function mergeCourse(id, remote = {}) {
   const base = { ...empty(), ...clean };
   for (const [field, value] of Object.entries(clean)) if (!(field in local)) local[field] = value;
   for (const [q, history] of Object.entries(base.answers)) {
-    if (!local.answers[q] || history.length > local.answers[q].length) local.answers[q] = history;
+    local.answers[q] = newerHistory(local.answers[q], history, local.srs[q]?.last, base.srs[q]?.last);
   }
   const exams = new Map([...base.exams, ...local.exams].map((exam) => [exam.date, exam]));
   local.exams = [...exams.values()].sort((a, b) => a.date.localeCompare(b.date)).slice(-30);
