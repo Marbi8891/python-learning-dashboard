@@ -67,13 +67,14 @@ export function createUploader({
     return true;
   }
 
-  /** Hubo un cambio local con la sesión abierta. */
-  function changed() {
+  /** Hubo un cambio local con la sesión abierta. Con `now` (al terminar la fusión inicial) se sube
+      sin esperar: otro dispositivo que entre a la vez debe encontrar ya la copia fusionada. */
+  function changed({ now = false } = {}) {
     changes += 1;
     if (syncState(name) !== "failed") setSyncState(name, "pending"); // el aviso de fallo sigue hasta subirlo
     if (!gate.ready) return;
     clear();
-    timer = schedule(upload, delayMs);
+    timer = schedule(upload, now ? 0 : delayMs);
   }
 
   /** Al iniciar sesión: lo local aún no está en la cuenta hasta fusionarlo y subirlo. */

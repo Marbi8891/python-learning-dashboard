@@ -44,7 +44,7 @@ export function initPcapSync(onMerged) {
       doc.adopt(remote);
     },
     onSynced: () => {
-      uploader.changed(); // sube el resultado de la fusión
+      uploader.changed({ now: true }); // sube ya el resultado de la fusión
       onMerged();
     },
   });

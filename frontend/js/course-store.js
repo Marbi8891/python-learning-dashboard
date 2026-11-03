@@ -173,7 +173,7 @@ export function initCourseSync(onMerged) {
           docs.get(id).adopt(remote);
         },
         onSynced: () => {
-          saveCourse(id); // ya abierta: sube el resultado con la misma espera que cualquier cambio
+          uploaders.get(id).changed({ now: true }); // sube ya el resultado de la fusión
           onMerged();
         },
       }),

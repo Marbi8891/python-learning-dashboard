@@ -76,7 +76,7 @@ const gate = createSyncGate({
     mergeRemote(remote);
     doc.adopt(remote);
   },
-  onSynced: () => uploader.changed(), // sube el resultado con la misma espera que cualquier cambio
+  onSynced: () => uploader.changed({ now: true }), // sube ya el resultado de la fusión
 });
 
 // Estado de la subida y reintentos (uploader.js)

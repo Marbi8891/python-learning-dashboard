@@ -169,3 +169,11 @@ test("al terminar la sesión no queda nada pendiente ni programado", async () =>
   assert.equal(uploader.state, "saved");
   assert.equal(clock.pending().length, 0);
 });
+
+test("tras la fusión inicial se sube sin esperar (otro dispositivo puede entrar a la vez)", async () => {
+  const { clock, uploader } = setup();
+  uploader.changed({ now: true });
+  assert.equal(clock.pending()[0].ms, 0);
+  uploader.changed();
+  assert.equal(clock.pending()[0].ms, 5, "los cambios normales se siguen agrupando");
+});
