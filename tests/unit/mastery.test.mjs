@@ -138,7 +138,8 @@ test("mergeLearning une el progreso de dos dispositivos sin perder nada", () => 
   recordAttempt(remote, index.exercises.get("buc-01"), { ok: true, error: null }, { now: daysAgo(1) });
   markRead(remote, "bucles", daysAgo(3));
   mergeLearning(local, JSON.parse(JSON.stringify(remote)));
-  assert.equal(local.ex["buc-01"].n, 2, "gana el historial con más intentos");
+  assert.equal(local.ex["buc-01"].n, 2, "el número de intentos no baja");
+  assert.deepEqual(local.ex["buc-01"].h, [true], "gana el historial del intento más reciente (SYNC-02)");
   assert.ok(local.ex["var-01"]);
   assert.ok(local.errors["variables.orden-asignacion"]);
   assert.equal(local.concepts.bucles.read, daysAgo(3).toISOString());

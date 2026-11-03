@@ -77,6 +77,18 @@ test("«Detener» corta el programa al momento y la consola sigue funcionando (P
   await expect(output(page)).toContainText("sigo vivo");
 });
 
+test("un programa que cambia print no deja muda la consola (PY-03) y la salida enorme se recorta (PY-04)", async ({ page }) => {
+  await openLesson(page, "bucles");
+  await run(page, "import builtins\nbuiltins.print = lambda *a, **k: None");
+  await run(page, "print('sigo hablando')");
+  await expect(output(page)).toContainText("sigo hablando");
+
+  await run(page, "for i in range(100_000):\n    print('x' * 50)");
+  await expect(output(page)).toContainText("salida recortada", { timeout: 15_000 });
+  await run(page, "print(len('abc'))");
+  await expect(output(page)).toHaveText("3");
+});
+
 test("Ctrl+Enter ejecuta y Tab inserta 4 espacios", async ({ page }) => {
   await openLesson(page, "variables");
   const editor = page.locator("#console-editor");

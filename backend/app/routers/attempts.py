@@ -4,7 +4,7 @@ from fastapi import APIRouter, status
 from sqlalchemy import delete, select
 
 from app.config import get_settings
-from app.deps import CurrentUser, DbSession, get_lesson_or_404
+from app.deps import CurrentUser, DbSession, WritingUser, get_lesson_or_404
 from app.models import ExerciseAttempt
 from app.routers.progress import mark_completed
 from app.schemas import AttemptCreate, AttemptOut
@@ -16,7 +16,7 @@ HISTORY_LIMIT = 20
 
 @router.post("", response_model=AttemptOut, status_code=status.HTTP_201_CREATED)
 def create_attempt(
-    slug: str, data: AttemptCreate, user: CurrentUser, db: DbSession
+    slug: str, data: AttemptCreate, user: WritingUser, db: DbSession
 ) -> ExerciseAttempt:
     """Registra un intento. Si ha superado los tests, la lección queda completada."""
     lesson = get_lesson_or_404(db, slug)

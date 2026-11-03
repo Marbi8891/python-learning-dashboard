@@ -268,7 +268,17 @@ const later = (a, b, field = "last") => ((a?.[field] ?? "") >= (b?.[field] ?? ""
 /** Fusiona la copia de la cuenta con la local sin perder nada (web y app comparten el documento). */
 export function mergeLearning(local, remote) {
   const other = cleanLearning(remote);
-  for (const [id, entry] of Object.entries(other.ex)) local.ex[id] = !local.ex[id] || entry.n > local.ex[id].n ? entry : local.ex[id];
+  // El historial guarda solo los últimos intentos: gana el del intento más reciente (SYNC-02), y el
+  // número total de intentos no baja. Sin fecha en alguna copia, gana la que tiene más intentos.
+  for (const [id, entry] of Object.entries(other.ex)) {
+    const mine = local.ex[id];
+    if (!mine) {
+      local.ex[id] = entry;
+      continue;
+    }
+    const newer = mine.last && entry.last ? later(mine, entry) : entry.n > mine.n ? entry : mine;
+    local.ex[id] = { ...newer, n: Math.max(mine.n, entry.n) };
+  }
   for (const [id, entry] of Object.entries(other.concepts)) {
     const mine = local.concepts[id];
     if (!mine) {

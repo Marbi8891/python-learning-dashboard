@@ -797,7 +797,8 @@ export function initDashboard({ refresh, toast }) {
     switch (target.dataset.panel) {
       case "logout":
         target.disabled = true;
-        await logout();
+        // Si algo no se pudo guardar, la sesión sigue abierta y se explica en el diálogo (SYNC-01)
+        if (!(await logout())) target.disabled = false;
         break;
       case "retry":
         remote.error = null;

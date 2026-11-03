@@ -145,5 +145,23 @@
   "Mi aprendizaje": "My learning",
   "Certificado": "Certificate",
   "Cursos de DAW": "DAW courses",
-  "Las lecciones están en español. Puedes traducirlas con la opción «Traducir» de tu navegador: el código no se traduce.": "Lessons are in Spanish. You can translate them with your browser's “Translate” option: the code is never translated."
+  "Las lecciones están en español. Puedes traducirlas con la opción «Traducir» de tu navegador: el código no se traduce.": "Lessons are in Spanish. You can translate them with your browser's “Translate” option: the code is never translated.",
+
+  "Cambios sin guardar": "Unsaved changes",
+  "Esto no se ha podido guardar en tu cuenta y todavía está solo en este navegador:": "This could not be saved to your account and is still only in this browser:",
+  "Si cierras sesión y lo borras de este navegador, se perderá. Si lo conservas, se subirá a tu cuenta la próxima vez que entres aquí.": "If you sign out and delete it from this browser, it will be lost. If you keep it, it will be uploaded to your account the next time you sign in here.",
+  "Reintentar": "Try again",
+  "Cerrar sesión y conservarlo aquí": "Sign out and keep it here",
+  "Seguir con la sesión abierta": "Stay signed in",
+  "Cerrar sesión y borrarlo de este navegador": "Sign out and delete it from this browser",
+  "Lo que no se ha guardado en tu cuenta se perderá. Hazlo solo si este equipo no es tuyo y no te importa perderlo.": "Whatever was not saved to your account will be lost. Only do this if this computer is not yours and you don't mind losing it.",
+  "Cerrar sesión y borrar": "Sign out and delete",
+  "No se ha podido guardar en tu cuenta {list}. Se reintentará; mientras, sigue en este navegador.": "{list} could not be saved to your account. It will be retried; meanwhile it stays in this browser.",
+  "Todavía no se ha podido guardar. Comprueba tu conexión e inténtalo de nuevo.": "It still could not be saved. Check your connection and try again.",
+  "Guardando en tu cuenta…": "Saving to your account…",
+  "la preparación del PCAP": "your PCAP preparation",
+  "el progreso por conceptos": "your progress by concept",
+  "la XP y los logros": "your XP and badges",
+  "las lecciones completadas": "your completed lessons",
+  "el curso {name}": "the {name} course"
 }

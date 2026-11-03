@@ -158,7 +158,7 @@ FastAPI genera la documentación interactiva (OpenAPI) en `/docs`.
 ## 4.4 Seguridad
 
 - Las contraseñas se guardan con Argon2.
-- La sesión es un JWT dentro de una cookie `HttpOnly` (`__Host-pld_session`) que caduca a los 30 minutos, así JavaScript no puede leer el token. Como la cookie se envía sola, las peticiones que cambian datos llevan una cabecera extra para evitar CSRF.
+- La sesión es un JWT dentro de una cookie `HttpOnly` (`__Host-pld_session`) que caduca a los 30 minutos y se renueva mientras se usa la web, con un máximo de 12 horas desde que se inició la sesión. JavaScript no puede leer el token. Como la cookie se envía sola, las peticiones que cambian datos llevan una cabecera extra para evitar CSRF.
 - Al cambiar la contraseña se cierran todas las sesiones (campo `token_version`).
 - Hay un límite de intentos de inicio de sesión por IP y por cuenta.
 - CORS solo deja pasar los orígenes del frontend.

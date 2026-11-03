@@ -10,7 +10,7 @@ from typing import Annotated
 from fastapi import APIRouter, HTTPException, Path, status
 
 from app import state_documents
-from app.deps import CurrentUser, DbSession
+from app.deps import CurrentUser, DbSession, WritingUser
 from app.models import CourseState
 from app.schemas import COURSES, PcapStateIn, PcapStateOut
 
@@ -34,7 +34,7 @@ def get_course_state(course: CourseId, user: CurrentUser, db: DbSession) -> Pcap
     "/{course}", response_model=PcapStateOut, responses={409: {"description": "La cuenta cambió"}}
 )
 def save_course_state(
-    course: CourseId, body: PcapStateIn, user: CurrentUser, db: DbSession
+    course: CourseId, body: PcapStateIn, user: WritingUser, db: DbSession
 ) -> PcapStateOut:
     """Guarda el documento completo. La app ya lo ha fusionado con el de la cuenta.
     Con `version`, responde 409 si otra pestaña o dispositivo guardó entre medias."""

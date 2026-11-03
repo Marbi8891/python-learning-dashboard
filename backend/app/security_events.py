@@ -37,6 +37,7 @@ class Event(StrEnum):
     PASSWORD_CHANGED = "account.password_changed"  # T1098 Account Manipulation
     ACCOUNT_DELETED = "account.deleted"  # T1485 Data Destruction (si no lo pidió el titular)
     BODY_TOO_LARGE = "request.too_large"  # T1499.003 Application Exhaustion Flood
+    WRITES_LIMITED = "progress.rate_limited"  # T1499.003: llenar la base de datos a guardados
 
 
 TECHNIQUE = {
@@ -53,6 +54,7 @@ TECHNIQUE = {
     Event.PASSWORD_CHANGED: "T1098",
     Event.ACCOUNT_DELETED: "T1485",
     Event.BODY_TOO_LARGE: "T1499.003",
+    Event.WRITES_LIMITED: "T1499.003",
 }
 
 
