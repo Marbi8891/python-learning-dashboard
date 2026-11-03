@@ -31,9 +31,11 @@ def cookie_token(request: Request) -> str | None:
     return request.cookies.get(COOKIE_NAME) if wants_cookie(request) else None
 
 
-def issue_session(request: Request, response: Response, user_id: int, version: int) -> Token:
+def issue_session(
+    request: Request, response: Response, user_id: int, version: int, auth_time: int | None = None
+) -> Token:
     """Token nuevo: en la cookie si la web lo pide; si no, en el cuerpo (Bearer)."""
-    token = create_access_token(user_id, version)
+    token = create_access_token(user_id, version, auth_time)
     if not wants_cookie(request):
         return Token(access_token=token)
     _set(response, token, get_settings().access_token_minutes * 60)
