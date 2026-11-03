@@ -192,6 +192,9 @@ COURSES = ("sql", "js", "java", "entornos", "programacion", "learn", "game")
 
 class PcapStateIn(BaseModel):
     data: dict
+    # Versión que leyó la app. Si no coincide con la de la cuenta, 409 (otra pestaña guardó antes).
+    # Sin ella se guarda sin comprobar, como hacían las versiones anteriores de la app.
+    version: int | None = Field(default=None, ge=0)
 
     @field_validator("data")
     @classmethod
@@ -204,6 +207,7 @@ class PcapStateIn(BaseModel):
 class PcapStateOut(BaseModel):
     data: dict
     updated_at: datetime | None
+    version: int = 0
 
 
 # ---------- Exportación de datos (RGPD, derecho de acceso y portabilidad) ----------

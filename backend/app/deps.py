@@ -2,16 +2,17 @@
 
 from typing import Annotated
 
-from fastapi import Depends, HTTPException, Request, status
+from fastapi import Depends, HTTPException, Request, Response, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.models import Lesson, User
-from app.security import decode_access_token, looks_forged
+from app.rate_limit import TOO_MANY_WRITES, write_limiter
+from app.security import decode_access_token, looks_forged, renewal_auth_time
 from app.security_events import Event, record
-from app.session_cookie import cookie_token
+from app.session_cookie import cookie_token, issue_session
 
 # auto_error=False: si no hay cabecera Authorization, se mira la cookie de la web
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login", auto_error=False)
@@ -20,7 +21,10 @@ DbSession = Annotated[Session, Depends(get_db)]
 
 
 def get_current_user(
-    bearer: Annotated[str | None, Depends(oauth2_scheme)], request: Request, db: DbSession
+    bearer: Annotated[str | None, Depends(oauth2_scheme)],
+    request: Request,
+    response: Response,
+    db: DbSession,
 ) -> User:
     token = bearer or cookie_token(request)
     if not token:
@@ -43,10 +47,28 @@ def get_current_user(
             detail="Sesión no válida o caducada",
             headers={"WWW-Authenticate": "Bearer"},
         )
+    # Sesión de la web (cookie) usada a mitad de su vida: se renueva para no cortar al alumno que
+    # sigue estudiando, con la misma caducidad absoluta (AUTH-01)
+    if not bearer:
+        started = renewal_auth_time(token)
+        if started is not None:
+            issue_session(request, response, user.id, user.token_version, started)
     return user
 
 
 CurrentUser = Annotated[User, Depends(get_current_user)]
+
+
+def get_writing_user(user: CurrentUser, request: Request) -> User:
+    """Quien guarda progreso, con límite de guardados por minuto (AUD-009)."""
+    if not write_limiter.hit(str(user.id)):
+        record(Event.WRITES_LIMITED, request, user=user.id)
+        raise HTTPException(status_code=status.HTTP_429_TOO_MANY_REQUESTS, detail=TOO_MANY_WRITES)
+    return user
+
+
+# Para los endpoints que escriben progreso (estado de cursos y PCAP, lecciones e intentos)
+WritingUser = Annotated[User, Depends(get_writing_user)]
 
 
 def get_lesson_or_404(db: Session, slug: str) -> Lesson:

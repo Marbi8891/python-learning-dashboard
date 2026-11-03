@@ -51,6 +51,7 @@ rm frontend/_pyo
 | Si cambias… | Ejecuta |
 |---|---|
 | `frontend/js/learn/*` | `npm run test:unit` y, si cambian vistas, `npm run test:e2e` |
+| `frontend/i18n/*.json` o `frontend/js/i18n.js` | `npm run test:unit` y `npx playwright test e2e/idiomas.spec.js` (guía en [`IDIOMAS.md`](IDIOMAS.md)) |
 | HTML o CSS | `npm run test:e2e` |
 | `frontend/data/lessons.json` o `pcap.json` | `cd backend && python -m pytest -q tests/test_content.py tests/test_pcap.py` |
 | `scripts/learning/**` | `python scripts/learning/build_learning.py` y después `--check` |

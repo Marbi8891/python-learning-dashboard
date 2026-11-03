@@ -1,36 +1,36 @@
 /* Guarda la preparación del PCAP en la cuenta.
    Al iniciar sesión fusiona la copia de la cuenta con la local; después sube cada cambio.
-   No sube nada hasta que esa fusión sale bien (sync-gate.js), para no pisar la copia de la cuenta. */
+   No sube nada hasta que esa fusión sale bien (sync-gate.js), para no pisar la copia de la cuenta.
+   El estado de la subida y los reintentos están en uploader.js. */
 
 import { request } from "./api.js";
 import { mergePcap, onPcapSave, pcap, savePcap } from "./pcap-store.js";
 import { state, subscribe } from "./store.js";
+import { createDocSync } from "./doc-sync.js";
 import { createSyncGate } from "./sync-gate.js";
+import { createUploader } from "./uploader.js";
 
-const DEBOUNCE_MS = 1500; // agrupa los cambios seguidos (p. ej. una tanda de práctica) en un envío
-let timer = null;
 let gate = null;
+let uploader = null;
 
-async function push() {
-  timer = null;
-  if (!gate?.ready) return;
-  try {
-    await request("PUT", "/api/pcap-state", { json: { data: pcap } });
-  } catch (error) {
-    console.warn("No se pudo guardar la preparación en la cuenta:", error.message);
-  }
+function mergeRemote(remote) {
+  mergePcap(remote.data);
+  savePcap();
 }
 
-/** Sube ya el cambio pendiente (antes de cerrar sesión). Si aún no se había fusionado, lo intenta. */
+// Sube con la versión leída: si otra pestaña guardó antes (409), relee, fusiona y reintenta
+const doc = createDocSync({
+  path: "/api/pcap-state",
+  request,
+  data: () => pcap,
+  merge: mergeRemote,
+  valid: () => gate?.ready === true,
+});
+
+/** Sube ya el cambio pendiente (antes de cerrar sesión). Devuelve si la cuenta lo tiene todo. */
 export async function flushPcapSync() {
-  if (!state.user || !gate) return;
-  if (!gate.ready) {
-    await gate.sync(); // al salir bien, sube el documento fusionado
-    return;
-  }
-  if (!timer) return;
-  clearTimeout(timer);
-  await push();
+  if (!state.user || !uploader) return true;
+  return uploader.flush();
 }
 
 /** @param {() => void} onMerged se llama cuando llega la copia de la cuenta (para repintar) */
@@ -40,21 +40,27 @@ export function initPcapSync(onMerged) {
     active: () => Boolean(state.user),
     load: () => request("GET", "/api/pcap-state"),
     merge: (remote) => {
-      mergePcap(remote.data);
-      savePcap();
+      mergeRemote(remote);
+      doc.adopt(remote);
     },
-    onSynced: async () => {
-      clearTimeout(timer);
-      await push();
+    onSynced: () => {
+      uploader.changed({ now: true }); // sube ya el resultado de la fusión
       onMerged();
     },
   });
+  uploader = createUploader({
+    name: "pcap",
+    label: "la preparación del PCAP",
+    gate,
+    push: () => doc.push(),
+  });
   onPcapSave(() => {
-    if (!state.user || !gate.ready) return;
-    clearTimeout(timer);
-    timer = setTimeout(push, DEBOUNCE_MS);
+    if (state.user) uploader.changed();
   });
   subscribe((change) => {
-    if (change.type === "user") gate.restart();
+    if (change.type !== "user") return;
+    if (state.user) uploader.sessionStarted();
+    else uploader.sessionEnded();
+    gate.restart();
   });
 }

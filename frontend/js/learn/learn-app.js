@@ -9,6 +9,8 @@
      #/progreso             dominio por concepto, errores y actividad
      #/sesion               sesión de estudio en curso (session-view.js) */
 
+import { locale } from "../i18n.js";
+import { prefersReducedMotion } from "../prefs.js";
 import { learning, loadLearningContent, onLearningChange, saveLearning } from "./learn-store.js";
 import { onWelcomeClick, onWelcomeKeydown, renderWelcome } from "./welcome.js";
 import { activeErrors, allStats, areaSummary, daysBetween, lastActivity, markRead } from "./mastery.js";
@@ -41,7 +43,7 @@ function ago(iso, now = new Date()) {
   return `hace ${days} días`;
 }
 
-const formatDay = (iso) => new Date(iso).toLocaleDateString("es-ES", { day: "numeric", month: "short" });
+const formatDay = (iso) => new Date(iso).toLocaleDateString(locale, { day: "numeric", month: "short" });
 
 const DAILY_BUDGET_KEY = "pld:daily-study-minutes";
 const DAILY_BUDGET_OPTIONS = [15, 30, 45, 60];
@@ -77,7 +79,7 @@ function renderToday() {
   const mastered = all.filter((s) => s.status === "dominado").length;
   const due = all.filter((s) => s.due);
   const last = lastActivity(index, learning);
-  const date = now.toLocaleDateString("es-ES", { weekday: "long", day: "numeric", month: "long" });
+  const date = now.toLocaleDateString(locale, { weekday: "long", day: "numeric", month: "long" });
   const [first, ...rest] = plan;
   const startButton = (item, label, primary) =>
     `<button class="btn ${primary ? "btn--primary btn--lg" : "btn--ghost"}" type="button" data-learn="plan" data-type="${item.type}" data-concept="${escapeHtml(item.concept)}"${item.errors ? ` data-errors="${escapeHtml(item.errors.join(","))}"` : ""}>${label}<span class="visually-hidden">: ${ACTION[item.type]} ${escapeHtml(title(item.concept))}</span></button>`;
@@ -229,7 +231,21 @@ function renderConcept(id) {
   const position = index.path.indexOf(id);
   const prev = index.path[position - 1];
   const next = index.path[position + 1];
+  // Índice «En esta página» (columna derecha en pantallas anchas). Son enlaces a la propia ruta:
+  // el clic desplaza hasta la sección sin cambiar el hash (el enrutador usa el hash).
+  const toc = [
+    ["lx-expl", "Explicación"],
+    ["lx-example", "Ejemplo, línea a línea"],
+    ["lx-when", "Cuándo usarlo"],
+    ["lx-errors", "Errores habituales"],
+    ["lx-practice", "Comprueba que lo entiendes"],
+    ...(concept.related?.length ? [["lx-related", "Relacionado"]] : []),
+  ]
+    .map(([section, label]) => `<li><a href="#/teoria/${id}" data-learn="toc" data-section="${section}">${label}</a></li>`)
+    .join("");
   return `
+    <div class="lx-doc">
+    <div class="lx-doc__main">
     <p class="daw-crumb"><a href="#/teoria">Teoría</a> › ${escapeHtml(index.areas.find((a) => a.id === concept.area).title)}</p>
     <header class="lx-head">
       <p class="eyebrow">Concepto ${position + 1} de ${index.path.length} · ${concept.daw === 3 ? "Imprescindible para DAW" : "Importante para DAW"}</p>
@@ -282,7 +298,13 @@ function renderConcept(id) {
     <nav class="daw-pager" aria-label="Conceptos">
       ${prev ? `<a class="btn btn--ghost" href="#/teoria/${prev}">← ${escapeHtml(title(prev))}</a>` : "<span></span>"}
       ${next ? `<a class="btn btn--ghost" href="#/teoria/${next}">${escapeHtml(title(next))} →</a>` : "<span></span>"}
-    </nav>`;
+    </nav>
+    </div>
+    <nav class="lx-toc" aria-label="En esta página">
+      <p class="lx-toc__title">En esta página</p>
+      <ol class="lx-toc__list">${toc}</ol>
+    </nav>
+    </div>`;
 }
 
 /* ---------- Practicar ---------- */
@@ -347,11 +369,14 @@ function renderPractice() {
     <section class="lx-section" aria-labelledby="lx-activity-title">
       <h2 class="lx-section__title" id="lx-activity-title">Por tipo de actividad</h2>
       <p class="lx-muted">Sobre los conceptos que ya has empezado: ${scope.map((id) => escapeHtml(title(id))).join(", ")}.</p>
-      <ul class="lx-cards">
+      <ul class="lx-activities">
         ${ACTIVITIES.map((a) => {
           const available = selectExercises(index, learning, scope, 6, { kinds: a.kinds, now }).length;
-          return `<li class="lx-card"><h3 class="lx-card__title">${a.label}</h3><p class="lx-muted">${a.text}</p>
-            <button class="btn btn--ghost" type="button" data-learn="activity" data-activity="${a.id}"${available ? "" : " disabled"}>${available ? `Practicar (${available})` : "Aún no hay ejercicios"}</button></li>`;
+          // Sin ejercicios no se pinta un botón desactivado: se dice en texto (RP-07)
+          const action = available
+            ? `<button class="btn btn--ghost" type="button" data-learn="activity" data-activity="${a.id}">Practicar (${available})</button>`
+            : '<span class="lx-activities__none">Aún sin ejercicios en estos conceptos</span>';
+          return `<li class="lx-activities__item" data-available="${available ? "true" : "false"}"><div><h3 class="lx-activities__title">${a.label}</h3><p class="lx-muted">${a.text}</p></div>${action}</li>`;
         }).join("")}
       </ul>
     </section>`;
@@ -374,14 +399,14 @@ function renderProgress() {
       (area) => `
       <section class="lx-section" aria-labelledby="pa-${area.id}">
         <h2 class="lx-section__title" id="pa-${area.id}">${escapeHtml(area.title)} <span class="lx-muted">· ${area.mastered}/${area.total}</span></h2>
-        <div class="table-wrap" tabindex="0"><table class="lx-table">
-          <thead><tr><th scope="col">Concepto</th><th scope="col">Estado</th><th scope="col">Dominio</th><th scope="col">Última vez</th><th scope="col">Próximo repaso</th></tr></thead>
-          <tbody>${area.ids
+        <div class="table-wrap" tabindex="0"><table class="lx-table lx-table--reflow" role="table" aria-labelledby="pa-${area.id}">
+          <thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">Concepto</th><th scope="col" role="columnheader">Estado</th><th scope="col" role="columnheader">Dominio</th><th scope="col" role="columnheader">Última vez</th><th scope="col" role="columnheader">Próximo repaso</th></tr></thead>
+          <tbody role="rowgroup">${area.ids
             .map((id) => {
               const s = stats.get(id);
-              return `<tr><th scope="row"><a href="#/teoria/${id}">${escapeHtml(title(id))}</a></th><td>${statusBadge(s)}</td>
-                <td>${meter(s.score, `Dominio de ${title(id)}`)} <span class="lx-row__value">${percent(s.score)}</span></td>
-                <td>${s.last ? ago(s.last, now) : "—"}</td><td>${s.nextReview ? formatDay(s.nextReview) : "—"}</td></tr>`;
+              return `<tr role="row"><th scope="row" role="rowheader"><a href="#/teoria/${id}">${escapeHtml(title(id))}</a></th><td role="cell" data-label="Estado">${statusBadge(s)}</td>
+                <td role="cell" data-label="Dominio">${meter(s.score, `Dominio de ${title(id)}`)} <span class="lx-row__value">${percent(s.score)}</span></td>
+                <td role="cell" data-label="Última vez">${s.last ? ago(s.last, now) : "—"}</td><td role="cell" data-label="Próximo repaso">${s.nextReview ? formatDay(s.nextReview) : "—"}</td></tr>`;
             })
             .join("")}</tbody>
         </table></div>
@@ -489,6 +514,15 @@ function onClick(event) {
   if (onWelcomeClick(target)) return;
   const { concept } = target.dataset;
   switch (target.dataset.learn) {
+    case "toc": {
+      event.preventDefault();
+      const heading = document.getElementById(target.dataset.section); // el <h2> de la sección
+      if (!heading) break;
+      heading.scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth", block: "start" });
+      heading.setAttribute("tabindex", "-1");
+      heading.focus({ preventScroll: true });
+      break;
+    }
     case "duration":
       saveDailyBudget(target.dataset.minutes);
       render(location.hash);
@@ -583,6 +617,14 @@ function render(route) {
   else if (section === "daw") html = renderDawPrep(index, learning);
   else html = renderToday();
   root().innerHTML = html;
+  document.title = `${pageTitle(section, arg)} · Python Learning Dashboard`;
+}
+
+/** Título de la pestaña propio de cada pantalla (WCAG 2.4.2): el lector de pantalla lo anuncia al
+    cambiar de ruta y sirve para distinguir pestañas. Antes todas se llamaban «Aprender». */
+function pageTitle(section, arg) {
+  if (section === "teoria") return arg && index.concepts.has(arg) ? `${title(arg)} · Teoría` : "Teoría";
+  return { bienvenida: "Bienvenida", practicar: "Practicar", progreso: "Tu progreso", daw: "Preparación DAW" }[section] ?? "Aprender";
 }
 
 export const LEARN_ROUTES = ["#/bienvenida", "#/aprender", "#/teoria", "#/practicar", "#/progreso", "#/sesion"];

@@ -324,6 +324,18 @@ a.lesson:hover {
   white-space: nowrap;
 }
 
+/* Aviso de que una subida a la cuenta falló (SYNC-04). Vacío no ocupa sitio, pero sigue en el
+   árbol de accesibilidad para que el lector de pantalla anuncie el cambio (role="status"). */
+.sync-status {
+  margin: var(--space-2) 0 0;
+  font-size: var(--text-sm);
+  color: var(--color-danger);
+}
+
+.sync-status:empty {
+  margin: 0;
+}
+
 .sidebar__footer {
   margin-top: auto;
   padding-inline: var(--space-2);

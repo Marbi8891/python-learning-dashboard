@@ -65,8 +65,13 @@ login_failures = RateLimiter(
 )
 # Peticiones de recuperación por email: evita llenar de correos la bandeja de alguien
 reset_requests = RateLimiter(3, 15 * 60)
+# Guardados de progreso por usuario (AUD-009): la base de datos gratuita tiene poco espacio
+write_limiter = RateLimiter(_settings.write_rate_limit_per_minute)
 
 TOO_MANY = "Demasiados intentos. Espera un poco y vuelve a probar."
+TOO_MANY_WRITES = (
+    "Demasiados guardados seguidos. Tu progreso sigue en este navegador: se volverá a intentar."
+)
 
 
 def client_ip(request: Request) -> str:

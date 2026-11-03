@@ -2,39 +2,44 @@
    tokens.css — sistema visual de toda la web (docs/DISENO.md)
    Un único sitio para colores, tipografía, tamaños, espaciado,
    radios y sombras. Se carga antes que cualquier otra hoja.
-   Antes estaban repartidos entre base.css (paleta dorada) y
-   pro.css (la azul que se veía): ahora solo queda la que se ve.
+   Identidad (rediseño 11/2026): grafito como base y ámbar
+   Python como único acento de acción. El verde queda solo para
+   acierto y progreso, y el rojo para errores. El tema claro es
+   un papel cálido con un ámbar oscuro para el texto, no una
+   inversión del oscuro. Contrastes medidos en docs/DISENO.md.
    ========================================================= */
 
 /* ---------- Tema oscuro (por defecto) ---------- */
 :root {
   /* Superficies */
-  --color-bg: #0b0f14;
-  --color-surface: #111720;
-  --color-surface-2: #17202b;
-  --color-code-bg: #080c11;
-  --color-border: #263241;
-  --color-input-bg: #0a0b0e;
+  --color-bg: #121417;        /* grafito */
+  --color-surface: #181b1f;
+  --color-surface-2: #20242a;
+  --color-code-bg: #0e1013;
+  --color-border: #2e333b;    /* separadores (decorativo) */
+  --color-border-control: #6a727e; /* borde de campos y botones: 3:1 o más sobre fondo y superficies (WCAG 1.4.11) */
+  --color-input-bg: #0e1013;
 
   /* Texto */
-  --color-text: #edf2f7;
-  --color-text-muted: #9aa8b8;
-  --color-text-faint: #8b98aa; /* 5,6:1 sobre --color-surface-2 (WCAG AA) */
-  --color-strong: #ffffff;
-  --color-link: #93c5fd;
-  --color-code-inline: #86efac;
-  --color-code-text: #e6ebf5;
+  --color-text: #ebe7df;      /* blanco suave, un punto cálido */
+  --color-text-muted: #a7abb2; /* 6,8:1 sobre --color-surface-2 */
+  --color-text-faint: #979ca5; /* 5,6:1 sobre --color-surface-2 (WCAG AA) */
+  --color-strong: #faf8f3;
+  --color-link: #f5c66b;
+  --color-code-inline: #9fd6b0;
+  --color-code-text: #e8e6e1;
 
-  /* Acción principal (azul): botones, enlaces destacados y foco */
-  --color-primary: #60a5fa;
-  --color-primary-soft: rgb(96 165 250 / .12);
-  --color-primary-strong: #2563eb;
-  --color-primary-hover: #3b82f6;
-  --color-on-primary: #ffffff;
+  /* Acción principal (ámbar Python): botones, enlaces destacados y foco.
+     El texto sobre el ámbar es oscuro (9,9:1). */
+  --color-primary: #f2b443;
+  --color-primary-soft: rgb(242 180 67 / .12);
+  --color-primary-strong: #f2b443;
+  --color-primary-hover: #f6c564;
+  --color-on-primary: #1b1405;
 
   /* Progreso y acierto (verde) */
-  --color-accent: #22c55e;
-  --color-accent-soft: rgb(34 197 94 / .12);
+  --color-accent: #3ccb72;
+  --color-accent-soft: rgb(60 203 114 / .12);
   --color-accent-hover: #34d399;
   --color-on-accent: #06130b;
 
@@ -44,7 +49,7 @@
   --color-gold: #fbbf24;
   --color-streak: #f4a66a;
   --color-hint: #f1d98f;
-  --shadow: rgb(0 0 0 / .28);
+  --shadow: rgb(0 0 0 / .32);
   --hairline: linear-gradient(90deg, transparent, rgb(212 175 106 / 0.45), transparent);
 
   /* Tipografía */
@@ -83,12 +88,28 @@
   --radius-pill: 999px;
   --shadow-1: 0 1px 2px var(--shadow);
   --shadow-2: 0 8px 24px -16px var(--shadow);
+  --border-width: 1px;
   --focus-ring: 0 0 0 3px var(--color-primary-soft);
+  --focus-outline: 2px solid var(--color-primary);
 
-  /* Layout y movimiento */
+  /* Estados interactivos */
+  --state-hover-bg: var(--color-primary-soft);
+  --state-disabled-opacity: .55;
+
+  /* Anchos y alturas */
+  --measure: 70ch;            /* línea de lectura cómoda */
+  --content-max: 1180px;      /* ancho máximo del contenido de la app */
+  --page-max: 1240px;         /* ancho máximo de la portada */
+  --nav-height: 64px;         /* cabecera de la portada y barra superior móvil */
   --sidebar-width: 272px;
-  --transition: 180ms ease;
   --tap-target: 44px; /* tamaño mínimo de los objetivos táctiles */
+
+  /* Movimiento: breve y solo para dar respuesta (se anula con prefers-reduced-motion) */
+  --duration-fast: 120ms;
+  --duration: 180ms;
+  --duration-slow: 320ms;
+  --ease: cubic-bezier(.2, 0, 0, 1);
+  --transition: var(--duration) var(--ease);
 
   color-scheme: dark;
 }
@@ -96,27 +117,29 @@
 /* ---------- Tema claro ---------- */
 :root[data-theme="light"] {
   /* Superficies */
-  --color-bg: #f5f7fa;
+  --color-bg: #f6f4ef;        /* papel cálido */
   --color-surface: #ffffff;
-  --color-surface-2: #f0f3f7;
-  --color-code-bg: #0b1118;
-  --color-border: #dce3eb;
+  --color-surface-2: #eeebe4;
+  --color-code-bg: #16181c;   /* el código sigue en oscuro: se lee igual en los dos temas */
+  --color-border: #dbd6cb;
+  --color-border-control: #8b867b; /* 3:1 o más sobre fondo y superficies */
   --color-input-bg: #ffffff;
 
   /* Texto */
-  --color-text: #17202b;
-  --color-text-muted: #5d6b7b;
-  --color-text-faint: #5d6b7b; /* 4,9:1 sobre --color-surface-2 (WCAG AA) */
-  --color-strong: #0f1720;
-  --color-link: #1d4ed8;
-  --color-code-inline: #15803d;
+  --color-text: #1c1e22;
+  --color-text-muted: #575c64; /* 5,6:1 sobre --color-surface-2 */
+  --color-text-faint: #575c64;
+  --color-strong: #111316;
+  --color-link: #8a5300;      /* ámbar oscuro: 5,3:1 sobre --color-surface-2 */
+  --color-code-inline: #1b6e3e;
 
-  /* Acción principal (azul): botones, enlaces destacados y foco */
-  --color-primary: #2563eb;
-  --color-primary-soft: rgb(37 99 235 / .09);
-  --color-primary-strong: #1d4ed8;
-  --color-primary-hover: #2563eb;
-  --color-on-primary: #ffffff;
+  /* Acción principal: el ámbar claro va de fondo de los botones (texto oscuro, 8,5:1)
+     y el ámbar oscuro en textos, bordes y marcas. */
+  --color-primary: #8a5300;
+  --color-primary-soft: rgb(229 165 43 / .16);
+  --color-primary-strong: #e5a52b;
+  --color-primary-hover: #d99a1f;
+  --color-on-primary: #1b1405;
 
   /* Progreso y acierto (verde) */
   --color-accent: #166534; /* 5,6:1 sobre --color-accent-soft (WCAG AA) */
@@ -130,7 +153,7 @@
   --color-gold: #854d0e; /* 6,1:1 sobre --color-surface-2 */
   --color-streak: #b4410c;
   --color-hint: #7c4a03;
-  --shadow: rgb(15 23 42 / .08);
+  --shadow: rgb(60 45 20 / .10);
   --hairline: linear-gradient(90deg, transparent, rgb(122 90 16 / 0.35), transparent);
 
   color-scheme: light;
@@ -143,4 +166,21 @@
 
 :root[data-font="muy-grande"] {
   --ui-zoom: 1.25;
+}
+
+/* ---------- Contraste alto: lo pide el sistema o el alumno en Aspecto ----------
+   Todo el texto secundario pasa a tener el color del texto principal y los separadores, el de
+   los bordes de los controles. [data-theme] sube la especificidad por encima de cada tema. */
+:root[data-theme][data-contrast="alto"] {
+  --color-text-muted: var(--color-text);
+  --color-text-faint: var(--color-text);
+  --color-border: var(--color-border-control);
+}
+
+@media (prefers-contrast: more) {
+  :root[data-theme] {
+    --color-text-muted: var(--color-text);
+    --color-text-faint: var(--color-text);
+    --color-border: var(--color-border-control);
+  }
 }

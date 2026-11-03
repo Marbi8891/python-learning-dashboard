@@ -7,6 +7,7 @@ from sqlalchemy import (
     DateTime,
     ForeignKey,
     Index,
+    Integer,
     String,
     Text,
     UniqueConstraint,
@@ -129,6 +130,9 @@ class PcapState(Base):
         ForeignKey("users.id", ondelete="CASCADE"), primary_key=True
     )
     data: Mapped[dict] = mapped_column(JSON)
+    # Sube en cada guardado. Quien guarda dice qué versión leyó: si otra pestaña o dispositivo
+    # guardó entre medias, el servidor responde 409 en vez de pisarlo (ver app/state_documents.py)
+    version: Mapped[int] = mapped_column(Integer, default=0, server_default=text("0"))
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
     )
@@ -148,6 +152,9 @@ class CourseState(Base):
     )
     course: Mapped[str] = mapped_column(String(20), primary_key=True)
     data: Mapped[dict] = mapped_column(JSON)
+    # Sube en cada guardado. Quien guarda dice qué versión leyó: si otra pestaña o dispositivo
+    # guardó entre medias, el servidor responde 409 en vez de pisarlo (ver app/state_documents.py)
+    version: Mapped[int] = mapped_column(Integer, default=0, server_default=text("0"))
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
     )

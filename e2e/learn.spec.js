@@ -358,6 +358,22 @@ for (const colorScheme of ["light", "dark"]) {
   });
 }
 
+test("cada pantalla del núcleo tiene su propio título de pestaña (WCAG 2.4.2)", async ({ page }) => {
+  const cases = [
+    ["/#/aprender", /^Aprender · /],
+    ["/#/teoria", /^Teoría · /],
+    ["/#/teoria/bucles", /· Teoría · Python Learning Dashboard$/],
+    ["/#/practicar", /^Practicar · /],
+    ["/#/progreso", /^Tu progreso · /],
+    ["/#/daw", /^Preparación DAW · /],
+  ];
+  for (const [url, title] of cases) {
+    await page.goto(url);
+    await page.locator("#learn-title").waitFor();
+    await expect(page).toHaveTitle(title);
+  }
+});
+
 test("en el móvil el plan de hoy se lee sin desbordarse", async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 800 });
   await page.goto("/#/aprender");
@@ -382,6 +398,35 @@ test("en el móvil el selector «Por concepto» de Practicar cabe en la pantalla
     expect(box.height).toBeGreaterThanOrEqual(40);
     await expect(page.getByRole("combobox", { name: "Concepto" })).toBeVisible();
   }
+});
+
+test("Practicar no muestra botones desactivados: si un tipo no tiene ejercicios lo dice en texto (RP-07)", async ({ page }) => {
+  await page.goto("/#/practicar");
+  const items = page.locator(".lx-activities__item");
+  await expect(items).toHaveCount(5);
+  await expect(page.locator(".lx-activities button:disabled")).toHaveCount(0);
+  // Cada tipo tiene o un botón para practicar o el aviso en texto, nunca los dos
+  for (const item of await items.all()) {
+    const available = (await item.getAttribute("data-available")) === "true";
+    await expect(item.getByRole("button", { name: /^Practicar \(\d+\)$/ })).toHaveCount(available ? 1 : 0);
+    await expect(item.locator(".lx-activities__none")).toHaveCount(available ? 0 : 1);
+  }
+});
+
+test("en el móvil la tabla de Progreso se lee sin scroll lateral y conserva su semántica", async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 700 });
+  await page.goto("/#/progreso");
+  const table = page.getByRole("table").first();
+  await expect(table).toBeVisible();
+  // Sigue siendo una tabla para el lector de pantalla: filas, encabezado de fila y celdas
+  await expect(table.getByRole("rowheader").first()).toBeVisible();
+  await expect(table.getByRole("cell").first()).toBeVisible();
+  // Nada se sale: ni la página ni el contenedor de la tabla necesitan scroll horizontal
+  expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(0);
+  const wrap = page.locator(".table-wrap").first();
+  expect(await wrap.evaluate((el) => el.scrollWidth - el.clientWidth)).toBeLessThanOrEqual(0);
+  // Cada dato lleva su etiqueta visible al ocultarse la cabecera
+  await expect(table.locator('td[data-label="Próximo repaso"]').first()).toBeVisible();
 });
 
 test.describe("Preparación DAW", () => {
@@ -445,4 +490,24 @@ test("prueba de nivel: se ofrece al empezar y lo acertado se salta en la ruta pe
   await expect(page.locator('.lx-route__item[data-status="next"]')).toContainText("Operadores y expresiones");
   await expect(page.locator('.lx-route__item[data-status="next"]')).toContainText("antes refuerza Tipos de datos");
   await expect(page.locator(".lx-route__item").nth(1)).toContainText("Superado en la prueba de nivel");
+});
+
+test.describe("pantalla ancha (tres áreas)", () => {
+  test.use({ viewport: { width: 1440, height: 900 } });
+
+  test("el índice «En esta página» del concepto desplaza sin cambiar la ruta", async ({ page }) => {
+    await page.goto("/#/teoria/bucles");
+    const toc = page.getByRole("navigation", { name: "En esta página" });
+    await expect(toc).toBeVisible();
+    await toc.getByRole("link", { name: "Errores habituales" }).click();
+    await expect(page).toHaveURL(/#\/teoria\/bucles$/);
+    await expect(page.locator("#lx-errors")).toBeFocused();
+    await expect(page.locator("#lx-errors")).toBeInViewport();
+  });
+
+  test("en la lección se ve el índice del curso sin desplazar el menú lateral", async ({ page }) => {
+    await page.goto("/#/leccion/variables");
+    await expect(page.getByRole("heading", { name: "Lecciones del curso PCAP" })).toBeInViewport();
+    await expect(page.locator("#console-editor")).toBeInViewport();
+  });
 });

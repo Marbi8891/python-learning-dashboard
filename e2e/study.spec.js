@@ -62,8 +62,13 @@ test("la preparación del PCAP se guarda en la cuenta y llega a otro dispositivo
   await form.getByLabel("Email").fill(email);
   await form.getByLabel(/Contraseña/).fill(password);
   await form.getByLabel(/He leído la política/).check();
+  // Al entrar, la web fusiona y sube su preparación: el otro dispositivo debe encontrarla en la cuenta
+  const uploaded = page.waitForResponse(
+    (r) => r.url().endsWith("/pcap-state") && r.request().method() === "PUT" && r.ok(),
+  );
   await form.getByRole("button", { name: "Crear cuenta" }).click();
   await expect(page.locator("#account-label")).toHaveText("Ana");
+  await uploaded;
   await expect
     .poll(async () => (await page.evaluate(() => JSON.parse(localStorage.getItem("pld:pcap")).known.length)))
     .toBe(1);

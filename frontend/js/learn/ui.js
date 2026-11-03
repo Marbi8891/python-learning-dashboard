@@ -3,6 +3,7 @@
 
 import hljs from "../../vendor/highlight/core.min.js";
 import python from "../../vendor/highlight/python.min.js";
+import { RUN_KEYS_HTML } from "../keys.js";
 import { escapeHtml, renderInline, renderMarkdown } from "../markdown.js";
 import { grade } from "./answers.js";
 
@@ -158,7 +159,7 @@ function codeBody(ex, answer, reveal) {
     <label class="lx-field">Tu programa
       <textarea class="lx-editor" id="lx-code" rows="${Math.max(8, (answer.code ?? ex.starter).split("\n").length + 2)}" spellcheck="false" autocapitalize="off" autocomplete="off" aria-describedby="lx-code-help"${reveal ? " readonly" : ""}>${escapeHtml(answer.code ?? ex.starter)}</textarea>
     </label>
-    <p class="console__help" id="lx-code-help"><kbd>Tab</kbd> inserta 4 espacios · <kbd>Esc</kbd> y después <kbd>Tab</kbd> para salir del editor · <kbd>Ctrl</kbd>+<kbd>Enter</kbd> ejecuta</p>
+    <p class="console__help" id="lx-code-help"><kbd>Tab</kbd> inserta 4 espacios · <kbd>Esc</kbd> y después <kbd>Tab</kbd> para salir del editor · ${RUN_KEYS_HTML} ejecuta</p>
     ${usesInput(ex) ? `<label class="lx-field">Entrada para probar (una línea por cada <code>input()</code>)<textarea id="lx-stdin" rows="2" spellcheck="false">${escapeHtml(answer.stdin ?? ex.checks.find((c) => c.stdin)?.stdin ?? "")}</textarea></label>` : ""}
     <div class="lx-actions">
       <button class="btn btn--ghost" type="button" data-lx="run"${reveal ? " disabled" : ""}>▶ Ejecutar</button>

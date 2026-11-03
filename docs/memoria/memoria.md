@@ -149,12 +149,16 @@ Las tablas de contenido (`modules`, `lessons`) se rellenan desde `lessons.json` 
 | GET, PUT | `/api/v1/course-state/{curso}` | Progreso de los cursos de DAW, del núcleo por conceptos (`learn`) y de la gamificación (`game`) |
 | GET | `/api/v1/dashboard`, `/dashboard/activity` | Datos del panel del alumno e historial de aprendizaje |
 
+Los documentos de `pcap-state` y `course-state` llevan un número de versión. Cada `PUT` dice qué
+versión leyó la app; si otra pestaña o dispositivo guardó entre medias, el servidor responde 409 y la
+app vuelve a leer, fusiona y reintenta, así que no se pierde lo guardado desde el otro sitio.
+
 FastAPI genera la documentación interactiva (OpenAPI) en `/docs`.
 
 ## 4.4 Seguridad
 
 - Las contraseñas se guardan con Argon2.
-- La sesión es un JWT dentro de una cookie `HttpOnly` (`__Host-pld_session`) que caduca a los 30 minutos, así JavaScript no puede leer el token. Como la cookie se envía sola, las peticiones que cambian datos llevan una cabecera extra para evitar CSRF.
+- La sesión es un JWT dentro de una cookie `HttpOnly` (`__Host-pld_session`) que caduca a los 30 minutos y se renueva mientras se usa la web, con un máximo de 12 horas desde que se inició la sesión. JavaScript no puede leer el token. Como la cookie se envía sola, las peticiones que cambian datos llevan una cabecera extra para evitar CSRF.
 - Al cambiar la contraseña se cierran todas las sesiones (campo `token_version`).
 - Hay un límite de intentos de inicio de sesión por IP y por cuenta.
 - CORS solo deja pasar los orígenes del frontend.

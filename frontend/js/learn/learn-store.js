@@ -4,12 +4,13 @@
 
 import { request } from "../api.js";
 import { state as session, subscribe } from "../store.js";
+import { createDocSync } from "../doc-sync.js";
 import { createSyncGate } from "../sync-gate.js";
+import { createUploader } from "../uploader.js";
 import { buildIndex, cleanLearning, mergeLearning } from "./mastery.js";
 
 const KEY = "pld:learn";
 const COURSE = "learn";
-const PUSH_DELAY_MS = 1500;
 
 function load() {
   try {
@@ -25,7 +26,19 @@ export const learning = load();
 const listeners = new Set();
 export const onLearningChange = (listener) => listeners.add(listener);
 
-let timer = null;
+function mergeRemote(remote) {
+  mergeLearning(learning, remote.data);
+  saveLearning();
+}
+
+// Sube con la versión leída: si otra pestaña guardó antes (409), relee, fusiona y reintenta
+const doc = createDocSync({
+  path: `/api/course-state/${COURSE}`,
+  request,
+  data: () => learning,
+  merge: mergeRemote,
+  valid: () => gate.ready,
+});
 
 // No se sube nada hasta haber fusionado la copia de la cuenta (AUD-001)
 const gate = createSyncGate({
@@ -33,24 +46,19 @@ const gate = createSyncGate({
   active: () => Boolean(session.user),
   load: () => request("GET", `/api/course-state/${COURSE}`),
   merge: (remote) => {
-    mergeLearning(learning, remote.data);
-    saveLearning();
+    mergeRemote(remote);
+    doc.adopt(remote);
   },
-  onSynced: () => {
-    clearTimeout(timer);
-    timer = setTimeout(push, PUSH_DELAY_MS); // sube el resultado con la misma espera que cualquier cambio
-  },
+  onSynced: () => uploader.changed({ now: true }), // sube ya el resultado de la fusión
 });
 
-async function push() {
-  timer = null;
-  if (!gate.ready) return;
-  try {
-    await request("PUT", `/api/course-state/${COURSE}`, { json: { data: learning } });
-  } catch (error) {
-    console.warn("No se pudo guardar el progreso de aprendizaje en la cuenta:", error.message);
-  }
-}
+// Estado de la subida y reintentos (uploader.js)
+const uploader = createUploader({
+  name: "learn",
+  label: "el progreso por conceptos",
+  gate,
+  push: () => doc.push(),
+});
 
 export function saveLearning() {
   try {
@@ -59,19 +67,14 @@ export function saveLearning() {
     // sin almacenamiento: dura hasta recargar
   }
   for (const listener of listeners) listener();
-  if (!session.user || !gate.ready) return;
-  clearTimeout(timer);
-  timer = setTimeout(push, PUSH_DELAY_MS);
+  if (session.user) uploader.changed();
 }
 
 
-/** Sube ya el cambio pendiente (antes de cerrar sesión). */
+/** Sube ya el cambio pendiente (antes de cerrar sesión). Devuelve si la cuenta lo tiene todo. */
 export async function flushLearnSync() {
-  if (!session.user) return;
-  if (!gate.ready && !(await gate.sync())) return; // sin fusionar no se sube nada
-  if (!timer) return;
-  clearTimeout(timer);
-  await push();
+  if (!session.user) return true;
+  return uploader.flush();
 }
 
 let content = null;
@@ -95,6 +98,9 @@ export function loadLearningContent() {
 /** Al iniciar sesión, trae la copia de la cuenta, la fusiona y sube el resultado (con reintentos). */
 export function initLearnSync() {
   subscribe((change) => {
-    if (change.type === "user") gate.restart();
+    if (change.type !== "user") return;
+    if (session.user) uploader.sessionStarted();
+    else uploader.sessionEnded();
+    gate.restart();
   });
 }

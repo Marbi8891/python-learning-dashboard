@@ -1,6 +1,7 @@
 /* Preparación DAW (#/daw): competencias, qué reforzar antes de avanzar,
    actividades con formato de examen y simulacros. */
 
+import { locale } from "../i18n.js";
 import { allStats } from "./mastery.js";
 import { buildExam, competencyAdvice, competencyStats, examByCompetency, examMinutes, examReadiness } from "./exam.js";
 import { selectExercises } from "./recommend.js";
@@ -15,7 +16,7 @@ export const EXAM_ACTIVITIES = [
   { id: "algoritmos", label: "Del enunciado al algoritmo", text: "Ordena pseudocódigo y tradúcelo a Python.", kinds: ["order", "code"], size: 4, minutes: null, concepts: ["algoritmos", "pseudocodigo"] },
 ];
 
-const formatDay = (iso) => new Date(iso).toLocaleDateString("es-ES", { day: "numeric", month: "short" });
+const formatDay = (iso) => new Date(iso).toLocaleDateString(locale, { day: "numeric", month: "short" });
 
 /** Conceptos de DAW sobre los que practicar: los empezados (o, si no hay, los primeros de la ruta). */
 export function dawScope(index, stats) {
@@ -71,8 +72,10 @@ export function renderDawPrep(index, state) {
 
   const activities = EXAM_ACTIVITIES.map((a) => {
     const count = activityExercises(index, state, a).length;
-    return `<li class="lx-card"><h3 class="lx-card__title">${a.label}</h3><p class="lx-muted">${a.text}</p>
-      <button class="btn btn--ghost" type="button" data-daw-prep="activity" data-activity="${a.id}"${count ? "" : " disabled"}>${count ? "Empezar" : "Disponible al avanzar en la ruta"}<span class="visually-hidden">: ${a.label}</span></button></li>`;
+    const action = count
+      ? `<button class="btn btn--ghost" type="button" data-daw-prep="activity" data-activity="${a.id}">Empezar<span class="visually-hidden">: ${a.label}</span></button>`
+      : '<span class="lx-activities__none">Disponible al avanzar en la ruta</span>';
+    return `<li class="lx-activities__item" data-available="${count ? "true" : "false"}"><div><h3 class="lx-activities__title">${a.label}</h3><p class="lx-muted">${a.text}</p></div>${action}</li>`;
   }).join("");
 
   const history = state.exams
@@ -115,7 +118,7 @@ export function renderDawPrep(index, state) {
 
     <section class="lx-section" aria-labelledby="lx-acts-title">
       <h2 class="lx-section__title" id="lx-acts-title">Preparación de examen</h2>
-      <ul class="lx-cards">${activities}</ul>
+      <ul class="lx-activities">${activities}</ul>
     </section>
 
     ${

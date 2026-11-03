@@ -10,7 +10,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Python Learning Dashboard · Aprende programación entendiendo lo que haces</title>
   <meta name="description" content="Aprende a programar en Python paso a paso: teoría con ejemplos, ejercicios corregidos con la explicación de cada error, repaso espaciado y preparación de Programación de DAW. Gratuito y de código abierto.">
-  <meta name="theme-color" content="#0c0d10">
+  <meta name="theme-color" content="#121417">
   <link rel="canonical" href="https://marbi8891.github.io/python-learning-dashboard/">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="es_ES">
@@ -121,7 +121,16 @@
           <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
           <span id="account-label">Iniciar sesión</span>
         </button>
+        <p class="sync-status" id="sync-status" role="status"></p>
 
+      </header>
+
+      <nav class="path" aria-label="Ruta de aprendizaje">
+        <h2 class="path__title">Lecciones del curso PCAP</h2>
+        <div id="modules"><!-- Se genera desde data/lessons.json --></div>
+      </nav>
+
+      <!-- Progreso y juego: después del índice del curso, para que en la lección se vea primero dónde estás -->
         <div class="stats-card">
         <div class="progress" id="progress"
              role="progressbar"
@@ -151,12 +160,6 @@
         </div>
       </section>
         </div>
-      </header>
-
-      <nav class="path" aria-label="Ruta de aprendizaje">
-        <h2 class="path__title">Lecciones del curso PCAP</h2>
-        <div id="modules"><!-- Se genera desde data/lessons.json --></div>
-      </nav>
 
       <footer class="sidebar__footer">
         <button class="appearance-button" id="appearance-button" type="button">
@@ -225,7 +228,8 @@
       <!-- ============ CONSOLA INTERACTIVA ============ -->
       <section class="console" aria-labelledby="console-title">
         <div class="console__head">
-          <h2 class="console__title" id="console-title">Consola Interactiva</h2>
+          <h2 class="console__title" id="console-title">Consola de Python</h2>
+          <span class="console__file" id="console-file" title="Nombre del ejercicio">main.py</span>
           <span class="console__status" id="console-status" data-status="idle" aria-live="polite">Python se carga al ejecutar por primera vez</span>
         </div>
 
@@ -244,8 +248,9 @@
         </details>
 
         <div class="console__actions">
-          <button class="btn btn--success" id="console-run" type="button">▶ Ejecutar</button>
-          <button class="btn btn--ghost" id="console-example" type="button">Cargar ejemplo</button>
+          <button class="btn btn--primary console__run" id="console-run" type="button"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M7 4v16l13-8z" fill="currentColor"/></svg> Ejecutar</button>
+          <button class="btn btn--ghost console__stop" id="console-stop" type="button" hidden><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="1.5" fill="currentColor"/></svg> Detener</button>
+          <button class="btn btn--ghost" id="console-example" type="button">Restablecer el ejemplo</button>
           <button class="btn btn--ghost" id="console-copy" type="button">Copiar código</button>
           <button class="btn btn--ghost" id="console-clear" type="button">Limpiar salida</button>
         </div>
@@ -350,6 +355,23 @@
         </div>
       </details>
     </div>
+
+    <div class="account__form" data-view="unsaved" hidden>
+      <h2 class="visually-hidden" data-title="Cambios sin guardar">Cambios sin guardar</h2>
+      <p>Esto no se ha podido guardar en tu cuenta y todavía está solo en este navegador:</p>
+      <p><strong id="unsaved-list"></strong></p>
+      <p class="account__muted">Si cierras sesión y lo borras de este navegador, se perderá. Si lo conservas, se subirá a tu cuenta la próxima vez que entres aquí.</p>
+      <div class="account__buttons">
+        <button class="btn btn--primary" id="unsaved-retry" type="button">Reintentar</button>
+        <button class="btn btn--ghost" id="unsaved-keep" type="button">Cerrar sesión y conservarlo aquí</button>
+        <button class="btn btn--ghost" id="unsaved-cancel" type="button">Seguir con la sesión abierta</button>
+      </div>
+      <details class="account__danger">
+        <summary>Cerrar sesión y borrarlo de este navegador</summary>
+        <p>Lo que no se ha guardado en tu cuenta se perderá. Hazlo solo si este equipo no es tuyo y no te importa perderlo.</p>
+        <button class="btn btn--danger" id="unsaved-discard" type="button">Cerrar sesión y borrar</button>
+      </details>
+    </div>
   </dialog>
 
   <!-- ============ ASPECTO ============ -->
@@ -359,6 +381,12 @@
       <button class="icon-button" id="appearance-close" type="button" aria-label="Cerrar">✕</button>
     </header>
     <form class="account__form" id="appearance-form">
+      <fieldset class="choice">
+        <legend>Idioma <span lang="en">· Language</span></legend>
+        <label><input type="radio" name="lang" value="es"> <span lang="es" translate="no">Español</span></label>
+        <label><input type="radio" name="lang" value="en"> <span lang="en" translate="no">English</span></label>
+        <p class="choice__note" id="lang-note" hidden>Las lecciones están en español. Puedes traducirlas con la opción «Traducir» de tu navegador: el código no se traduce.</p>
+      </fieldset>
       <fieldset class="choice">
         <legend>Tema</legend>
         <label><input type="radio" name="theme" value="auto"> Automático (como Windows)</label>
@@ -370,6 +398,12 @@
         <label><input type="radio" name="font" value="normal"> Normal</label>
         <label><input type="radio" name="font" value="grande"> Grande</label>
         <label><input type="radio" name="font" value="muy-grande"> Muy grande</label>
+      </fieldset>
+      <fieldset class="choice">
+        <legend>Lectura</legend>
+        <label><input type="checkbox" name="spacing"> Texto más espaciado</label>
+        <label><input type="checkbox" name="contrast"> Contraste alto</label>
+        <label><input type="checkbox" name="motion"> Sin animaciones</label>
       </fieldset>
     </form>
   </dialog>

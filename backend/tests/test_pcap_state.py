@@ -10,7 +10,7 @@ def test_requires_login(client):
 
 def test_empty_state_then_save_and_read(client, auth_headers):
     empty = client.get("/api/v1/pcap-state", headers=auth_headers).json()
-    assert empty == {"data": {}, "updated_at": None}
+    assert empty == {"data": {}, "updated_at": None, "version": 0}
 
     state = {"answers": {"oop-01": [False, True]}, "exams": [{"score": 80}], "bestCombo": 4}
     saved = client.put("/api/v1/pcap-state", json={"data": state}, headers=auth_headers)

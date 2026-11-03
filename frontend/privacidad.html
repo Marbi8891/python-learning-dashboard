@@ -9,7 +9,7 @@
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Política de privacidad · Python Learning Dashboard</title>
-  <meta name="theme-color" content="#0c0d10">
+  <meta name="theme-color" content="#121417">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/base.css">
@@ -79,13 +79,13 @@
     <table>
       <thead><tr><th>Qué</th><th>Tipo</th><th>Para qué</th><th>Cuánto dura</th></tr></thead>
       <tbody>
-        <tr><td><code>__Host-pld_session</code></td><td>Cookie de nuestro servidor, solo si inicias sesión. El código de la página no puede leerla</td><td>Mantener la sesión que tú abres</td><td>Como mucho 30 minutos; se borra al cerrar sesión</td></tr>
+        <tr><td><code>__Host-pld_session</code></td><td>Cookie de nuestro servidor, solo si inicias sesión. El código de la página no puede leerla</td><td>Mantener la sesión que tú abres</td><td>30 minutos, y se renueva mientras usas la web (nunca más de 12 horas desde que entraste); se borra al cerrar sesión</td></tr>
         <tr><td><code>g_state</code></td><td>Cookie de Google, solo si abres «Continuar con Google» o confirmas el borrado con Google</td><td>Que el botón de Google funcione</td><td>La decide Google</td></tr>
         <tr><td>Claves que empiezan por <code>pld:</code></td><td><code>localStorage</code> y <code>sessionStorage</code> de este navegador</td><td>Tu progreso, tus borradores de código, tu plan de estudio, el nombre del certificado, tus preferencias de aspecto y un aviso de que tienes la sesión abierta (no la sesión en sí)</td><td>Hasta que cierres sesión, borres la cuenta o los borres tú</td></tr>
         <tr><td><code>pld-site-…</code> y <code>pld-pyodide</code></td><td>Caché del navegador (<em>service worker</em>)</td><td>Que la web funcione sin conexión y no volver a descargar Python cada vez</td><td>Hasta la siguiente versión de la web o hasta que la borres. Nunca guarda datos de tu cuenta</td></tr>
       </tbody>
     </table>
-    <p><strong>Al cerrar sesión o eliminar tu cuenta, se borran de este navegador</strong> tu progreso, tus borradores y el resto de datos personales (se conservan solo tus preferencias de aspecto). Así, en un ordenador compartido la siguiente persona no ve nada tuyo. Sin cuenta, puedes borrarlos desde la configuración de tu navegador.</p>
+    <p><strong>Al cerrar sesión o eliminar tu cuenta, se borran de este navegador</strong> tu progreso, tus borradores y el resto de datos personales (se conservan solo tus preferencias de aspecto). Así, en un ordenador compartido la siguiente persona no ve nada tuyo. Antes se comprueba que tu cuenta lo tiene todo: si algo no se ha podido guardar, te avisamos y eliges si reintentar, conservarlo en este navegador o borrarlo. Si en este navegador entra otra cuenta, tu progreso no se mezcla con el suyo: se aparta y vuelve cuando entras tú. Sin cuenta, puedes borrarlos desde la configuración de tu navegador.</p>
 
     <div id="analytics-note" hidden>
       <h2>Estadísticas de visitas</h2>
@@ -106,7 +106,7 @@
     <h2>7. Seguridad</h2>
     <ul>
       <li>Contraseñas guardadas como <em>hash</em> Argon2id; conexiones cifradas (HTTPS) y también entre el servidor y la base de datos.</li>
-      <li>Sesiones que caducan a los 30 minutos; puedes cerrar la sesión en todos tus dispositivos, y cambiar la contraseña las cierra todas.</li>
+      <li>Sesiones que caducan a los 30 minutos sin actividad y, como mucho, a las 12 horas; puedes cerrar la sesión en todos tus dispositivos, y cambiar la contraseña las cierra todas.</li>
       <li>Límite de intentos de inicio de sesión por dirección y por cuenta, y de emails de recuperación.</li>
       <li>No se aceptan las contraseñas más comunes ni las que contienen tu email o tu nombre.</li>
       <li>Las amenazas se revisan con la matriz pública MITRE ATT&amp;CK y los intentos de ataque quedan en un registro seudonimizado.</li>

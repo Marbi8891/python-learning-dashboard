@@ -1,11 +1,12 @@
-/* Confeti ligero en un <canvas>. No hace nada si el sistema pide reducir el movimiento. */
+/* Confeti ligero en un <canvas>. No hace nada si el sistema o el alumno piden reducir el movimiento. */
 
-const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-const COLORS = ["#22c55e", "#4ade80", "#3b82f6", "#93c5fd", "#facc15", "#f472b6"];
+import { prefersReducedMotion } from "./prefs.js";
+
+const COLORS = ["#22c55e", "#4ade80", "#f2b443", "#f5c66b", "#facc15", "#f472b6"];
 const DURATION_MS = 1800;
 
 export function celebrate() {
-  if (reducedMotion.matches || document.querySelector(".confetti")) return;
+  if (prefersReducedMotion() || document.querySelector(".confetti")) return;
   const canvas = Object.assign(document.createElement("canvas"), { className: "confetti" });
   canvas.setAttribute("aria-hidden", "true");
   canvas.width = innerWidth;

@@ -11,7 +11,9 @@ import { request } from "./api.js";
 import { cleanGame, emptyGame, mergeGame } from "./game-data.js";
 import { examsPassed, pcap, questionsMastered } from "./pcap-store.js";
 import { state as store, subscribe as onStore } from "./store.js";
+import { createDocSync } from "./doc-sync.js";
 import { createSyncGate } from "./sync-gate.js";
+import { createUploader } from "./uploader.js";
 
 const KEY = "pld:game";
 const XP = {
@@ -50,8 +52,20 @@ function load() {
 export const game = load();
 
 const COURSE = "game";
-const PUSH_DELAY_MS = 1500; // agrupa los cambios seguidos en un envío
-let pushTimer = null;
+
+function mergeRemote(remote) {
+  mergeGame(game, remote.data);
+  commit();
+}
+
+// Sube con la versión leída: si otra pestaña guardó antes (409), relee, fusiona y reintenta
+const doc = createDocSync({
+  path: `/api/course-state/${COURSE}`,
+  request,
+  data: () => game,
+  merge: mergeRemote,
+  valid: () => gate.ready,
+});
 
 // No se suben los logros hasta haber fusionado la copia de la cuenta (AUD-001)
 const gate = createSyncGate({
@@ -59,24 +73,14 @@ const gate = createSyncGate({
   active: () => Boolean(store.user),
   load: () => request("GET", `/api/course-state/${COURSE}`),
   merge: (remote) => {
-    mergeGame(game, remote.data);
-    commit();
+    mergeRemote(remote);
+    doc.adopt(remote);
   },
-  onSynced: () => {
-    clearTimeout(pushTimer);
-    pushTimer = setTimeout(push, PUSH_DELAY_MS); // sube el resultado con la misma espera que cualquier cambio
-  },
+  onSynced: () => uploader.changed({ now: true }), // sube ya el resultado de la fusión
 });
 
-async function push() {
-  pushTimer = null;
-  if (!gate.ready) return;
-  try {
-    await request("PUT", `/api/course-state/${COURSE}`, { json: { data: game } });
-  } catch (error) {
-    console.warn("No se pudieron guardar los logros en la cuenta:", error.message);
-  }
-}
+// Estado de la subida y reintentos (uploader.js)
+const uploader = createUploader({ name: "game", label: "la XP y los logros", gate, push: () => doc.push() });
 
 function save() {
   try {
@@ -84,18 +88,13 @@ function save() {
   } catch {
     // sin almacenamiento: el juego dura hasta recargar
   }
-  if (!store.user || !gate.ready) return;
-  clearTimeout(pushTimer);
-  pushTimer = setTimeout(push, PUSH_DELAY_MS);
+  if (store.user) uploader.changed();
 }
 
-/** Sube ya el cambio pendiente (antes de cerrar sesión). */
+/** Sube ya el cambio pendiente (antes de cerrar sesión). Devuelve si la cuenta lo tiene todo. */
 export async function flushGameSync() {
-  if (!store.user) return;
-  if (!gate.ready && !(await gate.sync())) return; // sin fusionar no se sube nada
-  if (!pushTimer) return;
-  clearTimeout(pushTimer);
-  await push();
+  if (!store.user) return true;
+  return uploader.flush();
 }
 
 const add = (list, value) => {
@@ -278,7 +277,10 @@ export function initGame(allLessons) {
       return;
     }
     // Al iniciar sesión: se fusiona con la copia de la cuenta y se sube el resultado (con reintentos)
-    if (change.type === "user") gate.restart();
+    if (change.type !== "user") return;
+    if (store.user) uploader.sessionStarted();
+    else uploader.sessionEnded();
+    gate.restart();
   });
   commit();
 }

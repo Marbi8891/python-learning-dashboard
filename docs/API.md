@@ -25,6 +25,16 @@ Interactive OpenAPI documentation is available at /docs when ENABLE_DOCS=true.
 | DAW course state | /api/v1/course-state/{course} (`sql`, `js`, `java`, `entornos`, `programacion`, `learn`, `game`) |
 | Student dashboard | GET /api/v1/dashboard?utc_offset_minutes=, GET /api/v1/dashboard/activity?limit=&offset= |
 
+### Progress documents and versions
+
+`GET /api/v1/pcap-state` and `GET /api/v1/course-state/{course}` return `{data, updated_at, version}`
+(`version` is 0 when nothing is saved). `PUT` takes `{data, version}`, where `version` is the one the
+client last read. If another tab or device saved in between, the server answers **409** and keeps
+what it has. The client then reads the document again, merges it with its local copy and retries
+with the new version. The check and the write happen in one `UPDATE ... WHERE version = :read`, so
+two concurrent requests cannot both win. A `PUT` without `version` (older versions of the app) still
+overwrites.
+
 ## Authentication
 
 Authenticated endpoints accept a Bearer access token:

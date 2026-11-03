@@ -7,7 +7,8 @@ import { flushCourseSync } from "./course-store.js";
 import { flushGameSync } from "./game.js";
 import { flushPcapSync } from "./pcap-sync.js";
 import { flushLearnSync } from "./learn/learn-store.js";
-import { clearLocalData, endSession, startSession, state, subscribe } from "./store.js";
+import { clearLocalData, endSession, flushLessonsSync, startSession, state, subscribe } from "./store.js";
+import { failedStores, onSyncStateChange, unsavedStores } from "./sync-status.js";
 
 const FLASH_KEY = "pld:flash";
 
@@ -60,14 +61,18 @@ async function submitting(form, action) {
 }
 
 /** Cierra la sesión y borra de este navegador los datos personales (equipos compartidos).
+    Con `keep`, el alumno ha elegido conservar en este navegador lo que no se pudo subir (SYNC-01).
     Se recarga la página para que tampoco quede nada en memoria; el aviso se muestra al volver. */
-async function leave(message) {
+async function leave(message, { keep = false } = {}) {
   // La cookie de sesión es HttpOnly: solo la API puede borrarla
   await request("POST", "/api/auth/logout", { auth: false }).catch(() => {});
   endSession();
-  clearLocalData();
+  if (!keep) clearLocalData();
+  const after = keep
+    ? "Tu progreso sigue en este navegador y se subirá a tu cuenta la próxima vez que entres."
+    : "Tus datos se han borrado de este navegador.";
   try {
-    sessionStorage.setItem(FLASH_KEY, `${message} Tus datos se han borrado de este navegador.`);
+    sessionStorage.setItem(FLASH_KEY, `${message} ${after}`);
   } catch {
     // sin almacenamiento: se recarga igualmente
   }
@@ -162,7 +167,7 @@ function showGoogleButton(target, action) {
 /** Cuentas creadas con Google: su contraseña es aleatoria, así que el borrado se confirma volviendo
     a elegir la misma cuenta de Google. */
 async function deleteWithGoogle(credential) {
-  if (!state.user || !dialog().querySelector(".account__danger").open) return; // solo desde su botón
+  if (!state.user || !dialog().querySelector("[data-view=profile] .account__danger").open) return; // solo desde su botón
   await request("POST", "/api/users/me/delete", { json: { google_credential: credential } });
   await leave("Tu cuenta y todos sus datos se han borrado.");
 }
@@ -209,11 +214,54 @@ export async function exportMyData() {
   downloadJson(await request("GET", "/api/users/me/export"), "mis-datos-python-learning.json");
 }
 
-/** Cierra la sesión (desde el diálogo de la cuenta o desde el panel del alumno). */
+let leavingEverywhere = false;
+
+/** Sube ya todo lo pendiente. Devuelve si la cuenta lo tiene todo. */
+async function flushAll() {
+  const results = await Promise.all([
+    flushLessonsSync(),
+    flushPcapSync(),
+    flushCourseSync(),
+    flushLearnSync(),
+    flushGameSync(),
+  ]);
+  return results.every(Boolean) && unsavedStores().length === 0;
+}
+
+async function finishLogout({ keep = false } = {}) {
+  if (leavingEverywhere) await request("POST", "/api/auth/logout-all").catch(() => {});
+  await leave(leavingEverywhere ? "Sesión cerrada en todos tus dispositivos." : "Sesión cerrada.", { keep });
+}
+
+/** Cierra la sesión (desde el diálogo de la cuenta o desde el panel del alumno).
+    Antes sube lo pendiente. Si algo no llega a la cuenta, no se borra nada de este navegador:
+    se explica qué falta y el alumno elige (SYNC-01). Devuelve false si la sesión sigue abierta. */
 export async function logout({ everywhere = false } = {}) {
-  await Promise.allSettled([flushPcapSync(), flushCourseSync(), flushLearnSync(), flushGameSync()]); // nada se queda sin subir
-  if (everywhere) await request("POST", "/api/auth/logout-all").catch(() => {});
-  await leave(everywhere ? "Sesión cerrada en todos tus dispositivos." : "Sesión cerrada.");
+  leavingEverywhere = everywhere;
+  if (await flushAll()) {
+    await finishLogout();
+    return true;
+  }
+  showUnsaved();
+  return false;
+}
+
+function showUnsaved() {
+  openAccount("unsaved");
+  $("#unsaved-list").textContent = listText(unsavedStores());
+}
+
+const listText = (items) =>
+  items.length <= 1 ? (items[0] ?? "") : `${items.slice(0, -1).join(", ")} y ${items.at(-1)}`;
+
+/** Aviso discreto cuando una subida falla: el alumno sabe que su cuenta aún no lo tiene (SYNC-04). */
+function renderSyncStatus() {
+  const box = $("#sync-status");
+  if (!box) return;
+  const failed = state.user ? failedStores() : [];
+  box.textContent = failed.length
+    ? `No se ha podido guardar en tu cuenta ${listText(failed)}. Se reintentará; mientras, sigue en este navegador.`
+    : "";
 }
 
 export function initAccount({ toast }) {
@@ -225,6 +273,7 @@ export function initAccount({ toast }) {
     if (change.type === "profile") renderAccountButton(); // nombre cambiado en «Mi cuenta»
     if (change.type !== "user") return;
     renderAccountButton();
+    renderSyncStatus();
     if (change.expired) showToast("Tu sesión ha caducado. Vuelve a iniciar sesión.");
   });
 
@@ -302,7 +351,29 @@ export function initAccount({ toast }) {
 
   $("#logout-button").addEventListener("click", () => logout({ everywhere: $("#logout-everywhere").checked }));
 
-  const danger = dialog().querySelector(".account__danger");
+  // Cerrar sesión con cambios sin subir (SYNC-01)
+  $("#unsaved-retry").addEventListener("click", async (event) => {
+    const button = event.currentTarget;
+    button.disabled = true;
+    setMessage("Guardando en tu cuenta…", "info");
+    try {
+      if (await flushAll()) {
+        await finishLogout();
+        return;
+      }
+      $("#unsaved-list").textContent = listText(unsavedStores());
+      setMessage("Todavía no se ha podido guardar. Comprueba tu conexión e inténtalo de nuevo.");
+    } finally {
+      button.disabled = false;
+    }
+  });
+  $("#unsaved-keep").addEventListener("click", () => finishLogout({ keep: true }));
+  $("#unsaved-discard").addEventListener("click", () => finishLogout());
+  $("#unsaved-cancel").addEventListener("click", () => showView("profile"));
+
+  onSyncStateChange(renderSyncStatus);
+
+  const danger = dialog().querySelector("[data-view=profile] .account__danger");
   const googleDelete = dialog().querySelector("[data-google-delete]");
   danger.addEventListener("toggle", () => {
     googleDelete.hidden = !googleAvailable();

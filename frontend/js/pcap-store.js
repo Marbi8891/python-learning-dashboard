@@ -82,11 +82,23 @@ export function recordAnswer(id, ok) {
 
 const later = (a, b) => ((a?.last ?? "") >= (b?.last ?? "") ? a : b);
 
+/**
+ * Historial de una pregunta tras fusionar dos copias (SYNC-02). Cada historial guarda solo los
+ * últimos intentos, así que «el más largo» no dice cuál es más reciente: se usa la fecha del último
+ * intento, que está en el repaso espaciado (`srs[id].last`). Sin fecha en alguna de las dos copias
+ * (datos antiguos) se conserva la regla anterior: gana el más largo y, si empatan, el local.
+ */
+export function newerHistory(local, remote, localLast, remoteLast) {
+  if (!local) return remote;
+  if (localLast && remoteLast) return remoteLast > localLast ? remote : local;
+  return remote.length > local.length ? remote : local;
+}
+
 /** Combina el estado de la cuenta con el local sin perder nada de ninguno de los dos. */
 export function mergePcap(remote = {}) {
   const base = { ...empty(), ...cleanProgress(remote) };
   for (const [id, history] of Object.entries(base.answers)) {
-    if (!pcap.answers[id] || history.length > pcap.answers[id].length) pcap.answers[id] = history;
+    pcap.answers[id] = newerHistory(pcap.answers[id], history, pcap.srs[id]?.last, base.srs[id]?.last);
   }
   const exams = new Map([...base.exams, ...pcap.exams].map((exam) => [exam.date, exam]));
   pcap.exams = [...exams.values()].sort((a, b) => a.date.localeCompare(b.date)).slice(-30);
