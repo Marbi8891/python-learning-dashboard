@@ -178,6 +178,33 @@ export function runConsole() {
   });
 }
 
+const MAX_SHOWN_OUTPUT = 2000; // la salida de un bucle infinito no debe llenar la página
+
+/** Ejercicio no superado: qué falla, con qué entrada, qué mostró el programa y cómo seguir.
+    Nunca enseña la solución: el alumno corrige y vuelve a intentarlo. Todo lo que llega del Worker
+    se escapa (el código del alumno puede falsearlo). */
+function failureHtml(result, where) {
+  const label = (text) => `<p class="check__label">${text}</p>`;
+  const stdin = typeof result.stdin === "string" ? result.stdin : "";
+  let output = typeof result.output === "string" ? result.output : "";
+  if (output.length > MAX_SHOWN_OUTPUT) output = `${output.slice(0, MAX_SHOWN_OUTPUT)}\n…`;
+  const parts = [`<p class="check__title">✗ Todavía no${where}</p>`];
+  if (result.error) {
+    parts.push(label("Error al ejecutar"), `<pre class="console__error">${escapeHtml(result.error)}</pre>${renderHint(result.hint)}`);
+  } else {
+    parts.push(label("Qué falta"), `<p>${escapeHtml(result.message)}</p>`);
+  }
+  if (stdin) parts.push(label("Con esta entrada"), `<pre translate="no">${escapeHtml(stdin)}</pre>`);
+  if (!result.error) {
+    parts.push(
+      label("Lo que mostró tu programa"),
+      output ? `<pre translate="no">${escapeHtml(output)}</pre>` : '<p class="check__muted">(No mostró nada)</p>',
+    );
+  }
+  parts.push('<p class="check__retry">Corrige el código en la consola y vuelve a comprobarlo.</p>');
+  return parts.join("");
+}
+
 /** Comprueba el código de la consola con unos tests (del ejercicio o del reto). */
 export function checkCode({ checks, button, box, onResult }) {
   return withRunner(button, "Comprobando…", async () => {
@@ -187,10 +214,9 @@ export function checkCode({ checks, button, box, onResult }) {
     box.dataset.passed = String(result.passed);
     const [done, total] = [Number(result.case), Number(result.total)]; // números o NaN, nunca HTML
     const where = total > 1 && !result.passed ? ` (prueba ${done} de ${total})` : "";
-    box.innerHTML = `
-      <p class="check__title">${result.passed ? "✓ ¡Correcto!" : "✗ Todavía no"}${where}</p>
-      <p>${escapeHtml(result.message)}</p>
-      ${result.error ? `<pre class="console__error">${escapeHtml(result.error)}</pre>${renderHint(result.hint)}` : ""}`;
+    box.innerHTML = result.passed
+      ? `<p class="check__title">✓ ¡Correcto!</p><p>${escapeHtml(result.message)}</p>`
+      : failureHtml(result, where);
     box.focus();
     await onResult(result, code);
   });
