@@ -1,6 +1,7 @@
 /* Estado compartido: progreso (local + cuenta) y sesión del usuario. */
 
 import { ApiError, apiEnabled, request, setToken } from "./api.js";
+import { createUploader } from "./uploader.js";
 
 const PROGRESS_KEY = "pld:completed";
 // Solo un aviso de que hay una cookie de sesión (el token no se puede leer desde aquí): así, al
@@ -38,6 +39,30 @@ function saveLocal() {
   }
 }
 
+// Lecciones completadas que no se pudieron enviar: se reintentan subiendo la lista entera, que el
+// servidor une con la suya (POST /progress/import). Al iniciar sesión ya se sube con syncProgress().
+const lessonsUploader = createUploader({
+  name: "lessons",
+  label: "las lecciones completadas",
+  gate: {
+    get ready() {
+      return Boolean(state.user);
+    },
+    sync: async () => Boolean(state.user),
+  },
+  push: async () => {
+    if (!state.user) return false;
+    await request("POST", "/api/progress/import", { json: { lesson_slugs: [...state.completed] } });
+    return true;
+  },
+});
+
+/** Sube ya las lecciones que no se pudieron enviar (antes de cerrar sesión). */
+export async function flushLessonsSync() {
+  if (!state.user) return true;
+  return lessonsUploader.flush();
+}
+
 /** Marca o desmarca una lección. Con sesión iniciada, también en el servidor. */
 export async function setCompleted(slug, done) {
   if (done) state.completed.add(slug);
@@ -49,6 +74,7 @@ export async function setCompleted(slug, done) {
     await request(done ? "PUT" : "DELETE", `/api/progress/${encodeURIComponent(slug)}`);
   } catch (error) {
     console.warn("No se pudo sincronizar el progreso:", error.message);
+    if (done && error?.status !== 401) lessonsUploader.changed(); // se reintenta (desmarcar no se puede importar)
   }
 }
 
@@ -132,6 +158,7 @@ export function endSession() {
   setToken(null);
   rememberSession(false);
   state.user = null;
+  lessonsUploader.sessionEnded();
   emit({ type: "user" });
 }
 
@@ -139,5 +166,6 @@ window.addEventListener("pld:session-expired", () => {
   rememberSession(false);
   if (!state.user) return;
   state.user = null;
+  lessonsUploader.sessionEnded();
   emit({ type: "user", expired: true });
 });

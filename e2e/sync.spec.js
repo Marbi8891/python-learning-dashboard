@@ -122,3 +122,77 @@ test("PCAP: si otro dispositivo guardó después de entrar, se fusiona en vez de
     }, { timeout: 20_000 })
     .toEqual({ known: 1, other: [true] });
 });
+
+// SYNC-01: cerrar sesión cuando la cuenta no ha recibido lo último no puede borrarlo del navegador.
+// SYNC-04: el fallo de la subida se avisa en vez de quedarse en la consola.
+
+/** Entra, espera la primera subida y hace que el servidor falle al guardar la preparación del PCAP. */
+async function loginWithFailingSaves(page, request) {
+  const { email, headers } = await account(request);
+  await page.goto("/#/pcap/fichas");
+  const firstPut = page.waitForResponse((r) => r.url().endsWith("/pcap-state") && r.request().method() === "PUT");
+  await login(page, email);
+  await firstPut;
+  const server = { failing: true };
+  await page.route(`${API}/api/v1/pcap-state`, (route) =>
+    route.request().method() === "PUT" && server.failing
+      ? route.fulfill({ status: 503, contentType: "application/json", body: '{"detail":"Servidor caído"}' })
+      : route.continue(),
+  );
+  await page.getByRole("button", { name: "Ver respuesta" }).click();
+  await page.getByRole("button", { name: "Lo sé →" }).click();
+  return { headers, server };
+}
+
+const localKnown = (page) =>
+  page.evaluate(() => JSON.parse(localStorage.getItem("pld:pcap") || "{}").known?.length ?? 0);
+const serverKnown = async (request, headers) =>
+  (await (await request.get(`${API}/api/v1/pcap-state`, { headers })).json()).data.known?.length ?? 0;
+
+test("cerrar sesión con la subida fallida no borra el progreso y explica qué falta", async ({ page, request }) => {
+  const { headers, server } = await loginWithFailingSaves(page, request);
+
+  // El fallo de la subida se avisa (role="status")
+  await expect(page.locator("#sync-status")).toContainText("la preparación del PCAP", { timeout: 15_000 });
+
+  await page.locator("#account-button").click();
+  await page.locator("#logout-button").click();
+
+  // No se cierra la sesión ni se borra nada: se explica qué falta y se ofrece reintentar
+  await expect(page.locator("#unsaved-list")).toContainText("la preparación del PCAP");
+  await expect(page.locator("#unsaved-retry")).toBeFocused();
+  await expect(page.locator("#account-label")).toHaveText("Ana");
+  expect(await localKnown(page)).toBe(1);
+  expect(await serverKnown(request, headers)).toBe(0);
+
+  // Vuelve la conexión: «Reintentar» lo sube y, entonces sí, cierra la sesión y borra el navegador
+  server.failing = false;
+  await Promise.all([page.waitForEvent("load"), page.locator("#unsaved-retry").click()]);
+  expect(await serverKnown(request, headers)).toBe(1);
+  expect(await localKnown(page)).toBe(0);
+  await expect(page.locator("#account-label")).toHaveText("Iniciar sesión");
+});
+
+test("el alumno puede cerrar sesión conservando en el navegador lo que no se subió", async ({ page, request }) => {
+  const { headers } = await loginWithFailingSaves(page, request);
+  await page.locator("#account-button").click();
+  await page.locator("#logout-button").click();
+  await expect(page.locator("#unsaved-keep")).toBeVisible();
+
+  await Promise.all([page.waitForEvent("load"), page.locator("#unsaved-keep").click()]);
+  await expect(page.locator("#account-label")).toHaveText("Iniciar sesión");
+  expect(await localKnown(page)).toBe(1); // sigue aquí para subirlo la próxima vez
+  expect(await serverKnown(request, headers)).toBe(0);
+});
+
+test("cerrar sesión con todo guardado sigue borrando el navegador (equipos compartidos)", async ({ page, request }) => {
+  const { email, headers } = await account(request);
+  await page.goto("/#/pcap/fichas");
+  await login(page, email);
+  await page.getByRole("button", { name: "Ver respuesta" }).click();
+  await page.getByRole("button", { name: "Lo sé →" }).click();
+  await page.locator("#account-button").click();
+  await Promise.all([page.waitForEvent("load"), page.locator("#logout-button").click()]);
+  expect(await serverKnown(request, headers)).toBe(1); // lo pendiente se subió al cerrar
+  expect(await localKnown(page)).toBe(0);
+});
