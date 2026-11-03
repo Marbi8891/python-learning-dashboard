@@ -25,6 +25,7 @@ publica la web) lo hace siempre él.
 | A-01 Política y aviso legal | **Hecha en la rama**, pendiente de merge y de comprobar la versión publicada. El proveedor de email se nombra como categoría hasta que el titular diga cuál es | `frontend/privacidad.html`, `frontend/aviso-legal.html`, casillas de `frontend/index.html` |
 | A-04 Prueba de coherencia | **Hecha**: falla con la política anterior y pasa con la nueva | `backend/tests/test_privacy_policy.py` |
 | A-06 Registro y procedimiento de derechos | **Plantilla**: faltan los campos `[[TITULAR: …]]` | [REGISTRO_TRATAMIENTOS.md](REGISTRO_TRATAMIENTOS.md) |
+| A-03 bis Email | **Decisión del titular (3/11):** hoy se usa Gmail personal por SMTP. Recomendado pasar a Brevo (`BREVO_API_KEY`), que ofrece contrato de encargo y no lo bloquea Render. La política ya nombra Gmail | `render.yaml`, panel de Render |
 | A-08 Incidentes | **Hecho**, falta el contacto de urgencia y el primer simulacro | [INCIDENTES.md](INCIDENTES.md) |
 | A-18 README | **Hecha** | `README.md` |
 | Resto | Pendiente de datos del titular, de revisión jurídica o de autorización | Apartados siguientes |

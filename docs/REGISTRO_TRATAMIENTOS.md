@@ -34,8 +34,8 @@ apartado 7.G de la auditoría.
 | Base jurídica | Ejecución del servicio solicitado (RGPD art. 6.1.b) |
 | Interesados | Personas que crean una cuenta |
 | Datos | Email, nombre, hash de la contraseña, fechas de alta, de lectura de la política y de verificación del email; hash del enlace de recuperación |
-| Destinatarios | Render (servidor, encargado), Neon (base de datos, encargado), proveedor de envío de email `[[TITULAR: nombre del proveedor]]` (encargado). Google interviene como responsable independiente cuando el usuario elige entrar con Google |
-| Transferencias | Render: DPA con Marco UE-EE. UU. y cláusulas tipo. Neon: `[[TITULAR: garantía según su DPA]]`. Email: `[[TITULAR: ubicación y garantía]]` |
+| Destinatarios | Render (servidor, encargado), Neon (base de datos, encargado), Gmail (Google LLC), cuenta de Gmail personal del titular por SMTP, para los emails de recuperación (sin contrato de encargo del art. 28: ver LEG-012). Google interviene como responsable independiente cuando el usuario elige entrar con Google |
+| Transferencias | Render: DPA con Marco UE-EE. UU. y cláusulas tipo. Neon: `[[TITULAR: garantía según su DPA]]`. Email (Gmail): Google LLC, EE. UU., adherida al Marco de Privacidad de Datos UE-EE. UU. [VERIFICAR en dataprivacyframework.gov] |
 | Conservación | Mientras exista la cuenta. Cuentas inactivas: `[[TITULAR: plazo, si se decide]]`. Enlaces de recuperación: 30 minutos. Copias de Neon: historial de 6 horas (plan gratuito, confirmado el 2/11/2026) |
 | Código | `backend/app/models.py` (`User`, `PasswordResetToken`), `backend/app/routers/auth.py` |
 

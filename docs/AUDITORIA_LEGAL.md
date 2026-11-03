@@ -473,7 +473,7 @@ PD = pendiente de determinar; Dem. = demostrado; Sosp. = sospecha; Info = pendie
 | LEG-009 | RGPD | 12.3, 12.4 | Obl. | Responder en un mes y registrar solicitudes | Solo un email de contacto; sin procedimiento | Incumple (documental, Dem.) | Medio | Procedimiento de derechos | P2 | F-01 | 02/11/2026 |
 | LEG-010 | RGPD | 28.3 | Obl. | Contrato de encargo con Render | DPA de Render incorporado a sus condiciones (F-16); aceptación de la cuenta no vista | No verificado (Info) | Medio | Guardar copia del DPA y fecha de aceptación | P2 | F-16 | 02/11/2026 |
 | LEG-011 | RGPD | 28.3 | Obl. | Contrato de encargo con Neon | Página de Neon remite al MCSA de Databricks; sin cláusulas tipo visibles | No verificado (Info) | Medio | Descargar y guardar DPA y lista de subencargados | P2 | F-17 | 02/11/2026 |
-| LEG-012 | RGPD | 28.3 | Obl. | Contrato con el proveedor de email | Proveedor real desconocido | No verificado (Info) | Medio | Identificar proveedor y su DPA | P1 | F-01 | 02/11/2026 |
+| LEG-012 | RGPD | 28.3 | Obl. | Contrato con el proveedor de email | El titular confirma (3/11) Gmail personal por SMTP. Las cuentas de Gmail de consumo no ofrecen un contrato de encargo del art. 28. Además, `render.yaml` indica que el plan gratuito de Render bloquea SMTP: el envío puede estar fallando | **Incumple (Sosp.)** | Medio | Pasar a Brevo (`BREVO_API_KEY`, ya integrado, con DPA y sede en la UE) y probar un envío real | P1 | F-01 | 03/11/2026 |
 | LEG-013 | RGPD | 44-46 | Obl. | Garantías para transferencias a EE. UU. | Render: DPF + cláusulas tipo; Neon: no visto; política afirma cláusulas para ambos | Parcial (Sosp.) | Medio | Verificar Neon y ajustar el texto | P2 | F-16, F-17 | 02/11/2026 |
 | LEG-014 | RGPD | 30 | Obl. (interp.) | Registro de actividades | No existe en el repo; borrador desfasado del 19/10 | Incumple (documental, Sosp.) | Medio | Crear registro con T1-T13 | P2 | F-01 | 02/11/2026 |
 | LEG-015 | RGPD | 25 | Obl. | Privacidad desde el diseño | Actividad sin IP, logs seudonimizados, GSI bajo demanda, borrado local al cerrar sesión (`store.js:115`) | Cumple (técnico) | Bajo | Mantener | P3 | F-01 | 02/11/2026 |
@@ -541,7 +541,7 @@ de usuario.
 |---|---|---|
 | DF-01 | **Respondido el 2/11/2026:** reside en España y publica como particular. LOPDGDD aplicable; LSSI art. 10 sigue condicionado a que haya actividad económica (hoy no) | Aplicación de LOPDGDD y LSSI (LEG-021, LEG-025); quién firma los contratos |
 | DF-02 | Domicilio o dirección de contacto postal y NIF, **solo si** hay actividad económica | LSSI art. 10 (LEG-025). No se publicará nada sin su decisión |
-| DF-03 | Proveedor real de email en Render. El titular indica «un correo profesional de Gmail» (2/11/2026); falta confirmar si se envía por el SMTP de Gmail o por Brevo con esa dirección como remitente | LEG-002, LEG-012 |
+| DF-03 | **Respondido el 3/11/2026:** `SMTP_HOST` con una cuenta de Gmail personal. Ver LEG-012: sin contrato de encargo y posible bloqueo de SMTP en el plan gratuito de Render | LEG-002, LEG-012 |
 | DF-04 | Confirmación de que las cuentas de Render, Neon y el proveedor de email aceptaron sus DPA, con copia y fecha | LEG-010, LEG-011, LEG-012, LEG-013 |
 | DF-05 | **Plan de Neon respondido el 2/11/2026: gratuito** (historial de 6 h, ya en la política). Faltan la región real y la retención de logs de Render | LEG-005, LEG-017 |
 | DF-06 | Público objetivo y edad mínima que quiere fijar | LEG-022 |
