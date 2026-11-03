@@ -70,6 +70,13 @@ class Lesson:
     questions: list[Q]  # banco (ruta, práctica y juego)
     quiz: list[Q]  # mini-quiz de la teoría
     sources: list[tuple[str, str]]
+    # Opcionales (unidad completa). Si faltan, no salen en el JSON: los cursos antiguos no cambian
+    objectives: list[str] = field(default_factory=list)  # «Al terminar sabrás…»
+    mistakes: list[tuple[str, str]] = field(
+        default_factory=list
+    )  # (error frecuente, cómo evitarlo)
+    summary: list[str] = field(default_factory=list)  # ideas clave
+    solution: tuple[str, str] | None = None  # solución del ejercicio: (código, explicación)
 
 
 @dataclass
@@ -169,6 +176,22 @@ def practice(q: Q, runner: Callable[[str], str]) -> dict:
     raise ValueError(f"{q.id}: tipo desconocido {q.kind}")
 
 
+def unit_extras(lesson: Lesson) -> dict:
+    """Campos opcionales de una unidad completa, solo si el curso los tiene."""
+    extras: dict = {}
+    if lesson.objectives:
+        extras["objectives"] = lesson.objectives
+    if lesson.mistakes:
+        extras["mistakes"] = [{"error": e, "fix": f} for e, f in lesson.mistakes]
+    if lesson.summary:
+        extras["summary"] = lesson.summary
+    if lesson.solution:
+        solution, explain = lesson.solution
+        assert solution.strip() and explain.strip(), f"{lesson.slug}: solución vacía"
+        extras["solution"] = {"code": solution.strip() + "\n", "explain": explain.strip()}
+    return extras
+
+
 def build(
     course_id: str,
     blocks: list[Block],
@@ -252,6 +275,7 @@ def build(
                         "faq": [{"q": a, "a": b} for a, b in lesson.faq],
                     },
                     "sources": [{"title": t, "url": u} for t, u in lesson.sources],
+                    **unit_extras(lesson),
                 }
             )
         modules.append(
