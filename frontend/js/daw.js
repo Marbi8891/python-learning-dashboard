@@ -21,6 +21,7 @@ import {
   recordCourseAnswer,
   saveCourse,
 } from "./course-store.js";
+import { completedCount, completeLesson, visitLesson } from "./lesson-progress.js";
 import { loadCurriculum, renderCurriculum } from "./curriculum.js";
 import { escapeHtml, renderInline, renderMarkdown, safeUrl } from "./markdown.js";
 import { notFoundHtml } from "./not-found.js";
@@ -85,10 +86,26 @@ async function fetchJson(url) {
   return response.json();
 }
 
+// Recursos complementarios del ciclo: si no cargan, el curso funciona igual (sin la lista)
+let resourcesLoading = null;
+function loadResources() {
+  resourcesLoading ??= fetchJson("data/resources.json")
+    .then((data) => data.resources ?? [])
+    .catch(() => {
+      resourcesLoading = null; // se reintenta en la siguiente visita
+      return [];
+    });
+  return resourcesLoading;
+}
+
 function loadCourse(id) {
   if (!loaded.has(id)) {
-    const promise = Promise.all([fetchJson(`data/courses/${id}/bank.json`), fetchJson(`data/courses/${id}/lessons.json`)]).then(
-      ([bank, { modules }]) => {
+    const promise = Promise.all([
+      fetchJson(`data/courses/${id}/bank.json`),
+      fetchJson(`data/courses/${id}/lessons.json`),
+      loadResources(),
+    ]).then(
+      ([bank, { modules }, resources]) => {
         const lessons = new Map();
         const order = [];
         for (const module of modules) {
@@ -97,7 +114,8 @@ function loadCourse(id) {
             order.push(lesson.slug);
           }
         }
-        return { id, info: courseInfo(id), bank, modules, lessons, order };
+        const info = courseInfo(id);
+        return { id, info, bank, modules, lessons, order, resources: resources.filter((r) => r.modules?.includes(info.module)) };
       },
     );
     promise.catch(() => loaded.delete(id)); // se reintenta en la siguiente visita
@@ -166,6 +184,40 @@ function renderCatalog() {
     <ul class="daw-grid">${cards}</ul>`;
 }
 
+/* ---------- Recursos complementarios ---------- */
+
+const ACCESS_LABEL = {
+  accesible: "Accesible",
+  descargable: "Descargable",
+  registro: "Necesita registro",
+  pago: "De pago",
+  "licencia-no-identificada": "Licencia no identificada",
+  obsoleto: "Obsoleto",
+  "no-disponible": "No disponible",
+  "no-verificado": "Sin verificar",
+};
+
+function resourcesHtml(resources, title, id) {
+  if (!resources.length) return "";
+  const items = resources
+    .map(
+      (r) => `<li class="daw-resource">
+        <a href="${safeUrl(r.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(r.title)}</a>
+        <span class="daw-resource__meta">${escapeHtml(r.author)} · ${escapeHtml(r.lang === "en" ? "En inglés" : "En español")} ·
+          ${escapeHtml(ACCESS_LABEL[r.access] ?? r.access)}</span>
+        <span class="daw-resource__desc">${escapeHtml(r.description)}</span>
+        <span class="daw-resource__meta">Licencia: ${escapeHtml(r.license)}</span>
+      </li>`,
+    )
+    .join("");
+  return `<section class="course-section" aria-labelledby="${id}">
+      <h2 class="section-title" id="${id}">${title}</h2>
+      <ul class="daw-resources">${items}</ul>
+      <p class="readiness__note">Material externo que la plataforma solo enlaza. Licencias revisadas el
+        ${escapeHtml(resources[0].checked ?? "")}; compruébalas antes de reutilizar nada.</p>
+    </section>`;
+}
+
 /* ---------- Panel de un curso ---------- */
 
 function renderPanel(course) {
@@ -173,12 +225,21 @@ function renderPanel(course) {
   const stats = courseBlockStats(course.id, bank);
   const score = courseReadiness(stats, bank.exam.blocks);
   const due = dueQuestionIds(course.id, bank.questions.map((q) => q.id)).length;
+  const progress = courseState(course.id);
+  const completed = completedCount(progress, course.order);
+  const last = lessons.get(progress.lastLesson?.slug);
+  const pending = course.order.find((slug) => !progress.done?.[slug]);
   const blocks = bank.exam.blocks
     .map((b) => {
       const s = stats[b.slug];
       const module = modules.find((m) => m.slug === b.slug);
       const lessonLinks = (module?.lessons ?? [])
-        .map((l) => `<li><a href="#/daw/${course.id}/leccion/${l.slug}">${escapeHtml(l.title)}</a></li>`)
+        .map((l) => {
+          const done = progress.done?.[l.slug];
+          return `<li${done ? ' class="is-done"' : ""}><a href="#/daw/${course.id}/leccion/${l.slug}">${escapeHtml(l.title)}</a>${
+            done ? ' <span class="daw-done">✓ Completada</span>' : ""
+          }</li>`;
+        })
         .join("");
       return `
         <li class="block-row">
@@ -196,6 +257,8 @@ function renderPanel(course) {
     })
     .join("");
   const first = lessons.get(course.order[0]);
+  // Continuar: la última lección abierta si no está completada; si no, la primera pendiente
+  const resume = last && !progress.done?.[last.lesson.slug] ? last : lessons.get(pending);
   return `
     <p class="daw-crumb"><a href="#/daw">Preparación DAW</a> › <a href="#/daw/cursos">Cursos de DAW</a></p>
     <header class="course-hero">
@@ -203,8 +266,16 @@ function renderPanel(course) {
       <h1 class="course-hero__title" id="daw-title" tabindex="-1">${escapeHtml(course.info.title)}</h1>
       <p class="course-hero__lead">${course.order.length} lecciones · ${bank.questions.length} preguntas, con las respuestas de código
         comprobadas ejecutando el código.</p>
+      <p class="daw-units" id="daw-units">${completed} de ${course.order.length} lecciones completadas</p>
+      ${meter(course.order.length ? completed / course.order.length : 0, "Lecciones completadas")}
       <div class="course-hero__cta">
-        ${first ? `<a class="btn btn--primary btn--lg" href="#/daw/${course.id}/leccion/${first.lesson.slug}">Empezar por la teoría →</a>` : ""}
+        ${
+          resume && (last || completed)
+            ? `<a class="btn btn--primary btn--lg" href="#/daw/${course.id}/leccion/${resume.lesson.slug}">Continuar: ${escapeHtml(resume.lesson.title)} →</a>`
+            : first
+              ? `<a class="btn btn--primary btn--lg" href="#/daw/${course.id}/leccion/${first.lesson.slug}">Empezar por la teoría →</a>`
+              : ""
+        }
         ${due ? `<a class="btn btn--ghost btn--lg" href="#/daw/${course.id}/practica/repaso">Repaso de hoy (${due})</a>` : ""}
       </div>
     </header>
@@ -212,7 +283,8 @@ function renderPanel(course) {
       <h2 class="section-title" id="daw-blocks-title">Tu dominio: ${score} %</h2>
       <p class="readiness__note">Acierto de cada bloque ponderado por su peso. Orientativo.</p>
       <ul class="block-list">${blocks}</ul>
-    </section>`;
+    </section>
+    ${resourcesHtml(course.resources, "Recursos complementarios", "daw-resources-title")}`;
 }
 
 /* ---------- Lección ---------- */
@@ -256,6 +328,12 @@ function renderLesson(course, slug) {
   const faq = (lesson.assistant?.faq ?? [])
     .map((f) => `<details class="daw-faq"><summary>${renderInline(f.q)}</summary><p>${renderInline(f.a)}</p></details>`)
     .join("");
+  const objectives = (lesson.objectives ?? []).map((o) => `<li>${renderInline(o)}</li>`).join("");
+  const mistakes = (lesson.mistakes ?? [])
+    .map((m) => `<li><strong>${renderInline(m.error)}</strong> ${renderInline(m.fix)}</li>`)
+    .join("");
+  const summary = (lesson.summary ?? []).map((item) => `<li>${renderInline(item)}</li>`).join("");
+  const done = courseState(course.id).done?.[lesson.slug];
   const sources = (lesson.sources ?? [])
     .map((s) => `<li><a href="${safeUrl(s.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(s.title)}</a></li>`)
     .join("");
@@ -265,7 +343,14 @@ function renderLesson(course, slug) {
     <header class="course-hero">
       <p class="eyebrow">Lección ${index + 1} de ${course.order.length}</p>
       <h1 class="course-hero__title" id="daw-title" tabindex="-1">${escapeHtml(lesson.title)}</h1>
+      ${done ? '<p class="daw-done">✓ Lección completada</p>' : ""}
     </header>
+    ${
+      objectives
+        ? `<section class="course-section" aria-labelledby="daw-goals-title">
+            <h2 class="section-title" id="daw-goals-title">Al terminar sabrás</h2><ul class="daw-goals">${objectives}</ul></section>`
+        : ""
+    }
     <section class="course-section daw-theory" aria-label="Teoría">${renderMarkdown(lesson.theory)}</section>
     <section class="course-section" aria-labelledby="daw-example-title">
       <h2 class="section-title" id="daw-example-title">Ejemplo</h2>
@@ -277,7 +362,25 @@ function renderLesson(course, slug) {
       ${renderMarkdown(lesson.exercise)}
       ${code(lesson.starter, lang)}
       ${lesson.assistant?.hint ? `<details class="daw-faq"><summary>Pista</summary><p>${renderInline(lesson.assistant.hint)}</p></details>` : ""}
+      ${
+        lesson.solution
+          ? `<details class="daw-faq daw-solution-box"><summary>Ver una solución explicada</summary>
+              ${code(lesson.solution.code, lesson.solution.lang ?? lang)}${renderMarkdown(lesson.solution.explain)}</details>`
+          : ""
+      }
     </section>
+    ${
+      mistakes
+        ? `<section class="course-section" aria-labelledby="daw-mistakes-title">
+            <h2 class="section-title" id="daw-mistakes-title">Errores frecuentes</h2><ul class="daw-mistakes">${mistakes}</ul></section>`
+        : ""
+    }
+    ${
+      summary
+        ? `<section class="course-section" aria-labelledby="daw-summary-title">
+            <h2 class="section-title" id="daw-summary-title">Resumen</h2><ul>${summary}</ul></section>`
+        : ""
+    }
     ${quizHtml(lesson, lang)}
     ${
       challenge
@@ -291,7 +394,21 @@ function renderLesson(course, slug) {
         : ""
     }
     ${faq ? `<section class="course-section" aria-labelledby="daw-faq-title"><h2 class="section-title" id="daw-faq-title">Dudas frecuentes</h2>${faq}</section>` : ""}
+    ${resourcesHtml(
+      course.resources.filter((r) => r.lessons?.includes(`${course.id}/${lesson.slug}`)),
+      "Recursos complementarios",
+      "daw-lesson-resources-title",
+    )}
     ${sources ? `<section class="course-section" aria-labelledby="daw-sources-title"><h2 class="section-title" id="daw-sources-title">Fuentes</h2><ul>${sources}</ul></section>` : ""}
+    <section class="course-section daw-complete" aria-labelledby="daw-complete-title">
+      <h2 class="section-title" id="daw-complete-title">¿Has terminado la lección?</h2>
+      ${
+        done
+          ? `<p class="daw-done" role="status" tabindex="-1">✓ Completada. Cuenta en tu progreso del curso.</p>`
+          : `<button class="btn btn--primary" type="button" data-daw-complete="${escapeHtml(lesson.slug)}">Marcar la lección como completada</button>
+             <p class="readiness__note">Se guarda en este navegador y, con sesión, en tu cuenta.</p>`
+      }
+    </section>
     <nav class="daw-pager" aria-label="Lecciones">
       ${prev ? `<a class="btn btn--ghost" href="#/daw/${course.id}/leccion/${prev.lesson.slug}">← ${escapeHtml(prev.lesson.title)}</a>` : "<span></span>"}
       <a class="btn btn--primary" href="#/daw/${course.id}/practica/${module.slug}">Practicar este bloque</a>
@@ -302,6 +419,7 @@ function renderLesson(course, slug) {
 const TRY = {
   programacion: "Para probarlo, pégalo en un archivo .py y ejecútalo con «python archivo.py» o en PyCharm.",
   entornos: "Para probarlo, pégalo en un archivo .py y ejecútalo con «python archivo.py».",
+  marcas: "Para probarlo, pégalo en un archivo .py y ejecútalo con «python archivo.py». Los fragmentos de XML, HTML o JSON se pueden comprobar con el validador del W3C o con xmllint.",
   sql: "Para probarlo, cópialo en tu gestor de bases de datos (MySQL Workbench, DBeaver, SQLite…).",
   js: "Para probarlo, pégalo en la consola del navegador (F12) o ejecútalo con Node.",
   java: "Para probarlo, guárdalo en Main.java y ejecuta «java Main.java», o pégalo en tu IDE.",
@@ -496,6 +614,7 @@ async function render(route, { focus = false } = {}) {
     }
     if (location.hash !== route) return; // el alumno se fue mientras cargaba
     if (view === "leccion" && current.lessons.has(arg)) {
+      if (visitLesson(courseState(id), arg)) saveCourse(id); // «Continuar» en el panel del curso
       root().innerHTML = renderLesson(current, arg);
     } else if (view === "practica" && (arg === "repaso" || current.bank.exam.blocks.some((b) => b.slug === arg))) {
       if (session?.course !== id || session.block !== arg) startPractice(current, arg);
@@ -523,6 +642,12 @@ async function renderCurriculumRoute(route, moduleId) {
 const rerender = (focus = false) => render(location.hash, { focus });
 
 function onClick(event) {
+  const complete = event.target.closest("[data-daw-complete]");
+  if (complete && current) {
+    if (completeLesson(courseState(current.id), complete.dataset.dawComplete)) saveCourse(current.id);
+    rerender().then(() => $(".daw-complete .daw-done")?.focus());
+    return;
+  }
   const target = event.target.closest("[data-daw]");
   if (!target || !session) return;
   const item = session.items[session.index];

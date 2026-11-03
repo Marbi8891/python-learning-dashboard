@@ -134,7 +134,7 @@ export function renderDawPrep(index, state) {
       <h2 class="lx-section__title" id="lx-more-title">Temario del centro y otros módulos</h2>
       <ul>
         <li><a href="#/daw/programacion">Programación por unidades de trabajo (UT1-UT9)</a>: teoría y preguntas de cada UT, con su propio progreso (compartido con la app).</li>
-        <li><a href="#/daw/cursos">Otros módulos de DAW</a>: Bases de datos, Entornos de desarrollo, JavaScript y Java.</li>
+        <li><a href="#/daw/cursos">Otros módulos de DAW</a>: Bases de datos, Entornos de desarrollo, Lenguajes de marcas, JavaScript y Java.</li>
         <li><a href="#/daw/curriculo">Currículo oficial del ciclo</a>: los módulos de Castilla y León con sus resultados de aprendizaje y criterios de evaluación.</li>
       </ul>
     </section>`;

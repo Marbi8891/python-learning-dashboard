@@ -2,6 +2,8 @@
    navegador) o la copia de la cuenta. Deja solo los tipos esperados para que ningún dato
    manipulado acabe convertido en HTML. */
 
+import { cleanDone, cleanLastLesson } from "./lesson-progress.js";
+
 const DAY = /^\d{4}-\d{2}-\d{2}$/;
 const ISO = /^\d{4}-\d{2}-\d{2}T[\d:.+-]+Z?$/;
 const isNumber = (value) => typeof value === "number" && Number.isFinite(value);
@@ -47,6 +49,9 @@ export function cleanProgress(value) {
   if ("bestCombo" in value) clean.bestCombo = isNumber(value.bestCombo) ? value.bestCombo : 0;
   if ("lang" in value) clean.lang = value.lang === "en" ? "en" : "es";
   if ("flags" in value) clean.flags = isObject(value.flags) ? value.flags : {};
+  // Cursos de DAW: lecciones completadas y última lección estudiada (lesson-progress.js)
+  if ("done" in value) clean.done = cleanDone(value.done);
+  if ("lastLesson" in value) clean.lastLesson = cleanLastLesson(value.lastLesson);
   if ("plan" in value) {
     const date = value.plan?.examDate;
     const goal = value.plan?.dailyGoal;
