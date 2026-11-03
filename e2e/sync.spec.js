@@ -196,3 +196,35 @@ test("cerrar sesión con todo guardado sigue borrando el navegador (equipos comp
   expect(await serverKnown(request, headers)).toBe(1); // lo pendiente se subió al cerrar
   expect(await localKnown(page)).toBe(0);
 });
+
+// AUTH-02: si la sesión de una cuenta caduca y entra otra en el mismo navegador, el progreso de la
+// primera no se sube a la segunda ni se borra: se aparta y vuelve cuando la primera entra.
+test("el progreso de otra cuenta en el mismo navegador no se mezcla y vuelve a su dueña", async ({ page, request, context }) => {
+  const ana = await account(request);
+  const otra = await account(request);
+  await page.goto("/#/pcap/fichas");
+  await login(page, ana.email);
+  await page.getByRole("button", { name: "Ver respuesta" }).click();
+  await page.getByRole("button", { name: "Lo sé →" }).click();
+  await expect.poll(() => serverKnown(request, ana.headers), { timeout: 15_000 }).toBe(1);
+
+  // La sesión de Ana caduca (se pierde la cookie): su progreso se queda en el navegador
+  await context.clearCookies();
+  await page.reload();
+  await expect(page.locator("#account-label")).toHaveText("Iniciar sesión");
+  expect(await localKnown(page)).toBe(1);
+
+  // Entra otra cuenta en el mismo equipo: se recarga sin el progreso de Ana
+  await Promise.all([page.waitForEvent("load"), login(page, otra.email).catch(() => {})]);
+  await expect(page.locator("#account-label")).toHaveText("Ana"); // las dos cuentas de prueba se llaman Ana
+  await page.waitForTimeout(3_000); // margen para que una subida indebida llegara a la cuenta
+  expect(await serverKnown(request, otra.headers)).toBe(0);
+  expect(await localKnown(page)).toBe(0);
+
+  // Sale la segunda cuenta (todo guardado) y vuelve Ana: recupera lo suyo
+  await page.locator("#account-button").click();
+  await Promise.all([page.waitForEvent("load"), page.locator("#logout-button").click()]);
+  await Promise.all([page.waitForEvent("load"), login(page, ana.email).catch(() => {})]);
+  await expect(page.locator("#account-label")).toHaveText("Ana");
+  expect(await localKnown(page)).toBe(1);
+});

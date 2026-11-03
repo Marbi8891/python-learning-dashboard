@@ -2,6 +2,7 @@
 
 import { ApiError, apiEnabled, request, setToken } from "./api.js";
 import { createUploader } from "./uploader.js";
+import { claimLocalProgress, STASH_PREFIX } from "./local-owner.js";
 
 const PROGRESS_KEY = "pld:completed";
 // Solo un aviso de que hay una cookie de sesión (el token no se puede leer desde aquí): así, al
@@ -119,8 +120,11 @@ function hadSession() {
 /** Sin token: la sesión va en la cookie HttpOnly. Con token: solo en memoria. */
 export async function startSession(token = null) {
   setToken(token);
-  state.user = await request("GET", "/api/users/me");
+  const user = await request("GET", "/api/users/me");
   rememberSession(!token);
+  // Se recarga con el progreso de esta cuenta: la promesa no termina para que nadie siga con la sesión
+  if (claimOwnProgress(user, token)) return new Promise(() => {});
+  state.user = user;
   emit({ type: "user" });
   await syncProgress();
 }
@@ -136,12 +140,37 @@ export async function restoreSession() {
   }
 }
 
+/** El progreso de este navegador era de otra cuenta (o esta tenía algo apartado): se cambia y se
+    recarga, para que la app no mezcle cuentas (AUTH-02). Devuelve true si se va a recargar. */
+function claimOwnProgress(user, token) {
+  let swapped = false;
+  try {
+    swapped = claimLocalProgress(user.id, localStorage).swapped;
+  } catch {
+    return false; // sin almacenamiento no hay progreso de nadie que mezclar
+  }
+  if (!swapped) return false;
+  try {
+    sessionStorage.setItem(
+      "pld:flash",
+      token
+        ? "En este navegador había progreso de otra cuenta: lo hemos apartado sin mezclarlo. Vuelve a iniciar sesión."
+        : "En este navegador había progreso de otra cuenta: lo hemos apartado sin mezclarlo con el tuyo.",
+    );
+  } catch {
+    // sin aviso: se recarga igualmente
+  }
+  location.reload();
+  return true;
+}
+
 /** Borra de este navegador todo lo personal (progreso, borradores, nombre del certificado,
     logros…). Se conservan solo las preferencias de aspecto. Para equipos compartidos. */
 export function clearLocalData() {
   try {
     for (const key of Object.keys(localStorage)) {
-      if (key.startsWith("pld:") && key !== "pld:prefs") localStorage.removeItem(key);
+      // Lo apartado de otras cuentas (AUTH-02) no es de quien cierra la sesión: se conserva
+      if (key.startsWith("pld:") && key !== "pld:prefs" && !key.startsWith(STASH_PREFIX)) localStorage.removeItem(key);
     }
   } catch {
     // sin almacenamiento: no hay nada que borrar
