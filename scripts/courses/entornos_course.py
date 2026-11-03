@@ -89,6 +89,85 @@ SCRUM = (
 )
 DOCKER = ("Docker — Get started", "https://docs.docker.com/get-started/")
 
+# ---------------------------------------------------------------- soluciones (se ejecutan en check_solutions)
+
+MEDIA = """
+notas = [7, 4, 9, 6]  # entrada
+
+# proceso
+media = sum(notas) / len(notas)
+
+# salida
+print(f"Media: {media}")
+"""
+
+SUMA = """
+# suma.py: Python lo interpreta; no se genera ningún ejecutable
+suma = 0
+for i in range(1, 6):
+    suma += i
+print(suma)
+
+# suma.c: el mismo programa en C, que hay que compilar
+# #include <stdio.h>
+# int main(void) {
+#     int suma = 0;
+#     for (int i = 1; i <= 5; i++) suma += i;
+#     printf("%d\\n", suma);
+#     return 0;
+# }
+#
+# gcc suma.c -o suma   ->  genera el ejecutable «suma» («suma.exe» en Windows)
+# ./suma               ->  15, aunque borres suma.c
+"""
+
+PRODUCTO = """
+# 1. Imperativo: pasos y una variable que cambia
+producto = 1
+for i in range(1, 6):
+    producto *= i
+print(producto)
+
+# 2. Funcional: una función aplicada a los datos
+import math
+print(math.prod(range(1, 6)))
+
+# 3. POO: una clase con su estado y sus métodos
+class Multiplicador:
+    def __init__(self):
+        self.total = 1
+
+    def multiplicar(self, n):
+        self.total *= n
+
+m = Multiplicador()
+for i in range(1, 6):
+    m.multiplicar(i)
+print(m.total)
+"""
+
+GIMNASIO = """
+# Requisitos funcionales
+# 1. El socio se registra con su email y una contraseña.
+# 2. El socio consulta el horario de clases y reserva una plaza.
+# 3. El socio cancela una reserva hasta 2 horas antes de la clase.
+
+# Requisitos no funcionales
+# 1. La reserva se confirma en menos de 3 segundos.
+# 2. La app funciona en móviles Android e iOS de los últimos 5 años.
+
+# Backlog (de más a menos prioridad)
+# 1. Registro e inicio de sesión de socios
+# 2. Consultar el horario de clases
+# 3. Reservar una plaza
+# 4. Cancelar una reserva
+# 5. Avisar al socio cuando se libera una plaza
+# 6. Estadísticas de asistencia para el gimnasio
+
+# Sprint 1 (2 semanas): tareas 1 y 2, que ya se pueden enseñar al cliente.
+# Product Owner: la gerente del gimnasio, que conoce a los socios y decide las prioridades.
+"""
+
 # ---------------------------------------------------------------- lecciones
 
 L_LENGUAJES = Lesson(
@@ -266,6 +345,39 @@ Marca con comentarios la parte de entrada, la de proceso y la de salida.
             "Es el que ejecutan los navegadores para hacer las páginas interactivas.",
         ),
     ],
+    objectives=[
+        "Clasificar los lenguajes de programación más usados y elegir uno según el proyecto (RA1 e).",
+        "Distinguir el software de sistema, el de aplicación y el de desarrollo, y para qué sirven las herramientas de desarrollo (RA1 f).",
+        "Describir un programa como entrada, proceso y salida.",
+    ],
+    mistakes=[
+        (
+            "Pensar que hay un lenguaje «mejor» que los demás.",
+            "Cada lenguaje encaja en un tipo de proyecto: compara rendimiento, plataforma y facilidad.",
+        ),
+        (
+            "Confundir Java con JavaScript.",
+            "Son lenguajes distintos: Java se compila a bytecode para la JVM y JavaScript se ejecuta en el navegador o en Node.js.",
+        ),
+        (
+            "Llamar software de sistema a cualquier programa que viene instalado.",
+            "Solo es de sistema el que gestiona el hardware y los recursos, como el sistema operativo. El navegador es de aplicación.",
+        ),
+        (
+            "Dividir entre `len(notas)` sin comprobar que la lista tiene elementos.",
+            "Con una lista vacía, `sum([]) / len([])` da `ZeroDivisionError`.",
+        ),
+    ],
+    summary=[
+        "Un lenguaje de programación tiene su propia sintaxis: el mismo programa se escribe distinto en Java, Python, C++ o JavaScript.",
+        "Se elige el lenguaje según el proyecto: C++ para rendimiento, JavaScript para el navegador, Python para automatizar y Java para aplicaciones de empresa multiplataforma.",
+        "Un programa recibe datos, los procesa y muestra resultados.",
+        "El software puede ser de sistema, de aplicación o de desarrollo (IDE, compilador).",
+    ],
+    solution=(
+        MEDIA,
+        "La entrada es la lista, el proceso divide la suma entre el número de notas (28 / 4) y la salida muestra `Media: 6.5`. `sum` y `len` evitan escribir el bucle a mano.",
+    ),
     sources=[PY, JAVA],
 )
 
@@ -490,6 +602,41 @@ Anota qué archivos se generan en cada caso.
             "g++ y javac son compiladores; Scrum es una metodología ágil.",
         ),
     ],
+    objectives=[
+        "Diferenciar el código fuente, el código objeto y el ejecutable, y qué herramienta genera cada uno (RA1 c).",
+        "Explicar cómo Java genera bytecode para ejecutarlo en la máquina virtual (RA1 d).",
+        "Distinguir los lenguajes compilados de los interpretados (RA1 e).",
+        "Diferenciar una máquina virtual de un contenedor.",
+    ],
+    mistakes=[
+        (
+            "Creer que el código objeto ya se puede ejecutar.",
+            "Le falta el enlace: el enlazador lo une con las librerías y genera el ejecutable.",
+        ),
+        (
+            "Pensar que un ejecutable de Windows funciona en Linux.",
+            "El ejecutable es para un sistema y un procesador concretos. Por eso Java usa bytecode y una JVM en cada sistema.",
+        ),
+        (
+            "Decir que un programa interpretado no ejecuta nada si tiene un error.",
+            "El intérprete ejecuta las líneas anteriores al error y se detiene al llegar a él.",
+        ),
+        (
+            "Confundir la máquina virtual de Java con una máquina virtual como VirtualBox.",
+            "La JVM ejecuta bytecode. Una VM de virtualización simula un ordenador completo con su sistema operativo.",
+        ),
+    ],
+    summary=[
+        "Código fuente → compilador → código objeto → enlazador y librerías → ejecutable.",
+        "Un compilador traduce todo antes de ejecutar; el ejecutable funciona sin el código fuente.",
+        "Un intérprete traduce y ejecuta línea a línea, y se detiene en la línea con el error.",
+        "Java compila a bytecode (`.class`) y la JVM lo ejecuta en cualquier sistema.",
+        "Una máquina virtual simula un ordenador completo; un contenedor aísla el programa compartiendo el núcleo del sistema.",
+    ],
+    solution=(
+        SUMA,
+        "Los dos programas muestran 15. Con Python solo existe `suma.py`, y el intérprete lo lee cada vez que lo ejecutas. Con C, `gcc` compila y enlaza `suma.c` y genera el ejecutable `suma`, que funciona sin el código fuente. No ves el código objeto porque `gcc` lo borra al terminar; con `gcc -c suma.c` lo conserva (`suma.o`).",
+    ),
     sources=[PY, JAVA, DOCKER],
 )
 
@@ -702,6 +849,40 @@ Calcula el producto de los números del 1 al 5 (debe dar 120):
             "Las funciones puras son del paradigma funcional; SELECT, del declarativo.",
         ),
     ],
+    objectives=[
+        "Clasificar los lenguajes según su paradigma: imperativo, orientado a objetos, funcional y declarativo (RA1 e).",
+        "Reconocer las clases, los objetos, los atributos y los métodos de la programación orientada a objetos (RA5 a).",
+        "Resolver el mismo problema en estilo imperativo, funcional y orientado a objetos.",
+    ],
+    mistakes=[
+        (
+            "Empezar el producto en 0, como una suma.",
+            "El elemento neutro del producto es 1: con 0, el resultado siempre es 0.",
+        ),
+        (
+            "Pensar que un lenguaje solo admite un paradigma.",
+            "Python y Java mezclan varios: puedes escribir el mismo programa con bucles, con clases o con funciones.",
+        ),
+        (
+            "Confundir la clase con el objeto.",
+            "La clase es el molde (`Multiplicador`) y el objeto, cada instancia que creas con él (`m = Multiplicador()`).",
+        ),
+        (
+            "Llamar funcional a cualquier código que usa funciones.",
+            "Funcional es usar funciones puras, sin cambiar variables ni estado. Un bucle que cambia `total` es imperativo aunque esté dentro de una función.",
+        ),
+    ],
+    summary=[
+        "Imperativo: pasos, variables que cambian y estructuras de control.",
+        "Orientado a objetos: clases con atributos y métodos, y objetos que son sus instancias.",
+        "Funcional: funciones puras y datos que no cambian.",
+        "Declarativo: dices qué quieres y el sistema decide cómo (SQL).",
+        "Los lenguajes modernos mezclan paradigmas.",
+    ],
+    solution=(
+        PRODUCTO,
+        "Los tres estilos muestran 120. El imperativo acumula en una variable que empieza en 1. El funcional usa `math.prod`, sin variables que cambien. En POO, el objeto guarda el resultado en su atributo `total` y el método `multiplicar` lo actualiza.",
+    ),
     sources=[PY, JAVA],
 )
 
@@ -946,6 +1127,39 @@ Vas a desarrollar la app de reservas de un gimnasio con Scrum.
             "Trello y Jira sirven para gestionar tareas; Docker, para contenedores; g++ y javac son compiladores.",
         ),
     ],
+    objectives=[
+        "Identificar las fases del desarrollo de una aplicación y qué se hace en cada una (RA1 b).",
+        "Distinguir los requisitos funcionales de los no funcionales.",
+        "Reconocer las características de Scrum, Kanban y XP, y cuándo conviene usarlas frente al modelo en cascada (RA1 g).",
+    ],
+    mistakes=[
+        (
+            "Escribir un requisito no funcional como si fuera funcional.",
+            "Funcional es lo que hace la aplicación («reservar una plaza»); no funcional, cómo lo hace («en menos de 3 segundos»).",
+        ),
+        (
+            "Pensar que ágil significa no documentar ni planificar.",
+            "Se planifica en cada sprint y se documenta lo necesario. Lo que cambia es que se entrega software que funciona con frecuencia.",
+        ),
+        (
+            "Llenar el primer sprint con todo el backlog.",
+            "Un sprint entrega algo pequeño y terminado. Lo que no cabe se queda en el backlog para los siguientes.",
+        ),
+        (
+            "Confundir el Product Owner con el Scrum Master.",
+            "El Product Owner decide qué se hace y en qué orden; el Scrum Master ayuda al equipo a seguir Scrum y quita obstáculos.",
+        ),
+    ],
+    summary=[
+        "Fases: análisis, diseño, codificación, pruebas, documentación, explotación y mantenimiento.",
+        "Un requisito funcional dice qué hace la aplicación; uno no funcional, cómo se comporta.",
+        "Cascada es lineal y encaja con requisitos estables; las metodologías ágiles entregan en ciclos cortos y se adaptan al cambio.",
+        "Scrum trabaja en sprints con Product Owner, Scrum Master y equipo; Kanban, con un tablero y un límite de tareas en progreso; XP cuida la calidad del código.",
+    ],
+    solution=(
+        GIMNASIO,
+        "Los requisitos funcionales describen acciones del socio y los no funcionales, tiempos y dispositivos. El backlog pone primero lo imprescindible para usar la app (registrarse, ver el horario y reservar). El primer sprint entrega solo lo que cabe en dos semanas y ya se puede enseñar. El Product Owner es quien conoce el negocio, no el programador. Hay otras respuestas válidas si se justifican.",
+    ),
     sources=[SCRUM, JAVA],
 )
 
@@ -980,5 +1194,15 @@ BLOCKS = [
     ),
 ]
 
+
+def check_solutions() -> None:
+    """Las soluciones de Python se ejecutan y tienen que dar lo que dice su explicación."""
+    assert run_python(MEDIA) == "Media: 6.5"
+    assert run_python(SUMA) == "15"
+    assert run_python(PRODUCTO) == "120\n120\n120"
+    assert run_python(GIMNASIO) == ""  # solo comentarios: una planificación, no un programa
+
+
 if __name__ == "__main__":
+    check_solutions()
     main("entornos", BLOCKS, run_python, check_example, module="0487")

@@ -20,6 +20,7 @@
 2. En la extracción de la orden no aparece en qué curso va el 0616, Proyecto intermodular.
 3. El optativo I tiene 34 h con 2 h semanales, que no cuadra con 34 semanas.
 4. Qué optativos ofrece el centro.
+5. **Nuevo:** en el 0487, RA3, el criterio c aparece partido en dos: «c) Se han identificado las herramientas de depuración y prueba de aplicaciones» y «d) ofrecidas por el entorno de desarrollo.». Así está en `scripts/curriculum/rd_405_2023_daw.json`, extraído del XML del BOE. Si es un fallo de la extracción, las letras de la d en adelante están corridas una posición. No se ha corregido porque desde aquí no se puede abrir el BOE para comprobarlo, y ningún objetivo de la plataforma cita el RA3.
 
 ### 1.3 Origen de cada contenido
 
@@ -57,7 +58,7 @@ Generado con `python scripts/courses/audit_pedagogy.py`:
 
 | Curso (lecciones) | Objetivos | Conocimientos previos | Explicación | Ejemplo comentado | Ejercicio y reto (dos niveles) | Solución razonada | Errores frecuentes | Cuestionario | Criterios de superación | Resumen para repasar | Fuentes |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| entornos (4) | ✗ | — | ✓ | ✓ | ✓ | ✗ | ✗ | ✓ | — | ✗ | ✓ |
+| entornos (4) | ✓ | — | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — | ✓ | ✓ |
 | java (10) | ✗ | — | ✓ | ✓ | ✓ | ✗ | ✗ | ✓ | — | ✗ | ✓ |
 | js (10) | ✗ | — | ✓ | ✓ | ✓ | ✗ | ✗ | ✓ | — | ✗ | ✓ |
 | marcas (6) | ✓ | — | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — | ✓ | ✓ |
@@ -66,11 +67,13 @@ Generado con `python scripts/courses/audit_pedagogy.py`:
 
 ✓ todas las lecciones · ✗ ninguna · — la plataforma aún no tiene ese campo.
 
-- **Solo Lenguajes de marcas tiene la unidad completa.** Los otros cinco cursos (50 lecciones) tienen teoría, ejemplo, ejercicio, reto, mini-quiz y fuentes, pero no objetivos, solución razonada, errores frecuentes ni resumen.
+- **Lenguajes de marcas y Entornos de desarrollo tienen la unidad completa.** Los otros cuatro cursos (46 lecciones) tienen teoría, ejemplo, ejercicio, reto, mini-quiz y fuentes, pero no objetivos, solución razonada, errores frecuentes ni resumen.
 - **Ningún curso tiene todavía «conocimientos previos» ni «criterios de superación».** Son campos nuevos: conviene definirlos en `course_builder.py` antes de rellenarlos.
 - El **repaso** existe a nivel de curso (repaso espaciado de las preguntas falladas), no por lección.
 
-Completar las 50 lecciones es trabajo de contenido. Cada texto tiene que escribirse y comprobarse (las soluciones se ejecutan al generar el curso, como en Lenguajes de marcas), así que no se ha rellenado sin revisar. Propuesta de orden: Entornos (4 lecciones, el más corto), Bases de datos (14), Programación (12), JavaScript y Java.
+Completar las lecciones es trabajo de contenido. Cada texto tiene que escribirse y comprobarse (las soluciones se ejecutan al generar el curso), así que no se rellena sin revisar. Orden propuesto: Entornos (hecho), Bases de datos (14), Programación (12), JavaScript y Java.
+
+**Entornos de desarrollo, completado.** Las 4 lecciones tienen objetivos, errores frecuentes, resumen y solución explicada. Los objetivos citan solo los criterios que la lección trabaja de verdad: RA1 b, c, d, e, f y g, y RA5 a en Paradigmas (clases, objetos, atributos y métodos). Los objetivos sin un criterio claro, como «máquina virtual o contenedor» o «requisitos funcionales y no funcionales», no citan ningún RA. `check_solutions()` ejecuta las soluciones de Python y comprueba su salida (6,5; 15; 120 tres veces). La de la lección 4 es una planificación en comentarios, porque el ejercicio es de análisis y no de código. Las lecciones solo cubren el RA1 (y una parte del RA5): los RA2 a RA6 (IDE, pruebas, refactorización y control de versiones, diagramas UML) siguen sin contenido en la plataforma.
 
 ## 4. Generación y validación (6.4)
 
@@ -110,7 +113,7 @@ Para añadir otra comunidad bastaría con una tabla nueva con su orden, generar 
 
 ## 6. Siguientes pasos propuestos
 
-1. Completar Entornos de desarrollo con objetivos (con RA citados y revisados), errores frecuentes, solución razonada y resumen, siguiendo el modelo de Lenguajes de marcas.
+1. ~~Completar Entornos de desarrollo~~ (hecho). Siguiente: Bases de datos (14 lecciones), con el mismo modelo.
 2. Añadir a `course_builder.py` los campos «conocimientos previos» y «criterios de superación», y mostrarlos en la lección.
 3. Extraer del RD 659/2023 los RA de los módulos transversales, con el mismo método que `extract_boe.py`. Hace falta descargar el XML del BOE desde un equipo con acceso.
 4. Empezar un módulo sin contenido. El siguiente propuesto es 0615 Diseño de interfaces web.
