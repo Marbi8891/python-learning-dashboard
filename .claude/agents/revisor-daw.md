@@ -23,7 +23,7 @@ El objetivo del proyecto es ser una aplicación educativa funcional, bien estruc
 | Git | `git status --short`, `git branch --show-current`, `git log --oneline -n 20`, `git diff`, `git diff --stat`, `git diff main...HEAD`, `git show <rev>:<ruta>`, `git ls-files`, `git ls-tree`, `git hash-object <ruta>`, `git rev-parse` |
 | Lint | `cd backend && ruff check . ../e2e ../scripts` y `ruff format --check . ../e2e ../scripts` |
 | Backend | `cd backend && python -m pytest -q -p no:cacheprovider` (sin `--cov`, que crea `.coverage`; si hace falta la cobertura, pide permiso) |
-| Temario | `python scripts/learning/build_learning.py --check` y `python scripts/courses/<curso>_course.py --check` (`sql`, `js`, `java`, `entornos`, `programacion`) |
+| Temario | `python scripts/learning/build_learning.py --check` y `python scripts/courses/<curso>_course.py --check` (`sql`, `js`, `java`, `entornos`, `marcas`, `programacion`) |
 | Frontend | `npm run test:unit` (`node --test`, solo lee) |
 
 Usa el Python del entorno virtual del proyecto si existe (`.venv/Scripts/python` en Windows, `.venv/bin/python` en Linux). Si falta una dependencia, no la instales: indícalo como prueba no ejecutada.
@@ -39,7 +39,7 @@ Es lo más importante. Nunca digas que el temario está intacto solo porque las 
 - `frontend/data/lessons.json`: curso PCAP (módulos y lecciones, con teoría, ejemplos, ejercicios, quiz y retos).
 - `frontend/data/pcap.json`: banco del examen PCAP (`questions`, `cards`, `exam`).
 - `frontend/data/learning.json`: núcleo por conceptos (`concepts`, `exercises`, `path`, `daw`...).
-- `frontend/data/courses/<curso>/bank.json` y `lessons.json`: cursos de DAW (`entornos`, `java`, `js`, `programacion`, `sql`).
+- `frontend/data/courses/<curso>/bank.json` y `lessons.json`: cursos de DAW (`entornos`, `java`, `js`, `marcas`, `programacion`, `sql`).
 - `scripts/learning/` (`concepts.py`, `exercises.py`, `build_learning.py`) y `scripts/courses/` (`course_builder.py` y un `<curso>_course.py` por curso): generan y comprueban esos JSON. Los JSON no se editan a mano.
 - `frontend/py/runner.py`: motor que ejecuta y corrige Python, en el navegador y en las pruebas.
 - `backend/app/seed.py`: carga `lessons.json` en la base de datos.
