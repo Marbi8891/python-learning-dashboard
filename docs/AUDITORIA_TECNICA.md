@@ -275,3 +275,50 @@ Esfuerzo: S (horas), M (un día), L (varios días). «Fase» indica en qué fase
 6. **Fase 6 (seguridad):** AUD-009 y los RT.
 
 Antes de empezar convendría decidir qué hacer con el PR #61 (recomendado: cerrarlo y rehacer lo útil, como el botón Detener, en la Fase 3) y si el PR #65 (tutor con OpenAI, de pago) sigue en pie, porque el proyecto solo usa herramientas gratuitas.
+
+---
+
+## 11. Actualización del 3 de noviembre de 2026: protección del progreso (Fase B)
+
+Auditoría sobre `2bae4e1` y correcciones en la rama `claude/project-thread-0deakf`. El informe inicial
+completo (matriz de hallazgos, estado de los PR y de las pruebas) está fuera del repositorio, en los
+archivos del proyecto (`auditoria-plataforma/INFORME_INICIAL_FASE_A.md`).
+
+Desde la sección 9 ya se habían corregido AUD-001 (#72, #77), PY-01 (#85), PY-02, NAV-01 y AUD-010 (#74).
+
+### 11.1 Hallazgos nuevos y su estado
+
+| ID | Prioridad | Problema | Evidencia | Estado |
+|---|---|---|---|---|
+| SYNC-01 | P0 | Al cerrar sesión, si la última subida fallaba (red, 5xx, Render despertando) o la fusión inicial no había salido bien, se borraba del navegador un progreso que el servidor no tenía | Reproducido con Playwright y el backend real: `{"localBefore":1,"localAfter":["pld:game"],"serverKnown":0}` | **Corregido.** `uploader.js` sabe qué falta por confirmar. Si algo no se ha guardado, no se borra nada: el diálogo lo explica y ofrece reintentar, cerrar sesión conservándolo o borrarlo a sabiendas. e2e en `sync.spec.js` |
+| SYNC-04 | P1 | Un `PUT` fallido solo escribía en la consola: sin reintento ni aviso | Código | **Corregido.** Estado por almacén, reintentos a los 2, 10, 30 y 60 s (no con 401) y aviso `role="status"`. `uploader.test.mjs` |
+| SYNC-02 | P2 | Al fusionar ganaba el historial más largo. Como cada pregunta guarda 5 intentos, con los dos llenos ganaba siempre el local aunque el otro fuera más reciente | Código | **Corregido.** Gana la copia con el último intento más reciente (`srs[id].last`, `ex[id].last`), sin cambiar el formato. `merge.test.mjs` |
+| AUTH-02 | P2 | Si caducaba la sesión de A y entraba B en el mismo navegador, la fusión subía a B el progreso de A | Código | **Corregido.** `pld:owner` + `pld:stash:<id>`: lo de A se aparta sin borrarlo y vuelve cuando A entra. `local-owner.test.mjs` y e2e |
+| AUTH-01 | P2 | Sesión de 30 minutos fijos sin renovación | Código | **Corregido.** La cookie se renueva cuando le queda menos de la mitad, con un máximo absoluto de `SESSION_MAX_HOURS` (12). Los clientes Bearer no cambian. `test_session_renewal.py` |
+| AUD-009 | P1 | Sin límite de frecuencia en las escrituras | `grep` | **Corregido.** 120 guardados por usuario y minuto, 429 y evento `progress.rate_limited`. `test_write_limits.py` |
+| PY-03 | P2 | `builtins.print = …` dejaba muda la consola hasta recargar | Reproducido (las pruebas nuevas fallan con el runner anterior y llegan a romper pytest) | **Corregido.** `runner.py` restaura `builtins`, `sys.modules` y el límite de recursión tras cada ejecución y tras los tests. `test_runner_isolation.py` y e2e |
+| PY-04 | P3 | La salida se acumulaba entera y se recortaba al final | Reproducido (230 MB en CPython) | **Corregido.** Tope de salida mientras se genera (pico de memoria < 5 MB en la prueba) y aviso de «salida recortada» |
+| SYNC-03 | P3 | `PUT` sin `version` sobrescribe (compatibilidad con pestañas anteriores a #77) | Código | Pendiente: exigir la versión cuando no quede ningún cliente antiguo |
+
+### 11.2 Qué calcula el cliente y qué valida el servidor
+
+- **La XP, el nivel, la racha, los logros y los ejercicios superados los calcula el navegador.** La corrección corre en el Worker del alumno, que puede falsearla (PY-05). El servidor valida la forma, el tamaño (200 KB por documento) y ahora la frecuencia, pero no el contenido.
+- Es proporcionado para una plataforma de estudio personal sin rankings ni certificados con valor externo. Por eso la XP y el certificado **no deben presentarse como verificados**. Verificar en el servidor exigiría ejecutar código del alumno en Render, que es un riesgo mayor que el beneficio.
+
+### 11.3 Límites reales del aislamiento de Python
+
+El Web Worker evita que la página se congele, **pero no es una barrera de seguridad**:
+
+- Corre en el mismo origen y no tiene una CSP propia.
+- La red se cierra con una lista negra de APIs (RT-005).
+- Pyodide se descarga de jsDelivr sin SRI (RT-002).
+- La restauración de PY-03 cubre las funciones integradas, `sys.modules` y la recursión. Un programa todavía puede cambiar atributos de otros módulos (`math.pi = 3`) para las ejecuciones siguientes. Recargar la página o usar «Detener», que reinicia el Worker, lo arregla.
+
+### 11.4 Riesgos pendientes
+
+- **SYNC-03**: un `PUT` sin versión todavía sobrescribe la cuenta (ver la tabla).
+- **Sesión en Safari:** si Safari bloquea la cookie, la sesión vive en memoria y no se renueva (no comprobado en Safari).
+- **Datos que se quedan en el navegador:** con «Cerrar sesión y conservarlo aquí» y con lo apartado de otra cuenta, el progreso sigue en un equipo que puede ser compartido. Es una elección explícita del alumno o, en el caso de lo apartado, la alternativa a perder sus datos.
+- **Lecciones desmarcadas:** si desmarcar una lección falla, no se reintenta (la importación solo añade).
+- **Límites de intentos:** se guardan en memoria (una sola instancia de Render) y se reinician al reiniciar el servidor.
+- **Siguen abiertos:** AUD-008 (PWA sin conexión), AUD-002 a AUD-007 (lógica de aprendizaje), RT-001 a RT-006 y AUD-023 (`aria-invalid`). Se tratan en las fases siguientes.

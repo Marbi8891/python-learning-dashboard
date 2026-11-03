@@ -167,3 +167,20 @@
 :root[data-font="muy-grande"] {
   --ui-zoom: 1.25;
 }
+
+/* ---------- Contraste alto: lo pide el sistema o el alumno en Aspecto ----------
+   Todo el texto secundario pasa a tener el color del texto principal y los separadores, el de
+   los bordes de los controles. [data-theme] sube la especificidad por encima de cada tema. */
+:root[data-theme][data-contrast="alto"] {
+  --color-text-muted: var(--color-text);
+  --color-text-faint: var(--color-text);
+  --color-border: var(--color-border-control);
+}
+
+@media (prefers-contrast: more) {
+  :root[data-theme] {
+    --color-text-muted: var(--color-text);
+    --color-text-faint: var(--color-text);
+    --color-border: var(--color-border-control);
+  }
+}

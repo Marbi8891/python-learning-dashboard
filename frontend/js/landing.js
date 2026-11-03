@@ -8,6 +8,7 @@
    y no aparece si no hay actividad. La demostración usa un concepto y un ejercicio reales del
    temario y no muestra progreso inventado. */
 
+import { prefersReducedMotion } from "./prefs.js";
 import { apiEnabled } from "./api.js";
 import { openAccount } from "./account.js";
 import { DAW_COURSES } from "./course-store.js";
@@ -38,7 +39,6 @@ const NAV = [
 const SECTIONS = new Set(["actividad", "rutas", "demo", "codefeed", "preguntas", ...NAV.map((n) => n.id)]);
 
 const $ = (selector) => document.querySelector(selector);
-const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
 export const isLandingRoute = (hash) => hash === LANDING_ROUTE || hash.startsWith(`${LANDING_ROUTE}/`);
 
@@ -818,7 +818,7 @@ async function runDemo(button) {
   const output = button.parentElement.querySelector("[data-lp-output]");
   output.hidden = false;
   button.disabled = true;
-  output.textContent = "Cargando Python en tu navegador (solo la primera vez, unos segundos)…";
+  output.textContent = "Cargando Python en tu navegador (la primera vez se descargan unos 10 MB)…";
   try {
     const result = await pythonRunner.run(exerciseData.concept.example.code, "");
     const text = [result.output, result.error].filter(Boolean).join("\n");
@@ -868,7 +868,7 @@ function bind(view) {
 }
 
 function scrollToSection(section, { moveFocus }) {
-  const behavior = reducedMotion.matches ? "auto" : "smooth";
+  const behavior = prefersReducedMotion() ? "auto" : "smooth";
   if (!SECTIONS.has(section)) {
     window.scrollTo({ top: 0, behavior: "auto" });
     if (moveFocus) $("#lp-title")?.focus({ preventScroll: true });

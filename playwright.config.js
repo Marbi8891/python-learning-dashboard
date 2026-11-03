@@ -12,6 +12,8 @@ module.exports = defineConfig({
   reporter: process.env.CI ? [["github"], ["html", { open: "never" }]] : "list",
   use: {
     baseURL: "http://localhost:5500",
+    // La web es en español: un navegador en otro idioma vería el aviso para cambiar a inglés
+    locale: "es-ES",
     trace: "retain-on-failure",
   },
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],

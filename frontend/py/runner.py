@@ -4,6 +4,7 @@ Se usa en el navegador (Pyodide, dentro de un Web Worker) y en los tests de CPyt
 así que tiene que funcionar igual en los dos sitios: solo biblioteca estándar.
 """
 
+import builtins
 import contextlib
 import io
 import json
@@ -12,6 +13,57 @@ import traceback
 
 USER_FILE = "<tu código>"
 MAX_OUTPUT = 20_000
+TRUNCATED_NOTE = f"\n… (salida recortada: solo se muestran los primeros {MAX_OUTPUT:,} caracteres)".replace(",", " ")
+
+# Copia de las funciones integradas tal como estaban al cargar el runner (PY-03). Todas las
+# ejecuciones comparten intérprete: si un programa cambia `builtins.print` o borra `len`, se deja
+# como estaba al terminar, para que la consola y la corrección sigan funcionando.
+_PRISTINE_BUILTINS = dict(vars(builtins))
+
+
+class _LimitedOutput(io.TextIOBase):
+    """Salida con tope (PY-04): guarda solo los primeros MAX_OUTPUT caracteres mientras se generan.
+    Antes se guardaba todo y se recortaba al final: un bucle de print podía llenar la memoria."""
+
+    def __init__(self) -> None:
+        self._parts: list[str] = []
+        self._size = 0
+        self.truncated = False
+
+    def writable(self) -> bool:
+        return True
+
+    def write(self, text: str) -> int:
+        room = MAX_OUTPUT - self._size
+        if room > 0:
+            piece = text[:room]
+            self._parts.append(piece)
+            self._size += len(piece)
+        if len(text) > max(room, 0):
+            self.truncated = True
+        return len(text)
+
+    def getvalue(self) -> str:
+        return "".join(self._parts)
+
+
+def _snapshot() -> dict:
+    return {"modules": dict(sys.modules), "recursion": sys.getrecursionlimit()}
+
+
+def _restore(saved: dict) -> None:
+    """Deja el intérprete como antes de ejecutar el código del alumno (PY-03)."""
+    current = vars(builtins)
+    for name in [name for name in current if name not in _PRISTINE_BUILTINS]:
+        del current[name]
+    for name, value in _PRISTINE_BUILTINS.items():
+        if current.get(name) is not value:
+            current[name] = value
+    # Módulos que el programa borró o sustituyó en sys.modules (los nuevos se quedan en caché)
+    for name, module in saved["modules"].items():
+        if sys.modules.get(name) is not module:
+            sys.modules[name] = module
+    sys.setrecursionlimit(saved["recursion"])
 
 
 def _format_error(error: BaseException, code: str) -> str:
@@ -141,22 +193,26 @@ def explain_error(error: BaseException) -> dict | None:
 
 def run_code(code: str, stdin: str = "", name: str = "__main__") -> dict:
     """Ejecuta `code` con `stdin` como entrada. Devuelve salida, error y el espacio de nombres."""
-    output = io.StringIO()
+    output = _LimitedOutput()
     namespace = {"__name__": name}
+    saved = _snapshot()
     old_stdin = sys.stdin
     sys.stdin = io.StringIO(stdin)
-    error = None
-    hint = None
+    caught = None
     try:
         with contextlib.redirect_stdout(output), contextlib.redirect_stderr(output):
             exec(compile(code, USER_FILE, "exec"), namespace)
     except BaseException as exc:  # también SystemExit (exit()) y KeyboardInterrupt
-        error = _format_error(exc, code)
-        hint = explain_error(exc)
+        caught = exc
     finally:
         sys.stdin = old_stdin
+        _restore(saved)
+    # El error se describe con el intérprete ya restaurado (el programa pudo romper len, str…)
+    error = _format_error(caught, code) if caught is not None else None
+    hint = explain_error(caught) if caught is not None else None
     return {
-        "output": output.getvalue()[:MAX_OUTPUT],
+        "output": output.getvalue(),
+        "truncated": output.truncated,
         "error": error,
         "hint": hint,
         "namespace": namespace,
@@ -182,19 +238,24 @@ def check_exercise(code: str, cases: list[dict]) -> dict:
 
         namespace = result["namespace"]
         namespace.update(__output__=result["output"], __code__=code)
-        test_output = io.StringIO()
+        test_output = _LimitedOutput()
         sys.stdin, old_stdin = io.StringIO(""), sys.stdin
+        saved = _snapshot()
+        caught = None
         try:
             with contextlib.redirect_stdout(test_output):
                 exec(compile(case["test"], "<tests>", "exec"), namespace)
-        except AssertionError as exc:
-            return base | {"message": str(exc) or "Un test ha fallado.",
-                           "output": result["output"], "error": None}
         except BaseException as exc:
-            return base | {"message": f"Al probar tu código se produjo {type(exc).__name__}: {exc}",
-                           "output": result["output"], "error": None}
+            caught = exc
         finally:
             sys.stdin = old_stdin
+            _restore(saved)
+        if isinstance(caught, AssertionError):
+            return base | {"message": str(caught) or "Un test ha fallado.",
+                           "output": result["output"], "error": None}
+        if caught is not None:
+            return base | {"message": f"Al probar tu código se produjo {type(caught).__name__}: {caught}",
+                           "output": result["output"], "error": None}
     return {"passed": True, "case": len(cases), "total": len(cases),
             "message": "¡Todos los tests superados!"}
 
@@ -203,7 +264,8 @@ def check_exercise(code: str, cases: list[dict]) -> dict:
 
 def run_for_js(code: str, stdin: str) -> str:
     result = run_code(code, stdin)
-    return json.dumps({"output": result["output"], "error": result["error"], "hint": result["hint"]})
+    output = result["output"] + (TRUNCATED_NOTE if result["truncated"] else "")
+    return json.dumps({"output": output, "error": result["error"], "hint": result["hint"]})
 
 
 def check_for_js(code: str, cases_json: str) -> str:

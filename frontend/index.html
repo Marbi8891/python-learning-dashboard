@@ -121,6 +121,7 @@
           <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
           <span id="account-label">Iniciar sesión</span>
         </button>
+        <p class="sync-status" id="sync-status" role="status"></p>
 
       </header>
 
@@ -248,6 +249,7 @@
 
         <div class="console__actions">
           <button class="btn btn--primary console__run" id="console-run" type="button"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M7 4v16l13-8z" fill="currentColor"/></svg> Ejecutar</button>
+          <button class="btn btn--ghost console__stop" id="console-stop" type="button" hidden><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="1.5" fill="currentColor"/></svg> Detener</button>
           <button class="btn btn--ghost" id="console-example" type="button">Restablecer el ejemplo</button>
           <button class="btn btn--ghost" id="console-copy" type="button">Copiar código</button>
           <button class="btn btn--ghost" id="console-clear" type="button">Limpiar salida</button>
@@ -353,6 +355,23 @@
         </div>
       </details>
     </div>
+
+    <div class="account__form" data-view="unsaved" hidden>
+      <h2 class="visually-hidden" data-title="Cambios sin guardar">Cambios sin guardar</h2>
+      <p>Esto no se ha podido guardar en tu cuenta y todavía está solo en este navegador:</p>
+      <p><strong id="unsaved-list"></strong></p>
+      <p class="account__muted">Si cierras sesión y lo borras de este navegador, se perderá. Si lo conservas, se subirá a tu cuenta la próxima vez que entres aquí.</p>
+      <div class="account__buttons">
+        <button class="btn btn--primary" id="unsaved-retry" type="button">Reintentar</button>
+        <button class="btn btn--ghost" id="unsaved-keep" type="button">Cerrar sesión y conservarlo aquí</button>
+        <button class="btn btn--ghost" id="unsaved-cancel" type="button">Seguir con la sesión abierta</button>
+      </div>
+      <details class="account__danger">
+        <summary>Cerrar sesión y borrarlo de este navegador</summary>
+        <p>Lo que no se ha guardado en tu cuenta se perderá. Hazlo solo si este equipo no es tuyo y no te importa perderlo.</p>
+        <button class="btn btn--danger" id="unsaved-discard" type="button">Cerrar sesión y borrar</button>
+      </details>
+    </div>
   </dialog>
 
   <!-- ============ ASPECTO ============ -->
@@ -362,6 +381,12 @@
       <button class="icon-button" id="appearance-close" type="button" aria-label="Cerrar">✕</button>
     </header>
     <form class="account__form" id="appearance-form">
+      <fieldset class="choice">
+        <legend>Idioma <span lang="en">· Language</span></legend>
+        <label><input type="radio" name="lang" value="es"> <span lang="es" translate="no">Español</span></label>
+        <label><input type="radio" name="lang" value="en"> <span lang="en" translate="no">English</span></label>
+        <p class="choice__note" id="lang-note" hidden>Las lecciones están en español. Puedes traducirlas con la opción «Traducir» de tu navegador: el código no se traduce.</p>
+      </fieldset>
       <fieldset class="choice">
         <legend>Tema</legend>
         <label><input type="radio" name="theme" value="auto"> Automático (como Windows)</label>
@@ -373,6 +398,12 @@
         <label><input type="radio" name="font" value="normal"> Normal</label>
         <label><input type="radio" name="font" value="grande"> Grande</label>
         <label><input type="radio" name="font" value="muy-grande"> Muy grande</label>
+      </fieldset>
+      <fieldset class="choice">
+        <legend>Lectura</legend>
+        <label><input type="checkbox" name="spacing"> Texto más espaciado</label>
+        <label><input type="checkbox" name="contrast"> Contraste alto</label>
+        <label><input type="checkbox" name="motion"> Sin animaciones</label>
       </fieldset>
     </form>
   </dialog>

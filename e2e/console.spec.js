@@ -55,6 +55,40 @@ test("corta un bucle infinito y la consola sigue funcionando", async ({ page }) 
   await expect(output(page)).toContainText("sigo vivo");
 });
 
+test("«Detener» corta el programa al momento y la consola sigue funcionando (PY-01)", async ({ page }) => {
+  await openLesson(page, "bucles");
+  const stop = page.locator("#console-stop");
+  await expect(stop).toBeHidden(); // solo aparece mientras algo se ejecuta
+  await run(page, "print('calentando')"); // primera carga de Pyodide
+  await page.locator("#console-editor").fill("while True:\n    pass");
+  await page.locator("#console-run").focus();
+  await page.keyboard.press("Enter");
+  // El foco pasa del botón Ejecutar (desactivado) a Detener, para seguir con el teclado
+  await expect(stop).toBeVisible();
+  await expect(stop).toBeFocused();
+  const started = Date.now();
+  await page.keyboard.press("Enter");
+  await expect(output(page)).toContainText("Has detenido el programa", { timeout: 3000 });
+  expect(Date.now() - started).toBeLessThan(3000); // sin esperar al límite de 10 s
+  await expect(output(page)).not.toContainText("Error");
+  await expect(stop).toBeHidden();
+  await expect(page.locator("#console-run")).toBeFocused();
+  await run(page, "print('sigo vivo')");
+  await expect(output(page)).toContainText("sigo vivo");
+});
+
+test("un programa que cambia print no deja muda la consola (PY-03) y la salida enorme se recorta (PY-04)", async ({ page }) => {
+  await openLesson(page, "bucles");
+  await run(page, "import builtins\nbuiltins.print = lambda *a, **k: None");
+  await run(page, "print('sigo hablando')");
+  await expect(output(page)).toContainText("sigo hablando");
+
+  await run(page, "for i in range(100_000):\n    print('x' * 50)");
+  await expect(output(page)).toContainText("salida recortada", { timeout: 15_000 });
+  await run(page, "print(len('abc'))");
+  await expect(output(page)).toHaveText("3");
+});
+
 test("Ctrl+Enter ejecuta y Tab inserta 4 espacios", async ({ page }) => {
   await openLesson(page, "variables");
   const editor = page.locator("#console-editor");
@@ -108,4 +142,30 @@ test("superar los tests completa la lección", async ({ page }) => {
   await expect(page.locator("#check-result")).toHaveAttribute("data-passed", "true");
   await expect(page.locator("#progress-value")).toHaveText("13%");
   await expect(page.getByRole("button", { name: "Marcar como pendiente" })).toBeVisible();
+});
+
+test("los atajos muestran ⌘ Cmd en Mac y Ctrl en el resto", async ({ page }) => {
+  await openLesson(page, "variables");
+  await expect(page.locator("#console-help")).toContainText("Ctrl+Enter ejecuta");
+  await page.addInitScript(() => {
+    Object.defineProperty(Navigator.prototype, "userAgentData", { get: () => ({ platform: "macOS" }) });
+  });
+  await page.reload();
+  await expect(page.locator("#console-help")).toContainText("⌘ Cmd+Enter ejecuta");
+  // El atajo funciona con la tecla Cmd (Meta)
+  await page.locator("#console-editor").fill("print('con cmd')");
+  await page.locator("#console-editor").press("Meta+Enter");
+  await expect(output(page)).toContainText("con cmd", { timeout: 90_000 });
+});
+
+test("la primera ejecución avisa de que Python se descarga y de cuánto ocupa", async ({ page }) => {
+  // Retrasa Pyodide para ver el estado mientras se descarga (como en una conexión lenta)
+  await page.route("**/pyodide.mjs", async (route) => {
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+    await route.continue();
+  });
+  await openLesson(page, "variables");
+  await page.locator("#console-run").click();
+  await expect(page.locator("#console-status")).toHaveText("Descargando Python (unos 10 MB, solo la primera vez)…");
+  await expect(page.locator("#console-status")).toHaveText("Python 3 listo", { timeout: 90_000 });
 });

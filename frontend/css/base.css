@@ -155,3 +155,60 @@ button {
     animation: none !important;
   }
 }
+
+/* «Sin animaciones» elegido en Aspecto: lo mismo que pide el sistema */
+:root[data-motion="reducido"] *,
+:root[data-motion="reducido"] *::before,
+:root[data-motion="reducido"] *::after {
+  transition: none !important;
+  animation: none !important;
+  scroll-behavior: auto !important;
+}
+
+/* «Texto más espaciado» (Aspecto): más aire entre líneas, letras y palabras, como recomiendan
+   las guías de lectura para dislexia y WCAG 1.4.12. El código conserva su espaciado para que
+   las columnas sigan alineadas. */
+:root[data-spacing="amplio"] body {
+  line-height: 1.8;
+  letter-spacing: 0.05em;
+  word-spacing: 0.16em;
+}
+
+:root[data-spacing="amplio"] p,
+:root[data-spacing="amplio"] li {
+  margin-block-end: 0.9em;
+}
+
+:root[data-spacing="amplio"] :is(code, pre, kbd, samp, textarea) {
+  letter-spacing: normal;
+  word-spacing: normal;
+}
+
+/* ---------- Idioma ---------- */
+/* Mientras llega el diccionario de otro idioma (como mucho 2 s, ver theme-init.js) */
+:root[data-i18n-pending] body {
+  visibility: hidden;
+}
+
+/* Aviso único para navegadores que no están en español (i18n.js) */
+.lang-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2) var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-surface-2);
+  border-bottom: 1px solid var(--color-border-control);
+  color: var(--color-text);
+}
+
+.lang-banner p {
+  margin: 0;
+  max-width: 60ch;
+}
+
+.lang-banner__actions {
+  display: flex;
+  gap: var(--space-2);
+}

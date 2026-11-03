@@ -48,26 +48,55 @@ def get_jwt_secret() -> str:
     return secret
 
 
-def create_access_token(user_id: int, token_version: int = 0) -> str:
+def create_access_token(user_id: int, token_version: int = 0, auth_time: int | None = None) -> str:
+    """`auth_time` (segundos UNIX) es cuándo se inició la sesión: se conserva al renovarla."""
     now = datetime.now(UTC)
     payload = {
         "sub": str(user_id),
         "ver": token_version,
         "iat": now,
+        "auth": auth_time if auth_time is not None else int(now.timestamp()),
         "exp": now + timedelta(minutes=get_settings().access_token_minutes),
     }
     return jwt.encode(payload, get_jwt_secret(), algorithm=ALGORITHM)
 
 
-def decode_access_token(token: str) -> tuple[int, int] | None:
-    """Devuelve (id de usuario, versión del token), o None si es inválido o ha caducado."""
+def _payload(token: str) -> dict | None:
     try:
         payload = jwt.decode(
             token, get_jwt_secret(), algorithms=[ALGORITHM], options={"require": ["exp", "sub"]}
         )
-        return int(payload["sub"]), int(payload.get("ver", 0))
-    except (jwt.PyJWTError, KeyError, ValueError, TypeError):
+    except jwt.PyJWTError:
         return None
+    # Caducidad absoluta: ni renovándola, una sesión dura más de session_max_hours (AUTH-01)
+    started = payload.get("auth", payload.get("iat"))
+    max_age = get_settings().session_max_hours * 3600
+    if not isinstance(started, int | float) or datetime.now(UTC).timestamp() - started > max_age:
+        return None
+    return payload
+
+
+def decode_access_token(token: str) -> tuple[int, int] | None:
+    """Devuelve (id de usuario, versión del token), o None si es inválido o ha caducado."""
+    payload = _payload(token)
+    if payload is None:
+        return None
+    try:
+        return int(payload["sub"]), int(payload.get("ver", 0))
+    except (KeyError, ValueError, TypeError):
+        return None
+
+
+def renewal_auth_time(token: str) -> int | None:
+    """Si a la sesión le queda menos de la mitad de su duración, devuelve cuándo se inició (para
+    emitir otra con la misma caducidad absoluta). Si no toca renovarla, None."""
+    payload = _payload(token)
+    if payload is None:
+        return None
+    left = payload["exp"] - datetime.now(UTC).timestamp()
+    if left > get_settings().access_token_minutes * 60 / 2:
+        return None
+    return int(payload.get("auth", payload.get("iat")))
 
 
 def looks_forged(token: str) -> bool:

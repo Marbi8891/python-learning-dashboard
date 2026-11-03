@@ -798,6 +798,8 @@ body[data-zone="core"] .path {
 
   .lx-table--reflow td[data-label]::before {
     content: attr(data-label);
+    /* Texto alternativo vacío: el lector ya anuncia la cabecera de columna, así no lo dice dos veces */
+    content: attr(data-label) / "";
     display: block;
     color: var(--color-text-muted);
     font-size: var(--text-xs);

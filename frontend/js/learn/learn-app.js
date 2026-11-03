@@ -9,6 +9,8 @@
      #/progreso             dominio por concepto, errores y actividad
      #/sesion               sesión de estudio en curso (session-view.js) */
 
+import { locale } from "../i18n.js";
+import { prefersReducedMotion } from "../prefs.js";
 import { learning, loadLearningContent, onLearningChange, saveLearning } from "./learn-store.js";
 import { onWelcomeClick, onWelcomeKeydown, renderWelcome } from "./welcome.js";
 import { activeErrors, allStats, areaSummary, daysBetween, lastActivity, markRead } from "./mastery.js";
@@ -41,7 +43,7 @@ function ago(iso, now = new Date()) {
   return `hace ${days} días`;
 }
 
-const formatDay = (iso) => new Date(iso).toLocaleDateString("es-ES", { day: "numeric", month: "short" });
+const formatDay = (iso) => new Date(iso).toLocaleDateString(locale, { day: "numeric", month: "short" });
 
 const DAILY_BUDGET_KEY = "pld:daily-study-minutes";
 const DAILY_BUDGET_OPTIONS = [15, 30, 45, 60];
@@ -77,7 +79,7 @@ function renderToday() {
   const mastered = all.filter((s) => s.status === "dominado").length;
   const due = all.filter((s) => s.due);
   const last = lastActivity(index, learning);
-  const date = now.toLocaleDateString("es-ES", { weekday: "long", day: "numeric", month: "long" });
+  const date = now.toLocaleDateString(locale, { weekday: "long", day: "numeric", month: "long" });
   const [first, ...rest] = plan;
   const startButton = (item, label, primary) =>
     `<button class="btn ${primary ? "btn--primary btn--lg" : "btn--ghost"}" type="button" data-learn="plan" data-type="${item.type}" data-concept="${escapeHtml(item.concept)}"${item.errors ? ` data-errors="${escapeHtml(item.errors.join(","))}"` : ""}>${label}<span class="visually-hidden">: ${ACTION[item.type]} ${escapeHtml(title(item.concept))}</span></button>`;
@@ -397,7 +399,7 @@ function renderProgress() {
       (area) => `
       <section class="lx-section" aria-labelledby="pa-${area.id}">
         <h2 class="lx-section__title" id="pa-${area.id}">${escapeHtml(area.title)} <span class="lx-muted">· ${area.mastered}/${area.total}</span></h2>
-        <div class="table-wrap" tabindex="0" role="region" aria-labelledby="pa-${area.id}"><table class="lx-table lx-table--reflow" role="table">
+        <div class="table-wrap" tabindex="0"><table class="lx-table lx-table--reflow" role="table" aria-labelledby="pa-${area.id}">
           <thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">Concepto</th><th scope="col" role="columnheader">Estado</th><th scope="col" role="columnheader">Dominio</th><th scope="col" role="columnheader">Última vez</th><th scope="col" role="columnheader">Próximo repaso</th></tr></thead>
           <tbody role="rowgroup">${area.ids
             .map((id) => {
@@ -516,7 +518,7 @@ function onClick(event) {
       event.preventDefault();
       const heading = document.getElementById(target.dataset.section); // el <h2> de la sección
       if (!heading) break;
-      heading.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
+      heading.scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth", block: "start" });
       heading.setAttribute("tabindex", "-1");
       heading.focus({ preventScroll: true });
       break;
@@ -615,6 +617,14 @@ function render(route) {
   else if (section === "daw") html = renderDawPrep(index, learning);
   else html = renderToday();
   root().innerHTML = html;
+  document.title = `${pageTitle(section, arg)} · Python Learning Dashboard`;
+}
+
+/** Título de la pestaña propio de cada pantalla (WCAG 2.4.2): el lector de pantalla lo anuncia al
+    cambiar de ruta y sirve para distinguir pestañas. Antes todas se llamaban «Aprender». */
+function pageTitle(section, arg) {
+  if (section === "teoria") return arg && index.concepts.has(arg) ? `${title(arg)} · Teoría` : "Teoría";
+  return { bienvenida: "Bienvenida", practicar: "Practicar", progreso: "Tu progreso", daw: "Preparación DAW" }[section] ?? "Aprender";
 }
 
 export const LEARN_ROUTES = ["#/bienvenida", "#/aprender", "#/teoria", "#/practicar", "#/progreso", "#/sesion"];
