@@ -340,3 +340,31 @@
 .daw-resource__desc {
   color: var(--color-text);
 }
+
+/* De dónde sale el contenido de un curso (Fase D, 6.1) */
+.daw-origin {
+  display: grid;
+  grid-template-columns: minmax(0, 12rem) minmax(0, 1fr);
+  gap: var(--space-2) var(--space-4);
+  margin: var(--space-3) 0 0;
+}
+
+.daw-origin dt {
+  font-weight: 600;
+}
+
+.daw-origin dd {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+@media (max-width: 600px) {
+  .daw-origin {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-1);
+  }
+
+  .daw-origin dd {
+    margin-bottom: var(--space-2);
+  }
+}

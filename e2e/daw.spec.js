@@ -172,3 +172,24 @@ test("catálogo, lección y práctica sin infracciones WCAG", async ({ page }) =
     expect(summary, `${route}\n${summary.join("\n")}`).toEqual([]);
   }
 });
+
+test("cada curso dice de dónde sale su contenido y no presenta nada propio como oficial (Fase D)", async ({ page }) => {
+  await page.goto("/#/daw/programacion");
+  const origin = page.locator('section[aria-labelledby="daw-origin-title"]');
+  await expect(origin.getByRole("heading", { name: "De dónde sale este contenido" })).toBeVisible();
+  await expect(origin).toContainText("César San Juan Pastor");
+  await expect(origin).toContainText("Son práctica: no son evaluaciones del centro.");
+  await origin.getByRole("link", { name: "currículo del módulo 0485" }).click();
+  await expect(page).toHaveURL(/#\/daw\/curriculo\/0485$/);
+
+  // Los objetivos que citan RA avisan de que son un resumen propio y enlazan el texto oficial
+  await page.goto("/#/daw/marcas/leccion/mar-xml-bien-formado");
+  const goals = page.locator('section[aria-labelledby="daw-goals-title"]');
+  await expect(goals).toContainText("Resumen propio de la plataforma");
+  await expect(goals.getByRole("link", { name: "currículo del módulo 0373" })).toHaveAttribute("href", "#/daw/curriculo/0373");
+
+  await page.goto("/#/daw/js");
+  await expect(page.locator('section[aria-labelledby="daw-origin-title"]')).toContainText("no sigue ningún temario");
+  const results = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]).analyze();
+  expect(results.violations.map((v) => v.id)).toEqual([]);
+});
