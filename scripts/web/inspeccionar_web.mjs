@@ -170,7 +170,7 @@ async function inspeccionarRuta(navegador, base, ruta, nombreVista, salida, tema
   await page.goto(`${base}/index.html#/${ruta}`);
   await esperarQuieta(page);
   const medidas = await medirPagina(page, nombreVista === "movil");
-  const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"]).analyze();
+  const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]).analyze();
   const captura = `${ruta}-${nombreVista}${tema === "oscuro" ? "-oscuro" : ""}.png`;
   await page.screenshot({ path: join(salida, captura), fullPage: true });
   await contexto.close();

@@ -637,6 +637,14 @@ function render(route, { focus = false } = {}) {
   if (focus) $("#pcap-title")?.focus();
 }
 
+let finishOpener = null; // botón «Terminar examen» que abrió la confirmación
+
+/** Cierra «¿Terminar el examen?» y devuelve el foco al botón que la abrió (sin perderlo en <body>). */
+function closeFinishConfirm() {
+  $("#exam-confirm").hidden = true;
+  (finishOpener?.isConnected ? finishOpener : $('[data-pcap="ask-finish"]'))?.focus();
+}
+
 function onClick(event) {
   const target = event.target.closest("[data-pcap], [data-go]");
   if (!target) return;
@@ -660,11 +668,11 @@ function onClick(event) {
       session.items[session.index].flagged = !session.items[session.index].flagged;
       return rerender(false);
     case "ask-finish":
+      finishOpener = target;
       $("#exam-confirm").hidden = false;
       return $('#exam-confirm [data-pcap="finish"]').focus();
     case "cancel-finish":
-      $("#exam-confirm").hidden = true;
-      return undefined;
+      return closeFinishConfirm();
     case "finish":
       return finishExam();
     case "clear-date":
@@ -766,6 +774,10 @@ export async function openPcap(route, modules, { moveFocus = true } = {}) {
     root().addEventListener("click", onClick);
     root().addEventListener("change", onChange);
     root().addEventListener("submit", onSubmit);
+    // Esc cierra «¿Terminar el examen?» como cualquier diálogo (WCAG 2.1.2)
+    root().addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && event.target.closest("#exam-confirm")) closeFinishConfirm();
+    });
   }
   if (!location.hash.startsWith("#/pcap")) return; // el alumno se fue mientras cargaba
   render(route, { focus: moveFocus });

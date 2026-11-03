@@ -38,7 +38,7 @@ function render() {
         <button class="btn btn--primary" type="submit" id="quiz-submit">Comprobar respuestas</button>
         <button class="btn btn--ghost" type="button" id="quiz-retry" hidden>Volver a intentarlo</button>
       </div>
-      <p class="quiz__score" id="quiz-score" role="status"></p>
+      <p class="quiz__score" id="quiz-score" role="status" tabindex="-1"></p>
     </form>`;
 
   $("#quiz-form").addEventListener("submit", grade);
@@ -79,7 +79,8 @@ function grade(event) {
   $("#quiz-score").innerHTML = `<strong>${correct}/3</strong> · ${messages[correct]}`;
   $("#quiz-submit").hidden = true;
   $("#quiz-retry").hidden = false;
-  $("#quiz-score").focus?.();
+  // El botón pulsado se oculta: el foco pasa a la nota para no perderse en <body> (WCAG 2.4.3)
+  $("#quiz-score").focus();
   recordQuiz(lesson.slug, correct);
 }
 

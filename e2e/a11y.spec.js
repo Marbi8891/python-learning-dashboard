@@ -1,4 +1,4 @@
-// Auditoría automática de accesibilidad (WCAG 2.1 A/AA) con axe-core.
+// Auditoría automática de accesibilidad (WCAG 2.2 A/AA) con axe-core.
 // El tema «Automático» sigue al sistema: se audita la app en claro y en oscuro.
 const AxeBuilder = require("@axe-core/playwright").default;
 const { test, expect, openLesson } = require("./fixtures");
@@ -13,7 +13,7 @@ async function audit(page) {
     null,
     { timeout: 20_000 },
   );
-  const results = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"]).analyze();
+  const results = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]).analyze();
   const summary = results.violations.map((v) => `${v.id} (${v.impact}): ${v.nodes.map((n) => n.target).join(", ")}`);
   expect(summary, summary.join("\n")).toEqual([]);
 }
@@ -138,4 +138,42 @@ test("plan de estudio, repaso de hoy y certificado sin infracciones", async ({ p
   await page.goto("/#/certificado");
   await expect(page.locator(".cert-requirements")).toBeVisible();
   await audit(page);
+});
+
+test("al comprobar el quiz el foco pasa a la nota, no se pierde (WCAG 2.4.3)", async ({ page }) => {
+  await openLesson(page, "funciones");
+  await page.getByRole("tab", { name: "Quiz" }).click();
+  for (let qi = 0; qi < 3; qi += 1) await page.locator(`input[name=q${qi}]`).first().check();
+  await page.getByRole("button", { name: "Comprobar respuestas" }).press("Enter");
+  await expect(page.locator("#quiz-score")).toBeFocused();
+  await expect(page.locator("#quiz-score")).toContainText("/3");
+});
+
+test("la confirmación de terminar el simulacro devuelve el foco y se cierra con Esc", async ({ page }) => {
+  await page.goto("/#/pcap/simulacro");
+  await page.getByRole("button", { name: "Empezar el simulacro" }).click();
+  const opener = page.locator(".exam-nav").getByRole("button", { name: "Terminar examen" });
+  await opener.click();
+  await expect(page.getByRole("button", { name: "Sí, terminar" })).toBeFocused();
+  await page.getByRole("button", { name: "Seguir con el examen" }).click();
+  await expect(page.locator("#exam-confirm")).toBeHidden();
+  await expect(opener).toBeFocused();
+  await opener.press("Enter");
+  await expect(page.getByRole("button", { name: "Sí, terminar" })).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(page.locator("#exam-confirm")).toBeHidden();
+  await expect(opener).toBeFocused();
+});
+
+test.describe("letra al 200 % (WCAG 1.4.4)", () => {
+  test.use({ viewport: { width: 768, height: 900 } });
+  for (const route of ["portada", "aprender", "pcap", "daw", "leccion/funciones"]) {
+    test(`#/${route} no se sale por la derecha`, async ({ page }) => {
+      await page.goto(`/#/${route}`);
+      await page.waitForLoadState("networkidle");
+      await page.evaluate(() => (document.documentElement.style.fontSize = "200%"));
+      const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+      expect(overflow).toBeLessThanOrEqual(0);
+    });
+  }
 });

@@ -28,13 +28,19 @@ body {
   background: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-sans);
-  font-size: 15px;
+  font-size: 0.9375rem; /* 15 px con la letra por defecto; crece si el alumno la agranda en el navegador */
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
 
 h1, h2, h3, p, ol, ul {
   margin: 0;
+}
+
+/* Un fieldset no se estrecha por debajo de su contenido: con la letra grande, el código de una
+   pregunta lo ensanchaba y la página se salía por la derecha (WCAG 1.4.4 y 1.4.10) */
+fieldset {
+  min-inline-size: 0;
 }
 
 a {
