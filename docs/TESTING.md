@@ -23,7 +23,7 @@ Las e2e arrancan solas el frontend (`e2e/serve_frontend.py`, un `http.server` co
 |---|---|---|
 | Lint y formato | `cd backend && ruff check . ../e2e ../scripts && ruff format --check . ../e2e ../scripts` | Estilo PEP 8 |
 | Backend | `cd backend && python -m pytest -q --cov=app --cov-fail-under=100` | API, autenticación, RGPD, contenido y banco del PCAP |
-| Núcleo por conceptos | `python scripts/learning/build_learning.py --check` | `learning.json` al día y cada respuesta comprobada |
+| Núcleo por conceptos | `python scripts/learning/build_learning.py --check` | `learning.json` al día, cada respuesta comprobada e ids registrados en `scripts/learning/ids.lock.json` (también `tests/test_learning_ids.py`) |
 | Currículo de DAW | `python scripts/curriculum/build_curriculum.py --check` | Catálogo al día; las pruebas están en `test_curriculum.py` |
 | Cursos de DAW | `python scripts/courses/<curso>_course.py --check` (`sql`, `js`, `java`, `entornos`, `marcas`, `programacion`) | Cada respuesta de código se ejecuta (SQLite, Node, Java y Python) |
 | Coherencia de los cursos de DAW | `cd backend && python -m pytest -q tests/test_daw_courses.py` | Ids estables (`scripts/courses/ids.lock.json`), contenidos vacíos, preguntas repetidas, referencias a unidades, lecciones, módulos y RA, enlaces y soluciones |

@@ -206,6 +206,27 @@ const isCount = (value) => Number.isInteger(value) && value >= 0 && value < 1e6;
 const isIso = (value) => typeof value === "string" && ISO.test(value);
 const isoOrNull = (value) => (isIso(value) ? value : null);
 
+const EX_FIELDS = ["h", "last", "n"];
+const CONCEPT_FIELDS = ["box", "due", "last", "read", "placed"];
+const ERROR_FIELDS = ["n", "last", "streak"];
+const KNOWN_TOP = new Set(["v", "ex", "concepts", "errors", "log", "exams"]);
+const EXTRA_KEY = /^[a-zA-Z][a-zA-Z0-9]{0,30}$/;
+const isPrimitive = (value) =>
+  value === null || typeof value === "boolean" || (typeof value === "number" && Number.isFinite(value)) || (typeof value === "string" && value.length <= 200);
+
+/**
+ * Compatibilidad hacia delante (F1.0, EVO-10): los campos que esta versión no conoce se conservan
+ * para no borrarlos al fusionar y volver a subir el documento. Dentro de cada entrada solo pasan
+ * valores simples (texto corto, número, booleano o null). Esta versión no los pinta nunca.
+ */
+function extras(raw, known) {
+  const out = {};
+  for (const [key, value] of Object.entries(raw)) {
+    if (!known.includes(key) && EXTRA_KEY.test(key) && isPrimitive(value)) out[key] = value;
+  }
+  return out;
+}
+
 function cleanMap(value, item) {
   const out = {};
   if (!isObject(value)) return out;
@@ -225,16 +246,21 @@ export function cleanLearning(value) {
   const state = emptyLearning();
   if (!isObject(value)) return state;
   state.ex = cleanMap(value.ex, (e) =>
-    Array.isArray(e.h) && isIso(e.last) && isCount(e.n) ? { h: e.h.filter((x) => typeof x === "boolean").slice(-HISTORY), last: e.last, n: e.n } : null,
+    Array.isArray(e.h) && isIso(e.last) && isCount(e.n)
+      ? { ...extras(e, EX_FIELDS), h: e.h.filter((x) => typeof x === "boolean").slice(-HISTORY), last: e.last, n: e.n }
+      : null,
   );
   state.concepts = cleanMap(value.concepts, (c) => ({
+    ...extras(c, CONCEPT_FIELDS),
     box: Number.isInteger(c.box) && c.box >= 0 && c.box <= MAX_BOX ? c.box : 0,
     due: typeof c.due === "string" && DAY.test(c.due) ? c.due : null,
     last: isoOrNull(c.last),
     read: isoOrNull(c.read),
     placed: isoOrNull(c.placed),
   }));
-  state.errors = cleanMap(value.errors, (e) => (isCount(e.n) && isIso(e.last) ? { n: e.n, last: e.last, streak: isCount(e.streak) ? e.streak : 0 } : null));
+  state.errors = cleanMap(value.errors, (e) =>
+    isCount(e.n) && isIso(e.last) ? { ...extras(e, ERROR_FIELDS), n: e.n, last: e.last, streak: isCount(e.streak) ? e.streak : 0 } : null,
+  );
   state.log = (Array.isArray(value.log) ? value.log : [])
     .filter((l) => isObject(l) && isIso(l.at) && typeof l.ex === "string" && ID.test(l.ex) && typeof l.ok === "boolean")
     .map((l) => ({ at: l.at, ex: l.ex, ok: l.ok, err: typeof l.err === "string" && ID.test(l.err) ? l.err : null }))
@@ -250,6 +276,10 @@ export function cleanLearning(value) {
       concepts: examConcepts(e.concepts),
     }))
     .slice(-EXAMS);
+  // Bloques nuevos de versiones futuras: se guardan tal cual (son JSON de la propia cuenta)
+  for (const [key, raw] of Object.entries(value)) {
+    if (!KNOWN_TOP.has(key) && EXTRA_KEY.test(key)) state[key] = raw;
+  }
   return state;
 }
 
@@ -297,5 +327,7 @@ export function mergeLearning(local, remote) {
   local.log = [...log.values()].sort((a, b) => a.at.localeCompare(b.at)).slice(-LOG_SIZE);
   const exams = new Map([...other.exams, ...local.exams].map((e) => [e.date, e]));
   local.exams = [...exams.values()].sort((a, b) => a.date.localeCompare(b.date)).slice(-EXAMS);
+  // Bloques que esta versión no conoce: se conserva el de la cuenta si aquí no existe
+  for (const [key, raw] of Object.entries(other)) if (!(key in local)) local[key] = raw;
   return local;
 }

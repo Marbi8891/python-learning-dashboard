@@ -149,3 +149,35 @@ test("mergeLearning une el progreso de dos dispositivos sin perder nada", () => 
   mergeLearning(local, JSON.parse(JSON.stringify(remote)));
   assert.equal(local.log.length, 4);
 });
+
+test("compatibilidad hacia delante: cleanLearning conserva los campos de versiones futuras (F1.0)", () => {
+  const at = NOW.toISOString();
+  const clean = cleanLearning({
+    ex: { "buc-01": { h: [true], last: at, n: 1, okAt: at, raro: { a: 1 }, __proto__x: 1 } },
+    concepts: { bucles: { box: 1, due: "2026-10-05", last: at, read: null, placed: null, ease: 2.5 } },
+    errors: { "bucles.range-fin": { n: 1, last: at, streak: 0, seen: 3 } },
+    planner: { tasks: [{ id: "t1" }] },
+    "<mal>": 1,
+  });
+  assert.equal(clean.ex["buc-01"].okAt, at, "un campo simple nuevo se conserva");
+  assert.equal(clean.ex["buc-01"].raro, undefined, "dentro de una entrada solo pasan valores simples");
+  assert.equal(clean.concepts.bucles.ease, 2.5);
+  assert.equal(clean.errors["bucles.range-fin"].seen, 3);
+  assert.deepEqual(clean.planner, { tasks: [{ id: "t1" }] }, "un bloque nuevo se conserva tal cual");
+  assert.equal(clean["<mal>"], undefined, "claves con formato raro no pasan");
+  assert.equal(Object.getPrototypeOf(clean), Object.prototype);
+});
+
+test("compatibilidad hacia delante: mergeLearning no pierde los campos de versiones futuras", () => {
+  const local = fresh();
+  const remote = fresh();
+  recordAttempt(remote, index.exercises.get("buc-01"), { ok: true, error: null }, { now: NOW });
+  remote.ex["buc-01"].okAt = NOW.toISOString();
+  remote.planner = { minutes: 30 };
+  mergeLearning(local, JSON.parse(JSON.stringify(remote)));
+  assert.equal(local.ex["buc-01"].okAt, NOW.toISOString());
+  assert.deepEqual(local.planner, { minutes: 30 });
+  local.planner = { minutes: 45 };
+  mergeLearning(local, JSON.parse(JSON.stringify(remote)));
+  assert.deepEqual(local.planner, { minutes: 45 }, "si aquí existe, no se pisa");
+});
