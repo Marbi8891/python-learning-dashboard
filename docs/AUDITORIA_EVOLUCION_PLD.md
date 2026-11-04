@@ -16,6 +16,10 @@ heredado se ha vuelto a comprobar contra el código de `d0b3884`; los nuevos emp
 
 Prioridades: **P0** crítico · **P1** alto · **P2** medio · **P3** bajo.
 
+> **Estado (04/11/2026):** el autor aprobó aplicar todas las recomendaciones. La Fase 1 está hecha en
+> la misma rama: el motor está descrito en [`ADAPTIVE_ENGINE.md`](ADAPTIVE_ENGINE.md) y las decisiones
+> D1-D3, en [`DECISIONS.md`](DECISIONS.md). Los hallazgos resueltos lo dicen en su fila.
+
 ---
 
 ## 1. Estado real del proyecto
@@ -148,7 +152,7 @@ recuperación de contraseña, exportación y borrado (RGPD); PWA; inglés; WCAG 
 | EVO-07 | No se puede **posponer ni rechazar** una tarea del plan, ni consultar el **historial** de planes | `learn-app.js` |
 | EVO-08 | El tiempo diario solo se guarda en el navegador (`pld:daily-study-minutes`): no viaja con la cuenta | `learn-app.js:48` |
 | EVO-09 | Sin analítica de estudio (horas, tiempo por asignatura, evolución semanal) más allá de la actividad diaria del panel | `routers/dashboard.py` |
-| AUD-008 | La PWA solo precachea 6 archivos: sin conexión solo funciona lo ya visitado | `sw.js:9` (sigue igual) |
+| AUD-008 | La PWA solo precachea 6 archivos: sin conexión solo funciona lo ya visitado | `sw.js:9` · **Resuelto** en F1: `precache.js` |
 
 ---
 
@@ -161,8 +165,8 @@ recuperación de contraseña, exportación y borrado (RGPD); PWA; inglés; WCAG 
 | EVO-11 | P2 | La historia por ejercicio guarda solo 5 resultados sin fecha individual; el registro, 300 eventos. Para dar **evidencias identificables** hace falta guardar algo más (p. ej. fecha del último acierto) | [H] `mastery.js:19-21` |
 | EVO-12 | P3 | Los textos del motor («Toca repasarlo…») se traducen por coincidencia exacta del DOM: cada frase nueva con datos necesita su entrada con huecos en `i18n/en.json` | [H] `i18n.js:1-10` |
 | AUD-034 | P3 | `app.js`, `dashboard.js`, `pcap.js`, `landing.js` > 750 líneas mezclando datos y HTML | [H] `wc -l` |
-| EVO-16 | P2 | Prueba intermitente: tras guardar la fecha de examen en «Mi panel», el campo pierde a veces el foco (1 fallo de 6 ejecuciones). [Hip] Causa probable: un repintado en segundo plano, como en #87 | [H] fallo `e2e/my-account.spec.js:34`; la vista está en `private.js:293-297` |
-| EVO-13 | P3 | Las e2e solo corren en Chromium: no hay prueba en WebKit/Safari aunque el autor usa Mac | [H] `playwright.config.js:19` |
+| EVO-16 | P2 | Prueba intermitente: tras guardar la fecha de examen en «Mi panel», el campo pierde a veces el foco (1 fallo de 6 ejecuciones). [Hip] Causa probable: un repintado en segundo plano, como en #87 | [H] fallo `e2e/my-account.spec.js:34`; la vista está en `private.js:293-297` · **Resuelto** en F1: `dashboard.js` conserva el foco al repintar |
+| EVO-13 | P3 | Las e2e solo corren en Chromium: no hay prueba en WebKit/Safari aunque el autor usa Mac | [H] `playwright.config.js:19` · **Resuelto** en F1: trabajo `webkit` de CI |
 
 Tamaño: un documento `learn` con los 131 ejercicios intentados 5 veces ocupa **~34 KB** de los 200 KB
 permitidos [H] (medido con `mastery.js`). Hay margen para F1.
