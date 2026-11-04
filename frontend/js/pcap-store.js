@@ -131,7 +131,8 @@ export function blockStats(questions, blocks, answers = pcap.answers) {
   return stats;
 }
 
-const blockCoverage = (s) => (s.total ? Math.min(1, s.answered / s.total / FULL_COVERAGE) : 0);
+/** Parte de un bloque que cuenta para la preparación (0-1): entero a partir de FULL_COVERAGE de sus preguntas. */
+export const blockCoverage = (s) => (s.total ? Math.min(1, s.answered / s.total / FULL_COVERAGE) : 0);
 
 /**
  * Preparación estimada (0-100): acierto de cada bloque ponderado por su peso en el examen y por lo que

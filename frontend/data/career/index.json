@@ -1,0 +1,22 @@
+{
+ "version": 1,
+ "default": "python-backend-junior",
+ "roadmaps": [
+  {
+   "id": "python-backend-junior",
+   "status": "complete",
+   "title": {
+    "es": "Python Backend Developer Junior",
+    "en": "Junior Python Backend Developer"
+   },
+   "description": {
+    "es": "Itinerario para llegar al primer puesto de desarrollo backend con Python: lenguaje, bases de datos, APIs con FastAPI, pruebas, despliegue y preparación de entrevistas.",
+    "en": "A path to a first backend developer job with Python: the language, databases, FastAPI APIs, testing, deployment and interview preparation."
+   },
+   "level": "junior",
+   "months": 8,
+   "phases": 8,
+   "skills": 24
+  }
+ ]
+}

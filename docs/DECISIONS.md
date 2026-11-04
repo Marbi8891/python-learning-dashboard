@@ -66,3 +66,38 @@ comportamiento que fijaba el test anterior: lo aprobó el autor al aprobar la au
 
 **Decisión:** todo el motor se escribe en JavaScript sin bibliotecas nuevas. El backend solo gana un id de documento.
 **Por qué:** coste de mantenimiento y arquitectura actual (HTML, CSS, ES modules, FastAPI).
+
+## DEC-011 · Career Roadmap como documento y catálogo estático (D1, 04/11/2026)
+
+**Decisión:** el progreso del Career Roadmap es un documento `career` en `/api/course-state/career`;
+el catálogo de itinerarios se genera con `scripts/career/build_career.py` en `frontend/data/career/`.
+No hay tablas ni endpoints `/api/roadmaps…`.
+**Por qué:** reutiliza la sincronización con versión (DEC-002), el aislamiento por token y los límites;
+no necesita migraciones y la web sigue funcionando sin backend.
+**Consecuencia:** el servidor no valida entregas ni calificaciones. Se reconsiderará si alguna vez hace falta.
+
+## DEC-012 · Sin IA en el Career Roadmap por ahora (D2, 04/11/2026)
+
+**Decisión:** el Sprint 7 (IA) se pospone. Si se hace, solo modelo simulado u Ollama local, nunca de pago.
+**Por qué:** el autor no quiere gastar en APIs de pago.
+**Consecuencia:** el dominio de las competencias solo sale de evidencias deterministas.
+
+## DEC-013 · Solo el itinerario Backend Junior con contenido propio (D3, 04/11/2026)
+
+**Decisión:** Full Stack, Data Science / ML y Ciberseguridad serán esqueletos (`status: "skeleton"`)
+con fases, competencias y recursos externos. Una unidad sin contenido en la plataforma se marca
+`pending` en lugar de inventarlo.
+
+## DEC-014 · Sin agentes `career-*` (D4, 04/11/2026)
+
+**Decisión:** no se crean los 8 agentes del prompt. Se reutilizan `revisor-daw`, `red-teamer`,
+`mejorador-web` y `buscador-mejoras`.
+**Por qué:** cada agente es mantenimiento; los existentes cubren revisión, seguridad e inspección visual.
+
+## DEC-015 · Dominio de una competencia por agregación (Sprint 1)
+
+**Decisión:** el dominio de una competencia se calcula con lo que ya mide la plataforma (dominio y
+confianza de conceptos, acierto y cobertura de bloques) y las entregas de proyectos:
+`score = Σ valor × evidencia / fuentes`. Una fuente sin evidencias cuenta como 0.
+**Por qué:** no duplicar el motor 2.0 y no confundir contenido estudiado con dominio.
+**Consecuencia:** los proyectos son autoevaluados (lista de comprobación + enlace) y se marcan así.

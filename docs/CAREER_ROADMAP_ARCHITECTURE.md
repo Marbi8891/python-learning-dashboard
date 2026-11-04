@@ -1,8 +1,8 @@
 # Career Roadmap · Auditoría y arquitectura (Sprint 0)
 
-Estado: **propuesta, sin código funcional**. Auditoría hecha sobre `main` en `d0c88c6` (04/11/2026,
+Estado: **aprobada** (D1-D4, 04/11/2026; DEC-011..014). El Sprint 1 está implementado: ver
+[`CAREER_ROADMAP_AGENT_LOG.md`](CAREER_ROADMAP_AGENT_LOG.md). Auditoría hecha sobre `main` en `d0c88c6` (04/11/2026,
 después de fusionar el motor adaptativo 2.0 del PR #97 y la documentación del PR #99).
-El Sprint 1 no empieza hasta que el autor apruebe este documento y las decisiones de §8.
 
 Todo lo que se cita aquí existe en el repositorio en esa versión. Lo que todavía no existe se marca
 como **(nuevo)**.

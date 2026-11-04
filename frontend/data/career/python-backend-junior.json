@@ -1,0 +1,2165 @@
+{
+ "version": 1,
+ "id": "python-backend-junior",
+ "status": "complete",
+ "title": {
+  "es": "Python Backend Developer Junior",
+  "en": "Junior Python Backend Developer"
+ },
+ "description": {
+  "es": "Itinerario para llegar al primer puesto de desarrollo backend con Python: lenguaje, bases de datos, APIs con FastAPI, pruebas, despliegue y preparación de entrevistas.",
+  "en": "A path to a first backend developer job with Python: the language, databases, FastAPI APIs, testing, deployment and interview preparation."
+ },
+ "level": "junior",
+ "months": 8,
+ "objectives": [
+  {
+   "es": "Programar en Python con soltura y buenas prácticas",
+   "en": "Write fluent Python following good practices"
+  },
+  {
+   "es": "Diseñar y consultar bases de datos relacionales",
+   "en": "Design and query relational databases"
+  },
+  {
+   "es": "Construir una API REST segura con FastAPI",
+   "en": "Build a secure REST API with FastAPI"
+  },
+  {
+   "es": "Probar, desplegar y documentar una aplicación completa",
+   "en": "Test, deploy and document a complete application"
+  },
+  {
+   "es": "Presentar un portfolio y preparar entrevistas técnicas",
+   "en": "Present a portfolio and prepare technical interviews"
+  }
+ ],
+ "categories": [
+  "programming",
+  "backend",
+  "databases",
+  "frontend",
+  "testing",
+  "devops",
+  "ai-ml",
+  "professional"
+ ],
+ "skills": [
+  {
+   "id": "py-basics",
+   "title": {
+    "es": "Python básico: tipos, operadores y control de flujo",
+    "en": "Python basics: types, operators and control flow"
+   },
+   "category": "programming",
+   "target": 3,
+   "requires": [],
+   "sources": {
+    "concepts": [
+     "variables",
+     "tipos",
+     "operadores",
+     "entrada-salida",
+     "condicionales",
+     "bucles"
+    ],
+    "blocks": [
+     "programacion:prog-ut2",
+     "programacion:prog-ut3"
+    ],
+    "projects": []
+   }
+  },
+  {
+   "id": "py-functions",
+   "title": {
+    "es": "Funciones y recorridos",
+    "en": "Functions and iteration patterns"
+   },
+   "category": "programming",
+   "target": 3,
+   "requires": [
+    "py-basics"
+   ],
+   "sources": {
+    "concepts": [
+     "funciones",
+     "acumuladores",
+     "recorridos"
+    ],
+    "blocks": [],
+    "projects": []
+   }
+  },
+  {
+   "id": "py-collections",
+   "title": {
+    "es": "Strings, listas, tuplas, sets y diccionarios",
+    "en": "Strings, lists, tuples, sets and dictionaries"
+   },
+   "category": "programming",
+   "target": 3,
+   "requires": [
+    "py-basics"
+   ],
+   "sources": {
+    "concepts": [
+     "strings",
+     "listas",
+     "tuplas-conjuntos",
+     "diccionarios"
+    ],
+    "blocks": [
+     "programacion:prog-ut6"
+    ],
+    "projects": []
+   }
+  },
+  {
+   "id": "py-oop",
+   "title": {
+    "es": "Programación orientada a objetos",
+    "en": "Object-oriented programming"
+   },
+   "category": "programming",
+   "target": 2,
+   "requires": [
+    "py-functions",
+    "py-collections"
+   ],
+   "sources": {
+    "concepts": [
+     "poo"
+    ],
+    "blocks": [
+     "programacion:prog-ut4",
+     "programacion:prog-ut5"
+    ],
+    "projects": [
+     "mini-proyecto"
+    ]
+   }
+  },
+  {
+   "id": "py-errors-modules",
+   "title": {
+    "es": "Excepciones, módulos y ficheros",
+    "en": "Exceptions, modules and files"
+   },
+   "category": "programming",
+   "target": 2,
+   "requires": [
+    "py-functions"
+   ],
+   "sources": {
+    "concepts": [
+     "excepciones",
+     "modulos",
+     "archivos"
+    ],
+    "blocks": [],
+    "projects": []
+   }
+  },
+  {
+   "id": "py-professional",
+   "title": {
+    "es": "Python profesional: typing, decoradores, generadores y dataclasses",
+    "en": "Professional Python: typing, decorators, generators and dataclasses"
+   },
+   "category": "programming",
+   "target": 2,
+   "requires": [
+    "py-oop",
+    "py-errors-modules"
+   ],
+   "sources": {
+    "concepts": [],
+    "blocks": [],
+    "projects": [
+     "gestor-tareas"
+    ]
+   }
+  },
+  {
+   "id": "clean-code",
+   "title": {
+    "es": "Código limpio, SOLID y patrones básicos",
+    "en": "Clean code, SOLID and basic patterns"
+   },
+   "category": "professional",
+   "target": 2,
+   "requires": [
+    "py-oop"
+   ],
+   "sources": {
+    "concepts": [],
+    "blocks": [],
+    "projects": [
+     "gestor-tareas"
+    ]
+   }
+  },
+  {
+   "id": "sql-model",
+   "title": {
+    "es": "Modelo relacional y diseño de tablas",
+    "en": "Relational model and table design"
+   },
+   "category": "databases",
+   "target": 2,
+   "requires": [],
+   "sources": {
+    "concepts": [],
+    "blocks": [
+     "sql:bd-ud1",
+     "sql:bd-ud2"
+    ],
+    "projects": []
+   }
+  },
+  {
+   "id": "sql-queries",
+   "title": {
+    "es": "Consultas SQL: SELECT, JOIN, GROUP BY y subconsultas",
+    "en": "SQL queries: SELECT, JOIN, GROUP BY and subqueries"
+   },
+   "category": "databases",
+   "target": 3,
+   "requires": [
+    "sql-model"
+   ],
+   "sources": {
+    "concepts": [],
+    "blocks": [
+     "sql:bd-ud3"
+    ],
+    "projects": []
+   }
+  },
+  {
+   "id": "sql-transactions",
+   "title": {
+    "es": "Modificar datos y transacciones",
+    "en": "Data changes and transactions"
+   },
+   "category": "databases",
+   "target": 2,
+   "requires": [
+    "sql-queries"
+   ],
+   "sources": {
+    "concepts": [],
+    "blocks": [
+     "sql:bd-ampliacion"
+    ],
+    "projects": []
+   }
+  },
+  {
+   "id": "orm",
+   "title": {
+    "es": "SQLAlchemy, ORM y migraciones",
+    "en": "SQLAlchemy, ORM and migrations"
+   },
+   "category": "databases",
+   "target": 2,
+   "requires": [
+    "sql-queries",
+    "py-oop"
+   ],
+   "sources": {
+    "concepts": [],
+    "blocks": [],
+    "projects": [
+     "gestion-clientes"
+    ]
+   }
+  },
+  {
+   "id": "http-rest",
+   "title": {
+    "es": "HTTP, REST y JSON",
+    "en": "HTTP, REST and JSON"
+   },
+   "category": "backend",
+   "target": 2,
+   "requires": [
+    "py-functions"
+   ],
+   "sources": {
+    "concepts": [],
+    "blocks": [
+     "marcas:mar-json"
+    ],
+    "projects": [
+     "api-rest"
+    ]
+   }
+  },
+  {
+   "id": "fastapi",
+   "title": {
+    "es": "FastAPI: rutas, Pydantic e inyección de dependencias",
+    "en": "FastAPI: routing, Pydantic and dependency injection"
+   },
+   "category": "backend",
+   "target": 3,
+   "requires": [
+    "http-rest",
+    "py-professional"
+   ],
+   "sources": {
+    "concepts": [],
+    "blocks": [],
+    "projects": [
+     "api-rest"
+    ]
+   }
+  },
+  {
+   "id": "api-security",
+   "title": {
+    "es": "Autenticación, autorización y seguridad de APIs",
+    "en": "Authentication, authorization and API security"
+   },
+   "category": "backend",
+   "target": 2,
+   "requires": [
+    "fastapi"
+   ],
+   "sources": {
+    "concepts": [],
+    "blocks": [],
+    "projects": [
+     "api-rest"
+    ]
+   }
+  },
+  {
+   "id": "debugging",
+   "title": {
+    "es": "Depuración y trazado de programas",
+    "en": "Debugging and tracing programs"
+   },
+   "category": "testing",
+   "target": 2,
+   "requires": [
+    "py-functions"
+   ],
+   "sources": {
+    "concepts": [
+     "depuracion",
+     "trazado"
+    ],
+    "blocks": [],
+    "projects": []
+   }
+  },
+  {
+   "id": "automated-testing",
+   "title": {
+    "es": "Pytest: pruebas unitarias y de integración",
+    "en": "Pytest: unit and integration testing"
+   },
+   "category": "testing",
+   "target": 2,
+   "requires": [
+    "debugging",
+    "fastapi"
+   ],
+   "sources": {
+    "concepts": [],
+    "blocks": [],
+    "projects": [
+     "bateria-pruebas"
+    ]
+   }
+  },
+  {
+   "id": "html-css",
+   "title": {
+    "es": "HTML y CSS",
+    "en": "HTML and CSS"
+   },
+   "category": "frontend",
+   "target": 2,
+   "requires": [],
+   "sources": {
+    "concepts": [],
+    "blocks": [
+     "marcas:mar-html"
+    ],
+    "projects": []
+   }
+  },
+  {
+   "id": "js-core",
+   "title": {
+    "es": "JavaScript: tipos, funciones, arrays y objetos",
+    "en": "JavaScript: types, functions, arrays and objects"
+   },
+   "category": "frontend",
+   "target": 2,
+   "requires": [],
+   "sources": {
+    "concepts": [],
+    "blocks": [
+     "js:js-fundamentos",
+     "js:js-funciones",
+     "js:js-datos"
+    ],
+    "projects": []
+   }
+  },
+  {
+   "id": "dom-async",
+   "title": {
+    "es": "DOM, eventos, async/await y fetch",
+    "en": "DOM, events, async/await and fetch"
+   },
+   "category": "frontend",
+   "target": 2,
+   "requires": [
+    "js-core",
+    "html-css"
+   ],
+   "sources": {
+    "concepts": [],
+    "blocks": [
+     "js:js-dom",
+     "js:js-asincronia"
+    ],
+    "projects": [
+     "interfaz-web"
+    ]
+   }
+  },
+  {
+   "id": "dev-lifecycle",
+   "title": {
+    "es": "Ciclo de vida del software y metodologías",
+    "en": "Software lifecycle and methodologies"
+   },
+   "category": "devops",
+   "target": 2,
+   "requires": [],
+   "sources": {
+    "concepts": [],
+    "blocks": [
+     "entornos:ent-ciclo-de-vida",
+     "entornos:ent-traduccion"
+    ],
+    "projects": []
+   }
+  },
+  {
+   "id": "git-github",
+   "title": {
+    "es": "Git, GitHub y pull requests",
+    "en": "Git, GitHub and pull requests"
+   },
+   "category": "devops",
+   "target": 2,
+   "requires": [],
+   "sources": {
+    "concepts": [],
+    "blocks": [],
+    "projects": [
+     "despliegue"
+    ]
+   }
+  },
+  {
+   "id": "docker-ci",
+   "title": {
+    "es": "Docker, CI/CD y despliegue",
+    "en": "Docker, CI/CD and deployment"
+   },
+   "category": "devops",
+   "target": 2,
+   "requires": [
+    "git-github",
+    "fastapi"
+   ],
+   "sources": {
+    "concepts": [],
+    "blocks": [],
+    "projects": [
+     "despliegue"
+    ]
+   }
+  },
+  {
+   "id": "portfolio",
+   "title": {
+    "es": "Portfolio, README y documentación técnica",
+    "en": "Portfolio, README and technical documentation"
+   },
+   "category": "professional",
+   "target": 2,
+   "requires": [
+    "git-github"
+   ],
+   "sources": {
+    "concepts": [],
+    "blocks": [],
+    "projects": [
+     "proyecto-final"
+    ]
+   }
+  },
+  {
+   "id": "interviews",
+   "title": {
+    "es": "Entrevistas técnicas: algoritmos, SQL, Python y diseño de APIs",
+    "en": "Technical interviews: algorithms, SQL, Python and API design"
+   },
+   "category": "professional",
+   "target": 2,
+   "requires": [
+    "py-collections",
+    "sql-queries"
+   ],
+   "sources": {
+    "concepts": [],
+    "blocks": [],
+    "projects": [
+     "proyecto-final"
+    ]
+   }
+  }
+ ],
+ "phases": [
+  {
+   "id": "fundamentals",
+   "title": {
+    "es": "Python Fundamentals",
+    "en": "Python Fundamentals"
+   },
+   "description": {
+    "es": "Las bases del lenguaje, de las variables a la programación orientada a objetos.",
+    "en": "Language foundations, from variables to object-oriented programming."
+   },
+   "objectives": [
+    {
+     "es": "Resolver problemas con condicionales, bucles y funciones",
+     "en": "Solve problems with conditionals, loops and functions"
+    },
+    {
+     "es": "Elegir la colección adecuada para cada dato",
+     "en": "Choose the right collection for each piece of data"
+    },
+    {
+     "es": "Modelar un problema con clases, herencia y polimorfismo",
+     "en": "Model a problem with classes, inheritance and polymorphism"
+    }
+   ],
+   "requires": [],
+   "skills": [
+    "py-basics",
+    "py-functions",
+    "py-collections",
+    "py-oop"
+   ],
+   "units": [
+    {
+     "id": "fund-variables-tipos",
+     "title": {
+      "es": "Variables, tipos y operadores",
+      "en": "Variables, types and operators"
+     },
+     "links": [
+      {
+       "kind": "concept",
+       "ref": "variables",
+       "title": "Variables y asignación"
+      },
+      {
+       "kind": "concept",
+       "ref": "tipos",
+       "title": "Tipos de datos y conversiones"
+      },
+      {
+       "kind": "concept",
+       "ref": "operadores",
+       "title": "Operadores y expresiones"
+      },
+      {
+       "kind": "pcap",
+       "ref": "variables",
+       "title": "Variables y print()"
+      },
+      {
+       "kind": "pcap",
+       "ref": "tipos",
+       "title": "Tipos de datos"
+      },
+      {
+       "kind": "pcap",
+       "ref": "operadores",
+       "title": "Operadores"
+      }
+     ],
+     "pending": false
+    },
+    {
+     "id": "fund-control",
+     "title": {
+      "es": "Condicionales y bucles",
+      "en": "Conditionals and loops"
+     },
+     "links": [
+      {
+       "kind": "concept",
+       "ref": "condicionales",
+       "title": "Condicionales: if, elif y else"
+      },
+      {
+       "kind": "concept",
+       "ref": "bucles",
+       "title": "Bucles: while y for"
+      },
+      {
+       "kind": "pcap",
+       "ref": "condicionales",
+       "title": "Condicionales"
+      },
+      {
+       "kind": "pcap",
+       "ref": "bucles",
+       "title": "Bucles for y while"
+      },
+      {
+       "kind": "lesson",
+       "ref": "programacion/prog-ut3-control",
+       "title": "UT3 · Estructuras de control y depuración"
+      }
+     ],
+     "pending": false
+    },
+    {
+     "id": "fund-funciones",
+     "title": {
+      "es": "Funciones",
+      "en": "Functions"
+     },
+     "links": [
+      {
+       "kind": "concept",
+       "ref": "funciones",
+       "title": "Funciones: parámetros y return"
+      },
+      {
+       "kind": "pcap",
+       "ref": "funciones",
+       "title": "Funciones"
+      },
+      {
+       "kind": "lesson",
+       "ref": "programacion/prog-ut3-funciones",
+       "title": "UT3 · Programación modular y funciones"
+      }
+     ],
+     "pending": false
+    },
+    {
+     "id": "fund-colecciones",
+     "title": {
+      "es": "Listas, tuplas, diccionarios y sets",
+      "en": "Lists, tuples, dictionaries and sets"
+     },
+     "links": [
+      {
+       "kind": "concept",
+       "ref": "listas",
+       "title": "Listas"
+      },
+      {
+       "kind": "concept",
+       "ref": "tuplas-conjuntos",
+       "title": "Tuplas y conjuntos"
+      },
+      {
+       "kind": "concept",
+       "ref": "diccionarios",
+       "title": "Diccionarios"
+      },
+      {
+       "kind": "pcap",
+       "ref": "colecciones",
+       "title": "Listas y diccionarios"
+      },
+      {
+       "kind": "lesson",
+       "ref": "programacion/prog-ut6-colecciones",
+       "title": "UT6 · Listas, tuplas, diccionarios, conjuntos y recursividad"
+      }
+     ],
+     "pending": false
+    },
+    {
+     "id": "fund-strings",
+     "title": {
+      "es": "Strings",
+      "en": "Strings"
+     },
+     "links": [
+      {
+       "kind": "concept",
+       "ref": "strings",
+       "title": "Cadenas de texto"
+      },
+      {
+       "kind": "pcap",
+       "ref": "cadenas",
+       "title": "Cadenas: índices, slicing y comparación"
+      },
+      {
+       "kind": "pcap",
+       "ref": "metodos-string",
+       "title": "Métodos de string"
+      }
+     ],
+     "pending": false
+    },
+    {
+     "id": "fund-comprensiones",
+     "title": {
+      "es": "Comprensiones y lambdas",
+      "en": "Comprehensions and lambdas"
+     },
+     "links": [
+      {
+       "kind": "pcap",
+       "ref": "comprensiones-lambda",
+       "title": "Comprensiones, lambda, map y filter"
+      }
+     ],
+     "pending": false
+    },
+    {
+     "id": "fund-poo",
+     "title": {
+      "es": "Clases, herencia y polimorfismo",
+      "en": "Classes, inheritance and polymorphism"
+     },
+     "links": [
+      {
+       "kind": "concept",
+       "ref": "poo",
+       "title": "Clases y objetos (introducción a la POO)"
+      },
+      {
+       "kind": "pcap",
+       "ref": "poo",
+       "title": "Programación orientada a objetos"
+      },
+      {
+       "kind": "pcap",
+       "ref": "herencia",
+       "title": "Herencia simple, múltiple y MRO"
+      },
+      {
+       "kind": "lesson",
+       "ref": "programacion/prog-ut4-poo",
+       "title": "UT4 · Programación orientada a objetos"
+      },
+      {
+       "kind": "lesson",
+       "ref": "programacion/prog-ut5-clases",
+       "title": "UT5 · Clases, métodos y parámetros en Python"
+      },
+      {
+       "kind": "lesson",
+       "ref": "programacion/prog-ut6-herencia-excepciones",
+       "title": "UT6 · Herencia, polimorfismo, excepciones y estructuras de datos"
+      }
+     ],
+     "pending": false
+    }
+   ],
+   "assessment": null,
+   "project": "mini-proyecto"
+  },
+  {
+   "id": "professional-python",
+   "title": {
+    "es": "Professional Python",
+    "en": "Professional Python"
+   },
+   "description": {
+    "es": "Lo que separa un script de un programa mantenible: errores, módulos, entornos, tipado y diseño.",
+    "en": "What separates a script from maintainable software: errors, modules, environments, typing and design."
+   },
+   "objectives": [
+    {
+     "es": "Gestionar errores y organizar el código en módulos y paquetes",
+     "en": "Handle errors and organise code into modules and packages"
+    },
+    {
+     "es": "Usar typing, decoradores, generadores y context managers",
+     "en": "Use typing, decorators, generators and context managers"
+    },
+    {
+     "es": "Aplicar SOLID y Clean Code en un proyecto propio",
+     "en": "Apply SOLID and Clean Code in your own project"
+    }
+   ],
+   "requires": [
+    "fundamentals"
+   ],
+   "skills": [
+    "py-errors-modules",
+    "py-professional",
+    "clean-code"
+   ],
+   "units": [
+    {
+     "id": "pro-excepciones",
+     "title": {
+      "es": "Gestión de excepciones",
+      "en": "Exception handling"
+     },
+     "links": [
+      {
+       "kind": "concept",
+       "ref": "excepciones",
+       "title": "Excepciones: try, except y raise"
+      },
+      {
+       "kind": "pcap",
+       "ref": "excepciones",
+       "title": "Excepciones"
+      },
+      {
+       "kind": "pcap",
+       "ref": "jerarquia-excepciones",
+       "title": "Jerarquía de excepciones y excepciones propias"
+      }
+     ],
+     "pending": false
+    },
+    {
+     "id": "pro-modulos-paquetes",
+     "title": {
+      "es": "Módulos y paquetes",
+      "en": "Modules and packages"
+     },
+     "links": [
+      {
+       "kind": "concept",
+       "ref": "modulos",
+       "title": "Módulos e importación"
+      },
+      {
+       "kind": "pcap",
+       "ref": "modulos",
+       "title": "Módulos y paquetes"
+      },
+      {
+       "kind": "pcap",
+       "ref": "paquetes",
+       "title": "Paquetes, __name__ y sys.path"
+      },
+      {
+       "kind": "lesson",
+       "ref": "programacion/prog-ut5-modulos-cadenas",
+       "title": "UT5 · Módulos, paquetes, cadenas y expresiones regulares"
+      }
+     ],
+     "pending": false
+    },
+    {
+     "id": "pro-entornos-pip",
+     "title": {
+      "es": "Entornos virtuales y pip",
+      "en": "Virtual environments and pip"
+     },
+     "links": [
+      {
+       "kind": "resource",
+       "ref": "res-python-tutorial",
+       "title": "Tutorial oficial de Python",
+       "url": "https://docs.python.org/es/3/tutorial/"
+      }
+     ],
+     "pending": false
+    },
+    {
+     "id": "pro-typing-dataclasses",
+     "title": {
+      "es": "Typing y dataclasses",
+      "en": "Typing and dataclasses"
+     },
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "pro-decoradores-closures",
+     "title": {
+      "es": "Closures y decoradores",
+      "en": "Closures and decorators"
+     },
+     "links": [
+      {
+       "kind": "pcap",
+       "ref": "closures",
+       "title": "Closures y generadores"
+      }
+     ],
+     "pending": false
+    },
+    {
+     "id": "pro-iteradores-generadores",
+     "title": {
+      "es": "Iteradores, generadores y context managers",
+      "en": "Iterators, generators and context managers"
+     },
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "pro-ficheros-logging",
+     "title": {
+      "es": "Ficheros y logging",
+      "en": "Files and logging"
+     },
+     "links": [
+      {
+       "kind": "concept",
+       "ref": "archivos",
+       "title": "Ficheros de texto"
+      },
+      {
+       "kind": "pcap",
+       "ref": "archivos",
+       "title": "Archivos"
+      }
+     ],
+     "pending": false
+    },
+    {
+     "id": "pro-solid-clean-code",
+     "title": {
+      "es": "SOLID, Clean Code y patrones básicos",
+      "en": "SOLID, Clean Code and basic patterns"
+     },
+     "links": [],
+     "pending": true
+    }
+   ],
+   "assessment": null,
+   "project": "gestor-tareas"
+  },
+  {
+   "id": "databases",
+   "title": {
+    "es": "Databases & SQL",
+    "en": "Databases & SQL"
+   },
+   "description": {
+    "es": "Diseñar, consultar y modificar bases de datos relacionales, y usarlas desde Python.",
+    "en": "Design, query and modify relational databases, and use them from Python."
+   },
+   "objectives": [
+    {
+     "es": "Diseñar un modelo relacional normalizado",
+     "en": "Design a normalised relational model"
+    },
+    {
+     "es": "Escribir consultas con JOIN, GROUP BY y subconsultas",
+     "en": "Write queries with JOIN, GROUP BY and subqueries"
+    },
+    {
+     "es": "Acceder a PostgreSQL con SQLAlchemy y migraciones",
+     "en": "Access PostgreSQL with SQLAlchemy and migrations"
+    }
+   ],
+   "requires": [
+    "fundamentals"
+   ],
+   "skills": [
+    "sql-model",
+    "sql-queries",
+    "sql-transactions",
+    "orm"
+   ],
+   "units": [
+    {
+     "id": "db-fundamentos",
+     "title": {
+      "es": "Fundamentos y modelo relacional",
+      "en": "Foundations and the relational model"
+     },
+     "links": [
+      {
+       "kind": "lesson",
+       "ref": "sql/bd-tipos-y-modelos",
+       "title": "Tipos y modelos de bases de datos"
+      },
+      {
+       "kind": "lesson",
+       "ref": "sql/sql-modelo-relacional",
+       "title": "Modelo relacional y normalización"
+      },
+      {
+       "kind": "block",
+       "ref": "sql:bd-ud1",
+       "title": "UD1 · Almacenamiento de la información"
+      }
+     ],
+     "pending": false
+    },
+    {
+     "id": "db-tablas-indices",
+     "title": {
+      "es": "Tablas, restricciones e índices",
+      "en": "Tables, constraints and indexes"
+     },
+     "links": [
+      {
+       "kind": "lesson",
+       "ref": "sql/sql-crear-tablas",
+       "title": "CREATE TABLE y restricciones"
+      },
+      {
+       "kind": "lesson",
+       "ref": "sql/bd-null-indices-dcl",
+       "title": "NULL, ALTER, índices, usuarios y vistas"
+      },
+      {
+       "kind": "block",
+       "ref": "sql:bd-ud2",
+       "title": "UD2 · Bases de datos relacionales"
+      }
+     ],
+     "pending": false
+    },
+    {
+     "id": "db-select",
+     "title": {
+      "es": "SELECT, WHERE y funciones de agregado",
+      "en": "SELECT, WHERE and aggregate functions"
+     },
+     "links": [
+      {
+       "kind": "lesson",
+       "ref": "sql/sql-select",
+       "title": "SELECT: consultar datos"
+      },
+      {
+       "kind": "lesson",
+       "ref": "sql/sql-where",
+       "title": "WHERE: filtrar filas"
+      },
+      {
+       "kind": "lesson",
+       "ref": "sql/sql-agregados",
+       "title": "Funciones de agregado"
+      },
+      {
+       "kind": "lesson",
+       "ref": "sql/sql-group-by",
+       "title": "GROUP BY y HAVING"
+      }
+     ],
+     "pending": false
+    },
+    {
+     "id": "db-join-subconsultas",
+     "title": {
+      "es": "JOIN y subconsultas",
+      "en": "JOIN and subqueries"
+     },
+     "links": [
+      {
+       "kind": "lesson",
+       "ref": "sql/sql-inner-join",
+       "title": "INNER JOIN: combinar tablas"
+      },
+      {
+       "kind": "lesson",
+       "ref": "sql/sql-left-join-subconsultas",
+       "title": "LEFT JOIN y subconsultas"
+      },
+      {
+       "kind": "block",
+       "ref": "sql:bd-ud3",
+       "title": "UD3 · Realización de consultas"
+      }
+     ],
+     "pending": false
+    },
+    {
+     "id": "db-modificar-transacciones",
+     "title": {
+      "es": "INSERT, UPDATE, DELETE y transacciones",
+      "en": "INSERT, UPDATE, DELETE and transactions"
+     },
+     "links": [
+      {
+       "kind": "lesson",
+       "ref": "sql/sql-modificar-datos",
+       "title": "INSERT, UPDATE y DELETE"
+      },
+      {
+       "kind": "lesson",
+       "ref": "sql/sql-transacciones-vistas",
+       "title": "Transacciones, vistas e índices"
+      },
+      {
+       "kind": "block",
+       "ref": "sql:bd-ampliacion",
+       "title": "Ampliación · Modificar datos y transacciones"
+      }
+     ],
+     "pending": false
+    },
+    {
+     "id": "db-python",
+     "title": {
+      "es": "Bases de datos desde Python",
+      "en": "Databases from Python"
+     },
+     "links": [
+      {
+       "kind": "lesson",
+       "ref": "programacion/prog-ut8-ficheros-bd",
+       "title": "UT8 · Ficheros, serialización, bases de datos y XML"
+      }
+     ],
+     "pending": false
+    },
+    {
+     "id": "db-postgresql-orm",
+     "title": {
+      "es": "PostgreSQL, SQLAlchemy y migraciones",
+      "en": "PostgreSQL, SQLAlchemy and migrations"
+     },
+     "links": [],
+     "pending": true
+    }
+   ],
+   "assessment": null,
+   "project": "gestion-clientes"
+  },
+  {
+   "id": "backend",
+   "title": {
+    "es": "Backend Development",
+    "en": "Backend Development"
+   },
+   "description": {
+    "es": "Construir APIs REST con FastAPI: rutas, validación, autenticación y seguridad.",
+    "en": "Build REST APIs with FastAPI: routing, validation, authentication and security."
+   },
+   "objectives": [
+    {
+     "es": "Explicar cómo funcionan HTTP y REST",
+     "en": "Explain how HTTP and REST work"
+    },
+    {
+     "es": "Crear una API con FastAPI, Pydantic e inyección de dependencias",
+     "en": "Create an API with FastAPI, Pydantic and dependency injection"
+    },
+    {
+     "es": "Proteger una API con autenticación, autorización y validación",
+     "en": "Protect an API with authentication, authorization and validation"
+    }
+   ],
+   "requires": [
+    "professional-python",
+    "databases"
+   ],
+   "skills": [
+    "http-rest",
+    "fastapi",
+    "api-security"
+   ],
+   "units": [
+    {
+     "id": "be-http-json",
+     "title": {
+      "es": "HTTP, REST y JSON",
+      "en": "HTTP, REST and JSON"
+     },
+     "links": [
+      {
+       "kind": "lesson",
+       "ref": "marcas/mar-json-intercambio",
+       "title": "JSON e intercambio de datos"
+      },
+      {
+       "kind": "lesson",
+       "ref": "js/js-fetch-json",
+       "title": "fetch y JSON"
+      }
+     ],
+     "pending": false
+    },
+    {
+     "id": "be-primera-api",
+     "title": {
+      "es": "Primera API web en Python",
+      "en": "A first web API in Python"
+     },
+     "links": [
+      {
+       "kind": "pcap",
+       "ref": "flask",
+       "title": "APIs web con Flask"
+      }
+     ],
+     "pending": false
+    },
+    {
+     "id": "be-fastapi-pydantic",
+     "title": {
+      "es": "FastAPI, routing y Pydantic",
+      "en": "FastAPI, routing and Pydantic"
+     },
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "be-dependencias-middleware",
+     "title": {
+      "es": "Inyección de dependencias y middleware",
+      "en": "Dependency injection and middleware"
+     },
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "be-auth-jwt",
+     "title": {
+      "es": "Autenticación, JWT y OAuth2",
+      "en": "Authentication, JWT and OAuth2"
+     },
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "be-errores-paginacion",
+     "title": {
+      "es": "Errores, paginación y OpenAPI",
+      "en": "Errors, pagination and OpenAPI"
+     },
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "be-seguridad-apis",
+     "title": {
+      "es": "Seguridad de APIs (OWASP)",
+      "en": "API security (OWASP)"
+     },
+     "links": [],
+     "pending": true
+    }
+   ],
+   "assessment": null,
+   "project": "api-rest"
+  },
+  {
+   "id": "testing",
+   "title": {
+    "es": "Software Testing",
+    "en": "Software Testing"
+   },
+   "description": {
+    "es": "Comprobar que el código hace lo que debe, y seguir haciéndolo cuando cambia.",
+    "en": "Check that code does what it should, and keeps doing so when it changes."
+   },
+   "objectives": [
+    {
+     "es": "Depurar un programa con método",
+     "en": "Debug a program methodically"
+    },
+    {
+     "es": "Escribir pruebas unitarias y de integración con pytest",
+     "en": "Write unit and integration tests with pytest"
+    },
+    {
+     "es": "Medir la cobertura y usar análisis estático",
+     "en": "Measure coverage and use static analysis"
+    }
+   ],
+   "requires": [
+    "backend"
+   ],
+   "skills": [
+    "debugging",
+    "automated-testing"
+   ],
+   "units": [
+    {
+     "id": "test-depuracion",
+     "title": {
+      "es": "Depuración y trazado",
+      "en": "Debugging and tracing"
+     },
+     "links": [
+      {
+       "kind": "concept",
+       "ref": "depuracion",
+       "title": "Depuración y análisis de errores"
+      },
+      {
+       "kind": "concept",
+       "ref": "trazado",
+       "title": "Lectura y trazado de código"
+      }
+     ],
+     "pending": false
+    },
+    {
+     "id": "test-pytest",
+     "title": {
+      "es": "Pytest y fixtures",
+      "en": "Pytest and fixtures"
+     },
+     "links": [
+      {
+       "kind": "pcap",
+       "ref": "pytest",
+       "title": "Testing con pytest"
+      }
+     ],
+     "pending": false
+    },
+    {
+     "id": "test-mocking-integracion",
+     "title": {
+      "es": "Mocking y pruebas de integración",
+      "en": "Mocking and integration tests"
+     },
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "test-cobertura-estatico",
+     "title": {
+      "es": "Cobertura, análisis estático y type checking",
+      "en": "Coverage, static analysis and type checking"
+     },
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "test-refactoring",
+     "title": {
+      "es": "Refactorizar con red de pruebas",
+      "en": "Refactoring with a safety net of tests"
+     },
+     "links": [],
+     "pending": true
+    }
+   ],
+   "assessment": null,
+   "project": "bateria-pruebas"
+  },
+  {
+   "id": "frontend",
+   "title": {
+    "es": "Frontend Development",
+    "en": "Frontend Development"
+   },
+   "description": {
+    "es": "Lo necesario para construir una interfaz web que consuma tu API. React se estudia como contenido, no como cambio de esta plataforma.",
+    "en": "Enough to build a web interface that consumes your API. React is studied as content, not as a change to this platform."
+   },
+   "objectives": [
+    {
+     "es": "Maquetar con HTML y CSS accesibles y adaptables",
+     "en": "Build accessible, responsive HTML and CSS"
+    },
+    {
+     "es": "Manipular el DOM y llamar a una API con fetch",
+     "en": "Manipulate the DOM and call an API with fetch"
+    },
+    {
+     "es": "Conocer TypeScript y los componentes de React",
+     "en": "Get to know TypeScript and React components"
+    }
+   ],
+   "requires": [
+    "fundamentals"
+   ],
+   "skills": [
+    "html-css",
+    "js-core",
+    "dom-async"
+   ],
+   "units": [
+    {
+     "id": "fe-html-css",
+     "title": {
+      "es": "HTML5 y CSS3",
+      "en": "HTML5 and CSS3"
+     },
+     "links": [
+      {
+       "kind": "lesson",
+       "ref": "marcas/mar-html-css",
+       "title": "HTML y hojas de estilo CSS"
+      },
+      {
+       "kind": "resource",
+       "ref": "res-mdn-html",
+       "title": "MDN Web Docs: HTML",
+       "url": "https://developer.mozilla.org/es/docs/Web/HTML"
+      },
+      {
+       "kind": "resource",
+       "ref": "res-mdn-css",
+       "title": "MDN Web Docs: CSS",
+       "url": "https://developer.mozilla.org/es/docs/Web/CSS"
+      }
+     ],
+     "pending": false
+    },
+    {
+     "id": "fe-javascript",
+     "title": {
+      "es": "JavaScript: fundamentos, funciones y datos",
+      "en": "JavaScript: basics, functions and data"
+     },
+     "links": [
+      {
+       "kind": "lesson",
+       "ref": "js/js-variables",
+       "title": "Variables y tipos"
+      },
+      {
+       "kind": "lesson",
+       "ref": "js/js-funciones",
+       "title": "Funciones"
+      },
+      {
+       "kind": "lesson",
+       "ref": "js/js-arrays",
+       "title": "Arrays y sus métodos"
+      },
+      {
+       "kind": "lesson",
+       "ref": "js/js-objetos",
+       "title": "Objetos y JSON"
+      },
+      {
+       "kind": "resource",
+       "ref": "res-mdn-js",
+       "title": "MDN Web Docs: JavaScript",
+       "url": "https://developer.mozilla.org/es/docs/Web/JavaScript"
+      }
+     ],
+     "pending": false
+    },
+    {
+     "id": "fe-dom-eventos",
+     "title": {
+      "es": "DOM y eventos",
+      "en": "DOM and events"
+     },
+     "links": [
+      {
+       "kind": "lesson",
+       "ref": "js/js-dom",
+       "title": "El DOM: leer y cambiar la página"
+      },
+      {
+       "kind": "lesson",
+       "ref": "js/js-eventos",
+       "title": "Eventos"
+      }
+     ],
+     "pending": false
+    },
+    {
+     "id": "fe-async-fetch",
+     "title": {
+      "es": "Async/await y Fetch API",
+      "en": "Async/await and the Fetch API"
+     },
+     "links": [
+      {
+       "kind": "lesson",
+       "ref": "js/js-asincronia",
+       "title": "Asincronía: event loop, promesas y async/await"
+      },
+      {
+       "kind": "lesson",
+       "ref": "js/js-fetch-json",
+       "title": "fetch y JSON"
+      }
+     ],
+     "pending": false
+    },
+    {
+     "id": "fe-modulos-typescript",
+     "title": {
+      "es": "ES Modules y TypeScript",
+      "en": "ES Modules and TypeScript"
+     },
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "fe-react",
+     "title": {
+      "es": "React: componentes y estado",
+      "en": "React: components and state"
+     },
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "fe-responsive-a11y",
+     "title": {
+      "es": "Diseño adaptable y accesibilidad",
+      "en": "Responsive design and accessibility"
+     },
+     "links": [],
+     "pending": true
+    }
+   ],
+   "assessment": null,
+   "project": "interfaz-web"
+  },
+  {
+   "id": "devops",
+   "title": {
+    "es": "DevOps & Deployment",
+    "en": "DevOps & Deployment"
+   },
+   "description": {
+    "es": "Control de versiones, contenedores, integración continua y despliegue.",
+    "en": "Version control, containers, continuous integration and deployment."
+   },
+   "objectives": [
+    {
+     "es": "Trabajar con ramas y pull requests",
+     "en": "Work with branches and pull requests"
+    },
+    {
+     "es": "Empaquetar una aplicación con Docker y Docker Compose",
+     "en": "Package an application with Docker and Docker Compose"
+    },
+    {
+     "es": "Desplegar con CI/CD gestionando secretos y logs",
+     "en": "Deploy with CI/CD while handling secrets and logs"
+    }
+   ],
+   "requires": [
+    "backend"
+   ],
+   "skills": [
+    "dev-lifecycle",
+    "git-github",
+    "docker-ci"
+   ],
+   "units": [
+    {
+     "id": "ops-ciclo-de-vida",
+     "title": {
+      "es": "Ciclo de vida y metodologías ágiles",
+      "en": "Lifecycle and agile methodologies"
+     },
+     "links": [
+      {
+       "kind": "lesson",
+       "ref": "entornos/ent-fases-y-agiles",
+       "title": "Fases del desarrollo y metodologías ágiles"
+      },
+      {
+       "kind": "lesson",
+       "ref": "entornos/ent-compilar-e-interpretar",
+       "title": "Del código fuente al ejecutable"
+      }
+     ],
+     "pending": false
+    },
+    {
+     "id": "ops-git-github",
+     "title": {
+      "es": "Git, GitHub, ramas y pull requests",
+      "en": "Git, GitHub, branches and pull requests"
+     },
+     "links": [
+      {
+       "kind": "resource",
+       "ref": "res-pro-git",
+       "title": "Pro Git (2.ª edición, en español)",
+       "url": "https://git-scm.com/book/es/v2"
+      }
+     ],
+     "pending": false
+    },
+    {
+     "id": "ops-docker",
+     "title": {
+      "es": "Docker y Docker Compose",
+      "en": "Docker and Docker Compose"
+     },
+     "links": [
+      {
+       "kind": "resource",
+       "ref": "res-docker-docs",
+       "title": "Documentación de Docker",
+       "url": "https://docs.docker.com/"
+      }
+     ],
+     "pending": false
+    },
+    {
+     "id": "ops-ci-cd",
+     "title": {
+      "es": "GitHub Actions y CI/CD",
+      "en": "GitHub Actions and CI/CD"
+     },
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "ops-config-secretos",
+     "title": {
+      "es": "Variables de entorno y gestión de secretos",
+      "en": "Environment variables and secret management"
+     },
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "ops-logs-monitorizacion",
+     "title": {
+      "es": "Logs y monitorización",
+      "en": "Logs and monitoring"
+     },
+     "links": [],
+     "pending": true
+    }
+   ],
+   "assessment": null,
+   "project": "despliegue"
+  },
+  {
+   "id": "career",
+   "title": {
+    "es": "Career Preparation",
+    "en": "Career Preparation"
+   },
+   "description": {
+    "es": "Presentar tu trabajo y prepararte para las entrevistas técnicas.",
+    "en": "Present your work and prepare for technical interviews."
+   },
+   "objectives": [
+    {
+     "es": "Tener un perfil de GitHub y un portfolio cuidados",
+     "en": "Have a polished GitHub profile and portfolio"
+    },
+    {
+     "es": "Escribir un CV técnico y documentación clara",
+     "en": "Write a technical CV and clear documentation"
+    },
+    {
+     "es": "Practicar entrevistas de algoritmos, SQL, Python y diseño",
+     "en": "Practise algorithm, SQL, Python and design interviews"
+    }
+   ],
+   "requires": [
+    "testing",
+    "frontend",
+    "devops"
+   ],
+   "skills": [
+    "portfolio",
+    "interviews"
+   ],
+   "units": [
+    {
+     "id": "car-github-portfolio",
+     "title": {
+      "es": "GitHub profesional y portfolio",
+      "en": "Professional GitHub and portfolio"
+     },
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "car-readme-docs",
+     "title": {
+      "es": "README y documentación técnica",
+      "en": "README and technical documentation"
+     },
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "car-cv-linkedin",
+     "title": {
+      "es": "CV técnico y LinkedIn",
+      "en": "Technical CV and LinkedIn"
+     },
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "car-algoritmos",
+     "title": {
+      "es": "Algoritmos y estructuras de datos",
+      "en": "Algorithms and data structures"
+     },
+     "links": [
+      {
+       "kind": "concept",
+       "ref": "algoritmos",
+       "title": "Comprender el problema y diseñar el algoritmo"
+      },
+      {
+       "kind": "concept",
+       "ref": "recorridos",
+       "title": "Recorridos, búsqueda, máximo y mínimo"
+      },
+      {
+       "kind": "lesson",
+       "ref": "programacion/prog-ut1-algoritmos",
+       "title": "UT1 · Introducción, algoritmos y pseudocódigo"
+      }
+     ],
+     "pending": false
+    },
+    {
+     "id": "car-preguntas-sql-python",
+     "title": {
+      "es": "Preguntas de entrevista de SQL y Python",
+      "en": "SQL and Python interview questions"
+     },
+     "links": [
+      {
+       "kind": "block",
+       "ref": "sql:bd-ud3",
+       "title": "UD3 · Realización de consultas"
+      }
+     ],
+     "pending": false
+    },
+    {
+     "id": "car-api-system-design",
+     "title": {
+      "es": "Diseño de APIs y system design básico",
+      "en": "API design and basic system design"
+     },
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "car-simulacros",
+     "title": {
+      "es": "Simulaciones de entrevistas",
+      "en": "Mock interviews"
+     },
+     "links": [],
+     "pending": true
+    }
+   ],
+   "assessment": null,
+   "project": "proyecto-final"
+  }
+ ],
+ "projects": [
+  {
+   "id": "mini-proyecto",
+   "phase": "fundamentals",
+   "skills": [
+    "py-oop"
+   ],
+   "title": {
+    "es": "Mini proyecto de consola",
+    "en": "Console mini project"
+   },
+   "description": {
+    "es": "Un programa de consola con clases propias (por ejemplo, una agenda o un inventario).",
+    "en": "A console program with your own classes (for example, an address book or an inventory)."
+   },
+   "criteria": [
+    {
+     "id": "clases",
+     "text": {
+      "es": "Usa al menos dos clases propias, con herencia o composición",
+      "en": "Uses at least two classes of your own, with inheritance or composition"
+     }
+    },
+    {
+     "id": "colecciones",
+     "text": {
+      "es": "Guarda los datos en listas o diccionarios",
+      "en": "Stores data in lists or dictionaries"
+     }
+    },
+    {
+     "id": "entrada-validada",
+     "text": {
+      "es": "Valida la entrada del usuario",
+      "en": "Validates user input"
+     }
+    },
+    {
+     "id": "repositorio",
+     "text": {
+      "es": "Está en un repositorio público con README",
+      "en": "Is in a public repository with a README"
+     }
+    }
+   ]
+  },
+  {
+   "id": "gestor-tareas",
+   "phase": "professional-python",
+   "skills": [
+    "py-professional",
+    "clean-code"
+   ],
+   "title": {
+    "es": "Gestor de tareas con persistencia",
+    "en": "Task manager with persistence"
+   },
+   "description": {
+    "es": "Aplicación de gestión de tareas que guarda los datos en disco.",
+    "en": "A task management application that stores data on disk."
+   },
+   "criteria": [
+    {
+     "id": "paquete",
+     "text": {
+      "es": "Organizado en un paquete con módulos",
+      "en": "Organised as a package with modules"
+     }
+    },
+    {
+     "id": "persistencia",
+     "text": {
+      "es": "Guarda y carga las tareas (JSON o SQLite)",
+      "en": "Saves and loads tasks (JSON or SQLite)"
+     }
+    },
+    {
+     "id": "excepciones",
+     "text": {
+      "es": "Gestiona los errores con excepciones propias",
+      "en": "Handles errors with custom exceptions"
+     }
+    },
+    {
+     "id": "typing",
+     "text": {
+      "es": "Usa anotaciones de tipo y dataclasses",
+      "en": "Uses type hints and dataclasses"
+     }
+    },
+    {
+     "id": "venv",
+     "text": {
+      "es": "Se instala en un entorno virtual con requirements.txt",
+      "en": "Installs in a virtual environment with requirements.txt"
+     }
+    }
+   ]
+  },
+  {
+   "id": "gestion-clientes",
+   "phase": "databases",
+   "skills": [
+    "orm"
+   ],
+   "title": {
+    "es": "Sistema de gestión de clientes y operaciones",
+    "en": "Customer and operations management system"
+   },
+   "description": {
+    "es": "Base de datos relacional de clientes y operaciones accesible desde Python.",
+    "en": "A relational database of customers and operations accessed from Python."
+   },
+   "criteria": [
+    {
+     "id": "modelo",
+     "text": {
+      "es": "Modelo normalizado con claves foráneas",
+      "en": "Normalised model with foreign keys"
+     }
+    },
+    {
+     "id": "consultas",
+     "text": {
+      "es": "Incluye consultas con JOIN y GROUP BY",
+      "en": "Includes queries with JOIN and GROUP BY"
+     }
+    },
+    {
+     "id": "transacciones",
+     "text": {
+      "es": "Usa transacciones en las operaciones compuestas",
+      "en": "Uses transactions for compound operations"
+     }
+    },
+    {
+     "id": "orm-migraciones",
+     "text": {
+      "es": "Accede con SQLAlchemy y tiene migraciones",
+      "en": "Uses SQLAlchemy and has migrations"
+     }
+    }
+   ]
+  },
+  {
+   "id": "api-rest",
+   "phase": "backend",
+   "skills": [
+    "http-rest",
+    "fastapi",
+    "api-security"
+   ],
+   "title": {
+    "es": "API REST con usuarios, roles y CRUD",
+    "en": "REST API with users, roles and CRUD"
+   },
+   "description": {
+    "es": "API completa con FastAPI y base de datos.",
+    "en": "A complete API with FastAPI and a database."
+   },
+   "criteria": [
+    {
+     "id": "crud",
+     "text": {
+      "es": "Operaciones CRUD con validación Pydantic",
+      "en": "CRUD operations with Pydantic validation"
+     }
+    },
+    {
+     "id": "auth",
+     "text": {
+      "es": "Registro e inicio de sesión con contraseñas cifradas y JWT",
+      "en": "Sign-up and login with hashed passwords and JWT"
+     }
+    },
+    {
+     "id": "roles",
+     "text": {
+      "es": "Roles y control de acceso: nadie ve los datos de otro",
+      "en": "Roles and access control: nobody sees another user's data"
+     }
+    },
+    {
+     "id": "errores",
+     "text": {
+      "es": "Errores coherentes y paginación",
+      "en": "Consistent errors and pagination"
+     }
+    },
+    {
+     "id": "openapi",
+     "text": {
+      "es": "Documentación OpenAPI revisada",
+      "en": "Reviewed OpenAPI documentation"
+     }
+    }
+   ]
+  },
+  {
+   "id": "bateria-pruebas",
+   "phase": "testing",
+   "skills": [
+    "automated-testing"
+   ],
+   "title": {
+    "es": "Batería de pruebas de la API",
+    "en": "Test suite for the API"
+   },
+   "description": {
+    "es": "Pruebas automáticas para la API de la fase anterior.",
+    "en": "Automated tests for the API from the previous phase."
+   },
+   "criteria": [
+    {
+     "id": "unitarias",
+     "text": {
+      "es": "Pruebas unitarias con fixtures",
+      "en": "Unit tests with fixtures"
+     }
+    },
+    {
+     "id": "integracion",
+     "text": {
+      "es": "Pruebas de los endpoints, incluida la autorización",
+      "en": "Endpoint tests, including authorization"
+     }
+    },
+    {
+     "id": "mocks",
+     "text": {
+      "es": "Dependencias externas sustituidas con mocks",
+      "en": "External dependencies replaced with mocks"
+     }
+    },
+    {
+     "id": "cobertura",
+     "text": {
+      "es": "Informe de cobertura en la CI",
+      "en": "Coverage report in CI"
+     }
+    }
+   ]
+  },
+  {
+   "id": "interfaz-web",
+   "phase": "frontend",
+   "skills": [
+    "dom-async"
+   ],
+   "title": {
+    "es": "Interfaz web para la API",
+    "en": "Web interface for the API"
+   },
+   "description": {
+    "es": "Una interfaz web que consume la API del backend.",
+    "en": "A web interface that consumes the backend API."
+   },
+   "criteria": [
+    {
+     "id": "fetch",
+     "text": {
+      "es": "Lee y escribe datos de la API con fetch",
+      "en": "Reads and writes API data with fetch"
+     }
+    },
+    {
+     "id": "estados",
+     "text": {
+      "es": "Muestra estados de carga, error y vacío",
+      "en": "Shows loading, error and empty states"
+     }
+    },
+    {
+     "id": "responsive",
+     "text": {
+      "es": "Se usa bien en el móvil",
+      "en": "Works well on mobile"
+     }
+    },
+    {
+     "id": "accesible",
+     "text": {
+      "es": "Se maneja con teclado y tiene etiquetas accesibles",
+      "en": "Keyboard-usable with accessible labels"
+     }
+    }
+   ]
+  },
+  {
+   "id": "despliegue",
+   "phase": "devops",
+   "skills": [
+    "git-github",
+    "docker-ci"
+   ],
+   "title": {
+    "es": "Despliegue completo",
+    "en": "Full deployment"
+   },
+   "description": {
+    "es": "Backend, frontend y PostgreSQL desplegados.",
+    "en": "Backend, frontend and PostgreSQL deployed."
+   },
+   "criteria": [
+    {
+     "id": "ramas-pr",
+     "text": {
+      "es": "Trabajo en ramas con pull requests",
+      "en": "Work on branches with pull requests"
+     }
+    },
+    {
+     "id": "docker",
+     "text": {
+      "es": "Dockerfile y Docker Compose funcionando",
+      "en": "Working Dockerfile and Docker Compose"
+     }
+    },
+    {
+     "id": "ci",
+     "text": {
+      "es": "CI que ejecuta las pruebas en cada cambio",
+      "en": "CI that runs the tests on every change"
+     }
+    },
+    {
+     "id": "secretos",
+     "text": {
+      "es": "Secretos fuera del repositorio",
+      "en": "Secrets kept out of the repository"
+     }
+    },
+    {
+     "id": "publicado",
+     "text": {
+      "es": "Aplicación publicada y accesible",
+      "en": "Application published and reachable"
+     }
+    }
+   ]
+  },
+  {
+   "id": "proyecto-final",
+   "phase": "career",
+   "skills": [
+    "portfolio",
+    "interviews"
+   ],
+   "title": {
+    "es": "Proyecto final",
+    "en": "Final project"
+   },
+   "description": {
+    "es": "Aplicación completa, publicada, documentada y con pruebas automatizadas.",
+    "en": "A complete application, published, documented and with automated tests."
+   },
+   "criteria": [
+    {
+     "id": "publicada",
+     "text": {
+      "es": "Publicada con backend, frontend y base de datos",
+      "en": "Published with backend, frontend and database"
+     }
+    },
+    {
+     "id": "pruebas",
+     "text": {
+      "es": "Pruebas automatizadas en la CI",
+      "en": "Automated tests in CI"
+     }
+    },
+    {
+     "id": "documentacion",
+     "text": {
+      "es": "README con instalación, arquitectura y capturas",
+      "en": "README with installation, architecture and screenshots"
+     }
+    },
+    {
+     "id": "portfolio",
+     "text": {
+      "es": "Enlazada desde tu portfolio y tu CV",
+      "en": "Linked from your portfolio and CV"
+     }
+    },
+    {
+     "id": "explicable",
+     "text": {
+      "es": "Sabes explicar sus decisiones en una entrevista",
+      "en": "You can explain its design decisions in an interview"
+     }
+    }
+   ]
+  }
+ ]
+}

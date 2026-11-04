@@ -21,6 +21,9 @@
 | [DECISIONS.md](DECISIONS.md) | Registro de decisiones de arquitectura (DEC-NNN) |
 | [CAREER_ROADMAP_ARCHITECTURE.md](CAREER_ROADMAP_ARCHITECTURE.md) | Career Roadmap: auditoría y arquitectura propuesta (Sprint 0) |
 | [CAREER_ROADMAP_AGENT_LOG.md](CAREER_ROADMAP_AGENT_LOG.md) | Career Roadmap: registro de sprints y decisiones |
+| [CAREER_ROADMAP_API.md](CAREER_ROADMAP_API.md) | Career Roadmap: dónde se guarda el progreso y por qué no hay endpoints nuevos |
+| [CAREER_ROADMAP_DATA_MODEL.md](CAREER_ROADMAP_DATA_MODEL.md) | Career Roadmap: catálogo de itinerarios y documento de progreso |
+| [CAREER_ROADMAP_ADAPTIVE_ENGINE.md](CAREER_ROADMAP_ADAPTIVE_ENGINE.md) | Career Roadmap: dominio de competencias y estados de las fases |
 | [DISENO.md](DISENO.md) | Sistema visual: tokens, colores, tipografía y componentes |
 | [IDIOMAS.md](IDIOMAS.md) | Interfaz en inglés y cómo añadir textos traducidos |
 

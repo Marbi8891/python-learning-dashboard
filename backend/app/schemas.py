@@ -187,8 +187,20 @@ MAX_PCAP_STATE_BYTES = 200_000  # ~1000 simulacros y todas las respuestas caben 
 # más "learn": el progreso por conceptos del núcleo educativo, "game": XP, racha y
 # logros de la web, que antes solo vivían en el navegador, y "planner": el planificador diario
 # (tiempo disponible, fechas de exámenes y entregas, tareas hechas, pospuestas o rechazadas).
+# "career": el Career Roadmap (unidades y entregas de proyectos; docs/CAREER_ROADMAP_API.md).
 # Lista cerrada: evita que un cliente cree documentos con nombres arbitrarios.
-COURSES = ("sql", "js", "java", "entornos", "marcas", "programacion", "learn", "game", "planner")
+COURSES = (
+    "sql",
+    "js",
+    "java",
+    "entornos",
+    "marcas",
+    "programacion",
+    "learn",
+    "game",
+    "planner",
+    "career",
+)
 
 
 class PcapStateIn(BaseModel):
