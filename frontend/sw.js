@@ -1,15 +1,26 @@
 /* Service worker: la web funciona sin conexión después de la primera visita.
    - Archivos de la web: primero la red (siempre la versión nueva) y, sin conexión, la copia guardada.
    - Pyodide (Python en el navegador): primero la copia guardada; sus URL llevan la versión y no cambian.
-   - API del backend: nunca se guarda (datos personales y siempre actuales). */
+   - API del backend: nunca se guarda (datos personales y siempre actuales).
+   - Al instalarse guarda también toda la web (precache.js, AUD-008): así se puede estudiar sin conexión
+     aunque no se hayan abierto antes todas las páginas. */
 
-const VERSION = "v8";
+importScripts("precache.js");
+
+const VERSION = "v9";
 const SITE_CACHE = `pld-site-${VERSION}`;
 const PYODIDE_CACHE = "pld-pyodide"; // se conserva entre versiones: son ~10 MB inmutables
 const SHELL = ["./", "index.html", "config.js", "js/analytics.js", "manifest.webmanifest", "favicon.svg"];
 
 self.addEventListener("install", (event) => {
-  event.waitUntil(caches.open(SITE_CACHE).then((cache) => cache.addAll(SHELL)));
+  event.waitUntil(
+    caches.open(SITE_CACHE).then(async (cache) => {
+      await cache.addAll(SHELL);
+      // El resto, uno a uno: si falta un archivo, la instalación sigue (se guardará al pedirlo)
+      const rest = (self.PLD_PRECACHE ?? []).filter((file) => !SHELL.includes(file));
+      await Promise.all(rest.map((file) => cache.add(file).catch(() => {})));
+    }),
+  );
   self.skipWaiting();
 });
 
