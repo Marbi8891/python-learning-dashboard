@@ -41,7 +41,7 @@ backend/    la API en FastAPI, migraciones y pruebas
 scripts/    generan y comprueban el temario; run_local.py arranca todo en local
 e2e/        pruebas end-to-end con Playwright
 tests/unit/ pruebas unitarias del JavaScript
-docs/       memoria, despliegue, API y pruebas
+docs/       documentación del proyecto (índice en docs/README.md)
 ```
 
 ## Cómo funciona
@@ -141,16 +141,19 @@ Todas las pruebas y qué ejecutar según lo que cambies: [docs/TESTING.md](docs/
 
 ## Documentación
 
-- [Memoria del proyecto](docs/memoria/memoria.md)
-- [Guion de la defensa](docs/DEMO-Y-DEFENSA.md)
-- [API](docs/API.md)
-- [Recuperación de contraseña y login con Google](docs/auth.md)
-- [Despliegue](docs/DEPLOY.md)
-- [Pruebas](docs/TESTING.md)
-- [Ejecutar en Windows](docs/EJECUTAR-EN-WINDOWS.md)
-- [Plan del currículo oficial de DAW](docs/PLAN-CURRICULO-DAW.md)
-- [Auditoría y licencias de fuentes](docs/AUDITORIA-Y-LICENCIAS.md)
-- [Seguridad](SECURITY.md)
+El índice completo está en [docs/README.md](docs/README.md). Los más usados:
+
+- [Memoria del proyecto](docs/memoria/memoria.md) y [guion de la defensa](docs/DEMO-Y-DEFENSA.md)
+- [API](docs/API.md) y [recuperación de contraseña y login con Google](docs/auth.md)
+- [Motor adaptativo](docs/ADAPTIVE_ENGINE.md) y [decisiones de arquitectura](docs/DECISIONS.md)
+- [Despliegue](docs/DEPLOY.md), [pruebas](docs/TESTING.md) y [ejecutar en Windows](docs/EJECUTAR-EN-WINDOWS.md)
+- [Historial de cambios](CHANGELOG.md)
+
+## Contribuir
+
+Las contribuciones son bienvenidas. Lee [CONTRIBUTING.md](CONTRIBUTING.md) para el flujo de ramas, las
+pruebas y las reglas del proyecto, y respeta el [código de conducta](CODE_OF_CONDUCT.md). Para avisar
+de una vulnerabilidad, sigue la [política de seguridad](SECURITY.md) y no abras un issue público.
 
 ## Licencia
 
