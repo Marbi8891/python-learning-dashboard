@@ -5,7 +5,7 @@
 
 Proyecto de 2º de DAW: una web para **aprender Python entendiendo lo que haces** y preparar el examen **PCAP** y los módulos de programación del ciclo.
 
-**Demo:** https://marbi8891.github.io/python-learning-dashboard/
+**Demo:** https://marbi8891.github.io/python-learning-dashboard/ · **Qué estudio hoy:** [#/aprender](https://marbi8891.github.io/python-learning-dashboard/#/aprender)
 
 ## Qué tiene
 
@@ -15,10 +15,10 @@ Proyecto de 2º de DAW: una web para **aprender Python entendiendo lo que haces*
 - **Cursos de DAW:** Programación, Bases de datos, Entornos de desarrollo, Lenguajes de marcas, JavaScript y Java.
 - **Currículo oficial de DAW en Castilla y León** (`#/daw/curriculo`): los 17 módulos de la Orden EDU/1311/2024 y los resultados de aprendizaje y criterios de evaluación literales del Real Decreto 405/2023. Se genera con `scripts/curriculum/` (ver [docs/PLAN-CURRICULO-DAW.md](docs/PLAN-CURRICULO-DAW.md)). En «Mi panel › Mi progreso» se ve cuántas preguntas de cada módulo has practicado y cuántas dominas.
 - **Recursos complementarios de DAW** con autor, licencia y fecha de verificación. Cómo ampliar el temario: [docs/AMPLIAR-TEMARIO-DAW.md](docs/AMPLIAR-TEMARIO-DAW.md).
-- **Repaso espaciado** y plan de estudio según la fecha del examen.
+- **Motor adaptativo** en «Aprender»: dominio de cada concepto con evidencias, confianza y olvido, repaso espaciado común y plan de «Hoy» con el motivo de cada recomendación. Incluye un **planificador diario** (tiempo disponible, exámenes y entregas, tareas hechas, pospuestas o descartadas) que se sincroniza con la cuenta. Cómo funciona: [docs/ADAPTIVE_ENGINE.md](docs/ADAPTIVE_ENGINE.md); decisiones: [docs/DECISIONS.md](docs/DECISIONS.md).
 - **XP, niveles, racha y logros.**
 - **Cuenta opcional:** registro con email o con Google, recuperación de contraseña y panel del alumno. Puedes descargar tus datos o borrar la cuenta (RGPD).
-- **PWA:** se puede instalar y funciona sin conexión después de la primera visita.
+- **PWA:** se puede instalar y, después de la primera visita, funciona sin conexión en toda la web, también en las páginas que no se habían abierto.
 - **Tema claro y oscuro** y accesibilidad con objetivo WCAG 2.1 AA, comprobada con pruebas automáticas (axe-core). No se ha hecho una auditoría manual con lector de pantalla.
 
 Todo el temario se genera con los scripts de `scripts/`, que ejecutan el código de cada pregunta para comprobar que la respuesta es correcta.
