@@ -11,6 +11,9 @@ cambios se agrupan por fecha de merge, con el número de pull request entre par�
 ### Añadido
 - Documentación de proyecto: `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, este `CHANGELOG.md`, índice
   de `docs/` y plantillas de issues y de pull request.
+- Career Roadmap, base (#101): catálogo generado del itinerario Python Backend Developer Junior
+  (8 fases, 54 unidades, 24 competencias, 8 proyectos), documento de progreso `career` en la cuenta y
+  cálculo de dominio de competencias y estado de las fases. Todavía sin interfaz.
 
 ## 2026-11-04
 

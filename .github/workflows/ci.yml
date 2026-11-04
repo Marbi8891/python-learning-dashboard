@@ -50,6 +50,8 @@ jobs:
         run: python ../scripts/learning/build_learning.py --check
       - name: Catálogo del currículo de DAW al día
         run: python ../scripts/curriculum/build_curriculum.py --check
+      - name: Catálogo del Career Roadmap al día y con cada enlace comprobado
+        run: python ../scripts/career/build_career.py --check
       - name: Migraciones en PostgreSQL (vacía y con datos existentes)
         env:
           MIGRATION_TEST_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/pld

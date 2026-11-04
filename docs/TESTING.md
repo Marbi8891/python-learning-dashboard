@@ -27,6 +27,7 @@ Las e2e arrancan solas el frontend (`e2e/serve_frontend.py`, un `http.server` co
 | Currículo de DAW | `python scripts/curriculum/build_curriculum.py --check` | Catálogo al día; las pruebas están en `test_curriculum.py` |
 | Cursos de DAW | `python scripts/courses/<curso>_course.py --check` (`sql`, `js`, `java`, `entornos`, `marcas`, `programacion`) | Cada respuesta de código se ejecuta (SQLite, Node, Java y Python) |
 | Coherencia de los cursos de DAW | `cd backend && python -m pytest -q tests/test_daw_courses.py` | Ids estables (`scripts/courses/ids.lock.json`), contenidos vacíos, preguntas repetidas, referencias a unidades, lecciones, módulos y RA, enlaces y soluciones |
+| Career Roadmap | `python scripts/career/build_career.py --check` | Catálogo al día, ids registrados en `scripts/career/ids.lock.json`, enlaces a contenido que existe y prerrequisitos sin ciclos (también `tests/test_career_catalog.py`) |
 | Recursos de DAW | `python scripts/resources/build_resources.py --check` | Catálogo de recursos al día y válido (ids, módulos, lecciones, URL, licencias); las pruebas están en `test_resources.py` |
 | Frontend | `npm run test:unit` | Lógica del aprendizaje (dominio, confianza, retención), repaso espaciado común, recomendación, planificador, panel y Markdown seguro |
 | End-to-end y WCAG | `npm run test:e2e` | La web entera con el backend real y auditoría de accesibilidad (axe-core con las reglas de WCAG 2.2 A/AA, foco y letra al 200 %) |
@@ -63,6 +64,7 @@ rm frontend/_pyo
 | `scripts/courses/**` | `python scripts/courses/<curso>_course.py --check`, `python scripts/courses/lock_ids.py` si hay ids nuevos y `cd backend && python -m pytest -q tests/test_daw_courses.py` |
 | `backend/**` | Lint, formato y pytest con cobertura |
 | `scripts/resources/**` | `python scripts/resources/build_resources.py --check` y `cd backend && python -m pytest -q tests/test_resources.py` |
+| `scripts/career/**` o `frontend/js/career/*` | `python scripts/career/build_career.py` y después `--check`, `cd backend && python -m pytest -q tests/test_career_catalog.py` y `npm run test:unit` (`tests/unit/career-data.test.mjs`) |
 | `scripts/curriculum/**` | `python scripts/curriculum/build_curriculum.py --check` y `cd backend && python -m pytest -q tests/test_curriculum.py` |
 | `docs/memoria/img/*.dot` | `dot -Tpng <archivo>.dot -o <archivo>.png` (Graphviz) para regenerar el diagrama |
 

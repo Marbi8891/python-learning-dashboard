@@ -44,6 +44,7 @@ import { isLearnRoute, learnNavKey, openLearn } from "./learn/learn-app.js";
 import { LANDING_ROUTE, closeLanding, isLandingRoute, openLanding } from "./landing.js";
 import { initLearnSync } from "./learn/learn-store.js";
 import { initPlannerSync } from "./learn/planner-store.js";
+import { initCareerSync } from "./career/career-store.js";
 import { initPrefs } from "./prefs.js";
 import { badgesHtml, renderProfile } from "./profile.js";
 import { dashboardTitle, initDashboard, renderDashboard } from "./dashboard.js";
@@ -867,6 +868,7 @@ async function init() {
   initCourseSync(refreshDaw);
   initLearnSync();
   initPlannerSync();
+  initCareerSync();
   const flash = takeFlash(); // aviso tras cerrar sesión o borrar la cuenta
   if (flash) showToast(flash);
   restoreSession();

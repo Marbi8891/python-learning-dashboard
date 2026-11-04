@@ -95,3 +95,34 @@ def test_planner_is_saved_per_user_with_versions(client, auth_headers):
     assert saved["data"] == planner
     exported = client.get("/api/v1/users/me/export", headers=auth_headers).json()
     assert exported["courses"]["planner"] == planner
+
+
+def test_career_roadmap_is_private_versioned_and_exported(client, auth_headers):
+    """Career Roadmap: documento «career» con versión, aislado por cuenta y en la exportación."""
+    from tests.test_security_isolation import session_for
+
+    career = {
+        "v": 1,
+        "active": "python-backend-junior",
+        "roadmaps": {
+            "python-backend-junior": {
+                "enrolledAt": "2026-11-05T10:00:00.000Z",
+                "units": {"fund-control": {"done": True, "at": "2026-11-05T10:00:00.000Z"}},
+                "projects": {},
+            }
+        },
+    }
+    assert client.put("/api/v1/course-state/career", json={"data": career}).status_code == 401
+    first = client.put("/api/v1/course-state/career", json={"data": career}, headers=auth_headers)
+    assert first.status_code == 200 and first.json()["version"] == 1
+    stale = client.put(
+        "/api/v1/course-state/career", json={"data": {}, "version": 0}, headers=auth_headers
+    )
+    assert stale.status_code == 409
+
+    luis = session_for(client, "luis@example.com", "Luis")
+    assert client.get("/api/v1/course-state/career", headers=luis).json()["data"] == {}
+    client.put("/api/v1/course-state/career", json={"data": {"de": "Luis"}}, headers=luis)
+    assert client.get("/api/v1/course-state/career", headers=auth_headers).json()["data"] == career
+    exported = client.get("/api/v1/users/me/export", headers=auth_headers).json()
+    assert exported["courses"]["career"] == career
