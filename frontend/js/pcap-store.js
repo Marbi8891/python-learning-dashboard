@@ -2,6 +2,9 @@
    Sin dependencias: lo leen la zona de examen (pcap.js) y la gamificación (game.js). */
 
 import { cleanProgress } from "./progress-guard.js";
+import { isoDay, scheduleAnswer } from "./srs.js";
+
+export { isoDay };
 
 const KEY = "pld:pcap";
 
@@ -50,22 +53,9 @@ export function savePcap() {
 
 /* ---------- Repaso espaciado (cajas de Leitner) ---------- */
 
-const INTERVAL_DAYS = [0, 1, 3, 7, 14, 30]; // días hasta el siguiente repaso según la caja
-const MAX_BOX = INTERVAL_DAYS.length - 1;
-
-export const isoDay = (date = new Date()) =>
-  `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
-
-function addDays(days, from = new Date()) {
-  const date = new Date(from);
-  date.setDate(date.getDate() + days);
-  return isoDay(date);
-}
-
-/** Acierto: sube de caja y el repaso se aleja. Fallo: vuelve a la caja 1 (repaso mañana). */
-export function review(id, ok) {
-  const box = ok ? Math.min((pcap.srs[id]?.box ?? 0) + 1, MAX_BOX) : 1;
-  pcap.srs[id] = { box, due: addDays(INTERVAL_DAYS[box]), last: new Date().toISOString() };
+/** Acierto: sube de caja y el repaso se aleja (solo si tocaba repasarlo). Fallo: caja 1 (mañana). Ver srs.js. */
+export function review(id, ok, now = new Date()) {
+  pcap.srs[id] = scheduleAnswer(pcap.srs[id], ok, now);
 }
 
 /** Ids que toca repasar hoy (o que se quedaron atrasados). */
@@ -118,25 +108,46 @@ export const questionsMastered = () => Object.values(pcap.answers).filter((h) =>
 
 export const examsPassed = (min = 70) => pcap.exams.filter((exam) => exam.score >= min).length;
 
+/** Un bloque cuenta entero cuando se ha respondido al menos esta parte de sus preguntas. */
+export const FULL_COVERAGE = 0.5;
+/** Por debajo de esta parte del banco respondida no se muestra un porcentaje (AUD-006). */
+export const MIN_EVIDENCE = 0.2;
+
 /**
  * Acierto por bloque: último intento de cada pregunta respondida del bloque.
- * @returns {{[slug]: {answered: number, rate: number | null}}}
+ * @returns {{[slug]: {answered: number, total: number, rate: number | null}}}
  */
-export function blockStats(questions, blocks) {
+export function blockStats(questions, blocks, answers = pcap.answers) {
   const stats = {};
   for (const block of blocks) {
-    const last = questions
-      .filter((q) => q.block === block.slug && pcap.answers[q.id])
-      .map((q) => pcap.answers[q.id].at(-1));
+    const inBlock = questions.filter((q) => q.block === block.slug);
+    const last = inBlock.filter((q) => answers[q.id]?.length).map((q) => answers[q.id].at(-1));
     stats[block.slug] = {
       answered: last.length,
+      total: inBlock.length,
       rate: last.length ? last.filter(Boolean).length / last.length : null,
     };
   }
   return stats;
 }
 
-/** Preparación estimada: acierto de cada bloque ponderado por su peso en el examen (0-100). */
+const blockCoverage = (s) => (s.total ? Math.min(1, s.answered / s.total / FULL_COVERAGE) : 0);
+
+/**
+ * Preparación estimada (0-100): acierto de cada bloque ponderado por su peso en el examen y por lo que
+ * se ha cubierto del bloque. Un bloque con pocas respuestas cuenta menos: acertar una pregunta de cada
+ * bloque ya no da el 100 % (AUD-006).
+ */
 export function readiness(stats, blocks) {
-  return Math.round(blocks.reduce((sum, block) => sum + (stats[block.slug].rate ?? 0) * block.weight, 0));
+  return Math.round(blocks.reduce((sum, block) => sum + (stats[block.slug].rate ?? 0) * blockCoverage(stats[block.slug]) * block.weight, 0));
 }
+
+/** Parte del banco respondida (0-1). */
+export function evidenceCoverage(stats) {
+  const all = Object.values(stats);
+  const total = all.reduce((sum, s) => sum + (s.total ?? 0), 0);
+  return total ? all.reduce((sum, s) => sum + s.answered, 0) / total : 0;
+}
+
+/** ¿Hay respuestas suficientes para mostrar un porcentaje de preparación? */
+export const enoughEvidence = (stats) => evidenceCoverage(stats) >= MIN_EVIDENCE;

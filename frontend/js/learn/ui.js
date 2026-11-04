@@ -14,6 +14,7 @@ export { escapeHtml, renderInline, renderMarkdown };
 export const STATUS = {
   nuevo: { label: "Sin empezar", short: "Nuevo" },
   leido: { label: "Teoría leída", short: "Leído" },
+  insuficiente: { label: "Pocas evidencias", short: "Pocas evidencias" },
   aprendiendo: { label: "Aprendiendo", short: "Aprendiendo" },
   progreso: { label: "En progreso", short: "En progreso" },
   dominado: { label: "Dominado", short: "Dominado" },
@@ -29,6 +30,9 @@ export const KIND_LABEL = {
 };
 
 export const percent = (value) => `${Math.round((value ?? 0) * 100)} %`;
+
+/** Dominio para mostrar: sin evidencias suficientes no se da un porcentaje (F1.5). */
+export const masteryText = (stats) => (stats.enough ? percent(stats.score) : "Pocas evidencias");
 
 export function highlight(source) {
   return hljs.highlight(source, { language: "python" }).value;
@@ -51,7 +55,9 @@ export function meter(value, label) {
 
 export function statusBadge(stats) {
   const status = STATUS[stats.status];
-  return `<span class="lx-status" data-status="${stats.status}">${status.short}</span>${stats.due ? '<span class="lx-status" data-status="due">Repaso pendiente</span>' : ""}`;
+  return `<span class="lx-status" data-status="${stats.status}">${status.short}</span>${stats.due ? '<span class="lx-status" data-status="due">Repaso pendiente</span>' : ""}${
+    stats.forgotten ? '<span class="lx-status" data-status="due">Se está olvidando</span>' : ""
+  }`;
 }
 
 /** Explicación de un error típico: qué falla, por qué, cómo pensarlo y cómo evitarlo. */

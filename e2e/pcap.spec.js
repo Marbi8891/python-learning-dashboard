@@ -16,7 +16,7 @@ test("el panel muestra los 5 bloques con su peso y la preparación a cero", asyn
   await expect(page.getByRole("link", { name: "Examen PCAP" })).toHaveAttribute("aria-current", "page");
   await expect(page.locator(".block-row")).toHaveCount(5);
   await expect(page.locator(".block-row").nth(3)).toContainText("34 % del examen");
-  await expect(page.locator(".readiness__score")).toContainText("0 %");
+  await expect(page.locator(".readiness__score")).toContainText("Sin datos"); // sin respuestas no hay porcentaje (AUD-006)
   await expect(page.locator(".empty-state")).toContainText("ningún simulacro");
 });
 

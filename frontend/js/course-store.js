@@ -5,7 +5,8 @@
 
 import { request } from "./api.js";
 import { cleanProgress } from "./progress-guard.js";
-import { isoDay, newerHistory } from "./pcap-store.js";
+import { blockStats, newerHistory, readiness } from "./pcap-store.js";
+import { isoDay, scheduleAnswer } from "./srs.js";
 import { state, subscribe } from "./store.js";
 import { createDocSync } from "./doc-sync.js";
 import { createSyncGate } from "./sync-gate.js";
@@ -60,8 +61,6 @@ export function loadCourseBank(id) {
   }
   return banks.get(id);
 }
-const INTERVAL_DAYS = [0, 1, 3, 7, 14, 30]; // igual que el PCAP y la app
-const MAX_BOX = INTERVAL_DAYS.length - 1;
 const HISTORY = 5;
 
 function empty() {
@@ -109,20 +108,13 @@ export async function flushCourseSync() {
   return results.every(Boolean);
 }
 
-function addDays(days) {
-  const date = new Date();
-  date.setDate(date.getDate() + days);
-  return isoDay(date);
-}
-
-/** Guarda el intento y programa el repaso espaciado (cajas de Leitner). */
-export function recordCourseAnswer(id, questionId, ok) {
+/** Guarda el intento y programa el repaso espaciado (cajas de Leitner comunes, srs.js). */
+export function recordCourseAnswer(id, questionId, ok, now = new Date()) {
   const course = courseState(id);
   const history = (course.answers[questionId] ??= []);
   history.push(ok);
   if (history.length > HISTORY) history.shift();
-  const box = ok ? Math.min((course.srs[questionId]?.box ?? 0) + 1, MAX_BOX) : 1;
-  course.srs[questionId] = { box, due: addDays(INTERVAL_DAYS[box]), last: new Date().toISOString() };
+  course.srs[questionId] = scheduleAnswer(course.srs[questionId], ok, now);
 }
 
 export const dueQuestionIds = (id, ids, today = isoDay()) => {
@@ -130,19 +122,11 @@ export const dueQuestionIds = (id, ids, today = isoDay()) => {
   return ids.filter((q) => srs[q] && srs[q].due <= today);
 };
 
-/** Acierto por bloque con el último intento de cada pregunta, como la app. */
-export function courseBlockStats(id, bank) {
-  const { answers } = courseState(id);
-  const stats = {};
-  for (const block of bank.exam.blocks) {
-    const last = bank.questions.filter((q) => q.block === block.slug && answers[q.id]).map((q) => answers[q.id].at(-1));
-    stats[block.slug] = { answered: last.length, rate: last.length ? last.filter(Boolean).length / last.length : null };
-  }
-  return stats;
-}
+/** Acierto por bloque con el último intento de cada pregunta, como la app (mismas reglas que el PCAP). */
+export const courseBlockStats = (id, bank) => blockStats(bank.questions, bank.exam.blocks, courseState(id).answers);
 
-export const courseReadiness = (stats, blocks) =>
-  Math.round(blocks.reduce((sum, block) => sum + (stats[block.slug].rate ?? 0) * block.weight, 0));
+/** Preparación con cobertura (AUD-006): la misma fórmula que el PCAP. */
+export const courseReadiness = readiness;
 
 const later = (a, b) => ((a?.last ?? "") >= (b?.last ?? "") ? a : b);
 

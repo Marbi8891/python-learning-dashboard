@@ -4,10 +4,13 @@ import {
   activeErrors,
   cleanLearning,
   conceptStats,
+  explainStats,
   FIXED_STREAK,
+  halfLifeDays,
   markRead,
   mergeLearning,
   recordAttempt,
+  retention,
   reviewConcept,
 } from "../../frontend/js/learn/mastery.js";
 import { daysAgo, exercisesOf, fresh, index, NOW } from "./helpers.mjs";
@@ -27,7 +30,8 @@ test("acertar un solo ejercicio no basta para dominar un concepto", () => {
   const state = fresh();
   solve(state, exercisesOf("bucles").slice(0, 1));
   const stats = conceptStats(index, state, "bucles", NOW);
-  assert.equal(stats.status, "aprendiendo");
+  assert.equal(stats.status, "insuficiente", "con una sola evidencia no se estima el dominio (F1.5)");
+  assert.equal(stats.enough, false);
   assert.ok(stats.score > 0 && stats.score < 0.5);
 });
 
@@ -100,14 +104,32 @@ test("repaso espaciado: acierto alto aleja el repaso, acierto bajo lo trae a ma�
   const state = fresh();
   reviewConcept(state, "bucles", 1, NOW);
   assert.deepEqual([state.concepts.bucles.box, state.concepts.bucles.due], [1, "2026-10-05"]);
-  reviewConcept(state, "bucles", 0.9, NOW);
-  assert.deepEqual([state.concepts.bucles.box, state.concepts.bucles.due], [2, "2026-10-07"]);
-  reviewConcept(state, "bucles", 0.6, NOW);
-  assert.equal(state.concepts.bucles.box, 2, "acierto medio: se mantiene");
-  reviewConcept(state, "bucles", 0.2, NOW);
+  const tomorrow = new Date("2026-10-05T10:00:00");
+  reviewConcept(state, "bucles", 0.9, tomorrow);
+  assert.deepEqual([state.concepts.bucles.box, state.concepts.bucles.due], [2, "2026-10-08"]);
+  const later = new Date("2026-10-08T10:00:00");
+  reviewConcept(state, "bucles", 0.6, later);
+  assert.deepEqual([state.concepts.bucles.box, state.concepts.bucles.due], [2, "2026-10-11"], "acierto medio: se mantiene la caja");
+  reviewConcept(state, "bucles", 0.2, later);
+  assert.deepEqual([state.concepts.bucles.box, state.concepts.bucles.due], [1, "2026-10-09"]);
+  assert.equal(conceptStats(index, state, "bucles", new Date("2026-10-09T09:00:00")).due, true);
+  assert.equal(conceptStats(index, state, "bucles", later).due, false);
+});
+
+test("repaso espaciado: cinco sesiones perfectas la misma tarde no lo mandan a un mes (AUD-004)", () => {
+  const state = fresh();
+  for (let i = 0; i < 5; i += 1) reviewConcept(state, "bucles", 1, NOW);
   assert.deepEqual([state.concepts.bucles.box, state.concepts.bucles.due], [1, "2026-10-05"]);
-  assert.equal(conceptStats(index, state, "bucles", new Date("2026-10-05T09:00:00")).due, true);
-  assert.equal(conceptStats(index, state, "bucles", NOW).due, false);
+});
+
+test("una sesión abandonada deja el repaso programado para mañana (AUD-003)", () => {
+  const state = fresh();
+  solve(state, exercisesOf("variables"));
+  const stats = conceptStats(index, state, "variables", NOW);
+  assert.equal(stats.nextReview, "2026-10-05");
+  assert.equal(state.concepts.variables.box, 0, "la caja la sube el cierre de una sesión");
+  reviewConcept(state, "variables", 1, NOW);
+  assert.equal(state.concepts.variables.box, 1, "la primera sesión cerrada sí sube de caja");
 });
 
 test("cleanLearning descarta datos manipulados y conserva los válidos", () => {
@@ -180,4 +202,104 @@ test("compatibilidad hacia delante: mergeLearning no pierde los campos de versio
   local.planner = { minutes: 45 };
   mergeLearning(local, JSON.parse(JSON.stringify(remote)));
   assert.deepEqual(local.planner, { minutes: 45 }, "si aquí existe, no se pisa");
+});
+
+/* ---------- Dominio 2.0 (F1.5) ---------- */
+
+test("dominio 2.0: es reproducible (mismo documento y misma fecha, mismo resultado)", () => {
+  const state = fresh();
+  solve(state, exercisesOf("listas").slice(0, 3));
+  const a = conceptStats(index, JSON.parse(JSON.stringify(state)), "listas", NOW);
+  const b = conceptStats(index, JSON.parse(JSON.stringify(state)), "listas", NOW);
+  assert.deepEqual(a, b);
+});
+
+test("dominio 2.0: repetir el mismo ejercicio no infla el dominio ni la confianza", () => {
+  const once = fresh();
+  const many = fresh();
+  const [first] = exercisesOf("listas");
+  solve(once, [first]);
+  for (let i = 0; i < 20; i += 1) solve(many, [first]);
+  const a = conceptStats(index, once, "listas", NOW);
+  const b = conceptStats(index, many, "listas", NOW);
+  assert.equal(b.score, a.score);
+  assert.equal(b.confidence, a.confidence);
+  assert.equal(b.evidence.length, 1, "una evidencia por ejercicio distinto");
+  assert.equal(b.evidence[0].n, 20);
+});
+
+test("dominio 2.0: la confianza depende de la cantidad y la variedad de evidencias, no del acierto", () => {
+  const state = fresh();
+  const list = exercisesOf("listas");
+  solve(state, list.slice(0, 1));
+  const low = conceptStats(index, state, "listas", NOW);
+  solve(state, list.slice(1), false);
+  const high = conceptStats(index, state, "listas", NOW);
+  assert.ok(high.confidence > low.confidence);
+  assert.ok(high.score <= low.score + 1e-9, "más evidencias falladas no suben el dominio");
+  assert.equal(high.enough, true);
+  assert.equal(low.enough, false);
+});
+
+test("dominio 2.0: cada evidencia se identifica con su ejercicio, tipo, resultado y fecha", () => {
+  const state = fresh();
+  const [a, b] = exercisesOf("listas");
+  solve(state, [a]);
+  solve(state, [b], false);
+  const s = conceptStats(index, state, "listas", NOW);
+  assert.deepEqual(
+    s.evidence.map((e) => [e.id, e.ok, e.okAt]),
+    [
+      [a.id, true, NOW.toISOString()],
+      [b.id, false, null],
+    ],
+  );
+  assert.equal(state.ex[a.id].okAt, NOW.toISOString(), "recordAttempt guarda la fecha del último acierto");
+});
+
+test("dominio 2.0: si el repaso se pasa, la retención baja y el concepto se marca como olvidado", () => {
+  const state = fresh();
+  solve(state, exercisesOf("variables"), true, daysAgo(60));
+  reviewConcept(state, "variables", 1, daysAgo(60)); // caja 1: repaso al día siguiente
+  const s = conceptStats(index, state, "variables", NOW);
+  assert.equal(s.base, 1);
+  assert.ok(s.retention < 0.2);
+  assert.ok(s.score < 0.2);
+  assert.equal(s.forgotten, true);
+  assert.notEqual(s.status, "dominado");
+  const fresh1 = conceptStats(index, state, "variables", daysAgo(59));
+  assert.equal(fresh1.retention, 1, "hasta la fecha de repaso se supone intacta");
+});
+
+test("dominio 2.0: una caja alta olvida más despacio", () => {
+  assert.ok(halfLifeDays(5) > halfLifeDays(1));
+  const at = daysAgo(30).toISOString();
+  const low = retention({ box: 1, due: "2026-09-05", last: at }, NOW);
+  const high = retention({ box: 5, due: "2026-09-05", last: at }, NOW);
+  assert.ok(high > low);
+});
+
+test("dominio 2.0: los datos antiguos sin okAt deducen el último acierto del historial", () => {
+  const state = cleanLearning({ ex: { "lis-01": { h: [false, true], last: NOW.toISOString(), n: 2 } } });
+  const s = conceptStats(index, state, "listas", NOW);
+  assert.equal(s.evidence[0].okAt, NOW.toISOString());
+});
+
+test("explainStats explica el dominio con palabras", () => {
+  const state = fresh();
+  assert.match(explainStats(conceptStats(index, state, "listas", NOW)), /Aún no/);
+  solve(state, exercisesOf("listas").slice(0, 1));
+  assert.match(explainStats(conceptStats(index, state, "listas", NOW)), /pocas evidencias/);
+});
+
+test("fusión (F1.6): el último acierto de cualquier dispositivo no se pierde", () => {
+  const local = fresh();
+  const remote = fresh();
+  const ex = index.exercises.get("lis-01");
+  recordAttempt(remote, ex, { ok: true, error: null }, { now: daysAgo(2) });
+  recordAttempt(local, ex, { ok: false, error: null }, { now: daysAgo(1) });
+  mergeLearning(local, JSON.parse(JSON.stringify(remote)));
+  assert.deepEqual(local.ex["lis-01"].h, [false], "el resultado actual es el del intento más reciente");
+  assert.equal(local.ex["lis-01"].okAt, daysAgo(2).toISOString(), "pero la evidencia del acierto sigue");
+  assert.equal(local.ex["lis-01"].n, 1);
 });

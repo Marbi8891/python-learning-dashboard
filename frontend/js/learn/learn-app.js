@@ -12,8 +12,11 @@
 import { locale } from "../i18n.js";
 import { prefersReducedMotion } from "../prefs.js";
 import { learning, loadLearningContent, onLearningChange, saveLearning } from "./learn-store.js";
+import { onPlannerChange, planner, planOptions, savePlanner } from "./planner-store.js";
+import { acceptanceRate, addExam, plannerHistory, removeExam, setMinutes, setTaskStatus, todayTasks, upcomingExams } from "./planner.js";
+import { isoDay } from "../srs.js";
 import { onWelcomeClick, onWelcomeKeydown, renderWelcome } from "./welcome.js";
-import { activeErrors, allStats, areaSummary, daysBetween, lastActivity, markRead } from "./mastery.js";
+import { activeErrors, allStats, areaSummary, daysBetween, explainStats, lastActivity, markRead } from "./mastery.js";
 import { fitPlanToBudget, missingPrerequisites, selectExercises, todayPlan } from "./recommend.js";
 import { activityExercises, EXAM_ACTIVITIES, renderDawPrep } from "./daw-prep.js";
 import { buildDiagnostic, buildExam, examMinutes } from "./exam.js";
@@ -25,7 +28,7 @@ import {
   startPlanItem,
   startSession,
 } from "./session-view.js";
-import { codeBlock, errorExplanation, escapeHtml, KIND_LABEL, meter, percent, renderInline, renderMarkdown, STATUS, statusBadge } from "./ui.js";
+import { codeBlock, errorExplanation, escapeHtml, KIND_LABEL, masteryText, meter, percent, renderInline, renderMarkdown, STATUS, statusBadge } from "./ui.js";
 
 const $ = (selector) => document.querySelector(selector);
 const root = () => $("#learn-view");
@@ -45,25 +48,70 @@ function ago(iso, now = new Date()) {
 
 const formatDay = (iso) => new Date(iso).toLocaleDateString(locale, { day: "numeric", month: "short" });
 
-const DAILY_BUDGET_KEY = "pld:daily-study-minutes";
-const DAILY_BUDGET_OPTIONS = [15, 30, 45, 60];
+const DAILY_BUDGET_OPTIONS = [15, 30, 45, 60, 90];
 
-export function dailyBudget() {
-  try {
-    const value = Number(localStorage.getItem(DAILY_BUDGET_KEY));
-    return DAILY_BUDGET_OPTIONS.includes(value) ? value : 45;
-  } catch {
-    return 45;
-  }
-}
+/** Tiempo disponible hoy: está en el planificador, que viaja con la cuenta (F1.8, EVO-08). */
+export const dailyBudget = () => planner.minutes;
 
 function saveDailyBudget(minutes) {
   if (!DAILY_BUDGET_OPTIONS.includes(Number(minutes))) return;
-  try {
-    localStorage.setItem(DAILY_BUDGET_KEY, String(minutes));
-  } catch {
-    // La preferencia es opcional; el plan sigue funcionando sin almacenamiento.
-  }
+  setMinutes(planner, minutes);
+  savePlanner();
+}
+
+const TASK_LABEL = { hecha: "Hecha", pospuesta: "Pospuesta para mañana", rechazada: "Descartada hoy" };
+
+/** Botones para decidir sobre una tarea del plan: hacerla, posponerla o descartarla. */
+const taskButtons = (item) => `
+  <div class="lx-actions lx-task" role="group" aria-label="Qué hacer con ${escapeHtml(title(item.concept))}">
+    <button class="btn btn--ghost btn--sm" type="button" data-learn="task" data-status="hecha" data-concept="${escapeHtml(item.concept)}">Ya la he hecho</button>
+    <button class="btn btn--ghost btn--sm" type="button" data-learn="task" data-status="pospuesta" data-concept="${escapeHtml(item.concept)}">Posponer a mañana</button>
+    <button class="btn btn--ghost btn--sm" type="button" data-learn="task" data-status="rechazada" data-concept="${escapeHtml(item.concept)}">Hoy no</button>
+  </div>`;
+
+const whyText = (item) => (item.why?.length ? `<p class="lx-muted lx-why">Por qué: ${escapeHtml(item.why.join(" · "))}.</p>` : "");
+
+/** Exámenes y entregas, lo decidido hoy e historial de la semana. */
+function plannerHtml(now) {
+  const exams = upcomingExams(planner, now);
+  const decided = Object.entries(todayTasks(planner, now));
+  const history = plannerHistory(planner, now, 7).filter((d) => d.hecha + d.pospuesta + d.rechazada > 0);
+  const rate = acceptanceRate(planner);
+  const examList = exams.length
+    ? `<ul class="lx-list">${exams
+        .map(
+          (e) => `<li class="lx-row"><span>${e.kind === "entrega" ? "Entrega" : "Examen"}: <strong>${escapeHtml(e.title)}</strong> · ${formatDay(`${e.date}T00:00:00`)} (${e.days === 0 ? "hoy" : `en ${e.days} ${e.days === 1 ? "día" : "días"}`})</span>
+            <button class="btn btn--ghost btn--sm" type="button" data-learn="exam-remove" data-id="${escapeHtml(e.id)}">Quitar<span class="visually-hidden"> ${escapeHtml(e.title)}</span></button></li>`,
+        )
+        .join("")}</ul>`
+    : '<p class="lx-muted">Sin exámenes ni entregas. Añádelos y el plan dará prioridad a lo que entra antes.</p>';
+  return `
+    <section class="lx-panel lx-planner" aria-labelledby="lx-planner-title">
+      <h2 class="lx-panel__title" id="lx-planner-title">Exámenes y entregas</h2>
+      ${examList}
+      <form class="lx-exam-form" id="lx-exam-form">
+        <label>Nombre <input name="title" required maxlength="80" placeholder="Examen UT3 Programación"></label>
+        <label>Tipo <select name="kind"><option value="examen">Examen</option><option value="entrega">Entrega</option></select></label>
+        <label>Fecha del examen o entrega <input type="date" name="date" min="${isoDay(now)}" required></label>
+        <button class="btn btn--ghost" type="submit">Añadir</button>
+      </form>
+      ${
+        decided.length
+          ? `<h3 class="lx-h4">Hoy</h3><ul class="lx-list">${decided
+              .map(
+                ([id, t]) => `<li class="lx-row" data-task="${t.status}"><span>${escapeHtml(title(id))}: ${TASK_LABEL[t.status]}</span>
+                  <button class="btn btn--ghost btn--sm" type="button" data-learn="task" data-status="" data-concept="${escapeHtml(id)}">Deshacer<span class="visually-hidden"> ${escapeHtml(title(id))}</span></button></li>`,
+              )
+              .join("")}</ul>`
+          : ""
+      }
+      ${
+        history.length
+          ? `<details class="lx-details"><summary>Historial de la semana${rate === null ? "" : ` · ${Math.round(rate * 100)} % de recomendaciones hechas`}</summary>
+              <ul class="lx-list lx-list--pad">${history.map((d) => `<li>${formatDay(`${d.day}T00:00:00`)}: ${d.hecha} hechas, ${d.pospuesta} pospuestas, ${d.rechazada} descartadas</li>`).join("")}</ul></details>`
+          : ""
+      }
+    </section>`;
 }
 
 /* ---------- Aprender: ¿qué estudio ahora? ---------- */
@@ -71,7 +119,7 @@ function saveDailyBudget(minutes) {
 function renderToday() {
   const now = new Date();
   const stats = allStats(index, learning, now);
-  const fullPlan = todayPlan(index, learning, now, stats);
+  const fullPlan = todayPlan(index, learning, now, stats, planOptions(now));
   const budget = dailyBudget();
   const budgeted = fitPlanToBudget(fullPlan, budget);
   const plan = budgeted.items;
@@ -97,10 +145,12 @@ function renderToday() {
         <p class="lx-next__label">Tu siguiente paso · ${ACTION[first.type]}</p>
         <h2 class="lx-next__title" id="lx-next-title">${escapeHtml(title(first.concept))}</h2>
         <p class="lx-next__reason">${escapeHtml(first.reason)}</p>
+        ${whyText(first)}
         <div class="lx-actions">
           ${startButton(first, "Empezar ahora", true)}
           <a href="#/teoria/${escapeHtml(first.concept)}">Leer antes la teoría</a>
         </div>
+        ${taskButtons(first)}
       </section>`
     : `<section class="lx-next"><h2 class="lx-next__title">Has dominado todo el temario</h2>
         <p>Haz un <a href="#/daw">simulacro de DAW</a> o repasa en <a href="#/practicar">Practicar</a>.</p></section>`;
@@ -112,8 +162,10 @@ function renderToday() {
           <p class="lx-plan__action">${ACTION[item.type]}</p>
           <h3 class="lx-plan__title">${escapeHtml(title(item.concept))}</h3>
           <p class="lx-plan__reason">${escapeHtml(item.reason)}</p>
+          ${whyText(item)}
         </div>
         ${startButton(item, "Empezar", false)}
+        ${taskButtons(item)}
       </li>`,
     )
     .join("");
@@ -147,6 +199,7 @@ function renderToday() {
           </section>`
         : ""
     }
+    ${plannerHtml(now)}
     <section class="lx-summary-line" aria-label="Resumen">
       <p>${facts.join(" · ")}</p>
       <p class="lx-summary-line__links">
@@ -251,7 +304,8 @@ function renderConcept(id) {
       <p class="eyebrow">Concepto ${position + 1} de ${index.path.length} · ${concept.daw === 3 ? "Imprescindible para DAW" : "Importante para DAW"}</p>
       <h1 class="lx-title" id="learn-title" tabindex="-1">${escapeHtml(concept.title)}</h1>
       <p class="lx-lead">${renderInline(concept.summary)}</p>
-      <p class="lx-badges">${statusBadge(s)} ${s.attempted ? `<span class="lx-muted">${percent(s.score)} de dominio</span>` : ""}</p>
+      <p class="lx-badges">${statusBadge(s)} ${s.attempted && s.enough ? `<span class="lx-muted">${percent(s.score)} de dominio</span>` : ""}</p>
+      ${s.attempted ? `<p class="lx-muted lx-evidence">${escapeHtml(explainStats(s))}</p>` : ""}
       ${
         concept.requires.length
           ? `<p class="lx-muted">Antes conviene dominar: ${concept.requires.map((r) => `<a href="#/teoria/${r}">${escapeHtml(title(r))}</a>`).join(", ")}.</p>`
@@ -405,7 +459,7 @@ function renderProgress() {
             .map((id) => {
               const s = stats.get(id);
               return `<tr role="row"><th scope="row" role="rowheader"><a href="#/teoria/${id}">${escapeHtml(title(id))}</a></th><td role="cell" data-label="Estado">${statusBadge(s)}</td>
-                <td role="cell" data-label="Dominio">${meter(s.score, `Dominio de ${title(id)}`)} <span class="lx-row__value">${percent(s.score)}</span></td>
+                <td role="cell" data-label="Dominio">${s.enough ? meter(s.score, `Dominio de ${title(id)}`) : ""} <span class="lx-row__value">${s.attempted ? masteryText(s) : "—"}</span></td>
                 <td role="cell" data-label="Última vez">${s.last ? ago(s.last, now) : "—"}</td><td role="cell" data-label="Próximo repaso">${s.nextReview ? formatDay(s.nextReview) : "—"}</td></tr>`;
             })
             .join("")}</tbody>
@@ -525,7 +579,17 @@ function onClick(event) {
     }
     case "duration":
       saveDailyBudget(target.dataset.minutes);
-      render(location.hash);
+      render(location.hash, { focusSelector: `[data-learn="duration"][data-minutes="${target.dataset.minutes}"]` });
+      break;
+    case "task":
+      setTaskStatus(planner, concept, target.dataset.status || null);
+      savePlanner();
+      render(location.hash, { focusSelector: "#learn-title" });
+      break;
+    case "exam-remove":
+      removeExam(planner, target.dataset.id);
+      savePlanner();
+      render(location.hash, { focusSelector: "#lx-planner-title" });
       break;
     case "plan":
       startPlanItem(target.dataset.type, concept, { errors: target.dataset.errors?.split(",") ?? [] });
@@ -561,6 +625,14 @@ function onClick(event) {
 }
 
 function onSubmit(event) {
+  if (event.target.id === "lx-exam-form") {
+    event.preventDefault();
+    const form = event.target.elements;
+    addExam(planner, { title: form.title.value, kind: form.kind.value, date: form.date.value, module: "0485" });
+    savePlanner();
+    render(location.hash, { focusSelector: "#lx-planner-title" });
+    return;
+  }
   if (event.target.id !== "lx-concept-form") return;
   event.preventDefault();
   startPlanItem("practice", $("#lx-concept-select").value);
@@ -585,11 +657,13 @@ export async function openLearn(route, { moveFocus = true } = {}) {
     root().addEventListener("submit", onSubmit);
     root().addEventListener("keydown", onWelcomeKeydown);
     initSessionEvents();
-    onLearningChange(() => {
+    const repaint = () => {
       // Al llegar progreso (p. ej. de la cuenta) se repinta. La sesión se pinta sola: nunca se repinta encima
       if (location.hash.startsWith("#/sesion")) return;
       if (isLearnRoute(location.hash)) render(location.hash);
-    });
+    };
+    onLearningChange(repaint);
+    onPlannerChange(repaint);
     listening = true;
   }
   try {
@@ -603,7 +677,29 @@ export async function openLearn(route, { moveFocus = true } = {}) {
   if (moveFocus) $("#learn-title")?.focus();
 }
 
-function render(route) {
+/** Selector para volver a encontrar el elemento con el foco tras repintar (no perderlo, WCAG 2.4.3). */
+function activeSelector() {
+  const active = document.activeElement;
+  if (!active || active === document.body || !root().contains(active)) return null;
+  if (active.id) return `#${CSS.escape(active.id)}`;
+  const attrs = ["data-learn", "data-status", "data-concept", "data-minutes", "data-id", "name"]
+    .filter((a) => active.hasAttribute(a))
+    .map((a) => `[${a}="${CSS.escape(active.getAttribute(a))}"]`)
+    .join("");
+  return attrs ? `${active.tagName.toLowerCase()}${attrs}` : null;
+}
+
+function render(route, { focusSelector = null } = {}) {
+  const keep = focusSelector ?? activeSelector();
+  renderView(route);
+  if (!keep) return;
+  const target = root().querySelector(keep);
+  if (!target) return;
+  if (target.matches("h1, h2, h3") && !target.hasAttribute("tabindex")) target.setAttribute("tabindex", "-1");
+  target.focus({ preventScroll: !focusSelector });
+}
+
+function renderView(route) {
   const [, section, arg] = route.split("/").map(decodeURIComponent); // "#/teoria/bucles"
   if (section === "sesion") {
     renderSession();

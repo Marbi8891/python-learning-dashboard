@@ -109,3 +109,15 @@ test("prueba de nivel: sin corrección entre preguntas; los conceptos acertados 
   assert.equal(state.concepts.tipos.placed, null);
   assert.equal(state.exams.length, 0, "no es un simulacro");
 });
+
+test("prueba de nivel: un fallo no saca el concepto de «nuevo» ni le programa repaso (AUD-002)", () => {
+  const state = fresh();
+  const session = createSession({ kind: "diagnostic", title: "Prueba de nivel", exercises: ["var-01", "tip-01"], now: NOW });
+  submit(session, index, state, { ok: true, error: null }, NOW);
+  submit(session, index, state, { ok: false, error: "tipos.texto-numero" }, NOW);
+  finish(session, index, state, NOW);
+  assert.equal(state.ex["tip-01"], undefined, "el fallo no cuenta como intento");
+  assert.ok(state.errors["tipos.texto-numero"], "pero el error sí queda registrado");
+  assert.equal(state.concepts.tipos.due, null);
+  assert.ok(state.ex["var-01"]);
+});
