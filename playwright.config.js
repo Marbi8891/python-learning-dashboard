@@ -16,7 +16,11 @@ module.exports = defineConfig({
     locale: "es-ES",
     trace: "retain-on-failure",
   },
-  projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
+  projects: [
+    { name: "chromium", use: { ...devices["Desktop Chrome"] } },
+    // Safari (EVO-13): solo con PW_WEBKIT=1, que es como lo lanza el trabajo «webkit» de CI
+    ...(process.env.PW_WEBKIT ? [{ name: "webkit", use: { ...devices["Desktop Safari"] } }] : []),
+  ],
   webServer: [
     {
       command: "python e2e/serve_frontend.py 5500",

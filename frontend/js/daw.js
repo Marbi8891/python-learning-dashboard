@@ -22,6 +22,7 @@ import {
   saveCourse,
 } from "./course-store.js";
 import { completedCount, completeLesson, visitLesson } from "./lesson-progress.js";
+import { enoughEvidence, MIN_EVIDENCE } from "./pcap-store.js";
 import { loadCurriculum, renderCurriculum } from "./curriculum.js";
 import { escapeHtml, renderInline, renderMarkdown, safeUrl } from "./markdown.js";
 import { notFoundHtml } from "./not-found.js";
@@ -280,8 +281,8 @@ function renderPanel(course) {
       </div>
     </header>
     <section class="course-section" aria-labelledby="daw-blocks-title">
-      <h2 class="section-title" id="daw-blocks-title">Tu dominio: ${score} %</h2>
-      <p class="readiness__note">Acierto de cada bloque ponderado por su peso. Orientativo.</p>
+      <h2 class="section-title" id="daw-blocks-title">${enoughEvidence(stats) ? `Tu dominio: ${score} %` : "Tu dominio: sin datos suficientes"}</h2>
+      <p class="readiness__note">${enoughEvidence(stats) ? "" : `Responde al menos el ${MIN_EVIDENCE * 100} % de las preguntas para estimarlo. `}Acierto de cada bloque ponderado por su peso y por cuánto del bloque has respondido. Orientativo: no es una nota oficial.</p>
       <ul class="block-list">${blocks}</ul>
     </section>
     ${resourcesHtml(course.resources, "Recursos complementarios", "daw-resources-title")}

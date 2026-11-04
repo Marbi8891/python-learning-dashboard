@@ -6,7 +6,7 @@ import hljs from "../vendor/highlight/core.min.js";
 import { recordPcap } from "./game.js";
 import { escapeHtml, renderInline } from "./markdown.js";
 import { notFoundHtml } from "./not-found.js";
-import { blockStats, dueIds, isoDay, pcap, readiness, recordAnswer, review, savePcap } from "./pcap-store.js";
+import { blockStats, dueIds, enoughEvidence, isoDay, MIN_EVIDENCE, pcap, readiness, recordAnswer, review, savePcap } from "./pcap-store.js";
 import { state as progress } from "./store.js";
 
 const DATA_URL = "data/pcap.json";
@@ -216,11 +216,11 @@ function renderPanel() {
     <section class="course-section" aria-labelledby="pcap-ready-title">
       <h2 class="section-title" id="pcap-ready-title">Tu preparación</h2>
       <div class="readiness" data-ready="${ready}">
-        <div class="readiness__score"><strong>${score} %</strong><span>preparación estimada</span></div>
+        <div class="readiness__score">${enoughEvidence(stats) ? `<strong>${score} %</strong><span>preparación estimada</span>` : `<strong>Sin datos</strong><span>responde al menos el ${MIN_EVIDENCE * 100} % de las preguntas para estimarla</span>`}</div>
         <div class="readiness__text">
           ${meter(score / 100, "Preparación estimada", true)}
           <p><strong>${ready ? "Listo para examinarte." : "Aún no."}</strong> ${ready ? advice : `Para estar listo: ${advice}.`}</p>
-          <p class="readiness__note">Es tu acierto en cada bloque ponderado por su peso en el examen. Orientativo: no es una predicción oficial.</p>
+          <p class="readiness__note">Es tu acierto en cada bloque ponderado por su peso en el examen y por cuánto del bloque has respondido (cuenta entero a partir de la mitad). Orientativo: no es una predicción oficial.</p>
         </div>
       </div>
       <ul class="block-list">${blocks}</ul>

@@ -113,12 +113,21 @@ test("marcar como completada actualiza el progreso y persiste", async ({ page })
   await expect(page.locator(".module[data-module=fundamentos] .module__count")).toHaveText("1/8");
 });
 
-test("copiar y «Abrir en PyCharm» muestran la guía y la descarga", async ({ page, context }) => {
-  await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+test("copiar y «Abrir en PyCharm» muestran la guía y la descarga", async ({ page, context, browserName }) => {
+  // WebKit no deja dar permisos de portapapeles a Playwright: allí se comprueba lo que se copia, sin leerlo del sistema
+  if (browserName === "chromium") await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+  else {
+    await page.addInitScript(() => {
+      window.__copied = "";
+      navigator.clipboard.writeText = async (text) => {
+        window.__copied = text;
+      };
+    });
+  }
   await openLesson(page, "variables");
   await page.getByRole("button", { name: "Abrir en PyCharm" }).click();
   await expect(page.locator("#pycharm-hint")).toBeVisible();
-  const clipboard = await page.evaluate(() => navigator.clipboard.readText());
+  const clipboard = await page.evaluate((chromium) => (chromium ? navigator.clipboard.readText() : window.__copied), browserName === "chromium");
   expect(clipboard).toContain('nombre = "Carlos"');
 
   const download = page.waitForEvent("download");

@@ -8,6 +8,7 @@ import { flushCourseSync } from "./course-store.js";
 import { flushGameSync } from "./game.js";
 import { flushPcapSync } from "./pcap-sync.js";
 import { flushLearnSync } from "./learn/learn-store.js";
+import { flushPlannerSync } from "./learn/planner-store.js";
 import { clearLocalData, endSession, flushLessonsSync, startSession, state, subscribe } from "./store.js";
 import { failedStores, onSyncStateChange, unsavedStores } from "./sync-status.js";
 
@@ -233,6 +234,7 @@ async function flushAll() {
     flushPcapSync(),
     flushCourseSync(),
     flushLearnSync(),
+    flushPlannerSync(),
     flushGameSync(),
   ]);
   return results.every(Boolean) && unsavedStores().length === 0;

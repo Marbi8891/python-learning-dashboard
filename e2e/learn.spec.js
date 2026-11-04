@@ -340,6 +340,49 @@ test("el progreso por conceptos se sincroniza con la cuenta y se fusiona con el 
   await expect(page.locator(".lx-row--error")).toContainText("asignación funciona de izquierda a derecha");
 });
 
+test("planificador: tiempo, completar, posponer, deshacer, exámenes e historial (F1.8)", async ({ page }) => {
+  await page.goto("/#/aprender");
+  await page.getByRole("button", { name: "30 min" }).click();
+  await expect(page.getByRole("button", { name: "30 min" })).toHaveAttribute("aria-pressed", "true");
+  await expect(page.getByRole("button", { name: "30 min" })).toBeFocused(); // el foco no se pierde al repintar
+
+  // El primer paso explica por qué se recomienda y se puede marcar como hecho
+  const first = page.locator(".lx-next");
+  await expect(first.locator(".lx-next__title")).toHaveText("Comprender el problema y diseñar el algoritmo");
+  await expect(first.locator(".lx-why")).toContainText("imprescindible para DAW");
+  await first.getByRole("button", { name: "Ya la he hecho" }).click();
+  await expect(page.locator(".lx-planner [data-task='hecha']")).toContainText("Comprender el problema");
+  await expect(page.locator(".lx-next__title")).not.toHaveText("Comprender el problema y diseñar el algoritmo");
+
+  // Deshacer la vuelve a dejar pendiente
+  await page.locator(".lx-planner").getByRole("button", { name: /Deshacer/ }).click();
+  await expect(page.locator(".lx-next__title")).toHaveText("Comprender el problema y diseñar el algoritmo");
+
+  // Un examen próximo aparece con los días que faltan
+  const inTen = new Date(Date.now() + 10 * 86_400_000);
+  const day = `${inTen.getFullYear()}-${String(inTen.getMonth() + 1).padStart(2, "0")}-${String(inTen.getDate()).padStart(2, "0")}`;
+  await page.locator("#lx-exam-form").getByLabel("Nombre").fill("Examen UT3");
+  await page.locator("#lx-exam-form").getByLabel("Fecha del examen o entrega").fill(day);
+  await page.getByRole("button", { name: "Añadir" }).click();
+  await expect(page.locator(".lx-planner")).toContainText("Examen: Examen UT3");
+  await expect(page.locator(".lx-planner")).toContainText("en 10 días");
+  await expect(page.locator(".lx-next .lx-why")).toContainText("examen «Examen UT3» en 10 días");
+
+  // Posponer y el historial de la semana; todo se guarda en el planificador
+  await page.locator(".lx-next").getByRole("button", { name: "Posponer a mañana" }).click();
+  await expect(page.locator(".lx-planner [data-task='pospuesta']")).toBeVisible();
+  await page.locator(".lx-planner summary").click();
+  await expect(page.locator(".lx-planner details")).toContainText("1 pospuestas");
+  const saved = await page.evaluate(() => JSON.parse(localStorage.getItem("pld:planner")));
+  expect(saved.minutes).toBe(30);
+  expect(saved.exams[0].title).toBe("Examen UT3");
+
+  await page.reload();
+  await expect(page.locator(".lx-planner")).toContainText("Examen UT3");
+  const results = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]).analyze();
+  expect(results.violations.map((v) => v.id)).toEqual([]);
+});
+
 for (const colorScheme of ["light", "dark"]) {
   test.describe(`núcleo educativo en modo ${colorScheme}`, () => {
     test.use({ colorScheme });
@@ -471,7 +514,8 @@ test.describe("Preparación DAW", () => {
 test("prueba de nivel: se ofrece al empezar y lo acertado se salta en la ruta personal", async ({ page }) => {
   await page.goto("/#/aprender");
   await page.getByRole("button", { name: "Hacer la prueba de nivel" }).click();
-  await expect(page.locator(".lx-session-bar")).toContainText("de 21"); // un concepto por pregunta, sin POO
+  // Sin POO: una respuesta escrita por concepto o, si no tiene, dos preguntas (AUD-002)
+  await expect(page.locator(".lx-session-bar")).toContainText("de 24");
 
   // Prueba corta con ejercicios conocidos: acierta Comprender el problema y Variables
   await startSession(page, { kind: "diagnostic", title: "Prueba de nivel", exercises: ["alg-01", "var-01", "tip-01"] });
@@ -486,9 +530,9 @@ test("prueba de nivel: se ofrece al empezar y lo acertado se salta en la ruta pe
   await page.goto("/#/aprender");
   await expect(page.getByRole("button", { name: "Hacer la prueba de nivel" })).toHaveCount(0);
   await page.locator(".lx-route summary").click();
-  // Tipos se falló en la prueba: el siguiente concepto nuevo (Operadores) pide reforzarlo antes
-  await expect(page.locator('.lx-route__item[data-status="next"]')).toContainText("Operadores y expresiones");
-  await expect(page.locator('.lx-route__item[data-status="next"]')).toContainText("antes refuerza Tipos de datos");
+  // Tipos se falló en la prueba: sigue siendo nuevo y es el siguiente de la ruta (AUD-002)
+  await expect(page.locator('.lx-route__item[data-status="next"]')).toContainText("Tipos de datos");
+  await expect(page.locator('.lx-route__item[data-status="next"]')).not.toContainText("antes refuerza");
   await expect(page.locator(".lx-route__item").nth(1)).toContainText("Superado en la prueba de nivel");
 });
 

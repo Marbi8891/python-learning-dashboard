@@ -72,3 +72,26 @@ def test_game_state_is_saved_per_user(client, auth_headers):
     assert saved.status_code == 200
     assert client.get("/api/v1/course-state/game", headers=auth_headers).json()["data"] == game
     assert client.get("/api/v1/course-state/game").status_code == 401
+
+
+def test_planner_is_saved_per_user_with_versions(client, auth_headers):
+    """Planificador diario (F1.8): documento propio, con el mismo control de versiones."""
+    planner = {
+        "v": 1,
+        "minutes": 30,
+        "exams": [{"id": "e1", "module": "0485", "title": "Programación", "date": "2026-12-15"}],
+        "days": {"2026-11-04": {"variables": {"status": "hecha", "at": "2026-11-04T10:00:00Z"}}},
+    }
+    first = client.put("/api/v1/course-state/planner", json={"data": planner}, headers=auth_headers)
+    assert first.status_code == 200
+    version = first.json()["version"]
+    stale = client.put(
+        "/api/v1/course-state/planner",
+        json={"data": {}, "version": version - 1},
+        headers=auth_headers,
+    )
+    assert stale.status_code == 409
+    saved = client.get("/api/v1/course-state/planner", headers=auth_headers).json()
+    assert saved["data"] == planner
+    exported = client.get("/api/v1/users/me/export", headers=auth_headers).json()
+    assert exported["courses"]["planner"] == planner

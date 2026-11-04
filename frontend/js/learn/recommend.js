@@ -1,14 +1,15 @@
 /* ¿Qué estudio ahora? Recomendación y selección de ejercicios. Funciones puras.
 
-   Prioridad del plan de «Hoy» (la pidió el autor):
-     1. conceptos con repaso pendiente;
-     2. conceptos con errores recientes sin corregir;
-     3. conceptos importantes para DAW que aún no están dominados;
-     4. contenido nuevo, solo si sus prerrequisitos están firmes;
-     5. repaso general de lo dominado hace más tiempo. */
+   Plan de «Hoy» (F1.7):
+     1. repasos vencidos (siempre primero);
+     2. errores recientes, conceptos que se olvidan y conceptos empezados sin dominar, ordenados por
+        la prioridad P = 0,25 R + 0,25 E + 0,20 D + 0,15 W + 0,15 T (ver priority());
+     3. contenido nuevo, solo si sus prerrequisitos están firmes;
+     4. repaso general de lo dominado hace más tiempo.
+   Cada acción dice por qué se recomienda. */
 
 import { errorsTested } from "./answers.js";
-import { activeErrors, allStats, daysBetween } from "./mastery.js";
+import { activeErrors, allStats, daysBetween, INTERVAL_DAYS } from "./mastery.js";
 
 export const PLAN_SIZE = 4;
 /** Un prerrequisito está «firme» con este dominio. Por debajo, se pide reforzarlo antes de avanzar. */
@@ -51,38 +52,84 @@ function errorsByConcept(index, state, now) {
   return grouped; // en orden del error más reciente
 }
 
+/* ---------- Prioridad explicable (F1.7) ---------- */
+
+/** Pesos de la fórmula P = 0,25 R + 0,25 E + 0,20 D + 0,15 W + 0,15 T. Hipótesis inicial: se validan
+    con pruebas de propiedades (tests/unit/recommend.test.mjs), no se presentan como óptimos. */
+export const WEIGHTS = Object.freeze({ R: 0.25, E: 0.25, D: 0.2, W: 0.15, T: 0.15 });
+/** A partir de estos días, un examen ya no sube la prioridad. */
+export const EXAM_HORIZON_DAYS = 60;
+/** Errores activos de un concepto que cuentan como «muchos» (E = 1). */
+const ERRORS_FULL = 2;
+
+/** Examen o entrega más cercano del módulo del concepto (o null). `exams` viene de upcomingExams(). */
+const examFor = (index, conceptId, exams) => exams.find((e) => !e.module || e.module === index.concepts.get(conceptId).module) ?? null;
+
 /**
- * Plan de estudio para hoy: hasta PLAN_SIZE acciones, cada una con su motivo.
- * item = { type: "review" | "errors" | "practice" | "learn" | "reinforce", concept, reason, errors?, before? }
+ * Factores normalizados (0-1) de la prioridad de un concepto y su explicación.
+ * R: necesidad de repaso (vencido, o se está olvidando); E: errores activos; D: déficit de dominio;
+ * W: importancia curricular (1-3 → 0-1); T: proximidad del examen o entrega de su módulo.
  */
-export function todayPlan(index, state, now = new Date(), stats = allStats(index, state, now)) {
+export function priority(index, state, s, now = new Date(), { exams = [], errors = [] } = {}) {
+  const concept = index.concepts.get(s.id);
+  const box = state.concepts[s.id]?.box ?? 0;
+  const overdue = s.due && s.nextReview ? Math.max(0, daysBetween(`${s.nextReview}T00:00:00`, now)) : 0;
+  const R = s.due ? Math.min(1, (overdue + 1) / Math.max(1, INTERVAL_DAYS[Math.max(box, 1)])) : s.forgotten ? 1 - s.retention : 0;
+  const E = Math.min(1, errors.length / ERRORS_FULL);
+  const D = s.attempted ? 1 - s.score : 1;
+  const W = (concept.importance ?? concept.daw ?? 1) / 3;
+  const exam = examFor(index, s.id, exams);
+  const T = exam ? Math.max(0, 1 - exam.days / EXAM_HORIZON_DAYS) : 0;
+  const factors = { R, E, D, W, T };
+  const value = Object.entries(WEIGHTS).reduce((sum, [key, weight]) => sum + weight * factors[key], 0);
+  const why = [];
+  if (s.due) why.push(overdue > 0 ? `repaso vencido hace ${overdue} ${overdue === 1 ? "día" : "días"}` : "repaso programado para hoy");
+  else if (s.forgotten) why.push(`retención estimada del ${Math.round(s.retention * 100)} %`);
+  if (errors.length) why.push(`${errors.length} ${errors.length === 1 ? "error activo" : "errores activos"}`);
+  if (s.attempted) why.push(s.enough ? `dominio del ${Math.round(s.score * 100)} %` : "pocas evidencias");
+  why.push(concept.daw === 3 ? "imprescindible para DAW" : "importante para DAW");
+  if (exam) why.push(`${exam.kind === "entrega" ? "entrega" : "examen"} «${exam.title}» en ${exam.days} ${exam.days === 1 ? "día" : "días"}`);
+  return { value: Math.round(value * 1000) / 1000, factors, why };
+}
+
+/**
+ * Plan de estudio para hoy: hasta PLAN_SIZE acciones, cada una con su motivo, su prioridad y por qué.
+ * item = { type: "review" | "errors" | "practice" | "learn" | "reinforce", concept, reason, priority, why, errors?, before? }
+ *
+ * Reglas duras (no las cambia la fórmula):
+ *   1. los repasos vencidos van primero (como mucho dos, para dejar sitio a lo demás);
+ *   2. el contenido nuevo solo si sus prerrequisitos están firmes; si no, se propone reforzarlos;
+ *   3. lo que el alumno ya ha hecho, pospuesto o rechazado hoy no se vuelve a proponer (`skip`).
+ * El resto se ordena por la prioridad P. Lo pospuesto ayer lo dice en el motivo.
+ * `options.exams` = upcomingExams() del planificador.
+ */
+export function todayPlan(index, state, now = new Date(), stats = allStats(index, state, now), { exams = [], skip = new Set(), postponed = new Set() } = {}) {
   const plan = [];
-  const used = new Set();
+  const used = new Set(skip);
+  const title = (id) => index.concepts.get(id).title;
+  const errorsOf = errorsByConcept(index, state, now);
+  const score = (id) => priority(index, state, stats.get(id), now, { exams, errors: errorsOf.get(id) ?? [] });
   const push = (item) => {
     if (plan.length >= PLAN_SIZE || used.has(item.concept)) return;
     used.add(item.concept);
-    plan.push(item);
+    const p = score(item.concept);
+    const reason = postponed.has(item.concept) ? `${item.reason} Lo pospusiste ayer.` : item.reason;
+    plan.push({ ...item, reason, priority: p.value, why: p.why });
   };
-  const title = (id) => index.concepts.get(id).title;
+  const byPriority = (items) => items.map((item) => ({ item, p: score(item.concept).value })).sort((a, b) => b.p - a.p).map((x) => x.item);
 
-  // 1. Repasos pendientes, del más atrasado al más reciente (como mucho dos, para dejar sitio a lo demás)
+  // 1. Repasos vencidos, del más prioritario (en empate, del más atrasado)
   const due = index.path
     .map((id) => stats.get(id))
-    .filter((s) => s.due)
-    .sort((a, b) => a.nextReview.localeCompare(b.nextReview))
+    .filter((s) => s.due && !used.has(s.id))
+    .sort((a, b) => score(b.id).value - score(a.id).value || a.nextReview.localeCompare(b.nextReview))
     .slice(0, 2);
   for (const s of due) {
     const days = s.last ? daysBetween(s.last, now) : 0;
     push({ type: "review", concept: s.id, reason: days > 0 ? `Toca repasarlo: lo practicaste hace ${days} ${days === 1 ? "día" : "días"}.` : "Toca repasarlo hoy." });
   }
 
-  // 2. Errores recientes sin corregir
-  for (const [concept, errors] of errorsByConcept(index, state, now)) {
-    const label = index.errors.get(errors[0].id).label;
-    push({ type: "errors", concept, errors: errors.map((e) => e.id), reason: `Error reciente: ${label}.` });
-  }
-
-  // Siguiente concepto nuevo y lo que lo bloquea (se usa en los pasos 3 y 4)
+  // Siguiente concepto nuevo y lo que lo bloquea
   const next = nextNewConcept(index, stats);
   const blockers = new Set(next?.blockedBy ?? []);
   const reinforce = (id) => ({
@@ -92,22 +139,34 @@ export function todayPlan(index, state, now = new Date(), stats = allStats(index
     reason: `Necesitas reforzar ${title(id)} antes de pasar a ${title(next.id)}.`,
   });
 
-  // 3. Importantes para DAW, empezados y aún no dominados (los más flojos primero).
-  //    Si además bloquean el siguiente concepto, se dice explícitamente.
-  index.path
-    .map((id) => stats.get(id))
-    .filter((s) => isStarted(s) && !s.placed && s.status !== "dominado" && index.concepts.get(s.id).daw === 3)
-    .sort((a, b) => a.score - b.score)
-    .forEach((s) =>
-      push(blockers.has(s.id) ? reinforce(s.id) : { type: "practice", concept: s.id, reason: `Importante para DAW y aún no lo dominas (${Math.round(s.score * 100)} %).` }),
-    );
+  // 2. Candidatos ordenados por prioridad: errores recientes, conceptos que se olvidan, conceptos
+  //    empezados y aún no dominados, y lo que bloquea el siguiente concepto
+  const candidates = [];
+  for (const [concept, errors] of errorsOf) {
+    candidates.push({ type: "errors", concept, errors: errors.map((e) => e.id), reason: `Error reciente: ${index.errors.get(errors[0].id).label}.` });
+  }
+  for (const s of index.path.map((id) => stats.get(id))) {
+    if (s.forgotten && !s.due) candidates.push({ type: "review", concept: s.id, reason: "Se está olvidando: hace tiempo que pasó su repaso." });
+    else if (isStarted(s) && !s.placed && s.status !== "dominado") {
+      candidates.push(
+        blockers.has(s.id)
+          ? reinforce(s.id)
+          : {
+              type: "practice",
+              concept: s.id,
+              reason: s.enough ? `${index.concepts.get(s.id).daw === 3 ? "Importante para DAW" : "Para DAW"} y aún no lo dominas (${Math.round(s.score * 100)} %).` : "Aún hay pocas evidencias de que lo sepas.",
+            },
+      );
+    }
+  }
+  for (const id of blockers) candidates.push(reinforce(id));
+  // Errores y refuerzo de un mismo concepto: se queda la entrada de más valor (la primera tras ordenar)
+  byPriority(candidates).forEach(push);
 
-  // 4. Contenido nuevo si sus prerrequisitos están firmes; si no, qué reforzar antes
+  // 3. Contenido nuevo si sus prerrequisitos están firmes
   if (next && blockers.size === 0) push({ type: "learn", concept: next.id, reason: "Siguiente concepto de la ruta." });
-  for (const id of blockers) push(reinforce(id));
 
-  // 5. Repaso general: primero, consolidar lo que ya se sabía (prueba de nivel) y aún no está dominado;
-  //    después, lo dominado que hace más tiempo que no se practica
+  // 4. Repaso general: consolidar lo superado en la prueba de nivel y lo dominado hace más tiempo
   if (plan.length < 3) {
     index.path
       .map((id) => stats.get(id))

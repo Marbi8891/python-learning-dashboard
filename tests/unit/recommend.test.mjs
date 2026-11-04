@@ -1,8 +1,11 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { allStats, recordAttempt, reviewConcept } from "../../frontend/js/learn/mastery.js";
-import { fitPlanToBudget, missingPrerequisites, nextNewConcept, selectExercises, similarExercise, todayPlan } from "../../frontend/js/learn/recommend.js";
+import { fitPlanToBudget, missingPrerequisites, nextNewConcept, priority, selectExercises, similarExercise, todayPlan, WEIGHTS } from "../../frontend/js/learn/recommend.js";
 import { daysAgo, exercisesOf, fresh, index, NOW, seeded } from "./helpers.mjs";
+
+/** Sin la prioridad ni su explicación (se prueban aparte). */
+const bare = ({ priority, why, ...item }) => item;
 
 const master = (state, concept, now = NOW) => {
   for (const e of exercisesOf(concept)) recordAttempt(state, e, { ok: true, error: null }, { now });
@@ -23,7 +26,7 @@ test("con prerrequisitos flojos, dice qué reforzar antes de avanzar", () => {
   assert.deepEqual(missingPrerequisites(index, stats, "operadores"), ["tipos"]);
   assert.deepEqual(nextNewConcept(index, stats), { id: "operadores", blockedBy: ["tipos"] });
   const plan = todayPlan(index, state, NOW);
-  assert.deepEqual(plan, [
+  assert.deepEqual(plan.map(bare), [
     { type: "reinforce", concept: "tipos", before: "operadores", reason: "Necesitas reforzar Tipos de datos y conversiones antes de pasar a Operadores y expresiones." },
   ]);
   assert.ok(!plan.some((p) => p.type === "learn"), "no se propone contenido nuevo con la base floja");
@@ -42,16 +45,18 @@ test("el aviso «Necesitas reforzar X antes de pasar a Y» aparece cuando X no t
   assert.equal(next.id, "condicionales");
   assert.deepEqual(next.blockedBy, []);
   const plan = todayPlan(index, state, NOW);
-  assert.deepEqual(plan.find((p) => p.type === "learn"), { type: "learn", concept: "condicionales", reason: "Siguiente concepto de la ruta." });
+  assert.deepEqual(bare(plan.find((p) => p.type === "learn")), { type: "learn", concept: "condicionales", reason: "Siguiente concepto de la ruta." });
 });
 
 test("prioridad: repaso pendiente, luego errores recientes, luego DAW débil, luego nuevo", () => {
   const state = fresh();
   master(state, "algoritmos", daysAgo(10));
+  state.concepts.algoritmos.due = "2026-12-01"; // repaso programado para más adelante
   master(state, "variables", daysAgo(10));
   reviewConcept(state, "variables", 1, daysAgo(10)); // repaso a 1 día: atrasado
-  recordAttempt(state, index.exercises.get("tip-01"), { ok: false, error: "tipos.texto-numero" }, { now: daysAgo(1) });
-  recordAttempt(state, index.exercises.get("ope-02"), { ok: true, error: null }, { now: daysAgo(1) });
+  // Hoy mismo (su repaso, programado para mañana, aún no ha vencido)
+  recordAttempt(state, index.exercises.get("tip-01"), { ok: false, error: "tipos.texto-numero" }, { now: NOW });
+  recordAttempt(state, index.exercises.get("ope-02"), { ok: true, error: null }, { now: NOW });
   const plan = todayPlan(index, state, NOW);
   assert.deepEqual(
     plan.map((p) => p.type),
@@ -68,7 +73,10 @@ test("prioridad: repaso pendiente, luego errores recientes, luego DAW débil, lu
 
 test("con todo dominado y sin repasos pendientes, propone repaso general de lo más antiguo", () => {
   const state = fresh();
-  index.path.forEach((id, i) => master(state, id, daysAgo(40 - i)));
+  index.path.forEach((id, i) => {
+    master(state, id, daysAgo(40 - i));
+    Object.assign(state.concepts[id], { box: 5, due: "2026-11-01" }); // repasado y con el siguiente repaso lejos
+  });
   const plan = todayPlan(index, state, NOW);
   assert.ok(plan.length >= 1);
   assert.ok(plan.every((p) => p.type === "review"));
@@ -168,4 +176,59 @@ test("fitPlanToBudget limita valores inválidos y conserva todas las tareas si h
   assert.equal(enough.items.length, 2);
   assert.equal(enough.deferredCount, 0);
   assert.equal(enough.plannedMinutes, 25);
+});
+
+/* ---------- Prioridad explicable (F1.7) ---------- */
+
+test("prioridad: factores normalizados entre 0 y 1 y pesos que suman 1", () => {
+  const state = fresh();
+  recordAttempt(state, index.exercises.get("tip-01"), { ok: false, error: "tipos.texto-numero" }, { now: NOW });
+  const s = allStats(index, state, NOW).get("tipos");
+  const p = priority(index, state, s, NOW, { errors: [{ id: "tipos.texto-numero" }], exams: [{ title: "Programación", module: "0485", days: 6 }] });
+  for (const value of Object.values(p.factors)) assert.ok(value >= 0 && value <= 1);
+  assert.equal(Object.values(WEIGHTS).reduce((a, b) => a + b, 0).toFixed(6), "1.000000");
+  assert.ok(p.value > 0 && p.value <= 1);
+  assert.ok(p.why.some((w) => w.includes("examen «Programación» en 6 días")));
+  assert.ok(p.why.includes("1 error activo"));
+});
+
+test("prioridad: un examen cercano del módulo sube la prioridad; uno lejano o de otro módulo, no", () => {
+  const state = fresh();
+  recordAttempt(state, index.exercises.get("tip-01"), { ok: false, error: null }, { now: NOW });
+  const s = allStats(index, state, NOW).get("tipos");
+  const none = priority(index, state, s, NOW).value;
+  const near = priority(index, state, s, NOW, { exams: [{ title: "P", module: "0485", days: 3 }] }).value;
+  const far = priority(index, state, s, NOW, { exams: [{ title: "P", module: "0485", days: 90 }] }).value;
+  const other = priority(index, state, s, NOW, { exams: [{ title: "BD", module: "0484", days: 3 }] }).value;
+  assert.ok(near > none);
+  assert.equal(far, none);
+  assert.equal(other, none);
+});
+
+test("plan: un repaso vencido va antes que cualquier otra cosa aunque otra tenga más prioridad", () => {
+  const state = fresh();
+  master(state, "algoritmos", daysAgo(10));
+  reviewConcept(state, "algoritmos", 1, daysAgo(10));
+  for (const e of exercisesOf("variables")) recordAttempt(state, e, { ok: false, error: "variables.orden-asignacion" }, { now: NOW });
+  const plan = todayPlan(index, state, NOW, undefined, { exams: [{ title: "P", module: "0485", days: 1 }] });
+  assert.equal(plan[0].type, "review");
+  assert.equal(plan[0].concept, "algoritmos");
+  assert.ok(plan.every((p) => typeof p.priority === "number" && p.why.length > 0), "cada acción dice por qué");
+});
+
+test("plan: lo hecho, pospuesto o rechazado hoy no se vuelve a proponer; lo pospuesto ayer lo avisa", () => {
+  const state = fresh();
+  const first = todayPlan(index, state, NOW);
+  assert.equal(first[0].concept, "algoritmos");
+  const skipped = todayPlan(index, state, NOW, undefined, { skip: new Set(["algoritmos"]) });
+  assert.ok(!skipped.some((p) => p.concept === "algoritmos"));
+  const again = todayPlan(index, state, NOW, undefined, { postponed: new Set(["algoritmos"]) });
+  assert.match(again[0].reason, /Lo pospusiste ayer/);
+});
+
+test("plan: es determinista (mismo documento, misma fecha, mismo plan)", () => {
+  const state = fresh();
+  master(state, "algoritmos", daysAgo(3));
+  recordAttempt(state, index.exercises.get("tip-01"), { ok: false, error: "tipos.texto-numero" }, { now: daysAgo(1) });
+  assert.deepEqual(todayPlan(index, JSON.parse(JSON.stringify(state)), NOW), todayPlan(index, JSON.parse(JSON.stringify(state)), NOW));
 });

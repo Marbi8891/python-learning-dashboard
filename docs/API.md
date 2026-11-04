@@ -22,7 +22,7 @@ Interactive OpenAPI documentation is available at /docs when ENABLE_DOCS=true.
 | Progress | /api/v1/progress, /api/v1/progress/{slug} |
 | Exercise attempts | /api/v1/lessons/{slug}/attempts |
 | PCAP state | /api/v1/pcap-state |
-| DAW course state | /api/v1/course-state/{course} (`sql`, `js`, `java`, `entornos`, `marcas`, `programacion`, `learn`, `game`) |
+| DAW course state | /api/v1/course-state/{course} (`sql`, `js`, `java`, `entornos`, `marcas`, `programacion`, `learn`, `game`, `planner`) |
 | Student dashboard | GET /api/v1/dashboard?utc_offset_minutes=, GET /api/v1/dashboard/activity?limit=&offset= |
 
 ### Progress documents and versions

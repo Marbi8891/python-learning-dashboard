@@ -13,9 +13,10 @@
    } */
 
 import { errorsTested } from "./answers.js";
+import { addDays, daysBetween, INTERVAL_DAYS, isoDay, MAX_BOX, schedule } from "../srs.js";
 
-export const INTERVAL_DAYS = [0, 1, 3, 7, 14, 30]; // como el repaso del PCAP y de los cursos
-const MAX_BOX = INTERVAL_DAYS.length - 1;
+// Repaso espaciado común a conceptos, PCAP y cursos (srs.js); se reexporta para no romper imports
+export { addDays, daysBetween, INTERVAL_DAYS, isoDay };
 const HISTORY = 5;
 export const LOG_SIZE = 300;
 const EXAMS = 20;
@@ -26,23 +27,6 @@ export const ERROR_DAYS = 21;
 const LEVEL_WEIGHT = { 1: 1, 2: 1.5, 3: 2 };
 
 export const emptyLearning = () => ({ v: 1, ex: {}, concepts: {}, errors: {}, log: [], exams: [] });
-
-export const isoDay = (date = new Date()) =>
-  `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
-
-export function addDays(date, days) {
-  const next = new Date(date);
-  next.setDate(next.getDate() + days);
-  return isoDay(next);
-}
-
-/** Días completos entre dos fechas (por día del calendario local). */
-export function daysBetween(fromIso, now = new Date()) {
-  const from = new Date(fromIso);
-  const a = Date.UTC(from.getFullYear(), from.getMonth(), from.getDate());
-  const b = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
-  return Math.round((b - a) / 86_400_000);
-}
 
 /* ---------- Índice del contenido (learning.json) ---------- */
 
@@ -73,8 +57,13 @@ export function recordAttempt(state, exercise, result, { now = new Date(), retry
     if (entry.h.length > HISTORY) entry.h.shift();
     entry.last = at;
     entry.n += 1;
+    if (result.ok) entry.okAt = at; // evidencia identificable: cuándo se acertó por última vez
   }
-  conceptEntry(state, exercise.concept).last = at;
+  const concept = conceptEntry(state, exercise.concept);
+  concept.last = at;
+  // Sin repaso programado (sesión abandonada antes de terminar): se programa para mañana (AUD-003).
+  // La caja no cambia: la sube reviewConcept al cerrar una sesión.
+  if (!retry && !concept.due) concept.due = addDays(now, INTERVAL_DAYS[1]);
   if (result.error) {
     const error = (state.errors[result.error] ??= { n: 0, last: null, streak: 0 });
     error.n += 1;
@@ -102,15 +91,16 @@ export function markPlaced(state, conceptId, now = new Date()) {
 }
 
 /**
- * Programa el siguiente repaso del concepto al terminar una sesión (cajas de Leitner):
+ * Programa el siguiente repaso del concepto al terminar una sesión (cajas de Leitner, srs.js):
  * ≥ 80 % de acierto → sube de caja y el repaso se aleja; < 50 % → caja 1 (mañana); entre medias, se mantiene.
+ * Solo sube de caja si el repaso había vencido: varias sesiones el mismo día no lo comprimen (AUD-004).
  */
 export function reviewConcept(state, conceptId, accuracy, now = new Date()) {
   const entry = conceptEntry(state, conceptId);
-  if (accuracy >= 0.8) entry.box = Math.min(entry.box + 1, MAX_BOX);
-  else if (accuracy < 0.5) entry.box = 1;
-  else entry.box = Math.max(entry.box, 1);
-  entry.due = addDays(now, INTERVAL_DAYS[entry.box]);
+  const outcome = accuracy >= 0.8 ? "up" : accuracy < 0.5 ? "down" : "keep";
+  const next = schedule(entry, outcome, now);
+  entry.box = next.box;
+  entry.due = next.due;
 }
 
 export function recordExam(state, exam) {
@@ -130,11 +120,44 @@ export function activeErrors(state, now = new Date()) {
 
 const lastOk = (state, id) => state.ex[id]?.h.at(-1) === true;
 
+/* ---------- Dominio 2.0 (F1.5): evidencias, confianza y retención ---------- */
+
+/** Evidencias distintas que dan confianza plena (como mucho, los ejercicios que tenga el concepto). */
+export const CONFIDENCE_EXERCISES = 4;
+/** Tipos de ejercicio distintos que dan confianza plena (como mucho, los que tenga el concepto). */
+export const CONFIDENCE_KINDS = 2;
+/** Por debajo de esta confianza no se muestra un porcentaje: «Pocas evidencias». */
+export const MIN_CONFIDENCE = 0.5;
+/** Por debajo de esta retención, el concepto se considera olvidado y hay que repasarlo. */
+export const FORGOTTEN = 0.7;
+
+/** Semivida (días) de lo aprendido una vez vencido el repaso: cuanto más alta la caja, más dura. */
+export const halfLifeDays = (box) => Math.max(14, 3 * INTERVAL_DAYS[Math.min(Math.max(box ?? 0, 1), MAX_BOX)]);
+
 /**
- * Dominio de un concepto.
- * - score (0-1): ejercicios cuyo último intento fue correcto, ponderados por nivel, sobre el total
- *   de ejercicios del concepto. No basta con acertar uno: hay que cubrir el concepto.
- * - status: nuevo · leido · aprendiendo (< 50 %) · progreso · dominado (≥ 80 %, con al menos un
+ * Retención estimada (0-1) del concepto. Hasta la fecha de repaso se supone intacta; si el repaso se
+ * pasa, baja a la mitad cada `halfLifeDays(caja)` días. Determinista: solo depende del documento y de `now`.
+ */
+export function retention(entry, now = new Date()) {
+  if (!entry?.last) return 1;
+  const due = entry.due ?? addDays(new Date(entry.last), INTERVAL_DAYS[1]);
+  const overdue = Math.max(0, daysBetween(`${due}T00:00:00`, now));
+  return overdue === 0 ? 1 : 0.5 ** (overdue / halfLifeDays(entry.box));
+}
+
+/** Fecha del último acierto que cuenta (los datos antiguos no la guardan: se deduce del historial). */
+const okAt = (entry) => (entry.okAt && isIso(entry.okAt) ? entry.okAt : entry.h.at(-1) === true ? entry.last : null);
+
+/**
+ * Dominio de un concepto (F1.5). Explicable y reproducible:
+ * - evidencias: un ejercicio distinto cuenta una vez (repetirlo no suma), con su último resultado;
+ * - base (0-1): ejercicios cuyo último intento fue correcto, ponderados por nivel (1 / 1,5 / 2), sobre
+ *   todos los ejercicios del concepto: hay que cubrir el concepto, no basta con acertar uno;
+ * - retención: baja si el repaso programado se ha pasado;
+ * - score = base × retención;
+ * - confianza (0-1): cantidad y variedad de evidencias; con menos de MIN_CONFIDENCE no se muestra
+ *   porcentaje (`enough: false`, estado «insuficiente»);
+ * - status: nuevo · leido · insuficiente · aprendiendo (< 50 %) · progreso · dominado (≥ 80 %, con algún
  *   ejercicio de aplicación acertado y sin errores activos).
  */
 export function conceptStats(index, state, conceptId, now = new Date()) {
@@ -142,26 +165,46 @@ export function conceptStats(index, state, conceptId, now = new Date()) {
   const entry = state.concepts[conceptId];
   let total = 0;
   let earned = 0;
-  let attempted = 0;
+  const evidence = [];
   for (const exercise of exercises) {
     const weight = LEVEL_WEIGHT[exercise.level] ?? 1;
     total += weight;
-    if (state.ex[exercise.id]) attempted += 1;
-    if (lastOk(state, exercise.id)) earned += weight;
+    const ex = state.ex[exercise.id];
+    if (!ex) continue;
+    const ok = lastOk(state, exercise.id);
+    if (ok) earned += weight;
+    evidence.push({ id: exercise.id, kind: exercise.kind, level: exercise.level, ok, n: ex.n, last: ex.last, okAt: okAt(ex) });
   }
-  const score = total ? earned / total : 0;
+  const attempted = evidence.length;
+  const base = total ? earned / total : 0;
+  const kept = attempted ? retention(entry, now) : 1;
+  const score = base * kept;
+  const kindsAvailable = new Set(exercises.map((e) => e.kind)).size;
+  const kinds = new Set(evidence.map((e) => e.kind)).size;
+  const confidence = attempted
+    ? Math.min(1, attempted / Math.min(CONFIDENCE_EXERCISES, exercises.length)) * Math.min(1, kinds / Math.min(CONFIDENCE_KINDS, kindsAvailable))
+    : 0;
+  const enough = confidence >= MIN_CONFIDENCE;
   const advanced = exercises.filter((e) => e.level >= 2);
   const appliedOk = advanced.length === 0 || advanced.some((e) => lastOk(state, e.id));
   const errors = activeErrors(state, now).filter((e) => index.errors.get(e.id)?.concept === conceptId);
   let status;
   if (attempted === 0) status = entry?.read ? "leido" : "nuevo";
-  else if (score >= 0.8 && appliedOk && errors.length === 0) status = "dominado";
+  else if (score >= 0.8 && appliedOk && errors.length === 0 && enough) status = "dominado";
+  else if (!enough) status = "insuficiente";
   else if (score >= 0.5) status = "progreso";
   else status = "aprendiendo";
   const due = Boolean(entry?.due && entry.due <= isoDay(now));
   return {
     id: conceptId,
     score,
+    base,
+    retention: kept,
+    forgotten: attempted > 0 && base >= 0.5 && kept < FORGOTTEN,
+    confidence,
+    enough,
+    evidence,
+    kinds,
     status,
     attempted,
     count: exercises.length,
@@ -171,6 +214,15 @@ export function conceptStats(index, state, conceptId, now = new Date()) {
     last: entry?.last ?? null,
     placed: Boolean(entry?.placed),
   };
+}
+
+/** Explicación en una frase de un dominio (para la interfaz y el motivo de las recomendaciones). */
+export function explainStats(s) {
+  if (!s.attempted) return "Aún no has practicado este concepto.";
+  const parts = [`${s.attempted} de ${s.count} ejercicios practicados, de ${s.kinds} ${s.kinds === 1 ? "tipo" : "tipos"}`];
+  if (!s.enough) parts.push("pocas evidencias para estimar el dominio");
+  if (s.retention < 1) parts.push(`retención estimada del ${Math.round(s.retention * 100)} % porque el repaso se ha pasado`);
+  return `${parts.join("; ")}.`;
 }
 
 export const allStats = (index, state, now = new Date()) => new Map(index.path.map((id) => [id, conceptStats(index, state, id, now)]));
@@ -206,6 +258,27 @@ const isCount = (value) => Number.isInteger(value) && value >= 0 && value < 1e6;
 const isIso = (value) => typeof value === "string" && ISO.test(value);
 const isoOrNull = (value) => (isIso(value) ? value : null);
 
+const EX_FIELDS = ["h", "last", "n", "okAt"];
+const CONCEPT_FIELDS = ["box", "due", "last", "read", "placed"];
+const ERROR_FIELDS = ["n", "last", "streak"];
+const KNOWN_TOP = new Set(["v", "ex", "concepts", "errors", "log", "exams"]);
+const EXTRA_KEY = /^[a-zA-Z][a-zA-Z0-9]{0,30}$/;
+const isPrimitive = (value) =>
+  value === null || typeof value === "boolean" || (typeof value === "number" && Number.isFinite(value)) || (typeof value === "string" && value.length <= 200);
+
+/**
+ * Compatibilidad hacia delante (F1.0, EVO-10): los campos que esta versión no conoce se conservan
+ * para no borrarlos al fusionar y volver a subir el documento. Dentro de cada entrada solo pasan
+ * valores simples (texto corto, número, booleano o null). Esta versión no los pinta nunca.
+ */
+function extras(raw, known) {
+  const out = {};
+  for (const [key, value] of Object.entries(raw)) {
+    if (!known.includes(key) && EXTRA_KEY.test(key) && isPrimitive(value)) out[key] = value;
+  }
+  return out;
+}
+
 function cleanMap(value, item) {
   const out = {};
   if (!isObject(value)) return out;
@@ -225,16 +298,27 @@ export function cleanLearning(value) {
   const state = emptyLearning();
   if (!isObject(value)) return state;
   state.ex = cleanMap(value.ex, (e) =>
-    Array.isArray(e.h) && isIso(e.last) && isCount(e.n) ? { h: e.h.filter((x) => typeof x === "boolean").slice(-HISTORY), last: e.last, n: e.n } : null,
+    Array.isArray(e.h) && isIso(e.last) && isCount(e.n)
+      ? {
+          ...extras(e, EX_FIELDS),
+          h: e.h.filter((x) => typeof x === "boolean").slice(-HISTORY),
+          last: e.last,
+          n: e.n,
+          ...(isIso(e.okAt) ? { okAt: e.okAt } : {}),
+        }
+      : null,
   );
   state.concepts = cleanMap(value.concepts, (c) => ({
+    ...extras(c, CONCEPT_FIELDS),
     box: Number.isInteger(c.box) && c.box >= 0 && c.box <= MAX_BOX ? c.box : 0,
     due: typeof c.due === "string" && DAY.test(c.due) ? c.due : null,
     last: isoOrNull(c.last),
     read: isoOrNull(c.read),
     placed: isoOrNull(c.placed),
   }));
-  state.errors = cleanMap(value.errors, (e) => (isCount(e.n) && isIso(e.last) ? { n: e.n, last: e.last, streak: isCount(e.streak) ? e.streak : 0 } : null));
+  state.errors = cleanMap(value.errors, (e) =>
+    isCount(e.n) && isIso(e.last) ? { ...extras(e, ERROR_FIELDS), n: e.n, last: e.last, streak: isCount(e.streak) ? e.streak : 0 } : null,
+  );
   state.log = (Array.isArray(value.log) ? value.log : [])
     .filter((l) => isObject(l) && isIso(l.at) && typeof l.ex === "string" && ID.test(l.ex) && typeof l.ok === "boolean")
     .map((l) => ({ at: l.at, ex: l.ex, ok: l.ok, err: typeof l.err === "string" && ID.test(l.err) ? l.err : null }))
@@ -250,6 +334,10 @@ export function cleanLearning(value) {
       concepts: examConcepts(e.concepts),
     }))
     .slice(-EXAMS);
+  // Bloques nuevos de versiones futuras: se guardan tal cual (son JSON de la propia cuenta)
+  for (const [key, raw] of Object.entries(value)) {
+    if (!KNOWN_TOP.has(key) && EXTRA_KEY.test(key)) state[key] = raw;
+  }
   return state;
 }
 
@@ -277,7 +365,9 @@ export function mergeLearning(local, remote) {
       continue;
     }
     const newer = mine.last && entry.last ? later(mine, entry) : entry.n > mine.n ? entry : mine;
-    local.ex[id] = { ...newer, n: Math.max(mine.n, entry.n) };
+    // El último acierto es una evidencia: se conserva el más reciente de las dos copias (F1.6, EVO-15)
+    const okAt = [mine.okAt, entry.okAt].filter(Boolean).sort().at(-1);
+    local.ex[id] = { ...newer, n: Math.max(mine.n, entry.n), ...(okAt ? { okAt } : {}) };
   }
   for (const [id, entry] of Object.entries(other.concepts)) {
     const mine = local.concepts[id];
@@ -297,5 +387,7 @@ export function mergeLearning(local, remote) {
   local.log = [...log.values()].sort((a, b) => a.at.localeCompare(b.at)).slice(-LOG_SIZE);
   const exams = new Map([...other.exams, ...local.exams].map((e) => [e.date, e]));
   local.exams = [...exams.values()].sort((a, b) => a.date.localeCompare(b.date)).slice(-EXAMS);
+  // Bloques que esta versión no conoce: se conserva el de la cuenta si aquí no existe
+  for (const [key, raw] of Object.entries(other)) if (!(key in local)) local[key] = raw;
   return local;
 }

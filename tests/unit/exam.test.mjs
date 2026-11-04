@@ -19,7 +19,7 @@ test("competencyStats: dominio ponderado y conceptos más flojos", () => {
   const state = fresh();
   master(state, "variables");
   master(state, "tipos");
-  const [fund] = competencyStats(index, null, state);
+  const [fund] = competencyStats(index, allStats(index, state, NOW));
   assert.equal(fund.mastered, 2);
   assert.ok(fund.score > 0 && fund.score < 1);
   assert.equal(fund.weakest.length, 2);
@@ -83,10 +83,16 @@ test("examMinutes y examByCompetency", () => {
   );
 });
 
-test("prueba de nivel: un ejercicio rápido por concepto, sin código ni POO", async () => {
+test("prueba de nivel: respuesta escrita o dos preguntas por concepto, sin código ni POO (AUD-002)", async () => {
   const { buildDiagnostic } = await import("../../frontend/js/learn/exam.js");
   const list = buildDiagnostic(index, { random: seeded(2) });
-  assert.equal(list.length, index.path.length - 1);
-  assert.deepEqual(list.map((e) => e.concept), index.path.filter((id) => id !== "poo"));
+  const concepts = index.path.filter((id) => id !== "poo");
+  assert.deepEqual([...new Set(list.map((e) => e.concept))], concepts);
   assert.ok(list.every((e) => e.kind !== "code" && e.kind !== "order"));
+  assert.equal(new Set(list.map((e) => e.id)).size, list.length, "sin repetidos");
+  for (const id of concepts) {
+    const mine = list.filter((e) => e.concept === id);
+    const typed = mine.some((e) => e.kind === "output" || e.kind === "fill");
+    assert.ok(typed ? mine.length === 1 : mine.length === 2, `${id}: ${mine.map((e) => e.kind)}`);
+  }
 });

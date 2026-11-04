@@ -1356,3 +1356,33 @@ CONCEPTS = [
         "related": ["funciones", "diccionarios"],
     },
 ]
+
+# ---------- Modelo de conocimiento (F1.4) ----------
+# Criterios de evaluación (CE) del módulo 0485 Programación (RD 405/2023) que trabaja cada concepto.
+# Los ids son los de frontend/data/curriculum/daw-cyl.json; build_learning.py comprueba que existen
+# y deriva de ellos el módulo y los resultados de aprendizaje (RA). Es una relación de la plataforma
+# para orientar el estudio, no una programación didáctica oficial.
+CURRICULUM_CE = {
+    "algoritmos": ["0485-RA1-a"],
+    "variables": ["0485-RA1-d", "0485-RA1-e", "0485-RA1-f"],
+    "tipos": ["0485-RA1-d", "0485-RA1-h"],
+    "operadores": ["0485-RA1-g"],
+    "entrada-salida": ["0485-RA5-a", "0485-RA5-b"],
+    "condicionales": ["0485-RA3-a", "0485-RA3-e"],
+    "bucles": ["0485-RA3-b", "0485-RA3-c"],
+    "acumuladores": ["0485-RA3-b", "0485-RA3-e"],
+    "validacion": ["0485-RA3-b", "0485-RA3-d", "0485-RA5-a"],
+    "funciones": ["0485-RA2-b", "0485-RA2-f", "0485-RA3-e"],
+    "strings": ["0485-RA2-d"],
+    "listas": ["0485-RA6-a", "0485-RA6-c", "0485-RA6-d"],
+    "tuplas-conjuntos": ["0485-RA6-e"],
+    "diccionarios": ["0485-RA6-e"],
+    "recorridos": ["0485-RA6-d", "0485-RA6-j"],
+    "excepciones": ["0485-RA3-d", "0485-RA3-h"],
+    "modulos": ["0485-RA2-g"],
+    "archivos": ["0485-RA5-d", "0485-RA5-e"],
+    "pseudocodigo": ["0485-RA1-a"],
+    "trazado": ["0485-RA3-f"],
+    "depuracion": ["0485-RA3-f", "0485-RA3-i"],
+    "poo": ["0485-RA2-a", "0485-RA4-a", "0485-RA4-b", "0485-RA4-c", "0485-RA4-d", "0485-RA4-e"],
+}
