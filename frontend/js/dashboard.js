@@ -8,6 +8,7 @@
 
 import { locale } from "./i18n.js";
 import { exportMyData, logout } from "./account.js";
+import { keepTyped } from "./form-errors.js";
 import { loadCurriculum } from "./curriculum.js";
 import { request } from "./api.js";
 import {
@@ -143,7 +144,9 @@ function paint() {
   // Los datos de la cuenta llegan en segundo plano: si el foco estaba en un control de la sección
   // (p. ej. la fecha del examen recién guardada), se devuelve al mismo control (EVO-16, WCAG 2.4.3)
   const keep = activeSelector(body);
+  const restoreTyped = keepTyped(body); // ni lo que se estaba escribiendo
   body.innerHTML = bodyHtml(section);
+  restoreTyped(body);
   afterPaint(section);
   if (keep) body.querySelector(keep)?.focus({ preventScroll: true });
 }

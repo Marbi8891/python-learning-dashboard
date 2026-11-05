@@ -92,6 +92,24 @@ test("perfil y seguridad: cambiar el nombre, la contraseña y ver la actividad",
   expect(old.status()).toBe(401);
 });
 
+test("perfil: repintar en segundo plano no borra lo que se está escribiendo", async ({ page, request }) => {
+  // Regresión: al llegar datos de la cuenta, la vista se repinta entera y la contraseña actual
+  // escrita se perdía (fallo intermitente de la prueba anterior y del alumno real)
+  await signIn(page, request);
+  const form = page.locator("#password-form");
+  await form.getByLabel("Contraseña actual").fill(PASSWORD);
+  await form.getByLabel("Nueva contraseña (mínimo 8 caracteres)").fill("tortuga-azul-en-bici");
+  // Lo mismo que hace la app al cambiar el perfil o el progreso: avisar a la vista para que se repinte
+  await page.evaluate(async () => {
+    const { state, updateUser } = await import("/js/store.js");
+    updateUser({ ...state.user });
+  });
+  await expect(form.getByLabel("Contraseña actual")).toHaveValue(PASSWORD);
+  await expect(form.getByLabel("Nueva contraseña (mínimo 8 caracteres)")).toHaveValue("tortuga-azul-en-bici");
+  await expect(form.getByLabel("Repite la nueva")).toHaveValue("");
+  await expect(page.getByLabel("Nombre que se muestra")).toHaveValue("Ana");
+});
+
 test("Mi cuenta sin infracciones WCAG", async ({ page, request }) => {
   await signIn(page, request, "cursos");
   await expect(page.locator('[data-course-card="java"] [data-course-detail]')).toContainText("Dominio:");

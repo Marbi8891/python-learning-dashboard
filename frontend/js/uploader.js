@@ -7,7 +7,12 @@
      caducada) no se reintenta: se subirá al volver a entrar.
    - Solo pasa a "guardado" cuando el servidor confirma la copia que incluye el último cambio: si
      hubo otro cambio mientras se subía, sigue pendiente.
+   - Hay como mucho una subida en curso. Si llega otra petición mientras tanto, se sube otra vez al
+     terminar la primera: dos PUT a la vez con la misma versión chocaban entre sí (409) y el cierre
+     de sesión creía que faltaba algo por guardar.
    - `flush()` sube ya lo pendiente (antes de cerrar sesión) y devuelve si quedó todo guardado.
+     Espera a la subida en curso y repite mientras quede algo pendiente (p. ej. la fusión de un 409
+     cuenta como cambio), con un límite.
 
    No depende del DOM ni de la API, para poder probarlo con node --test. */
 
@@ -15,6 +20,8 @@ import { RETRY_DELAYS_MS } from "./sync-gate.js";
 import { registerSyncStore, setSyncState, syncState } from "./sync-status.js";
 
 export const PUSH_DELAY_MS = 1500;
+/** Subidas seguidas que puede hacer `flush()` mientras siga habiendo algo pendiente. */
+export const MAX_FLUSH_UPLOADS = 3;
 
 /**
  * @param {object} options
@@ -41,13 +48,36 @@ export function createUploader({
   let timer = null;
   let attempt = 0;
   let changes = 0; // cuántos cambios locales ha habido: la subida solo confirma los que llevaba
+  let running = null; // la subida en curso (una sola a la vez)
+  let again = false; // alguien pidió subir mientras había una en curso
 
   function clear() {
     if (timer !== null) cancel(timer);
     timer = null;
   }
 
-  async function upload() {
+  /** Sube ya. Si hay una subida en curso, se sube otra vez al terminar ella (con los datos de ese
+      momento) y se devuelve el resultado de esa última. */
+  function upload() {
+    clear();
+    if (running) {
+      again = true;
+      return running;
+    }
+    running = (async () => {
+      let ok;
+      do {
+        again = false;
+        ok = await uploadOnce();
+      } while (again && ok);
+      return ok;
+    })().finally(() => {
+      running = null;
+    });
+    return running;
+  }
+
+  async function uploadOnce() {
     clear();
     if (!gate.ready) return false;
     const sent = changes;
@@ -95,8 +125,9 @@ export function createUploader({
   /** Sube ya lo pendiente. Devuelve si el servidor tiene todo lo de este almacén. */
   async function flush() {
     if (!gate.ready && !(await gate.sync())) return syncState(name) === "saved";
-    if (syncState(name) === "saved") return true;
-    await upload();
+    for (let round = 0; round < MAX_FLUSH_UPLOADS && syncState(name) !== "saved"; round += 1) {
+      if (!(await upload())) break; // fallo real: queda marcado y el alumno decide (SYNC-01)
+    }
     return syncState(name) === "saved";
   }
 

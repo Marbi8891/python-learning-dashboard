@@ -177,3 +177,77 @@ test("tras la fusión inicial se sube sin esperar (otro dispositivo puede entrar
   uploader.changed();
   assert.equal(clock.pending()[0].ms, 5, "los cambios normales se siguen agrupando");
 });
+
+/** Una subida que no termina hasta que el test la suelta (para simular peticiones en vuelo). */
+function deferred() {
+  let resolve;
+  const promise = new Promise((r) => {
+    resolve = r;
+  });
+  return { promise, resolve };
+}
+
+test("nunca hay dos subidas a la vez: la segunda espera a la primera (sin 409 contra sí misma)", async () => {
+  const first = deferred();
+  let inFlight = 0;
+  let maxInFlight = 0;
+  const ctx = setup({
+    responses: [
+      async () => {
+        inFlight += 1;
+        maxInFlight = Math.max(maxInFlight, inFlight);
+        await first.promise;
+        inFlight -= 1;
+        return true;
+      },
+      async () => {
+        inFlight += 1;
+        maxInFlight = Math.max(maxInFlight, inFlight);
+        inFlight -= 1;
+        return true;
+      },
+    ],
+  });
+  ctx.uploader.changed({ now: true });
+  const uploading = ctx.clock.fireNext(); // la subida tras la fusión inicial, aún sin respuesta
+  ctx.uploader.changed(); // otro cambio mientras viaja
+  const flushing = ctx.uploader.flush(); // y el alumno cierra sesión
+  first.resolve();
+  await uploading;
+  assert.equal(await flushing, true);
+  assert.equal(maxInFlight, 1);
+  assert.equal(ctx.calls.push, 2, "lo que cambió durante la primera se sube después, una vez");
+  assert.equal(ctx.uploader.state, "saved");
+});
+
+test("flush repite si la subida trajo un cambio (fusión tras un 409) y termina guardado", async () => {
+  let uploader;
+  const ctx = setup({
+    responses: [
+      () => {
+        uploader.changed(); // doc-sync fusionó la copia de la cuenta: cuenta como cambio local
+        return true;
+      },
+    ],
+  });
+  uploader = ctx.uploader;
+  uploader.changed();
+  assert.equal(await uploader.flush(), true);
+  assert.equal(ctx.calls.push, 2);
+  assert.equal(ctx.clock.pending().length, 0, "no queda otra subida programada");
+});
+
+test("flush no se queda en bucle si cada subida trae otro cambio", async () => {
+  let uploader;
+  const ctx = setup({
+    responses: Array.from({ length: 10 }, () => () => {
+      uploader.changed();
+      return true;
+    }),
+  });
+  uploader = ctx.uploader;
+  uploader.changed();
+  assert.equal(await uploader.flush(), false);
+  assert.equal(ctx.calls.push, 3);
+  assert.deepEqual(unsavedStores(), ["la preparación del PCAP"]);
+});
