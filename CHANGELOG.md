@@ -9,8 +9,18 @@ cambios se agrupan por fecha de merge, con el número de pull request entre par�
 ## [Sin publicar]
 
 ### Añadido
+- Monitor de CI: `ci-monitor.yml` diagnostica cada ejecución de CI y avisa con una incidencia
+  `ci-monitor` (nuevo, recurrente, corregido, cancelado u obsoleto); `scripts/ci-monitor/` y
+  `docs/CI_CD_MONITORING.md` (#103).
 - Documentación de proyecto: `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, este `CHANGELOG.md`, índice
   de `docs/` y plantillas de issues y de pull request.
+
+### Corregido
+- Cerrar sesión justo después de entrar ya no se queda con la sesión abierta: las subidas del
+  progreso van de una en una (#103).
+- Si la API no puede cerrar la sesión, se avisa en vez de fingir que se ha cerrado (#103).
+- «Mi perfil» ya no borra lo que se está escribiendo cuando la vista se repinta (#103).
+- La prueba del portapapeles usa el portapapeles real en Chromium y WebKit (#103).
 
 ## 2026-11-04
 

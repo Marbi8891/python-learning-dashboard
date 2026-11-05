@@ -1,0 +1,18 @@
+2026-11-05T06:30:12.4008675Z ·······································
+2026-11-05T06:30:12.4014070Z 
+2026-11-05T06:30:12.4024351Z   1) [chromium] › e2e/account.spec.js:194:1 › registro: un email ya registrado marca el campo del email (AUD-023) 
+2026-11-05T06:30:12.4024922Z 
+2026-11-05T06:30:12.4025178Z     Error: expect(locator).toHaveText(expected) failed
+2026-11-05T06:30:12.4025525Z 
+2026-11-05T06:30:12.4025719Z     Locator:  locator('#account-label')
+2026-11-05T06:30:12.4026258Z     Expected: "Iniciar sesión"
+2026-11-05T06:30:12.4026605Z     Received: "Ana"
+2026-11-05T06:30:12.4026912Z     Timeout:  10000ms
+2026-11-05T06:30:12.4029880Z       198 |   await page.locator("#account-button").click();
+2026-11-05T06:30:12.4030624Z       199 |   await dialog(page).getByRole("button", { name: "Cerrar sesión" }).click();
+2026-11-05T06:30:12.4031469Z     > 200 |   await expect(page.locator("#account-label")).toHaveText("Iniciar sesión");
+2026-11-05T06:30:12.4035667Z         at /home/runner/work/python-learning-dashboard/python-learning-dashboard/e2e/account.spec.js:200:48
+2026-11-05T06:30:12.4060195Z   1 failed
+2026-11-05T06:30:12.4061085Z     [chromium] › e2e/account.spec.js:194:1 › registro: un email ya registrado marca el campo del email (AUD-023) 
+2026-11-05T06:30:12.4061741Z   197 passed (4.8m)
+2026-11-05T06:30:12.5529680Z ##[error]Process completed with exit code 1.

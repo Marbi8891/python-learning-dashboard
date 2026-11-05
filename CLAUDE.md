@@ -15,6 +15,18 @@ Instrucciones para Claude Code en este repositorio. La descripción del proyecto
 - Una tarea no está terminada hasta que pasan las pruebas de `docs/TESTING.md` que le tocan.
   Prohibido saltar o debilitar un test para que pase.
 
+## CI
+
+Cada push queda vigilado hasta que GitHub Actions termina ([`docs/CI_CD_MONITORING.md`](docs/CI_CD_MONITORING.md)).
+
+- Después de abrir o actualizar un PR, suscríbete a su actividad para que los fallos de CI te despierten.
+- Si un job falla: lee su log, reproduce el fallo en local, corrige la causa con el cambio mínimo, añade
+  una prueba de regresión, pasa las pruebas de `docs/TESTING.md` que tocan y sube un commit nuevo
+  (`git add` de archivos concretos, sin `--force`).
+- Como mucho 3 ciclos por incidencia y nunca la misma solución dos veces. Un fallo externo (red, npm,
+  runner) no se arregla tocando código. Para un secreto, un permiso o una decisión de arquitectura, para y pregunta.
+- Informa solo de lo comprobado: subida, error, corrección y resultado final de cada job.
+
 ## Agentes
 
 - `revisor-daw`: revisa el código o unos cambios y devuelve fallos con evidencia.
