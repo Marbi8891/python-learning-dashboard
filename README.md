@@ -99,7 +99,7 @@ En Linux o macOS: `pip install -r backend/requirements.txt && python scripts/run
 ```bash
 cd backend
 python -m venv .venv
-.venv\\Scripts\\activate            # Linux/Mac: source .venv/bin/activate
+.venv\Scripts\activate            # Linux/Mac: source .venv/bin/activate
 pip install -r requirements-dev.txt
 copy .env.example .env            # Linux/Mac: cp .env.example .env
 python -c "import secrets; print(secrets.token_urlsafe(48))"   # pégalo en JWT_SECRET del .env
