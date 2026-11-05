@@ -149,6 +149,7 @@ El índice completo está en [docs/README.md](docs/README.md). Los más usados:
 - [API](docs/API.md) y [recuperación de contraseña y login con Google](docs/auth.md)
 - [Motor adaptativo](docs/ADAPTIVE_ENGINE.md) y [decisiones de arquitectura](docs/DECISIONS.md)
 - [Despliegue](docs/DEPLOY.md), [pruebas](docs/TESTING.md) y [ejecutar en Windows](docs/EJECUTAR-EN-WINDOWS.md)
+- [Historial de cambios](CHANGELOG.md)
 
 ## Contribuir
 
