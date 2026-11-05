@@ -43,6 +43,7 @@ Son borradores técnicos que no ha revisado un abogado.
 | [RIESGOS_LEGALES.md](RIESGOS_LEGALES.md) | Riesgos legales abiertos y su estado |
 | [PLAN_ADECUACION_LEGAL.md](PLAN_ADECUACION_LEGAL.md) | Plan de adecuación legal por fases |
 | [AUDITORIA_LEGAL.md](AUDITORIA_LEGAL.md) | Auditoría legal del 02/11/2026 |
+| [MARCA-Y-USO-DE-PYTHON.md](MARCA-Y-USO-DE-PYTHON.md) | Uso de la marca Python y transición a una marca comercial independiente |
 
 La política de seguridad está en [SECURITY.md](../SECURITY.md).
 
