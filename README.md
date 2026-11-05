@@ -5,6 +5,8 @@
 
 Proyecto de 2º de DAW: una web para **aprender Python entendiendo lo que haces** y preparar el examen **PCAP** y los módulos de programación del ciclo.
 
+> **Marca:** Python es una marca registrada de la Python Software Foundation (PSF). Este proyecto es independiente y no está afiliado, patrocinado ni respaldado por la PSF. La palabra Python se utiliza para identificar el lenguaje de programación que se enseña y ejecuta en la plataforma. Consulta [la política de marcas de la PSF](https://www.python.org/psf/trademarks/). El plan de uso de marca y transición comercial está documentado en [docs/MARCA-Y-USO-DE-PYTHON.md](docs/MARCA-Y-USO-DE-PYTHON.md).
+
 **Demo:** https://marbi8891.github.io/python-learning-dashboard/ · **Qué estudio hoy:** [#/aprender](https://marbi8891.github.io/python-learning-dashboard/#/aprender)
 
 ## Qué tiene
