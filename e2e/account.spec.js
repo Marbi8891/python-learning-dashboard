@@ -191,6 +191,62 @@ test("recuperar contraseña: las dos contraseñas deben coincidir", async ({ pag
   await expect(confirm).not.toHaveAttribute("aria-invalid");
 });
 
+/** Pide /users/me desde la página, como la web: con la cookie de sesión (HttpOnly) del navegador.
+    Devuelve el código HTTP. */
+const meWithCookie = (page) =>
+  page.evaluate(async () => {
+    const response = await fetch("http://127.0.0.1:8000/api/v1/users/me", { credentials: "include", headers: { "X-PLD-Session": "cookie" } });
+    return response.status;
+  });
+
+test("cerrar sesión justo después de entrar: se cierra en el servidor y no vuelve al recargar", async ({ page }) => {
+  // Regresión: la subida tras la fusión inicial y la de «Cerrar sesión» iban a la vez, chocaban (409)
+  // y el cierre creía que faltaba algo por guardar (se quedaba en «Ana»)
+  const conflicts = [];
+  page.on("response", (response) => response.status() === 409 && conflicts.push(response.url()));
+  const email = uniqueEmail();
+  await openLesson(page);
+  await register(page, email);
+  expect(await meWithCookie(page)).toBe(200);
+
+  await page.locator("#account-button").click();
+  await dialog(page).getByRole("button", { name: "Cerrar sesión" }).click();
+  await expect(page.locator("#toast")).toContainText("Sesión cerrada");
+  await expect(page.locator("#account-label")).toHaveText("Iniciar sesión");
+  expect(conflicts).toEqual([]);
+
+  // La cookie ya no está: una petición autenticada no recupera la sesión, ni al recargar
+  expect((await page.context().cookies()).filter((c) => c.name === "__Host-pld_session")).toEqual([]);
+  expect(await meWithCookie(page)).toBe(401);
+  await page.reload();
+  await page.locator(".lesson[data-slug]").first().waitFor({ state: "attached" });
+  await expect(page.locator("#account-label")).toHaveText("Iniciar sesión");
+
+  // Y se puede volver a entrar
+  await page.getByRole("button", { name: "Iniciar sesión" }).click();
+  await dialog(page).getByLabel("Email").first().fill(email);
+  await dialog(page).locator("#login-form").getByLabel("Contraseña").fill(PASSWORD);
+  await dialog(page).getByRole("button", { name: "Entrar" }).click();
+  await expect(page.locator("#account-label")).toHaveText("Ana");
+});
+
+test("cerrar sesión sin conexión con el servidor: la sesión sigue abierta y se avisa", async ({ page }) => {
+  await openLesson(page);
+  await register(page, uniqueEmail());
+  await page.route("**/api/v1/auth/logout", (route) => route.abort("internetdisconnected"));
+  await page.locator("#account-button").click();
+  await dialog(page).getByRole("button", { name: "Cerrar sesión" }).click();
+  // Sin borrar la cookie, recargar devolvería la sesión: no se finge que se ha cerrado
+  await expect(page.locator("#toast")).toContainText("No se pudo cerrar la sesión");
+  await expect(page.locator("#account-label")).toHaveText("Ana");
+  expect(await meWithCookie(page)).toBe(200);
+
+  await page.unroute("**/api/v1/auth/logout");
+  await dialog(page).getByRole("button", { name: "Cerrar sesión" }).click();
+  await expect(page.locator("#account-label")).toHaveText("Iniciar sesión");
+  expect(await meWithCookie(page)).toBe(401);
+});
+
 test("registro: un email ya registrado marca el campo del email (AUD-023)", async ({ page }) => {
   const email = uniqueEmail();
   await openLesson(page);
