@@ -32,11 +32,20 @@ Las e2e arrancan solas el frontend (`e2e/serve_frontend.py`, un `http.server` co
 | End-to-end y WCAG | `npm run test:e2e` | La web entera con el backend real y auditoría de accesibilidad (axe-core con las reglas de WCAG 2.2 A/AA, foco y letra al 200 %) |
 | Migraciones en PostgreSQL | `MIGRATION_TEST_DATABASE_URL=postgresql://… python -m pytest -q tests/test_migrations.py` (en `backend/`) | Migraciones sobre una BD vacía y con datos |
 | Archivos sin conexión | `node scripts/web/build_precache.mjs --check` (también `tests/unit/precache.test.mjs`) | `frontend/precache.js`, la lista que el service worker guarda al instalarse, está al día |
-| Safari (WebKit) | `PW_WEBKIT=1 npx playwright test --project=webkit e2e/navigation.spec.js e2e/landing.spec.js` | Prueba de humo en WebKit (trabajo `webkit` de CI) |
+| Safari (WebKit) | `PW_WEBKIT=1 npx playwright test --project=webkit e2e/navigation.spec.js e2e/landing.spec.js e2e/account.spec.js` | Prueba de humo en WebKit, con la cuenta y el cierre de sesión (trabajo `webkit` de CI) |
 | Inspección de la web | `node scripts/web/inspeccionar_web.mjs [--rutas a,b] [--tema claro\|oscuro\|ambos] [--comparar <carpeta>]` | Capturas en móvil y escritorio (y en tema oscuro con `--tema`), axe, errores de consola, desbordamiento y peso de cada ruta (no es una prueba que falle: es evidencia de antes y después) |
 | Dependencias | `pip-audit -r backend/requirements.txt` y `npm audit --audit-level=high` | Vulnerabilidades conocidas |
 
 GitHub Actions (`ci.yml`) lo pasa todo en cada push y pull request.
+
+En CI cada e2e que falla se reintenta una vez para guardar su traza (`playwright-report`, se sube como artefacto),
+pero una prueba que solo pasa al reintentar hace fallar el trabajo (`failOnFlakyTests`): hay que arreglarla, no
+reintentarla. Para comprobar que una prueba es estable, repítela: `npx playwright test <archivo> -g "<nombre>" --repeat-each=5`.
+
+El portapapeles no se prueba igual en todos los motores, porque Playwright no da los mismos permisos:
+Chromium acepta `clipboard-read` y `clipboard-write`, WebKit solo `clipboard-read` y Firefox ninguno. Usa
+`watchClipboard(page, browserName)` de `e2e/fixtures.js`: anota lo que la web copia de verdad y, donde se puede,
+lee el portapapeles real.
 
 En un portátil, las e2e en paralelo pueden agotar el tiempo de espera, porque cada navegador descarga Pyodide (unos 10 MB) a la vez. Si pasa, ejecútalas en serie: `npx playwright test --workers=1`.
 
