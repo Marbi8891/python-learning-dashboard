@@ -5,6 +5,8 @@
 
 Proyecto de 2º de DAW: una web para **aprender Python entendiendo lo que haces** y preparar el examen **PCAP** y los módulos de programación del ciclo.
 
+> **Marca:** Python es una marca registrada de la Python Software Foundation (PSF). Este proyecto es independiente y no está afiliado, patrocinado ni respaldado por la PSF. La palabra Python se utiliza para identificar el lenguaje de programación que se enseña y ejecuta en la plataforma. Consulta [la política de marcas de la PSF](https://www.python.org/psf/trademarks/). El plan de uso de marca y transición comercial está documentado en [docs/MARCA-Y-USO-DE-PYTHON.md](docs/MARCA-Y-USO-DE-PYTHON.md).
+
 **Demo:** https://marbi8891.github.io/python-learning-dashboard/ · **Qué estudio hoy:** [#/aprender](https://marbi8891.github.io/python-learning-dashboard/#/aprender)
 
 ## Qué tiene
@@ -97,7 +99,7 @@ En Linux o macOS: `pip install -r backend/requirements.txt && python scripts/run
 ```bash
 cd backend
 python -m venv .venv
-.venv\Scripts\activate            # Linux/Mac: source .venv/bin/activate
+.venv\\Scripts\\activate            # Linux/Mac: source .venv/bin/activate
 pip install -r requirements-dev.txt
 copy .env.example .env            # Linux/Mac: cp .env.example .env
 python -c "import secrets; print(secrets.token_urlsafe(48))"   # pégalo en JWT_SECRET del .env
@@ -147,7 +149,6 @@ El índice completo está en [docs/README.md](docs/README.md). Los más usados:
 - [API](docs/API.md) y [recuperación de contraseña y login con Google](docs/auth.md)
 - [Motor adaptativo](docs/ADAPTIVE_ENGINE.md) y [decisiones de arquitectura](docs/DECISIONS.md)
 - [Despliegue](docs/DEPLOY.md), [pruebas](docs/TESTING.md) y [ejecutar en Windows](docs/EJECUTAR-EN-WINDOWS.md)
-- [Historial de cambios](CHANGELOG.md)
 
 ## Contribuir
 
