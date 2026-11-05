@@ -68,21 +68,33 @@ test("errores de validación y credenciales en español", async ({ page }) => {
   await expect(page.locator("#account-message")).toHaveText("Email o contraseña incorrectos");
 });
 
-test("la sesión va en una cookie HttpOnly: sigue al recargar y JavaScript no ve el token", async ({ page }) => {
+/* WebKit, como Safari, no guarda la cookie de la API: es de otro sitio (la web va en localhost y la
+   API en 127.0.0.1) y la bloquea. La web entonces entra con el token solo en memoria (account.js).
+   Las pruebas de sesión comprueban en cada motor el modo que le toca: Chromium SIEMPRE con cookie. */
+const usesSessionCookie = (browserName) => browserName !== "webkit";
+
+test("la sesión va en una cookie HttpOnly (en WebKit, solo en memoria) y JavaScript no ve el token", async ({ page, browserName }) => {
   // El token no está ni en el almacenamiento ni en document.cookie; solo la API puede leerla y borrarla
+  const withCookie = usesSessionCookie(browserName);
   await openLesson(page, "variables");
   await register(page, uniqueEmail(), "Luis");
   await page.getByRole("tab", { name: "Práctica y Ejercicio" }).click();
   await page.getByRole("button", { name: "Marcar como completada" }).click();
   const sessionCookie = async () => (await page.context().cookies()).find((c) => c.name === "__Host-pld_session");
   // Particionada (CHIPS): solo vale cuando la API se usa desde esta web
-  expect(await sessionCookie()).toMatchObject({ httpOnly: true, secure: true, sameSite: "None", partitionKey: "http://localhost" });
-  await page.reload();
-  await expect(page.locator("#account-label")).toHaveText("Luis");
+  if (withCookie) expect(await sessionCookie()).toMatchObject({ httpOnly: true, secure: true, sameSite: "None", partitionKey: "http://localhost" });
+  else expect(await sessionCookie()).toBeUndefined();
   const visible = await page.evaluate(
     () => JSON.stringify({ ...localStorage }) + JSON.stringify({ ...sessionStorage }) + document.cookie,
   );
   expect(visible).not.toMatch(/eyJ[\w-]+\.[\w-]+\./); // ningún JWT al alcance de un script
+  await page.reload();
+  if (!withCookie) {
+    // El token vivía solo en memoria: recargar cierra la sesión y no queda nada que la recupere
+    await expect(page.locator("#account-label")).toHaveText("Iniciar sesión");
+    return;
+  }
+  await expect(page.locator("#account-label")).toHaveText("Luis");
   await page.locator(".lesson[data-slug=tipos]").click();
   await expect(page.locator(".lesson[data-slug=variables]")).toHaveAttribute("data-status", "completed");
 
@@ -199,7 +211,7 @@ const meWithCookie = (page) =>
     return response.status;
   });
 
-test("cerrar sesión justo después de entrar: se cierra en el servidor y no vuelve al recargar", async ({ page }) => {
+test("cerrar sesión justo después de entrar: se cierra en el servidor y no vuelve al recargar", async ({ page, browserName }) => {
   // Regresión: la subida tras la fusión inicial y la de «Cerrar sesión» iban a la vez, chocaban (409)
   // y el cierre creía que faltaba algo por guardar (se quedaba en «Ana»)
   const conflicts = [];
@@ -207,7 +219,7 @@ test("cerrar sesión justo después de entrar: se cierra en el servidor y no vue
   const email = uniqueEmail();
   await openLesson(page);
   await register(page, email);
-  expect(await meWithCookie(page)).toBe(200);
+  expect(await meWithCookie(page)).toBe(usesSessionCookie(browserName) ? 200 : 401);
 
   await page.locator("#account-button").click();
   await dialog(page).getByRole("button", { name: "Cerrar sesión" }).click();
@@ -230,12 +242,19 @@ test("cerrar sesión justo después de entrar: se cierra en el servidor y no vue
   await expect(page.locator("#account-label")).toHaveText("Ana");
 });
 
-test("cerrar sesión sin conexión con el servidor: la sesión sigue abierta y se avisa", async ({ page }) => {
+test("cerrar sesión sin conexión con el servidor: con cookie, la sesión sigue abierta y se avisa", async ({ page, browserName }) => {
   await openLesson(page);
   await register(page, uniqueEmail());
   await page.route("**/api/v1/auth/logout", (route) => route.abort("internetdisconnected"));
   await page.locator("#account-button").click();
   await dialog(page).getByRole("button", { name: "Cerrar sesión" }).click();
+  if (!usesSessionCookie(browserName)) {
+    // Con el token solo en memoria no hay cookie que borrar: recargar ya cierra la sesión del todo
+    await expect(page.locator("#toast")).toContainText("Sesión cerrada");
+    await expect(page.locator("#account-label")).toHaveText("Iniciar sesión");
+    expect(await meWithCookie(page)).toBe(401);
+    return;
+  }
   // Sin borrar la cookie, recargar devolvería la sesión: no se finge que se ha cerrado
   await expect(page.locator("#toast")).toContainText("No se pudo cerrar la sesión");
   await expect(page.locator("#account-label")).toHaveText("Ana");
