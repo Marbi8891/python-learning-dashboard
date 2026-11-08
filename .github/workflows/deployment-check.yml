@@ -1,0 +1,118 @@
+# Comprobación de despliegue, sin desplegar nada:
+#   pages-artifact: construye la copia de frontend/ que publicaría pages.yml (con la CSP de producción)
+#                   y la verifica (archivos necesarios, sin restos de desarrollo, referencias y precache)
+#   backend-image:  construye la imagen Docker de Render y comprueba que arranca y responde /api/health
+#   config:         workflows válidos (actionlint) y configuración de Render coherente
+# No usa secretos ni toca Render, Neon ni GitHub Pages.
+name: Deployment check
+
+on:
+  pull_request:
+  push:
+    branches: [main, develop]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  NO_COLOR: "1"
+
+jobs:
+  pages-artifact:
+    name: Artefacto de GitHub Pages
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+      - name: Construir el artefacto como pages.yml (en una copia)
+        run: |
+          cp -r frontend _site
+          python3 scripts/security/production_csp.py _site
+      - name: Verificar el artefacto
+        run: python3 scripts/qa/verify_pages_artifact.py _site
+      - name: Referencias, imports y recursos del artefacto
+        run: node --experimental-vm-modules --disable-warning=ExperimentalWarning scripts/qa/frontend_static.mjs --root _site
+      - name: Lista de archivos sin conexión (precache) al día
+        run: node scripts/web/build_precache.mjs --check
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: pages-artifact-preview
+          path: _site/
+          retention-days: 3
+
+  backend-image:
+    name: Imagen Docker del backend
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Construir la imagen (como Render)
+        run: docker build -f backend/Dockerfile -t pld-api:qa .
+      - name: Arrancar con SQLite temporal y comprobar /api/health
+        run: |
+          # Secreto de un solo uso para este contenedor: no es ni se parece a ningún secreto real
+          secret="$(python3 -c 'import secrets; print(secrets.token_urlsafe(48))')"
+          docker run -d --name pld-api-qa -p 8000:8000 \
+            -e JWT_SECRET="$secret" -e DATABASE_URL=sqlite:////tmp/qa.db pld-api:qa
+          for _ in $(seq 1 60); do
+            if curl -sf http://127.0.0.1:8000/api/health >/tmp/health.json; then break; fi
+            sleep 1
+          done
+          docker logs pld-api-qa | tail -20
+          python3 - <<'PY'
+          import json
+          health = json.load(open("/tmp/health.json"))
+          assert health["status"] == "ok", health
+          print("health:", health)
+          PY
+          curl -sfI http://127.0.0.1:8000/api/v1/health | tee /tmp/headers.txt
+          grep -qi '^x-content-type-options: nosniff' /tmp/headers.txt
+          grep -qi '^cache-control: no-store' /tmp/headers.txt
+          # /docs no se publica en producción
+          test "$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8000/docs)" = 404
+          # El proceso no corre como root
+          test "$(docker exec pld-api-qa id -u)" != 0
+      - name: Parar el contenedor
+        if: always()
+        run: docker rm -f pld-api-qa || true
+
+  config:
+    name: Workflows y configuración de Render
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      ACTIONLINT_VERSION: "1.7.12"
+      ACTIONLINT_SHA256: "8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Validar los workflows (actionlint, binario comprobado con SHA-256)
+        run: |
+          curl -sSfL -o /tmp/actionlint.tgz \
+            "https://github.com/rhysd/actionlint/releases/download/v${ACTIONLINT_VERSION}/actionlint_${ACTIONLINT_VERSION}_linux_amd64.tar.gz"
+          echo "${ACTIONLINT_SHA256}  /tmp/actionlint.tgz" | sha256sum -c -
+          tar -xzf /tmp/actionlint.tgz -C /tmp actionlint
+          /tmp/actionlint -color=never -shellcheck= .github/workflows/*.yml
+      - name: Archivos que necesita el despliegue
+        run: |
+          for f in render.yaml backend/Dockerfile backend/requirements.txt backend/alembic.ini \
+                   frontend/index.html frontend/404.html frontend/config.js frontend/sw.js \
+                   frontend/precache.js frontend/manifest.webmanifest .github/workflows/pages.yml; do
+            test -f "$f" || { echo "::error file=$f::falta $f"; exit 1; }
+          done
+          dockerfile="$(sed -n 's/^\s*dockerfilePath:\s*\.\///p' render.yaml)"
+          test -f "$dockerfile" || { echo "::error file=render.yaml::dockerfilePath $dockerfile no existe"; exit 1; }
+          echo "render.yaml → $dockerfile"

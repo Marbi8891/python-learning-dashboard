@@ -20,8 +20,15 @@ qa_base_ref() {
 # 1. Rama actual
 check_branch() {
   local branch
-  branch="$(git symbolic-ref --short -q HEAD)" || { echo "QA-DETAIL: HEAD separado (detached): no hay rama que subir"; return 1; }
-  echo "Rama: $branch"
+  # En un pull request de GitHub Actions el checkout es un commit de fusión: la rama es GITHUB_HEAD_REF
+  branch="${GITHUB_HEAD_REF:-}"
+  [ -z "$branch" ] && { branch="$(git symbolic-ref --short -q HEAD)" || { echo "QA-DETAIL: HEAD separado (detached): no hay rama que subir"; return 1; }; }
+  echo "Rama: $branch${GITHUB_BASE_REF:+ → $GITHUB_BASE_REF}"
+  # El único PR que sale de una rama protegida es el de publicación: develop → main
+  if [ "$branch" = develop ] && [ "${GITHUB_BASE_REF:-}" = main ]; then
+    echo "PR de publicación develop → main"
+    return 0
+  fi
   for p in $PROTECTED_BRANCHES; do
     if [ "$branch" = "$p" ]; then
       echo "QA-DETAIL: estás en «$branch»: a $branch solo se llega con un pull request (docs/GIT_WORKFLOW.md)"
@@ -138,7 +145,7 @@ check_changed_files() {
 }
 
 # 3. Sintaxis
-check_python_syntax() { "$PY" -m compileall -q backend/app backend/migrations scripts e2e tests >/dev/null && echo "Python: sintaxis correcta"; }
+check_python_syntax() { "$PY" -m compileall -q backend/app backend/migrations scripts e2e tests && echo "Python: sintaxis correcta"; }
 check_ruff() {
   # Misma regla que ci.yml, con las carpetas nuevas (tests/) incluidas
   (cd backend && "$PY" -m ruff check . ../e2e ../scripts ../tests)
@@ -213,6 +220,20 @@ check_gitleaks() {
     # Commits de esta rama que aún no están en la base: lo que se va a subir
     "$bin" git --no-banner --redact --config .gitleaks.toml --log-opts="$base..HEAD" \
       --report-format json --report-path "$QA_REPORT_DIR/gitleaks-git.json" . || rc=1
+  fi
+  if [ "$rc" != 0 ]; then
+    # Solo archivo, línea y regla (nunca el valor: los informes van con --redact)
+    "$PY" - "$QA_REPORT_DIR" <<'PY'
+import json, pathlib, sys
+found = []
+for name in ("gitleaks-dir.json", "gitleaks-git.json"):
+    p = pathlib.Path(sys.argv[1]) / name
+    if p.exists() and p.read_text().strip():
+        found += [f"{f['File']}:{f['StartLine']} ({f['RuleID']})" for f in json.loads(p.read_text())]
+for f in dict.fromkeys(found):
+    print(f)
+print(f"QA-DETAIL: {len(set(found))} posibles secretos: {' '.join(dict.fromkeys(found))}")
+PY
   fi
   return "$rc"
 }

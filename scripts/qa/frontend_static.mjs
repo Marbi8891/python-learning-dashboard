@@ -269,6 +269,7 @@ export async function checkFrontend(root = path.join(REPO, "frontend")) {
   const visited = new Set();
   const queue = [...moduleRoots];
   const failedResolution = new Set();
+  const staticDeps = new Map(); // módulo → módulos que importa de forma estática
   while (queue.length) {
     const file = queue.shift();
     if (visited.has(file)) continue;
@@ -278,9 +279,11 @@ export async function checkFrontend(root = path.join(REPO, "frontend")) {
     const src = sourceOf(file);
     const mod = getModule(file);
     const specs = [...mod.dependencySpecifiers];
+    const staticCount = specs.length;
+    staticDeps.set(file, []);
     // import("./x.js") con ruta literal: también se comprueba (no se enlaza: se carga al usarse)
     for (const m of src.matchAll(/\bimport\(\s*["']([^"']+)["']\s*\)/g)) specs.push(m[1]);
-    for (const spec of specs) {
+    for (const [n, spec] of specs.entries()) {
       stats.imports++;
       const at = lineOf(src, src.indexOf(`"${spec}"`) >= 0 ? src.indexOf(`"${spec}"`) : src.indexOf(`'${spec}'`));
       if (EXTERNAL.test(spec)) continue;
@@ -309,28 +312,34 @@ export async function checkFrontend(root = path.join(REPO, "frontend")) {
         failedResolution.add(file);
         continue;
       }
+      if (n < staticCount) staticDeps.get(file).push(resolved);
       queue.push(resolved);
     }
   }
 
-  // Enlazar solo los grafos sin rutas rotas (si no, el error ya está anotado)
+  // Enlazar solo los grafos sin rutas rotas ni errores de sintaxis (esos errores ya están anotados)
+  const linkable = new Map();
+  const isLinkable = (file) => {
+    if (linkable.has(file)) return linkable.get(file);
+    linkable.set(file, true); // ciclos de imports: se supone bien mientras se recorre
+    const ok =
+      syntaxOk.has(file) && !failedResolution.has(file) && (staticDeps.get(file) ?? []).every(isLinkable);
+    linkable.set(file, ok);
+    return ok;
+  };
   const linkErrors = new Set();
   for (const file of visited) {
-    if (!syntaxOk.has(file) || failedResolution.has(file)) continue;
+    if (!isLinkable(file)) continue;
     const mod = getModule(file);
     if (mod.status !== "unlinked") continue;
     const linker = (spec, referencing) => {
       const from = fileURLToPath(referencing.identifier);
       const resolved = spec.startsWith("/") ? path.join(root, spec) : path.resolve(path.dirname(from), spec);
-      if (failedResolution.has(resolved) || !syntaxOk.has(resolved)) {
-        throw Object.assign(new Error("dependencia rota"), { skip: true });
-      }
       return getModule(resolved);
     };
     try {
       await mod.link(linker);
     } catch (e) {
-      if (e.skip) continue;
       const match = /module '([^']+)' does not provide an export named '([^']+)'/.exec(e.message);
       const key = e.message;
       if (linkErrors.has(key)) continue;

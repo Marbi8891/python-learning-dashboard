@@ -69,7 +69,7 @@ if has '^backend/'; then
   run_step qa-python "Contrato de la API y errores" check_qa_python
 fi
 if has '^frontend/'; then
-  run_step frontend-static "JavaScript: sintaxis, imports y recursos" check_frontend_static
+  run_step frontend-static "JavaScript (sintaxis, imports y recursos)" check_frontend_static
   run_step unit-frontend "Tests unitarios del frontend" check_unit_frontend
 fi
 if has '^frontend/.*\.html$'; then run_step lint-html "Validación HTML" check_lint_html; fi

@@ -1,0 +1,25 @@
+# Pull requests automáticos para mantener las dependencias al día (ADR-0022), hacia develop:
+# pasan por qa-tests.yml, security.yml y ci.yml como cualquier otro cambio (docs/GIT_WORKFLOW.md).
+# Se recupera el archivo que quitó el commit 5dcea0b, sin la app Android (ya no está en el repositorio).
+version: 2
+updates:
+  - package-ecosystem: pip
+    directory: /backend
+    target-branch: develop
+    schedule:
+      interval: monthly
+  - package-ecosystem: npm  # tests del frontend y entorno QA
+    directory: /
+    target-branch: develop
+    schedule:
+      interval: monthly
+  - package-ecosystem: docker  # imagen del backend (Render)
+    directory: /backend
+    target-branch: develop
+    schedule:
+      interval: monthly
+  - package-ecosystem: github-actions  # actualiza también los SHA fijados de los workflows
+    directory: /
+    target-branch: develop
+    schedule:
+      interval: monthly

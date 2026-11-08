@@ -57,7 +57,7 @@ step changed-files "Archivos modificados" check_changed_files
 step syntax-python "Sintaxis de Python" check_python_syntax
 step lint-python "Lint de Python (ruff)" check_ruff
 step format-python "Formato de Python (ruff)" check_ruff_format
-step frontend-static "JavaScript: sintaxis, imports y recursos" check_frontend_static
+step frontend-static "JavaScript (sintaxis, imports y recursos)" check_frontend_static
 step lint-html "Validación HTML" check_lint_html
 step lint-css "Validación CSS" check_lint_css
 # 4. Frontend

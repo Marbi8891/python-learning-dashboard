@@ -54,8 +54,12 @@ _record() { # id nombre estado segundos detalle
 
 # Primeras líneas con aspecto de «archivo:línea» del log: el archivo afectado
 _affected_files() {
-  grep -oE '([A-Za-z0-9_.-]+/)*[A-Za-z0-9_.-]+\.(py|js|mjs|html|css|json|yml|yaml|toml|sh|txt):[0-9]+' "$1" 2>/dev/null \
-    | sed "s#^${QA_ROOT#/}/##" | grep -v -E '^(node:|site-packages|lib/python)' | awk '!seen[$0]++' | head -5
+  {
+    grep -oE '([A-Za-z0-9_.-]+/)*[A-Za-z0-9_.-]+\.(py|js|mjs|html|css|json|yml|yaml|toml|sh|txt):[0-9]+' "$1" 2>/dev/null
+    # Formatos que ponen el archivo solo en una línea (stylelint, html-validate)
+    grep -oE '^\s*(\./)?(frontend|backend|scripts|tests|e2e)/[^ :]+\.[a-z]+\s*$' "$1" 2>/dev/null | tr -d ' '
+  } | sed "s#^${QA_ROOT#/}/##; s#^\./##" \
+    | grep -v -E '(^node:|site-packages|/lib/python|^usr/|^tmp/)' | awk '!seen[$0]++' | head -5
 }
 
 # Causa probable y solución según el tipo de comprobación y el texto del error
@@ -97,6 +101,11 @@ run_step() { # id nombre comando...
   ( cd "$QA_ROOT" && "$@" ) >"$log" 2>&1
   code=$?
   end=$(date +%s)
+  # En CI (QA_STRICT=1) una herramienta que falta es un fallo de configuración, no un SKIP
+  if [ "$code" = 77 ] && [ "${QA_STRICT:-0}" = "1" ]; then
+    echo "QA-DETAIL: no se ha podido ejecutar en CI (QA_STRICT): $(grep -m1 '^SKIP:' "$log" | sed 's/^SKIP: //')" >>"$log"
+    code=1
+  fi
   case "$code" in
     0) status=PASS; printf '%sPASS%s (%ss)\n' "$C_GREEN" "$C_OFF" "$((end - start))";;
     77) status=SKIP; QA_WARNED=1; printf '%sSKIP%s\n' "$C_YELLOW" "$C_OFF";;

@@ -157,3 +157,14 @@ test("un archivo JS que nadie carga es una advertencia, no un error", async () =
     ["js-unreferenced"],
   );
 });
+
+test("una dependencia rota en mitad del grafo da un solo error y no rompe el resto", async () => {
+  const result = await checkFrontend(
+    site({
+      "js/app.js": 'import { helper } from "./util.js";\nimport { other } from "./b.js";\nhelper(); other();',
+      "js/b.js": 'import { gone } from "./c.js";\nexport const other = () => gone;',
+    }),
+  );
+  assert.deepEqual(checks(result), ["js-missing-import"]);
+  assert.match(result.errors[0].file, /js\/b\.js$/);
+});
