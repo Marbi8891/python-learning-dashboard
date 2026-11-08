@@ -71,3 +71,16 @@ rm frontend/_pyo
 - Pruebas manuales de accesibilidad (lector de pantalla, solo teclado, zoom al 200 %).
 - Pruebas en un móvil real y medición de rendimiento con Lighthouse (memoria, 6.3 y 6.5).
 - El modo sin conexión tiene una prueba automática (`e2e/study.spec.js`, «PWA») que recarga «¿Qué estudio ahora?» sin red y abre el PCAP, que no se había visitado (se guarda al instalarse, AUD-008). No cubre Pyodide sin conexión si nunca se ha ejecutado código.
+
+## Entorno QA
+
+Todo lo de arriba, más las comprobaciones del entorno QA (imports y recursos del frontend, HTML, CSS,
+Web Workers, contrato frontend-backend, autorización, secretos…), en un solo comando y con informe en
+`reports/qa/latest-report.md`:
+
+```bash
+bash scripts/qa/pre-push-check.sh          # antes de cada push
+bash scripts/qa/claude-task-check.sh "<tarea>" --scope "<carpetas>"   # después de cada tarea
+```
+
+Guía completa: [QA_GUIDE.md](QA_GUIDE.md).

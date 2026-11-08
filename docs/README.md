@@ -24,6 +24,14 @@
 | [DISENO.md](DISENO.md) | Sistema visual: tokens, colores, tipografía y componentes |
 | [IDIOMAS.md](IDIOMAS.md) | Interfaz en inglés y cómo añadir textos traducidos |
 
+## Calidad y CI/CD
+
+| Documento | Para qué sirve |
+|---|---|
+| [QA_GUIDE.md](QA_GUIDE.md) | Entorno QA: validar un cambio antes de subirlo, informe PASS/WARNING/FAIL y solución de errores |
+| [GIT_WORKFLOW.md](GIT_WORKFLOW.md) | Ramas `main`, `develop`, `feature/*`, `fix/*`, `test/*`, pull requests y protección de `main` |
+| [CI_CD_ARCHITECTURE.md](CI_CD_ARCHITECTURE.md) | Qué comprueba cada workflow de GitHub Actions y por qué |
+
 ## Temario
 
 | Documento | Para qué sirve |
