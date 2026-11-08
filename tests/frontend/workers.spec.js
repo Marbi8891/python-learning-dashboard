@@ -115,7 +115,8 @@ test("Python real (Pyodide) ejecuta código en el Worker", async ({ page }) => {
   } catch {
     reachable = false;
   }
-  test.skip(!reachable, `Pyodide no accesible en ${indexURL}: sin red hacia el CDN (define PYODIDE_URL para servirlo en local)`);
+  // qa-allow-skip: sin red hacia el CDN no se puede probar Pyodide real; sale como «skipped», no como superada
+  test.skip(!reachable, `Pyodide no accesible en ${indexURL} (define PYODIDE_URL para servirlo en local)`); // qa-allow-skip: sin red
   await blankPage(page);
   const out = await page.evaluate(async (url) => {
     const { PythonRunner } = await import("/js/python-runner.js");
