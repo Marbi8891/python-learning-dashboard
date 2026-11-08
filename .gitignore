@@ -38,3 +38,7 @@ backend/.local-secret
 # Informes locales del agente buscador-mejoras
 .claude/informes/
 frontend/_pyo
+
+# Entorno QA: informes generados por scripts/qa (se regeneran en cada ejecución)
+reports/qa/*
+!reports/qa/README.md

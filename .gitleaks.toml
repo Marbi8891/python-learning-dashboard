@@ -1,0 +1,17 @@
+# Configuración de Gitleaks (detección de secretos). Se usa en scripts/qa/security_scan.sh y en
+# .github/workflows/security.yml. Extiende las reglas oficiales; solo se permiten valores concretos
+# que se han revisado a mano y que NO son secretos. Nunca se excluyen carpetas enteras.
+title = "python-learning-dashboard"
+
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Valores de ejemplo y contraseñas de test revisados (no son secretos reales)"
+regexTarget = "secret"
+regexes = [
+  # Marcador de .env.docker.example: indica que hay que generar un secreto
+  '''^GENERA_UN_SECRETO_ALEATORIO_DE_AL_MENOS_32_CARACTERES$''',
+  # Contraseña incorrecta a propósito en los tests de límite de intentos (backend/tests)
+  '''^incorrecta-123$''',
+]
