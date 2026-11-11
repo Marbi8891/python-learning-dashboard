@@ -85,6 +85,22 @@ export function markRead(state, conceptId, now = new Date()) {
   entry.last ??= entry.read;
 }
 
+/**
+ * El alumno ha completado una lección de una unidad (módulo de POO). Solo organiza el estudio:
+ * no cuenta para el dominio, que sale de los ejercicios. Es idempotente: se guarda la primera fecha.
+ * Documento: sections: { [idLección]: ISO } (opcional; solo existe si hay alguna lección completada).
+ */
+export function markSection(state, sectionId, now = new Date()) {
+  if (!ID.test(sectionId)) return;
+  state.sections ??= {};
+  state.sections[sectionId] ??= now.toISOString();
+}
+
+/** Lecciones completadas de una unidad: [{ id, at }] en el orden de la unidad. */
+export function sectionsDone(state, concept) {
+  return (concept.sections ?? []).filter((s) => state.sections?.[s.id]).map((s) => ({ id: s.id, at: state.sections[s.id] }));
+}
+
 /** El alumno ha demostrado en la prueba de nivel que ya sabe este concepto: la ruta puede saltarlo. */
 export function markPlaced(state, conceptId, now = new Date()) {
   conceptEntry(state, conceptId).placed = now.toISOString();
@@ -261,7 +277,7 @@ const isoOrNull = (value) => (isIso(value) ? value : null);
 const EX_FIELDS = ["h", "last", "n", "okAt"];
 const CONCEPT_FIELDS = ["box", "due", "last", "read", "placed"];
 const ERROR_FIELDS = ["n", "last", "streak"];
-const KNOWN_TOP = new Set(["v", "ex", "concepts", "errors", "log", "exams"]);
+const KNOWN_TOP = new Set(["v", "ex", "concepts", "errors", "log", "exams", "sections"]);
 const EXTRA_KEY = /^[a-zA-Z][a-zA-Z0-9]{0,30}$/;
 const isPrimitive = (value) =>
   value === null || typeof value === "boolean" || (typeof value === "number" && Number.isFinite(value)) || (typeof value === "string" && value.length <= 200);
@@ -334,11 +350,21 @@ export function cleanLearning(value) {
       concepts: examConcepts(e.concepts),
     }))
     .slice(-EXAMS);
+  const sections = cleanSections(value.sections);
+  if (Object.keys(sections).length) state.sections = sections;
   // Bloques nuevos de versiones futuras: se guardan tal cual (son JSON de la propia cuenta)
   for (const [key, raw] of Object.entries(value)) {
     if (!KNOWN_TOP.has(key) && EXTRA_KEY.test(key)) state[key] = raw;
   }
   return state;
+}
+
+/** Lecciones completadas: ids con formato de id y fecha ISO; lo demás se descarta. */
+function cleanSections(raw) {
+  const sections = {};
+  if (!isObject(raw)) return sections;
+  for (const [id, at] of Object.entries(raw)) if (ID.test(id) && isIso(at)) sections[id] = at;
+  return sections;
 }
 
 /** Aciertos por concepto de un simulacro: { [id]: [aciertos, total] }. */
@@ -387,6 +413,11 @@ export function mergeLearning(local, remote) {
   local.log = [...log.values()].sort((a, b) => a.at.localeCompare(b.at)).slice(-LOG_SIZE);
   const exams = new Map([...other.exams, ...local.exams].map((e) => [e.date, e]));
   local.exams = [...exams.values()].sort((a, b) => a.date.localeCompare(b.date)).slice(-EXAMS);
+  // Lecciones completadas: unión de las dos copias, con la primera fecha (una copia vacía no borra nada)
+  for (const [id, at] of Object.entries(other.sections ?? {})) {
+    local.sections ??= {};
+    if (!local.sections[id] || at < local.sections[id]) local.sections[id] = at;
+  }
   // Bloques que esta versión no conoce: se conserva el de la cuenta si aquí no existe
   for (const [key, raw] of Object.entries(other)) if (!(key in local)) local[key] = raw;
   return local;

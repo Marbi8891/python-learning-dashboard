@@ -154,7 +154,18 @@
   "daw-pro-03",
   "daw-pro-04",
   "daw-pro-05",
-  "daw-pro-06"
+  "daw-pro-06",
+  "poo-04",
+  "poo-05",
+  "poo-06",
+  "poo-07",
+  "poo-08",
+  "poo-09",
+  "poo-10",
+  "poo-11",
+  "poo-12",
+  "poo-13",
+  "poo-14"
  ],
  "errors": [
   "algoritmos.sin-entrada-salida",
@@ -228,6 +239,8 @@
   "depuracion.tipo-error",
   "depuracion.cambios-a-ciegas",
   "poo.olvida-self",
-  "poo.clase-objeto"
+  "poo.clase-objeto",
+  "poo.init-mal-escrito",
+  "poo.alias-copia"
  ]
 }

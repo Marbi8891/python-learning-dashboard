@@ -379,8 +379,9 @@ test("planificador: tiempo, completar, posponer, deshacer, exámenes e historial
 
   await page.reload();
   await expect(page.locator(".lx-planner")).toContainText("Examen UT3");
-  const results = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]).analyze();
-  expect(results.violations.map((v) => v.id)).toEqual([]);
+  // Mismas reglas que antes, pero con la vista ya pintada: axe a media animación de entrada mide
+  // colores a medio fundir (contraste 3,2:1 que no ve nadie) y el resultado dependía del tiempo de carga
+  await audit(page);
 });
 
 for (const colorScheme of ["light", "dark"]) {

@@ -117,7 +117,7 @@ export function buildExam(index, state, { scope = "studied", size = 12, random =
 const TYPED = new Set(["output", "fill"]);
 
 /**
- * Prueba de nivel: por cada concepto de la ruta (salvo los de «Más adelante»), sin problemas de
+ * Prueba de nivel: por cada concepto de la ruta (salvo las unidades del módulo de POO), sin problemas de
  * escribir código para que sea rápida (≈ 15-20 min), de aplicación si lo hay:
  * - un ejercicio de respuesta escrita (`output`, `fill`) si el concepto lo tiene;
  * - si no, dos ejercicios distintos de opción múltiple o de encontrar el error, porque uno solo se
@@ -130,7 +130,7 @@ export function buildDiagnostic(index, { random = Math.random } = {}) {
     return applied.length ? applied : list;
   };
   return index.path
-    .filter((id) => index.concepts.get(id).area !== "avanzado")
+    .filter((id) => index.concepts.get(id).area !== "poo") // el módulo de POO va aparte (AUD-002)
     .flatMap((id) => {
       const quick = index.byConcept.get(id).filter((e) => e.kind !== "code" && e.kind !== "order");
       const typed = quick.filter((e) => TYPED.has(e.kind));

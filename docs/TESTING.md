@@ -69,6 +69,7 @@ rm frontend/_pyo
 | Archivos de `frontend/` (nuevos, borrados o renombrados) o `frontend/sw.js` | `node scripts/web/build_precache.mjs` y `npx playwright test e2e/study.spec.js -g PWA` |
 | `frontend/data/lessons.json` o `pcap.json` | `cd backend && python -m pytest -q tests/test_content.py tests/test_pcap.py` |
 | `scripts/learning/**` | `python scripts/learning/build_learning.py` y después `--check` |
+| Módulo de POO (`scripts/learning/poo_module.py`, `frontend/js/learn/poo-view.js`) | Lo anterior, `cd backend && python -m pytest -q tests/test_poo_module.py`, `npm run test:unit` y `npx playwright test e2e/poo.spec.js` |
 | `scripts/courses/**` | `python scripts/courses/<curso>_course.py --check`, `python scripts/courses/lock_ids.py` si hay ids nuevos y `cd backend && python -m pytest -q tests/test_daw_courses.py` |
 | `backend/**` | Lint, formato y pytest con cobertura |
 | `scripts/resources/**` | `python scripts/resources/build_resources.py --check` y `cd backend && python -m pytest -q tests/test_resources.py` |

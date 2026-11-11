@@ -1438,3 +1438,46 @@ body[data-zone="core"] .assistant {
 .lx-row[data-task] {
   gap: var(--space-2);
 }
+
+/* ---------- Módulo de POO: unidad (#/teoria/<unidad>) e índice (#/poo) ---------- */
+
+.lx-unit-lesson {
+  margin: var(--space-5) 0;
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+}
+
+.lx-unit-example {
+  margin: var(--space-4) 0;
+}
+
+.lx-key {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0;
+}
+
+.lx-key dt {
+  font-weight: 700;
+}
+
+.lx-key dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.lx-unit-exlist,
+.lx-unit-pass {
+  display: grid;
+  gap: var(--space-2);
+  padding-left: 0;
+  list-style: none;
+}
+
+.lx-unit-pass li[data-done="true"] {
+  font-weight: 600;
+}
+
+.lx-concept[data-available="false"] .lx-concept__link {
+  color: var(--color-text-muted);
+}

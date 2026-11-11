@@ -9,6 +9,11 @@ cambios se agrupan por fecha de merge, con el número de pull request entre par�
 ## [Sin publicar]
 
 ### Añadido
+- Módulo de POO, Sprint 1: índice `#/poo` con las 10 unidades, página de unidad con objetivos,
+  lecciones con ejemplos ejecutables y mini-quiz, ejercicios guiados y autónomos, autoevaluación,
+  resumen, criterios de superación y currículo (propuesto); la Unidad 2 (`#/teoria/poo`) ya tiene el
+  formato nuevo; lecciones completadas en el progreso; validadores en `build_learning.py`
+  (`docs/MODULO_POO.md`).
 - Monitor de CI: `ci-monitor.yml` diagnostica cada ejecución de CI y avisa con una incidencia
   `ci-monitor` (nuevo, recurrente, corregido, cancelado u obsoleto); `scripts/ci-monitor/` y
   `docs/CI_CD_MONITORING.md` (#103).

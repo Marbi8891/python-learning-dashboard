@@ -17,9 +17,9 @@
    "summary": "Pensar antes de programar: algoritmos, pseudocódigo, trazas y depuración."
   },
   {
-   "id": "avanzado",
-   "title": "Más adelante",
-   "summary": "Cuando la base esté firme."
+   "id": "poo",
+   "title": "Programación orientada a objetos",
+   "summary": "Módulo de 10 unidades: de la primera clase a una aplicación completa (índice en #/poo)."
   }
  ],
  "path": [
@@ -98,6 +98,76 @@
     "depuracion"
    ],
    "weight": 30
+  }
+ ],
+ "modules": [
+  {
+   "id": "poo",
+   "title": "Programación orientada a objetos con Python",
+   "summary": "De la primera clase a una aplicación completa: objetos, encapsulación, herencia, polimorfismo, composición y diseño.",
+   "course": "0485",
+   "units": [
+    {
+     "number": 1,
+     "id": "poo-fundamentos",
+     "title": "Fundamentos de la programación orientada a objetos",
+     "available": false
+    },
+    {
+     "number": 2,
+     "id": "poo",
+     "title": "Creación de clases y objetos",
+     "available": true
+    },
+    {
+     "number": 3,
+     "id": "poo-atributos-metodos",
+     "title": "Atributos y métodos",
+     "available": false
+    },
+    {
+     "number": 4,
+     "id": "poo-encapsulacion",
+     "title": "Encapsulación y propiedades",
+     "available": false
+    },
+    {
+     "number": 5,
+     "id": "poo-herencia",
+     "title": "Herencia",
+     "available": false
+    },
+    {
+     "number": 6,
+     "id": "poo-polimorfismo",
+     "title": "Polimorfismo",
+     "available": false
+    },
+    {
+     "number": 7,
+     "id": "poo-composicion",
+     "title": "Composición y relaciones entre objetos",
+     "available": false
+    },
+    {
+     "number": 8,
+     "id": "poo-metodos-especiales",
+     "title": "Métodos especiales de Python",
+     "available": false
+    },
+    {
+     "number": 9,
+     "id": "poo-diseno",
+     "title": "Diseño y buenas prácticas",
+     "available": false
+    },
+    {
+     "number": 10,
+     "id": "poo-proyecto",
+     "title": "Proyecto final: gestión de una biblioteca",
+     "available": false
+    }
+   ]
   }
  ],
  "concepts": [
@@ -1691,8 +1761,8 @@
   },
   {
    "id": "poo",
-   "title": "Clases y objetos (introducción a la POO)",
-   "area": "avanzado",
+   "title": "Creación de clases y objetos",
+   "area": "poo",
    "requires": [
     "funciones",
     "diccionarios"
@@ -1702,7 +1772,7 @@
    "lessons": [
     "poo"
    ],
-   "summary": "Agrupar datos y comportamiento: clases, objetos, atributos y métodos.",
+   "summary": "Definir clases, crear objetos con `__init__`, usar `self` y trabajar con el estado de varios objetos.",
    "when": "Cuando un programa maneja entidades con datos y acciones propias (cuenta bancaria, alumno, producto). Llega después de dominar funciones y colecciones.",
    "example": {
     "code": "class Cuenta:\n    def __init__(self, titular, saldo=0):\n        self.titular = titular\n        self.saldo = saldo\n\n    def ingresar(self, cantidad):\n        self.saldo += cantidad\n\nc = Cuenta(\"Ana\")\nc.ingresar(50)\nprint(c.titular, c.saldo)",
@@ -1740,11 +1810,277 @@
      "why": "La clase es la plantilla; los objetos se crean llamándola: `c = Cuenta(\"Ana\")`.",
      "think": "Una clase es «Perro»; un objeto es «mi perro Toby».",
      "avoid": "Llama a los métodos sobre un objeto, no sobre la clase."
+    },
+    {
+     "id": "poo.init-mal-escrito",
+     "label": "Escribe mal `__init__` o cree que hay que llamarlo a mano",
+     "why": "El constructor solo funciona si se llama exactamente `__init__` (dos guiones bajos a cada lado). Python lo llama solo al crear el objeto.",
+     "think": "¿He escrito `__init__` letra a letra? ¿Estoy creando el objeto con `Clase(...)`?",
+     "avoid": "Copia el nombre `__init__` tal cual y crea los objetos llamando a la clase."
+    },
+    {
+     "id": "poo.alias-copia",
+     "label": "Cree que `b = a` copia el objeto",
+     "why": "Asignar un objeto a otra variable no lo copia: las dos variables apuntan al mismo objeto y los cambios se ven por las dos.",
+     "think": "¿He llamado a la clase otra vez o solo he puesto otro nombre al mismo objeto?",
+     "avoid": "Para tener otro objeto, créalo con `Clase(...)`; `is` te dice si dos variables son el mismo objeto."
     }
    ],
    "related": [
     "funciones",
     "diccionarios"
+   ],
+   "unit": {
+    "module": "poo",
+    "number": 2
+   },
+   "objectives": [
+    "Definir una clase con `class` y crear varios objetos a partir de ella.",
+    "Escribir un constructor `__init__` que dé a cada objeto sus datos iniciales.",
+    "Explicar qué es `self` y por qué no se escribe al llamar a un método.",
+    "Distinguir el estado (atributos) del comportamiento (métodos) de un objeto.",
+    "Predecir qué ocurre al modificar un objeto y sus alias."
+   ],
+   "prior": "Funciones con parámetros y `return`, listas y diccionarios. Conviene haber leído la Unidad 1 (qué es una clase y qué es un objeto), aunque esta unidad lo vuelve a explicar desde cero.",
+   "key": [
+    [
+     "Clase",
+     "La plantilla que describe qué datos y qué acciones tendrán sus objetos. Se define con `class`."
+    ],
+    [
+     "Objeto o instancia",
+     "Cada ejemplar concreto creado a partir de una clase: `ana = Alumno(\"Ana\", 19)`."
+    ],
+    [
+     "Instanciar",
+     "Crear un objeto llamando a la clase como si fuera una función."
+    ],
+    [
+     "Constructor `__init__`",
+     "Método que Python ejecuta solo al crear el objeto para darle sus atributos iniciales."
+    ],
+    [
+     "`self`",
+     "El propio objeto con el que se está trabajando. Es el primer parámetro de todo método de instancia."
+    ],
+    [
+     "Atributo",
+     "Un dato guardado en el objeto (`self.nombre`)."
+    ],
+    [
+     "Método",
+     "Una función definida dentro de la clase que trabaja con los datos del objeto."
+    ],
+    [
+     "Estado",
+     "Los valores que tienen los atributos de un objeto en un momento dado."
+    ]
+   ],
+   "sections": [
+    {
+     "id": "poo.definir",
+     "title": "Definir una clase y crear objetos",
+     "theory": "Una **clase** se define con la palabra `class` seguida de su nombre. Por convenio, los nombres de clase van en *PascalCase*: `Alumno`, `CuentaBancaria`. Todo lo que va sangrado debajo pertenece a la clase.\n\nPara **instanciar** (crear un objeto) se *llama* a la clase como si fuera una función: `ana = Alumno()`. Cada llamada crea un objeto **nuevo e independiente**, aunque sea de la misma clase.\n\n- `type(objeto)` dice de qué clase es un objeto, e `isinstance(objeto, Clase)` lo comprueba.\n- `a is b` dice si dos variables apuntan **al mismo** objeto.\n- Sin paréntesis no se crea nada: `x = Alumno` guarda la clase en otra variable, no un objeto.",
+     "examples": [
+      {
+       "code": "class Alumno:\n    pass                      # clase vacía, de momento\n\n\nana = Alumno()                # instancia: un objeto nuevo\nluis = Alumno()               # otro objeto, distinto del anterior\n\nprint(type(ana).__name__)\nprint(ana is luis)\nprint(isinstance(ana, Alumno))",
+       "lines": [
+        [
+         1,
+         "`class Alumno:` define la clase. Todavía no existe ningún alumno."
+        ],
+        [
+         2,
+         "`pass` deja la clase vacía: no hace nada, pero la sintaxis pide al menos una línea."
+        ],
+        [
+         5,
+         "Con paréntesis se llama a la clase y se crea un objeto. `ana` apunta a él."
+        ],
+        [
+         6,
+         "Otra llamada, otro objeto: `luis` no es el mismo que `ana`."
+        ],
+        [
+         8,
+         "`type(ana)` es la clase `Alumno`; su `__name__` es el texto `'Alumno'`."
+        ],
+        [
+         9,
+         "`False`: son dos objetos distintos, aunque sean de la misma clase."
+        ]
+       ],
+       "output": "Alumno\nFalse\nTrue\n"
+      }
+     ],
+     "quiz": [
+      "poo-04",
+      "poo-05",
+      "poo-06"
+     ]
+    },
+    {
+     "id": "poo.init-self",
+     "title": "El constructor `__init__` y `self`",
+     "theory": "Un objeto vacío sirve de poco. El método especial **`__init__`** (dos guiones bajos a cada lado) se ejecuta **automáticamente** cada vez que se crea un objeto y le da sus datos iniciales.\n\n- Su primer parámetro es **`self`**: el objeto que se acaba de crear. Con `self.nombre = nombre` se guarda el dato *dentro* del objeto (un **atributo**).\n- Al crear el objeto **no se escribe** `self`: `Alumno(\"Ana\", 19)` hace que Python ejecute `Alumno.__init__(objeto_nuevo, \"Ana\", 19)`.\n- Se le pueden poner parámetros con valor por defecto, como a cualquier función.\n- `__init__` no devuelve nada: solo prepara el objeto.\n\nSi el nombre está mal escrito (`_init_`, `__int__`), Python no lo reconoce como constructor y falla al pasarle datos: `TypeError: Alumno() takes no arguments`.",
+     "examples": [
+      {
+       "code": "class Alumno:\n    def __init__(self, nombre, edad, curso=\"1.º DAW\"):\n        self.nombre = nombre      # atributo de instancia\n        self.edad = edad\n        self.curso = curso\n\n\nana = Alumno(\"Ana\", 19)\neva = Alumno(\"Eva\", 22, \"2.º DAW\")\nprint(ana.nombre, ana.curso)\nprint(eva.nombre, eva.curso)",
+       "lines": [
+        [
+         2,
+         "`__init__` recibe primero `self` y después los datos. `curso` es opcional."
+        ],
+        [
+         3,
+         "`self.nombre = nombre`: el parámetro (local) se guarda como atributo del objeto."
+        ],
+        [
+         8,
+         "No se pasa `self`: Python lo añade solo. `curso` toma el valor por defecto."
+        ],
+        [
+         9,
+         "Otro objeto con sus propios datos: no pisa los de `ana`."
+        ],
+        [
+         10,
+         "Los atributos se leen con un punto: `objeto.atributo`."
+        ]
+       ],
+       "output": "Ana 1.º DAW\nEva 2.º DAW\n"
+      }
+     ],
+     "quiz": [
+      "poo-02",
+      "poo-07",
+      "poo-08"
+     ]
+    },
+    {
+     "id": "poo.estado",
+     "title": "Estado y comportamiento de varios objetos",
+     "theory": "Un objeto reúne **estado** (los valores de sus atributos) y **comportamiento** (sus **métodos**). Un método es una función definida dentro de la clase; recibe `self` y con él puede leer y cambiar el estado del objeto. Se llama con un punto: `ana.poner_nota(8)`.\n\nCada objeto tiene **su propio estado**: cambiar `ana` no cambia `luis`. Pero ojo con los **alias**: `b = a` no copia el objeto, hace que `b` apunte al **mismo** objeto que `a`. Cualquier cambio hecho por `b` se ve desde `a`.",
+     "examples": [
+      {
+       "code": "class Alumno:\n    def __init__(self, nombre):\n        self.nombre = nombre\n        self.notas = []                 # cada alumno, su propia lista\n\n    def poner_nota(self, nota):\n        self.notas.append(nota)         # cambia el estado del objeto\n\n    def media(self):\n        if not self.notas:\n            return 0\n        return sum(self.notas) / len(self.notas)\n\n\nana = Alumno(\"Ana\")\nluis = Alumno(\"Luis\")\nana.poner_nota(8)\nana.poner_nota(6)\nluis.poner_nota(9)\nprint(ana.nombre, ana.media())\nprint(luis.nombre, luis.media())",
+       "lines": [
+        [
+         4,
+         "La lista se crea en `__init__`: cada objeto tiene la suya."
+        ],
+        [
+         6,
+         "Un método: recibe `self` (el alumno) y la nota."
+        ],
+        [
+         7,
+         "Modifica el estado del alumno con el que se ha llamado."
+        ],
+        [
+         9,
+         "Otro método que solo lee el estado y devuelve un resultado."
+        ],
+        [
+         17,
+         "`ana.poner_nota(8)` equivale a `Alumno.poner_nota(ana, 8)`."
+        ],
+        [
+         20,
+         "Las notas de `luis` no se mezclan con las de `ana`."
+        ]
+       ],
+       "output": "Ana 7.0\nLuis 9.0\n"
+      },
+      {
+       "code": "class Contador:\n    def __init__(self):\n        self.valor = 0\n\n\na = Contador()\nb = a            # b NO es una copia: es el mismo objeto\nb.valor = 5\nprint(a.valor)\nc = Contador()   # este sí es otro objeto\nprint(c.valor)",
+       "lines": [
+        [
+         7,
+         "Asignar un objeto a otra variable crea un alias, no una copia."
+        ],
+        [
+         9,
+         "Muestra 5: `a` y `b` son el mismo contador."
+        ],
+        [
+         10,
+         "Llamar a la clase de nuevo sí crea un objeto distinto, que empieza en 0."
+        ]
+       ],
+       "output": "5\n0\n"
+      }
+     ],
+     "quiz": [
+      "poo-01",
+      "poo-09",
+      "poo-10"
+     ]
+    }
+   ],
+   "guided": [
+    "poo-11"
+   ],
+   "autonomous": [
+    "poo-03",
+    "poo-12"
+   ],
+   "selfcheck": [
+    "poo-13",
+    "poo-14"
+   ],
+   "recap": [
+    "Una clase se define con `class Nombre:` y se instancia llamándola: `objeto = Nombre(...)`.",
+    "`__init__` se ejecuta solo al crear cada objeto y guarda sus datos con `self.atributo = valor`.",
+    "`self` es el propio objeto: es el primer parámetro de los métodos y no se escribe al llamarlos.",
+    "Cada objeto tiene su propio estado; los métodos lo leen y lo cambian.",
+    "`b = a` no copia un objeto: las dos variables apuntan al mismo."
+   ],
+   "pass": {
+    "minScore": 0.7,
+    "required": [
+     "poo-11",
+     "poo-12"
+    ],
+    "text": [
+     "Resolver el ejercicio guiado (`Alumno`) y el autónomo `Marcador` con todos los tests superados.",
+     "Dominar la unidad según el motor: al menos un 70 % de aciertos recientes en sus ejercicios, con varios tipos distintos.",
+     "Completar las lecciones ayuda a organizarte, pero **no** demuestra la competencia: la demuestran los ejercicios."
+    ]
+   },
+   "curriculum": [
+    {
+     "ce": "0485-RA2-h",
+     "status": "proposed",
+     "source": "rd-405-2023#anexo-I",
+     "reviewed": "2026-11-11",
+     "by": "plataforma",
+     "note": "Se usan constructores (`__init__`) para inicializar objetos."
+    },
+    {
+     "ce": "0485-RA4-b",
+     "status": "proposed",
+     "source": "rd-405-2023#anexo-I",
+     "reviewed": "2026-11-11",
+     "by": "plataforma",
+     "note": "Se definen clases propias con `class`."
+    },
+    {
+     "ce": "0485-RA4-d",
+     "status": "proposed",
+     "source": "rd-405-2023#anexo-I",
+     "reviewed": "2026-11-11",
+     "by": "plataforma",
+     "note": "Se escriben constructores con parámetros y valores por defecto."
+    },
+    {
+     "ce": "0485-RA4-e",
+     "status": "proposed",
+     "source": "rd-405-2023#anexo-I",
+     "reviewed": "2026-11-11",
+     "by": "plataforma",
+     "note": "Se escriben programas que crean y usan varios objetos de las clases definidas."
+    }
    ],
    "module": "0485",
    "ra": [
@@ -1752,14 +2088,12 @@
     "0485-RA4"
    ],
    "ce": [
-    "0485-RA2-a",
-    "0485-RA4-a",
+    "0485-RA2-h",
     "0485-RA4-b",
-    "0485-RA4-c",
     "0485-RA4-d",
     "0485-RA4-e"
    ],
-   "difficulty": 2.0,
+   "difficulty": 1.6,
    "importance": 2
   }
  ],
@@ -4599,6 +4933,251 @@
    ],
    "hint": "`dni[:8]` son las cifras y `dni[8]` la letra. Comprueba `isdigit()` antes de `int()`.",
    "explain": "Dos funciones pequeñas: una calcula y la otra valida reutilizándola. Validar el formato **antes** de convertir con `int()` evita el ValueError."
+  },
+  {
+   "id": "poo-04",
+   "concept": "poo",
+   "kind": "choice",
+   "level": 1,
+   "daw": false,
+   "q": "Con la clase `Producto` ya definida, ¿qué hace la línea `p = Producto()`?",
+   "code": null,
+   "options": [
+    {
+     "text": "Crea un objeto nuevo de la clase `Producto` y lo guarda en `p`",
+     "error": null
+    },
+    {
+     "text": "Define una clase nueva llamada `p`",
+     "error": "poo.clase-objeto"
+    },
+    {
+     "text": "Guarda en `p` la propia clase `Producto`, sin crear nada",
+     "error": "poo.clase-objeto"
+    },
+    {
+     "text": "Ejecuta todos los métodos de `Producto` uno tras otro",
+     "error": null
+    }
+   ],
+   "answer": 0,
+   "explain": "Llamar a la clase (con paréntesis) la **instancia**: crea un objeto nuevo. Sin paréntesis (`p = Producto`) solo se copiaría la referencia a la clase. Los métodos no se ejecutan solos: hay que llamarlos.",
+   "codeOptions": false
+  },
+  {
+   "id": "poo-05",
+   "concept": "poo",
+   "kind": "output",
+   "level": 1,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "class Perro:\n    pass\n\na = Perro()\nb = Perro()\nc = a\nprint(a is b, a is c)",
+   "stdin": "",
+   "expect": "False True",
+   "traps": {
+    "True True": "poo.clase-objeto",
+    "False False": "poo.alias-copia"
+   },
+   "explain": "`a` y `b` son dos objetos distintos (dos llamadas a la clase). `c = a` no crea un objeto: `c` es otro nombre para el mismo objeto que `a`."
+  },
+  {
+   "id": "poo-06",
+   "concept": "poo",
+   "kind": "bug",
+   "level": 1,
+   "daw": false,
+   "q": "Debería mostrar `Ana`. ¿Qué línea falla?",
+   "code": "class Saludo:\n    def __init__(self, nombre):\n        self.nombre = nombre\n\ns = Saludo\nprint(s.nombre)",
+   "stdin": "",
+   "line": 5,
+   "fix": "s = Saludo(\"Ana\")",
+   "expect": "Ana",
+   "error": "poo.clase-objeto",
+   "explain": "Sin paréntesis, `s` es la clase y no un objeto: la clase no tiene el atributo `nombre` y salta `AttributeError`. Hay que crear el objeto con sus datos: `Saludo(\"Ana\")`."
+  },
+  {
+   "id": "poo-07",
+   "concept": "poo",
+   "kind": "fill",
+   "level": 1,
+   "daw": false,
+   "q": "Completa el nombre del método para que cada libro se cree con su título.",
+   "code": "class Libro:\n    def ___(self, titulo):\n        self.titulo = titulo\n\nlibro = Libro(\"Rayuela\")\nprint(libro.titulo)",
+   "accept": [
+    "__init__"
+   ],
+   "expect": "Rayuela",
+   "traps": {
+    "_init_": "poo.init-mal-escrito",
+    "__int__": "poo.init-mal-escrito",
+    "init": "poo.init-mal-escrito"
+   },
+   "explain": "El constructor se llama exactamente `__init__`, con dos guiones bajos a cada lado. Con otro nombre, `Libro(\"Rayuela\")` daría `TypeError: Libro() takes no arguments`."
+  },
+  {
+   "id": "poo-08",
+   "concept": "poo",
+   "kind": "bug",
+   "level": 2,
+   "daw": false,
+   "q": "Debería mostrar `Luis 20`. ¿Qué línea falla?",
+   "code": "class Alumno:\n    def __init__(nombre, edad):\n        self.nombre = nombre\n        self.edad = edad\n\nluis = Alumno(\"Luis\", 20)\nprint(luis.nombre, luis.edad)",
+   "stdin": "",
+   "line": 2,
+   "fix": "    def __init__(self, nombre, edad):",
+   "expect": "Luis 20",
+   "error": "poo.olvida-self",
+   "explain": "El primer parámetro de `__init__` debe ser `self`. Sin él, Python mete el objeto nuevo en `nombre`, sobran argumentos (`TypeError`) y además `self` no existe dentro del método."
+  },
+  {
+   "id": "poo-09",
+   "concept": "poo",
+   "kind": "output",
+   "level": 2,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "class Lampara:\n    def __init__(self):\n        self.encendida = False\n\n    def pulsar(self):\n        self.encendida = not self.encendida\n\nluz = Lampara()\nluz.pulsar()\nluz.pulsar()\nluz.pulsar()\nprint(luz.encendida)",
+   "stdin": "",
+   "expect": "True",
+   "traps": {
+    "False": null
+   },
+   "explain": "Empieza apagada (`False`) y cada `pulsar()` invierte el estado: tras tres pulsaciones queda encendida (`True`). El método cambia el estado del propio objeto a través de `self`."
+  },
+  {
+   "id": "poo-10",
+   "concept": "poo",
+   "kind": "choice",
+   "level": 2,
+   "daw": false,
+   "q": "`a` es un objeto con el atributo `x = 1`. Se ejecuta `b = a` y después `b.x = 9`. ¿Cuánto vale `a.x`?",
+   "code": null,
+   "options": [
+    {
+     "text": "9, porque `a` y `b` son el mismo objeto",
+     "error": null
+    },
+    {
+     "text": "1, porque `b` es una copia de `a`",
+     "error": "poo.alias-copia"
+    },
+    {
+     "text": "Da un error: no se puede asignar un objeto a otra variable",
+     "error": null
+    },
+    {
+     "text": "1, porque cada variable tiene su propio objeto desde que se crea",
+     "error": "poo.alias-copia"
+    }
+   ],
+   "answer": 0,
+   "explain": "`b = a` no crea un objeto nuevo: `b` es un alias. Lo que se cambie por un nombre se ve por el otro. Para tener otro objeto hay que llamar de nuevo a la clase (o copiarlo explícitamente).",
+   "codeOptions": false
+  },
+  {
+   "id": "poo-11",
+   "concept": "poo",
+   "kind": "code",
+   "level": 2,
+   "daw": false,
+   "q": "**Ejercicio guiado: la clase `Alumno`.** Sigue los pasos:\n\n1. Escribe `__init__(self, nombre, edad, curso)` y guarda los tres datos como atributos.\n2. Añade el método `presentarse()`, que **devuelva** (no que imprima) el texto `\"Soy Ana, tengo 19 años y estudio 1.º DAW\"` con los datos del alumno.\n3. Añade el método `cumplir_anios()`, que sume 1 a la edad del alumno.\n4. Pulsa **▶ Ejecutar** para ver el resultado y después **Comprobar con los tests**.",
+   "starter": "class Alumno:\n    def __init__(self, nombre, edad, curso):\n        # Paso 1: guarda los datos con self.\n        ...\n\n    # Paso 2: presentarse()\n\n    # Paso 3: cumplir_anios()\n\n\nana = Alumno(\"Ana\", 19, \"1.º DAW\")\nprint(ana.presentarse())\nana.cumplir_anios()\nprint(ana.edad)",
+   "solution": "class Alumno:\n    def __init__(self, nombre, edad, curso):\n        self.nombre = nombre\n        self.edad = edad\n        self.curso = curso\n\n    def presentarse(self):\n        return f\"Soy {self.nombre}, tengo {self.edad} años y estudio {self.curso}\"\n\n    def cumplir_anios(self):\n        self.edad += 1\n\n\nana = Alumno(\"Ana\", 19, \"1.º DAW\")\nprint(ana.presentarse())\nana.cumplir_anios()\nprint(ana.edad)",
+   "checks": [
+    {
+     "stdin": "",
+     "test": "a = Alumno(\"Eva\", 22, \"2.º DAW\")\nassert (a.nombre, a.edad, a.curso) == (\"Eva\", 22, \"2.º DAW\"), \"Guarda nombre, edad y curso como atributos con self (self.nombre = nombre…)\"",
+     "error": "poo.olvida-self"
+    },
+    {
+     "stdin": "",
+     "test": "a = Alumno(\"Eva\", 22, \"2.º DAW\")\nassert a.presentarse() == \"Soy Eva, tengo 22 años y estudio 2.º DAW\", f\"presentarse() debe devolver el texto con los datos del alumno; devuelve {a.presentarse()!r}\"",
+     "error": null
+    },
+    {
+     "stdin": "",
+     "test": "a = Alumno(\"Eva\", 22, \"2.º DAW\")\nb = Alumno(\"Leo\", 30, \"1.º DAW\")\na.cumplir_anios()\nassert a.edad == 23, \"cumplir_anios() debe sumar 1 a self.edad\"\nassert b.edad == 30, \"cumplir_anios() solo cambia el alumno con el que se llama\"",
+     "error": "poo.clase-objeto"
+    }
+   ],
+   "hint": "En `__init__`: `self.nombre = nombre` (igual con edad y curso). `presentarse` devuelve una f-string con `self.nombre`, `self.edad` y `self.curso`. `cumplir_anios` hace `self.edad += 1`.",
+   "explain": "Cada dato se guarda en `self` dentro de `__init__`; los métodos lo leen o lo cambian con `self.`. `presentarse` devuelve el texto con `return` para que quien la llame decida si lo imprime.",
+   "expect": "Soy Ana, tengo 19 años y estudio 1.º DAW\n20\n"
+  },
+  {
+   "id": "poo-12",
+   "concept": "poo",
+   "kind": "code",
+   "level": 2,
+   "daw": false,
+   "q": "**Ejercicio autónomo: el marcador de un partido.** Crea la clase `Marcador` con:\n\n- `__init__(self, local, visitante)`: los nombres de los equipos; los dos empiezan con 0 goles.\n- `gol_local()` y `gol_visitante()`: suman un gol al equipo correspondiente.\n- `resultado()`: devuelve un texto como `\"Betis 2 - 1 Sevilla\"`.\n\nCrea un partido, marca algunos goles y muestra el resultado.",
+   "starter": "class Marcador:\n    ...",
+   "solution": "class Marcador:\n    def __init__(self, local, visitante):\n        self.local = local\n        self.visitante = visitante\n        self.goles_local = 0\n        self.goles_visitante = 0\n\n    def gol_local(self):\n        self.goles_local += 1\n\n    def gol_visitante(self):\n        self.goles_visitante += 1\n\n    def resultado(self):\n        return f\"{self.local} {self.goles_local} - {self.goles_visitante} {self.visitante}\"\n\n\npartido = Marcador(\"Betis\", \"Sevilla\")\npartido.gol_local()\npartido.gol_local()\npartido.gol_visitante()\nprint(partido.resultado())",
+   "checks": [
+    {
+     "stdin": "",
+     "test": "m = Marcador(\"A\", \"B\")\nassert m.resultado() == \"A 0 - 0 B\", f\"Un partido nuevo debe empezar 0 - 0; resultado() devuelve {m.resultado()!r}\"",
+     "error": null
+    },
+    {
+     "stdin": "",
+     "test": "m = Marcador(\"A\", \"B\")\nm.gol_local()\nm.gol_local()\nm.gol_visitante()\nassert m.resultado() == \"A 2 - 1 B\", f\"Tras dos goles locales y uno visitante debe ser 'A 2 - 1 B'; es {m.resultado()!r}\"",
+     "error": "poo.olvida-self"
+    },
+    {
+     "stdin": "",
+     "test": "m1 = Marcador(\"A\", \"B\")\nm2 = Marcador(\"C\", \"D\")\nm1.gol_local()\nassert m2.resultado() == \"C 0 - 0 D\", \"Los goles de un partido no deben cambiar otro partido\"",
+     "error": "poo.clase-objeto"
+    }
+   ],
+   "hint": "Guarda cuatro atributos en `__init__`: los dos nombres y dos contadores a 0. Cada método `gol_*` suma 1 a su contador con `self.`.",
+   "explain": "Los goles son el **estado** del marcador y empiezan en 0 en `__init__`; los métodos `gol_*` lo cambian y `resultado` lo lee para construir el texto.",
+   "expect": "Betis 2 - 1 Sevilla\n"
+  },
+  {
+   "id": "poo-13",
+   "concept": "poo",
+   "kind": "choice",
+   "level": 1,
+   "daw": false,
+   "q": "¿Cuál de estas afirmaciones sobre `__init__` es correcta?",
+   "code": null,
+   "options": [
+    {
+     "text": "Python lo ejecuta automáticamente cada vez que se crea un objeto de la clase",
+     "error": null
+    },
+    {
+     "text": "Hay que llamarlo a mano después de crear el objeto: `a.__init__()`",
+     "error": "poo.init-mal-escrito"
+    },
+    {
+     "text": "Debe terminar con `return self` para que el objeto exista",
+     "error": null
+    },
+    {
+     "text": "Solo se ejecuta la primera vez que se usa la clase",
+     "error": "poo.clase-objeto"
+    }
+   ],
+   "answer": 0,
+   "explain": "`__init__` se ejecuta solo en cada instanciación (`Clase(...)`) y no devuelve nada: el objeto ya existe y `__init__` solo le pone sus datos iniciales. Si devolviera algo distinto de `None`, Python lanzaría `TypeError`.",
+   "codeOptions": false
+  },
+  {
+   "id": "poo-14",
+   "concept": "poo",
+   "kind": "output",
+   "level": 2,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "class Caja:\n    def __init__(self, contenido):\n        self.contenido = contenido\n\n    def cambiar(self, nuevo):\n        contenido = nuevo\n\ncaja = Caja(\"libros\")\ncaja.cambiar(\"ropa\")\nprint(caja.contenido)",
+   "stdin": "",
+   "expect": "libros",
+   "traps": {
+    "ropa": "poo.olvida-self"
+   },
+   "explain": "En `cambiar` falta `self.`: `contenido = nuevo` crea una variable **local** del método que desaparece al terminar. El atributo del objeto sigue valiendo `\"libros\"`."
   }
  ]
 }

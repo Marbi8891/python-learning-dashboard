@@ -14,6 +14,7 @@ import importlib.util
 import json
 import multiprocessing
 import os
+import re
 import sys
 import tempfile
 from pathlib import Path
@@ -29,7 +30,11 @@ TIMEOUT_S = 5
 
 sys.path.insert(0, str(HERE))
 from concepts import AREAS, CONCEPTS, CURRICULUM_CE, DAW_COMPETENCIES, PATH  # noqa: E402
-from exercises import E  # noqa: E402
+from exercises import E as BASE_EXERCISES  # noqa: E402
+from poo_module import EXERCISES as POO_EXERCISES  # noqa: E402
+from poo_module import MODULE, UNIT_FIELDS  # noqa: E402
+
+E = [*BASE_EXERCISES, *POO_EXERCISES]
 
 KINDS = {"choice", "output", "fill", "order", "bug", "code"}
 
@@ -136,9 +141,9 @@ def check_concepts(problems: Problems) -> set[str]:
             if not 1 <= number <= lines:
                 problems.add(where, f"explicación de una línea inexistente: {number}")
     covered = [cid for comp in DAW_COMPETENCIES for cid in comp["concepts"]]
-    if sorted(covered) != sorted(i for i in ids if i != "poo"):
+    if sorted(covered) != sorted(c["id"] for c in CONCEPTS if c["area"] != "poo"):
         problems.add(
-            "DAW", "cada concepto (salvo POO, para más adelante) va en una sola competencia"
+            "DAW", "cada concepto (salvo el módulo de POO, aparte) va en una sola competencia"
         )
     if sum(comp["weight"] for comp in DAW_COMPETENCIES) != 100:
         problems.add("DAW", "los pesos de las competencias deben sumar 100")
@@ -259,6 +264,125 @@ def check_exercise(ex: dict, concepts: set[str], errors: set[str], problems: Pro
                 )
 
 
+MAPPING_STATUS = {"verified", "proposed", "unassigned"}
+CHOICE_OPTIONS = 4  # preguntas tipo test del módulo de POO: siempre cuatro opciones
+MIN_UNIT_EXERCISES = 8
+
+
+def _same_text(ex: dict) -> str:
+    """Enunciado y código normalizados, para detectar preguntas repetidas."""
+    return " ".join(f"{ex['q']} {ex.get('code') or ''}".lower().split())
+
+
+def check_units(problems: Problems) -> list[dict]:
+    """Módulo de POO: cada unidad tiene todos sus apartados y sus ejercicios están completos.
+
+    Devuelve el índice del módulo con `available` en las unidades que ya tienen concepto.
+    """
+    catalog = json.loads((DATA / "curriculum" / "daw-cyl.json").read_text("utf-8"))
+    criteria = {
+        ce["id"]
+        for module in catalog["modules"]
+        for ra in module.get("learningOutcomes", [])
+        for ce in ra["criteria"]
+    }
+    sources = {source["id"] for source in catalog["sources"]}
+    by_id = {c["id"]: c for c in CONCEPTS}
+    exercises = {e["id"]: e for e in E}
+    units = MODULE["units"]
+    if [u["number"] for u in units] != list(range(1, len(units) + 1)):
+        problems.add("módulo POO", "las unidades deben ir numeradas 1, 2, 3… sin huecos")
+    numbers = {u["id"]: u["number"] for u in units}
+    for concept in CONCEPTS:
+        if concept["area"] == "poo" and concept["id"] not in numbers:
+            problems.add(f"concepto {concept['id']}", "es del área poo pero no está en MODULE")
+    seen_texts: dict[str, str] = {}
+    for ex in E:
+        if by_id.get(ex["concept"], {}).get("area") != "poo":
+            continue
+        text = _same_text(ex)
+        if text in seen_texts:
+            problems.add(f"ejercicio {ex['id']}", f"repite el enunciado de {seen_texts[text]}")
+        seen_texts.setdefault(text, ex["id"])
+    for unit in units:
+        concept = by_id.get(unit["id"])
+        if concept is None:
+            continue  # unidad aún no publicada: el índice la muestra «en preparación»
+        cid = concept["id"]
+        where = f"unidad {unit['number']} ({cid})"
+        if concept.get("unit") != {"module": MODULE["id"], "number": unit["number"]}:
+            problems.add(where, "el campo unit no coincide con el índice del módulo")
+        for name in UNIT_FIELDS:
+            if not concept.get(name):
+                problems.add(where, f"falta el apartado {name}")
+        own = [e for e in E if e["concept"] == cid]
+        if len(own) < MIN_UNIT_EXERCISES:
+            problems.add(where, f"necesita al menos {MIN_UNIT_EXERCISES} ejercicios")
+        used: list[str] = []
+        section_ids = set()
+        for section in concept.get("sections", []):
+            swhere = f"{where}, lección {section.get('id')}"
+            if not section.get("id", "").startswith(f"{cid}.") or section["id"] in section_ids:
+                problems.add(swhere, f"id de lección repetido o sin el prefijo {cid}.")
+            section_ids.add(section.get("id"))
+            if not section.get("title") or not section.get("theory"):
+                problems.add(swhere, "falta el título o la teoría")
+            if not section.get("examples"):
+                problems.add(swhere, "sin ejemplos")
+            for example in section.get("examples", []):
+                result = execute("run", code=example["code"], stdin=example.get("stdin", ""))
+                if result.get("timeout") or result["error"]:
+                    problems.add(swhere, f"un ejemplo falla: {result['error']}")
+                example["output"] = result["output"]
+                lines = example["code"].count("\n") + 1
+                for number, _ in example["lines"]:
+                    if not 1 <= number <= lines:
+                        problems.add(swhere, f"explicación de una línea inexistente: {number}")
+            if len(section.get("quiz", [])) != 3:
+                problems.add(swhere, "el mini-quiz debe tener 3 preguntas")
+            used += section.get("quiz", [])
+        for group in ("guided", "autonomous"):
+            for eid in concept.get(group, []):
+                if exercises.get(eid, {}).get("kind") != "code":
+                    problems.add(where, f"{group}: {eid} debe ser un ejercicio de escribir código")
+        used += concept.get("guided", []) + concept.get("autonomous", [])
+        used += concept.get("selfcheck", [])
+        used += concept.get("pass", {}).get("required", [])
+        for eid in used:
+            if exercises.get(eid, {}).get("concept") != cid:
+                problems.add(where, f"{eid} no existe o no es un ejercicio de esta unidad")
+        for ex in own:
+            ewhere = f"ejercicio {ex['id']}"
+            if ex["id"] not in used:
+                problems.add(ewhere, "no aparece en ninguna lección, práctica ni autoevaluación")
+            if ex["kind"] == "choice" and len(ex["options"]) != CHOICE_OPTIONS:
+                problems.add(ewhere, f"una pregunta tipo test lleva {CHOICE_OPTIONS} opciones")
+            if ex["kind"] == "code":
+                starter = execute("check", code=ex["starter"], checks=ex["checks"])
+                if starter["passed"]:
+                    problems.add(ewhere, "el código inicial ya supera los tests")
+                result = execute("run", code=ex["solution"])
+                if result["output"].strip():
+                    ex["expect"] = result["output"]  # «Resultado esperado»: el de la solución real
+        score = concept.get("pass", {}).get("minScore")
+        if not isinstance(score, (int, float)) or not 0 < score <= 1:
+            problems.add(where, "pass.minScore debe estar entre 0 y 1")
+        for mapping in concept.get("curriculum", []):
+            mwhere = f"{where}, {mapping.get('ce')}"
+            if mapping.get("status") not in MAPPING_STATUS:
+                problems.add(mwhere, f"estado no válido (usa {sorted(MAPPING_STATUS)})")
+            if mapping.get("source", "").split("#")[0] not in sources:
+                problems.add(mwhere, "fuente desconocida en daw-cyl.json")
+            if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", str(mapping.get("reviewed", ""))):
+                problems.add(mwhere, "falta la fecha de revisión (AAAA-MM-DD)")
+            if mapping.get("status") != "unassigned" and mapping.get("ce") not in criteria:
+                problems.add(mwhere, "CE inexistente en daw-cyl.json")
+            unreviewed = mapping.get("by") in (None, "", "plataforma")
+            if mapping.get("status") == "verified" and unreviewed:
+                problems.add(mwhere, "una correspondencia verified necesita quién la validó")
+    return [{**u, "available": u["id"] in by_id} for u in units]
+
+
 def current_ids(concepts: list[dict], exercises: list[dict]) -> dict[str, list[str]]:
     return {
         "concepts": [c["id"] for c in concepts],
@@ -337,6 +461,7 @@ def build() -> dict:
         if not any(e["concept"] == concept for e in E):
             problems.add(f"concepto {concept}", "sin ejercicios")
     check_lock(current_ids(CONCEPTS, E), problems)
+    units = check_units(problems)
     concepts_out = knowledge_model(E, problems)
     if problems:
         print("\n".join(problems), file=sys.stderr)
@@ -347,6 +472,7 @@ def build() -> dict:
         "areas": AREAS,
         "path": PATH,
         "daw": DAW_COMPETENCIES,
+        "modules": [{**MODULE, "units": units}],
         "concepts": concepts_out,
         "exercises": exercises,
     }

@@ -16,6 +16,8 @@ teoría, un ejemplo explicado línea a línea, cuándo usarlo y sus errores típ
 La salida de cada ejemplo no se escribe a mano: build_learning.py la obtiene ejecutándolo.
 """
 
+from poo_module import UNIT_ERRORS, UNIT_OVERRIDES, UNITS
+
 AREAS = [
     {
         "id": "fundamentos",
@@ -32,7 +34,11 @@ AREAS = [
         "title": "Lógica",
         "summary": "Pensar antes de programar: algoritmos, pseudocódigo, trazas y depuración.",
     },
-    {"id": "avanzado", "title": "Más adelante", "summary": "Cuando la base esté firme."},
+    {
+        "id": "poo",
+        "title": "Programación orientada a objetos",
+        "summary": "Módulo de 10 unidades: de la primera clase a una aplicación completa (índice en #/poo).",
+    },
 ]
 
 # Orden recomendado de la ruta «Aprender»: intercala la lógica (pseudocódigo, trazas, depuración)
@@ -1315,11 +1321,11 @@ CONCEPTS = [
         ],
         "related": ["trazado", "excepciones"],
     },
-    # ------------------------------------------------------------------ MÁS ADELANTE
+    # ------------------------------------------------------------------ POO (Unidad 2 del módulo; ver poo_module.py)
     {
         "id": "poo",
         "title": "Clases y objetos (introducción a la POO)",
-        "area": "avanzado",
+        "area": "poo",
         "requires": ["funciones", "diccionarios"],
         "daw": 2,
         "ut": "prog-ut5",
@@ -1384,5 +1390,16 @@ CURRICULUM_CE = {
     "pseudocodigo": ["0485-RA1-a"],
     "trazado": ["0485-RA3-f"],
     "depuracion": ["0485-RA3-f", "0485-RA3-i"],
-    "poo": ["0485-RA2-a", "0485-RA4-a", "0485-RA4-b", "0485-RA4-c", "0485-RA4-d", "0485-RA4-e"],
 }
+
+# ---------- Módulo de POO (unidades con campos propios; ver poo_module.py) ----------
+for _concept in CONCEPTS:
+    _concept.update(UNIT_OVERRIDES.get(_concept["id"], {}))
+    _concept["errors"] += [err(_concept["id"], *e) for e in UNIT_ERRORS.get(_concept["id"], [])]
+    _concept.update(UNITS.get(_concept["id"], {}))
+    if "curriculum" in _concept:
+        # Los CE de una unidad salen de sus correspondencias (propuestas o validadas, nunca las
+        # «unassigned»): así no hay dos listas que mantener a mano.
+        CURRICULUM_CE[_concept["id"]] = [
+            m["ce"] for m in _concept["curriculum"] if m["status"] != "unassigned"
+        ]
