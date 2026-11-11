@@ -262,6 +262,9 @@ test("cerrar sesión sin conexión con el servidor: con cookie, la sesión sigue
 
   await page.unroute("**/api/v1/auth/logout");
   await dialog(page).getByRole("button", { name: "Cerrar sesión" }).click();
+  // Cerrar sesión recarga la página (account.js, leave). La etiqueta cambia antes de la recarga, así
+  // que se espera al aviso, que solo aparece al volver: si no, fetch se ejecuta durante la recarga
+  await expect(page.locator("#toast")).toContainText("Sesión cerrada");
   await expect(page.locator("#account-label")).toHaveText("Iniciar sesión");
   expect(await meWithCookie(page)).toBe(401);
 });
