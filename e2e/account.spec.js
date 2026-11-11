@@ -366,7 +366,7 @@ test("entrar con Google simulado exige la privacidad y abre la sesión", async (
   await expect(page.locator("#account-message")).toHaveText("Confirma que has leído la política de privacidad para continuar con Google.");
   expect(bodies).toEqual([]);
   // Accesible con el bloque de Google visible
-  const axe = await new AxeBuilder({ page }).include("#account-dialog").withTags(["wcag2a", "wcag2aa"]).analyze();
+  const axe = await new AxeBuilder({ page }).include("#account-dialog").withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]).analyze();
   expect(axe.violations.map((v) => v.id)).toEqual([]);
   await page.locator("[data-google-login]").getByLabel(/He leído la política/).check();
   await google.click();

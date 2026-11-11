@@ -104,7 +104,7 @@ Para añadir uno: añade su ficha a `RESOURCES`, ejecuta `python scripts/resourc
 | Catálogo de recursos | `python scripts/resources/build_resources.py --check` y `backend/tests/test_resources.py` |
 | Fusión y validación del progreso por lección | `tests/unit/lesson-progress.test.mjs` |
 | Enlace directo, recarga, mini-quiz, práctica, completar, continuar, recursos y sincronización con la cuenta sin borrar lo de otro dispositivo | `e2e/daw.spec.js` |
-| Accesibilidad (axe, WCAG 2.1 AA) de una lección y del panel de Lenguajes de marcas | `e2e/daw.spec.js` |
+| Accesibilidad (axe, reglas de WCAG 2.2 A/AA) de una lección y del panel de Lenguajes de marcas | `e2e/daw.spec.js` |
 
 ## 8. Limitaciones conocidas y siguiente paso
 

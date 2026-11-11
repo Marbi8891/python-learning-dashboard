@@ -98,7 +98,7 @@ test("Mi cuenta sin infracciones WCAG", async ({ page, request }) => {
   await page.goto("/#/panel/perfil");
   await expect(page.locator("#account-activity li").first()).toBeVisible();
   await page.waitForFunction(() => !document.querySelector("#toast.toast--visible"), null, { timeout: 20_000 });
-  const results = await new AxeBuilder({ page }).include("#private-view").withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"]).analyze();
+  const results = await new AxeBuilder({ page }).include("#private-view").withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]).analyze();
   const summary = results.violations.map((v) => `${v.id} (${v.impact}): ${v.nodes.map((n) => n.target).join(", ")}`);
   expect(summary, summary.join("\n")).toEqual([]);
 });

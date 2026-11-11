@@ -119,6 +119,34 @@ Gmail corta los envíos de una cuenta personal a partir de unos 500 emails al d�
 
 Actualiza en `frontend/privacidad.html` la línea «Emails de recuperación de contraseña» con el proveedor elegido (Brevo, Google o el servicio que uses) y publica.
 
+### Lista de comprobación de Brevo (lo hace el propietario de la cuenta)
+
+El código ya está listo (`backend/app/mailer.py`, probado en `tests/test_internals.py` con una API de Brevo
+simulada). Lo que falta es configuración, y solo la puede hacer quien tiene acceso a Brevo y a Render:
+
+1. Crear la cuenta de Brevo, verificar el remitente y generar la clave (pasos 1 a 3 de la opción A).
+2. Probar en tu ordenador **antes** de tocar Render: en `backend/.env` pon `BREVO_API_KEY` y `SMTP_FROM` y
+   ejecuta `python -m app.mailer tu-direccion@gmail.com`. Si Brevo rechaza el envío, el comando muestra
+   su motivo (clave incorrecta, remitente sin verificar, cuenta pendiente de activar). La Shell de Render
+   no está en el plan gratuito, así que esta es la forma de ver el error exacto.
+3. En Render, añadir `BREVO_API_KEY` y `SMTP_FROM` (paso 4) y desplegar.
+4. Comprobar `/api/health` → `"email": true`, pedir un enlace desde la web con una cuenta tuya y
+   completar el cambio de contraseña con él.
+5. Cuando funcione, **borrar de Render `SMTP_HOST`, `SMTP_USER` y `SMTP_PASSWORD`**: ya no se usan
+   (Brevo tiene prioridad) y la contraseña de aplicación de Gmail es un secreto que no hace falta guardar
+   allí. Revoca también esa contraseña de aplicación en tu cuenta de Google si no la usas en otro sitio.
+6. Actualizar `frontend/privacidad.html` con el proveedor (ver arriba).
+
+Qué tener en cuenta:
+
+| Tema | Cómo funciona hoy |
+|---|---|
+| Plantilla | Texto plano en español, generado en `request_password_reset` (`backend/app/routers/auth.py`): saludo con el nombre, enlace `FRONTEND_URL/#/restablecer?token=…`, minutos de validez y aviso de ignorarlo si no lo pidió. No hay versión HTML ni en inglés |
+| Errores | El envío va en segundo plano: un fallo de Brevo (4xx/5xx o red) se registra en el log como «No se pudo enviar el email a a***@dominio» y la persona ve el mismo mensaje de siempre. `/api/health` dice `"email": true` en cuanto hay clave, aunque sea incorrecta: por eso hay que hacer la prueba del paso 4 |
+| Abuso | Límite por IP en todo `/auth/*` (5 por minuto), como mucho 3 emails por cuenta cada 15 minutos, misma respuesta exista o no la cuenta. Detalle en [auth.md](auth.md). Los límites viven en memoria (se reinician con el servidor) |
+| Cuota | 300 emails al día en el plan gratuito de Brevo. Un piloto de clase no se acerca |
+| Remitente | Con una dirección `@gmail.com` como remitente, Gmail puede mandar los emails a spam porque no salen de los servidores de Google. Si pasa a menudo, la solución es un dominio propio autenticado en Brevo (SPF y DKIM) |
+
 ## 6. Antes de abrirlo a usuarios reales
 
 - [x] Responsable, contacto y proveedores (Render y Neon, Frankfurt) en `frontend/privacidad.html`.

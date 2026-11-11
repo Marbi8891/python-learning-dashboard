@@ -38,7 +38,7 @@ Si la mejora es de seguridad, del backend o del contenido educativo, no es tuya:
 - Python se ejecuta con Pyodide en un Web Worker; el backend es FastAPI.
 - Rutas con almohadilla (`#/portada`, `#/inicio`, `#/aprender`, `#/teoria`, `#/practicar`, `#/pcap`, `#/daw`, `#/progreso`, `#/panel`, `#/perfil`…); el enrutador está en `frontend/js/app.js`.
 - **Diseño:** usa los tokens de `frontend/css/base.css` (`--color-*`, espaciados, radios). No pongas colores ni tamaños a mano si existe un token. Comprueba **tema claro y oscuro** y respeta `prefers-reduced-motion`.
-- **Accesibilidad:** objetivo WCAG 2.1 AA (lo vigila `e2e/a11y.spec.js` con axe-core). Foco visible, navegación con teclado, `aria-*` correctos, textos alternativos.
+- **Accesibilidad:** objetivo WCAG 2.2 AA (lo vigilan `e2e/a11y.spec.js` y las demás e2e con axe-core; axe no sustituye la revisión manual). Foco visible, navegación con teclado, `aria-*` correctos, textos alternativos.
 - **Textos:** en español, claros y cercanos, para alguien que está aprendiendo.
 - **Datos que pinta la web:** escapa siempre lo que venga del usuario o de la API antes de meterlo en `innerHTML` (mira cómo lo hacen los módulos vecinos).
 - `frontend/sw.js` usa «primero la red» para los archivos de la web: no hace falta cambiar su `VERSION` por tocar CSS o JS.
