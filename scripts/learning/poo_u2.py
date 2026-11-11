@@ -8,7 +8,7 @@ La salida de los ejemplos la obtiene build_learning.py ejecutándolos.
 
 from exercises import bug as bug_exercise
 from exercises import case, choice, code, fill, output
-from poo_common import proposed
+from poo_common import practice, proposed, ref
 
 CID = "poo"
 
@@ -28,6 +28,7 @@ UNIT = {
         "Explicar qué es `self` y por qué no se escribe al llamar a un método.",
         "Distinguir el estado (atributos) del comportamiento (métodos) de un objeto.",
         "Predecir qué ocurre al modificar un objeto y sus alias.",
+        "Definir `__str__` para que un objeto se muestre como un texto útil.",
     ],
     "prior": "Funciones con parámetros y `return`, listas y diccionarios. Conviene haber leído la Unidad 1 (qué es una clase y qué es un objeto), aunque esta unidad lo vuelve a explicar desde cero.",
     "key": [
@@ -147,9 +148,28 @@ UNIT = {
             ],
             "quiz": ["poo-01", "poo-09", "poo-10"],
         },
+        {
+            "id": "poo.str",
+            "title": "Mostrar un objeto como texto: `__str__`",
+            "theory": "Si haces `print(objeto)` con una clase propia, Python muestra algo como `<__main__.Alumno object at 0x7f…>`: el nombre de la clase y una dirección de memoria, que no ayudan nada.\n\nPara elegir qué se muestra, la clase define el método especial **`__str__`** (dos guiones bajos a cada lado):\n\n- Recibe solo `self` y **devuelve** un texto con `return`. No lo imprime.\n- Python lo llama solo cada vez que necesita el objeto como texto: en `print(objeto)`, en `str(objeto)` y dentro de una *f-string*.\n- Tiene que devolver un `str`. Si devuelve otra cosa (o nada, porque se ha usado `print` dentro), Python termina con `TypeError: __str__ returned non-string`.\n\nEs uno de los **métodos especiales** de Python: no se llaman a mano, sino que Python los usa en momentos concretos, igual que `__init__` al crear el objeto. En la Unidad 8 verás otros, como `__repr__` o `__eq__`.",
+            "examples": [
+                {
+                    "code": 'class Alumno:\n    def __init__(self, nombre, curso):\n        self.nombre = nombre\n        self.curso = curso\n\n    def __str__(self):\n        return f"{self.nombre} ({self.curso})"\n\n\nana = Alumno("Ana", "1.º DAW")\nprint(ana)\nprint("Alumna: " + str(ana))\nprint(f"Hoy expone {ana}")',
+                    "lines": [
+                        [6, "`__str__` solo recibe `self`: el alumno que hay que mostrar."],
+                        [7, "Devuelve el texto con `return`. No usa `print`."],
+                        [11, "`print(ana)` llama por dentro a `ana.__str__()`."],
+                        [12, "`str(ana)` también lo usa, y así se puede unir con otro texto."],
+                        [13, "Una f-string que incluye el objeto lo convierte con `__str__`."],
+                    ],
+                }
+            ],
+            "quiz": ["poo-16", "poo-17", "poo-18"],
+        },
     ],
     "guided": ["poo-11"],
-    "autonomous": ["poo-03", "poo-12"],
+    "autonomous": ["poo-15"],
+    "extras": ["poo-03", "poo-12"],
     "selfcheck": ["poo-13", "poo-14"],
     "recap": [
         "Una clase se define con `class Nombre:` y se instancia llamándola: `objeto = Nombre(...)`.",
@@ -157,16 +177,73 @@ UNIT = {
         "`self` es el propio objeto: es el primer parámetro de los métodos y no se escribe al llamarlos.",
         "Cada objeto tiene su propio estado; los métodos lo leen y lo cambian.",
         "`b = a` no copia un objeto: las dos variables apuntan al mismo.",
+        "`__str__` devuelve el texto con el que se muestra el objeto en `print`, `str()` y las f-strings.",
     ],
     "pass": {
         "minScore": 0.7,
-        "required": ["poo-11", "poo-12"],
+        "required": ["poo-11", "poo-15"],
         "text": [
-            "Resolver el ejercicio guiado (`Alumno`) y el autónomo `Marcador` con todos los tests superados.",
+            "Resolver el ejercicio guiado (`Alumno`) y el ejercicio principal `Vehiculo` con todos los tests superados.",
             "Dominar la unidad según el motor: al menos un 70 % de aciertos recientes en sus ejercicios, con varios tipos distintos.",
             "Completar las lecciones ayuda a organizarte, pero **no** demuestra la competencia: la demuestran los ejercicios.",
         ],
     },
+    "practices": [
+        practice(
+            "Crea todos los atributos del objeto en `__init__`, aunque empiecen vacíos (`self.notas = []`).",
+            "Así cualquier método puede contar con ellos y se ve de un vistazo qué datos tiene cada objeto.",
+        ),
+        practice(
+            "Escribe `self.` delante de cada dato que tenga que durar más que el método.",
+            "Sin `self.` es una variable local, que desaparece al terminar el método.",
+        ),
+        practice(
+            "Define `__str__` para que `print(objeto)` muestre algo útil, y haz que devuelva el texto con `return`.",
+            "Python usa `__str__` en `print`, `str()` y las f-strings, y exige que devuelva un texto.",
+        ),
+        practice(
+            "Da valor por defecto solo a los parámetros que de verdad son opcionales.",
+            "Obligar a dar los datos esenciales evita crear objetos a medias.",
+        ),
+        practice(
+            "Si necesitas otro objeto, llama otra vez a la clase: `b = a` solo le pone otro nombre al mismo.",
+            "Así no cambias por sorpresa dos «objetos» que en realidad son uno.",
+        ),
+    ],
+    "references": [
+        ref(
+            "py-tutorial-classes",
+            "9.3.2. Objetos clase",
+            ["instanciar una clase", "el constructor `__init__` y sus argumentos"],
+        ),
+        ref(
+            "py-tutorial-classes",
+            "9.3.3. Objetos instancia y 9.3.4. Objetos método",
+            ["atributos de instancia", "por qué `x.f()` equivale a `Clase.f(x)`"],
+        ),
+        ref(
+            "py-faq-programming",
+            "Objetos: ¿Qué es self?",
+            ["`self` como primer argumento de un método y su nombre por convenio"],
+        ),
+    ],
+    "bank": [
+        "poo-02",
+        "poo-04",
+        "poo-10",
+        "poo-13",
+        "poo-16",
+        "poo-17",
+        "poo-18",
+        "poo-19",
+        "poo-20",
+        "poo-21",
+        "poo-22",
+        "poo-23",
+        "poo-24",
+        "poo-25",
+        "poo-26",
+    ],
     "curriculum": [
         proposed("0485-RA2-h", "Se usan constructores (`__init__`) para inicializar objetos."),
         proposed("0485-RA4-b", "Se definen clases propias con `class`."),
@@ -523,6 +600,488 @@ EXERCISES = [
         level=2,
         daw=False,
     ),
+    # ---------- Ejercicio principal de la unidad
+    code(
+        "poo-15",
+        "poo",
+        '**Ejercicio principal: la clase `Vehiculo`.** Crea la clase con:\n\n- `__init__(self, marca, modelo, anio)`: guarda los tres datos como atributos.\n- `__str__()`: devuelve un texto como `"Seat Ibiza (2020)"`, para que `print(coche)` lo muestre así.\n- `antiguedad(anio_actual)`: devuelve los años que tiene el vehículo.\n- `es_clasico(anio_actual)`: devuelve `True` si tiene 25 años o más.\n\nCrea dos vehículos y muéstralos con `print`.',
+        """
+        class Vehiculo:
+            ...
+        """,
+        """
+        class Vehiculo:
+            def __init__(self, marca, modelo, anio):
+                self.marca = marca
+                self.modelo = modelo
+                self.anio = anio
+
+            def __str__(self):
+                return f"{self.marca} {self.modelo} ({self.anio})"
+
+            def antiguedad(self, anio_actual):
+                return anio_actual - self.anio
+
+            def es_clasico(self, anio_actual):
+                return self.antiguedad(anio_actual) >= 25
+
+
+        coche = Vehiculo("Seat", "Ibiza", 2020)
+        moto = Vehiculo("Vespa", "Primavera", 1990)
+        print(coche)
+        print(moto, "es un clásico:", moto.es_clasico(2026))
+        """,
+        [
+            case(
+                'v = Vehiculo("Seat", "Ibiza", 2020)\nassert (v.marca, v.modelo, v.anio) == ("Seat", "Ibiza", 2020), "Guarda marca, modelo y anio como atributos con self"',
+                error="poo.olvida-self",
+            ),
+            case(
+                'v = Vehiculo("Seat", "Ibiza", 2020)\nassert str(v) == "Seat Ibiza (2020)", f"str(v) debe ser \'Seat Ibiza (2020)\'; es {str(v)!r}"\nassert f"{v}" == "Seat Ibiza (2020)", "Las f-strings también usan __str__"',
+            ),
+            case(
+                'v = Vehiculo("Seat", "Ibiza", 2020)\nassert v.antiguedad(2026) == 6, "antiguedad(2026) de un coche de 2020 es 6"\nassert Vehiculo("Vespa", "PX", 2001).es_clasico(2026) is True, "Con 25 años ya es un clásico"\nassert v.es_clasico(2026) is False, "Con 6 años no es un clásico"',
+            ),
+            case(
+                'a = Vehiculo("Seat", "Ibiza", 2020)\nb = Vehiculo("Renault", "Clio", 2015)\nassert str(a) != str(b), "Cada vehículo se muestra con sus propios datos"',
+                error="poo.alias-copia",
+            ),
+        ],
+        "`__str__` devuelve el texto que representa al objeto y Python lo usa en `print`, `str()` y las f-strings. Los demás métodos trabajan con los datos del propio vehículo a través de `self`, y `es_clasico` reutiliza `antiguedad` en vez de repetir la resta.",
+        "Escribe `def __str__(self):` con dos guiones bajos a cada lado y **devuelve** la f-string con `return`. `es_clasico` puede llamar a `self.antiguedad(anio_actual)`.",
+        wrong=[
+            (
+                """
+                class Vehiculo:
+                    def __init__(self, marca, modelo, anio):
+                        self.marca = marca
+                        self.modelo = modelo
+                        self.anio = anio
+
+                    def __str__(self):
+                        print(f"{self.marca} {self.modelo} ({self.anio})")
+
+                    def antiguedad(self, anio_actual):
+                        return anio_actual - self.anio
+
+                    def es_clasico(self, anio_actual):
+                        return self.antiguedad(anio_actual) >= 25
+                """,
+                2,
+            ),
+            (
+                """
+                class Vehiculo:
+                    def __init__(self, marca, modelo, anio):
+                        self.marca = marca
+                        self.modelo = modelo
+                        self.anio = anio
+
+                    def __str__(self):
+                        return f"{self.marca} {self.modelo} ({self.anio})"
+
+                    def antiguedad(self, anio_actual):
+                        return anio_actual - self.anio
+
+                    def es_clasico(self, anio_actual):
+                        return self.antiguedad(anio_actual) > 25
+                """,
+                3,
+            ),
+        ],
+        level=2,
+        daw=False,
+    ),
+    # ---------- Banco de preguntas de la unidad (cuestionario)
+    choice(
+        "poo-16",
+        "poo",
+        "¿Qué muestra este programa?",
+        [
+            ("Seat Ibiza", None),
+            (
+                "<__main__.Vehiculo object>",
+                None,
+                "Eso es lo que se vería **sin** `__str__`. Como la clase lo define, `print` usa el texto que devuelve.",
+            ),
+            (
+                "Vehiculo",
+                "poo.clase-objeto",
+                "`print` no muestra el nombre de la clase: muestra lo que devuelve `__str__` del objeto.",
+            ),
+            (
+                "marca modelo",
+                None,
+                "La f-string sustituye `self.marca` y `self.modelo` por sus valores, no por sus nombres.",
+            ),
+        ],
+        0,
+        "`print(coche)` llama a `coche.__str__()`, que devuelve el texto con la marca y el modelo de ese objeto.",
+        code="""
+        class Vehiculo:
+            def __init__(self, marca, modelo):
+                self.marca = marca
+                self.modelo = modelo
+
+            def __str__(self):
+                return f"{self.marca} {self.modelo}"
+
+        coche = Vehiculo("Seat", "Ibiza")
+        print(coche)
+        """,
+        level=1,
+        daw=False,
+        bank=True,
+        qtype="prediccion",
+    ),
+    choice(
+        "poo-17",
+        "poo",
+        "Este programa muestra `Ana (1.º DAW)` y después termina con `TypeError`. ¿Por qué?",
+        [
+            (
+                "`__str__` imprime el texto en vez de devolverlo, así que devuelve `None` y no un `str`",
+                None,
+            ),
+            (
+                "`__str__` tiene que recibir el texto como parámetro",
+                None,
+                "`__str__` solo recibe `self`: el texto lo construye a partir de los atributos del objeto.",
+            ),
+            (
+                "No se puede usar `print` con objetos de clases propias",
+                None,
+                "Sí se puede: `print` llama a `__str__`. El fallo está en lo que devuelve ese método.",
+            ),
+            (
+                "Falta llamar a mano a `ana.__str__()` antes del `print`",
+                None,
+                "Python llama a `__str__` solo; llamarlo a mano no arregla que devuelva `None`.",
+            ),
+        ],
+        0,
+        "`print(ana)` ejecuta `__str__`, que imprime el texto (por eso aparece) pero no tiene `return`. Python recibe `None` y protesta: `__str__` debe **devolver** un texto.",
+        code="""
+        class Alumno:
+            def __init__(self, nombre, curso):
+                self.nombre = nombre
+                self.curso = curso
+
+            def __str__(self):
+                print(f"{self.nombre} ({self.curso})")
+
+        ana = Alumno("Ana", "1.º DAW")
+        print(ana)
+        """,
+        level=2,
+        daw=False,
+        bank=True,
+        qtype="error",
+    ),
+    choice(
+        "poo-18",
+        "poo",
+        "¿Cuándo usa Python el método `__str__` de un objeto?",
+        [
+            (
+                "Cuando necesita el objeto como texto: en `print(objeto)`, `str(objeto)` y las f-strings",
+                None,
+            ),
+            (
+                "Al crear el objeto, justo después de `__init__`",
+                "poo.init-mal-escrito",
+                "Al crear el objeto solo se ejecuta `__init__`; `__str__` espera a que se pida el objeto como texto.",
+            ),
+            (
+                "Solo cuando se llama a mano: `objeto.__str__()`",
+                None,
+                "Se puede llamar a mano, pero lo normal es que Python lo llame solo al convertir el objeto en texto.",
+            ),
+            (
+                "Cada vez que cambia uno de sus atributos",
+                None,
+                "Cambiar un atributo no muestra nada: `__str__` solo se ejecuta cuando se pide el texto.",
+            ),
+        ],
+        0,
+        "`__str__` es un método especial: no se suele llamar a mano. Python lo usa cada vez que tiene que convertir el objeto en texto.",
+        level=1,
+        daw=False,
+        bank=True,
+        qtype="teoria",
+    ),
+    choice(
+        "poo-19",
+        "poo",
+        "¿Qué muestra este programa?",
+        [
+            ("3 15", None),
+            (
+                "3 3",
+                "poo.clase-objeto",
+                "`a` y `b` son dos contadores distintos: lo que se suma a uno no se suma al otro.",
+            ),
+            (
+                "2 15",
+                None,
+                "`a` suma 1 (valor por defecto de `n`) y luego 2: en total 3.",
+            ),
+            (
+                "1 15",
+                None,
+                "La segunda llamada `a.sumar(2)` también cambia `a`: 1 + 2 = 3.",
+            ),
+        ],
+        0,
+        "`a` empieza en 0 y suma 1 y 2 (queda en 3); `b` empieza en 10 y suma 5 (queda en 15). Cada objeto guarda su propio `valor`.",
+        code="""
+        class Contador:
+            def __init__(self, inicio=0):
+                self.valor = inicio
+
+            def sumar(self, n=1):
+                self.valor += n
+
+        a = Contador()
+        b = Contador(10)
+        a.sumar()
+        b.sumar(5)
+        a.sumar(2)
+        print(a.valor, b.valor)
+        """,
+        level=2,
+        daw=False,
+        bank=True,
+        qtype="prediccion",
+    ),
+    choice(
+        "poo-20",
+        "poo",
+        "¿Qué muestra este programa?",
+        [
+            ("ropa libros False", None),
+            (
+                "libros libros False",
+                "poo.alias-copia",
+                "`b = a` no copia la caja: `a` y `b` son el mismo objeto, así que el cambio se ve desde `a`.",
+            ),
+            (
+                "ropa ropa True",
+                "poo.alias-copia",
+                "`c` es otra caja creada con `Caja(...)`: el cambio hecho por `b` no le llega.",
+            ),
+            (
+                "ropa libros True",
+                None,
+                "`is` dice si son el mismo objeto; `a` y `c` tienen el mismo contenido inicial, pero son dos cajas distintas.",
+            ),
+        ],
+        0,
+        "`b` es otro nombre de `a`, así que cambiar `b.contenido` cambia `a`. `c` es un objeto distinto y conserva `libros`; por eso `a is c` es `False`.",
+        code="""
+        class Caja:
+            def __init__(self, contenido):
+                self.contenido = contenido
+
+        a = Caja("libros")
+        b = a
+        c = Caja("libros")
+        b.contenido = "ropa"
+        print(a.contenido, c.contenido, a is c)
+        """,
+        level=3,
+        daw=False,
+        bank=True,
+        qtype="prediccion",
+    ),
+    choice(
+        "poo-21",
+        "poo",
+        "Dentro de un método, ¿qué es `self`?",
+        [
+            ("El objeto con el que se ha llamado al método", None),
+            (
+                "La clase en la que está definido el método",
+                "poo.clase-objeto",
+                "En `ana.presentarse()`, `self` es `ana`, no la clase `Alumno`.",
+            ),
+            (
+                "Una palabra reservada: el primer parámetro tiene que llamarse así o Python da error",
+                None,
+                "Es un convenio muy extendido, pero Python pasa el objeto como primer argumento se llame como se llame.",
+            ),
+            (
+                "Una copia del objeto, así que los cambios no se guardan",
+                "poo.olvida-self",
+                "No es una copia: lo que se cambia en `self.atributo` se queda en el objeto.",
+            ),
+        ],
+        0,
+        "Al escribir `ana.presentarse()`, Python ejecuta `Alumno.presentarse(ana)`: el objeto llega como primer parámetro, que por convenio se llama `self`.",
+        level=2,
+        daw=False,
+        bank=True,
+        qtype="teoria",
+    ),
+    choice(
+        "poo-22",
+        "poo",
+        "Con esta clase, ¿qué hace la línea `ana.poner_nota(8)`?",
+        [
+            ("Añade 8 a la lista de notas de `ana`: equivale a `Alumno.poner_nota(ana, 8)`", None),
+            (
+                "Añade 8 a las notas de todos los alumnos",
+                "poo.clase-objeto",
+                "La lista se crea en `__init__`: cada alumno tiene la suya y solo cambia la de `ana`.",
+            ),
+            (
+                "Crea en `ana` un atributo nuevo llamado `nota` que vale 8",
+                None,
+                "`nota` es un parámetro del método: el 8 se añade a `self.notas` con `append`.",
+            ),
+            (
+                "Da error, porque falta pasar `self`",
+                None,
+                "`self` no se escribe al llamar: Python pasa `ana` como primer argumento.",
+            ),
+        ],
+        0,
+        "Un método se llama desde un objeto y recibe ese objeto en `self`. Así `self.notas.append(nota)` cambia solo las notas de `ana`.",
+        code="""
+        class Alumno:
+            def __init__(self, nombre):
+                self.nombre = nombre
+                self.notas = []
+
+            def poner_nota(self, nota):
+                self.notas.append(nota)
+        """,
+        level=1,
+        daw=False,
+        bank=True,
+        qtype="codigo",
+    ),
+    choice(
+        "poo-23",
+        "poo",
+        "Cada cuenta debe guardar su titular y empezar con saldo 0. ¿Qué constructor es correcto?",
+        [
+            ("def __init__(self, titular): self.titular = titular; self.saldo = 0", None),
+            (
+                "def __init__(titular): self.titular = titular; self.saldo = 0",
+                "poo.olvida-self",
+                "Falta `self` como primer parámetro: Python pasaría la cuenta en `titular` y `self` no existiría.",
+            ),
+            (
+                "def __init__(self, titular): titular = titular; saldo = 0",
+                "poo.olvida-self",
+                "Sin `self.` son variables locales que desaparecen al terminar `__init__`: la cuenta se queda sin datos.",
+            ),
+            (
+                "def _init_(self, titular): self.titular = titular; self.saldo = 0",
+                "poo.init-mal-escrito",
+                "Con un solo guion bajo a cada lado no es el constructor: Python no lo ejecuta al crear la cuenta.",
+            ),
+        ],
+        0,
+        "El constructor se llama exactamente `__init__`, recibe `self` primero y guarda cada dato con `self.`.",
+        level=3,
+        daw=False,
+        code_options=True,
+        bank=True,
+        qtype="solucion",
+    ),
+    choice(
+        "poo-24",
+        "poo",
+        "Queremos que `print(v)` muestre `Seat Ibiza (2020)`. ¿Qué método lo consigue?",
+        [
+            ('def __str__(self): return f"{self.marca} {self.modelo} ({self.anio})"', None),
+            (
+                'def __str__(self): print(f"{self.marca} {self.modelo} ({self.anio})")',
+                None,
+                "Imprime el texto pero devuelve `None`, y `print(v)` termina con `TypeError`.",
+            ),
+            (
+                'def str(self): return f"{self.marca} {self.modelo} ({self.anio})"',
+                None,
+                "`print` busca `__str__`, con dos guiones bajos a cada lado; un método `str` normal no lo usa.",
+            ),
+            (
+                'def __str__(): return f"{marca} {modelo} ({anio})"',
+                "poo.olvida-self",
+                "Sin `self` el método no recibe el vehículo y `marca` no existe como variable.",
+            ),
+        ],
+        0,
+        "`__str__` recibe `self` y **devuelve** el texto construido con los atributos del objeto.",
+        level=3,
+        daw=False,
+        code_options=True,
+        bank=True,
+        qtype="solucion",
+    ),
+    choice(
+        "poo-25",
+        "poo",
+        "Una aplicación de gimnasio guarda los socios con su nombre y su cuota, y tiene que poder cambiar la cuota de un socio. ¿Qué diseño encaja?",
+        [
+            (
+                "Una clase `Socio` con los atributos `nombre` y `cuota` y un método `cambiar_cuota(nueva)`",
+                None,
+            ),
+            (
+                "Una clase por cada socio: `Ana`, `Luis`, `Eva`…",
+                "poo.clase-objeto",
+                "Los socios concretos son objetos de una misma clase; crear una clase por persona repite el mismo código.",
+            ),
+            (
+                "Una variable global `cuota` que comparten todos los socios",
+                None,
+                "Cada socio puede pagar una cuota distinta: el dato tiene que ser de cada objeto.",
+            ),
+            (
+                "Una clase `Cuota` con un método `nombre()`",
+                None,
+                "El nombre es un dato del socio, no una acción de la cuota: el diseño confunde qué es cada cosa.",
+            ),
+        ],
+        0,
+        "Cada socio es un objeto con sus propios datos y la acción que los cambia va en la misma clase.",
+        level=2,
+        daw=False,
+        bank=True,
+        qtype="diseno",
+    ),
+    choice(
+        "poo-26",
+        "poo",
+        "Cada `Pista` de pádel tiene su propia lista de reservas. ¿Dónde conviene crear esa lista?",
+        [
+            ("En `__init__`, con `self.reservas = []`, para que cada pista tenga la suya", None),
+            (
+                "Debajo de `class Pista:`, con `reservas = []`",
+                "poo.clase-objeto",
+                "Así sería una sola lista de la clase, compartida por todas las pistas (lo verás en la Unidad 3).",
+            ),
+            (
+                "Fuera de la clase, como variable global",
+                None,
+                "Una lista global no sabe a qué pista pertenece cada reserva.",
+            ),
+            (
+                "Dentro del método `reservar`, con `reservas = []` cada vez",
+                "poo.olvida-self",
+                "Se crearía una lista nueva y local en cada llamada: las reservas anteriores se perderían.",
+            ),
+        ],
+        0,
+        "Lo que es de cada objeto se crea en `__init__` con `self.`: así cada pista empieza con su lista vacía.",
+        level=3,
+        daw=False,
+        bank=True,
+        qtype="diseno",
+    ),
 ]
 
 # Errores típicos nuevos de la Unidad 2 (se añaden a los del concepto `poo`)
@@ -542,3 +1101,43 @@ ERRORS = [
         "Para tener otro objeto, créalo con `Clase(...)`; `is` te dice si dos variables son el mismo objeto.",
     ),
 ]
+
+# Preguntas tipo test que ya existían y pasan al banco: (tipo, nivel, por qué falla cada distractor)
+BANK_TAGS = {
+    "poo-02": (
+        "error",
+        2,
+        [
+            "El método solo tiene que sumar al saldo: no necesita devolver nada para funcionar.",
+            "`cantidad` es un parámetro y llega bien; lo que no existe es la variable `saldo` dentro del método.",
+            "`saldo += cantidad` usa una variable local que no existe y termina con `UnboundLocalError`.",
+        ],
+    ),
+    "poo-04": (
+        "codigo",
+        1,
+        [
+            "Las clases se definen con `class`; `p = Producto()` llama a una clase que ya existe.",
+            "Con paréntesis se llama a la clase y se crea un objeto; sin ellos sí sería la propia clase.",
+            "Al crear el objeto solo se ejecuta `__init__`; los demás métodos hay que llamarlos.",
+        ],
+    ),
+    "poo-10": (
+        "codigo",
+        2,
+        [
+            "`b = a` no copia el objeto: las dos variables apuntan al mismo.",
+            "Asignar un objeto a otra variable es válido: solo le da otro nombre.",
+            "Solo hay un objeto: se creó una vez y `b` es otro nombre para él.",
+        ],
+    ),
+    "poo-13": (
+        "teoria",
+        1,
+        [
+            "Python lo llama solo al hacer `Clase(...)`: llamarlo a mano no hace falta.",
+            "`__init__` no devuelve nada; si devolviera algo distinto de `None`, Python daría `TypeError`.",
+            "Se ejecuta con cada objeto nuevo, no solo con el primero.",
+        ],
+    ),
+}

@@ -7,7 +7,7 @@ La salida de los ejemplos la obtiene build_learning.py ejecutándolos.
 """
 
 from exercises import bug, case, choice, code, fill, output
-from poo_common import proposed
+from poo_common import practice, proposed, ref
 
 CID = "poo-encapsulacion"
 
@@ -77,7 +77,7 @@ UNIT = {
         {
             "id": f"{CID}.convenio",
             "title": "Público, protegido y privado",
-            "theory": "La **encapsulación** consiste en que cada objeto cuide de sus propios datos: el resto del programa usa su **interfaz pública** (métodos y propiedades) y no toca los detalles internos. Así se pueden cambiar esos detalles sin romper el código que usa la clase.\n\nPython no tiene `private` como Java: usa **convenios** con guiones bajos.\n\n- `nombre`: **público**, se puede usar desde fuera.\n- `_saldo`: **protegido** por convenio. Significa «es interno»; Python lo deja usar, pero un buen programador no lo hace desde fuera.\n- `__pin`: **privado**. Python le cambia el nombre a `_Caja__pin` (*name mangling*), así que `objeto.__pin` desde fuera da `AttributeError`. No es una caja fuerte: sigue existiendo con el nombre cambiado, pero evita usos accidentales y choques con subclases.\n\nDesde dentro de la clase se usa siempre igual: `self._saldo`, `self.__pin`.",
+            "theory": "La **encapsulación** consiste en que cada objeto cuide de sus propios datos: el resto del programa usa su **interfaz pública** (métodos y propiedades) y no toca los detalles internos. Así se pueden cambiar esos detalles sin romper el código que usa la clase.\n\nPython no tiene `private` como Java: usa **convenios** con guiones bajos.\n\n- `nombre`: **público**, se puede usar desde fuera.\n- `_saldo`: **protegido** por convenio. Significa «es interno»; Python lo deja usar, pero un buen programador no lo hace desde fuera.\n- `__pin`: **privado**. Python le cambia el nombre a `_Caja__pin` (*name mangling*), así que `objeto.__pin` desde fuera da `AttributeError`. No es una caja fuerte: sigue existiendo con el nombre cambiado, pero evita usos accidentales y choques con subclases.\n\n**Importante:** ni `_x` ni `__x` son una medida de seguridad. Cualquier código del mismo programa puede leer `objeto._Caja__pin`. Sirven para organizar el código y avisar de lo que es interno, no para guardar secretos como contraseñas.\n\nDesde dentro de la clase se usa siempre igual: `self._saldo`, `self.__pin`.",
             "examples": [
                 {
                     "code": 'class Caja:\n    def __init__(self, dueno, pin):\n        self.dueno = dueno          # público\n        self._intentos = 0          # protegido (convenio)\n        self.__pin = pin            # privado (name mangling)\n\n    def abrir(self, intento):\n        self._intentos += 1\n        return intento == self.__pin\n\n\nc = Caja("Ana", 1234)\nprint(c.dueno, c.abrir(1111), c.abrir(1234))\nprint(c._intentos)\nprint(hasattr(c, "__pin"), hasattr(c, "_Caja__pin"))',
@@ -142,7 +142,8 @@ UNIT = {
         },
     ],
     "guided": ["poo4-10"],
-    "autonomous": ["poo4-11", "poo4-12"],
+    "autonomous": ["poo4-15"],
+    "extras": ["poo4-11", "poo4-12"],
     "selfcheck": ["poo4-13", "poo4-14"],
     "recap": [
         "Encapsular es dejar usar un objeto por su interfaz pública y esconder los detalles internos.",
@@ -153,13 +154,66 @@ UNIT = {
     ],
     "pass": {
         "minScore": 0.7,
-        "required": ["poo4-10", "poo4-11"],
+        "required": ["poo4-10", "poo4-15"],
         "text": [
-            "Resolver el ejercicio guiado (`CuentaSegura`) y el autónomo `Termostato` con todos los tests superados.",
+            "Resolver el ejercicio guiado (`CuentaSegura`) y el ejercicio principal `CuentaBancaria` con todos los tests superados.",
             "Dominar la unidad según el motor: al menos un 70 % de aciertos recientes en sus ejercicios, con varios tipos distintos.",
             "Completar las lecciones ayuda a organizarte, pero **no** demuestra la competencia: la demuestran los ejercicios.",
         ],
     },
+    "practices": [
+        practice(
+            "Marca con un guion bajo (`_saldo`) lo que es interno y deja públicos solo los métodos y propiedades que otros deben usar.",
+            "Así queda claro qué se puede usar desde fuera y qué puede cambiar sin avisar.",
+        ),
+        practice(
+            "No uses `__x` como medida de seguridad: sirve para evitar choques de nombres con las subclases.",
+            "Python lo renombra a `_Clase__x`, pero cualquier código puede seguir leyéndolo con ese nombre.",
+        ),
+        practice(
+            "Cuando escribas una propiedad, guarda el dato real en otro atributo (`self._edad`).",
+            "Si el setter asignara `self.edad`, se llamaría a sí mismo sin fin (`RecursionError`).",
+        ),
+        practice(
+            "Valida en el setter y, en `__init__`, asigna a través de la propiedad.",
+            "Así el objeto cumple sus reglas desde el momento en que se crea.",
+        ),
+        practice(
+            "Si un valor no es válido, lanza `ValueError` en vez de corregirlo en silencio o de imprimir un aviso.",
+            "Quien llama se entera del problema y el objeto no se queda en un estado incorrecto.",
+        ),
+        practice(
+            "Si un método devuelve una lista interna, devuelve una copia o una tupla.",
+            "Si no, desde fuera se podría cambiar el estado del objeto sin pasar por sus métodos.",
+        ),
+    ],
+    "references": [
+        ref(
+            "py-tutorial-classes",
+            "9.6. Variables privadas",
+            [
+                "convenio del guion bajo para lo que es interno",
+                "renombrado de `__x` (name mangling) y que no impide el acceso",
+            ],
+        ),
+    ],
+    "bank": [
+        "poo4-01",
+        "poo4-08",
+        "poo4-09",
+        "poo4-13",
+        "poo4-16",
+        "poo4-17",
+        "poo4-18",
+        "poo4-19",
+        "poo4-20",
+        "poo4-21",
+        "poo4-22",
+        "poo4-23",
+        "poo4-24",
+        "poo4-25",
+        "poo4-26",
+    ],
     "curriculum": [
         proposed(
             "0485-RA4-f",
@@ -679,6 +733,584 @@ EXERCISES = [
         level=2,
         daw=False,
     ),
+    # ---------- Ejercicio principal de la unidad
+    code(
+        "poo4-15",
+        CID,
+        "**Ejercicio principal: la clase `CuentaBancaria`.** Crea la clase con:\n\n- `__init__(self, titular, saldo=0)`: guarda el titular y el saldo en el atributo **privado** `__saldo`, y una lista **privada** `__movimientos` vacía. Lanza `ValueError` si el saldo inicial es negativo.\n- La propiedad de **solo lectura** `saldo`.\n- `ingresar(cantidad)` y `retirar(cantidad)`: lanzan `ValueError` si la cantidad no es mayor que 0 o (al retirar) si no hay saldo suficiente. Si todo va bien, cambian el saldo y apuntan el movimiento en la lista: `+50` o `-20`.\n- La propiedad `movimientos`: devuelve los movimientos como **tupla**, para que nadie pueda cambiarlos desde fuera.\n- `transferir(destino, cantidad)`: retira de esta cuenta e ingresa en la otra usando sus métodos.\n\nRecuerda: `__saldo` evita usos accidentales, pero no es una medida de seguridad.",
+        """
+        class CuentaBancaria:
+            ...
+        """,
+        """
+        class CuentaBancaria:
+            def __init__(self, titular, saldo=0):
+                if saldo < 0:
+                    raise ValueError("El saldo inicial no puede ser negativo")
+                self.titular = titular
+                self.__saldo = saldo
+                self.__movimientos = []
+
+            @property
+            def saldo(self):
+                return self.__saldo
+
+            @property
+            def movimientos(self):
+                return tuple(self.__movimientos)
+
+            def ingresar(self, cantidad):
+                if cantidad <= 0:
+                    raise ValueError("La cantidad debe ser mayor que 0")
+                self.__saldo += cantidad
+                self.__movimientos.append(cantidad)
+
+            def retirar(self, cantidad):
+                if cantidad <= 0:
+                    raise ValueError("La cantidad debe ser mayor que 0")
+                if cantidad > self.__saldo:
+                    raise ValueError("Saldo insuficiente")
+                self.__saldo -= cantidad
+                self.__movimientos.append(-cantidad)
+
+            def transferir(self, destino, cantidad):
+                self.retirar(cantidad)
+                destino.ingresar(cantidad)
+
+
+        ana = CuentaBancaria("Ana", 100)
+        luis = CuentaBancaria("Luis")
+        ana.transferir(luis, 30)
+        print(ana.saldo, luis.saldo, ana.movimientos)
+        """,
+        [
+            case(
+                'c = CuentaBancaria("Ana", 100)\nassert c.saldo == 100, "La propiedad saldo devuelve el saldo"\nassert "_CuentaBancaria__saldo" in vars(c), "Guarda el saldo en el atributo privado self.__saldo"\ntry:\n    c.saldo = 1000\nexcept AttributeError:\n    pass\nelse:\n    raise AssertionError("saldo debe ser de solo lectura (una propiedad sin setter)")',
+                error=f"{CID}.sin-setter",
+            ),
+            case(
+                'c = CuentaBancaria("Ana", 100)\nc.ingresar(50)\nc.retirar(20)\nassert c.saldo == 130, "ingresar suma y retirar resta"\nfor mala in (0, -5):\n    try:\n        c.ingresar(mala)\n    except ValueError:\n        pass\n    else:\n        raise AssertionError(f"ingresar({mala}) debe lanzar ValueError")\ntry:\n    c.retirar(1000)\nexcept ValueError:\n    pass\nelse:\n    raise AssertionError("Retirar más del saldo debe lanzar ValueError")\nassert c.saldo == 130, "Una operación rechazada no cambia el saldo"',
+                error=f"{CID}.validacion-fuera",
+            ),
+            case(
+                'try:\n    CuentaBancaria("Ana", -1)\nexcept ValueError:\n    pass\nelse:\n    raise AssertionError("Un saldo inicial negativo debe lanzar ValueError")',
+            ),
+            case(
+                'c = CuentaBancaria("Ana", 100)\nc.ingresar(50)\nc.retirar(20)\nassert c.movimientos == (50, -20), f"movimientos debe ser (50, -20); es {c.movimientos!r}"\nassert isinstance(c.movimientos, tuple), "movimientos se devuelve como tupla, que no se puede cambiar"',
+            ),
+            case(
+                'a = CuentaBancaria("Ana", 100)\nb = CuentaBancaria("Luis")\na.transferir(b, 30)\nassert (a.saldo, b.saldo) == (70, 30), "transferir pasa el dinero de una cuenta a otra"\ntry:\n    a.transferir(b, 500)\nexcept ValueError:\n    pass\nelse:\n    raise AssertionError("Sin saldo suficiente, transferir debe lanzar ValueError")\nassert (a.saldo, b.saldo) == (70, 30), "Si la transferencia falla, ninguna de las dos cuentas cambia"',
+            ),
+        ],
+        "El saldo solo cambia a través de `ingresar` y `retirar`, que aplican las reglas antes de tocar nada. `transferir` reutiliza esos métodos, así que también valida. Y `movimientos` devuelve una tupla: desde fuera se puede leer el historial, pero no cambiarlo. Aun así, `__saldo` no es secreto: `c._CuentaBancaria__saldo` lo sigue mostrando.",
+        "Crea `self.__saldo` y `self.__movimientos` en `__init__`. Para la solo lectura, usa `@property` sin setter. En `retirar`, comprueba primero y cambia después.",
+        wrong=[
+            (
+                """
+                class CuentaBancaria:
+                    def __init__(self, titular, saldo=0):
+                        self.titular = titular
+                        self.saldo = saldo
+                        self.movimientos = []
+
+                    def ingresar(self, cantidad):
+                        self.saldo += cantidad
+                        self.movimientos.append(cantidad)
+
+                    def retirar(self, cantidad):
+                        self.saldo -= cantidad
+                        self.movimientos.append(-cantidad)
+                """,
+                1,
+            ),
+            (
+                """
+                class CuentaBancaria:
+                    def __init__(self, titular, saldo=0):
+                        if saldo < 0:
+                            raise ValueError("negativo")
+                        self.titular = titular
+                        self.__saldo = saldo
+                        self.__movimientos = []
+
+                    @property
+                    def saldo(self):
+                        return self.__saldo
+
+                    @property
+                    def movimientos(self):
+                        return self.__movimientos
+
+                    def ingresar(self, cantidad):
+                        if cantidad <= 0:
+                            raise ValueError("cantidad")
+                        self.__saldo += cantidad
+                        self.__movimientos.append(cantidad)
+
+                    def retirar(self, cantidad):
+                        if cantidad <= 0 or cantidad > self.__saldo:
+                            raise ValueError("cantidad")
+                        self.__saldo -= cantidad
+                        self.__movimientos.append(-cantidad)
+
+                    def transferir(self, destino, cantidad):
+                        self.retirar(cantidad)
+                        destino.ingresar(cantidad)
+                """,
+                4,
+            ),
+            (
+                """
+                class CuentaBancaria:
+                    def __init__(self, titular, saldo=0):
+                        if saldo < 0:
+                            raise ValueError("negativo")
+                        self.titular = titular
+                        self.__saldo = saldo
+                        self.__movimientos = []
+
+                    @property
+                    def saldo(self):
+                        return self.__saldo
+
+                    @property
+                    def movimientos(self):
+                        return tuple(self.__movimientos)
+
+                    def ingresar(self, cantidad):
+                        if cantidad <= 0:
+                            raise ValueError("cantidad")
+                        self.__saldo += cantidad
+                        self.__movimientos.append(cantidad)
+
+                    def retirar(self, cantidad):
+                        if cantidad <= 0 or cantidad > self.__saldo:
+                            raise ValueError("cantidad")
+                        self.__saldo -= cantidad
+                        self.__movimientos.append(-cantidad)
+
+                    def transferir(self, destino, cantidad):
+                        destino.ingresar(cantidad)
+                        self.retirar(cantidad)
+                """,
+                5,
+            ),
+        ],
+        level=2,
+        daw=False,
+    ),
+    # ---------- Banco de preguntas de la unidad (cuestionario)
+    choice(
+        "poo4-16",
+        CID,
+        "Con esta clase y `p = Producto(10)`, ¿cómo se lee el precio?",
+        [
+            ("`p.precio`, sin paréntesis", None),
+            (
+                "`p.precio()`",
+                f"{CID}.property-con-parentesis",
+                "Una propiedad se usa como un atributo: con paréntesis se intentaría llamar al número y daría `TypeError`.",
+            ),
+            (
+                "`p.get_precio()`",
+                None,
+                "La clase no define ningún método `get_precio`: la propiedad ya hace ese papel.",
+            ),
+            (
+                "`p._precio()`",
+                f"{CID}.privado-desde-fuera",
+                "`_precio` es el dato interno (y es un número, no se llama). Desde fuera se usa la propiedad.",
+            ),
+        ],
+        0,
+        "`@property` convierte el método en algo que se lee como un atributo: `p.precio` ejecuta el método y devuelve `self._precio`.",
+        code="""
+        class Producto:
+            def __init__(self, precio):
+                self._precio = precio
+
+            @property
+            def precio(self):
+                return self._precio
+        """,
+        level=1,
+        daw=False,
+        bank=True,
+        qtype="codigo",
+    ),
+    choice(
+        "poo4-17",
+        CID,
+        "Con `t = Termometro(20)`, ¿qué ocurre al ejecutar `t.temperatura = 80`?",
+        [
+            ("Se lanza `ValueError` y la temperatura sigue siendo 20", None),
+            (
+                "Se guarda 80, porque un atributo acepta cualquier valor",
+                f"{CID}.validacion-fuera",
+                "La asignación pasa por el setter, que comprueba el rango antes de guardar.",
+            ),
+            (
+                "Se guarda 50, el máximo permitido",
+                None,
+                "El setter no corrige el valor: lanza una excepción y no guarda nada.",
+            ),
+            (
+                "Se lanza `AttributeError`, porque la propiedad es de solo lectura",
+                f"{CID}.sin-setter",
+                "La propiedad tiene setter (`@temperatura.setter`), así que se puede asignar si el valor es válido.",
+            ),
+        ],
+        0,
+        "El setter valida antes de guardar en `self._temperatura`. Como 80 está fuera de rango, lanza la excepción y el dato anterior no cambia.",
+        code="""
+        class Termometro:
+            def __init__(self, grados):
+                self.temperatura = grados
+
+            @property
+            def temperatura(self):
+                return self._temperatura
+
+            @temperatura.setter
+            def temperatura(self, valor):
+                if not -50 <= valor <= 50:
+                    raise ValueError("Temperatura fuera de rango")
+                self._temperatura = valor
+        """,
+        level=2,
+        daw=False,
+        bank=True,
+        qtype="codigo",
+    ),
+    choice(
+        "poo4-18",
+        CID,
+        "En esta clase, ¿por qué `__init__` escribe `self.temperatura = grados` y no `self._temperatura = grados`?",
+        [
+            ("Para que el valor inicial también pase por el setter y se valide", None),
+            (
+                "Porque `self._temperatura` no se puede usar dentro de `__init__`",
+                None,
+                "Se puede usar en cualquier método; el motivo es que así se valida.",
+            ),
+            (
+                "Da igual: las dos formas validan el valor",
+                f"{CID}.validacion-fuera",
+                "Asignar `self._temperatura` directamente se salta el setter: `Termometro(80)` se crearía sin error.",
+            ),
+            (
+                "Para que la temperatura sea de solo lectura",
+                f"{CID}.sin-setter",
+                "La propiedad tiene setter: se puede cambiar después. Lo que se busca es validar desde el principio.",
+            ),
+        ],
+        0,
+        "Si `__init__` asigna por la propiedad, la regla se aplica también al crear el objeto: un termómetro no puede nacer con 80 grados.",
+        code="""
+        class Termometro:
+            def __init__(self, grados):
+                self.temperatura = grados
+
+            @property
+            def temperatura(self):
+                return self._temperatura
+
+            @temperatura.setter
+            def temperatura(self, valor):
+                if not -50 <= valor <= 50:
+                    raise ValueError("Temperatura fuera de rango")
+                self._temperatura = valor
+        """,
+        level=3,
+        daw=False,
+        bank=True,
+        qtype="codigo",
+    ),
+    choice(
+        "poo4-19",
+        CID,
+        "¿Qué muestra este programa?",
+        [
+            ("5", None),
+            (
+                "3",
+                f"{CID}.privado-absoluto",
+                "Un guion bajo no impide cambiar el atributo desde fuera: es solo un aviso.",
+            ),
+            (
+                "AttributeError",
+                f"{CID}.privado-absoluto",
+                "Python no bloquea los atributos con un guion bajo; solo renombra los que llevan dos.",
+            ),
+            (
+                "None",
+                None,
+                "El atributo existe y se le acaba de asignar 5.",
+            ),
+        ],
+        0,
+        "`_items` es interno solo por convenio. Python deja leerlo y cambiarlo desde fuera, aunque no se debería hacer.",
+        code="""
+        class Caja:
+            def __init__(self):
+                self._items = 3
+
+        c = Caja()
+        c._items = 5
+        print(c._items)
+        """,
+        level=1,
+        daw=False,
+        bank=True,
+        qtype="prediccion",
+    ),
+    choice(
+        "poo4-20",
+        CID,
+        "¿Qué muestra este programa?",
+        [
+            ("100 0", None),
+            (
+                "0 0",
+                f"{CID}.privado-desde-fuera",
+                "Desde fuera `c.__saldo` no se renombra: crea un atributo nuevo y el saldo real (`_Cuenta__saldo`) sigue en 100.",
+            ),
+            (
+                "100 100",
+                None,
+                "`c.__saldo = 0` sí crea un atributo con ese nombre exacto, y vale 0.",
+            ),
+            (
+                "AttributeError",
+                f"{CID}.privado-absoluto",
+                "Los dos nombres existen: `_Cuenta__saldo` (creado en `__init__`) y `__saldo` (creado fuera).",
+            ),
+        ],
+        0,
+        "Dentro de la clase, `self.__saldo` se guarda como `_Cuenta__saldo`. Fuera de la clase no hay renombrado, así que `c.__saldo = 0` crea otro atributo distinto.",
+        code="""
+        class Cuenta:
+            def __init__(self, saldo):
+                self.__saldo = saldo
+
+        c = Cuenta(100)
+        c.__saldo = 0
+        print(c._Cuenta__saldo, c.__saldo)
+        """,
+        level=2,
+        daw=False,
+        bank=True,
+        qtype="prediccion",
+    ),
+    choice(
+        "poo4-21",
+        CID,
+        "¿Qué muestra este programa?",
+        [
+            ("3", None),
+            (
+                "-2",
+                f"{CID}.validacion-fuera",
+                "`__init__` asigna por la propiedad, así que el -5 ya se convirtió en 0 al crear el producto.",
+            ),
+            (
+                "0",
+                None,
+                "Después de crear el producto se le suman 3 al precio, que pasa por el setter: 0 + 3 = 3.",
+            ),
+            (
+                "-5",
+                None,
+                "El setter guarda `max(valor, 0)`: nunca guarda un número negativo.",
+            ),
+        ],
+        0,
+        "Al crear el producto, el setter convierte -5 en 0. Después `p.precio + 3` vale 3 y el setter lo guarda tal cual.",
+        code="""
+        class Producto:
+            def __init__(self, precio):
+                self.precio = precio
+
+            @property
+            def precio(self):
+                return self._precio
+
+            @precio.setter
+            def precio(self, valor):
+                self._precio = max(valor, 0)
+
+        p = Producto(-5)
+        p.precio = p.precio + 3
+        print(p.precio)
+        """,
+        level=3,
+        daw=False,
+        bank=True,
+        qtype="prediccion",
+    ),
+    choice(
+        "poo4-22",
+        CID,
+        "Este programa termina con `TypeError: 'float' object is not callable`. ¿Qué lo arregla?",
+        [
+            ("Leer la propiedad sin paréntesis: `print(c.area)`", None),
+            (
+                "Cambiar `self.radio ** 2` por `self.radio * 2`",
+                None,
+                "Eso cambia la fórmula (y la estropea), pero el error sigue: el problema son los paréntesis al usar `area`.",
+            ),
+            (
+                "Escribir `return` con paréntesis: `return (3.14 * self.radio ** 2)`",
+                None,
+                "Los paréntesis del `return` no cambian nada: el fallo está en cómo se usa `area`.",
+            ),
+            (
+                "Añadir un setter para `area`",
+                f"{CID}.sin-setter",
+                "Un setter sirve para asignar. Aquí solo se lee el área.",
+            ),
+        ],
+        0,
+        "`c.area` ya ejecuta el método y devuelve un número. Con `c.area()` se intenta llamar a ese número como si fuera una función.",
+        code="""
+        class Circulo:
+            def __init__(self, radio):
+                self.radio = radio
+
+            @property
+            def area(self):
+                return 3.14 * self.radio ** 2
+
+        c = Circulo(2)
+        print(c.area())
+        """,
+        level=2,
+        daw=False,
+        bank=True,
+        qtype="error",
+    ),
+    choice(
+        "poo4-23",
+        CID,
+        "Queremos que el `saldo` de una cuenta se pueda leer desde fuera (`c.saldo`) pero no asignar. ¿Qué lo consigue?",
+        [
+            ("Una propiedad `saldo` con `@property` que devuelve `self._saldo`, sin setter", None),
+            (
+                "Guardarlo en `self.__saldo` y nada más",
+                f"{CID}.privado-absoluto",
+                "No se podría leer como `c.saldo`, y el renombrado tampoco impide cambiarlo con `c._Cuenta__saldo`.",
+            ),
+            (
+                "Una propiedad con un setter que hace `self.saldo = valor`",
+                f"{CID}.setter-recursivo",
+                "Con setter se podría asignar, y además ese setter se llamaría a sí mismo sin fin.",
+            ),
+            (
+                "Un método `saldo()` que devuelve `self._saldo`",
+                f"{CID}.property-con-parentesis",
+                "Habría que leerlo con paréntesis, y `c.saldo = 5` taparía el método sin dar ningún error.",
+            ),
+        ],
+        0,
+        "Una propiedad sin setter es de solo lectura: `c.saldo` funciona y `c.saldo = 5` lanza `AttributeError`.",
+        level=1,
+        daw=False,
+        bank=True,
+        qtype="solucion",
+    ),
+    choice(
+        "poo4-24",
+        CID,
+        "El setter de la propiedad `edad` debe rechazar las edades negativas. ¿Qué versión es correcta?",
+        [
+            ("Si `valor < 0` lanza `ValueError`; si no, guarda el valor en `self._edad`", None),
+            (
+                "Comprueba el valor y lo guarda en `self.edad`",
+                f"{CID}.setter-recursivo",
+                "`self.edad = …` dentro del setter vuelve a llamar al setter, sin fin (`RecursionError`).",
+            ),
+            (
+                'Si `valor < 0` hace `print("Edad no válida")` y después lo guarda igualmente',
+                None,
+                "El aviso no impide que el objeto se quede con una edad negativa.",
+            ),
+            (
+                "No comprueba nada: el programa principal comprueba la edad antes de asignarla",
+                f"{CID}.validacion-fuera",
+                "Si la regla está fuera, cualquier parte del programa puede olvidarla. La clase debe protegerse sola.",
+            ),
+        ],
+        0,
+        "El setter es el sitio de la regla: valida primero y guarda en el atributo interno solo si el valor es correcto.",
+        level=3,
+        daw=False,
+        bank=True,
+        qtype="solucion",
+    ),
+    choice(
+        "poo4-25",
+        CID,
+        "La clase `Usuario` guarda una contraseña. ¿Qué interfaz pública es la más adecuada?",
+        [
+            (
+                "Los métodos `comprobar(clave)` y `cambiar_clave(actual, nueva)`, sin forma de leer la contraseña",
+                None,
+            ),
+            (
+                "Una propiedad `clave` con getter y setter, sin ninguna comprobación",
+                f"{CID}.validacion-fuera",
+                "Cualquiera podría leerla y cambiarla sin conocer la actual: la propiedad no protege nada.",
+            ),
+            (
+                "Un atributo público `clave`",
+                None,
+                "Deja leer y cambiar la contraseña desde cualquier parte del programa.",
+            ),
+            (
+                "Guardar la contraseña en un atributo de clase",
+                None,
+                "Un atributo de clase es el mismo para todos los usuarios.",
+            ),
+        ],
+        0,
+        "Encapsular no es solo ocultar: es decidir qué operaciones tienen sentido. Con una contraseña basta con poder comprobarla y cambiarla con reglas.",
+        level=2,
+        daw=False,
+        bank=True,
+        qtype="diseno",
+    ),
+    choice(
+        "poo4-26",
+        CID,
+        "El `estado` de un `Pedido` solo puede pasar de `nuevo` a `enviado` y de `enviado` a `entregado`. ¿Qué diseño lo garantiza mejor?",
+        [
+            (
+                "Un dato interno `_estado`, una propiedad `estado` de solo lectura y los métodos `enviar()` y `entregar()`, que comprueban el estado actual",
+                None,
+            ),
+            (
+                "Un atributo público `estado` y un comentario que explique el orden correcto",
+                f"{CID}.validacion-fuera",
+                'Un comentario no impide asignar `estado = "entregado"` a un pedido nuevo.',
+            ),
+            (
+                "Una propiedad `estado` con un setter que acepta cualquier texto",
+                None,
+                "Si el setter no comprueba nada, la propiedad no añade ninguna protección.",
+            ),
+            (
+                "Guardar el estado en un atributo de clase de `Pedido`",
+                None,
+                "Sería el mismo estado para todos los pedidos.",
+            ),
+        ],
+        0,
+        "La regla vive dentro del objeto: desde fuera solo se puede leer el estado y pedir los cambios permitidos, y cada método comprueba que el paso es válido.",
+        level=3,
+        daw=False,
+        bank=True,
+        qtype="diseno",
+    ),
 ]
 
 # Errores típicos (slug, etiqueta, por qué, qué pensar, cómo evitarlo)
@@ -726,3 +1358,43 @@ ERRORS = [
         "Para que nadie cambie un dato desde fuera, guárdalo en `self._x` y exponlo con una propiedad sin setter.",
     ),
 ]
+
+# Preguntas tipo test que ya existían y pasan al banco: (tipo, nivel, por qué falla cada distractor)
+BANK_TAGS = {
+    "poo4-01": (
+        "teoria",
+        1,
+        [
+            "Python no bloquea nada con un guion bajo: es solo un aviso entre programadores.",
+            "La solo lectura se consigue con una propiedad sin setter; el guion bajo no cambia nada.",
+            "Sigue siendo un dato de cada objeto, porque se crea con `self.`.",
+        ],
+    ),
+    "poo4-08": (
+        "error",
+        2,
+        [
+            "`self.edad = valor` vuelve a llamar al setter, que vuelve a asignar, sin fin.",
+            "Python no añade guiones bajos por su cuenta: hay que escribir `self._edad`.",
+            "La sintaxis es correcta: el fallo aparece al ejecutar el setter.",
+        ],
+    ),
+    "poo4-09": (
+        "teoria",
+        1,
+        [
+            "Con setter se puede cambiar; sin setter es de solo lectura, pero esa no es la ventaja frente a un método.",
+            "Los métodos `get_` son válidos: la propiedad solo es más cómoda y deja añadir reglas después.",
+            "El valor se sigue guardando en cada objeto, normalmente en `self._precio`.",
+        ],
+    ),
+    "poo4-13": (
+        "teoria",
+        2,
+        [
+            "Sigue existiendo como `_Caja__pin` y se puede leer con ese nombre: no es una barrera de seguridad.",
+            "El atributo existe mientras exista el objeto: Python no lo borra.",
+            "Con dos guiones bajos Python sí cambia el nombre; con uno solo no hace nada.",
+        ],
+    ),
+}

@@ -22,7 +22,8 @@ import poo_u3
 import poo_u4
 import poo_u5
 import poo_u6
-from poo_common import REVIEWED, SOURCE, proposed
+from exercises import E as BASE_EXERCISES
+from poo_common import REVIEWED, SOURCE, proposed, tag_bank
 
 __all__ = ["REVIEWED", "SOURCE", "proposed"]
 
@@ -62,6 +63,9 @@ UNIT_FIELDS = (
     "recap",
     "pass",
     "curriculum",
+    "practices",
+    "references",
+    "bank",
 )
 
 UNITS = {
@@ -81,6 +85,17 @@ EXERCISES = [
     *poo_u6.EXERCISES,
     *poo_u2.EXERCISES,  # la Unidad 2 va al final: así no cambia el orden de learning.json
 ]
+
+# Preguntas tipo test que ya existían y pasan al banco evaluable de su unidad (mismo id)
+BANK_TAGS = {
+    **poo_u1.BANK_TAGS,
+    **poo_u2.BANK_TAGS,
+    **poo_u3.BANK_TAGS,
+    **poo_u4.BANK_TAGS,
+    **poo_u5.BANK_TAGS,
+    **poo_u6.BANK_TAGS,
+}
+tag_bank([*BASE_EXERCISES, *EXERCISES], BANK_TAGS)
 
 # Errores típicos nuevos de cada unidad (la Unidad 2 los añade a los del concepto `poo`)
 UNIT_ERRORS = {

@@ -7,7 +7,7 @@ La salida de los ejemplos la obtiene build_learning.py ejecutándolos.
 """
 
 from exercises import bug, case, choice, code, fill, output
-from poo_common import proposed
+from poo_common import practice, proposed, ref
 
 CID = "poo-herencia"
 
@@ -128,9 +128,48 @@ UNIT = {
             ],
             "quiz": ["poo5-07", "poo5-08", "poo5-09"],
         },
+        {
+            "id": f"{CID}.mro",
+            "title": "Herencia múltiple y orden de búsqueda (MRO)",
+            "theory": "Una clase puede heredar de **varias** a la vez: `class Becario(Exportable, Empleado):`. Recibe los atributos y métodos de todas ellas.\n\nSi dos superclases tienen un método con el mismo nombre, ¿cuál se usa? Python sigue el **MRO** (*method resolution order*, orden de resolución de métodos): una lista con la clase, sus superclases y al final `object`. Busca el método en ese orden y usa el primero que encuentra.\n\n- Las superclases se miran **de izquierda a derecha**, en el orden en que se escriben entre paréntesis.\n- Cada clase aparece **una sola vez** y siempre antes que sus propias superclases, aunque se llegue a ella por dos caminos.\n- El MRO se consulta con `Clase.__mro__`. `super()` también lo sigue.\n\nEl uso más habitual es el **mixin**: una clase pequeña que añade **una** capacidad (exportar, comparar, registrar) y se combina con la clase principal. Fuera de eso, la herencia múltiple complica el diseño muy rápido: si dudas, usa composición (Unidad 7).",
+            "examples": [
+                {
+                    "code": 'class Exportable:                       # mixin: añade una sola capacidad\n    def exportar(self):\n        datos = ", ".join(f"{k}={v}" for k, v in vars(self).items())\n        return f"{type(self).__name__}({datos})"\n\n\nclass Empleado:\n    def __init__(self, nombre, sueldo):\n        self.nombre = nombre\n        self.sueldo = sueldo\n\n    def descripcion(self):\n        return f"Empleado {self.nombre}"\n\n\nclass Becario(Exportable, Empleado):    # hereda de las dos\n    def descripcion(self):\n        return f"Becario {self.nombre}"\n\n\nb = Becario("Eva", 600)\nprint(b.descripcion())\nprint(b.exportar())\nprint([c.__name__ for c in Becario.__mro__])',
+                    "lines": [
+                        [
+                            1,
+                            "`Exportable` no tiene datos propios: solo aporta el método `exportar`.",
+                        ],
+                        [3, "`vars(self)` es el diccionario con los atributos del objeto."],
+                        [16, "Dos superclases entre paréntesis: herencia múltiple."],
+                        [
+                            21,
+                            "`__init__` no está en `Becario` ni en `Exportable`: se usa el de `Empleado`.",
+                        ],
+                        [
+                            24,
+                            "El MRO: `Becario`, `Exportable`, `Empleado` y `object`, en ese orden.",
+                        ],
+                    ],
+                },
+                {
+                    "code": 'class A:\n    def hola(self):\n        return "A"\n\n\nclass B(A):\n    pass\n\n\nclass C(A):\n    def hola(self):\n        return "C"\n\n\nclass D(B, C):\n    pass\n\n\nprint(D().hola())\nprint([k.__name__ for k in D.__mro__])',
+                    "lines": [
+                        [15, "`D` hereda de `B` y de `C`, y las dos heredan de `A` (un «rombo»)."],
+                        [
+                            19,
+                            "`B` no define `hola`, así que Python sigue con `C` antes de llegar a `A`.",
+                        ],
+                        [20, "`A` aparece una sola vez y después de sus dos subclases."],
+                    ],
+                },
+            ],
+            "quiz": ["poo5-16", "poo5-17", "poo5-18"],
+        },
     ],
     "guided": ["poo5-10"],
-    "autonomous": ["poo5-11", "poo5-12"],
+    "autonomous": ["poo5-15"],
+    "extras": ["poo5-11", "poo5-12"],
     "selfcheck": ["poo5-13", "poo5-14"],
     "recap": [
         "`class Hija(Padre):` crea una subclase que recibe todos los atributos y métodos de la superclase.",
@@ -141,13 +180,72 @@ UNIT = {
     ],
     "pass": {
         "minScore": 0.7,
-        "required": ["poo5-10", "poo5-11"],
+        "required": ["poo5-10", "poo5-15"],
         "text": [
-            "Resolver el ejercicio guiado (empleados) y el autónomo de figuras con todos los tests superados.",
+            "Resolver el ejercicio guiado (empleados) y el ejercicio principal de empleados fijos y temporales con todos los tests superados.",
             "Dominar la unidad según el motor: al menos un 70 % de aciertos recientes en sus ejercicios, con varios tipos distintos.",
             "Completar las lecciones ayuda a organizarte, pero **no** demuestra la competencia: la demuestran los ejercicios.",
         ],
     },
+    "practices": [
+        practice(
+            "Antes de heredar, comprueba que la frase «un X es un Y» tiene sentido.",
+            "Si la relación es «tiene un», la herencia da jerarquías difíciles de cambiar: usa composición.",
+        ),
+        practice(
+            "Empieza el `__init__` de la subclase con `super().__init__(...)`.",
+            "Así se crean los atributos de la superclase antes que los propios y no falta ninguno.",
+        ),
+        practice(
+            "Para ampliar un método, llama a `super().metodo()` y añade lo nuevo en vez de copiar el código.",
+            "Si la superclase cambia, la subclase se actualiza sola.",
+        ),
+        practice(
+            "Mantén las jerarquías poco profundas, de dos o tres niveles.",
+            "Cuantos más niveles, más difícil es saber de qué clase sale cada método.",
+        ),
+        practice(
+            "Usa la herencia múltiple sobre todo para mixins pequeños, y consulta `Clase.__mro__` cuando dudes.",
+            "Así el orden de búsqueda es fácil de prever y de explicar.",
+        ),
+    ],
+    "references": [
+        ref(
+            "py-tutorial-classes",
+            "9.5. Herencia",
+            ["subclases y sobrescritura de métodos", "`isinstance()` e `issubclass()`"],
+        ),
+        ref(
+            "py-tutorial-classes",
+            "9.5.1. Herencia múltiple",
+            [
+                "búsqueda en las superclases de izquierda a derecha",
+                "orden de resolución de métodos (MRO)",
+            ],
+        ),
+        ref(
+            "py-faq-programming",
+            "Objetos: ¿Cómo puedo llamar a un método definido en una clase base desde una clase derivada que la extiende?",
+            ["`super()` para usar la versión de la superclase"],
+        ),
+    ],
+    "bank": [
+        "poo5-02",
+        "poo5-09",
+        "poo5-13",
+        "poo5-16",
+        "poo5-17",
+        "poo5-18",
+        "poo5-19",
+        "poo5-20",
+        "poo5-21",
+        "poo5-22",
+        "poo5-23",
+        "poo5-24",
+        "poo5-25",
+        "poo5-26",
+        "poo5-27",
+    ],
     "curriculum": [
         proposed("0485-RA4-g", "Se definen y usan clases heredadas."),
         proposed("0485-RA7-a", "Se identifican la herencia, la superclase y la subclase."),
@@ -706,6 +804,610 @@ EXERCISES = [
         level=2,
         daw=False,
     ),
+    # ---------- Ejercicio principal de la unidad
+    code(
+        "poo5-15",
+        CID,
+        '**Ejercicio principal: empleados fijos y temporales.** Crea tres clases:\n\n- `Empleado` con `__init__(self, nombre)`, un método `salario()` que lance `NotImplementedError` (cada tipo de empleado lo calcula a su manera) y `ficha()`, que devuelva `"Ana: 2000.00 €"` usando `self.salario()`.\n- `EmpleadoFijo(Empleado)` con `__init__(self, nombre, sueldo_anual, pagas=14)`: su salario mensual es el sueldo anual entre las pagas.\n- `EmpleadoTemporal(Empleado)` con `__init__(self, nombre, horas, precio_hora, meses)`: su salario son las horas por el precio. Sobrescribe `ficha()` para **ampliarla**: la de `Empleado` más `" (temporal, 6 meses)"`.\n\nLas dos subclases llaman a `super().__init__(nombre)` y `EmpleadoFijo` no necesita su propia `ficha()`.',
+        """
+        class Empleado:
+            ...
+        """,
+        """
+        class Empleado:
+            def __init__(self, nombre):
+                self.nombre = nombre
+
+            def salario(self):
+                raise NotImplementedError("Cada tipo de empleado calcula su salario")
+
+            def ficha(self):
+                return f"{self.nombre}: {self.salario():.2f} €"
+
+
+        class EmpleadoFijo(Empleado):
+            def __init__(self, nombre, sueldo_anual, pagas=14):
+                super().__init__(nombre)
+                self.sueldo_anual = sueldo_anual
+                self.pagas = pagas
+
+            def salario(self):
+                return self.sueldo_anual / self.pagas
+
+
+        class EmpleadoTemporal(Empleado):
+            def __init__(self, nombre, horas, precio_hora, meses):
+                super().__init__(nombre)
+                self.horas = horas
+                self.precio_hora = precio_hora
+                self.meses = meses
+
+            def salario(self):
+                return self.horas * self.precio_hora
+
+            def ficha(self):
+                return f"{super().ficha()} (temporal, {self.meses} meses)"
+
+
+        plantilla = [EmpleadoFijo("Ana", 28000), EmpleadoTemporal("Luis", 120, 12.5, 6)]
+        for empleado in plantilla:
+            print(empleado.ficha())
+        """,
+        [
+            case(
+                'f = EmpleadoFijo("Ana", 28000)\nt = EmpleadoTemporal("Luis", 120, 12.5, 6)\nassert f.nombre == "Ana" and t.nombre == "Luis", "Las dos subclases deben llamar a super().__init__(nombre)"\nassert isinstance(f, Empleado) and isinstance(t, Empleado), "EmpleadoFijo y EmpleadoTemporal heredan de Empleado"',
+                error=f"{CID}.olvida-super",
+            ),
+            case(
+                'assert EmpleadoFijo("Ana", 28000).salario() == 2000, "28000 € en 14 pagas son 2000 € al mes"\nassert EmpleadoFijo("Eva", 24000, 12).salario() == 2000, "Las pagas se pueden indicar"\nassert EmpleadoTemporal("Luis", 120, 12.5, 6).salario() == 1500, "El temporal cobra horas × precio"',
+                error=f"{CID}.sobrescribir",
+            ),
+            case(
+                'assert EmpleadoFijo("Ana", 28000).ficha() == "Ana: 2000.00 €", "ficha() usa el salario de cada tipo de empleado"\nassert "ficha" not in vars(EmpleadoFijo), "EmpleadoFijo no necesita su propia ficha(): la hereda"\ntry:\n    Empleado("Leo").salario()\nexcept NotImplementedError:\n    pass\nelse:\n    raise AssertionError("salario() de Empleado debe lanzar NotImplementedError")',
+            ),
+            case(
+                't = EmpleadoTemporal("Luis", 120, 12.5, 6)\nassert t.ficha() == "Luis: 1500.00 € (temporal, 6 meses)", f"La ficha del temporal amplía la de Empleado; es {t.ficha()!r}"\nclass Prueba(EmpleadoTemporal):\n    def salario(self):\n        return 7\nassert Prueba("X", 1, 1, 2).ficha().startswith("X: 7.00 €"), "La ficha del temporal debe reutilizar super().ficha(), no repetir el formato"',
+                error=f"{CID}.sobrescribir",
+            ),
+        ],
+        "La superclase reúne lo común (`nombre` y el formato de la ficha) y cada subclase pone lo suyo: cómo se calcula el salario. `ficha()` llama a `self.salario()`, así que cada empleado usa su versión. El temporal amplía la ficha con `super().ficha()` en vez de copiar el formato.",
+        "En cada subclase, la primera línea de `__init__` es `super().__init__(nombre)`. En `EmpleadoTemporal.ficha`, usa `super().ficha()` y añade el texto.",
+        wrong=[
+            (
+                """
+                class Empleado:
+                    def __init__(self, nombre):
+                        self.nombre = nombre
+
+                    def salario(self):
+                        raise NotImplementedError
+
+                    def ficha(self):
+                        return f"{self.nombre}: {self.salario():.2f} €"
+
+
+                class EmpleadoFijo(Empleado):
+                    def __init__(self, nombre, sueldo_anual, pagas=14):
+                        super().__init__(nombre)
+                        self.sueldo_anual = sueldo_anual
+                        self.pagas = pagas
+
+                    def salario(self):
+                        return self.sueldo_anual / self.pagas
+
+
+                class EmpleadoTemporal(Empleado):
+                    def __init__(self, nombre, horas, precio_hora, meses):
+                        self.horas = horas
+                        self.precio_hora = precio_hora
+                        self.meses = meses
+
+                    def salario(self):
+                        return self.horas * self.precio_hora
+                """,
+                1,
+            ),
+            (
+                """
+                class Empleado:
+                    def __init__(self, nombre):
+                        self.nombre = nombre
+
+                    def salario(self):
+                        raise NotImplementedError
+
+                    def ficha(self):
+                        return f"{self.nombre}: {self.salario():.2f} €"
+
+
+                class EmpleadoFijo(Empleado):
+                    def __init__(self, nombre, sueldo_anual, pagas=14):
+                        super().__init__(nombre)
+                        self.sueldo_anual = sueldo_anual
+                        self.pagas = pagas
+
+                    def salario(self):
+                        return self.sueldo_anual / self.pagas
+
+
+                class EmpleadoTemporal(Empleado):
+                    def __init__(self, nombre, horas, precio_hora, meses):
+                        super().__init__(nombre)
+                        self.horas = horas
+                        self.precio_hora = precio_hora
+                        self.meses = meses
+
+                    def salario(self):
+                        return self.horas * self.precio_hora
+
+                    def ficha(self):
+                        return f"{self.nombre}: {self.horas * self.precio_hora:.2f} € (temporal, {self.meses} meses)"
+                """,
+                4,
+            ),
+        ],
+        level=2,
+        daw=False,
+    ),
+    # ---------- Banco de preguntas de la unidad (cuestionario)
+    choice(
+        "poo5-16",
+        CID,
+        "¿Qué muestra este programa?",
+        [
+            ("C", None),
+            (
+                "A",
+                f"{CID}.jerarquia-al-reves",
+                "Python no sube primero hasta `A` por `B`: según el MRO (`D`, `B`, `C`, `A`), mira `C` antes que `A`.",
+            ),
+            (
+                "B",
+                None,
+                "`B` no define `hola`: no tiene nada que devolver, así que la búsqueda sigue.",
+            ),
+            (
+                "TypeError",
+                None,
+                "La herencia múltiple es válida: Python usa el primer `hola` que encuentra en el MRO.",
+            ),
+        ],
+        0,
+        "El MRO de `D` es `D`, `B`, `C`, `A`, `object`. `A` va al final porque es superclase de `B` y de `C`, así que el primer `hola` es el de `C`.",
+        code="""
+        class A:
+            def hola(self):
+                return "A"
+
+        class B(A):
+            pass
+
+        class C(A):
+            def hola(self):
+                return "C"
+
+        class D(B, C):
+            pass
+
+        print(D().hola())
+        """,
+        level=3,
+        daw=False,
+        bank=True,
+        qtype="prediccion",
+    ),
+    choice(
+        "poo5-17",
+        CID,
+        "¿Qué es el MRO de una clase?",
+        [
+            (
+                "El orden en que Python busca un atributo o un método: la clase, sus superclases y al final `object`",
+                None,
+            ),
+            (
+                "La lista de los objetos que se han creado con esa clase",
+                None,
+                "Una clase no guarda sus objetos: el MRO es una lista de clases.",
+            ),
+            (
+                "Un error que salta cuando una clase hereda de dos a la vez",
+                None,
+                "La herencia múltiple es válida; el MRO es lo que decide qué versión de cada método se usa.",
+            ),
+            (
+                "El método que se ejecuta al crear un objeto",
+                None,
+                "Ese es `__init__`. El MRO es el orden de búsqueda de los métodos.",
+            ),
+        ],
+        0,
+        "MRO significa *method resolution order*. Se consulta con `Clase.__mro__` y lo siguen tanto la búsqueda de métodos como `super()`.",
+        level=1,
+        daw=False,
+        bank=True,
+        qtype="teoria",
+    ),
+    choice(
+        "poo5-18",
+        CID,
+        "Con esta jerarquía, si `Becario` no define `descripcion`, ¿dónde la busca Python al hacer `b.descripcion()`?",
+        [
+            ("Primero en `Exportable` y después en `Empleado`, de izquierda a derecha", None),
+            (
+                "Primero en `Empleado`, porque es la que tiene `__init__`",
+                None,
+                "El orden lo marcan los paréntesis de la definición, no qué métodos tiene cada clase.",
+            ),
+            (
+                "Solo en `Empleado`: en un mixin nunca se busca",
+                None,
+                "Un mixin es una superclase como cualquier otra y entra en el MRO.",
+            ),
+            (
+                "En ninguna: con dos superclases Python da error",
+                None,
+                "Python resuelve la búsqueda siguiendo el MRO; no hay ningún error.",
+            ),
+        ],
+        0,
+        "Las superclases se recorren en el orden en que se escriben. Como `Exportable` no tiene `descripcion`, Python la encuentra en `Empleado`.",
+        code="""
+        class Exportable:
+            def exportar(self):
+                return str(vars(self))
+
+        class Empleado:
+            def descripcion(self):
+                return "Empleado"
+
+        class Becario(Exportable, Empleado):
+            pass
+
+        b = Becario()
+        """,
+        level=2,
+        daw=False,
+        bank=True,
+        qtype="codigo",
+    ),
+    choice(
+        "poo5-19",
+        CID,
+        "¿Qué es un *mixin*?",
+        [
+            (
+                "Una clase pequeña que aporta una sola capacidad y se combina con otra mediante herencia múltiple",
+                None,
+            ),
+            (
+                "Una subclase que sobrescribe todos los métodos de su superclase",
+                f"{CID}.sobrescribir",
+                "Sobrescribir es otra cosa; un mixin añade una capacidad sin ser la clase principal.",
+            ),
+            (
+                "Una clase con métodos abstractos que no se puede instanciar",
+                None,
+                "Eso es una clase abstracta (Unidad 6).",
+            ),
+            (
+                "Otro nombre para la composición",
+                f"{CID}.es-un-tiene-un",
+                "La composición guarda objetos como atributos; un mixin se hereda.",
+            ),
+        ],
+        0,
+        "Un mixin como `Exportable` no representa ninguna entidad: solo añade un método útil a las clases que lo heredan.",
+        level=2,
+        daw=False,
+        bank=True,
+        qtype="teoria",
+    ),
+    choice(
+        "poo5-20",
+        CID,
+        "¿Qué relación hay entre `Gato` y `Animal` en este código?",
+        [
+            ("`Gato` es subclase de `Animal` y sobrescribe el método `sonido`", None),
+            (
+                "`Animal` es subclase de `Gato`",
+                f"{CID}.jerarquia-al-reves",
+                "La superclase es la que va entre paréntesis: `Gato(Animal)` hace de `Gato` la subclase.",
+            ),
+            (
+                "Un `Gato` tiene un `Animal` guardado dentro",
+                f"{CID}.es-un-tiene-un",
+                "No hay ningún atributo con un `Animal`: es herencia («un gato es un animal»).",
+            ),
+            (
+                "`Gato` copia el código de `Animal`, así que si `Animal` cambia, `Gato` no se entera",
+                None,
+                "La herencia no copia: los métodos que `Gato` no define se buscan en `Animal` en cada llamada.",
+            ),
+        ],
+        0,
+        "`class Gato(Animal)` declara la herencia. Al definir otro `sonido`, `Gato` sobrescribe el de `Animal`.",
+        code="""
+        class Animal:
+            def sonido(self):
+                return "..."
+
+        class Gato(Animal):
+            def sonido(self):
+                return "Miau"
+        """,
+        level=1,
+        daw=False,
+        bank=True,
+        qtype="codigo",
+    ),
+    choice(
+        "poo5-21",
+        CID,
+        'Con `h = Hija("Ana", 20)`, ¿qué atributos tiene `h`?',
+        [
+            ("Solo `edad`: el `__init__` de `Hija` sustituye al de `Base` y no lo llama", None),
+            (
+                "`nombre` y `edad`",
+                f"{CID}.olvida-super",
+                "El `__init__` de `Base` no se ejecuta solo si la subclase define el suyo: hay que llamarlo con `super()`.",
+            ),
+            (
+                "Solo `nombre`",
+                None,
+                "El `__init__` que se ejecuta es el de `Hija`, que sí crea `edad`.",
+            ),
+            (
+                "Ninguno: da error al crear el objeto",
+                None,
+                "Crear el objeto funciona: el error aparecería más tarde, al usar `h.nombre`.",
+            ),
+        ],
+        0,
+        "Al definir su propio `__init__`, `Hija` deja de usar el de `Base`. Para tener `nombre` hace falta `super().__init__(nombre)`.",
+        code="""
+        class Base:
+            def __init__(self, nombre):
+                self.nombre = nombre
+
+        class Hija(Base):
+            def __init__(self, nombre, edad):
+                self.edad = edad
+        """,
+        level=3,
+        daw=False,
+        bank=True,
+        qtype="codigo",
+    ),
+    choice(
+        "poo5-22",
+        CID,
+        "¿Qué muestra este programa?",
+        [
+            ("4 ruedas 2 ruedas", None),
+            (
+                "4 ruedas 4 ruedas",
+                f"{CID}.sobrescribir",
+                "`Moto` redefine `ruedas`: para una moto, `self.ruedas` encuentra el 2 antes que el 4.",
+            ),
+            (
+                "2 ruedas 2 ruedas",
+                None,
+                "Cambiar `ruedas` en `Moto` no cambia la clase `Vehiculo`.",
+            ),
+            (
+                "AttributeError",
+                None,
+                "`Moto` hereda `describir` y las dos clases tienen `ruedas`.",
+            ),
+        ],
+        0,
+        "`describir` está en `Vehiculo`, pero `self.ruedas` se busca empezando por la clase del objeto: la moto encuentra su propio 2.",
+        code="""
+        class Vehiculo:
+            ruedas = 4
+
+            def describir(self):
+                return f"{self.ruedas} ruedas"
+
+        class Moto(Vehiculo):
+            ruedas = 2
+
+        print(Vehiculo().describir(), Moto().describir())
+        """,
+        level=1,
+        daw=False,
+        bank=True,
+        qtype="prediccion",
+    ),
+    choice(
+        "poo5-23",
+        CID,
+        "¿Qué muestra este programa?",
+        [
+            ("80.0 True", None),
+            (
+                "100 True",
+                f"{CID}.sobrescribir",
+                "Para una `Oferta` se usa su propio `precio_final`, que aplica el 0.8.",
+            ),
+            (
+                "80 False",
+                f"{CID}.jerarquia-al-reves",
+                "Multiplicar por 0.8 da un decimal (80.0), y una oferta sí es un `Producto`.",
+            ),
+            (
+                "80.0 False",
+                None,
+                "`isinstance` es `True` también con la superclase: una oferta es un producto.",
+            ),
+        ],
+        0,
+        "`super().precio_final()` devuelve 100 y la oferta lo multiplica por 0.8. Además, toda `Oferta` es un `Producto`.",
+        code="""
+        class Producto:
+            def precio_final(self):
+                return 100
+
+        class Oferta(Producto):
+            def precio_final(self):
+                return super().precio_final() * 0.8
+
+        print(Oferta().precio_final(), isinstance(Oferta(), Producto))
+        """,
+        level=2,
+        daw=False,
+        bank=True,
+        qtype="prediccion",
+    ),
+    choice(
+        "poo5-24",
+        CID,
+        "Este programa termina con `AttributeError: 'Alumno' object has no attribute 'nombre'`. ¿Por qué?",
+        [
+            (
+                "El `__init__` de `Alumno` no llama a `super().__init__(nombre)`, así que `nombre` no se crea",
+                None,
+            ),
+            (
+                "Las subclases no heredan los atributos",
+                None,
+                "Sí los heredan, siempre que se ejecute el `__init__` de la superclase, que es quien los crea.",
+            ),
+            (
+                "Falta escribir `nombre` en la línea `class Alumno(Persona)`",
+                None,
+                "Entre paréntesis solo va la superclase; los datos se pasan al crear el objeto.",
+            ),
+            (
+                "`a.nombre` debería ser `a.Persona.nombre`",
+                None,
+                "Los atributos heredados se usan igual que los propios: `a.nombre`.",
+            ),
+        ],
+        0,
+        "Al definir su propio `__init__`, `Alumno` sustituye al de `Persona`. Sin `super().__init__(nombre)`, nadie crea `self.nombre`.",
+        code="""
+        class Persona:
+            def __init__(self, nombre):
+                self.nombre = nombre
+
+        class Alumno(Persona):
+            def __init__(self, nombre, curso):
+                self.curso = curso
+
+        a = Alumno("Ana", "1.º DAW")
+        print(a.nombre)
+        """,
+        level=1,
+        daw=False,
+        bank=True,
+        qtype="error",
+    ),
+    choice(
+        "poo5-25",
+        CID,
+        "Este programa termina con `TypeError: Rectangulo.__init__() takes 3 positional arguments but 4 were given`. ¿Por qué?",
+        [
+            ("Se pasa `self` a `super().__init__`: sobra, porque Python lo añade solo", None),
+            (
+                "Un cuadrado no puede heredar de un rectángulo",
+                f"{CID}.es-un-tiene-un",
+                "La herencia es válida («un cuadrado es un rectángulo»); el fallo está en la llamada.",
+            ),
+            (
+                "Falta un parámetro `altura` en el `__init__` de `Cuadrado`",
+                None,
+                "El cuadrado solo necesita el lado: lo pasa dos veces, como base y como altura.",
+            ),
+            (
+                "`super()` no se puede usar dentro de `__init__`",
+                f"{CID}.olvida-super",
+                "Es justo donde más se usa. El problema es el argumento de más.",
+            ),
+        ],
+        0,
+        "`super().__init__` ya está ligado al objeto: se llama solo con los datos. Con `self` delante llegan cuatro argumentos donde se esperan tres.",
+        code="""
+        class Rectangulo:
+            def __init__(self, base, altura):
+                self.base = base
+                self.altura = altura
+
+        class Cuadrado(Rectangulo):
+            def __init__(self, lado):
+                super().__init__(self, lado, lado)
+
+        c = Cuadrado(3)
+        """,
+        level=3,
+        daw=False,
+        bank=True,
+        qtype="error",
+    ),
+    choice(
+        "poo5-26",
+        CID,
+        "`Empleado` pide `nombre` y `sueldo`, y `Gerente(Empleado)` añade un `plus`. ¿Qué constructor de `Gerente` es correcto?",
+        [
+            (
+                "def __init__(self, nombre, sueldo, plus): super().__init__(nombre, sueldo); self.plus = plus",
+                None,
+            ),
+            (
+                "def __init__(self, nombre, sueldo, plus): self.plus = plus",
+                f"{CID}.olvida-super",
+                "Sin llamar a `super().__init__`, el gerente se queda sin `nombre` ni `sueldo`.",
+            ),
+            (
+                "def __init__(self, nombre, sueldo, plus): super().__init__(self, nombre, sueldo); self.plus = plus",
+                None,
+                "A `super().__init__` no se le pasa `self`: llegarían cuatro argumentos y daría `TypeError`.",
+            ),
+            (
+                "def __init__(self, plus): super().__init__(); self.plus = plus",
+                None,
+                "El `__init__` de `Empleado` necesita el nombre y el sueldo: así daría `TypeError`.",
+            ),
+        ],
+        0,
+        "Primero se inicializa la parte heredada con sus datos y después se guarda lo propio del gerente.",
+        level=2,
+        daw=False,
+        code_options=True,
+        bank=True,
+        qtype="solucion",
+    ),
+    choice(
+        "poo5-27",
+        CID,
+        "`Oferta(Producto)` debe mostrar la etiqueta de `Producto` y añadirle `(-10 %)` sin repetir código. ¿Qué método lo consigue?",
+        [
+            ('def etiqueta(self): return super().etiqueta() + f" (-{self.descuento} %)"', None),
+            (
+                'def etiqueta(self): return self.etiqueta() + f" (-{self.descuento} %)"',
+                None,
+                "`self.etiqueta()` vuelve a llamar a este mismo método, sin fin (`RecursionError`).",
+            ),
+            (
+                'def etiqueta(self): return Producto.etiqueta() + f" (-{self.descuento} %)"',
+                f"{CID}.olvida-super",
+                "Llamado desde la clase, el método necesita el objeto: falta `self` y da `TypeError`.",
+            ),
+            (
+                'def etiqueta(self): return f"{self.nombre}: {self.precio:.2f} € (-{self.descuento} %)"',
+                f"{CID}.sobrescribir",
+                "Funciona, pero copia el formato de `Producto`: si ese formato cambia, la oferta se queda desfasada.",
+            ),
+        ],
+        0,
+        "`super().etiqueta()` reutiliza la versión de la superclase y la subclase solo añade lo que la diferencia.",
+        level=3,
+        daw=False,
+        code_options=True,
+        bank=True,
+        qtype="solucion",
+    ),
 ]
 
 # Errores típicos (slug, etiqueta, por qué, qué pensar, cómo evitarlo)
@@ -739,3 +1441,34 @@ ERRORS = [
         "Lee `class Hija(Padre)` como «Hija es un tipo de Padre».",
     ),
 ]
+
+# Preguntas tipo test que ya existían y pasan al banco: (tipo, nivel, por qué falla cada distractor)
+BANK_TAGS = {
+    "poo5-02": (
+        "diseno",
+        1,
+        [
+            "«Tiene un» es composición: el coche guarda un motor como atributo.",
+            "Una biblioteca no es un libro: los contiene.",
+            "Un pedido no es un producto: guarda una lista de ellos.",
+        ],
+    ),
+    "poo5-09": (
+        "teoria",
+        2,
+        [
+            "`isinstance` también da `True` con todas las superclases: un gerente es un empleado y una persona.",
+            "Es al revés: `Gerente` es subclase de `Persona`.",
+            "Hereda los métodos de toda la cadena de superclases.",
+        ],
+    ),
+    "poo5-13": (
+        "diseno",
+        2,
+        [
+            "Heredar diría que un coche es un motor; para reutilizar algo que se tiene, se guarda un objeto.",
+            "El tamaño no importa: lo que cuenta es si se cumple «es un».",
+            "Es una decisión de diseño que se toma leyendo la relación, no ejecutando el programa.",
+        ],
+    ),
+}

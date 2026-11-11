@@ -31,6 +31,7 @@ TIMEOUT_S = 5
 sys.path.insert(0, str(HERE))
 from concepts import AREAS, CONCEPTS, CURRICULUM_CE, DAW_COMPETENCIES, PATH  # noqa: E402
 from exercises import E as BASE_EXERCISES  # noqa: E402
+from poo_common import BANK_LEVELS, BANK_QTYPES, BANK_SIZE, REFERENCE_STATUS, SOURCES  # noqa: E402
 from poo_module import EXERCISES as POO_EXERCISES  # noqa: E402
 from poo_module import MODULE, UNIT_FIELDS  # noqa: E402
 
@@ -274,6 +275,93 @@ def _same_text(ex: dict) -> str:
     return " ".join(f"{ex['q']} {ex.get('code') or ''}".lower().split())
 
 
+def check_unit_content(concept: dict, where: str, exercises: dict, problems: Problems) -> None:
+    """Buenas prácticas, referencias, prácticas adicionales y banco de preguntas de una unidad."""
+    cid = concept["id"]
+    practices = concept.get("practices", [])
+    if not 4 <= len(practices) <= 6:
+        problems.add(where, "las buenas prácticas son de 4 a 6")
+    for item in practices:
+        if not item.get("text") or not item.get("why"):
+            problems.add(where, "cada buena práctica lleva su texto y su porqué")
+    cited = set()
+    for reference in concept.get("references", []):
+        rwhere = f"{where}, referencia {reference.get('source')}"
+        source = SOURCES.get(reference.get("source"))
+        if source is None:
+            problems.add(rwhere, "fuente fuera del catálogo SOURCES de poo_common.py")
+            continue
+        if source["kind"] != "python":
+            problems.add(
+                rwhere, "la normativa de FP no respalda conceptos de Python: va en curriculum"
+            )
+        if not reference.get("section") or not reference.get("supports"):
+            problems.add(rwhere, "falta el apartado de la fuente o lo que respalda")
+        if reference.get("status") not in REFERENCE_STATUS:
+            problems.add(rwhere, f"estado no válido (usa {sorted(REFERENCE_STATUS)})")
+        verified = reference.get("status") == "verified"
+        if verified and not (reference.get("by") and reference.get("date")):
+            problems.add(rwhere, "una referencia verified necesita quién la comprobó y cuándo")
+        cited.add(reference["source"])
+    for section in concept.get("sections", []):
+        for example in section.get("examples", []):
+            origin = example.setdefault("origin", {"kind": "original"})
+            if origin.get("kind") not in ("original", "docs"):
+                problems.add(where, f"origen de ejemplo no válido: {origin}")
+            elif origin["kind"] == "docs" and origin.get("ref") not in cited:
+                problems.add(
+                    where,
+                    f"un ejemplo adaptado cita {origin.get('ref')}, que no está en references",
+                )
+    for eid in concept.get("extras", []):
+        if exercises.get(eid, {}).get("kind") != "code":
+            problems.add(where, f"extras: {eid} debe ser un ejercicio de escribir código")
+    bank = concept.get("bank", [])
+    if len(bank) != BANK_SIZE or len(set(bank)) != BANK_SIZE:
+        problems.add(
+            where, f"el banco de la unidad tiene exactamente {BANK_SIZE} preguntas distintas"
+        )
+    questions = [exercises[eid] for eid in bank if eid in exercises]
+    qtypes = {t: sum(q.get("qtype") == t for q in questions) for t in BANK_QTYPES}
+    if qtypes != BANK_QTYPES:
+        problems.add(where, f"reparto por tipo del banco {qtypes}; se pide {BANK_QTYPES}")
+    levels = {n: sum(q["level"] == n for q in questions) for n in BANK_LEVELS}
+    if levels != BANK_LEVELS:
+        problems.add(where, f"reparto por nivel del banco {levels}; se pide {BANK_LEVELS}")
+    for q in questions:
+        qwhere = f"pregunta {q['id']}"
+        if q["concept"] != cid or q["kind"] != "choice" or not q.get("bank"):
+            problems.add(qwhere, f"no es una pregunta tipo test del banco de {cid}")
+            continue
+        if not q["explain"]:
+            problems.add(qwhere, "falta la explicación")
+        texts = [o["text"] for o in q["options"]]
+        if len(set(texts)) != len(texts):
+            problems.add(qwhere, "opciones repetidas")
+        for i, o in enumerate(q["options"]):
+            if i != q["answer"] and not o.get("why"):
+                problems.add(qwhere, f"la opción {i + 1} no explica por qué es incorrecta")
+        if q["qtype"] == "prediccion":
+            result = execute("run", code=q["code"] or "")
+            real = normalize(result["output"])
+            if result["error"] or real != normalize(q["options"][q["answer"]]["text"]):
+                problems.add(qwhere, f"la opción correcta no es la salida real: {real!r}")
+            if any(normalize(t) == real for i, t in enumerate(texts) if i != q["answer"]):
+                problems.add(qwhere, "una opción incorrecta coincide con la salida real")
+
+
+def check_bank_totals(units: list[dict], problems: Problems) -> None:
+    """Toda pregunta marcada `bank` está en el banco de su unidad, y hay 15 por unidad publicada."""
+    listed = {eid for u in units for eid in u.get("bank", [])}
+    for ex in E:
+        if ex.get("bank") and ex["id"] not in listed:
+            problems.add(f"pregunta {ex['id']}", "marcada bank pero fuera del banco de su unidad")
+        if ex.get("bank") and ex.get("qtype") not in BANK_QTYPES:
+            problems.add(f"pregunta {ex['id']}", f"qtype no válido (usa {sorted(BANK_QTYPES)})")
+    if len(listed) != BANK_SIZE * len(units):
+        problems.add("banco de POO", f"{len(listed)} preguntas; se esperan {BANK_SIZE} por unidad")
+
+
 def check_units(problems: Problems) -> list[dict]:
     """Módulo de POO: cada unidad tiene todos sus apartados y sus ejercicios están completos.
 
@@ -345,7 +433,9 @@ def check_units(problems: Problems) -> list[dict]:
             for eid in concept.get(group, []):
                 if exercises.get(eid, {}).get("kind") != "code":
                     problems.add(where, f"{group}: {eid} debe ser un ejercicio de escribir código")
+        check_unit_content(concept, where, exercises, problems)
         used += concept.get("guided", []) + concept.get("autonomous", [])
+        used += concept.get("extras", []) + concept.get("bank", [])
         used += concept.get("selfcheck", [])
         used += concept.get("pass", {}).get("required", [])
         for eid in used:
@@ -380,6 +470,7 @@ def check_units(problems: Problems) -> list[dict]:
             unreviewed = mapping.get("by") in (None, "", "plataforma")
             if mapping.get("status") == "verified" and unreviewed:
                 problems.add(mwhere, "una correspondencia verified necesita quién la validó")
+    check_bank_totals([by_id[u["id"]] for u in units if u["id"] in by_id], problems)
     return [{**u, "available": u["id"] in by_id} for u in units]
 
 
@@ -472,7 +563,7 @@ def build() -> dict:
         "areas": AREAS,
         "path": PATH,
         "daw": DAW_COMPETENCIES,
-        "modules": [{**MODULE, "units": units}],
+        "modules": [{**MODULE, "units": units, "sources": SOURCES}],
         "concepts": concepts_out,
         "exercises": exercises,
     }
