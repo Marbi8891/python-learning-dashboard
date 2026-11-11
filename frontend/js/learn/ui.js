@@ -198,6 +198,7 @@ export function feedbackHtml(ex, result, { error = null, conceptTitle = "", retr
   return `
     <section class="quiz__feedback lx-feedback" data-result="${result.ok ? "ok" : "ko"}" tabindex="-1" aria-labelledby="lx-verdict">
       <p class="quiz__verdict" id="lx-verdict">${result.ok ? "✓ Correcto" : "✗ No es correcto"}</p>
+      ${!result.ok && result.why ? `<div class="lx-feedback__chosen"><h3 class="lx-h4">Por qué tu opción no es correcta</h3><p>${renderInline(result.why)}</p></div>` : ""}
       <div class="lx-feedback__why"><h3 class="lx-h4">${result.ok ? "Por qué funciona" : "Cómo pensarlo"}</h3>${renderMarkdown(ex.explain)}</div>
       ${!result.ok && error ? `<h3 class="lx-h4">Error típico detectado</h3>${errorExplanation(error, { heading: "p" })}` : ""}
       ${!result.ok && retryNote ? '<p class="lx-note">Al final de la sesión volverás a intentarlo con un ejercicio parecido.</p>' : ""}

@@ -11,19 +11,24 @@ de DAW. Se construye por sprints; este documento dice qué hay en cada uno y có
 | 1 | Estructura, validadores, vista de unidad, índice `#/poo`, Unidad 2 en el formato nuevo | Hecho |
 | 2 | Unidades 1 a 3 (la 2 pasa a pedir la 1) | Hecho |
 | 3 | Unidades 4 a 6 | Hecho |
-| 4 | Unidades 7 a 9 | Pendiente |
-| 5 | Proyecto final: biblioteca | Pendiente |
-| 6 | Banco de ≥ 100 preguntas, evaluación por unidad y final, repaso espaciado | Pendiente |
-| 7 | Motor adaptativo, progreso y currículo | Pendiente |
-| 8 | Pruebas, accesibilidad y documentación | Pendiente |
+
+Desde el 11/11/2026 el módulo sigue el plan de cinco PR del diseño de la Fase 2:
+
+| PR | Contenido | Estado |
+|---|---|---|
+| A | Formato nuevo (buenas prácticas, referencias, origen de los ejemplos, prácticas adicionales, banco) y Unidades 1 a 6 completas, con 90 preguntas de banco | En revisión |
+| B | Unidades 7 y 8 (relaciones entre objetos y métodos especiales) | Pendiente |
+| C | Unidades 9 y 10 (diseño y proyecto biblioteca) | Pendiente |
+| D | Banco cerrado de 150 preguntas, cuestionarios con nota, evaluación final y repaso | Pendiente |
+| E | Currículo, bibliografía general, progreso, motor adaptativo y documentación | Pendiente |
 
 ## Dónde está cada cosa
 
 | Qué | Archivo |
 |---|---|
 | Índice de unidades, Unidad 2 y reunión de todas las unidades | `scripts/learning/poo_module.py` |
-| Una unidad completa por archivo (concepto, campos, ejercicios y errores) | `scripts/learning/poo_u1.py`, `poo_u3.py` … `poo_u6.py` |
-| Correspondencias propuestas (`proposed`), fuente y fecha | `scripts/learning/poo_common.py` |
+| Una unidad completa por archivo (concepto, campos, ejercicios, banco y errores) | `scripts/learning/poo_u1.py` … `poo_u6.py` |
+| Correspondencias propuestas (`proposed`), catálogo de fuentes (`SOURCES`), `ref`, `practice` y reparto del banco | `scripts/learning/poo_common.py` |
 | Integración en el mapa de conceptos (área `poo`) | `scripts/learning/concepts.py` |
 | Validación y generación | `scripts/learning/build_learning.py` (`check_units`) |
 | Datos que usa la web (generados, no se editan a mano) | `frontend/data/learning.json` (`modules` y conceptos del área `poo`) |
@@ -55,12 +60,12 @@ Publicadas: Unidades 1 a 6 (Sprints 2 y 3). En la ruta «Aprender» van seguidas
 
 | Unidad | Lecciones | Ejercicios | Errores típicos nuevos | CE propuestos |
 |---|---|---|---|---|
-| 1 | Procedural frente a objetos · Clases, objetos y modelado · Cuándo usar la POO y sus pilares | 13 (`poo1-01`…`13`) | clase-instancia, poo-siempre, atributo-metodo | RA2-a, RA2-c, RA4-a |
-| 2 | Definir una clase · `__init__` y `self` · Estado de varios objetos | 14 (`poo-01`…`14`) | init-mal-escrito, alias-copia | RA2-h, RA4-b, RA4-d, RA4-e |
-| 3 | Atributos de instancia y de clase · Métodos de instancia, de clase y estáticos · Métodos que protegen el estado | 14 (`poo3-01`…`14`) | self-en-atributo-clase, static-con-self, tipo-metodo, lista-de-clase | RA2-d, RA2-e, RA2-f, RA4-c, RA4-h |
-| 4 | Público, protegido y privado · `@property` y setter · Validar y proteger el estado | 14 (`poo4-01`…`14`) | privado-absoluto, privado-desde-fuera, property-con-parentesis, setter-recursivo, validacion-fuera, sin-setter | RA4-f, RA2-d, RA4-c |
-| 5 | Superclase y subclase · Constructores y `super()` · Sobrescribir y ampliar métodos | 14 (`poo5-01`…`14`) | es-un-tiene-un, olvida-super, sobrescribir, jerarquia-al-reves | RA4-g, RA7-a, RA7-c, RA7-d, RA7-e |
-| 6 | Mismo método, distinto comportamiento · Duck typing · Clases abstractas (`abc`) | 14 (`poo6-01`…`14`) | isinstance-en-cadena, necesita-herencia, abstracta-instanciable, abstracta-sin-implementar, version-base, metodo-sin-llamar | RA7-i, RA7-g, RA7-f |
+| 1 | Procedural frente a objetos · Clases, objetos y modelado · Cuándo usar la POO y sus pilares | 21 (`poo1-01`…`21`) | clase-instancia, poo-siempre, atributo-metodo | RA2-a, RA2-c, RA4-a |
+| 2 | Definir una clase · `__init__` y `self` · Estado de varios objetos · `__str__` | 26 (`poo-01`…`26`) | init-mal-escrito, alias-copia | RA2-h, RA4-b, RA4-d, RA4-e |
+| 3 | Atributos de instancia y de clase · Métodos de instancia, de clase y estáticos · Métodos que protegen el estado | 27 (`poo3-01`…`27`) | self-en-atributo-clase, static-con-self, tipo-metodo, lista-de-clase | RA2-d, RA2-e, RA2-f, RA4-c, RA4-h |
+| 4 | Público, protegido y privado · `@property` y setter · Validar y proteger el estado | 26 (`poo4-01`…`26`) | privado-absoluto, privado-desde-fuera, property-con-parentesis, setter-recursivo, validacion-fuera, sin-setter | RA4-f, RA2-d, RA4-c |
+| 5 | Superclase y subclase · Constructores y `super()` · Sobrescribir y ampliar métodos · Herencia múltiple y MRO | 27 (`poo5-01`…`27`) | es-un-tiene-un, olvida-super, sobrescribir, jerarquia-al-reves | RA4-g, RA7-a, RA7-c, RA7-d, RA7-e |
+| 6 | Mismo método, distinto comportamiento · Duck typing · Clases abstractas (`abc`) | 27 (`poo6-01`…`27`) | isinstance-en-cadena, necesita-herencia, abstracta-instanciable, abstracta-sin-implementar, version-base, metodo-sin-llamar | RA7-i, RA7-g, RA7-f |
 
 ## Formato de una unidad
 
@@ -74,7 +79,11 @@ Campos opcionales del concepto (los demás conceptos no los tienen y no cambian)
 | `sections` | Lecciones: `{ id, title, theory, examples: [{ code, lines, output }], quiz: [3 ids] }` |
 | `key` | Conceptos importantes: `[término, definición]` |
 | `example` | Ejemplo comentado (el del concepto de siempre) |
-| `guided`, `autonomous` | Ejercicios guiados y autónomos (de escribir código, con tests) |
+| `guided`, `autonomous` | Ejercicios guiados y ejercicio principal (de escribir código, con tests; el principal es el primero de `autonomous`) |
+| `extras` | Prácticas adicionales: ejercicios de código que ya existían y dejan de ser principales (no se borra ningún id) |
+| `practices` | Buenas prácticas: de 4 a 6 `{ text, why }` |
+| `bank` | Cuestionario de la unidad: los ids de sus 15 preguntas de banco |
+| `references` | Referencias bibliográficas: `{ source, section, supports, status }` del catálogo cerrado |
 | `errors` | Errores frecuentes (los del motor: cada fallo se registra con su causa) |
 | `selfcheck` | Autoevaluación |
 | `recap` | Resumen (`summary` sigue siendo la frase de presentación del concepto) |
@@ -87,6 +96,40 @@ si se repite un enunciado, si un ejercicio de la unidad no aparece en ningún ap
 inicial de un ejercicio ya supera los tests o si una correspondencia curricular no tiene estado,
 fuente y fecha. En los ejercicios de código, el «Resultado esperado» que ve el alumno es la salida
 real de la solución.
+
+### Banco de preguntas
+
+Cada unidad publicada tiene exactamente 15 preguntas tipo test con `bank: true` (150 cuando estén las
+10). Son ejercicios `choice` normales del motor, con dos campos más: `qtype` y un `why` en cada
+opción incorrecta, que la corrección muestra al fallar («Por qué tu opción no es correcta»).
+Las preguntas que ya existían entran en el banco con su mismo id (`BANK_TAGS` de cada `poo_uN.py`).
+Los ejercicios de salida, completar, depurar y código no cuentan en las 15.
+
+| `qtype` | Qué pide | Por unidad |
+|---|---|---|
+| `teoria` | Definir o distinguir conceptos | 3 |
+| `codigo` | Interpretar qué hace un fragmento | 3 |
+| `prediccion` | Elegir la salida exacta de un programa | 3 |
+| `error` | Localizar el fallo y su causa | 2 |
+| `solucion` | Elegir el código que cumple un requisito | 2 |
+| `diseno` | Razonar qué clase, relación o método conviene | 2 |
+
+Por nivel (`level`): 5 básicas (1), 6 intermedias (2) y 4 avanzadas (3). El validador comprueba los
+dos repartos, las 4 opciones sin repetir, la explicación, el porqué de cada distractor y que la opción
+correcta de cada pregunta de predicción es la salida real de su código (lo ejecuta al generar).
+
+### Referencias
+
+Solo se puede citar una fuente del catálogo cerrado `SOURCES` (`poo_common.py`): el tutorial de
+clases, la FAQ de programación y los módulos `abc` y `dataclasses` de docs.python.org, y los RD
+405/2023 y 659/2023. La normativa (`kind: "norma"`) solo sirve para el currículo: el validador
+rechaza que respalde un concepto de Python. Toda referencia nace `pending` («Pendiente de
+comprobación») y solo pasa a `verified` con quién (`by`) y cuándo (`date`) la comprobó. Desde el
+entorno en que se escribió este contenido no se podía abrir docs.python.org, así que los nombres de
+los apartados citados están sin comprobar.
+
+Los ejemplos llevan `origin`: `original` (por defecto) o `docs` con la fuente, que debe estar también
+en las referencias de la unidad.
 
 ## Ejecución de Python
 
@@ -144,6 +187,9 @@ concepto asociado (estaban sin revisar y pasan a las unidades que los trabajan).
 | Qué | Dónde |
 |---|---|
 | Datos, apartados, ejemplos y soluciones ejecutados | `python scripts/learning/build_learning.py --check` |
-| Estructura, banco, currículo y validador | `backend/tests/test_poo_module.py` |
+| Estructura, banco (15 por unidad y repartos), referencias, currículo y validador | `backend/tests/test_poo_module.py` |
 | Lecciones completadas, fusión, recomendaciones y vistas | `tests/unit/poo-module.test.mjs` |
-| Índice, unidad, Pyodide, mini-quiz, móvil y WCAG 2.2 AA | `e2e/poo.spec.js` |
+| Índice, unidad, Pyodide, mini-quiz, cuestionario con el porqué del fallo, móvil y WCAG 2.2 AA | `e2e/poo.spec.js` |
+
+Tamaño de `learning.json` con las Unidades 1 a 6 completas (PR A): 485 KB sin comprimir y 111 KB
+con gzip (antes, 346 KB). El umbral para separar el módulo en otro archivo es 400 KB comprimido.

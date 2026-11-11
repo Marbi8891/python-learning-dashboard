@@ -83,6 +83,7 @@ def test_unit_exercises_are_complete_and_not_repeated(unit):
     assert len(own) >= 8
     used = {i for s in unit["sections"] for i in s["quiz"]}
     used |= set(unit["guided"] + unit["autonomous"] + unit["selfcheck"] + unit["pass"]["required"])
+    used |= set(unit.get("extras", []) + unit["bank"])
     assert {e["id"] for e in own} <= used, "hay ejercicios que no aparecen en la unidad"
     assert all(EXERCISES[i]["concept"] == unit["id"] for i in used)
     texts = [" ".join(f"{e['q']} {e.get('code') or ''}".lower().split()) for e in own]
@@ -142,3 +143,108 @@ def test_validator_rejects_an_incomplete_unit(monkeypatch):
     builder.check_units(problems)
     assert any("falta el apartado objectives" in p for p in problems)
     assert any("estado no válido" in p for p in problems)
+
+
+BANK_QTYPES = {"teoria": 3, "codigo": 3, "prediccion": 3, "error": 2, "solucion": 2, "diseno": 2}
+
+
+@pytest.mark.parametrize("unit", UNITS, ids=lambda u: u["id"])
+def test_unit_bank_has_fifteen_balanced_questions(unit):
+    """Banco evaluable: 15 por unidad, 4 opciones, un porqué en cada distractor y reparto fijo."""
+    bank = [EXERCISES[i] for i in unit["bank"]]
+    assert len(bank) == 15 and len({q["id"] for q in bank}) == 15
+    assert {t: sum(q["qtype"] == t for q in bank) for t in BANK_QTYPES} == BANK_QTYPES
+    assert {n: sum(q["level"] == n for q in bank) for n in (1, 2, 3)} == {1: 5, 2: 6, 3: 4}
+    for q in bank:
+        assert q["kind"] == "choice" and q["bank"] is True and q["concept"] == unit["id"]
+        assert len(q["options"]) == 4 and q["explain"]
+        for i, option in enumerate(q["options"]):
+            assert (i == q["answer"]) or option.get("why"), f"{q['id']}: distractor sin porqué"
+        if q["qtype"] == "prediccion":
+            assert q["code"], f"{q['id']}: una pregunta de predicción lleva código"
+
+
+def test_bank_questions_are_only_those_listed_by_their_units():
+    listed = {i for u in UNITS for i in u["bank"]}
+    marked = {e["id"] for e in DATA["exercises"] if e.get("bank")}
+    assert listed == marked
+    assert len(listed) == 15 * len(UNITS)
+
+
+@pytest.mark.parametrize("unit", UNITS, ids=lambda u: u["id"])
+def test_unit_practices_references_and_main_exercise(unit):
+    assert 4 <= len(unit["practices"]) <= 6
+    assert all(p["text"] and p["why"] for p in unit["practices"])
+    sources = MODULE["sources"]
+    assert unit["references"], "cada unidad cita al menos una fuente"
+    for reference in unit["references"]:
+        source = sources[reference["source"]]
+        # La normativa de FP no respalda conceptos de Python: solo aparece en el currículo
+        assert source["kind"] == "python"
+        assert source["url"].startswith("https://docs.python.org/es/3/")
+        assert reference["section"] and reference["supports"]
+        # Desde este entorno no se pueden abrir las fuentes: nada se presenta como comprobado
+        assert reference["status"] == "pending"
+    for section in unit["sections"]:
+        for example in section["examples"]:
+            assert example["origin"]["kind"] in {"original", "docs"}
+    main = EXERCISES[unit["autonomous"][0]]
+    assert main["kind"] == "code" and main["id"] in unit["pass"]["required"]
+    assert all(EXERCISES[i]["kind"] == "code" for i in unit.get("extras", []))
+
+
+def test_source_catalog_is_closed():
+    assert set(MODULE["sources"]) == {
+        "py-tutorial-classes",
+        "py-faq-programming",
+        "py-abc",
+        "py-dataclasses",
+        "rd-405-2023",
+        "rd-659-2023",
+    }
+
+
+def test_validator_rejects_bad_bank_and_references(monkeypatch):
+    builder = _load_builder()
+    unit = next(c for c in builder.CONCEPTS if c["id"] == "poo")
+    monkeypatch.setitem(unit, "bank", unit["bank"][:14])
+    monkeypatch.setitem(
+        unit,
+        "references",
+        [
+            {
+                "source": "rd-405-2023",
+                "section": "Anexo I",
+                "supports": ["clases"],
+                "status": "pending",
+            },
+            {"source": "otra-web", "section": "x", "supports": ["y"], "status": "pending"},
+            {
+                "source": "py-faq-programming",
+                "section": "x",
+                "supports": ["y"],
+                "status": "verified",
+            },
+        ],
+    )
+    monkeypatch.setitem(unit, "practices", unit["practices"][:2])
+    quiet = {"output": "", "error": None, "passed": False}
+    monkeypatch.setattr(builder, "execute", lambda *a, **k: quiet)
+    problems = builder.Problems()
+    builder.check_units(problems)
+    assert any("exactamente 15 preguntas" in p for p in problems)
+    assert any("la normativa de FP no respalda" in p for p in problems)
+    assert any("fuera del catálogo" in p for p in problems)
+    assert any("verified necesita quién" in p for p in problems)
+    assert any("buenas prácticas son de 4 a 6" in p for p in problems)
+    assert any("marcada bank pero fuera del banco" in p for p in problems)
+
+
+def test_validator_checks_prediction_answers_against_the_real_output(monkeypatch):
+    builder = _load_builder()
+    question = next(e for e in builder.E if e["id"] == "poo1-15")
+    wrong = {"output": "35 35\n", "error": None, "passed": False}
+    monkeypatch.setattr(builder, "execute", lambda *a, **k: wrong)
+    problems = builder.Problems()
+    builder.check_units(problems)
+    assert any(p.startswith(f"pregunta {question['id']}") and "salida real" in p for p in problems)
