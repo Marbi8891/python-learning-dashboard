@@ -9,6 +9,7 @@
 |---|---|
 | [EJECUTAR-EN-WINDOWS.md](EJECUTAR-EN-WINDOWS.md) | Usar la web y la API en tu PC con `Iniciar-Dashboard.bat` |
 | [TESTING.md](TESTING.md) | Todas las pruebas y cuáles ejecutar según lo que cambies |
+| [CI_CD_MONITORING.md](CI_CD_MONITORING.md) | Cómo se vigila cada subida a GitHub Actions, cómo se avisa y cómo se corrigen los fallos |
 | [DEPLOY.md](DEPLOY.md) | Desplegar la web en GitHub Pages y la API en Render con Neon |
 
 ## Arquitectura y funcionamiento
