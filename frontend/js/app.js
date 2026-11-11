@@ -5,6 +5,7 @@
 import hljs from "../vendor/highlight/core.min.js";
 import python from "../vendor/highlight/python.min.js";
 import { apiEnabled } from "./api.js";
+import { keepTyped } from "./form-errors.js";
 import { initI18n } from "./i18n.js";
 import { initAccount, openAccount, openPasswordReset, takeFlash } from "./account.js";
 import { initAssistant, setAssistantLesson } from "./assistant.js";
@@ -393,7 +394,9 @@ function refreshProgressViews() {
   const container = $(view.element);
   // Al llegar el progreso de la cuenta se repinta en segundo plano: el foco no se puede perder
   const focused = focusSelector(container);
+  const restoreTyped = keepTyped(container); // ni lo que se estaba escribiendo en un formulario
   container.innerHTML = view.render();
+  restoreTyped(container);
   if (focused) container.querySelector(focused)?.focus();
 }
 

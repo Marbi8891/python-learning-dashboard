@@ -87,8 +87,8 @@ jobs:
           path: playwright-report/
           retention-days: 7
 
-  # Safari/WebKit (EVO-13): prueba de humo de la navegación y la portada en el motor de Safari.
-  # El resto de las e2e corre en Chromium (job e2e).
+  # Safari/WebKit (EVO-13): prueba de humo de la navegación, la portada y la cuenta (registro,
+  # cierre de sesión y cookies) en el motor de Safari. El resto de las e2e corre en Chromium (job e2e).
   webkit:
     runs-on: ubuntu-latest
     steps:
@@ -108,9 +108,16 @@ jobs:
       - run: npm ci
       - run: npx playwright install --with-deps webkit
       - name: Prueba de humo en WebKit
-        run: npx playwright test --project=webkit e2e/navigation.spec.js e2e/landing.spec.js
+        run: npx playwright test --project=webkit e2e/navigation.spec.js e2e/landing.spec.js e2e/account.spec.js
         env:
           PW_WEBKIT: "1"
+      - name: Informe de Playwright (WebKit)
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-report-webkit
+          path: playwright-report/
+          retention-days: 7
 
   # Cursos de DAW: cada respuesta se comprueba ejecutando el código de verdad (SQLite, Node, Java y Python)
   cursos:
