@@ -22,6 +22,8 @@ import poo_u3
 import poo_u4
 import poo_u5
 import poo_u6
+import poo_u7
+import poo_u8
 from exercises import E as BASE_EXERCISES
 from poo_common import REVIEWED, SOURCE, proposed, tag_bank
 
@@ -75,6 +77,8 @@ UNITS = {
     "poo-encapsulacion": poo_u4.UNIT,
     "poo-herencia": poo_u5.UNIT,
     "poo-polimorfismo": poo_u6.UNIT,
+    "poo-composicion": poo_u7.UNIT,
+    "poo-metodos-especiales": poo_u8.UNIT,
 }
 
 EXERCISES = [
@@ -83,6 +87,8 @@ EXERCISES = [
     *poo_u4.EXERCISES,
     *poo_u5.EXERCISES,
     *poo_u6.EXERCISES,
+    *poo_u7.EXERCISES,
+    *poo_u8.EXERCISES,
     *poo_u2.EXERCISES,  # la Unidad 2 va al final: así no cambia el orden de learning.json
 ]
 
@@ -94,6 +100,8 @@ BANK_TAGS = {
     **poo_u4.BANK_TAGS,
     **poo_u5.BANK_TAGS,
     **poo_u6.BANK_TAGS,
+    **poo_u7.BANK_TAGS,
+    **poo_u8.BANK_TAGS,
 }
 tag_bank([*BASE_EXERCISES, *EXERCISES], BANK_TAGS)
 
@@ -105,6 +113,8 @@ UNIT_ERRORS = {
     "poo-encapsulacion": poo_u4.ERRORS,
     "poo-herencia": poo_u5.ERRORS,
     "poo-polimorfismo": poo_u6.ERRORS,
+    "poo-composicion": poo_u7.ERRORS,
+    "poo-metodos-especiales": poo_u8.ERRORS,
 }
 
 # Teoría y presentación de la Unidad 2 (sustituyen a las del concepto `poo`; el id no cambia)
@@ -112,4 +122,11 @@ UNIT_OVERRIDES = {"poo": poo_u2.OVERRIDES}
 
 # Conceptos nuevos de las unidades (concepts.py los coloca alrededor de `poo`, en el orden del módulo)
 CONCEPTS_BEFORE_POO = [poo_u1.CONCEPT]
-CONCEPTS_AFTER_POO = [poo_u3.CONCEPT, poo_u4.CONCEPT, poo_u5.CONCEPT, poo_u6.CONCEPT]
+CONCEPTS_AFTER_POO = [
+    poo_u3.CONCEPT,
+    poo_u4.CONCEPT,
+    poo_u5.CONCEPT,
+    poo_u6.CONCEPT,
+    poo_u7.CONCEPT,
+    poo_u8.CONCEPT,
+]

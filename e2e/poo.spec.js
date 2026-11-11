@@ -37,7 +37,8 @@ test("índice del módulo: 10 unidades, las publicadas enlazadas y el progreso e
   await expect(page.getByRole("link", { name: /^Unidad 2\. Creación de clases y objetos/ })).toHaveAttribute("href", "#/teoria/poo");
   await expect(page.getByRole("link", { name: /^Unidad 1\. Fundamentos de la programación orientada a objetos/ })).toHaveAttribute("href", "#/teoria/poo-fundamentos");
   await expect(page.getByRole("link", { name: /^Unidad 3\. Atributos y métodos/ })).toHaveAttribute("href", "#/teoria/poo-atributos-metodos");
-  await expect(page.locator('[data-available="false"]')).toHaveCount(4);
+  await expect(page.getByRole("link", { name: /^Unidad 8\. Métodos especiales de Python/ })).toHaveAttribute("href", "#/teoria/poo-metodos-especiales");
+  await expect(page.locator('[data-available="false"]')).toHaveCount(2);
   await expect(page.locator('[data-available="false"]').first()).toContainText("En preparación");
   await expect(page.getByText("Completar lecciones no equivale a dominar")).toBeVisible();
   // En el menú se marca Teoría
@@ -66,6 +67,8 @@ for (const [id, number, title] of [
   ["poo-encapsulacion", 4, "Encapsulación y propiedades"],
   ["poo-herencia", 5, "Herencia"],
   ["poo-polimorfismo", 6, "Polimorfismo"],
+  ["poo-composicion", 7, "Composición y relaciones entre objetos"],
+  ["poo-metodos-especiales", 8, "Métodos especiales de Python"],
 ]) {
   test(`la Unidad ${number} tiene sus apartados, su posición en el módulo y pasa axe`, async ({ page }) => {
     await page.goto(`/#/teoria/${id}`);
@@ -143,7 +146,7 @@ test("el ejercicio guiado muestra el resultado esperado y se corrige con los tes
 test.describe("en el móvil", () => {
   test.use({ viewport: { width: 360, height: 740 } });
   test("la unidad y el índice caben sin desplazamiento horizontal", async ({ page }) => {
-    for (const route of ["/#/poo", "/#/teoria/poo", "/#/teoria/poo-fundamentos", "/#/teoria/poo-atributos-metodos", "/#/teoria/poo-polimorfismo"]) {
+    for (const route of ["/#/poo", "/#/teoria/poo", "/#/teoria/poo-fundamentos", "/#/teoria/poo-atributos-metodos", "/#/teoria/poo-polimorfismo", "/#/teoria/poo-composicion", "/#/teoria/poo-metodos-especiales"]) {
       await page.goto(route);
       await page.locator("#learn-title").waitFor();
       const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
