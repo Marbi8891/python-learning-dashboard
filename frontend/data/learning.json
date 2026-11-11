@@ -46,7 +46,10 @@
   "archivos",
   "poo-fundamentos",
   "poo",
-  "poo-atributos-metodos"
+  "poo-atributos-metodos",
+  "poo-encapsulacion",
+  "poo-herencia",
+  "poo-polimorfismo"
  ],
  "daw": [
   {
@@ -131,19 +134,19 @@
      "number": 4,
      "id": "poo-encapsulacion",
      "title": "Encapsulación y propiedades",
-     "available": false
+     "available": true
     },
     {
      "number": 5,
      "id": "poo-herencia",
      "title": "Herencia",
-     "available": false
+     "available": true
     },
     {
      "number": 6,
      "id": "poo-polimorfismo",
      "title": "Polimorfismo",
-     "available": false
+     "available": true
     },
     {
      "number": 7,
@@ -2718,6 +2721,930 @@
     "0485-RA2-f",
     "0485-RA4-c",
     "0485-RA4-h"
+   ],
+   "difficulty": 1.6,
+   "importance": 2
+  },
+  {
+   "id": "poo-encapsulacion",
+   "title": "Encapsulación y propiedades",
+   "area": "poo",
+   "requires": [
+    "poo-atributos-metodos"
+   ],
+   "daw": 2,
+   "ut": "prog-ut5",
+   "lessons": [
+    "atributos-clase"
+   ],
+   "summary": "Proteger el estado de un objeto: atributos protegidos y privados, propiedades con `@property` y validación.",
+   "when": "Cuando un dato de un objeto tiene reglas (un saldo que no puede ser negativo, una nota de 0 a 10) y no quieres que nadie las salte cambiando el atributo desde fuera.",
+   "example": {
+    "code": "class Producto:\n    def __init__(self, nombre, precio):\n        self.nombre = nombre\n        self.precio = precio            # pasa por el setter: se valida\n\n    @property\n    def precio(self):                   # getter: se lee como un atributo\n        return self._precio\n\n    @precio.setter\n    def precio(self, valor):            # setter: se ejecuta al asignar\n        if valor < 0:\n            raise ValueError(\"El precio no puede ser negativo\")\n        self._precio = valor\n\n\np = Producto(\"Teclado\", 25)\np.precio = 30\nprint(p.nombre, p.precio)\ntry:\n    p.precio = -5\nexcept ValueError as e:\n    print(\"Error:\", e)\nprint(p.precio)",
+    "lines": [
+     [
+      4,
+      "Incluso en `__init__` la asignación pasa por el setter y se valida."
+     ],
+     [
+      6,
+      "`@property` convierte el método en un atributo que se lee sin paréntesis."
+     ],
+     [
+      8,
+      "El dato real se guarda en `_precio` (protegido por convenio)."
+     ],
+     [
+      10,
+      "`@precio.setter` define qué pasa al escribir `p.precio = …`."
+     ],
+     [
+      21,
+      "Un precio negativo se rechaza y el objeto sigue con su valor válido."
+     ]
+    ],
+    "output": "Teclado 30\nError: El precio no puede ser negativo\n30\n"
+   },
+   "errors": [
+    {
+     "id": "poo-encapsulacion.privado-absoluto",
+     "label": "Cree que `_x` o `__x` bloquean del todo el acceso",
+     "why": "En Python `_x` es solo un convenio y `__x` se renombra a `_Clase__x`. La protección real la dan las propiedades y los métodos que aplican las reglas.",
+     "think": "¿Qué impide de verdad que se rompa la regla: un guion bajo o un setter que valida?",
+     "avoid": "Usa `_x` para avisar y una propiedad o un método para proteger."
+    },
+    {
+     "id": "poo-encapsulacion.privado-desde-fuera",
+     "label": "Usa desde fuera un atributo privado en vez de la interfaz pública",
+     "why": "Desde fuera `objeto.__x` no existe (está renombrado) y los atributos internos pueden cambiar en cualquier versión de la clase.",
+     "think": "¿La clase me ofrece un método o una propiedad para esto?",
+     "avoid": "Fuera de la clase usa solo métodos y atributos sin guion bajo."
+    },
+    {
+     "id": "poo-encapsulacion.property-con-parentesis",
+     "label": "Llama a una propiedad con paréntesis",
+     "why": "Una propiedad ya devuelve su valor al leerla: `r.area()` intenta llamar al resultado y da `TypeError`.",
+     "think": "¿Tiene `@property` encima? Entonces se lee como un atributo.",
+     "avoid": "Escribe `objeto.propiedad`, sin paréntesis."
+    },
+    {
+     "id": "poo-encapsulacion.setter-recursivo",
+     "label": "Guarda el valor en la propia propiedad dentro del setter",
+     "why": "`self.edad = valor` dentro del setter de `edad` vuelve a llamar al setter sin fin (`RecursionError`).",
+     "think": "¿Dónde está guardado de verdad el dato?",
+     "avoid": "Guarda el valor en otro atributo con guion bajo: `self._edad = valor`."
+    },
+    {
+     "id": "poo-encapsulacion.validacion-fuera",
+     "label": "Se salta la validación al crear o al modificar el objeto",
+     "why": "Si `__init__` o un método escriben directamente `self._x`, el setter no se ejecuta y el objeto puede quedar con un valor no válido.",
+     "think": "¿Todas las asignaciones pasan por la propiedad que valida?",
+     "avoid": "En `__init__` y en los métodos asigna `self.x = …` (la propiedad), no `self._x`."
+    },
+    {
+     "id": "poo-encapsulacion.sin-setter",
+     "label": "Cree que una propiedad sin setter se puede asignar (o que un atributo normal es de solo lectura)",
+     "why": "Solo una propiedad sin setter es de solo lectura: asignarla da `AttributeError`. Un atributo normal se puede cambiar desde fuera.",
+     "think": "¿Este dato tiene `@property`? ¿Tiene `@x.setter`?",
+     "avoid": "Para que nadie cambie un dato desde fuera, guárdalo en `self._x` y exponlo con una propiedad sin setter."
+    }
+   ],
+   "related": [
+    "poo-atributos-metodos",
+    "excepciones"
+   ],
+   "unit": {
+    "module": "poo",
+    "number": 4
+   },
+   "objectives": [
+    "Explicar qué es la encapsulación y por qué protege el estado de un objeto.",
+    "Usar los convenios de Python: `_atributo` (protegido) y `__atributo` (privado, con *name mangling*).",
+    "Crear propiedades con `@property` y validar las asignaciones con su `setter`.",
+    "Definir atributos de solo lectura y atributos calculados.",
+    "Mantener las reglas del objeto (invariantes) desde que se crea hasta que se modifica."
+   ],
+   "prior": "La Unidad 3 (atributos de instancia y métodos que validan con `raise ValueError`) y la captura de excepciones con `try`/`except`.",
+   "key": [
+    [
+     "Encapsulación",
+     "Ocultar los detalles internos de un objeto y dejar usarlo a través de su interfaz (métodos y propiedades)."
+    ],
+    [
+     "Interfaz pública",
+     "Lo que el resto del programa puede usar de un objeto: sus métodos y atributos sin guion bajo."
+    ],
+    [
+     "Atributo protegido `_x`",
+     "Un convenio: «es interno, no lo uses desde fuera». Python no lo impide."
+    ],
+    [
+     "Atributo privado `__x`",
+     "Python le cambia el nombre a `_Clase__x` (*name mangling*) para evitar choques y usos accidentales."
+    ],
+    [
+     "Propiedad",
+     "Un método con `@property` que se usa como un atributo, sin paréntesis."
+    ],
+    [
+     "Getter y setter",
+     "El código que se ejecuta al leer y al asignar una propiedad."
+    ],
+    [
+     "Solo lectura",
+     "Una propiedad sin setter: se puede leer pero asignarla da `AttributeError`."
+    ],
+    [
+     "Invariante",
+     "Una regla que el objeto cumple siempre, por ejemplo «el saldo nunca es negativo»."
+    ]
+   ],
+   "sections": [
+    {
+     "id": "poo-encapsulacion.convenio",
+     "title": "Público, protegido y privado",
+     "theory": "La **encapsulación** consiste en que cada objeto cuide de sus propios datos: el resto del programa usa su **interfaz pública** (métodos y propiedades) y no toca los detalles internos. Así se pueden cambiar esos detalles sin romper el código que usa la clase.\n\nPython no tiene `private` como Java: usa **convenios** con guiones bajos.\n\n- `nombre`: **público**, se puede usar desde fuera.\n- `_saldo`: **protegido** por convenio. Significa «es interno»; Python lo deja usar, pero un buen programador no lo hace desde fuera.\n- `__pin`: **privado**. Python le cambia el nombre a `_Caja__pin` (*name mangling*), así que `objeto.__pin` desde fuera da `AttributeError`. No es una caja fuerte: sigue existiendo con el nombre cambiado, pero evita usos accidentales y choques con subclases.\n\nDesde dentro de la clase se usa siempre igual: `self._saldo`, `self.__pin`.",
+     "examples": [
+      {
+       "code": "class Caja:\n    def __init__(self, dueno, pin):\n        self.dueno = dueno          # público\n        self._intentos = 0          # protegido (convenio)\n        self.__pin = pin            # privado (name mangling)\n\n    def abrir(self, intento):\n        self._intentos += 1\n        return intento == self.__pin\n\n\nc = Caja(\"Ana\", 1234)\nprint(c.dueno, c.abrir(1111), c.abrir(1234))\nprint(c._intentos)\nprint(hasattr(c, \"__pin\"), hasattr(c, \"_Caja__pin\"))",
+       "lines": [
+        [
+         3,
+         "Público: forma parte de la interfaz de la caja."
+        ],
+        [
+         4,
+         "Protegido: un guion bajo avisa de que es un detalle interno."
+        ],
+        [
+         5,
+         "Privado: dos guiones bajos; Python lo guarda como `_Caja__pin`."
+        ],
+        [
+         9,
+         "Dentro de la clase se usa con su nombre normal."
+        ],
+        [
+         14,
+         "Se puede leer `_intentos`, pero el guion bajo dice que no se debería."
+        ],
+        [
+         15,
+         "`__pin` no existe con ese nombre fuera de la clase: está como `_Caja__pin`."
+        ]
+       ],
+       "output": "Ana False True\n2\nFalse True\n"
+      }
+     ],
+     "quiz": [
+      "poo4-01",
+      "poo4-02",
+      "poo4-03"
+     ]
+    },
+    {
+     "id": "poo-encapsulacion.property",
+     "title": "Propiedades con `@property`",
+     "theory": "Una **propiedad** es un método que se usa como si fuera un atributo. Se crea con el decorador `@property` encima del método que **lee** el valor (el *getter*) y se usa **sin paréntesis**: `p.precio`, no `p.precio()`.\n\nPara permitir asignarla se añade un **setter** con `@nombre.setter`, un método con el **mismo nombre** que recibe el valor nuevo. Ahí se valida antes de guardar.\n\n- El dato real se guarda en otro atributo, normalmente con guion bajo (`self._precio`). Si el setter hiciera `self.precio = valor`, se llamaría a sí mismo sin fin (`RecursionError`).\n- Una propiedad **sin setter** es de **solo lectura**: asignarla da `AttributeError`.\n- Una propiedad puede ser **calculada**: no guarda nada, devuelve un valor a partir de otros atributos (el área de un rectángulo).\n\nVentaja: el código que usa la clase escribe `p.precio` tanto si es un atributo simple como si hay validación detrás; se puede añadir la regla después sin cambiar nada fuera.",
+     "examples": [
+      {
+       "code": "class Rectangulo:\n    def __init__(self, base, altura):\n        self.base = base\n        self.altura = altura\n\n    @property\n    def area(self):                 # propiedad calculada y de solo lectura\n        return self.base * self.altura\n\n\nr = Rectangulo(3, 4)\nprint(r.area)\nr.base = 5\nprint(r.area)\ntry:\n    r.area = 100\nexcept AttributeError:\n    print(\"area es de solo lectura\")",
+       "lines": [
+        [
+         6,
+         "`@property`: `area` se usará como un atributo."
+        ],
+        [
+         8,
+         "No guarda nada: se calcula cada vez a partir de base y altura."
+        ],
+        [
+         12,
+         "Se lee sin paréntesis: `r.area`."
+        ],
+        [
+         14,
+         "Al cambiar la base, el área calculada cambia sola."
+        ],
+        [
+         16,
+         "No hay setter, así que asignarla da `AttributeError`."
+        ]
+       ],
+       "output": "12\n20\narea es de solo lectura\n"
+      }
+     ],
+     "quiz": [
+      "poo4-04",
+      "poo4-05",
+      "poo4-06"
+     ]
+    },
+    {
+     "id": "poo-encapsulacion.invariantes",
+     "title": "Validar y proteger el estado",
+     "theory": "Una **invariante** es una regla que el objeto debe cumplir **siempre**: una nota entre 0 y 10, un saldo que no baja de 0, un nombre que no está vacío. La encapsulación sirve para que nadie pueda romperla.\n\n- Pon la validación en el **setter** y, en `__init__`, asigna **a través de la propiedad** (`self.nota = nota`, no `self._nota = nota`). Así el objeto ya nace válido.\n- Si un dato no debe cambiar desde fuera (el saldo), hazlo **de solo lectura** y ofrece métodos (`ingresar`, `retirar`) que apliquen las reglas.\n- Si una operación no es válida, lanza una excepción **antes** de cambiar nada, para no dejar el objeto a medias.",
+     "examples": [
+      {
+       "code": "class Temperatura:\n    def __init__(self, celsius):\n        self.celsius = celsius           # se valida desde el principio\n\n    @property\n    def celsius(self):\n        return self._celsius\n\n    @celsius.setter\n    def celsius(self, valor):\n        if valor < -273.15:\n            raise ValueError(\"Por debajo del cero absoluto\")\n        self._celsius = valor\n\n    @property\n    def fahrenheit(self):                # calculada y de solo lectura\n        return self.celsius * 9 / 5 + 32\n\n\nt = Temperatura(25)\nprint(t.fahrenheit)\nfor valor in (100, -300):\n    try:\n        t.celsius = valor\n    except ValueError as e:\n        print(\"Rechazado:\", e)\nprint(t.celsius)",
+       "lines": [
+        [
+         3,
+         "La asignación de `__init__` pasa por el setter: un valor imposible ni se crea."
+        ],
+        [
+         11,
+         "La regla (invariante) está en un único sitio."
+        ],
+        [
+         16,
+         "`fahrenheit` se calcula siempre a partir del dato validado."
+        ],
+        [
+         24,
+         "100 se acepta; -300 se rechaza y el objeto conserva su último valor válido."
+        ]
+       ],
+       "output": "77.0\nRechazado: Por debajo del cero absoluto\n100\n"
+      }
+     ],
+     "quiz": [
+      "poo4-07",
+      "poo4-08",
+      "poo4-09"
+     ]
+    }
+   ],
+   "guided": [
+    "poo4-10"
+   ],
+   "autonomous": [
+    "poo4-11",
+    "poo4-12"
+   ],
+   "selfcheck": [
+    "poo4-13",
+    "poo4-14"
+   ],
+   "recap": [
+    "Encapsular es dejar usar un objeto por su interfaz pública y esconder los detalles internos.",
+    "`_x` es protegido por convenio (Python no lo impide); `__x` es privado y Python lo renombra a `_Clase__x`.",
+    "`@property` crea un atributo que se lee sin paréntesis; `@nombre.setter` valida al asignarlo.",
+    "Una propiedad sin setter es de solo lectura; el dato real va en otro atributo (`self._x`) para no caer en recursión.",
+    "Valida en el setter y asigna por la propiedad en `__init__`: el objeto cumple sus reglas desde que nace."
+   ],
+   "pass": {
+    "minScore": 0.7,
+    "required": [
+     "poo4-10",
+     "poo4-11"
+    ],
+    "text": [
+     "Resolver el ejercicio guiado (`CuentaSegura`) y el autónomo `Termostato` con todos los tests superados.",
+     "Dominar la unidad según el motor: al menos un 70 % de aciertos recientes en sus ejercicios, con varios tipos distintos.",
+     "Completar las lecciones ayuda a organizarte, pero **no** demuestra la competencia: la demuestran los ejercicios."
+    ]
+   },
+   "curriculum": [
+    {
+     "ce": "0485-RA4-f",
+     "status": "proposed",
+     "source": "rd-405-2023#anexo-I",
+     "reviewed": "2026-11-11",
+     "by": "plataforma",
+     "note": "Se controla la visibilidad de los miembros con `_x`, `__x` y propiedades."
+    },
+    {
+     "ce": "0485-RA2-d",
+     "status": "proposed",
+     "source": "rd-405-2023#anexo-I",
+     "reviewed": "2026-11-11",
+     "by": "plataforma",
+     "note": "Se usan propiedades (`@property`) de los objetos."
+    },
+    {
+     "ce": "0485-RA4-c",
+     "status": "proposed",
+     "source": "rd-405-2023#anexo-I",
+     "reviewed": "2026-11-11",
+     "by": "plataforma",
+     "note": "Se definen propiedades con getter y setter, y métodos que las usan."
+    }
+   ],
+   "module": "0485",
+   "ra": [
+    "0485-RA2",
+    "0485-RA4"
+   ],
+   "ce": [
+    "0485-RA4-f",
+    "0485-RA2-d",
+    "0485-RA4-c"
+   ],
+   "difficulty": 1.7,
+   "importance": 2
+  },
+  {
+   "id": "poo-herencia",
+   "title": "Herencia",
+   "area": "poo",
+   "requires": [
+    "poo-atributos-metodos"
+   ],
+   "daw": 2,
+   "ut": "prog-ut6",
+   "lessons": [
+    "herencia"
+   ],
+   "summary": "Crear clases a partir de otras: superclase y subclase, `super()`, sobrescribir métodos y jerarquías.",
+   "when": "Cuando varias clases comparten datos y comportamiento y entre ellas hay una relación «es un» (un gerente es un empleado), para escribir lo común una sola vez.",
+   "example": {
+    "code": "class Empleado:\n    def __init__(self, nombre, sueldo):\n        self.nombre = nombre\n        self.sueldo = sueldo\n\n    def salario(self):\n        return self.sueldo\n\n\nclass Gerente(Empleado):                 # Gerente hereda de Empleado\n    def __init__(self, nombre, sueldo, plus):\n        super().__init__(nombre, sueldo)  # inicializa la parte de Empleado\n        self.plus = plus\n\n    def salario(self):                    # sobrescribe y amplía\n        return super().salario() + self.plus\n\n\nana = Empleado(\"Ana\", 1500)\nluis = Gerente(\"Luis\", 2000, 500)\nprint(ana.nombre, ana.salario())\nprint(luis.nombre, luis.salario())\nprint(isinstance(luis, Empleado))",
+    "lines": [
+     [
+      10,
+      "`class Gerente(Empleado)`: la subclase recibe todo lo de la superclase."
+     ],
+     [
+      12,
+      "`super().__init__` ejecuta el constructor de `Empleado` para guardar nombre y sueldo."
+     ],
+     [
+      15,
+      "El gerente tiene su propia versión de `salario`."
+     ],
+     [
+      16,
+      "`super().salario()` reutiliza el cálculo de la superclase y le suma el plus."
+     ],
+     [
+      23,
+      "Un gerente **es un** empleado: `isinstance` lo confirma."
+     ]
+    ],
+    "output": "Ana 1500\nLuis 2500\nTrue\n"
+   },
+   "errors": [
+    {
+     "id": "poo-herencia.es-un-tiene-un",
+     "label": "Usa herencia donde la relación es «tiene un»",
+     "why": "La herencia modela «es un». Si un objeto contiene otro (un coche tiene un motor), la subclase hereda cosas que no tienen sentido y la jerarquía se vuelve rara.",
+     "think": "¿Es natural decir «un X es un Y»?",
+     "avoid": "Si es «tiene un», guarda el otro objeto en un atributo (composición)."
+    },
+    {
+     "id": "poo-herencia.olvida-super",
+     "label": "Olvida llamar a `super().__init__` (o no le pasa los datos)",
+     "why": "Si la subclase define su `__init__`, el de la superclase no se ejecuta solo: sus atributos no se crean.",
+     "think": "¿Mi constructor crea también los atributos de la superclase?",
+     "avoid": "Empieza el `__init__` de la subclase con `super().__init__(datos_de_la_superclase)`."
+    },
+    {
+     "id": "poo-herencia.sobrescribir",
+     "label": "No entiende qué versión de un método se ejecuta al sobrescribirlo",
+     "why": "Python usa el método de la clase del objeto; solo si no existe sube a la superclase. `super().metodo()` llama explícitamente a la de arriba.",
+     "think": "¿De qué clase es el objeto? ¿Esa clase define el método?",
+     "avoid": "Sigue el orden de búsqueda (`Clase.__mro__`): primero la clase del objeto, luego sus superclases."
+    },
+    {
+     "id": "poo-herencia.jerarquia-al-reves",
+     "label": "Interpreta la jerarquía al revés",
+     "why": "Un objeto de la subclase también es de la superclase, pero no al revés: todo perro es un animal, no todo animal es un perro.",
+     "think": "¿Cuál es la clase general y cuál la concreta?",
+     "avoid": "Lee `class Hija(Padre)` como «Hija es un tipo de Padre»."
+    }
+   ],
+   "related": [
+    "poo-atributos-metodos",
+    "poo-encapsulacion"
+   ],
+   "unit": {
+    "module": "poo",
+    "number": 5
+   },
+   "objectives": [
+    "Definir una subclase que hereda atributos y métodos de una superclase.",
+    "Reconocer cuándo hay una relación «es un» (herencia) y cuándo «tiene un» (composición).",
+    "Escribir constructores de subclase que llamen a `super().__init__`.",
+    "Sobrescribir métodos y ampliarlos con `super()`.",
+    "Comprobar jerarquías con `isinstance` e `issubclass`."
+   ],
+   "prior": "Las Unidades 2 y 3: clases, `__init__`, `self`, atributos y métodos. Conviene haber hecho la Unidad 4, aunque no es imprescindible.",
+   "key": [
+    [
+     "Herencia",
+     "Mecanismo para crear una clase nueva a partir de otra y reutilizar su código."
+    ],
+    [
+     "Superclase (clase base o padre)",
+     "La clase de la que se hereda: `Empleado`."
+    ],
+    [
+     "Subclase (clase derivada o hija)",
+     "La clase que hereda: `class Gerente(Empleado):`."
+    ],
+    [
+     "Relación «es un»",
+     "La prueba de la herencia: un gerente *es un* empleado."
+    ],
+    [
+     "`super()`",
+     "Da acceso a los métodos de la superclase desde la subclase."
+    ],
+    [
+     "Sobrescribir",
+     "Definir en la subclase un método con el mismo nombre que en la superclase."
+    ],
+    [
+     "Jerarquía",
+     "El árbol de clases que heredan unas de otras; en Python todas heredan de `object`."
+    ]
+   ],
+   "sections": [
+    {
+     "id": "poo-herencia.subclases",
+     "title": "Superclase y subclase",
+     "theory": "Con la **herencia** una clase nueva (la **subclase**) se crea a partir de otra (la **superclase**) y recibe **todos** sus atributos y métodos. Se escribe poniendo la superclase entre paréntesis: `class Perro(Animal):`. Después la subclase puede **añadir** cosas nuevas.\n\nLa herencia expresa una relación **«es un»**: un perro *es un* animal, un gerente *es un* empleado. Si la frase natural es «**tiene un**» (un coche *tiene un* motor), no es herencia sino **composición** (Unidad 7).\n\n- `isinstance(objeto, Clase)` es `True` también con las superclases: un perro es un `Animal`.\n- `issubclass(Perro, Animal)` comprueba la relación entre clases.\n- En Python todas las clases heredan, al final, de `object`.",
+     "examples": [
+      {
+       "code": "class Animal:\n    def __init__(self, nombre):\n        self.nombre = nombre\n\n    def presentarse(self):\n        return f\"Soy {self.nombre}\"\n\n\nclass Perro(Animal):            # Perro hereda de Animal\n    def ladrar(self):           # y añade un método nuevo\n        return \"¡Guau!\"\n\n\ntoby = Perro(\"Toby\")\nprint(toby.presentarse())       # método heredado\nprint(toby.ladrar())            # método propio\nprint(isinstance(toby, Animal), issubclass(Perro, Animal))\nprint(issubclass(Animal, Perro))",
+       "lines": [
+        [
+         9,
+         "`Perro` recibe `__init__` y `presentarse` de `Animal` sin escribirlos."
+        ],
+        [
+         10,
+         "Además tiene un método que `Animal` no tiene."
+        ],
+        [
+         15,
+         "El método heredado funciona con los datos del perro."
+        ],
+        [
+         17,
+         "Un perro es un animal (`True`) y `Perro` es subclase de `Animal`."
+        ],
+        [
+         18,
+         "Al revés no: no todo animal es un perro."
+        ]
+       ],
+       "output": "Soy Toby\n¡Guau!\nTrue True\nFalse\n"
+      }
+     ],
+     "quiz": [
+      "poo5-01",
+      "poo5-02",
+      "poo5-03"
+     ]
+    },
+    {
+     "id": "poo-herencia.super",
+     "title": "Constructores y `super()`",
+     "theory": "Si la subclase **no** define `__init__`, usa el de la superclase. Si define el suyo, **lo sustituye**: el `__init__` de la superclase ya no se ejecuta solo y sus atributos no se crean.\n\nPor eso el constructor de la subclase suele empezar llamando a **`super().__init__(...)`** con los datos que necesita la superclase, y después guarda los suyos.\n\n- `super()` da acceso a la superclase sin escribir su nombre; no se pasa `self`.\n- Si se olvida, los atributos de la superclase no existen y aparece `AttributeError` más tarde.\n- También funciona `Superclase.__init__(self, ...)`, pero `super()` es más claro y se adapta mejor a jerarquías grandes.",
+     "examples": [
+      {
+       "code": "class Persona:\n    def __init__(self, nombre):\n        self.nombre = nombre\n\n\nclass Alumno(Persona):\n    def __init__(self, nombre, curso):\n        super().__init__(nombre)      # crea self.nombre\n        self.curso = curso            # y después lo propio\n\n\nclass Profesor(Persona):\n    def __init__(self, nombre, modulo):\n        self.modulo = modulo          # ¡olvida super().__init__!\n\n\na = Alumno(\"Ana\", \"1.º DAW\")\nprint(a.nombre, a.curso)\np = Profesor(\"Luis\", \"Programación\")\nprint(hasattr(p, \"nombre\"), p.modulo)",
+       "lines": [
+        [
+         8,
+         "Primero se inicializa la parte heredada con los datos de `Persona`."
+        ],
+        [
+         9,
+         "Después, los atributos que solo tiene el alumno."
+        ],
+        [
+         14,
+         "Este constructor sustituye al de `Persona` y no lo llama."
+        ],
+        [
+         20,
+         "Resultado: el profesor no tiene `nombre`."
+        ]
+       ],
+       "output": "Ana 1.º DAW\nFalse Programación\n"
+      }
+     ],
+     "quiz": [
+      "poo5-04",
+      "poo5-05",
+      "poo5-06"
+     ]
+    },
+    {
+     "id": "poo-herencia.sobrescribir",
+     "title": "Sobrescribir y ampliar métodos",
+     "theory": "Una subclase puede **sobrescribir** un método: definir otro con el **mismo nombre**. Cuando se llama sobre un objeto de la subclase, Python usa **su** versión y no la de la superclase.\n\nSi no quieres sustituir el método sino **ampliarlo**, llama dentro a la versión de la superclase con `super().metodo(...)` y añade lo nuevo.\n\nPython busca un método primero en la clase del objeto y, si no está, va subiendo por la jerarquía (el orden se ve en `Clase.__mro__`). Un consejo: usa la herencia solo si de verdad hay una relación «es un». Heredar únicamente para reutilizar un par de métodos suele dar jerarquías difíciles de mantener; para eso está la composición (Unidad 7).",
+     "examples": [
+      {
+       "code": "class Producto:\n    def __init__(self, nombre, precio):\n        self.nombre = nombre\n        self.precio = precio\n\n    def etiqueta(self):\n        return f\"{self.nombre}: {self.precio:.2f} €\"\n\n\nclass Oferta(Producto):\n    def __init__(self, nombre, precio, descuento):\n        super().__init__(nombre, precio)\n        self.descuento = descuento\n\n    def etiqueta(self):                          # sobrescribe\n        base = super().etiqueta()                # reutiliza la de Producto\n        return f\"{base} (-{self.descuento} %)\"   # y la amplía\n\n\nfor p in [Producto(\"Libro\", 20), Oferta(\"Ratón\", 15, 10)]:\n    print(p.etiqueta())\nprint([c.__name__ for c in Oferta.__mro__])",
+       "lines": [
+        [
+         15,
+         "Mismo nombre que en `Producto`: para una oferta se usa esta versión."
+        ],
+        [
+         16,
+         "`super().etiqueta()` devuelve la etiqueta normal del producto."
+        ],
+        [
+         20,
+         "Cada objeto usa la versión de su clase."
+        ],
+        [
+         22,
+         "El orden de búsqueda: primero `Oferta`, luego `Producto` y al final `object`."
+        ]
+       ],
+       "output": "Libro: 20.00 €\nRatón: 15.00 € (-10 %)\n['Oferta', 'Producto', 'object']\n"
+      }
+     ],
+     "quiz": [
+      "poo5-07",
+      "poo5-08",
+      "poo5-09"
+     ]
+    }
+   ],
+   "guided": [
+    "poo5-10"
+   ],
+   "autonomous": [
+    "poo5-11",
+    "poo5-12"
+   ],
+   "selfcheck": [
+    "poo5-13",
+    "poo5-14"
+   ],
+   "recap": [
+    "`class Hija(Padre):` crea una subclase que recibe todos los atributos y métodos de la superclase.",
+    "La herencia expresa «es un»; si la relación es «tiene un», usa composición.",
+    "Si la subclase define `__init__`, debe llamar a `super().__init__(...)` para crear la parte heredada.",
+    "Sobrescribir es definir un método con el mismo nombre; `super().metodo()` permite ampliarlo en vez de sustituirlo.",
+    "`isinstance` acepta las superclases e `issubclass` compara clases."
+   ],
+   "pass": {
+    "minScore": 0.7,
+    "required": [
+     "poo5-10",
+     "poo5-11"
+    ],
+    "text": [
+     "Resolver el ejercicio guiado (empleados) y el autónomo de figuras con todos los tests superados.",
+     "Dominar la unidad según el motor: al menos un 70 % de aciertos recientes en sus ejercicios, con varios tipos distintos.",
+     "Completar las lecciones ayuda a organizarte, pero **no** demuestra la competencia: la demuestran los ejercicios."
+    ]
+   },
+   "curriculum": [
+    {
+     "ce": "0485-RA4-g",
+     "status": "proposed",
+     "source": "rd-405-2023#anexo-I",
+     "reviewed": "2026-11-11",
+     "by": "plataforma",
+     "note": "Se definen y usan clases heredadas."
+    },
+    {
+     "ce": "0485-RA7-a",
+     "status": "proposed",
+     "source": "rd-405-2023#anexo-I",
+     "reviewed": "2026-11-11",
+     "by": "plataforma",
+     "note": "Se identifican la herencia, la superclase y la subclase."
+    },
+    {
+     "ce": "0485-RA7-c",
+     "status": "proposed",
+     "source": "rd-405-2023#anexo-I",
+     "reviewed": "2026-11-11",
+     "by": "plataforma",
+     "note": "Se reconoce el efecto de los constructores en la herencia (`super().__init__`)."
+    },
+    {
+     "ce": "0485-RA7-d",
+     "status": "proposed",
+     "source": "rd-405-2023#anexo-I",
+     "reviewed": "2026-11-11",
+     "by": "plataforma",
+     "note": "Se crean subclases que sobrescriben métodos de la superclase."
+    },
+    {
+     "ce": "0485-RA7-e",
+     "status": "proposed",
+     "source": "rd-405-2023#anexo-I",
+     "reviewed": "2026-11-11",
+     "by": "plataforma",
+     "note": "Se diseñan jerarquías de clases sencillas."
+    }
+   ],
+   "module": "0485",
+   "ra": [
+    "0485-RA4",
+    "0485-RA7"
+   ],
+   "ce": [
+    "0485-RA4-g",
+    "0485-RA7-a",
+    "0485-RA7-c",
+    "0485-RA7-d",
+    "0485-RA7-e"
+   ],
+   "difficulty": 1.7,
+   "importance": 2
+  },
+  {
+   "id": "poo-polimorfismo",
+   "title": "Polimorfismo",
+   "area": "poo",
+   "requires": [
+    "poo-herencia"
+   ],
+   "daw": 2,
+   "ut": "prog-ut6",
+   "lessons": [
+    "herencia"
+   ],
+   "summary": "Tratar igual a objetos distintos: el mismo método con distinto comportamiento, duck typing y clases abstractas.",
+   "when": "Cuando un programa trabaja con objetos de varias clases que hacen «lo mismo» de forma distinta (pagos, notificaciones, figuras) y no quieres llenar el código de `if` por cada tipo.",
+   "example": {
+    "code": "from abc import ABC, abstractmethod\n\n\nclass Pago(ABC):                      # clase abstracta: el contrato\n    @abstractmethod\n    def cobrar(self, importe):\n        ...\n\n\nclass Tarjeta(Pago):\n    def cobrar(self, importe):\n        return f\"{importe} € con tarjeta\"\n\n\nclass Bizum(Pago):\n    def cobrar(self, importe):\n        return f\"{importe} € por Bizum\"\n\n\ndef pagar_todo(pagos, importe):\n    for pago in pagos:                # no pregunta de qué tipo es\n        print(pago.cobrar(importe))\n\n\npagar_todo([Tarjeta(), Bizum()], 20)",
+    "lines": [
+     [
+      4,
+      "`Pago` dice qué deben saber hacer todos los pagos, pero no cómo."
+     ],
+     [
+      5,
+      "`@abstractmethod`: cada subclase está obligada a implementarlo."
+     ],
+     [
+      11,
+      "Cada forma de pago cobra a su manera."
+     ],
+     [
+      21,
+      "La función solo envía el mismo mensaje, `cobrar`; cada objeto responde a su modo."
+     ]
+    ],
+    "output": "20 € con tarjeta\n20 € por Bizum\n"
+   },
+   "errors": [
+    {
+     "id": "poo-polimorfismo.isinstance-en-cadena",
+     "label": "Pregunta el tipo con `if isinstance` en vez de usar métodos polimórficos",
+     "why": "Una cadena de `if` por cada clase hay que tocarla cada vez que aparece una clase nueva, y repite lo que cada clase ya debería saber hacer.",
+     "think": "¿Podría cada clase tener su propio método con el mismo nombre?",
+     "avoid": "Pon el comportamiento en un método de cada clase y llama a `objeto.metodo()`."
+    },
+    {
+     "id": "poo-polimorfismo.necesita-herencia",
+     "label": "Cree que solo funcionan juntos los objetos que heredan de la misma clase",
+     "why": "En Python basta con que el objeto tenga el método (*duck typing*). La herencia es útil, pero no es obligatoria para el polimorfismo.",
+     "think": "¿Qué método uso de este objeto? ¿Lo tiene?",
+     "avoid": "Piensa en lo que sabe hacer el objeto, no en su clase; usa `hasattr` si puede faltar."
+    },
+    {
+     "id": "poo-polimorfismo.abstracta-instanciable",
+     "label": "Cree que se puede crear un objeto de una clase abstracta",
+     "why": "Una clase que hereda de `ABC` y tiene métodos `@abstractmethod` sin implementar no se puede instanciar: da `TypeError`.",
+     "think": "¿Esta clase tiene métodos abstractos pendientes?",
+     "avoid": "Crea objetos de las subclases concretas, que implementan todos los métodos abstractos."
+    },
+    {
+     "id": "poo-polimorfismo.abstracta-sin-implementar",
+     "label": "Deja sin implementar (o con otro nombre) un método abstracto",
+     "why": "Si la subclase no implementa todos los métodos abstractos con el mismo nombre, sigue siendo abstracta y no se puede instanciar.",
+     "think": "¿He escrito todos los métodos del contrato, con el nombre exacto?",
+     "avoid": "Copia la firma del método abstracto (`def cobrar(self, importe):`) en cada subclase."
+    },
+    {
+     "id": "poo-polimorfismo.version-base",
+     "label": "Cree que se ejecuta la versión de la superclase",
+     "why": "Python usa el método de la clase del objeto, aunque la llamada esté escrita en un método heredado (`self.cuerpo()`).",
+     "think": "¿De qué clase es `self` en este momento?",
+     "avoid": "Sigue la llamada desde el objeto real, no desde la clase donde está escrito el código."
+    },
+    {
+     "id": "poo-polimorfismo.metodo-sin-llamar",
+     "label": "Usa el método sin paréntesis",
+     "why": "`objeto.metodo` es el método en sí; para ejecutarlo y obtener su resultado hay que escribir `objeto.metodo()`.",
+     "think": "¿Quiero el método o lo que devuelve?",
+     "avoid": "Pon siempre los paréntesis al llamar a un método."
+    }
+   ],
+   "related": [
+    "poo-herencia",
+    "funciones"
+   ],
+   "unit": {
+    "module": "poo",
+    "number": 6
+   },
+   "objectives": [
+    "Explicar el polimorfismo: el mismo método produce comportamientos distintos según el objeto.",
+    "Recorrer colecciones de objetos de clases distintas llamando al mismo método.",
+    "Aplicar el *duck typing* de Python: lo que importa es qué sabe hacer un objeto, no su clase.",
+    "Definir clases abstractas con `abc.ABC` y `@abstractmethod` como contrato (interfaz).",
+    "Sustituir cadenas de `if isinstance(...)` por métodos polimórficos."
+   ],
+   "prior": "La Unidad 5 (herencia, sobrescribir métodos y `super()`) y recorrer listas con `for`.",
+   "key": [
+    [
+     "Polimorfismo",
+     "«Muchas formas»: un mismo mensaje (`objeto.metodo()`) se ejecuta de forma distinta según la clase del objeto."
+    ],
+    [
+     "Mensaje",
+     "Llamar a un método sobre un objeto: `figura.area()`."
+    ],
+    [
+     "Duck typing",
+     "«Si camina como un pato y hace cuac, es un pato»: basta con que el objeto tenga el método."
+    ],
+    [
+     "Clase abstracta",
+     "Una clase que no se puede instanciar y sirve de modelo para sus subclases (`class Forma(ABC)`)."
+    ],
+    [
+     "Método abstracto",
+     "Un método marcado con `@abstractmethod` que toda subclase concreta debe implementar."
+    ],
+    [
+     "Interfaz",
+     "El conjunto de métodos que un objeto promete tener. En Python se expresa con clases abstractas o por convenio."
+    ]
+   ],
+   "sections": [
+    {
+     "id": "poo-polimorfismo.mismo-mensaje",
+     "title": "Mismo método, distinto comportamiento",
+     "theory": "**Polimorfismo** significa «muchas formas». Cuando varias clases tienen un método con el **mismo nombre**, el programa puede llamarlo sin saber de qué clase es cada objeto: cada uno responde **a su manera**. Es la consecuencia natural de sobrescribir métodos (Unidad 5).\n\nAsí, en vez de escribir\n\n```\nif tipo == \"perro\": ...\nelif tipo == \"gato\": ...\n```\n\nse escribe `animal.hablar()` y punto. Añadir un animal nuevo es crear una clase con su `hablar()`, sin tocar el código que los recorre.\n\n- El método se llama **con paréntesis**: `animal.hablar` sin ellos es el propio método, no su resultado.\n- Un método de la superclase que llama a `self.otro()` usará la versión de la subclase: también es polimorfismo.",
+     "examples": [
+      {
+       "code": "class Animal:\n    def __init__(self, nombre):\n        self.nombre = nombre\n\n    def hablar(self):\n        return \"...\"\n\n    def presentarse(self):\n        return f\"{self.nombre} dice {self.hablar()}\"   # usa la versión de cada uno\n\n\nclass Perro(Animal):\n    def hablar(self):\n        return \"guau\"\n\n\nclass Gato(Animal):\n    def hablar(self):\n        return \"miau\"\n\n\nfor animal in [Perro(\"Toby\"), Gato(\"Misi\"), Animal(\"Bicho\")]:\n    print(animal.presentarse())",
+       "lines": [
+        [
+         9,
+         "`presentarse` llama a `self.hablar()`: el resultado depende del objeto."
+        ],
+        [
+         13,
+         "Cada subclase sobrescribe `hablar`."
+        ],
+        [
+         22,
+         "El bucle no pregunta por la clase: envía el mismo mensaje a todos."
+        ]
+       ],
+       "output": "Toby dice guau\nMisi dice miau\nBicho dice ...\n"
+      }
+     ],
+     "quiz": [
+      "poo6-01",
+      "poo6-02",
+      "poo6-03"
+     ]
+    },
+    {
+     "id": "poo-polimorfismo.duck",
+     "title": "Duck typing: lo que importa es lo que sabe hacer",
+     "theory": "En Python el polimorfismo **no exige herencia**. Una función que llama a `x.texto()` funciona con **cualquier** objeto que tenga ese método, sea de la clase que sea. Es el *duck typing*: «si camina como un pato y hace cuac, es un pato».\n\nYa lo usas sin saberlo: `len()` funciona con textos, listas y diccionarios; `for` recorre cualquier cosa iterable.\n\n- Si el objeto **no** tiene el método, salta `AttributeError` al llamarlo.\n- Para aceptar objetos opcionales se puede comprobar con `hasattr(objeto, \"metodo\")` o capturar el `AttributeError`.\n- Evita preguntar el tipo con `isinstance` para decidir qué hacer: si cada clase tiene su método, el código queda abierto a clases nuevas.",
+     "examples": [
+      {
+       "code": "class Pato:\n    def sonido(self):\n        return \"cuac\"\n\n\nclass Robot:                     # no hereda de Pato\n    def sonido(self):\n        return \"bip\"\n\n\nclass Piedra:\n    pass\n\n\ndef hacer_ruido(cosa):\n    if hasattr(cosa, \"sonido\"):\n        return cosa.sonido()\n    return \"(silencio)\"\n\n\nfor cosa in [Pato(), Robot(), Piedra()]:\n    print(hacer_ruido(cosa))\nprint(len(\"hola\"), len([1, 2]), len({\"a\": 1}))",
+       "lines": [
+        [
+         6,
+         "`Robot` no tiene nada que ver con `Pato`, pero también tiene `sonido`."
+        ],
+        [
+         16,
+         "`hasattr` comprueba si el objeto sabe hacer algo, sin mirar su clase."
+        ],
+        [
+         22,
+         "`Piedra` no tiene `sonido`: se trata sin error."
+        ],
+        [
+         23,
+         "`len` es polimórfico: funciona con cualquier objeto que tenga longitud."
+        ]
+       ],
+       "output": "cuac\nbip\n(silencio)\n4 2 1\n"
+      }
+     ],
+     "quiz": [
+      "poo6-04",
+      "poo6-05",
+      "poo6-06"
+     ]
+    },
+    {
+     "id": "poo-polimorfismo.abstractas",
+     "title": "Clases abstractas e interfaces",
+     "theory": "A veces quieres **obligar** a que todas las subclases tengan ciertos métodos. Para eso están las **clases abstractas** del módulo `abc`:\n\n```\nfrom abc import ABC, abstractmethod\n\nclass Forma(ABC):\n    @abstractmethod\n    def area(self): ...\n```\n\n- Una clase con métodos abstractos **no se puede instanciar**: `Forma()` da `TypeError`.\n- Una subclase solo se puede instanciar si **implementa todos** los métodos abstractos, con el mismo nombre. Si se le olvida uno (o lo escribe mal), crear el objeto da `TypeError`.\n- La clase abstracta puede tener también métodos normales que usen los abstractos.\n\nEs lo que en Java se consigue con `abstract` e `interface`: un **contrato** que dice qué deben saber hacer los objetos, y el error aparece al crearlos y no a mitad del programa.",
+     "examples": [
+      {
+       "code": "from abc import ABC, abstractmethod\n\n\nclass Forma(ABC):\n    @abstractmethod\n    def area(self):\n        ...\n\n    def informe(self):                       # método normal que usa el abstracto\n        return f\"{type(self).__name__}: {self.area():.1f}\"\n\n\nclass Cuadrado(Forma):\n    def __init__(self, lado):\n        self.lado = lado\n\n    def area(self):\n        return self.lado**2\n\n\nprint(Cuadrado(3).informe())\ntry:\n    Forma()\nexcept TypeError:\n    print(\"Forma es abstracta: no se puede instanciar\")",
+       "lines": [
+        [
+         4,
+         "Heredar de `ABC` la convierte en clase abstracta."
+        ],
+        [
+         5,
+         "`@abstractmethod`: las subclases deben implementarlo."
+        ],
+        [
+         9,
+         "Un método normal puede apoyarse en el abstracto."
+        ],
+        [
+         17,
+         "`Cuadrado` cumple el contrato, así que se puede crear."
+        ],
+        [
+         23,
+         "La clase abstracta no se puede instanciar."
+        ]
+       ],
+       "output": "Cuadrado: 9.0\nForma es abstracta: no se puede instanciar\n"
+      }
+     ],
+     "quiz": [
+      "poo6-07",
+      "poo6-08",
+      "poo6-09"
+     ]
+    }
+   ],
+   "guided": [
+    "poo6-10"
+   ],
+   "autonomous": [
+    "poo6-11",
+    "poo6-12"
+   ],
+   "selfcheck": [
+    "poo6-13",
+    "poo6-14"
+   ],
+   "recap": [
+    "Polimorfismo: el mismo mensaje (`objeto.metodo()`) se comporta distinto según la clase del objeto.",
+    "Recorre colecciones llamando al mismo método en vez de preguntar el tipo con `if`.",
+    "Duck typing: en Python basta con que el objeto tenga el método; no hace falta una superclase común.",
+    "`ABC` y `@abstractmethod` definen un contrato: la clase abstracta no se instancia y las subclases deben implementarlo todo.",
+    "Un método de la superclase que llama a `self.metodo()` usa la versión de la subclase."
+   ],
+   "pass": {
+    "minScore": 0.7,
+    "required": [
+     "poo6-10",
+     "poo6-11"
+    ],
+    "text": [
+     "Resolver el ejercicio guiado (notificaciones) y el autónomo de nóminas con todos los tests superados.",
+     "Dominar la unidad según el motor: al menos un 70 % de aciertos recientes en sus ejercicios, con varios tipos distintos.",
+     "Completar las lecciones ayuda a organizarte, pero **no** demuestra la competencia: la demuestran los ejercicios."
+    ]
+   },
+   "curriculum": [
+    {
+     "ce": "0485-RA7-i",
+     "status": "proposed",
+     "source": "rd-405-2023#anexo-I",
+     "reviewed": "2026-11-11",
+     "by": "plataforma",
+     "note": "Se identifican escenarios de uso de interfaces (clases abstractas con `abc`)."
+    },
+    {
+     "ce": "0485-RA7-g",
+     "status": "proposed",
+     "source": "rd-405-2023#anexo-I",
+     "reviewed": "2026-11-11",
+     "by": "plataforma",
+     "note": "Se escriben programas que usan jerarquías de clases de forma polimórfica."
+    },
+    {
+     "ce": "0485-RA7-f",
+     "status": "proposed",
+     "source": "rd-405-2023#anexo-I",
+     "reviewed": "2026-11-11",
+     "by": "plataforma",
+     "note": "Se prueban y depuran jerarquías de clases (métodos abstractos sin implementar)."
+    }
+   ],
+   "module": "0485",
+   "ra": [
+    "0485-RA7"
+   ],
+   "ce": [
+    "0485-RA7-i",
+    "0485-RA7-g",
+    "0485-RA7-f"
    ],
    "difficulty": 1.6,
    "importance": 2
@@ -6212,6 +7139,941 @@
     "0": "poo-atributos-metodos.lista-de-clase"
    },
    "explain": "`miembros` es una lista de **clase**: `append` no crea un atributo nuevo, cambia la lista compartida, así que `b` también ve a Ana. Si cada grupo necesita la suya, se crea en `__init__` con `self.miembros = []`."
+  },
+  {
+   "id": "poo4-01",
+   "concept": "poo-encapsulacion",
+   "kind": "choice",
+   "level": 1,
+   "daw": false,
+   "q": "En una clase aparece el atributo `self._saldo`. ¿Qué significa el guion bajo?",
+   "code": null,
+   "options": [
+    {
+     "text": "Es un convenio: avisa de que es interno y no debería usarse desde fuera",
+     "error": null
+    },
+    {
+     "text": "Python impide leerlo o cambiarlo desde fuera de la clase",
+     "error": "poo-encapsulacion.privado-absoluto"
+    },
+    {
+     "text": "Hace que el atributo sea de solo lectura",
+     "error": "poo-encapsulacion.sin-setter"
+    },
+    {
+     "text": "Lo convierte en un atributo de clase compartido",
+     "error": null
+    }
+   ],
+   "answer": 0,
+   "explain": "Un guion bajo es solo un aviso entre programadores: «esto es un detalle interno». Python no bloquea nada; la protección real se consigue con propiedades y métodos.",
+   "codeOptions": false
+  },
+  {
+   "id": "poo4-02",
+   "concept": "poo-encapsulacion",
+   "kind": "output",
+   "level": 2,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "class Clave:\n    def __init__(self, valor):\n        self.__valor = valor\n\nk = Clave(\"abc\")\nprint(hasattr(k, \"__valor\"), hasattr(k, \"_Clave__valor\"))",
+   "stdin": "",
+   "expect": "False True",
+   "traps": {
+    "True False": "poo-encapsulacion.privado-absoluto",
+    "False False": "poo-encapsulacion.privado-absoluto"
+   },
+   "explain": "Con dos guiones bajos Python renombra el atributo a `_Clave__valor` (*name mangling*). Por eso no se encuentra como `__valor` desde fuera, aunque sigue existiendo."
+  },
+  {
+   "id": "poo4-03",
+   "concept": "poo-encapsulacion",
+   "kind": "bug",
+   "level": 2,
+   "daw": false,
+   "q": "Debería mostrar `True` comprobando el PIN. ¿Qué línea falla?",
+   "code": "class Caja:\n    def __init__(self, pin):\n        self.__pin = pin\n\n    def abrir(self, intento):\n        return intento == self.__pin\n\nc = Caja(1234)\nprint(c.__pin == 1234)",
+   "stdin": "",
+   "line": 9,
+   "fix": "print(c.abrir(1234))",
+   "expect": "True",
+   "error": "poo-encapsulacion.privado-desde-fuera",
+   "explain": "Fuera de la clase `c.__pin` no existe (se llama `_Caja__pin`) y salta `AttributeError`. Lo correcto es usar la interfaz pública de la caja: el método `abrir`."
+  },
+  {
+   "id": "poo4-04",
+   "concept": "poo-encapsulacion",
+   "kind": "output",
+   "level": 1,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "class Circulo:\n    def __init__(self, radio):\n        self.radio = radio\n\n    @property\n    def diametro(self):\n        return self.radio * 2\n\nc = Circulo(3)\nc.radio = 5\nprint(c.diametro)",
+   "stdin": "",
+   "expect": "10",
+   "traps": {
+    "6": null
+   },
+   "explain": "`diametro` es una propiedad calculada: no guarda nada y se calcula cada vez que se lee, con el radio actual (5)."
+  },
+  {
+   "id": "poo4-05",
+   "concept": "poo-encapsulacion",
+   "kind": "bug",
+   "level": 2,
+   "daw": false,
+   "q": "Debería mostrar `12`. ¿Qué línea falla?",
+   "code": "class Rectangulo:\n    def __init__(self, base, altura):\n        self.base = base\n        self.altura = altura\n\n    @property\n    def area(self):\n        return self.base * self.altura\n\nr = Rectangulo(3, 4)\nprint(r.area())",
+   "stdin": "",
+   "line": 11,
+   "fix": "print(r.area)",
+   "expect": "12",
+   "error": "poo-encapsulacion.property-con-parentesis",
+   "explain": "Una propiedad se lee **sin paréntesis**. `r.area` ya vale 12; `r.area()` intenta llamar al número 12 y da `TypeError: 'int' object is not callable`."
+  },
+  {
+   "id": "poo4-06",
+   "concept": "poo-encapsulacion",
+   "kind": "fill",
+   "level": 2,
+   "daw": false,
+   "q": "Completa el decorador del setter para que la edad se valide al asignarla.",
+   "code": "class Persona:\n    def __init__(self, edad):\n        self.edad = edad\n\n    @property\n    def edad(self):\n        return self._edad\n\n    @___.setter\n    def edad(self, valor):\n        if valor < 0:\n            raise ValueError(\"Edad negativa\")\n        self._edad = valor\n\np = Persona(20)\np.edad = 21\nprint(p.edad)",
+   "accept": [
+    "edad"
+   ],
+   "expect": "21",
+   "traps": {
+    "property": null,
+    "_edad": null,
+    "self.edad": null
+   },
+   "explain": "El setter se declara con `@nombre_de_la_propiedad.setter` y el método se llama igual que la propiedad: `@edad.setter` y `def edad(self, valor)`."
+  },
+  {
+   "id": "poo4-07",
+   "concept": "poo-encapsulacion",
+   "kind": "output",
+   "level": 2,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "class Nota:\n    def __init__(self, valor):\n        self.valor = valor\n\n    @property\n    def valor(self):\n        return self._valor\n\n    @valor.setter\n    def valor(self, nuevo):\n        if not 0 <= nuevo <= 10:\n            raise ValueError(\"Fuera de rango\")\n        self._valor = nuevo\n\ntry:\n    n = Nota(12)\n    print(\"creada\")\nexcept ValueError as e:\n    print(e)",
+   "stdin": "",
+   "expect": "Fuera de rango",
+   "traps": {
+    "creada": "poo-encapsulacion.validacion-fuera"
+   },
+   "explain": "En `__init__`, `self.valor = valor` pasa por el setter, así que una nota de 12 se rechaza al crearla: el objeto nunca llega a existir con un valor no válido."
+  },
+  {
+   "id": "poo4-08",
+   "concept": "poo-encapsulacion",
+   "kind": "choice",
+   "level": 2,
+   "daw": false,
+   "q": "Dentro del setter de la propiedad `edad` se escribe `self.edad = valor` en vez de `self._edad = valor`. ¿Qué pasa al asignar una edad?",
+   "code": null,
+   "options": [
+    {
+     "text": "`RecursionError`: el setter se vuelve a llamar a sí mismo sin parar",
+     "error": null
+    },
+    {
+     "text": "Se guarda el valor con normalidad",
+     "error": "poo-encapsulacion.setter-recursivo"
+    },
+    {
+     "text": "Python crea solo un atributo `_edad`",
+     "error": "poo-encapsulacion.setter-recursivo"
+    },
+    {
+     "text": "Da `SyntaxError` al definir la clase",
+     "error": null
+    }
+   ],
+   "answer": 0,
+   "explain": "`self.edad = …` dentro del setter vuelve a llamar al setter, que vuelve a asignar… hasta agotar la pila. El dato real debe ir en otro atributo: `self._edad`.",
+   "codeOptions": false
+  },
+  {
+   "id": "poo4-09",
+   "concept": "poo-encapsulacion",
+   "kind": "choice",
+   "level": 1,
+   "daw": false,
+   "q": "¿Qué ventaja tiene una propiedad `precio` frente a un método `get_precio()`?",
+   "code": null,
+   "options": [
+    {
+     "text": "Se usa como un atributo (`p.precio`) y se puede añadir validación después sin cambiar el código que la usa",
+     "error": null
+    },
+    {
+     "text": "Hace que el precio sea imposible de cambiar de ninguna forma",
+     "error": "poo-encapsulacion.privado-absoluto"
+    },
+    {
+     "text": "Es obligatoria: Python no permite métodos `get_`",
+     "error": null
+    },
+    {
+     "text": "Guarda el valor en un atributo de clase compartido",
+     "error": null
+    }
+   ],
+   "answer": 0,
+   "explain": "Con una propiedad, el código de fuera sigue escribiendo `p.precio` y `p.precio = 30`; la clase decide por dentro cómo se calcula o se valida. Los métodos `get_`/`set_` funcionan, pero son menos naturales en Python.",
+   "codeOptions": false
+  },
+  {
+   "id": "poo4-10",
+   "concept": "poo-encapsulacion",
+   "kind": "code",
+   "level": 2,
+   "daw": false,
+   "q": "**Ejercicio guiado: `CuentaSegura`.** Sigue los pasos:\n\n1. En `__init__(self, titular, saldo=0)` asigna `self.titular = titular` (pasará por su setter) y guarda el saldo en `self._saldo`.\n2. Crea la propiedad `titular` con un setter que lance `ValueError` si el texto está vacío.\n3. Crea la propiedad `saldo` **de solo lectura** (sin setter).\n4. Escribe `ingresar(cantidad)` y `retirar(cantidad)`: lanzan `ValueError` si la cantidad no es positiva o si no hay saldo suficiente, y devuelven el saldo nuevo.",
+   "starter": "class CuentaSegura:\n    def __init__(self, titular, saldo=0):\n        # Paso 1\n        ...\n\n    # Paso 2: propiedad titular con su setter\n\n    # Paso 3: propiedad saldo (solo lectura)\n\n    # Paso 4: ingresar(cantidad) y retirar(cantidad)\n\n\nc = CuentaSegura(\"Ana\", 50)\nprint(c.ingresar(25))\nprint(c.saldo)",
+   "solution": "class CuentaSegura:\n    def __init__(self, titular, saldo=0):\n        self.titular = titular\n        self._saldo = saldo\n\n    @property\n    def titular(self):\n        return self._titular\n\n    @titular.setter\n    def titular(self, valor):\n        if not valor:\n            raise ValueError(\"El titular no puede estar vacío\")\n        self._titular = valor\n\n    @property\n    def saldo(self):\n        return self._saldo\n\n    def ingresar(self, cantidad):\n        if cantidad <= 0:\n            raise ValueError(\"La cantidad debe ser positiva\")\n        self._saldo += cantidad\n        return self._saldo\n\n    def retirar(self, cantidad):\n        if cantidad <= 0:\n            raise ValueError(\"La cantidad debe ser positiva\")\n        if cantidad > self._saldo:\n            raise ValueError(\"Saldo insuficiente\")\n        self._saldo -= cantidad\n        return self._saldo\n\n\nc = CuentaSegura(\"Ana\", 50)\nprint(c.ingresar(25))\nprint(c.saldo)",
+   "checks": [
+    {
+     "stdin": "",
+     "test": "c = CuentaSegura(\"Eva\", 50)\nassert c.titular == \"Eva\" and c.saldo == 50, \"Guarda titular y saldo\"\nassert c.ingresar(25) == 75, \"ingresar() debe devolver el saldo nuevo\"\nassert c.retirar(70) == 5, \"retirar() debe devolver el saldo nuevo\"",
+     "error": null
+    },
+    {
+     "stdin": "",
+     "test": "c = CuentaSegura(\"Eva\", 50)\nassert isinstance(CuentaSegura.__dict__.get(\"saldo\"), property), \"saldo debe ser una propiedad (@property)\"\ntry:\n    c.saldo = 1000\nexcept AttributeError:\n    pass\nelse:\n    raise AssertionError(\"saldo debe ser de solo lectura: c.saldo = 1000 tiene que dar AttributeError\")",
+     "error": "poo-encapsulacion.sin-setter"
+    },
+    {
+     "stdin": "",
+     "test": "c = CuentaSegura(\"Eva\", 10)\nfor mal in (lambda: c.retirar(20), lambda: c.ingresar(-1), lambda: setattr(c, \"titular\", \"\"), lambda: CuentaSegura(\"\", 5)):\n    try:\n        mal()\n    except ValueError:\n        pass\n    else:\n        raise AssertionError(\"Sin saldo, con cantidades no positivas o con un titular vacío debe lanzarse ValueError (también al crear la cuenta)\")\nassert c.saldo == 10 and c.titular == \"Eva\", \"Una operación rechazada no debe cambiar nada\"",
+     "error": "poo-encapsulacion.validacion-fuera"
+    }
+   ],
+   "hint": "Para la propiedad: `@property` y `def saldo(self): return self._saldo`. Para el setter: `@titular.setter` y `def titular(self, valor):`, que guarda en `self._titular`.",
+   "explain": "El saldo solo cambia a través de `ingresar` y `retirar`, que aplican las reglas: por eso la propiedad `saldo` no tiene setter. El titular sí se puede cambiar, pero su setter impide dejarlo vacío, también al crear la cuenta.",
+   "expect": "75\n75\n"
+  },
+  {
+   "id": "poo4-11",
+   "concept": "poo-encapsulacion",
+   "kind": "code",
+   "level": 2,
+   "daw": false,
+   "q": "**Ejercicio autónomo: `Termostato`.** Crea la clase con:\n\n- La propiedad `temperatura`, con un setter que solo acepte valores de 10 a 30 (ambos incluidos) y lance `ValueError` con cualquier otro. También debe validarse al crear el termostato.\n- El método `subir(grados=1)`, que sube la temperatura usando la propiedad (así se valida).\n- La propiedad de solo lectura `modo`: `\"confort\"` si la temperatura está entre 19 y 24 (incluidos) y `\"ajustar\"` en otro caso.",
+   "starter": "class Termostato:\n    ...",
+   "solution": "class Termostato:\n    def __init__(self, temperatura):\n        self.temperatura = temperatura\n\n    @property\n    def temperatura(self):\n        return self._temperatura\n\n    @temperatura.setter\n    def temperatura(self, valor):\n        if not 10 <= valor <= 30:\n            raise ValueError(\"Temperatura fuera de rango (10-30)\")\n        self._temperatura = valor\n\n    def subir(self, grados=1):\n        self.temperatura = self.temperatura + grados\n\n    @property\n    def modo(self):\n        return \"confort\" if 19 <= self.temperatura <= 24 else \"ajustar\"\n\n\nt = Termostato(20)\nt.subir(3)\nprint(t.temperatura, t.modo)",
+   "checks": [
+    {
+     "stdin": "",
+     "test": "t = Termostato(20)\nassert t.temperatura == 20, \"Guarda la temperatura inicial\"\nassert t.modo == \"confort\", f\"Con 20 grados el modo es 'confort'; es {t.modo!r}\"\nassert Termostato(25).modo == \"ajustar\", \"Con 25 grados el modo es 'ajustar'\"",
+     "error": null
+    },
+    {
+     "stdin": "",
+     "test": "for mal in (lambda: Termostato(31), lambda: setattr(Termostato(20), \"temperatura\", 5)):\n    try:\n        mal()\n    except ValueError:\n        pass\n    else:\n        raise AssertionError(\"Fuera de 10-30 debe lanzarse ValueError, también al crear el termostato\")\nassert isinstance(Termostato.__dict__.get(\"temperatura\"), property), \"temperatura debe ser una propiedad\"",
+     "error": "poo-encapsulacion.validacion-fuera"
+    },
+    {
+     "stdin": "",
+     "test": "t = Termostato(29)\nt.subir()\nassert t.temperatura == 30, \"subir() sin argumentos sube 1 grado\"\ntry:\n    t.subir()\nexcept ValueError:\n    pass\nelse:\n    raise AssertionError(\"subir() por encima de 30 debe lanzar ValueError\")\nassert t.temperatura == 30, \"Si no se puede subir, la temperatura no cambia\"\ntry:\n    t.modo = \"x\"\nexcept AttributeError:\n    pass\nelse:\n    raise AssertionError(\"modo debe ser de solo lectura\")",
+     "error": "poo-encapsulacion.sin-setter"
+    }
+   ],
+   "hint": "En `__init__` y en `subir` asigna `self.temperatura = …` (con la propiedad), nunca `self._temperatura` directamente.",
+   "explain": "Toda escritura de la temperatura pasa por el setter: la de `__init__`, la de `subir` y la de fuera. Así la regla de 10 a 30 está en un único sitio. `modo` se calcula, así que no necesita setter.",
+   "expect": "23 confort\n"
+  },
+  {
+   "id": "poo4-12",
+   "concept": "poo-encapsulacion",
+   "kind": "code",
+   "level": 2,
+   "daw": false,
+   "q": "**Ejercicio autónomo: `Usuario` con contraseña privada.** Crea la clase con:\n\n- `__init__(self, nombre, clave)`: guarda el nombre y la contraseña en un atributo **privado** `__clave`.\n- La propiedad de solo lectura `nombre`.\n- `comprobar(clave)`: devuelve `True` si coincide.\n- `cambiar_clave(actual, nueva)`: si `actual` es correcta y `nueva` tiene al menos 8 caracteres, cambia la contraseña y devuelve `True`; si no, devuelve `False` sin cambiar nada.",
+   "starter": "class Usuario:\n    ...",
+   "solution": "class Usuario:\n    def __init__(self, nombre, clave):\n        self._nombre = nombre\n        self.__clave = clave\n\n    @property\n    def nombre(self):\n        return self._nombre\n\n    def comprobar(self, clave):\n        return clave == self.__clave\n\n    def cambiar_clave(self, actual, nueva):\n        if not self.comprobar(actual) or len(nueva) < 8:\n            return False\n        self.__clave = nueva\n        return True\n\n\nu = Usuario(\"ana\", \"secreto123\")\nprint(u.comprobar(\"secreto123\"))\nprint(u.cambiar_clave(\"secreto123\", \"corta\"))",
+   "checks": [
+    {
+     "stdin": "",
+     "test": "u = Usuario(\"ana\", \"secreto123\")\nassert u.nombre == \"ana\", \"La propiedad nombre devuelve el nombre\"\nassert u.comprobar(\"secreto123\") is True and u.comprobar(\"otra\") is False, \"comprobar() devuelve True solo con la contraseña correcta\"",
+     "error": null
+    },
+    {
+     "stdin": "",
+     "test": "u = Usuario(\"ana\", \"secreto123\")\nassert u.cambiar_clave(\"mal\", \"nuevaclave1\") is False, \"Con la contraseña actual incorrecta no se cambia\"\nassert u.cambiar_clave(\"secreto123\", \"corta\") is False, \"Una contraseña nueva de menos de 8 caracteres no se acepta\"\nassert u.comprobar(\"secreto123\"), \"Si el cambio se rechaza, la contraseña sigue siendo la misma\"\nassert u.cambiar_clave(\"secreto123\", \"nuevaclave1\") is True and u.comprobar(\"nuevaclave1\"), \"Con datos correctos se cambia y devuelve True\"",
+     "error": null
+    },
+    {
+     "stdin": "",
+     "test": "u = Usuario(\"ana\", \"secreto123\")\nassert \"_Usuario__clave\" in vars(u), \"Guarda la contraseña en el atributo privado self.__clave\"\nassert not any(k in vars(u) for k in (\"clave\", \"_clave\")), \"La contraseña no debe estar en un atributo público ni protegido\"\ntry:\n    u.nombre = \"otro\"\nexcept AttributeError:\n    pass\nelse:\n    raise AssertionError(\"nombre debe ser de solo lectura\")",
+     "error": "poo-encapsulacion.privado-absoluto"
+    }
+   ],
+   "hint": "Guarda con `self.__clave = clave` y usa `self.__clave` dentro de los métodos. Para `nombre`, guarda `self._nombre` y crea una propiedad sin setter.",
+   "explain": "La contraseña no se puede leer desde fuera: solo se puede **comprobar** o **cambiar** con reglas. Ese es el sentido de la encapsulación: el objeto decide qué se puede hacer con sus datos.",
+   "expect": "True\nFalse\n"
+  },
+  {
+   "id": "poo4-13",
+   "concept": "poo-encapsulacion",
+   "kind": "choice",
+   "level": 1,
+   "daw": false,
+   "q": "¿Qué hace Python con un atributo `self.__pin` definido dentro de la clase `Caja`?",
+   "code": null,
+   "options": [
+    {
+     "text": "Le cambia el nombre a `_Caja__pin`, así que desde fuera no se encuentra como `__pin`",
+     "error": null
+    },
+    {
+     "text": "Lo hace imposible de leer de ninguna manera",
+     "error": "poo-encapsulacion.privado-absoluto"
+    },
+    {
+     "text": "Lo borra cuando termina `__init__`",
+     "error": null
+    },
+    {
+     "text": "Nada: los dos guiones bajos son solo estilo, igual que uno",
+     "error": "poo-encapsulacion.privado-absoluto"
+    }
+   ],
+   "answer": 0,
+   "explain": "Es el *name mangling*: el atributo existe, pero renombrado. Evita usos accidentales y choques con subclases, aunque no es una protección absoluta.",
+   "codeOptions": false
+  },
+  {
+   "id": "poo4-14",
+   "concept": "poo-encapsulacion",
+   "kind": "output",
+   "level": 2,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "class Termo:\n    def __init__(self):\n        self._grados = 20\n\n    @property\n    def grados(self):\n        return self._grados\n\nt = Termo()\ntry:\n    t.grados = 50\nexcept AttributeError:\n    print(\"solo lectura\")\nprint(t.grados)",
+   "stdin": "",
+   "expect": "solo lectura\n20",
+   "traps": {
+    "50": "poo-encapsulacion.sin-setter",
+    "solo lectura\n50": "poo-encapsulacion.sin-setter"
+   },
+   "explain": "`grados` es una propiedad sin setter, así que asignarla da `AttributeError` y el valor sigue siendo 20."
+  },
+  {
+   "id": "poo5-01",
+   "concept": "poo-herencia",
+   "kind": "output",
+   "level": 1,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "class Vehiculo:\n    pass\n\nclass Coche(Vehiculo):\n    pass\n\nc = Coche()\nprint(isinstance(c, Vehiculo), issubclass(Vehiculo, Coche))",
+   "stdin": "",
+   "expect": "True False",
+   "traps": {
+    "True True": "poo-herencia.jerarquia-al-reves",
+    "False False": "poo-herencia.jerarquia-al-reves"
+   },
+   "explain": "Un coche es un vehículo, así que `isinstance(c, Vehiculo)` es `True`. Pero `Vehiculo` no es subclase de `Coche`: la herencia va de la superclase hacia abajo, no al revés."
+  },
+  {
+   "id": "poo5-02",
+   "concept": "poo-herencia",
+   "kind": "choice",
+   "level": 1,
+   "daw": false,
+   "q": "¿En cuál de estos casos encaja la herencia?",
+   "code": null,
+   "options": [
+    {
+     "text": "Un `Gato` es un `Animal`",
+     "error": null
+    },
+    {
+     "text": "Un `Coche` tiene un `Motor`",
+     "error": "poo-herencia.es-un-tiene-un"
+    },
+    {
+     "text": "Una `Biblioteca` tiene muchos `Libro`",
+     "error": "poo-herencia.es-un-tiene-un"
+    },
+    {
+     "text": "Un `Pedido` tiene una lista de `Producto`",
+     "error": "poo-herencia.es-un-tiene-un"
+    }
+   ],
+   "answer": 0,
+   "explain": "La herencia es para relaciones «es un». Cuando un objeto **tiene** otros dentro (motor, libros, productos), se usa composición: un atributo que guarda esos objetos.",
+   "codeOptions": false
+  },
+  {
+   "id": "poo5-03",
+   "concept": "poo-herencia",
+   "kind": "output",
+   "level": 1,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "class Vehiculo:\n    def __init__(self, ruedas):\n        self.ruedas = ruedas\n\n    def describir(self):\n        return f\"{self.ruedas} ruedas\"\n\nclass Moto(Vehiculo):\n    pass\n\nprint(Moto(2).describir())",
+   "stdin": "",
+   "expect": "2 ruedas",
+   "traps": {
+    "None": null,
+    "ruedas": null
+   },
+   "explain": "`Moto` no define nada, así que hereda `__init__` y `describir` de `Vehiculo`. Por eso `Moto(2)` funciona y usa el mismo método."
+  },
+  {
+   "id": "poo5-04",
+   "concept": "poo-herencia",
+   "kind": "bug",
+   "level": 2,
+   "daw": false,
+   "q": "Debería mostrar `Ana 1.º DAW`. ¿Qué línea falla?",
+   "code": "class Persona:\n    def __init__(self, nombre):\n        self.nombre = nombre\n\nclass Alumno(Persona):\n    def __init__(self, nombre, curso):\n        super().__init__()\n        self.curso = curso\n\na = Alumno(\"Ana\", \"1.º DAW\")\nprint(a.nombre, a.curso)",
+   "stdin": "",
+   "line": 7,
+   "fix": "        super().__init__(nombre)",
+   "expect": "Ana 1.º DAW",
+   "error": "poo-herencia.olvida-super",
+   "explain": "`super().__init__()` llama al constructor de `Persona`, que necesita el nombre: sin él da `TypeError: missing 1 required positional argument`. Hay que pasarle los datos de la superclase (sin `self`)."
+  },
+  {
+   "id": "poo5-05",
+   "concept": "poo-herencia",
+   "kind": "output",
+   "level": 2,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "class A:\n    def __init__(self):\n        print(\"A\")\n\nclass B(A):\n    def __init__(self):\n        print(\"B\")\n        super().__init__()\n\nB()",
+   "stdin": "",
+   "expect": "B\nA",
+   "traps": {
+    "A\nB": null,
+    "B": "poo-herencia.olvida-super"
+   },
+   "explain": "Se ejecuta el `__init__` de `B`: primero imprime `B` y después, con `super().__init__()`, el de `A`. El constructor de la superclase solo se ejecuta porque se le llama."
+  },
+  {
+   "id": "poo5-06",
+   "concept": "poo-herencia",
+   "kind": "fill",
+   "level": 2,
+   "daw": false,
+   "q": "Completa la llamada para que el gerente también tenga nombre.",
+   "code": "class Empleado:\n    def __init__(self, nombre):\n        self.nombre = nombre\n\nclass Gerente(Empleado):\n    def __init__(self, nombre, equipo):\n        super().___(nombre)\n        self.equipo = equipo\n\ng = Gerente(\"Eva\", 5)\nprint(g.nombre, g.equipo)",
+   "accept": [
+    "__init__"
+   ],
+   "expect": "Eva 5",
+   "traps": {
+    "init": "poo-herencia.olvida-super",
+    "Empleado": null
+   },
+   "explain": "`super().__init__(nombre)` ejecuta el constructor de `Empleado`, que guarda el nombre. Después el gerente guarda su propio dato."
+  },
+  {
+   "id": "poo5-07",
+   "concept": "poo-herencia",
+   "kind": "output",
+   "level": 1,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "class Ave:\n    def mover(self):\n        return \"vuela\"\n\nclass Pinguino(Ave):\n    def mover(self):\n        return \"nada\"\n\nfor ave in [Ave(), Pinguino()]:\n    print(ave.mover())",
+   "stdin": "",
+   "expect": "vuela\nnada",
+   "traps": {
+    "vuela\nvuela": "poo-herencia.sobrescribir",
+    "nada\nnada": null
+   },
+   "explain": "`Pinguino` sobrescribe `mover`: para un pingüino se usa su versión. El ave normal sigue con la de `Ave`."
+  },
+  {
+   "id": "poo5-08",
+   "concept": "poo-herencia",
+   "kind": "output",
+   "level": 2,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "class Mensaje:\n    def texto(self):\n        return \"Hola\"\n\nclass Urgente(Mensaje):\n    def texto(self):\n        return super().texto() + \" (urgente)\"\n\nprint(Urgente().texto())",
+   "stdin": "",
+   "expect": "Hola (urgente)",
+   "traps": {
+    " (urgente)": "poo-herencia.sobrescribir",
+    "Hola": "poo-herencia.sobrescribir"
+   },
+   "explain": "`Urgente` amplía el método: `super().texto()` devuelve `\"Hola\"` y le añade el aviso."
+  },
+  {
+   "id": "poo5-09",
+   "concept": "poo-herencia",
+   "kind": "choice",
+   "level": 2,
+   "daw": false,
+   "q": "`Gerente` hereda de `Empleado` y `Empleado` hereda de `Persona`. Con `g = Gerente(...)`, ¿qué es verdadero?",
+   "code": null,
+   "options": [
+    {
+     "text": "`isinstance(g, Persona)` es `True`",
+     "error": null
+    },
+    {
+     "text": "Solo `isinstance(g, Gerente)` es `True`",
+     "error": "poo-herencia.jerarquia-al-reves"
+    },
+    {
+     "text": "`issubclass(Persona, Gerente)` es `True`",
+     "error": "poo-herencia.jerarquia-al-reves"
+    },
+    {
+     "text": "`g` no tiene los métodos de `Persona`",
+     "error": null
+    }
+   ],
+   "answer": 0,
+   "explain": "La herencia se encadena: un gerente es un empleado y un empleado es una persona, así que el gerente también es una `Persona` y tiene sus métodos.",
+   "codeOptions": false
+  },
+  {
+   "id": "poo5-10",
+   "concept": "poo-herencia",
+   "kind": "code",
+   "level": 2,
+   "daw": false,
+   "q": "**Ejercicio guiado: empleados de una empresa.** La clase `Empleado` ya está. Sigue los pasos:\n\n1. Crea `Comercial(Empleado)` con `__init__(self, nombre, sueldo, ventas)`: llama a `super().__init__(nombre, sueldo)` y guarda las ventas.\n2. Sobrescribe `salario()` en `Comercial`: el salario de la superclase más el 10 % de las ventas.\n3. Crea `Gerente(Empleado)` con un `plus` y un `salario()` que sume el plus al de la superclase.\n4. No sobrescribas `descripcion()`: la heredada ya usa el `salario()` de cada uno.",
+   "starter": "class Empleado:\n    def __init__(self, nombre, sueldo):\n        self.nombre = nombre\n        self.sueldo = sueldo\n\n    def salario(self):\n        return self.sueldo\n\n    def descripcion(self):\n        return f\"{self.nombre}: {self.salario():.2f} €\"\n\n\n# Paso 1 y 2: Comercial\n\n# Paso 3: Gerente\n\n\nprint(Empleado(\"Ana\", 1500).descripcion())",
+   "solution": "class Empleado:\n    def __init__(self, nombre, sueldo):\n        self.nombre = nombre\n        self.sueldo = sueldo\n\n    def salario(self):\n        return self.sueldo\n\n    def descripcion(self):\n        return f\"{self.nombre}: {self.salario():.2f} €\"\n\n\nclass Comercial(Empleado):\n    def __init__(self, nombre, sueldo, ventas):\n        super().__init__(nombre, sueldo)\n        self.ventas = ventas\n\n    def salario(self):\n        return super().salario() + self.ventas * 0.10\n\n\nclass Gerente(Empleado):\n    def __init__(self, nombre, sueldo, plus):\n        super().__init__(nombre, sueldo)\n        self.plus = plus\n\n    def salario(self):\n        return super().salario() + self.plus\n\n\nprint(Empleado(\"Ana\", 1500).descripcion())\nprint(Comercial(\"Leo\", 1200, 3000).descripcion())\nprint(Gerente(\"Eva\", 2000, 500).descripcion())",
+   "checks": [
+    {
+     "stdin": "",
+     "test": "assert Empleado(\"Ana\", 1500).descripcion() == \"Ana: 1500.00 €\", \"No cambies la clase Empleado\"",
+     "error": null
+    },
+    {
+     "stdin": "",
+     "test": "c = Comercial(\"Leo\", 1200, 3000)\nassert issubclass(Comercial, Empleado), \"Comercial debe heredar de Empleado: class Comercial(Empleado)\"\nassert c.nombre == \"Leo\" and c.ventas == 3000, \"Llama a super().__init__(nombre, sueldo) y guarda las ventas\"\nassert c.salario() == 1500, f\"1200 + 10 % de 3000 = 1500; salario() devuelve {c.salario()!r}\"\nassert c.descripcion() == \"Leo: 1500.00 €\", \"descripcion() heredada debe usar el salario del comercial\"",
+     "error": "poo-herencia.olvida-super"
+    },
+    {
+     "stdin": "",
+     "test": "g = Gerente(\"Eva\", 2000, 500)\nassert issubclass(Gerente, Empleado), \"Gerente debe heredar de Empleado\"\nassert g.salario() == 2500, f\"2000 + 500 = 2500; salario() devuelve {g.salario()!r}\"\nassert \"descripcion\" not in Comercial.__dict__ and \"descripcion\" not in Gerente.__dict__, \"No sobrescribas descripcion(): reutiliza la de Empleado\"",
+     "error": "poo-herencia.sobrescribir"
+    }
+   ],
+   "hint": "En `salario` de la subclase usa `super().salario()` para obtener el sueldo base y súmale lo que corresponda.",
+   "explain": "Lo común (nombre, sueldo, `descripcion`) se escribe una vez en `Empleado`. Cada subclase solo añade lo suyo y cambia `salario`. Como `descripcion` llama a `self.salario()`, cada objeto usa su propia versión.",
+   "expect": "Ana: 1500.00 €\nLeo: 1500.00 €\nEva: 2500.00 €\n"
+  },
+  {
+   "id": "poo5-11",
+   "concept": "poo-herencia",
+   "kind": "code",
+   "level": 2,
+   "daw": false,
+   "q": "**Ejercicio autónomo: figuras geométricas.** Crea:\n\n- `Figura` con `__init__(self, nombre)`, un método `area()` que lance `NotImplementedError` y `describir()`, que devuelva `\"Rectángulo: 6.00\"` (nombre y área con dos decimales).\n- `Rectangulo(Figura)` con `__init__(self, base, altura)`; su nombre es `\"Rectángulo\"`.\n- `Circulo(Figura)` con `__init__(self, radio)`; su nombre es `\"Círculo\"` y su área `math.pi * radio ** 2`.\n\nLas subclases solo sobrescriben `area()`: `describir()` se hereda.",
+   "starter": "import math\n\nclass Figura:\n    ...",
+   "solution": "import math\n\n\nclass Figura:\n    def __init__(self, nombre):\n        self.nombre = nombre\n\n    def area(self):\n        raise NotImplementedError(\"Cada figura calcula su área\")\n\n    def describir(self):\n        return f\"{self.nombre}: {self.area():.2f}\"\n\n\nclass Rectangulo(Figura):\n    def __init__(self, base, altura):\n        super().__init__(\"Rectángulo\")\n        self.base = base\n        self.altura = altura\n\n    def area(self):\n        return self.base * self.altura\n\n\nclass Circulo(Figura):\n    def __init__(self, radio):\n        super().__init__(\"Círculo\")\n        self.radio = radio\n\n    def area(self):\n        return math.pi * self.radio**2\n\n\nfor figura in [Rectangulo(2, 3), Circulo(1)]:\n    print(figura.describir())",
+   "checks": [
+    {
+     "stdin": "",
+     "test": "r = Rectangulo(2, 3)\nassert r.area() == 6, \"El área del rectángulo es base * altura\"\nassert r.describir() == \"Rectángulo: 6.00\", f\"describir() debe devolver 'Rectángulo: 6.00'; devuelve {r.describir()!r}\"",
+     "error": null
+    },
+    {
+     "stdin": "",
+     "test": "c = Circulo(1)\nassert isinstance(c, Figura) and isinstance(Rectangulo(1, 1), Figura), \"Rectangulo y Circulo deben heredar de Figura\"\nassert c.describir() == \"Círculo: 3.14\", f\"describir() debe devolver 'Círculo: 3.14'; devuelve {c.describir()!r}\"\nassert \"describir\" not in Circulo.__dict__ and \"describir\" not in Rectangulo.__dict__, \"describir() se hereda de Figura: no la repitas\"",
+     "error": "poo-herencia.sobrescribir"
+    },
+    {
+     "stdin": "",
+     "test": "try:\n    Figura(\"x\").area()\nexcept NotImplementedError:\n    pass\nelse:\n    raise AssertionError(\"Figura.area() debe lanzar NotImplementedError\")",
+     "error": null
+    }
+   ],
+   "hint": "En el `__init__` de cada subclase llama a `super().__init__(\"Rectángulo\")` (o `\"Círculo\"`) y guarda sus medidas.",
+   "explain": "`Figura` guarda lo común y deja `area` sin implementar; cada subclase la sobrescribe. `describir` llama a `self.area()`, así que funciona para cualquier figura sin repetir código.",
+   "expect": "Rectángulo: 6.00\nCírculo: 3.14\n"
+  },
+  {
+   "id": "poo5-12",
+   "concept": "poo-herencia",
+   "kind": "code",
+   "level": 2,
+   "daw": false,
+   "q": "**Ejercicio autónomo: tipos de cuenta.** Crea:\n\n- `Cuenta` con `__init__(self, titular, saldo=0)` y `retirar(cantidad)`, que lanza `ValueError` si no hay saldo suficiente y, si lo hay, resta y devuelve el saldo.\n- `CuentaAhorro(Cuenta)` con un `interes` (en %) y el método `aplicar_interes()`, que suma el interés al saldo y lo devuelve.\n- `CuentaCredito(Cuenta)` con un `limite`: sobrescribe `retirar` para permitir quedarse en negativo hasta `-limite`.",
+   "starter": "class Cuenta:\n    ...",
+   "solution": "class Cuenta:\n    def __init__(self, titular, saldo=0):\n        self.titular = titular\n        self.saldo = saldo\n\n    def retirar(self, cantidad):\n        if cantidad > self.saldo:\n            raise ValueError(\"Saldo insuficiente\")\n        self.saldo -= cantidad\n        return self.saldo\n\n\nclass CuentaAhorro(Cuenta):\n    def __init__(self, titular, saldo=0, interes=2):\n        super().__init__(titular, saldo)\n        self.interes = interes\n\n    def aplicar_interes(self):\n        self.saldo += self.saldo * self.interes / 100\n        return self.saldo\n\n\nclass CuentaCredito(Cuenta):\n    def __init__(self, titular, saldo=0, limite=100):\n        super().__init__(titular, saldo)\n        self.limite = limite\n\n    def retirar(self, cantidad):\n        if self.saldo - cantidad < -self.limite:\n            raise ValueError(\"Límite de crédito superado\")\n        self.saldo -= cantidad\n        return self.saldo\n\n\nahorro = CuentaAhorro(\"Ana\", 100, interes=5)\nprint(ahorro.aplicar_interes())\ncredito = CuentaCredito(\"Leo\", 0, limite=100)\nprint(credito.retirar(80))",
+   "checks": [
+    {
+     "stdin": "",
+     "test": "c = Cuenta(\"A\", 50)\nassert c.retirar(20) == 30, \"retirar() resta y devuelve el saldo\"\ntry:\n    c.retirar(100)\nexcept ValueError:\n    pass\nelse:\n    raise AssertionError(\"Cuenta.retirar() sin saldo suficiente debe lanzar ValueError\")",
+     "error": null
+    },
+    {
+     "stdin": "",
+     "test": "a = CuentaAhorro(\"A\", 100, interes=5)\nassert isinstance(a, Cuenta), \"CuentaAhorro debe heredar de Cuenta\"\nassert a.titular == \"A\", \"Llama a super().__init__ para guardar el titular\"\nassert a.aplicar_interes() == 105, \"100 € con un 5 % de interés son 105\"\nassert a.retirar(5) == 100, \"La cuenta de ahorro hereda retirar()\"",
+     "error": "poo-herencia.olvida-super"
+    },
+    {
+     "stdin": "",
+     "test": "k = CuentaCredito(\"A\", 0, limite=100)\nassert isinstance(k, Cuenta), \"CuentaCredito debe heredar de Cuenta\"\nassert k.retirar(80) == -80, \"Con crédito se puede quedar en negativo hasta el límite\"\ntry:\n    k.retirar(30)\nexcept ValueError:\n    pass\nelse:\n    raise AssertionError(\"Pasar de -limite debe lanzar ValueError\")\nassert k.saldo == -80, \"Una retirada rechazada no cambia el saldo\"",
+     "error": "poo-herencia.sobrescribir"
+    }
+   ],
+   "hint": "En `CuentaCredito.retirar` la condición es `self.saldo - cantidad < -self.limite`.",
+   "explain": "Las tres cuentas comparten titular, saldo y la idea de retirar. `CuentaAhorro` añade un método y hereda `retirar`; `CuentaCredito` lo sobrescribe porque su regla es distinta.",
+   "expect": "105.0\n-80\n"
+  },
+  {
+   "id": "poo5-13",
+   "concept": "poo-herencia",
+   "kind": "choice",
+   "level": 2,
+   "daw": false,
+   "q": "Quieres reutilizar el código de la clase `Motor` en la clase `Coche`. ¿Debe `Coche` heredar de `Motor`?",
+   "code": null,
+   "options": [
+    {
+     "text": "No: un coche *tiene* un motor, así que `Coche` debe guardar un objeto `Motor` (composición)",
+     "error": null
+    },
+    {
+     "text": "Sí: heredar es la forma de reutilizar código de otra clase",
+     "error": "poo-herencia.es-un-tiene-un"
+    },
+    {
+     "text": "Sí, porque `Motor` es más pequeño que `Coche`",
+     "error": "poo-herencia.es-un-tiene-un"
+    },
+    {
+     "text": "No se puede saber sin ejecutar el programa",
+     "error": null
+    }
+   ],
+   "answer": 0,
+   "explain": "La prueba es la frase «es un»: «un coche es un motor» es falso. La herencia no es solo para reutilizar código: modela una relación. Aquí lo correcto es un atributo `self.motor = Motor(...)` (Unidad 7).",
+   "codeOptions": false
+  },
+  {
+   "id": "poo5-14",
+   "concept": "poo-herencia",
+   "kind": "output",
+   "level": 2,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "class Base:\n    def __init__(self):\n        self.x = 1\n\nclass Hija(Base):\n    def __init__(self):\n        self.y = 2\n\nh = Hija()\nprint(hasattr(h, \"x\"), hasattr(h, \"y\"))",
+   "stdin": "",
+   "expect": "False True",
+   "traps": {
+    "True True": "poo-herencia.olvida-super"
+   },
+   "explain": "`Hija` define su propio `__init__` y no llama a `super().__init__()`, así que el de `Base` no se ejecuta y `x` no existe."
+  },
+  {
+   "id": "poo6-01",
+   "concept": "poo-polimorfismo",
+   "kind": "output",
+   "level": 1,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "class Forma:\n    def lados(self):\n        return 0\n\nclass Triangulo(Forma):\n    def lados(self):\n        return 3\n\nclass Cuadrado(Forma):\n    def lados(self):\n        return 4\n\nprint(sum(f.lados() for f in [Triangulo(), Cuadrado(), Forma()]))",
+   "stdin": "",
+   "expect": "7",
+   "traps": {
+    "0": "poo-polimorfismo.version-base",
+    "8": null
+   },
+   "explain": "Cada objeto responde con su propia versión de `lados()`: 3 + 4 + 0 = 7. El código que suma no necesita saber de qué clase es cada uno."
+  },
+  {
+   "id": "poo6-02",
+   "concept": "poo-polimorfismo",
+   "kind": "choice",
+   "level": 1,
+   "daw": false,
+   "q": "¿Qué es el polimorfismo?",
+   "code": null,
+   "options": [
+    {
+     "text": "Que el mismo método se comporte de forma distinta según la clase del objeto que lo recibe",
+     "error": null
+    },
+    {
+     "text": "Que una clase tenga varios constructores `__init__`",
+     "error": null
+    },
+    {
+     "text": "Que una clase herede de varias a la vez",
+     "error": null
+    },
+    {
+     "text": "Comprobar con `isinstance` el tipo de cada objeto antes de usarlo",
+     "error": "poo-polimorfismo.isinstance-en-cadena"
+    }
+   ],
+   "answer": 0,
+   "explain": "Polimorfismo es enviar el mismo mensaje (`objeto.metodo()`) a objetos distintos y que cada uno responda a su manera. Preguntar el tipo con `isinstance` es justo lo que el polimorfismo evita.",
+   "codeOptions": false
+  },
+  {
+   "id": "poo6-03",
+   "concept": "poo-polimorfismo",
+   "kind": "bug",
+   "level": 1,
+   "daw": false,
+   "q": "Debería mostrar `miau` y `guau`. ¿Qué línea falla?",
+   "code": "class Gato:\n    def hablar(self):\n        return \"miau\"\n\nclass Perro:\n    def hablar(self):\n        return \"guau\"\n\nfor animal in [Gato(), Perro()]:\n    print(animal.hablar)",
+   "stdin": "",
+   "line": 10,
+   "fix": "    print(animal.hablar())",
+   "expect": "miau\nguau",
+   "error": "poo-polimorfismo.metodo-sin-llamar",
+   "explain": "Sin paréntesis `animal.hablar` es el propio método (se imprime algo como `<bound method …>`), no lo que devuelve. Para ejecutarlo hay que llamarlo: `animal.hablar()`."
+  },
+  {
+   "id": "poo6-04",
+   "concept": "poo-polimorfismo",
+   "kind": "output",
+   "level": 1,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "class Libro:\n    def resumen(self):\n        return \"libro\"\n\nclass Cancion:\n    def resumen(self):\n        return \"canción\"\n\ndef mostrar(cosa):\n    return cosa.resumen()\n\nprint(mostrar(Libro()), mostrar(Cancion()))",
+   "stdin": "",
+   "expect": "libro canción",
+   "traps": {
+    "libro libro": null
+   },
+   "explain": "`Libro` y `Cancion` no comparten superclase (salvo `object`), pero las dos tienen `resumen()`. A `mostrar` solo le importa eso: es *duck typing*."
+  },
+  {
+   "id": "poo6-05",
+   "concept": "poo-polimorfismo",
+   "kind": "choice",
+   "level": 1,
+   "daw": false,
+   "q": "¿Qué necesita un objeto para poder pasarlo a `def imprimir(x): print(x.texto())`?",
+   "code": null,
+   "options": [
+    {
+     "text": "Tener un método `texto()`",
+     "error": null
+    },
+    {
+     "text": "Heredar de una clase común con las demás",
+     "error": "poo-polimorfismo.necesita-herencia"
+    },
+    {
+     "text": "Ser una instancia de `str`",
+     "error": null
+    },
+    {
+     "text": "Estar declarado con un tipo en la función",
+     "error": "poo-polimorfismo.necesita-herencia"
+    }
+   ],
+   "answer": 0,
+   "explain": "En Python no se comprueba la clase: si el objeto tiene `texto()`, funciona. Si no lo tiene, saltará `AttributeError` al llamarlo.",
+   "codeOptions": false
+  },
+  {
+   "id": "poo6-06",
+   "concept": "poo-polimorfismo",
+   "kind": "output",
+   "level": 2,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "class Coche:\n    def arrancar(self):\n        return \"brum\"\n\nclass Bici:\n    pass\n\nfor v in [Coche(), Bici()]:\n    try:\n        print(v.arrancar())\n    except AttributeError:\n        print(\"no sabe arrancar\")",
+   "stdin": "",
+   "expect": "brum\nno sabe arrancar",
+   "traps": {
+    "brum\nNone": null,
+    "brum": "poo-polimorfismo.necesita-herencia"
+   },
+   "explain": "`Bici` no tiene `arrancar`, así que llamarlo da `AttributeError`, que aquí se captura. Con *duck typing* el error aparece al usar el método que falta."
+  },
+  {
+   "id": "poo6-07",
+   "concept": "poo-polimorfismo",
+   "kind": "output",
+   "level": 1,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "from abc import ABC, abstractmethod\n\nclass Forma(ABC):\n    @abstractmethod\n    def area(self):\n        ...\n\ntry:\n    Forma()\n    print(\"creada\")\nexcept TypeError:\n    print(\"no se puede instanciar\")",
+   "stdin": "",
+   "expect": "no se puede instanciar",
+   "traps": {
+    "creada": "poo-polimorfismo.abstracta-instanciable"
+   },
+   "explain": "Una clase con métodos abstractos no se puede instanciar: `Forma()` lanza `TypeError`. Solo sirve como modelo para sus subclases."
+  },
+  {
+   "id": "poo6-08",
+   "concept": "poo-polimorfismo",
+   "kind": "bug",
+   "level": 2,
+   "daw": false,
+   "q": "Debería mostrar `Cobrados 20 € en efectivo`. ¿Qué línea falla?",
+   "code": "from abc import ABC, abstractmethod\n\nclass Pago(ABC):\n    @abstractmethod\n    def cobrar(self, importe):\n        ...\n\nclass Efectivo(Pago):\n    def cobra(self, importe):\n        return f\"Cobrados {importe} € en efectivo\"\n\nprint(Efectivo().cobrar(20))",
+   "stdin": "",
+   "line": 9,
+   "fix": "    def cobrar(self, importe):",
+   "expect": "Cobrados 20 € en efectivo",
+   "error": "poo-polimorfismo.abstracta-sin-implementar",
+   "explain": "El método se llama `cobra` y no `cobrar`, así que `Efectivo` no implementa el método abstracto y `Efectivo()` da `TypeError`. Es la ventaja de las clases abstractas: el error aparece al crear el objeto."
+  },
+  {
+   "id": "poo6-09",
+   "concept": "poo-polimorfismo",
+   "kind": "fill",
+   "level": 2,
+   "daw": false,
+   "q": "Completa el decorador para que toda forma esté obligada a tener `perimetro()`.",
+   "code": "from abc import ABC, abstractmethod\n\nclass Forma(ABC):\n    @___\n    def perimetro(self):\n        ...\n\nclass Cuadrado(Forma):\n    def __init__(self, lado):\n        self.lado = lado\n\n    def perimetro(self):\n        return 4 * self.lado\n\nprint(Cuadrado(5).perimetro())",
+   "accept": [
+    "abstractmethod"
+   ],
+   "expect": "20",
+   "traps": {
+    "staticmethod": null,
+    "abstract": "poo-polimorfismo.abstracta-instanciable",
+    "ABC": null
+   },
+   "explain": "`@abstractmethod` marca el método como obligatorio: `Forma` no se podrá instanciar y sus subclases tendrán que implementarlo."
+  },
+  {
+   "id": "poo6-10",
+   "concept": "poo-polimorfismo",
+   "kind": "code",
+   "level": 2,
+   "daw": false,
+   "q": "**Ejercicio guiado: notificaciones.** La clase abstracta `Notificacion` ya está. Sigue los pasos:\n\n1. Crea `Email(Notificacion)` con `enviar(mensaje)`, que devuelva `\"Email a ana@ies.es: Hola\"`.\n2. Crea `SMS(Notificacion)` con `enviar(mensaje)`, que devuelva `\"SMS a 600111222: …\"` con solo los **20 primeros** caracteres del mensaje.\n3. Escribe la función `enviar_todas(notificaciones, mensaje)`, que devuelva una lista con lo que devuelve cada `enviar`. **Sin** `if` ni `isinstance`: debe funcionar con cualquier objeto que tenga `enviar`.",
+   "starter": "from abc import ABC, abstractmethod\n\n\nclass Notificacion(ABC):\n    def __init__(self, destinatario):\n        self.destinatario = destinatario\n\n    @abstractmethod\n    def enviar(self, mensaje):\n        ...\n\n\n# Paso 1: Email\n\n# Paso 2: SMS\n\n# Paso 3: enviar_todas(notificaciones, mensaje)\n\n\navisos = [Email(\"ana@ies.es\"), SMS(\"600111222\")]\nfor texto in enviar_todas(avisos, \"Mañana no hay clase de Programación\"):\n    print(texto)",
+   "solution": "from abc import ABC, abstractmethod\n\n\nclass Notificacion(ABC):\n    def __init__(self, destinatario):\n        self.destinatario = destinatario\n\n    @abstractmethod\n    def enviar(self, mensaje):\n        ...\n\n\nclass Email(Notificacion):\n    def enviar(self, mensaje):\n        return f\"Email a {self.destinatario}: {mensaje}\"\n\n\nclass SMS(Notificacion):\n    def enviar(self, mensaje):\n        return f\"SMS a {self.destinatario}: {mensaje[:20]}\"\n\n\ndef enviar_todas(notificaciones, mensaje):\n    return [n.enviar(mensaje) for n in notificaciones]\n\n\navisos = [Email(\"ana@ies.es\"), SMS(\"600111222\")]\nfor texto in enviar_todas(avisos, \"Mañana no hay clase de Programación\"):\n    print(texto)",
+   "checks": [
+    {
+     "stdin": "",
+     "test": "assert Email(\"ana@ies.es\").enviar(\"Hola\") == \"Email a ana@ies.es: Hola\", \"Email.enviar() debe devolver 'Email a <destinatario>: <mensaje>'\"\nassert isinstance(Email(\"x\"), Notificacion), \"Email debe heredar de Notificacion\"\ntry:\n    Notificacion(\"x\")\nexcept TypeError:\n    pass\nelse:\n    raise AssertionError(\"No cambies Notificacion: debe seguir siendo abstracta\")",
+     "error": null
+    },
+    {
+     "stdin": "",
+     "test": "s = SMS(\"600111222\")\nassert isinstance(s, Notificacion), \"SMS debe heredar de Notificacion\"\nassert s.enviar(\"0123456789ABCDEFGHIJKLMN\") == \"SMS a 600111222: 0123456789ABCDEFGHIJ\", \"SMS.enviar() solo debe incluir los 20 primeros caracteres\"",
+     "error": "poo-polimorfismo.abstracta-sin-implementar"
+    },
+    {
+     "stdin": "",
+     "test": "class Paloma:\n    def enviar(self, mensaje):\n        return \"paloma: \" + mensaje\n\nres = enviar_todas([Email(\"a@b.es\"), Paloma(), SMS(\"1\")], \"Hola\")\nassert res == [\"Email a a@b.es: Hola\", \"paloma: Hola\", \"SMS a 1: Hola\"], f\"enviar_todas() debe llamar a enviar() de cada objeto, sea de la clase que sea; devuelve {res!r}\"",
+     "error": "poo-polimorfismo.isinstance-en-cadena"
+    }
+   ],
+   "hint": "`enviar_todas` cabe en una línea: `return [n.enviar(mensaje) for n in notificaciones]`. En `SMS`, recorta con `mensaje[:20]`.",
+   "explain": "Cada tipo de notificación sabe enviarse a su manera y `enviar_todas` solo envía el mismo mensaje a todas. Para añadir un tipo nuevo (WhatsApp, push) basta con crear su clase: la función no cambia.",
+   "expect": "Email a ana@ies.es: Mañana no hay clase de Programación\nSMS a 600111222: Mañana no hay clase \n"
+  },
+  {
+   "id": "poo6-11",
+   "concept": "poo-polimorfismo",
+   "kind": "code",
+   "level": 2,
+   "daw": false,
+   "q": "**Ejercicio autónomo: nóminas.** Crea:\n\n- La clase abstracta `Empleado(ABC)` con `__init__(self, nombre)` y el método abstracto `salario()`.\n- `Fijo(nombre, sueldo)`: su salario es el sueldo.\n- `PorHoras(nombre, horas, precio_hora)`: horas por precio.\n- `Becario(nombre)`: siempre 300.\n- La función `total_nominas(empleados)`, que devuelva la suma de los salarios de una lista de empleados de cualquier tipo, también de tipos que se creen más adelante.",
+   "starter": "from abc import ABC, abstractmethod",
+   "solution": "from abc import ABC, abstractmethod\n\n\nclass Empleado(ABC):\n    def __init__(self, nombre):\n        self.nombre = nombre\n\n    @abstractmethod\n    def salario(self):\n        ...\n\n\nclass Fijo(Empleado):\n    def __init__(self, nombre, sueldo):\n        super().__init__(nombre)\n        self.sueldo = sueldo\n\n    def salario(self):\n        return self.sueldo\n\n\nclass PorHoras(Empleado):\n    def __init__(self, nombre, horas, precio_hora):\n        super().__init__(nombre)\n        self.horas = horas\n        self.precio_hora = precio_hora\n\n    def salario(self):\n        return self.horas * self.precio_hora\n\n\nclass Becario(Empleado):\n    def salario(self):\n        return 300\n\n\ndef total_nominas(empleados):\n    return sum(e.salario() for e in empleados)\n\n\nplantilla = [Fijo(\"Ana\", 1500), PorHoras(\"Leo\", 80, 12), Becario(\"Eva\")]\nprint(total_nominas(plantilla))",
+   "checks": [
+    {
+     "stdin": "",
+     "test": "assert Fijo(\"A\", 1500).salario() == 1500, \"El salario de Fijo es su sueldo\"\nassert PorHoras(\"B\", 10, 12).salario() == 120, \"El salario por horas es horas * precio_hora\"\nassert Becario(\"C\").salario() == 300 and Becario(\"C\").nombre == \"C\", \"Becario cobra 300 y guarda su nombre\"",
+     "error": null
+    },
+    {
+     "stdin": "",
+     "test": "try:\n    Empleado(\"x\")\nexcept TypeError:\n    pass\nelse:\n    raise AssertionError(\"Empleado debe ser abstracta: hereda de ABC y marca salario() con @abstractmethod\")\nassert all(isinstance(e, Empleado) for e in (Fijo(\"A\", 1), PorHoras(\"B\", 1, 1), Becario(\"C\"))), \"Las tres clases deben heredar de Empleado\"",
+     "error": "poo-polimorfismo.abstracta-instanciable"
+    },
+    {
+     "stdin": "",
+     "test": "class Autonomo(Empleado):\n    def salario(self):\n        return 1000\n\ntotal = total_nominas([Fijo(\"A\", 1500), Becario(\"B\"), Autonomo(\"C\")])\nassert total == 2800, f\"total_nominas() debe sumar salario() de cualquier empleado, también de clases nuevas; devuelve {total!r}\"\nassert total_nominas([]) == 0, \"Sin empleados el total es 0\"",
+     "error": "poo-polimorfismo.isinstance-en-cadena"
+    }
+   ],
+   "hint": "`total_nominas` puede ser `return sum(e.salario() for e in empleados)`. `Becario` no necesita `__init__`: hereda el de `Empleado`.",
+   "explain": "La clase abstracta asegura que todo empleado tiene `salario()`; `total_nominas` solo envía ese mensaje. Por eso una clase nueva como `Autonomo` funciona sin tocar la función.",
+   "expect": "2760\n"
+  },
+  {
+   "id": "poo6-12",
+   "concept": "poo-polimorfismo",
+   "kind": "code",
+   "level": 2,
+   "daw": false,
+   "q": "**Ejercicio autónomo: exportar un catálogo.** Crea:\n\n- `Libro(titulo, autor)` con `a_texto()`, que devuelva `\"Libro: Rayuela, de Julio Cortázar\"`.\n- `Pelicula(titulo, minutos)` con `a_texto()`, que devuelva `\"Película: Coco (105 min)\"`.\n- La función `exportar(elementos)`, que devuelva la lista de textos de los elementos que **tengan** el método `a_texto` y se salte los demás (números, textos sueltos…) sin dar error.",
+   "starter": "class Libro:\n    ...",
+   "solution": "class Libro:\n    def __init__(self, titulo, autor):\n        self.titulo = titulo\n        self.autor = autor\n\n    def a_texto(self):\n        return f\"Libro: {self.titulo}, de {self.autor}\"\n\n\nclass Pelicula:\n    def __init__(self, titulo, minutos):\n        self.titulo = titulo\n        self.minutos = minutos\n\n    def a_texto(self):\n        return f\"Película: {self.titulo} ({self.minutos} min)\"\n\n\ndef exportar(elementos):\n    return [e.a_texto() for e in elementos if hasattr(e, \"a_texto\")]\n\n\ncatalogo = [Libro(\"Rayuela\", \"Julio Cortázar\"), Pelicula(\"Coco\", 105), 42]\nfor linea in exportar(catalogo):\n    print(linea)",
+   "checks": [
+    {
+     "stdin": "",
+     "test": "assert Libro(\"Rayuela\", \"Julio Cortázar\").a_texto() == \"Libro: Rayuela, de Julio Cortázar\", \"Formato del libro: 'Libro: <título>, de <autor>'\"\nassert Pelicula(\"Coco\", 105).a_texto() == \"Película: Coco (105 min)\", \"Formato de la película: 'Película: <título> (<minutos> min)'\"",
+     "error": null
+    },
+    {
+     "stdin": "",
+     "test": "res = exportar([Pelicula(\"A\", 90), Libro(\"B\", \"C\")])\nassert res == [\"Película: A (90 min)\", \"Libro: B, de C\"], f\"exportar() debe devolver los textos en el mismo orden; devuelve {res!r}\"",
+     "error": null
+    },
+    {
+     "stdin": "",
+     "test": "class Disco:\n    def a_texto(self):\n        return \"Disco\"\n\nres = exportar([42, Libro(\"B\", \"C\"), \"hola\", Disco(), None])\nassert res == [\"Libro: B, de C\", \"Disco\"], f\"exportar() debe saltarse lo que no tiene a_texto() y aceptar cualquier objeto que lo tenga; devuelve {res!r}\"",
+     "error": "poo-polimorfismo.necesita-herencia"
+    }
+   ],
+   "hint": "Filtra con `hasattr(e, \"a_texto\")` dentro de una comprensión de listas o un bucle.",
+   "explain": "Es *duck typing*: `exportar` no mira la clase, sino si el objeto sabe convertirse a texto. Por eso acepta también un `Disco` que nadie había previsto.",
+   "expect": "Libro: Rayuela, de Julio Cortázar\nPelícula: Coco (105 min)\n"
+  },
+  {
+   "id": "poo6-13",
+   "concept": "poo-polimorfismo",
+   "kind": "choice",
+   "level": 2,
+   "daw": false,
+   "q": "Una función tiene diez `elif isinstance(figura, …)` para calcular el área de cada tipo de figura. ¿Cuál es la mejora orientada a objetos?",
+   "code": null,
+   "options": [
+    {
+     "text": "Dar a cada clase su propio método `area()` y llamar a `figura.area()`",
+     "error": null
+    },
+    {
+     "text": "Añadir un `elif` más cada vez que aparezca una figura nueva",
+     "error": "poo-polimorfismo.isinstance-en-cadena"
+    },
+    {
+     "text": "Guardar el tipo de figura en un texto y comparar con `==`",
+     "error": "poo-polimorfismo.isinstance-en-cadena"
+    },
+    {
+     "text": "Juntar todas las figuras en una sola clase con un atributo `tipo`",
+     "error": null
+    }
+   ],
+   "answer": 0,
+   "explain": "Con polimorfismo cada clase sabe calcular su área y la función solo llama a `area()`. Una figura nueva no obliga a tocar la función.",
+   "codeOptions": false
+  },
+  {
+   "id": "poo6-14",
+   "concept": "poo-polimorfismo",
+   "kind": "output",
+   "level": 2,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "class Informe:\n    def generar(self):\n        return \"[\" + self.cuerpo() + \"]\"\n\n    def cuerpo(self):\n        return \"vacío\"\n\nclass Ventas(Informe):\n    def cuerpo(self):\n        return \"ventas: 3\"\n\nprint(Ventas().generar())",
+   "stdin": "",
+   "expect": "[ventas: 3]",
+   "traps": {
+    "[vacío]": "poo-polimorfismo.version-base"
+   },
+   "explain": "`generar` se hereda de `Informe`, pero llama a `self.cuerpo()` y `self` es un objeto `Ventas`: se usa la versión de la subclase."
   },
   {
    "id": "poo-04",

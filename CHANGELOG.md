@@ -17,6 +17,9 @@ cambios se agrupan por fecha de merge, con el número de pull request entre par�
 - Módulo de POO, Sprint 2: Unidad 1 (fundamentos: procedural frente a objetos, modelado, pilares) y
   Unidad 3 (atributos de clase, `@classmethod`, `@staticmethod` y métodos que protegen el estado),
   con 27 ejercicios nuevos y 7 errores típicos; la Unidad 2 pasa a pedir la Unidad 1.
+- Módulo de POO, Sprint 3: Unidades 4 (encapsulación, `_x`/`__x`, `@property`), 5 (herencia,
+  `super()`, sobrescribir) y 6 (polimorfismo, duck typing, clases abstractas con `abc`), con 42
+  ejercicios nuevos y 16 errores típicos.
 - Monitor de CI: `ci-monitor.yml` diagnostica cada ejecución de CI y avisa con una incidencia
   `ci-monitor` (nuevo, recurrente, corregido, cancelado u obsoleto); `scripts/ci-monitor/` y
   `docs/CI_CD_MONITORING.md` (#103).

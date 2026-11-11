@@ -178,7 +178,7 @@ test("menú principal: Aprender, Teoría, Practicar, DAW y Progreso; el PCAP sig
 
 test("teoría: concepto con explicación, ejemplo línea a línea, cuándo usarlo y errores habituales", async ({ page }) => {
   await page.goto("/#/teoria");
-  await expect(page.locator(".lx-concept")).toHaveCount(24);
+  await expect(page.locator(".lx-concept")).toHaveCount(27);
   await page.getByRole("link", { name: "Bucles: while y for" }).click();
   await expect(page).toHaveURL(/#\/teoria\/bucles$/);
   await expect(page.locator("#learn-title")).toHaveText("Bucles: while y for");

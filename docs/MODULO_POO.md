@@ -10,7 +10,7 @@ de DAW. Se construye por sprints; este documento dice qué hay en cada uno y có
 |---|---|---|
 | 1 | Estructura, validadores, vista de unidad, índice `#/poo`, Unidad 2 en el formato nuevo | Hecho |
 | 2 | Unidades 1 a 3 (la 2 pasa a pedir la 1) | Hecho |
-| 3 | Unidades 4 a 6 | Pendiente |
+| 3 | Unidades 4 a 6 | Hecho |
 | 4 | Unidades 7 a 9 | Pendiente |
 | 5 | Proyecto final: biblioteca | Pendiente |
 | 6 | Banco de ≥ 100 preguntas, evaluación por unidad y final, repaso espaciado | Pendiente |
@@ -22,7 +22,7 @@ de DAW. Se construye por sprints; este documento dice qué hay en cada uno y có
 | Qué | Archivo |
 |---|---|
 | Índice de unidades, Unidad 2 y reunión de todas las unidades | `scripts/learning/poo_module.py` |
-| Una unidad completa por archivo (concepto, campos, ejercicios y errores) | `scripts/learning/poo_u1.py`, `poo_u3.py`, … |
+| Una unidad completa por archivo (concepto, campos, ejercicios y errores) | `scripts/learning/poo_u1.py`, `poo_u3.py` … `poo_u6.py` |
 | Correspondencias propuestas (`proposed`), fuente y fecha | `scripts/learning/poo_common.py` |
 | Integración en el mapa de conceptos (área `poo`) | `scripts/learning/concepts.py` |
 | Validación y generación | `scripts/learning/build_learning.py` (`check_units`) |
@@ -49,14 +49,18 @@ sigue funcionando y nadie pierde su progreso. Las unidades que aún no existen s
 | 9 | `poo-diseno` | Diseño y buenas prácticas |
 | 10 | `poo-proyecto` | Proyecto final: gestión de una biblioteca |
 
-Publicadas: Unidades 1, 2 y 3 (Sprint 2). En la ruta «Aprender» van seguidas y encadenadas por
-prerrequisitos: `poo-fundamentos` (pide funciones y diccionarios) → `poo` → `poo-atributos-metodos`.
+Publicadas: Unidades 1 a 6 (Sprints 2 y 3). En la ruta «Aprender» van seguidas. Prerrequisitos:
+`poo-fundamentos` (pide funciones y diccionarios) → `poo` → `poo-atributos-metodos`, que abre
+`poo-encapsulacion` y `poo-herencia`; `poo-polimorfismo` pide `poo-herencia`.
 
 | Unidad | Lecciones | Ejercicios | Errores típicos nuevos | CE propuestos |
 |---|---|---|---|---|
 | 1 | Procedural frente a objetos · Clases, objetos y modelado · Cuándo usar la POO y sus pilares | 13 (`poo1-01`…`13`) | clase-instancia, poo-siempre, atributo-metodo | RA2-a, RA2-c, RA4-a |
 | 2 | Definir una clase · `__init__` y `self` · Estado de varios objetos | 14 (`poo-01`…`14`) | init-mal-escrito, alias-copia | RA2-h, RA4-b, RA4-d, RA4-e |
 | 3 | Atributos de instancia y de clase · Métodos de instancia, de clase y estáticos · Métodos que protegen el estado | 14 (`poo3-01`…`14`) | self-en-atributo-clase, static-con-self, tipo-metodo, lista-de-clase | RA2-d, RA2-e, RA2-f, RA4-c, RA4-h |
+| 4 | Público, protegido y privado · `@property` y setter · Validar y proteger el estado | 14 (`poo4-01`…`14`) | privado-absoluto, privado-desde-fuera, property-con-parentesis, setter-recursivo, validacion-fuera, sin-setter | RA4-f, RA2-d, RA4-c |
+| 5 | Superclase y subclase · Constructores y `super()` · Sobrescribir y ampliar métodos | 14 (`poo5-01`…`14`) | es-un-tiene-un, olvida-super, sobrescribir, jerarquia-al-reves | RA4-g, RA7-a, RA7-c, RA7-d, RA7-e |
+| 6 | Mismo método, distinto comportamiento · Duck typing · Clases abstractas (`abc`) | 14 (`poo6-01`…`14`) | isinstance-en-cadena, necesita-herencia, abstracta-instanciable, abstracta-sin-implementar, version-base, metodo-sin-llamar | RA7-i, RA7-g, RA7-f |
 
 ## Formato de una unidad
 

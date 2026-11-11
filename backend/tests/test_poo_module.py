@@ -41,13 +41,23 @@ def test_index_has_ten_numbered_units_and_keeps_the_old_route():
 
 
 def test_published_units_follow_the_module_order_in_the_path():
-    # Sprint 2: Unidades 1-3 publicadas, encadenadas por prerrequisitos y en orden en la ruta
+    # Sprints 2 y 3: Unidades 1-6 publicadas, encadenadas por prerrequisitos y en orden en la ruta
     published = [u["id"] for u in MODULE["units"] if u["available"]]
-    assert published[:3] == ["poo-fundamentos", "poo", "poo-atributos-metodos"]
+    assert published[:6] == [
+        "poo-fundamentos",
+        "poo",
+        "poo-atributos-metodos",
+        "poo-encapsulacion",
+        "poo-herencia",
+        "poo-polimorfismo",
+    ]
     path = DATA["path"]
     assert [path.index(i) for i in published] == sorted(path.index(i) for i in published)
     assert CONCEPTS["poo"]["requires"] == ["poo-fundamentos"]
     assert CONCEPTS["poo-atributos-metodos"]["requires"] == ["poo"]
+    assert CONCEPTS["poo-encapsulacion"]["requires"] == ["poo-atributos-metodos"]
+    assert CONCEPTS["poo-herencia"]["requires"] == ["poo-atributos-metodos"]
+    assert CONCEPTS["poo-polimorfismo"]["requires"] == ["poo-herencia"]
     for number, uid in enumerate(published, start=1):
         assert CONCEPTS[uid]["unit"] == {"module": "poo", "number": number}
 

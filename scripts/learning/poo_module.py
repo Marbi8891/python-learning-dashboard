@@ -18,6 +18,9 @@ Las correspondencias con el currículo (`curriculum`) son propuestas de la plata
 
 import poo_u1
 import poo_u3
+import poo_u4
+import poo_u5
+import poo_u6
 from exercises import bug as bug_exercise
 from exercises import case, choice, code, fill, output
 from poo_common import REVIEWED, SOURCE, proposed
@@ -65,6 +68,9 @@ UNIT_FIELDS = (
 UNITS = {
     "poo-fundamentos": poo_u1.UNIT,
     "poo-atributos-metodos": poo_u3.UNIT,
+    "poo-encapsulacion": poo_u4.UNIT,
+    "poo-herencia": poo_u5.UNIT,
+    "poo-polimorfismo": poo_u6.UNIT,
     # ------------------------------------------------------------------ UNIDAD 2
     "poo": {
         "unit": {"module": "poo", "number": 2},
@@ -231,6 +237,9 @@ UNITS = {
 EXERCISES = [
     *poo_u1.EXERCISES,
     *poo_u3.EXERCISES,
+    *poo_u4.EXERCISES,
+    *poo_u5.EXERCISES,
+    *poo_u6.EXERCISES,
     # ---------- Lección «Definir una clase y crear objetos»
     choice(
         "poo-04",
@@ -581,6 +590,9 @@ EXERCISES = [
 UNIT_ERRORS = {
     "poo-fundamentos": poo_u1.ERRORS,
     "poo-atributos-metodos": poo_u3.ERRORS,
+    "poo-encapsulacion": poo_u4.ERRORS,
+    "poo-herencia": poo_u5.ERRORS,
+    "poo-polimorfismo": poo_u6.ERRORS,
     "poo": [
         (
             "init-mal-escrito",
@@ -612,4 +624,4 @@ UNIT_OVERRIDES = {
 
 # Conceptos nuevos de las unidades (concepts.py los coloca alrededor de `poo`, en el orden del módulo)
 CONCEPTS_BEFORE_POO = [poo_u1.CONCEPT]
-CONCEPTS_AFTER_POO = [poo_u3.CONCEPT]
+CONCEPTS_AFTER_POO = [poo_u3.CONCEPT, poo_u4.CONCEPT, poo_u5.CONCEPT, poo_u6.CONCEPT]
