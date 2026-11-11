@@ -62,7 +62,7 @@ for (const colorScheme of ["light", "dark"]) {
         await expect(page.locator("#daw-view details[open] .curr-criteria")).toBeVisible();
       }
       await page.waitForFunction(() => document.getAnimations().every((a) => a.playState !== "running"));
-      const results = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"]).analyze();
+      const results = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]).analyze();
       const summary = results.violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target).join(", ")}`);
       expect(summary, `${route}\n${summary.join("\n")}`).toEqual([]);
     }

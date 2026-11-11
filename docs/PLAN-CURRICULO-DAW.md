@@ -210,7 +210,7 @@ Siguen pendientes: los RA de los módulos transversales, el curso del 0616, la i
 | `frontend/js/daw.js` | Enruta `#/daw/curriculo` hacia `curriculum.js` y enlaza el currículo desde el catálogo de cursos |
 | `frontend/js/learn/daw-prep.js` | Enlace «Currículo oficial del ciclo» en la Preparación DAW |
 | `frontend/css/daw.css` | Estilos `curr-*`. Reutiliza `.table-wrap`, `.history`, `.daw-faq` y `.course-hero`. El estado se indica con texto, no solo con color |
-| `e2e/curriculum.spec.js` | 6 pruebas: navegación, contenido de un módulo, módulo pendiente sin datos inventados, módulo inexistente y axe (WCAG 2.1 AA) en claro y oscuro con un RA abierto |
+| `e2e/curriculum.spec.js` | 6 pruebas: navegación, contenido de un módulo, módulo pendiente sin datos inventados, módulo inexistente y axe (reglas de WCAG 2.2 A/AA) en claro y oscuro con un RA abierto |
 
 Un módulo pendiente explica dónde están sus RA (por ejemplo, el RD 659/2023) y no muestra ninguno. El aviso «las actividades de la plataforma son prácticas» aparece en el índice y en cada módulo.
 
