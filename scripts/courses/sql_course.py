@@ -115,6 +115,251 @@ PEDIDOS = T(
 )
 
 
+# ---------------------------------------------------------------- soluciones (se ejecutan en check_solutions)
+
+S_FRAGMENTOS = """
+-- 1. Horizontal: se reparten las filas. Cada sede guarda sus alumnos en una tabla
+--    con las mismas columnas: alumnos_madrid y alumnos_valladolid.
+-- 2. Vertical: se reparten las columnas y el id une los dos fragmentos.
+CREATE TABLE alumnos_personal (
+  id INTEGER PRIMARY KEY,
+  nombre TEXT NOT NULL,
+  dni CHAR(9) NOT NULL UNIQUE,
+  direccion TEXT
+);
+
+CREATE TABLE alumnos_academico (
+  id INTEGER PRIMARY KEY REFERENCES alumnos_personal(id),
+  nota_media DECIMAL(4,2),
+  pagos_pendientes DECIMAL(8,2)
+);
+
+INSERT INTO alumnos_personal VALUES (1, 'Ana', '12345678Z', 'C/ Mayor 1');
+INSERT INTO alumnos_academico VALUES (1, 8.5, 0);
+
+-- El alumno completo: se unen los fragmentos por la clave
+SELECT p.nombre, p.dni, a.nota_media, a.pagos_pendientes
+FROM alumnos_personal p
+JOIN alumnos_academico a ON a.id = p.id;
+"""
+
+S_SUPRESION = """
+-- Para descargar un PDF basta un email al que enviar el enlace y la fecha en que
+-- aceptó la política de privacidad. Nombre, teléfono o dirección no hacen falta.
+CREATE TABLE usuarios (
+  id INTEGER PRIMARY KEY,
+  email VARCHAR(254) NOT NULL UNIQUE,
+  consentimiento DATETIME NOT NULL
+);
+
+INSERT INTO usuarios VALUES (7, 'ana@ejemplo.es', '2026-11-03 10:00');
+
+-- Derecho de supresión del usuario 7
+DELETE FROM usuarios WHERE id = 7;
+
+SELECT COUNT(*) FROM usuarios WHERE id = 7;
+"""
+
+S_BIBLIOTECA = """
+CREATE TABLE libros (
+  id INTEGER PRIMARY KEY,
+  titulo TEXT NOT NULL
+);
+
+CREATE TABLE autores (
+  id INTEGER PRIMARY KEY,
+  nombre TEXT NOT NULL
+);
+
+-- N:M: tabla intermedia con dos claves ajenas y clave primaria compuesta
+CREATE TABLE libros_autores (
+  libro_id INTEGER REFERENCES libros(id),
+  autor_id INTEGER REFERENCES autores(id),
+  PRIMARY KEY (libro_id, autor_id)
+);
+
+CREATE TABLE socios (
+  id INTEGER PRIMARY KEY,
+  nombre TEXT NOT NULL
+);
+
+-- Cada préstamo es de un socio y un libro (1:N con las dos tablas)
+CREATE TABLE prestamos (
+  id INTEGER PRIMARY KEY,
+  socio_id INTEGER NOT NULL REFERENCES socios(id),
+  libro_id INTEGER NOT NULL REFERENCES libros(id),
+  salida DATE NOT NULL,
+  devolucion DATE,
+  CHECK (devolucion IS NULL OR devolucion >= salida)
+);
+"""
+
+S_LIBROS = """
+CREATE TABLE libros (
+  id INTEGER PRIMARY KEY,
+  titulo VARCHAR(200) NOT NULL,
+  isbn CHAR(13) UNIQUE,
+  precio DECIMAL(8,2) CHECK (precio >= 0),
+  alta DATE DEFAULT CURRENT_DATE
+);
+"""
+
+S_EMPLEADOS = """
+-- 1. La vista no incluye el salario
+CREATE VIEW empleados_publico AS
+SELECT id, nombre, puesto, telefono
+FROM empleados;
+
+-- 2. Las filas que ya existían quedan con fecha_baja a NULL: siguen activos
+ALTER TABLE empleados ADD fecha_baja DATE;
+
+-- 3. En MySQL (empresa es el nombre de la base de datos):
+-- CREATE USER 'rrhh'@'localhost' IDENTIFIED BY '...';
+-- GRANT SELECT ON empresa.empleados_publico TO 'rrhh'@'localhost';
+
+SELECT * FROM empleados_publico;
+"""
+
+S_SELECT = """
+SELECT nombre, precio * stock AS valor
+FROM productos
+ORDER BY valor DESC, nombre
+LIMIT 2;
+"""
+
+S_WHERE_1 = """
+-- 1. Con stock y menos de 30 €
+SELECT nombre, precio
+FROM productos
+WHERE stock > 0 AND precio < 30;
+"""
+
+S_WHERE_2 = """
+-- 2. Empiezan por M o por C
+SELECT nombre, precio
+FROM productos
+WHERE nombre LIKE 'M%' OR nombre LIKE 'C%';
+"""
+
+S_AGREGADOS = """
+SELECT
+  (SELECT COUNT(*) FROM productos WHERE stock = 0) AS sin_stock,
+  (SELECT MAX(precio) FROM productos WHERE stock > 0) AS mas_caro;
+"""
+
+S_GROUP_1 = """
+-- 1. Alumnos por ciclo
+SELECT ciclo, COUNT(*) AS alumnos
+FROM alumnos
+GROUP BY ciclo
+ORDER BY ciclo;
+"""
+
+S_GROUP_2 = """
+-- 2. Ciclos con nota media de 7 o más
+SELECT ciclo, AVG(nota) AS media
+FROM alumnos
+GROUP BY ciclo
+HAVING AVG(nota) >= 7
+ORDER BY ciclo;
+"""
+
+S_JOIN_1 = """
+-- 1. Cada pedido con el nombre y la ciudad de su cliente
+SELECT p.id, c.nombre, c.ciudad, p.total
+FROM pedidos p
+JOIN clientes c ON c.id = p.cliente_id
+ORDER BY p.id;
+"""
+
+S_JOIN_2 = """
+-- 2. Total gastado por cada cliente con pedidos
+SELECT c.nombre, SUM(p.total) AS gastado
+FROM clientes c
+JOIN pedidos p ON p.cliente_id = c.id
+GROUP BY c.id, c.nombre
+ORDER BY c.nombre;
+"""
+
+S_LEFT_1 = """
+-- 1. Todos los clientes, también los que tienen 0 pedidos
+SELECT c.nombre, COUNT(p.id) AS pedidos
+FROM clientes c
+LEFT JOIN pedidos p ON p.cliente_id = c.id
+GROUP BY c.id, c.nombre
+ORDER BY c.nombre;
+"""
+
+S_LEFT_2 = """
+-- 2. Clientes con algún pedido de más de 40 €
+SELECT nombre
+FROM clientes
+WHERE id IN (SELECT cliente_id FROM pedidos WHERE total > 40);
+"""
+
+S_UNION = """
+-- 1. Nombres de clientes y proveedores, sin repetidos
+SELECT nombre FROM clientes
+UNION
+SELECT nombre FROM proveedores
+ORDER BY nombre;
+"""
+
+S_SIN_PEDIDOS_IN = """
+-- 2a. Con NOT IN (funciona porque pedidos.cliente_id no tiene NULL)
+SELECT nombre
+FROM clientes
+WHERE id NOT IN (SELECT cliente_id FROM pedidos);
+"""
+
+S_SIN_PEDIDOS_JOIN = """
+-- 2b. Con LEFT JOIN … IS NULL
+SELECT c.nombre
+FROM clientes c
+LEFT JOIN pedidos p ON p.cliente_id = c.id
+WHERE p.id IS NULL;
+"""
+
+S_INDICE = """
+-- 3. Índice en la columna por la que se unen las tablas, y el plan de la consulta
+CREATE INDEX idx_pedidos_cliente ON pedidos(cliente_id);
+
+EXPLAIN
+SELECT c.nombre
+FROM clientes c
+LEFT JOIN pedidos p ON p.cliente_id = c.id
+WHERE p.id IS NULL;
+"""
+
+S_DML = """
+-- 1. ROUND evita decimales de más: 5 * 1.1 da 5.500000000000001
+UPDATE productos
+SET precio = ROUND(precio * 1.1, 2)
+WHERE precio < 20;
+
+-- 2.
+DELETE FROM productos
+WHERE stock = 0;
+
+-- 3.
+SELECT * FROM productos;
+"""
+
+S_VISTA = """
+CREATE VIEW resumen_ciclos AS
+SELECT ciclo, COUNT(*) AS alumnos, ROUND(AVG(nota), 2) AS media
+FROM alumnos
+GROUP BY ciclo;
+
+SELECT * FROM resumen_ciclos ORDER BY ciclo;
+
+-- Luis (DAM) pasa de 5 a 10
+UPDATE alumnos SET nota = 10 WHERE id = 2;
+
+SELECT * FROM resumen_ciclos ORDER BY ciclo;
+"""
+
+
 def cq(
     id: str, q: str, tables: list[T], query: str, expect: str, wrong: list[str], explain: str
 ) -> Q:
@@ -270,6 +515,40 @@ Con la tabla `productos(id, nombre, precio, stock)`, muestra el **nombre** y el 
             "MySQL, SQLite y PostgreSQL usan `LIMIT`. `TOP` es de SQL Server y `ROWNUM` de las versiones antiguas de Oracle.",
         ),
     ],
+    objectives=[
+        "Escribir consultas `SELECT` sobre una tabla con columnas, expresiones y alias (RA3 a, b).",
+        "Ordenar y limitar el resultado con `ORDER BY` y `LIMIT` (RA3 b).",
+        "Explicar el orden lógico en que el SGBD evalúa las cláusulas.",
+    ],
+    mistakes=[
+        (
+            "Usar en `WHERE` un alias del `SELECT`.",
+            "`WHERE` se evalúa antes que el `SELECT`: repite la expresión (`WHERE precio * stock > 100`). En `ORDER BY` sí puedes usar el alias.",
+        ),
+        (
+            "Ordenar solo por una columna con empates y esperar siempre el mismo resultado.",
+            "Añade una segunda columna de desempate (`ORDER BY valor DESC, nombre`).",
+        ),
+        (
+            "Pensar que `DISTINCT` se aplica solo a la primera columna.",
+            "Quita las filas repetidas teniendo en cuenta todas las columnas del `SELECT`.",
+        ),
+        (
+            "Usar `SELECT *` en un programa.",
+            "Nombra las columnas: la consulta no se rompe si la tabla cambia.",
+        ),
+    ],
+    summary=[
+        "SQL es declarativo: dices qué datos quieres y el SGBD decide cómo obtenerlos.",
+        "`AS` pone nombre a una columna calculada.",
+        "`ORDER BY … DESC` ordena de mayor a menor; la segunda columna solo desempata.",
+        "`LIMIT n` devuelve las n primeras filas.",
+        "Orden lógico: FROM, WHERE, GROUP BY, HAVING, SELECT, ORDER BY y LIMIT.",
+    ],
+    solution=(
+        S_SELECT,
+        "`precio * stock` se calcula en cada fila y se llama `valor`. El Monitor vale 720; el Teclado y el Cable empatan a 250, y el desempate por nombre deja el Cable en segundo lugar. Sin ese desempate, el segundo producto podría cambiar de una ejecución a otra. Resultado: `Monitor | 720` y `Cable | 250`.",
+    ),
     sources=[MYSQL, SQLITE],
 )
 
@@ -394,6 +673,39 @@ Con la tabla `productos(id, nombre, precio, stock)`:
             "`IN` equivale a varias igualdades unidas con OR: de ASIR o de DAM son Juan, Luis y Sara.",
         ),
     ],
+    objectives=[
+        "Filtrar filas con `WHERE` y los operadores de comparación y lógicos (RA3 b).",
+        "Usar `BETWEEN`, `IN` y `LIKE` con sus comodines.",
+        "Comprobar valores desconocidos con `IS NULL`.",
+    ],
+    mistakes=[
+        (
+            "Mezclar `AND` y `OR` sin paréntesis.",
+            "`AND` va antes que `OR`. Escribe `(a OR b) AND c` si es lo que quieres decir.",
+        ),
+        (
+            "Escribir `nombre LIKE 'M%' OR 'C%'`.",
+            "Cada condición necesita su columna: `nombre LIKE 'M%' OR nombre LIKE 'C%'`.",
+        ),
+        (
+            "Comparar con `= NULL`.",
+            "Nunca se cumple. Usa `IS NULL` o `IS NOT NULL`.",
+        ),
+        (
+            "Pensar que `BETWEEN 10 AND 20` excluye los extremos.",
+            "Los incluye: equivale a `>= 10 AND <= 20`.",
+        ),
+    ],
+    summary=[
+        "`WHERE` se queda con las filas que cumplen la condición.",
+        "Comparación: `=`, `<>`, `<`, `>`, `<=` y `>=`. Lógicos: `AND`, `OR` y `NOT`, con `AND` antes que `OR`.",
+        "`BETWEEN` incluye los extremos, `IN` compara con una lista y `LIKE` usa `%` (cualquier secuencia) y `_` (un carácter).",
+        "Cualquier comparación con NULL es desconocida: se usa `IS NULL`.",
+    ],
+    solution=(
+        S_WHERE_1 + S_WHERE_2,
+        "La primera consulta necesita las dos condiciones a la vez (`AND`): devuelve el Teclado (25) y el Cable (5). El Ratón cuesta menos de 30 pero no tiene stock. La segunda repite la columna en cada `LIKE` y une los patrones con `OR`: devuelve el Monitor y el Cable.",
+    ),
     sources=[MYSQL, SQLITE],
 )
 
@@ -518,6 +830,39 @@ Pista: son dos consultas distintas o, si te atreves, una con dos subconsultas.
             "`COUNT(*)` cuenta filas, tengan lo que tengan. Las demás solo trabajan con valores no nulos.",
         ),
     ],
+    objectives=[
+        "Resumir una tabla con `COUNT`, `SUM`, `AVG`, `MIN` y `MAX` (RA3 e).",
+        "Explicar cómo tratan los agregados los valores NULL y sustituirlos con `COALESCE`.",
+        "Combinar varios resúmenes en una sola consulta con subconsultas escalares (RA3 f).",
+    ],
+    mistakes=[
+        (
+            "Pensar que `AVG(nota)` cuenta como 0 las notas que faltan.",
+            "`AVG` ignora los NULL. Si deben contar como 0, usa `AVG(COALESCE(nota, 0))`.",
+        ),
+        (
+            "Usar `COUNT(columna)` para contar filas.",
+            "`COUNT(columna)` se salta los NULL; para contar filas usa `COUNT(*)`.",
+        ),
+        (
+            "Mezclar una columna normal con un agregado sin `GROUP BY`.",
+            "MySQL da error y SQLite devuelve una fila cualquiera. Agrupa o quita la columna.",
+        ),
+        (
+            "Esperar 0 de un `SUM` sin filas.",
+            "Devuelve NULL; solo `COUNT` devuelve 0.",
+        ),
+    ],
+    summary=[
+        "Las funciones de agregado resumen muchas filas en un valor.",
+        "`COUNT(*)` cuenta filas; el resto de agregados ignoran los NULL.",
+        "Sin filas, `SUM`, `AVG`, `MIN` y `MAX` devuelven NULL; `COUNT` devuelve 0.",
+        "Sin `GROUP BY`, una consulta con agregados devuelve una sola fila.",
+    ],
+    solution=(
+        S_AGREGADOS,
+        "Cada subconsulta escalar devuelve un solo valor con su propio `WHERE`, así que caben dos condiciones distintas en la misma fila. Solo el Ratón no tiene stock (1), y el más caro de los que tienen stock es el Monitor (180). Resultado: `1 | 180`.",
+    ),
     sources=[MYSQL, SQLITE],
 )
 
@@ -647,6 +992,38 @@ Con la tabla `alumnos(id, nombre, ciclo, nota)`:
             "Solo queda el grupo DAW, con Ana y Eva. (Filtrar por ciclo sería más eficiente en WHERE.)",
         ),
     ],
+    objectives=[
+        "Agrupar filas con `GROUP BY` y calcular un resumen por grupo (RA3 e).",
+        "Filtrar grupos con `HAVING` y distinguirlo de `WHERE` (RA3 e).",
+    ],
+    mistakes=[
+        (
+            "Poner en `WHERE` una condición sobre un agregado (`WHERE AVG(nota) >= 7`).",
+            "`WHERE` filtra filas antes de agrupar; las condiciones sobre agregados van en `HAVING`.",
+        ),
+        (
+            "Añadir al `SELECT` una columna que no está en el `GROUP BY` ni en un agregado.",
+            "Inclúyela en el `GROUP BY` o métela en una función de agregado.",
+        ),
+        (
+            "Pensar que una fila con NULL baja la media del grupo.",
+            "`AVG` ignora el NULL: la media de DAW es la de Ana sola (8).",
+        ),
+        (
+            "Dar por hecho el orden de los grupos.",
+            "Sin `ORDER BY`, el orden no está garantizado.",
+        ),
+    ],
+    summary=[
+        "`GROUP BY` reparte las filas en grupos y calcula los agregados de cada uno.",
+        "Cada columna del `SELECT` está en el `GROUP BY` o dentro de un agregado.",
+        "`WHERE` filtra filas antes de agrupar; `HAVING` filtra grupos después.",
+        "Los NULL de la columna agrupada forman un único grupo.",
+    ],
+    solution=(
+        S_GROUP_1 + S_GROUP_2,
+        "La primera consulta devuelve ASIR 1, DAM 2 y DAW 2. La segunda calcula la media de cada ciclo y deja pasar solo las de 7 o más. Con estos datos pasan los tres: ASIR 7, DAM 7 (5 y 9) y DAW 8, porque la nota que falta de Eva no cuenta. Si Sara tuviera un 8, DAM quedaría fuera con un 6,5.",
+    ),
     sources=[MYSQL, PG],
 )
 
@@ -775,6 +1152,39 @@ Con `clientes(id, nombre, ciudad)` y `pedidos(id, cliente_id, total)`:
             "La única clienta de Madrid es Ana, que tiene dos pedidos.",
         ),
     ],
+    objectives=[
+        "Combinar dos tablas con `INNER JOIN` siguiendo la clave ajena (RA3 c).",
+        "Calcular resúmenes sobre tablas combinadas (RA3 e).",
+        "Reconocer el producto cartesiano y evitarlo.",
+    ],
+    mistakes=[
+        (
+            "Olvidar la condición `ON`.",
+            "Sin ella sale el producto cartesiano: cada cliente con cada pedido.",
+        ),
+        (
+            "Escribir `id` sin cualificar cuando está en las dos tablas.",
+            "Indica la tabla: `c.id` o `p.id`. Si no, el SGBD da un error de columna ambigua.",
+        ),
+        (
+            "Unir por las columnas equivocadas (`ON p.id = c.id`).",
+            "Une la clave ajena con la primaria que referencia: `ON p.cliente_id = c.id`.",
+        ),
+        (
+            "Esperar que `INNER JOIN` muestre los clientes sin pedidos.",
+            "Solo muestra filas con pareja en las dos tablas; para todos, usa `LEFT JOIN`.",
+        ),
+    ],
+    summary=[
+        "Un JOIN vuelve a juntar la información que el modelo relacional reparte en tablas.",
+        "`ON` dice cómo se relacionan las filas: normalmente, clave ajena = clave primaria.",
+        "`INNER JOIN` devuelve solo las filas que tienen pareja en las dos tablas.",
+        "Los alias de tabla acortan la consulta y evitan columnas ambiguas.",
+    ],
+    solution=(
+        S_JOIN_1 + S_JOIN_2,
+        "La primera consulta une cada pedido con su cliente por `cliente_id` y muestra los 3 pedidos con el nombre y la ciudad. La segunda agrupa por cliente y suma sus pedidos: Ana 50 (30 + 20) y Luis 50. Eva no aparece porque no tiene pedidos y `JOIN` solo devuelve las filas con pareja.",
+    ),
     sources=[MYSQL, PG],
 )
 
@@ -910,6 +1320,39 @@ Con `clientes` y `pedidos`:
             "`x NOT IN (1, NULL)` equivale a `x <> 1 AND x <> NULL`, y lo segundo es *desconocido*. Usa `NOT EXISTS` o filtra los NULL en la subconsulta.",
         ),
     ],
+    objectives=[
+        "Usar `LEFT JOIN` para conservar las filas sin pareja (RA3 d).",
+        "Contar correctamente después de un `LEFT JOIN`.",
+        "Escribir subconsultas escalares, con `IN` y con `EXISTS` (RA3 f).",
+    ],
+    mistakes=[
+        (
+            "Contar con `COUNT(*)` después de un `LEFT JOIN`.",
+            "Cuenta la fila rellenada con NULL y da 1 a quien no tiene pedidos. Usa `COUNT(p.id)`.",
+        ),
+        (
+            "Usar `NOT IN` con una subconsulta que puede devolver NULL.",
+            "Si hay un NULL, no devuelve nada. Usa `NOT EXISTS` o `LEFT JOIN … IS NULL`.",
+        ),
+        (
+            "Poner en el `WHERE` una condición sobre la tabla de la derecha.",
+            "Elimina las filas sin pareja y el `LEFT JOIN` se comporta como un `INNER JOIN`. Ponla en el `ON` si quieres conservarlas.",
+        ),
+        (
+            "Usar `=` con una subconsulta que devuelve varias filas.",
+            "Usa `IN`: `=` espera un solo valor.",
+        ),
+    ],
+    summary=[
+        "`LEFT JOIN` conserva todas las filas de la izquierda y rellena con NULL las que no tienen pareja.",
+        "`WHERE derecha.id IS NULL` deja solo las filas sin pareja.",
+        "Tras un `LEFT JOIN`, cuenta con `COUNT(columna_de_la_derecha)`.",
+        "Las subconsultas pueden devolver un valor, una lista (`IN`) o comprobar si hay filas (`EXISTS`).",
+    ],
+    solution=(
+        S_LEFT_1 + S_LEFT_2,
+        "La primera consulta conserva a Eva con 0 pedidos gracias al `LEFT JOIN` y a `COUNT(p.id)`, que no cuenta el NULL: Ana 2, Eva 0 y Luis 1. En la segunda, la subconsulta devuelve los clientes con algún pedido de más de 40 € (solo el pedido 3, de Luis) y el `IN` se queda con ellos: Luis.",
+    ),
     sources=[MYSQL, PG],
 )
 
@@ -1045,6 +1488,40 @@ Crea la tabla `libros` con:
             "`ON DELETE CASCADE` borra automáticamente los préstamos del socio borrado. Sin esa opción, el DELETE habría dado error.",
         ),
     ],
+    objectives=[
+        "Crear tablas con `CREATE TABLE` eligiendo el tipo de dato adecuado a cada columna (RA2 b, c).",
+        "Definir la clave primaria y las claves ajenas (RA2 d).",
+        "Implantar las restricciones del diseño: `NOT NULL`, `UNIQUE`, `DEFAULT` y `CHECK` (RA2 e).",
+    ],
+    mistakes=[
+        (
+            "Guardar dinero en `FLOAT` o `REAL`.",
+            "Usa `DECIMAL(8,2)`: guarda los céntimos exactos, sin errores de redondeo.",
+        ),
+        (
+            "Pensar que `UNIQUE` también impide los NULL.",
+            "`UNIQUE` admite NULL. Si el dato es obligatorio, añade `NOT NULL`.",
+        ),
+        (
+            "Guardar el ISBN o un teléfono como número.",
+            "Son códigos, no cantidades: van en texto (`CHAR(13)`), y así no se pierden los ceros a la izquierda.",
+        ),
+        (
+            "Dar por hecho que SQLite comprueba los tipos como MySQL.",
+            "SQLite tiene tipado flexible: las restricciones `CHECK` y `NOT NULL` sí se cumplen, pero el tipo no siempre.",
+        ),
+    ],
+    summary=[
+        "El DDL (`CREATE`, `ALTER`, `DROP`) define la estructura de las tablas.",
+        "Elige el tipo según el dato: `INT`, `DECIMAL(p,s)`, `VARCHAR(n)`, `CHAR(n)`, `DATE`, `BOOLEAN`.",
+        "`PRIMARY KEY` identifica cada fila; `FOREIGN KEY … REFERENCES` mantiene la integridad referencial.",
+        "`NOT NULL`, `UNIQUE`, `DEFAULT` y `CHECK` llevan las reglas de negocio a la base de datos.",
+        "Una sentencia que incumple una restricción se rechaza entera.",
+    ],
+    solution=(
+        S_LIBROS,
+        "Cada requisito es una restricción: `NOT NULL` en el título, `UNIQUE` en el ISBN, `DECIMAL(8,2)` con `CHECK (precio >= 0)` para el precio y `DEFAULT CURRENT_DATE` para la fecha de alta. Si insertas un precio negativo o un ISBN repetido, el SGBD rechaza la fila; si no indicas `alta`, se guarda la fecha del día.",
+    ),
     sources=[MYSQL, SQLITE],
 )
 
@@ -1179,6 +1656,39 @@ Con la tabla `productos(id, nombre, precio, stock)`:
             "Así compruebas el filtro sin riesgo. Y, si puedes, trabaja dentro de una transacción.",
         ),
     ],
+    objectives=[
+        "Insertar, actualizar y borrar datos con `INSERT`, `UPDATE` y `DELETE` (RA4 a, b).",
+        "Insertar en una tabla el resultado de una consulta (RA4 c).",
+        "Comprobar qué filas se van a modificar antes de hacerlo (RA4 h).",
+    ],
+    mistakes=[
+        (
+            "Lanzar un `UPDATE` o un `DELETE` sin `WHERE`.",
+            "Afecta a todas las filas. Ejecuta antes un `SELECT` con el mismo `WHERE`.",
+        ),
+        (
+            "Esperar un resultado exacto al multiplicar decimales.",
+            "`5 * 1.1` da `5.500000000000001`. Redondea con `ROUND(…, 2)` o guarda el precio en `DECIMAL`.",
+        ),
+        (
+            "Pensar que `WHERE nota < 5` incluye las filas sin nota.",
+            "Los NULL no cumplen ninguna comparación: no se tocan.",
+        ),
+        (
+            "Usar `TRUNCATE` en SQLite.",
+            "No existe; usa `DELETE FROM tabla`.",
+        ),
+    ],
+    summary=[
+        "El DML cambia el contenido: `INSERT`, `UPDATE` y `DELETE`.",
+        "`INSERT … SELECT` copia en una tabla el resultado de una consulta.",
+        "Sin `WHERE`, `UPDATE` y `DELETE` afectan a todas las filas.",
+        "Comprueba con un `SELECT` antes y después de modificar.",
+    ],
+    solution=(
+        S_DML,
+        "El `UPDATE` sube un 10 % los productos de menos de 20 €: el Ratón (15 → 16.5) y el Cable (5 → 5.5). `ROUND` evita los decimales de más. Después, el `DELETE` borra el Ratón, que no tiene stock. Quedan el Teclado (25), el Monitor (180) y el Cable (5.5).",
+    ),
     sources=[MYSQL, SQLITE],
 )
 
@@ -1338,6 +1848,40 @@ Escribe los `CREATE TABLE` con sus claves primarias y ajenas.
             "Es lo que comprueban las FOREIGN KEY: no puedes matricular a nadie en un ciclo que no existe.",
         ),
     ],
+    objectives=[
+        "Pasar a tablas las relaciones 1:N, N:M y 1:1 de un diagrama entidad/relación (RA6 b, c, d).",
+        "Elegir las claves primarias, candidatas y ajenas de cada tabla (RA6 e).",
+        "Aplicar reglas de integridad con claves ajenas y restricciones (RA6 f).",
+        "Normalizar hasta la 3FN para evitar datos repetidos y anomalías (RA6 g).",
+    ],
+    mistakes=[
+        (
+            "Poner la clave ajena en el lado 1 de una relación 1:N.",
+            "Va en el lado N: cada alumno apunta a su ciclo, no al revés.",
+        ),
+        (
+            "Resolver una N:M con una lista de ids en una columna (`autores = '1,4,7'`).",
+            "Incumple la 1FN. Usa una tabla intermedia con una fila por pareja.",
+        ),
+        (
+            "Dar a la tabla intermedia un id propio y olvidar que la pareja no se repita.",
+            "Usa la pareja como clave primaria compuesta: `PRIMARY KEY (libro_id, autor_id)`.",
+        ),
+        (
+            "Guardar en `prestamos` el título del libro o el nombre del socio.",
+            "Guarda solo sus claves: copiarlos crea datos repetidos que se desincronizan (3FN).",
+        ),
+    ],
+    summary=[
+        "1:N: la clave ajena va en el lado N. N:M: tabla intermedia con dos claves ajenas. 1:1: clave ajena con UNIQUE en cualquiera de las dos.",
+        "La clave primaria es la candidata elegida; la ajena apunta a la primaria de otra tabla.",
+        "1FN: valores atómicos. 2FN: cada atributo depende de toda la clave. 3FN: sin dependencias entre atributos no clave.",
+        "Normalizar evita las anomalías al insertar, modificar y borrar.",
+    ],
+    solution=(
+        S_BIBLIOTECA,
+        "Libros y autores es una relación N:M, así que `libros_autores` guarda cada pareja una sola vez con su clave compuesta. Un préstamo une un socio y un libro: lleva las dos claves ajenas y sus fechas. `devolucion` admite NULL mientras el libro no se haya devuelto, y el `CHECK` impide que sea anterior a la salida. Si intentas registrar un préstamo de un socio que no existe, el SGBD lo rechaza.",
+    ),
     sources=[PG, MYSQL],
 )
 
@@ -1471,6 +2015,40 @@ Con la tabla `alumnos(id, nombre, ciclo, nota)`:
             "Un índice no cambia el resultado, solo lo rápido que se obtiene: sigue habiendo 2 alumnos de DAW.",
         ),
     ],
+    objectives=[
+        "Agrupar sentencias en una transacción y confirmarla o deshacerla con `COMMIT` y `ROLLBACK` (RA4 e, f).",
+        "Explicar las propiedades ACID.",
+        "Crear vistas y comprobar que muestran siempre los datos actuales (RA2 f).",
+        "Decidir cuándo conviene un índice (RA3 h).",
+    ],
+    mistakes=[
+        (
+            "Pensar que una vista guarda una copia de los datos.",
+            "Guarda la consulta: cada vez que la consultas, se ejecuta sobre los datos actuales.",
+        ),
+        (
+            "Olvidar el `COMMIT`.",
+            "Sin él, los cambios de la transacción no se confirman y otras sesiones no los ven.",
+        ),
+        (
+            "Creer que un índice puede cambiar el resultado.",
+            "Solo cambia la velocidad: el resultado es el mismo.",
+        ),
+        (
+            "Pensar que `ROLLBACK` deshace lo ya confirmado.",
+            "Solo deshace lo hecho desde el `BEGIN` de la transacción abierta.",
+        ),
+    ],
+    summary=[
+        "Una transacción aplica todas sus sentencias o ninguna: `BEGIN`, `COMMIT` y `ROLLBACK`.",
+        "ACID: atomicidad, consistencia, aislamiento y durabilidad.",
+        "Una vista es una consulta con nombre y siempre muestra los datos actuales.",
+        "Los índices aceleran las búsquedas y ralentizan un poco las escrituras.",
+    ],
+    solution=(
+        S_VISTA,
+        "La vista no copia datos: guarda la consulta. Por eso, después del `UPDATE`, la segunda consulta ya muestra la media de DAM en 9.5 (antes, 7.0) sin tocar la vista. ASIR y DAW no cambian.",
+    ),
     sources=[MYSQL, PG],
 )
 
@@ -1719,6 +2297,41 @@ Una cadena de academias tiene sedes en Madrid y Valladolid y guarda de cada alum
             "Tiempo real es Velocidad; muchos formatos, Variedad; beneficio, Valor.",
         ),
     ],
+    objectives=[
+        "Distinguir las bases de datos según dónde está la información: local, en la nube, centralizada o distribuida (RA1 c).",
+        "Explicar para qué sirve una base de datos distribuida y sus inconvenientes (RA1 g).",
+        "Proponer una fragmentación horizontal, vertical o mixta de una tabla (RA1 h).",
+        "Identificar los modelos relacional, jerárquico, en red y orientado a objetos (RA1 b).",
+        "Reconocer qué es el Big Data y sus 5 V (RA1 j).",
+    ],
+    mistakes=[
+        (
+            "Confundir la fragmentación horizontal con la vertical.",
+            "Horizontal reparte filas (los alumnos de cada sede); vertical reparte columnas (datos personales en una tabla y académicos en otra).",
+        ),
+        (
+            "Olvidar la clave en los fragmentos verticales.",
+            "Cada fragmento necesita el mismo `id`; sin él no se puede reconstruir la fila completa.",
+        ),
+        (
+            "Pensar que una base de datos distribuida no tiene inconvenientes.",
+            "Si un servidor cae, los demás siguen, pero cuesta más mantener los datos sincronizados y administrarla.",
+        ),
+        (
+            "Creer que el modelo jerárquico y el modelo en red son lo mismo.",
+            "En el jerárquico cada nodo tiene un solo padre; en red puede tener varios.",
+        ),
+    ],
+    summary=[
+        "Centralizada: un único servidor, fácil de administrar pero con un punto único de fallo. Distribuida: varios servidores que se reparten datos y carga.",
+        "Fragmentación horizontal = filas; vertical = columnas unidas por la clave; mixta = las dos.",
+        "El modelo relacional (tablas y claves) es el más usado; también existen el jerárquico, el de red y el orientado a objetos.",
+        "Big Data: datos que las herramientas tradicionales no procesan bien. Las 5 V son volumen, velocidad, variedad, veracidad y valor.",
+    ],
+    solution=(
+        S_FRAGMENTOS,
+        "Los dos fragmentos verticales comparten el `id`: en `alumnos_academico` es a la vez clave primaria y clave ajena. Con un JOIN por ese `id` se recupera al alumno completo: `Ana | 12345678Z | 8.5 | 0`. Las notas y los pagos se resumen en una columna cada uno para que cada celda tenga un solo valor; un diseño completo los llevaría a tablas propias.",
+    ),
     sources=[MYSQL, PG],
 )
 
@@ -1921,6 +2534,41 @@ Diseña el registro de usuarios de una web que permite descargar un PDF gratuito
             "Consentimiento, transparencia, minimización y seguridad. Los demás son conceptos de bases de datos o de Big Data.",
         ),
     ],
+    objectives=[
+        "Comparar los ficheros planos, indexados y de acceso directo, y el acceso secuencial y aleatorio (RA1 a).",
+        "Identificar el RGPD y la LOPDGDD y aplicar el principio de minimización al diseñar una tabla (RA1 i).",
+        "Explicar para qué sirve un SGBD, sus funciones y sus componentes (RA1 d, e).",
+        "Clasificar los SGBD en relacionales, NoSQL y de grafos (RA1 f).",
+    ],
+    mistakes=[
+        (
+            "Pedir «por si acaso» datos que la aplicación no necesita.",
+            "Minimización: pide solo lo imprescindible para la finalidad, y justifica cada campo.",
+        ),
+        (
+            "Ofrecer el derecho de supresión, pero sin forma real de borrar los datos.",
+            "La aplicación tiene que poder borrar al usuario: prepara el `DELETE` y lo que dependa de él.",
+        ),
+        (
+            "Confundir el RGPD con la LOPDGDD.",
+            "El RGPD es el reglamento europeo; la LOPDGDD es la ley orgánica española que lo complementa.",
+        ),
+        (
+            "Mezclar DDL, DML y DCL.",
+            "DDL define la estructura (`CREATE`), DML maneja los datos (`SELECT`, `DELETE`) y DCL da y quita permisos (`GRANT`, `REVOKE`).",
+        ),
+    ],
+    summary=[
+        "Los ficheros planos son sencillos pero lentos para buscar; los indexados y los de acceso directo encuentran un dato sin recorrerlo todo.",
+        "El acceso secuencial sirve para procesar todo; el aleatorio, para ir a un registro concreto.",
+        "RGPD (UE) y LOPDGDD (España): consentimiento, transparencia, minimización, seguridad y derechos de acceso, rectificación y supresión.",
+        "Un SGBD define, manipula y controla los datos (DDL, DML y DCL) con su motor, su lenguaje de consulta y sus herramientas.",
+        "Tipos de SGBD: relacionales, NoSQL y de grafos.",
+    ],
+    solution=(
+        S_SUPRESION,
+        "Basta un email (para enviar el enlace) y la fecha del consentimiento (para demostrar que lo dio); el resto incumpliría la minimización. `UNIQUE` impide registrar dos veces el mismo email. El `DELETE` con `WHERE id = 7` borra solo a ese usuario, y la última consulta devuelve 0: ya no queda ninguna fila suya.",
+    ),
     sources=[AEPD, MYSQL],
 )
 
@@ -2209,6 +2857,41 @@ Sobre una tabla `empleados(id, nombre, puesto, salario, telefono)`:
             "No almacena datos propios: los lee de las tablas cada vez que se consulta.",
         ),
     ],
+    objectives=[
+        "Tratar NULL correctamente y elegir el tipo de dato de cada columna (RA2 c).",
+        "Cambiar la estructura de una tabla con `ALTER TABLE` y crear índices (RA2 h).",
+        "Crear vistas para reutilizar consultas y ocultar columnas sensibles (RA2 f).",
+        "Crear usuarios y asignarles privilegios con `GRANT` y `REVOKE` (RA2 g).",
+    ],
+    mistakes=[
+        (
+            "Dar permiso sobre la tabla en vez de sobre la vista.",
+            "Con `GRANT SELECT ON empresa.empleados`, el usuario vería el salario. Dale permiso solo sobre `empleados_publico`.",
+        ),
+        (
+            "Escribir `REVOKE … TO`.",
+            "`GRANT` va con `TO` y `REVOKE` con `FROM`.",
+        ),
+        (
+            "Crear un índice en cada columna «por si acaso».",
+            "Cada índice ralentiza los INSERT, UPDATE y DELETE. Indexa solo las columnas que se filtran o se unen a menudo.",
+        ),
+        (
+            "Usar `MODIFY` fuera de MySQL.",
+            "`ALTER TABLE … MODIFY` es de MySQL; PostgreSQL usa `ALTER COLUMN … TYPE`.",
+        ),
+    ],
+    summary=[
+        "NULL es «no se sabe» o «no aplica»: se compara con `IS NULL`, y los agregados lo ignoran salvo `COUNT(*)`.",
+        "`ALTER TABLE` añade, cambia o borra columnas; `DROP TABLE` borra la tabla y sus datos.",
+        "Los índices aceleran las lecturas y ralentizan las escrituras.",
+        "`CREATE USER`, `GRANT … TO` y `REVOKE … FROM` gestionan los permisos; los roles agrupan permisos.",
+        "Una vista guarda una consulta, no los datos, y sirve para mostrar a cada usuario solo lo que necesita.",
+    ],
+    solution=(
+        S_EMPLEADOS,
+        "La vista elige todas las columnas menos `salario`, así que quien solo puede leer la vista nunca lo ve. `ALTER TABLE … ADD fecha_baja DATE` deja la columna a NULL en las filas que ya existían, que es justo lo que significa «sigue activo». El GRANT da solo `SELECT` y solo sobre la vista. La última consulta muestra los empleados sin el salario.",
+    ),
     sources=[MYSQL, SQLITE],
 )
 
@@ -2480,6 +3163,41 @@ Con las tablas `clientes`, `proveedores` y `pedidos`:
             "La consulta interna calcula el valor (por ejemplo, la media) y la externa lo usa para filtrar.",
         ),
     ],
+    objectives=[
+        "Combinar los resultados de varias consultas con `UNION`, `INTERSECT` y `EXCEPT` (RA3 g).",
+        "Usar composiciones externas y `COALESCE` (RA3 d).",
+        "Resolver el mismo problema con una subconsulta y con un JOIN (RA3 f).",
+        "Aplicar criterios de optimización: índices, columnas justas y `EXPLAIN` (RA3 h).",
+    ],
+    mistakes=[
+        (
+            "Unir con `UNION` consultas con distinto número de columnas.",
+            "Las dos consultas deben devolver el mismo número de columnas y de tipos compatibles.",
+        ),
+        (
+            "Poner `ORDER BY` en la primera consulta de un `UNION`.",
+            "Va al final, y ordena el resultado completo.",
+        ),
+        (
+            "Usar `UNION` cuando necesitas conservar los repetidos.",
+            "`UNION` los quita; `UNION ALL` los conserva y es más rápido.",
+        ),
+        (
+            "Crear índices sin mirar el plan.",
+            "Ejecuta `EXPLAIN` antes y después para ver si la consulta usa el índice.",
+        ),
+    ],
+    summary=[
+        "Proyección elige columnas; selección elige filas.",
+        "`UNION` junta sin repetidos, `INTERSECT` deja lo común y `EXCEPT` lo de la primera que no está en la segunda.",
+        "`LEFT`, `RIGHT` y `FULL OUTER JOIN` conservan las filas sin pareja; `COALESCE` sustituye sus NULL.",
+        "`NOT IN` falla con NULL; `NOT EXISTS` y `LEFT JOIN … IS NULL`, no.",
+        "Optimizar: índices en las columnas de filtro y de unión, pedir solo las columnas necesarias y revisar el plan con `EXPLAIN`.",
+    ],
+    solution=(
+        S_UNION + S_SIN_PEDIDOS_IN + S_SIN_PEDIDOS_JOIN + S_INDICE,
+        "`UNION` quita los nombres repetidos (Ana y Luis son clientes y proveedores) y el `ORDER BY` final ordena todo: Ana, Eva, Luis y Tecnofp. Las dos formas del apartado 2 devuelven a Eva; `NOT IN` funciona aquí porque `cliente_id` no tiene NULL. El índice en `pedidos(cliente_id)` acelera la unión, y `EXPLAIN` muestra el plan para comprobar que se usa. Su salida cambia de un SGBD a otro.",
+    ),
     sources=[MYSQL, PG],
 )
 
@@ -2515,5 +3233,67 @@ BLOCKS = [
     ),
 ]
 
+
+def check_solutions() -> None:
+    """Las soluciones se ejecutan en SQLite con los datos de ejemplo y dan lo que dice su explicación."""
+    setup = "".join(t.setup() for t in (ALUMNOS, PRODUCTOS, CLIENTES, PEDIDOS, PROVEEDORES))
+    expected = {
+        S_FRAGMENTOS: "Ana | 12345678Z | 8.5 | 0",
+        S_SUPRESION: "0",
+        S_SELECT: "Monitor | 720\nCable | 250",
+        S_WHERE_1: "Teclado | 25\nCable | 5",
+        S_WHERE_2: "Monitor | 180\nCable | 5",
+        S_AGREGADOS: "1 | 180",
+        S_GROUP_1: "ASIR | 1\nDAM | 2\nDAW | 2",
+        S_GROUP_2: "ASIR | 7.0\nDAM | 7.0\nDAW | 8.0",
+        S_JOIN_1: "1 | Ana | Madrid | 30\n2 | Ana | Madrid | 20\n3 | Luis | Leganés | 50",
+        S_JOIN_2: "Ana | 50\nLuis | 50",
+        S_LEFT_1: "Ana | 2\nEva | 0\nLuis | 1",
+        S_LEFT_2: "Luis",
+        S_UNION: "Ana\nEva\nLuis\nTecnofp",
+        S_SIN_PEDIDOS_IN: "Eva",
+        S_SIN_PEDIDOS_JOIN: "Eva",
+        S_DML: "1 | Teclado | 25 | 10\n3 | Monitor | 180 | 4\n4 | Cable | 5.5 | 50",
+        S_VISTA: "ASIR | 1 | 7.0\nDAM | 2 | 9.5\nDAW | 2 | 8.0",
+    }
+    for solution, output in expected.items():
+        actual = run_sql(setup + solution)
+        assert actual == output, f"solución con otra salida:\n{solution}\n--- real ---\n{actual}"
+    assert run_sql(setup + S_INDICE) != "Error"
+    # Las restricciones de las soluciones de diseño hacen su trabajo
+    prestamo = "INSERT INTO libros VALUES (1, 'Dune'); INSERT INTO socios VALUES (1, 'Ana');"
+    ok = "INSERT INTO prestamos VALUES (1, 1, 1, '2026-11-01', NULL); SELECT COUNT(*) FROM prestamos;"
+    assert run_sql(S_BIBLIOTECA + prestamo + ok) == "1"
+    assert (
+        run_sql(
+            S_BIBLIOTECA + prestamo + "INSERT INTO prestamos VALUES (1, 9, 1, '2026-11-01', NULL);"
+        )
+        == "Error"
+    )
+    assert (
+        run_sql(
+            S_BIBLIOTECA
+            + prestamo
+            + "INSERT INTO prestamos VALUES (1, 1, 1, '2026-11-01', '2026-10-01');"
+        )
+        == "Error"
+    )
+    assert run_sql(S_LIBROS + "INSERT INTO libros (titulo, precio) VALUES ('Dune', -1);") == "Error"
+    assert (
+        run_sql(S_LIBROS + "INSERT INTO libros (titulo, isbn) VALUES ('A', '1'), ('B', '1');")
+        == "Error"
+    )
+    assert (
+        run_sql(
+            S_LIBROS
+            + "INSERT INTO libros (titulo) VALUES ('Dune'); SELECT alta IS NOT NULL FROM libros;"
+        )
+        == "1"
+    )
+    empleados = "CREATE TABLE empleados (id INTEGER PRIMARY KEY, nombre TEXT, puesto TEXT, salario INTEGER, telefono TEXT); INSERT INTO empleados VALUES (1, 'Ana', 'Técnica', 2000, '600111222');"
+    assert run_sql(empleados + S_EMPLEADOS) == "1 | Ana | Técnica | 600111222"
+
+
 if __name__ == "__main__":
+    check_solutions()
     main("sql", BLOCKS, run_sql, check_example, module="0484")

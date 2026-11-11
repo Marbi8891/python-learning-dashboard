@@ -63,17 +63,19 @@ Generado con `python scripts/courses/audit_pedagogy.py`:
 | js (10) | ✗ | — | ✓ | ✓ | ✓ | ✗ | ✗ | ✓ | — | ✗ | ✓ |
 | marcas (6) | ✓ | — | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — | ✓ | ✓ |
 | programacion (12) | ✗ | — | ✓ | ✓ | ✓ | ✗ | ✗ | ✓ | — | ✗ | ✓ |
-| sql (14) | ✗ | — | ✓ | ✓ | ✓ | ✗ | ✗ | ✓ | — | ✗ | ✓ |
+| sql (14) | ✓ | — | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — | ✓ | ✓ |
 
 ✓ todas las lecciones · ✗ ninguna · — la plataforma aún no tiene ese campo.
 
-- **Lenguajes de marcas y Entornos de desarrollo tienen la unidad completa.** Los otros cuatro cursos (46 lecciones) tienen teoría, ejemplo, ejercicio, reto, mini-quiz y fuentes, pero no objetivos, solución razonada, errores frecuentes ni resumen.
+- **Lenguajes de marcas, Entornos de desarrollo y Bases de datos tienen la unidad completa.** Los otros tres cursos (32 lecciones) tienen teoría, ejemplo, ejercicio, reto, mini-quiz y fuentes, pero no objetivos, solución razonada, errores frecuentes ni resumen.
 - **Ningún curso tiene todavía «conocimientos previos» ni «criterios de superación».** Son campos nuevos: conviene definirlos en `course_builder.py` antes de rellenarlos.
 - El **repaso** existe a nivel de curso (repaso espaciado de las preguntas falladas), no por lección.
 
-Completar las lecciones es trabajo de contenido. Cada texto tiene que escribirse y comprobarse (las soluciones se ejecutan al generar el curso), así que no se rellena sin revisar. Orden propuesto: Entornos (hecho), Bases de datos (14), Programación (12), JavaScript y Java.
+Completar las lecciones es trabajo de contenido. Cada texto tiene que escribirse y comprobarse (las soluciones se ejecutan al generar el curso), así que no se rellena sin revisar. Orden propuesto: Entornos (hecho), Bases de datos (hecho), Programación (12), JavaScript y Java.
 
 **Entornos de desarrollo, completado.** Las 4 lecciones tienen objetivos, errores frecuentes, resumen y solución explicada. Los objetivos citan solo los criterios que la lección trabaja de verdad: RA1 b, c, d, e, f y g, y RA5 a en Paradigmas (clases, objetos, atributos y métodos). Los objetivos sin un criterio claro, como «máquina virtual o contenedor» o «requisitos funcionales y no funcionales», no citan ningún RA. `check_solutions()` ejecuta las soluciones de Python y comprueba su salida (6,5; 15; 120 tres veces). La de la lección 4 es una planificación en comentarios, porque el ejercicio es de análisis y no de código. Las lecciones solo cubren el RA1 (y una parte del RA5): los RA2 a RA6 (IDE, pruebas, refactorización y control de versiones, diagramas UML) siguen sin contenido en la plataforma.
+
+**Bases de datos, completado.** Las 14 lecciones tienen objetivos, errores frecuentes, resumen y solución explicada. Los objetivos citan los RA1, RA2, RA3, RA4 y RA6 según lo que trabaja cada lección. `check_solutions()` ejecuta las 17 consultas de las soluciones en SQLite con las tablas de ejemplo y compara su salida. También comprueba que las restricciones de las soluciones de diseño rechazan lo que deben: un préstamo de un socio que no existe, una devolución anterior a la salida, un precio negativo o un ISBN repetido. Las partes que solo existen en MySQL (`GRANT`, `CREATE USER`) van como comentario. Siguen sin contenido el RA5 (procedimientos, funciones, disparadores y cursores) y el RA7 (bases de datos no relacionales).
 
 ## 4. Generación y validación (6.4)
 
@@ -113,7 +115,7 @@ Para añadir otra comunidad bastaría con una tabla nueva con su orden, generar 
 
 ## 6. Siguientes pasos propuestos
 
-1. ~~Completar Entornos de desarrollo~~ (hecho). Siguiente: Bases de datos (14 lecciones), con el mismo modelo.
+1. ~~Completar Entornos de desarrollo y Bases de datos~~ (hecho). Siguiente: Programación (12 lecciones), con el mismo modelo.
 2. Añadir a `course_builder.py` los campos «conocimientos previos» y «criterios de superación», y mostrarlos en la lección.
 3. Extraer del RD 659/2023 los RA de los módulos transversales, con el mismo método que `extract_boe.py`. Hace falta descargar el XML del BOE desde un equipo con acceso.
 4. Empezar un módulo sin contenido. El siguiente propuesto es 0615 Diseño de interfaces web.
