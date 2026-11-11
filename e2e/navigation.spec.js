@@ -1,4 +1,4 @@
-const { test, expect, openLesson } = require("./fixtures");
+const { test, expect, openLesson, watchClipboard } = require("./fixtures");
 
 test("la portada del curso PCAP lleva a la primera lección pendiente y la barra lateral navega", async ({ page }) => {
   await openLesson(page);
@@ -113,13 +113,24 @@ test("marcar como completada actualiza el progreso y persiste", async ({ page })
   await expect(page.locator(".module[data-module=fundamentos] .module__count")).toHaveText("1/8");
 });
 
-test("copiar y «Abrir en PyCharm» muestran la guía y la descarga", async ({ page, context }) => {
-  await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+test("copiar y «Abrir en PyCharm» muestran la guía y la descarga", async ({ page, browserName }) => {
+  const clipboard = await watchClipboard(page, browserName);
   await openLesson(page, "variables");
+  const code = await page.locator(".code-block pre code").first().textContent();
+  expect(code).toContain('nombre = "Carlos"');
+
+  // «Copiar al portapapeles»: la escritura real sale bien y la web lo confirma
+  await page.getByRole("button", { name: "Copiar al portapapeles" }).click();
+  await expect(page.locator("#toast")).toHaveText("Código copiado al portapapeles");
+  expect(await clipboard.writes()).toEqual([code]);
+  if (clipboard.read) expect(await clipboard.read()).toBe(code); // lo que hay de verdad en el portapapeles
+
+  // «Abrir en PyCharm»: vuelve a copiar el ejemplo y enseña la guía con la descarga
   await page.getByRole("button", { name: "Abrir en PyCharm" }).click();
   await expect(page.locator("#pycharm-hint")).toBeVisible();
-  const clipboard = await page.evaluate(() => navigator.clipboard.readText());
-  expect(clipboard).toContain('nombre = "Carlos"');
+  expect(await clipboard.writes()).toEqual([code, code]);
+  if (clipboard.read) expect(await clipboard.read()).toBe(code);
+  await expect(page.locator("#toast")).not.toContainText("No se pudo copiar");
 
   const download = page.waitForEvent("download");
   await page.getByRole("link", { name: "Descargar variables.py" }).click();

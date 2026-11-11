@@ -23,18 +23,29 @@ Las e2e arrancan solas el frontend (`e2e/serve_frontend.py`, un `http.server` co
 |---|---|---|
 | Lint y formato | `cd backend && ruff check . ../e2e ../scripts && ruff format --check . ../e2e ../scripts` | Estilo PEP 8 |
 | Backend | `cd backend && python -m pytest -q --cov=app --cov-fail-under=100` | API, autenticación, RGPD, contenido y banco del PCAP |
-| Núcleo por conceptos | `python scripts/learning/build_learning.py --check` | `learning.json` al día y cada respuesta comprobada |
+| Núcleo por conceptos | `python scripts/learning/build_learning.py --check` | `learning.json` al día, cada respuesta comprobada e ids registrados en `scripts/learning/ids.lock.json` (también `tests/test_learning_ids.py`) |
 | Currículo de DAW | `python scripts/curriculum/build_curriculum.py --check` | Catálogo al día; las pruebas están en `test_curriculum.py` |
 | Cursos de DAW | `python scripts/courses/<curso>_course.py --check` (`sql`, `js`, `java`, `entornos`, `marcas`, `programacion`) | Cada respuesta de código se ejecuta (SQLite, Node, Java y Python) |
 | Coherencia de los cursos de DAW | `cd backend && python -m pytest -q tests/test_daw_courses.py` | Ids estables (`scripts/courses/ids.lock.json`), contenidos vacíos, preguntas repetidas, referencias a unidades, lecciones, módulos y RA, enlaces y soluciones |
 | Recursos de DAW | `python scripts/resources/build_resources.py --check` | Catálogo de recursos al día y válido (ids, módulos, lecciones, URL, licencias); las pruebas están en `test_resources.py` |
-| Frontend | `npm run test:unit` | Lógica del aprendizaje, repaso, recomendación, panel y Markdown seguro |
+| Frontend | `npm run test:unit` | Lógica del aprendizaje (dominio, confianza, retención), repaso espaciado común, recomendación, planificador, panel y Markdown seguro |
 | End-to-end y WCAG | `npm run test:e2e` | La web entera con el backend real y auditoría de accesibilidad (axe-core con las reglas de WCAG 2.2 A/AA, foco y letra al 200 %) |
 | Migraciones en PostgreSQL | `MIGRATION_TEST_DATABASE_URL=postgresql://… python -m pytest -q tests/test_migrations.py` (en `backend/`) | Migraciones sobre una BD vacía y con datos |
+| Archivos sin conexión | `node scripts/web/build_precache.mjs --check` (también `tests/unit/precache.test.mjs`) | `frontend/precache.js`, la lista que el service worker guarda al instalarse, está al día |
+| Safari (WebKit) | `PW_WEBKIT=1 npx playwright test --project=webkit e2e/navigation.spec.js e2e/landing.spec.js e2e/account.spec.js` | Prueba de humo en WebKit, con la cuenta y el cierre de sesión (trabajo `webkit` de CI) |
 | Inspección de la web | `node scripts/web/inspeccionar_web.mjs [--rutas a,b] [--tema claro\|oscuro\|ambos] [--comparar <carpeta>]` | Capturas en móvil y escritorio (y en tema oscuro con `--tema`), axe, errores de consola, desbordamiento y peso de cada ruta (no es una prueba que falle: es evidencia de antes y después) |
 | Dependencias | `pip-audit -r backend/requirements.txt` y `npm audit --audit-level=high` | Vulnerabilidades conocidas |
 
 GitHub Actions (`ci.yml`) lo pasa todo en cada push y pull request.
+
+En CI cada e2e que falla se reintenta una vez para guardar su traza (`playwright-report`, se sube como artefacto),
+pero una prueba que solo pasa al reintentar hace fallar el trabajo (`failOnFlakyTests`): hay que arreglarla, no
+reintentarla. Para comprobar que una prueba es estable, repítela: `npx playwright test <archivo> -g "<nombre>" --repeat-each=5`.
+
+El portapapeles no se prueba igual en todos los motores, porque Playwright no da los mismos permisos:
+Chromium acepta `clipboard-read` y `clipboard-write`, WebKit solo `clipboard-read` y Firefox ninguno. Usa
+`watchClipboard(page, browserName)` de `e2e/fixtures.js`: anota lo que la web copia de verdad y, donde se puede,
+lee el portapapeles real.
 
 En un portátil, las e2e en paralelo pueden agotar el tiempo de espera, porque cada navegador descarga Pyodide (unos 10 MB) a la vez. Si pasa, ejecútalas en serie: `npx playwright test --workers=1`.
 
@@ -52,9 +63,10 @@ rm frontend/_pyo
 
 | Si cambias… | Ejecuta |
 |---|---|
-| `frontend/js/learn/*` | `npm run test:unit` y, si cambian vistas, `npm run test:e2e` |
+| `frontend/js/learn/*` o `frontend/js/srs.js` | `npm run test:unit` y, si cambian vistas, `npm run test:e2e`. Qué prueba cada archivo del motor: [`ADAPTIVE_ENGINE.md`](ADAPTIVE_ENGINE.md) §9 |
 | `frontend/i18n/*.json` o `frontend/js/i18n.js` | `npm run test:unit` y `npx playwright test e2e/idiomas.spec.js` (guía en [`IDIOMAS.md`](IDIOMAS.md)) |
 | HTML o CSS | `npm run test:e2e` |
+| Archivos de `frontend/` (nuevos, borrados o renombrados) o `frontend/sw.js` | `node scripts/web/build_precache.mjs` y `npx playwright test e2e/study.spec.js -g PWA` |
 | `frontend/data/lessons.json` o `pcap.json` | `cd backend && python -m pytest -q tests/test_content.py tests/test_pcap.py` |
 | `scripts/learning/**` | `python scripts/learning/build_learning.py` y después `--check` |
 | `scripts/courses/**` | `python scripts/courses/<curso>_course.py --check`, `python scripts/courses/lock_ids.py` si hay ids nuevos y `cd backend && python -m pytest -q tests/test_daw_courses.py` |
@@ -67,4 +79,4 @@ rm frontend/_pyo
 
 - Pruebas manuales de accesibilidad (lector de pantalla, solo teclado, zoom al 200 %).
 - Pruebas en un móvil real y medición de rendimiento con Lighthouse (memoria, 6.3 y 6.5).
-- El modo sin conexión tiene una prueba automática (`e2e/study.spec.js`, «PWA») que recarga «¿Qué estudio ahora?» sin red, pero no cubre abrir una lección que no se había visitado antes.
+- El modo sin conexión tiene una prueba automática (`e2e/study.spec.js`, «PWA») que recarga «¿Qué estudio ahora?» sin red y abre el PCAP, que no se había visitado (se guarda al instalarse, AUD-008). No cubre Pyodide sin conexión si nunca se ha ejecutado código.

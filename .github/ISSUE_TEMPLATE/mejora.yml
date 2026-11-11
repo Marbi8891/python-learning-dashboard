@@ -1,0 +1,35 @@
+name: Proponer una mejora
+description: Una idea nueva o un cambio en algo que ya existe.
+title: "[Mejora] "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problema
+    attributes:
+      label: Qué problema resuelve
+      description: Para quién es y en qué situación lo echa de menos.
+    validations:
+      required: true
+  - type: textarea
+    id: propuesta
+    attributes:
+      label: Propuesta
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Área
+      options:
+        - Temario de Python o PCAP
+        - Cursos de DAW
+        - Motor adaptativo y planificador
+        - Consola de Python
+        - Cuenta y progreso
+        - Accesibilidad
+        - Diseño
+        - Otra
+  - type: textarea
+    id: alternativas
+    attributes:
+      label: Alternativas que has pensado

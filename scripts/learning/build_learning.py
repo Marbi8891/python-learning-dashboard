@@ -22,10 +22,13 @@ HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
 DATA = ROOT / "frontend" / "data"
 OUT = DATA / "learning.json"
+# Ids estables (F1.0): el progreso del alumno se guarda por id de concepto, ejercicio y error.
+# El registro solo crece; quitar o renombrar un id exige un plan de migración en el mismo PR.
+LOCK = HERE / "ids.lock.json"
 TIMEOUT_S = 5
 
 sys.path.insert(0, str(HERE))
-from concepts import AREAS, CONCEPTS, DAW_COMPETENCIES, PATH  # noqa: E402
+from concepts import AREAS, CONCEPTS, CURRICULUM_CE, DAW_COMPETENCIES, PATH  # noqa: E402
 from exercises import E  # noqa: E402
 
 KINDS = {"choice", "output", "fill", "order", "bug", "code"}
@@ -256,6 +259,71 @@ def check_exercise(ex: dict, concepts: set[str], errors: set[str], problems: Pro
                 )
 
 
+def current_ids(concepts: list[dict], exercises: list[dict]) -> dict[str, list[str]]:
+    return {
+        "concepts": [c["id"] for c in concepts],
+        "exercises": [e["id"] for e in exercises],
+        "errors": [error["id"] for c in concepts for error in c["errors"]],
+    }
+
+
+def locked_ids() -> dict[str, list[str]]:
+    return json.loads(LOCK.read_text("utf-8")) if LOCK.exists() else {}
+
+
+def merged_lock(locked: dict, now: dict) -> dict:
+    """El registro solo crece: lo nuevo se añade al final y lo registrado no se toca."""
+    result = {kind: list(values) for kind, values in locked.items()}
+    for kind, values in now.items():
+        known = result.setdefault(kind, [])
+        known.extend(v for v in values if v not in known)
+    return result
+
+
+def check_lock(now: dict, problems: Problems) -> None:
+    for kind, ids in locked_ids().items():
+        lost = [i for i in ids if i not in now.get(kind, [])]
+        if lost:
+            problems.add(f"ids.lock.json ({kind})", f"ya no existen (hace falta migración): {lost}")
+
+
+def knowledge_model(exercises: list[dict], problems: Problems) -> list[dict]:
+    """Añade a cada concepto su módulo, RA, CE, dificultad e importancia (F1.4).
+
+    - `ce` sale de CURRICULUM_CE y se comprueba contra el catálogo oficial (daw-cyl.json).
+    - `module` y `ra` se derivan de los CE; `difficulty` es el nivel medio de sus ejercicios (1-3);
+      `importance` es la importancia para DAW que ya tenía (`daw`, 1-3), con nombre explícito.
+    """
+    catalog = json.loads((DATA / "curriculum" / "daw-cyl.json").read_text("utf-8"))
+    criteria = {
+        ce["id"]
+        for module in catalog["modules"]
+        for ra in module.get("learningOutcomes", [])
+        for ce in ra["criteria"]
+    }
+    ids = {c["id"] for c in CONCEPTS}
+    for cid in sorted(set(CURRICULUM_CE) ^ ids):
+        problems.add(f"concepto {cid}", "falta o sobra en CURRICULUM_CE")
+    enriched = []
+    for concept in CONCEPTS:
+        ce = CURRICULUM_CE.get(concept["id"], [])
+        for unknown in [c for c in ce if c not in criteria]:
+            problems.add(f"concepto {concept['id']}", f"CE inexistente en daw-cyl.json: {unknown}")
+        levels = [e["level"] for e in exercises if e["concept"] == concept["id"]]
+        outcomes = sorted({c.rsplit("-", 1)[0] for c in ce}, key=lambda r: int(r.split("RA")[1]))
+        enriched.append(
+            {
+                **concept,
+                "module": sorted({c.split("-")[0] for c in ce})[0] if ce else None,
+                "ra": outcomes,
+                "ce": ce,
+                "difficulty": round(sum(levels) / len(levels), 1) if levels else 1,
+                "importance": concept["daw"],
+            }
+        )
+    return enriched
+
+
 def build() -> dict:
     problems = Problems()
     errors = check_concepts(problems)
@@ -268,6 +336,8 @@ def build() -> dict:
     for concept in concepts:
         if not any(e["concept"] == concept for e in E):
             problems.add(f"concepto {concept}", "sin ejercicios")
+    check_lock(current_ids(CONCEPTS, E), problems)
+    concepts_out = knowledge_model(E, problems)
     if problems:
         print("\n".join(problems), file=sys.stderr)
         sys.exit(1)
@@ -277,7 +347,7 @@ def build() -> dict:
         "areas": AREAS,
         "path": PATH,
         "daw": DAW_COMPETENCIES,
-        "concepts": CONCEPTS,
+        "concepts": concepts_out,
         "exercises": exercises,
     }
 
@@ -292,12 +362,22 @@ def main() -> None:
                 file=sys.stderr,
             )
             sys.exit(1)
+        locked = locked_ids()
+        if merged_lock(locked, current_ids(data["concepts"], data["exercises"])) != locked:
+            print(
+                "Hay ids nuevos sin registrar en ids.lock.json: "
+                "ejecuta python scripts/learning/build_learning.py",
+                file=sys.stderr,
+            )
+            sys.exit(1)
         print(
             f"learning.json al día: {len(data['concepts'])} conceptos, "
             f"{len(data['exercises'])} ejercicios comprobados"
         )
         return
     OUT.write_text(text, "utf-8", newline="\n")  # LF también en Windows
+    lock = merged_lock(locked_ids(), current_ids(data["concepts"], data["exercises"]))
+    LOCK.write_text(json.dumps(lock, ensure_ascii=False, indent=1) + "\n", "utf-8", newline="\n")
     print(
         f"Escrito {OUT.relative_to(ROOT)}: {len(data['concepts'])} conceptos, "
         f"{len(data['exercises'])} ejercicios"

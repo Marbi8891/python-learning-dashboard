@@ -150,6 +150,11 @@ test.describe("PWA", () => {
     await page.reload();
     await expect(page.locator("#learn-title")).toHaveText("¿Qué estudio ahora?"); // con su contenido (learning.json) en caché
     await expect(page.locator(".lx-plan__item").first()).toBeVisible();
+    // AUD-008: una página que no se había abierto también funciona, porque se guardó al instalarse
+    await page.goto("/#/pcap");
+    await page.reload();
+    await expect(page.locator("#pcap-title")).toContainText("Prepara el examen PCAP");
+    await expect(page.locator(".block-row")).toHaveCount(5); // con su banco (pcap.json) guardado al instalarse
     await context.setOffline(false);
   });
 });

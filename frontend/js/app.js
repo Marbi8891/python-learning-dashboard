@@ -5,6 +5,7 @@
 import hljs from "../vendor/highlight/core.min.js";
 import python from "../vendor/highlight/python.min.js";
 import { apiEnabled } from "./api.js";
+import { keepTyped } from "./form-errors.js";
 import { initI18n } from "./i18n.js";
 import { initAccount, openAccount, openPasswordReset, takeFlash } from "./account.js";
 import { initAssistant, setAssistantLesson } from "./assistant.js";
@@ -43,6 +44,7 @@ import { initPcapSync } from "./pcap-sync.js";
 import { isLearnRoute, learnNavKey, openLearn } from "./learn/learn-app.js";
 import { LANDING_ROUTE, closeLanding, isLandingRoute, openLanding } from "./landing.js";
 import { initLearnSync } from "./learn/learn-store.js";
+import { initPlannerSync } from "./learn/planner-store.js";
 import { initPrefs } from "./prefs.js";
 import { badgesHtml, renderProfile } from "./profile.js";
 import { dashboardTitle, initDashboard, renderDashboard } from "./dashboard.js";
@@ -392,7 +394,9 @@ function refreshProgressViews() {
   const container = $(view.element);
   // Al llegar el progreso de la cuenta se repinta en segundo plano: el foco no se puede perder
   const focused = focusSelector(container);
+  const restoreTyped = keepTyped(container); // ni lo que se estaba escribiendo en un formulario
   container.innerHTML = view.render();
+  restoreTyped(container);
   if (focused) container.querySelector(focused)?.focus();
 }
 
@@ -865,6 +869,7 @@ async function init() {
   });
   initCourseSync(refreshDaw);
   initLearnSync();
+  initPlannerSync();
   const flash = takeFlash(); // aviso tras cerrar sesión o borrar la cuenta
   if (flash) showToast(flash);
   restoreSession();

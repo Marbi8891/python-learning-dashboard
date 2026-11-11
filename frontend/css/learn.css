@@ -313,6 +313,7 @@ body[data-zone="core"] .path {
 }
 
 .lx-status[data-status="progreso"],
+.lx-status[data-status="insuficiente"],
 .lx-status[data-status="aprendiendo"] {
   border-color: var(--color-primary);
   color: var(--color-link);
@@ -1395,4 +1396,45 @@ body[data-zone="core"] .assistant {
   .lx-map__n {
     transition: background-color 150ms ease, border-color 150ms ease;
   }
+}
+
+/* Planificador diario (F1.8): decidir sobre cada tarea y exámenes/entregas */
+.btn--sm {
+  min-height: 32px;
+  padding: 4px 10px;
+  font-size: 13px;
+}
+
+.lx-task {
+  margin-top: var(--space-2);
+}
+
+.lx-why {
+  margin-top: var(--space-1);
+  font-size: 13px;
+}
+
+.lx-exam-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  align-items: flex-end;
+  margin-top: var(--space-3);
+}
+
+.lx-exam-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 14px;
+}
+
+.lx-exam-form input,
+.lx-exam-form select {
+  min-height: 36px;
+  max-width: 100%;
+}
+
+.lx-row[data-task] {
+  gap: var(--space-2);
 }

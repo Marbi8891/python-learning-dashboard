@@ -8,6 +8,7 @@
 
 import { locale } from "./i18n.js";
 import { exportMyData, logout } from "./account.js";
+import { keepTyped } from "./form-errors.js";
 import { loadCurriculum } from "./curriculum.js";
 import { request } from "./api.js";
 import {
@@ -26,6 +27,7 @@ import {
 } from "./dashboard-data.js";
 import { BADGES, game, levelInfo, streak } from "./game.js";
 import { dailyBudget } from "./learn/learn-app.js";
+import { planOptions } from "./learn/planner-store.js";
 import { learning, loadLearningContent } from "./learn/learn-store.js";
 import { activeErrors, allStats, lastActivity } from "./learn/mastery.js";
 import { fitPlanToBudget, todayPlan } from "./learn/recommend.js";
@@ -139,8 +141,23 @@ function paint() {
   const body = $("#dash-body");
   if (!body || !state.user || !location.hash.startsWith(PANEL_ROUTE)) return;
   const section = sectionFromRoute(location.hash);
+  // Los datos de la cuenta llegan en segundo plano: si el foco estaba en un control de la sección
+  // (p. ej. la fecha del examen recién guardada), se devuelve al mismo control (EVO-16, WCAG 2.4.3)
+  const keep = activeSelector(body);
+  const restoreTyped = keepTyped(body); // ni lo que se estaba escribiendo
   body.innerHTML = bodyHtml(section);
+  restoreTyped(body);
   afterPaint(section);
+  if (keep) body.querySelector(keep)?.focus({ preventScroll: true });
+}
+
+/** Selector del control con el foco dentro de `container` (por id o por su primer atributo data-). */
+function activeSelector(container) {
+  const active = document.activeElement;
+  if (!active || active === document.body || !container.contains(active)) return null;
+  if (active.id) return `#${CSS.escape(active.id)}`;
+  const data = [...active.attributes].find((a) => a.name.startsWith("data-"));
+  return data ? `${active.tagName.toLowerCase()}[${data.name}="${CSS.escape(data.value)}"]` : null;
 }
 
 /* ---------- Piezas comunes ---------- */
@@ -318,7 +335,7 @@ function continueHtml(courses) {
   candidates.push(...courses.filter((c) => c.lastDate).map((c) => ({ at: c.lastDate, label: c.title, href: c.continueHref })));
   const last = latestActivity(candidates);
 
-  const plan = index ? todayPlan(index, learning) : [];
+  const plan = index ? todayPlan(index, learning, new Date(), undefined, planOptions()) : [];
   const step = plan[0];
   const nextLesson = srv?.lessons.next_lesson;
 
@@ -526,7 +543,7 @@ function progressHtml() {
               ? `<ul class="module-progress-list">${weak
                   .map(
                     (x) => `<li class="module-progress"><a class="module-progress__name" href="#/teoria/${encodeURIComponent(x.id)}">${escapeHtml(conceptTitle(x.id))}</a>
-                      <span class="module-progress__count">${Math.round(x.score * 100)} %</span>${meter(Math.round(x.score * 100), `Dominio de ${conceptTitle(x.id)}`)}</li>`,
+                      <span class="module-progress__count">${x.enough ? `${Math.round(x.score * 100)} %` : "Pocas evidencias"}</span>${x.enough ? meter(Math.round(x.score * 100), `Dominio de ${conceptTitle(x.id)}`) : ""}</li>`,
                   )
                   .join("")}</ul>`
               : `<p class="empty-state">Nada pendiente de reforzar entre los conceptos que has empezado.</p>`
@@ -627,7 +644,7 @@ function planningHtml() {
   let today = `<p class="account-card__meta">${indexFailed ? "No se pudo cargar el plan de hoy." : "Calculando tu plan de hoy…"}</p>`;
   if (index) {
     const s = allStats(index, learning);
-    const budget = fitPlanToBudget(todayPlan(index, learning, new Date(), s), dailyBudget());
+    const budget = fitPlanToBudget(todayPlan(index, learning, new Date(), s, planOptions()), dailyBudget());
     const due = [...s.values()].filter((x) => x.due).length;
     today = budget.items.length
       ? `<ol class="activity-list dash-plan">${budget.items

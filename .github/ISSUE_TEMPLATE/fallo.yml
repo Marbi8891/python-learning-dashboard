@@ -1,0 +1,46 @@
+name: Informar de un fallo
+description: Algo de la web o de la API no funciona como debería.
+title: "[Fallo] "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: que-pasa
+    attributes:
+      label: Qué pasa
+      description: Lo que ves y lo que esperabas ver.
+    validations:
+      required: true
+  - type: textarea
+    id: pasos
+    attributes:
+      label: Pasos para reproducirlo
+      placeholder: |
+        1. Abre #/aprender
+        2. Pulsa en …
+        3. Aparece …
+    validations:
+      required: true
+  - type: input
+    id: ruta
+    attributes:
+      label: Página
+      description: La ruta donde pasa, por ejemplo `#/pcap` o `#/leccion/variables`.
+  - type: input
+    id: entorno
+    attributes:
+      label: Navegador y dispositivo
+      placeholder: Chrome 140 en Windows 11, Safari en iPhone…
+    validations:
+      required: true
+  - type: dropdown
+    id: cuenta
+    attributes:
+      label: ¿Con sesión iniciada?
+      options:
+        - "No"
+        - "Sí"
+  - type: textarea
+    id: extra
+    attributes:
+      label: Capturas o errores de la consola
+      description: No pegues contraseñas, tokens ni datos personales.

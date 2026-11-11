@@ -113,18 +113,33 @@ export function buildExam(index, state, { scope = "studied", size = 12, random =
   return chosen.slice(0, size).sort((a, b) => a.level - b.level || (a.kind === "code") - (b.kind === "code"));
 }
 
+/** Tipos de ejercicio en los que se escribe la respuesta: no se aciertan al azar. */
+const TYPED = new Set(["output", "fill"]);
+
 /**
- * Prueba de nivel: un ejercicio corto de cada concepto de la ruta (salvo los de «Más adelante»),
- * de aplicación si lo hay, sin problemas de escribir código para que sea rápida (≈ 15 min).
+ * Prueba de nivel: por cada concepto de la ruta (salvo los de «Más adelante»), sin problemas de
+ * escribir código para que sea rápida (≈ 15-20 min), de aplicación si lo hay:
+ * - un ejercicio de respuesta escrita (`output`, `fill`) si el concepto lo tiene;
+ * - si no, dos ejercicios distintos de opción múltiple o de encontrar el error, porque uno solo se
+ *   acierta al azar una de cada cuatro veces (AUD-002). El concepto se supera acertando todos.
  */
 export function buildDiagnostic(index, { random = Math.random } = {}) {
+  const pick = (pool) => pool.splice(Math.floor(random() * pool.length), 1)[0];
+  const preferApplied = (list) => {
+    const applied = list.filter((e) => e.level >= 2);
+    return applied.length ? applied : list;
+  };
   return index.path
     .filter((id) => index.concepts.get(id).area !== "avanzado")
-    .map((id) => {
+    .flatMap((id) => {
       const quick = index.byConcept.get(id).filter((e) => e.kind !== "code" && e.kind !== "order");
-      const applied = quick.filter((e) => e.level >= 2);
-      const pool = applied.length ? applied : quick;
-      return pool[Math.floor(random() * pool.length)];
+      const typed = quick.filter((e) => TYPED.has(e.kind));
+      if (typed.length) return [pick([...preferApplied(typed)])];
+      const pool = [...preferApplied(quick)];
+      const chosen = [pick(pool)];
+      const rest = pool.length ? pool : quick.filter((e) => e !== chosen[0]);
+      if (rest.length) chosen.push(pick([...rest]));
+      return chosen;
     })
     .filter(Boolean);
 }

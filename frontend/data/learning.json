@@ -159,7 +159,16 @@
    "related": [
     "pseudocodigo",
     "trazado"
-   ]
+   ],
+   "module": "0485",
+   "ra": [
+    "0485-RA1"
+   ],
+   "ce": [
+    "0485-RA1-a"
+   ],
+   "difficulty": 1.0,
+   "importance": 3
   },
   {
    "id": "variables",
@@ -221,7 +230,18 @@
    "related": [
     "tipos",
     "trazado"
-   ]
+   ],
+   "module": "0485",
+   "ra": [
+    "0485-RA1"
+   ],
+   "ce": [
+    "0485-RA1-d",
+    "0485-RA1-e",
+    "0485-RA1-f"
+   ],
+   "difficulty": 1.3,
+   "importance": 3
   },
   {
    "id": "tipos",
@@ -285,7 +305,17 @@
    "related": [
     "operadores",
     "entrada-salida"
-   ]
+   ],
+   "module": "0485",
+   "ra": [
+    "0485-RA1"
+   ],
+   "ce": [
+    "0485-RA1-d",
+    "0485-RA1-h"
+   ],
+   "difficulty": 1.2,
+   "importance": 3
   },
   {
    "id": "operadores",
@@ -356,7 +386,16 @@
    "related": [
     "condicionales",
     "tipos"
-   ]
+   ],
+   "module": "0485",
+   "ra": [
+    "0485-RA1"
+   ],
+   "ce": [
+    "0485-RA1-g"
+   ],
+   "difficulty": 1.3,
+   "importance": 3
   },
   {
    "id": "entrada-salida",
@@ -421,7 +460,17 @@
    "related": [
     "tipos",
     "validacion"
-   ]
+   ],
+   "module": "0485",
+   "ra": [
+    "0485-RA5"
+   ],
+   "ce": [
+    "0485-RA5-a",
+    "0485-RA5-b"
+   ],
+   "difficulty": 1.5,
+   "importance": 3
   },
   {
    "id": "condicionales",
@@ -492,7 +541,17 @@
    "related": [
     "operadores",
     "bucles"
-   ]
+   ],
+   "module": "0485",
+   "ra": [
+    "0485-RA3"
+   ],
+   "ce": [
+    "0485-RA3-a",
+    "0485-RA3-e"
+   ],
+   "difficulty": 1.4,
+   "importance": 3
   },
   {
    "id": "bucles",
@@ -564,7 +623,17 @@
     "acumuladores",
     "recorridos",
     "trazado"
-   ]
+   ],
+   "module": "0485",
+   "ra": [
+    "0485-RA3"
+   ],
+   "ce": [
+    "0485-RA3-b",
+    "0485-RA3-c"
+   ],
+   "difficulty": 1.8,
+   "importance": 3
   },
   {
    "id": "acumuladores",
@@ -640,7 +709,17 @@
    "related": [
     "bucles",
     "recorridos"
-   ]
+   ],
+   "module": "0485",
+   "ra": [
+    "0485-RA3"
+   ],
+   "ce": [
+    "0485-RA3-b",
+    "0485-RA3-e"
+   ],
+   "difficulty": 1.8,
+   "importance": 3
   },
   {
    "id": "validacion",
@@ -704,7 +783,19 @@
    "related": [
     "excepciones",
     "bucles"
-   ]
+   ],
+   "module": "0485",
+   "ra": [
+    "0485-RA3",
+    "0485-RA5"
+   ],
+   "ce": [
+    "0485-RA3-b",
+    "0485-RA3-d",
+    "0485-RA5-a"
+   ],
+   "difficulty": 2.0,
+   "importance": 3
   },
   {
    "id": "funciones",
@@ -775,7 +866,19 @@
    "related": [
     "modulos",
     "depuracion"
-   ]
+   ],
+   "module": "0485",
+   "ra": [
+    "0485-RA2",
+    "0485-RA3"
+   ],
+   "ce": [
+    "0485-RA2-b",
+    "0485-RA2-f",
+    "0485-RA3-e"
+   ],
+   "difficulty": 2.0,
+   "importance": 3
   },
   {
    "id": "strings",
@@ -840,7 +943,16 @@
    "related": [
     "listas",
     "recorridos"
-   ]
+   ],
+   "module": "0485",
+   "ra": [
+    "0485-RA2"
+   ],
+   "ce": [
+    "0485-RA2-d"
+   ],
+   "difficulty": 1.4,
+   "importance": 3
   },
   {
    "id": "listas",
@@ -909,7 +1021,18 @@
     "recorridos",
     "tuplas-conjuntos",
     "diccionarios"
-   ]
+   ],
+   "module": "0485",
+   "ra": [
+    "0485-RA6"
+   ],
+   "ce": [
+    "0485-RA6-a",
+    "0485-RA6-c",
+    "0485-RA6-d"
+   ],
+   "difficulty": 1.5,
+   "importance": 3
   },
   {
    "id": "tuplas-conjuntos",
@@ -974,7 +1097,16 @@
    "related": [
     "listas",
     "diccionarios"
-   ]
+   ],
+   "module": "0485",
+   "ra": [
+    "0485-RA6"
+   ],
+   "ce": [
+    "0485-RA6-e"
+   ],
+   "difficulty": 1.3,
+   "importance": 2
   },
   {
    "id": "diccionarios",
@@ -1039,7 +1171,16 @@
    "related": [
     "listas",
     "recorridos"
-   ]
+   ],
+   "module": "0485",
+   "ra": [
+    "0485-RA6"
+   ],
+   "ce": [
+    "0485-RA6-e"
+   ],
+   "difficulty": 1.6,
+   "importance": 3
   },
   {
    "id": "recorridos",
@@ -1110,7 +1251,17 @@
     "listas",
     "acumuladores",
     "trazado"
-   ]
+   ],
+   "module": "0485",
+   "ra": [
+    "0485-RA6"
+   ],
+   "ce": [
+    "0485-RA6-d",
+    "0485-RA6-j"
+   ],
+   "difficulty": 2.2,
+   "importance": 3
   },
   {
    "id": "excepciones",
@@ -1171,7 +1322,17 @@
     "validacion",
     "archivos",
     "depuracion"
-   ]
+   ],
+   "module": "0485",
+   "ra": [
+    "0485-RA3"
+   ],
+   "ce": [
+    "0485-RA3-d",
+    "0485-RA3-h"
+   ],
+   "difficulty": 1.2,
+   "importance": 3
   },
   {
    "id": "modulos",
@@ -1223,7 +1384,16 @@
    ],
    "related": [
     "funciones"
-   ]
+   ],
+   "module": "0485",
+   "ra": [
+    "0485-RA2"
+   ],
+   "ce": [
+    "0485-RA2-g"
+   ],
+   "difficulty": 1.3,
+   "importance": 2
   },
   {
    "id": "archivos",
@@ -1288,7 +1458,17 @@
    "related": [
     "excepciones",
     "strings"
-   ]
+   ],
+   "module": "0485",
+   "ra": [
+    "0485-RA5"
+   ],
+   "ce": [
+    "0485-RA5-d",
+    "0485-RA5-e"
+   ],
+   "difficulty": 1.7,
+   "importance": 2
   },
   {
    "id": "pseudocodigo",
@@ -1352,7 +1532,16 @@
    "related": [
     "algoritmos",
     "trazado"
-   ]
+   ],
+   "module": "0485",
+   "ra": [
+    "0485-RA1"
+   ],
+   "ce": [
+    "0485-RA1-a"
+   ],
+   "difficulty": 1.7,
+   "importance": 3
   },
   {
    "id": "trazado",
@@ -1414,7 +1603,16 @@
    "related": [
     "bucles",
     "depuracion"
-   ]
+   ],
+   "module": "0485",
+   "ra": [
+    "0485-RA3"
+   ],
+   "ce": [
+    "0485-RA3-f"
+   ],
+   "difficulty": 2.5,
+   "importance": 3
   },
   {
    "id": "depuracion",
@@ -1479,7 +1677,17 @@
    "related": [
     "trazado",
     "excepciones"
-   ]
+   ],
+   "module": "0485",
+   "ra": [
+    "0485-RA3"
+   ],
+   "ce": [
+    "0485-RA3-f",
+    "0485-RA3-i"
+   ],
+   "difficulty": 1.7,
+   "importance": 3
   },
   {
    "id": "poo",
@@ -1537,7 +1745,22 @@
    "related": [
     "funciones",
     "diccionarios"
-   ]
+   ],
+   "module": "0485",
+   "ra": [
+    "0485-RA2",
+    "0485-RA4"
+   ],
+   "ce": [
+    "0485-RA2-a",
+    "0485-RA4-a",
+    "0485-RA4-b",
+    "0485-RA4-c",
+    "0485-RA4-d",
+    "0485-RA4-e"
+   ],
+   "difficulty": 2.0,
+   "importance": 2
   }
  ],
  "exercises": [

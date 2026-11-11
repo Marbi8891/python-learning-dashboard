@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Vulnerabilidad de seguridad
+    url: https://github.com/Marbi8891/python-learning-dashboard/security/advisories/new
+    about: Avisa en privado. No abras un issue público (ver SECURITY.md).

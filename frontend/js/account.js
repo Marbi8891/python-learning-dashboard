@@ -1,13 +1,14 @@
 /* Diálogo de cuenta: login, registro, recuperación, perfil, exportación y borrado. */
 
 import { errorFields, markInvalid } from "./form-errors.js";
-import { ApiError, apiEnabled, request, serverInfo } from "./api.js";
+import { ApiError, apiEnabled, getToken, request, serverInfo } from "./api.js";
 import { escapeHtml } from "./markdown.js";
 import { renderGoogleButton } from "./google-identity.js";
 import { flushCourseSync } from "./course-store.js";
 import { flushGameSync } from "./game.js";
 import { flushPcapSync } from "./pcap-sync.js";
 import { flushLearnSync } from "./learn/learn-store.js";
+import { flushPlannerSync } from "./learn/planner-store.js";
 import { clearLocalData, endSession, flushLessonsSync, startSession, state, subscribe } from "./store.js";
 import { failedStores, onSyncStateChange, unsavedStores } from "./sync-status.js";
 
@@ -70,12 +71,24 @@ async function submitting(form, action, { fieldsFor = () => [] } = {}) {
   markInvalid(form, invalid, MESSAGE_ID); // después de reactivar el botón, para poder llevar el foco al campo
 }
 
+const LOGOUT_FAILED = "No se pudo cerrar la sesión: no hay conexión con el servidor. Inténtalo de nuevo en unos segundos.";
+
 /** Cierra la sesión y borra de este navegador los datos personales (equipos compartidos).
     Con `keep`, el alumno ha elegido conservar en este navegador lo que no se pudo subir (SYNC-01).
     Se recarga la página para que tampoco quede nada en memoria; el aviso se muestra al volver. */
-async function leave(message, { keep = false } = {}) {
-  // La cookie de sesión es HttpOnly: solo la API puede borrarla
-  await request("POST", "/api/auth/logout", { auth: false }).catch(() => {});
+async function leave(message, { keep = false, accountGone = false } = {}) {
+  // La cookie de sesión es HttpOnly: solo la API puede borrarla. Si no se pudo, recargar la
+  // devolvería: la sesión sigue abierta y se avisa (con el token en memoria basta con recargar;
+  // con la cuenta ya borrada, la cookie no vale para nada).
+  const closed = await request("POST", "/api/auth/logout", { auth: false }).then(
+    () => true,
+    () => accountGone || Boolean(getToken()),
+  );
+  if (!closed) {
+    setMessage(LOGOUT_FAILED);
+    showToast(LOGOUT_FAILED);
+    return false;
+  }
   endSession();
   if (!keep) clearLocalData();
   const after = keep
@@ -87,6 +100,7 @@ async function leave(message, { keep = false } = {}) {
     // sin almacenamiento: se recarga igualmente
   }
   location.reload();
+  return true;
 }
 
 /** Aviso pendiente de la página anterior (tras cerrar sesión o borrar la cuenta). */
@@ -179,7 +193,7 @@ function showGoogleButton(target, action) {
 async function deleteWithGoogle(credential) {
   if (!state.user || !dialog().querySelector("[data-view=profile] .account__danger").open) return; // solo desde su botón
   await request("POST", "/api/users/me/delete", { json: { google_credential: credential } });
-  await leave("Tu cuenta y todos sus datos se han borrado.");
+  await leave("Tu cuenta y todos sus datos se han borrado.", { accountGone: true });
 }
 
 function downloadJson(data, filename) {
@@ -233,6 +247,7 @@ async function flushAll() {
     flushPcapSync(),
     flushCourseSync(),
     flushLearnSync(),
+    flushPlannerSync(),
     flushGameSync(),
   ]);
   return results.every(Boolean) && unsavedStores().length === 0;
@@ -240,7 +255,7 @@ async function flushAll() {
 
 async function finishLogout({ keep = false } = {}) {
   if (leavingEverywhere) await request("POST", "/api/auth/logout-all").catch(() => {});
-  await leave(leavingEverywhere ? "Sesión cerrada en todos tus dispositivos." : "Sesión cerrada.", { keep });
+  return leave(leavingEverywhere ? "Sesión cerrada en todos tus dispositivos." : "Sesión cerrada.", { keep });
 }
 
 /** Cierra la sesión (desde el diálogo de la cuenta o desde el panel del alumno).
@@ -248,10 +263,7 @@ async function finishLogout({ keep = false } = {}) {
     se explica qué falta y el alumno elige (SYNC-01). Devuelve false si la sesión sigue abierta. */
 export async function logout({ everywhere = false } = {}) {
   leavingEverywhere = everywhere;
-  if (await flushAll()) {
-    await finishLogout();
-    return true;
-  }
+  if (await flushAll()) return finishLogout();
   showUnsaved();
   return false;
 }
@@ -373,7 +385,7 @@ export function initAccount({ toast }) {
     setMessage("Guardando en tu cuenta…", "info");
     try {
       if (await flushAll()) {
-        await finishLogout();
+        await finishLogout(); // si no se pudo cerrar, leave() ya lo ha explicado
         return;
       }
       $("#unsaved-list").textContent = listText(unsavedStores());
@@ -399,7 +411,7 @@ export function initAccount({ toast }) {
     event.preventDefault();
     submitting(event.target, async (data) => {
       await request("POST", "/api/users/me/delete", { json: { password: data.get("password") } });
-      await leave("Tu cuenta y todos sus datos se han borrado.");
+      await leave("Tu cuenta y todos sus datos se han borrado.", { accountGone: true });
     });
   });
 }

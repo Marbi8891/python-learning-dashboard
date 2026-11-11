@@ -1,0 +1,24 @@
+name: Error en el temario
+description: Una explicación, pregunta o respuesta del temario está mal o se entiende mal.
+title: "[Temario] "
+labels: ["contenido"]
+body:
+  - type: input
+    id: donde
+    attributes:
+      label: Dónde está
+      description: Curso, lección y pregunta, o la ruta de la página.
+      placeholder: "PCAP › Lección 12 › pregunta 3"
+    validations:
+      required: true
+  - type: textarea
+    id: error
+    attributes:
+      label: Qué está mal
+    validations:
+      required: true
+  - type: textarea
+    id: correccion
+    attributes:
+      label: Cómo debería ser
+      description: Si puedes, con la fuente (documentación oficial, currículo, etc.).

@@ -52,7 +52,10 @@ export const isExpired = (session, now = new Date()) => secondsLeft(session, now
 export function submit(session, index, state, result, now = new Date()) {
   const item = currentItem(session);
   const exercise = index.exercises.get(item.id);
-  recordAttempt(state, exercise, result, { now, retry: item.retry });
+  // En la prueba de nivel, un fallo no cuenta como «empezado»: el concepto sigue siendo nuevo y la
+  // ruta lo enseña desde el principio (AUD-002). El error sí queda registrado.
+  const notEvidence = item.retry || (session.kind === "diagnostic" && !result.ok);
+  recordAttempt(state, exercise, result, { now, retry: notEvidence });
   session.results.push({ id: item.id, concept: exercise.concept, ok: Boolean(result.ok), error: result.error ?? null, retry: item.retry });
   if (!result.ok && session.feedback && session.retries < MAX_RETRIES && !item.retryOf) {
     const queued = session.queue.map((q) => q.id);
@@ -116,6 +119,8 @@ export function summarize(session, index) {
 export function finish(session, index, state, now = new Date()) {
   const summary = summarize(session, index);
   for (const [concept, [ok, total]] of Object.entries(summary.byConcept)) {
+    // Prueba de nivel sin ningún acierto: el concepto es nuevo, no hay nada que repasar
+    if (session.kind === "diagnostic" && ok === 0) continue;
     reviewConcept(state, concept, ok / total, now);
     if (session.kind === "diagnostic" && ok === total) markPlaced(state, concept, now);
   }

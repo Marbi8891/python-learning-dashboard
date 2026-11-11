@@ -13,7 +13,7 @@ import { certificateStatus, courseCertificateStatus } from "./certificate.js";
 import { courseBlockStats, courseReadiness, courseState, DAW_COURSES, loadCourseBank, saveCourse } from "./course-store.js";
 import { BADGES, game, levelInfo, streak } from "./game.js";
 import { escapeHtml } from "./markdown.js";
-import { blockStats, examsPassed, isoDay, pcap, questionsMastered, readiness, savePcap } from "./pcap-store.js";
+import { blockStats, enoughEvidence, examsPassed, isoDay, pcap, questionsMastered, readiness, savePcap } from "./pcap-store.js";
 import { badgesHtml } from "./profile.js";
 import { updateUser } from "./store.js";
 
@@ -159,6 +159,7 @@ export async function fillCourse(c) {
   const blocks = bank.exam.blocks;
   const stats = c.id === "pcap" ? blockStats(bank.questions, blocks) : courseBlockStats(c.id, bank);
   const score = c.id === "pcap" ? readiness(stats, blocks) : courseReadiness(stats, blocks);
+  const enough = enoughEvidence(stats);
   const tried = blocks.filter((b) => stats[b.slug].answered > 0).sort((a, b) => stats[a.slug].rate - stats[b.slug].rate);
   const weak = tried[0];
   const untried = blocks.find((b) => stats[b.slug].answered === 0);
@@ -172,10 +173,14 @@ export async function fillCourse(c) {
   const detail = document.querySelector(`[data-course-card="${c.id}"] [data-course-detail]`);
   if (!detail) return;
   detail.innerHTML = `
-    <div class="meter" role="progressbar" aria-label="Dominio de ${escapeHtml(c.title)}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${score}">
+    ${
+      enough
+        ? `<div class="meter" role="progressbar" aria-label="Dominio de ${escapeHtml(c.title)}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${score}">
       <span class="meter__fill" style="--value: ${score}%"></span>
-    </div>
-    <p class="account-card__meta">Dominio: <strong>${score} %</strong> · ${tip}</p>`;
+    </div>`
+        : ""
+    }
+    <p class="account-card__meta">Dominio: <strong>${enough ? `${score} %` : "sin datos suficientes"}</strong> · ${tip}</p>`;
 }
 
 /* ---------- 3. Logros y certificados ---------- */

@@ -4,6 +4,7 @@
 import { pythonRunner } from "../console.js";
 import { codeResult, grade, missingAnswer } from "./answers.js";
 import { learning, saveLearning } from "./learn-store.js";
+import { planOptions } from "./planner-store.js";
 import { allStats, markRead } from "./mastery.js";
 import { exercisesForError, selectExercises, todayPlan } from "./recommend.js";
 import { advance, createSession, currentItem, finish, isExpired, secondsLeft, stop, submit } from "./session.js";
@@ -165,7 +166,7 @@ function summaryHtml() {
       </li>`,
     )
     .join("");
-  const next = todayPlan(index, learning)[0];
+  const next = todayPlan(index, learning, new Date(), undefined, planOptions())[0];
   const exam = session.kind === "exam";
   const total = exam ? session.queue.length : summary.total;
   const message =

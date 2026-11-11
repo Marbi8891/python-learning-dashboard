@@ -8,7 +8,10 @@ module.exports = defineConfig({
   timeout: 60_000,
   expect: { timeout: 10_000 },
   fullyParallel: true,
+  // En CI se reintenta una vez para guardar la traza del fallo, pero una prueba que solo pasa al
+  // reintentar («flaky») hace fallar el trabajo: los reintentos diagnostican, no esconden fallos
   retries: process.env.CI ? 1 : 0,
+  failOnFlakyTests: Boolean(process.env.CI),
   reporter: process.env.CI ? [["github"], ["html", { open: "never" }]] : "list",
   use: {
     baseURL: "http://localhost:5500",
@@ -16,7 +19,11 @@ module.exports = defineConfig({
     locale: "es-ES",
     trace: "retain-on-failure",
   },
-  projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
+  projects: [
+    { name: "chromium", use: { ...devices["Desktop Chrome"] } },
+    // Safari (EVO-13): solo con PW_WEBKIT=1, que es como lo lanza el trabajo «webkit» de CI
+    ...(process.env.PW_WEBKIT ? [{ name: "webkit", use: { ...devices["Desktop Safari"] } }] : []),
+  ],
   webServer: [
     {
       command: "python e2e/serve_frontend.py 5500",
