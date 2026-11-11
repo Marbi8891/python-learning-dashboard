@@ -16,23 +16,13 @@ Las correspondencias con el currículo (`curriculum`) son propuestas de la plata
 (`proposed`) hasta que una persona las valide; nunca se muestran como oficiales.
 """
 
+import poo_u1
+import poo_u3
 from exercises import bug as bug_exercise
 from exercises import case, choice, code, fill, output
+from poo_common import REVIEWED, SOURCE, proposed
 
-REVIEWED = "2026-11-11"
-SOURCE = "rd-405-2023#anexo-I"  # texto oficial ya extraído en frontend/data/curriculum/daw-cyl.json
-
-
-def proposed(ce: str, note: str) -> dict:
-    """Correspondencia propuesta por la plataforma: falta que la valide una persona."""
-    return {
-        "ce": ce,
-        "status": "proposed",
-        "source": SOURCE,
-        "reviewed": REVIEWED,
-        "by": "plataforma",
-        "note": note,
-    }
+__all__ = ["REVIEWED", "SOURCE", "proposed"]
 
 
 MODULE = {
@@ -73,6 +63,8 @@ UNIT_FIELDS = (
 )
 
 UNITS = {
+    "poo-fundamentos": poo_u1.UNIT,
+    "poo-atributos-metodos": poo_u3.UNIT,
     # ------------------------------------------------------------------ UNIDAD 2
     "poo": {
         "unit": {"module": "poo", "number": 2},
@@ -237,6 +229,8 @@ UNITS = {
 
 
 EXERCISES = [
+    *poo_u1.EXERCISES,
+    *poo_u3.EXERCISES,
     # ---------- Lección «Definir una clase y crear objetos»
     choice(
         "poo-04",
@@ -585,6 +579,8 @@ EXERCISES = [
 
 # Errores típicos nuevos de la Unidad 2 (se añaden a los del concepto `poo`)
 UNIT_ERRORS = {
+    "poo-fundamentos": poo_u1.ERRORS,
+    "poo-atributos-metodos": poo_u3.ERRORS,
     "poo": [
         (
             "init-mal-escrito",
@@ -609,5 +605,11 @@ UNIT_OVERRIDES = {
         "title": "Creación de clases y objetos",
         "area": "poo",
         "summary": "Definir clases, crear objetos con `__init__`, usar `self` y trabajar con el estado de varios objetos.",
+        # Desde el Sprint 2 la Unidad 2 se apoya en la Unidad 1 (que a su vez pide funciones y diccionarios)
+        "requires": ["poo-fundamentos"],
     },
 }
+
+# Conceptos nuevos de las unidades (concepts.py los coloca alrededor de `poo`, en el orden del módulo)
+CONCEPTS_BEFORE_POO = [poo_u1.CONCEPT]
+CONCEPTS_AFTER_POO = [poo_u3.CONCEPT]

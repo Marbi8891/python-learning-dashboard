@@ -31,6 +31,9 @@ test("índice del módulo: 10 unidades, las publicadas enlazadas y el progreso e
   await expect(page).toHaveTitle(/^Módulo de POO · /);
   await expect(page.locator(".lx-concepts > li")).toHaveCount(10);
   await expect(page.getByRole("link", { name: /^Unidad 2\. Creación de clases y objetos/ })).toHaveAttribute("href", "#/teoria/poo");
+  await expect(page.getByRole("link", { name: /^Unidad 1\. Fundamentos de la programación orientada a objetos/ })).toHaveAttribute("href", "#/teoria/poo-fundamentos");
+  await expect(page.getByRole("link", { name: /^Unidad 3\. Atributos y métodos/ })).toHaveAttribute("href", "#/teoria/poo-atributos-metodos");
+  await expect(page.locator('[data-available="false"]')).toHaveCount(7);
   await expect(page.locator('[data-available="false"]').first()).toContainText("En preparación");
   await expect(page.getByText("Completar lecciones no equivale a dominar")).toBeVisible();
   // En el menú se marca Teoría
@@ -52,6 +55,20 @@ test("la Unidad 2 sigue en #/teoria/poo con todos sus apartados y el currículo 
   await expect(page.locator("#lx-curriculum").locator("..")).not.toContainText("Validada");
   await audit(page);
 });
+
+for (const [id, number, title] of [
+  ["poo-fundamentos", 1, "Fundamentos de la programación orientada a objetos"],
+  ["poo-atributos-metodos", 3, "Atributos y métodos"],
+]) {
+  test(`la Unidad ${number} tiene sus apartados, su posición en el módulo y pasa axe`, async ({ page }) => {
+    await page.goto(`/#/teoria/${id}`);
+    await expect(page.locator("#learn-title")).toHaveText(title);
+    await expect(page.locator(".daw-crumb")).toContainText(`Unidad ${number} de 10`);
+    for (const name of SECTIONS) await expect(page.getByRole("heading", { level: 2, name })).toBeVisible();
+    await expect(page.locator("#lx-curriculum").locator("..")).toContainText("pendiente de validar");
+    await audit(page);
+  });
+}
 
 test("completar una lección se guarda, no cuenta como dominio y el mini-quiz abre una sesión de 3", async ({ page }) => {
   await page.goto("/#/teoria/poo");
@@ -98,7 +115,7 @@ test("el ejercicio guiado muestra el resultado esperado y se corrige con los tes
 test.describe("en el móvil", () => {
   test.use({ viewport: { width: 360, height: 740 } });
   test("la unidad y el índice caben sin desplazamiento horizontal", async ({ page }) => {
-    for (const route of ["/#/poo", "/#/teoria/poo"]) {
+    for (const route of ["/#/poo", "/#/teoria/poo", "/#/teoria/poo-fundamentos", "/#/teoria/poo-atributos-metodos"]) {
       await page.goto(route);
       await page.locator("#learn-title").waitFor();
       const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);

@@ -16,7 +16,7 @@ teoría, un ejemplo explicado línea a línea, cuándo usarlo y sus errores típ
 La salida de cada ejemplo no se escribe a mano: build_learning.py la obtiene ejecutándolo.
 """
 
-from poo_module import UNIT_ERRORS, UNIT_OVERRIDES, UNITS
+from poo_module import CONCEPTS_AFTER_POO, CONCEPTS_BEFORE_POO, UNIT_ERRORS, UNIT_OVERRIDES, UNITS
 
 AREAS = [
     {
@@ -65,7 +65,9 @@ PATH = [
     "excepciones",
     "modulos",
     "archivos",
+    "poo-fundamentos",
     "poo",
+    "poo-atributos-metodos",
 ]
 
 # Competencias de «Preparación DAW» (las que pidió el autor), en el orden en que se trabajan.
@@ -1393,6 +1395,10 @@ CURRICULUM_CE = {
 }
 
 # ---------- Módulo de POO (unidades con campos propios; ver poo_module.py) ----------
+# Las unidades nuevas se colocan alrededor de `poo` (Unidad 2), en el orden del módulo.
+_poo = next(i for i, c in enumerate(CONCEPTS) if c["id"] == "poo")
+CONCEPTS[_poo : _poo + 1] = [*CONCEPTS_BEFORE_POO, CONCEPTS[_poo], *CONCEPTS_AFTER_POO]
+
 for _concept in CONCEPTS:
     _concept.update(UNIT_OVERRIDES.get(_concept["id"], {}))
     _concept["errors"] += [err(_concept["id"], *e) for e in UNIT_ERRORS.get(_concept["id"], [])]

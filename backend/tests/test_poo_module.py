@@ -40,6 +40,18 @@ def test_index_has_ten_numbered_units_and_keeps_the_old_route():
         assert unit["available"] == (unit["id"] in CONCEPTS)
 
 
+def test_published_units_follow_the_module_order_in_the_path():
+    # Sprint 2: Unidades 1-3 publicadas, encadenadas por prerrequisitos y en orden en la ruta
+    published = [u["id"] for u in MODULE["units"] if u["available"]]
+    assert published[:3] == ["poo-fundamentos", "poo", "poo-atributos-metodos"]
+    path = DATA["path"]
+    assert [path.index(i) for i in published] == sorted(path.index(i) for i in published)
+    assert CONCEPTS["poo"]["requires"] == ["poo-fundamentos"]
+    assert CONCEPTS["poo-atributos-metodos"]["requires"] == ["poo"]
+    for number, uid in enumerate(published, start=1):
+        assert CONCEPTS[uid]["unit"] == {"module": "poo", "number": number}
+
+
 @pytest.mark.parametrize("unit", UNITS, ids=lambda u: u["id"])
 def test_unit_has_every_section(unit):
     assert unit["area"] == "poo"

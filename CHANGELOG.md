@@ -14,6 +14,9 @@ cambios se agrupan por fecha de merge, con el número de pull request entre par�
   resumen, criterios de superación y currículo (propuesto); la Unidad 2 (`#/teoria/poo`) ya tiene el
   formato nuevo; lecciones completadas en el progreso; validadores en `build_learning.py`
   (`docs/MODULO_POO.md`).
+- Módulo de POO, Sprint 2: Unidad 1 (fundamentos: procedural frente a objetos, modelado, pilares) y
+  Unidad 3 (atributos de clase, `@classmethod`, `@staticmethod` y métodos que protegen el estado),
+  con 27 ejercicios nuevos y 7 errores típicos; la Unidad 2 pasa a pedir la Unidad 1.
 - Monitor de CI: `ci-monitor.yml` diagnostica cada ejecución de CI y avisa con una incidencia
   `ci-monitor` (nuevo, recurrente, corregido, cancelado u obsoleto); `scripts/ci-monitor/` y
   `docs/CI_CD_MONITORING.md` (#103).

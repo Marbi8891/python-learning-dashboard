@@ -44,7 +44,9 @@
   "excepciones",
   "modulos",
   "archivos",
-  "poo"
+  "poo-fundamentos",
+  "poo",
+  "poo-atributos-metodos"
  ],
  "daw": [
   {
@@ -111,7 +113,7 @@
      "number": 1,
      "id": "poo-fundamentos",
      "title": "Fundamentos de la programación orientada a objetos",
-     "available": false
+     "available": true
     },
     {
      "number": 2,
@@ -123,7 +125,7 @@
      "number": 3,
      "id": "poo-atributos-metodos",
      "title": "Atributos y métodos",
-     "available": false
+     "available": true
     },
     {
      "number": 4,
@@ -1760,12 +1762,309 @@
    "importance": 3
   },
   {
-   "id": "poo",
-   "title": "Creación de clases y objetos",
+   "id": "poo-fundamentos",
+   "title": "Fundamentos de la programación orientada a objetos",
    "area": "poo",
    "requires": [
     "funciones",
     "diccionarios"
+   ],
+   "daw": 2,
+   "ut": "prog-ut4",
+   "lessons": [
+    "poo"
+   ],
+   "summary": "Qué es la programación orientada a objetos, en qué se diferencia de la procedural y cuándo conviene usarla.",
+   "when": "Antes de escribir tu primera clase: te ayuda a leer un enunciado y decidir qué serán clases, atributos y métodos, y cuándo basta con una función.",
+   "example": {
+    "code": "class Producto:\n    def __init__(self, nombre, precio):\n        self.nombre = nombre                # atributo: una característica\n        self.precio = precio\n\n    def con_descuento(self, porcentaje):    # método: una acción\n        return self.precio * (1 - porcentaje / 100)\n\n\nteclado = Producto(\"Teclado\", 40)          # dos instancias\nraton = Producto(\"Ratón\", 20)              # de la misma clase\nprint(teclado.nombre, teclado.con_descuento(25))\nprint(raton.nombre, raton.con_descuento(25))",
+    "lines": [
+     [
+      1,
+      "`Producto` es la clase: el molde que dice qué tiene y qué sabe hacer un producto."
+     ],
+     [
+      3,
+      "`nombre` y `precio` son atributos: los datos que guarda cada producto."
+     ],
+     [
+      6,
+      "`con_descuento` es un método: una acción que usa los datos del propio objeto."
+     ],
+     [
+      10,
+      "`teclado` y `raton` son objetos (instancias) distintos de la misma clase."
+     ],
+     [
+      12,
+      "Cada objeto responde con sus propios datos: 40 € y 20 € con un 25 % menos."
+     ]
+    ],
+    "output": "Teclado 30.0\nRatón 15.0\n"
+   },
+   "errors": [
+    {
+     "id": "poo-fundamentos.clase-instancia",
+     "label": "Confunde la clase (el molde) con sus objetos",
+     "why": "La clase describe un tipo de cosa; cada objeto es un ejemplar concreto con sus propios valores. Dos objetos de la misma clase son distintos.",
+     "think": "¿Hablo de «los coches» en general (clase) o de «este coche» en concreto (objeto)?",
+     "avoid": "Piensa en la clase como el plano y en los objetos como las casas construidas con él."
+    },
+    {
+     "id": "poo-fundamentos.poo-siempre",
+     "label": "Cree que la POO sustituye a todo o que siempre hay que usarla",
+     "why": "La POO organiza el código, pero los métodos se siguen escribiendo con funciones, condiciones y bucles, y para un cálculo suelto una función es más clara.",
+     "think": "¿Tengo entidades con datos y acciones propias, o solo un cálculo?",
+     "avoid": "Usa una clase cuando haya datos que viajen con sus acciones; si no, una función."
+    },
+    {
+     "id": "poo-fundamentos.atributo-metodo",
+     "label": "Confunde atributos (datos) con métodos (acciones)",
+     "why": "Un atributo es algo que el objeto tiene (se lee sin paréntesis); un método es algo que el objeto hace (se llama con paréntesis).",
+     "think": "¿Es una característica o una acción? ¿Lleva paréntesis?",
+     "avoid": "Sustantivos y adjetivos → atributos; verbos → métodos."
+    }
+   ],
+   "related": [
+    "funciones",
+    "diccionarios"
+   ],
+   "unit": {
+    "module": "poo",
+    "number": 1
+   },
+   "objectives": [
+    "Explicar qué es la programación orientada a objetos y en qué se diferencia de la procedural.",
+    "Distinguir una clase (el molde) de un objeto o instancia (cada ejemplar concreto).",
+    "Leer un enunciado y decidir qué serán clases, atributos y métodos.",
+    "Reconocer que los tipos de Python (`str`, `list`…) ya son clases con métodos.",
+    "Nombrar los cuatro pilares de la POO y decidir cuándo merece la pena usarla."
+   ],
+   "prior": "Funciones con parámetros y `return`, y diccionarios. No hace falta saber nada de clases: esta unidad empieza desde cero.",
+   "key": [
+    [
+     "Programación procedural",
+     "Organiza el programa en datos por un lado y funciones por otro, que reciben esos datos como parámetros."
+    ],
+    [
+     "Programación orientada a objetos (POO)",
+     "Organiza el programa en objetos que reúnen sus datos y las acciones que trabajan con ellos."
+    ],
+    [
+     "Clase",
+     "El molde o plantilla que describe qué datos y qué acciones tendrán sus objetos."
+    ],
+    [
+     "Objeto o instancia",
+     "Cada ejemplar concreto creado a partir de una clase, con sus propios valores."
+    ],
+    [
+     "Atributo",
+     "Una característica o dato del objeto: el nombre, el precio, la matrícula."
+    ],
+    [
+     "Método",
+     "Una acción que sabe hacer el objeto: una función que pertenece a la clase."
+    ],
+    [
+     "Abstracción",
+     "Quedarse solo con los datos y acciones que importan para el problema."
+    ],
+    [
+     "Encapsulación",
+     "Ocultar los detalles internos y dejar usar el objeto a través de sus métodos."
+    ],
+    [
+     "Herencia y polimorfismo",
+     "Crear clases a partir de otras y tratar igual a objetos distintos (Unidades 5 y 6)."
+    ]
+   ],
+   "sections": [
+    {
+     "id": "poo-fundamentos.procedural",
+     "title": "Del programa procedural a los objetos",
+     "theory": "Hasta ahora has programado de forma **procedural**: los datos van en variables, listas o diccionarios y las **funciones** van aparte y los reciben como parámetros. Funciona bien, pero cuando el programa crece nada impide pasar a una función un diccionario que no es el suyo, y los datos y lo que se puede hacer con ellos quedan separados.\n\nLa **programación orientada a objetos (POO)** junta las dos cosas: un **objeto** guarda sus datos (**atributos**) y sabe hacer acciones con ellos (**métodos**). En vez de `ingresar(cuenta, 50)` se escribe `cuenta.ingresar(50)`: se le pide a la cuenta que haga algo consigo misma.\n\n- La POO no sustituye a las funciones, las condiciones ni los bucles: los métodos se escriben con ellos.\n- No hace que el programa vaya más rápido: lo que mejora es la **organización** del código.",
+     "examples": [
+      {
+       "code": "# Procedural: los datos en un diccionario y las funciones aparte\ncuenta = {\"titular\": \"Ana\", \"saldo\": 100}\n\n\ndef ingresar(c, cantidad):\n    c[\"saldo\"] += cantidad\n\n\ningresar(cuenta, 50)\nprint(cuenta[\"saldo\"])\n\n\n# Orientado a objetos: los datos y sus acciones juntos\nclass Cuenta:\n    def __init__(self, titular, saldo):\n        self.titular = titular\n        self.saldo = saldo\n\n    def ingresar(self, cantidad):\n        self.saldo += cantidad\n\n\nmi_cuenta = Cuenta(\"Ana\", 100)\nmi_cuenta.ingresar(50)\nprint(mi_cuenta.saldo)",
+       "lines": [
+        [
+         2,
+         "Enfoque procedural: los datos de la cuenta viven en un diccionario."
+        ],
+        [
+         5,
+         "La función está separada y recibe la cuenta como parámetro."
+        ],
+        [
+         9,
+         "Se llama a la función pasándole los datos."
+        ],
+        [
+         14,
+         "Enfoque POO: la clase `Cuenta` reúne los datos y la acción."
+        ],
+        [
+         19,
+         "El método `ingresar` trabaja con los datos del propio objeto (`self`)."
+        ],
+        [
+         24,
+         "Se le pide al objeto que haga la acción: `mi_cuenta.ingresar(50)`."
+        ]
+       ],
+       "output": "150\n150\n"
+      }
+     ],
+     "quiz": [
+      "poo1-01",
+      "poo1-02",
+      "poo1-03"
+     ]
+    },
+    {
+     "id": "poo-fundamentos.clase-instancia",
+     "title": "Clases, objetos y cómo modelar un problema",
+     "theory": "Una **clase** es un molde: describe qué datos y qué acciones tendrá algo, como el plano de una casa. Un **objeto** (o **instancia**) es cada ejemplar concreto hecho con ese molde: «Alumno» es una clase; «Ana, de 1.º DAW» es un objeto. De una clase se pueden crear tantos objetos como haga falta y cada uno guarda **sus propios valores**.\n\nPara **modelar** un enunciado, una técnica sencilla es fijarse en las palabras:\n\n- Los **sustantivos** importantes suelen ser **clases**: alumno, coche, pedido.\n- Sus **características** son **atributos**: nombre, matrícula, importe.\n- Los **verbos** (lo que hace o lo que se le hace) son **métodos**: matricularse, arrancar, pagar.\n\nEn Python **todo es un objeto**: un texto es un objeto de la clase `str` y una lista, de la clase `list`. Por eso escribes `texto.upper()` o `lista.sort()`: estás llamando a métodos de esos objetos.",
+     "examples": [
+      {
+       "code": "texto = \"hola\"\nnumeros = [3, 1, 2]\n\nprint(type(texto).__name__)      # texto es un objeto de la clase str\nprint(texto.upper())             # upper() es un método de str\nnumeros.sort()                   # sort() cambia el estado de la lista\nprint(numeros)\nprint(isinstance(numeros, list))",
+       "lines": [
+        [
+         1,
+         "Un texto ya es un objeto: una instancia de la clase `str`."
+        ],
+        [
+         4,
+         "`type()` dice de qué clase es un objeto; `__name__` da su nombre."
+        ],
+        [
+         5,
+         "`upper()` es un método: devuelve el texto en mayúsculas."
+        ],
+        [
+         6,
+         "`sort()` es un método que cambia el estado de la propia lista."
+        ],
+        [
+         8,
+         "`isinstance` comprueba si un objeto es de una clase."
+        ]
+       ],
+       "output": "str\nHOLA\n[1, 2, 3]\nTrue\n"
+      }
+     ],
+     "quiz": [
+      "poo1-04",
+      "poo1-05",
+      "poo1-06"
+     ]
+    },
+    {
+     "id": "poo-fundamentos.cuando",
+     "title": "Cuándo usar la POO y sus cuatro pilares",
+     "theory": "La POO **ayuda** cuando el programa maneja muchas entidades parecidas con datos y acciones propias (alumnos, productos, cuentas): el código queda ordenado por responsabilidades, se reutiliza y es más fácil de mantener y probar. **No compensa** para un cálculo suelto o un script corto: ahí una función es más clara. Una clase que no guarda datos propios suele ser una función disfrazada.\n\nLa POO se apoya en **cuatro pilares**, que verás a lo largo del módulo:\n\n1. **Abstracción**: modelar solo lo que importa para el problema (de un alumno, a secretaría le importan las notas, no su color favorito).\n2. **Encapsulación**: ocultar los detalles internos y dejar usar el objeto a través de sus métodos (Unidad 4).\n3. **Herencia**: crear clases nuevas a partir de otras (Unidad 5).\n4. **Polimorfismo**: tratar igual a objetos de clases distintas que responden al mismo método (Unidad 6).",
+     "examples": [
+      {
+       "code": "import math\n\n\n# Para un cálculo suelto basta una función\ndef area_circulo(radio):\n    return round(math.pi * radio**2, 2)\n\n\nprint(area_circulo(2))\n\n\n# Una clase sin datos propios no aporta nada aquí\nclass CalculadoraArea:\n    def circulo(self, radio):\n        return round(math.pi * radio**2, 2)\n\n\nprint(CalculadoraArea().circulo(2))",
+       "lines": [
+        [
+         5,
+         "Una función resuelve el cálculo sin más ceremonia."
+        ],
+        [
+         13,
+         "Esta clase no guarda ningún dato: el objeto no aporta nada."
+        ],
+        [
+         18,
+         "Mismo resultado, más código: aquí la POO no compensa."
+        ]
+       ],
+       "output": "12.57\n12.57\n"
+      }
+     ],
+     "quiz": [
+      "poo1-07",
+      "poo1-08",
+      "poo1-09"
+     ]
+    }
+   ],
+   "guided": [
+    "poo1-10"
+   ],
+   "autonomous": [
+    "poo1-11"
+   ],
+   "selfcheck": [
+    "poo1-12",
+    "poo1-13"
+   ],
+   "recap": [
+    "La programación procedural separa datos y funciones; la POO los junta en objetos.",
+    "Una clase es el molde; cada objeto (instancia) es un ejemplar concreto con sus propios valores.",
+    "Al modelar: sustantivos → clases, características → atributos, verbos → métodos.",
+    "En Python todo es un objeto: `str`, `list` o `dict` son clases con sus métodos.",
+    "Los cuatro pilares son abstracción, encapsulación, herencia y polimorfismo; la POO compensa cuando hay entidades con datos y acciones propias."
+   ],
+   "pass": {
+    "minScore": 0.7,
+    "required": [
+     "poo1-10",
+     "poo1-11"
+    ],
+    "text": [
+     "Resolver el ejercicio guiado (tres clases con `describir()`) y el autónomo `Libro` con todos los tests superados.",
+     "Dominar la unidad según el motor: al menos un 70 % de aciertos recientes en sus ejercicios, con varios tipos distintos.",
+     "Completar las lecciones ayuda a organizarte, pero **no** demuestra la competencia: la demuestran los ejercicios."
+    ]
+   },
+   "curriculum": [
+    {
+     "ce": "0485-RA2-a",
+     "status": "proposed",
+     "source": "rd-405-2023#anexo-I",
+     "reviewed": "2026-11-11",
+     "by": "plataforma",
+     "note": "Se explican los fundamentos de la POO: clase, objeto, atributo, método y sus pilares."
+    },
+    {
+     "ce": "0485-RA2-c",
+     "status": "proposed",
+     "source": "rd-405-2023#anexo-I",
+     "reviewed": "2026-11-11",
+     "by": "plataforma",
+     "note": "Se usan objetos de clases predefinidas de Python (`str`, `list`) y sus métodos."
+    },
+    {
+     "ce": "0485-RA4-a",
+     "status": "proposed",
+     "source": "rd-405-2023#anexo-I",
+     "reviewed": "2026-11-11",
+     "by": "plataforma",
+     "note": "Se reconocen la sintaxis y los componentes típicos de una clase (atributos y métodos)."
+    }
+   ],
+   "module": "0485",
+   "ra": [
+    "0485-RA2",
+    "0485-RA4"
+   ],
+   "ce": [
+    "0485-RA2-a",
+    "0485-RA2-c",
+    "0485-RA4-a"
+   ],
+   "difficulty": 1.2,
+   "importance": 2
+  },
+  {
+   "id": "poo",
+   "title": "Creación de clases y objetos",
+   "area": "poo",
+   "requires": [
+    "poo-fundamentos"
    ],
    "daw": 2,
    "ut": "prog-ut5",
@@ -2092,6 +2391,333 @@
     "0485-RA4-b",
     "0485-RA4-d",
     "0485-RA4-e"
+   ],
+   "difficulty": 1.6,
+   "importance": 2
+  },
+  {
+   "id": "poo-atributos-metodos",
+   "title": "Atributos y métodos",
+   "area": "poo",
+   "requires": [
+    "poo"
+   ],
+   "daw": 2,
+   "ut": "prog-ut5",
+   "lessons": [
+    "atributos-clase"
+   ],
+   "summary": "Atributos de instancia y de clase, y métodos de instancia, de clase y estáticos.",
+   "when": "Cuando un dato debe ser común a todos los objetos (un contador, un tipo de IVA) o una acción no depende de un objeto concreto (una conversión, otra forma de crear objetos).",
+   "example": {
+    "code": "class Ticket:\n    iva = 21                          # atributo de clase\n    emitidos = 0\n\n    def __init__(self, importe):\n        self.importe = importe        # atributo de instancia\n        Ticket.emitidos += 1\n\n    def con_iva(self):                # método de instancia\n        return round(self.importe * (1 + Ticket.iva / 100), 2)\n\n    @classmethod\n    def cuantos(cls):                 # método de clase\n        return cls.emitidos\n\n\nt1 = Ticket(25)\nprint(Ticket.cuantos(), end=\" \")\nt2 = Ticket(10)\nprint(Ticket.cuantos(), t2.emitidos)\nprint(t1.con_iva())",
+    "lines": [
+     [
+      2,
+      "Un atributo de clase es común a todos los tickets."
+     ],
+     [
+      6,
+      "Un atributo de instancia es propio de cada ticket."
+     ],
+     [
+      7,
+      "El contador compartido se cambia a través de la clase, no de `self`."
+     ],
+     [
+      12,
+      "`@classmethod` recibe la clase (`cls`) en vez del objeto."
+     ],
+     [
+      20,
+      "El atributo de clase también se puede leer desde un objeto: `t2.emitidos`."
+     ]
+    ],
+    "output": "1 2 2\n30.25\n"
+   },
+   "errors": [
+    {
+     "id": "poo-atributos-metodos.self-en-atributo-clase",
+     "label": "Cambia un atributo de clase a través de `self` o de un objeto",
+     "why": "`self.total += 1` u `objeto.dato = valor` crean un atributo de instancia que tapa al de clase: el valor compartido no cambia.",
+     "think": "¿Este dato es de cada objeto o de todos? Si es de todos, ¿lo estoy cambiando a través de la clase?",
+     "avoid": "Para cambiar un atributo de clase escribe `Clase.dato = …` (o `cls.dato` en un método de clase)."
+    },
+    {
+     "id": "poo-atributos-metodos.static-con-self",
+     "label": "Pone `self` en un método estático",
+     "why": "Un método con `@staticmethod` no recibe el objeto: si se declara `self`, el primer argumento cae ahí y falta otro.",
+     "think": "¿Este método lleva `@staticmethod`? Entonces sus parámetros son solo los datos que necesita.",
+     "avoid": "En un estático no escribas `self` ni `cls`; si necesitas el objeto, hazlo método de instancia."
+    },
+    {
+     "id": "poo-atributos-metodos.tipo-metodo",
+     "label": "Elige mal entre método de instancia, de clase y estático",
+     "why": "Cada tipo recibe algo distinto: `self` (el objeto), `cls` (la clase) o nada. Si el tipo no encaja, falta un argumento o no se puede hacer lo que se quiere (por ejemplo, crear un objeto sin `cls`).",
+     "think": "¿Uso datos del objeto, de la clase o de ninguno de los dos?",
+     "avoid": "Datos del objeto → instancia; datos de la clase o crear objetos → `@classmethod`; ninguno → `@staticmethod`."
+    },
+    {
+     "id": "poo-atributos-metodos.lista-de-clase",
+     "label": "Usa una lista o diccionario como atributo de clase pensando que cada objeto tiene el suyo",
+     "why": "Un atributo de clase mutable es uno solo para todos: `append` lo cambia para todos los objetos.",
+     "think": "¿Cada objeto necesita su propia lista?",
+     "avoid": "Crea las listas y diccionarios propios de cada objeto dentro de `__init__` con `self.`."
+    }
+   ],
+   "related": [
+    "poo",
+    "funciones"
+   ],
+   "unit": {
+    "module": "poo",
+    "number": 3
+   },
+   "objectives": [
+    "Distinguir los atributos de instancia (propios de cada objeto) de los de clase (compartidos).",
+    "Modificar un atributo de clase sin crear por error uno de instancia que lo tape.",
+    "Escribir métodos de instancia, de clase (`@classmethod`) y estáticos (`@staticmethod`), y elegir el adecuado.",
+    "Llamar a métodos con parámetros y usar lo que devuelven.",
+    "Escribir métodos que cambian el estado del objeto y rechazan valores no válidos."
+   ],
+   "prior": "La Unidad 2: definir una clase, `__init__`, `self` y llamar a métodos. También conviene repasar `raise ValueError` de la unidad de excepciones.",
+   "key": [
+    [
+     "Atributo de instancia",
+     "Dato propio de cada objeto; se crea con `self.dato = valor`, normalmente en `__init__`."
+    ],
+    [
+     "Atributo de clase",
+     "Dato definido en el cuerpo de la clase, compartido por todos sus objetos: `Clase.dato`."
+    ],
+    [
+     "Sombreado",
+     "Asignar `objeto.dato = valor` crea un atributo de instancia que tapa al de clase solo para ese objeto."
+    ],
+    [
+     "Método de instancia",
+     "Recibe `self`: trabaja con los datos de un objeto concreto."
+    ],
+    [
+     "Método de clase",
+     "Lleva `@classmethod` y recibe `cls`, la clase. Sirve para datos compartidos y para crear objetos de otra forma."
+    ],
+    [
+     "Método estático",
+     "Lleva `@staticmethod` y no recibe ni `self` ni `cls`: una utilidad relacionada con la clase."
+    ],
+    [
+     "Decorador",
+     "La línea `@algo` encima de un `def` que cambia cómo se comporta ese método."
+    ]
+   ],
+   "sections": [
+    {
+     "id": "poo-atributos-metodos.instancia-clase",
+     "title": "Atributos de instancia y de clase",
+     "theory": "Los **atributos de instancia** se crean con `self.dato = valor` (normalmente en `__init__`) y cada objeto tiene los suyos. Los **atributos de clase** se escriben en el cuerpo de la clase, fuera de los métodos, y son **compartidos** por todos los objetos: sirven para constantes comunes (el centro, el IVA) o contadores.\n\n- Un atributo de clase se puede **leer** desde la clase (`Alumno.centro`) o desde cualquier objeto (`ana.centro`).\n- Para **cambiarlo** hay que hacerlo a través de la clase: `Alumno.total += 1`.\n- Si escribes `ana.centro = \"Otro\"` o `self.total += 1`, Python crea un atributo **de instancia** con ese nombre que tapa al de clase **solo para ese objeto** (se llama *sombreado*). El de clase no cambia.\n- Cuidado con las listas y diccionarios como atributo de clase: todos los objetos comparten **la misma** lista. Si cada objeto necesita la suya, créala en `__init__`.",
+     "examples": [
+      {
+       "code": "class Alumno:\n    centro = \"IES Python\"       # atributo de clase: compartido\n    total = 0\n\n    def __init__(self, nombre):\n        self.nombre = nombre    # atributo de instancia: propio\n        Alumno.total += 1       # cambia el dato compartido\n\n\nana = Alumno(\"Ana\")\nluis = Alumno(\"Luis\")\nprint(ana.centro, luis.centro)\nprint(Alumno.total)\nluis.centro = \"IES Java\"        # crea un atributo de instancia que tapa el de clase\nprint(ana.centro, luis.centro, Alumno.centro)",
+       "lines": [
+        [
+         2,
+         "Definido en el cuerpo de la clase: lo comparten todos los alumnos."
+        ],
+        [
+         6,
+         "Cada alumno guarda su propio nombre."
+        ],
+        [
+         7,
+         "El contador se cambia a través de la clase, así que cuenta todos los objetos."
+        ],
+        [
+         12,
+         "Los dos objetos leen el mismo atributo de clase."
+        ],
+        [
+         14,
+         "Asignar desde un objeto no cambia la clase: crea un atributo solo para `luis`."
+        ],
+        [
+         15,
+         "`ana` y la clase siguen con «IES Python»; solo `luis` ve «IES Java»."
+        ]
+       ],
+       "output": "IES Python IES Python\n2\nIES Python IES Java IES Python\n"
+      }
+     ],
+     "quiz": [
+      "poo3-01",
+      "poo3-02",
+      "poo3-03"
+     ]
+    },
+    {
+     "id": "poo-atributos-metodos.metodos",
+     "title": "Métodos de instancia, de clase y estáticos",
+     "theory": "Hay tres tipos de métodos según lo que necesitan:\n\n- **De instancia** (los de siempre): reciben `self` y trabajan con los datos de **un objeto**. Se llaman sobre un objeto: `fecha.texto()`.\n- **De clase**: llevan el decorador `@classmethod` y reciben **`cls`**, la propia clase. Se usan para trabajar con atributos de clase o como **constructores alternativos**: `cls(...)` crea un objeto nuevo de esa clase. Se llaman sobre la clase: `Fecha.desde_texto(\"5-3-2024\")`.\n- **Estáticos**: llevan `@staticmethod` y **no reciben ni `self` ni `cls`**. Son funciones de utilidad que tienen que ver con la clase pero no necesitan sus datos (validar, convertir). Se llaman `Fecha.es_bisiesto(2024)`.\n\nRegla rápida: ¿usa datos del objeto? → instancia. ¿Usa la clase o crea objetos? → de clase. ¿No usa ninguno de los dos? → estático.",
+     "examples": [
+      {
+       "code": "class Fecha:\n    def __init__(self, dia, mes, anio):\n        self.dia = dia\n        self.mes = mes\n        self.anio = anio\n\n    def texto(self):                      # método de instancia\n        return f\"{self.dia:02d}/{self.mes:02d}/{self.anio}\"\n\n    @classmethod\n    def desde_texto(cls, cadena):         # método de clase: otro constructor\n        dia, mes, anio = cadena.split(\"-\")\n        return cls(int(dia), int(mes), int(anio))\n\n    @staticmethod\n    def es_bisiesto(anio):                # método estático: una utilidad\n        return anio % 4 == 0 and (anio % 100 != 0 or anio % 400 == 0)\n\n\nf = Fecha.desde_texto(\"5-3-2024\")\nprint(f.texto())\nprint(Fecha.es_bisiesto(2024), Fecha.es_bisiesto(1900))",
+       "lines": [
+        [
+         7,
+         "Método de instancia: usa los datos de esta fecha a través de `self`."
+        ],
+        [
+         10,
+         "`@classmethod` hace que el primer parámetro sea la clase (`cls`)."
+        ],
+        [
+         13,
+         "`cls(...)` crea y devuelve un objeto `Fecha` nuevo."
+        ],
+        [
+         15,
+         "`@staticmethod`: no recibe `self` ni `cls`, solo sus parámetros."
+        ],
+        [
+         20,
+         "El método de clase se llama sobre la clase y devuelve un objeto."
+        ],
+        [
+         22,
+         "El estático también se llama sobre la clase, sin crear ningún objeto."
+        ]
+       ],
+       "output": "05/03/2024\nTrue False\n"
+      }
+     ],
+     "quiz": [
+      "poo3-04",
+      "poo3-05",
+      "poo3-06"
+     ]
+    },
+    {
+     "id": "poo-atributos-metodos.estado",
+     "title": "Métodos que cambian y protegen el estado",
+     "theory": "Los métodos de instancia son el sitio natural para **cambiar el estado** del objeto, y también para **protegerlo**: si un valor no tiene sentido (una cantidad negativa, más litros de los que caben), el método lo rechaza con `raise ValueError(...)` antes de tocar nada.\n\n- Valida **dentro** del método, no en cada sitio donde se use el objeto: así la regla está en un solo lugar.\n- Un método puede cambiar el estado y además **devolver** un resultado útil (el saldo nuevo, los litros actuales).\n- Una operación rechazada no debe dejar el objeto a medias: comprueba primero y cambia después.\n\nEn la Unidad 4 verás cómo ocultar los atributos para que nadie se salte estas reglas.",
+     "examples": [
+      {
+       "code": "class Deposito:\n    def __init__(self, capacidad):\n        self.capacidad = capacidad\n        self.litros = 0\n\n    def llenar(self, litros):\n        if litros <= 0:\n            raise ValueError(\"La cantidad debe ser positiva\")\n        self.litros = min(self.capacidad, self.litros + litros)\n        return self.litros\n\n    def vaciar(self):\n        self.litros = 0\n\n\nd = Deposito(50)\nprint(d.llenar(30))\nprint(d.llenar(30))\ntry:\n    d.llenar(-5)\nexcept ValueError as e:\n    print(\"Error:\", e)",
+       "lines": [
+        [
+         7,
+         "Primero se comprueba: un valor no válido se rechaza sin cambiar nada."
+        ],
+        [
+         9,
+         "Después se cambia el estado, sin pasar de la capacidad."
+        ],
+        [
+         10,
+         "Además devuelve el estado nuevo, útil para quien llama."
+        ],
+        [
+         18,
+         "El segundo llenado se queda en 50: el método protege el límite."
+        ],
+        [
+         20,
+         "Una cantidad negativa lanza `ValueError` y el depósito no cambia."
+        ]
+       ],
+       "output": "30\n50\nError: La cantidad debe ser positiva\n"
+      }
+     ],
+     "quiz": [
+      "poo3-07",
+      "poo3-08",
+      "poo3-09"
+     ]
+    }
+   ],
+   "guided": [
+    "poo3-10"
+   ],
+   "autonomous": [
+    "poo3-11",
+    "poo3-12"
+   ],
+   "selfcheck": [
+    "poo3-13",
+    "poo3-14"
+   ],
+   "recap": [
+    "Los atributos de instancia (`self.x`) son propios de cada objeto; los de clase se escriben en el cuerpo de la clase y se comparten.",
+    "Un atributo de clase se cambia a través de la clase (`Clase.x += 1`); asignarlo desde un objeto crea uno de instancia que lo tapa.",
+    "Una lista como atributo de clase la comparten todos los objetos: si cada uno necesita la suya, créala en `__init__`.",
+    "`@classmethod` recibe `cls` (para datos de clase y constructores alternativos); `@staticmethod` no recibe ni `self` ni `cls`.",
+    "Los métodos que cambian el estado deben validar antes y pueden devolver el resultado."
+   ],
+   "pass": {
+    "minScore": 0.7,
+    "required": [
+     "poo3-10",
+     "poo3-11"
+    ],
+    "text": [
+     "Resolver el ejercicio guiado (`CuentaBancaria`) y el autónomo `Temperatura` con todos los tests superados.",
+     "Dominar la unidad según el motor: al menos un 70 % de aciertos recientes en sus ejercicios, con varios tipos distintos.",
+     "Completar las lecciones ayuda a organizarte, pero **no** demuestra la competencia: la demuestran los ejercicios."
+    ]
+   },
+   "curriculum": [
+    {
+     "ce": "0485-RA2-d",
+     "status": "proposed",
+     "source": "rd-405-2023#anexo-I",
+     "reviewed": "2026-11-11",
+     "by": "plataforma",
+     "note": "Se usan métodos y atributos (propiedades) de los objetos."
+    },
+    {
+     "ce": "0485-RA2-e",
+     "status": "proposed",
+     "source": "rd-405-2023#anexo-I",
+     "reviewed": "2026-11-11",
+     "by": "plataforma",
+     "note": "Se llaman métodos estáticos (`Clase.metodo(...)`)."
+    },
+    {
+     "ce": "0485-RA2-f",
+     "status": "proposed",
+     "source": "rd-405-2023#anexo-I",
+     "reviewed": "2026-11-11",
+     "by": "plataforma",
+     "note": "Se pasan parámetros en la llamada a los métodos."
+    },
+    {
+     "ce": "0485-RA4-c",
+     "status": "proposed",
+     "source": "rd-405-2023#anexo-I",
+     "reviewed": "2026-11-11",
+     "by": "plataforma",
+     "note": "Se definen atributos de instancia y de clase, y métodos."
+    },
+    {
+     "ce": "0485-RA4-h",
+     "status": "proposed",
+     "source": "rd-405-2023#anexo-I",
+     "reviewed": "2026-11-11",
+     "by": "plataforma",
+     "note": "Se crean y usan métodos estáticos (`@staticmethod`) y de clase."
+    }
+   ],
+   "module": "0485",
+   "ra": [
+    "0485-RA2",
+    "0485-RA4"
+   ],
+   "ce": [
+    "0485-RA2-d",
+    "0485-RA2-e",
+    "0485-RA2-f",
+    "0485-RA4-c",
+    "0485-RA4-h"
    ],
    "difficulty": 1.6,
    "importance": 2
@@ -4933,6 +5559,659 @@
    ],
    "hint": "`dni[:8]` son las cifras y `dni[8]` la letra. Comprueba `isdigit()` antes de `int()`.",
    "explain": "Dos funciones pequeñas: una calcula y la otra valida reutilizándola. Validar el formato **antes** de convertir con `int()` evita el ValueError."
+  },
+  {
+   "id": "poo1-01",
+   "concept": "poo-fundamentos",
+   "kind": "choice",
+   "level": 1,
+   "daw": false,
+   "q": "¿Cuál es la diferencia principal entre la programación procedural y la orientada a objetos?",
+   "code": null,
+   "options": [
+    {
+     "text": "En la POO los datos y las funciones que trabajan con ellos se agrupan en una misma unidad, la clase",
+     "error": null
+    },
+    {
+     "text": "La POO no usa funciones, condiciones ni bucles",
+     "error": "poo-fundamentos.poo-siempre"
+    },
+    {
+     "text": "La POO hace que el programa se ejecute más rápido",
+     "error": "poo-fundamentos.poo-siempre"
+    },
+    {
+     "text": "En la programación procedural no se pueden usar diccionarios",
+     "error": null
+    }
+   ],
+   "answer": 0,
+   "explain": "La POO cambia la **organización**: junta los datos (atributos) con las acciones que los usan (métodos). Dentro de los métodos sigue habiendo funciones, condiciones y bucles, y la velocidad no cambia por usar clases.",
+   "codeOptions": false
+  },
+  {
+   "id": "poo1-02",
+   "concept": "poo-fundamentos",
+   "kind": "output",
+   "level": 1,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "def ingresar(cuenta, cantidad):\n    cuenta[\"saldo\"] += cantidad\n\ncuenta = {\"titular\": \"Ana\", \"saldo\": 10}\ningresar(cuenta, 5)\ningresar(cuenta, 5)\nprint(cuenta[\"saldo\"])",
+   "stdin": "",
+   "expect": "20",
+   "traps": {
+    "10": null,
+    "15": null
+   },
+   "explain": "Versión procedural: la función recibe el diccionario y lo modifica, así que los dos ingresos se acumulan (10 + 5 + 5). Un método hace lo mismo con `self`, pero los datos y la acción quedan juntos en el objeto."
+  },
+  {
+   "id": "poo1-03",
+   "concept": "poo-fundamentos",
+   "kind": "choice",
+   "level": 1,
+   "daw": false,
+   "q": "En la línea `teclado.con_descuento(25)`, ¿qué es `con_descuento`?",
+   "code": null,
+   "options": [
+    {
+     "text": "Un método: una acción del objeto `teclado` que trabaja con sus datos",
+     "error": null
+    },
+    {
+     "text": "Un atributo: un dato guardado en `teclado`",
+     "error": "poo-fundamentos.atributo-metodo"
+    },
+    {
+     "text": "La clase de la que se ha creado `teclado`",
+     "error": "poo-fundamentos.clase-instancia"
+    },
+    {
+     "text": "Una variable global del programa",
+     "error": null
+    }
+   ],
+   "answer": 0,
+   "explain": "Los paréntesis lo delatan: se está **llamando** a algo del objeto, así que es un método. Un atributo se lee sin paréntesis (`teclado.precio`).",
+   "codeOptions": false
+  },
+  {
+   "id": "poo1-04",
+   "concept": "poo-fundamentos",
+   "kind": "choice",
+   "level": 1,
+   "daw": false,
+   "q": "Enunciado: «Un coche tiene matrícula y color, y puede arrancar y frenar». Si `Coche` es una clase, ¿qué son «matrícula» y «arrancar»?",
+   "code": null,
+   "options": [
+    {
+     "text": "«matrícula» es un atributo y «arrancar» es un método",
+     "error": null
+    },
+    {
+     "text": "«matrícula» es un método y «arrancar» es un atributo",
+     "error": "poo-fundamentos.atributo-metodo"
+    },
+    {
+     "text": "Las dos son clases nuevas",
+     "error": "poo-fundamentos.clase-instancia"
+    },
+    {
+     "text": "Las dos son atributos",
+     "error": "poo-fundamentos.atributo-metodo"
+    }
+   ],
+   "answer": 0,
+   "explain": "Las características (lo que el coche **tiene**) son atributos; las acciones (lo que el coche **hace**) son métodos.",
+   "codeOptions": false
+  },
+  {
+   "id": "poo1-05",
+   "concept": "poo-fundamentos",
+   "kind": "output",
+   "level": 1,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "print(type([1]).__name__, type(\"a\").__name__)",
+   "stdin": "",
+   "expect": "list str",
+   "traps": {
+    "[1] a": "poo-fundamentos.clase-instancia",
+    "lista texto": null
+   },
+   "explain": "Una lista es un objeto de la clase `list` y un texto, de la clase `str`: en Python todo valor es una instancia de alguna clase."
+  },
+  {
+   "id": "poo1-06",
+   "concept": "poo-fundamentos",
+   "kind": "choice",
+   "level": 1,
+   "daw": false,
+   "q": "¿Cuál de estas frases describe una **instancia** y no una clase?",
+   "code": null,
+   "options": [
+    {
+     "text": "El coche de matrícula 1234-ABC aparcado en la puerta del instituto",
+     "error": null
+    },
+    {
+     "text": "Coche: todo vehículo con matrícula, color y motor",
+     "error": "poo-fundamentos.clase-instancia"
+    },
+    {
+     "text": "Alumno: cualquier persona matriculada en el ciclo",
+     "error": "poo-fundamentos.clase-instancia"
+    },
+    {
+     "text": "Producto: lo que vende una tienda, con nombre y precio",
+     "error": "poo-fundamentos.clase-instancia"
+    }
+   ],
+   "answer": 0,
+   "explain": "Una instancia es **un ejemplar concreto** con sus propios valores (esa matrícula). Las otras frases describen un tipo general de cosa: son clases.",
+   "codeOptions": false
+  },
+  {
+   "id": "poo1-07",
+   "concept": "poo-fundamentos",
+   "kind": "choice",
+   "level": 1,
+   "daw": false,
+   "q": "¿En cuál de estos casos **no** merece la pena crear una clase?",
+   "code": null,
+   "options": [
+    {
+     "text": "Un script de diez líneas que convierte una temperatura de °C a °F y la muestra",
+     "error": null
+    },
+    {
+     "text": "Una aplicación que gestiona cientos de alumnos, cada uno con sus notas",
+     "error": null
+    },
+    {
+     "text": "Un juego con varios personajes que se mueven y tienen vidas",
+     "error": null
+    },
+    {
+     "text": "Una tienda con productos, clientes y pedidos",
+     "error": null
+    }
+   ],
+   "answer": 0,
+   "explain": "Un cálculo suelto se resuelve mejor con una función: una clase solo añadiría código. La POO compensa cuando hay muchas entidades con datos y acciones propias, como en los otros tres casos.",
+   "codeOptions": false
+  },
+  {
+   "id": "poo1-08",
+   "concept": "poo-fundamentos",
+   "kind": "choice",
+   "level": 1,
+   "daw": false,
+   "q": "¿Qué pilar de la POO consiste en ocultar los detalles internos de un objeto y dejar usarlo solo a través de sus métodos?",
+   "code": null,
+   "options": [
+    {
+     "text": "Encapsulación",
+     "error": null
+    },
+    {
+     "text": "Herencia",
+     "error": null
+    },
+    {
+     "text": "Polimorfismo",
+     "error": null
+    },
+    {
+     "text": "Abstracción",
+     "error": null
+    }
+   ],
+   "answer": 0,
+   "explain": "Eso es la **encapsulación** (Unidad 4). La herencia crea clases a partir de otras, el polimorfismo trata igual a objetos distintos y la abstracción elige qué datos importan.",
+   "codeOptions": false
+  },
+  {
+   "id": "poo1-09",
+   "concept": "poo-fundamentos",
+   "kind": "choice",
+   "level": 1,
+   "daw": false,
+   "q": "Al modelar `Alumno` para la secretaría guardas nombre, curso y notas, pero no su color favorito. ¿Qué pilar estás aplicando?",
+   "code": null,
+   "options": [
+    {
+     "text": "Abstracción",
+     "error": null
+    },
+    {
+     "text": "Herencia",
+     "error": null
+    },
+    {
+     "text": "Polimorfismo",
+     "error": null
+    },
+    {
+     "text": "Encapsulación",
+     "error": null
+    }
+   ],
+   "answer": 0,
+   "explain": "La **abstracción** consiste en quedarse con lo que importa para el problema y dejar fuera el resto.",
+   "codeOptions": false
+  },
+  {
+   "id": "poo1-10",
+   "concept": "poo-fundamentos",
+   "kind": "code",
+   "level": 1,
+   "daw": false,
+   "q": "**Ejercicio guiado: tres clases sencillas.** La clase `Persona` ya está hecha como modelo. Sigue los pasos:\n\n1. Crea la clase `Vehiculo` con `__init__(self, marca, matricula)` y un método `describir()` que **devuelva** `\"Seat (1234-ABC)\"`.\n2. Crea la clase `Producto` con `__init__(self, nombre, precio)` y un método `describir()` que devuelva `\"Teclado: 25.00 €\"` (el precio con dos decimales).\n3. Pulsa **▶ Ejecutar** y después **Comprobar con los tests**.",
+   "starter": "class Persona:\n    def __init__(self, nombre, edad):\n        self.nombre = nombre\n        self.edad = edad\n\n    def describir(self):\n        return f\"{self.nombre}, {self.edad} años\"\n\n\n# Paso 1: clase Vehiculo(marca, matricula) con describir()\n\n# Paso 2: clase Producto(nombre, precio) con describir()\n\n\nprint(Persona(\"Ana\", 19).describir())",
+   "solution": "class Persona:\n    def __init__(self, nombre, edad):\n        self.nombre = nombre\n        self.edad = edad\n\n    def describir(self):\n        return f\"{self.nombre}, {self.edad} años\"\n\n\nclass Vehiculo:\n    def __init__(self, marca, matricula):\n        self.marca = marca\n        self.matricula = matricula\n\n    def describir(self):\n        return f\"{self.marca} ({self.matricula})\"\n\n\nclass Producto:\n    def __init__(self, nombre, precio):\n        self.nombre = nombre\n        self.precio = precio\n\n    def describir(self):\n        return f\"{self.nombre}: {self.precio:.2f} €\"\n\n\nprint(Persona(\"Ana\", 19).describir())\nprint(Vehiculo(\"Seat\", \"1234-ABC\").describir())\nprint(Producto(\"Teclado\", 25).describir())",
+   "checks": [
+    {
+     "stdin": "",
+     "test": "assert Persona(\"Leo\", 30).describir() == \"Leo, 30 años\", \"No cambies la clase Persona: es el modelo\"",
+     "error": null
+    },
+    {
+     "stdin": "",
+     "test": "v = Vehiculo(\"Seat\", \"1234-ABC\")\nassert (v.marca, v.matricula) == (\"Seat\", \"1234-ABC\"), \"Guarda marca y matrícula como atributos con self\"\nassert v.describir() == \"Seat (1234-ABC)\", f\"describir() debe devolver 'Seat (1234-ABC)'; devuelve {v.describir()!r}\"",
+     "error": "poo-fundamentos.atributo-metodo"
+    },
+    {
+     "stdin": "",
+     "test": "p = Producto(\"Ratón\", 9.5)\nassert p.describir() == \"Ratón: 9.50 €\", f\"describir() debe devolver 'Ratón: 9.50 €' (dos decimales); devuelve {p.describir()!r}\"",
+     "error": null
+    }
+   ],
+   "hint": "Copia la estructura de `Persona`. Para los dos decimales usa `f\"{self.precio:.2f}\"`.",
+   "explain": "Cada clase guarda sus datos en `__init__` con `self.` y tiene su propio `describir()`. Que las tres clases tengan un método con el mismo nombre es normal: cada objeto responde a su manera (es la idea del polimorfismo, Unidad 6).",
+   "expect": "Ana, 19 años\nSeat (1234-ABC)\nTeclado: 25.00 €\n"
+  },
+  {
+   "id": "poo1-11",
+   "concept": "poo-fundamentos",
+   "kind": "code",
+   "level": 2,
+   "daw": false,
+   "q": "**Ejercicio autónomo: de procedural a objetos.** Este programa guarda libros en diccionarios y usa funciones sueltas:\n\n```\ndef crear_libro(titulo, autor, paginas):\n    return {\"titulo\": titulo, \"autor\": autor, \"paginas\": paginas}\n\ndef es_largo(libro):\n    return libro[\"paginas\"] > 300\n\ndef ficha(libro):\n    return f'{libro[\"titulo\"]} ({libro[\"autor\"]}), {libro[\"paginas\"]} páginas'\n```\n\nReescríbelo como una clase `Libro` con `__init__(self, titulo, autor, paginas)` y los métodos `es_largo()` (más de 300 páginas) y `ficha()`, que devuelva un texto como `\"Rayuela (Julio Cortázar), 600 páginas\"`.",
+   "starter": "class Libro:\n    ...",
+   "solution": "class Libro:\n    def __init__(self, titulo, autor, paginas):\n        self.titulo = titulo\n        self.autor = autor\n        self.paginas = paginas\n\n    def es_largo(self):\n        return self.paginas > 300\n\n    def ficha(self):\n        return f\"{self.titulo} ({self.autor}), {self.paginas} páginas\"\n\n\nlibro = Libro(\"Rayuela\", \"Julio Cortázar\", 600)\nprint(libro.ficha())\nprint(libro.es_largo())",
+   "checks": [
+    {
+     "stdin": "",
+     "test": "l = Libro(\"A\", \"B\", 100)\nassert l.ficha() == \"A (B), 100 páginas\", f\"ficha() debe devolver 'A (B), 100 páginas'; devuelve {l.ficha()!r}\"",
+     "error": null
+    },
+    {
+     "stdin": "",
+     "test": "assert Libro(\"A\", \"B\", 301).es_largo() is True, \"Un libro de 301 páginas es largo\"\nassert Libro(\"A\", \"B\", 300).es_largo() is False, \"Un libro de 300 páginas justas NO es largo: más de 300\"",
+     "error": null
+    },
+    {
+     "stdin": "",
+     "test": "l1 = Libro(\"A\", \"B\", 100)\nl2 = Libro(\"C\", \"D\", 500)\nassert l1.titulo == \"A\" and l2.titulo == \"C\", \"Cada libro debe guardar su propio título\"\nassert l2.es_largo() and not l1.es_largo(), \"Cada libro responde con sus propios datos\"",
+     "error": "poo-fundamentos.clase-instancia"
+    }
+   ],
+   "hint": "Cambia `libro[\"paginas\"]` por `self.paginas` y quita el parámetro `libro` de las funciones: ahora lo es `self`.",
+   "explain": "El diccionario se convierte en atributos guardados en `__init__` y cada función pasa a ser un método que, en vez de recibir el libro, usa `self`.",
+   "expect": "Rayuela (Julio Cortázar), 600 páginas\nTrue\n"
+  },
+  {
+   "id": "poo1-12",
+   "concept": "poo-fundamentos",
+   "kind": "choice",
+   "level": 1,
+   "daw": false,
+   "q": "¿Cuál de estas afirmaciones es correcta?",
+   "code": null,
+   "options": [
+    {
+     "text": "De una clase se pueden crear muchos objetos, y cada uno guarda sus propios valores",
+     "error": null
+    },
+    {
+     "text": "Cada clase solo puede tener un objeto",
+     "error": "poo-fundamentos.clase-instancia"
+    },
+    {
+     "text": "Los objetos se definen con la palabra `class`",
+     "error": "poo-fundamentos.clase-instancia"
+    },
+    {
+     "text": "Los métodos son los datos que guarda un objeto",
+     "error": "poo-fundamentos.atributo-metodo"
+    }
+   ],
+   "answer": 0,
+   "explain": "La clase se define una vez con `class` y de ella se crean todos los objetos que haga falta. Los datos son atributos; los métodos son acciones.",
+   "codeOptions": false
+  },
+  {
+   "id": "poo1-13",
+   "concept": "poo-fundamentos",
+   "kind": "output",
+   "level": 2,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "class Punto:\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n\np1 = Punto(1, 2)\np2 = Punto(1, 2)\nprint(type(p1) == type(p2), p1 == p2)",
+   "stdin": "",
+   "expect": "True False",
+   "traps": {
+    "True True": "poo-fundamentos.clase-instancia",
+    "False False": null
+   },
+   "explain": "Los dos son de la misma clase (`True`), pero son **dos objetos distintos**: sin más instrucciones, `==` entre objetos compara si son el mismo objeto, no sus valores. En la Unidad 8 verás cómo cambiarlo con `__eq__`."
+  },
+  {
+   "id": "poo3-01",
+   "concept": "poo-atributos-metodos",
+   "kind": "output",
+   "level": 1,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "class Visita:\n    total = 0\n\n    def __init__(self):\n        Visita.total += 1\n\nVisita()\nVisita()\nv = Visita()\nprint(Visita.total, v.total)",
+   "stdin": "",
+   "expect": "3 3",
+   "traps": {
+    "1 1": "poo-atributos-metodos.self-en-atributo-clase",
+    "3 0": null
+   },
+   "explain": "`total` es un atributo de clase y cada objeto nuevo lo aumenta a través de la clase. Desde el objeto `v` se lee el mismo valor compartido."
+  },
+  {
+   "id": "poo3-02",
+   "concept": "poo-atributos-metodos",
+   "kind": "output",
+   "level": 2,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "class Config:\n    idioma = \"es\"\n\na = Config()\nb = Config()\na.idioma = \"en\"\nprint(a.idioma, b.idioma, Config.idioma)",
+   "stdin": "",
+   "expect": "en es es",
+   "traps": {
+    "en en en": "poo-atributos-metodos.self-en-atributo-clase"
+   },
+   "explain": "`a.idioma = \"en\"` no cambia el atributo de clase: crea un atributo de instancia solo en `a` que lo tapa. `b` y la clase siguen viendo `\"es\"`."
+  },
+  {
+   "id": "poo3-03",
+   "concept": "poo-atributos-metodos",
+   "kind": "bug",
+   "level": 2,
+   "daw": false,
+   "q": "Debería mostrar `2` (los pedidos creados). ¿Qué línea falla?",
+   "code": "class Pedido:\n    total = 0\n\n    def __init__(self, producto):\n        self.producto = producto\n        self.total += 1\n\nPedido(\"pan\")\nPedido(\"leche\")\nprint(Pedido.total)",
+   "stdin": "",
+   "line": 6,
+   "fix": "        Pedido.total += 1",
+   "expect": "2",
+   "error": "poo-atributos-metodos.self-en-atributo-clase",
+   "explain": "`self.total += 1` lee el atributo de clase (0) y guarda el 1 en un atributo **nuevo** del objeto: el contador de la clase nunca cambia y se muestra 0. Hay que cambiarlo a través de la clase: `Pedido.total += 1`."
+  },
+  {
+   "id": "poo3-04",
+   "concept": "poo-atributos-metodos",
+   "kind": "choice",
+   "level": 1,
+   "daw": false,
+   "q": "En un método con `@classmethod`, ¿qué recibe el primer parámetro `cls`?",
+   "code": null,
+   "options": [
+    {
+     "text": "La propia clase, por eso `cls(...)` crea un objeto nuevo",
+     "error": null
+    },
+    {
+     "text": "El objeto con el que se ha llamado, igual que `self`",
+     "error": "poo-atributos-metodos.tipo-metodo"
+    },
+    {
+     "text": "Nada: los métodos de clase no tienen parámetros",
+     "error": "poo-atributos-metodos.tipo-metodo"
+    },
+    {
+     "text": "Una copia del último objeto creado",
+     "error": null
+    }
+   ],
+   "answer": 0,
+   "explain": "`cls` es la clase. Con ella se leen o cambian los atributos de clase y se pueden crear objetos (`return cls(...)`), lo que permite escribir constructores alternativos.",
+   "codeOptions": false
+  },
+  {
+   "id": "poo3-05",
+   "concept": "poo-atributos-metodos",
+   "kind": "output",
+   "level": 2,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "class Conversor:\n    @staticmethod\n    def a_fahrenheit(celsius):\n        return celsius * 9 / 5 + 32\n\nprint(Conversor.a_fahrenheit(100))\nprint(Conversor().a_fahrenheit(0))",
+   "stdin": "",
+   "expect": "212.0\n32.0",
+   "traps": {
+    "212\n32": null
+   },
+   "explain": "Un método estático no recibe `self`: se puede llamar sobre la clase o sobre un objeto y solo usa sus parámetros. La división `/` siempre da `float`, por eso sale `212.0`."
+  },
+  {
+   "id": "poo3-06",
+   "concept": "poo-atributos-metodos",
+   "kind": "bug",
+   "level": 2,
+   "daw": false,
+   "q": "Debería mostrar `8`. ¿Qué línea falla?",
+   "code": "class Calculo:\n    @staticmethod\n    def doble(self, x):\n        return x * 2\n\nprint(Calculo.doble(4))",
+   "stdin": "",
+   "line": 3,
+   "fix": "    def doble(x):",
+   "expect": "8",
+   "error": "poo-atributos-metodos.static-con-self",
+   "explain": "Un método estático **no** recibe `self`: el 4 se queda en `self` y falta `x` (`TypeError: missing 1 required positional argument`). Solo lleva sus propios parámetros."
+  },
+  {
+   "id": "poo3-07",
+   "concept": "poo-atributos-metodos",
+   "kind": "output",
+   "level": 1,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "class Hucha:\n    def __init__(self):\n        self.dinero = 0\n\n    def meter(self, euros):\n        self.dinero += euros\n        return self.dinero\n\nh = Hucha()\nh.meter(5)\ntotal = h.meter(10)\nprint(total, h.dinero)",
+   "stdin": "",
+   "expect": "15 15",
+   "traps": {
+    "10 15": null,
+    "10 10": "poo-atributos-metodos.tipo-metodo"
+   },
+   "explain": "`meter` cambia el estado y además devuelve el dinero acumulado. El primer resultado no se guarda, pero el estado sí cambió: 5 + 10 = 15."
+  },
+  {
+   "id": "poo3-08",
+   "concept": "poo-atributos-metodos",
+   "kind": "choice",
+   "level": 1,
+   "daw": false,
+   "q": "Una `Cuenta` no debe quedarse nunca con saldo negativo. ¿Dónde es mejor comprobarlo?",
+   "code": null,
+   "options": [
+    {
+     "text": "Dentro del método `retirar`, que lanza `ValueError` si no hay saldo suficiente",
+     "error": null
+    },
+    {
+     "text": "En cada parte del programa que use la cuenta, antes de llamar a `retirar`",
+     "error": null
+    },
+    {
+     "text": "En ningún sitio: Python no deja guardar números negativos en un atributo",
+     "error": null
+    },
+    {
+     "text": "En un atributo de clase que todas las cuentas comparten",
+     "error": "poo-atributos-metodos.tipo-metodo"
+    }
+   ],
+   "answer": 0,
+   "explain": "La regla pertenece a la cuenta: si se comprueba dentro de `retirar` está en un solo lugar y nadie la olvida. Python no impide valores negativos por sí solo.",
+   "codeOptions": false
+  },
+  {
+   "id": "poo3-09",
+   "concept": "poo-atributos-metodos",
+   "kind": "fill",
+   "level": 2,
+   "daw": false,
+   "q": "Completa el decorador para que `cuantas()` reciba la clase en `cls`.",
+   "code": "class Pieza:\n    creadas = 0\n\n    def __init__(self):\n        Pieza.creadas += 1\n\n    ___\n    def cuantas(cls):\n        return cls.creadas\n\nPieza()\nPieza()\nprint(Pieza.cuantas())",
+   "accept": [
+    "@classmethod"
+   ],
+   "expect": "2",
+   "traps": {
+    "@staticmethod": "poo-atributos-metodos.tipo-metodo",
+    "classmethod": null
+   },
+   "explain": "`@classmethod` hace que el primer parámetro sea la clase. Con `@staticmethod` no recibiría nada y faltaría el argumento `cls`."
+  },
+  {
+   "id": "poo3-10",
+   "concept": "poo-atributos-metodos",
+   "kind": "code",
+   "level": 2,
+   "daw": false,
+   "q": "**Ejercicio guiado: `CuentaBancaria`.** Los atributos de clase ya están. Sigue los pasos:\n\n1. En `__init__(self, titular, saldo=0)` guarda los dos datos y suma 1 a `CuentaBancaria.abiertas` (a través de la clase).\n2. Añade el método estático `importe_valido(cantidad)`, que devuelva `True` si la cantidad es mayor que 0.\n3. Añade `ingresar(cantidad)` y `retirar(cantidad)`: si el importe no es válido, o si no hay saldo suficiente para retirar, lanza `ValueError`; si todo va bien, cambian el saldo y **devuelven** el saldo nuevo.\n4. Añade el método de clase `total_abiertas(cls)`, que devuelva el número de cuentas abiertas.",
+   "starter": "class CuentaBancaria:\n    banco = \"PyBank\"\n    abiertas = 0\n\n    def __init__(self, titular, saldo=0):\n        # Paso 1: guarda titular y saldo, y suma 1 a las cuentas abiertas\n        ...\n\n    # Paso 2: @staticmethod importe_valido(cantidad)\n\n    # Paso 3: ingresar(cantidad) y retirar(cantidad)\n\n    # Paso 4: @classmethod total_abiertas(cls)\n\n\nc = CuentaBancaria(\"Ana\", 100)\nprint(c.ingresar(50))\nprint(c.retirar(30))\nprint(CuentaBancaria.total_abiertas())",
+   "solution": "class CuentaBancaria:\n    banco = \"PyBank\"\n    abiertas = 0\n\n    def __init__(self, titular, saldo=0):\n        self.titular = titular\n        self.saldo = saldo\n        CuentaBancaria.abiertas += 1\n\n    @staticmethod\n    def importe_valido(cantidad):\n        return cantidad > 0\n\n    def ingresar(self, cantidad):\n        if not CuentaBancaria.importe_valido(cantidad):\n            raise ValueError(\"El importe debe ser positivo\")\n        self.saldo += cantidad\n        return self.saldo\n\n    def retirar(self, cantidad):\n        if not CuentaBancaria.importe_valido(cantidad):\n            raise ValueError(\"El importe debe ser positivo\")\n        if cantidad > self.saldo:\n            raise ValueError(\"Saldo insuficiente\")\n        self.saldo -= cantidad\n        return self.saldo\n\n    @classmethod\n    def total_abiertas(cls):\n        return cls.abiertas\n\n\nc = CuentaBancaria(\"Ana\", 100)\nprint(c.ingresar(50))\nprint(c.retirar(30))\nprint(CuentaBancaria.total_abiertas())",
+   "checks": [
+    {
+     "stdin": "",
+     "test": "a = CuentaBancaria(\"Eva\", 10)\nassert (a.titular, a.saldo) == (\"Eva\", 10), \"Guarda titular y saldo como atributos con self\"\nassert CuentaBancaria(\"Leo\").saldo == 0, \"Si no se indica, el saldo empieza en 0\"",
+     "error": null
+    },
+    {
+     "stdin": "",
+     "test": "a = CuentaBancaria(\"Eva\", 10)\nassert a.ingresar(5) == 15, \"ingresar() debe sumar y devolver el saldo nuevo\"\nassert a.retirar(15) == 0, \"retirar() debe restar y devolver el saldo nuevo\"\nfor mal in (lambda: a.retirar(1), lambda: a.ingresar(-3), lambda: a.ingresar(0)):\n    try:\n        mal()\n    except ValueError:\n        pass\n    else:\n        raise AssertionError(\"Sin saldo suficiente o con un importe no positivo debe lanzarse ValueError\")\nassert a.saldo == 0, \"Una operación rechazada no debe cambiar el saldo\"",
+     "error": null
+    },
+    {
+     "stdin": "",
+     "test": "antes = CuentaBancaria.total_abiertas()\nx = CuentaBancaria(\"X\")\nCuentaBancaria(\"Y\")\nassert CuentaBancaria.total_abiertas() == antes + 2, \"Cada cuenta nueva debe sumar 1 a CuentaBancaria.abiertas (a través de la clase)\"\nassert \"abiertas\" not in vars(x), \"El contador es de la clase: usa CuentaBancaria.abiertas, no self.abiertas\"\nassert isinstance(CuentaBancaria.__dict__.get(\"importe_valido\"), staticmethod), \"importe_valido debe llevar @staticmethod\"\nassert isinstance(CuentaBancaria.__dict__.get(\"total_abiertas\"), classmethod), \"total_abiertas debe llevar @classmethod\"\nassert CuentaBancaria.importe_valido(5) and not CuentaBancaria.importe_valido(0), \"importe_valido: True solo si la cantidad es mayor que 0\"",
+     "error": "poo-atributos-metodos.self-en-atributo-clase"
+    }
+   ],
+   "hint": "Escribe `@staticmethod` encima de `def importe_valido(cantidad):` y `@classmethod` encima de `def total_abiertas(cls):`. En `ingresar` y `retirar`, comprueba primero y cambia el saldo después.",
+   "explain": "El saldo es de cada cuenta (atributo de instancia) y el contador, de todas (atributo de clase, que se cambia con `CuentaBancaria.abiertas`). Validar es una utilidad sin datos propios (estático) y contar las cuentas trabaja con la clase (de clase).",
+   "expect": "150\n120\n1\n"
+  },
+  {
+   "id": "poo3-11",
+   "concept": "poo-atributos-metodos",
+   "kind": "code",
+   "level": 2,
+   "daw": false,
+   "q": "**Ejercicio autónomo: `Temperatura`.** Crea la clase con:\n\n- El atributo de clase `CERO_ABSOLUTO = -273.15`.\n- El método estático `es_valida(celsius)`: `True` si la temperatura no está por debajo del cero absoluto.\n- `__init__(self, celsius)`: lanza `ValueError` si la temperatura no es válida; si lo es, la guarda en `self.celsius`.\n- El método `a_fahrenheit()`: devuelve `celsius * 9 / 5 + 32`.\n- El método de clase `desde_fahrenheit(cls, grados)`: crea y **devuelve un objeto** `Temperatura` a partir de grados Fahrenheit (`(grados - 32) * 5 / 9`).",
+   "starter": "class Temperatura:\n    CERO_ABSOLUTO = -273.15\n    ...",
+   "solution": "class Temperatura:\n    CERO_ABSOLUTO = -273.15\n\n    def __init__(self, celsius):\n        if not Temperatura.es_valida(celsius):\n            raise ValueError(\"Por debajo del cero absoluto\")\n        self.celsius = celsius\n\n    @staticmethod\n    def es_valida(celsius):\n        return celsius >= Temperatura.CERO_ABSOLUTO\n\n    def a_fahrenheit(self):\n        return self.celsius * 9 / 5 + 32\n\n    @classmethod\n    def desde_fahrenheit(cls, grados):\n        return cls((grados - 32) * 5 / 9)\n\n\nt = Temperatura(25)\nprint(t.a_fahrenheit())\nprint(Temperatura.desde_fahrenheit(212).celsius)\nprint(Temperatura.es_valida(-300))",
+   "checks": [
+    {
+     "stdin": "",
+     "test": "t = Temperatura(100)\nassert t.celsius == 100, \"Guarda la temperatura en self.celsius\"\nassert t.a_fahrenheit() == 212, f\"100 °C son 212 °F; a_fahrenheit() devuelve {t.a_fahrenheit()!r}\"",
+     "error": null
+    },
+    {
+     "stdin": "",
+     "test": "t = Temperatura.desde_fahrenheit(212)\nassert isinstance(t, Temperatura), \"desde_fahrenheit debe devolver un objeto Temperatura (return cls(...)), no un número\"\nassert round(t.celsius, 2) == 100, \"212 °F son 100 °C\"\nassert isinstance(Temperatura.__dict__.get(\"desde_fahrenheit\"), classmethod), \"desde_fahrenheit debe llevar @classmethod\"",
+     "error": "poo-atributos-metodos.tipo-metodo"
+    },
+    {
+     "stdin": "",
+     "test": "assert Temperatura.es_valida(-273.15) is True, \"El cero absoluto justo es válido\"\nassert Temperatura.es_valida(-300) is False, \"-300 °C está por debajo del cero absoluto\"\ntry:\n    Temperatura(-300)\nexcept ValueError:\n    pass\nelse:\n    raise AssertionError(\"Temperatura(-300) debe lanzar ValueError\")",
+     "error": null
+    }
+   ],
+   "hint": "En `desde_fahrenheit` calcula los grados Celsius y termina con `return cls(celsius)`. En `__init__`, llama a `Temperatura.es_valida(celsius)` antes de guardar nada.",
+   "explain": "La constante es común a todas las temperaturas (atributo de clase); validar no necesita ningún objeto (estático); convertir usa los datos de una temperatura (instancia), y crear una temperatura desde °F es un constructor alternativo (de clase).",
+   "expect": "77.0\n100.0\nFalse\n"
+  },
+  {
+   "id": "poo3-12",
+   "concept": "poo-atributos-metodos",
+   "kind": "code",
+   "level": 2,
+   "daw": false,
+   "q": "**Ejercicio autónomo: el IVA de una tienda.** Crea la clase `Producto` con:\n\n- El atributo de clase `iva = 21` (el mismo para todos los productos).\n- `__init__(self, nombre, precio)`.\n- `precio_final()`: devuelve el precio con IVA redondeado a 2 decimales (`round(..., 2)`).\n- El método de clase `cambiar_iva(cls, nuevo)`: cambia el IVA de **todos** los productos.\n\nPor ejemplo, un producto de 10 € cuesta 12.1 con el 21 % y 11.0 después de `Producto.cambiar_iva(10)`.",
+   "starter": "class Producto:\n    ...",
+   "solution": "class Producto:\n    iva = 21\n\n    def __init__(self, nombre, precio):\n        self.nombre = nombre\n        self.precio = precio\n\n    def precio_final(self):\n        return round(self.precio * (1 + Producto.iva / 100), 2)\n\n    @classmethod\n    def cambiar_iva(cls, nuevo):\n        cls.iva = nuevo\n\n\nlibro = Producto(\"Libro\", 20)\nprint(libro.precio_final())\nProducto.cambiar_iva(4)\nprint(libro.precio_final())",
+   "checks": [
+    {
+     "stdin": "",
+     "test": "assert \"iva\" in vars(Producto), \"iva debe ser un atributo de clase: escríbelo en el cuerpo de la clase\"\nProducto.iva = 21\np = Producto(\"A\", 10)\nassert p.precio_final() == 12.1, f\"10 € con un 21 % son 12.1; precio_final() devuelve {p.precio_final()!r}\"",
+     "error": null
+    },
+    {
+     "stdin": "",
+     "test": "Producto.iva = 21\np = Producto(\"A\", 10)\nq = Producto(\"B\", 20)\ntry:\n    Producto.cambiar_iva(10)\n    assert p.precio_final() == 11.0 and q.precio_final() == 22.0, \"cambiar_iva debe cambiar el IVA de TODOS los productos\"\n    assert isinstance(Producto.__dict__.get(\"cambiar_iva\"), classmethod), \"cambiar_iva debe llevar @classmethod y cambiar cls.iva\"\nfinally:\n    Producto.iva = 21",
+     "error": "poo-atributos-metodos.tipo-metodo"
+    },
+    {
+     "stdin": "",
+     "test": "Producto.iva = 21\np = Producto(\"A\", 9.99)\nassert p.precio_final() == 12.09, f\"Redondea a 2 decimales: 9.99 € con IVA son 12.09; devuelve {p.precio_final()!r}\"\nassert \"iva\" not in vars(p), \"El IVA es de la clase: no lo guardes en cada producto\"",
+     "error": "poo-atributos-metodos.self-en-atributo-clase"
+    }
+   ],
+   "hint": "Pon `iva = 21` en el cuerpo de la clase y escribe `@classmethod` encima de `def cambiar_iva(cls, nuevo):`.",
+   "explain": "El IVA es común a todos los productos, así que es un atributo de clase y se cambia con un método de clase (`cls.iva = nuevo`). El precio final depende de cada producto: método de instancia.",
+   "expect": "24.2\n20.8\n"
+  },
+  {
+   "id": "poo3-13",
+   "concept": "poo-atributos-metodos",
+   "kind": "choice",
+   "level": 1,
+   "daw": false,
+   "q": "Quieres añadir a la clase `Cliente` una función `es_dni_valido(texto)` que no usa ningún dato del objeto ni de la clase. ¿Qué tipo de método encaja mejor?",
+   "code": null,
+   "options": [
+    {
+     "text": "Un método estático, con `@staticmethod`",
+     "error": null
+    },
+    {
+     "text": "Un método de instancia, con `self`",
+     "error": "poo-atributos-metodos.tipo-metodo"
+    },
+    {
+     "text": "Un método de clase, con `@classmethod`",
+     "error": "poo-atributos-metodos.tipo-metodo"
+    },
+    {
+     "text": "Un atributo de clase",
+     "error": null
+    }
+   ],
+   "answer": 0,
+   "explain": "Si no necesita ni el objeto ni la clase, es una utilidad: método estático. Se llama sin crear ningún cliente: `Cliente.es_dni_valido(\"12345678Z\")`.",
+   "codeOptions": false
+  },
+  {
+   "id": "poo3-14",
+   "concept": "poo-atributos-metodos",
+   "kind": "output",
+   "level": 2,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "class Grupo:\n    miembros = []\n\n    def __init__(self, nombre):\n        self.nombre = nombre\n\n    def unir(self, persona):\n        self.miembros.append(persona)\n\na = Grupo(\"A\")\nb = Grupo(\"B\")\na.unir(\"Ana\")\nprint(len(b.miembros))",
+   "stdin": "",
+   "expect": "1",
+   "traps": {
+    "0": "poo-atributos-metodos.lista-de-clase"
+   },
+   "explain": "`miembros` es una lista de **clase**: `append` no crea un atributo nuevo, cambia la lista compartida, así que `b` también ve a Ana. Si cada grupo necesita la suya, se crea en `__init__` con `self.miembros = []`."
   },
   {
    "id": "poo-04",
