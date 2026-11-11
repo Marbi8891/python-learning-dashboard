@@ -4,6 +4,9 @@ import { buildExam, competencyAdvice, competencyStats, examByCompetency, examMin
 import { allStats, markRead, recordAttempt } from "../../frontend/js/learn/mastery.js";
 import { exercisesOf, fresh, index, NOW, seeded } from "./helpers.mjs";
 
+// Las unidades del módulo de POO (área `poo`) quedan fuera de Preparación DAW y de la prueba de nivel
+const notPoo = (id) => index.concepts.get(id).area !== "poo";
+
 const master = (state, concept) => {
   for (const e of exercisesOf(concept)) recordAttempt(state, e, { ok: true, error: null }, { now: NOW });
 };
@@ -11,7 +14,7 @@ const master = (state, concept) => {
 test("las competencias de DAW cubren todos los conceptos salvo POO y sus pesos suman 100", () => {
   const ids = index.data.daw.flatMap((c) => c.concepts);
   assert.equal(new Set(ids).size, ids.length);
-  assert.deepEqual([...ids].sort(), index.path.filter((id) => id !== "poo").sort());
+  assert.deepEqual([...ids].sort(), index.path.filter(notPoo).sort());
   assert.equal(index.data.daw.reduce((s, c) => s + c.weight, 0), 100);
 });
 
@@ -86,7 +89,7 @@ test("examMinutes y examByCompetency", () => {
 test("prueba de nivel: respuesta escrita o dos preguntas por concepto, sin código ni POO (AUD-002)", async () => {
   const { buildDiagnostic } = await import("../../frontend/js/learn/exam.js");
   const list = buildDiagnostic(index, { random: seeded(2) });
-  const concepts = index.path.filter((id) => id !== "poo");
+  const concepts = index.path.filter(notPoo);
   assert.deepEqual([...new Set(list.map((e) => e.concept))], concepts);
   assert.ok(list.every((e) => e.kind !== "code" && e.kind !== "order"));
   assert.equal(new Set(list.map((e) => e.id)).size, list.length, "sin repetidos");

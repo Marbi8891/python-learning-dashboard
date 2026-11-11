@@ -66,3 +66,17 @@ comportamiento que fijaba el test anterior: lo aprobó el autor al aprobar la au
 
 **Decisión:** todo el motor se escribe en JavaScript sin bibliotecas nuevas. El backend solo gana un id de documento.
 **Por qué:** coste de mantenimiento y arquitectura actual (HTML, CSS, ES modules, FastAPI).
+
+## DEC-016 · El módulo de POO vive en el núcleo por conceptos
+
+(DEC-011 a DEC-015 están reservadas por el Career Roadmap, PR #101.)
+
+**Decisión:** las 10 unidades de POO son conceptos del área `poo` de `learning.json`, con campos de unidad opcionales; no un curso de DAW aparte. El id `poo` pasa a ser la Unidad 2.
+**Por qué:** reutiliza el runner de Pyodide, los errores típicos, el repaso espaciado y las recomendaciones sin crear otro motor; los cursos de DAW no corrigen código en la web. Lo eligió el autor el 11/11/2026.
+**Consecuencia:** `#/teoria/poo` y el progreso existente se conservan; las unidades de POO quedan fuera del simulacro DAW y de la prueba de nivel hasta el Sprint 7 (`docs/MODULO_POO.md`).
+
+## DEC-017 · Correspondencias curriculares con estado
+
+**Decisión:** cada relación unidad → CE lleva `status` (`verified`, `proposed`, `unassigned`), `source` y `reviewed`. Todas nacen `proposed`; solo una persona puede marcarlas `verified` (`by`).
+**Por qué:** no se pueden presentar como oficiales relaciones que nadie ha validado (auditoría del piloto DAW).
+**Consecuencia:** la web enseña «pendiente de validar» junto a cada CE propuesto; el validador rechaza un `verified` sin autor.

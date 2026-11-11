@@ -98,7 +98,7 @@ test("«Continúa donde lo dejaste» resume solo el progreso guardado y se actua
   await expect(block.getByRole("heading", { name: "Continúa donde lo dejaste" })).toBeVisible();
   await expect(block).toContainText("guardado en este navegador");
   await expect(block).toContainText("Siguiente paso · Aprender: Comprender el problema y diseñar el algoritmo");
-  await expect(block).toContainText("0 de 22 conceptos dominados");
+  await expect(block).toContainText("0 de 24 conceptos dominados");
   await expect(block).toContainText("1 de 27 lecciones completadas");
   await expect(block.getByRole("link", { name: "Seguir con «Tipos de datos»" })).toHaveAttribute("href", "#/leccion/tipos");
   await expect(block.getByRole("link", { name: /Ver el plan de hoy/ })).toHaveAttribute("href", "#/aprender");

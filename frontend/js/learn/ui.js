@@ -165,6 +165,7 @@ function codeBody(ex, answer, reveal) {
     <label class="lx-field">Tu programa
       <textarea class="lx-editor" id="lx-code" rows="${Math.max(8, (answer.code ?? ex.starter).split("\n").length + 2)}" spellcheck="false" autocapitalize="off" autocomplete="off" aria-describedby="lx-code-help"${reveal ? " readonly" : ""}>${escapeHtml(answer.code ?? ex.starter)}</textarea>
     </label>
+    ${ex.expect ? `<p class="lx-note">Resultado esperado al ejecutar el programa:</p><pre class="lx-output lx-output--expected" tabindex="0">${escapeHtml(ex.expect)}</pre>` : ""}
     <p class="console__help" id="lx-code-help"><kbd>Tab</kbd> inserta 4 espacios · <kbd>Esc</kbd> y después <kbd>Tab</kbd> para salir del editor · ${RUN_KEYS_HTML} ejecuta</p>
     ${usesInput(ex) ? `<label class="lx-field">Entrada para probar (una línea por cada <code>input()</code>)<textarea id="lx-stdin" rows="2" spellcheck="false">${escapeHtml(answer.stdin ?? ex.checks.find((c) => c.stdin)?.stdin ?? "")}</textarea></label>` : ""}
     <div class="lx-actions">

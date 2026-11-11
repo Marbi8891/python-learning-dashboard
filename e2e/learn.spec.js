@@ -178,7 +178,7 @@ test("menú principal: Aprender, Teoría, Practicar, DAW y Progreso; el PCAP sig
 
 test("teoría: concepto con explicación, ejemplo línea a línea, cuándo usarlo y errores habituales", async ({ page }) => {
   await page.goto("/#/teoria");
-  await expect(page.locator(".lx-concept")).toHaveCount(22);
+  await expect(page.locator(".lx-concept")).toHaveCount(24);
   await page.getByRole("link", { name: "Bucles: while y for" }).click();
   await expect(page).toHaveURL(/#\/teoria\/bucles$/);
   await expect(page.locator("#learn-title")).toHaveText("Bucles: while y for");
@@ -379,8 +379,9 @@ test("planificador: tiempo, completar, posponer, deshacer, exámenes e historial
 
   await page.reload();
   await expect(page.locator(".lx-planner")).toContainText("Examen UT3");
-  const results = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]).analyze();
-  expect(results.violations.map((v) => v.id)).toEqual([]);
+  // Mismas reglas que antes, pero con la vista ya pintada: axe a media animación de entrada mide
+  // colores a medio fundir (contraste 3,2:1 que no ve nadie) y el resultado dependía del tiempo de carga
+  await audit(page);
 });
 
 for (const colorScheme of ["light", "dark"]) {

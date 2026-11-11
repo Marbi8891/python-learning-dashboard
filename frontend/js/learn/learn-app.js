@@ -16,7 +16,9 @@ import { onPlannerChange, planner, planOptions, savePlanner } from "./planner-st
 import { acceptanceRate, addExam, plannerHistory, removeExam, setMinutes, setTaskStatus, todayTasks, upcomingExams } from "./planner.js";
 import { isoDay } from "../srs.js";
 import { onWelcomeClick, onWelcomeKeydown, renderWelcome } from "./welcome.js";
-import { activeErrors, allStats, areaSummary, daysBetween, explainStats, lastActivity, markRead } from "./mastery.js";
+import { activeErrors, allStats, areaSummary, daysBetween, explainStats, lastActivity, markRead, markSection } from "./mastery.js";
+import { pooModule, renderModule, unitBody, unitCrumb, unitExercises, unitToc } from "./poo-view.js";
+import { pythonRunner } from "../console.js";
 import { fitPlanToBudget, missingPrerequisites, selectExercises, todayPlan } from "./recommend.js";
 import { activityExercises, EXAM_ACTIVITIES, renderDawPrep } from "./daw-prep.js";
 import { buildDiagnostic, buildExam, examMinutes } from "./exam.js";
@@ -239,6 +241,7 @@ function renderTheoryIndex() {
       <section class="lx-section" aria-labelledby="area-${area.id}">
         <h2 class="lx-section__title" id="area-${area.id}">${escapeHtml(area.title)} <span class="lx-muted">· ${area.mastered}/${area.total} dominados</span></h2>
         <p class="lx-muted">${escapeHtml(area.summary)}</p>
+        ${area.id === "poo" && pooModule(index) ? '<p><a class="btn btn--ghost" href="#/poo">Índice del módulo de POO: unidades y progreso</a></p>' : ""}
         <ol class="lx-concepts">
           ${area.ids
             .map((id) => {
@@ -286,22 +289,23 @@ function renderConcept(id) {
   const next = index.path[position + 1];
   // Índice «En esta página» (columna derecha en pantallas anchas). Son enlaces a la propia ruta:
   // el clic desplaza hasta la sección sin cambiar el hash (el enrutador usa el hash).
-  const toc = [
+  const unit = Boolean(concept.unit);
+  const toc = (unit ? unitToc(concept) : [
     ["lx-expl", "Explicación"],
     ["lx-example", "Ejemplo, línea a línea"],
     ["lx-when", "Cuándo usarlo"],
     ["lx-errors", "Errores habituales"],
     ["lx-practice", "Comprueba que lo entiendes"],
     ...(concept.related?.length ? [["lx-related", "Relacionado"]] : []),
-  ]
+  ])
     .map(([section, label]) => `<li><a href="#/teoria/${id}" data-learn="toc" data-section="${section}">${label}</a></li>`)
     .join("");
   return `
     <div class="lx-doc">
     <div class="lx-doc__main">
-    <p class="daw-crumb"><a href="#/teoria">Teoría</a> › ${escapeHtml(index.areas.find((a) => a.id === concept.area).title)}</p>
+    ${unit ? unitCrumb(index, concept) : `<p class="daw-crumb"><a href="#/teoria">Teoría</a> › ${escapeHtml(index.areas.find((a) => a.id === concept.area).title)}</p>`}
     <header class="lx-head">
-      <p class="eyebrow">Concepto ${position + 1} de ${index.path.length} · ${concept.daw === 3 ? "Imprescindible para DAW" : "Importante para DAW"}</p>
+      <p class="eyebrow">${unit ? `Módulo de POO · Unidad ${concept.unit.number}` : `Concepto ${position + 1} de ${index.path.length}`} · ${concept.daw === 3 ? "Imprescindible para DAW" : "Importante para DAW"}</p>
       <h1 class="lx-title" id="learn-title" tabindex="-1">${escapeHtml(concept.title)}</h1>
       <p class="lx-lead">${renderInline(concept.summary)}</p>
       <p class="lx-badges">${statusBadge(s)} ${s.attempted && s.enough ? `<span class="lx-muted">${percent(s.score)} de dominio</span>` : ""}</p>
@@ -313,6 +317,22 @@ function renderConcept(id) {
       }
       ${missing.length ? `<p class="lx-warning">Necesitas reforzar ${missing.map((r) => escapeHtml(title(r))).join(" y ")} antes de pasar a este concepto.</p>` : ""}
     </header>
+    ${unit ? unitBody(index, learning, concept, s, { lessons }) + unitPractice(id, exercises, kinds, s) : conceptBody(concept, { lines, errors, exercises, kinds, s, id, lessons })}
+    <nav class="daw-pager" aria-label="Conceptos">
+      ${prev ? `<a class="btn btn--ghost" href="#/teoria/${prev}">← ${escapeHtml(title(prev))}</a>` : "<span></span>"}
+      ${next ? `<a class="btn btn--ghost" href="#/teoria/${next}">${escapeHtml(title(next))} →</a>` : "<span></span>"}
+    </nav>
+    </div>
+    <nav class="lx-toc" aria-label="En esta página">
+      <p class="lx-toc__title">En esta página</p>
+      <ol class="lx-toc__list">${toc}</ol>
+    </nav>
+    </div>`;
+}
+
+/** Cuerpo de la página de un concepto del temario general (los del módulo de POO usan unitBody). */
+function conceptBody(concept, { lines, errors, exercises, kinds, s, id, lessons }) {
+  return `
     <section class="lx-section prose" aria-labelledby="lx-expl">
       <h2 class="lx-section__title" id="lx-expl">Explicación</h2>
       ${theoryText(concept)}
@@ -348,17 +368,21 @@ function renderConcept(id) {
         ? `<section class="lx-section" aria-labelledby="lx-related"><h2 class="lx-section__title" id="lx-related">Relacionado</h2>
             <ul class="lx-inline-list">${concept.related.map((r) => `<li><a href="#/teoria/${r}">${escapeHtml(title(r))}</a></li>`).join("")}</ul></section>`
         : ""
-    }
-    <nav class="daw-pager" aria-label="Conceptos">
-      ${prev ? `<a class="btn btn--ghost" href="#/teoria/${prev}">← ${escapeHtml(title(prev))}</a>` : "<span></span>"}
-      ${next ? `<a class="btn btn--ghost" href="#/teoria/${next}">${escapeHtml(title(next))} →</a>` : "<span></span>"}
-    </nav>
-    </div>
-    <nav class="lx-toc" aria-label="En esta página">
-      <p class="lx-toc__title">En esta página</p>
-      <ol class="lx-toc__list">${toc}</ol>
-    </nav>
-    </div>`;
+    }`;
+}
+
+/** Práctica de una unidad con todos sus ejercicios (la elige el motor, como en los conceptos). */
+function unitPractice(id, exercises, kinds, s) {
+  return `
+    <section class="lx-section" aria-labelledby="lx-practice">
+      <h2 class="lx-section__title" id="lx-practice">Práctica de la unidad</h2>
+      <p class="lx-muted">${exercises.length} ejercicios (${escapeHtml(kinds)}). La práctica elige primero lo que no dominas y los errores que has cometido.</p>
+      <div class="lx-actions">
+        <button class="btn btn--primary" type="button" data-learn="short" data-concept="${id}">Ejercicio corto (3)</button>
+        <button class="btn btn--ghost" type="button" data-learn="plan" data-type="practice" data-concept="${id}">Práctica completa</button>
+        ${s.status === "nuevo" ? `<button class="btn btn--ghost" type="button" data-learn="read" data-concept="${id}">He leído la teoría</button>` : ""}
+      </div>
+    </section>`;
 }
 
 /* ---------- Practicar ---------- */
@@ -603,6 +627,25 @@ function onClick(event) {
       markRead(learning, concept);
       saveLearning();
       break;
+    case "section-done":
+      markSection(learning, target.dataset.section);
+      saveLearning();
+      render(location.hash, { focusSelector: `[data-learn="unit-quiz"][data-section="${CSS.escape(target.dataset.section)}"]` });
+      break;
+    case "unit-quiz":
+    case "unit-practice": {
+      const unit = index.concepts.get(concept);
+      const section = unit.sections.find((sec) => sec.id === target.dataset.section);
+      const exercises = unitExercises(unit, { group: target.dataset.group, section: section?.id });
+      const label = section ? `Mini-quiz: ${section.title.replace(/`/g, "")}` : { guided: "Ejercicio guiado", autonomous: "Ejercicios autónomos", selfcheck: "Autoevaluación" }[target.dataset.group];
+      markRead(learning, concept);
+      saveLearning();
+      startSession({ kind: "practice", title: `${label} · ${title(concept)}`, exercises, concept });
+      break;
+    }
+    case "run-example":
+      runExample(target);
+      break;
     case "review-all":
       startReviewAll();
       break;
@@ -621,6 +664,24 @@ function onClick(event) {
     }
     default:
       break;
+  }
+}
+
+/** Ejecuta un ejemplo de una lección con el mismo Python del resto de la web (Pyodide en un Web Worker). */
+async function runExample(button) {
+  const unit = index.concepts.get(button.dataset.concept);
+  const example = unit?.sections.find((sec) => sec.id === button.dataset.section)?.examples[Number(button.dataset.example)];
+  const out = document.getElementById(button.getAttribute("aria-controls"));
+  if (!example || !out || button.disabled) return;
+  button.disabled = true;
+  out.textContent = "Ejecutando… (la primera vez Python tarda unos segundos en cargar)";
+  try {
+    const result = await pythonRunner.run(example.code, "");
+    out.textContent = [result.output, result.error].filter(Boolean).join("\n") || "(El programa no ha mostrado nada)";
+  } catch (error) {
+    out.textContent = error.message;
+  } finally {
+    button.disabled = false;
   }
 }
 
@@ -708,6 +769,7 @@ function renderView(route) {
   let html;
   if (section === "bienvenida") html = renderWelcome();
   else if (section === "teoria") html = arg && index.concepts.has(arg) ? renderConcept(arg) : renderTheoryIndex();
+  else if (section === "poo") html = renderModule(index, learning);
   else if (section === "practicar") html = renderPractice();
   else if (section === "progreso") html = renderProgress();
   else if (section === "daw") html = renderDawPrep(index, learning);
@@ -720,10 +782,11 @@ function renderView(route) {
     cambiar de ruta y sirve para distinguir pestañas. Antes todas se llamaban «Aprender». */
 function pageTitle(section, arg) {
   if (section === "teoria") return arg && index.concepts.has(arg) ? `${title(arg)} · Teoría` : "Teoría";
+  if (section === "poo") return "Módulo de POO";
   return { bienvenida: "Bienvenida", practicar: "Practicar", progreso: "Tu progreso", daw: "Preparación DAW" }[section] ?? "Aprender";
 }
 
-export const LEARN_ROUTES = ["#/bienvenida", "#/aprender", "#/teoria", "#/practicar", "#/progreso", "#/sesion"];
+export const LEARN_ROUTES = ["#/bienvenida", "#/aprender", "#/teoria", "#/poo", "#/practicar", "#/progreso", "#/sesion"];
 
 /** ¿La ruta es del núcleo educativo? `#/daw` es la Preparación DAW; `#/daw/<curso>` sigue en daw.js. */
 export const isLearnRoute = (hash) => hash === "#/daw" || LEARN_ROUTES.some((r) => hash === r || hash.startsWith(`${r}/`));
@@ -731,7 +794,7 @@ export const isLearnRoute = (hash) => hash === "#/daw" || LEARN_ROUTES.some((r) 
 /** Clave del menú principal para una ruta del núcleo. */
 export function learnNavKey(hash) {
   if (hash.startsWith("#/bienvenida")) return "bienvenida"; // ninguna entrada del menú
-  if (hash.startsWith("#/teoria")) return "teoria";
+  if (hash.startsWith("#/teoria") || hash.startsWith("#/poo")) return "teoria";
   if (hash.startsWith("#/practicar")) return "practicar";
   if (hash.startsWith("#/progreso")) return "progreso";
   if (hash.startsWith("#/daw")) return "daw";
