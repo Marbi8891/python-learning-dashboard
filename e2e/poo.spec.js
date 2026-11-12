@@ -137,7 +137,53 @@ test("el cuestionario de la unidad abre 15 preguntas y explica por qué la opci�
   await expect(feedback).toContainText("No es correcto");
   await expect(feedback.getByRole("heading", { name: "Por qué tu opción no es correcta" })).toBeVisible();
   await expect(feedback).toContainText("Usar clases no hace el programa más rápido");
+  // Tiene nota: un fallo no añade nuevos intentos al final
+  await expect(feedback).not.toContainText("volverás a intentarlo");
+  await expect(page.locator(".lx-session-bar")).toContainText("Ejercicio 1 de 15");
   await audit(page);
+});
+
+test("la nota del cuestionario se guarda y la unidad ofrece repasar las falladas", async ({ page }) => {
+  await page.goto("/#/teoria/poo-fundamentos");
+  const bank = await page.evaluate(async () => {
+    const data = await (await fetch("/data/learning.json")).json();
+    return data.concepts.find((c) => c.id === "poo-fundamentos").bank;
+  });
+  await page.evaluate((ids) => {
+    const at = new Date().toISOString();
+    const ex = Object.fromEntries(ids.map((id, i) => [id, { h: [i >= 2], last: at, n: 1 }]));
+    localStorage.setItem("pld:learn", JSON.stringify({ v: 1, ex, concepts: {}, errors: {}, log: [], exams: [], quizzes: { "poo-fundamentos": { best: 13, total: 15, last: 13, at, passedAt: at } } }));
+  }, bank);
+  await page.reload();
+  const section = page.locator("#lx-bank").locator("..");
+  await expect(section).toContainText("Superado");
+  await expect(section).toContainText("Mejor nota: 13 de 15");
+  await expect(page.locator("#lx-pass").locator("..")).toContainText("Cuestionario de la unidad: mejor nota 13 de 15");
+  await page.getByRole("button", { name: "Repasar las 2 preguntas falladas" }).click();
+  await expect(page.locator(".lx-session-bar")).toContainText("Ejercicio 1 de 2");
+  await expect(page.locator(".lx-session-bar")).toContainText("Repaso de las preguntas falladas");
+});
+
+test("la evaluación final: 30 preguntas sin corrección hasta el final y nota guardada", async ({ page }) => {
+  await page.goto("/#/poo");
+  const final = page.locator("#lx-poo-final").locator("..");
+  await expect(final).toContainText("Se supera con 21 aciertos o más (70 %)");
+  await expect(final).toContainText("Aún no lo has hecho");
+  await page.getByRole("button", { name: "Empezar la evaluación final (30 preguntas)" }).click();
+  await expect(page.locator(".lx-session-bar")).toContainText("Ejercicio 1 de 30");
+  await page.locator("#lx-form input[name=lx-choice]").first().check();
+  await page.getByRole("button", { name: "Comprobar", exact: true }).click();
+  // Sin corrección: pasa directamente a la siguiente pregunta
+  await expect(page.locator(".lx-feedback")).toHaveCount(0);
+  await expect(page.locator(".lx-session-bar")).toContainText("Ejercicio 2 de 30");
+  await page.getByRole("button", { name: "Terminar la evaluación" }).click();
+  await expect(page.locator("#lx-summary-title")).toContainText(/de 30 correctos · \d+ %/);
+  await expect(page.locator(".lx-summary")).toContainText("Sin superar");
+  await expect(page.locator(".lx-summary")).toContainText("Sin responder: 29 (cuentan como fallos)");
+  await expect(page.locator(".lx-reviews > li")).toHaveCount(30);
+  await audit(page);
+  await page.goto("/#/poo");
+  await expect(final).toContainText(/Mejor nota: [01] de 30/);
 });
 
 test("los ejemplos se ejecutan con Pyodide en el navegador", async ({ page }) => {

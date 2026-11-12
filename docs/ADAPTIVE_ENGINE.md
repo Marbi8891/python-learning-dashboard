@@ -50,6 +50,7 @@ Se distingue:
 |---|---|---|
 | Contenido leído | `concepts[id].read` | No |
 | Lección completada (módulo de POO) | `sections[id]` | No |
+| Nota de un cuestionario con nota (POO) | `quizzes[id]`: mejor nota, último intento y primer aprobado | No (sus respuestas sí, como intentos) |
 | Ejercicio intentado | `ex[id]` existe | Sí, con su último resultado |
 | Respuesta correcta | `ex[id].h.at(-1) === true`, `okAt` | Sí |
 | Nuevo intento tras ver la explicación | solo `log` y errores | No |

@@ -17,11 +17,11 @@ import { acceptanceRate, addExam, plannerHistory, removeExam, setMinutes, setTas
 import { isoDay } from "../srs.js";
 import { onWelcomeClick, onWelcomeKeydown, renderWelcome } from "./welcome.js";
 import { activeErrors, allStats, areaSummary, daysBetween, explainStats, lastActivity, markRead, markSection } from "./mastery.js";
-import { pooModule, renderModule, unitBody, unitCrumb, unitExercises, unitToc } from "./poo-view.js";
+import { failedBank, FINAL_ID, pooModule, renderModule, unitBody, unitCrumb, unitExercises, unitToc } from "./poo-view.js";
 import { pythonRunner } from "../console.js";
 import { fitPlanToBudget, missingPrerequisites, selectExercises, todayPlan } from "./recommend.js";
 import { activityExercises, EXAM_ACTIVITIES, renderDawPrep } from "./daw-prep.js";
-import { buildDiagnostic, buildExam, examMinutes } from "./exam.js";
+import { buildDiagnostic, buildExam, buildPooFinal, examMinutes } from "./exam.js";
 import {
   initSessionEvents,
   renderSession,
@@ -640,9 +640,19 @@ function onClick(event) {
       const label = section ? `Mini-quiz: ${section.title.replace(/`/g, "")}` : { guided: "Ejercicio guiado", autonomous: "Ejercicio principal", extras: "Prácticas adicionales", selfcheck: "Autoevaluación", bank: "Cuestionario de la unidad" }[target.dataset.group];
       markRead(learning, concept);
       saveLearning();
-      startSession({ kind: "practice", title: `${label} · ${title(concept)}`, exercises, concept });
+      // El cuestionario de la unidad tiene nota: sin nuevos intentos y con el resultado guardado
+      const quiz = !section && target.dataset.group === "bank";
+      startSession({ kind: quiz ? "quiz" : "practice", title: `${label} · ${title(concept)}`, exercises, concept, meta: quiz ? { quiz: concept } : {} });
       break;
     }
+    case "bank-review": {
+      const unit = index.concepts.get(concept);
+      startSession({ kind: "practice", title: `Repaso de las preguntas falladas · ${title(concept)}`, exercises: failedBank(learning, unit), concept });
+      break;
+    }
+    case "poo-final":
+      startSession({ kind: "final", title: "Evaluación final del módulo de POO", exercises: buildPooFinal(index), meta: { quiz: FINAL_ID } });
+      break;
     case "run-example":
       runExample(target);
       break;
