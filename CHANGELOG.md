@@ -9,6 +9,10 @@ cambios se agrupan por fecha de merge, con el número de pull request entre par�
 ## [Sin publicar]
 
 ### Añadido
+- `GET /api/v1/ready`: comprueba la base de datos y que el esquema está en la última migración (503
+  sin detalles si no); `/api/health` sigue sin tocar la base de datos para que Render no reinicie en
+  bucle. Script de copia y restauración (`scripts/ops/copia_bd.py`) con salvaguardas, ensayo en cada
+  CI y guía de operación: monitor, copias, restauración y vuelta atrás (`docs/OPERACION.md`, #111).
 - `deployment-check.yml`: comprueba el artefacto de Pages, la imagen Docker del backend y los workflows
   sin desplegar nada, y `dependabot.yml` vuelve (hacia `main`). Lo útil del PR #104, sin la rama `develop`.
 - Módulo de POO, Sprint 1: índice `#/poo` con las 10 unidades, página de unidad con objetivos,

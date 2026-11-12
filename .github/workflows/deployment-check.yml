@@ -80,6 +80,9 @@ jobs:
           curl -sfI http://127.0.0.1:8000/api/v1/health | tee /tmp/headers.txt
           grep -qi '^x-content-type-options: nosniff' /tmp/headers.txt
           grep -qi '^cache-control: no-store' /tmp/headers.txt
+          # /api/v1/ready: la imagen aplica las migraciones al arrancar, así que el esquema está al día
+          curl -sf http://127.0.0.1:8000/api/v1/ready | tee /tmp/ready.json
+          grep -q '"migrations":"ok"' /tmp/ready.json
           # /docs no se publica en producción
           test "$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8000/docs)" = 404
           # El proceso no corre como root

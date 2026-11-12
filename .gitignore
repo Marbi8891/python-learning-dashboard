@@ -38,3 +38,7 @@ backend/.local-secret
 # Informes locales del agente buscador-mejoras
 .claude/informes/
 frontend/_pyo
+
+# Copias de la base de datos: tienen datos personales (scripts/ops/copia_bd.py)
+copias/
+*.dump

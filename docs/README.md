@@ -11,6 +11,7 @@
 | [TESTING.md](TESTING.md) | Todas las pruebas y cuáles ejecutar según lo que cambies |
 | [CI_CD_MONITORING.md](CI_CD_MONITORING.md) | Cómo se vigila cada subida a GitHub Actions, cómo se avisa y cómo se corrigen los fallos |
 | [DEPLOY.md](DEPLOY.md) | Desplegar la web en GitHub Pages y la API en Render con Neon |
+| [OPERACION.md](OPERACION.md) | Vigilar (`/api/v1/ready` y monitor externo), copiar, restaurar y volver atrás |
 
 ## Arquitectura y funcionamiento
 

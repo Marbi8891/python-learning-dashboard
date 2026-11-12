@@ -149,6 +149,8 @@ Qué tener en cuenta:
 
 ## 6. Antes de abrirlo a usuarios reales
 
+- [ ] Monitor externo y primera copia de la base de datos, con un ensayo de restauración: [OPERACION.md](OPERACION.md).
+
 - [x] Responsable, contacto y proveedores (Render y Neon, Frankfurt) en `frontend/privacidad.html`.
 - [ ] Revisa y acepta los acuerdos de tratamiento de datos (DPA) de Render y Neon desde sus paneles o webs.
 - [ ] Al activar el SMTP, añade el proveedor de email a la política (sección 5).
