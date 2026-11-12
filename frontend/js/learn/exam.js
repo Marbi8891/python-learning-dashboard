@@ -55,7 +55,8 @@ export function competencyAdvice(index, competencies) {
 /** Preparación estimada (0-1): dominio de cada competencia ponderado por su peso en el simulacro. Orientativa. */
 export const examReadiness = (competencies) => competencies.reduce((sum, c) => sum + c.score * c.weight, 0) / 100;
 
-function shuffle(list, random) {
+/** Copia de la lista en orden aleatorio (Fisher-Yates). */
+export function shuffle(list, random = Math.random) {
   const copy = [...list];
   for (let i = copy.length - 1; i > 0; i -= 1) {
     const j = Math.floor(random() * (i + 1));

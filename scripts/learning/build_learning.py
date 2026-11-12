@@ -399,6 +399,11 @@ def check_bank_totals(units: list[dict], problems: Problems) -> None:
             problems.add(f"pregunta {ex['id']}", f"qtype no válido (usa {sorted(BANK_QTYPES)})")
     if len(listed) != BANK_SIZE * len(units):
         problems.add("banco de POO", f"{len(listed)} preguntas; se esperan {BANK_SIZE} por unidad")
+    # Banco cerrado: con todas las unidades publicadas son exactamente 15 × 10 = 150
+    if len(units) == len(MODULE["units"]) and len(listed) != BANK_SIZE * len(MODULE["units"]):
+        problems.add(
+            "banco de POO", f"el banco cerrado tiene {BANK_SIZE * len(MODULE['units'])} preguntas"
+        )
 
 
 def check_units(problems: Problems) -> list[dict]:

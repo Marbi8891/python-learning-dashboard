@@ -185,13 +185,14 @@ alumno nunca se envía al backend.
 | | Cuestionario de la unidad | Evaluación final |
 |---|---|---|
 | Dónde | Apartado «Cuestionario de la unidad» | Índice `#/poo` |
-| Preguntas | Las 15 del banco de la unidad | 30: de cada unidad, una del banco de cada nivel (1, 2 y 3), al azar |
+| Preguntas | Las 15 del banco de la unidad, en orden aleatorio cada vez | 30: de cada unidad, una del banco de cada nivel (1, 2 y 3), al azar |
 | Corrección | Al momento, con el porqué de cada opción incorrecta | Al terminar, pregunta a pregunta |
 | Nuevos intentos | No: la nota es la del primer intento | No |
 | Se supera con | 11 de 15 (70 %) | 21 de 30 (70 %) |
 | Sesión | `kind: "quiz"` | `kind: "final"` (sin tiempo; se puede terminar antes y lo no respondido cuenta como fallo) |
 
-`QUIZ_PASS` (`mastery.js`) fija el 70 % para los dos. El cuestionario superado es un criterio más de
+`QUIZ_PASS` (`mastery.js`) fija el 70 % para los dos. El banco está cerrado: con las 10 unidades,
+`build_learning.py --check` exige exactamente 150 preguntas (50 básicas, 60 intermedias y 40 avanzadas). El cuestionario superado es un criterio más de
 «Criterios de superación» de cada unidad, junto a los ejercicios obligatorios y el dominio.
 
 **Repaso.** Al terminar cualquiera de los dos, cada unidad trabajada recibe su fecha de repaso con el

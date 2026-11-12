@@ -120,6 +120,10 @@ test("completar una lección se guarda, no cuenta como dominio y el mini-quiz ab
 });
 
 test("el cuestionario de la unidad abre 15 preguntas y explica por qué la opción elegida es incorrecta", async ({ page }) => {
+  // Las preguntas salen en orden aleatorio: con este valor el barajado deja el orden del banco
+  await page.addInitScript(() => {
+    Math.random = () => 0.999999;
+  });
   await page.goto("/#/teoria/poo-fundamentos");
   // Las referencias se presentan como pendientes de comprobación, nunca como comprobadas
   const references = page.locator("#lx-references").locator("..");

@@ -21,7 +21,7 @@ import { failedBank, FINAL_ID, pooModule, renderModule, unitBody, unitCrumb, uni
 import { pythonRunner } from "../console.js";
 import { fitPlanToBudget, missingPrerequisites, selectExercises, todayPlan } from "./recommend.js";
 import { activityExercises, EXAM_ACTIVITIES, renderDawPrep } from "./daw-prep.js";
-import { buildDiagnostic, buildExam, buildPooFinal, examMinutes } from "./exam.js";
+import { buildDiagnostic, buildExam, buildPooFinal, examMinutes, shuffle } from "./exam.js";
 import {
   initSessionEvents,
   renderSession,
@@ -641,8 +641,9 @@ function onClick(event) {
       markRead(learning, concept);
       saveLearning();
       // El cuestionario de la unidad tiene nota: sin nuevos intentos y con el resultado guardado
+      // y las 15 preguntas en orden aleatorio cada vez
       const quiz = !section && target.dataset.group === "bank";
-      startSession({ kind: quiz ? "quiz" : "practice", title: `${label} · ${title(concept)}`, exercises, concept, meta: quiz ? { quiz: concept } : {} });
+      startSession({ kind: quiz ? "quiz" : "practice", title: `${label} · ${title(concept)}`, exercises: quiz ? shuffle(exercises) : exercises, concept, meta: quiz ? { quiz: concept } : {} });
       break;
     }
     case "bank-review": {

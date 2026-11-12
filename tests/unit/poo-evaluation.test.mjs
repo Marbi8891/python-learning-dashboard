@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import { cleanLearning, mergeLearning, QUIZ_PASS, quizResult, recordQuiz } from "../../frontend/js/learn/mastery.js";
 import { advance, createSession, finish, submit } from "../../frontend/js/learn/session.js";
-import { buildPooFinal } from "../../frontend/js/learn/exam.js";
+import { buildPooFinal, shuffle } from "../../frontend/js/learn/exam.js";
 import { availableUnits, failedBank, FINAL_ID, needed, renderModule, unitBody } from "../../frontend/js/learn/poo-view.js";
 import { allStats } from "../../frontend/js/learn/mastery.js";
 import { fresh, index, NOW, seeded } from "./helpers.mjs";
@@ -139,4 +139,11 @@ test("el índice del módulo ofrece la evaluación final de 30 preguntas y cuent
   assert.match(html, /Se supera con 21 aciertos o más/);
   assert.match(html, /llevas 1 de 10/);
   assert.match(html, /<dt>Cuestionarios superados<\/dt><dd>1 de 10<\/dd>/);
+});
+
+test("el cuestionario de la unidad baraja sus 15 preguntas sin perder ni repetir ninguna", () => {
+  const order = shuffle(unit.bank, seeded(5));
+  assert.notDeepEqual(order, unit.bank);
+  assert.deepEqual([...order].sort(), [...unit.bank].sort());
+  assert.deepEqual(unit.bank, index.concepts.get("poo-herencia").bank, "no cambia el banco original");
 });
