@@ -3,7 +3,8 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import { allStats, cleanLearning, markSection, mergeLearning, recordAttempt, sectionsDone } from "../../frontend/js/learn/mastery.js";
 import { availableUnits, exerciseTitle, pooModule, renderModule, unitBody, unitExercises, unitToc } from "../../frontend/js/learn/poo-view.js";
-import { errorsTested } from "../../frontend/js/learn/answers.js";
+import { errorsTested, grade } from "../../frontend/js/learn/answers.js";
+import { feedbackHtml } from "../../frontend/js/learn/ui.js";
 import { exercisesForError, similarExercise } from "../../frontend/js/learn/recommend.js";
 import { fresh, index, NOW } from "./helpers.mjs";
 
@@ -99,4 +100,32 @@ test("las vistas muestran las correspondencias como propuesta y el aviso de que 
 test("los ejercicios de la unidad tienen un título corto legible en las listas", () => {
   assert.equal(exerciseTitle(index.exercises.get("poo-11")), "Ejercicio guiado: la clase `Alumno`");
   assert.equal(exerciseTitle(index.exercises.get("poo-03")), index.exercises.get("poo-03").q);
+});
+
+test("cada unidad publicada muestra sus buenas prácticas, el cuestionario de 15, las prácticas adicionales y sus referencias", () => {
+  for (const { id } of availableUnits(index)) {
+    const unit = index.concepts.get(id);
+    const html = unitBody(index, fresh(), unit, allStats(index, fresh(), NOW).get(id));
+    const toc = unitToc(unit).map(([anchor]) => anchor);
+    for (const anchor of ["lx-practices", "lx-bank", "lx-references"]) {
+      assert.ok(toc.includes(anchor), `${id}: falta ${anchor} en el índice`);
+      assert.ok(html.includes(`id="${anchor}"`), `${id}: falta la sección ${anchor}`);
+    }
+    assert.equal(unitExercises(unit, { group: "bank" }).length, 15);
+    assert.ok(html.includes('data-group="bank"'), `${id}: el cuestionario se puede empezar`);
+    if (unit.extras?.length) assert.ok(html.includes('data-group="extras"'), `${id}: prácticas adicionales`);
+    // Ninguna referencia sin comprobar se presenta como comprobada
+    const pending = unit.references.filter((r) => r.status === "pending").length;
+    assert.equal(html.split("Pendiente de comprobación</span>").length - 1, pending);
+  }
+});
+
+test("al fallar una pregunta del banco, la corrección explica por qué la opción elegida es incorrecta", () => {
+  const q = index.exercises.get("poo1-15");
+  const wrong = q.options.findIndex((_, i) => i !== q.answer);
+  const result = grade(q, { choice: wrong });
+  assert.equal(result.ok, false);
+  assert.equal(result.why, q.options[wrong].why);
+  assert.ok(feedbackHtml(q, result).includes("Por qué tu opción no es correcta"));
+  assert.ok(!feedbackHtml(q, grade(q, { choice: q.answer })).includes("Por qué tu opción no es correcta"));
 });

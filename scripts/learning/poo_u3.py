@@ -7,7 +7,7 @@ protegen el estado del objeto. La salida de los ejemplos la obtiene build_learni
 """
 
 from exercises import bug, case, choice, code, fill, output
-from poo_common import proposed
+from poo_common import practice, proposed, ref
 
 CID = "poo-atributos-metodos"
 
@@ -146,7 +146,8 @@ UNIT = {
         },
     ],
     "guided": ["poo3-10"],
-    "autonomous": ["poo3-11", "poo3-12"],
+    "autonomous": ["poo3-15"],
+    "extras": ["poo3-11", "poo3-12"],
     "selfcheck": ["poo3-13", "poo3-14"],
     "recap": [
         "Los atributos de instancia (`self.x`) son propios de cada objeto; los de clase se escriben en el cuerpo de la clase y se comparten.",
@@ -157,13 +158,71 @@ UNIT = {
     ],
     "pass": {
         "minScore": 0.7,
-        "required": ["poo3-10", "poo3-11"],
+        "required": ["poo3-10", "poo3-15"],
         "text": [
-            "Resolver el ejercicio guiado (`CuentaBancaria`) y el autónomo `Temperatura` con todos los tests superados.",
+            "Resolver el ejercicio guiado (`CuentaBancaria`) y el ejercicio principal `Empleado` con todos los tests superados.",
             "Dominar la unidad según el motor: al menos un 70 % de aciertos recientes en sus ejercicios, con varios tipos distintos.",
             "Completar las lecciones ayuda a organizarte, pero **no** demuestra la competencia: la demuestran los ejercicios.",
         ],
     },
+    "practices": [
+        practice(
+            "Usa atributos de clase solo para datos comunes a todos los objetos, como constantes o contadores.",
+            "Lo que cambia de un objeto a otro tiene que ir en `self`, o todos lo compartirían.",
+        ),
+        practice(
+            "Cambia un atributo de clase a través de la clase (`Empleado.total += 1`), no con `self`.",
+            "`self.total = …` crea un atributo nuevo en ese objeto, que tapa al de la clase sin cambiarlo.",
+        ),
+        practice(
+            "No uses una lista o un diccionario como atributo de clase si cada objeto necesita los suyos.",
+            "Sería la misma lista para todas las instancias: lo que añade una lo verían todas.",
+        ),
+        practice(
+            "Escribe los constructores alternativos (`desde_texto`) con `@classmethod` y crea el objeto con `cls(...)`.",
+            "Con `cls` el método crea objetos de la clase desde la que se llama, también en las subclases.",
+        ),
+        practice(
+            "Usa `@staticmethod` para utilidades que no necesitan ni el objeto ni la clase, como comprobar un formato.",
+            "Deja claro que el método no toca el estado y se puede usar sin crear ningún objeto.",
+        ),
+        practice(
+            "Comprueba las reglas dentro del método que cambia el estado, como `retirar`.",
+            "Así la regla se cumple siempre, se llame al método desde donde se llame.",
+        ),
+    ],
+    "references": [
+        ref(
+            "py-tutorial-classes",
+            "9.3.5. Variables de clase y de instancia",
+            [
+                "atributos de clase compartidos por todas las instancias",
+                "por qué una lista como atributo de clase la comparten todos los objetos",
+            ],
+        ),
+        ref(
+            "py-faq-programming",
+            "Objetos: ¿Cómo creo datos estáticos de clase y métodos estáticos de clase?",
+            ["atributos de clase", "métodos con `@staticmethod` y `@classmethod`"],
+        ),
+    ],
+    "bank": [
+        "poo3-04",
+        "poo3-08",
+        "poo3-13",
+        "poo3-16",
+        "poo3-17",
+        "poo3-18",
+        "poo3-19",
+        "poo3-20",
+        "poo3-21",
+        "poo3-22",
+        "poo3-23",
+        "poo3-24",
+        "poo3-25",
+        "poo3-26",
+        "poo3-27",
+    ],
     "curriculum": [
         proposed("0485-RA2-d", "Se usan métodos y atributos (propiedades) de los objetos."),
         proposed("0485-RA2-e", "Se llaman métodos estáticos (`Clase.metodo(...)`)."),
@@ -683,6 +742,579 @@ EXERCISES = [
         level=2,
         daw=False,
     ),
+    # ---------- Ejercicio principal de la unidad
+    code(
+        "poo3-15",
+        CID,
+        '**Ejercicio principal: la clase `Empleado` con los tres tipos de método.** Crea la clase con:\n\n- El atributo de clase `total = 0`, que cuenta los empleados creados.\n- El método **estático** `es_dni_valido(dni)`: `True` si el texto tiene 9 caracteres, los 8 primeros son cifras y el último es una letra (solo se comprueba el formato).\n- `__init__(self, nombre, dni, sueldo)`: si el DNI no es válido lanza `ValueError`; si lo es, guarda los datos y suma 1 a `Empleado.total`.\n- El método **de clase** `desde_texto(cls, texto)`: crea un empleado a partir de un texto como `"Ana;12345678Z;1800"`.\n- El método de instancia `subir_sueldo(porcentaje)`: sube el sueldo de ese empleado.',
+        """
+        class Empleado:
+            total = 0
+        """,
+        """
+        class Empleado:
+            total = 0
+
+            @staticmethod
+            def es_dni_valido(dni):
+                return len(dni) == 9 and dni[:8].isdigit() and dni[8].isalpha()
+
+            def __init__(self, nombre, dni, sueldo):
+                if not Empleado.es_dni_valido(dni):
+                    raise ValueError(f"DNI con formato no válido: {dni}")
+                self.nombre = nombre
+                self.dni = dni
+                self.sueldo = sueldo
+                Empleado.total += 1
+
+            @classmethod
+            def desde_texto(cls, texto):
+                nombre, dni, sueldo = texto.split(";")
+                return cls(nombre, dni, float(sueldo))
+
+            def subir_sueldo(self, porcentaje):
+                self.sueldo = self.sueldo * (1 + porcentaje / 100)
+
+
+        ana = Empleado("Ana", "12345678Z", 1800)
+        luis = Empleado.desde_texto("Luis;87654321X;1500")
+        luis.subir_sueldo(10)
+        print(luis.nombre, round(luis.sueldo, 2), "· empleados:", Empleado.total)
+        """,
+        [
+            case(
+                'assert Empleado.es_dni_valido("12345678Z") is True, "Un DNI de 8 cifras y una letra es válido"\nassert not Empleado.es_dni_valido("1234567Z") and not Empleado.es_dni_valido("123456789"), "Con 7 cifras o sin letra final no es válido"\nassert isinstance(vars(Empleado)["es_dni_valido"], staticmethod), "es_dni_valido debe ser un método estático (@staticmethod)"',
+                error=f"{CID}.tipo-metodo",
+            ),
+            case(
+                'Empleado.total = 0\nEmpleado("Ana", "12345678Z", 1800)\nEmpleado("Eva", "11111111A", 1500)\nassert Empleado.total == 2, "total cuenta los empleados creados"\nassert "total" not in vars(Empleado("Leo", "22222222B", 1000)), "Suma en Empleado.total, no en self.total"',
+                error=f"{CID}.self-en-atributo-clase",
+            ),
+            case(
+                'Empleado.total = 0\ntry:\n    Empleado("Ana", "123", 1800)\nexcept ValueError:\n    pass\nelse:\n    raise AssertionError("Con un DNI no válido hay que lanzar ValueError")\nassert Empleado.total == 0, "Un empleado rechazado no cuenta en total"',
+            ),
+            case(
+                'e = Empleado.desde_texto("Ana;12345678Z;1800")\nassert (e.nombre, e.dni, e.sueldo) == ("Ana", "12345678Z", 1800), "desde_texto separa el texto por ; y convierte el sueldo en número"\nclass Becario(Empleado):\n    pass\nassert type(Becario.desde_texto("Eva;11111111A;600")) is Becario, "desde_texto debe crear el objeto con cls(...) para que funcione en subclases"',
+                error=f"{CID}.tipo-metodo",
+            ),
+            case(
+                'a = Empleado("Ana", "12345678Z", 1000)\nb = Empleado("Eva", "11111111A", 1000)\na.subir_sueldo(10)\nassert round(a.sueldo, 2) == 1100 and b.sueldo == 1000, "subir_sueldo cambia solo el sueldo de ese empleado"',
+            ),
+        ],
+        "Cada tipo de método tiene su sitio: `es_dni_valido` no necesita datos (estático), `desde_texto` necesita la clase para crear el objeto (de clase, con `cls`) y `subir_sueldo` trabaja con un empleado concreto (de instancia, con `self`). El contador es de la clase y se cambia a través de ella.",
+        'Pon `@staticmethod` y `@classmethod` encima de cada método. En `__init__`, valida **antes** de sumar al contador, y en `desde_texto` usa `texto.split(";")` y `return cls(...)`.',
+        wrong=[
+            (
+                """
+                class Empleado:
+                    total = 0
+
+                    def es_dni_valido(self, dni):
+                        return len(dni) == 9 and dni[:8].isdigit() and dni[8].isalpha()
+
+                    def __init__(self, nombre, dni, sueldo):
+                        self.nombre = nombre
+                        self.dni = dni
+                        self.sueldo = sueldo
+                        Empleado.total += 1
+                """,
+                1,
+            ),
+            (
+                """
+                class Empleado:
+                    total = 0
+
+                    @staticmethod
+                    def es_dni_valido(dni):
+                        return len(dni) == 9 and dni[:8].isdigit() and dni[8].isalpha()
+
+                    def __init__(self, nombre, dni, sueldo):
+                        if not Empleado.es_dni_valido(dni):
+                            raise ValueError(dni)
+                        self.nombre = nombre
+                        self.dni = dni
+                        self.sueldo = sueldo
+                        self.total += 1
+                """,
+                2,
+            ),
+            (
+                """
+                class Empleado:
+                    total = 0
+
+                    @staticmethod
+                    def es_dni_valido(dni):
+                        return len(dni) == 9 and dni[:8].isdigit() and dni[8].isalpha()
+
+                    def __init__(self, nombre, dni, sueldo):
+                        if not Empleado.es_dni_valido(dni):
+                            raise ValueError(dni)
+                        self.nombre = nombre
+                        self.dni = dni
+                        self.sueldo = sueldo
+                        Empleado.total += 1
+
+                    @staticmethod
+                    def desde_texto(texto):
+                        nombre, dni, sueldo = texto.split(";")
+                        return Empleado(nombre, dni, float(sueldo))
+
+                    def subir_sueldo(self, porcentaje):
+                        self.sueldo = self.sueldo * (1 + porcentaje / 100)
+                """,
+                4,
+            ),
+        ],
+        level=2,
+        daw=False,
+    ),
+    # ---------- Banco de preguntas de la unidad (cuestionario)
+    choice(
+        "poo3-16",
+        CID,
+        "¿Qué es un atributo de clase?",
+        [
+            ("Un dato definido directamente en la clase y compartido por todos sus objetos", None),
+            (
+                "Un dato que se crea en `__init__` con `self.`",
+                f"{CID}.self-en-atributo-clase",
+                "Eso es un atributo de instancia: cada objeto tiene el suyo.",
+            ),
+            (
+                "Un método que devuelve la propia clase",
+                f"{CID}.tipo-metodo",
+                "Un atributo es un dato, no una acción; los métodos de clase son otra cosa.",
+            ),
+            (
+                "Cualquier atributo cuyo nombre empieza por mayúscula",
+                None,
+                "Lo que lo hace de clase es dónde se define (debajo de `class`), no cómo se escribe su nombre.",
+            ),
+        ],
+        0,
+        "Se escribe debajo de `class`, fuera de los métodos, y es el mismo para todas las instancias: sirve para constantes y contadores.",
+        level=1,
+        daw=False,
+        bank=True,
+        qtype="teoria",
+    ),
+    choice(
+        "poo3-17",
+        CID,
+        "¿Qué diferencia hay entre `@staticmethod` y `@classmethod`?",
+        [
+            (
+                "El estático no recibe ni el objeto ni la clase; el de clase recibe la clase en `cls`",
+                None,
+            ),
+            (
+                "Un método estático no se puede llamar desde un objeto",
+                None,
+                "Se puede llamar desde la clase o desde un objeto; en los dos casos no recibe ninguno de los dos.",
+            ),
+            (
+                "Un método de clase solo se puede llamar una vez",
+                None,
+                "Se puede llamar todas las veces que haga falta, como cualquier método.",
+            ),
+            (
+                "Ninguna: son dos nombres para lo mismo",
+                f"{CID}.tipo-metodo",
+                "El de clase recibe `cls` como primer parámetro y el estático no recibe nada automáticamente.",
+            ),
+        ],
+        0,
+        "Un método estático es una función normal guardada en la clase. Un método de clase recibe la clase y por eso puede crear objetos con `cls(...)`.",
+        level=2,
+        daw=False,
+        bank=True,
+        qtype="teoria",
+    ),
+    choice(
+        "poo3-18",
+        CID,
+        "En esta clase, ¿qué es `iva`?",
+        [
+            ("Un atributo de clase: el mismo valor para todos los pedidos", None),
+            (
+                "Un atributo de instancia que tiene cada pedido",
+                f"{CID}.self-en-atributo-clase",
+                "Está fuera de `__init__` y sin `self.`: pertenece a la clase, no a cada objeto.",
+            ),
+            (
+                "Una variable local de `__init__`",
+                None,
+                "Está escrita fuera de cualquier método, así que no es local de `__init__`.",
+            ),
+            (
+                "Un dato que hay que pasar al crear cada pedido",
+                None,
+                "Al crear el pedido solo se pasa `base`, el único parámetro de `__init__`.",
+            ),
+        ],
+        0,
+        "Lo que se define debajo de `class` y fuera de los métodos es de la clase: `Pedido.iva` vale 21 para todos.",
+        code="""
+        class Pedido:
+            iva = 21
+
+            def __init__(self, base):
+                self.base = base
+        """,
+        level=1,
+        daw=False,
+        bank=True,
+        qtype="codigo",
+    ),
+    choice(
+        "poo3-19",
+        CID,
+        "¿Qué devuelve `Ficha.vacia()`?",
+        [
+            ("Un objeto `Ficha` nuevo, con el nombre vacío y 0 puntos", None),
+            (
+                "La propia clase `Ficha`",
+                f"{CID}.tipo-metodo",
+                '`cls` es la clase, pero `cls("", 0)` la llama y crea un objeto.',
+            ),
+            (
+                "`None`, porque los métodos de clase no pueden devolver objetos",
+                None,
+                "Pueden devolver cualquier valor; lo habitual es devolver un objeto nuevo creado con `cls`.",
+            ),
+            (
+                "Un error, porque falta pasar `cls` al llamarlo",
+                None,
+                "Python pasa la clase en `cls` solo, igual que pasa el objeto en `self`.",
+            ),
+        ],
+        0,
+        '`vacia` es un constructor alternativo: Python le pasa la clase y `cls("", 0)` crea una ficha con esos datos.',
+        code="""
+        class Ficha:
+            def __init__(self, nombre, puntos):
+                self.nombre = nombre
+                self.puntos = puntos
+
+            @classmethod
+            def vacia(cls):
+                return cls("", 0)
+        """,
+        level=2,
+        daw=False,
+        bank=True,
+        qtype="codigo",
+    ),
+    choice(
+        "poo3-20",
+        CID,
+        "Si se ejecuta `c.comision = 0` con una cuenta `c`, ¿qué pasa después al retirar dinero?",
+        [
+            ("Esa cuenta deja de pagar comisión y las demás siguen pagando 2", None),
+            (
+                "Todas las cuentas dejan de pagar comisión",
+                f"{CID}.self-en-atributo-clase",
+                "La asignación crea un atributo `comision` solo en `c`; `Cuenta.comision` sigue valiendo 2.",
+            ),
+            (
+                "Da error: un atributo de clase no se puede asignar desde un objeto",
+                None,
+                "No da error: Python crea en el objeto un atributo nuevo con ese nombre.",
+            ),
+            (
+                "La cuenta sigue pagando 2, porque `self.comision` siempre lee el de la clase",
+                None,
+                "`self.comision` busca primero en el objeto: si lo encuentra allí, ya no mira en la clase.",
+            ),
+        ],
+        0,
+        "Al leer `self.comision`, Python busca primero en el objeto y después en la clase. `c.comision = 0` crea un atributo de instancia que tapa al de la clase solo para `c`.",
+        code="""
+        class Cuenta:
+            comision = 2
+
+            def __init__(self, saldo):
+                self.saldo = saldo
+
+            def retirar(self, cantidad):
+                self.saldo -= cantidad + self.comision
+        """,
+        level=3,
+        daw=False,
+        bank=True,
+        qtype="codigo",
+    ),
+    choice(
+        "poo3-21",
+        CID,
+        "¿Qué muestra este programa?",
+        [
+            ("3", None),
+            (
+                "1",
+                f"{CID}.self-en-atributo-clase",
+                "`Alumno.total` es uno solo para toda la clase y cada alumno nuevo le suma 1.",
+            ),
+            (
+                "0",
+                None,
+                "Cada llamada `Alumno(...)` ejecuta `__init__`, que suma 1 al contador.",
+            ),
+            (
+                "Ana Luis Eva",
+                None,
+                "Se muestra el contador de la clase, no los nombres de los alumnos.",
+            ),
+        ],
+        0,
+        "Se crean tres alumnos y cada `__init__` suma 1 a `Alumno.total`, que es de la clase.",
+        code="""
+        class Alumno:
+            total = 0
+
+            def __init__(self, nombre):
+                self.nombre = nombre
+                Alumno.total += 1
+
+        Alumno("Ana")
+        Alumno("Luis")
+        Alumno("Eva")
+        print(Alumno.total)
+        """,
+        level=1,
+        daw=False,
+        bank=True,
+        qtype="prediccion",
+    ),
+    choice(
+        "poo3-22",
+        CID,
+        "¿Qué muestra este programa?",
+        [
+            ("10 21 21", None),
+            (
+                "10 10 10",
+                f"{CID}.self-en-atributo-clase",
+                "`a.iva = 10` no cambia la clase: crea un atributo `iva` solo en `a`.",
+            ),
+            (
+                "21 21 21",
+                None,
+                "`a` tiene ahora su propio `iva` (10), que es el que se lee antes que el de la clase.",
+            ),
+            (
+                "10 21 10",
+                None,
+                "`Producto.iva` es el de la clase y no ha cambiado: sigue en 21.",
+            ),
+        ],
+        0,
+        "La asignación a través de `a` crea un atributo de instancia. `b` y la clase siguen viendo el 21 de `Producto.iva`.",
+        code="""
+        class Producto:
+            iva = 21
+
+            def __init__(self, precio):
+                self.precio = precio
+
+        a = Producto(10)
+        b = Producto(20)
+        a.iva = 10
+        print(a.iva, b.iva, Producto.iva)
+        """,
+        level=2,
+        daw=False,
+        bank=True,
+        qtype="prediccion",
+    ),
+    choice(
+        "poo3-23",
+        CID,
+        "¿Qué muestra este programa?",
+        [
+            ("2 2", None),
+            (
+                "1 1",
+                f"{CID}.lista-de-clase",
+                "La lista es un atributo de clase: los dos equipos añaden en la misma lista.",
+            ),
+            (
+                "2 0",
+                f"{CID}.lista-de-clase",
+                "`b.jugadores` no es una lista vacía propia: es la misma lista de la clase.",
+            ),
+            (
+                "1 2",
+                None,
+                "`a.jugadores` y `b.jugadores` son el mismo objeto, así que tienen la misma longitud.",
+            ),
+        ],
+        0,
+        "`jugadores = []` debajo de `class` crea **una** lista para toda la clase. `append` la modifica y no crea otra, así que los dos equipos ven a Ana y a Luis.",
+        code="""
+        class Equipo:
+            jugadores = []
+
+            def fichar(self, nombre):
+                self.jugadores.append(nombre)
+
+        a = Equipo()
+        b = Equipo()
+        a.fichar("Ana")
+        b.fichar("Luis")
+        print(len(a.jugadores), len(b.jugadores))
+        """,
+        level=3,
+        daw=False,
+        bank=True,
+        qtype="prediccion",
+    ),
+    choice(
+        "poo3-24",
+        CID,
+        "Este programa termina con `TypeError`. ¿Por qué?",
+        [
+            (
+                "Un método estático no recibe `self`: sobra ese parámetro y por eso falta un argumento",
+                None,
+            ),
+            (
+                "Los métodos estáticos no pueden devolver valores",
+                None,
+                "Pueden devolver lo que haga falta, como cualquier función.",
+            ),
+            (
+                "Hay que crear un `Conversor()` antes de usar el método",
+                f"{CID}.tipo-metodo",
+                "Un método estático se puede llamar desde la clase sin crear objetos; el fallo está en sus parámetros.",
+            ),
+            (
+                "`round` no se puede usar dentro de una clase",
+                None,
+                "Dentro de un método se puede usar cualquier función de Python.",
+            ),
+        ],
+        0,
+        "Con `@staticmethod` Python no pasa nada automáticamente: el 1000 llega en `self` y falta `pesetas`. Hay que quitar `self` de los parámetros.",
+        code="""
+        class Conversor:
+            @staticmethod
+            def a_euros(self, pesetas):
+                return round(pesetas / 166.386, 2)
+
+        print(Conversor.a_euros(1000))
+        """,
+        level=2,
+        daw=False,
+        bank=True,
+        qtype="error",
+    ),
+    choice(
+        "poo3-25",
+        CID,
+        "Este programa termina con `TypeError: … missing 1 required positional argument: 'texto'`. ¿Qué falta?",
+        [
+            ("El decorador `@classmethod` encima de `desde_texto`", None),
+            (
+                "El decorador `@staticmethod` encima de `desde_texto`",
+                f"{CID}.tipo-metodo",
+                "Con `@staticmethod` no se recibiría `cls` y no se podría crear el objeto con `cls(...)`.",
+            ),
+            (
+                "Crear antes una fecha y llamar `f.desde_texto(...)`",
+                None,
+                "Sin decorador también fallaría: la fecha llegaría en `cls` y el texto en `texto`, y no tendría sentido crear una fecha para crear otra.",
+            ),
+            (
+                "Escribir `return Fecha(...)` en vez de `return cls(...)`",
+                None,
+                "El error ocurre antes de llegar al `return`: el problema es cómo recibe los parámetros.",
+            ),
+        ],
+        0,
+        'Sin `@classmethod`, `Fecha.desde_texto("11/11/2026")` es una llamada normal: el texto llega en `cls` y falta `texto`. Con el decorador, Python pasa la clase en `cls`.',
+        code="""
+        class Fecha:
+            def __init__(self, dia, mes, anio):
+                self.dia = dia
+                self.mes = mes
+                self.anio = anio
+
+            def desde_texto(cls, texto):
+                dia, mes, anio = texto.split("/")
+                return cls(int(dia), int(mes), int(anio))
+
+        f = Fecha.desde_texto("11/11/2026")
+        """,
+        level=3,
+        daw=False,
+        bank=True,
+        qtype="error",
+    ),
+    choice(
+        "poo3-26",
+        CID,
+        "La clase `Pedido` tiene el atributo de clase `creados = 0` para contar los pedidos. ¿Qué línea va dentro de `__init__`?",
+        [
+            ("Pedido.creados += 1", None),
+            (
+                "self.creados += 1",
+                f"{CID}.self-en-atributo-clase",
+                "Crearía en cada pedido su propio `creados` con valor 1, y el contador de la clase no cambiaría.",
+            ),
+            (
+                "creados += 1",
+                None,
+                "Sin `Pedido.` es una variable local que no existe: daría `UnboundLocalError`.",
+            ),
+            (
+                "cls.creados += 1",
+                f"{CID}.tipo-metodo",
+                "`__init__` es un método de instancia: no recibe `cls`, así que daría `NameError`.",
+            ),
+        ],
+        0,
+        "Un dato de la clase se cambia a través de la clase. Así todos los pedidos suman en el mismo contador.",
+        level=2,
+        daw=False,
+        code_options=True,
+        bank=True,
+        qtype="solucion",
+    ),
+    choice(
+        "poo3-27",
+        CID,
+        'Hay que crear un `Punto` a partir de un texto como `"3,4"`, y que funcione igual en las subclases de `Punto`. ¿Qué solución es la correcta?',
+        [
+            (
+                "Un método con `@classmethod` que separa el texto y devuelve `cls(int(x), int(y))`",
+                None,
+            ),
+            (
+                "Un método con `@staticmethod` que devuelve `Punto(int(x), int(y))`",
+                f"{CID}.tipo-metodo",
+                "Funciona en `Punto`, pero desde una subclase seguiría creando un `Punto` y no un objeto de la subclase.",
+            ),
+            (
+                "Un método de instancia `desde_texto(self, texto)`",
+                f"{CID}.tipo-metodo",
+                "Haría falta tener ya un punto para poder crear otro.",
+            ),
+            (
+                'Un atributo de clase `texto = "3,4"`',
+                None,
+                "Un atributo guarda un dato, pero no crea objetos.",
+            ),
+        ],
+        0,
+        "Un método de clase recibe la clase desde la que se llama: `cls(...)` crea un `Punto` o un objeto de la subclase, según el caso.",
+        level=3,
+        daw=False,
+        bank=True,
+        qtype="solucion",
+    ),
 ]
 
 # Errores típicos (slug, etiqueta, por qué, qué pensar, cómo evitarlo)
@@ -716,3 +1348,34 @@ ERRORS = [
         "Crea las listas y diccionarios propios de cada objeto dentro de `__init__` con `self.`.",
     ),
 ]
+
+# Preguntas tipo test que ya existían y pasan al banco: (tipo, nivel, por qué falla cada distractor)
+BANK_TAGS = {
+    "poo3-04": (
+        "teoria",
+        1,
+        [
+            "Eso es `self` en un método de instancia; con `@classmethod` llega la clase aunque se llame desde un objeto.",
+            "Reciben la clase como primer parámetro, y después los parámetros que se definan.",
+            "La clase no guarda ningún «último objeto»: `cls` es la clase misma.",
+        ],
+    ),
+    "poo3-08": (
+        "diseno",
+        2,
+        [
+            "Repetir la comprobación fuera es fácil de olvidar; dentro del método la regla se cumple siempre.",
+            "Un atributo acepta cualquier número: la regla la tiene que poner la clase.",
+            "Un atributo de clase es un dato compartido, no una comprobación.",
+        ],
+    ),
+    "poo3-13": (
+        "diseno",
+        1,
+        [
+            "No usa ningún dato del objeto: pedir `self` obligaría a crear un cliente solo para validar un texto.",
+            "No necesita la clase para nada: `cls` sobraría.",
+            "Un atributo guarda un dato; aquí hace falta una acción que reciba un texto.",
+        ],
+    ),
+}

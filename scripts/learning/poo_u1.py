@@ -7,7 +7,7 @@ La salida de los ejemplos la obtiene build_learning.py ejecutándolos.
 """
 
 from exercises import case, choice, code, output
-from poo_common import proposed
+from poo_common import practice, proposed, ref
 
 CID = "poo-fundamentos"
 
@@ -139,7 +139,8 @@ UNIT = {
         },
     ],
     "guided": ["poo1-10"],
-    "autonomous": ["poo1-11"],
+    "autonomous": ["poo1-14"],
+    "extras": ["poo1-11"],
     "selfcheck": ["poo1-12", "poo1-13"],
     "recap": [
         "La programación procedural separa datos y funciones; la POO los junta en objetos.",
@@ -150,13 +151,69 @@ UNIT = {
     ],
     "pass": {
         "minScore": 0.7,
-        "required": ["poo1-10", "poo1-11"],
+        "required": ["poo1-10", "poo1-14"],
         "text": [
-            "Resolver el ejercicio guiado (tres clases con `describir()`) y el autónomo `Libro` con todos los tests superados.",
+            "Resolver el ejercicio guiado (tres clases con `describir()`) y el ejercicio principal `Producto` con todos los tests superados.",
             "Dominar la unidad según el motor: al menos un 70 % de aciertos recientes en sus ejercicios, con varios tipos distintos.",
             "Completar las lecciones ayuda a organizarte, pero **no** demuestra la competencia: la demuestran los ejercicios.",
         ],
     },
+    "practices": [
+        practice(
+            "Antes de programar, subraya en el enunciado los sustantivos (posibles clases), sus características (atributos) y los verbos (métodos).",
+            "Así el diseño sale del problema y no de la intuición del momento, y es más fácil explicar por qué existe cada clase.",
+        ),
+        practice(
+            "Nombra las clases en singular y con mayúscula inicial en cada palabra: `Producto`, `CuentaBancaria`.",
+            "Cada clase describe un solo ejemplar, y el nombre la distingue a simple vista de una variable o una función (`producto`, `mostrar`).",
+        ),
+        practice(
+            "Crea una clase cuando haya datos y acciones que vayan juntos; para un cálculo suelto, deja una función.",
+            "Una clase sin datos propios solo añade código y no aporta organización.",
+        ),
+        practice(
+            "Haz que los métodos que calculan algo lo devuelvan con `return` y deja `print` para el programa principal.",
+            "Un valor devuelto se puede comprobar, reutilizar en otro cálculo y probar con tests.",
+        ),
+        practice(
+            "Guarda los datos de cada ejemplar en el propio objeto (`self.precio`) y no en variables sueltas del programa.",
+            "Así cada objeto lleva sus valores consigo y dos productos no se pisan los datos.",
+        ),
+    ],
+    "references": [
+        ref(
+            "py-tutorial-classes",
+            "9.3. Un primer vistazo a las clases",
+            ["qué es una clase y cómo se crea un objeto", "atributos y métodos de una instancia"],
+        ),
+        ref(
+            "py-tutorial-classes",
+            "9.1. Unas palabras sobre nombres y objetos",
+            ["en Python los valores son objetos y varios nombres pueden apuntar al mismo"],
+        ),
+        ref(
+            "py-faq-programming",
+            "Objetos: ¿Qué es una clase? y ¿Qué es un método?",
+            ["definición de clase y de método"],
+        ),
+    ],
+    "bank": [
+        "poo1-01",
+        "poo1-03",
+        "poo1-04",
+        "poo1-06",
+        "poo1-07",
+        "poo1-08",
+        "poo1-09",
+        "poo1-12",
+        "poo1-15",
+        "poo1-16",
+        "poo1-17",
+        "poo1-18",
+        "poo1-19",
+        "poo1-20",
+        "poo1-21",
+    ],
     "curriculum": [
         proposed(
             "0485-RA2-a",
@@ -306,7 +363,7 @@ EXERCISES = [
     choice(
         "poo1-09",
         CID,
-        "Al modelar `Alumno` para la secretaría guardas nombre, curso y notas, pero no su color favorito. ¿Qué pilar estás aplicando?",
+        "Esta clase `Alumno` es para la secretaría: guarda nombre, curso y notas, pero no el color favorito del alumno. ¿Qué pilar de la POO se está aplicando?",
         [
             ("Abstracción", None),
             ("Herencia", None),
@@ -315,6 +372,13 @@ EXERCISES = [
         ],
         0,
         "La **abstracción** consiste en quedarse con lo que importa para el problema y dejar fuera el resto.",
+        code="""
+        class Alumno:
+            def __init__(self, nombre, curso, notas):
+                self.nombre = nombre
+                self.curso = curso
+                self.notas = notas
+        """,
         level=1,
         daw=False,
     ),
@@ -487,7 +551,7 @@ EXERCISES = [
     choice(
         "poo1-12",
         CID,
-        "¿Cuál de estas afirmaciones es correcta?",
+        "Con este código, ¿cuál de estas afirmaciones es correcta?",
         [
             (
                 "De una clase se pueden crear muchos objetos, y cada uno guarda sus propios valores",
@@ -498,7 +562,15 @@ EXERCISES = [
             ("Los métodos son los datos que guarda un objeto", f"{CID}.atributo-metodo"),
         ],
         0,
-        "La clase se define una vez con `class` y de ella se crean todos los objetos que haga falta. Los datos son atributos; los métodos son acciones.",
+        "La clase se define una vez con `class` y de ella se crean todos los objetos que haga falta: aquí `a` y `b` son dos productos, cada uno con su nombre. Los datos son atributos; los métodos son acciones.",
+        code="""
+        class Producto:
+            def __init__(self, nombre):
+                self.nombre = nombre
+
+        a = Producto("Teclado")
+        b = Producto("Ratón")
+        """,
         level=1,
         daw=False,
     ),
@@ -521,7 +593,439 @@ EXERCISES = [
         level=2,
         daw=False,
     ),
+    # ---------- Ejercicio principal de la unidad
+    code(
+        "poo1-14",
+        CID,
+        '**Ejercicio principal: la clase `Producto`.** Una tienda quiere dejar de guardar sus productos en diccionarios. Crea la clase `Producto` con:\n\n- `__init__(self, nombre, precio, unidades=0)`: guarda los tres datos como atributos.\n- `mostrar()`: **devuelve** un texto como `"Teclado · 25.00 € · 3 uds."` (el precio con dos decimales).\n- `valor_stock()`: devuelve el precio por las unidades.\n- `reponer(cantidad)`: suma la cantidad a las unidades.\n\nCrea dos productos, repón uno y muestra los dos.',
+        """
+        class Producto:
+            ...
+        """,
+        """
+        class Producto:
+            def __init__(self, nombre, precio, unidades=0):
+                self.nombre = nombre
+                self.precio = precio
+                self.unidades = unidades
+
+            def mostrar(self):
+                return f"{self.nombre} · {self.precio:.2f} € · {self.unidades} uds."
+
+            def valor_stock(self):
+                return self.precio * self.unidades
+
+            def reponer(self, cantidad):
+                self.unidades += cantidad
+
+
+        teclado = Producto("Teclado", 25, 3)
+        raton = Producto("Ratón", 9.5)
+        raton.reponer(4)
+        print(teclado.mostrar())
+        print(raton.mostrar())
+        """,
+        [
+            case(
+                'p = Producto("Monitor", 120, 2)\nassert (p.nombre, p.precio, p.unidades) == ("Monitor", 120, 2), "Guarda nombre, precio y unidades como atributos con self"\nassert Producto("Cable", 3).unidades == 0, "Las unidades empiezan en 0 si no se indican"',
+                error=f"{CID}.atributo-metodo",
+            ),
+            case(
+                'p = Producto("Teclado", 25, 3)\nassert p.mostrar() == "Teclado · 25.00 € · 3 uds.", f"mostrar() debe devolver \'Teclado · 25.00 € · 3 uds.\'; devuelve {p.mostrar()!r}"',
+            ),
+            case(
+                'p = Producto("Teclado", 25, 3)\nassert p.valor_stock() == 75, "valor_stock() devuelve precio × unidades"\np.reponer(2)\nassert p.unidades == 5 and p.valor_stock() == 125, "reponer() suma la cantidad a las unidades del producto"',
+            ),
+            case(
+                'a = Producto("A", 1, 1)\nb = Producto("B", 2, 1)\na.reponer(10)\nassert b.unidades == 1, "Reponer un producto no debe cambiar las unidades de otro"\nassert a.mostrar() != b.mostrar(), "Cada producto muestra sus propios datos"',
+                error=f"{CID}.clase-instancia",
+            ),
+        ],
+        "Los datos (`nombre`, `precio`, `unidades`) viven en cada objeto y los métodos trabajan con ellos a través de `self`. Por eso reponer el ratón no cambia el teclado: cada producto es una instancia con su propio estado.",
+        "Copia la estructura de `__init__` de la lección. Para el texto usa una f-string con `{self.precio:.2f}` y recuerda **devolverlo** con `return`, no imprimirlo.",
+        wrong=[
+            (
+                """
+                class Producto:
+                    def __init__(self, nombre, precio, unidades=0):
+                        self.nombre = nombre
+                        self.precio = precio
+                        self.unidades = unidades
+
+                    def mostrar(self):
+                        print(f"{self.nombre} · {self.precio:.2f} € · {self.unidades} uds.")
+
+                    def valor_stock(self):
+                        return self.precio * self.unidades
+
+                    def reponer(self, cantidad):
+                        self.unidades += cantidad
+                """,
+                2,
+            ),
+            (
+                """
+                class Producto:
+                    unidades = 0
+
+                    def __init__(self, nombre, precio, unidades=0):
+                        self.nombre = nombre
+                        self.precio = precio
+                        Producto.unidades = unidades
+
+                    def mostrar(self):
+                        return f"{self.nombre} · {self.precio:.2f} € · {Producto.unidades} uds."
+
+                    def valor_stock(self):
+                        return self.precio * Producto.unidades
+
+                    def reponer(self, cantidad):
+                        Producto.unidades += cantidad
+                """,
+                4,
+            ),
+        ],
+        level=2,
+        daw=False,
+    ),
+    # ---------- Banco de preguntas de la unidad (cuestionario)
+    choice(
+        "poo1-15",
+        CID,
+        "¿Qué muestra este programa?",
+        [
+            ("35 20", None),
+            (
+                "35 35",
+                f"{CID}.clase-instancia",
+                "Cambiar `a.precio` solo cambia el objeto `a`: `b` es otra instancia con su propio precio.",
+            ),
+            (
+                "40 20",
+                None,
+                "Los atributos de un objeto se pueden cambiar después de crearlo: `a.precio = 35` sustituye el 40.",
+            ),
+            (
+                "AttributeError",
+                None,
+                "`precio` existe en los dos objetos porque lo crea `__init__`; asignarle otro valor no da error.",
+            ),
+        ],
+        0,
+        "Cada objeto guarda sus propios valores. `a.precio = 35` cambia el precio del teclado y el ratón conserva sus 20.",
+        code="""
+        class Producto:
+            def __init__(self, nombre, precio):
+                self.nombre = nombre
+                self.precio = precio
+
+        a = Producto("Teclado", 40)
+        b = Producto("Ratón", 20)
+        a.precio = 35
+        print(a.precio, b.precio)
+        """,
+        level=2,
+        daw=False,
+        bank=True,
+        qtype="prediccion",
+    ),
+    choice(
+        "poo1-16",
+        CID,
+        "¿Qué muestra este programa?",
+        [
+            ("str HOLA", None),
+            (
+                "hola HOLA",
+                f"{CID}.clase-instancia",
+                "`type()` no devuelve el valor sino su clase; el nombre de la clase de un texto es `str`.",
+            ),
+            (
+                "str hola",
+                None,
+                "`upper()` es un método de los textos que devuelve otro texto en mayúsculas.",
+            ),
+            (
+                "texto HOLA",
+                None,
+                "Las clases de Python tienen nombre en inglés: la de los textos se llama `str`.",
+            ),
+        ],
+        0,
+        "Un texto es un objeto de la clase `str` y `upper()` es uno de sus métodos: en Python los tipos predefinidos también son clases.",
+        code="""
+        saludo = "hola"
+        print(type(saludo).__name__, saludo.upper())
+        """,
+        level=2,
+        daw=False,
+        bank=True,
+        qtype="prediccion",
+    ),
+    choice(
+        "poo1-17",
+        CID,
+        "¿Qué muestra este programa?",
+        [
+            ("2 1", None),
+            (
+                "3 3",
+                f"{CID}.clase-instancia",
+                "La lista se crea en `__init__`, así que cada carrito tiene la suya: no comparten productos.",
+            ),
+            (
+                "1 1",
+                None,
+                "`a` recibe dos llamadas a `meter` (pan y sal), y cada una añade un elemento.",
+            ),
+            (
+                "3 0",
+                None,
+                "Lo que se mete en `b` va a la lista de `b`, no a la de `a`.",
+            ),
+        ],
+        0,
+        "`self.items = []` se ejecuta al crear **cada** carrito, así que hay dos listas. `a` acaba con pan y sal (2) y `b` con leche (1).",
+        code="""
+        class Carrito:
+            def __init__(self):
+                self.items = []
+
+            def meter(self, producto):
+                self.items.append(producto)
+
+        a = Carrito()
+        b = Carrito()
+        a.meter("pan")
+        b.meter("leche")
+        a.meter("sal")
+        print(len(a.items), len(b.items))
+        """,
+        level=3,
+        daw=False,
+        bank=True,
+        qtype="prediccion",
+    ),
+    choice(
+        "poo1-18",
+        CID,
+        "Este programa termina con `TypeError`. ¿Cuál es la causa?",
+        [
+            ("Falta el precio: `__init__` pide nombre y precio y solo se le pasa el nombre", None),
+            (
+                'Hay que pasar `self` al crear el objeto: `Producto(self, "Teclado")`',
+                None,
+                "Python pasa `self` solo; al crear el objeto solo se escriben los datos.",
+            ),
+            (
+                "Falta `return self` al final de `__init__`",
+                None,
+                "`__init__` no devuelve nada: solo prepara el objeto que Python ya ha creado.",
+            ),
+            (
+                "Una clase no puede recibir textos como datos",
+                None,
+                "Un atributo puede guardar cualquier valor: textos, números, listas u otros objetos.",
+            ),
+        ],
+        0,
+        'Al crear un objeto hay que dar un valor a cada parámetro de `__init__` (menos `self`). Aquí falta `precio`: `Producto("Teclado", 40)`.',
+        code="""
+        class Producto:
+            def __init__(self, nombre, precio):
+                self.nombre = nombre
+                self.precio = precio
+
+        p = Producto("Teclado")
+        """,
+        level=2,
+        daw=False,
+        bank=True,
+        qtype="error",
+    ),
+    choice(
+        "poo1-19",
+        CID,
+        "Debería mostrar `True`, pero muestra `False`. ¿Por qué?",
+        [
+            ("En la línea 8 falta llamar al método: `l.encender()`, con paréntesis", None),
+            (
+                "`encendida` es un atributo compartido por todas las lámparas",
+                None,
+                "`self.encendida` se crea en `__init__`: es de cada lámpara, no de la clase.",
+            ),
+            (
+                "El método `encender` necesita `return True`",
+                None,
+                "El método cambia el estado del objeto; no hace falta que devuelva nada. El problema es que nunca se ejecuta.",
+            ),
+            (
+                "Hay que llamarlo desde la clase: `Lampara.encender()`",
+                f"{CID}.clase-instancia",
+                "Sin objeto, `encender` no sabría qué lámpara encender y daría `TypeError`.",
+            ),
+        ],
+        0,
+        "Sin paréntesis, `l.encender` solo nombra el método y no lo ejecuta. Un atributo se lee sin paréntesis; un método se **llama** con ellos.",
+        code="""
+        class Lampara:
+            def __init__(self):
+                self.encendida = False
+
+            def encender(self):
+                self.encendida = True
+
+        l = Lampara()
+        l.encender
+        print(l.encendida)
+        """,
+        level=3,
+        daw=False,
+        bank=True,
+        qtype="error",
+    ),
+    choice(
+        "poo1-20",
+        CID,
+        "Hay que guardar varios libros con su título y sus páginas, y saber si cada uno es largo (más de 300 páginas). ¿Qué diseño lo resuelve con POO?",
+        [
+            (
+                "`class Libro` con `__init__(self, titulo, paginas)` y un método `es_largo(self)` que devuelve `self.paginas > 300`",
+                None,
+            ),
+            (
+                "`class Libro` con un método `es_largo(paginas)`, sin `self`, que devuelve `paginas > 300`",
+                f"{CID}.atributo-metodo",
+                "Sin `self` el método no recibe el libro: al llamar `libro.es_largo()` Python pasa el objeto y no cuadran los parámetros.",
+            ),
+            (
+                "Un diccionario por libro y una función suelta `es_largo(libro)`",
+                f"{CID}.poo-siempre",
+                "Funciona, pero es la versión procedural: los datos y la acción siguen separados.",
+            ),
+            (
+                "Una sola clase `Libros` con un atributo `titulo` común a todos los libros",
+                f"{CID}.clase-instancia",
+                "Cada libro necesita su propio título y sus páginas: un dato común no distingue un libro de otro.",
+            ),
+        ],
+        0,
+        "En la POO cada libro es un objeto con sus datos y el método `es_largo` usa los datos del propio libro a través de `self`.",
+        level=3,
+        daw=False,
+        bank=True,
+        qtype="solucion",
+    ),
+    choice(
+        "poo1-21",
+        CID,
+        "Con la clase `Producto(nombre, precio)`, ¿qué código muestra `Teclado Ratón`?",
+        [
+            (
+                'a = Producto("Teclado", 40); b = Producto("Ratón", 20); print(a.nombre, b.nombre)',
+                None,
+            ),
+            (
+                "a = Producto; b = Producto; print(a.nombre, b.nombre)",
+                f"{CID}.clase-instancia",
+                "Sin paréntesis no se crea ningún objeto: `a` y `b` son la clase, que no tiene `nombre`.",
+            ),
+            (
+                'a = b = Producto("Teclado", 40); b.nombre = "Ratón"; print(a.nombre, b.nombre)',
+                f"{CID}.clase-instancia",
+                "`a = b = …` crea un solo objeto con dos nombres: los dos mostrarían `Ratón`.",
+            ),
+            (
+                'Producto("Teclado", 40); Producto("Ratón", 20); print(Producto.nombre)',
+                None,
+                "Los objetos se crean pero no se guardan en ninguna variable, y la clase no tiene el atributo `nombre`.",
+            ),
+        ],
+        0,
+        "Cada llamada a la clase crea un objeto nuevo; guardándolo en una variable se puede usar después.",
+        level=3,
+        daw=False,
+        code_options=True,
+        bank=True,
+        qtype="solucion",
+    ),
 ]
+
+# Preguntas tipo test que ya existían y pasan al banco: (tipo, nivel, por qué falla cada distractor)
+BANK_TAGS = {
+    "poo1-01": (
+        "teoria",
+        1,
+        [
+            "Dentro de los métodos se siguen usando funciones, condiciones y bucles: la POO cambia cómo se organiza el código.",
+            "Usar clases no hace el programa más rápido; organiza el código.",
+            "Los diccionarios se usan en cualquier estilo de programación.",
+        ],
+    ),
+    "poo1-03": (
+        "codigo",
+        1,
+        [
+            "Un atributo se lee sin paréntesis; aquí se está llamando a algo, así que es un método.",
+            "La clase es `Producto`; `teclado` es un objeto y `con_descuento` una acción suya.",
+            "Va detrás de `teclado.`: pertenece al objeto, no es una variable suelta del programa.",
+        ],
+    ),
+    "poo1-04": (
+        "diseno",
+        1,
+        [
+            "Es al revés: lo que el coche tiene es un atributo y lo que hace es un método.",
+            "Son partes del coche (un dato y una acción), no tipos de cosa nuevos.",
+            "«Arrancar» es una acción, y las acciones son métodos.",
+        ],
+    ),
+    "poo1-06": (
+        "teoria",
+        1,
+        [
+            "Describe a todos los coches en general: es una clase.",
+            "Habla de cualquier alumno, no de uno concreto: es una clase.",
+            "Es la descripción general de lo que vende la tienda: una clase.",
+        ],
+    ),
+    "poo1-07": (
+        "diseno",
+        2,
+        [
+            "Cientos de alumnos con sus notas son entidades con datos y acciones propias: ahí la POO compensa.",
+            "Cada personaje tiene su estado (posición, vidas) y sus acciones: es un caso típico de objetos.",
+            "Productos, clientes y pedidos son entidades distintas con datos y acciones: encajan como clases.",
+        ],
+    ),
+    "poo1-08": (
+        "teoria",
+        1,
+        [
+            "La herencia sirve para crear una clase a partir de otra, no para ocultar detalles.",
+            "El polimorfismo es tratar igual a objetos distintos que responden al mismo método.",
+            "La abstracción elige qué datos importan; ocultarlos tras métodos es la encapsulación.",
+        ],
+    ),
+    "poo1-09": (
+        "codigo",
+        2,
+        [
+            "No hay ninguna clase que herede de otra en este código.",
+            "No hay varios objetos distintos respondiendo al mismo método.",
+            "Los atributos son públicos: no se está ocultando nada, se está eligiendo qué guardar.",
+        ],
+    ),
+    "poo1-12": (
+        "codigo",
+        2,
+        [
+            "En el código se crean dos objetos de `Producto`: una clase admite todos los que hagan falta.",
+            'Con `class` se define la clase; los objetos se crean llamándola: `Producto("Teclado")`.',
+            "Los datos que guarda un objeto son atributos, como `nombre`; los métodos son acciones.",
+        ],
+    ),
+}
 
 # Errores típicos (slug, etiqueta, por qué, qué pensar, cómo evitarlo)
 ERRORS = [

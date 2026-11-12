@@ -9,6 +9,7 @@
 
 import { activeErrors, allStats, sectionsDone } from "./mastery.js";
 import { codeBlock, errorExplanation, escapeHtml, KIND_LABEL, meter, percent, renderInline, renderMarkdown, statusBadge } from "./ui.js";
+import { safeUrl } from "../markdown.js";
 
 const STATUS_TEXT = {
   verified: "Validada",
@@ -41,9 +42,19 @@ function exerciseList(index, learning, ids, group, concept) {
       return `<li class="lx-unit-ex"><span class="lx-kind">${KIND_LABEL[ex.kind]}</span> ${renderInline(exerciseTitle(ex))} <span class="lx-muted">· ${state}</span></li>`;
     })
     .join("");
-  const label = { guided: "Empezar el ejercicio guiado", autonomous: "Hacer los ejercicios autónomos", selfcheck: "Hacer la autoevaluación" }[group];
+  const label = {
+    guided: "Empezar el ejercicio guiado",
+    autonomous: "Hacer el ejercicio principal",
+    extras: "Hacer las prácticas adicionales",
+    selfcheck: "Hacer la autoevaluación",
+  }[group];
   return `<ul class="lx-unit-exlist">${items}</ul>
     <div class="lx-actions"><button class="btn btn--primary" type="button" data-learn="unit-practice" data-group="${group}" data-concept="${concept.id}">${label}</button></div>`;
+}
+
+/** El cuestionario no lista sus 15 preguntas (se verían las respuestas al leerlas): solo el botón. */
+function bankButton(concept) {
+  return `<div class="lx-actions"><button class="btn btn--primary" type="button" data-learn="unit-practice" data-group="bank" data-concept="${concept.id}">Empezar el cuestionario (${concept.bank.length} preguntas)</button></div>`;
 }
 
 function lessonHtml(concept, section, position, done) {
@@ -101,6 +112,30 @@ function curriculumHtml(concept) {
     <ul class="lx-list">${rows}</ul>`;
 }
 
+/** Buenas prácticas de la unidad: qué hacer y por qué. */
+function practicesHtml(concept) {
+  return `<ul class="lx-list">${concept.practices.map((p) => `<li>${renderInline(p.text)} <span class="lx-muted">${renderInline(p.why)}</span></li>`).join("")}</ul>`;
+}
+
+/** Referencias bibliográficas: solo fuentes del catálogo cerrado del módulo; las no comprobadas lo dicen. */
+function referencesHtml(index, concept) {
+  const sources = pooModule(index)?.sources ?? {};
+  const rows = concept.references
+    .map((r) => {
+      const source = sources[r.source];
+      if (!source) return "";
+      const status =
+        r.status === "verified"
+          ? `<span class="lx-status" data-status="dominado">Comprobada</span> <span class="lx-muted">por ${escapeHtml(r.by)} el ${escapeHtml(r.date)}</span>`
+          : '<span class="lx-status" data-status="insuficiente">Pendiente de comprobación</span>';
+      return `<li><a href="${safeUrl(source.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(source.title)}</a>, apartado «${renderInline(r.section)}». ${status}
+        <span class="lx-muted">Respalda: ${r.supports.map((t) => renderInline(t)).join("; ")}.</span></li>`;
+    })
+    .join("");
+  return `<p class="lx-muted">Fuentes oficiales de Python. «Pendiente de comprobación» significa que una persona todavía no ha revisado que el apartado citado diga eso.</p>
+    <ul class="lx-list">${rows}</ul>`;
+}
+
 /** Secciones y su orden en la página de una unidad (también es el índice «En esta página»). */
 export function unitToc(concept) {
   return [
@@ -110,12 +145,16 @@ export function unitToc(concept) {
     ["lx-key", "Conceptos importantes"],
     ["lx-example", "Ejemplo comentado"],
     ["lx-guided", "Ejercicios guiados"],
-    ["lx-autonomous", "Ejercicios autónomos"],
+    ["lx-autonomous", "Ejercicio principal"],
+    ...(concept.extras?.length ? [["lx-extras", "Prácticas adicionales"]] : []),
     ["lx-errors", "Errores frecuentes"],
+    ...(concept.practices?.length ? [["lx-practices", "Buenas prácticas"]] : []),
     ["lx-selfcheck", "Autoevaluación"],
+    ...(concept.bank?.length ? [["lx-bank", "Cuestionario de la unidad"]] : []),
     ["lx-summary", "Resumen"],
     ["lx-pass", "Criterios de superación"],
     ...(concept.curriculum?.length ? [["lx-curriculum", "Currículo DAW"]] : []),
+    ...(concept.references?.length ? [["lx-references", "Referencias"]] : []),
   ];
 }
 
@@ -151,12 +190,18 @@ export function unitBody(index, learning, concept, s, { lessons = "" } = {}) {
        ${example.output ? `<p class="lx-note">Salida:</p><pre class="lx-output" tabindex="0">${escapeHtml(example.output)}</pre>` : ""}`,
     ),
     section("lx-guided", "Ejercicios guiados", `<p class="lx-muted">Paso a paso, con pista y solución explicada al terminar.</p>${exerciseList(index, learning, concept.guided, "guided", concept)}`),
-    section("lx-autonomous", "Ejercicios autónomos", `<p class="lx-muted">Sin pasos: aplica lo aprendido. Se corrigen con tests en tu navegador.</p>${exerciseList(index, learning, concept.autonomous, "autonomous", concept)}`),
+    section("lx-autonomous", "Ejercicio principal", `<p class="lx-muted">Sin pasos: aplica lo aprendido. Se corrige con tests en tu navegador y es necesario para superar la unidad.</p>${exerciseList(index, learning, concept.autonomous, "autonomous", concept)}`),
+    concept.extras?.length ? section("lx-extras", "Prácticas adicionales", `<p class="lx-muted">Más ejercicios de código para seguir practicando. No son obligatorios.</p>${exerciseList(index, learning, concept.extras, "extras", concept)}`) : "",
     section("lx-errors", "Errores frecuentes", errors),
+    concept.practices?.length ? section("lx-practices", "Buenas prácticas", practicesHtml(concept)) : "",
     section("lx-selfcheck", "Autoevaluación", `<p class="lx-muted">Preguntas para comprobar si has entendido la unidad.</p>${exerciseList(index, learning, concept.selfcheck, "selfcheck", concept)}`),
+    concept.bank?.length
+      ? section("lx-bank", "Cuestionario de la unidad", `<p class="lx-muted">Preguntas tipo test de toda la unidad, de nivel básico, intermedio y avanzado. Si fallas una, verás por qué tu opción no es correcta.</p>${bankButton(concept)}`)
+      : "",
     section("lx-summary", "Resumen", `<ul class="lx-list">${concept.recap.map((t) => `<li>${renderInline(t)}</li>`).join("")}</ul>`),
     section("lx-pass", "Criterios de superación", passHtml(index, learning, concept, s)),
     concept.curriculum?.length ? section("lx-curriculum", "Relación con el currículo de DAW", curriculumHtml(concept)) : "",
+    concept.references?.length ? section("lx-references", "Referencias bibliográficas", referencesHtml(index, concept)) : "",
   ].join("");
 }
 

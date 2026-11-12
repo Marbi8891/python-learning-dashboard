@@ -637,7 +637,7 @@ function onClick(event) {
       const unit = index.concepts.get(concept);
       const section = unit.sections.find((sec) => sec.id === target.dataset.section);
       const exercises = unitExercises(unit, { group: target.dataset.group, section: section?.id });
-      const label = section ? `Mini-quiz: ${section.title.replace(/`/g, "")}` : { guided: "Ejercicio guiado", autonomous: "Ejercicios autónomos", selfcheck: "Autoevaluación" }[target.dataset.group];
+      const label = section ? `Mini-quiz: ${section.title.replace(/`/g, "")}` : { guided: "Ejercicio guiado", autonomous: "Ejercicio principal", extras: "Prácticas adicionales", selfcheck: "Autoevaluación", bank: "Cuestionario de la unidad" }[target.dataset.group];
       markRead(learning, concept);
       saveLearning();
       startSession({ kind: "practice", title: `${label} · ${title(concept)}`, exercises, concept });

@@ -68,6 +68,9 @@ PATH = [
     "poo-fundamentos",
     "poo",
     "poo-atributos-metodos",
+    "poo-encapsulacion",
+    "poo-herencia",
+    "poo-polimorfismo",
 ]
 
 # Competencias de «Preparación DAW» (las que pidió el autor), en el orden en que se trabajan.
