@@ -18,6 +18,7 @@ import {
   lastPractice,
   MASTERY_STREAK,
   moduleProgress,
+  criteriaProgress,
   parseServerDate,
   PANEL_ROUTE,
   recurringErrors,
@@ -79,6 +80,7 @@ let refreshView = () => {};
 function reset() {
   Object.assign(remote, { data: null, feed: [], total: 0, error: null, feedError: null, loaded: -1 });
   remote.version += 1;
+  openCriteria.clear();
 }
 
 const utcOffset = () => -new Date().getTimezoneOffset();
@@ -521,7 +523,7 @@ function progressHtml() {
       <h2 class="section-title" id="dash-modules-title">Módulos de DAW</h2>
       <p class="readiness__note">Practicada: la has respondido al menos una vez. Dominada: has acertado sus ${MASTERY_STREAK} últimos intentos.
         Es una orientación de la plataforma, no una calificación del centro.</p>
-      <div data-module-progress><p class="dash-status">Cargando…</p></div>
+      <div data-module-progress>${curriculumData ? modulesHtml(curriculumData) : `<p class="dash-status">Cargando…</p>`}</div>
     </section>
     <div class="course-columns">
       <section class="course-section" aria-labelledby="dash-mastered-title">
@@ -731,18 +733,52 @@ function bodyHtml(section, content = lastContent) {
   return `${statusHtml()}${html}`;
 }
 
+/** Módulos cuyo desglose de criterios ha abierto el alumno: se conserva al repintar. */
+const openCriteria = new Set();
+
+const CE_STATE = {
+  practiced: (c) => `Practicado: has respondido ${c.practiced} de ${plural(c.questions, "pregunta", "preguntas")}`,
+  pending: (c) => `Sin practicar: ${plural(c.questions, "pregunta", "preguntas")} en la plataforma`,
+  none: () => "Sin preguntas en la plataforma",
+};
+
+/** Criterios de evaluación de un módulo, agrupados por RA (#106). */
+function criteriaHtml(module, answersOf) {
+  const cov = criteriaProgress(module, answersOf);
+  if (!cov.total) return "";
+  const outcomes = cov.outcomes
+    .map((ra) => {
+      const rows = ra.criteria
+        .map((c) => {
+          const state = c.practiced > 0 ? "practiced" : c.questions > 0 ? "pending" : "none";
+          return `<li class="ce-row ce-row--${state}"><span class="ce-row__text">${escapeHtml(c.letter)}) ${escapeHtml(c.text)}</span>
+            <span class="account-card__meta">${escapeHtml(CE_STATE[state](c))}</span></li>`;
+        })
+        .join("");
+      return `<li class="ce-outcome">
+          <h4 class="ce-outcome__title">RA${ra.number}. ${escapeHtml(ra.text)}</h4>
+          <p class="account-card__meta">Practicados: <strong>${ra.practiced} de ${ra.criteria.length}</strong> criterios · ${ra.withQuestions} con preguntas</p>
+          <ul class="ce-list">${rows}</ul>
+        </li>`;
+    })
+    .join("");
+  return `
+    <details class="dash-details ce-coverage" data-ce-module="${escapeHtml(module.code)}"${openCriteria.has(module.code) ? " open" : ""}>
+      <summary data-ce-summary="${escapeHtml(module.code)}">Criterios de evaluación: ${cov.practiced} de ${cov.total} practicados (${cov.withQuestions} con preguntas)</summary>
+      <p class="readiness__note">Practicar un criterio no es superarlo: lo evalúa tu profesorado. La relación de cada pregunta con sus criterios es
+        una propuesta de la plataforma, pendiente de revisión docente.</p>
+      <ul class="ce-outcomes">${outcomes}</ul>
+    </details>`;
+}
+
+/** Catálogo del currículo ya descargado: con él, un repintado pinta los módulos sin esperar. */
+let curriculumData = null;
+
 /** Progreso por módulo oficial: se calcula con el catálogo del currículo y el progreso de los cursos. */
-async function fillModules() {
-  const target = () => $("[data-module-progress]");
-  let data;
-  try {
-    data = await loadCurriculum();
-  } catch {
-    if (target()) target().innerHTML = `<p class="empty-state">No se pudo cargar el currículo. Comprueba la conexión y recarga.</p>`;
-    return;
-  }
-  if (!target()) return; // el alumno cambió de sección mientras cargaba
-  const rows = moduleProgress(data.modules, (course) => stateOf(course).answers);
+function modulesHtml(data) {
+  const answersOf = (course) => stateOf(course).answers;
+  const rows = moduleProgress(data.modules, answersOf);
+  const byId = new Map(data.modules.map((m) => [m.id, m]));
   const withoutContent = data.modules.length - rows.length;
   const items = rows
     .map((m) => {
@@ -755,13 +791,31 @@ async function fillModules() {
           <p class="account-card__meta">Practicadas: <strong>${m.practiced} de ${m.total}</strong> (${safePercent(m.practiced, m.total)} %)</p>
           ${meter(safePercent(m.mastered, m.total), `Preguntas dominadas de ${label}`)}
           <p class="account-card__meta">Dominadas: <strong>${m.mastered} de ${m.total}</strong> (${safePercent(m.mastered, m.total)} %)</p>
+          ${criteriaHtml(byId.get(m.id), answersOf)}
         </li>`;
     })
     .join("");
-  target().innerHTML = `
+  return `
     <ul class="course-progress-list">${items}</ul>
     <p class="account-card__meta">${plural(withoutContent, "módulo del ciclo aún no tiene", "módulos del ciclo aún no tienen")} preguntas en la plataforma.
       <a href="#/daw/curriculo">Ver el currículo completo</a></p>`;
+}
+
+/** La primera vez, el catálogo llega después de pintar: se rellena al llegar. */
+async function fillModules() {
+  const target = () => $("[data-module-progress]");
+  if (curriculumData) return; // ya está pintado con la vista
+  try {
+    curriculumData = await loadCurriculum();
+  } catch {
+    if (target()) target().innerHTML = `<p class="empty-state">No se pudo cargar el currículo. Comprueba la conexión y recarga.</p>`;
+    return;
+  }
+  const el = target();
+  if (!el) return; // el alumno cambió de sección mientras cargaba
+  const keep = activeSelector(el);
+  el.innerHTML = modulesHtml(curriculumData);
+  if (keep) el.querySelector(keep)?.focus({ preventScroll: true });
 }
 
 /** Lo que llega después (dominio de los cursos y actividad de la cuenta) se rellena al pintar. */
@@ -802,6 +856,17 @@ export function dashboardTitle() {
  */
 export function initDashboard({ refresh, toast }) {
   refreshView = refresh;
+  // Qué desgloses de criterios están abiertos («toggle» no burbujea: se escucha en captura)
+  document.addEventListener(
+    "toggle",
+    (event) => {
+      const code = event.target.dataset?.ceModule;
+      if (!code) return;
+      if (event.target.open) openCriteria.add(code);
+      else openCriteria.delete(code);
+    },
+    true,
+  );
   subscribe((change) => {
     if (change.type === "user" && !state.user) reset(); // al salir no queda nada de la cuenta
     else if (change.type === "progress" || change.type === "user") remote.version += 1; // anticuados
