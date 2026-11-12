@@ -24,6 +24,8 @@ import poo_u5
 import poo_u6
 import poo_u7
 import poo_u8
+import poo_u9
+import poo_u10
 from exercises import E as BASE_EXERCISES
 from poo_common import REVIEWED, SOURCE, proposed, tag_bank
 
@@ -79,6 +81,8 @@ UNITS = {
     "poo-polimorfismo": poo_u6.UNIT,
     "poo-composicion": poo_u7.UNIT,
     "poo-metodos-especiales": poo_u8.UNIT,
+    "poo-diseno": poo_u9.UNIT,
+    "poo-proyecto": poo_u10.UNIT,
 }
 
 EXERCISES = [
@@ -89,6 +93,8 @@ EXERCISES = [
     *poo_u6.EXERCISES,
     *poo_u7.EXERCISES,
     *poo_u8.EXERCISES,
+    *poo_u9.EXERCISES,
+    *poo_u10.EXERCISES,
     *poo_u2.EXERCISES,  # la Unidad 2 va al final: así no cambia el orden de learning.json
 ]
 
@@ -102,6 +108,8 @@ BANK_TAGS = {
     **poo_u6.BANK_TAGS,
     **poo_u7.BANK_TAGS,
     **poo_u8.BANK_TAGS,
+    **poo_u9.BANK_TAGS,
+    **poo_u10.BANK_TAGS,
 }
 tag_bank([*BASE_EXERCISES, *EXERCISES], BANK_TAGS)
 
@@ -115,6 +123,8 @@ UNIT_ERRORS = {
     "poo-polimorfismo": poo_u6.ERRORS,
     "poo-composicion": poo_u7.ERRORS,
     "poo-metodos-especiales": poo_u8.ERRORS,
+    "poo-diseno": poo_u9.ERRORS,
+    "poo-proyecto": poo_u10.ERRORS,
 }
 
 # Teoría y presentación de la Unidad 2 (sustituyen a las del concepto `poo`; el id no cambia)
@@ -129,4 +139,6 @@ CONCEPTS_AFTER_POO = [
     poo_u6.CONCEPT,
     poo_u7.CONCEPT,
     poo_u8.CONCEPT,
+    poo_u9.CONCEPT,
+    poo_u10.CONCEPT,
 ]

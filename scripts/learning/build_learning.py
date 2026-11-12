@@ -275,6 +275,45 @@ def _same_text(ex: dict) -> str:
     return " ".join(f"{ex['q']} {ex.get('code') or ''}".lower().split())
 
 
+RELATION_KINDS = {"asociacion", "agregacion", "composicion", "herencia"}
+
+
+def check_project_extras(concept: dict, where: str, problems: Problems) -> None:
+    """Diagrama de clases, rúbrica y retos: apartados opcionales (los usa el proyecto final)."""
+    diagram = concept.get("diagram")
+    if diagram:
+        if not diagram.get("title") or not diagram.get("summary"):
+            problems.add(where, "el diagrama necesita título y resumen en texto")
+        boxes = {}
+        for box in diagram.get("classes", []):
+            if not box.get("id") or not box.get("name") or box["id"] in boxes:
+                problems.add(where, "cada clase del diagrama lleva un id único y un nombre")
+                continue
+            place = (box.get("col"), box.get("row"))
+            if place in boxes.values():
+                problems.add(where, f"dos clases del diagrama ocupan la misma celda: {place}")
+            boxes[box["id"]] = place
+        if not diagram.get("relations"):
+            problems.add(where, "el diagrama no tiene relaciones")
+        for rel in diagram.get("relations", []):
+            if rel.get("from") not in boxes or rel.get("to") not in boxes:
+                problems.add(where, f"relación con una clase inexistente: {rel}")
+            if rel.get("kind") not in RELATION_KINDS:
+                problems.add(where, f"tipo de relación desconocido: {rel.get('kind')}")
+            if not rel.get("text"):
+                problems.add(where, "cada relación se explica en texto")
+    rubric = concept.get("rubric")
+    if rubric is not None:
+        if sum(item.get("points", 0) for item in rubric) != 100:
+            problems.add(where, "la rúbrica debe sumar 100 puntos")
+        for item in rubric:
+            if not item.get("criterion") or not item.get("text") or item.get("points", 0) <= 0:
+                problems.add(where, "cada criterio de la rúbrica lleva nombre, puntos y texto")
+    challenges = concept.get("challenges")
+    if challenges is not None and (not challenges or not all(challenges)):
+        problems.add(where, "los retos de ampliación no pueden estar vacíos")
+
+
 def check_unit_content(concept: dict, where: str, exercises: dict, problems: Problems) -> None:
     """Buenas prácticas, referencias, prácticas adicionales y banco de preguntas de una unidad."""
     cid = concept["id"]
@@ -434,6 +473,7 @@ def check_units(problems: Problems) -> list[dict]:
                 if exercises.get(eid, {}).get("kind") != "code":
                     problems.add(where, f"{group}: {eid} debe ser un ejercicio de escribir código")
         check_unit_content(concept, where, exercises, problems)
+        check_project_extras(concept, where, problems)
         used += concept.get("guided", []) + concept.get("autonomous", [])
         used += concept.get("extras", []) + concept.get("bank", [])
         used += concept.get("selfcheck", [])

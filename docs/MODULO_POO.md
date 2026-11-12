@@ -16,9 +16,9 @@ Desde el 11/11/2026 el módulo sigue el plan de cinco PR del diseño de la Fase 
 
 | PR | Contenido | Estado |
 |---|---|---|
-| A | Formato nuevo (buenas prácticas, referencias, origen de los ejemplos, prácticas adicionales, banco) y Unidades 1 a 6 completas, con 90 preguntas de banco | En revisión |
-| B | Unidades 7 y 8 (relaciones entre objetos y métodos especiales), con 30 preguntas de banco más (120 en total) | En revisión |
-| C | Unidades 9 y 10 (diseño y proyecto biblioteca) | Pendiente |
+| A | Formato nuevo (buenas prácticas, referencias, origen de los ejemplos, prácticas adicionales, banco) y Unidades 1 a 6 completas, con 90 preguntas de banco | Hecho (#121) |
+| B | Unidades 7 y 8 (relaciones entre objetos y métodos especiales), con 30 preguntas de banco más (120 en total) | Hecho (#122) |
+| C | Unidades 9 y 10 (diseño y proyecto biblioteca, con diagrama de clases, rúbrica y retos), con 30 preguntas de banco más (150 en total) | En revisión |
 | D | Banco cerrado de 150 preguntas, cuestionarios con nota, evaluación final y repaso | Pendiente |
 | E | Currículo, bibliografía general, progreso, motor adaptativo y documentación | Pendiente |
 
@@ -27,7 +27,7 @@ Desde el 11/11/2026 el módulo sigue el plan de cinco PR del diseño de la Fase 
 | Qué | Archivo |
 |---|---|
 | Índice de unidades, Unidad 2 y reunión de todas las unidades | `scripts/learning/poo_module.py` |
-| Una unidad completa por archivo (concepto, campos, ejercicios, banco y errores) | `scripts/learning/poo_u1.py` … `poo_u8.py` |
+| Una unidad completa por archivo (concepto, campos, ejercicios, banco y errores) | `scripts/learning/poo_u1.py` … `poo_u10.py` |
 | Correspondencias propuestas (`proposed`), catálogo de fuentes (`SOURCES`), `ref`, `practice` y reparto del banco | `scripts/learning/poo_common.py` |
 | Integración en el mapa de conceptos (área `poo`) | `scripts/learning/concepts.py` |
 | Validación y generación | `scripts/learning/build_learning.py` (`check_units`) |
@@ -38,8 +38,8 @@ Desde el 11/11/2026 el módulo sigue el plan de cinco PR del diseño de la Fase 
 ## Unidades
 
 Cada unidad es **un concepto** del núcleo. El id `poo` es la **Unidad 2** y no cambia: `#/teoria/poo`
-sigue funcionando y nadie pierde su progreso. Las unidades que aún no existen salen en el índice como
-«En preparación».
+sigue funcionando y nadie pierde su progreso. Si una unidad del índice no existiera como concepto,
+saldría como «En preparación», sin enlace (hoy están las 10).
 
 | # | Id | Título |
 |---|---|---|
@@ -54,11 +54,12 @@ sigue funcionando y nadie pierde su progreso. Las unidades que aún no existen s
 | 9 | `poo-diseno` | Diseño y buenas prácticas |
 | 10 | `poo-proyecto` | Proyecto final: gestión de una biblioteca |
 
-Publicadas: Unidades 1 a 8 (Sprints 2 y 3, PR A y PR B). En la ruta «Aprender» van seguidas.
+Publicadas: las 10 unidades (Sprints 2 y 3, PR A, B y C). En la ruta «Aprender» van seguidas.
 Prerrequisitos: `poo-fundamentos` (pide funciones y diccionarios) → `poo` → `poo-atributos-metodos`,
 que abre `poo-encapsulacion` y `poo-herencia`; `poo-polimorfismo` pide `poo-herencia`;
-`poo-composicion` pide `poo-encapsulacion` y `poo-herencia`, y `poo-metodos-especiales` pide `poo` y
-`poo-atributos-metodos`.
+`poo-composicion` pide `poo-encapsulacion` y `poo-herencia`; `poo-metodos-especiales` pide `poo` y
+`poo-atributos-metodos`; `poo-diseno` pide `poo-polimorfismo` y `poo-composicion`, y `poo-proyecto` pide
+`poo-metodos-especiales` y `poo-diseno`.
 
 | Unidad | Lecciones | Ejercicios | Errores típicos nuevos | CE propuestos |
 |---|---|---|---|---|
@@ -70,6 +71,27 @@ que abre `poo-encapsulacion` y `poo-herencia`; `poo-polimorfismo` pide `poo-here
 | 6 | Mismo método, distinto comportamiento · Duck typing · Clases abstractas (`abc`) | 27 (`poo6-01`…`27`) | isinstance-en-cadena, necesita-herencia, abstracta-instanciable, abstracta-sin-implementar, version-base, metodo-sin-llamar | RA7-i, RA7-g, RA7-f |
 | 7 | Asociación · Agregación y composición · Delegación · Herencia frente a composición | 27 (`poo7-01`…`27`) | copia-al-guardar, lista-por-defecto, herencia-por-tiene, no-delega, relacion-es-sintaxis | RA7-j, RA4-e, RA6-c |
 | 8 | Qué son y cuándo los llama Python · Esenciales (`__str__`, `__repr__`, `__eq__`, `__len__`) · Avanzados (`__contains__`, `__iter__`, `__next__`) | 26 (`poo8-01`…`26`) | nombre-especial-mal, llamada-directa, imprime-en-vez-de-devolver, lista-usa-str, eq-identidad, len-no-entero, iter-no-iterador | RA4-c, RA6-d, RA4-e |
+| 9 | Responsabilidad única, cohesión y acoplamiento · Composición frente a herencia e introducción a SOLID · Type hints, docstrings y dataclasses · Organización en módulos y refactorización | 27 (`poo9-01`…`27`) | clase-que-lo-hace-todo, responsabilidad-es-un-metodo, acoplado-a-detalles, copia-de-datos, if-por-tipos, herencia-que-rompe, crea-su-dependencia, hints-obligan, dataclass-lista-por-defecto, sin-documentar | RA3-g, RA7-h, RA4-i |
+| 10 | Arquitectura y diagrama de clases · Libro y Usuario · Prestamo: fechas y estado · Biblioteca y excepciones propias · Pruebas, retos y rúbrica | 25 (`poo10-01`…`25`) | estado-a-medias, valida-tarde, dato-duplicado, excepcion-sin-jerarquia, excepcion-generica, except-en-mal-orden | RA4-e, RA3-h, RA3-f |
+
+### Proyecto final (Unidad 10)
+
+El proyecto biblioteca se construye en 6 fases, cada una un ejercicio de código con tests:
+`poo10-01` Libro (guiado), `poo10-02` Usuario, `poo10-03` Prestamo, `poo10-04` excepciones propias,
+`poo10-05` registro de libros y usuarios y `poo10-06` la `Biblioteca` completa (ejercicio principal).
+Cada fase parte del código de las anteriores ya resuelto, así que el alumno se centra en una clase.
+
+La unidad tiene tres apartados opcionales que solo usa el proyecto, y que el validador comprueba:
+
+| Campo | Qué es | Comprobación (`check_project_extras`) |
+|---|---|---|
+| `diagram` | Diagrama de clases: cajas en una rejilla (`col`, `row`) y relaciones `asociacion`, `agregacion`, `composicion` o `herencia` | Ids únicos, sin dos cajas en la misma celda, relaciones entre clases que existen y con texto |
+| `rubric` | Rúbrica de evaluación: criterio, puntos y qué se valora | Suma 100 y cada criterio tiene nombre, puntos y texto |
+| `challenges` | Retos de ampliación sin tests | Ninguno vacío |
+
+La web dibuja el diagrama en SVG con `role="img"`, `<title>` y `<desc>`, y debajo repite cada relación
+en texto, que es lo que lee un lector de pantalla o quien amplía la página. La rúbrica es una tabla que
+en el móvil se lee como fichas.
 
 ## Formato de una unidad
 
@@ -103,8 +125,7 @@ real de la solución.
 
 ### Banco de preguntas
 
-Cada unidad publicada tiene exactamente 15 preguntas tipo test con `bank: true` (150 cuando estén las
-10). Son ejercicios `choice` normales del motor, con dos campos más: `qtype` y un `why` en cada
+Cada unidad publicada tiene exactamente 15 preguntas tipo test con `bank: true` (150 con las 10). Son ejercicios `choice` normales del motor, con dos campos más: `qtype` y un `why` en cada
 opción incorrecta, que la corrección muestra al fallar («Por qué tu opción no es correcta»).
 Las preguntas que ya existían entran en el banco con su mismo id (`BANK_TAGS` de cada `poo_uN.py`).
 Los ejercicios de salida, completar, depurar y código no cuentan en las 15.
@@ -193,7 +214,9 @@ concepto asociado (estaban sin revisar y pasan a las unidades que los trabajan).
 | Datos, apartados, ejemplos y soluciones ejecutados | `python scripts/learning/build_learning.py --check` |
 | Estructura, banco (15 por unidad y repartos), referencias, currículo y validador | `backend/tests/test_poo_module.py` |
 | Lecciones completadas, fusión, recomendaciones y vistas | `tests/unit/poo-module.test.mjs` |
-| Índice, unidad, Pyodide, mini-quiz, cuestionario con el porqué del fallo, móvil y WCAG 2.2 AA | `e2e/poo.spec.js` |
+| Índice, unidad, diagrama, rúbrica y retos, Pyodide, mini-quiz, cuestionario con el porqué del fallo, móvil y WCAG 2.2 AA | `e2e/poo.spec.js` |
 
 Tamaño de `learning.json` con las Unidades 1 a 6 completas (PR A): 485 KB sin comprimir y 111 KB
 con gzip (antes, 346 KB). El umbral para separar el módulo en otro archivo es 400 KB comprimido.
+
+Con las 10 unidades (PR C): 760 KB sin comprimir y 171 KB con gzip, por debajo del umbral.

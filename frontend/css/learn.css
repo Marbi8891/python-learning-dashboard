@@ -1481,3 +1481,54 @@ body[data-zone="core"] .assistant {
 .lx-concept[data-available="false"] .lx-concept__link {
   color: var(--color-text-muted);
 }
+
+/* ---------- Diagrama de clases (proyecto final del módulo de POO) ---------- */
+.lx-uml {
+  margin: var(--space-3) 0;
+}
+
+.lx-uml__svg {
+  display: block;
+  width: 100%;
+  max-width: 720px;
+  height: auto;
+}
+
+.lx-uml__class rect {
+  fill: var(--color-surface-2);
+  stroke: var(--color-border-control);
+  stroke-width: 1.5;
+}
+
+.lx-uml__sep {
+  stroke: var(--color-border-control);
+}
+
+.lx-uml__name {
+  fill: var(--color-strong);
+  font: 700 15px var(--font-sans);
+}
+
+.lx-uml__member {
+  fill: var(--color-text-muted);
+  font: 13px var(--font-mono);
+}
+
+.lx-uml__rel {
+  stroke: var(--color-text-muted);
+  stroke-width: 1.5;
+}
+
+.lx-uml__mark-filled {
+  fill: var(--color-text-muted);
+}
+
+.lx-uml__mark-hollow {
+  fill: var(--color-surface);
+  stroke: var(--color-text-muted);
+  stroke-width: 1.2;
+}
+
+.lx-uml figcaption {
+  margin-top: var(--space-2);
+}

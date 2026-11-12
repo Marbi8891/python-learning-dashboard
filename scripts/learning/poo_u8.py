@@ -223,7 +223,7 @@ UNIT = {
                     "lines": [
                         [9, "`in` llama a `__contains__`."],
                         [13, "`iter()` sobre la lista interna devuelve un iterador ya hecho."],
-                        [24, "Cuando no quedan elementos, el iterador avisa con `StopIteration`."],
+                        [25, "Cuando no quedan elementos, el iterador avisa con `StopIteration`."],
                         [34, "`for` usa `__iter__` y después `__next__` hasta `StopIteration`."],
                     ],
                 }
