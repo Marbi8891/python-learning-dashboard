@@ -262,7 +262,7 @@ function navHtml(section) {
   return `
     <nav class="dash-nav" aria-label="Secciones del panel">
       <ul>${SECTIONS.map(
-        (s) => `<li><a href="${PANEL_ROUTE}/${s.id}"${s.id === section ? ' aria-current="page"' : ""}>${s.label}</a></li>`,
+        (s) => `<li><a href="${PANEL_ROUTE}/${s.id}" data-section="${s.id}"${s.id === section ? ' aria-current="page"' : ""}>${s.label}</a></li>`,
       ).join("")}</ul>
     </nav>`;
 }

@@ -31,6 +31,11 @@ cambios se agrupan por fecha de merge, con el número de pull request entre par�
   `__str__`, `__repr__`, `__eq__`, `__len__` y, como avanzados, `__contains__`, `__iter__` y
   `__next__`; ejercicio principal CarritoCompra), con 53 ejercicios, 30 preguntas de banco y 12
   errores típicos nuevos.
+- Módulo de POO, PR C: Unidad 9 (responsabilidad única, cohesión y acoplamiento, composición frente a
+  herencia, SOLID, type hints, docstrings y `dataclasses`, módulos y refactorización; ejercicio
+  principal: refactorizar una tienda) y Unidad 10 (proyecto biblioteca en 6 fases con excepciones
+  propias, diagrama de clases accesible, rúbrica de 100 puntos y retos de ampliación), con 52
+  ejercicios, 30 preguntas de banco (150 en total) y 16 errores típicos nuevos.
 - Correspondencia con los RA y CE oficiales en los cursos de DAW: cada lección y cada pregunta (520)
   dice qué CE trabaja y con qué estado (`verified`, `proposed` o `unassigned`). Hoy todo es
   `proposed`, pendiente de revisión docente. Mapa en `scripts/courses/curriculum_map.py`, validado al
@@ -48,13 +53,15 @@ cambios se agrupan por fecha de merge, con el número de pull request entre par�
   WCAG 2.2 AA y que falta la revisión manual con lector de pantalla.
 
 ### Corregido
+- En el panel, las secciones («Cursos», «Logros»…) ya no pierden el foco de teclado al repintarse la vista
+  cuando llega el progreso de la cuenta: sus enlaces no tenían con qué volver a encontrarlos (#106).
+- Las pruebas e2e del panel y de la cuenta fallaban a veces porque seguían antes de que se cerrara el
+  diálogo de cuenta, que es modal y deja el resto de la página sin foco. Ahora esperan a que se cierre.
 - La auditoría de accesibilidad del PCAP fallaba a veces con `color-contrast` en `#toast`: axe empezaba
   en el hueco de 250 ms entre dos avisos en cola y medía el segundo a media transición. Ahora espera a
   que la cola se vacíe; dos pruebas nuevas lo vigilan, y también el contraste del aviso visible.
 - Las casillas del diálogo de cuenta miden 24 × 24 px (WCAG 2.5.8): la de privacidad del bloque de
   Google medía 13 px y le faltaba separación. Lo detectó axe al pasar a las reglas de WCAG 2.2.
-
-### Corregido
 - Cerrar sesión justo después de entrar ya no se queda con la sesión abierta: las subidas del
   progreso van de una en una (#103).
 - Si la API no puede cerrar la sesión, se avisa en vez de fingir que se ha cerrado (#103).

@@ -92,9 +92,18 @@ test("las vistas muestran las correspondencias como propuesta y el aviso de que 
   assert.match(html, /lo que demuestra que la dominas son los ejercicios/);
   for (const [id] of unitToc(unit2)) assert.match(html, new RegExp(`id="${id}"`));
   const module = renderModule(index, state, NOW);
-  assert.match(module, /En preparación/);
+  assert.match(module, /Las 10 unidades están publicadas/);
+  assert.doesNotMatch(module, /En preparación/);
   assert.match(module, /href="#\/teoria\/poo"/);
   assert.match(module, /Completar lecciones no equivale a dominar/);
+  // Una unidad sin publicar sale «en preparación», sin enlace, y el recuento lo dice
+  const pending = structuredClone(pooModule(index));
+  pending.units[9].available = false;
+  const partial = { ...index, data: { ...index.data, modules: [pending] } };
+  const html2 = renderModule(partial, state, NOW);
+  assert.match(html2, /9 de 10 unidades publicadas/);
+  assert.match(html2, /En preparación/);
+  assert.doesNotMatch(html2, /href="#\/teoria\/poo-proyecto"/);
 });
 
 test("los ejercicios de la unidad tienen un título corto legible en las listas", () => {
@@ -128,4 +137,43 @@ test("al fallar una pregunta del banco, la corrección explica por qué la opci�
   assert.equal(result.why, q.options[wrong].why);
   assert.ok(feedbackHtml(q, result).includes("Por qué tu opción no es correcta"));
   assert.ok(!feedbackHtml(q, grade(q, { choice: q.answer })).includes("Por qué tu opción no es correcta"));
+});
+
+test("el proyecto final muestra el diagrama de clases accesible, la rúbrica y los retos", () => {
+  const project = index.concepts.get("poo-proyecto");
+  const toc = unitToc(project).map(([id]) => id);
+  for (const id of ["lx-diagram", "lx-rubric", "lx-challenges"]) assert.ok(toc.includes(id), id);
+  // El diagrama va después del ejemplo y la rúbrica después del ejercicio principal
+  assert.ok(toc.indexOf("lx-diagram") > toc.indexOf("lx-example"));
+  assert.ok(toc.indexOf("lx-rubric") > toc.indexOf("lx-autonomous"));
+  const html = unitBody(index, fresh(), project, allStats(index, fresh(), NOW).get("poo-proyecto"));
+  // SVG como imagen con título y descripción, y las relaciones también en texto
+  assert.match(html, /<svg class="lx-uml__svg"[^>]*role="img" aria-labelledby="lx-uml-title lx-uml-desc"/);
+  assert.match(html, /<title id="lx-uml-title">Diagrama de clases del proyecto biblioteca<\/title>/);
+  assert.equal((html.match(/<g class="lx-uml__class">/g) ?? []).length, project.diagram.classes.length);
+  assert.equal((html.match(/<line class="lx-uml__rel"/g) ?? []).length, project.diagram.relations.length);
+  assert.match(html, /data-kind="composicion"[^>]*marker-start="url\(#lx-uml-filled\)"/);
+  assert.match(html, /data-kind="agregacion"[^>]*marker-start="url\(#lx-uml-hollow\)"/);
+  assert.match(html, /Biblioteca → Prestamo<\/strong> \(composición\)/);
+  assert.match(html, /sobre 100 puntos/);
+  assert.equal((html.match(/data-label="Puntos"/g) ?? []).length, project.rubric.length);
+  assert.ok(html.includes("Multas por retraso"));
+  // Las unidades sin estos apartados no los muestran
+  const unit2Toc = unitToc(unit2).map(([id]) => id);
+  for (const id of ["lx-diagram", "lx-rubric", "lx-challenges"]) assert.equal(unit2Toc.includes(id), false);
+});
+
+test("el diagrama escapa los nombres de las clases", () => {
+  const diagram = {
+    title: "T",
+    summary: "S",
+    classes: [
+      { id: "a", name: "<img src=x>", col: 0, row: 0, members: ["<b>"] },
+      { id: "b", name: "B", col: 1, row: 0, members: [] },
+    ],
+    relations: [{ from: "a", to: "b", kind: "asociacion", text: "rel" }],
+  };
+  const html = unitBody(index, fresh(), { ...index.concepts.get("poo-proyecto"), diagram }, allStats(index, fresh(), NOW).get("poo-proyecto"));
+  assert.equal(html.includes("<img src=x>"), false);
+  assert.ok(html.includes("&lt;img src=x&gt;"));
 });
