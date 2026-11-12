@@ -44,6 +44,13 @@ test("índice del módulo: 10 unidades, las publicadas enlazadas y el progreso e
   await expect(page.locator('[data-available="false"]')).toHaveCount(0);
   await expect(page.getByText("Las 10 unidades están publicadas.")).toBeVisible();
   await expect(page.getByText("Completar lecciones no equivale a dominar")).toBeVisible();
+  // Progreso por unidad (tabla), currículo propuesto y bibliografía general
+  const table = page.getByRole("table", { name: "Progreso por unidad" });
+  await expect(table.getByRole("row")).toHaveCount(11);
+  await expect(table.getByRole("row", { name: /Unidad 10/ })).toContainText("U8, U9");
+  await expect(page.locator("#lx-poo-curriculum").locator("..")).toContainText("Propuesta de la plataforma, pendiente de validar");
+  await expect(page.locator("#lx-poo-curriculum").locator("..")).not.toContainText("Validada");
+  await expect(page.locator("#lx-poo-bibliography").locator("..").getByRole("link", { name: /Real Decreto 405\/2023/ })).toHaveAttribute("href", /boe\.es/);
   // En el menú se marca Teoría
   await expect(page.locator('[data-nav="teoria"][aria-current="page"]').first()).toBeVisible();
   await audit(page);

@@ -147,3 +147,40 @@ test("el cuestionario de la unidad baraja sus 15 preguntas sin perder ni repetir
   assert.deepEqual([...order].sort(), [...unit.bank].sort());
   assert.deepEqual(unit.bank, index.concepts.get("poo-herencia").bank, "no cambia el banco original");
 });
+
+test("una unidad está superada con los obligatorios, el cuestionario aprobado y el dominio", async () => {
+  const { unitProgress } = await import("../../frontend/js/learn/poo-view.js");
+  const state = fresh();
+  const s = { status: "dominado" };
+  let p = unitProgress(state, unit, s);
+  assert.equal(p.passed, false);
+  for (const id of unit.pass.required) state.ex[id] = { h: [true], last: NOW.toISOString(), n: 1, okAt: NOW.toISOString() };
+  assert.equal(unitProgress(state, unit, s).passed, false, "falta el cuestionario");
+  recordQuiz(state, unit.id, 11, 15, NOW);
+  p = unitProgress(state, unit, s);
+  assert.deepEqual([p.required, p.requiredTotal, p.quizPassed, p.passed], [unit.pass.required.length, unit.pass.required.length, true, true]);
+  assert.equal(unitProgress(state, unit, { status: "practicando" }).passed, false, "falta el dominio");
+});
+
+test("el índice reúne el currículo propuesto, la bibliografía general y el progreso por unidad", async () => {
+  const { moduleCurriculum } = await import("../../frontend/js/learn/poo-view.js");
+  const units = availableUnits(index);
+  const ces = moduleCurriculum(index, units);
+  assert.ok(ces.length >= 10);
+  assert.equal(new Set(ces.map((e) => e.ce)).size, ces.length);
+  // Ordenados por RA y CE, y ninguno validado todavía
+  assert.equal(ces[0].ce.split("-")[1], "RA2");
+  assert.ok(ces.every((e) => e.verified === false));
+  const uses = ces.find((e) => e.ce === "0485-RA4-e");
+  assert.ok(uses.units.includes(10));
+  const html = renderModule(index, fresh(), NOW);
+  assert.match(html, /Relación con el currículo de DAW/);
+  assert.match(html, /no una programación didáctica oficial/);
+  assert.match(html, /Bibliografía general/);
+  assert.match(html, /href="https:\/\/docs\.python\.org\/es\/3\/library\/dataclasses\.html"[^>]*>dataclasses[^<]*<\/a> <span class="lx-muted">· Unidades 8, 9, 10<\/span>/);
+  assert.match(html, /Normativa del ciclo/);
+  assert.match(html, /Progreso por unidad/);
+  assert.equal((html.match(/<tr role="row" data-unit=/g) ?? []).length, 10);
+  assert.match(html, /data-unit="poo-proyecto" data-passed="false"><th scope="row" role="rowheader"><a href="#\/teoria\/poo-proyecto">Unidad 10<\/a><\/th>\s*<td role="cell" data-label="Requiere">U8, U9<\/td>/);
+  assert.match(html, /Llevas 0 de 10/);
+});

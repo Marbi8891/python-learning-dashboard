@@ -309,3 +309,33 @@ def test_validator_rejects_a_broken_diagram_and_rubric(monkeypatch):
     assert any("misma celda" in p for p in problems)
     assert any("sumar 100 puntos" in p for p in problems)
     assert any("retos de ampliación" in p for p in problems)
+
+
+def test_poo_prerequisites_point_backwards_and_have_no_cycles():
+    # PR E: cada unidad solo pide unidades anteriores del módulo (o conceptos previos del temario),
+    # así que el grafo no tiene ciclos y la ruta puede enseñarlas en orden
+    path = DATA["path"]
+    numbers = {u["id"]: u["number"] for u in MODULE["units"]}
+    for unit in UNITS:
+        for required in unit["requires"]:
+            assert path.index(required) < path.index(unit["id"]), f"{unit['id']} pide {required}"
+            if required in numbers:
+                assert numbers[required] < unit["unit"]["number"]
+    # Desde la Unidad 10 se llega a todas las demás siguiendo prerrequisitos
+    seen, todo = set(), ["poo-proyecto"]
+    while todo:
+        current = todo.pop()
+        if current not in seen:
+            seen.add(current)
+            todo += CONCEPTS[current]["requires"]
+    assert set(numbers) <= seen
+
+
+def test_python_concepts_are_never_backed_by_fp_regulations():
+    # La normativa de FP solo respalda la correspondencia curricular, nunca un concepto de Python
+    norms = {k for k, s in MODULE["sources"].items() if s["kind"] == "norma"}
+    for unit in UNITS:
+        assert not {r["source"] for r in unit["references"]} & norms
+        for mapping in unit["curriculum"]:
+            assert mapping["status"] == "proposed", "ningún CE se presenta como validado"
+            assert mapping["source"].split("#")[0] in norms

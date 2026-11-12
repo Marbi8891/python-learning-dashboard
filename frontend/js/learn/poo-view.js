@@ -108,6 +108,26 @@ function lessonHtml(concept, section, position, done) {
     </article>`;
 }
 
+/**
+ * Estado de los criterios de superación de una unidad: ejercicios obligatorios resueltos, cuestionario
+ * con nota superado (si la unidad tiene banco) y unidad dominada según el motor. `passed` exige los tres.
+ */
+export function unitProgress(learning, concept, s) {
+  const required = concept.pass.required.filter((id) => solved(learning, id)).length;
+  const quiz = concept.bank?.length ? quizResult(learning, concept.id) : null;
+  const quizPassed = !concept.bank?.length || Boolean(quiz?.passedAt);
+  const mastered = s.status === "dominado";
+  return {
+    lessons: sectionsDone(learning, concept).length,
+    required,
+    requiredTotal: concept.pass.required.length,
+    quiz,
+    quizPassed,
+    mastered,
+    passed: required === concept.pass.required.length && quizPassed && mastered,
+  };
+}
+
 function passHtml(index, learning, concept, s) {
   const required = concept.pass.required.map((id) => {
     const ok = solved(learning, id);
@@ -341,6 +361,93 @@ export function unitExercises(concept, { group = null, section = null } = {}) {
 /** Id del resultado de la evaluación final en el progreso (quizzes). */
 export const FINAL_ID = "poo-final";
 
+/** Tabla de progreso por unidad: lecciones, ejercicios obligatorios, cuestionario, dominio y si está superada. */
+function unitsProgressHtml(index, learning, units, stats) {
+  const cell = (label, html) => `<td role="cell" data-label="${label}">${html}</td>`;
+  const mark = (ok) => (ok ? "✓ Sí" : "○ No");
+  const rows = units
+    .map((u) => {
+      const concept = index.concepts.get(u.id);
+      const p = unitProgress(learning, concept, stats.get(u.id));
+      const requires = concept.requires
+        .map((r) => index.concepts.get(r))
+        .map((r) => (r?.unit?.module === "poo" ? `U${r.unit.number}` : escapeHtml(r?.title ?? "")))
+        .join(", ");
+      return `<tr role="row" data-unit="${u.id}" data-passed="${p.passed}"><th scope="row" role="rowheader"><a href="#/teoria/${u.id}">Unidad ${u.number}</a></th>
+        ${cell("Requiere", requires || "—")}
+        ${cell("Lecciones", `${p.lessons} de ${concept.sections.length}`)}
+        ${cell("Obligatorios", `${p.required} de ${p.requiredTotal}`)}
+        ${cell("Cuestionario", p.quiz ? `${p.quiz.best} de ${p.quiz.total}${p.quizPassed ? " ✓" : ""}` : "Sin hacer")}
+        ${cell("Dominada", mark(p.mastered))}
+        ${cell("Superada", mark(p.passed))}</tr>`;
+    })
+    .join("");
+  const passed = units.filter((u) => unitProgress(learning, index.concepts.get(u.id), stats.get(u.id)).passed).length;
+  return `
+    <section class="lx-section" aria-labelledby="lx-poo-table">
+      <h2 class="lx-section__title" id="lx-poo-table">Progreso por unidad</h2>
+      <p class="lx-muted">Una unidad está superada cuando tiene los ejercicios obligatorios resueltos, el cuestionario aprobado y el motor la marca como dominada. Llevas ${passed} de ${units.length}. «Requiere» son los prerrequisitos: la ruta te avisa si conviene reforzarlos antes.</p>
+      <div class="table-wrap" tabindex="0"><table class="lx-table lx-table--reflow" role="table" aria-labelledby="lx-poo-table">
+        <thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">Unidad</th><th scope="col" role="columnheader">Requiere</th><th scope="col" role="columnheader">Lecciones</th><th scope="col" role="columnheader">Obligatorios</th><th scope="col" role="columnheader">Cuestionario</th><th scope="col" role="columnheader">Dominada</th><th scope="col" role="columnheader">Superada</th></tr></thead>
+        <tbody role="rowgroup">${rows}</tbody>
+      </table></div>
+    </section>`;
+}
+
+/** Criterios de evaluación (RD 405/2023) que trabaja el módulo y en qué unidades: siempre como propuesta. */
+export function moduleCurriculum(index, units) {
+  const byCe = new Map();
+  for (const u of units) {
+    for (const m of index.concepts.get(u.id).curriculum ?? []) {
+      const entry = byCe.get(m.ce) ?? { ce: m.ce, units: [], verified: true };
+      entry.units.push(u.number);
+      entry.verified &&= m.status === "verified";
+      byCe.set(m.ce, entry);
+    }
+  }
+  const key = (ce) => ce.split("-").slice(1).map((part) => part.replace(/\d+/, (n) => n.padStart(2, "0")));
+  return [...byCe.values()].sort((a, b) => key(a.ce).join("-").localeCompare(key(b.ce).join("-")));
+}
+
+function moduleCurriculumHtml(index, units) {
+  const items = moduleCurriculum(index, units)
+    .map((e) => `<li><a href="#/daw/curriculo/${escapeHtml(e.ce.split("-")[0])}">${escapeHtml(e.ce)}</a> · Unidad${e.units.length > 1 ? "es" : ""} ${e.units.join(", ")} · <span class="lx-status" data-status="${e.verified ? "dominado" : "insuficiente"}">${e.verified ? STATUS_TEXT.verified : STATUS_TEXT.proposed}</span></li>`)
+    .join("");
+  if (!items) return "";
+  return `
+    <section class="lx-section" aria-labelledby="lx-poo-curriculum">
+      <h2 class="lx-section__title" id="lx-poo-curriculum">Relación con el currículo de DAW</h2>
+      <p class="lx-muted">Módulo 0485 Programación. Criterios de evaluación del RD 405/2023 que trabaja cada unidad. Es una propuesta de la plataforma para orientar el estudio, no una programación didáctica oficial, hasta que la valide un docente.</p>
+      <ul class="lx-list">${items}</ul>
+    </section>`;
+}
+
+/** Bibliografía general: todo el catálogo cerrado de fuentes, con las unidades que las citan. */
+function bibliographyHtml(index, units) {
+  const sources = pooModule(index)?.sources ?? {};
+  const citedBy = (id) =>
+    units
+      .filter((u) => (index.concepts.get(u.id).references ?? []).some((r) => r.source === id) || (index.concepts.get(u.id).curriculum ?? []).some((m) => m.source?.split("#")[0] === id))
+      .map((u) => u.number);
+  const group = (kind) =>
+    Object.entries(sources)
+      .filter(([, s]) => s.kind === kind)
+      .map(([id, s]) => {
+        const cited = citedBy(id);
+        return `<li><a href="${safeUrl(s.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(s.title)}</a>${cited.length ? ` <span class="lx-muted">· Unidad${cited.length > 1 ? "es" : ""} ${cited.join(", ")}</span>` : ""}</li>`;
+      })
+      .join("");
+  return `
+    <section class="lx-section" aria-labelledby="lx-poo-bibliography">
+      <h2 class="lx-section__title" id="lx-poo-bibliography">Bibliografía general</h2>
+      <p class="lx-muted">Solo fuentes oficiales y gratuitas. Cada unidad cita el apartado concreto en sus «Referencias bibliográficas», y las que nadie ha revisado todavía lo dicen.</p>
+      <h3 class="lx-h4">Documentación oficial de Python</h3>
+      <ul class="lx-list">${group("python")}</ul>
+      <h3 class="lx-h4">Normativa del ciclo (solo para el currículo, no para los conceptos de Python)</h3>
+      <ul class="lx-list">${group("norma")}</ul>
+    </section>`;
+}
+
 /** Evaluación final: 3 preguntas por unidad publicada (una de cada nivel), sin corrección hasta el final. */
 function finalHtml(index, learning, units) {
   const total = units.length * 3;
@@ -401,6 +508,7 @@ export function renderModule(index, learning, now = new Date()) {
       <ol class="lx-concepts">${rows}</ol>
     </section>
     ${finalHtml(index, learning, units)}
+    ${unitsProgressHtml(index, learning, units, stats)}
     <section class="lx-section" aria-labelledby="lx-poo-progress">
       <h2 class="lx-section__title" id="lx-poo-progress">Tu progreso en el módulo</h2>
       <dl class="lx-key">
@@ -414,5 +522,7 @@ export function renderModule(index, learning, now = new Date()) {
       <p class="lx-muted">Completar lecciones no equivale a dominar una unidad: el dominio lo calcula el motor con tus respuestas recientes.</p>
       ${errorItems ? `<h3 class="lx-h4">Errores que conviene corregir</h3><ul class="lx-list">${errorItems}</ul>` : ""}
     </section>
+    ${moduleCurriculumHtml(index, units)}
+    ${bibliographyHtml(index, units)}
     </div></div>`;
 }

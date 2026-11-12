@@ -39,7 +39,11 @@ cambios se agrupan por fecha de merge, con el número de pull request entre par�
 - Módulo de POO, PR D: el cuestionario de cada unidad tiene nota (se supera con 11 de 15, el 70 %, y se
   guarda la mejor), evaluación final de 30 preguntas en `#/poo` (3 por unidad, una de cada nivel,
   corregida al terminar; se supera con 21) y «Repasar las preguntas falladas» en cada unidad. Las notas
-  se sincronizan con la cuenta (`quizzes`).
+  se sincronizan con la cuenta (`quizzes`) (#139).
+- Módulo de POO, PR E: el índice `#/poo` muestra el progreso por unidad (prerrequisitos, lecciones,
+  ejercicios obligatorios, cuestionario, dominio y si está superada), los CE del currículo que trabaja
+  el módulo, siempre como propuesta, y la bibliografía general. Pruebas del grafo de prerrequisitos y de
+  que la normativa de FP no respalda conceptos de Python.
 - Correspondencia con los RA y CE oficiales en los cursos de DAW: cada lección y cada pregunta (520)
   dice qué CE trabaja y con qué estado (`verified`, `proposed` o `unassigned`). Hoy todo es
   `proposed`, pendiente de revisión docente. Mapa en `scripts/courses/curriculum_map.py`, validado al
