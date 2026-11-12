@@ -35,7 +35,11 @@ cambios se agrupan por fecha de merge, con el número de pull request entre par�
   herencia, SOLID, type hints, docstrings y `dataclasses`, módulos y refactorización; ejercicio
   principal: refactorizar una tienda) y Unidad 10 (proyecto biblioteca en 6 fases con excepciones
   propias, diagrama de clases accesible, rúbrica de 100 puntos y retos de ampliación), con 52
-  ejercicios, 30 preguntas de banco (150 en total) y 16 errores típicos nuevos.
+  ejercicios, 30 preguntas de banco (150 en total) y 16 errores típicos nuevos (#134).
+- Módulo de POO, PR D: el cuestionario de cada unidad tiene nota (se supera con 11 de 15, el 70 %, y se
+  guarda la mejor), evaluación final de 30 preguntas en `#/poo` (3 por unidad, una de cada nivel,
+  corregida al terminar; se supera con 21) y «Repasar las preguntas falladas» en cada unidad. Las notas
+  se sincronizan con la cuenta (`quizzes`).
 - Correspondencia con los RA y CE oficiales en los cursos de DAW: cada lección y cada pregunta (520)
   dice qué CE trabaja y con qué estado (`verified`, `proposed` o `unassigned`). Hoy todo es
   `proposed`, pendiente de revisión docente. Mapa en `scripts/courses/curriculum_map.py`, validado al

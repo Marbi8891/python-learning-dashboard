@@ -18,8 +18,8 @@ Desde el 11/11/2026 el módulo sigue el plan de cinco PR del diseño de la Fase 
 |---|---|---|
 | A | Formato nuevo (buenas prácticas, referencias, origen de los ejemplos, prácticas adicionales, banco) y Unidades 1 a 6 completas, con 90 preguntas de banco | Hecho (#121) |
 | B | Unidades 7 y 8 (relaciones entre objetos y métodos especiales), con 30 preguntas de banco más (120 en total) | Hecho (#122) |
-| C | Unidades 9 y 10 (diseño y proyecto biblioteca, con diagrama de clases, rúbrica y retos), con 30 preguntas de banco más (150 en total) | En revisión |
-| D | Banco cerrado de 150 preguntas, cuestionarios con nota, evaluación final y repaso | Pendiente |
+| C | Unidades 9 y 10 (diseño y proyecto biblioteca, con diagrama de clases, rúbrica y retos), con 30 preguntas de banco más (150 en total) | Hecho (#134) |
+| D | Cuestionario de unidad con nota (70 %), evaluación final de 30 preguntas y repaso de las falladas | En revisión |
 | E | Currículo, bibliografía general, progreso, motor adaptativo y documentación | Pendiente |
 
 ## Dónde está cada cosa
@@ -172,8 +172,36 @@ alumno nunca se envía al backend.
 - **Lecciones completadas**: `sections: { idLección: fecha }` en el documento `learn` (se sincroniza con
   la cuenta). Solo crece y al fusionar gana la primera fecha. **No cuenta para el dominio**: completar
   una lección no demuestra la competencia.
+- **Cuestionarios con nota** (`quizzes: { id: { best, total, last, at, passedAt } }` en el documento
+  `learn`, sincronizado): `id` es la unidad o `poo-final`. Se guarda la mejor nota, la del último
+  intento y la fecha del primer aprobado, que no se pierde con una nota peor. Al fusionar dos copias gana
+  la mejor nota y el primer aprobado. La nota no cuenta para el dominio; las respuestas sí, como
+  cualquier intento.
 - Las unidades de POO no entran en el simulacro de Preparación DAW ni en la prueba de nivel hasta
   decidirlo en el Sprint 7.
+
+## Cuestionarios y evaluación final
+
+| | Cuestionario de la unidad | Evaluación final |
+|---|---|---|
+| Dónde | Apartado «Cuestionario de la unidad» | Índice `#/poo` |
+| Preguntas | Las 15 del banco de la unidad, en orden aleatorio cada vez | 30: de cada unidad, una del banco de cada nivel (1, 2 y 3), al azar |
+| Corrección | Al momento, con el porqué de cada opción incorrecta | Al terminar, pregunta a pregunta |
+| Nuevos intentos | No: la nota es la del primer intento | No |
+| Se supera con | 11 de 15 (70 %) | 21 de 30 (70 %) |
+| Sesión | `kind: "quiz"` | `kind: "final"` (sin tiempo; se puede terminar antes y lo no respondido cuenta como fallo) |
+
+`QUIZ_PASS` (`mastery.js`) fija el 70 % para los dos. El banco está cerrado: con las 10 unidades,
+`build_learning.py --check` exige exactamente 150 preguntas (50 básicas, 60 intermedias y 40 avanzadas). El cuestionario superado es un criterio más de
+«Criterios de superación» de cada unidad, junto a los ejercicios obligatorios y el dominio.
+
+**Repaso.** Al terminar cualquiera de los dos, cada unidad trabajada recibe su fecha de repaso con el
+mismo sistema de cajas que el resto (`reviewConcept`). Además, la unidad ofrece «Repasar las N preguntas
+falladas»: una práctica con las preguntas del banco cuya última respuesta fue incorrecta. No cambia la
+nota guardada.
+
+`buildPooFinal` (`exam.js`) compone la evaluación final; `failedBank` y `needed` (`poo-view.js`), el
+repaso y los aciertos necesarios.
 
 ## Currículo
 
@@ -214,6 +242,7 @@ concepto asociado (estaban sin revisar y pasan a las unidades que los trabajan).
 | Datos, apartados, ejemplos y soluciones ejecutados | `python scripts/learning/build_learning.py --check` |
 | Estructura, banco (15 por unidad y repartos), referencias, currículo y validador | `backend/tests/test_poo_module.py` |
 | Lecciones completadas, fusión, recomendaciones y vistas | `tests/unit/poo-module.test.mjs` |
+| Nota del cuestionario, evaluación final, limpieza y fusión de `quizzes`, repaso de falladas | `tests/unit/poo-evaluation.test.mjs` |
 | Índice, unidad, diagrama, rúbrica y retos, Pyodide, mini-quiz, cuestionario con el porqué del fallo, móvil y WCAG 2.2 AA | `e2e/poo.spec.js` |
 
 Tamaño de `learning.json` con las Unidades 1 a 6 completas (PR A): 485 KB sin comprimir y 111 KB

@@ -119,6 +119,33 @@ export function reviewConcept(state, conceptId, accuracy, now = new Date()) {
   entry.due = next.due;
 }
 
+/** Nota mínima de un cuestionario con nota (unidad o evaluación final del módulo de POO). */
+export const QUIZ_PASS = 0.7;
+
+/**
+ * Guarda el resultado de un cuestionario con nota. Documento:
+ * quizzes: { [id]: { best, total, last, at, passedAt } } (opcional; `id` es la unidad o `poo-final`).
+ * `best` es la mejor nota (aciertos), `last` la del último intento y `passedAt` la primera vez que se
+ * llegó al QUIZ_PASS: una nota peor después no quita el aprobado.
+ */
+export function recordQuiz(state, id, correct, total, now = new Date()) {
+  if (!ID.test(id) || !isCount(correct) || !isCount(total) || total === 0 || correct > total) return;
+  state.quizzes ??= {};
+  const before = state.quizzes[id];
+  const at = now.toISOString();
+  const passed = correct / total >= QUIZ_PASS;
+  state.quizzes[id] = {
+    best: Math.max(before?.total === total ? before.best : 0, correct),
+    total,
+    last: correct,
+    at,
+    passedAt: before?.passedAt ?? (passed ? at : null),
+  };
+}
+
+/** Resultado guardado de un cuestionario con nota, o null si no se ha hecho nunca. */
+export const quizResult = (state, id) => state.quizzes?.[id] ?? null;
+
 export function recordExam(state, exam) {
   state.exams.push(exam);
   if (state.exams.length > EXAMS) state.exams.splice(0, state.exams.length - EXAMS);
@@ -277,7 +304,7 @@ const isoOrNull = (value) => (isIso(value) ? value : null);
 const EX_FIELDS = ["h", "last", "n", "okAt"];
 const CONCEPT_FIELDS = ["box", "due", "last", "read", "placed"];
 const ERROR_FIELDS = ["n", "last", "streak"];
-const KNOWN_TOP = new Set(["v", "ex", "concepts", "errors", "log", "exams", "sections"]);
+const KNOWN_TOP = new Set(["v", "ex", "concepts", "errors", "log", "exams", "sections", "quizzes"]);
 const EXTRA_KEY = /^[a-zA-Z][a-zA-Z0-9]{0,30}$/;
 const isPrimitive = (value) =>
   value === null || typeof value === "boolean" || (typeof value === "number" && Number.isFinite(value)) || (typeof value === "string" && value.length <= 200);
@@ -352,6 +379,12 @@ export function cleanLearning(value) {
     .slice(-EXAMS);
   const sections = cleanSections(value.sections);
   if (Object.keys(sections).length) state.sections = sections;
+  const quizzes = cleanMap(value.quizzes, (q) =>
+    isCount(q.best) && isCount(q.last) && isCount(q.total) && q.total > 0 && q.best <= q.total && q.last <= q.total && isIso(q.at)
+      ? { best: q.best, total: q.total, last: q.last, at: q.at, passedAt: isoOrNull(q.passedAt) }
+      : null,
+  );
+  if (Object.keys(quizzes).length) state.quizzes = quizzes;
   // Bloques nuevos de versiones futuras: se guardan tal cual (son JSON de la propia cuenta)
   for (const [key, raw] of Object.entries(value)) {
     if (!KNOWN_TOP.has(key) && EXTRA_KEY.test(key)) state[key] = raw;
@@ -417,6 +450,20 @@ export function mergeLearning(local, remote) {
   for (const [id, at] of Object.entries(other.sections ?? {})) {
     local.sections ??= {};
     if (!local.sections[id] || at < local.sections[id]) local.sections[id] = at;
+  }
+  // Cuestionarios con nota: la mejor nota de las dos copias, el último intento más reciente y el
+  // primer aprobado (una copia sin el cuestionario no borra nada)
+  for (const [id, entry] of Object.entries(other.quizzes ?? {})) {
+    local.quizzes ??= {};
+    const mine = local.quizzes[id];
+    if (!mine) {
+      local.quizzes[id] = entry;
+      continue;
+    }
+    const newer = later(mine, entry, "at");
+    const best = mine.total === entry.total ? Math.max(mine.best, entry.best) : newer.best;
+    const passedAt = [mine.passedAt, entry.passedAt].filter(Boolean).sort()[0] ?? null;
+    local.quizzes[id] = { ...newer, best, passedAt };
   }
   // Bloques que esta versión no conoce: se conserva el de la cuenta si aquí no existe
   for (const [key, raw] of Object.entries(other)) if (!(key in local)) local[key] = raw;

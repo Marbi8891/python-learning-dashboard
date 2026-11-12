@@ -55,7 +55,8 @@ export function competencyAdvice(index, competencies) {
 /** Preparación estimada (0-1): dominio de cada competencia ponderado por su peso en el simulacro. Orientativa. */
 export const examReadiness = (competencies) => competencies.reduce((sum, c) => sum + c.score * c.weight, 0) / 100;
 
-function shuffle(list, random) {
+/** Copia de la lista en orden aleatorio (Fisher-Yates). */
+export function shuffle(list, random = Math.random) {
   const copy = [...list];
   for (let i = copy.length - 1; i > 0; i -= 1) {
     const j = Math.floor(random() * (i + 1));
@@ -156,4 +157,25 @@ export function examByCompetency(index, exam) {
     }
     return { id: competency.id, title: competency.title, ok, total };
   });
+}
+
+/** Preguntas de la evaluación final del módulo de POO por unidad: una de cada nivel. */
+export const FINAL_LEVELS = [1, 2, 3];
+
+/**
+ * Evaluación final del módulo de POO: de cada unidad publicada, una pregunta del banco de cada nivel
+ * (básico, intermedio y avanzado), elegida al azar. Con las 10 unidades son 30 preguntas, en el orden
+ * de las unidades y, dentro de cada una, de la más sencilla a la más difícil.
+ */
+export function buildPooFinal(index, { random = Math.random } = {}) {
+  const module = (index.data.modules ?? []).find((m) => m.id === "poo");
+  return (module?.units ?? [])
+    .filter((u) => u.available && index.concepts.has(u.id))
+    .flatMap((u) => {
+      const bank = (index.concepts.get(u.id).bank ?? []).map((id) => index.exercises.get(id)).filter(Boolean);
+      return FINAL_LEVELS.map((level) => {
+        const pool = bank.filter((e) => e.level === level);
+        return pool.length ? pool[Math.floor(random() * pool.length)].id : null;
+      }).filter(Boolean);
+    });
 }

@@ -7,7 +7,7 @@
 
    Funciones puras que devuelven HTML: los clics los atiende learn-app.js (data-learn="…"). */
 
-import { activeErrors, allStats, sectionsDone } from "./mastery.js";
+import { activeErrors, allStats, QUIZ_PASS, quizResult, sectionsDone } from "./mastery.js";
 import { codeBlock, errorExplanation, escapeHtml, KIND_LABEL, meter, percent, renderInline, renderMarkdown, statusBadge } from "./ui.js";
 import { safeUrl } from "../markdown.js";
 
@@ -53,8 +53,30 @@ function exerciseList(index, learning, ids, group, concept) {
 }
 
 /** El cuestionario no lista sus 15 preguntas (se verían las respuestas al leerlas): solo el botón. */
-function bankButton(concept) {
-  return `<div class="lx-actions"><button class="btn btn--primary" type="button" data-learn="unit-practice" data-group="bank" data-concept="${concept.id}">Empezar el cuestionario (${concept.bank.length} preguntas)</button></div>`;
+/** Aciertos necesarios para aprobar un cuestionario de `total` preguntas (70 %: 11 de 15, 21 de 30). */
+export const needed = (total) => Math.ceil(total * QUIZ_PASS - 1e-9);
+
+/** Línea con la nota guardada de un cuestionario: mejor nota, último intento y si está superado. */
+export function quizStatusHtml(result) {
+  if (!result) return '<p class="lx-muted">Aún no lo has hecho.</p>';
+  const passed = Boolean(result.passedAt);
+  return `<p><span class="lx-status" data-status="${passed ? "dominado" : "insuficiente"}">${passed ? "Superado" : "Sin superar"}</span>
+    Mejor nota: <strong>${result.best} de ${result.total}</strong> (${percent(result.best / result.total)}). Último intento: ${result.last} de ${result.total}.</p>`;
+}
+
+/** Preguntas del banco de la unidad cuya última respuesta fue incorrecta (para repasarlas). */
+export const failedBank = (learning, concept) => (concept.bank ?? []).filter((id) => learning.ex[id]?.h.at(-1) === false);
+
+function bankHtml(learning, concept) {
+  const total = concept.bank.length;
+  const failed = failedBank(learning, concept);
+  return `<p class="lx-muted">${total} preguntas tipo test de toda la unidad, de nivel básico, intermedio y avanzado. Cada respuesta se corrige al momento y, si fallas, verás por qué tu opción no es correcta. La nota es la del primer intento: se supera con ${needed(total)} aciertos o más (${percent(QUIZ_PASS)}). Puedes repetirlo cuando quieras; se guarda tu mejor nota.</p>
+    ${quizStatusHtml(quizResult(learning, concept.id))}
+    <div class="lx-actions">
+      <button class="btn btn--primary" type="button" data-learn="unit-practice" data-group="bank" data-concept="${concept.id}">Empezar el cuestionario (${total} preguntas)</button>
+      ${failed.length ? `<button class="btn btn--ghost" type="button" data-learn="bank-review" data-concept="${concept.id}">Repasar las ${failed.length} preguntas falladas</button>` : ""}
+    </div>
+    ${failed.length ? '<p class="lx-muted">El repaso de las falladas no cambia tu nota: sirve para fijar lo que fallaste. El motor también te volverá a proponer la unidad en su fecha de repaso.</p>' : ""}`;
 }
 
 function lessonHtml(concept, section, position, done) {
@@ -92,11 +114,18 @@ function passHtml(index, learning, concept, s) {
     return `<li data-done="${ok}">${ok ? "✓" : "○"} ${renderInline(exerciseTitle(index.exercises.get(id)))}</li>`;
   });
   const mastered = s.status === "dominado";
+  const quiz = concept.bank?.length ? quizResult(learning, concept.id) : null;
+  const quizPassed = Boolean(quiz?.passedAt);
+  const quizText = concept.bank?.length ? `Sacar ${needed(concept.bank.length)} de ${concept.bank.length} o más (${percent(QUIZ_PASS)}) en el cuestionario de la unidad.` : "";
+  const quizItem = concept.bank?.length
+    ? `<li data-done="${quizPassed}">${quizPassed ? "✓" : "○"} Cuestionario de la unidad: ${quiz ? `mejor nota ${quiz.best} de ${quiz.total}` : "sin hacer"} (se piden ${needed(concept.bank.length)} aciertos)</li>`
+    : "";
   return `
-    <ul class="lx-list">${concept.pass.text.map((t) => `<li>${renderInline(t)}</li>`).join("")}</ul>
+    <ul class="lx-list">${concept.pass.text.map((t) => `<li>${renderInline(t)}</li>`).join("")}${quizText ? `<li>${quizText}</li>` : ""}</ul>
     <h3 class="lx-h4">Tu situación</h3>
     <ul class="lx-unit-pass">
       ${required.join("")}
+      ${quizItem}
       <li data-done="${mastered}">${mastered ? "✓" : "○"} Dominio de la unidad: ${s.attempted && s.enough ? percent(s.score) : "pocas evidencias todavía"} (se pide ${percent(concept.pass.minScore)} o más y que el motor la marque como dominada)</li>
     </ul>`;
 }
@@ -286,7 +315,7 @@ export function unitBody(index, learning, concept, s, { lessons = "" } = {}) {
     concept.practices?.length ? section("lx-practices", "Buenas prácticas", practicesHtml(concept)) : "",
     section("lx-selfcheck", "Autoevaluación", `<p class="lx-muted">Preguntas para comprobar si has entendido la unidad.</p>${exerciseList(index, learning, concept.selfcheck, "selfcheck", concept)}`),
     concept.bank?.length
-      ? section("lx-bank", "Cuestionario de la unidad", `<p class="lx-muted">Preguntas tipo test de toda la unidad, de nivel básico, intermedio y avanzado. Si fallas una, verás por qué tu opción no es correcta.</p>${bankButton(concept)}`)
+      ? section("lx-bank", "Cuestionario de la unidad", bankHtml(learning, concept))
       : "",
     section("lx-summary", "Resumen", `<ul class="lx-list">${concept.recap.map((t) => `<li>${renderInline(t)}</li>`).join("")}</ul>`),
     section("lx-pass", "Criterios de superación", passHtml(index, learning, concept, s)),
@@ -308,6 +337,24 @@ export function unitExercises(concept, { group = null, section = null } = {}) {
 }
 
 /* ---------- Índice del módulo (#/poo) ---------- */
+
+/** Id del resultado de la evaluación final en el progreso (quizzes). */
+export const FINAL_ID = "poo-final";
+
+/** Evaluación final: 3 preguntas por unidad publicada (una de cada nivel), sin corrección hasta el final. */
+function finalHtml(index, learning, units) {
+  const total = units.length * 3;
+  if (!total) return "";
+  const passedUnits = units.filter((u) => quizResult(learning, u.id)?.passedAt).length;
+  return `
+    <section class="lx-section" aria-labelledby="lx-poo-final">
+      <h2 class="lx-section__title" id="lx-poo-final">Evaluación final del módulo</h2>
+      <p>${total} preguntas del banco, 3 de cada unidad (una básica, una intermedia y una avanzada), elegidas al azar cada vez. Como en un examen, la corrección se ve al terminar. Se supera con ${needed(total)} aciertos o más (${percent(QUIZ_PASS)}).</p>
+      <p class="lx-muted">Conviene hacerla cuando hayas superado los cuestionarios de las unidades (llevas ${passedUnits} de ${units.length}). Sin tiempo límite; las que dejes sin responder cuentan como falladas.</p>
+      ${quizStatusHtml(quizResult(learning, FINAL_ID))}
+      <div class="lx-actions"><button class="btn btn--primary" type="button" data-learn="poo-final">Empezar la evaluación final (${total} preguntas)</button></div>
+    </section>`;
+}
 
 export function renderModule(index, learning, now = new Date()) {
   const module = pooModule(index);
@@ -353,11 +400,13 @@ export function renderModule(index, learning, now = new Date()) {
       <h2 class="lx-section__title" id="lx-poo-units">Unidades</h2>
       <ol class="lx-concepts">${rows}</ol>
     </section>
+    ${finalHtml(index, learning, units)}
     <section class="lx-section" aria-labelledby="lx-poo-progress">
       <h2 class="lx-section__title" id="lx-poo-progress">Tu progreso en el módulo</h2>
       <dl class="lx-key">
         <div><dt>Lecciones completadas</dt><dd>${lessonsDone} de ${lessonsTotal} ${meter(lessonsTotal ? lessonsDone / lessonsTotal : 0, "Lecciones completadas del módulo")}</dd></div>
         <div><dt>Ejercicios practicados</dt><dd>${tried.length} de ${exercises.length}; ${right.length} bien en el último intento</dd></div>
+        <div><dt>Cuestionarios superados</dt><dd>${units.filter((u) => quizResult(learning, u.id)?.passedAt).length} de ${units.length}</dd></div>
         <div><dt>Unidades dominadas</dt><dd>${mastered.length ? mastered.map((u) => escapeHtml(index.concepts.get(u.id).title)).join(", ") : "Ninguna todavía"}</dd></div>
         <div><dt>Repaso pendiente</dt><dd>${due.length ? due.map((u) => `<a href="#/teoria/${u.id}">${escapeHtml(index.concepts.get(u.id).title)}</a>`).join(", ") : "Nada por hoy"}</dd></div>
         <div><dt>Última actividad</dt><dd>${last ? new Date(last.at).toLocaleDateString("es-ES", { day: "numeric", month: "long" }) : "Aún no has practicado el módulo"}</dd></div>

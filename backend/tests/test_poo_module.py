@@ -179,6 +179,24 @@ def test_bank_questions_are_only_those_listed_by_their_units():
     assert len(listed) == 15 * len(UNITS)
 
 
+def test_bank_is_closed_at_150_with_the_level_split_of_the_design():
+    # PR D: banco cerrado de 150 (50 básicas, 60 intermedias, 40 avanzadas), sin textos repetidos
+    bank = [EXERCISES[i] for u in UNITS for i in u["bank"]]
+    assert len(UNITS) == 10 and len(bank) == 150
+    assert {n: sum(q["level"] == n for q in bank) for n in (1, 2, 3)} == {1: 50, 2: 60, 3: 40}
+    texts = [(q["q"], q.get("code") or "") for q in bank]
+    assert len(set(texts)) == 150, "dos preguntas del banco con el mismo enunciado y código"
+
+
+def test_validator_requires_the_closed_bank(monkeypatch):
+    builder = _load_builder()
+    units = [c for c in builder.CONCEPTS if c.get("unit", {}).get("module") == "poo"]
+    monkeypatch.setitem(units[0], "bank", units[0]["bank"][:-1])
+    problems = builder.Problems()
+    builder.check_bank_totals(units, problems)
+    assert any("el banco cerrado tiene 150 preguntas" in p for p in problems)
+
+
 @pytest.mark.parametrize("unit", UNITS, ids=lambda u: u["id"])
 def test_unit_practices_references_and_main_exercise(unit):
     assert 4 <= len(unit["practices"]) <= 6
