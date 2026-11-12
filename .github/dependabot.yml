@@ -1,0 +1,25 @@
+# Pull requests automáticos para mantener las dependencias al día (ADR-0022), hacia main:
+# pasan por ci.yml y deployment-check.yml como cualquier otro cambio, y los fusiona una persona.
+# Se recupera el archivo que quitó el commit 5dcea0b, sin la app Android (ya no está en el repositorio).
+version: 2
+updates:
+  - package-ecosystem: pip
+    directory: /backend
+    target-branch: main
+    schedule:
+      interval: monthly
+  - package-ecosystem: npm  # tests del frontend y entorno QA
+    directory: /
+    target-branch: main
+    schedule:
+      interval: monthly
+  - package-ecosystem: docker  # imagen del backend (Render)
+    directory: /backend
+    target-branch: main
+    schedule:
+      interval: monthly
+  - package-ecosystem: github-actions  # actualiza también los SHA fijados de los workflows
+    directory: /
+    target-branch: main
+    schedule:
+      interval: monthly
