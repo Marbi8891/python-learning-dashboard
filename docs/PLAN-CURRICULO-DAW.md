@@ -287,6 +287,21 @@ Validación, en dos sitios:
 - `course_builder.py` no genera un curso si un CE no existe en `daw-cyl.json`, es de otro módulo, está repetido o el estado no cuadra.
 - `backend/tests/test_daw_courses.py` lo vuelve a comprobar sobre los JSON publicados.
 
+**En el panel** («Mi panel › Mi progreso › Módulos de DAW»), cada módulo con RA oficiales tiene un desplegable «Criterios de evaluación: N de T practicados (W con preguntas)». Dentro, por RA, cada CE aparece como:
+
+- «Practicado», si el alumno ha respondido alguna de sus preguntas (un fallo también cuenta como práctica);
+- «Sin practicar»;
+- «Sin preguntas en la plataforma».
+
+Encabeza la lista el aviso: «Practicar un criterio no es superarlo: lo evalúa tu profesorado», y que la relación es una propuesta pendiente de revisión docente.
+
+Cómo funciona:
+
+- `build_curriculum.py` lee el `curriculum` de cada pregunta y escribe en cada CE de `daw-cyl.json` `platformQuestionIds` y `mapping` (si sus preguntas tienen estados distintos, el menos seguro). El catálogo pasa de 150 KB a 214 KB, unos 28 KB con gzip.
+- `criteriaProgress()` (`dashboard-data.js`) hace el cálculo y lo prueba `tests/unit/dashboard.test.mjs`.
+- `e2e/dashboard.spec.js` prueba el teclado, el aviso, el repintado sin perder el foco ni el desplegable abierto, y axe con WCAG 2.2 AA.
+- Capturas en tema claro y oscuro, móvil y escritorio: `/mnt/project-files/piloto-daw/sprint-1/`.
+
 Para verificar una lección: el docente la revisa, se cambia `status="verified"` y `reviewed="Nombre, AAAA-MM-DD"` en el mapa y se regeneran los cursos.
 
 ## 6. Información que sigue haciendo falta

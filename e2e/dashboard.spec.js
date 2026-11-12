@@ -212,6 +212,40 @@ test("panel: repintar en segundo plano no quita el foco de las secciones", async
   await expect(page).toHaveURL(/#\/panel\/logros$/);
 });
 
+test("Mi progreso: criterios de evaluación por RA, sin confundir practicado con superado (#106)", async ({ page }) => {
+  // sql-01..03 son de la lección sql-select, que trabaja 0484-RA3 a y b (propuesta)
+  await page.addInitScript(() => {
+    if (sessionStorage.getItem("seeded")) return;
+    sessionStorage.setItem("seeded", "1");
+    localStorage.setItem("pld:course:sql", JSON.stringify({ answers: { "sql-01": [true, true], "sql-02": [true], "sql-03": [false] } }));
+  });
+  await page.goto("/#/bienvenida");
+  await register(page, uniqueEmail());
+  await page.goto("/#/panel/progreso");
+  const bd = panel(page).locator("[data-module-progress] > ul > li", { hasText: "0484 · Bases de datos" });
+  const summary = bd.locator("summary");
+  await expect(summary).toHaveText("Criterios de evaluación: 2 de 57 practicados (37 con preguntas)");
+  // Se abre con el teclado
+  await summary.focus();
+  await page.keyboard.press("Enter");
+  const details = bd.locator("details");
+  await expect(details).toHaveAttribute("open", "");
+  await expect(details).toContainText("Practicar un criterio no es superarlo: lo evalúa tu profesorado");
+  await expect(details).toContainText("pendiente de revisión docente");
+  const ra3 = details.locator(".ce-outcome", { hasText: "RA3." });
+  await expect(ra3).toContainText("Practicados: 2 de 8 criterios");
+  await expect(ra3.locator(".ce-row").first()).toContainText("Practicado: has respondido 3 de");
+  await expect(details.locator(".ce-outcome", { hasText: "RA5." })).toContainText("Sin preguntas en la plataforma");
+  // Al repintarse en segundo plano sigue abierto y con el foco donde estaba
+  await page.evaluate(async () => {
+    const { state, updateUser } = await import("/js/store.js");
+    updateUser({ ...state.user });
+  });
+  await expect(details).toHaveAttribute("open", "");
+  await expect(summary).toBeFocused();
+  await audit(page);
+});
+
 test("Mi progreso: cada módulo de DAW separa preguntas practicadas y dominadas", async ({ page }) => {
   // sql-01 acertada dos veces seguidas (dominada) · sql-02 un acierto suelto · sql-03 fallada
   await page.addInitScript(() => {
