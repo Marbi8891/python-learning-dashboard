@@ -40,9 +40,30 @@ Cómo recupera el acceso quien ha olvidado su contraseña, y qué protege cada p
 
 Sin `BREVO_API_KEY` ni `SMTP_HOST` no se envía nada, y la web ofrece el email de contacto en lugar del formulario.
 
+## Límites de intentos compartidos
+
+Desde #110 los tres límites de autenticación se guardan en PostgreSQL (tabla `rate_limits`), así que valen igual con una instancia de la API que con varias **[verificado en CI: 4 instancias y 40 intentos a la vez contra PostgreSQL 16 dejan pasar exactamente el límite]**.
+
+| Límite | Clave | Cuántos | Ventana | Dónde se usa |
+|---|---|---|---|---|
+| `auth_ip` | IP del cliente | `AUTH_RATE_LIMIT_PER_MINUTE` (5) | 1 min | Todo `/auth/*`, Google, cambio de contraseña y borrar cuenta |
+| `login_account` | Email del login | `LOGIN_FAILURES_PER_ACCOUNT` (10) | `LOGIN_LOCKOUT_MINUTES` (15 min) | Login con contraseña. Un login correcto lo vacía |
+| `reset_email` | Email de recuperación | 3 | 15 min | Emails de recuperación. La respuesta no cambia: no revela si la cuenta existe |
+
+Cómo funciona:
+
+- **Atómico.** Cada intento es una sola sentencia `INSERT … ON CONFLICT DO UPDATE SET count = count + 1 WHERE count < hueco … RETURNING`. Dos peticiones a la vez no pueden ocupar las dos el último hueco, y un intento bloqueado no suma (no alarga el bloqueo).
+- **Ventana deslizante aproximada.** Cuenta la ventana fija actual más la parte de la anterior que aún cae en la última ventana. Así no se puede hacer el doble de intentos justo en el cambio de ventana.
+- **Login.** Cada intento ocupa su hueco *antes* de comprobar la contraseña, así que muchos intentos a la vez contra una cuenta no pasan del límite. Un login correcto (o restablecer la contraseña) libera la cuenta.
+- **Sin datos en claro.** La clave es un HMAC-SHA256 del límite y el email o la IP con `JWT_SECRET`. Cada instancia borra de vez en cuando las ventanas que ya no cuentan (filas de más de dos ventanas).
+- **Si la base de datos falla**, cada instancia sigue limitando en su memoria (como antes de #110) y escribe en el log `rate_limit …: la base de datos no responde, límite en memoria`, sin la clave ni el error. La petición sigue su curso: un login sin base de datos fallará de todos modos al buscar al usuario.
+- **El límite de guardados de progreso** (`WRITE_RATE_LIMIT_PER_MINUTE`) sigue en memoria a propósito: es muy frecuente y solo protege el espacio de la base de datos.
+
+Por qué PostgreSQL y no Redis: ya está desplegado (Neon), no añade otro servicio ni otra cuenta gratuita que vigilar y su `ON CONFLICT` da la atomicidad que hace falta. Cada intento cuesta una lectura y una escritura de pocos milisegundos; con el tráfico de un aula sobra. Redis solo compensaría con mucho más tráfico.
+
 ## Límites conocidos
 
-- Los límites viven en memoria: con varias instancias del backend, cada una cuenta por separado. Hoy hay una sola instancia.
+- Una IP compartida (un aula detrás del mismo router) comparte el límite por IP: 5 intentos por minuto entre todo el aula.
 - Si la cuenta existe, se escriben filas en la base de datos (unos milisegundos). Igualarlo del todo exigiría escrituras ficticias, y no compensa.
 
 ## Inicio de sesión con Google

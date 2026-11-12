@@ -9,6 +9,10 @@ cambios se agrupan por fecha de merge, con el número de pull request entre par�
 ## [Sin publicar]
 
 ### Añadido
+- Límites de intentos compartidos (#110): por IP, por cuenta y por email de recuperación se guardan
+  en PostgreSQL (tabla `rate_limits`, con seudónimos HMAC), con una sola sentencia atómica por
+  intento y ventana deslizante. Valen con varias instancias de la API; si la base de datos falla,
+  cada instancia vuelve a limitar en memoria. Prueba de concurrencia en PostgreSQL en cada CI.
 - `GET /api/v1/ready`: comprueba la base de datos y que el esquema está en la última migración (503
   sin detalles si no); `/api/health` sigue sin tocar la base de datos para que Render no reinicie en
   bucle. Script de copia y restauración (`scripts/ops/copia_bd.py`) con salvaguardas, ensayo en cada
