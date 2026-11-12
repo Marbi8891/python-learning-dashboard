@@ -16,6 +16,8 @@ async function register(page, email, name = "Ana") {
   await form.getByLabel(/He leído la política/).check();
   await form.getByRole("button", { name: "Crear cuenta" }).click();
   await expect(page.locator("#account-label")).toHaveText(name);
+  // El nombre cambia antes de que termine la sincronización; el diálogo (modal) se cierra después
+  await expect(dialog(page)).toBeHidden();
 }
 
 /** Consulta la API como el usuario. El token de la web va en una cookie HttpOnly (no se puede

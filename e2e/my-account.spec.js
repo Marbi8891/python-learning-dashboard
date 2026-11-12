@@ -15,6 +15,8 @@ async function signIn(page, request, section = "perfil") {
   await page.locator("#login-form").getByLabel("Contraseña").fill(PASSWORD);
   await page.locator("#login-form").getByRole("button", { name: "Entrar" }).click();
   await expect(page.locator("#account-label")).toHaveText("Ana");
+  // El nombre cambia antes de que termine la sincronización; el diálogo (modal) se cierra después
+  await expect(page.locator("#account-dialog")).toBeHidden();
   // La antigua «Mi cuenta» lleva al perfil del panel; cada parte vive en su sección
   await page.goto("/#/cuenta");
   await expect(page).toHaveURL(/#\/panel\/perfil$/);

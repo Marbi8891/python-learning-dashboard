@@ -17,6 +17,9 @@ async function register(page, email, name = "Ana") {
   await form.getByLabel(/He leído la política/).check();
   await form.getByRole("button", { name: "Crear cuenta" }).click();
   await expect(page.locator("#account-label")).toHaveText(name);
+  // El nombre cambia antes de que termine la sincronización; el diálogo (modal) se cierra después
+  // y, mientras está abierto, el resto de la página no recibe el foco
+  await expect(dialog(page)).toBeHidden();
 }
 
 async function login(page, email) {
@@ -190,6 +193,23 @@ test("en el móvil, el panel cabe sin desplazamiento horizontal y se navega con 
   await page.keyboard.press("Enter");
   await expect(page).toHaveURL(/#\/panel\/logros$/);
   await expect(page.locator("#private-title")).toBeFocused();
+});
+
+test("panel: repintar en segundo plano no quita el foco de las secciones", async ({ page }) => {
+  // Regresión: al llegar el progreso de la cuenta, la vista se repinta entera y el foco solo vuelve a
+  // un elemento con id o atributo data-; los enlaces de secciones no tenían ninguno y Enter no hacía nada
+  await openLesson(page);
+  await register(page, uniqueEmail());
+  await page.goto("/#/panel/cursos");
+  await expect(panel(page).locator('[data-course-card="learn"]')).toBeVisible();
+  await page.locator(".dash-nav a", { hasText: "Logros" }).focus();
+  await page.evaluate(async () => {
+    const { state, updateUser } = await import("/js/store.js");
+    updateUser({ ...state.user });
+  });
+  await expect(page.locator(".dash-nav a", { hasText: "Logros" })).toBeFocused();
+  await page.keyboard.press("Enter");
+  await expect(page).toHaveURL(/#\/panel\/logros$/);
 });
 
 test("Mi progreso: cada módulo de DAW separa preguntas practicadas y dominadas", async ({ page }) => {

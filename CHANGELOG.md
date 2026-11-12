@@ -44,13 +44,15 @@ cambios se agrupan por fecha de merge, con el número de pull request entre par�
   WCAG 2.2 AA y que falta la revisión manual con lector de pantalla.
 
 ### Corregido
+- En el panel, las secciones («Cursos», «Logros»…) ya no pierden el foco de teclado al repintarse la vista
+  cuando llega el progreso de la cuenta: sus enlaces no tenían con qué volver a encontrarlos (#106).
+- Las pruebas e2e del panel y de la cuenta fallaban a veces porque seguían antes de que se cerrara el
+  diálogo de cuenta, que es modal y deja el resto de la página sin foco. Ahora esperan a que se cierre.
 - La auditoría de accesibilidad del PCAP fallaba a veces con `color-contrast` en `#toast`: axe empezaba
   en el hueco de 250 ms entre dos avisos en cola y medía el segundo a media transición. Ahora espera a
   que la cola se vacíe; dos pruebas nuevas lo vigilan, y también el contraste del aviso visible.
 - Las casillas del diálogo de cuenta miden 24 × 24 px (WCAG 2.5.8): la de privacidad del bloque de
   Google medía 13 px y le faltaba separación. Lo detectó axe al pasar a las reglas de WCAG 2.2.
-
-### Corregido
 - Cerrar sesión justo después de entrar ya no se queda con la sesión abierta: las subidas del
   progreso van de una en una (#103).
 - Si la API no puede cerrar la sesión, se avisa en vez de fingir que se ha cerrado (#103).
