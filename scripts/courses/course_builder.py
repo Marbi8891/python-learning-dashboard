@@ -22,8 +22,34 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from curriculum_map import Mapping, check, for_lesson, ra_of
+
 ROOT = Path(__file__).resolve().parents[2]
 ASSETS = ROOT / "frontend" / "data" / "courses"
+CURRICULUM = ROOT / "frontend" / "data" / "curriculum" / "daw-cyl.json"
+FROM_QUESTION = "Propuesta para esta pregunta"
+
+
+def known_criteria() -> set[str]:
+    """Ids de todos los CE del currículo oficial (`0484-RA3-b`)."""
+    catalog = json.loads(CURRICULUM.read_text(encoding="utf-8"))
+    return {
+        c["id"]
+        for m in catalog["modules"]
+        for ra in m.get("learningOutcomes", [])
+        for c in ra["criteria"]
+    }
+
+
+def lesson_curriculum(mapping: Mapping) -> dict:
+    """Lo que dice la lección de su correspondencia con el currículo (#106)."""
+    return {
+        "ra": sorted({ra_of(c) for c in mapping.ce}),
+        "ce": list(mapping.ce),
+        "status": mapping.status,
+        "source": mapping.source,
+        "reviewed": mapping.reviewed,
+    }
 
 
 @dataclass
@@ -52,6 +78,8 @@ class Q:
     target: str | None = None  # bug: lo que debería mostrar el programa corregido
     # Módulo oficial que trabaja (código del currículo). Vacío = el módulo del curso
     module: str | None = None
+    # CE propios de la pregunta (`0484-RA3-b`). Vacío = los de su lección (curriculum_map.py)
+    ce: list[str] = field(default_factory=list)
 
 
 @dataclass
@@ -201,10 +229,13 @@ def build(
 ) -> dict[str, str]:
     assert sum(b.weight for b in blocks) == 100, "los pesos de los bloques deben sumar 100"
     ids: set[str] = set()
+    known = known_criteria()
     bank_questions, modules = [], []
     for block in blocks:
         lessons = []
         for lesson in block.lessons:
+            mapping = for_lesson(lesson.slug)
+            check(mapping, module, known, lesson.slug)
             examples(lesson.example)  # el ejemplo de la teoría también tiene que funcionar
             quiz = []
             for q in lesson.quiz:
@@ -221,6 +252,10 @@ def build(
             for q in lesson.questions:
                 assert q.id not in ids, f"id repetido: {q.id}"
                 ids.add(q.id)
+                own = Mapping(tuple(q.ce), FROM_QUESTION) if q.ce else mapping
+                check(own, q.module or module, known, q.id)
+                # Solo los CE y el estado: el resto (fuente, revisión) está en la lección
+                curriculum = {"ce": list(own.ce), "status": own.status}
                 if q.kind != "choice":
                     entry = practice(q, runner)
                     extra = entry.pop("extra")
@@ -233,6 +268,7 @@ def build(
                             "explain": {"es": q.explain + extra, "en": q.explain + extra},
                             "lesson": lesson.slug,
                             "module": q.module or module,
+                            "curriculum": curriculum,
                         }
                     )
                     continue
@@ -251,6 +287,7 @@ def build(
                         "explain": {"es": q.explain, "en": q.explain},
                         "lesson": lesson.slug,
                         "module": q.module or module,
+                        "curriculum": curriculum,
                     }
                 )
             title, stars, text, starter, hint = lesson.challenge
@@ -275,6 +312,7 @@ def build(
                         "faq": [{"q": a, "a": b} for a, b in lesson.faq],
                     },
                     "sources": [{"title": t, "url": u} for t, u in lesson.sources],
+                    "curriculum": lesson_curriculum(mapping),
                     **unit_extras(lesson),
                 }
             )
