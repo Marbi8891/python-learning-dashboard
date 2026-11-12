@@ -325,6 +325,8 @@ test("el progreso por conceptos se sincroniza con la cuenta y se fusiona con el 
   await page.locator("#login-form").getByLabel("Contraseña").fill("contraseña-segura");
   await page.locator("#login-form").getByRole("button", { name: "Entrar" }).click();
   await expect(page.locator("#account-label")).toHaveText("Ana");
+  // El nombre cambia antes de que termine la sincronización; el diálogo (modal) se cierra después
+  await expect(page.locator("#account-dialog")).toBeHidden();
   await startSession(page, { kind: "practice", title: "Bucles", exercises: ["buc-01"] });
   await page.getByLabel(/Lo que muestra el programa/).fill("2 3 4 5");
   await page.getByRole("button", { name: "Comprobar", exact: true }).click();

@@ -40,6 +40,8 @@ cambios se agrupan por fecha de merge, con el número de pull request entre par�
   dice qué CE trabaja y con qué estado (`verified`, `proposed` o `unassigned`). Hoy todo es
   `proposed`, pendiente de revisión docente. Mapa en `scripts/courses/curriculum_map.py`, validado al
   generar los cursos y en las pruebas (#106).
+- «Mi progreso» muestra, por módulo de DAW, los criterios de evaluación agrupados por RA y si se han
+  practicado, sin practicar o no tienen preguntas, con el aviso de que practicar no es superar (#106).
 - Monitor de CI: `ci-monitor.yml` diagnostica cada ejecución de CI y avisa con una incidencia
   `ci-monitor` (nuevo, recurrente, corregido, cancelado u obsoleto); `scripts/ci-monitor/` y
   `docs/CI_CD_MONITORING.md` (#103).

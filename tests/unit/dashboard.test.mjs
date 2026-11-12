@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import {
+  criteriaProgress,
   dailySeries,
   examSummary,
   lastPractice,
@@ -102,4 +103,40 @@ test("progreso por módulo: practicada no es lo mismo que dominada", () => {
   assert.equal(bd.practiced, 0); // un historial que no es una lista no cuenta
   assert.deepEqual(rest, []); // un módulo sin preguntas en la plataforma no aparece
   assert.equal(MASTERY_STREAK, 2);
+});
+
+test("cobertura de criterios: practicado si se respondió alguna de sus preguntas, sin confundirlo con superado", () => {
+  const module = {
+    code: "0484",
+    learningOutcomes: [
+      {
+        id: "0484-RA3",
+        number: 3,
+        text: "Consulta la información…",
+        criteria: [
+          { id: "0484-RA3-a", letter: "a", text: "Herramientas", platformQuestionIds: { sql: ["s1", "s2"] }, mapping: "proposed" },
+          { id: "0484-RA3-b", letter: "b", text: "Consultas simples", platformQuestionIds: { sql: ["s3"], otro: ["o1"] }, mapping: "proposed" },
+          { id: "0484-RA3-c", letter: "c", text: "Sin preguntas" },
+        ],
+      },
+      { id: "0484-RA5", number: 5, text: "Procedimientos", criteria: [{ id: "0484-RA5-a", letter: "a", text: "Automatizar" }] },
+    ],
+  };
+  const states = { sql: { s1: [false], s3: "dañado" }, otro: { o1: [] } };
+  const cov = criteriaProgress(module, (course) => states[course]);
+  assert.equal(cov.total, 4);
+  assert.equal(cov.withQuestions, 2);
+  assert.equal(cov.practiced, 1); // un fallo también es práctica; historial dañado o vacío, no
+  const [ra3, ra5] = cov.outcomes;
+  assert.deepEqual(
+    ra3.criteria.map((c) => [c.letter, c.questions, c.practiced, c.mapping]),
+    [["a", 2, 1, "proposed"], ["b", 2, 0, "proposed"], ["c", 0, 0, "unassigned"]],
+  );
+  assert.equal(ra3.practiced, 1);
+  assert.equal(ra3.withQuestions, 2);
+  assert.equal(ra5.withQuestions, 0);
+  // Sin progreso guardado de un curso (aún no lo ha abierto) no falla
+  assert.equal(criteriaProgress(module, () => undefined).practiced, 0);
+  // Módulo sin RA oficiales: nada que cubrir
+  assert.deepEqual(criteriaProgress({ code: "0613", learningOutcomes: [] }, () => ({})), { total: 0, withQuestions: 0, practiced: 0, outcomes: [] });
 });

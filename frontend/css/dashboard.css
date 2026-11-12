@@ -178,6 +178,53 @@
   color: var(--color-link);
 }
 
+/* Criterios de evaluación de un módulo (#106). Abierto, ocupa toda la fila para leerse bien */
+.course-progress:has(.ce-coverage[open]) {
+  grid-column: 1 / -1;
+}
+
+.ce-coverage summary {
+  padding-block: var(--space-1);
+}
+
+.ce-outcomes,
+.ce-list {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ce-outcomes {
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+}
+
+.ce-outcome__title {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.ce-row {
+  display: grid;
+  gap: 2px;
+  padding-inline-start: var(--space-2);
+  border-inline-start: 3px solid var(--color-border);
+}
+
+.ce-row .account-card__meta {
+  margin: 0;
+}
+
+.ce-row--practiced {
+  border-inline-start-color: var(--color-primary);
+}
+
+.ce-row--none {
+  border-inline-start-style: dashed;
+}
+
 .dash-tags {
   display: flex;
   flex-wrap: wrap;
