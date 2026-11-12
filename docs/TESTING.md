@@ -35,6 +35,7 @@ Las e2e arrancan solas el frontend (`e2e/serve_frontend.py`, un `http.server` co
 | Safari (WebKit) | `PW_WEBKIT=1 npx playwright test --project=webkit e2e/navigation.spec.js e2e/landing.spec.js e2e/account.spec.js` | Prueba de humo en WebKit, con la cuenta y el cierre de sesión (trabajo `webkit` de CI) |
 | Inspección de la web | `node scripts/web/inspeccionar_web.mjs [--rutas a,b] [--tema claro\|oscuro\|ambos] [--comparar <carpeta>]` | Capturas en móvil y escritorio (y en tema oscuro con `--tema`), axe, errores de consola, desbordamiento y peso de cada ruta (no es una prueba que falle: es evidencia de antes y después) |
 | Dependencias | `pip-audit -r backend/requirements.txt` y `npm audit --audit-level=high` | Vulnerabilidades conocidas |
+| Despliegue (sin desplegar) | `cp -r frontend _site && python scripts/security/production_csp.py _site && python scripts/qa/verify_pages_artifact.py _site` y `node --experimental-vm-modules scripts/qa/frontend_static.mjs --root _site` | Lo que publicaría Pages: archivos necesarios, CSP sin orígenes de desarrollo, sin restos ni secretos, imports y referencias. En CI (`deployment-check.yml`) también construye la imagen Docker de Render, comprueba `/api/health` y valida los workflows con actionlint |
 
 GitHub Actions (`ci.yml`) lo pasa todo en cada push y pull request.
 

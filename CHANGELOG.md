@@ -9,6 +9,8 @@ cambios se agrupan por fecha de merge, con el número de pull request entre par�
 ## [Sin publicar]
 
 ### Añadido
+- `deployment-check.yml`: comprueba el artefacto de Pages, la imagen Docker del backend y los workflows
+  sin desplegar nada, y `dependabot.yml` vuelve (hacia `main`). Lo útil del PR #104, sin la rama `develop`.
 - Módulo de POO, Sprint 1: índice `#/poo` con las 10 unidades, página de unidad con objetivos,
   lecciones con ejemplos ejecutables y mini-quiz, ejercicios guiados y autónomos, autoevaluación,
   resumen, criterios de superación y currículo (propuesto); la Unidad 2 (`#/teoria/poo`) ya tiene el
