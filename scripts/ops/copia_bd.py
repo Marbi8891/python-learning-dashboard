@@ -76,6 +76,25 @@ def mask_all(text: str) -> str:
     return re.sub(r"(://[^:/@\s]+:)[^@\s]+@", r"\1***@", text)
 
 
+# Un pg_dump más nuevo que el servidor escribe ajustes que el servidor no conoce (pg_dump 17+ pone
+# `SET transaction_timeout = 0;` y PostgreSQL 16 no lo tiene). Ese error se puede ignorar: no toca
+# datos y la comparación de filas lo confirma después. Cualquier otro error para la restauración.
+UNKNOWN_SETTING = re.compile(r'unrecognized configuration parameter "(\w+)"')
+
+
+def restore_errors(stderr: str) -> tuple[list[str], list[str]]:
+    """Separa los errores de pg_restore en (ajustes desconocidos que se ignoran, errores reales)."""
+    ignored, real = [], []
+    for line in stderr.splitlines():
+        if "error:" not in line:
+            continue
+        if found := UNKNOWN_SETTING.search(line):
+            ignored.append(found.group(1))
+        else:
+            real.append(line.strip())
+    return ignored, real
+
+
 def psql(url: str, sql: str) -> list[str]:
     out = run([tool("psql"), "--no-psqlrc", "-At", "-d", url, "-c", sql]).stdout
     return [line for line in out.splitlines() if line]
@@ -140,10 +159,17 @@ def restore(dump: Path, destination: str, confirm: str, clean: bool) -> bool:
         sys.exit(f"«{name}» ya tiene tablas. Usa otra base vacía o añade --limpia (las borra).")
     print(f"Restaurando {dump.name} en {masked(url)}")
     started = time.perf_counter()
-    args = [tool("pg_restore"), "--no-owner", "--no-acl", "--exit-on-error", "-d", url]
+    args = [tool("pg_restore"), "--no-owner", "--no-acl", "-d", url]
     if clean:
         args += ["--clean", "--if-exists"]
-    run([*args, str(dump)])
+    result = subprocess.run([*args, str(dump)], capture_output=True, text=True)
+    if result.returncode != 0:
+        ignored, real = restore_errors(result.stderr)
+        if real or not ignored:
+            sys.exit(f"Ha fallado pg_restore:\n{mask_all(result.stderr.strip())}")
+        print(
+            f"Aviso: el servidor no conoce {', '.join(sorted(set(ignored)))} (pg_restore más nuevo)"
+        )
     seconds = time.perf_counter() - started
     counts = row_counts(url)
     print(f"Restaurada en {seconds:.1f} s: {sum(counts.values())} filas en {len(counts)} tablas")

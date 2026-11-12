@@ -103,3 +103,56 @@ def test_backup_and_restore_rehearsal(tmp_path, monkeypatch, capsys):
     finally:
         for name in ("pld_copia_origen", "pld_copia_destino"):
             sql(f"DROP DATABASE IF EXISTS {name} WITH (FORCE)")
+
+
+# Lo que escribió pg_restore 18 contra PostgreSQL 16 en CI (#143)
+NEWER_CLIENT_STDERR = (
+    "pg_restore: error: could not execute query: ERROR:  "
+    'unrecognized configuration parameter "transaction_timeout"\n'
+    "Command was: SET transaction_timeout = 0;\n"
+    "pg_restore: warning: errors ignored on restore: 1\n"
+)
+
+
+def fake_restore(tmp_path, monkeypatch, stderr):
+    """Una copia válida y un pg_restore simulado que termina con `stderr` y código 1."""
+    dump = tmp_path / "pld.dump"
+    dump.write_bytes(b"copia")
+    meta = {"sha256": copia_bd.sha256(dump), "tables": {"users": 1}}
+    dump.with_suffix(".json").write_text(copia_bd.json.dumps(meta), encoding="utf-8")
+    monkeypatch.setattr(copia_bd, "tool", lambda name: name)
+    monkeypatch.setattr(copia_bd, "psql", lambda url, sql: [])  # destino vacío
+    monkeypatch.setattr(copia_bd, "row_counts", lambda url: {"users": 1})
+    monkeypatch.setattr(
+        copia_bd.subprocess,
+        "run",
+        lambda args, **kw: subprocess.CompletedProcess(args, 1, "", stderr),
+    )
+    return dump
+
+
+def test_restore_tolerates_settings_unknown_to_an_older_server(tmp_path, monkeypatch, capsys):
+    dump = fake_restore(tmp_path, monkeypatch, NEWER_CLIENT_STDERR)
+    assert copia_bd.restore(dump, "postgresql://u:p@h/pld_prueba", "pld_prueba", False)
+    out = capsys.readouterr().out
+    assert "no conoce transaction_timeout" in out
+    assert "mismas filas" in out  # la comparación de filas es la que da la restauración por buena
+
+
+def test_restore_stops_on_any_other_error(tmp_path, monkeypatch):
+    stderr = NEWER_CLIENT_STDERR + (
+        'pg_restore: error: could not execute query: ERROR:  relation "users" already exists\n'
+    )
+    dump = fake_restore(tmp_path, monkeypatch, stderr)
+    with pytest.raises(SystemExit, match="already exists"):
+        copia_bd.restore(dump, "postgresql://u:p@h/pld_prueba", "pld_prueba", False)
+
+
+def test_restore_errors_classifies_lines():
+    ignored, real = copia_bd.restore_errors(NEWER_CLIENT_STDERR)
+    assert ignored == ["transaction_timeout"]
+    assert real == []
+    assert copia_bd.restore_errors("pg_restore: error: connection failed") == (
+        [],
+        ["pg_restore: error: connection failed"],
+    )

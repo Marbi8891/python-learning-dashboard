@@ -105,6 +105,8 @@ Nunca se restaura encima de producción a la primera. Primero se restaura en una
    - el archivo no coincide con su SHA-256.
 
    Al terminar, compara las filas de cada tabla con las de la copia.
+
+   Si tus herramientas son más nuevas que el servidor, puede salir «Aviso: el servidor no conoce transaction_timeout». Es normal: `pg_dump` 17 o posterior escribe un ajuste que PostgreSQL 16 no tiene. El script solo pasa por alto ese tipo de error; cualquier otro detiene la restauración. **[verificado en CI: `pg_dump` 18 contra PostgreSQL 16]**
 3. En Render › Environment, cambia `DATABASE_URL` por la de `pld_restaurada`. Render se reinicia y aplica las migraciones que falten (`alembic upgrade head`).
 4. Comprueba que `/api/v1/ready` da 200 y que puedes entrar con una cuenta de prueba.
 5. Anota el incidente según `docs/INCIDENTES.md`.
