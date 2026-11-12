@@ -162,12 +162,13 @@ def login(
     aunque los intentos lleguen de muchas IPs distintas."""
     email = form.username.strip().lower()
     account = pseudonym(email)
-    if login_failures.blocked(email):
+    # Cada intento ocupa un hueco antes de comprobar la contraseña (de forma atómica, así que
+    # muchos intentos a la vez no pasan de más) y un login correcto los libera todos
+    if not login_failures.hit(email):
         record(Event.ACCOUNT_LOCKED, request, account=account)
         raise HTTPException(status_code=status.HTTP_429_TOO_MANY_REQUESTS, detail=TOO_MANY)
     user = db.scalar(select(User).where(User.email == email))
     if not verify_password(form.password, user.password_hash if user else None):
-        login_failures.record(email)
         record(Event.LOGIN_FAILED, request, account=account, known=user is not None)
         if user is not None:  # el titular lo verá en «Actividad de la cuenta»
             activity.log(db, user.id, "login_failed", request)

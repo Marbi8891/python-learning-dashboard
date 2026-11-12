@@ -143,7 +143,7 @@ Qué tener en cuenta:
 |---|---|
 | Plantilla | Texto plano en español, generado en `request_password_reset` (`backend/app/routers/auth.py`): saludo con el nombre, enlace `FRONTEND_URL/#/restablecer?token=…`, minutos de validez y aviso de ignorarlo si no lo pidió. No hay versión HTML ni en inglés |
 | Errores | El envío va en segundo plano: un fallo de Brevo (4xx/5xx o red) se registra en el log como «No se pudo enviar el email a a***@dominio» y la persona ve el mismo mensaje de siempre. `/api/health` dice `"email": true` en cuanto hay clave, aunque sea incorrecta: por eso hay que hacer la prueba del paso 4 |
-| Abuso | Límite por IP en todo `/auth/*` (5 por minuto), como mucho 3 emails por cuenta cada 15 minutos, misma respuesta exista o no la cuenta. Detalle en [auth.md](auth.md). Los límites viven en memoria (se reinician con el servidor) |
+| Abuso | Límite por IP en todo `/auth/*` (5 por minuto), como mucho 3 emails por cuenta cada 15 minutos, misma respuesta exista o no la cuenta. Detalle en [auth.md](auth.md). Los límites se guardan en PostgreSQL y valen para todas las instancias; si la base de datos falla, cada instancia limita en memoria ([auth.md](auth.md#límites-de-intentos-compartidos)) |
 | Cuota | 300 emails al día en el plan gratuito de Brevo. Un piloto de clase no se acerca |
 | Remitente | Con una dirección `@gmail.com` como remitente, Gmail puede mandar los emails a spam porque no salen de los servidores de Google. Si pasa a menudo, la solución es un dominio propio autenticado en Brevo (SPF y DKIM) |
 

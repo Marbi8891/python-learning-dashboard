@@ -320,7 +320,7 @@ El Web Worker evita que la página se congele, **pero no es una barrera de segur
 - **Sesión en Safari:** si Safari bloquea la cookie, la sesión vive en memoria y no se renueva (no comprobado en Safari).
 - **Datos que se quedan en el navegador:** con «Cerrar sesión y conservarlo aquí» y con lo apartado de otra cuenta, el progreso sigue en un equipo que puede ser compartido. Es una elección explícita del alumno o, en el caso de lo apartado, la alternativa a perder sus datos.
 - **Lecciones desmarcadas:** si desmarcar una lección falla, no se reintenta (la importación solo añade).
-- **Límites de intentos:** se guardan en memoria (una sola instancia de Render) y se reinician al reiniciar el servidor.
+- **Límites de intentos:** ~~se guardan en memoria~~ resuelto en #110: compartidos en PostgreSQL, atómicos y con vuelta a memoria si la base de datos falla ([auth.md](auth.md#límites-de-intentos-compartidos)). Sigue el límite por IP compartido en un aula detrás de NAT.
 - **Siguen abiertos:** AUD-008 (PWA sin conexión), AUD-002 a AUD-007 (lógica de aprendizaje), RT-001 a RT-006 y AUD-023 (`aria-invalid`). Se tratan en las fases siguientes.
 
 ## 12. Actualización del 3 de noviembre de 2026: experiencia de estudio, accesibilidad y rendimiento (Fase C)

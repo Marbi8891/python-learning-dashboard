@@ -4,6 +4,7 @@ from datetime import datetime
 
 from sqlalchemy import (
     JSON,
+    BigInteger,
     DateTime,
     ForeignKey,
     Index,
@@ -172,3 +173,17 @@ class AccountEvent(Base):
     kind: Mapped[str] = mapped_column(String(30))
     device: Mapped[str] = mapped_column(String(60), default="")
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class RateLimitWindow(Base):
+    """Contador de intentos compartido por todas las instancias de la API (#110).
+
+    Una fila por límite (`scope`), clave y ventana fija. La clave es un HMAC con el secreto del
+    servidor: nunca se guarda el email ni la IP en claro. Las ventanas viejas se borran solas."""
+
+    __tablename__ = "rate_limits"
+
+    scope: Mapped[str] = mapped_column(String(20), primary_key=True)
+    key: Mapped[str] = mapped_column(String(64), primary_key=True)
+    window_start: Mapped[int] = mapped_column(BigInteger, primary_key=True)  # segundos Unix
+    count: Mapped[int] = mapped_column(Integer)
