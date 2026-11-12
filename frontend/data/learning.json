@@ -51,7 +51,9 @@
   "poo-herencia",
   "poo-polimorfismo",
   "poo-composicion",
-  "poo-metodos-especiales"
+  "poo-metodos-especiales",
+  "poo-diseno",
+  "poo-proyecto"
  ],
  "daw": [
   {
@@ -166,13 +168,13 @@
      "number": 9,
      "id": "poo-diseno",
      "title": "Diseño y buenas prácticas",
-     "available": false
+     "available": true
     },
     {
      "number": 10,
      "id": "poo-proyecto",
      "title": "Proyecto final: gestión de una biblioteca",
-     "available": false
+     "available": true
     }
    ],
    "sources": {
@@ -4864,7 +4866,7 @@
          "`iter()` sobre la lista interna devuelve un iterador ya hecho."
         ],
         [
-         24,
+         25,
          "Cuando no quedan elementos, el iterador avisa con `StopIteration`."
         ],
         [
@@ -5022,6 +5024,1033 @@
     "0485-RA4-e"
    ],
    "difficulty": 1.9,
+   "importance": 2
+  },
+  {
+   "id": "poo-diseno",
+   "title": "Diseño y buenas prácticas",
+   "area": "poo",
+   "requires": [
+    "poo-polimorfismo",
+    "poo-composicion"
+   ],
+   "daw": 2,
+   "ut": "prog-ut6",
+   "lessons": [
+    "poo"
+   ],
+   "summary": "Clases fáciles de entender y de cambiar: una responsabilidad por clase, poco acoplamiento, SOLID, type hints, docstrings y dataclasses.",
+   "when": "Cuando un programa crece y cada cambio rompe algo: una función que lo hace todo, clases que dependen de los detalles de otras o datos sueltos en diccionarios.",
+   "example": {
+    "code": "from dataclasses import dataclass\n\n\n@dataclass\nclass Producto:\n    \"\"\"Un artículo de la tienda: solo sus datos.\"\"\"\n    nombre: str\n    precio: float\n\n\nclass Carrito:\n    \"\"\"Guarda lo que compra un cliente y calcula su importe.\"\"\"\n\n    def __init__(self) -> None:\n        self.lineas: list[tuple[Producto, int]] = []\n\n    def agregar(self, producto: Producto, cantidad: int = 1) -> None:\n        self.lineas.append((producto, cantidad))\n\n    def total(self) -> float:\n        return sum(p.precio * n for p, n in self.lineas)\n\n\nclass Ticket:\n    \"\"\"Presenta un carrito al cliente: no calcula ni guarda nada.\"\"\"\n\n    def __init__(self, carrito: Carrito) -> None:\n        self.carrito = carrito\n\n    def texto(self) -> str:\n        return f\"Total: {self.carrito.total():.2f} €\"\n\n\ncarrito = Carrito()\ncarrito.agregar(Producto(\"Teclado\", 25.0), 2)\nprint(Ticket(carrito).texto())",
+    "lines": [
+     [
+      4,
+      "`@dataclass` escribe `__init__`, `__repr__` y `__eq__` a partir de los atributos."
+     ],
+     [
+      7,
+      "Type hints: dicen de qué tipo es cada dato, para quien lee el código."
+     ],
+     [
+      12,
+      "Cada clase tiene una docstring que dice de qué se ocupa."
+     ],
+     [
+      25,
+      "`Ticket` solo presenta: si cambia el formato, no se toca el cálculo."
+     ]
+    ],
+    "output": "Total: 50.00 €\n"
+   },
+   "errors": [
+    {
+     "id": "poo-diseno.clase-que-lo-hace-todo",
+     "label": "Pone en una sola clase o función varias responsabilidades",
+     "why": "Cuando una clase calcula, presenta y guarda, cualquier cambio en una de esas cosas obliga a tocarla y puede romper las otras.",
+     "think": "¿Por cuántos motivos distintos podría tener que cambiar esta clase?",
+     "avoid": "Separa cada responsabilidad en su clase y haz que colaboren pidiéndose resultados."
+    },
+    {
+     "id": "poo-diseno.responsabilidad-es-un-metodo",
+     "label": "Cree que «una responsabilidad» significa «un solo método»",
+     "why": "Una responsabilidad (por ejemplo, las cuentas de las notas) puede necesitar varios métodos; lo que importa es que todos traten de lo mismo.",
+     "think": "¿Todos estos métodos cambian por el mismo motivo?",
+     "avoid": "Agrupa por motivo de cambio, no por número de métodos."
+    },
+    {
+     "id": "poo-diseno.acoplado-a-detalles",
+     "label": "Usa los atributos internos de otra clase en vez de pedirle el resultado",
+     "why": "Si una clase lee `otra.lista[0].precio`, cualquier cambio en cómo se guarda la otra la rompe: acoplamiento alto.",
+     "think": "¿Tiene la otra clase un método que me dé lo que necesito?",
+     "avoid": "Llama a sus métodos (`carrito.total()`) y deja que cada clase decida cómo guarda sus datos."
+    },
+    {
+     "id": "poo-diseno.copia-de-datos",
+     "label": "Copia un resultado de otro objeto en vez de pedírselo cuando lo necesita",
+     "why": "La copia se queda vieja en cuanto el otro objeto cambia y los dos dejan de coincidir.",
+     "think": "¿Este dato puede cambiar en el objeto que lo tiene?",
+     "avoid": "Pide el dato o el cálculo en el momento: `self.calificaciones.media()`."
+    },
+    {
+     "id": "poo-diseno.if-por-tipos",
+     "label": "Añade un `if` por cada tipo nuevo en vez de una clase nueva",
+     "why": "Cada tipo nuevo obliga a modificar código que ya funcionaba, que es lo que el principio abierto/cerrado quiere evitar.",
+     "think": "¿Podría cada caso ser una clase con el mismo método?",
+     "avoid": "Usa polimorfismo: una clase por caso con el mismo método, y llama al método."
+    },
+    {
+     "id": "poo-diseno.herencia-que-rompe",
+     "label": "Hereda aunque la subclase no pueda cumplir lo que promete la superclase",
+     "why": "Si un objeto de la subclase no se comporta como se espera de la superclase (un cuadrado que deja de serlo, un pingüino que no vuela), rompe la sustitución de Liskov.",
+     "think": "¿Puedo usar un objeto de la subclase en cualquier sitio donde se use la superclase?",
+     "avoid": "Cambia la jerarquía o usa composición."
+    },
+    {
+     "id": "poo-diseno.crea-su-dependencia",
+     "label": "La clase crea dentro los objetos de los que depende",
+     "why": "Si un pedido crea su propio aviso por email, no se puede cambiar por otro ni probar sin enviar emails de verdad.",
+     "think": "¿Podría recibir este objeto por el constructor?",
+     "avoid": "Pásale la dependencia al crearlo (`Pedido(numero, aviso)`) y guárdala."
+    },
+    {
+     "id": "poo-diseno.hints-obligan",
+     "label": "Cree que Python comprueba los type hints al ejecutar",
+     "why": "Los type hints documentan y los usan el editor o `mypy`, pero Python no los comprueba: `doble(\"ab\")` funciona aunque diga `x: int`.",
+     "think": "¿Quién comprobaría este tipo: Python o una herramienta aparte?",
+     "avoid": "Valida tú los datos importantes (con `if` y `raise`) y usa los hints para documentar."
+    },
+    {
+     "id": "poo-diseno.dataclass-lista-por-defecto",
+     "label": "Pone una lista como valor por defecto en una dataclass",
+     "why": "`@dataclass` lo rechaza con `ValueError`, porque todos los objetos compartirían la misma lista.",
+     "think": "¿Este valor por defecto es mutable (lista, diccionario, conjunto)?",
+     "avoid": "Usa `field(default_factory=list)` (o `dict`, `set`)."
+    },
+    {
+     "id": "poo-diseno.sin-documentar",
+     "label": "Deja las clases sin docstring ni type hints",
+     "why": "Quien usa la clase tiene que leer todo su código para saber qué hace y qué recibe.",
+     "think": "¿Sabría alguien usar esta clase leyendo solo su cabecera?",
+     "avoid": "Añade una docstring corta y anota los parámetros y lo que devuelve."
+    }
+   ],
+   "related": [
+    "poo-composicion",
+    "poo-polimorfismo",
+    "funciones"
+   ],
+   "unit": {
+    "module": "poo",
+    "number": 9
+   },
+   "objectives": [
+    "Reconocer una clase con demasiadas responsabilidades y repartirlas.",
+    "Explicar la cohesión y el acoplamiento y por qué conviene alta cohesión y bajo acoplamiento.",
+    "Conocer a nivel introductorio los cinco principios SOLID y aplicar los más sencillos.",
+    "Documentar clases con type hints y docstrings, y crear clases de datos con `@dataclass`.",
+    "Refactorizar código procedural en clases sin cambiar lo que hace el programa."
+   ],
+   "prior": "Las Unidades 1 a 8, en especial el polimorfismo (Unidad 6) y la composición (Unidad 7).",
+   "key": [
+    [
+     "Responsabilidad única",
+     "Cada clase se ocupa de una sola cosa y solo tiene un motivo para cambiar."
+    ],
+    [
+     "Cohesión",
+     "Cuánto tienen que ver entre sí los métodos y atributos de una clase. Se busca que sea alta."
+    ],
+    [
+     "Acoplamiento",
+     "Cuánto depende una clase de los detalles de otras. Se busca que sea bajo."
+    ],
+    [
+     "SOLID",
+     "Cinco principios de diseño: responsabilidad única, abierto/cerrado, sustitución de Liskov, segregación de interfaces e inversión de dependencias."
+    ],
+    [
+     "Type hints",
+     "Anotaciones como `precio: float` o `-> str` que documentan los tipos. Python no las comprueba al ejecutar."
+    ],
+    [
+     "`@dataclass`",
+     "Decorador que escribe `__init__`, `__repr__` y `__eq__` de una clase a partir de sus atributos anotados."
+    ],
+    [
+     "Refactorizar",
+     "Cambiar cómo está organizado el código sin cambiar lo que hace."
+    ]
+   ],
+   "sections": [
+    {
+     "id": "poo-diseno.responsabilidad",
+     "title": "Responsabilidad única, cohesión y acoplamiento",
+     "theory": "Un programa no se escribe una vez: se lee y se cambia muchas veces. Un buen diseño hace que cada cambio toque **pocas** partes.\n\n**Responsabilidad única.** Cada clase se ocupa de **una sola cosa**. Pregúntate: «¿por qué motivos podría tener que cambiar esta clase?». Si hay varios (el cálculo de precios, el formato del ticket y cómo se guarda en un archivo), son varias responsabilidades y conviene separarlas.\n\n**Cohesión.** Los métodos y atributos de una clase deben tener que ver entre sí. Una clase `Alumno` con `media()` y `enviar_email_al_director()` tiene **baja cohesión**: el email no es cosa del alumno.\n\n**Acoplamiento.** Es cuánto depende una clase de **cómo está hecha por dentro** otra. Si `Ticket` lee `carrito.lineas[i][0].precio`, cualquier cambio en `Carrito` rompe `Ticket`. Si solo llama a `carrito.total()`, el acoplamiento es **bajo**.\n\nLa regla práctica: **alta cohesión y bajo acoplamiento**. Una señal de alarma es una clase o una función enorme que «lo hace todo» y que nadie se atreve a tocar.",
+     "examples": [
+      {
+       "code": "# Antes: una sola función calcula, decide y presenta\ndef informe(notas):\n    media = sum(notas) / len(notas)\n    estado = \"aprobado\" if media >= 5 else \"suspenso\"\n    return f\"Media {media:.1f}: {estado}\"\n\n\n# Después: cada clase tiene una responsabilidad\nclass Calificaciones:\n    def __init__(self, notas):\n        self.notas = list(notas)\n\n    def media(self):\n        return sum(self.notas) / len(self.notas)\n\n    def aprobado(self):\n        return self.media() >= 5\n\n\nclass Informe:\n    def __init__(self, calificaciones):\n        self.calificaciones = calificaciones\n\n    def texto(self):\n        c = self.calificaciones\n        estado = \"aprobado\" if c.aprobado() else \"suspenso\"\n        return f\"Media {c.media():.1f}: {estado}\"\n\n\nprint(informe([6, 4, 7]))\nprint(Informe(Calificaciones([6, 4, 7])).texto())",
+       "lines": [
+        [
+         2,
+         "Una función que hace tres cosas: calcular, decidir y dar formato."
+        ],
+        [
+         9,
+         "`Calificaciones` solo se ocupa de los números."
+        ],
+        [
+         20,
+         "`Informe` solo presenta; pide los datos, no los calcula."
+        ],
+        [
+         31,
+         "El resultado es el mismo: refactorizar no cambia lo que hace el programa."
+        ]
+       ],
+       "output": "Media 5.7: aprobado\nMedia 5.7: aprobado\n",
+       "origin": {
+        "kind": "original"
+       }
+      }
+     ],
+     "quiz": [
+      "poo9-01",
+      "poo9-02",
+      "poo9-03"
+     ]
+    },
+    {
+     "id": "poo-diseno.solid",
+     "title": "Composición frente a herencia e introducción a SOLID",
+     "theory": "En la Unidad 7 viste la regla «es un» → herencia, «tiene un» → composición. **SOLID** reúne cinco principios clásicos del diseño orientado a objetos. Aquí basta con conocerlos y aplicar los más sencillos:\n\n| Letra | Principio | Idea en una frase |\n|---|---|---|\n| **S** | Responsabilidad única | Una clase, un motivo para cambiar. |\n| **O** | Abierto/cerrado | Añade comportamiento con clases nuevas, sin modificar el código que ya funciona (polimorfismo en vez de `if` por tipos). |\n| **L** | Sustitución de Liskov | Un objeto de la subclase debe poder usarse donde se espera uno de la superclase sin sorpresas. |\n| **I** | Segregación de interfaces | No obligues a una clase a tener métodos que no necesita: mejor contratos pequeños. |\n| **D** | Inversión de dependencias | Una clase recibe los objetos de los que depende (por el constructor) en vez de crearlos ella; así se pueden cambiar o simular en las pruebas. |\n\nEl principio de Liskov explica por qué la herencia a veces engaña: un `Cuadrado` «es un» rectángulo en matemáticas, pero si `Rectangulo` deja cambiar el ancho sin el alto, un `Cuadrado` que hereda de él deja de ser cuadrado o se comporta distinto de lo que espera quien usa rectángulos. Cuando una subclase tiene que «romper» lo que promete la superclase, la herencia no es la relación adecuada.",
+     "examples": [
+      {
+       "code": "class AvisoPorEmail:\n    def enviar(self, texto):\n        return f\"email: {texto}\"\n\n\nclass AvisoFalso:                        # para las pruebas: no envía nada\n    def __init__(self):\n        self.enviados = []\n\n    def enviar(self, texto):\n        self.enviados.append(texto)\n        return \"guardado\"\n\n\nclass Pedido:\n    def __init__(self, numero, aviso):   # D: recibe su dependencia\n        self.numero = numero\n        self.aviso = aviso\n\n    def confirmar(self):\n        return self.aviso.enviar(f\"Pedido {self.numero} confirmado\")\n\n\nprint(Pedido(1, AvisoPorEmail()).confirmar())\nfalso = AvisoFalso()\nPedido(2, falso).confirmar()\nprint(falso.enviados)",
+       "lines": [
+        [
+         6,
+         "Otra clase con el mismo método: el pedido no nota la diferencia."
+        ],
+        [
+         16,
+         "El pedido no crea su aviso: se lo dan. Es la inversión de dependencias."
+        ],
+        [
+         21,
+         "Solo usa `enviar`: no depende de cómo se envía."
+        ],
+        [
+         25,
+         "En una prueba se le pasa un aviso falso y se comprueba qué habría enviado."
+        ]
+       ],
+       "output": "email: Pedido 1 confirmado\n['Pedido 2 confirmado']\n",
+       "origin": {
+        "kind": "original"
+       }
+      }
+     ],
+     "quiz": [
+      "poo9-04",
+      "poo9-05",
+      "poo9-06"
+     ]
+    },
+    {
+     "id": "poo-diseno.tipos-docs",
+     "title": "Type hints, docstrings y dataclasses",
+     "theory": "Tres herramientas de Python que hacen las clases más fáciles de leer y de usar.\n\n**Type hints.** Anotan el tipo esperado: `def total(self) -> float:` o `nombre: str`. Sirven a quien lee y a herramientas como el editor o `mypy`, pero **Python no las comprueba** al ejecutar: `doble(\"ab\")` funciona aunque diga `x: int`. Algunas formas útiles: `list[str]`, `dict[str, int]`, `str | None`.\n\n**Docstrings.** Un texto entre triples comillas **justo debajo** de `class` o `def` que explica qué hace (no cómo). Python lo guarda en `__doc__` y `help()` lo muestra. Un comentario con `#` no es una docstring.\n\n**`@dataclass`** (módulo `dataclasses`). Para clases que sobre todo guardan datos:\n\n```\nfrom dataclasses import dataclass, field\n\n@dataclass\nclass Libro:\n    titulo: str\n    paginas: int = 0\n    etiquetas: list[str] = field(default_factory=list)\n```\n\n- Escribe por ti `__init__`, `__repr__` (`Libro(titulo='Dune', paginas=0, etiquetas=[])`) y `__eq__` (compara los atributos).\n- Puedes añadir tus propios métodos como en cualquier clase.\n- Un valor por defecto mutable (`= []`) da `ValueError`: usa `field(default_factory=list)`, que crea una lista nueva para cada objeto.\n- `@dataclass(order=True)` añade `<`, `>`… comparando los atributos **en el orden en que están escritos**.",
+     "examples": [
+      {
+       "code": "from dataclasses import dataclass, field\n\n\n@dataclass\nclass Libro:\n    \"\"\"Un libro de la estantería.\"\"\"\n    titulo: str\n    paginas: int = 0\n    etiquetas: list[str] = field(default_factory=list)\n\n    def es_largo(self) -> bool:\n        return self.paginas > 400\n\n\ndune = Libro(\"Dune\", 600)\ndune.etiquetas.append(\"ciencia ficción\")\nprint(dune)\nprint(dune == Libro(\"Dune\", 600, [\"ciencia ficción\"]), dune.es_largo())\nprint(Libro(\"Otro\").etiquetas)\nprint(Libro.__doc__)",
+       "lines": [
+        [
+         4,
+         "`@dataclass` genera el constructor, la representación y la igualdad."
+        ],
+        [
+         9,
+         "`default_factory=list`: cada libro estrena su propia lista."
+        ],
+        [
+         12,
+         "Una dataclass admite métodos propios."
+        ],
+        [
+         17,
+         "El `__repr__` generado muestra todos los atributos."
+        ],
+        [
+         20,
+         "La docstring queda guardada en `__doc__`."
+        ]
+       ],
+       "output": "Libro(titulo='Dune', paginas=600, etiquetas=['ciencia ficción'])\nTrue True\n[]\nUn libro de la estantería.\n",
+       "origin": {
+        "kind": "original"
+       }
+      }
+     ],
+     "quiz": [
+      "poo9-07",
+      "poo9-08",
+      "poo9-09"
+     ]
+    },
+    {
+     "id": "poo-diseno.modulos-refactor",
+     "title": "Organización en módulos y refactorización",
+     "theory": "**Módulos.** En un proyecto real cada grupo de clases va en su archivo y se importa: `modelo.py` con `Producto` e `Inventario`, `ventas.py` con `Carrito` y `Ticket`, y `main.py`, que solo pone el programa en marcha (`from modelo import Producto`). Un **paquete** es una carpeta de módulos. Agrupa lo que cambia junto y evita importaciones en círculo (A importa B y B importa A). En esta web todo se ejecuta en **un solo archivo**, así que verás la separación marcada con comentarios.\n\n**Refactorizar** es cambiar la organización del código **sin cambiar lo que hace**. Pasos seguros:\n\n1. Ten antes **pruebas** que comprueben el comportamiento (aunque sean unos `assert`).\n2. Cambia **poco cada vez**: extrae una función, pon un nombre claro, mueve un dato a una clase.\n3. Ejecuta las pruebas después de cada paso. Si fallan, sabes qué paso lo rompió.\n\nSeñales de que toca refactorizar: código repetido, funciones muy largas, cadenas de `if` por tipos, diccionarios que viajan por todo el programa con claves «mágicas» (`p[\"precio\"]`) y nombres como `datos2` o `aux`.",
+     "examples": [
+      {
+       "code": "# ---- modelo.py ----------------------------------------\nclass Producto:\n    def __init__(self, nombre, precio):\n        self.nombre = nombre\n        self.precio = precio\n\n\n# ---- ventas.py (haría: from modelo import Producto) ----\nclass Carrito:\n    def __init__(self):\n        self.lineas = []\n\n    def agregar(self, producto, cantidad):\n        self.lineas.append((producto, cantidad))\n\n    def total(self):\n        return sum(p.precio * n for p, n in self.lineas)\n\n\n# ---- main.py: solo pone el programa en marcha ----------\ndef main():\n    carrito = Carrito()\n    carrito.agregar(Producto(\"Pan\", 1.5), 2)\n    assert carrito.total() == 3.0      # prueba: el comportamiento no cambia\n    print(f\"Total: {carrito.total():.2f} €\")\n\n\nmain()",
+       "lines": [
+        [
+         1,
+         "En un proyecto real, esto sería el archivo `modelo.py`."
+        ],
+        [
+         8,
+         "`ventas.py` importaría `Producto` del módulo `modelo`."
+        ],
+        [
+         21,
+         "`main` solo coordina: crea los objetos y los usa."
+        ],
+        [
+         24,
+         "Un `assert` protege el comportamiento mientras refactorizas."
+        ]
+       ],
+       "output": "Total: 3.00 €\n",
+       "origin": {
+        "kind": "original"
+       }
+      }
+     ],
+     "quiz": [
+      "poo9-10",
+      "poo9-11",
+      "poo9-12"
+     ]
+    }
+   ],
+   "guided": [
+    "poo9-14"
+   ],
+   "autonomous": [
+    "poo9-27"
+   ],
+   "extras": [
+    "poo9-15",
+    "poo9-25"
+   ],
+   "selfcheck": [
+    "poo9-13",
+    "poo9-26"
+   ],
+   "recap": [
+    "Una clase, una responsabilidad: si tiene varios motivos para cambiar, sepárala.",
+    "Alta cohesión (todo lo de la clase tiene que ver) y bajo acoplamiento (pide a los demás, no mires sus tripas).",
+    "SOLID: responsabilidad única, abierto/cerrado, Liskov, segregación de interfaces e inversión de dependencias.",
+    "Los type hints documentan tipos, pero Python no los comprueba al ejecutar.",
+    "Las docstrings explican qué hace una clase o función y quedan en `__doc__`.",
+    "`@dataclass` genera `__init__`, `__repr__` y `__eq__`; para listas, `field(default_factory=list)`.",
+    "Refactoriza con pruebas y en pasos pequeños: el comportamiento no debe cambiar."
+   ],
+   "pass": {
+    "minScore": 0.7,
+    "required": [
+     "poo9-14",
+     "poo9-27"
+    ],
+    "text": [
+     "Resolver el ejercicio guiado (boletín de notas) y el ejercicio principal (refactorizar la tienda) con todos los tests superados.",
+     "Al menos un 70 % en el cuestionario de la unidad y dominar la unidad según el motor, con varios tipos de ejercicio distintos.",
+     "Completar las lecciones ayuda a organizarte, pero **no** demuestra la competencia: la demuestran los ejercicios."
+    ]
+   },
+   "practices": [
+    {
+     "text": "Antes de añadir un método, pregúntate si es responsabilidad de esa clase.",
+     "why": "Si no lo es, acabarás con una clase que hay que tocar por motivos que no tienen nada que ver."
+    },
+    {
+     "text": "Pide resultados a los objetos (`carrito.total()`) en vez de leer sus atributos internos.",
+     "why": "Así puedes cambiar cómo está hecha una clase sin romper las que la usan."
+    },
+    {
+     "text": "Pasa por el constructor los objetos de los que depende una clase.",
+     "why": "Puedes cambiarlos sin tocar la clase y usar objetos falsos en las pruebas."
+    },
+    {
+     "text": "Pon type hints y una docstring corta en las clases y métodos públicos.",
+     "why": "Quien use tu clase sabe qué pasarle y qué devuelve sin leer todo el código."
+    },
+    {
+     "text": "Usa `@dataclass` para las clases que sobre todo guardan datos.",
+     "why": "Te ahorra escribir a mano `__init__`, `__repr__` y `__eq__`, que es donde más fallos se cometen."
+    },
+    {
+     "text": "Refactoriza en pasos pequeños y ejecuta las pruebas después de cada uno.",
+     "why": "Si algo se rompe, sabes exactamente qué cambio lo ha causado."
+    }
+   ],
+   "references": [
+    {
+     "source": "py-dataclasses",
+     "section": "Contenido del módulo: el decorador dataclass, sus parámetros (order) y field con default_factory",
+     "supports": [
+      "`@dataclass` genera `__init__`, `__repr__` y `__eq__`",
+      "valores por defecto mutables y `default_factory`",
+      "`order=True` compara los campos en orden"
+     ],
+     "status": "pending"
+    },
+    {
+     "source": "py-tutorial-classes",
+     "section": "9.7. Cajón de sastre",
+     "supports": [
+      "clases sencillas para agrupar datos con nombre (como un registro)"
+     ],
+     "status": "pending"
+    },
+    {
+     "source": "py-faq-programming",
+     "section": "Objetos: ¿Qué es la delegación?",
+     "supports": [
+      "pasar trabajo a otro objeto en vez de heredar de él"
+     ],
+     "status": "pending"
+    }
+   ],
+   "bank": [
+    "poo9-01",
+    "poo9-03",
+    "poo9-04",
+    "poo9-08",
+    "poo9-10",
+    "poo9-13",
+    "poo9-16",
+    "poo9-17",
+    "poo9-18",
+    "poo9-19",
+    "poo9-20",
+    "poo9-21",
+    "poo9-22",
+    "poo9-23",
+    "poo9-24"
+   ],
+   "curriculum": [
+    {
+     "ce": "0485-RA3-g",
+     "status": "proposed",
+     "source": "rd-405-2023#anexo-I",
+     "reviewed": "2026-11-11",
+     "by": "plataforma",
+     "note": "Se documenta el código con docstrings y type hints."
+    },
+    {
+     "ce": "0485-RA7-h",
+     "status": "proposed",
+     "source": "rd-405-2023#anexo-I",
+     "reviewed": "2026-11-11",
+     "by": "plataforma",
+     "note": "Se comentan y documentan las clases de una jerarquía y sus métodos."
+    },
+    {
+     "ce": "0485-RA4-i",
+     "status": "proposed",
+     "source": "rd-405-2023#anexo-I",
+     "reviewed": "2026-11-11",
+     "by": "plataforma",
+     "note": "Se organizan las clases en módulos que forman una librería propia (presentado con ejemplos comentados)."
+    }
+   ],
+   "module": "0485",
+   "ra": [
+    "0485-RA3",
+    "0485-RA4",
+    "0485-RA7"
+   ],
+   "ce": [
+    "0485-RA3-g",
+    "0485-RA7-h",
+    "0485-RA4-i"
+   ],
+   "difficulty": 1.9,
+   "importance": 2
+  },
+  {
+   "id": "poo-proyecto",
+   "title": "Proyecto final: gestión de una biblioteca",
+   "area": "poo",
+   "requires": [
+    "poo-metodos-especiales",
+    "poo-diseno"
+   ],
+   "daw": 2,
+   "ut": "prog-ut7",
+   "lessons": [
+    "poo"
+   ],
+   "summary": "Una aplicación completa con todo lo del módulo: libros, usuarios y préstamos, con errores propios, pruebas y una rúbrica.",
+   "when": "Cuando quieras demostrar que sabes diseñar varias clases que colaboran: es el tipo de proyecto que se pide al final de la POO en Programación.",
+   "example": {
+    "code": "from datetime import date\n\n\nclass Libro:\n    def __init__(self, isbn, titulo):\n        self.isbn = isbn\n        self.titulo = titulo\n        self.disponible = True\n\n\nclass Prestamo:\n    def __init__(self, libro, inicio):\n        self.libro = libro\n        self.inicio = inicio\n\n\nclass Biblioteca:\n    def __init__(self):\n        self.libros = {}            # agregación: los libros vienen de fuera\n        self.prestamos = []         # composición: los crea la biblioteca\n\n    def prestar(self, isbn, fecha):\n        libro = self.libros[isbn]\n        if not libro.disponible:\n            raise ValueError(f\"{libro.titulo} está prestado\")\n        libro.disponible = False\n        self.prestamos.append(Prestamo(libro, fecha))\n\n\nbib = Biblioteca()\nbib.libros[\"1\"] = Libro(\"1\", \"Dune\")\nbib.prestar(\"1\", date(2026, 1, 10))\ntry:\n    bib.prestar(\"1\", date(2026, 1, 11))\nexcept ValueError as error:\n    print(error)",
+    "lines": [
+     [
+      19,
+      "La biblioteca guarda libros que existen por su cuenta."
+     ],
+     [
+      20,
+      "Los préstamos los crea la propia biblioteca."
+     ],
+     [
+      24,
+      "Primero se comprueba; solo si todo está bien se cambia el estado."
+     ],
+     [
+      34,
+      "El segundo préstamo del mismo libro da un error claro."
+     ]
+    ],
+    "output": "Dune está prestado\n"
+   },
+   "errors": [
+    {
+     "id": "poo-proyecto.estado-a-medias",
+     "label": "Cambia el estado antes de comprobar todas las reglas",
+     "why": "Si una comprobación falla después de un cambio, la excepción no deshace lo hecho: un libro puede quedar «prestado» sin préstamo.",
+     "think": "¿Qué pasa con los datos si la siguiente comprobación falla?",
+     "avoid": "Haz todas las comprobaciones primero y los cambios al final."
+    },
+    {
+     "id": "poo-proyecto.valida-tarde",
+     "label": "No valida los datos al crear el objeto",
+     "why": "Un libro sin ISBN o un usuario sin nombre se cuelan en el programa y fallan mucho después, lejos de donde se crearon.",
+     "think": "¿Qué datos hacen que este objeto no tenga sentido?",
+     "avoid": "Valida en `__init__` y lanza `ValueError` antes de guardar nada; usa `strip()` para los textos de solo espacios."
+    },
+    {
+     "id": "poo-proyecto.dato-duplicado",
+     "label": "Guarda un dato que se puede calcular a partir de otro",
+     "why": "Dos copias del mismo dato (`activo` y `fin`) se contradicen en cuanto alguien cambia una y no la otra.",
+     "think": "¿Puedo calcular este dato a partir de los que ya tengo?",
+     "avoid": "Calcúlalo con una propiedad (`@property`) en vez de guardarlo aparte."
+    },
+    {
+     "id": "poo-proyecto.excepcion-sin-jerarquia",
+     "label": "Crea excepciones propias sin una base común",
+     "why": "Sin una base como `ErrorBiblioteca`, quien usa la biblioteca no puede capturar todos sus errores a la vez sin capturar también errores de Python que no tienen nada que ver.",
+     "think": "¿De qué clase heredan mis excepciones?",
+     "avoid": "Crea una excepción base del proyecto y haz que las demás hereden de ella."
+    },
+    {
+     "id": "poo-proyecto.excepcion-generica",
+     "label": "Deja que salte un error genérico de Python en vez de la excepción del proyecto",
+     "why": "Un `KeyError` al buscar un ISBN no dice qué pasó y obliga a quien usa la clase a conocer cómo guarda los datos por dentro.",
+     "think": "¿Qué error verá quien llame a este método si el dato no existe?",
+     "avoid": "Comprueba antes y lanza tu excepción (`LibroNoEncontrado(isbn)`) con un mensaje claro."
+    },
+    {
+     "id": "poo-proyecto.except-en-mal-orden",
+     "label": "Pone un `except` general antes de uno concreto",
+     "why": "Python usa el primer `except` que encaja; si el general va primero, el concreto nunca se ejecuta.",
+     "think": "¿Alguno de los `except` de arriba captura ya esta excepción?",
+     "avoid": "Ordena los `except` de lo más concreto a lo más general."
+    }
+   ],
+   "related": [
+    "poo-diseno",
+    "poo-composicion",
+    "excepciones"
+   ],
+   "unit": {
+    "module": "poo",
+    "number": 10
+   },
+   "objectives": [
+    "Diseñar una aplicación de varias clases a partir de un enunciado y su diagrama de clases.",
+    "Programar `Libro`, `Usuario`, `Prestamo` y `Biblioteca` con sus responsabilidades y relaciones.",
+    "Crear una jerarquía de excepciones propias y lanzarlas en cada caso de error sin dejar el estado a medias.",
+    "Comprobar el proyecto con tests y añadir pruebas propias.",
+    "Valorar tu trabajo con una rúbrica y ampliarlo con retos opcionales."
+   ],
+   "prior": "Todo el módulo: en especial la composición (Unidad 7), los métodos especiales (Unidad 8) y el diseño (Unidad 9), además de las excepciones.",
+   "key": [
+    [
+     "Diagrama de clases",
+     "Dibujo de las clases, sus atributos y métodos, y las relaciones entre ellas. Se hace antes de programar."
+    ],
+    [
+     "Excepción propia",
+     "Una clase que hereda de `Exception` (o de otra excepción propia) para nombrar un error del programa: `class LibroNoDisponible(ErrorBiblioteca)`."
+    ],
+    [
+     "Jerarquía de excepciones",
+     "Excepciones propias que heredan de una base común; `except ErrorBiblioteca` las captura todas."
+    ],
+    [
+     "Estado consistente",
+     "Tras un error, ningún dato queda a medias: se comprueba todo antes de cambiar nada."
+    ],
+    [
+     "Integración",
+     "Juntar las piezas que ya funcionan por separado y comprobar que funcionan juntas."
+    ],
+    [
+     "Rúbrica",
+     "Tabla con los criterios y los puntos con que se valora el proyecto."
+    ]
+   ],
+   "sections": [
+    {
+     "id": "poo-proyecto.arquitectura",
+     "title": "Arquitectura y diagrama de clases",
+     "theory": "El proyecto es la gestión de una biblioteca: se registran libros y usuarios, se prestan libros y se devuelven. Antes de escribir código se decide **qué clases hay**, **de qué se ocupa cada una** y **cómo se relacionan** (lo verás dibujado en el diagrama de esta página).\n\n| Clase | Responsabilidad |\n|---|---|\n| `Libro` | Sus datos (ISBN, título, autor) y si está disponible. Dos libros son el mismo si tienen el mismo ISBN. |\n| `Usuario` | Sus datos y cuántos préstamos puede tener a la vez. |\n| `Prestamo` | Un libro prestado a un usuario: la fecha de inicio, la de devolución y si sigue activo. |\n| `Biblioteca` | Registra libros y usuarios, crea y cierra préstamos y comprueba las reglas. |\n| `ErrorBiblioteca` y sus subclases | Nombran cada error de las operaciones. |\n\nRelaciones:\n\n- La biblioteca **agrega** libros y usuarios: se crean fuera y existen por su cuenta.\n- La biblioteca **compone** los préstamos: los crea ella al prestar.\n- Cada préstamo está **asociado** a un libro y a un usuario.\n\nEl proyecto se construye **por fases**: cada ejercicio añade una pieza con sus propios tests y parte del código resuelto del anterior. La última fase lo integra todo.",
+     "examples": [
+      {
+       "code": "# Fase   Pieza                      Depende de\nfases = [\n    (1, \"Libro\", []),\n    (2, \"Usuario\", []),\n    (3, \"Prestamo\", [\"Libro\", \"Usuario\"]),\n    (4, \"Excepciones\", []),\n    (5, \"Biblioteca: registro\", [\"Libro\", \"Usuario\"]),\n    (6, \"Biblioteca: préstamos\", [\"Prestamo\", \"Excepciones\"]),\n]\nhechas = set()\nfor numero, pieza, necesita in fases:\n    assert all(n in hechas or n.split(\":\")[0] in hechas for n in necesita)\n    hechas.add(pieza.split(\":\")[0])\n    print(numero, pieza)",
+       "lines": [
+        [
+         3,
+         "Las clases sin dependencias van primero."
+        ],
+        [
+         5,
+         "`Prestamo` necesita que existan `Libro` y `Usuario`."
+        ],
+        [
+         12,
+         "Comprueba que cada fase solo usa piezas ya hechas."
+        ]
+       ],
+       "output": "1 Libro\n2 Usuario\n3 Prestamo\n4 Excepciones\n5 Biblioteca: registro\n6 Biblioteca: préstamos\n",
+       "origin": {
+        "kind": "original"
+       }
+      }
+     ],
+     "quiz": [
+      "poo10-07",
+      "poo10-08",
+      "poo10-09"
+     ]
+    },
+    {
+     "id": "poo-proyecto.libro-usuario",
+     "title": "Libro y Usuario",
+     "theory": "Son las dos clases más sencillas: guardan datos, los validan y saben presentarse.\n\n- **Validar en el constructor**: un libro sin ISBN o sin título, o un usuario sin nombre, no tiene sentido. Lanza `ValueError` y el objeto no llega a crearse. `\"  \".strip()` es `\"\"`, así que `if not isbn.strip()` detecta también los textos con solo espacios.\n- **`__str__`** para mostrarlos: `Dune (Frank Herbert) [disponible]`.\n- **`__eq__` por ISBN**: el ISBN identifica el libro aunque otro objeto tenga el título mal escrito. Devuelve `NotImplemented` si el otro no es un `Libro`.\n- **`puede_prestar(activos)`**: el usuario sabe su límite (`max_prestamos`, 3 por defecto), pero no cuenta sus préstamos: eso lo sabe la biblioteca, que se lo pasa. Así cada dato está en un solo sitio.",
+     "examples": [
+      {
+       "code": "class Usuario:\n    def __init__(self, id, nombre, max_prestamos=3):\n        if not nombre.strip():\n            raise ValueError(\"El nombre es obligatorio\")\n        self.id = id\n        self.nombre = nombre\n        self.max_prestamos = max_prestamos\n\n    def puede_prestar(self, activos):\n        return activos < self.max_prestamos\n\n\neva = Usuario(2, \"Eva\", max_prestamos=1)\nprint(eva.puede_prestar(0), eva.puede_prestar(1))\ntry:\n    Usuario(3, \"   \")\nexcept ValueError as error:\n    print(error)",
+       "lines": [
+        [
+         3,
+         "`strip()` quita los espacios: un nombre de solo espacios también es vacío."
+        ],
+        [
+         9,
+         "El usuario recibe cuántos préstamos tiene; no los cuenta él."
+        ],
+        [
+         16,
+         "El objeto no llega a crearse si los datos no son válidos."
+        ]
+       ],
+       "output": "True False\nEl nombre es obligatorio\n",
+       "origin": {
+        "kind": "original"
+       }
+      }
+     ],
+     "quiz": [
+      "poo10-10",
+      "poo10-11",
+      "poo10-12"
+     ]
+    },
+    {
+     "id": "poo-proyecto.prestamo",
+     "title": "Prestamo: fechas y estado",
+     "theory": "Un préstamo une un libro y un usuario durante un tiempo. Usa el módulo `datetime` de la biblioteca estándar: `date(2026, 1, 10)` es una fecha y dos fechas se comparan con `<`.\n\n- Guarda `inicio` y `fin`, que empieza en `None` mientras el libro no se devuelve.\n- **`activo`** es una **propiedad** (Unidad 4): no se guarda, se calcula (`self.fin is None`). Así nunca se contradice con `fin`.\n- **`cerrar(fecha)`** valida antes de cambiar nada: si ya estaba cerrado o la fecha es anterior al inicio, lanza `ValueError` y el préstamo sigue como estaba.\n\nEl préstamo no cambia la disponibilidad del libro: de eso se encarga la biblioteca, que es quien sabe que ha prestado o recibido el libro.",
+     "examples": [
+      {
+       "code": "from datetime import date\n\n\nclass Prestamo:\n    def __init__(self, libro, inicio):\n        self.libro = libro\n        self.inicio = inicio\n        self.fin = None\n\n    @property\n    def activo(self):\n        return self.fin is None\n\n    def cerrar(self, fecha):\n        if not self.activo:\n            raise ValueError(\"El préstamo ya está cerrado\")\n        if fecha < self.inicio:\n            raise ValueError(\"La devolución no puede ser anterior al préstamo\")\n        self.fin = fecha\n\n\np = Prestamo(\"Dune\", date(2026, 1, 10))\ntry:\n    p.cerrar(date(2026, 1, 5))\nexcept ValueError as error:\n    print(error, \"- activo:\", p.activo)\np.cerrar(date(2026, 1, 20))\nprint(p.activo, (p.fin - p.inicio).days, \"días\")",
+       "lines": [
+        [
+         8,
+         "Sin devolver todavía: `fin` es `None`."
+        ],
+        [
+         11,
+         "`activo` se calcula a partir de `fin`, no se guarda aparte."
+        ],
+        [
+         17,
+         "Se valida antes de tocar `fin`."
+        ],
+        [
+         28,
+         "Restar dos fechas da los días que ha durado el préstamo."
+        ]
+       ],
+       "output": "La devolución no puede ser anterior al préstamo - activo: True\nFalse 10 días\n",
+       "origin": {
+        "kind": "original"
+       }
+      }
+     ],
+     "quiz": [
+      "poo10-13",
+      "poo10-14",
+      "poo10-15"
+     ]
+    },
+    {
+     "id": "poo-proyecto.biblioteca-errores",
+     "title": "Biblioteca y excepciones propias",
+     "theory": "La `Biblioteca` coordina: guarda los libros (por ISBN) y los usuarios (por id) en diccionarios, y crea los préstamos.\n\nCada caso de error tiene **su excepción**. Todas heredan de `ErrorBiblioteca`, que hereda de `Exception`:\n\n| Excepción | Cuándo |\n|---|---|\n| `LibroNoEncontrado` | El ISBN no está registrado. |\n| `UsuarioNoEncontrado` | El id no está registrado. |\n| `PrestamoDuplicado` | El usuario ya tiene ese mismo libro. |\n| `LibroNoDisponible` | El libro lo tiene otra persona. |\n| `LimiteAlcanzado` | El usuario ya tiene su máximo de préstamos. |\n\nLos datos vacíos y los ISBN o id repetidos al registrar dan `ValueError`, y devolver un libro que no está prestado da `ErrorBiblioteca`.\n\n- Quien usa la biblioteca puede capturar un error concreto (`except LibroNoDisponible`) o todos a la vez (`except ErrorBiblioteca`).\n- En un `try` con varios `except`, Python usa el **primero** que encaja: pon los concretos antes que el general.\n- **Comprueba todo antes de cambiar nada**: si `prestar` marcara el libro como prestado y luego fallara la comprobación del límite, el libro quedaría «prestado» sin préstamo. Es el error que la rúbrica llama dejar el estado a medias.",
+     "examples": [
+      {
+       "code": "class ErrorBiblioteca(Exception):\n    \"\"\"Cualquier error de la biblioteca.\"\"\"\n\n\nclass LibroNoEncontrado(ErrorBiblioteca):\n    def __init__(self, isbn):\n        super().__init__(f\"No existe el libro con ISBN {isbn}\")\n        self.isbn = isbn\n\n\ndef buscar(libros, isbn):\n    if isbn not in libros:\n        raise LibroNoEncontrado(isbn)\n    return libros[isbn]\n\n\nlibros = {\"1\": \"Dune\"}\nfor isbn in (\"1\", \"9\"):\n    try:\n        print(buscar(libros, isbn))\n    except LibroNoEncontrado as error:\n        print(\"Concreto:\", error, error.isbn)\n    except ErrorBiblioteca:\n        print(\"Cualquier otro error de la biblioteca\")\nprint(issubclass(LibroNoEncontrado, Exception))",
+       "lines": [
+        [
+         1,
+         "La base de todas las excepciones del proyecto."
+        ],
+        [
+         7,
+         "`super().__init__` guarda el mensaje que se ve al imprimir el error."
+        ],
+        [
+         8,
+         "La excepción guarda además el dato que falló."
+        ],
+        [
+         21,
+         "El `except` concreto va antes que el general."
+        ]
+       ],
+       "output": "Dune\nConcreto: No existe el libro con ISBN 9 9\nTrue\n",
+       "origin": {
+        "kind": "original"
+       }
+      }
+     ],
+     "quiz": [
+      "poo10-16",
+      "poo10-17",
+      "poo10-18"
+     ]
+    },
+    {
+     "id": "poo-proyecto.pruebas-retos",
+     "title": "Pruebas, retos y rúbrica",
+     "theory": "Cada fase se corrige con tests en tu navegador. Además, la rúbrica pide que añadas **al menos 3 pruebas tuyas** con `assert`. Una buena prueba:\n\n- comprueba **una sola cosa** y su mensaje dice qué falla: `assert len(bib.prestamos_activos()) == 1, \"Debe haber un préstamo activo\"`;\n- prueba también los **casos de error**: que se lanza la excepción correcta **y** que el estado no ha cambiado;\n- parte de datos nuevos, para no depender de lo que hizo otra prueba.\n\nPara comprobar que algo lanza un error sin una librería de pruebas:\n\n```\ntry:\n    bib.prestar(\"1\", 7, date(2026, 1, 11))\nexcept LibroNoDisponible:\n    pass\nelse:\n    raise AssertionError(\"Debía lanzar LibroNoDisponible\")\n```\n\nCuando termines, valora tu proyecto con la **rúbrica** de esta página y, si quieres más, elige uno de los **retos de ampliación**: no tienen tests obligatorios.",
+     "examples": [
+      {
+       "code": "def lanza(error, funcion, *args):\n    \"\"\"True si funcion(*args) lanza ese error.\"\"\"\n    try:\n        funcion(*args)\n    except error:\n        return True\n    return False\n\n\nstock = {\"Dune\": 1}\n\n\ndef prestar(titulo):\n    if stock.get(titulo, 0) == 0:\n        raise ValueError(f\"No queda {titulo}\")\n    stock[titulo] -= 1\n\n\nprestar(\"Dune\")\nassert stock[\"Dune\"] == 0, \"Prestar descuenta uno\"\nassert lanza(ValueError, prestar, \"Dune\"), \"Sin stock debe dar ValueError\"\nassert stock[\"Dune\"] == 0, \"Un error no cambia el stock\"\nprint(\"3 pruebas superadas\")",
+       "lines": [
+        [
+         1,
+         "Una función de ayuda para probar errores sin repetir el `try`."
+        ],
+        [
+         20,
+         "Primera prueba: el caso normal."
+        ],
+        [
+         21,
+         "Segunda: el caso de error lanza la excepción correcta."
+        ],
+        [
+         22,
+         "Tercera: el error no deja el estado a medias."
+        ]
+       ],
+       "output": "3 pruebas superadas\n",
+       "origin": {
+        "kind": "original"
+       }
+      }
+     ],
+     "quiz": [
+      "poo10-19",
+      "poo10-20",
+      "poo10-21"
+     ]
+    }
+   ],
+   "guided": [
+    "poo10-01"
+   ],
+   "autonomous": [
+    "poo10-06"
+   ],
+   "extras": [
+    "poo10-02",
+    "poo10-03",
+    "poo10-04",
+    "poo10-05"
+   ],
+   "selfcheck": [
+    "poo10-22",
+    "poo10-23"
+   ],
+   "recap": [
+    "Diseña antes de programar: clases, responsabilidades y relaciones en un diagrama.",
+    "La biblioteca agrega libros y usuarios y compone los préstamos; cada préstamo se asocia a un libro y a un usuario.",
+    "Valida los datos en el constructor y lanza `ValueError` si no sirven.",
+    "Una jerarquía de excepciones propias permite capturar un error concreto o todos a la vez.",
+    "Comprueba todas las reglas antes de cambiar el estado.",
+    "Construye por fases, con tests en cada una, e integra al final."
+   ],
+   "pass": {
+    "minScore": 0.7,
+    "required": [
+     "poo10-01",
+     "poo10-06"
+    ],
+    "text": [
+     "Superar los tests de las 6 fases del proyecto; la fase 6 (la biblioteca completa) es el ejercicio principal.",
+     "Al menos un 70 % en el cuestionario de la unidad y dominar la unidad según el motor, con varios tipos de ejercicio distintos.",
+     "Valorar tu proyecto con la rúbrica: la funcionalidad son 40 de los 100 puntos; el diseño, los errores, tus pruebas y el estilo, el resto."
+    ]
+   },
+   "practices": [
+    {
+     "text": "Dibuja el diagrama de clases antes de escribir la primera línea.",
+     "why": "Decidir las responsabilidades después de programar obliga a rehacer clases enteras."
+    },
+    {
+     "text": "Termina y prueba una clase antes de empezar la siguiente.",
+     "why": "Si algo falla al integrar, sabes que las piezas por separado funcionaban."
+    },
+    {
+     "text": "Comprueba todas las reglas antes de cambiar el estado.",
+     "why": "Un error a mitad de operación no puede dejar un libro «prestado» sin préstamo."
+    },
+    {
+     "text": "Crea una excepción propia para cada caso de error que quien use la clase quiera distinguir.",
+     "why": "`except LibroNoDisponible` es más claro y seguro que comparar el texto del mensaje."
+    },
+    {
+     "text": "Guarda cada dato en un solo sitio: la disponibilidad en el libro, los préstamos en la biblioteca.",
+     "why": "Dos copias del mismo dato acaban contradiciéndose."
+    }
+   ],
+   "references": [
+    {
+     "source": "py-tutorial-classes",
+     "section": "9.5. Herencia",
+     "supports": [
+      "excepciones propias como subclases de `Exception`"
+     ],
+     "status": "pending"
+    },
+    {
+     "source": "py-faq-programming",
+     "section": "Objetos: ¿Cómo puedo llamar a un método definido en una clase base desde una clase derivada que la extiende?",
+     "supports": [
+      "`super().__init__(mensaje)` en una excepción propia"
+     ],
+     "status": "pending"
+    },
+    {
+     "source": "py-dataclasses",
+     "section": "El decorador dataclass",
+     "supports": [
+      "reto de ampliación: informes con clases de datos"
+     ],
+     "status": "pending"
+    }
+   ],
+   "diagram": {
+    "title": "Diagrama de clases del proyecto biblioteca",
+    "summary": "La biblioteca guarda libros y usuarios que existen por su cuenta (agregación) y crea los préstamos (composición). Cada préstamo apunta a un libro y a un usuario (asociación). Las excepciones del proyecto heredan de ErrorBiblioteca.",
+    "classes": [
+     {
+      "id": "biblioteca",
+      "name": "Biblioteca",
+      "col": 1,
+      "row": 0,
+      "members": [
+       "registrar_libro()",
+       "registrar_usuario()",
+       "catalogo()",
+       "prestar() · devolver()"
+      ]
+     },
+     {
+      "id": "libro",
+      "name": "Libro",
+      "col": 0,
+      "row": 1,
+      "members": [
+       "isbn · titulo · autor",
+       "disponible",
+       "__str__ · __eq__"
+      ]
+     },
+     {
+      "id": "usuario",
+      "name": "Usuario",
+      "col": 2,
+      "row": 1,
+      "members": [
+       "id · nombre",
+       "max_prestamos",
+       "puede_prestar()"
+      ]
+     },
+     {
+      "id": "prestamo",
+      "name": "Prestamo",
+      "col": 1,
+      "row": 2,
+      "members": [
+       "libro · usuario",
+       "inicio · fin",
+       "activo · cerrar()"
+      ]
+     },
+     {
+      "id": "error",
+      "name": "ErrorBiblioteca",
+      "col": 0,
+      "row": 2,
+      "members": [
+       "LibroNoEncontrado",
+       "UsuarioNoEncontrado",
+       "PrestamoDuplicado · …"
+      ]
+     }
+    ],
+    "relations": [
+     {
+      "from": "biblioteca",
+      "to": "libro",
+      "kind": "agregacion",
+      "text": "La biblioteca agrega libros: se crean fuera y existen por su cuenta."
+     },
+     {
+      "from": "biblioteca",
+      "to": "usuario",
+      "kind": "agregacion",
+      "text": "La biblioteca agrega usuarios: se crean fuera y existen por su cuenta."
+     },
+     {
+      "from": "biblioteca",
+      "to": "prestamo",
+      "kind": "composicion",
+      "text": "La biblioteca compone los préstamos: los crea al prestar."
+     },
+     {
+      "from": "prestamo",
+      "to": "libro",
+      "kind": "asociacion",
+      "text": "Cada préstamo está asociado a un libro."
+     },
+     {
+      "from": "prestamo",
+      "to": "usuario",
+      "kind": "asociacion",
+      "text": "Cada préstamo está asociado a un usuario."
+     }
+    ]
+   },
+   "rubric": [
+    {
+     "criterion": "Funcionalidad",
+     "points": 40,
+     "text": "Pasan los tests de las 6 fases."
+    },
+    {
+     "criterion": "Diseño de clases",
+     "points": 25,
+     "text": "Cada clase tiene una sola responsabilidad y las relaciones son las del diagrama."
+    },
+    {
+     "criterion": "Control de errores",
+     "points": 15,
+     "text": "Cada caso de error lanza su excepción y no deja el estado a medias."
+    },
+    {
+     "criterion": "Pruebas propias",
+     "points": 10,
+     "text": "Añades al menos 3 `assert` tuyos."
+    },
+    {
+     "criterion": "Estilo y documentación",
+     "points": 10,
+     "text": "Type hints, docstrings y nombres claros."
+    }
+   ],
+   "challenges": [
+    "Multas por retraso: cada préstamo vence a los 14 días y `devolver` calcula una multa por día de retraso.",
+    "Reservas: un usuario puede reservar un libro prestado y es el primero en recibirlo al devolverse.",
+    "Búsqueda por autor: `buscar(autor)` devuelve los libros de ese autor, sin distinguir mayúsculas.",
+    "Informes con `dataclasses`: un `Informe` con los libros más prestados y los usuarios con más préstamos.",
+    "Guardar el estado en JSON: `guardar(ruta)` y `cargar(ruta)` con el módulo `json` (en tu ordenador, no en el navegador)."
+   ],
+   "bank": [
+    "poo10-07",
+    "poo10-08",
+    "poo10-09",
+    "poo10-11",
+    "poo10-12",
+    "poo10-14",
+    "poo10-15",
+    "poo10-17",
+    "poo10-18",
+    "poo10-19",
+    "poo10-20",
+    "poo10-21",
+    "poo10-22",
+    "poo10-24",
+    "poo10-25"
+   ],
+   "curriculum": [
+    {
+     "ce": "0485-RA4-e",
+     "status": "proposed",
+     "source": "rd-405-2023#anexo-I",
+     "reviewed": "2026-11-11",
+     "by": "plataforma",
+     "note": "Se desarrolla una aplicación que instancia y usa objetos de varias clases propias."
+    },
+    {
+     "ce": "0485-RA3-h",
+     "status": "proposed",
+     "source": "rd-405-2023#anexo-I",
+     "reviewed": "2026-11-11",
+     "by": "plataforma",
+     "note": "Se crean excepciones propias en una jerarquía (`ErrorBiblioteca` y sus subclases)."
+    },
+    {
+     "ce": "0485-RA3-f",
+     "status": "proposed",
+     "source": "rd-405-2023#anexo-I",
+     "reviewed": "2026-11-11",
+     "by": "plataforma",
+     "note": "Se prueba y depura el proyecto por fases con tests y pruebas propias."
+    }
+   ],
+   "module": "0485",
+   "ra": [
+    "0485-RA3",
+    "0485-RA4"
+   ],
+   "ce": [
+    "0485-RA4-e",
+    "0485-RA3-h",
+    "0485-RA3-f"
+   ],
+   "difficulty": 2.0,
    "importance": 2
   }
  ],
@@ -13192,6 +14221,1583 @@
    "codeOptions": false,
    "bank": true,
    "qtype": "diseno"
+  },
+  {
+   "id": "poo9-01",
+   "concept": "poo-diseno",
+   "kind": "choice",
+   "level": 1,
+   "daw": false,
+   "q": "¿Qué dice el principio de responsabilidad única?",
+   "code": null,
+   "options": [
+    {
+     "text": "Que cada clase se ocupe de una sola cosa y tenga un solo motivo para cambiar",
+     "error": null
+    },
+    {
+     "text": "Que cada clase tenga un solo método",
+     "error": "poo-diseno.responsabilidad-es-un-metodo",
+     "why": "Una responsabilidad puede necesitar varios métodos: `media()` y `aprobado()` son de la misma."
+    },
+    {
+     "text": "Que solo una persona del equipo pueda modificar cada clase",
+     "error": null,
+     "why": "Habla del diseño del código, no de quién lo escribe."
+    },
+    {
+     "text": "Que un programa tenga una sola clase",
+     "error": null,
+     "why": "Al revés: suele llevar a más clases, cada una con su tarea."
+    }
+   ],
+   "answer": 0,
+   "explain": "Si una clase cambia por motivos distintos (el cálculo, el formato, cómo se guarda), tiene varias responsabilidades y conviene separarlas.",
+   "codeOptions": false,
+   "bank": true,
+   "qtype": "teoria"
+  },
+  {
+   "id": "poo9-02",
+   "concept": "poo-diseno",
+   "kind": "output",
+   "level": 1,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "class Calificaciones:\n    def __init__(self, notas):\n        self.notas = notas\n\n    def media(self):\n        return sum(self.notas) / len(self.notas)\n\nclass Informe:\n    def __init__(self, calificaciones):\n        self.calificaciones = calificaciones\n\n    def texto(self):\n        return f\"Media: {self.calificaciones.media():.1f}\"\n\nc = Calificaciones([8, 6])\nc.notas.append(10)\nprint(Informe(c).texto())",
+   "stdin": "",
+   "expect": "Media: 8.0",
+   "traps": {
+    "Media: 7.0": "poo-diseno.copia-de-datos",
+    "Media: 8": null
+   },
+   "explain": "`Informe` no guarda una copia de la media: se la pide a `Calificaciones` cuando la necesita. Con la nota nueva, (8 + 6 + 10) / 3 = 8.0."
+  },
+  {
+   "id": "poo9-03",
+   "concept": "poo-diseno",
+   "kind": "choice",
+   "level": 1,
+   "daw": false,
+   "q": "¿Qué clase tiene **baja cohesión**?",
+   "code": null,
+   "options": [
+    {
+     "text": "`Alumno` con `media()`, `aprobado()`, `imprimir_factura_de_la_cafeteria()` y `reservar_aula()`",
+     "error": null
+    },
+    {
+     "text": "`Alumno` con `media()` y `aprobado()`",
+     "error": null,
+     "why": "Los dos métodos trabajan con las notas del alumno: tienen que ver entre sí."
+    },
+    {
+     "text": "`Termometro` con `celsius` y `a_fahrenheit()`",
+     "error": null,
+     "why": "La conversión usa el dato de la propia clase: es cohesiva."
+    },
+    {
+     "text": "`Carrito` con `agregar()`, `quitar()` y `total()`",
+     "error": null,
+     "why": "Todo trata de los productos del carrito."
+    }
+   ],
+   "answer": 0,
+   "explain": "Facturas de la cafetería y reservas de aulas no tienen nada que ver con las notas: esa clase mezcla responsabilidades.",
+   "codeOptions": false,
+   "bank": true,
+   "qtype": "diseno"
+  },
+  {
+   "id": "poo9-04",
+   "concept": "poo-diseno",
+   "kind": "choice",
+   "level": 2,
+   "daw": false,
+   "q": "¿Qué pide el principio **abierto/cerrado** (la O de SOLID)?",
+   "code": null,
+   "options": [
+    {
+     "text": "Poder añadir comportamiento con clases nuevas sin modificar el código que ya funciona",
+     "error": null
+    },
+    {
+     "text": "Que todos los atributos sean públicos (abiertos) y los métodos privados (cerrados)",
+     "error": null,
+     "why": "No trata de la visibilidad de los miembros, sino de cómo crece el programa."
+    },
+    {
+     "text": "Añadir un `elif` a la función cada vez que aparece un tipo nuevo",
+     "error": "poo-diseno.if-por-tipos",
+     "why": "Eso obliga a modificar código que ya funcionaba: es lo que el principio quiere evitar."
+    },
+    {
+     "text": "Cerrar los archivos después de abrirlos",
+     "error": null,
+     "why": "El nombre se parece, pero el principio habla del diseño de clases."
+    }
+   ],
+   "answer": 0,
+   "explain": "Con polimorfismo, un tipo nuevo es una clase nueva con su método: el código que recorre los objetos no se toca.",
+   "codeOptions": false,
+   "bank": true,
+   "qtype": "teoria"
+  },
+  {
+   "id": "poo9-05",
+   "concept": "poo-diseno",
+   "kind": "output",
+   "level": 2,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "class Rectangulo:\n    def __init__(self, ancho, alto):\n        self.ancho = ancho\n        self.alto = alto\n\n    def area(self):\n        return self.ancho * self.alto\n\nclass Cuadrado(Rectangulo):\n    def __init__(self, lado):\n        super().__init__(lado, lado)\n\ndef estirar(figura):\n    figura.ancho = figura.ancho * 2\n    return figura.area()\n\nprint(estirar(Rectangulo(2, 3)), estirar(Cuadrado(2)))",
+   "stdin": "",
+   "expect": "12 8",
+   "traps": {
+    "12 16": "poo-diseno.herencia-que-rompe",
+    "12 4": null
+   },
+   "explain": "`estirar` duplica el ancho de cualquier rectángulo. El cuadrado acaba con ancho 4 y alto 2: ya no es un cuadrado. Es el problema que señala el principio de sustitución de Liskov."
+  },
+  {
+   "id": "poo9-06",
+   "concept": "poo-diseno",
+   "kind": "fill",
+   "level": 2,
+   "daw": false,
+   "q": "Completa el constructor para que el pedido **reciba** su aviso (inversión de dependencias) en vez de crearlo.",
+   "code": "class AvisoFalso:\n    def enviar(self, texto):\n        return \"simulado: \" + texto\n\nclass Pedido:\n    def __init__(self, numero, aviso):\n        self.numero = numero\n        self.aviso = ___\n\n    def confirmar(self):\n        return self.aviso.enviar(f\"pedido {self.numero}\")\n\nprint(Pedido(3, AvisoFalso()).confirmar())",
+   "accept": [
+    "aviso"
+   ],
+   "expect": "simulado: pedido 3",
+   "traps": {
+    "AvisoFalso()": "poo-diseno.crea-su-dependencia",
+    "AvisoPorEmail()": "poo-diseno.crea-su-dependencia"
+   },
+   "explain": "Guardar el parámetro (`self.aviso = aviso`) permite pasarle cualquier objeto con `enviar`, también uno falso para las pruebas."
+  },
+  {
+   "id": "poo9-07",
+   "concept": "poo-diseno",
+   "kind": "output",
+   "level": 1,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "def doble(x: int) -> int:\n    return x * 2\n\nprint(doble(\"ab\"))",
+   "stdin": "",
+   "expect": "abab",
+   "traps": {
+    "TypeError": "poo-diseno.hints-obligan",
+    "4": null
+   },
+   "explain": "Los type hints no se comprueban al ejecutar: `\"ab\" * 2` es `\"abab\"`. Sirven para documentar y para herramientas como `mypy`."
+  },
+  {
+   "id": "poo9-08",
+   "concept": "poo-diseno",
+   "kind": "choice",
+   "level": 1,
+   "daw": false,
+   "q": "¿Qué métodos escribe por ti `@dataclass` en una clase con atributos anotados?",
+   "code": null,
+   "options": [
+    {
+     "text": "`__init__`, `__repr__` y `__eq__`",
+     "error": null
+    },
+    {
+     "text": "Solo `__init__`",
+     "error": null,
+     "why": "También genera `__repr__` y `__eq__`."
+    },
+    {
+     "text": "`__str__` y `__len__`",
+     "error": null,
+     "why": "No genera `__len__`, y `print` usa el `__repr__` generado porque no hay `__str__`."
+    },
+    {
+     "text": "Ninguno: solo comprueba los tipos de los atributos",
+     "error": "poo-diseno.hints-obligan",
+     "why": "`@dataclass` no comprueba tipos; escribe métodos a partir de los atributos."
+    }
+   ],
+   "answer": 0,
+   "explain": "`@dataclass` lee los atributos anotados y genera el constructor, la representación (`Libro(titulo='Dune', paginas=600)`) y la comparación con `==`.",
+   "codeOptions": false,
+   "bank": true,
+   "qtype": "codigo"
+  },
+  {
+   "id": "poo9-09",
+   "concept": "poo-diseno",
+   "kind": "bug",
+   "level": 2,
+   "daw": false,
+   "q": "Python da `ValueError: mutable default <class 'list'> for field etiquetas is not allowed`. ¿Qué línea hay que cambiar?",
+   "code": "from dataclasses import dataclass, field\n\n@dataclass\nclass Libro:\n    titulo: str\n    etiquetas: list = []\n\na = Libro(\"Dune\")\na.etiquetas.append(\"sf\")\nprint(Libro(\"Otro\").etiquetas)",
+   "stdin": "",
+   "line": 6,
+   "fix": "    etiquetas: list = field(default_factory=list)",
+   "expect": "[]",
+   "error": "poo-diseno.dataclass-lista-por-defecto",
+   "explain": "Una lista como valor por defecto la compartirían todos los libros, y `@dataclass` lo prohíbe. `field(default_factory=list)` crea una lista nueva para cada objeto."
+  },
+  {
+   "id": "poo9-10",
+   "concept": "poo-diseno",
+   "kind": "choice",
+   "level": 2,
+   "daw": false,
+   "q": "`Pinguino` hereda de `Ave`, que tiene `volar()`. Como los pingüinos no vuelan, `Pinguino.volar()` lanza un error. ¿Qué dice esto del diseño?",
+   "code": null,
+   "options": [
+    {
+     "text": "Que se rompe la sustitución de Liskov: un pingüino no se puede usar donde se espera un `Ave` que vuela",
+     "error": null
+    },
+    {
+     "text": "Nada: sobrescribir un método para que lance un error es la forma correcta",
+     "error": "poo-diseno.herencia-que-rompe",
+     "why": "El código que recorre aves y llama a `volar()` fallaría por sorpresa con un pingüino."
+    },
+    {
+     "text": "Que `Ave` debería heredar de `Pinguino`",
+     "error": null,
+     "why": "Invertir la jerarquía no tiene sentido: no todas las aves son pingüinos."
+    },
+    {
+     "text": "Que hay que añadir un `if isinstance(ave, Pinguino)` en cada sitio donde se llama a `volar()`",
+     "error": "poo-diseno.if-por-tipos",
+     "why": "Llenaría el programa de comprobaciones de tipo: es justo lo que se quiere evitar."
+    }
+   ],
+   "answer": 0,
+   "explain": "Si una subclase no puede cumplir lo que promete la superclase, la jerarquía está mal: por ejemplo, saca `volar()` a una clase `AveVoladora` solo para las que vuelan.",
+   "codeOptions": false,
+   "bank": true,
+   "qtype": "diseno"
+  },
+  {
+   "id": "poo9-11",
+   "concept": "poo-diseno",
+   "kind": "output",
+   "level": 1,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "# Antes\ndef total(lineas):\n    t = 0\n    for precio, cantidad in lineas:\n        t += precio * cantidad\n    return t\n\n# Después de refactorizar\nclass Linea:\n    def __init__(self, precio, cantidad):\n        self.precio = precio\n        self.cantidad = cantidad\n\n    def subtotal(self):\n        return self.precio * self.cantidad\n\ndatos = [(2, 3), (5, 1)]\nnuevo = sum(Linea(p, n).subtotal() for p, n in datos)\nprint(total(datos) == nuevo, nuevo)",
+   "stdin": "",
+   "expect": "True 11",
+   "traps": {
+    "False 11": null,
+    "True 6": null
+   },
+   "explain": "Refactorizar cambia la organización, no el resultado: los dos cálculos dan 2 × 3 + 5 × 1 = 11."
+  },
+  {
+   "id": "poo9-12",
+   "concept": "poo-diseno",
+   "kind": "choice",
+   "level": 1,
+   "daw": false,
+   "q": "Vas a refactorizar una función larga que funciona. ¿Qué haces **primero**?",
+   "code": null,
+   "options": [
+    {
+     "text": "Escribir pruebas que comprueben lo que hace ahora",
+     "error": null
+    },
+    {
+     "text": "Reescribirla entera de una vez con clases",
+     "error": null
+    },
+    {
+     "text": "Cambiar todos los nombres de variables",
+     "error": null
+    },
+    {
+     "text": "Borrar los comentarios",
+     "error": null
+    }
+   ],
+   "answer": 0,
+   "explain": "Sin pruebas no sabes si el código refactorizado sigue haciendo lo mismo. Con ellas, cada paso pequeño se comprueba al momento.",
+   "codeOptions": false
+  },
+  {
+   "id": "poo9-13",
+   "concept": "poo-diseno",
+   "kind": "choice",
+   "level": 2,
+   "daw": false,
+   "q": "`procesar_venta()` comprueba el stock, calcula el total con IVA, imprime el ticket y guarda la venta en un archivo. ¿Cuál es la mejor reorganización?",
+   "code": null,
+   "options": [
+    {
+     "text": "Repartirlo: el inventario comprueba el stock, el carrito calcula, el ticket presenta y otra clase guarda",
+     "error": null
+    },
+    {
+     "text": "Dejarla igual pero con más comentarios",
+     "error": null,
+     "why": "Los comentarios ayudan a leer, pero la función sigue teniendo cuatro motivos para cambiar."
+    },
+    {
+     "text": "Convertirla en un método de una clase `Tienda` sin cambiar nada más",
+     "error": "poo-diseno.clase-que-lo-hace-todo",
+     "why": "Seguiría haciendo cuatro cosas: solo cambia de sitio."
+    },
+    {
+     "text": "Partirla en cuatro funciones que se llaman `paso1()`, `paso2()`, `paso3()` y `paso4()`",
+     "error": null,
+     "why": "Separa, pero los nombres no dicen nada y el reparto no sigue las responsabilidades."
+    }
+   ],
+   "answer": 0,
+   "explain": "Cada parte tiene su motivo para cambiar (el stock, el IVA, el formato, el almacenamiento): cada una va a la clase que se ocupa de ello.",
+   "codeOptions": false,
+   "bank": true,
+   "qtype": "solucion"
+  },
+  {
+   "id": "poo9-14",
+   "concept": "poo-diseno",
+   "kind": "code",
+   "level": 2,
+   "daw": false,
+   "q": "**Ejercicio guiado: boletín de notas.** La función `boletin(nombre, notas)` calcula, decide y presenta a la vez. Repártelo en dos clases:\n\n1. `Calificaciones(notas)`: guarda una **copia** de la lista y tiene `media()` (0 si no hay notas) y `aprobado()` (media ≥ 5).\n2. `Boletin(nombre, calificaciones)`: recibe un objeto `Calificaciones` y tiene `texto()`, que devuelve lo mismo que la función: `\"Ana: 6.5 (aprobado)\"`.\n3. Pon una docstring en cada clase. La función antigua se queda para comparar.",
+   "starter": "def boletin(nombre, notas):\n    media = sum(notas) / len(notas) if notas else 0\n    estado = \"aprobado\" if media >= 5 else \"suspenso\"\n    return f\"{nombre}: {media:.1f} ({estado})\"\n\n\n# Paso 1: Calificaciones\n\n# Paso 2: Boletin\n\n# Paso 3: docstrings\n\n\nprint(boletin(\"Ana\", [6, 7]))\nprint(Boletin(\"Ana\", Calificaciones([6, 7])).texto())",
+   "solution": "def boletin(nombre, notas):\n    media = sum(notas) / len(notas) if notas else 0\n    estado = \"aprobado\" if media >= 5 else \"suspenso\"\n    return f\"{nombre}: {media:.1f} ({estado})\"\n\n\nclass Calificaciones:\n    \"\"\"Las notas de un alumno y los cálculos con ellas.\"\"\"\n\n    def __init__(self, notas: list[float]) -> None:\n        self.notas = list(notas)\n\n    def media(self) -> float:\n        return sum(self.notas) / len(self.notas) if self.notas else 0\n\n    def aprobado(self) -> bool:\n        return self.media() >= 5\n\n\nclass Boletin:\n    \"\"\"Presenta las calificaciones de un alumno.\"\"\"\n\n    def __init__(self, nombre: str, calificaciones: Calificaciones) -> None:\n        self.nombre = nombre\n        self.calificaciones = calificaciones\n\n    def texto(self) -> str:\n        estado = \"aprobado\" if self.calificaciones.aprobado() else \"suspenso\"\n        return f\"{self.nombre}: {self.calificaciones.media():.1f} ({estado})\"\n\n\nprint(boletin(\"Ana\", [6, 7]))\nprint(Boletin(\"Ana\", Calificaciones([6, 7])).texto())",
+   "checks": [
+    {
+     "stdin": "",
+     "test": "c = Calificaciones([6, 7])\nassert c.media() == 6.5, f\"media() debe dar 6.5; da {c.media()!r}\"\nassert c.aprobado() is True and Calificaciones([3, 4]).aprobado() is False, \"aprobado() es media >= 5\"\nassert Calificaciones([]).media() == 0, \"Sin notas, la media es 0\"\nmis = [5]\nc = Calificaciones(mis)\nmis.append(0)\nassert c.notas == [5], \"Calificaciones debe guardar una copia de la lista\"",
+     "error": null
+    },
+    {
+     "stdin": "",
+     "test": "for nombre, notas in ((\"Ana\", [6, 7]), (\"Luis\", [2, 4]), (\"Eva\", [])):\n    nuevo = Boletin(nombre, Calificaciones(notas)).texto()\n    assert nuevo == boletin(nombre, notas), f\"Boletin debe dar lo mismo que la función: {nuevo!r} frente a {boletin(nombre, notas)!r}\"",
+     "error": null
+    },
+    {
+     "stdin": "",
+     "test": "class Fijas:\n    def media(self):\n        return 9.0\n    def aprobado(self):\n        return True\nassert Boletin(\"Zoe\", Fijas()).texto() == \"Zoe: 9.0 (aprobado)\", \"Boletin debe pedir media() y aprobado() al objeto que recibe, sin calcular por su cuenta\"\nassert Calificaciones.__doc__ and Boletin.__doc__, \"Pon una docstring en cada clase\"",
+     "error": "poo-diseno.acoplado-a-detalles"
+    }
+   ],
+   "hint": "En `Boletin.texto()` usa `self.calificaciones.media()` y `self.calificaciones.aprobado()`, no `self.calificaciones.notas`.",
+   "explain": "`Calificaciones` hace los cálculos y `Boletin` solo presenta. Como `Boletin` pide los resultados en vez de leer `notas`, funciona con cualquier objeto que tenga `media()` y `aprobado()`: bajo acoplamiento.",
+   "expect": "Ana: 6.5 (aprobado)\nAna: 6.5 (aprobado)\n"
+  },
+  {
+   "id": "poo9-15",
+   "concept": "poo-diseno",
+   "kind": "code",
+   "level": 2,
+   "daw": false,
+   "q": "**Práctica: una dataclass.** Crea con `@dataclass` la clase `Tarea` con `titulo: str`, `horas: float = 1.0`, `hecha: bool = False` y `etiquetas: list[str]` (lista nueva para cada tarea). Añade:\n\n- `marcar()`, que pone `hecha` a `True`.\n- `es_larga()`, que devuelve si dura más de 4 horas.\n\nY una función `pendientes(tareas)` que devuelva los títulos de las tareas no hechas, en el mismo orden.",
+   "starter": "from dataclasses import dataclass, field\n\n\nclass Tarea:\n    ...",
+   "solution": "from dataclasses import dataclass, field\n\n\n@dataclass\nclass Tarea:\n    \"\"\"Una tarea de la lista de pendientes.\"\"\"\n    titulo: str\n    horas: float = 1.0\n    hecha: bool = False\n    etiquetas: list[str] = field(default_factory=list)\n\n    def marcar(self) -> None:\n        self.hecha = True\n\n    def es_larga(self) -> bool:\n        return self.horas > 4\n\n\ndef pendientes(tareas: list[Tarea]) -> list[str]:\n    return [t.titulo for t in tareas if not t.hecha]\n\n\nlista = [Tarea(\"Práctica 1\", 3), Tarea(\"Proyecto\", 10)]\nlista[0].marcar()\nprint(lista[1], pendientes(lista))",
+   "checks": [
+    {
+     "stdin": "",
+     "test": "import dataclasses\nassert dataclasses.is_dataclass(Tarea), \"Tarea debe llevar @dataclass\"\nt = Tarea(\"Leer\")\nassert (t.horas, t.hecha, t.etiquetas) == (1.0, False, []), \"Valores por defecto: horas 1.0, hecha False y etiquetas vacía\"\nassert Tarea(\"A\", 2) == Tarea(\"A\", 2), \"Dos tareas con los mismos datos son iguales (__eq__ generado)\"\nassert repr(Tarea(\"A\", 2)) == \"Tarea(titulo='A', horas=2, hecha=False, etiquetas=[])\", f\"repr generado: {Tarea('A', 2)!r}\"",
+     "error": null
+    },
+    {
+     "stdin": "",
+     "test": "a, b = Tarea(\"A\"), Tarea(\"B\")\na.etiquetas.append(\"dam\")\nassert b.etiquetas == [], \"Cada tarea debe tener su propia lista: field(default_factory=list)\"",
+     "error": "poo-diseno.dataclass-lista-por-defecto"
+    },
+    {
+     "stdin": "",
+     "test": "t = Tarea(\"A\", 5)\nassert t.es_larga() and not Tarea(\"B\", 4).es_larga(), \"es_larga() es más de 4 horas\"\nt.marcar()\nassert t.hecha, \"marcar() pone hecha a True\"\nlista = [Tarea(\"x\"), t, Tarea(\"y\")]\nassert pendientes(lista) == [\"x\", \"y\"], f\"pendientes() devuelve {pendientes(lista)!r}\"",
+     "error": null
+    }
+   ],
+   "hint": "Las anotaciones van como `titulo: str` dentro de la clase. Para la lista: `etiquetas: list[str] = field(default_factory=list)`.",
+   "explain": "`@dataclass` escribe el constructor, el `repr` y la igualdad; tú solo añades lo que es propio de una tarea. `field(default_factory=list)` evita que todas las tareas compartan la misma lista de etiquetas.",
+   "expect": "Tarea(titulo='Proyecto', horas=10, hecha=False, etiquetas=[]) ['Proyecto']\n"
+  },
+  {
+   "id": "poo9-16",
+   "concept": "poo-diseno",
+   "kind": "choice",
+   "level": 1,
+   "daw": false,
+   "q": "¿Qué es una docstring?",
+   "code": null,
+   "options": [
+    {
+     "text": "Un texto entre triples comillas justo debajo de `class` o `def` que explica qué hace; Python lo guarda en `__doc__`",
+     "error": null
+    },
+    {
+     "text": "Cualquier comentario que empieza por `#`",
+     "error": null,
+     "why": "Los comentarios con `#` los ignora Python; la docstring es una cadena que queda en `__doc__`."
+    },
+    {
+     "text": "Un type hint que indica que el resultado es un `str`",
+     "error": "poo-diseno.hints-obligan",
+     "why": "Eso sería `-> str`, una anotación de tipo, no una docstring."
+    },
+    {
+     "text": "Un método especial que convierte el objeto en texto",
+     "error": null,
+     "why": "Ese es `__str__` (Unidad 8)."
+    }
+   ],
+   "answer": 0,
+   "explain": "La docstring documenta el **qué**; `help(Clase)` la muestra. Un comentario `#` explica detalles del código y no se guarda.",
+   "codeOptions": false,
+   "bank": true,
+   "qtype": "teoria"
+  },
+  {
+   "id": "poo9-17",
+   "concept": "poo-diseno",
+   "kind": "choice",
+   "level": 2,
+   "daw": false,
+   "q": "¿Qué indica `def buscar(self, nombre: str) -> Producto | None:`?",
+   "code": null,
+   "options": [
+    {
+     "text": "Que recibe un texto y devuelve un `Producto` o `None` si no lo encuentra",
+     "error": null
+    },
+    {
+     "text": "Que Python lanzará `TypeError` si `nombre` no es un `str`",
+     "error": "poo-diseno.hints-obligan",
+     "why": "Los type hints no se comprueban al ejecutar; solo documentan."
+    },
+    {
+     "text": "Que devuelve a la vez un `Producto` y `None`",
+     "error": null,
+     "why": "`|` significa «o»: devuelve una cosa u otra."
+    },
+    {
+     "text": "Que `nombre` es opcional y vale `None` por defecto",
+     "error": null,
+     "why": "El `None` está en el tipo de lo que devuelve, no en el parámetro; `nombre` no tiene valor por defecto."
+    }
+   ],
+   "answer": 0,
+   "explain": "`nombre: str` anota el parámetro y `-> Producto | None` lo que devuelve. Quien lo use sabe que debe comprobar si recibe `None`.",
+   "codeOptions": false,
+   "bank": true,
+   "qtype": "codigo"
+  },
+  {
+   "id": "poo9-18",
+   "concept": "poo-diseno",
+   "kind": "choice",
+   "level": 3,
+   "daw": false,
+   "q": "En una dataclass, ¿qué diferencia hay entre `etiquetas: list = field(default_factory=list)` y escribir en `__init__` `self.etiquetas = []`?",
+   "code": null,
+   "options": [
+    {
+     "text": "Ninguna en el resultado: las dos crean una lista nueva para cada objeto",
+     "error": null
+    },
+    {
+     "text": "`default_factory` crea una sola lista que comparten todos los objetos",
+     "error": "poo-diseno.dataclass-lista-por-defecto",
+     "why": "Es al revés: llama a `list()` cada vez que se crea un objeto."
+    },
+    {
+     "text": "Con `default_factory` la lista no se puede modificar",
+     "error": null,
+     "why": "Es una lista normal: se puede añadir y quitar."
+    },
+    {
+     "text": "`self.etiquetas = []` en `__init__` también comparte la lista entre objetos",
+     "error": null,
+     "why": "Esa línea se ejecuta en cada `__init__`, así que cada objeto estrena su lista."
+    }
+   ],
+   "answer": 0,
+   "explain": "`default_factory=list` es la forma de pedirle a `@dataclass` lo mismo que harías en un `__init__` escrito a mano: una lista nueva por objeto.",
+   "codeOptions": false,
+   "bank": true,
+   "qtype": "codigo"
+  },
+  {
+   "id": "poo9-19",
+   "concept": "poo-diseno",
+   "kind": "choice",
+   "level": 1,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "from dataclasses import dataclass\n\n@dataclass\nclass Punto:\n    x: int\n    y: int\n\nprint(Punto(1, 2))",
+   "options": [
+    {
+     "text": "Punto(x=1, y=2)",
+     "error": null
+    },
+    {
+     "text": "<__main__.Punto object>",
+     "error": null,
+     "why": "`@dataclass` genera un `__repr__` que muestra los atributos."
+    },
+    {
+     "text": "(1, 2)",
+     "error": null,
+     "why": "El `__repr__` generado incluye el nombre de la clase y de cada atributo."
+    },
+    {
+     "text": "Punto(1, 2)",
+     "error": null,
+     "why": "El `__repr__` generado pone el nombre de cada atributo: `x=1`."
+    }
+   ],
+   "answer": 0,
+   "explain": "El `__repr__` que escribe `@dataclass` muestra la clase y cada atributo con su nombre y su valor.",
+   "codeOptions": false,
+   "bank": true,
+   "qtype": "prediccion"
+  },
+  {
+   "id": "poo9-20",
+   "concept": "poo-diseno",
+   "kind": "choice",
+   "level": 2,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "from dataclasses import dataclass\n\n@dataclass\nclass Libro:\n    titulo: str\n    paginas: int\n\na = Libro(\"Dune\", 600)\nb = Libro(\"Dune\", 600)\nprint(a == b, a is b)",
+   "options": [
+    {
+     "text": "True False",
+     "error": null
+    },
+    {
+     "text": "False False",
+     "error": null,
+     "why": "`@dataclass` genera `__eq__`, que compara los atributos: los dos libros tienen los mismos."
+    },
+    {
+     "text": "True True",
+     "error": null,
+     "why": "Son dos objetos distintos con los mismos datos: `is` da `False`."
+    },
+    {
+     "text": "False True",
+     "error": null,
+     "why": "`is` solo es `True` si es el mismo objeto, y aquí se crean dos."
+    }
+   ],
+   "answer": 0,
+   "explain": "`==` usa el `__eq__` generado y compara `titulo` y `paginas`. `is` mira si son el mismo objeto, y no lo son.",
+   "codeOptions": false,
+   "bank": true,
+   "qtype": "prediccion"
+  },
+  {
+   "id": "poo9-21",
+   "concept": "poo-diseno",
+   "kind": "choice",
+   "level": 3,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "from dataclasses import dataclass\n\n@dataclass(order=True)\nclass Nota:\n    valor: int\n    alumno: str\n\nnotas = [Nota(7, \"Eva\"), Nota(5, \"Luis\"), Nota(7, \"Ana\")]\nprint([n.alumno for n in sorted(notas)])",
+   "options": [
+    {
+     "text": "['Luis', 'Ana', 'Eva']",
+     "error": null
+    },
+    {
+     "text": "['Eva', 'Luis', 'Ana']",
+     "error": null,
+     "why": "`sorted` ordena: no deja la lista en el orden en que se escribió."
+    },
+    {
+     "text": "['Ana', 'Eva', 'Luis']",
+     "error": null,
+     "why": "`order=True` compara primero `valor` (el primer atributo), no el nombre."
+    },
+    {
+     "text": "['Luis', 'Eva', 'Ana']",
+     "error": null,
+     "why": "Con el mismo `valor`, se compara el siguiente atributo, `alumno`: «Ana» va antes que «Eva»."
+    }
+   ],
+   "answer": 0,
+   "explain": "`order=True` compara los atributos en el orden en que están escritos: primero `valor` (5 antes que 7) y, si empatan, `alumno` (Ana antes que Eva).",
+   "codeOptions": false,
+   "bank": true,
+   "qtype": "prediccion"
+  },
+  {
+   "id": "poo9-22",
+   "concept": "poo-diseno",
+   "kind": "choice",
+   "level": 2,
+   "daw": false,
+   "q": "¿Cuál es el problema de diseño de esta clase?",
+   "code": "class Expediente:\n    def __init__(self, notas):\n        self.notas = notas\n\n    def media(self):\n        return sum(self.notas) / len(self.notas)\n\n    def informe_html(self):\n        return f\"<p>Media: {self.media():.1f}</p>\"\n\n    def guardar(self, ruta):\n        with open(ruta, \"w\") as f:\n            f.write(self.informe_html())",
+   "options": [
+    {
+     "text": "Mezcla responsabilidades: cálculo, formato y guardado en un archivo tienen motivos distintos para cambiar",
+     "error": null
+    },
+    {
+     "text": "Tiene demasiados atributos",
+     "error": null,
+     "why": "Solo tiene uno; el problema está en lo que hacen sus métodos."
+    },
+    {
+     "text": "Le faltan type hints",
+     "error": null,
+     "why": "Los type hints ayudarían a leerla, pero el problema de diseño seguiría ahí."
+    },
+    {
+     "text": "Debería heredar de `list` para guardar las notas",
+     "error": "poo-diseno.herencia-que-rompe",
+     "why": "Un expediente no es una lista; además, eso no arregla la mezcla de tareas."
+    }
+   ],
+   "answer": 0,
+   "explain": "Si cambia el formato del informe o el archivo donde se guarda, hay que tocar la clase de las notas. Lo propio es separar: `Expediente` calcula, `Informe` presenta y otra clase guarda.",
+   "codeOptions": false,
+   "bank": true,
+   "qtype": "error"
+  },
+  {
+   "id": "poo9-23",
+   "concept": "poo-diseno",
+   "kind": "choice",
+   "level": 3,
+   "daw": false,
+   "q": "Al ejecutar este código Python da `ValueError` antes de crear ningún objeto. ¿Por qué?",
+   "code": "from dataclasses import dataclass\n\n@dataclass\nclass Grupo:\n    nombre: str\n    alumnos: list = []",
+   "options": [
+    {
+     "text": "`@dataclass` no admite una lista como valor por defecto: hay que usar `field(default_factory=list)`",
+     "error": null
+    },
+    {
+     "text": "Falta escribir el `__init__`",
+     "error": null,
+     "why": "Con `@dataclass` no hace falta: lo genera el decorador."
+    },
+    {
+     "text": "Los type hints `list` y `str` no se pueden mezclar",
+     "error": null,
+     "why": "Cada atributo puede tener su propio tipo."
+    },
+    {
+     "text": "Hay que poner `alumnos` antes que `nombre`",
+     "error": null,
+     "why": "El orden es correcto: el atributo con valor por defecto va después del que no lo tiene."
+    }
+   ],
+   "answer": 0,
+   "explain": "Una lista por defecto la compartirían todos los objetos, así que `@dataclass` la rechaza al definir la clase. `field(default_factory=list)` crea una por objeto.",
+   "codeOptions": false,
+   "bank": true,
+   "qtype": "error"
+  },
+  {
+   "id": "poo9-24",
+   "concept": "poo-diseno",
+   "kind": "choice",
+   "level": 3,
+   "daw": false,
+   "q": "`precio_envio(pedido)` tiene un `if`/`elif` por cada transportista y hay que añadir uno nuevo cada mes. ¿Qué cambio sigue el principio abierto/cerrado?",
+   "code": null,
+   "options": [
+    {
+     "text": "Una clase por transportista con su método `precio(pedido)`, y que el pedido reciba el transportista y le pida el precio",
+     "error": null
+    },
+    {
+     "text": "Añadir otro `elif` para el transportista nuevo",
+     "error": "poo-diseno.if-por-tipos",
+     "why": "Cada transportista nuevo obliga a modificar la función que ya funcionaba."
+    },
+    {
+     "text": "Guardar en un diccionario el nombre del transportista y una tarifa fija",
+     "error": null,
+     "why": "Sirve si todos cobran igual, pero no si cada uno calcula el precio a su manera."
+    },
+    {
+     "text": "Copiar la función y llamarla `precio_envio2`",
+     "error": null,
+     "why": "Duplica el código y los cambios habría que hacerlos en dos sitios."
+    }
+   ],
+   "answer": 0,
+   "explain": "Con una clase por transportista (polimorfismo, Unidad 6) y el transportista pasado al pedido (inversión de dependencias), uno nuevo es una clase nueva: no se modifica nada de lo que ya funciona.",
+   "codeOptions": false,
+   "bank": true,
+   "qtype": "solucion"
+  },
+  {
+   "id": "poo9-25",
+   "concept": "poo-diseno",
+   "kind": "code",
+   "level": 2,
+   "daw": false,
+   "q": "**Práctica: inversión de dependencias.** Crea `Pedido(numero, aviso)`, que **recibe** el objeto que envía los avisos, y:\n\n- `confirmar()`: si el pedido ya estaba confirmado lanza `ValueError`; si no, lo marca como confirmado (atributo `confirmado`) y devuelve lo que devuelve `aviso.enviar(\"Pedido 7 confirmado\")`.\n\nCrea también `AvisoFalso`, con una lista `enviados` y un `enviar(texto)` que guarda el texto y devuelve `\"ok\"`, para probar el pedido sin enviar nada de verdad.",
+   "starter": "class AvisoFalso:\n    ...\n\n\nclass Pedido:\n    ...",
+   "solution": "class AvisoFalso:\n    \"\"\"Aviso de mentira para las pruebas: guarda lo que se habría enviado.\"\"\"\n\n    def __init__(self) -> None:\n        self.enviados: list[str] = []\n\n    def enviar(self, texto: str) -> str:\n        self.enviados.append(texto)\n        return \"ok\"\n\n\nclass Pedido:\n    \"\"\"Un pedido que avisa al confirmarse con el aviso que recibe.\"\"\"\n\n    def __init__(self, numero: int, aviso) -> None:\n        self.numero = numero\n        self.aviso = aviso\n        self.confirmado = False\n\n    def confirmar(self) -> str:\n        if self.confirmado:\n            raise ValueError(\"El pedido ya está confirmado\")\n        self.confirmado = True\n        return self.aviso.enviar(f\"Pedido {self.numero} confirmado\")\n\n\nfalso = AvisoFalso()\nprint(Pedido(7, falso).confirmar(), falso.enviados)",
+   "checks": [
+    {
+     "stdin": "",
+     "test": "f = AvisoFalso()\nassert f.enviados == [] and f.enviar(\"x\") == \"ok\" and f.enviados == [\"x\"], \"AvisoFalso guarda cada texto y devuelve 'ok'\"",
+     "error": null
+    },
+    {
+     "stdin": "",
+     "test": "class Eco:\n    def enviar(self, texto):\n        return \"eco: \" + texto\np = Pedido(7, Eco())\nassert p.confirmado is False, \"Un pedido nuevo no está confirmado\"\nassert p.confirmar() == \"eco: Pedido 7 confirmado\", \"confirmar() debe usar el aviso que recibe el pedido y devolver su resultado\"\nassert p.confirmado is True, \"confirmar() marca el pedido\"",
+     "error": "poo-diseno.crea-su-dependencia"
+    },
+    {
+     "stdin": "",
+     "test": "f = AvisoFalso()\np = Pedido(1, f)\np.confirmar()\ntry:\n    p.confirmar()\nexcept ValueError:\n    pass\nelse:\n    raise AssertionError(\"Confirmar dos veces debe lanzar ValueError\")\nassert f.enviados == [\"Pedido 1 confirmado\"], \"El segundo intento no debe enviar otro aviso\"",
+     "error": null
+    }
+   ],
+   "hint": "Guarda el parámetro en `self.aviso` y en `confirmar` llama a `self.aviso.enviar(...)`. Comprueba `self.confirmado` antes de enviar.",
+   "explain": "El pedido no sabe cómo se envían los avisos: solo llama a `enviar`. Por eso en las pruebas se le pasa un `AvisoFalso` y se comprueba qué habría enviado, sin mandar nada.",
+   "expect": "ok ['Pedido 7 confirmado']\n"
+  },
+  {
+   "id": "poo9-26",
+   "concept": "poo-diseno",
+   "kind": "output",
+   "level": 2,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "from dataclasses import dataclass, field\n\n@dataclass\nclass Grupo:\n    nombre: str\n    alumnos: list = field(default_factory=list)\n\na = Grupo(\"1A\")\nb = Grupo(\"1B\")\na.alumnos.append(\"Ana\")\nprint(len(a.alumnos), len(b.alumnos), a == Grupo(\"1A\", [\"Ana\"]))",
+   "stdin": "",
+   "expect": "1 0 True",
+   "traps": {
+    "1 1 True": "poo-diseno.dataclass-lista-por-defecto",
+    "1 0 False": null
+   },
+   "explain": "Cada grupo estrena su lista gracias a `default_factory`, y el `__eq__` generado compara nombre y alumnos."
+  },
+  {
+   "id": "poo9-27",
+   "concept": "poo-diseno",
+   "kind": "code",
+   "level": 3,
+   "daw": false,
+   "q": "**Ejercicio principal: refactorizar la tienda.** El código inicial es una tienda procedural con diccionarios. Reorganízala en cuatro clases, cada una con su responsabilidad, docstring y type hints:\n\n- `Producto`: una **dataclass** con `nombre: str`, `precio: float` y `stock: int = 0`.\n- `Inventario`: `agregar(producto)` (un nombre repetido da `ValueError`), `buscar(nombre)` (devuelve el producto; si no existe, `KeyError`) y `retirar(nombre, cantidad)` (si no hay stock suficiente, `ValueError` y no cambia nada).\n- `Carrito(inventario)`: `agregar(nombre, cantidad)` retira del inventario y guarda la línea; `subtotal()` suma precio × cantidad.\n- `Ticket(carrito, iva=0.21)`: `total()` (subtotal con IVA, redondeado a 2 decimales) y `texto()`, que devuelve las líneas `\"2 x Teclado = 50.00 €\"` y al final `\"Total con IVA: 60.50 €\"`, separadas por saltos de línea. El ticket **no** toca el stock.",
+   "starter": "# Tienda procedural: funciona, pero todo está mezclado\ninventario = {\"Teclado\": {\"precio\": 25.0, \"stock\": 5}}\ncarrito = []\n\n\ndef comprar(nombre, cantidad):\n    producto = inventario[nombre]\n    if producto[\"stock\"] < cantidad:\n        raise ValueError(\"No hay stock\")\n    producto[\"stock\"] -= cantidad\n    carrito.append((nombre, cantidad))\n\n\ndef ticket():\n    lineas = []\n    subtotal = 0\n    for nombre, cantidad in carrito:\n        importe = inventario[nombre][\"precio\"] * cantidad\n        subtotal += importe\n        lineas.append(f\"{cantidad} x {nombre} = {importe:.2f} €\")\n    lineas.append(f\"Total con IVA: {round(subtotal * 1.21, 2):.2f} €\")\n    return \"\\n\".join(lineas)\n\n\ncomprar(\"Teclado\", 2)\nprint(ticket())",
+   "solution": "from dataclasses import dataclass\n\n\n@dataclass\nclass Producto:\n    \"\"\"Un artículo de la tienda.\"\"\"\n    nombre: str\n    precio: float\n    stock: int = 0\n\n\nclass Inventario:\n    \"\"\"Los productos de la tienda y su stock.\"\"\"\n\n    def __init__(self) -> None:\n        self._productos: dict[str, Producto] = {}\n\n    def agregar(self, producto: Producto) -> None:\n        if producto.nombre in self._productos:\n            raise ValueError(f\"Ya existe {producto.nombre}\")\n        self._productos[producto.nombre] = producto\n\n    def buscar(self, nombre: str) -> Producto:\n        if nombre not in self._productos:\n            raise KeyError(nombre)\n        return self._productos[nombre]\n\n    def retirar(self, nombre: str, cantidad: int) -> Producto:\n        producto = self.buscar(nombre)\n        if cantidad > producto.stock:\n            raise ValueError(f\"No hay stock suficiente de {nombre}\")\n        producto.stock -= cantidad\n        return producto\n\n\nclass Carrito:\n    \"\"\"Lo que compra un cliente.\"\"\"\n\n    def __init__(self, inventario: Inventario) -> None:\n        self.inventario = inventario\n        self.lineas: list[tuple[Producto, int]] = []\n\n    def agregar(self, nombre: str, cantidad: int) -> None:\n        producto = self.inventario.retirar(nombre, cantidad)\n        self.lineas.append((producto, cantidad))\n\n    def subtotal(self) -> float:\n        return sum(producto.precio * cantidad for producto, cantidad in self.lineas)\n\n\nclass Ticket:\n    \"\"\"Presenta un carrito con su IVA: no calcula precios ni toca el stock.\"\"\"\n\n    def __init__(self, carrito: Carrito, iva: float = 0.21) -> None:\n        self.carrito = carrito\n        self.iva = iva\n\n    def total(self) -> float:\n        return round(self.carrito.subtotal() * (1 + self.iva), 2)\n\n    def texto(self) -> str:\n        lineas = [\n            f\"{cantidad} x {producto.nombre} = {producto.precio * cantidad:.2f} €\"\n            for producto, cantidad in self.carrito.lineas\n        ]\n        lineas.append(f\"Total con IVA: {self.total():.2f} €\")\n        return \"\\n\".join(lineas)\n\n\ninventario = Inventario()\ninventario.agregar(Producto(\"Teclado\", 25.0, 5))\ncarrito = Carrito(inventario)\ncarrito.agregar(\"Teclado\", 2)\nprint(Ticket(carrito).texto())",
+   "checks": [
+    {
+     "stdin": "",
+     "test": "import dataclasses\nassert dataclasses.is_dataclass(Producto), \"Producto debe ser una dataclass\"\np = Producto(\"Pan\", 1.5)\nassert p.stock == 0 and p == Producto(\"Pan\", 1.5, 0), \"Producto(nombre, precio, stock=0) con __eq__ generado\"",
+     "error": null
+    },
+    {
+     "stdin": "",
+     "test": "inv = Inventario()\npan = Producto(\"Pan\", 1.5, 10)\ninv.agregar(pan)\nassert inv.buscar(\"Pan\") is pan, \"buscar() devuelve el producto guardado\"\nfor accion in (lambda: inv.agregar(Producto(\"Pan\", 2.0)), lambda: inv.retirar(\"Pan\", 11)):\n    try:\n        accion()\n    except ValueError:\n        pass\n    else:\n        raise AssertionError(\"Un nombre repetido o retirar más del stock debe lanzar ValueError\")\nassert pan.stock == 10, \"Si no hay stock suficiente, no debe cambiar nada\"\ntry:\n    inv.buscar(\"Leche\")\nexcept KeyError:\n    pass\nelse:\n    raise AssertionError(\"buscar() de un producto que no existe debe lanzar KeyError\")\ninv.retirar(\"Pan\", 4)\nassert pan.stock == 6, \"retirar() descuenta del stock\"",
+     "error": null
+    },
+    {
+     "stdin": "",
+     "test": "inv = Inventario()\ninv.agregar(Producto(\"Teclado\", 25.0, 5))\ninv.agregar(Producto(\"Ratón\", 10.0, 1))\ncar = Carrito(inv)\ncar.agregar(\"Teclado\", 2)\ncar.agregar(\"Ratón\", 1)\nassert car.subtotal() == 60.0, f\"subtotal() debe dar 60.0; da {car.subtotal()!r}\"\nassert inv.buscar(\"Teclado\").stock == 3, \"El carrito retira del inventario\"\ntry:\n    car.agregar(\"Ratón\", 1)\nexcept ValueError:\n    pass\nelse:\n    raise AssertionError(\"Sin stock, Carrito.agregar() debe lanzar el ValueError del inventario\")\nassert len(car.lineas) == 2, \"Si no hay stock no se añade la línea\"",
+     "error": null
+    },
+    {
+     "stdin": "",
+     "test": "inv = Inventario()\ninv.agregar(Producto(\"Teclado\", 25.0, 5))\ncar = Carrito(inv)\ncar.agregar(\"Teclado\", 2)\nt = Ticket(car)\nassert t.total() == 60.5, f\"total() con IVA del 21 %: debe dar 60.5; da {t.total()!r}\"\nassert t.texto() == \"2 x Teclado = 50.00 €\\nTotal con IVA: 60.50 €\", f\"texto() devuelve {t.texto()!r}\"\nassert Ticket(car, iva=0.1).total() == 55.0, \"El IVA se puede cambiar\"\nt.texto()\nassert inv.buscar(\"Teclado\").stock == 3, \"El ticket no debe tocar el stock\"",
+     "error": "poo-diseno.clase-que-lo-hace-todo"
+    },
+    {
+     "stdin": "",
+     "test": "for clase in (Producto, Inventario, Carrito, Ticket):\n    assert clase.__doc__ and not clase.__doc__.startswith(clase.__name__ + \"(\"), f\"Pon una docstring en {clase.__name__}\"\nassert Ticket.texto.__annotations__.get(\"return\") in (str, \"str\"), \"Anota que Ticket.texto() devuelve str\"",
+     "error": "poo-diseno.sin-documentar"
+    }
+   ],
+   "hint": "Empieza por la dataclass y el inventario (guarda los productos en un diccionario por nombre). `Carrito.agregar` llama a `self.inventario.retirar(...)` y guarda lo que devuelve.",
+   "explain": "Cada clase tiene un solo motivo para cambiar: `Producto` los datos, `Inventario` el stock, `Carrito` lo que se compra y `Ticket` cómo se presenta. El ticket solo pide `subtotal()` y las líneas: si mañana cambia el IVA o el formato, no se toca nada más.",
+   "expect": "2 x Teclado = 50.00 €\nTotal con IVA: 60.50 €\n"
+  },
+  {
+   "id": "poo10-01",
+   "concept": "poo-proyecto",
+   "kind": "code",
+   "level": 2,
+   "daw": false,
+   "q": "**Fase 1 del proyecto: `Libro`.** Crea `Libro(isbn, titulo, autor)`:\n\n1. Si el ISBN o el título están vacíos (o solo tienen espacios), lanza `ValueError`.\n2. Guarda los tres datos y `disponible = True`.\n3. `__str__` devuelve `\"Dune (Frank Herbert) [disponible]\"` o `[prestado]`.\n4. `__eq__`: dos libros son iguales si tienen el mismo ISBN; con otro tipo, `NotImplemented`.",
+   "starter": "from datetime import date\n\n\n# Fase 1: la clase Libro",
+   "solution": "from datetime import date\n\nclass Libro:\n    \"\"\"Un libro del catálogo, identificado por su ISBN.\"\"\"\n\n    def __init__(self, isbn: str, titulo: str, autor: str) -> None:\n        if not isbn.strip() or not titulo.strip():\n            raise ValueError(\"El ISBN y el título son obligatorios\")\n        self.isbn = isbn\n        self.titulo = titulo\n        self.autor = autor\n        self.disponible = True\n\n    def __str__(self) -> str:\n        estado = \"disponible\" if self.disponible else \"prestado\"\n        return f\"{self.titulo} ({self.autor}) [{estado}]\"\n\n    def __eq__(self, otro: object) -> bool:\n        if not isinstance(otro, Libro):\n            return NotImplemented\n        return self.isbn == otro.isbn\n\n\nprint(Libro(\"978-1\", \"Dune\", \"Frank Herbert\"))\nprint(Libro(\"978-1\", \"Dune\", \"F. H.\") == Libro(\"978-1\", \"Otro\", \"X\"))",
+   "checks": [
+    {
+     "stdin": "",
+     "test": "l = Libro(\"978-1\", \"Dune\", \"Frank Herbert\")\nassert (l.isbn, l.titulo, l.autor, l.disponible) == (\"978-1\", \"Dune\", \"Frank Herbert\", True), \"Libro guarda isbn, titulo y autor, y empieza disponible\"\nassert str(l) == \"Dune (Frank Herbert) [disponible]\", f\"str() devuelve {str(l)!r}\"\nl.disponible = False\nassert str(l) == \"Dune (Frank Herbert) [prestado]\", f\"Prestado, str() devuelve {str(l)!r}\"",
+     "error": null
+    },
+    {
+     "stdin": "",
+     "test": "assert Libro(\"978-1\", \"Dune\", \"F. H.\") == Libro(\"978-1\", \"Duna\", \"X\"), \"Dos libros con el mismo ISBN son el mismo\"\nassert Libro(\"978-1\", \"Dune\", \"F. H.\") != Libro(\"978-2\", \"Dune\", \"F. H.\"), \"Con otro ISBN no son el mismo\"\nassert (Libro(\"1\", \"A\", \"B\") == \"1\") is False, \"Con otro tipo, __eq__ devuelve NotImplemented y == da False\"",
+     "error": "poo-metodos-especiales.eq-identidad"
+    },
+    {
+     "stdin": "",
+     "test": "for args in ((\"\", \"Dune\", \"X\"), (\"   \", \"Dune\", \"X\"), (\"978-1\", \" \", \"X\")):\n    try:\n        Libro(*args)\n    except ValueError:\n        pass\n    else:\n        raise AssertionError(f\"Libro{args} debe lanzar ValueError: el ISBN y el título son obligatorios\")",
+     "error": "poo-proyecto.valida-tarde"
+    }
+   ],
+   "hint": "Valida con `if not isbn.strip() or not titulo.strip(): raise ValueError(...)` antes de guardar nada.",
+   "explain": "El libro valida sus datos al crearse y se compara por lo que lo identifica, el ISBN. Así la biblioteca podrá encontrar «el mismo libro» aunque sea otro objeto.",
+   "expect": "Dune (Frank Herbert) [disponible]\nTrue\n"
+  },
+  {
+   "id": "poo10-02",
+   "concept": "poo-proyecto",
+   "kind": "code",
+   "level": 2,
+   "daw": false,
+   "q": "**Fase 2 del proyecto: `Usuario`.** El `Libro` de la fase 1 ya está. Añade `Usuario(id, nombre, max_prestamos=3)`:\n\n- Un nombre vacío (o solo espacios) da `ValueError`.\n- `puede_prestar(activos)`: `True` si `activos` es menor que `max_prestamos`.\n- `__str__` → `\"Ana (#1)\"`.",
+   "starter": "from datetime import date\n\nclass Libro:\n    \"\"\"Un libro del catálogo, identificado por su ISBN.\"\"\"\n\n    def __init__(self, isbn: str, titulo: str, autor: str) -> None:\n        if not isbn.strip() or not titulo.strip():\n            raise ValueError(\"El ISBN y el título son obligatorios\")\n        self.isbn = isbn\n        self.titulo = titulo\n        self.autor = autor\n        self.disponible = True\n\n    def __str__(self) -> str:\n        estado = \"disponible\" if self.disponible else \"prestado\"\n        return f\"{self.titulo} ({self.autor}) [{estado}]\"\n\n    def __eq__(self, otro: object) -> bool:\n        if not isinstance(otro, Libro):\n            return NotImplemented\n        return self.isbn == otro.isbn\n\n\n# Fase 2: la clase Usuario",
+   "solution": "from datetime import date\n\nclass Libro:\n    \"\"\"Un libro del catálogo, identificado por su ISBN.\"\"\"\n\n    def __init__(self, isbn: str, titulo: str, autor: str) -> None:\n        if not isbn.strip() or not titulo.strip():\n            raise ValueError(\"El ISBN y el título son obligatorios\")\n        self.isbn = isbn\n        self.titulo = titulo\n        self.autor = autor\n        self.disponible = True\n\n    def __str__(self) -> str:\n        estado = \"disponible\" if self.disponible else \"prestado\"\n        return f\"{self.titulo} ({self.autor}) [{estado}]\"\n\n    def __eq__(self, otro: object) -> bool:\n        if not isinstance(otro, Libro):\n            return NotImplemented\n        return self.isbn == otro.isbn\n\n\nclass Usuario:\n    \"\"\"Una persona socia de la biblioteca.\"\"\"\n\n    def __init__(self, id: int, nombre: str, max_prestamos: int = 3) -> None:\n        if not nombre.strip():\n            raise ValueError(\"El nombre es obligatorio\")\n        self.id = id\n        self.nombre = nombre\n        self.max_prestamos = max_prestamos\n\n    def puede_prestar(self, activos: int) -> bool:\n        return activos < self.max_prestamos\n\n    def __str__(self) -> str:\n        return f\"{self.nombre} (#{self.id})\"\n\n\nana = Usuario(1, \"Ana\", max_prestamos=2)\nprint(ana, ana.puede_prestar(1), ana.puede_prestar(2))",
+   "checks": [
+    {
+     "stdin": "",
+     "test": "u = Usuario(1, \"Ana\")\nassert (u.id, u.nombre, u.max_prestamos) == (1, \"Ana\", 3), \"Usuario(id, nombre) con max_prestamos=3 por defecto\"\nassert str(u) == \"Ana (#1)\", f\"str() devuelve {str(u)!r}\"",
+     "error": null
+    },
+    {
+     "stdin": "",
+     "test": "u = Usuario(2, \"Eva\", max_prestamos=2)\nassert u.puede_prestar(0) and u.puede_prestar(1), \"Con menos préstamos que el máximo, puede\"\nassert not u.puede_prestar(2) and not u.puede_prestar(5), \"Con el máximo o más, no puede\"",
+     "error": null
+    },
+    {
+     "stdin": "",
+     "test": "for nombre in (\"\", \"   \"):\n    try:\n        Usuario(3, nombre)\n    except ValueError:\n        pass\n    else:\n        raise AssertionError(f\"Usuario(3, {nombre!r}) debe lanzar ValueError\")",
+     "error": "poo-proyecto.valida-tarde"
+    }
+   ],
+   "hint": "`puede_prestar` es una sola línea: `return activos < self.max_prestamos`.",
+   "explain": "El usuario conoce su límite, pero no cuenta sus préstamos: esa información la tiene la biblioteca y se la pasa. Cada dato está en un solo sitio.",
+   "expect": "Ana (#1) True False\n"
+  },
+  {
+   "id": "poo10-03",
+   "concept": "poo-proyecto",
+   "kind": "code",
+   "level": 2,
+   "daw": false,
+   "q": "**Fase 3 del proyecto: `Prestamo`.** `Libro` y `Usuario` ya están. Añade `Prestamo(libro, usuario, inicio)`, con `from datetime import date`:\n\n- Guarda el libro, el usuario, la fecha `inicio` y `fin = None`.\n- `activo` es una **propiedad**: `True` mientras `fin` sea `None`.\n- `cerrar(fecha)`: si ya está cerrado o la fecha es anterior al inicio, `ValueError` sin cambiar nada; si no, guarda `fin`.",
+   "starter": "from datetime import date\n\nclass Libro:\n    \"\"\"Un libro del catálogo, identificado por su ISBN.\"\"\"\n\n    def __init__(self, isbn: str, titulo: str, autor: str) -> None:\n        if not isbn.strip() or not titulo.strip():\n            raise ValueError(\"El ISBN y el título son obligatorios\")\n        self.isbn = isbn\n        self.titulo = titulo\n        self.autor = autor\n        self.disponible = True\n\n    def __str__(self) -> str:\n        estado = \"disponible\" if self.disponible else \"prestado\"\n        return f\"{self.titulo} ({self.autor}) [{estado}]\"\n\n    def __eq__(self, otro: object) -> bool:\n        if not isinstance(otro, Libro):\n            return NotImplemented\n        return self.isbn == otro.isbn\n\n\nclass Usuario:\n    \"\"\"Una persona socia de la biblioteca.\"\"\"\n\n    def __init__(self, id: int, nombre: str, max_prestamos: int = 3) -> None:\n        if not nombre.strip():\n            raise ValueError(\"El nombre es obligatorio\")\n        self.id = id\n        self.nombre = nombre\n        self.max_prestamos = max_prestamos\n\n    def puede_prestar(self, activos: int) -> bool:\n        return activos < self.max_prestamos\n\n    def __str__(self) -> str:\n        return f\"{self.nombre} (#{self.id})\"\n\n\n# Fase 3: la clase Prestamo",
+   "solution": "from datetime import date\n\nclass Libro:\n    \"\"\"Un libro del catálogo, identificado por su ISBN.\"\"\"\n\n    def __init__(self, isbn: str, titulo: str, autor: str) -> None:\n        if not isbn.strip() or not titulo.strip():\n            raise ValueError(\"El ISBN y el título son obligatorios\")\n        self.isbn = isbn\n        self.titulo = titulo\n        self.autor = autor\n        self.disponible = True\n\n    def __str__(self) -> str:\n        estado = \"disponible\" if self.disponible else \"prestado\"\n        return f\"{self.titulo} ({self.autor}) [{estado}]\"\n\n    def __eq__(self, otro: object) -> bool:\n        if not isinstance(otro, Libro):\n            return NotImplemented\n        return self.isbn == otro.isbn\n\n\nclass Usuario:\n    \"\"\"Una persona socia de la biblioteca.\"\"\"\n\n    def __init__(self, id: int, nombre: str, max_prestamos: int = 3) -> None:\n        if not nombre.strip():\n            raise ValueError(\"El nombre es obligatorio\")\n        self.id = id\n        self.nombre = nombre\n        self.max_prestamos = max_prestamos\n\n    def puede_prestar(self, activos: int) -> bool:\n        return activos < self.max_prestamos\n\n    def __str__(self) -> str:\n        return f\"{self.nombre} (#{self.id})\"\n\n\nclass Prestamo:\n    \"\"\"Un libro prestado a un usuario desde una fecha hasta que se devuelve.\"\"\"\n\n    def __init__(self, libro: Libro, usuario: Usuario, inicio: date) -> None:\n        self.libro = libro\n        self.usuario = usuario\n        self.inicio = inicio\n        self.fin: date | None = None\n\n    @property\n    def activo(self) -> bool:\n        return self.fin is None\n\n    def cerrar(self, fecha: date) -> None:\n        if not self.activo:\n            raise ValueError(\"El préstamo ya está cerrado\")\n        if fecha < self.inicio:\n            raise ValueError(\"La devolución no puede ser anterior al préstamo\")\n        self.fin = fecha\n\n\np = Prestamo(Libro(\"978-1\", \"Dune\", \"F. Herbert\"), Usuario(1, \"Ana\"), date(2026, 1, 10))\nprint(p.activo)\np.cerrar(date(2026, 1, 20))\nprint(p.activo, p.fin)",
+   "checks": [
+    {
+     "stdin": "",
+     "test": "from datetime import date\nl, u = Libro(\"1\", \"Dune\", \"X\"), Usuario(1, \"Ana\")\np = Prestamo(l, u, date(2026, 1, 10))\nassert p.libro is l and p.usuario is u, \"El préstamo guarda el mismo libro y el mismo usuario\"\nassert p.inicio == date(2026, 1, 10) and p.fin is None, \"Empieza con su fecha de inicio y sin fin\"\nassert p.activo is True, \"Un préstamo nuevo está activo\"",
+     "error": null
+    },
+    {
+     "stdin": "",
+     "test": "from datetime import date\np = Prestamo(Libro(\"1\", \"Dune\", \"X\"), Usuario(1, \"Ana\"), date(2026, 1, 10))\np.cerrar(date(2026, 1, 10))\nassert p.fin == date(2026, 1, 10) and p.activo is False, \"cerrar(fecha) guarda el fin y el préstamo deja de estar activo\"\ntry:\n    p.cerrar(date(2026, 1, 12))\nexcept ValueError:\n    pass\nelse:\n    raise AssertionError(\"Cerrar dos veces debe lanzar ValueError\")\nassert p.fin == date(2026, 1, 10), \"El segundo cierre no cambia la fecha\"",
+     "error": "poo-proyecto.estado-a-medias"
+    },
+    {
+     "stdin": "",
+     "test": "from datetime import date\np = Prestamo(Libro(\"1\", \"Dune\", \"X\"), Usuario(1, \"Ana\"), date(2026, 1, 10))\ntry:\n    p.cerrar(date(2026, 1, 9))\nexcept ValueError:\n    pass\nelse:\n    raise AssertionError(\"Una devolución anterior al inicio debe lanzar ValueError\")\nassert p.activo and p.fin is None, \"Si la fecha no vale, el préstamo sigue activo\"\np.fin = date(2026, 2, 1)\nassert p.activo is False, \"activo debe calcularse a partir de fin (una propiedad), no guardarse aparte\"",
+     "error": "poo-proyecto.dato-duplicado"
+    }
+   ],
+   "hint": "Pon `@property` encima de `def activo(self): return self.fin is None`. En `cerrar`, las dos comprobaciones van antes de `self.fin = fecha`.",
+   "explain": "`activo` se calcula a partir de `fin`, así nunca se contradicen. `cerrar` valida antes de tocar `fin`, de modo que un error no deja el préstamo a medias.",
+   "expect": "True\nFalse 2026-01-20\n"
+  },
+  {
+   "id": "poo10-04",
+   "concept": "poo-proyecto",
+   "kind": "code",
+   "level": 2,
+   "daw": false,
+   "q": "**Fase 4 del proyecto: excepciones propias.** Añade `ErrorBiblioteca(Exception)` y cinco subclases suyas, cada una con su dato y su mensaje (pásalo a `super().__init__`):\n\n| Clase | Dato | Mensaje |\n|---|---|---|\n| `LibroNoEncontrado(isbn)` | `isbn` | `No existe el libro con ISBN 978-9` |\n| `UsuarioNoEncontrado(id)` | `id` | `No existe el usuario 7` |\n| `LibroNoDisponible(titulo)` | `titulo` | `«Dune» está prestado` |\n| `PrestamoDuplicado(titulo)` | `titulo` | `Ya tienes en préstamo «Dune»` |\n| `LimiteAlcanzado(nombre)` | `nombre` | `Ana ha llegado a su límite de préstamos` |",
+   "starter": "from datetime import date\n\nclass Libro:\n    \"\"\"Un libro del catálogo, identificado por su ISBN.\"\"\"\n\n    def __init__(self, isbn: str, titulo: str, autor: str) -> None:\n        if not isbn.strip() or not titulo.strip():\n            raise ValueError(\"El ISBN y el título son obligatorios\")\n        self.isbn = isbn\n        self.titulo = titulo\n        self.autor = autor\n        self.disponible = True\n\n    def __str__(self) -> str:\n        estado = \"disponible\" if self.disponible else \"prestado\"\n        return f\"{self.titulo} ({self.autor}) [{estado}]\"\n\n    def __eq__(self, otro: object) -> bool:\n        if not isinstance(otro, Libro):\n            return NotImplemented\n        return self.isbn == otro.isbn\n\n\nclass Usuario:\n    \"\"\"Una persona socia de la biblioteca.\"\"\"\n\n    def __init__(self, id: int, nombre: str, max_prestamos: int = 3) -> None:\n        if not nombre.strip():\n            raise ValueError(\"El nombre es obligatorio\")\n        self.id = id\n        self.nombre = nombre\n        self.max_prestamos = max_prestamos\n\n    def puede_prestar(self, activos: int) -> bool:\n        return activos < self.max_prestamos\n\n    def __str__(self) -> str:\n        return f\"{self.nombre} (#{self.id})\"\n\n\nclass Prestamo:\n    \"\"\"Un libro prestado a un usuario desde una fecha hasta que se devuelve.\"\"\"\n\n    def __init__(self, libro: Libro, usuario: Usuario, inicio: date) -> None:\n        self.libro = libro\n        self.usuario = usuario\n        self.inicio = inicio\n        self.fin: date | None = None\n\n    @property\n    def activo(self) -> bool:\n        return self.fin is None\n\n    def cerrar(self, fecha: date) -> None:\n        if not self.activo:\n            raise ValueError(\"El préstamo ya está cerrado\")\n        if fecha < self.inicio:\n            raise ValueError(\"La devolución no puede ser anterior al préstamo\")\n        self.fin = fecha\n\n\n# Fase 4: ErrorBiblioteca y sus subclases",
+   "solution": "from datetime import date\n\nclass Libro:\n    \"\"\"Un libro del catálogo, identificado por su ISBN.\"\"\"\n\n    def __init__(self, isbn: str, titulo: str, autor: str) -> None:\n        if not isbn.strip() or not titulo.strip():\n            raise ValueError(\"El ISBN y el título son obligatorios\")\n        self.isbn = isbn\n        self.titulo = titulo\n        self.autor = autor\n        self.disponible = True\n\n    def __str__(self) -> str:\n        estado = \"disponible\" if self.disponible else \"prestado\"\n        return f\"{self.titulo} ({self.autor}) [{estado}]\"\n\n    def __eq__(self, otro: object) -> bool:\n        if not isinstance(otro, Libro):\n            return NotImplemented\n        return self.isbn == otro.isbn\n\n\nclass Usuario:\n    \"\"\"Una persona socia de la biblioteca.\"\"\"\n\n    def __init__(self, id: int, nombre: str, max_prestamos: int = 3) -> None:\n        if not nombre.strip():\n            raise ValueError(\"El nombre es obligatorio\")\n        self.id = id\n        self.nombre = nombre\n        self.max_prestamos = max_prestamos\n\n    def puede_prestar(self, activos: int) -> bool:\n        return activos < self.max_prestamos\n\n    def __str__(self) -> str:\n        return f\"{self.nombre} (#{self.id})\"\n\n\nclass Prestamo:\n    \"\"\"Un libro prestado a un usuario desde una fecha hasta que se devuelve.\"\"\"\n\n    def __init__(self, libro: Libro, usuario: Usuario, inicio: date) -> None:\n        self.libro = libro\n        self.usuario = usuario\n        self.inicio = inicio\n        self.fin: date | None = None\n\n    @property\n    def activo(self) -> bool:\n        return self.fin is None\n\n    def cerrar(self, fecha: date) -> None:\n        if not self.activo:\n            raise ValueError(\"El préstamo ya está cerrado\")\n        if fecha < self.inicio:\n            raise ValueError(\"La devolución no puede ser anterior al préstamo\")\n        self.fin = fecha\n\n\nclass ErrorBiblioteca(Exception):\n    \"\"\"Cualquier error de las operaciones de la biblioteca.\"\"\"\n\n\nclass LibroNoEncontrado(ErrorBiblioteca):\n    def __init__(self, isbn: str) -> None:\n        super().__init__(f\"No existe el libro con ISBN {isbn}\")\n        self.isbn = isbn\n\n\nclass UsuarioNoEncontrado(ErrorBiblioteca):\n    def __init__(self, id: int) -> None:\n        super().__init__(f\"No existe el usuario {id}\")\n        self.id = id\n\n\nclass LibroNoDisponible(ErrorBiblioteca):\n    def __init__(self, titulo: str) -> None:\n        super().__init__(f\"«{titulo}» está prestado\")\n        self.titulo = titulo\n\n\nclass PrestamoDuplicado(ErrorBiblioteca):\n    def __init__(self, titulo: str) -> None:\n        super().__init__(f\"Ya tienes en préstamo «{titulo}»\")\n        self.titulo = titulo\n\n\nclass LimiteAlcanzado(ErrorBiblioteca):\n    def __init__(self, nombre: str) -> None:\n        super().__init__(f\"{nombre} ha llegado a su límite de préstamos\")\n        self.nombre = nombre\n\n\ntry:\n    raise LibroNoEncontrado(\"978-9\")\nexcept ErrorBiblioteca as error:\n    print(type(error).__name__, \"-\", error)",
+   "checks": [
+    {
+     "stdin": "",
+     "test": "for clase in (LibroNoEncontrado, UsuarioNoEncontrado, LibroNoDisponible, PrestamoDuplicado, LimiteAlcanzado):\n    assert issubclass(clase, ErrorBiblioteca), f\"{clase.__name__} debe heredar de ErrorBiblioteca\"\nassert issubclass(ErrorBiblioteca, Exception) and ErrorBiblioteca is not Exception, \"ErrorBiblioteca hereda de Exception\"",
+     "error": "poo-proyecto.excepcion-sin-jerarquia"
+    },
+    {
+     "stdin": "",
+     "test": "e = LibroNoEncontrado(\"978-9\")\nassert str(e) == \"No existe el libro con ISBN 978-9\" and e.isbn == \"978-9\", f\"Mensaje: {e}\"\ne = UsuarioNoEncontrado(7)\nassert str(e) == \"No existe el usuario 7\" and e.id == 7, f\"Mensaje: {e}\"",
+     "error": null
+    },
+    {
+     "stdin": "",
+     "test": "e = LibroNoDisponible(\"Dune\")\nassert str(e) == \"«Dune» está prestado\" and e.titulo == \"Dune\", f\"Mensaje: {e}\"\ne = PrestamoDuplicado(\"Dune\")\nassert str(e) == \"Ya tienes en préstamo «Dune»\", f\"Mensaje: {e}\"\ne = LimiteAlcanzado(\"Ana\")\nassert str(e) == \"Ana ha llegado a su límite de préstamos\" and e.nombre == \"Ana\", f\"Mensaje: {e}\"\ntry:\n    raise LimiteAlcanzado(\"Ana\")\nexcept ErrorBiblioteca:\n    pass",
+     "error": null
+    }
+   ],
+   "hint": "Cada subclase: `def __init__(self, isbn): super().__init__(f\"No existe el libro con ISBN {isbn}\"); self.isbn = isbn`.",
+   "explain": "Con una base común, quien use la biblioteca puede capturar un error concreto o todos con `except ErrorBiblioteca`. Cada excepción guarda el dato que falló, además del mensaje.",
+   "expect": "LibroNoEncontrado - No existe el libro con ISBN 978-9\n"
+  },
+  {
+   "id": "poo10-05",
+   "concept": "poo-proyecto",
+   "kind": "code",
+   "level": 2,
+   "daw": false,
+   "q": "**Fase 5 del proyecto: registro y catálogo.** Las piezas anteriores ya están. Crea `Biblioteca(nombre)`, que guarda los libros por ISBN y los usuarios por id en diccionarios, y una lista vacía de préstamos:\n\n- `registrar_libro(libro)` y `registrar_usuario(usuario)`: un ISBN o un id ya registrado da `ValueError`.\n- `catalogo(solo_disponibles=False)`: la lista de libros **ordenada por título**; con `solo_disponibles=True`, sin los prestados.",
+   "starter": "from datetime import date\n\nclass Libro:\n    \"\"\"Un libro del catálogo, identificado por su ISBN.\"\"\"\n\n    def __init__(self, isbn: str, titulo: str, autor: str) -> None:\n        if not isbn.strip() or not titulo.strip():\n            raise ValueError(\"El ISBN y el título son obligatorios\")\n        self.isbn = isbn\n        self.titulo = titulo\n        self.autor = autor\n        self.disponible = True\n\n    def __str__(self) -> str:\n        estado = \"disponible\" if self.disponible else \"prestado\"\n        return f\"{self.titulo} ({self.autor}) [{estado}]\"\n\n    def __eq__(self, otro: object) -> bool:\n        if not isinstance(otro, Libro):\n            return NotImplemented\n        return self.isbn == otro.isbn\n\n\nclass Usuario:\n    \"\"\"Una persona socia de la biblioteca.\"\"\"\n\n    def __init__(self, id: int, nombre: str, max_prestamos: int = 3) -> None:\n        if not nombre.strip():\n            raise ValueError(\"El nombre es obligatorio\")\n        self.id = id\n        self.nombre = nombre\n        self.max_prestamos = max_prestamos\n\n    def puede_prestar(self, activos: int) -> bool:\n        return activos < self.max_prestamos\n\n    def __str__(self) -> str:\n        return f\"{self.nombre} (#{self.id})\"\n\n\nclass Prestamo:\n    \"\"\"Un libro prestado a un usuario desde una fecha hasta que se devuelve.\"\"\"\n\n    def __init__(self, libro: Libro, usuario: Usuario, inicio: date) -> None:\n        self.libro = libro\n        self.usuario = usuario\n        self.inicio = inicio\n        self.fin: date | None = None\n\n    @property\n    def activo(self) -> bool:\n        return self.fin is None\n\n    def cerrar(self, fecha: date) -> None:\n        if not self.activo:\n            raise ValueError(\"El préstamo ya está cerrado\")\n        if fecha < self.inicio:\n            raise ValueError(\"La devolución no puede ser anterior al préstamo\")\n        self.fin = fecha\n\n\nclass ErrorBiblioteca(Exception):\n    \"\"\"Cualquier error de las operaciones de la biblioteca.\"\"\"\n\n\nclass LibroNoEncontrado(ErrorBiblioteca):\n    def __init__(self, isbn: str) -> None:\n        super().__init__(f\"No existe el libro con ISBN {isbn}\")\n        self.isbn = isbn\n\n\nclass UsuarioNoEncontrado(ErrorBiblioteca):\n    def __init__(self, id: int) -> None:\n        super().__init__(f\"No existe el usuario {id}\")\n        self.id = id\n\n\nclass LibroNoDisponible(ErrorBiblioteca):\n    def __init__(self, titulo: str) -> None:\n        super().__init__(f\"«{titulo}» está prestado\")\n        self.titulo = titulo\n\n\nclass PrestamoDuplicado(ErrorBiblioteca):\n    def __init__(self, titulo: str) -> None:\n        super().__init__(f\"Ya tienes en préstamo «{titulo}»\")\n        self.titulo = titulo\n\n\nclass LimiteAlcanzado(ErrorBiblioteca):\n    def __init__(self, nombre: str) -> None:\n        super().__init__(f\"{nombre} ha llegado a su límite de préstamos\")\n        self.nombre = nombre\n\n\n# Fase 5: la clase Biblioteca con el registro y el catálogo",
+   "solution": "from datetime import date\n\nclass Libro:\n    \"\"\"Un libro del catálogo, identificado por su ISBN.\"\"\"\n\n    def __init__(self, isbn: str, titulo: str, autor: str) -> None:\n        if not isbn.strip() or not titulo.strip():\n            raise ValueError(\"El ISBN y el título son obligatorios\")\n        self.isbn = isbn\n        self.titulo = titulo\n        self.autor = autor\n        self.disponible = True\n\n    def __str__(self) -> str:\n        estado = \"disponible\" if self.disponible else \"prestado\"\n        return f\"{self.titulo} ({self.autor}) [{estado}]\"\n\n    def __eq__(self, otro: object) -> bool:\n        if not isinstance(otro, Libro):\n            return NotImplemented\n        return self.isbn == otro.isbn\n\n\nclass Usuario:\n    \"\"\"Una persona socia de la biblioteca.\"\"\"\n\n    def __init__(self, id: int, nombre: str, max_prestamos: int = 3) -> None:\n        if not nombre.strip():\n            raise ValueError(\"El nombre es obligatorio\")\n        self.id = id\n        self.nombre = nombre\n        self.max_prestamos = max_prestamos\n\n    def puede_prestar(self, activos: int) -> bool:\n        return activos < self.max_prestamos\n\n    def __str__(self) -> str:\n        return f\"{self.nombre} (#{self.id})\"\n\n\nclass Prestamo:\n    \"\"\"Un libro prestado a un usuario desde una fecha hasta que se devuelve.\"\"\"\n\n    def __init__(self, libro: Libro, usuario: Usuario, inicio: date) -> None:\n        self.libro = libro\n        self.usuario = usuario\n        self.inicio = inicio\n        self.fin: date | None = None\n\n    @property\n    def activo(self) -> bool:\n        return self.fin is None\n\n    def cerrar(self, fecha: date) -> None:\n        if not self.activo:\n            raise ValueError(\"El préstamo ya está cerrado\")\n        if fecha < self.inicio:\n            raise ValueError(\"La devolución no puede ser anterior al préstamo\")\n        self.fin = fecha\n\n\nclass ErrorBiblioteca(Exception):\n    \"\"\"Cualquier error de las operaciones de la biblioteca.\"\"\"\n\n\nclass LibroNoEncontrado(ErrorBiblioteca):\n    def __init__(self, isbn: str) -> None:\n        super().__init__(f\"No existe el libro con ISBN {isbn}\")\n        self.isbn = isbn\n\n\nclass UsuarioNoEncontrado(ErrorBiblioteca):\n    def __init__(self, id: int) -> None:\n        super().__init__(f\"No existe el usuario {id}\")\n        self.id = id\n\n\nclass LibroNoDisponible(ErrorBiblioteca):\n    def __init__(self, titulo: str) -> None:\n        super().__init__(f\"«{titulo}» está prestado\")\n        self.titulo = titulo\n\n\nclass PrestamoDuplicado(ErrorBiblioteca):\n    def __init__(self, titulo: str) -> None:\n        super().__init__(f\"Ya tienes en préstamo «{titulo}»\")\n        self.titulo = titulo\n\n\nclass LimiteAlcanzado(ErrorBiblioteca):\n    def __init__(self, nombre: str) -> None:\n        super().__init__(f\"{nombre} ha llegado a su límite de préstamos\")\n        self.nombre = nombre\n\n\nclass Biblioteca:\n    \"\"\"Guarda libros y usuarios, y gestiona los préstamos.\"\"\"\n\n    def __init__(self, nombre: str) -> None:\n        self.nombre = nombre\n        self._libros: dict[str, Libro] = {}\n        self._usuarios: dict[int, Usuario] = {}\n        self._prestamos: list[Prestamo] = []\n\n    def registrar_libro(self, libro: Libro) -> None:\n        if libro.isbn in self._libros:\n            raise ValueError(f\"Ya hay un libro con ISBN {libro.isbn}\")\n        self._libros[libro.isbn] = libro\n\n    def registrar_usuario(self, usuario: Usuario) -> None:\n        if usuario.id in self._usuarios:\n            raise ValueError(f\"Ya hay un usuario con id {usuario.id}\")\n        self._usuarios[usuario.id] = usuario\n\n    def catalogo(self, solo_disponibles: bool = False) -> list[Libro]:\n        libros = [l for l in self._libros.values() if l.disponible or not solo_disponibles]\n        return sorted(libros, key=lambda l: l.titulo)\n\n\nbib = Biblioteca(\"IES\")\nbib.registrar_libro(Libro(\"2\", \"Neuromante\", \"W. Gibson\"))\nbib.registrar_libro(Libro(\"1\", \"Dune\", \"F. Herbert\"))\nprint([l.titulo for l in bib.catalogo()])",
+   "checks": [
+    {
+     "stdin": "",
+     "test": "b = Biblioteca(\"IES\")\nassert b.nombre == \"IES\" and b.catalogo() == [], \"Una biblioteca nueva no tiene libros\"\nl = Libro(\"1\", \"Dune\", \"X\")\nb.registrar_libro(l)\nassert b.catalogo() == [l] and b.catalogo()[0] is l, \"registrar_libro guarda el mismo libro\"",
+     "error": null
+    },
+    {
+     "stdin": "",
+     "test": "b = Biblioteca(\"IES\")\nb.registrar_libro(Libro(\"1\", \"Dune\", \"X\"))\nb.registrar_usuario(Usuario(1, \"Ana\"))\nfor accion in (lambda: b.registrar_libro(Libro(\"1\", \"Otro\", \"Y\")), lambda: b.registrar_usuario(Usuario(1, \"Eva\"))):\n    try:\n        accion()\n    except ValueError:\n        pass\n    else:\n        raise AssertionError(\"Un ISBN o un id ya registrado debe lanzar ValueError\")\nassert [l.titulo for l in b.catalogo()] == [\"Dune\"], \"El libro repetido no se registra\"",
+     "error": null
+    },
+    {
+     "stdin": "",
+     "test": "b = Biblioteca(\"IES\")\nfor isbn, titulo in ((\"3\", \"Neuromante\"), (\"1\", \"Dune\"), (\"2\", \"Fundación\")):\n    b.registrar_libro(Libro(isbn, titulo, \"X\"))\nassert [l.titulo for l in b.catalogo()] == [\"Dune\", \"Fundación\", \"Neuromante\"], \"El catálogo sale ordenado por título\"\nb.catalogo()[0].disponible = False\nassert [l.titulo for l in b.catalogo(solo_disponibles=True)] == [\"Fundación\", \"Neuromante\"], \"catalogo(solo_disponibles=True) quita los prestados\"\nassert len(b.catalogo()) == 3, \"Sin el parámetro, salen todos\"",
+     "error": null
+    }
+   ],
+   "hint": "Ordena con `sorted(libros, key=lambda l: l.titulo)`.",
+   "explain": "La biblioteca agrega libros y usuarios creados fuera. Guardarlos en diccionarios por su ISBN o id hace que encontrarlos y detectar repetidos sea inmediato.",
+   "expect": "['Dune', 'Neuromante']\n"
+  },
+  {
+   "id": "poo10-06",
+   "concept": "poo-proyecto",
+   "kind": "code",
+   "level": 3,
+   "daw": false,
+   "q": "**Fase 6 del proyecto (ejercicio principal): préstamos.** Completa la `Biblioteca` de la fase 5 con:\n\n- `prestamos_activos(usuario_id=None)`: los préstamos activos, todos o solo los de ese usuario.\n- `prestar(isbn, usuario_id, fecha)`: crea, guarda y devuelve el `Prestamo` y marca el libro como no disponible. Errores, en este orden: `LibroNoEncontrado`, `UsuarioNoEncontrado`, `PrestamoDuplicado` (ya lo tiene ese usuario), `LibroNoDisponible` (lo tiene otra persona) y `LimiteAlcanzado`.\n- `devolver(isbn, fecha)`: cierra el préstamo activo de ese libro, lo vuelve a poner disponible y devuelve el préstamo. Si no está prestado, `ErrorBiblioteca`.\n\nNingún error puede dejar el estado a medias.",
+   "starter": "from datetime import date\n\nclass Libro:\n    \"\"\"Un libro del catálogo, identificado por su ISBN.\"\"\"\n\n    def __init__(self, isbn: str, titulo: str, autor: str) -> None:\n        if not isbn.strip() or not titulo.strip():\n            raise ValueError(\"El ISBN y el título son obligatorios\")\n        self.isbn = isbn\n        self.titulo = titulo\n        self.autor = autor\n        self.disponible = True\n\n    def __str__(self) -> str:\n        estado = \"disponible\" if self.disponible else \"prestado\"\n        return f\"{self.titulo} ({self.autor}) [{estado}]\"\n\n    def __eq__(self, otro: object) -> bool:\n        if not isinstance(otro, Libro):\n            return NotImplemented\n        return self.isbn == otro.isbn\n\n\nclass Usuario:\n    \"\"\"Una persona socia de la biblioteca.\"\"\"\n\n    def __init__(self, id: int, nombre: str, max_prestamos: int = 3) -> None:\n        if not nombre.strip():\n            raise ValueError(\"El nombre es obligatorio\")\n        self.id = id\n        self.nombre = nombre\n        self.max_prestamos = max_prestamos\n\n    def puede_prestar(self, activos: int) -> bool:\n        return activos < self.max_prestamos\n\n    def __str__(self) -> str:\n        return f\"{self.nombre} (#{self.id})\"\n\n\nclass Prestamo:\n    \"\"\"Un libro prestado a un usuario desde una fecha hasta que se devuelve.\"\"\"\n\n    def __init__(self, libro: Libro, usuario: Usuario, inicio: date) -> None:\n        self.libro = libro\n        self.usuario = usuario\n        self.inicio = inicio\n        self.fin: date | None = None\n\n    @property\n    def activo(self) -> bool:\n        return self.fin is None\n\n    def cerrar(self, fecha: date) -> None:\n        if not self.activo:\n            raise ValueError(\"El préstamo ya está cerrado\")\n        if fecha < self.inicio:\n            raise ValueError(\"La devolución no puede ser anterior al préstamo\")\n        self.fin = fecha\n\n\nclass ErrorBiblioteca(Exception):\n    \"\"\"Cualquier error de las operaciones de la biblioteca.\"\"\"\n\n\nclass LibroNoEncontrado(ErrorBiblioteca):\n    def __init__(self, isbn: str) -> None:\n        super().__init__(f\"No existe el libro con ISBN {isbn}\")\n        self.isbn = isbn\n\n\nclass UsuarioNoEncontrado(ErrorBiblioteca):\n    def __init__(self, id: int) -> None:\n        super().__init__(f\"No existe el usuario {id}\")\n        self.id = id\n\n\nclass LibroNoDisponible(ErrorBiblioteca):\n    def __init__(self, titulo: str) -> None:\n        super().__init__(f\"«{titulo}» está prestado\")\n        self.titulo = titulo\n\n\nclass PrestamoDuplicado(ErrorBiblioteca):\n    def __init__(self, titulo: str) -> None:\n        super().__init__(f\"Ya tienes en préstamo «{titulo}»\")\n        self.titulo = titulo\n\n\nclass LimiteAlcanzado(ErrorBiblioteca):\n    def __init__(self, nombre: str) -> None:\n        super().__init__(f\"{nombre} ha llegado a su límite de préstamos\")\n        self.nombre = nombre\n\n\nclass Biblioteca:\n    \"\"\"Guarda libros y usuarios, y gestiona los préstamos.\"\"\"\n\n    def __init__(self, nombre: str) -> None:\n        self.nombre = nombre\n        self._libros: dict[str, Libro] = {}\n        self._usuarios: dict[int, Usuario] = {}\n        self._prestamos: list[Prestamo] = []\n\n    def registrar_libro(self, libro: Libro) -> None:\n        if libro.isbn in self._libros:\n            raise ValueError(f\"Ya hay un libro con ISBN {libro.isbn}\")\n        self._libros[libro.isbn] = libro\n\n    def registrar_usuario(self, usuario: Usuario) -> None:\n        if usuario.id in self._usuarios:\n            raise ValueError(f\"Ya hay un usuario con id {usuario.id}\")\n        self._usuarios[usuario.id] = usuario\n\n    def catalogo(self, solo_disponibles: bool = False) -> list[Libro]:\n        libros = [l for l in self._libros.values() if l.disponible or not solo_disponibles]\n        return sorted(libros, key=lambda l: l.titulo)\n\n\n# Fase 6: añade a Biblioteca prestamos_activos, prestar y devolver",
+   "solution": "from datetime import date\n\nclass Libro:\n    \"\"\"Un libro del catálogo, identificado por su ISBN.\"\"\"\n\n    def __init__(self, isbn: str, titulo: str, autor: str) -> None:\n        if not isbn.strip() or not titulo.strip():\n            raise ValueError(\"El ISBN y el título son obligatorios\")\n        self.isbn = isbn\n        self.titulo = titulo\n        self.autor = autor\n        self.disponible = True\n\n    def __str__(self) -> str:\n        estado = \"disponible\" if self.disponible else \"prestado\"\n        return f\"{self.titulo} ({self.autor}) [{estado}]\"\n\n    def __eq__(self, otro: object) -> bool:\n        if not isinstance(otro, Libro):\n            return NotImplemented\n        return self.isbn == otro.isbn\n\n\nclass Usuario:\n    \"\"\"Una persona socia de la biblioteca.\"\"\"\n\n    def __init__(self, id: int, nombre: str, max_prestamos: int = 3) -> None:\n        if not nombre.strip():\n            raise ValueError(\"El nombre es obligatorio\")\n        self.id = id\n        self.nombre = nombre\n        self.max_prestamos = max_prestamos\n\n    def puede_prestar(self, activos: int) -> bool:\n        return activos < self.max_prestamos\n\n    def __str__(self) -> str:\n        return f\"{self.nombre} (#{self.id})\"\n\n\nclass Prestamo:\n    \"\"\"Un libro prestado a un usuario desde una fecha hasta que se devuelve.\"\"\"\n\n    def __init__(self, libro: Libro, usuario: Usuario, inicio: date) -> None:\n        self.libro = libro\n        self.usuario = usuario\n        self.inicio = inicio\n        self.fin: date | None = None\n\n    @property\n    def activo(self) -> bool:\n        return self.fin is None\n\n    def cerrar(self, fecha: date) -> None:\n        if not self.activo:\n            raise ValueError(\"El préstamo ya está cerrado\")\n        if fecha < self.inicio:\n            raise ValueError(\"La devolución no puede ser anterior al préstamo\")\n        self.fin = fecha\n\n\nclass ErrorBiblioteca(Exception):\n    \"\"\"Cualquier error de las operaciones de la biblioteca.\"\"\"\n\n\nclass LibroNoEncontrado(ErrorBiblioteca):\n    def __init__(self, isbn: str) -> None:\n        super().__init__(f\"No existe el libro con ISBN {isbn}\")\n        self.isbn = isbn\n\n\nclass UsuarioNoEncontrado(ErrorBiblioteca):\n    def __init__(self, id: int) -> None:\n        super().__init__(f\"No existe el usuario {id}\")\n        self.id = id\n\n\nclass LibroNoDisponible(ErrorBiblioteca):\n    def __init__(self, titulo: str) -> None:\n        super().__init__(f\"«{titulo}» está prestado\")\n        self.titulo = titulo\n\n\nclass PrestamoDuplicado(ErrorBiblioteca):\n    def __init__(self, titulo: str) -> None:\n        super().__init__(f\"Ya tienes en préstamo «{titulo}»\")\n        self.titulo = titulo\n\n\nclass LimiteAlcanzado(ErrorBiblioteca):\n    def __init__(self, nombre: str) -> None:\n        super().__init__(f\"{nombre} ha llegado a su límite de préstamos\")\n        self.nombre = nombre\n\n\nclass Biblioteca:\n    \"\"\"Guarda libros y usuarios, y gestiona los préstamos.\"\"\"\n\n    def __init__(self, nombre: str) -> None:\n        self.nombre = nombre\n        self._libros: dict[str, Libro] = {}\n        self._usuarios: dict[int, Usuario] = {}\n        self._prestamos: list[Prestamo] = []\n\n    def registrar_libro(self, libro: Libro) -> None:\n        if libro.isbn in self._libros:\n            raise ValueError(f\"Ya hay un libro con ISBN {libro.isbn}\")\n        self._libros[libro.isbn] = libro\n\n    def registrar_usuario(self, usuario: Usuario) -> None:\n        if usuario.id in self._usuarios:\n            raise ValueError(f\"Ya hay un usuario con id {usuario.id}\")\n        self._usuarios[usuario.id] = usuario\n\n    def catalogo(self, solo_disponibles: bool = False) -> list[Libro]:\n        libros = [l for l in self._libros.values() if l.disponible or not solo_disponibles]\n        return sorted(libros, key=lambda l: l.titulo)\n\n    def _libro(self, isbn: str) -> Libro:\n        if isbn not in self._libros:\n            raise LibroNoEncontrado(isbn)\n        return self._libros[isbn]\n\n    def _usuario(self, id: int) -> Usuario:\n        if id not in self._usuarios:\n            raise UsuarioNoEncontrado(id)\n        return self._usuarios[id]\n\n    def prestamos_activos(self, usuario_id: int | None = None) -> list[Prestamo]:\n        return [\n            p\n            for p in self._prestamos\n            if p.activo and (usuario_id is None or p.usuario.id == usuario_id)\n        ]\n\n    def prestar(self, isbn: str, usuario_id: int, fecha: date) -> Prestamo:\n        libro = self._libro(isbn)\n        usuario = self._usuario(usuario_id)\n        activos = self.prestamos_activos(usuario_id)\n        if any(p.libro == libro for p in activos):\n            raise PrestamoDuplicado(libro.titulo)\n        if not libro.disponible:\n            raise LibroNoDisponible(libro.titulo)\n        if not usuario.puede_prestar(len(activos)):\n            raise LimiteAlcanzado(usuario.nombre)\n        prestamo = Prestamo(libro, usuario, fecha)\n        libro.disponible = False\n        self._prestamos.append(prestamo)\n        return prestamo\n\n    def devolver(self, isbn: str, fecha: date) -> Prestamo:\n        libro = self._libro(isbn)\n        for prestamo in self.prestamos_activos():\n            if prestamo.libro == libro:\n                prestamo.cerrar(fecha)\n                libro.disponible = True\n                return prestamo\n        raise ErrorBiblioteca(f\"«{libro.titulo}» no está prestado\")\n\n\nbib = Biblioteca(\"IES\")\nbib.registrar_libro(Libro(\"1\", \"Dune\", \"F. Herbert\"))\nbib.registrar_usuario(Usuario(7, \"Ana\"))\nbib.prestar(\"1\", 7, date(2026, 1, 10))\nprint([str(l) for l in bib.catalogo()])\ntry:\n    bib.prestar(\"1\", 7, date(2026, 1, 11))\nexcept ErrorBiblioteca as error:\n    print(error)\nbib.devolver(\"1\", date(2026, 1, 20))\nprint(len(bib.prestamos_activos()))",
+   "checks": [
+    {
+     "stdin": "",
+     "test": "from datetime import date\nb = Biblioteca(\"IES\")\nfor isbn, titulo in ((\"1\", \"Dune\"), (\"2\", \"Fundación\"), (\"3\", \"Neuromante\")):\n    b.registrar_libro(Libro(isbn, titulo, \"X\"))\nb.registrar_usuario(Usuario(7, \"Ana\", max_prestamos=2))\nb.registrar_usuario(Usuario(8, \"Luis\"))\nhoy = date(2026, 1, 10)\np = b.prestar(\"1\", 7, hoy)\nassert isinstance(p, Prestamo) and p.libro.isbn == \"1\" and p.usuario.id == 7 and p.inicio == hoy, \"prestar() crea y devuelve el Prestamo\"\nassert p.libro.disponible is False, \"El libro prestado deja de estar disponible\"\nassert b.prestamos_activos() == [p] and b.prestamos_activos(7) == [p] and b.prestamos_activos(8) == [], \"prestamos_activos() con y sin usuario\"",
+     "error": null
+    },
+    {
+     "stdin": "",
+     "test": "from datetime import date\nb = Biblioteca(\"IES\")\nfor isbn, titulo in ((\"1\", \"Dune\"), (\"2\", \"Fundación\"), (\"3\", \"Neuromante\")):\n    b.registrar_libro(Libro(isbn, titulo, \"X\"))\nb.registrar_usuario(Usuario(7, \"Ana\", max_prestamos=2))\nb.registrar_usuario(Usuario(8, \"Luis\"))\nhoy = date(2026, 1, 10)\ntry:\n    b.prestar(\"9\", 7, hoy)\nexcept LibroNoEncontrado:\n    pass\nelse:\n    raise AssertionError(\"Un ISBN que no existe debe lanzar LibroNoEncontrado\")\ntry:\n    b.prestar(\"1\", 99, hoy)\nexcept UsuarioNoEncontrado:\n    pass\nelse:\n    raise AssertionError(\"Un usuario que no existe debe lanzar UsuarioNoEncontrado\")\ntry:\n    b.devolver(\"9\", hoy)\nexcept LibroNoEncontrado:\n    pass\nelse:\n    raise AssertionError(\"Devolver un ISBN que no existe debe lanzar LibroNoEncontrado\")\nassert b.prestamos_activos() == [], \"Los errores no crean préstamos\"",
+     "error": "poo-proyecto.excepcion-generica"
+    },
+    {
+     "stdin": "",
+     "test": "from datetime import date\nb = Biblioteca(\"IES\")\nfor isbn, titulo in ((\"1\", \"Dune\"), (\"2\", \"Fundación\"), (\"3\", \"Neuromante\")):\n    b.registrar_libro(Libro(isbn, titulo, \"X\"))\nb.registrar_usuario(Usuario(7, \"Ana\", max_prestamos=2))\nb.registrar_usuario(Usuario(8, \"Luis\"))\nhoy = date(2026, 1, 10)\nb.prestar(\"1\", 7, hoy)\ntry:\n    b.prestar(\"1\", 7, hoy)\nexcept PrestamoDuplicado:\n    pass\nelse:\n    raise AssertionError(\"Pedir otra vez un libro que ya tienes debe lanzar PrestamoDuplicado\")\ntry:\n    b.prestar(\"1\", 8, hoy)\nexcept LibroNoDisponible:\n    pass\nelse:\n    raise AssertionError(\"Un libro prestado a otra persona debe lanzar LibroNoDisponible\")\nassert len(b.prestamos_activos()) == 1, \"Un libro no se puede prestar dos veces\"",
+     "error": null
+    },
+    {
+     "stdin": "",
+     "test": "from datetime import date\nb = Biblioteca(\"IES\")\nfor isbn, titulo in ((\"1\", \"Dune\"), (\"2\", \"Fundación\"), (\"3\", \"Neuromante\")):\n    b.registrar_libro(Libro(isbn, titulo, \"X\"))\nb.registrar_usuario(Usuario(7, \"Ana\", max_prestamos=2))\nb.registrar_usuario(Usuario(8, \"Luis\"))\nhoy = date(2026, 1, 10)\nb.prestar(\"1\", 7, hoy)\nb.prestar(\"2\", 7, hoy)\ntry:\n    b.prestar(\"3\", 7, hoy)\nexcept LimiteAlcanzado:\n    pass\nelse:\n    raise AssertionError(\"Con su máximo de préstamos, el usuario no puede pedir más: LimiteAlcanzado\")\ntercero = [l for l in b.catalogo() if l.isbn == \"3\"][0]\nassert tercero.disponible, \"Si se supera el límite, el libro sigue disponible (sin estado a medias)\"\nassert len(b.prestamos_activos(7)) == 2, \"No se crea el tercer préstamo\"",
+     "error": "poo-proyecto.estado-a-medias"
+    },
+    {
+     "stdin": "",
+     "test": "from datetime import date\nb = Biblioteca(\"IES\")\nfor isbn, titulo in ((\"1\", \"Dune\"), (\"2\", \"Fundación\"), (\"3\", \"Neuromante\")):\n    b.registrar_libro(Libro(isbn, titulo, \"X\"))\nb.registrar_usuario(Usuario(7, \"Ana\", max_prestamos=2))\nb.registrar_usuario(Usuario(8, \"Luis\"))\nhoy = date(2026, 1, 10)\np = b.prestar(\"1\", 7, hoy)\ndevuelto = b.devolver(\"1\", date(2026, 1, 20))\nassert devuelto is p and p.fin == date(2026, 1, 20) and not p.activo, \"devolver() cierra y devuelve el préstamo\"\nassert p.libro.disponible and b.prestamos_activos() == [], \"El libro vuelve a estar disponible\"\ntry:\n    b.devolver(\"1\", date(2026, 1, 21))\nexcept ErrorBiblioteca:\n    pass\nelse:\n    raise AssertionError(\"Devolver un libro que no está prestado debe lanzar ErrorBiblioteca\")\nb.prestar(\"1\", 8, date(2026, 1, 21))\ntry:\n    b.devolver(\"1\", date(2026, 1, 1))\nexcept ValueError:\n    pass\nelse:\n    raise AssertionError(\"Una devolución anterior al préstamo debe lanzar ValueError\")\nassert not [l for l in b.catalogo() if l.isbn == \"1\"][0].disponible and len(b.prestamos_activos()) == 1, \"Si la fecha no vale, el libro sigue prestado\"\nassert [l.titulo for l in b.catalogo(solo_disponibles=True)] == [\"Fundación\", \"Neuromante\"], \"El catálogo de disponibles quita el prestado\"",
+     "error": "poo-proyecto.estado-a-medias"
+    }
+   ],
+   "hint": "Escribe dos métodos de ayuda, `_libro(isbn)` y `_usuario(id)`, que lanzan `LibroNoEncontrado` y `UsuarioNoEncontrado`. En `devolver`, cierra el préstamo **antes** de poner `disponible = True`.",
+   "explain": "`prestar` comprueba todas las reglas antes de cambiar nada: si una falla, ni se crea el préstamo ni cambia el libro. `devolver` deja que `Prestamo.cerrar` valide la fecha antes de devolver el libro a la estantería. Cada caso de error tiene su excepción, que quien use la biblioteca puede capturar por separado.",
+   "expect": "['Dune (F. Herbert) [prestado]']\nYa tienes en préstamo «Dune»\n0\n"
+  },
+  {
+   "id": "poo10-07",
+   "concept": "poo-proyecto",
+   "kind": "choice",
+   "level": 1,
+   "daw": false,
+   "q": "En el proyecto, los libros se crean fuera y se registran en la biblioteca; si la biblioteca desapareciera, los libros seguirían existiendo. ¿Qué relación hay entre `Biblioteca` y `Libro`?",
+   "code": null,
+   "options": [
+    {
+     "text": "Agregación",
+     "error": null
+    },
+    {
+     "text": "Composición",
+     "error": "poo-composicion.relacion-es-sintaxis",
+     "why": "En la composición el todo crea sus partes; los libros se crean fuera."
+    },
+    {
+     "text": "Herencia",
+     "error": "poo-composicion.herencia-por-tiene",
+     "why": "Una biblioteca no «es un» libro: lo guarda."
+    },
+    {
+     "text": "Ninguna: no están relacionadas",
+     "error": null,
+     "why": "La biblioteca guarda los libros en un atributo: sí hay relación."
+    }
+   ],
+   "answer": 0,
+   "explain": "Las partes existen por su cuenta y el todo solo las agrupa: es una agregación. Los préstamos, en cambio, los crea la biblioteca (composición).",
+   "codeOptions": false,
+   "bank": true,
+   "qtype": "diseno"
+  },
+  {
+   "id": "poo10-08",
+   "concept": "poo-proyecto",
+   "kind": "choice",
+   "level": 1,
+   "daw": false,
+   "q": "¿Por qué `Prestamo` es una clase propia en vez de guardar en cada libro el nombre de quien lo tiene?",
+   "code": null,
+   "options": [
+    {
+     "text": "Porque un préstamo tiene sus propios datos y reglas (fechas, si sigue activo, cerrar) y relaciona un libro con un usuario",
+     "error": null
+    },
+    {
+     "text": "Porque Python obliga a tener al menos cuatro clases en un programa",
+     "error": null,
+     "why": "Python no obliga a ningún número de clases: es una decisión de diseño."
+    },
+    {
+     "text": "Para que el programa vaya más rápido",
+     "error": null,
+     "why": "No cambia la velocidad: organiza los datos y las reglas."
+    },
+    {
+     "text": "Porque así `Libro` puede heredar de `Prestamo`",
+     "error": "poo-composicion.herencia-por-tiene",
+     "why": "Un libro no «es un» préstamo; el préstamo apunta al libro."
+    }
+   ],
+   "answer": 0,
+   "explain": "Si el libro guardara quién lo tiene, se perderían las fechas y el historial, y el libro tendría una responsabilidad que no es suya.",
+   "codeOptions": false,
+   "bank": true,
+   "qtype": "teoria"
+  },
+  {
+   "id": "poo10-09",
+   "concept": "poo-proyecto",
+   "kind": "choice",
+   "level": 2,
+   "daw": false,
+   "q": "¿Quién debería crear los objetos `Prestamo`?",
+   "code": null,
+   "options": [
+    {
+     "text": "La `Biblioteca`, en su método `prestar`, después de comprobar las reglas",
+     "error": null
+    },
+    {
+     "text": "El programa principal, que luego se los pasa a la biblioteca",
+     "error": null,
+     "why": "Así cualquiera podría crear préstamos sin pasar por las comprobaciones de la biblioteca."
+    },
+    {
+     "text": "El `Libro`, al crearse",
+     "error": null,
+     "why": "Un libro recién registrado no está prestado a nadie."
+    },
+    {
+     "text": "El `Usuario`, en `puede_prestar`",
+     "error": null,
+     "why": "`puede_prestar` solo responde sí o no; no sabe si el libro está disponible."
+    }
+   ],
+   "answer": 0,
+   "explain": "La biblioteca compone los préstamos: los crea ella cuando todo está en regla, así ningún préstamo existe sin haber pasado por sus comprobaciones.",
+   "codeOptions": false,
+   "bank": true,
+   "qtype": "diseno"
+  },
+  {
+   "id": "poo10-10",
+   "concept": "poo-proyecto",
+   "kind": "output",
+   "level": 2,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "class Libro:\n    def __init__(self, isbn, titulo):\n        self.isbn = isbn\n        self.titulo = titulo\n\n    def __eq__(self, otro):\n        if not isinstance(otro, Libro):\n            return NotImplemented\n        return self.isbn == otro.isbn\n\na = Libro(\"978-1\", \"Dune\")\nb = Libro(\"978-1\", \"Duna\")\nprint(a == b, a is b, a in [Libro(\"978-2\", \"Dune\")])",
+   "stdin": "",
+   "expect": "True False False",
+   "traps": {
+    "False False False": "poo-metodos-especiales.eq-identidad",
+    "True False True": null
+   },
+   "explain": "`==` compara el ISBN, que coincide. Pero son dos objetos (`is` da `False`), y `in` también usa `__eq__`: en la lista solo hay un libro con otro ISBN."
+  },
+  {
+   "id": "poo10-11",
+   "concept": "poo-proyecto",
+   "kind": "choice",
+   "level": 1,
+   "daw": false,
+   "q": "Con el `Libro` del proyecto, ¿qué devuelve `str(Libro(\"978-1\", \"Dune\", \"Frank Herbert\"))`?",
+   "code": null,
+   "options": [
+    {
+     "text": "`Dune (Frank Herbert) [disponible]`",
+     "error": null
+    },
+    {
+     "text": "`Libro('978-1', 'Dune', 'Frank Herbert')`",
+     "error": "poo-metodos-especiales.lista-usa-str",
+     "why": "Ese sería el estilo de un `__repr__`; el proyecto define `__str__` para el usuario."
+    },
+    {
+     "text": "`Dune (Frank Herbert) [prestado]`",
+     "error": null,
+     "why": "Un libro nuevo empieza con `disponible = True`."
+    },
+    {
+     "text": "`<__main__.Libro object at …>`",
+     "error": "poo-metodos-especiales.nombre-especial-mal",
+     "why": "La clase define `__str__`, así que `str()` lo usa."
+    }
+   ],
+   "answer": 0,
+   "explain": "`__str__` junta título, autor y el estado, que en un libro recién creado es «disponible».",
+   "codeOptions": true,
+   "bank": true,
+   "qtype": "codigo"
+  },
+  {
+   "id": "poo10-12",
+   "concept": "poo-proyecto",
+   "kind": "choice",
+   "level": 2,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "class Usuario:\n    def __init__(self, nombre, max_prestamos=3):\n        self.nombre = nombre\n        self.max_prestamos = max_prestamos\n\n    def puede_prestar(self, activos):\n        return activos < self.max_prestamos\n\neva = Usuario(\"Eva\", max_prestamos=2)\nprint(eva.puede_prestar(1), eva.puede_prestar(2), eva.puede_prestar(3))",
+   "options": [
+    {
+     "text": "True False False",
+     "error": null
+    },
+    {
+     "text": "True True False",
+     "error": null,
+     "why": "Con 2 préstamos y un máximo de 2, `2 < 2` es `False`."
+    },
+    {
+     "text": "False False False",
+     "error": null,
+     "why": "Con 1 préstamo y un máximo de 2 todavía puede: `1 < 2`."
+    },
+    {
+     "text": "True False True",
+     "error": null,
+     "why": "Con 3 préstamos tampoco puede: `3 < 2` es `False`."
+    }
+   ],
+   "answer": 0,
+   "explain": "`puede_prestar` compara con `<`: con 1 puede, con 2 (su máximo) ya no, y con 3 tampoco.",
+   "codeOptions": false,
+   "bank": true,
+   "qtype": "prediccion"
+  },
+  {
+   "id": "poo10-13",
+   "concept": "poo-proyecto",
+   "kind": "output",
+   "level": 2,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "from datetime import date\n\nclass Prestamo:\n    def __init__(self, inicio):\n        self.inicio = inicio\n        self.fin = None\n\n    @property\n    def activo(self):\n        return self.fin is None\n\np = Prestamo(date(2026, 3, 1))\nantes = p.activo\np.fin = date(2026, 3, 15)\nprint(antes, p.activo, (p.fin - p.inicio).days)",
+   "stdin": "",
+   "expect": "True False 14",
+   "traps": {
+    "True True 14": "poo-proyecto.dato-duplicado",
+    "True False 15": null
+   },
+   "explain": "`activo` se calcula cada vez que se consulta: antes de poner `fin` es `True` y después `False`. Restar dos fechas da un intervalo cuyos `.days` son 14."
+  },
+  {
+   "id": "poo10-14",
+   "concept": "poo-proyecto",
+   "kind": "choice",
+   "level": 2,
+   "daw": false,
+   "q": "En `Prestamo`, ¿qué ventaja tiene que `activo` sea una propiedad (`@property` que devuelve `self.fin is None`) en vez de un atributo que se pone a `False` al cerrar?",
+   "code": null,
+   "options": [
+    {
+     "text": "Que no puede contradecirse con `fin`: siempre se calcula a partir de él",
+     "error": null
+    },
+    {
+     "text": "Que se puede asignar con `p.activo = False`",
+     "error": "poo-encapsulacion.sin-setter",
+     "why": "Sin setter, una propiedad no se puede asignar; y no hace falta, porque se calcula."
+    },
+    {
+     "text": "Que ocupa menos memoria y por eso va más rápido",
+     "error": null,
+     "why": "La diferencia de memoria es despreciable; la ventaja es que el dato no se duplica."
+    },
+    {
+     "text": "Ninguna: es lo mismo escrito de otra forma",
+     "error": "poo-proyecto.dato-duplicado",
+     "why": "Con un atributo aparte, alguien puede cambiar `fin` y olvidar `activo`, y los dos se contradicen."
+    }
+   ],
+   "answer": 0,
+   "explain": "Un dato que se puede calcular a partir de otro no se guarda dos veces. Así nunca hay un préstamo «activo» con fecha de devolución.",
+   "codeOptions": false,
+   "bank": true,
+   "qtype": "codigo"
+  },
+  {
+   "id": "poo10-15",
+   "concept": "poo-proyecto",
+   "kind": "choice",
+   "level": 2,
+   "daw": false,
+   "q": "Este `cerrar` tiene un fallo. ¿Cuál?",
+   "code": "def cerrar(self, fecha):\n    self.fin = fecha\n    if fecha < self.inicio:\n        raise ValueError(\"La devolución no puede ser anterior al préstamo\")",
+   "options": [
+    {
+     "text": "Guarda `fin` antes de validar: con una fecha anterior al inicio lanza el error, pero el préstamo ya queda cerrado",
+     "error": null
+    },
+    {
+     "text": "Falta `return True` al final",
+     "error": null,
+     "why": "`cerrar` no necesita devolver nada; el fallo está en el orden de las líneas."
+    },
+    {
+     "text": "Las fechas no se pueden comparar con `<`",
+     "error": null,
+     "why": "Los objetos `date` sí se comparan con `<`."
+    },
+    {
+     "text": "Debería lanzar `TypeError` en vez de `ValueError`",
+     "error": null,
+     "why": "El tipo es correcto: es una fecha; lo que falla es su valor, y para eso es `ValueError`."
+    }
+   ],
+   "answer": 0,
+   "explain": "Primero se comprueba y después se cambia. Si no, un error deja el objeto a medias: el préstamo aparece cerrado con una fecha imposible.",
+   "codeOptions": false,
+   "bank": true,
+   "qtype": "error"
+  },
+  {
+   "id": "poo10-16",
+   "concept": "poo-proyecto",
+   "kind": "output",
+   "level": 2,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "class ErrorBiblioteca(Exception):\n    pass\n\nclass LibroNoDisponible(ErrorBiblioteca):\n    pass\n\ndef prestar(disponible):\n    if not disponible:\n        raise LibroNoDisponible(\"Dune está prestado\")\n    return \"prestado\"\n\nfor d in (True, False):\n    try:\n        print(prestar(d))\n    except ErrorBiblioteca as error:\n        print(\"Error:\", error)",
+   "stdin": "",
+   "expect": "prestado\nError: Dune está prestado",
+   "traps": {
+    "prestado": "poo-proyecto.excepcion-sin-jerarquia",
+    "prestado\nError: LibroNoDisponible": null
+   },
+   "explain": "`except ErrorBiblioteca` captura también sus subclases, como `LibroNoDisponible`. El mensaje es el que se pasó al lanzarla."
+  },
+  {
+   "id": "poo10-17",
+   "concept": "poo-proyecto",
+   "kind": "choice",
+   "level": 2,
+   "daw": false,
+   "q": "¿Para qué sirve que todas las excepciones del proyecto hereden de `ErrorBiblioteca`?",
+   "code": null,
+   "options": [
+    {
+     "text": "Para poder capturar cualquier error de la biblioteca con un solo `except ErrorBiblioteca`, o uno concreto si hace falta",
+     "error": null
+    },
+    {
+     "text": "Para que Python no muestre el mensaje de error",
+     "error": null,
+     "why": "Heredar no cambia el mensaje: se sigue viendo si no se captura."
+    },
+    {
+     "text": "Porque una excepción propia no puede heredar directamente de `Exception`",
+     "error": null,
+     "why": "Sí puede; `ErrorBiblioteca` hereda directamente de `Exception`."
+    },
+    {
+     "text": "Para que todas tengan el mismo mensaje",
+     "error": null,
+     "why": "Cada subclase tiene su mensaje y su dato; lo que comparten es la base."
+    }
+   ],
+   "answer": 0,
+   "explain": "Es el mismo polimorfismo de la Unidad 6 aplicado a los errores: quien usa la biblioteca decide si trata cada caso por separado o todos a la vez.",
+   "codeOptions": false,
+   "bank": true,
+   "qtype": "teoria"
+  },
+  {
+   "id": "poo10-18",
+   "concept": "poo-proyecto",
+   "kind": "choice",
+   "level": 3,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "class ErrorBiblioteca(Exception):\n    pass\n\nclass LibroNoEncontrado(ErrorBiblioteca):\n    pass\n\ntry:\n    raise LibroNoEncontrado(\"978-9\")\nexcept ErrorBiblioteca:\n    print(\"general\")\nexcept LibroNoEncontrado:\n    print(\"concreto\")",
+   "options": [
+    {
+     "text": "general",
+     "error": null
+    },
+    {
+     "text": "concreto",
+     "error": "poo-proyecto.except-en-mal-orden",
+     "why": "Python usa el primer `except` que encaja, y `ErrorBiblioteca` ya encaja con la subclase."
+    },
+    {
+     "text": "general concreto",
+     "error": null,
+     "why": "Solo se ejecuta un `except`: el primero que encaja."
+    },
+    {
+     "text": "LibroNoEncontrado",
+     "error": null,
+     "why": "Se captura la excepción y se imprime el texto del bloque `except`, no su nombre."
+    }
+   ],
+   "answer": 0,
+   "explain": "El `except` general va primero y encaja con cualquier subclase, así que el concreto nunca se usa. Los concretos deben ir antes.",
+   "codeOptions": false,
+   "bank": true,
+   "qtype": "prediccion"
+  },
+  {
+   "id": "poo10-19",
+   "concept": "poo-proyecto",
+   "kind": "choice",
+   "level": 3,
+   "daw": false,
+   "q": "¿Qué prueba comprueba bien que un libro **no se puede prestar dos veces**?",
+   "code": null,
+   "options": [
+    {
+     "text": "Prestarlo a Ana, intentar prestarlo a Luis comprobando que lanza `LibroNoDisponible` y que solo hay un préstamo activo",
+     "error": null
+    },
+    {
+     "text": "Prestarlo a Ana y comprobar que `prestar` devuelve un `Prestamo`",
+     "error": null,
+     "why": "Solo prueba el caso normal: no intenta el segundo préstamo."
+    },
+    {
+     "text": "Prestarlo dos veces seguidas sin `try` y ver si el programa termina",
+     "error": null,
+     "why": "Si lanza el error, el programa se para y la prueba no dice qué excepción fue ni comprueba el estado."
+    },
+    {
+     "text": "Comprobar que `LibroNoDisponible` hereda de `ErrorBiblioteca`",
+     "error": null,
+     "why": "Eso prueba la jerarquía, no la regla de los préstamos."
+    }
+   ],
+   "answer": 0,
+   "explain": "Una buena prueba de error comprueba dos cosas: que se lanza la excepción correcta y que el estado no ha cambiado.",
+   "codeOptions": false,
+   "bank": true,
+   "qtype": "solucion"
+  },
+  {
+   "id": "poo10-20",
+   "concept": "poo-proyecto",
+   "kind": "choice",
+   "level": 3,
+   "daw": false,
+   "q": "Este `prestar` marca el libro como prestado antes de comprobar el límite del usuario. ¿Qué pasa si el usuario ya está en su límite?",
+   "code": "def prestar(self, isbn, usuario_id, fecha):\n    libro = self._libro(isbn)\n    usuario = self._usuario(usuario_id)\n    activos = self.prestamos_activos(usuario_id)\n    libro.disponible = False\n    if not usuario.puede_prestar(len(activos)):\n        raise LimiteAlcanzado(usuario.nombre)\n    prestamo = Prestamo(libro, usuario, fecha)\n    self._prestamos.append(prestamo)\n    return prestamo",
+   "options": [
+    {
+     "text": "Lanza `LimiteAlcanzado`, pero el libro queda como no disponible sin ningún préstamo: estado a medias",
+     "error": null
+    },
+    {
+     "text": "Nada: el error impide que se cambie nada",
+     "error": "poo-proyecto.estado-a-medias",
+     "why": "Lo que ya se ejecutó antes del `raise` no se deshace: `disponible` ya es `False`."
+    },
+    {
+     "text": "Se crea el préstamo y después se lanza el error",
+     "error": null,
+     "why": "El `raise` está antes de crear el préstamo: el préstamo no llega a existir."
+    },
+    {
+     "text": "Python da `SyntaxError` por el orden de las líneas",
+     "error": null,
+     "why": "El código es válido; el fallo es de lógica."
+    }
+   ],
+   "answer": 0,
+   "explain": "Primero todas las comprobaciones y después los cambios. Si no, nadie podrá prestar ese libro aunque nunca se prestó.",
+   "codeOptions": false,
+   "bank": true,
+   "qtype": "error"
+  },
+  {
+   "id": "poo10-21",
+   "concept": "poo-proyecto",
+   "kind": "choice",
+   "level": 1,
+   "daw": false,
+   "q": "¿Qué es la **integración** en un proyecto construido por fases?",
+   "code": null,
+   "options": [
+    {
+     "text": "Juntar las piezas que ya funcionan por separado y comprobar que funcionan juntas",
+     "error": null
+    },
+    {
+     "text": "Escribir todo el programa de una vez al final",
+     "error": null,
+     "why": "Al revés: las piezas ya existen y probadas; la integración las une."
+    },
+    {
+     "text": "Borrar los tests de las fases anteriores",
+     "error": null,
+     "why": "Los tests de cada fase se mantienen: siguen protegiendo cada pieza."
+    },
+    {
+     "text": "Convertir todas las clases en una sola",
+     "error": null,
+     "why": "Las clases siguen separadas; la integración las hace colaborar."
+    }
+   ],
+   "answer": 0,
+   "explain": "En la fase 6, la biblioteca usa libros, usuarios, préstamos y excepciones a la vez. Si algo falla, ya sabes que cada pieza funcionaba sola.",
+   "codeOptions": false,
+   "bank": true,
+   "qtype": "teoria"
+  },
+  {
+   "id": "poo10-22",
+   "concept": "poo-proyecto",
+   "kind": "choice",
+   "level": 2,
+   "daw": false,
+   "q": "Quieres saber si `devolver` lanza `ErrorBiblioteca` con un libro que no está prestado. ¿Qué prueba es correcta?",
+   "code": null,
+   "options": [
+    {
+     "text": "`try: bib.devolver(\"1\", hoy)` / `except ErrorBiblioteca: pass` / `else: raise AssertionError(\"Debía fallar\")`",
+     "error": null
+    },
+    {
+     "text": "`assert bib.devolver(\"1\", hoy) == ErrorBiblioteca`",
+     "error": null,
+     "why": "Una excepción no se devuelve: se lanza, y el `assert` ni llega a comparar."
+    },
+    {
+     "text": "`try: bib.devolver(\"1\", hoy)` / `except: pass`",
+     "error": null,
+     "why": "Pasa aunque no se lance nada y aunque el error sea otro: no comprueba nada."
+    },
+    {
+     "text": "`assert isinstance(ErrorBiblioteca, Exception)`",
+     "error": null,
+     "why": "Comprueba la jerarquía (y mal: es una clase, no una instancia), no lo que hace `devolver`."
+    }
+   ],
+   "answer": 0,
+   "explain": "El `else` del `try` solo se ejecuta si no hubo excepción: es justo el caso en que la prueba debe fallar.",
+   "codeOptions": true,
+   "bank": true,
+   "qtype": "solucion"
+  },
+  {
+   "id": "poo10-23",
+   "concept": "poo-proyecto",
+   "kind": "output",
+   "level": 2,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "libros = {\"1\": {\"titulo\": \"Dune\", \"disponible\": True}}\nprestamos = []\n\ndef prestar(isbn, quien, limite_de_quien):\n    libro = libros[isbn]\n    if not libro[\"disponible\"]:\n        return \"no disponible\"\n    if limite_de_quien == 0:\n        return \"límite\"\n    libro[\"disponible\"] = False\n    prestamos.append((isbn, quien))\n    return \"ok\"\n\nprint(prestar(\"1\", \"Ana\", 0), prestar(\"1\", \"Luis\", 3), prestar(\"1\", \"Eva\", 3))",
+   "stdin": "",
+   "expect": "límite ok no disponible",
+   "traps": {
+    "límite no disponible no disponible": "poo-proyecto.estado-a-medias",
+    "ok no disponible no disponible": null
+   },
+   "explain": "Como las comprobaciones van antes de los cambios, el intento de Ana no deja el libro bloqueado: Luis lo consigue y Eva ya lo encuentra prestado."
+  },
+  {
+   "id": "poo10-24",
+   "concept": "poo-proyecto",
+   "kind": "choice",
+   "level": 3,
+   "daw": false,
+   "q": "En la `Biblioteca`, ¿qué hace `prestamos_activos(7)`?",
+   "code": "def prestamos_activos(self, usuario_id=None):\n    return [\n        p\n        for p in self._prestamos\n        if p.activo and (usuario_id is None or p.usuario.id == usuario_id)\n    ]",
+   "options": [
+    {
+     "text": "Devuelve los préstamos no cerrados del usuario con id 7",
+     "error": null
+    },
+    {
+     "text": "Devuelve cuántos préstamos ha tenido el usuario 7 en total",
+     "error": null,
+     "why": "Devuelve una lista, y solo de los activos: los cerrados no cuentan."
+    },
+    {
+     "text": "Presta 7 libros",
+     "error": null,
+     "why": "El 7 es el id del usuario, no una cantidad."
+    },
+    {
+     "text": "Devuelve todos los préstamos activos de la biblioteca",
+     "error": null,
+     "why": "Eso es `prestamos_activos()` sin argumento; con el id filtra por usuario."
+    }
+   ],
+   "answer": 0,
+   "explain": "Filtra por `p.activo` y, si se le pasa un id, por `p.usuario.id`. `prestar` lo usa con `len(...)` para comprobar el límite del usuario.",
+   "codeOptions": false,
+   "bank": true,
+   "qtype": "codigo"
+  },
+  {
+   "id": "poo10-25",
+   "concept": "poo-proyecto",
+   "kind": "choice",
+   "level": 1,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "registrados = [(\"3\", \"Neuromante\"), (\"1\", \"Dune\"), (\"2\", \"Fundación\")]\nprint([titulo for _, titulo in sorted(registrados, key=lambda l: l[1])])",
+   "options": [
+    {
+     "text": "['Dune', 'Fundación', 'Neuromante']",
+     "error": null
+    },
+    {
+     "text": "['Neuromante', 'Dune', 'Fundación']",
+     "error": null,
+     "why": "`sorted` ordena; ese es el orden en que se registraron."
+    },
+    {
+     "text": "['Fundación', 'Neuromante', 'Dune']",
+     "error": null,
+     "why": "Se ordena por título, no por ISBN."
+    },
+    {
+     "text": "['Neuromante', 'Fundación', 'Dune']",
+     "error": null,
+     "why": "Es orden alfabético ascendente: de la A a la Z."
+    }
+   ],
+   "answer": 0,
+   "explain": "`key=lambda l: l[1]` ordena por el título, que es el segundo elemento de cada tupla.",
+   "codeOptions": false,
+   "bank": true,
+   "qtype": "prediccion"
   },
   {
    "id": "poo-04",

@@ -136,6 +136,88 @@ function referencesHtml(index, concept) {
     <ul class="lx-list">${rows}</ul>`;
 }
 
+/** Tipos de relación del diagrama de clases y cómo se leen en voz alta. */
+const RELATION_TEXT = { asociacion: "asociación", agregacion: "agregación", composicion: "composición", herencia: "herencia" };
+
+/** Punto del borde de la caja `b` por el que sale la recta hacia (x, y). */
+function edgePoint(b, x, y) {
+  const dx = x - b.cx;
+  const dy = y - b.cy;
+  const t = Math.min(dx ? b.w / 2 / Math.abs(dx) : Infinity, dy ? b.h / 2 / Math.abs(dy) : Infinity);
+  return [b.cx + dx * t, b.cy + dy * t];
+}
+
+/**
+ * Diagrama de clases en SVG (dibujo) más la misma información en texto: el SVG es una imagen con
+ * título y descripción, y la lista de relaciones es lo que lee un lector de pantalla o quien amplía.
+ */
+export function diagramHtml(diagram) {
+  const W = 210;
+  const PITCH_X = 240;
+  const PITCH_Y = 140;
+  const LINE = 18;
+  const boxes = new Map(
+    diagram.classes.map((c) => {
+      const h = 34 + LINE * c.members.length;
+      return [c.id, { ...c, w: W, h, x: c.col * PITCH_X + 10, y: c.row * PITCH_Y + 10, cx: c.col * PITCH_X + 10 + W / 2, cy: c.row * PITCH_Y + 10 + h / 2 }];
+    }),
+  );
+  const width = Math.max(...[...boxes.values()].map((b) => b.x + b.w)) + 10;
+  const height = Math.max(...[...boxes.values()].map((b) => b.y + b.h)) + 10;
+  const lines = diagram.relations
+    .map((r) => {
+      const a = boxes.get(r.from);
+      const b = boxes.get(r.to);
+      const [x1, y1] = edgePoint(a, b.cx, b.cy);
+      const [x2, y2] = edgePoint(b, a.cx, a.cy);
+      const start = r.kind === "composicion" ? ' marker-start="url(#lx-uml-filled)"' : r.kind === "agregacion" ? ' marker-start="url(#lx-uml-hollow)"' : "";
+      const end = r.kind === "herencia" ? ' marker-end="url(#lx-uml-arrow)"' : "";
+      return `<line class="lx-uml__rel" data-kind="${escapeHtml(r.kind)}" x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}"${start}${end}/>`;
+    })
+    .join("");
+  const rects = [...boxes.values()]
+    .map(
+      (b) => `<g class="lx-uml__class"><rect x="${b.x}" y="${b.y}" width="${b.w}" height="${b.h}" rx="6"/>
+        <text class="lx-uml__name" x="${b.cx}" y="${b.y + 21}" text-anchor="middle">${escapeHtml(b.name)}</text>
+        <line class="lx-uml__sep" x1="${b.x}" y1="${b.y + 30}" x2="${b.x + b.w}" y2="${b.y + 30}"/>
+        ${b.members.map((m, i) => `<text class="lx-uml__member" x="${b.x + 10}" y="${b.y + 47 + i * LINE}">${escapeHtml(m)}</text>`).join("")}</g>`,
+    )
+    .join("");
+  const names = new Map(diagram.classes.map((c) => [c.id, c.name]));
+  const items = diagram.relations
+    .map((r) => `<li><strong>${escapeHtml(names.get(r.from))} → ${escapeHtml(names.get(r.to))}</strong> (${RELATION_TEXT[r.kind] ?? escapeHtml(r.kind)}): ${renderInline(r.text)}</li>`)
+    .join("");
+  return `<figure class="lx-uml">
+      <svg class="lx-uml__svg" viewBox="0 0 ${width} ${height}" role="img" aria-labelledby="lx-uml-title lx-uml-desc">
+        <title id="lx-uml-title">${escapeHtml(diagram.title)}</title>
+        <desc id="lx-uml-desc">${escapeHtml(diagram.summary)}</desc>
+        <defs>
+          <marker id="lx-uml-filled" viewBox="0 0 12 10" refX="0" refY="5" markerWidth="12" markerHeight="10" orient="auto"><path class="lx-uml__mark-filled" d="M0 5 L6 0 L12 5 L6 10 Z"/></marker>
+          <marker id="lx-uml-hollow" viewBox="0 0 12 10" refX="0" refY="5" markerWidth="12" markerHeight="10" orient="auto"><path class="lx-uml__mark-hollow" d="M0 5 L6 0 L12 5 L6 10 Z"/></marker>
+          <marker id="lx-uml-arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="10" markerHeight="10" orient="auto"><path class="lx-uml__mark-hollow" d="M0 0 L10 5 L0 10 Z"/></marker>
+        </defs>
+        ${rects}${lines}
+      </svg>
+      <figcaption class="lx-muted">${renderInline(diagram.summary)} Rombo relleno: composición; rombo hueco: agregación; línea sola: asociación.</figcaption>
+    </figure>
+    <h3 class="lx-h4">Relaciones del diagrama</h3>
+    <ul class="lx-list">${items}</ul>`;
+}
+
+/** Rúbrica del proyecto: criterio, puntos y qué se mira. */
+function rubricHtml(concept) {
+  const cell = (label, html) => `<td role="cell" data-label="${label}">${html}</td>`;
+  const rows = concept.rubric
+    .map((r) => `<tr role="row"><th scope="row" role="rowheader">${renderInline(r.criterion)}</th>${cell("Puntos", r.points)}${cell("Qué se valora", renderInline(r.text))}</tr>`)
+    .join("");
+  const total = concept.rubric.reduce((sum, r) => sum + r.points, 0);
+  return `<p class="lx-muted">Para que valores tu proyecto, o para que lo valore tu profesor, sobre ${total} puntos. La funcionalidad la comprueban los tests del ejercicio principal.</p>
+    <div class="table-wrap" tabindex="0"><table class="lx-table lx-table--reflow" role="table" aria-labelledby="lx-rubric">
+      <thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">Criterio</th><th scope="col" role="columnheader">Puntos</th><th scope="col" role="columnheader">Qué se valora</th></tr></thead>
+      <tbody role="rowgroup">${rows}</tbody>
+    </table></div>`;
+}
+
 /** Secciones y su orden en la página de una unidad (también es el índice «En esta página»). */
 export function unitToc(concept) {
   return [
@@ -144,9 +226,12 @@ export function unitToc(concept) {
     ["lx-expl", "Lecciones"],
     ["lx-key", "Conceptos importantes"],
     ["lx-example", "Ejemplo comentado"],
+    ...(concept.diagram ? [["lx-diagram", "Diagrama de clases"]] : []),
     ["lx-guided", "Ejercicios guiados"],
     ["lx-autonomous", "Ejercicio principal"],
+    ...(concept.rubric?.length ? [["lx-rubric", "Rúbrica"]] : []),
     ...(concept.extras?.length ? [["lx-extras", "Prácticas adicionales"]] : []),
+    ...(concept.challenges?.length ? [["lx-challenges", "Retos de ampliación"]] : []),
     ["lx-errors", "Errores frecuentes"],
     ...(concept.practices?.length ? [["lx-practices", "Buenas prácticas"]] : []),
     ["lx-selfcheck", "Autoevaluación"],
@@ -189,9 +274,14 @@ export function unitBody(index, learning, concept, s, { lessons = "" } = {}) {
       `${codeBlock(example.code, { numbered: true, label: "Código de ejemplo" })}<ol class="lx-lines">${lines}</ol>
        ${example.output ? `<p class="lx-note">Salida:</p><pre class="lx-output" tabindex="0">${escapeHtml(example.output)}</pre>` : ""}`,
     ),
+    concept.diagram ? section("lx-diagram", "Diagrama de clases", diagramHtml(concept.diagram)) : "",
     section("lx-guided", "Ejercicios guiados", `<p class="lx-muted">Paso a paso, con pista y solución explicada al terminar.</p>${exerciseList(index, learning, concept.guided, "guided", concept)}`),
     section("lx-autonomous", "Ejercicio principal", `<p class="lx-muted">Sin pasos: aplica lo aprendido. Se corrige con tests en tu navegador y es necesario para superar la unidad.</p>${exerciseList(index, learning, concept.autonomous, "autonomous", concept)}`),
+    concept.rubric?.length ? section("lx-rubric", "Rúbrica de evaluación", rubricHtml(concept)) : "",
     concept.extras?.length ? section("lx-extras", "Prácticas adicionales", `<p class="lx-muted">Más ejercicios de código para seguir practicando. No son obligatorios.</p>${exerciseList(index, learning, concept.extras, "extras", concept)}`) : "",
+    concept.challenges?.length
+      ? section("lx-challenges", "Retos de ampliación", `<p class="lx-muted">Ideas para seguir con el proyecto por tu cuenta. No tienen tests ni cuentan para superar la unidad.</p><ol class="lx-list">${concept.challenges.map((t) => `<li>${renderInline(t)}</li>`).join("")}</ol>`)
+      : "",
     section("lx-errors", "Errores frecuentes", errors),
     concept.practices?.length ? section("lx-practices", "Buenas prácticas", practicesHtml(concept)) : "",
     section("lx-selfcheck", "Autoevaluación", `<p class="lx-muted">Preguntas para comprobar si has entendido la unidad.</p>${exerciseList(index, learning, concept.selfcheck, "selfcheck", concept)}`),
@@ -257,7 +347,7 @@ export function renderModule(index, learning, now = new Date()) {
       <p class="eyebrow">Módulo · 0485 Programación</p>
       <h1 class="lx-title" id="learn-title" tabindex="-1">${escapeHtml(module.title)}</h1>
       <p class="lx-lead">${renderInline(module.summary)}</p>
-      <p class="lx-muted">${units.length} de ${module.units.length} unidades publicadas. Las demás llegarán por fases.</p>
+      <p class="lx-muted">${units.length === module.units.length ? `Las ${units.length} unidades están publicadas.` : `${units.length} de ${module.units.length} unidades publicadas. Las demás llegarán por fases.`}</p>
     </header>
     <section class="lx-section" aria-labelledby="lx-poo-units">
       <h2 class="lx-section__title" id="lx-poo-units">Unidades</h2>

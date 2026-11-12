@@ -41,9 +41,9 @@ def test_index_has_ten_numbered_units_and_keeps_the_old_route():
 
 
 def test_published_units_follow_the_module_order_in_the_path():
-    # PR A y PR B: Unidades 1-8 publicadas, encadenadas por prerrequisitos y en orden en la ruta
+    # Las 10 unidades publicadas, encadenadas por prerrequisitos y en orden en la ruta
     published = [u["id"] for u in MODULE["units"] if u["available"]]
-    assert published[:8] == [
+    assert published == [
         "poo-fundamentos",
         "poo",
         "poo-atributos-metodos",
@@ -52,6 +52,8 @@ def test_published_units_follow_the_module_order_in_the_path():
         "poo-polimorfismo",
         "poo-composicion",
         "poo-metodos-especiales",
+        "poo-diseno",
+        "poo-proyecto",
     ]
     path = DATA["path"]
     assert [path.index(i) for i in published] == sorted(path.index(i) for i in published)
@@ -62,6 +64,8 @@ def test_published_units_follow_the_module_order_in_the_path():
     assert CONCEPTS["poo-polimorfismo"]["requires"] == ["poo-herencia"]
     assert CONCEPTS["poo-composicion"]["requires"] == ["poo-encapsulacion", "poo-herencia"]
     assert CONCEPTS["poo-metodos-especiales"]["requires"] == ["poo", "poo-atributos-metodos"]
+    assert CONCEPTS["poo-diseno"]["requires"] == ["poo-polimorfismo", "poo-composicion"]
+    assert CONCEPTS["poo-proyecto"]["requires"] == ["poo-metodos-especiales", "poo-diseno"]
     for number, uid in enumerate(published, start=1):
         assert CONCEPTS[uid]["unit"] == {"module": "poo", "number": number}
 
@@ -252,3 +256,38 @@ def test_validator_checks_prediction_answers_against_the_real_output(monkeypatch
     problems = builder.Problems()
     builder.check_units(problems)
     assert any(p.startswith(f"pregunta {question['id']}") and "salida real" in p for p in problems)
+
+
+def test_final_project_has_diagram_rubric_and_challenges():
+    project = CONCEPTS["poo-proyecto"]
+    boxes = {b["id"] for b in project["diagram"]["classes"]}
+    assert {r["from"] for r in project["diagram"]["relations"]} <= boxes
+    assert {r["to"] for r in project["diagram"]["relations"]} <= boxes
+    assert {r["kind"] for r in project["diagram"]["relations"]} == {
+        "agregacion",
+        "composicion",
+        "asociacion",
+    }
+    assert sum(item["points"] for item in project["rubric"]) == 100
+    assert len(project["challenges"]) >= 3
+    # el proyecto va por fases: un ejercicio por clase, de la fase guiada a la completa
+    assert project["guided"] == ["poo10-01"] and project["autonomous"] == ["poo10-06"]
+
+
+def test_validator_rejects_a_broken_diagram_and_rubric(monkeypatch):
+    builder = _load_builder()
+    project = next(c for c in builder.CONCEPTS if c["id"] == "poo-proyecto")
+    diagram = json.loads(json.dumps(project["diagram"]))
+    diagram["relations"].append({"from": "libro", "to": "socio", "kind": "uso", "text": ""})
+    diagram["classes"][1]["col"], diagram["classes"][1]["row"] = 1, 0
+    monkeypatch.setitem(project, "diagram", diagram)
+    monkeypatch.setitem(project, "rubric", project["rubric"][:-1])
+    monkeypatch.setitem(project, "challenges", ["", "reto"])
+    problems = builder.Problems()
+    builder.check_project_extras(project, "unidad 10", problems)
+    assert any("clase inexistente" in p for p in problems)
+    assert any("tipo de relación desconocido: uso" in p for p in problems)
+    assert any("se explica en texto" in p for p in problems)
+    assert any("misma celda" in p for p in problems)
+    assert any("sumar 100 puntos" in p for p in problems)
+    assert any("retos de ampliación" in p for p in problems)
