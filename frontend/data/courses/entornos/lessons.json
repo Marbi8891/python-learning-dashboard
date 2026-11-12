@@ -66,6 +66,18 @@
        "url": "https://docs.oracle.com/javase/tutorial/"
       }
      ],
+     "curriculum": {
+      "ra": [
+       "0487-RA1"
+      ],
+      "ce": [
+       "0487-RA1-e",
+       "0487-RA1-f"
+      ],
+      "status": "proposed",
+      "source": "Objetivos de la lección: su autor cita estos RA y CE",
+      "reviewed": null
+     },
      "objectives": [
       "Clasificar los lenguajes de programación más usados y elegir uno según el proyecto (RA1 e).",
       "Distinguir el software de sistema, el de aplicación y el de desarrollo, y para qué sirven las herramientas de desarrollo (RA1 f).",
@@ -172,6 +184,19 @@
        "url": "https://docs.docker.com/get-started/"
       }
      ],
+     "curriculum": {
+      "ra": [
+       "0487-RA1"
+      ],
+      "ce": [
+       "0487-RA1-c",
+       "0487-RA1-d",
+       "0487-RA1-e"
+      ],
+      "status": "proposed",
+      "source": "Objetivos de la lección: su autor cita estos RA y CE",
+      "reviewed": null
+     },
      "objectives": [
       "Diferenciar el código fuente, el código objeto y el ejecutable, y qué herramienta genera cada uno (RA1 c).",
       "Explicar cómo Java genera bytecode para ejecutarlo en la máquina virtual (RA1 d).",
@@ -276,6 +301,19 @@
        "url": "https://docs.oracle.com/javase/tutorial/"
       }
      ],
+     "curriculum": {
+      "ra": [
+       "0487-RA1",
+       "0487-RA5"
+      ],
+      "ce": [
+       "0487-RA1-e",
+       "0487-RA5-a"
+      ],
+      "status": "proposed",
+      "source": "Objetivos de la lección: su autor cita estos RA y CE",
+      "reviewed": null
+     },
      "objectives": [
       "Clasificar los lenguajes según su paradigma: imperativo, orientado a objetos, funcional y declarativo (RA1 e).",
       "Reconocer las clases, los objetos, los atributos y los métodos de la programación orientada a objetos (RA5 a).",
@@ -379,6 +417,18 @@
        "url": "https://docs.oracle.com/javase/tutorial/"
       }
      ],
+     "curriculum": {
+      "ra": [
+       "0487-RA1"
+      ],
+      "ce": [
+       "0487-RA1-b",
+       "0487-RA1-g"
+      ],
+      "status": "proposed",
+      "source": "Objetivos de la lección: su autor cita estos RA y CE",
+      "reviewed": null
+     },
      "objectives": [
       "Identificar las fases del desarrollo de una aplicación y qué se hace en cada una (RA1 b).",
       "Distinguir los requisitos funcionales de los no funcionales.",

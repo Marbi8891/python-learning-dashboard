@@ -96,7 +96,21 @@
     "en": "Las marcas de XML y HTML describen la estructura y el significado. Cómo se ve lo decide otra capa (CSS, XSLT)."
    },
    "lesson": "mar-xml-bien-formado",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA1-a",
+     "0373-RA1-b",
+     "0373-RA1-c",
+     "0373-RA1-d",
+     "0373-RA1-e",
+     "0373-RA1-f",
+     "0373-RA1-g",
+     "0373-RA1-h",
+     "0373-RA1-i"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-02",
@@ -132,7 +146,21 @@
     "en": "XML no tiene etiquetas predefinidas: cada vocabulario (SVG, MathML, RSS…) define las suyas con sus reglas."
    },
    "lesson": "mar-xml-bien-formado",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA1-a",
+     "0373-RA1-b",
+     "0373-RA1-c",
+     "0373-RA1-d",
+     "0373-RA1-e",
+     "0373-RA1-f",
+     "0373-RA1-g",
+     "0373-RA1-h",
+     "0373-RA1-i"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-03",
@@ -168,7 +196,21 @@
     "en": "`<titulo>` se abre dentro de `<libro>`, así que tiene que cerrarse antes. El prólogo es opcional."
    },
    "lesson": "mar-xml-bien-formado",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA1-a",
+     "0373-RA1-b",
+     "0373-RA1-c",
+     "0373-RA1-d",
+     "0373-RA1-e",
+     "0373-RA1-f",
+     "0373-RA1-g",
+     "0373-RA1-h",
+     "0373-RA1-i"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-04",
@@ -204,7 +246,21 @@
     "en": "Un documento XML tiene un único elemento raíz. Habría que envolverlos en, por ejemplo, `<libros>`."
    },
    "lesson": "mar-xml-bien-formado",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA1-a",
+     "0373-RA1-b",
+     "0373-RA1-c",
+     "0373-RA1-d",
+     "0373-RA1-e",
+     "0373-RA1-f",
+     "0373-RA1-g",
+     "0373-RA1-h",
+     "0373-RA1-i"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-05",
@@ -240,7 +296,21 @@
     "en": "En XML el valor de un atributo va siempre entre comillas: `id=\"2\"` o `id='2'`."
    },
    "lesson": "mar-xml-bien-formado",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA1-a",
+     "0373-RA1-b",
+     "0373-RA1-c",
+     "0373-RA1-d",
+     "0373-RA1-e",
+     "0373-RA1-f",
+     "0373-RA1-g",
+     "0373-RA1-h",
+     "0373-RA1-i"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-06",
@@ -276,7 +346,21 @@
     "en": "`<Nombre>` y `</nombre>` son etiquetas distintas. Los nombres sí pueden empezar por mayúscula."
    },
    "lesson": "mar-xml-bien-formado",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA1-a",
+     "0373-RA1-b",
+     "0373-RA1-c",
+     "0373-RA1-d",
+     "0373-RA1-e",
+     "0373-RA1-f",
+     "0373-RA1-g",
+     "0373-RA1-h",
+     "0373-RA1-i"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-07",
@@ -312,7 +396,21 @@
     "en": "`<producto/>` es un elemento vacío correcto, el comentario es válido y `&lt;` y `&amp;` son las entidades de < y &."
    },
    "lesson": "mar-xml-bien-formado",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA1-a",
+     "0373-RA1-b",
+     "0373-RA1-c",
+     "0373-RA1-d",
+     "0373-RA1-e",
+     "0373-RA1-f",
+     "0373-RA1-g",
+     "0373-RA1-h",
+     "0373-RA1-i"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-08",
@@ -348,7 +446,21 @@
     "en": "El `&` inicia una entidad. Suelto, el analizador da error: se escribe `&amp;` o se mete en una sección CDATA."
    },
    "lesson": "mar-xml-bien-formado",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA1-a",
+     "0373-RA1-b",
+     "0373-RA1-c",
+     "0373-RA1-d",
+     "0373-RA1-e",
+     "0373-RA1-f",
+     "0373-RA1-g",
+     "0373-RA1-h",
+     "0373-RA1-i"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-09",
@@ -384,7 +496,21 @@
     "en": "Todo XML válido está bien formado, pero no al revés."
    },
    "lesson": "mar-xml-bien-formado",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA1-a",
+     "0373-RA1-b",
+     "0373-RA1-c",
+     "0373-RA1-d",
+     "0373-RA1-e",
+     "0373-RA1-f",
+     "0373-RA1-g",
+     "0373-RA1-h",
+     "0373-RA1-i"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-10",
@@ -420,7 +546,21 @@
     "en": "Cada vocabulario se asocia a una URI y sus elementos llevan un prefijo, como `lib:titulo` y `per:titulo`."
    },
    "lesson": "mar-xml-bien-formado",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA1-a",
+     "0373-RA1-b",
+     "0373-RA1-c",
+     "0373-RA1-d",
+     "0373-RA1-e",
+     "0373-RA1-f",
+     "0373-RA1-g",
+     "0373-RA1-h",
+     "0373-RA1-i"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-11",
@@ -444,7 +584,21 @@
     "en": "`len(raiz)` cuenta los hijos directos del elemento raíz: dos libros y una revista."
    },
    "lesson": "mar-xml-bien-formado",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA1-a",
+     "0373-RA1-b",
+     "0373-RA1-c",
+     "0373-RA1-d",
+     "0373-RA1-e",
+     "0373-RA1-f",
+     "0373-RA1-g",
+     "0373-RA1-h",
+     "0373-RA1-i"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-12",
@@ -468,7 +622,21 @@
     "en": "`get` lee un atributo y `find(...).text` el texto del primer hijo con ese nombre."
    },
    "lesson": "mar-xml-bien-formado",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA1-a",
+     "0373-RA1-b",
+     "0373-RA1-c",
+     "0373-RA1-d",
+     "0373-RA1-e",
+     "0373-RA1-f",
+     "0373-RA1-g",
+     "0373-RA1-h",
+     "0373-RA1-i"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-13",
@@ -489,7 +657,21 @@
     "en": "El contenido de texto de un elemento está en su atributo `.text`. Solución: `text`."
    },
    "lesson": "mar-xml-bien-formado",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA1-a",
+     "0373-RA1-b",
+     "0373-RA1-c",
+     "0373-RA1-d",
+     "0373-RA1-e",
+     "0373-RA1-f",
+     "0373-RA1-g",
+     "0373-RA1-h",
+     "0373-RA1-i"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-14",
@@ -525,7 +707,20 @@
     "en": "El contenido visible va en `<body>`. `<head>` describe la página."
    },
    "lesson": "mar-html-css",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA2-a",
+     "0373-RA2-b",
+     "0373-RA2-c",
+     "0373-RA2-d",
+     "0373-RA2-e",
+     "0373-RA2-f",
+     "0373-RA2-g",
+     "0373-RA2-h"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-15",
@@ -561,7 +756,20 @@
     "en": "Lo leen los lectores de pantalla y se muestra si la imagen falla. Es obligatorio para la accesibilidad."
    },
    "lesson": "mar-html-css",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA2-a",
+     "0373-RA2-b",
+     "0373-RA2-c",
+     "0373-RA2-d",
+     "0373-RA2-e",
+     "0373-RA2-f",
+     "0373-RA2-g",
+     "0373-RA2-h"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-16",
@@ -597,7 +805,20 @@
     "en": "`<main>` aparece una vez y deja fuera la cabecera, la navegación y el pie."
    },
    "lesson": "mar-html-css",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA2-a",
+     "0373-RA2-b",
+     "0373-RA2-c",
+     "0373-RA2-d",
+     "0373-RA2-e",
+     "0373-RA2-f",
+     "0373-RA2-g",
+     "0373-RA2-h"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-17",
@@ -633,7 +854,20 @@
     "en": "HTML5 simplificó el DOCTYPE. La segunda es la de HTML 4.01."
    },
    "lesson": "mar-html-css",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA2-a",
+     "0373-RA2-b",
+     "0373-RA2-c",
+     "0373-RA2-d",
+     "0373-RA2-e",
+     "0373-RA2-f",
+     "0373-RA2-g",
+     "0373-RA2-h"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-18",
@@ -669,7 +903,20 @@
     "en": "Una clase es más específica que una etiqueta, aunque la regla de `p` vaya después."
    },
    "lesson": "mar-html-css",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA2-a",
+     "0373-RA2-b",
+     "0373-RA2-c",
+     "0373-RA2-d",
+     "0373-RA2-e",
+     "0373-RA2-f",
+     "0373-RA2-g",
+     "0373-RA2-h"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-19",
@@ -705,7 +952,20 @@
     "en": "Con la misma especificidad gana la última regla de la cascada."
    },
    "lesson": "mar-html-css",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA2-a",
+     "0373-RA2-b",
+     "0373-RA2-c",
+     "0373-RA2-d",
+     "0373-RA2-e",
+     "0373-RA2-f",
+     "0373-RA2-g",
+     "0373-RA2-h"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-20",
@@ -741,7 +1001,20 @@
     "en": "El espacio es el combinador descendiente: elementos `a` en cualquier nivel dentro de `nav`."
    },
    "lesson": "mar-html-css",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA2-a",
+     "0373-RA2-b",
+     "0373-RA2-c",
+     "0373-RA2-d",
+     "0373-RA2-e",
+     "0373-RA2-f",
+     "0373-RA2-g",
+     "0373-RA2-h"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-21",
@@ -777,7 +1050,20 @@
     "en": "Una hoja externa se reutiliza en todas las páginas, se guarda en caché y separa contenido y presentación."
    },
    "lesson": "mar-html-css",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA2-a",
+     "0373-RA2-b",
+     "0373-RA2-c",
+     "0373-RA2-d",
+     "0373-RA2-e",
+     "0373-RA2-f",
+     "0373-RA2-g",
+     "0373-RA2-h"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-22",
@@ -813,7 +1099,20 @@
     "en": "El margen (`margin`) es el espacio exterior; el relleno (`padding`), el interior."
    },
    "lesson": "mar-html-css",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA2-a",
+     "0373-RA2-b",
+     "0373-RA2-c",
+     "0373-RA2-d",
+     "0373-RA2-e",
+     "0373-RA2-f",
+     "0373-RA2-g",
+     "0373-RA2-h"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-23",
@@ -849,7 +1148,20 @@
     "en": "Para CSS está el validador de hojas de estilo del W3C (jigsaw)."
    },
    "lesson": "mar-html-css",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA2-a",
+     "0373-RA2-b",
+     "0373-RA2-c",
+     "0373-RA2-d",
+     "0373-RA2-e",
+     "0373-RA2-f",
+     "0373-RA2-g",
+     "0373-RA2-h"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-24",
@@ -873,7 +1185,20 @@
     "en": "`handle_starttag` se llama con cada etiqueta de apertura; solo hay dos `<a>`."
    },
    "lesson": "mar-html-css",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA2-a",
+     "0373-RA2-b",
+     "0373-RA2-c",
+     "0373-RA2-d",
+     "0373-RA2-e",
+     "0373-RA2-f",
+     "0373-RA2-g",
+     "0373-RA2-h"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-25",
@@ -898,7 +1223,20 @@
     "en": "Primero el import, después la clase con su método y al final se usa."
    },
    "lesson": "mar-html-css",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA2-a",
+     "0373-RA2-b",
+     "0373-RA2-c",
+     "0373-RA2-d",
+     "0373-RA2-e",
+     "0373-RA2-f",
+     "0373-RA2-g",
+     "0373-RA2-h"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-26",
@@ -934,7 +1272,19 @@
     "en": "`autor+` exige al menos un autor y el orden de la secuencia es obligatorio; `anio?` puede faltar."
    },
    "lesson": "mar-dtd-xsd",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA4-a",
+     "0373-RA4-b",
+     "0373-RA4-c",
+     "0373-RA4-d",
+     "0373-RA4-e",
+     "0373-RA4-f",
+     "0373-RA4-g"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-27",
@@ -970,7 +1320,19 @@
     "en": "Un nombre al principio y después cualquier número de teléfonos o emails, en cualquier orden entre ellos."
    },
    "lesson": "mar-dtd-xsd",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA4-a",
+     "0373-RA4-b",
+     "0373-RA4-c",
+     "0373-RA4-d",
+     "0373-RA4-e",
+     "0373-RA4-f",
+     "0373-RA4-g"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-28",
@@ -1006,7 +1368,19 @@
     "en": "`cuerpo` sin símbolo aparece exactamente una vez; la cabecera es opcional y va antes."
    },
    "lesson": "mar-dtd-xsd",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA4-a",
+     "0373-RA4-b",
+     "0373-RA4-c",
+     "0373-RA4-d",
+     "0373-RA4-e",
+     "0373-RA4-f",
+     "0373-RA4-g"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-29",
@@ -1042,7 +1416,19 @@
     "en": "`?` es cero o una, `+` una o más y sin símbolo, exactamente una."
    },
    "lesson": "mar-dtd-xsd",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA4-a",
+     "0373-RA4-b",
+     "0373-RA4-c",
+     "0373-RA4-d",
+     "0373-RA4-e",
+     "0373-RA4-f",
+     "0373-RA4-g"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-30",
@@ -1078,7 +1464,19 @@
     "en": "`ID` exige un valor único en el documento y `#REQUIRED` lo hace obligatorio. La lista entre paréntesis limita los valores."
    },
    "lesson": "mar-dtd-xsd",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA4-a",
+     "0373-RA4-b",
+     "0373-RA4-c",
+     "0373-RA4-d",
+     "0373-RA4-e",
+     "0373-RA4-f",
+     "0373-RA4-g"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-31",
@@ -1114,7 +1512,19 @@
     "en": "Con `SYSTEM` y una ruta, las reglas están en otro archivo. Una DTD interna va entre corchetes."
    },
    "lesson": "mar-dtd-xsd",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA4-a",
+     "0373-RA4-b",
+     "0373-RA4-c",
+     "0373-RA4-d",
+     "0373-RA4-e",
+     "0373-RA4-f",
+     "0373-RA4-g"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-32",
@@ -1150,7 +1560,19 @@
     "en": "Con XSD puedes exigir que `<precio>` sea un decimal positivo; con una DTD, solo que tenga texto."
    },
    "lesson": "mar-dtd-xsd",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA4-a",
+     "0373-RA4-b",
+     "0373-RA4-c",
+     "0373-RA4-d",
+     "0373-RA4-e",
+     "0373-RA4-f",
+     "0373-RA4-g"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-33",
@@ -1186,7 +1608,19 @@
     "en": "`minOccurs` y `maxOccurs` fijan el mínimo y el máximo. Por defecto valen 1."
    },
    "lesson": "mar-dtd-xsd",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA4-a",
+     "0373-RA4-b",
+     "0373-RA4-c",
+     "0373-RA4-d",
+     "0373-RA4-e",
+     "0373-RA4-f",
+     "0373-RA4-g"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-34",
@@ -1222,7 +1656,19 @@
     "en": "`xs:enumeration` restringe el tipo base a una lista cerrada de valores."
    },
    "lesson": "mar-dtd-xsd",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA4-a",
+     "0373-RA4-b",
+     "0373-RA4-c",
+     "0373-RA4-d",
+     "0373-RA4-e",
+     "0373-RA4-f",
+     "0373-RA4-g"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-35",
@@ -1258,7 +1704,19 @@
     "en": "Se pone en el elemento raíz, junto a `xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"`."
    },
    "lesson": "mar-dtd-xsd",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA4-a",
+     "0373-RA4-b",
+     "0373-RA4-c",
+     "0373-RA4-d",
+     "0373-RA4-e",
+     "0373-RA4-f",
+     "0373-RA4-g"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-36",
@@ -1282,7 +1740,20 @@
     "en": "El predicado `[@idioma='es']` deja los libros 1 y 3."
    },
    "lesson": "mar-xpath-xslt",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA6-e",
+     "0373-RA6-h",
+     "0373-RA6-i",
+     "0373-RA5-c",
+     "0373-RA5-d",
+     "0373-RA5-e",
+     "0373-RA5-f",
+     "0373-RA5-g"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-37",
@@ -1306,7 +1777,20 @@
     "en": "`last()` es la posición del último libro."
    },
    "lesson": "mar-xpath-xslt",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA6-e",
+     "0373-RA6-h",
+     "0373-RA6-i",
+     "0373-RA5-c",
+     "0373-RA5-d",
+     "0373-RA5-e",
+     "0373-RA5-f",
+     "0373-RA5-g"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-38",
@@ -1330,7 +1814,20 @@
     "en": "Como en XPath, la posición `[2]` cuenta desde 1: es el segundo libro."
    },
    "lesson": "mar-xpath-xslt",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA6-e",
+     "0373-RA6-h",
+     "0373-RA6-i",
+     "0373-RA5-c",
+     "0373-RA5-d",
+     "0373-RA5-e",
+     "0373-RA5-f",
+     "0373-RA5-g"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-39",
@@ -1354,7 +1851,20 @@
     "en": "`iter` recorre todos los descendientes con ese nombre: 12 + 25 + 18. En XPath sería `sum(//precio)`."
    },
    "lesson": "mar-xpath-xslt",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA6-e",
+     "0373-RA6-h",
+     "0373-RA6-i",
+     "0373-RA5-c",
+     "0373-RA5-d",
+     "0373-RA5-e",
+     "0373-RA5-f",
+     "0373-RA5-g"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-40",
@@ -1375,7 +1885,20 @@
     "en": "`.//titulo` busca a cualquier profundidad desde el nodo actual. Solución: `.//titulo`."
    },
    "lesson": "mar-xpath-xslt",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA6-e",
+     "0373-RA6-h",
+     "0373-RA6-i",
+     "0373-RA5-c",
+     "0373-RA5-d",
+     "0373-RA5-e",
+     "0373-RA5-f",
+     "0373-RA5-g"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-41",
@@ -1411,7 +1934,20 @@
     "en": "El predicado filtra los libros y la ruta sigue hasta su `titulo`."
    },
    "lesson": "mar-xpath-xslt",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA6-e",
+     "0373-RA6-h",
+     "0373-RA6-i",
+     "0373-RA5-c",
+     "0373-RA5-d",
+     "0373-RA5-e",
+     "0373-RA5-f",
+     "0373-RA5-g"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-42",
@@ -1447,7 +1983,20 @@
     "en": "`count()` cuenta los nodos de una secuencia."
    },
    "lesson": "mar-xpath-xslt",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA6-e",
+     "0373-RA6-h",
+     "0373-RA6-i",
+     "0373-RA5-c",
+     "0373-RA5-d",
+     "0373-RA5-e",
+     "0373-RA5-f",
+     "0373-RA5-g"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-43",
@@ -1483,7 +2032,20 @@
     "en": "Para recorrer se usa `xsl:for-each` y para ordenar, `xsl:sort`."
    },
    "lesson": "mar-xpath-xslt",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA6-e",
+     "0373-RA6-h",
+     "0373-RA6-i",
+     "0373-RA5-c",
+     "0373-RA5-d",
+     "0373-RA5-e",
+     "0373-RA5-f",
+     "0373-RA5-g"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-44",
@@ -1519,7 +2081,20 @@
     "en": "XSLT transforma; la validación es cosa de la DTD o el XSD."
    },
    "lesson": "mar-xpath-xslt",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA6-e",
+     "0373-RA6-h",
+     "0373-RA6-i",
+     "0373-RA5-c",
+     "0373-RA5-d",
+     "0373-RA5-e",
+     "0373-RA5-f",
+     "0373-RA5-g"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-45",
@@ -1555,7 +2130,20 @@
     "en": "Recorre (`for`), asigna (`let`), filtra (`where`), ordena (`order by`) y devuelve (`return`)."
    },
    "lesson": "mar-xpath-xslt",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA6-e",
+     "0373-RA6-h",
+     "0373-RA6-i",
+     "0373-RA5-c",
+     "0373-RA5-d",
+     "0373-RA5-e",
+     "0373-RA5-f",
+     "0373-RA5-g"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-46",
@@ -1591,7 +2179,20 @@
     "en": "Se consultan con XPath y XQuery, sin pasar los datos a tablas."
    },
    "lesson": "mar-xpath-xslt",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA6-e",
+     "0373-RA6-h",
+     "0373-RA6-i",
+     "0373-RA5-c",
+     "0373-RA5-d",
+     "0373-RA5-e",
+     "0373-RA5-f",
+     "0373-RA5-g"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-47",
@@ -1627,7 +2228,19 @@
     "en": "JSON solo admite comillas dobles en claves y cadenas."
    },
    "lesson": "mar-json-intercambio",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA6-a",
+     "0373-RA6-b",
+     "0373-RA6-c",
+     "0373-RA6-d",
+     "0373-RA6-f",
+     "0373-RA6-g",
+     "0373-RA5-g"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-48",
@@ -1663,7 +2276,19 @@
     "en": "Las comas finales son válidas en JavaScript, pero no en JSON."
    },
    "lesson": "mar-json-intercambio",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA6-a",
+     "0373-RA6-b",
+     "0373-RA6-c",
+     "0373-RA6-d",
+     "0373-RA6-f",
+     "0373-RA6-g",
+     "0373-RA5-g"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-49",
@@ -1699,7 +2324,19 @@
     "en": "`true`, `null`, los arrays vacíos y los decimales son JSON válido."
    },
    "lesson": "mar-json-intercambio",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA6-a",
+     "0373-RA6-b",
+     "0373-RA6-c",
+     "0373-RA6-d",
+     "0373-RA6-f",
+     "0373-RA6-g",
+     "0373-RA5-g"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-50",
@@ -1735,7 +2372,19 @@
     "en": "JSON no tiene comentarios. Si se necesitan, se usa otro formato (YAML) o una clave como `\"_nota\"`."
    },
    "lesson": "mar-json-intercambio",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA6-a",
+     "0373-RA6-b",
+     "0373-RA6-c",
+     "0373-RA6-d",
+     "0373-RA6-f",
+     "0373-RA6-g",
+     "0373-RA5-g"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-51",
@@ -1759,7 +2408,19 @@
     "en": "Un array de JSON es una lista de Python y un objeto, un diccionario."
    },
    "lesson": "mar-json-intercambio",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA6-a",
+     "0373-RA6-b",
+     "0373-RA6-c",
+     "0373-RA6-d",
+     "0373-RA6-f",
+     "0373-RA6-g",
+     "0373-RA5-g"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-52",
@@ -1783,7 +2444,19 @@
     "en": "`dumps` traduce `True` a `true`, `None` a `null` y las tuplas a arrays."
    },
    "lesson": "mar-json-intercambio",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA6-a",
+     "0373-RA6-b",
+     "0373-RA6-c",
+     "0373-RA6-d",
+     "0373-RA6-f",
+     "0373-RA6-g",
+     "0373-RA5-g"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-53",
@@ -1807,7 +2480,19 @@
     "en": "Por defecto `dumps` escapa lo que no es ASCII. Con `ensure_ascii=False` sale «Málaga»."
    },
    "lesson": "mar-json-intercambio",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA6-a",
+     "0373-RA6-b",
+     "0373-RA6-c",
+     "0373-RA6-d",
+     "0373-RA6-f",
+     "0373-RA6-g",
+     "0373-RA5-g"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-54",
@@ -1831,7 +2516,19 @@
     "en": "Una conversión de XML a JSON: cada elemento pasa a ser un objeto. `int()` convierte el atributo, que en XML siempre es texto."
    },
    "lesson": "mar-json-intercambio",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA6-a",
+     "0373-RA6-b",
+     "0373-RA6-c",
+     "0373-RA6-d",
+     "0373-RA6-f",
+     "0373-RA6-g",
+     "0373-RA5-g"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-55",
@@ -1855,7 +2552,19 @@
     "en": "SQLite ordena el texto por su código: «L» va antes que «Á», que no es una letra ASCII. Para ordenar como un diccionario hace falta una intercalación (COLLATE)."
    },
    "lesson": "mar-json-intercambio",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA6-a",
+     "0373-RA6-b",
+     "0373-RA6-c",
+     "0373-RA6-d",
+     "0373-RA6-f",
+     "0373-RA6-g",
+     "0373-RA5-g"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-56",
@@ -1876,7 +2585,19 @@
     "en": "`loads` (load string) lee un texto; `load`, un archivo abierto. Solución: `loads`."
    },
    "lesson": "mar-json-intercambio",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA6-a",
+     "0373-RA6-b",
+     "0373-RA6-c",
+     "0373-RA6-d",
+     "0373-RA6-f",
+     "0373-RA6-g",
+     "0373-RA5-g"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-57",
@@ -1912,7 +2633,19 @@
     "en": "Por eso se guardan en un gestor y se exportan a JSON o XML para intercambiarlos."
    },
    "lesson": "mar-json-intercambio",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA6-a",
+     "0373-RA6-b",
+     "0373-RA6-c",
+     "0373-RA6-d",
+     "0373-RA6-f",
+     "0373-RA6-g",
+     "0373-RA5-g"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-58",
@@ -1948,7 +2681,23 @@
     "en": "Los lectores de noticias y las aplicaciones de pódcast consultan esos canales."
    },
    "lesson": "mar-sindicacion-erp",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA2-i",
+     "0373-RA2-j",
+     "0373-RA7-a",
+     "0373-RA7-b",
+     "0373-RA7-c",
+     "0373-RA7-d",
+     "0373-RA7-e",
+     "0373-RA7-f",
+     "0373-RA7-g",
+     "0373-RA7-h",
+     "0373-RA7-i"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-59",
@@ -1984,7 +2733,23 @@
     "en": "`<entry>` es el equivalente en Atom; `<channel>` contiene a todos los `<item>`."
    },
    "lesson": "mar-sindicacion-erp",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA2-i",
+     "0373-RA2-j",
+     "0373-RA7-a",
+     "0373-RA7-b",
+     "0373-RA7-c",
+     "0373-RA7-d",
+     "0373-RA7-e",
+     "0373-RA7-f",
+     "0373-RA7-g",
+     "0373-RA7-h",
+     "0373-RA7-i"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-60",
@@ -2008,7 +2773,23 @@
     "en": "Hay dos `<item>`; `find` devuelve el primero que encaja con la ruta."
    },
    "lesson": "mar-sindicacion-erp",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA2-i",
+     "0373-RA2-j",
+     "0373-RA7-a",
+     "0373-RA7-b",
+     "0373-RA7-c",
+     "0373-RA7-d",
+     "0373-RA7-e",
+     "0373-RA7-f",
+     "0373-RA7-g",
+     "0373-RA7-h",
+     "0373-RA7-i"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-61",
@@ -2032,7 +2813,23 @@
     "en": "Con el espacio de nombres por defecto, el nombre real es `{URI}entry`: sin la URI, `find` no lo encuentra."
    },
    "lesson": "mar-sindicacion-erp",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA2-i",
+     "0373-RA2-j",
+     "0373-RA7-a",
+     "0373-RA7-b",
+     "0373-RA7-c",
+     "0373-RA7-d",
+     "0373-RA7-e",
+     "0373-RA7-f",
+     "0373-RA7-g",
+     "0373-RA7-h",
+     "0373-RA7-i"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-62",
@@ -2068,7 +2865,23 @@
     "en": "Todas las áreas comparten una base de datos y se activan como módulos."
    },
    "lesson": "mar-sindicacion-erp",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA2-i",
+     "0373-RA2-j",
+     "0373-RA7-a",
+     "0373-RA7-b",
+     "0373-RA7-c",
+     "0373-RA7-d",
+     "0373-RA7-e",
+     "0373-RA7-f",
+     "0373-RA7-g",
+     "0373-RA7-h",
+     "0373-RA7-i"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-63",
@@ -2104,7 +2917,23 @@
     "en": "Muchos ERP incluyen un módulo de CRM."
    },
    "lesson": "mar-sindicacion-erp",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA2-i",
+     "0373-RA2-j",
+     "0373-RA7-a",
+     "0373-RA7-b",
+     "0373-RA7-c",
+     "0373-RA7-d",
+     "0373-RA7-e",
+     "0373-RA7-f",
+     "0373-RA7-g",
+     "0373-RA7-h",
+     "0373-RA7-i"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-64",
@@ -2140,7 +2969,23 @@
     "en": "Odoo Community y ERPNext también lo son. Los otros tres son comerciales."
    },
    "lesson": "mar-sindicacion-erp",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA2-i",
+     "0373-RA2-j",
+     "0373-RA7-a",
+     "0373-RA7-b",
+     "0373-RA7-c",
+     "0373-RA7-d",
+     "0373-RA7-e",
+     "0373-RA7-f",
+     "0373-RA7-g",
+     "0373-RA7-h",
+     "0373-RA7-i"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-65",
@@ -2176,7 +3021,23 @@
     "en": "Es el principio de mínimo privilegio: limita el daño de un error o de una cuenta robada."
    },
    "lesson": "mar-sindicacion-erp",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA2-i",
+     "0373-RA2-j",
+     "0373-RA7-a",
+     "0373-RA7-b",
+     "0373-RA7-c",
+     "0373-RA7-d",
+     "0373-RA7-e",
+     "0373-RA7-f",
+     "0373-RA7-g",
+     "0373-RA7-h",
+     "0373-RA7-i"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "mar-66",
@@ -2202,7 +3063,23 @@
     "en": "Se importa, se crea el destino, el escritor, la cabecera, las filas y al final se muestra."
    },
    "lesson": "mar-sindicacion-erp",
-   "module": "0373"
+   "module": "0373",
+   "curriculum": {
+    "ce": [
+     "0373-RA2-i",
+     "0373-RA2-j",
+     "0373-RA7-a",
+     "0373-RA7-b",
+     "0373-RA7-c",
+     "0373-RA7-d",
+     "0373-RA7-e",
+     "0373-RA7-f",
+     "0373-RA7-g",
+     "0373-RA7-h",
+     "0373-RA7-i"
+    ],
+    "status": "proposed"
+   }
   }
  ],
  "cards": []

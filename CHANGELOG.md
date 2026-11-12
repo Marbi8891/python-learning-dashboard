@@ -40,6 +40,10 @@ cambios se agrupan por fecha de merge, con el número de pull request entre par�
   guarda la mejor), evaluación final de 30 preguntas en `#/poo` (3 por unidad, una de cada nivel,
   corregida al terminar; se supera con 21) y «Repasar las preguntas falladas» en cada unidad. Las notas
   se sincronizan con la cuenta (`quizzes`).
+- Correspondencia con los RA y CE oficiales en los cursos de DAW: cada lección y cada pregunta (520)
+  dice qué CE trabaja y con qué estado (`verified`, `proposed` o `unassigned`). Hoy todo es
+  `proposed`, pendiente de revisión docente. Mapa en `scripts/courses/curriculum_map.py`, validado al
+  generar los cursos y en las pruebas (#106).
 - Monitor de CI: `ci-monitor.yml` diagnostica cada ejecución de CI y avisa con una incidencia
   `ci-monitor` (nuevo, recurrente, corregido, cancelado u obsoleto); `scripts/ci-monitor/` y
   `docs/CI_CD_MONITORING.md` (#103).

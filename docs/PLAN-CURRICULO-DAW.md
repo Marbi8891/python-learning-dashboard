@@ -255,6 +255,40 @@ No hacen falta cambios en el backend: el progreso de cada curso ya se guarda en 
 
 Siguiente fase: E (simulacro y prueba de nivel por módulo, reutilizando `learn/exam.js`).
 
+### Correspondencia con RA y CE (#106, Sprint 1 del piloto)
+
+Cada lección y cada pregunta de los cursos de DAW dice ahora qué criterios de evaluación (CE) oficiales trabaja, y con qué seguridad. La correspondencia está en un solo archivo, `scripts/courses/curriculum_map.py`, por lección. Cada pregunta hereda los CE de su lección, salvo que el curso le ponga los suyos con `Q(ce=[...])`.
+
+| Estado | Qué quiere decir | Hoy |
+|---|---|---|
+| `verified` | Un docente lo ha revisado. Exige `reviewed` («nombre, fecha») | 0 |
+| `proposed` | Lo propone el proyecto. Pendiente de revisión docente | 56 lecciones, 520 preguntas |
+| `unassigned` | Sin correspondencia todavía | 0 |
+
+De dónde sale cada propuesta (`source`):
+
+- SQL, Lenguajes de marcas y Entornos: los RA y CE que ya citaban los objetivos de cada lección. Una prueba comprueba que todo CE citado en un objetivo está en el mapa.
+- Programación, Java y JavaScript: propuesta por el contenido de la lección, porque sus objetivos no citan RA.
+
+Formato en los JSON generados:
+
+- `lessons.json`, en cada lección: `"curriculum": {"ra": [...], "ce": [...], "status", "source", "reviewed"}`.
+- `bank.json`, en cada pregunta: `"curriculum": {"ce": [...], "status"}`. La fuente y la revisión están en la lección.
+
+Límites, dichos claro:
+
+- Por lección. Una pregunta que hereda 9 CE no los trabaja todos: el mapa dice que su lección los trabaja. Afinar por pregunta es trabajo para la revisión docente.
+- Practicar un CE no es superarlo. La evaluación de un CE la hace el profesorado con sus propios instrumentos.
+
+CE con alguna pregunta: 0485, 58 de 79; 0612, 27 de 58; 0484, 37 de 57; 0373, 49 de 57; 0487, 7 de 47.
+
+Validación, en dos sitios:
+
+- `course_builder.py` no genera un curso si un CE no existe en `daw-cyl.json`, es de otro módulo, está repetido o el estado no cuadra.
+- `backend/tests/test_daw_courses.py` lo vuelve a comprobar sobre los JSON publicados.
+
+Para verificar una lección: el docente la revisa, se cambia `status="verified"` y `reviewed="Nombre, AAAA-MM-DD"` en el mapa y se regeneran los cursos.
+
 ## 6. Información que sigue haciendo falta
 
 1. Qué módulos optativos ofrece tu centro.

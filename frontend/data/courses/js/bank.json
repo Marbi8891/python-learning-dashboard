@@ -75,7 +75,13 @@
     "en": "`typeof` devuelve el tipo del **valor**: \"42\" entre comillas es un string. No existe el tipo `int`: todos los números son `number`."
    },
    "lesson": "js-variables",
-   "module": "0612"
+   "module": "0612",
+   "curriculum": {
+    "ce": [
+     "0612-RA2-b"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "js-02",
@@ -99,7 +105,13 @@
     "en": "Dos rarezas: `typeof null` es \"object\" (un error histórico del lenguaje) y los arrays también son \"object\". Para arrays se usa `Array.isArray`."
    },
    "lesson": "js-variables",
-   "module": "0612"
+   "module": "0612",
+   "curriculum": {
+    "ce": [
+     "0612-RA2-b"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "js-03",
@@ -123,7 +135,13 @@
     "en": "`const` impide reasignar la variable, pero el array se puede modificar: `push` añade un tercer elemento."
    },
    "lesson": "js-variables",
-   "module": "0612"
+   "module": "0612",
+   "curriculum": {
+    "ce": [
+     "0612-RA2-b"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "js-04",
@@ -147,7 +165,13 @@
     "en": "Reasignar una constante lanza `TypeError: Assignment to constant variable`. Si vas a cambiar el valor, usa `let`."
    },
    "lesson": "js-variables",
-   "module": "0612"
+   "module": "0612",
+   "curriculum": {
+    "ce": [
+     "0612-RA2-b"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "js-05",
@@ -171,7 +195,13 @@
     "en": "Dentro de `${ }` va una **expresión** que se evalúa: `nota + 1` es 8 porque `nota` es un número."
    },
    "lesson": "js-variables",
-   "module": "0612"
+   "module": "0612",
+   "curriculum": {
+    "ce": [
+     "0612-RA2-b"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "js-06",
@@ -195,7 +225,14 @@
     "en": "`==` convierte el texto a número antes de comparar; `===` no convierte y los tipos son distintos."
    },
    "lesson": "js-coercion",
-   "module": "0612"
+   "module": "0612",
+   "curriculum": {
+    "ce": [
+     "0612-RA2-d",
+     "0612-RA2-e"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "js-07",
@@ -219,7 +256,14 @@
     "en": "Con un string, `+` concatena: \"53\". El `-` solo existe para números, así que convierte \"5\" a 5: 2."
    },
    "lesson": "js-coercion",
-   "module": "0612"
+   "module": "0612",
+   "curriculum": {
+    "ce": [
+     "0612-RA2-d",
+     "0612-RA2-e"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "js-08",
@@ -243,7 +287,14 @@
     "en": "Solo el texto vacío es falsy; \"0\" es un texto con un carácter. Un array, aunque esté vacío, es un objeto: truthy. El número 0 es falsy."
    },
    "lesson": "js-coercion",
-   "module": "0612"
+   "module": "0612",
+   "curriculum": {
+    "ce": [
+     "0612-RA2-d",
+     "0612-RA2-e"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "js-09",
@@ -267,7 +318,14 @@
     "en": "`||` descarta cualquier falsy, también el 0. `??` solo sustituye null o undefined, así que respeta la edad 0."
    },
    "lesson": "js-coercion",
-   "module": "0612"
+   "module": "0612",
+   "curriculum": {
+    "ce": [
+     "0612-RA2-d",
+     "0612-RA2-e"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "js-10",
@@ -291,7 +349,14 @@
     "en": "NaN es el único valor distinto de sí mismo. `Number(\"abc\")` da NaN y `Number.isNaN` lo detecta."
    },
    "lesson": "js-coercion",
-   "module": "0612"
+   "module": "0612",
+   "curriculum": {
+    "ce": [
+     "0612-RA2-d",
+     "0612-RA2-e"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "js-11",
@@ -315,7 +380,14 @@
     "en": "Sin argumento, el parámetro toma su valor por defecto. Una flecha sin llaves devuelve la expresión."
    },
    "lesson": "js-funciones",
-   "module": "0612"
+   "module": "0612",
+   "curriculum": {
+    "ce": [
+     "0612-RA4-a",
+     "0612-RA4-b"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "js-12",
@@ -339,7 +411,14 @@
     "en": "Las **declaraciones** de función se elevan (*hoisting*): existen desde el principio de su ámbito y se pueden llamar antes."
    },
    "lesson": "js-funciones",
-   "module": "0612"
+   "module": "0612",
+   "curriculum": {
+    "ce": [
+     "0612-RA4-a",
+     "0612-RA4-b"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "js-13",
@@ -363,7 +442,14 @@
     "en": "Una función guardada en un `const` no existe hasta su línea: usarla antes lanza `ReferenceError`."
    },
    "lesson": "js-funciones",
-   "module": "0612"
+   "module": "0612",
+   "curriculum": {
+    "ce": [
+     "0612-RA4-a",
+     "0612-RA4-b"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "js-14",
@@ -387,7 +473,14 @@
     "en": "`...nums` recoge todos los argumentos en un array (vacío si no hay ninguno). El 0 inicial de `reduce` evita el error con el array vacío."
    },
    "lesson": "js-funciones",
-   "module": "0612"
+   "module": "0612",
+   "curriculum": {
+    "ce": [
+     "0612-RA4-a",
+     "0612-RA4-b"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "js-15",
@@ -411,7 +504,14 @@
     "en": "Calcula el producto, pero no lo **devuelve**. Una función sin `return` devuelve `undefined`."
    },
    "lesson": "js-funciones",
-   "module": "0612"
+   "module": "0612",
+   "curriculum": {
+    "ce": [
+     "0612-RA4-a",
+     "0612-RA4-b"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "js-16",
@@ -435,7 +535,13 @@
     "en": "Con `var` solo hay **una** `i` compartida. Cuando se ejecutan los setTimeout, el bucle ya ha terminado e `i` vale 3."
    },
    "lesson": "js-ambito",
-   "module": "0612"
+   "module": "0612",
+   "curriculum": {
+    "ce": [
+     "0612-RA2-c"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "js-17",
@@ -459,7 +565,13 @@
     "en": "Con `let`, cada vuelta del bucle tiene su propia `i`, y cada función recuerda la suya."
    },
    "lesson": "js-ambito",
-   "module": "0612"
+   "module": "0612",
+   "curriculum": {
+    "ce": [
+     "0612-RA2-c"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "js-18",
@@ -483,7 +595,13 @@
     "en": "Cada llamada a `crearContador` crea su propio `n`. `a` ya se ha usado dos veces, así que la tercera da 3; `b` empieza de cero."
    },
    "lesson": "js-ambito",
-   "module": "0612"
+   "module": "0612",
+   "curriculum": {
+    "ce": [
+     "0612-RA2-c"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "js-19",
@@ -507,7 +625,13 @@
     "en": "`x` está en la zona muerta temporal hasta su declaración: leerla antes lanza `ReferenceError`."
    },
    "lesson": "js-ambito",
-   "module": "0612"
+   "module": "0612",
+   "curriculum": {
+    "ce": [
+     "0612-RA2-c"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "js-20",
@@ -531,7 +655,13 @@
     "en": "La declaración `var y` se eleva, pero la asignación `= 5` se queda en su línea: en el console.log, y existe y vale undefined."
    },
    "lesson": "js-ambito",
-   "module": "0612"
+   "module": "0612",
+   "curriculum": {
+    "ce": [
+     "0612-RA2-c"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "js-21",
@@ -555,7 +685,15 @@
     "en": "`map` da [2, 4, 6, 8] y `filter` se queda con los mayores que 4: 6 y 8."
    },
    "lesson": "js-arrays",
-   "module": "0612"
+   "module": "0612",
+   "curriculum": {
+    "ce": [
+     "0612-RA4-c",
+     "0612-RA4-d",
+     "0612-RA4-e"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "js-22",
@@ -579,7 +717,15 @@
     "en": "Sin función de comparación, `sort` ordena como **texto**: \"10\" va antes que \"9\" porque '1' < '9'. Para números: `sort((a, b) => a - b)`."
    },
    "lesson": "js-arrays",
-   "module": "0612"
+   "module": "0612",
+   "curriculum": {
+    "ce": [
+     "0612-RA4-c",
+     "0612-RA4-d",
+     "0612-RA4-e"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "js-23",
@@ -603,7 +749,15 @@
     "en": "`reduce` parte del valor inicial 0 y va sumando cada precio: 35."
    },
    "lesson": "js-arrays",
-   "module": "0612"
+   "module": "0612",
+   "curriculum": {
+    "ce": [
+     "0612-RA4-c",
+     "0612-RA4-d",
+     "0612-RA4-e"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "js-24",
@@ -627,7 +781,15 @@
     "en": "`find` devuelve el **primero** que cumple la condición (Ana); `filter` devuelve **todos** (Ana y Eva)."
    },
    "lesson": "js-arrays",
-   "module": "0612"
+   "module": "0612",
+   "curriculum": {
+    "ce": [
+     "0612-RA4-c",
+     "0612-RA4-d",
+     "0612-RA4-e"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "js-25",
@@ -651,7 +813,15 @@
     "en": "El hueco entre comas salta el 2. `...resto` recoge lo que queda (4 y 5): longitud 2."
    },
    "lesson": "js-arrays",
-   "module": "0612"
+   "module": "0612",
+   "curriculum": {
+    "ce": [
+     "0612-RA4-c",
+     "0612-RA4-d",
+     "0612-RA4-e"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "js-26",
@@ -675,7 +845,16 @@
     "en": "`ciudad` no existe en el objeto, así que toma el valor por defecto de la desestructuración."
    },
    "lesson": "js-objetos",
-   "module": "0612"
+   "module": "0612",
+   "curriculum": {
+    "ce": [
+     "0612-RA4-f",
+     "0612-RA4-g",
+     "0612-RA4-h",
+     "0612-RA4-i"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "js-27",
@@ -699,7 +878,16 @@
     "en": "La propagación hace una copia **superficial**: `n` se copia, pero `datos` sigue siendo el mismo objeto en los dos."
    },
    "lesson": "js-objetos",
-   "module": "0612"
+   "module": "0612",
+   "curriculum": {
+    "ce": [
+     "0612-RA4-f",
+     "0612-RA4-g",
+     "0612-RA4-h",
+     "0612-RA4-i"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "js-28",
@@ -723,7 +911,16 @@
     "en": "`JSON.stringify` devuelve un **texto** con claves entre comillas dobles y sin espacios."
    },
    "lesson": "js-objetos",
-   "module": "0612"
+   "module": "0612",
+   "curriculum": {
+    "ce": [
+     "0612-RA4-f",
+     "0612-RA4-g",
+     "0612-RA4-h",
+     "0612-RA4-i"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "js-29",
@@ -747,7 +944,16 @@
     "en": "`alumno.direccion` es undefined. Con `?.` no falla, pero en el segundo acceso se lee `.calle` de undefined: `TypeError`. Los argumentos se evalúan antes de imprimir, así que no se imprime nada."
    },
    "lesson": "js-objetos",
-   "module": "0612"
+   "module": "0612",
+   "curriculum": {
+    "ce": [
+     "0612-RA4-f",
+     "0612-RA4-g",
+     "0612-RA4-h",
+     "0612-RA4-i"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "js-30",
@@ -771,7 +977,16 @@
     "en": "`Object.keys` da las claves y `Object.values` los valores, ambos como arrays."
    },
    "lesson": "js-objetos",
-   "module": "0612"
+   "module": "0612",
+   "curriculum": {
+    "ce": [
+     "0612-RA4-f",
+     "0612-RA4-g",
+     "0612-RA4-h",
+     "0612-RA4-i"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "js-31",
@@ -807,7 +1022,17 @@
     "en": "Si metes con innerHTML un texto escrito por el usuario, podría incluir `<img onerror=…>` y ejecutar código."
    },
    "lesson": "js-dom",
-   "module": "0612"
+   "module": "0612",
+   "curriculum": {
+    "ce": [
+     "0612-RA6-a",
+     "0612-RA6-b",
+     "0612-RA6-c",
+     "0612-RA6-d",
+     "0612-RA3-d"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "js-32",
@@ -843,7 +1068,17 @@
     "en": "`querySelector` devuelve el primer elemento que coincide; para todos existe `querySelectorAll`."
    },
    "lesson": "js-dom",
-   "module": "0612"
+   "module": "0612",
+   "curriculum": {
+    "ce": [
+     "0612-RA6-a",
+     "0612-RA6-b",
+     "0612-RA6-c",
+     "0612-RA6-d",
+     "0612-RA3-d"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "js-33",
@@ -879,7 +1114,17 @@
     "en": "Por eso recorrerla con `forEach` nunca falla, mientras que `querySelector` sí puede devolver null."
    },
    "lesson": "js-dom",
-   "module": "0612"
+   "module": "0612",
+   "curriculum": {
+    "ce": [
+     "0612-RA6-a",
+     "0612-RA6-b",
+     "0612-RA6-c",
+     "0612-RA6-d",
+     "0612-RA3-d"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "js-34",
@@ -915,7 +1160,17 @@
     "en": "`className =` sustituye todas las clases por una sola."
    },
    "lesson": "js-dom",
-   "module": "0612"
+   "module": "0612",
+   "curriculum": {
+    "ce": [
+     "0612-RA6-a",
+     "0612-RA6-b",
+     "0612-RA6-c",
+     "0612-RA6-d",
+     "0612-RA3-d"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "js-35",
@@ -951,7 +1206,17 @@
     "en": "El navegador ejecuta el script en cuanto lo encuentra. Con `defer` espera a que el HTML esté completo."
    },
    "lesson": "js-dom",
-   "module": "0612"
+   "module": "0612",
+   "curriculum": {
+    "ce": [
+     "0612-RA6-a",
+     "0612-RA6-b",
+     "0612-RA6-c",
+     "0612-RA6-d",
+     "0612-RA3-d"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "js-36",
@@ -987,7 +1252,16 @@
     "en": "Se pasa la función sin llamarla; el navegador la llamará en cada click."
    },
    "lesson": "js-eventos",
-   "module": "0612"
+   "module": "0612",
+   "curriculum": {
+    "ce": [
+     "0612-RA5-b",
+     "0612-RA5-c",
+     "0612-RA5-d",
+     "0612-RA6-e"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "js-37",
@@ -1023,7 +1297,16 @@
     "en": "Los paréntesis **llaman** a la función. Si necesitas pasarle argumentos: `() => saludar(\"Ana\")`."
    },
    "lesson": "js-eventos",
-   "module": "0612"
+   "module": "0612",
+   "curriculum": {
+    "ce": [
+     "0612-RA5-b",
+     "0612-RA5-c",
+     "0612-RA5-d",
+     "0612-RA6-e"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "js-38",
@@ -1059,7 +1342,16 @@
     "en": "`preventDefault` cancela la acción por defecto del navegador, que es enviar el formulario y recargar."
    },
    "lesson": "js-eventos",
-   "module": "0612"
+   "module": "0612",
+   "curriculum": {
+    "ce": [
+     "0612-RA5-b",
+     "0612-RA5-c",
+     "0612-RA5-d",
+     "0612-RA6-e"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "js-39",
@@ -1095,7 +1387,16 @@
     "en": "Los eventos suben por el árbol. `stopPropagation()` lo evitaría."
    },
    "lesson": "js-eventos",
-   "module": "0612"
+   "module": "0612",
+   "curriculum": {
+    "ce": [
+     "0612-RA5-b",
+     "0612-RA5-c",
+     "0612-RA5-d",
+     "0612-RA6-e"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "js-40",
@@ -1131,7 +1432,16 @@
     "en": "Funciona también con los elementos que se añaden después y ahorra listeners."
    },
    "lesson": "js-eventos",
-   "module": "0612"
+   "module": "0612",
+   "curriculum": {
+    "ce": [
+     "0612-RA5-b",
+     "0612-RA5-c",
+     "0612-RA5-d",
+     "0612-RA6-e"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "js-41",
@@ -1155,7 +1465,14 @@
     "en": "El setTimeout, aunque sea de 0 ms, se ejecuta cuando termina todo el código síncrono."
    },
    "lesson": "js-asincronia",
-   "module": "0612"
+   "module": "0612",
+   "curriculum": {
+    "ce": [
+     "0612-RA7-a",
+     "0612-RA7-b"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "js-42",
@@ -1179,7 +1496,14 @@
     "en": "Primero el código síncrono; después las **microtareas** (el then de la promesa) y por último las tareas como setTimeout."
    },
    "lesson": "js-asincronia",
-   "module": "0612"
+   "module": "0612",
+   "curriculum": {
+    "ce": [
+     "0612-RA7-a",
+     "0612-RA7-b"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "js-43",
@@ -1203,7 +1527,14 @@
     "en": "Una función async **siempre** devuelve una promesa (un objeto). El 5 se obtiene con `then` o con `await`."
    },
    "lesson": "js-asincronia",
-   "module": "0612"
+   "module": "0612",
+   "curriculum": {
+    "ce": [
+     "0612-RA7-a",
+     "0612-RA7-b"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "js-44",
@@ -1227,7 +1558,14 @@
     "en": "`main` imprime 1 y se pausa en el await. Mientras tanto, el resto del programa imprime 3. Al terminar la espera, main continúa e imprime 2."
    },
    "lesson": "js-asincronia",
-   "module": "0612"
+   "module": "0612",
+   "curriculum": {
+    "ce": [
+     "0612-RA7-a",
+     "0612-RA7-b"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "js-45",
@@ -1251,7 +1589,14 @@
     "en": "El error de una función async rechaza su promesa y el `catch` lo trata, pero de forma asíncrona: después del código síncrono."
    },
    "lesson": "js-asincronia",
-   "module": "0612"
+   "module": "0612",
+   "curriculum": {
+    "ce": [
+     "0612-RA7-a",
+     "0612-RA7-b"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "js-46",
@@ -1275,7 +1620,15 @@
     "en": "`precio` llega como **texto** \"12\" y `+` concatena: \"123\". Hay que convertir: `Number(datos.precio)`."
    },
    "lesson": "js-fetch-json",
-   "module": "0612"
+   "module": "0612",
+   "curriculum": {
+    "ce": [
+     "0612-RA7-c",
+     "0612-RA7-e",
+     "0612-RA7-f"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "js-47",
@@ -1299,7 +1652,15 @@
     "en": "Es un objeto válido en JavaScript, pero no es JSON válido: JSON exige comillas dobles en claves y textos."
    },
    "lesson": "js-fetch-json",
-   "module": "0612"
+   "module": "0612",
+   "curriculum": {
+    "ce": [
+     "0612-RA7-c",
+     "0612-RA7-e",
+     "0612-RA7-f"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "js-48",
@@ -1335,7 +1696,15 @@
     "en": "`fetch` solo rechaza por errores de red. Un 404 es una respuesta válida del servidor."
    },
    "lesson": "js-fetch-json",
-   "module": "0612"
+   "module": "0612",
+   "curriculum": {
+    "ce": [
+     "0612-RA7-c",
+     "0612-RA7-e",
+     "0612-RA7-f"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "js-49",
@@ -1371,7 +1740,15 @@
     "en": "El cuerpo puede llegar en trozos; `json()` espera a tenerlo entero y lo convierte."
    },
    "lesson": "js-fetch-json",
-   "module": "0612"
+   "module": "0612",
+   "curriculum": {
+    "ce": [
+     "0612-RA7-c",
+     "0612-RA7-e",
+     "0612-RA7-f"
+    ],
+    "status": "proposed"
+   }
   },
   {
    "id": "js-50",
@@ -1395,7 +1772,15 @@
     "en": "El `await` de una promesa rechazada lanza el error dentro del try: salta al catch sin ejecutar \"no llega\" y termina con el finally."
    },
    "lesson": "js-fetch-json",
-   "module": "0612"
+   "module": "0612",
+   "curriculum": {
+    "ce": [
+     "0612-RA7-c",
+     "0612-RA7-e",
+     "0612-RA7-f"
+    ],
+    "status": "proposed"
+   }
   }
  ],
  "cards": []
