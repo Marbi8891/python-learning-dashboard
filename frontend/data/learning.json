@@ -49,7 +49,9 @@
   "poo-atributos-metodos",
   "poo-encapsulacion",
   "poo-herencia",
-  "poo-polimorfismo"
+  "poo-polimorfismo",
+  "poo-composicion",
+  "poo-metodos-especiales"
  ],
  "daw": [
   {
@@ -152,13 +154,13 @@
      "number": 7,
      "id": "poo-composicion",
      "title": "Composición y relaciones entre objetos",
-     "available": false
+     "available": true
     },
     {
      "number": 8,
      "id": "poo-metodos-especiales",
      "title": "Métodos especiales de Python",
-     "available": false
+     "available": true
     },
     {
      "number": 9,
@@ -4234,6 +4236,792 @@
     "0485-RA7-f"
    ],
    "difficulty": 1.8,
+   "importance": 2
+  },
+  {
+   "id": "poo-composicion",
+   "title": "Composición y relaciones entre objetos",
+   "area": "poo",
+   "requires": [
+    "poo-encapsulacion",
+    "poo-herencia"
+   ],
+   "daw": 2,
+   "ut": "prog-ut6",
+   "lessons": [
+    "herencia"
+   ],
+   "summary": "Objetos que trabajan juntos: asociación, agregación y composición, delegación y cuándo componer en vez de heredar.",
+   "when": "Cuando un objeto necesita a otros para hacer su trabajo (un pedido con su cliente y sus líneas, un coche con su motor) y tienes que decidir quién crea a quién y quién hace cada cosa.",
+   "example": {
+    "code": "class Linea:\n    def __init__(self, producto, precio, cantidad):\n        self.producto = producto\n        self.precio = precio\n        self.cantidad = cantidad\n\n    def subtotal(self):\n        return self.precio * self.cantidad\n\n\nclass Pedido:\n    def __init__(self, cliente):\n        self.cliente = cliente          # asociación: el cliente existe fuera\n        self.lineas = []                # composición: las líneas son del pedido\n\n    def agregar(self, producto, precio, cantidad):\n        self.lineas.append(Linea(producto, precio, cantidad))\n\n    def total(self):                    # delegación: cada línea calcula lo suyo\n        return sum(linea.subtotal() for linea in self.lineas)\n\n\npedido = Pedido(\"Ana\")\npedido.agregar(\"Teclado\", 25, 2)\npedido.agregar(\"Ratón\", 10, 1)\nprint(pedido.cliente, pedido.total())",
+    "lines": [
+     [
+      13,
+      "El pedido guarda una referencia al cliente: los dos existen por separado."
+     ],
+     [
+      14,
+      "Las líneas solo tienen sentido dentro de su pedido."
+     ],
+     [
+      17,
+      "El propio pedido crea sus líneas: eso es la composición."
+     ],
+     [
+      19,
+      "`total` no calcula precios: se lo pide a cada línea."
+     ]
+    ],
+    "output": "Ana 60\n"
+   },
+   "errors": [
+    {
+     "id": "poo-composicion.copia-al-guardar",
+     "label": "Cree que guardar un objeto en un atributo lo copia",
+     "why": "Un atributo guarda una referencia: el mismo objeto se ve desde todos los sitios que lo guardan, y sus cambios también.",
+     "think": "¿Hay aquí uno o dos objetos? ¿Dónde se creó cada uno?",
+     "avoid": "Comprueba con `is` si dos nombres apuntan al mismo objeto; copia la lista con `list(...)` cuando necesites una propia."
+    },
+    {
+     "id": "poo-composicion.lista-por-defecto",
+     "label": "Usa una lista como valor por defecto de un parámetro",
+     "why": "El valor por defecto se crea una sola vez, al definir la función, y todos los objetos creados sin ese argumento comparten la misma lista.",
+     "think": "¿Qué pasará al crear un segundo objeto sin pasarle la lista?",
+     "avoid": "Pon `None` como valor por defecto y crea la lista dentro: `self.x = list(x) if x else []`."
+    },
+    {
+     "id": "poo-composicion.herencia-por-tiene",
+     "label": "Usa herencia cuando la relación es «tiene un»",
+     "why": "Heredar dice «es un»: la subclase recibe todos los métodos de la otra y se puede usar en su lugar, aunque no tenga sentido.",
+     "think": "¿Suena bien la frase «A es un B»? ¿O es «A tiene un B»?",
+     "avoid": "Si es «tiene un», guarda el otro objeto en un atributo y delega en él."
+    },
+    {
+     "id": "poo-composicion.no-delega",
+     "label": "Hace desde fuera lo que el objeto ya sabe hacer",
+     "why": "Repetir un cálculo con los atributos de otro objeto (o guardar una copia del resultado) hace que dos sitios tengan que estar de acuerdo, y tarde o temprano se contradicen.",
+     "think": "¿Qué objeto tiene estos datos? ¿Tiene ya un método para esto?",
+     "avoid": "Pídeselo al objeto que tiene los datos: `linea.subtotal()`, `motor.encender()`."
+    },
+    {
+     "id": "poo-composicion.relacion-es-sintaxis",
+     "label": "Cree que asociación, agregación y composición son instrucciones de Python",
+     "why": "Son ideas de diseño. En el código siempre hay un atributo que apunta a otro objeto; lo que cambia es quién crea ese objeto y cuánto vive.",
+     "think": "¿Quién crea esta parte? ¿Existiría sin el todo?",
+     "avoid": "Para clasificar una relación, mira dónde se crea el objeto y qué pasa con él cuando el todo desaparece."
+    }
+   ],
+   "related": [
+    "poo-herencia",
+    "poo-encapsulacion",
+    "listas"
+   ],
+   "unit": {
+    "module": "poo",
+    "number": 7
+   },
+   "objectives": [
+    "Reconocer en un enunciado las relaciones entre objetos: asociación, agregación y composición.",
+    "Construir objetos que guardan referencias a otros objetos y entender que no se copian.",
+    "Decidir quién crea las partes y quién vive más tiempo, el todo o sus partes.",
+    "Delegar: que cada objeto haga su parte del trabajo en vez de hacerlo todo desde fuera.",
+    "Elegir entre herencia («es un») y composición («tiene un») con argumentos."
+   ],
+   "prior": "La Unidad 4 (encapsulación y propiedades), la Unidad 5 (herencia) y trabajar con listas de objetos.",
+   "key": [
+    [
+     "Asociación",
+     "Un objeto conoce a otro y lo usa, pero los dos existen por separado (un pedido y su cliente)."
+    ],
+    [
+     "Agregación",
+     "Un todo agrupa partes que se crean fuera y pueden seguir existiendo sin él (un equipo y sus jugadores)."
+    ],
+    [
+     "Composición",
+     "Un todo crea sus partes y estas no tienen sentido sin él (un pedido y sus líneas)."
+    ],
+    [
+     "Delegación",
+     "Un objeto pasa una tarea a otro objeto que sabe hacerla, en vez de hacerla él."
+    ],
+    [
+     "«Es un» / «tiene un»",
+     "La prueba para elegir: si «A es un B», herencia; si «A tiene un B», composición."
+    ],
+    [
+     "Referencia",
+     "Lo que guarda un atributo cuando le asignas un objeto: el mismo objeto, no una copia."
+    ]
+   ],
+   "sections": [
+    {
+     "id": "poo-composicion.asociacion",
+     "title": "Asociación: objetos que se conocen",
+     "theory": "Hasta ahora cada objeto trabajaba solo. En un programa real los objetos **se relacionan**: un pedido es de un cliente, un alumno está matriculado en un curso. La relación más sencilla es la **asociación**: un objeto guarda en un atributo a otro objeto y lo usa cuando lo necesita.\n\n```\nclass Pedido:\n    def __init__(self, cliente):\n        self.cliente = cliente\n```\n\n- El atributo guarda una **referencia** al mismo objeto, **no una copia**. Si el cliente cambia su correo, el pedido ve el cambio.\n- Los dos objetos **viven por separado**: el cliente existía antes del pedido y seguirá existiendo si el pedido se borra.\n- Asociación, agregación y composición son **ideas de diseño** (se dibujan en los diagramas de clases). Python no tiene palabras clave para ellas: en el código siempre verás lo mismo, un atributo que apunta a otro objeto. Lo que cambia es **quién crea** el objeto y **cuánto vive**.",
+     "examples": [
+      {
+       "code": "class Cliente:\n    def __init__(self, nombre, email):\n        self.nombre = nombre\n        self.email = email\n\n\nclass Pedido:\n    def __init__(self, numero, cliente):\n        self.numero = numero\n        self.cliente = cliente      # guarda el mismo objeto, no una copia\n\n    def destinatario(self):\n        return f\"Pedido {self.numero} para {self.cliente.email}\"\n\n\nana = Cliente(\"Ana\", \"ana@ies.es\")\npedido = Pedido(1, ana)\nana.email = \"ana.garcia@ies.es\"     # el cliente cambia su correo\nprint(pedido.destinatario())\nprint(pedido.cliente is ana)",
+       "lines": [
+        [
+         10,
+         "El pedido guarda una referencia al cliente que recibe."
+        ],
+        [
+         13,
+         "Usa los datos del cliente en el momento de llamarlo."
+        ],
+        [
+         18,
+         "Cambiar el cliente se nota desde el pedido: es el mismo objeto."
+        ],
+        [
+         20,
+         "`is` confirma que no hay copia: los dos nombres apuntan al mismo objeto."
+        ]
+       ],
+       "output": "Pedido 1 para ana.garcia@ies.es\nTrue\n",
+       "origin": {
+        "kind": "original"
+       }
+      }
+     ],
+     "quiz": [
+      "poo7-01",
+      "poo7-02",
+      "poo7-03"
+     ]
+    },
+    {
+     "id": "poo-composicion.agregacion-composicion",
+     "title": "Agregación y composición",
+     "theory": "Cuando un objeto es un **todo** formado por **partes**, hay dos casos:\n\n| | Agregación | Composición |\n|---|---|---|\n| Quién crea las partes | Se crean **fuera** y se le pasan al todo | Las crea **el propio todo** |\n| Quién vive más | Las partes pueden seguir sin el todo | Las partes desaparecen con el todo |\n| Ejemplo | Un equipo y sus jugadores | Un pedido y sus líneas |\n\nLa pregunta clave es: **¿esta parte tiene sentido sin el todo?** Un jugador sigue existiendo si el equipo desaparece; una línea de pedido («2 teclados a 25 €») no significa nada fuera de su pedido.\n\nDos trampas al guardar partes en una lista:\n\n- **Nunca** uses una lista como valor por defecto de un parámetro (`def __init__(self, jugadores=[])`). Esa lista se crea **una sola vez** y la comparten todos los objetos. Usa `None` y crea la lista dentro.\n- Si recibes una lista de fuera, guarda una **copia** (`list(jugadores)`) si no quieres que los cambios de fuera se cuelen en tu objeto.",
+     "examples": [
+      {
+       "code": "class Jugador:\n    def __init__(self, nombre):\n        self.nombre = nombre\n\n\nclass Equipo:                       # agregación: recibe jugadores creados fuera\n    def __init__(self, nombre, jugadores=None):\n        self.nombre = nombre\n        self.jugadores = list(jugadores) if jugadores else []\n\n    def fichar(self, jugador):\n        self.jugadores.append(jugador)\n\n\nclass Linea:\n    def __init__(self, producto, cantidad):\n        self.producto = producto\n        self.cantidad = cantidad\n\n\nclass Pedido:                       # composición: crea sus propias líneas\n    def __init__(self):\n        self.lineas = []\n\n    def agregar(self, producto, cantidad):\n        self.lineas.append(Linea(producto, cantidad))\n\n\nlucia = Jugador(\"Lucía\")\nequipo = Equipo(\"IES\", [lucia])\notro = Equipo(\"Club\")\notro.fichar(Jugador(\"Marta\"))\nprint(len(equipo.jugadores), len(otro.jugadores))\n\npedido = Pedido()\npedido.agregar(\"Teclado\", 2)\nprint(pedido.lineas[0].producto, pedido.lineas[0].cantidad)",
+       "lines": [
+        [
+         7,
+         "`None` como valor por defecto: cada equipo tendrá su propia lista."
+        ],
+        [
+         9,
+         "`list(...)` guarda una copia de la lista recibida."
+        ],
+        [
+         26,
+         "El pedido crea la línea: nadie de fuera la ve nacer."
+        ],
+        [
+         29,
+         "La jugadora existe antes que el equipo y seguiría existiendo sin él."
+        ],
+        [
+         33,
+         "Cada equipo tiene su lista: fichar en uno no cambia el otro."
+        ]
+       ],
+       "output": "1 1\nTeclado 2\n",
+       "origin": {
+        "kind": "original"
+       }
+      }
+     ],
+     "quiz": [
+      "poo7-04",
+      "poo7-05",
+      "poo7-06"
+     ]
+    },
+    {
+     "id": "poo-composicion.delegacion",
+     "title": "Delegación: cada objeto hace su parte",
+     "theory": "**Delegar** es que un objeto pase una tarea al objeto que sabe hacerla. El pedido no sabe calcular el precio de una línea: se lo pide a la línea.\n\n```\ndef total(self):\n    return sum(linea.subtotal() for linea in self.lineas)\n```\n\n- Cada clase se ocupa de **sus propios datos**: la línea sabe su subtotal, el pedido suma las líneas.\n- Si cambia cómo se calcula un subtotal (un descuento por cantidad), solo se toca `Linea`.\n- Desde fuera, pide las cosas al objeto que tienes, en vez de recorrer sus tripas: mejor `pedido.total()` que `pedido.lineas[0].producto.precio * …`. Encadenar atributos de objetos ajenos hace que tu código dependa de cómo están hechos por dentro.",
+     "examples": [
+      {
+       "code": "class Motor:\n    def __init__(self, potencia):\n        self.potencia = potencia\n        self.encendido = False\n\n    def encender(self):\n        self.encendido = True\n        return f\"Motor de {self.potencia} CV en marcha\"\n\n\nclass Coche:\n    def __init__(self, modelo, potencia):\n        self.modelo = modelo\n        self.motor = Motor(potencia)    # el coche crea su motor\n\n    def arrancar(self):\n        return self.motor.encender()    # delega en el motor\n\n    def en_marcha(self):\n        return self.motor.encendido\n\n\ncoche = Coche(\"Ibiza\", 95)\nprint(coche.en_marcha())\nprint(coche.arrancar())\nprint(coche.en_marcha())",
+       "lines": [
+        [
+         14,
+         "Composición: el motor nace con el coche."
+        ],
+        [
+         17,
+         "`arrancar` no sabe encender motores: se lo pide al motor."
+        ],
+        [
+         20,
+         "Quien usa el coche no necesita saber que hay un motor dentro."
+        ]
+       ],
+       "output": "False\nMotor de 95 CV en marcha\nTrue\n",
+       "origin": {
+        "kind": "original"
+       }
+      }
+     ],
+     "quiz": [
+      "poo7-07",
+      "poo7-08",
+      "poo7-09"
+     ]
+    },
+    {
+     "id": "poo-composicion.herencia-o-composicion",
+     "title": "Herencia frente a composición",
+     "theory": "Herencia y composición sirven para reutilizar código, pero dicen cosas distintas:\n\n- **Herencia** («es un»): un `Perro` **es un** `Animal`. La subclase recibe **todos** los métodos de la superclase y se puede usar en su lugar.\n- **Composición** («tiene un»): un `Coche` **tiene un** `Motor`. La clase usa otro objeto y solo enseña lo que ella decide.\n\nLa prueba es decir la frase en voz alta. «Un coche es un motor» suena mal: no heredes, compón.\n\nUn caso típico es una `Pila`. Si haces `class Pila(list)`, la pila hereda `insert`, `sort` o `pop(0)`, y cualquiera puede romper la regla «solo se saca el último». Si la pila **tiene** una lista dentro, solo ofrece `apilar`, `desapilar` y `cima`.\n\nUn consejo clásico del diseño orientado a objetos es **preferir la composición** cuando dudes: cambiar la pieza interna (otra lista, otro motor) no afecta a quien usa la clase, y no arrastras métodos que no quieres.",
+     "examples": [
+      {
+       "code": "class Pila:\n    def __init__(self):\n        self._elementos = []        # la pila TIENE una lista\n\n    def apilar(self, valor):\n        self._elementos.append(valor)\n\n    def desapilar(self):\n        return self._elementos.pop()\n\n    def cima(self):\n        return self._elementos[-1]\n\n    def esta_vacia(self):\n        return not self._elementos\n\n\npila = Pila()\nfor plato in [\"azul\", \"rojo\", \"verde\"]:\n    pila.apilar(plato)\nprint(pila.desapilar(), pila.cima())\nprint(hasattr(pila, \"insert\"))",
+       "lines": [
+        [
+         3,
+         "Composición: la lista es una pieza interna, con `_` porque no es pública."
+        ],
+        [
+         9,
+         "Cada método delega en la lista, pero solo los que tienen sentido en una pila."
+        ],
+        [
+         22,
+         "La pila no tiene `insert`: nadie puede meter un plato por debajo."
+        ]
+       ],
+       "output": "verde rojo\nFalse\n",
+       "origin": {
+        "kind": "original"
+       }
+      }
+     ],
+     "quiz": [
+      "poo7-10",
+      "poo7-11",
+      "poo7-12"
+     ]
+    }
+   ],
+   "guided": [
+    "poo7-13"
+   ],
+   "autonomous": [
+    "poo7-18"
+   ],
+   "extras": [
+    "poo7-14",
+    "poo7-15"
+   ],
+   "selfcheck": [
+    "poo7-16",
+    "poo7-17"
+   ],
+   "recap": [
+    "Asociación, agregación y composición son ideas de diseño: en Python siempre es un atributo que apunta a otro objeto.",
+    "Guardar un objeto en un atributo guarda una referencia, no una copia.",
+    "Agregación: las partes se crean fuera y sobreviven al todo. Composición: el todo crea sus partes.",
+    "Nunca uses una lista como valor por defecto de un parámetro: usa `None` y crea la lista dentro.",
+    "Delega: cada objeto hace lo que sabe hacer con sus datos.",
+    "«Es un» → herencia; «tiene un» → composición. Si dudas, compón."
+   ],
+   "pass": {
+    "minScore": 0.7,
+    "required": [
+     "poo7-13",
+     "poo7-18"
+    ],
+    "text": [
+     "Resolver el ejercicio guiado (coche y motor) y el ejercicio principal (clientes, pedidos y productos) con todos los tests superados.",
+     "Dominar la unidad según el motor: al menos un 70 % de aciertos recientes en sus ejercicios, con varios tipos distintos.",
+     "Completar las lecciones ayuda a organizarte, pero **no** demuestra la competencia: la demuestran los ejercicios."
+    ]
+   },
+   "practices": [
+    {
+     "text": "Antes de escribir código, di la relación en voz alta: «A es un B» o «A tiene un B».",
+     "why": "Evita heredar de una clase solo para aprovechar sus métodos cuando en realidad la usas."
+    },
+    {
+     "text": "Decide quién crea cada objeto: si la parte no tiene sentido sin el todo, que la cree el todo.",
+     "why": "Así nadie de fuera puede dejar el todo con partes a medias o compartidas por error."
+    },
+    {
+     "text": "No uses listas ni diccionarios como valor por defecto de un parámetro: usa `None`.",
+     "why": "El valor por defecto se crea una sola vez y lo compartirían todos los objetos."
+    },
+    {
+     "text": "Pide las cosas al objeto que tienes (`pedido.total()`) en vez de encadenar atributos de otros (`pedido.lineas[0].producto.precio`).",
+     "why": "Si cambia cómo está hecha una clase por dentro, tu código no se rompe."
+    },
+    {
+     "text": "Guarda las piezas internas con `_` y ofrece solo los métodos que tienen sentido.",
+     "why": "La clase decide qué se puede hacer con ella y protege sus reglas."
+    }
+   ],
+   "references": [
+    {
+     "source": "py-faq-programming",
+     "section": "Objetos: ¿Qué es la delegación?",
+     "supports": [
+      "delegar en otro objeto las operaciones que no hace el propio objeto"
+     ],
+     "status": "pending"
+    },
+    {
+     "source": "py-tutorial-classes",
+     "section": "9.3.5. Variables de clase y de instancia",
+     "supports": [
+      "una lista compartida por todos los objetos cuando no se crea en `__init__`"
+     ],
+     "status": "pending"
+    },
+    {
+     "source": "py-faq-programming",
+     "section": "¿Por qué se comparten los valores por defecto entre objetos?",
+     "supports": [
+      "el valor por defecto de un parámetro se crea una sola vez",
+      "usar `None` como valor por defecto"
+     ],
+     "status": "pending"
+    }
+   ],
+   "bank": [
+    "poo7-02",
+    "poo7-05",
+    "poo7-08",
+    "poo7-10",
+    "poo7-12",
+    "poo7-16",
+    "poo7-19",
+    "poo7-20",
+    "poo7-21",
+    "poo7-22",
+    "poo7-23",
+    "poo7-24",
+    "poo7-25",
+    "poo7-26",
+    "poo7-27"
+   ],
+   "curriculum": [
+    {
+     "ce": "0485-RA7-j",
+     "status": "proposed",
+     "source": "rd-405-2023#anexo-I",
+     "reviewed": "2026-11-11",
+     "by": "plataforma",
+     "note": "Se comparan herencia («es un») y composición («tiene un») y se elige entre ellas."
+    },
+    {
+     "ce": "0485-RA4-e",
+     "status": "proposed",
+     "source": "rd-405-2023#anexo-I",
+     "reviewed": "2026-11-11",
+     "by": "plataforma",
+     "note": "Se escriben programas con objetos que usan otros objetos (cliente, pedido y líneas)."
+    },
+    {
+     "ce": "0485-RA6-c",
+     "status": "proposed",
+     "source": "rd-405-2023#anexo-I",
+     "reviewed": "2026-11-11",
+     "by": "plataforma",
+     "note": "Se guardan y procesan listas de objetos dentro de otro objeto."
+    }
+   ],
+   "module": "0485",
+   "ra": [
+    "0485-RA4",
+    "0485-RA6",
+    "0485-RA7"
+   ],
+   "ce": [
+    "0485-RA7-j",
+    "0485-RA4-e",
+    "0485-RA6-c"
+   ],
+   "difficulty": 1.9,
+   "importance": 2
+  },
+  {
+   "id": "poo-metodos-especiales",
+   "title": "Métodos especiales de Python",
+   "area": "poo",
+   "requires": [
+    "poo",
+    "poo-atributos-metodos"
+   ],
+   "daw": 2,
+   "ut": "prog-ut5",
+   "lessons": [
+    "poo"
+   ],
+   "summary": "Que tus objetos funcionen con `print`, `len`, `==`, `in` y `for` como los de Python: los métodos especiales.",
+   "when": "Cuando quieres que un objeto se imprima de forma legible, se compare por su contenido, diga cuántos elementos tiene o se pueda recorrer con `for`, igual que una lista.",
+   "example": {
+    "code": "class Carrito:\n    def __init__(self):\n        self.productos = []\n\n    def agregar(self, producto):\n        self.productos.append(producto)\n\n    def __len__(self):                  # len(carrito)\n        return len(self.productos)\n\n    def __contains__(self, producto):   # producto in carrito\n        return producto in self.productos\n\n    def __str__(self):                  # print(carrito) y str(carrito)\n        return f\"Carrito con {len(self)} productos\"\n\n\ncarrito = Carrito()\ncarrito.agregar(\"pan\")\ncarrito.agregar(\"leche\")\nprint(carrito)\nprint(len(carrito), \"pan\" in carrito)",
+    "lines": [
+     [
+      8,
+      "Python llama a `__len__` cuando escribes `len(carrito)`."
+     ],
+     [
+      11,
+      "`in` usa `__contains__`."
+     ],
+     [
+      14,
+      "`print` usa `__str__` para saber qué texto mostrar."
+     ],
+     [
+      21,
+      "Nadie llama a los métodos especiales por su nombre: los llama Python."
+     ]
+    ],
+    "output": "Carrito con 2 productos\n2 True\n"
+   },
+   "errors": [
+    {
+     "id": "poo-metodos-especiales.nombre-especial-mal",
+     "label": "Escribe mal el nombre del método especial",
+     "why": "Python solo llama al método si el nombre es exacto, con dos guiones bajos delante y detrás (`__str__`). Con otro nombre se usa el comportamiento por defecto.",
+     "think": "¿He puesto dos guiones bajos a cada lado y el nombre que espera Python?",
+     "avoid": "Consulta la tabla de la lección: `len()` → `__len__`, `in` → `__contains__`, `for` → `__iter__`."
+    },
+    {
+     "id": "poo-metodos-especiales.llamada-directa",
+     "label": "Llama al método especial por su nombre en vez de usar la instrucción de Python",
+     "why": "Los métodos especiales están para que Python los llame. `x.__len__()` funciona, pero se escribe `len(x)`; y sin paréntesis no se llama a nada.",
+     "think": "¿Qué instrucción de Python usa este método?",
+     "avoid": "Escribe `len(x)`, `str(x)`, `a == b` o `y in x`, y deja que Python llame al método."
+    },
+    {
+     "id": "poo-metodos-especiales.imprime-en-vez-de-devolver",
+     "label": "Imprime dentro del método especial en vez de devolver el resultado",
+     "why": "`__str__`, `__repr__` y `__eq__` deben devolver su resultado. Si imprimen y no devuelven nada, devuelven `None` y Python da error o una comparación falsa.",
+     "think": "¿Este método tiene un `return` con el valor que se espera?",
+     "avoid": "Usa `return` con un `str` (en `__str__` y `__repr__`) o un `bool` (en `__eq__` y `__contains__`)."
+    },
+    {
+     "id": "poo-metodos-especiales.lista-usa-str",
+     "label": "Cree que una lista de objetos se imprime con `__str__`",
+     "why": "Las listas, las tuplas y los diccionarios muestran sus elementos con `__repr__`. Si solo hay `__str__`, verás `<__main__.X object at …>` dentro de la lista.",
+     "think": "¿Estoy imprimiendo el objeto suelto o un contenedor con objetos?",
+     "avoid": "Define `__repr__` en tus clases; si quieres el texto de usuario, recorre la lista e imprime cada `str`."
+    },
+    {
+     "id": "poo-metodos-especiales.eq-identidad",
+     "label": "Cree que `==` compara los atributos sin definir `__eq__`",
+     "why": "Sin `__eq__`, `==` hace lo mismo que `is`: solo da `True` si es el mismo objeto.",
+     "think": "¿Esta clase define `__eq__`? ¿Qué debería hacer iguales a dos objetos?",
+     "avoid": "Define `__eq__` comparando los datos que identifican al objeto y devuelve `NotImplemented` con otros tipos."
+    },
+    {
+     "id": "poo-metodos-especiales.len-no-entero",
+     "label": "`__len__` no devuelve un número entero",
+     "why": "`len()` exige que `__len__` devuelva un entero mayor o igual que 0; si devuelve una lista, un texto o un decimal, da `TypeError`.",
+     "think": "¿Qué devuelve mi `__len__`: un número o la colección entera?",
+     "avoid": "Devuelve `len(self.elementos)` o una suma de cantidades enteras."
+    },
+    {
+     "id": "poo-metodos-especiales.iter-no-iterador",
+     "label": "`__iter__` devuelve algo que no es un iterador",
+     "why": "`for` necesita un iterador (algo con `__next__`). Una lista es recorrible pero no es un iterador, así que `return self.lista` da `TypeError`.",
+     "think": "¿Lo que devuelve `__iter__` tiene `__next__`?",
+     "avoid": "Devuelve `iter(self.lista)`, o `self` si la clase tiene su propio `__next__`."
+    }
+   ],
+   "related": [
+    "poo",
+    "poo-atributos-metodos",
+    "listas"
+   ],
+   "unit": {
+    "module": "poo",
+    "number": 8
+   },
+   "objectives": [
+    "Explicar qué es un método especial y qué instrucción hace que Python lo llame.",
+    "Dar a una clase `__str__` para el usuario y `__repr__` para el programador.",
+    "Comparar objetos por su contenido con `__eq__` y distinguir `==` de `is`.",
+    "Usar `__len__` y `__contains__` para que un objeto contenedor funcione con `len()` e `in`.",
+    "(Avanzado) Hacer un objeto recorrible con `__iter__` y entender qué hace `__next__`."
+   ],
+   "prior": "La Unidad 2 (clases, `__init__` y `__str__`) y la Unidad 3 (atributos y métodos).",
+   "key": [
+    [
+     "Método especial",
+     "Un método con dos guiones bajos delante y detrás (`__len__`) que Python llama por su cuenta en ciertas operaciones."
+    ],
+    [
+     "`__str__`",
+     "El texto legible para el usuario: lo usan `print()` y `str()`."
+    ],
+    [
+     "`__repr__`",
+     "El texto para el programador: lo usan la consola, las listas al imprimirse y `repr()`."
+    ],
+    [
+     "`__eq__`",
+     "Decide si dos objetos son iguales con `==`. Sin él, `==` compara identidad."
+    ],
+    [
+     "`__len__` y `__contains__`",
+     "Hacen funcionar `len(objeto)` y `x in objeto`."
+    ],
+    [
+     "Iterador",
+     "Un objeto que va dando elementos con `__next__` hasta lanzar `StopIteration`; `for` lo pide con `__iter__`."
+    ]
+   ],
+   "sections": [
+    {
+     "id": "poo-metodos-especiales.que-son",
+     "title": "Qué son y cuándo los llama Python",
+     "theory": "Ya conoces dos métodos especiales: `__init__` y `__str__`. Tienen **dos guiones bajos** delante y detrás y una particularidad: **no los llamas tú**, los llama Python cuando usas ciertas instrucciones.\n\n| Escribes | Python llama a |\n|---|---|\n| `print(x)` o `str(x)` | `x.__str__()` |\n| `repr(x)` o la consola | `x.__repr__()` |\n| `a == b` | `a.__eq__(b)` |\n| `len(x)` | `x.__len__()` |\n| `y in x` | `x.__contains__(y)` |\n| `for y in x:` | `x.__iter__()` |\n\n- Escribe tú `len(carrito)`, no `carrito.__len__()`: el resultado es el mismo, pero es más claro y es lo que espera cualquier programador de Python.\n- El nombre tiene que ser **exacto**. Si escribes `_str_` o `__str`, Python no lo reconoce y sigue usando el comportamiento por defecto.\n- No inventes métodos con dos guiones bajos (`__total__`): ese tipo de nombres está reservado para Python.",
+     "examples": [
+      {
+       "code": "class Lista:\n    def __init__(self, *elementos):\n        self.elementos = list(elementos)\n\n    def __len__(self):\n        return len(self.elementos)\n\n\nclass SinLen:\n    pass\n\n\ncompra = Lista(\"pan\", \"leche\", \"huevos\")\nprint(len(compra))\ntry:\n    len(SinLen())\nexcept TypeError:\n    print(\"SinLen no tiene __len__: len() no sabe qué hacer\")",
+       "lines": [
+        [
+         5,
+         "Al definir `__len__`, la clase acepta `len()`."
+        ],
+        [
+         14,
+         "`len(compra)` hace que Python llame a `compra.__len__()`."
+        ],
+        [
+         16,
+         "Sin `__len__`, `len()` da `TypeError`."
+        ]
+       ],
+       "output": "3\nSinLen no tiene __len__: len() no sabe qué hacer\n",
+       "origin": {
+        "kind": "original"
+       }
+      }
+     ],
+     "quiz": [
+      "poo8-01",
+      "poo8-02",
+      "poo8-03"
+     ]
+    },
+    {
+     "id": "poo-metodos-especiales.esenciales",
+     "title": "Los esenciales: __str__, __repr__, __eq__ y __len__",
+     "theory": "Son los que más vas a usar.\n\n**`__str__` y `__repr__`.** Los dos devuelven un **texto** (con `return`, no con `print`), pero para públicos distintos:\n\n- `__str__` es para el **usuario**: `Pan (1.20 €)`. Lo usan `print()`, `str()` y los f-strings.\n- `__repr__` es para el **programador**: `Producto('Pan', 1.2)`, a ser posible con el aspecto del código que crea el objeto. Lo usan la consola, `repr()` y **las listas** al imprimirse.\n- Si solo defines `__repr__`, `print` también lo usa. Si no defines ninguno, verás algo como `<__main__.Producto object at 0x…>`.\n\n**`__eq__`.** Sin él, `a == b` solo es `True` si `a` y `b` son **el mismo objeto** (como `is`). Con él decides qué hace iguales a dos objetos:\n\n```\ndef __eq__(self, otro):\n    if not isinstance(otro, Producto):\n        return NotImplemented\n    return self.nombre == otro.nombre and self.precio == otro.precio\n```\n\n`NotImplemented` le dice a Python «no sé compararme con eso», y entonces `Producto(...) == 3` da `False` en vez de un error. Ojo: una clase que define `__eq__` y no define `__hash__` ya no puede usarse en un `set` ni como clave de diccionario.\n\n**`__len__`.** Devuelve un **entero mayor o igual que 0**: el número de elementos del objeto. Tiene sentido en objetos que son colecciones (un carrito, una lista de reproducción), no en cualquier clase.",
+     "examples": [
+      {
+       "code": "class Producto:\n    def __init__(self, nombre, precio):\n        self.nombre = nombre\n        self.precio = precio\n\n    def __str__(self):\n        return f\"{self.nombre} ({self.precio:.2f} €)\"\n\n    def __repr__(self):\n        return f\"Producto({self.nombre!r}, {self.precio!r})\"\n\n    def __eq__(self, otro):\n        if not isinstance(otro, Producto):\n            return NotImplemented\n        return self.nombre == otro.nombre and self.precio == otro.precio\n\n\npan = Producto(\"Pan\", 1.2)\nprint(pan)\nprint([pan, Producto(\"Leche\", 0.9)])\nprint(pan == Producto(\"Pan\", 1.2), pan is Producto(\"Pan\", 1.2))\nprint(pan == \"Pan\")",
+       "lines": [
+        [
+         7,
+         "`__str__` devuelve el texto para el usuario."
+        ],
+        [
+         10,
+         "`!r` pone las comillas: el texto parece el código que crea el objeto."
+        ],
+        [
+         14,
+         "Con otro tipo de objeto, deja que Python responda `False`."
+        ],
+        [
+         20,
+         "Una lista muestra sus elementos con `__repr__`, no con `__str__`."
+        ],
+        [
+         21,
+         "Iguales por contenido (`==`), pero son dos objetos distintos (`is`)."
+        ]
+       ],
+       "output": "Pan (1.20 €)\n[Producto('Pan', 1.2), Producto('Leche', 0.9)]\nTrue False\nFalse\n",
+       "origin": {
+        "kind": "original"
+       }
+      }
+     ],
+     "quiz": [
+      "poo8-04",
+      "poo8-05",
+      "poo8-06"
+     ]
+    },
+    {
+     "id": "poo-metodos-especiales.avanzados",
+     "title": "Avanzados: __contains__, __iter__ y __next__",
+     "theory": "Estos métodos convierten tu objeto en un **contenedor** que se usa como una lista. Son de nivel avanzado: primero domina los esenciales.\n\n**`__contains__(self, elemento)`** responde a `elemento in objeto` y devuelve `True` o `False`.\n\n**`__iter__(self)`** hace que el objeto se pueda recorrer con `for`. Debe devolver un **iterador**. La forma más sencilla es delegar en la lista que guardas dentro:\n\n```\ndef __iter__(self):\n    return iter(self.canciones)\n```\n\n**`__next__(self)`** es lo que tiene un iterador: cada llamada devuelve el siguiente elemento y, cuando no quedan, lanza `StopIteration`. Así funciona `for` por dentro: pide un iterador con `__iter__` y llama a `__next__` hasta que llega `StopIteration`.\n\n- `__iter__` debe devolver un iterador, no una lista: `return self.canciones` da `TypeError`.\n- Un iterador escrito a mano (con `__iter__` que devuelve `self` y su `__next__`) **se gasta**: después de recorrerlo una vez ya no da más elementos.",
+     "examples": [
+      {
+       "code": "class Playlist:\n    def __init__(self, nombre):\n        self.nombre = nombre\n        self.canciones = []\n\n    def agregar(self, cancion):\n        self.canciones.append(cancion)\n\n    def __contains__(self, cancion):\n        return cancion in self.canciones\n\n    def __iter__(self):\n        return iter(self.canciones)     # delega en la lista\n\n\nclass CuentaAtras:                      # un iterador escrito a mano\n    def __init__(self, desde):\n        self.actual = desde\n\n    def __iter__(self):\n        return self\n\n    def __next__(self):\n        if self.actual == 0:\n            raise StopIteration\n        self.actual -= 1\n        return self.actual + 1\n\n\nlista = Playlist(\"Estudio\")\nlista.agregar(\"Lo-fi 1\")\nlista.agregar(\"Lo-fi 2\")\nprint(\"Lo-fi 2\" in lista)\nfor cancion in lista:\n    print(cancion)\nprint(list(CuentaAtras(3)))",
+       "lines": [
+        [
+         9,
+         "`in` llama a `__contains__`."
+        ],
+        [
+         13,
+         "`iter()` sobre la lista interna devuelve un iterador ya hecho."
+        ],
+        [
+         24,
+         "Cuando no quedan elementos, el iterador avisa con `StopIteration`."
+        ],
+        [
+         34,
+         "`for` usa `__iter__` y después `__next__` hasta `StopIteration`."
+        ]
+       ],
+       "output": "True\nLo-fi 1\nLo-fi 2\n[3, 2, 1]\n",
+       "origin": {
+        "kind": "original"
+       }
+      }
+     ],
+     "quiz": [
+      "poo8-07",
+      "poo8-08",
+      "poo8-09"
+     ]
+    }
+   ],
+   "guided": [
+    "poo8-10"
+   ],
+   "autonomous": [
+    "poo8-15"
+   ],
+   "extras": [
+    "poo8-11",
+    "poo8-12"
+   ],
+   "selfcheck": [
+    "poo8-13",
+    "poo8-14"
+   ],
+   "recap": [
+    "Los métodos especiales llevan dos guiones bajos delante y detrás y los llama Python, no tú.",
+    "`__str__` es el texto para el usuario y `__repr__` el del programador; los dos devuelven un `str`.",
+    "Una lista de objetos se imprime con el `__repr__` de cada uno.",
+    "Sin `__eq__`, `==` compara identidad; con él, compara lo que tú decidas. Devuelve `NotImplemented` con otros tipos.",
+    "`__len__` devuelve un entero y `__contains__` un booleano.",
+    "(Avanzado) `__iter__` devuelve un iterador; el iterador da elementos con `__next__` hasta `StopIteration`."
+   ],
+   "pass": {
+    "minScore": 0.7,
+    "required": [
+     "poo8-10",
+     "poo8-15"
+    ],
+    "text": [
+     "Resolver el ejercicio guiado (puntos) y el ejercicio principal (el carrito de la compra) con todos los tests superados.",
+     "Dominar la unidad según el motor: al menos un 70 % de aciertos recientes en sus ejercicios, con varios tipos distintos.",
+     "Completar las lecciones ayuda a organizarte, pero **no** demuestra la competencia: la demuestran los ejercicios."
+    ]
+   },
+   "practices": [
+    {
+     "text": "Da a tus clases al menos un `__repr__` que diga qué objeto es y con qué datos.",
+     "why": "Al depurar o imprimir una lista verás `Producto('Pan', 1.2)` en vez de una dirección de memoria."
+    },
+    {
+     "text": "Haz que `__str__` y `__repr__` devuelvan el texto con `return`; nunca uses `print` dentro.",
+     "why": "Python necesita recibir un `str`; si el método no devuelve nada, da `TypeError`."
+    },
+    {
+     "text": "En `__eq__`, devuelve `NotImplemented` si el otro objeto no es de tu clase.",
+     "why": "Así comparar con otro tipo da `False` en vez de un error por un atributo que no existe."
+    },
+    {
+     "text": "Usa `len(x)`, `str(x)` e `in` en tu código, no `x.__len__()` ni `x.__str__()`.",
+     "why": "Es más legible y es la forma que espera cualquier programador de Python."
+    },
+    {
+     "text": "Define solo los métodos especiales que tienen sentido para la clase.",
+     "why": "`len()` en una persona o `in` en una fecha confunden más que ayudan."
+    }
+   ],
+   "references": [
+    {
+     "source": "py-tutorial-classes",
+     "section": "9.8. Iteradores",
+     "supports": [
+      "`for` llama a `iter()` y después a `__next__()` hasta `StopIteration`",
+      "una clase con `__iter__` que devuelve `self` y su `__next__`"
+     ],
+     "status": "pending"
+    },
+    {
+     "source": "py-dataclasses",
+     "section": "El decorador dataclass y los métodos que genera",
+     "supports": [
+      "`@dataclass` puede generar `__init__`, `__repr__` y `__eq__` a partir de los atributos"
+     ],
+     "status": "pending"
+    },
+    {
+     "source": "py-faq-programming",
+     "section": "¿Cuándo puedo fiarme de las comparaciones de identidad con el operador *is*?",
+     "supports": [
+      "diferencia entre comparar identidad (`is`) e igualdad (`==`)"
+     ],
+     "status": "pending"
+    }
+   ],
+   "bank": [
+    "poo8-02",
+    "poo8-05",
+    "poo8-08",
+    "poo8-13",
+    "poo8-16",
+    "poo8-17",
+    "poo8-18",
+    "poo8-19",
+    "poo8-20",
+    "poo8-21",
+    "poo8-22",
+    "poo8-23",
+    "poo8-24",
+    "poo8-25",
+    "poo8-26"
+   ],
+   "curriculum": [
+    {
+     "ce": "0485-RA4-c",
+     "status": "proposed",
+     "source": "rd-405-2023#anexo-I",
+     "reviewed": "2026-11-11",
+     "by": "plataforma",
+     "note": "Se definen métodos especiales (`__str__`, `__eq__`, `__len__`…) en las clases."
+    },
+    {
+     "ce": "0485-RA6-d",
+     "status": "proposed",
+     "source": "rd-405-2023#anexo-I",
+     "reviewed": "2026-11-11",
+     "by": "plataforma",
+     "note": "Se recorren objetos propios con iteradores (`__iter__` y `__next__`)."
+    },
+    {
+     "ce": "0485-RA4-e",
+     "status": "proposed",
+     "source": "rd-405-2023#anexo-I",
+     "reviewed": "2026-11-11",
+     "by": "plataforma",
+     "note": "Se escriben programas que usan objetos propios con `print`, `len`, `==` e `in`."
+    }
+   ],
+   "module": "0485",
+   "ra": [
+    "0485-RA4",
+    "0485-RA6"
+   ],
+   "ce": [
+    "0485-RA4-c",
+    "0485-RA6-d",
+    "0485-RA4-e"
+   ],
+   "difficulty": 1.9,
    "importance": 2
   }
  ],
@@ -10848,6 +11636,1559 @@
    ],
    "answer": 0,
    "explain": "Con una clase abstracta, cada forma de pago cumple el mismo contrato y el resto del programa no cambia cuando llega una nueva.",
+   "codeOptions": false,
+   "bank": true,
+   "qtype": "diseno"
+  },
+  {
+   "id": "poo7-01",
+   "concept": "poo-composicion",
+   "kind": "output",
+   "level": 1,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "class Cliente:\n    def __init__(self, nombre):\n        self.nombre = nombre\n\nclass Pedido:\n    def __init__(self, cliente):\n        self.cliente = cliente\n\nluis = Cliente(\"Luis\")\np1 = Pedido(luis)\np2 = Pedido(luis)\np1.cliente.nombre = \"Luis Pérez\"\nprint(p2.cliente.nombre)",
+   "stdin": "",
+   "expect": "Luis Pérez",
+   "traps": {
+    "Luis": "poo-composicion.copia-al-guardar"
+   },
+   "explain": "Los dos pedidos guardan una referencia al **mismo** cliente. Cambiar su nombre a través de `p1` se ve desde `p2` y desde `luis`: no hay copias."
+  },
+  {
+   "id": "poo7-02",
+   "concept": "poo-composicion",
+   "kind": "choice",
+   "level": 1,
+   "daw": false,
+   "q": "Un `Pedido` guarda en `self.cliente` un objeto `Cliente` que ya existía y que sigue existiendo cuando el pedido se borra. ¿Qué relación es?",
+   "code": null,
+   "options": [
+    {
+     "text": "Asociación: el pedido conoce al cliente, pero los dos viven por separado",
+     "error": null
+    },
+    {
+     "text": "Herencia: `Pedido` es un tipo de `Cliente`",
+     "error": "poo-composicion.herencia-por-tiene",
+     "why": "Un pedido no «es un» cliente: solo lo conoce. No hay ninguna subclase."
+    },
+    {
+     "text": "Composición: el pedido crea al cliente",
+     "error": null,
+     "why": "El cliente ya existía antes y no lo crea el pedido: no es una parte suya."
+    },
+    {
+     "text": "Ninguna: un objeto no puede guardar otro objeto en un atributo",
+     "error": null,
+     "why": "Un atributo puede guardar cualquier valor, también otros objetos."
+    }
+   ],
+   "answer": 0,
+   "explain": "Es una **asociación**: un objeto guarda una referencia a otro y lo usa, sin crearlo ni ser su dueño.",
+   "codeOptions": false,
+   "bank": true,
+   "qtype": "teoria"
+  },
+  {
+   "id": "poo7-03",
+   "concept": "poo-composicion",
+   "kind": "fill",
+   "level": 1,
+   "daw": false,
+   "q": "Completa el constructor para que cada curso **conozca** a su tutor (el mismo objeto, sin copiarlo).",
+   "code": "class Profesor:\n    def __init__(self, nombre):\n        self.nombre = nombre\n\nclass Curso:\n    def __init__(self, nombre, tutor):\n        self.nombre = nombre\n        self.tutor = ___\n\nrosa = Profesor(\"Rosa\")\ndaw1 = Curso(\"1.º DAW\", rosa)\nprint(daw1.tutor.nombre, daw1.tutor is rosa)",
+   "accept": [
+    "tutor"
+   ],
+   "expect": "Rosa True",
+   "traps": {
+    "Profesor(tutor)": "poo-composicion.copia-al-guardar",
+    "rosa": null,
+    "nombre": null
+   },
+   "explain": "Basta con guardar el parámetro: `self.tutor = tutor`. El curso apunta al mismo profesor, por eso `is` da `True`."
+  },
+  {
+   "id": "poo7-04",
+   "concept": "poo-composicion",
+   "kind": "output",
+   "level": 2,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "class Equipo:\n    def __init__(self, nombre, jugadores=[]):\n        self.nombre = nombre\n        self.jugadores = jugadores\n\n    def fichar(self, jugador):\n        self.jugadores.append(jugador)\n\na = Equipo(\"A\")\nb = Equipo(\"B\")\na.fichar(\"Lucía\")\nprint(len(b.jugadores))",
+   "stdin": "",
+   "expect": "1",
+   "traps": {
+    "0": "poo-composicion.lista-por-defecto"
+   },
+   "explain": "La lista `[]` del valor por defecto se crea **una sola vez**, al definir la función, y la comparten todos los equipos creados sin lista. Fichar en `a` también «ficha» en `b`."
+  },
+  {
+   "id": "poo7-05",
+   "concept": "poo-composicion",
+   "kind": "choice",
+   "level": 1,
+   "daw": false,
+   "q": "¿Qué distingue la **composición** de la **agregación**?",
+   "code": null,
+   "options": [
+    {
+     "text": "En la composición el todo crea sus partes y estas no tienen sentido sin él",
+     "error": null
+    },
+    {
+     "text": "En la composición las partes se crean fuera y se pasan al constructor",
+     "error": null,
+     "why": "Eso describe la agregación: las partes vienen de fuera y pueden vivir sin el todo."
+    },
+    {
+     "text": "La composición usa la palabra clave `compose` de Python",
+     "error": "poo-composicion.relacion-es-sintaxis",
+     "why": "Python no tiene palabras clave para estas relaciones: son ideas de diseño."
+    },
+    {
+     "text": "La composición solo se puede hacer con herencia",
+     "error": "poo-composicion.herencia-por-tiene",
+     "why": "Es al revés: la composición es una alternativa a la herencia («tiene un» frente a «es un»)."
+    }
+   ],
+   "answer": 0,
+   "explain": "La pregunta es quién crea la parte y si tiene sentido sola. Una línea de pedido la crea el pedido y no significa nada fuera de él: composición.",
+   "codeOptions": false,
+   "bank": true,
+   "qtype": "teoria"
+  },
+  {
+   "id": "poo7-06",
+   "concept": "poo-composicion",
+   "kind": "bug",
+   "level": 2,
+   "daw": false,
+   "q": "Cada carrito debería empezar vacío, pero el segundo ya trae el producto del primero. Sin tocar la cabecera de `__init__`, ¿qué línea hay que cambiar?",
+   "code": "class Carrito:\n    def __init__(self, productos=[]):\n        self.productos = productos\n\n    def meter(self, producto):\n        self.productos.append(producto)\n\nc1 = Carrito()\nc1.meter(\"pan\")\nc2 = Carrito()\nprint(c2.productos)",
+   "stdin": "",
+   "line": 3,
+   "fix": "        self.productos = list(productos)",
+   "expect": "[]",
+   "error": "poo-composicion.lista-por-defecto",
+   "explain": "La lista `[]` del valor por defecto se crea una sola vez y la comparten todos los carritos que se crean sin lista. `list(productos)` hace que cada carrito guarde una lista nueva. Lo más limpio, además, es cambiar el valor por defecto a `None`."
+  },
+  {
+   "id": "poo7-07",
+   "concept": "poo-composicion",
+   "kind": "output",
+   "level": 1,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "class Linea:\n    def __init__(self, precio, cantidad):\n        self.precio = precio\n        self.cantidad = cantidad\n\n    def subtotal(self):\n        return self.precio * self.cantidad\n\nclass Pedido:\n    def __init__(self):\n        self.lineas = []\n\n    def agregar(self, precio, cantidad):\n        self.lineas.append(Linea(precio, cantidad))\n\n    def total(self):\n        return sum(l.subtotal() for l in self.lineas)\n\np = Pedido()\np.agregar(10, 3)\np.agregar(5, 2)\nprint(p.total())",
+   "stdin": "",
+   "expect": "40",
+   "traps": {
+    "15": null,
+    "5": null
+   },
+   "explain": "El pedido delega en cada línea: 10 × 3 = 30 y 5 × 2 = 10, en total 40."
+  },
+  {
+   "id": "poo7-08",
+   "concept": "poo-composicion",
+   "kind": "choice",
+   "level": 2,
+   "daw": false,
+   "q": "Cada `Linea` tiene el método `subtotal()`. ¿Qué versión de `Pedido.total()` **delega** en las líneas?",
+   "code": null,
+   "options": [
+    {
+     "text": "`return sum(linea.subtotal() for linea in self.lineas)`",
+     "error": null
+    },
+    {
+     "text": "`return sum(linea.precio * linea.cantidad for linea in self.lineas)`",
+     "error": "poo-composicion.no-delega",
+     "why": "Repite fuera de la línea un cálculo que la línea ya sabe hacer."
+    },
+    {
+     "text": "`return sum(self.lineas)`",
+     "error": null,
+     "why": "No se pueden sumar objetos `Linea` directamente: hay que pedirle a cada una su subtotal."
+    },
+    {
+     "text": "`return Linea.subtotal()`",
+     "error": null,
+     "why": "Así se llama al método sin ninguna línea concreta: falta el objeto sobre el que trabajar."
+    }
+   ],
+   "answer": 0,
+   "explain": "Delegar es pedirle a cada línea lo que sabe hacer. Si mañana `subtotal` aplica un descuento, `total` sigue siendo correcto sin tocarlo.",
+   "codeOptions": true,
+   "bank": true,
+   "qtype": "codigo"
+  },
+  {
+   "id": "poo7-09",
+   "concept": "poo-composicion",
+   "kind": "fill",
+   "level": 2,
+   "daw": false,
+   "q": "Completa `arrancar` para que el coche **delegue** en su motor.",
+   "code": "class Motor:\n    def encender(self):\n        return \"brrrum\"\n\nclass Coche:\n    def __init__(self):\n        self.motor = Motor()\n\n    def arrancar(self):\n        return ___\n\nprint(Coche().arrancar())",
+   "accept": [
+    "self.motor.encender()"
+   ],
+   "expect": "brrrum",
+   "traps": {
+    "Motor.encender()": null,
+    "self.motor.encender": "poo-composicion.no-delega",
+    "motor.encender()": null
+   },
+   "explain": "El coche no sabe encender motores: se lo pide a su motor con `self.motor.encender()`."
+  },
+  {
+   "id": "poo7-10",
+   "concept": "poo-composicion",
+   "kind": "choice",
+   "level": 2,
+   "daw": false,
+   "q": "Un coche necesita un motor con `encender()` y `apagar()`. ¿Qué diseño es mejor?",
+   "code": null,
+   "options": [
+    {
+     "text": "`Coche` guarda un objeto `Motor` en un atributo y le delega esas tareas",
+     "error": null
+    },
+    {
+     "text": "`class Coche(Motor)`, para heredar `encender()` y `apagar()`",
+     "error": "poo-composicion.herencia-por-tiene",
+     "why": "«Un coche es un motor» no es cierto: el coche heredaría todo lo del motor y se podría usar como si fuera uno."
+    },
+    {
+     "text": "`class Motor(Coche)`, porque el motor forma parte del coche",
+     "error": "poo-composicion.herencia-por-tiene",
+     "why": "Formar parte de algo es «tiene un», no «es un»: tampoco es herencia."
+    },
+    {
+     "text": "Copiar los métodos del motor dentro de `Coche`",
+     "error": null,
+     "why": "Duplicaría el código: un cambio en el motor habría que hacerlo en dos sitios."
+    }
+   ],
+   "answer": 0,
+   "explain": "«Un coche **tiene un** motor»: composición. El coche usa el motor y solo enseña lo que le interesa (`arrancar`).",
+   "codeOptions": false,
+   "bank": true,
+   "qtype": "diseno"
+  },
+  {
+   "id": "poo7-11",
+   "concept": "poo-composicion",
+   "kind": "output",
+   "level": 1,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "class Pila:\n    def __init__(self):\n        self._datos = []\n\n    def apilar(self, x):\n        self._datos.append(x)\n\n    def desapilar(self):\n        return self._datos.pop()\n\np = Pila()\np.apilar(1)\np.apilar(2)\np.apilar(3)\nprint(p.desapilar() + p.desapilar())",
+   "stdin": "",
+   "expect": "5",
+   "traps": {
+    "3": null,
+    "6": null,
+    "1": null
+   },
+   "explain": "La pila delega en su lista interna y saca siempre el último: primero 3 y después 2, que suman 5."
+  },
+  {
+   "id": "poo7-12",
+   "concept": "poo-composicion",
+   "kind": "choice",
+   "level": 2,
+   "daw": false,
+   "q": "¿Qué es cierto sobre la asociación, la agregación y la composición en Python?",
+   "code": null,
+   "options": [
+    {
+     "text": "Son ideas de diseño: en el código siempre es un atributo que apunta a otro objeto",
+     "error": null
+    },
+    {
+     "text": "Cada una se declara con una palabra clave distinta",
+     "error": "poo-composicion.relacion-es-sintaxis",
+     "why": "Python no tiene palabras clave para ellas; se reconocen por quién crea los objetos y cuánto viven."
+    },
+    {
+     "text": "Solo existen si se usa herencia",
+     "error": "poo-composicion.herencia-por-tiene",
+     "why": "Son relaciones entre objetos distintos; la herencia es una relación entre clases."
+    },
+    {
+     "text": "Python copia el objeto al guardarlo en un atributo",
+     "error": "poo-composicion.copia-al-guardar",
+     "why": "Python guarda una referencia al mismo objeto, nunca una copia automática."
+    }
+   ],
+   "answer": 0,
+   "explain": "En los diagramas de clases se dibujan de forma distinta, pero en Python el código es el mismo: `self.parte = objeto`. Lo que cambia es el diseño: quién crea la parte y si sobrevive al todo.",
+   "codeOptions": false,
+   "bank": true,
+   "qtype": "teoria"
+  },
+  {
+   "id": "poo7-13",
+   "concept": "poo-composicion",
+   "kind": "code",
+   "level": 2,
+   "daw": false,
+   "q": "**Ejercicio guiado: coche y motor.** Sigue los pasos:\n\n1. Crea `Motor(potencia)` con el atributo `encendido` a `False` y los métodos `encender()` y `apagar()`, que cambian `encendido`.\n2. Crea `Coche(modelo, potencia)`: el propio coche crea su `Motor` y lo guarda en `self.motor` (composición).\n3. Añade a `Coche` los métodos `arrancar()` y `parar()`, que **delegan** en el motor, y `estado()`, que devuelve `\"Ibiza: en marcha\"` o `\"Ibiza: parado\"`.",
+   "starter": "# Paso 1: Motor\n\n# Paso 2: Coche crea su motor\n\n# Paso 3: arrancar, parar y estado\n\n\ncoche = Coche(\"Ibiza\", 95)\ncoche.arrancar()\nprint(coche.estado())\ncoche.parar()\nprint(coche.estado())",
+   "solution": "class Motor:\n    def __init__(self, potencia):\n        self.potencia = potencia\n        self.encendido = False\n\n    def encender(self):\n        self.encendido = True\n\n    def apagar(self):\n        self.encendido = False\n\n\nclass Coche:\n    def __init__(self, modelo, potencia):\n        self.modelo = modelo\n        self.motor = Motor(potencia)\n\n    def arrancar(self):\n        self.motor.encender()\n\n    def parar(self):\n        self.motor.apagar()\n\n    def estado(self):\n        situacion = \"en marcha\" if self.motor.encendido else \"parado\"\n        return f\"{self.modelo}: {situacion}\"\n\n\ncoche = Coche(\"Ibiza\", 95)\ncoche.arrancar()\nprint(coche.estado())\ncoche.parar()\nprint(coche.estado())",
+   "checks": [
+    {
+     "stdin": "",
+     "test": "m = Motor(90)\nassert m.potencia == 90 and m.encendido is False, \"Un motor nuevo guarda su potencia y empieza apagado\"\nm.encender()\nassert m.encendido is True, \"encender() pone encendido a True\"\nm.apagar()\nassert m.encendido is False, \"apagar() pone encendido a False\"",
+     "error": null
+    },
+    {
+     "stdin": "",
+     "test": "a = Coche(\"Ibiza\", 95)\nb = Coche(\"León\", 150)\nassert isinstance(a.motor, Motor), \"El coche debe crear su Motor y guardarlo en self.motor\"\nassert a.motor.potencia == 95 and b.motor.potencia == 150, \"Cada coche crea su motor con su potencia\"\nassert a.motor is not b.motor, \"Cada coche tiene su propio motor\"\nassert not isinstance(a, Motor), \"Un coche no es un motor: no heredes de Motor, guárdalo en un atributo\"",
+     "error": "poo-composicion.herencia-por-tiene"
+    },
+    {
+     "stdin": "",
+     "test": "c = Coche(\"Ibiza\", 95)\nassert c.estado() == \"Ibiza: parado\", f\"Un coche nuevo está parado; estado() devuelve {c.estado()!r}\"\nc.arrancar()\nassert c.motor.encendido, \"arrancar() debe encender el motor del coche\"\nassert c.estado() == \"Ibiza: en marcha\", f\"Tras arrancar, estado() devuelve {c.estado()!r}\"\nc.parar()\nassert not c.motor.encendido and c.estado() == \"Ibiza: parado\", \"parar() debe apagar el motor\"",
+     "error": "poo-composicion.no-delega"
+    }
+   ],
+   "hint": "En `Coche.__init__` escribe `self.motor = Motor(potencia)`. `arrancar` es una línea: `self.motor.encender()`.",
+   "explain": "El coche crea su motor (composición) y le pasa el trabajo de encenderse y apagarse (delegación). `estado()` consulta al motor en vez de llevar su propia copia del dato, así nunca se contradicen.",
+   "expect": "Ibiza: en marcha\nIbiza: parado\n"
+  },
+  {
+   "id": "poo7-14",
+   "concept": "poo-composicion",
+   "kind": "code",
+   "level": 2,
+   "daw": false,
+   "q": "**Práctica: agenda de contactos (agregación).** Crea:\n\n- `Contacto(nombre, telefono)`.\n- `Agenda(contactos=None)`: guarda una **copia** de la lista de contactos que recibe (o una lista vacía). Así, si quien la creó cambia su lista, la agenda no cambia.\n- `agregar(contacto)`, que añade un contacto creado fuera.\n- `buscar(nombre)`, que devuelve el teléfono del contacto con ese nombre o `None` si no está.\n- `cuantos()`, que devuelve el número de contactos.",
+   "starter": "class Contacto:\n    ...\n\n\nclass Agenda:\n    ...",
+   "solution": "class Contacto:\n    def __init__(self, nombre, telefono):\n        self.nombre = nombre\n        self.telefono = telefono\n\n\nclass Agenda:\n    def __init__(self, contactos=None):\n        self.contactos = list(contactos) if contactos else []\n\n    def agregar(self, contacto):\n        self.contactos.append(contacto)\n\n    def buscar(self, nombre):\n        for contacto in self.contactos:\n            if contacto.nombre == nombre:\n                return contacto.telefono\n        return None\n\n    def cuantos(self):\n        return len(self.contactos)\n\n\nana = Contacto(\"Ana\", \"600111222\")\nagenda = Agenda([ana])\nagenda.agregar(Contacto(\"Luis\", \"600333444\"))\nprint(agenda.buscar(\"Luis\"), agenda.cuantos())",
+   "checks": [
+    {
+     "stdin": "",
+     "test": "ana = Contacto(\"Ana\", \"600111222\")\nag = Agenda([ana])\nag.agregar(Contacto(\"Luis\", \"600333444\"))\nassert ag.buscar(\"Luis\") == \"600333444\", \"buscar() devuelve el teléfono del contacto\"\nassert ag.buscar(\"Eva\") is None, \"buscar() devuelve None si no encuentra el nombre\"\nassert ag.cuantos() == 2, \"cuantos() devuelve cuántos contactos hay\"\nassert ag.contactos[0] is ana, \"La agenda guarda los mismos contactos que recibe, no copias de cada uno\"",
+     "error": null
+    },
+    {
+     "stdin": "",
+     "test": "a = Agenda()\nb = Agenda()\na.agregar(Contacto(\"Ana\", \"1\"))\nassert b.cuantos() == 0, \"Cada agenda nueva debe tener su propia lista vacía (no uses [] como valor por defecto)\"",
+     "error": "poo-composicion.lista-por-defecto"
+    },
+    {
+     "stdin": "",
+     "test": "mis = [Contacto(\"Ana\", \"1\")]\nag = Agenda(mis)\nmis.append(Contacto(\"Intruso\", \"0\"))\nassert ag.cuantos() == 1, \"La agenda debe guardar una copia de la lista recibida: list(contactos)\"",
+     "error": "poo-composicion.copia-al-guardar"
+    }
+   ],
+   "hint": "En `__init__`: `self.contactos = list(contactos) if contactos else []`.",
+   "explain": "Los contactos se crean fuera y la agenda solo los agrupa: es una agregación. Copiar la lista (no los contactos) protege a la agenda de cambios en la lista de quien la creó, y `None` como valor por defecto evita que todas las agendas compartan la misma lista.",
+   "expect": "600333444 2\n"
+  },
+  {
+   "id": "poo7-15",
+   "concept": "poo-composicion",
+   "kind": "code",
+   "level": 2,
+   "daw": false,
+   "q": "**Práctica: una cola por composición.** Crea la clase `Cola` (el primero que entra es el primero que sale) **sin heredar de `list`**: guarda una lista interna `_elementos` y ofrece solo:\n\n- `encolar(valor)`, que añade al final.\n- `desencolar()`, que saca y devuelve el **primero**; si la cola está vacía, lanza `IndexError(\"La cola está vacía\")`.\n- `primero()`, que devuelve el primero sin sacarlo.\n- `tamano()`, que devuelve cuántos hay.",
+   "starter": "class Cola:\n    ...",
+   "solution": "class Cola:\n    def __init__(self):\n        self._elementos = []\n\n    def encolar(self, valor):\n        self._elementos.append(valor)\n\n    def desencolar(self):\n        if not self._elementos:\n            raise IndexError(\"La cola está vacía\")\n        return self._elementos.pop(0)\n\n    def primero(self):\n        return self._elementos[0]\n\n    def tamano(self):\n        return len(self._elementos)\n\n\ncola = Cola()\nfor persona in [\"Ana\", \"Luis\", \"Eva\"]:\n    cola.encolar(persona)\nprint(cola.desencolar(), cola.primero(), cola.tamano())",
+   "checks": [
+    {
+     "stdin": "",
+     "test": "c = Cola()\nfor x in \"abc\":\n    c.encolar(x)\nassert c.tamano() == 3, \"tamano() devuelve cuántos elementos hay\"\nassert c.desencolar() == \"a\", \"desencolar() saca el primero que entró\"\nassert c.primero() == \"b\" and c.tamano() == 2, \"primero() mira el siguiente sin sacarlo\"",
+     "error": null
+    },
+    {
+     "stdin": "",
+     "test": "try:\n    Cola().desencolar()\nexcept IndexError as e:\n    assert str(e) == \"La cola está vacía\", f\"Mensaje del error: {e}\"\nelse:\n    raise AssertionError(\"desencolar() en una cola vacía debe lanzar IndexError\")",
+     "error": null
+    },
+    {
+     "stdin": "",
+     "test": "c = Cola()\nassert not isinstance(c, list), \"Una cola no es una lista: guarda la lista dentro (composición), no heredes de list\"\nassert not hasattr(c, \"insert\") and not hasattr(c, \"sort\"), \"La cola no debe ofrecer los métodos de una lista\"\na, b = Cola(), Cola()\na.encolar(1)\nassert b.tamano() == 0, \"Cada cola tiene su propia lista\"",
+     "error": "poo-composicion.herencia-por-tiene"
+    }
+   ],
+   "hint": "Crea la lista en `__init__` con `self._elementos = []`. Para sacar el primero, `self._elementos.pop(0)`.",
+   "explain": "La cola **tiene** una lista y delega en ella, pero solo enseña las operaciones de una cola. Si heredara de `list`, cualquiera podría usar `insert` o `sort` y colarse en la fila.",
+   "expect": "Ana Luis 2\n"
+  },
+  {
+   "id": "poo7-16",
+   "concept": "poo-composicion",
+   "kind": "choice",
+   "level": 2,
+   "daw": false,
+   "q": "En el programa principal aparece `print(pedido.lineas[0].producto.precio * pedido.lineas[0].cantidad)`. ¿Cuál es la mejor corrección?",
+   "code": null,
+   "options": [
+    {
+     "text": "Dar a `Linea` un método `subtotal()` y escribir `pedido.lineas[0].subtotal()`",
+     "error": null
+    },
+    {
+     "text": "Guardar el precio también en el pedido para no tener que buscarlo",
+     "error": null,
+     "why": "Duplicaría el dato: si cambia el precio, el pedido y el producto se contradirían."
+    },
+    {
+     "text": "Hacer que `Pedido` herede de `Producto` para tener el precio a mano",
+     "error": "poo-composicion.herencia-por-tiene",
+     "why": "Un pedido no es un producto: heredar mezclaría dos clases que no tienen nada que ver."
+    },
+    {
+     "text": "Nada: encadenar atributos es la forma normal de usar objetos",
+     "error": "poo-composicion.no-delega",
+     "why": "Así el programa depende de cómo están hechas por dentro tres clases distintas."
+    }
+   ],
+   "answer": 0,
+   "explain": "Quien tiene los datos hace el cálculo: la línea conoce su producto y su cantidad, así que ella calcula su subtotal. El resto del programa solo se lo pide.",
+   "codeOptions": false,
+   "bank": true,
+   "qtype": "solucion"
+  },
+  {
+   "id": "poo7-17",
+   "concept": "poo-composicion",
+   "kind": "output",
+   "level": 3,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "class Jugador:\n    def __init__(self, nombre):\n        self.nombre = nombre\n\nclass Equipo:\n    def __init__(self, jugadores):\n        self.jugadores = list(jugadores)\n\nplantilla = [Jugador(\"Ana\"), Jugador(\"Eva\")]\nequipo = Equipo(plantilla)\nplantilla.append(Jugador(\"Luis\"))\nplantilla[0].nombre = \"Ana G.\"\nprint(len(equipo.jugadores), equipo.jugadores[0].nombre)",
+   "stdin": "",
+   "expect": "2 Ana G.",
+   "traps": {
+    "3 Ana G.": "poo-composicion.copia-al-guardar",
+    "2 Ana": "poo-composicion.copia-al-guardar",
+    "3 Ana": null
+   },
+   "explain": "`list(jugadores)` copia la **lista**, así que añadir a `plantilla` no afecta al equipo (sigue con 2). Pero los jugadores son los **mismos objetos**: cambiar el nombre de Ana se ve en los dos sitios."
+  },
+  {
+   "id": "poo7-18",
+   "concept": "poo-composicion",
+   "kind": "code",
+   "level": 3,
+   "daw": false,
+   "q": "**Ejercicio principal: `Cliente`, `Pedido` y `Producto`.** Crea:\n\n- `Producto(nombre, precio)`.\n- `LineaPedido(producto, cantidad)` con `subtotal()`.\n- `Pedido(numero, cliente)`: guarda el cliente (asociación) y una lista `lineas` vacía. Su método `agregar(producto, cantidad)` **crea** la línea (composición); si la cantidad no es mayor que 0, lanza `ValueError`, y si el producto ya está en el pedido, suma la cantidad a su línea en vez de crear otra. `total()` delega en las líneas y `resumen()` devuelve `\"Pedido 1 de Ana: 3 líneas, 70.00 €\"`.\n- `Cliente(nombre, email)` con una lista `pedidos`. `nuevo_pedido(numero)` crea un `Pedido` de ese cliente, lo guarda y lo devuelve. `total_gastado()` suma el total de todos sus pedidos.",
+   "starter": "class Producto:\n    ...\n\n\nclass LineaPedido:\n    ...\n\n\nclass Pedido:\n    ...\n\n\nclass Cliente:\n    ...",
+   "solution": "class Producto:\n    def __init__(self, nombre, precio):\n        self.nombre = nombre\n        self.precio = precio\n\n\nclass LineaPedido:\n    def __init__(self, producto, cantidad):\n        self.producto = producto\n        self.cantidad = cantidad\n\n    def subtotal(self):\n        return self.producto.precio * self.cantidad\n\n\nclass Pedido:\n    def __init__(self, numero, cliente):\n        self.numero = numero\n        self.cliente = cliente\n        self.lineas = []\n\n    def agregar(self, producto, cantidad):\n        if cantidad <= 0:\n            raise ValueError(\"La cantidad debe ser mayor que 0\")\n        for linea in self.lineas:\n            if linea.producto is producto:\n                linea.cantidad += cantidad\n                return\n        self.lineas.append(LineaPedido(producto, cantidad))\n\n    def total(self):\n        return sum(linea.subtotal() for linea in self.lineas)\n\n    def resumen(self):\n        return f\"Pedido {self.numero} de {self.cliente.nombre}: {len(self.lineas)} líneas, {self.total():.2f} €\"\n\n\nclass Cliente:\n    def __init__(self, nombre, email):\n        self.nombre = nombre\n        self.email = email\n        self.pedidos = []\n\n    def nuevo_pedido(self, numero):\n        pedido = Pedido(numero, self)\n        self.pedidos.append(pedido)\n        return pedido\n\n    def total_gastado(self):\n        return sum(pedido.total() for pedido in self.pedidos)\n\n\nana = Cliente(\"Ana\", \"ana@ies.es\")\nteclado = Producto(\"Teclado\", 25)\nraton = Producto(\"Ratón\", 10)\npedido = ana.nuevo_pedido(1)\npedido.agregar(teclado, 2)\npedido.agregar(raton, 1)\npedido.agregar(Producto(\"Alfombrilla\", 10), 1)\nprint(pedido.resumen())\nprint(ana.total_gastado())",
+   "checks": [
+    {
+     "stdin": "",
+     "test": "p = Producto(\"Teclado\", 25)\nl = LineaPedido(p, 3)\nassert l.subtotal() == 75, f\"subtotal() es precio por cantidad; devuelve {l.subtotal()!r}\"\nassert l.producto is p, \"La línea guarda el mismo producto que recibe\"",
+     "error": null
+    },
+    {
+     "stdin": "",
+     "test": "ana = Cliente(\"Ana\", \"a@b.es\")\nped = Pedido(7, ana)\nassert ped.cliente is ana and ped.lineas == [], \"El pedido guarda su cliente (el mismo objeto) y empieza sin líneas\"\nt = Producto(\"Teclado\", 25)\nped.agregar(t, 2)\nassert len(ped.lineas) == 1 and isinstance(ped.lineas[0], LineaPedido), \"agregar() debe crear una LineaPedido dentro del pedido\"\nassert ped.lineas[0].producto is t and ped.lineas[0].cantidad == 2, \"La línea creada lleva el producto y la cantidad\"",
+     "error": null
+    },
+    {
+     "stdin": "",
+     "test": "ped = Pedido(1, Cliente(\"Ana\", \"a@b.es\"))\nt = Producto(\"Teclado\", 25)\nped.agregar(t, 2)\nped.agregar(t, 3)\nassert len(ped.lineas) == 1 and ped.lineas[0].cantidad == 5, \"Si el producto ya está en el pedido, suma la cantidad en su línea\"\nfor mala in (0, -1):\n    try:\n        ped.agregar(t, mala)\n    except ValueError:\n        pass\n    else:\n        raise AssertionError(f\"agregar(producto, {mala}) debe lanzar ValueError\")",
+     "error": null
+    },
+    {
+     "stdin": "",
+     "test": "ped = Pedido(1, Cliente(\"Ana\", \"a@b.es\"))\nped.agregar(Producto(\"Teclado\", 25), 2)\nped.agregar(Producto(\"Ratón\", 10), 1)\nped.agregar(Producto(\"Alfombrilla\", 10), 1)\nassert ped.total() == 70, f\"total() suma los subtotales; devuelve {ped.total()!r}\"\nassert ped.resumen() == \"Pedido 1 de Ana: 3 líneas, 70.00 €\", f\"resumen() devuelve {ped.resumen()!r}\"\nped.lineas[0].producto.precio = 30\nassert ped.total() == 80, \"total() debe delegar en las líneas cada vez, sin guardar un total calculado antes\"",
+     "error": "poo-composicion.no-delega"
+    },
+    {
+     "stdin": "",
+     "test": "ana = Cliente(\"Ana\", \"a@b.es\")\nluis = Cliente(\"Luis\", \"l@b.es\")\np1 = ana.nuevo_pedido(1)\np2 = ana.nuevo_pedido(2)\nassert isinstance(p1, Pedido) and p1.cliente is ana, \"nuevo_pedido() crea un Pedido de este cliente y lo devuelve\"\nassert ana.pedidos == [p1, p2] and luis.pedidos == [], \"Cada cliente guarda solo sus pedidos\"\np1.agregar(Producto(\"Teclado\", 25), 2)\np2.agregar(Producto(\"Ratón\", 10), 3)\nassert ana.total_gastado() == 80 and luis.total_gastado() == 0, f\"total_gastado() suma el total de sus pedidos; devuelve {ana.total_gastado()!r}\"",
+     "error": "poo-composicion.lista-por-defecto"
+    }
+   ],
+   "hint": "En `agregar`, recorre `self.lineas` buscando `linea.producto is producto`; si no la encuentras, crea `LineaPedido(producto, cantidad)`. En `nuevo_pedido`, `Pedido(numero, self)`.",
+   "explain": "El pedido **conoce** a su cliente (asociación) y **crea** sus líneas (composición). Cada objeto calcula con sus datos: la línea su subtotal, el pedido su total y el cliente lo que lleva gastado (delegación). Por eso un cambio de precio se nota en todos los cálculos sin tocar nada más.",
+   "expect": "Pedido 1 de Ana: 3 líneas, 70.00 €\n70\n"
+  },
+  {
+   "id": "poo7-19",
+   "concept": "poo-composicion",
+   "kind": "choice",
+   "level": 1,
+   "daw": false,
+   "q": "Tras ejecutar `p = Pedido(ana)`, cuyo constructor hace `self.cliente = cliente`, ¿qué guarda `p.cliente`?",
+   "code": null,
+   "options": [
+    {
+     "text": "Una referencia al mismo objeto que `ana`",
+     "error": null
+    },
+    {
+     "text": "Una copia independiente de `ana`",
+     "error": "poo-composicion.copia-al-guardar",
+     "why": "Python nunca copia un objeto al asignarlo: `p.cliente is ana` da `True`."
+    },
+    {
+     "text": "El texto con el nombre de `ana`",
+     "error": null,
+     "why": "Se guarda el objeto entero, no uno de sus atributos."
+    },
+    {
+     "text": "Nada hasta que se llame a un método del pedido",
+     "error": null,
+     "why": "La asignación se hace al ejecutar el constructor, al crear el pedido."
+    }
+   ],
+   "answer": 0,
+   "explain": "Asignar un objeto a un atributo guarda una referencia: `p.cliente` y `ana` son dos nombres para el mismo cliente.",
+   "codeOptions": false,
+   "bank": true,
+   "qtype": "codigo"
+  },
+  {
+   "id": "poo7-20",
+   "concept": "poo-composicion",
+   "kind": "choice",
+   "level": 3,
+   "daw": false,
+   "q": "¿Qué línea hace que la relación entre `Factura` y sus `Linea` sea una **composición**?",
+   "code": "class Factura:\n    def __init__(self, cliente):\n        self.cliente = cliente\n        self.lineas = []\n\n    def agregar(self, concepto, importe):\n        self.lineas.append(Linea(concepto, importe))",
+   "options": [
+    {
+     "text": "La línea 7: la factura crea cada `Linea` dentro de su propio método",
+     "error": null
+    },
+    {
+     "text": "La línea 3: `self.cliente = cliente`",
+     "error": "poo-composicion.relacion-es-sintaxis",
+     "why": "Esa línea relaciona la factura con su cliente, que viene de fuera: es una asociación."
+    },
+    {
+     "text": "La línea 4: `self.lineas = []`",
+     "error": "poo-composicion.relacion-es-sintaxis",
+     "why": "Crear una lista vacía no dice nada aún: lo que cuenta es quién crea las líneas que se meten en ella."
+    },
+    {
+     "text": "Ninguna: para que haya composición `Linea` tendría que heredar de `Factura`",
+     "error": "poo-composicion.herencia-por-tiene",
+     "why": "La composición no usa herencia: es una relación «tiene un» entre objetos."
+    }
+   ],
+   "answer": 0,
+   "explain": "Lo que convierte la relación en composición es que el todo **crea** sus partes: nadie de fuera crea una `Linea` y se la pasa. Así las líneas nacen y viven con su factura.",
+   "codeOptions": false,
+   "bank": true,
+   "qtype": "codigo"
+  },
+  {
+   "id": "poo7-21",
+   "concept": "poo-composicion",
+   "kind": "choice",
+   "level": 1,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "class Persona:\n    def __init__(self, nombre):\n        self.nombre = nombre\n\nclass Perro:\n    def __init__(self, duena):\n        self.duena = duena\n\npepa = Persona(\"Pep\")\na = Perro(pepa)\nb = Perro(pepa)\na.duena.nombre = \"Pepa\"\nprint(a.duena.nombre, b.duena.nombre)",
+   "options": [
+    {
+     "text": "Pepa Pepa",
+     "error": null
+    },
+    {
+     "text": "Pepa Pep",
+     "error": "poo-composicion.copia-al-guardar",
+     "why": "`a.duena` y `b.duena` son la misma persona: el cambio se ve desde los dos."
+    },
+    {
+     "text": "Pep Pep",
+     "error": null,
+     "why": "El nombre cambia antes del `print`, y los dos perros apuntan a esa misma persona."
+    },
+    {
+     "text": "AttributeError",
+     "error": null,
+     "why": "Los dos perros tienen el atributo `duena`, que guarda un objeto `Persona`."
+    }
+   ],
+   "answer": 0,
+   "explain": "Los dos perros guardan una referencia a la **misma** persona. Al cambiar su nombre a través de `a`, `b` también lo ve.",
+   "codeOptions": false,
+   "bank": true,
+   "qtype": "prediccion"
+  },
+  {
+   "id": "poo7-22",
+   "concept": "poo-composicion",
+   "kind": "choice",
+   "level": 2,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "class Clase:\n    def __init__(self, alumnos=[]):\n        self.alumnos = alumnos\n\n    def apuntar(self, nombre):\n        self.alumnos.append(nombre)\n\na = Clase()\nb = Clase()\na.apuntar(\"Ana\")\nb.apuntar(\"Luis\")\nprint(len(a.alumnos), len(b.alumnos))",
+   "options": [
+    {
+     "text": "2 2",
+     "error": null
+    },
+    {
+     "text": "1 1",
+     "error": "poo-composicion.lista-por-defecto",
+     "why": "Las dos clases usan la misma lista por defecto, así que cada `apuntar` se suma a la misma."
+    },
+    {
+     "text": "2 0",
+     "error": "poo-composicion.lista-por-defecto",
+     "why": "`b` se creó sin lista y recibe la lista por defecto, la misma que `a`."
+    },
+    {
+     "text": "1 0",
+     "error": "poo-composicion.lista-por-defecto",
+     "why": "La lista `[]` del valor por defecto se crea una sola vez y la comparten `a` y `b`."
+    }
+   ],
+   "answer": 0,
+   "explain": "`alumnos=[]` crea la lista **una vez**, al definir el método. `a` y `b` comparten esa lista: después de dos `apuntar`, los dos ven 2 alumnos.",
+   "codeOptions": false,
+   "bank": true,
+   "qtype": "prediccion"
+  },
+  {
+   "id": "poo7-23",
+   "concept": "poo-composicion",
+   "kind": "choice",
+   "level": 3,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "class Producto:\n    def __init__(self, precio):\n        self.precio = precio\n\nclass Linea:\n    def __init__(self, producto, cantidad):\n        self.producto = producto\n        self.cantidad = cantidad\n\n    def subtotal(self):\n        return self.producto.precio * self.cantidad\n\nclass Pedido:\n    def __init__(self):\n        self.lineas = []\n\n    def agregar(self, producto, cantidad):\n        self.lineas.append(Linea(producto, cantidad))\n\n    def total(self):\n        return sum(l.subtotal() for l in self.lineas)\n\nteclado = Producto(25)\nraton = Producto(10)\np = Pedido()\np.agregar(teclado, 2)\np.agregar(raton, 1)\nteclado.precio = 40\nprint(p.total(), len(p.lineas))",
+   "options": [
+    {
+     "text": "90 2",
+     "error": null
+    },
+    {
+     "text": "75 2",
+     "error": "poo-composicion.no-delega",
+     "why": "`total()` se calcula al llamarlo y pregunta a cada línea por el precio actual del producto: ya es 40."
+    },
+    {
+     "text": "90 3",
+     "error": null,
+     "why": "Se han agregado dos productos, así que el pedido tiene 2 líneas."
+    },
+    {
+     "text": "50 2",
+     "error": null,
+     "why": "Cada línea multiplica por su cantidad: 40 × 2 + 10 × 1."
+    }
+   ],
+   "answer": 0,
+   "explain": "Las líneas guardan una referencia al producto, no su precio copiado. Cuando el teclado pasa a 40 €, `total()` ya lo usa: 40 × 2 + 10 × 1 = 90, en 2 líneas.",
+   "codeOptions": false,
+   "bank": true,
+   "qtype": "prediccion"
+  },
+  {
+   "id": "poo7-24",
+   "concept": "poo-composicion",
+   "kind": "choice",
+   "level": 2,
+   "daw": false,
+   "q": "Cada biblioteca nueva debería empezar sin libros, pero la segunda ya tiene los de la primera. ¿Cuál es el fallo?",
+   "code": "class Biblioteca:\n    def __init__(self, libros=[]):\n        self.libros = libros\n\n    def donar(self, libro):\n        self.libros.append(libro)",
+   "options": [
+    {
+     "text": "El valor por defecto `libros=[]` se crea una vez y lo comparten todas las bibliotecas",
+     "error": null
+    },
+    {
+     "text": "Falta llamar a `super().__init__()`",
+     "error": null,
+     "why": "`Biblioteca` no hereda de nadie más que `object`; no es la causa."
+    },
+    {
+     "text": "`append` copia la lista en vez de añadir",
+     "error": null,
+     "why": "`append` añade a la lista que hay; el problema es que esa lista es la misma para todas."
+    },
+    {
+     "text": "Hay que guardar los libros como atributo de clase",
+     "error": null,
+     "why": "Un atributo de clase también lo compartirían todas: es justo el problema que hay que evitar."
+    }
+   ],
+   "answer": 0,
+   "explain": "Los valores por defecto se evalúan una sola vez, al definir el método. Usa `libros=None` y, dentro, `self.libros = list(libros) if libros else []`.",
+   "codeOptions": false,
+   "bank": true,
+   "qtype": "error"
+  },
+  {
+   "id": "poo7-25",
+   "concept": "poo-composicion",
+   "kind": "choice",
+   "level": 3,
+   "daw": false,
+   "q": "`Pila` hereda de `list` para aprovechar `append` y `pop`. ¿Qué problema de diseño tiene?",
+   "code": "class Pila(list):\n    def apilar(self, x):\n        self.append(x)\n\n    def desapilar(self):\n        return self.pop()\n\np = Pila()\np.apilar(\"abajo\")\np.insert(0, \"colado\")",
+   "options": [
+    {
+     "text": "La pila hereda todos los métodos de una lista, como `insert(0, x)`, y se puede saltar su regla «solo se saca el último»",
+     "error": null
+    },
+    {
+     "text": "No funciona: no se puede heredar de `list`",
+     "error": null,
+     "why": "Sí se puede heredar de `list`; el problema no es técnico, es de diseño."
+    },
+    {
+     "text": "Ninguno: si funciona, el diseño es correcto",
+     "error": "poo-composicion.herencia-por-tiene",
+     "why": "Funcionar no basta: una pila no «es una» lista con todas sus operaciones."
+    },
+    {
+     "text": "`pop` saca el primer elemento en vez del último",
+     "error": null,
+     "why": "`pop()` sin argumentos saca el último, así que eso sí es correcto."
+    }
+   ],
+   "answer": 0,
+   "explain": "Con herencia la pila **es una** lista y ofrece todo lo de una lista. Con composición (`self._elementos = []`) solo enseña `apilar`, `desapilar` y `cima`, y su regla no se puede romper.",
+   "codeOptions": false,
+   "bank": true,
+   "qtype": "error"
+  },
+  {
+   "id": "poo7-26",
+   "concept": "poo-composicion",
+   "kind": "choice",
+   "level": 3,
+   "daw": false,
+   "q": "Un `Equipo` guarda directamente la lista que recibe. Quien la creó la sigue usando y los cambios se cuelan en el equipo. ¿Qué cambio lo evita?",
+   "code": null,
+   "options": [
+    {
+     "text": "`self.jugadores = list(jugadores)`",
+     "error": null
+    },
+    {
+     "text": "`self.jugadores = jugadores`",
+     "error": "poo-composicion.copia-al-guardar",
+     "why": "Es lo que ya hace: guarda la misma lista y comparte los cambios."
+    },
+    {
+     "text": "`self.jugadores = jugadores.copy` (sin paréntesis)",
+     "error": null,
+     "why": "Sin paréntesis se guarda el método `copy`, no una lista copiada."
+    },
+    {
+     "text": "`self.jugadores = []` y no usar el parámetro",
+     "error": null,
+     "why": "Así se pierden los jugadores que se le pasan al crear el equipo."
+    }
+   ],
+   "answer": 0,
+   "explain": "`list(jugadores)` crea una lista nueva con los mismos jugadores. El equipo controla su lista, aunque los jugadores sigan siendo los mismos objetos (agregación).",
+   "codeOptions": true,
+   "bank": true,
+   "qtype": "solucion"
+  },
+  {
+   "id": "poo7-27",
+   "concept": "poo-composicion",
+   "kind": "choice",
+   "level": 1,
+   "daw": false,
+   "q": "¿En qué pareja la relación es una **composición**?",
+   "code": null,
+   "options": [
+    {
+     "text": "Una casa y sus habitaciones: las crea la casa y no existen sin ella",
+     "error": null
+    },
+    {
+     "text": "Un equipo y sus jugadores",
+     "error": null,
+     "why": "Los jugadores existen antes y pueden cambiar de equipo: es una agregación."
+    },
+    {
+     "text": "Un pedido y su cliente",
+     "error": null,
+     "why": "El cliente existe por su cuenta y tiene muchos pedidos: es una asociación."
+    },
+    {
+     "text": "Un perro y un animal",
+     "error": "poo-composicion.herencia-por-tiene",
+     "why": "«Un perro es un animal» es herencia, no una relación entre objetos."
+    }
+   ],
+   "answer": 0,
+   "explain": "En la composición las partes nacen y mueren con el todo. Una habitación no tiene sentido fuera de su casa.",
+   "codeOptions": false,
+   "bank": true,
+   "qtype": "diseno"
+  },
+  {
+   "id": "poo8-01",
+   "concept": "poo-metodos-especiales",
+   "kind": "output",
+   "level": 1,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "class Equipo:\n    def __init__(self, *jugadores):\n        self.jugadores = list(jugadores)\n\n    def __len__(self):\n        return len(self.jugadores)\n\ne = Equipo(\"Ana\", \"Eva\", \"Luis\")\nprint(len(e) * 2)",
+   "stdin": "",
+   "expect": "6",
+   "traps": {
+    "3": null,
+    "TypeError": "poo-metodos-especiales.llamada-directa"
+   },
+   "explain": "`len(e)` hace que Python llame a `e.__len__()`, que devuelve 3. Por 2, 6."
+  },
+  {
+   "id": "poo8-02",
+   "concept": "poo-metodos-especiales",
+   "kind": "choice",
+   "level": 1,
+   "daw": false,
+   "q": "¿Quién llama normalmente a un método especial como `__len__`?",
+   "code": null,
+   "options": [
+    {
+     "text": "Python, cuando el programa usa `len(objeto)`",
+     "error": null
+    },
+    {
+     "text": "El programador, escribiendo siempre `objeto.__len__()`",
+     "error": "poo-metodos-especiales.llamada-directa",
+     "why": "Funciona, pero no es lo habitual: se escribe `len(objeto)` y Python llama al método."
+    },
+    {
+     "text": "El constructor `__init__`, al crear el objeto",
+     "error": null,
+     "why": "`__init__` solo prepara el objeto; no llama a los demás métodos especiales."
+    },
+    {
+     "text": "Nadie: los métodos con guiones bajos son privados y no se ejecutan",
+     "error": null,
+     "why": "Los dos guiones bajos delante **y detrás** marcan un método especial, no uno privado."
+    }
+   ],
+   "answer": 0,
+   "explain": "Los métodos especiales son la forma en que Python conecta sus instrucciones (`len`, `print`, `==`, `in`, `for`) con tus clases. Tú usas la instrucción y Python llama al método.",
+   "codeOptions": false,
+   "bank": true,
+   "qtype": "teoria"
+  },
+  {
+   "id": "poo8-03",
+   "concept": "poo-metodos-especiales",
+   "kind": "bug",
+   "level": 1,
+   "daw": false,
+   "q": "Debería mostrar `Libro: Dune`, pero muestra algo como `<__main__.Libro object at 0x…>`. ¿Qué línea falla?",
+   "code": "class Libro:\n    def __init__(self, titulo):\n        self.titulo = titulo\n\n    def _str_(self):\n        return f\"Libro: {self.titulo}\"\n\nprint(Libro(\"Dune\"))",
+   "stdin": "",
+   "line": 5,
+   "fix": "    def __str__(self):",
+   "expect": "Libro: Dune",
+   "error": "poo-metodos-especiales.nombre-especial-mal",
+   "explain": "El método se llama `__str__`, con **dos** guiones bajos a cada lado. Con otro nombre, Python no lo reconoce y `print` usa el texto por defecto."
+  },
+  {
+   "id": "poo8-04",
+   "concept": "poo-metodos-especiales",
+   "kind": "output",
+   "level": 2,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "class Nota:\n    def __init__(self, valor):\n        self.valor = valor\n\n    def __str__(self):\n        return f\"{self.valor} puntos\"\n\n    def __repr__(self):\n        return f\"Nota({self.valor})\"\n\nnotas = [Nota(7), Nota(9)]\nprint(notas[0])\nprint(notas)",
+   "stdin": "",
+   "expect": "7 puntos\n[Nota(7), Nota(9)]",
+   "traps": {
+    "7 puntos\n[7 puntos, 9 puntos]": "poo-metodos-especiales.lista-usa-str",
+    "Nota(7)\n[Nota(7), Nota(9)]": null
+   },
+   "explain": "`print(notas[0])` usa `__str__`. Al imprimir la **lista**, cada elemento se muestra con su `__repr__`."
+  },
+  {
+   "id": "poo8-05",
+   "concept": "poo-metodos-especiales",
+   "kind": "choice",
+   "level": 2,
+   "daw": false,
+   "q": "¿Cuál es un `__eq__` correcto para que dos `Punto` sean iguales si tienen las mismas coordenadas?",
+   "code": null,
+   "options": [
+    {
+     "text": "`if not isinstance(otro, Punto): return NotImplemented` y después `return self.x == otro.x and self.y == otro.y`",
+     "error": null
+    },
+    {
+     "text": "`return self is otro`",
+     "error": "poo-metodos-especiales.eq-identidad",
+     "why": "Eso es lo que ya hace `==` sin `__eq__`: compara si son el mismo objeto, no sus coordenadas."
+    },
+    {
+     "text": "`print(self.x == otro.x and self.y == otro.y)`",
+     "error": "poo-metodos-especiales.imprime-en-vez-de-devolver",
+     "why": "`__eq__` tiene que devolver el resultado; con `print` devuelve `None` y la comparación falla."
+    },
+    {
+     "text": "`return self.x == otro.x and self.y == otro.y`, sin más",
+     "error": null,
+     "why": "Funciona entre puntos, pero `Punto(1, 2) == 5` da `AttributeError` porque un número no tiene `x`."
+    }
+   ],
+   "answer": 0,
+   "explain": "`__eq__` compara el contenido y devuelve un booleano. Con `NotImplemented` para otros tipos, `Punto(1, 2) == 5` da `False` sin error.",
+   "codeOptions": false,
+   "bank": true,
+   "qtype": "codigo"
+  },
+  {
+   "id": "poo8-06",
+   "concept": "poo-metodos-especiales",
+   "kind": "fill",
+   "level": 1,
+   "daw": false,
+   "q": "Completa `__len__` para que `len(carrito)` devuelva cuántos productos hay.",
+   "code": "class Carrito:\n    def __init__(self):\n        self.productos = [\"pan\", \"leche\"]\n\n    def __len__(self):\n        return ___\n\nprint(len(Carrito()))",
+   "accept": [
+    "len(self.productos)"
+   ],
+   "expect": "2",
+   "traps": {
+    "self.productos": "poo-metodos-especiales.len-no-entero",
+    "len(self)": null,
+    "len(productos)": null
+   },
+   "explain": "`__len__` delega en la lista interna: `return len(self.productos)`. Devuelve un entero, como exige `len()`."
+  },
+  {
+   "id": "poo8-07",
+   "concept": "poo-metodos-especiales",
+   "kind": "output",
+   "level": 2,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "class Rango:\n    def __init__(self, minimo, maximo):\n        self.minimo = minimo\n        self.maximo = maximo\n\n    def __contains__(self, valor):\n        return self.minimo <= valor <= self.maximo\n\naprobado = Rango(5, 10)\nprint(7 in aprobado, 4 in aprobado)",
+   "stdin": "",
+   "expect": "True False",
+   "traps": {
+    "True True": null,
+    "False False": null,
+    "TypeError": null
+   },
+   "explain": "`7 in aprobado` llama a `aprobado.__contains__(7)`, que comprueba si está entre 5 y 10. El 4 no lo está."
+  },
+  {
+   "id": "poo8-08",
+   "concept": "poo-metodos-especiales",
+   "kind": "choice",
+   "level": 2,
+   "daw": false,
+   "q": "¿Qué hace cada método en un objeto que se recorre con `for`?",
+   "code": null,
+   "options": [
+    {
+     "text": "`__iter__` devuelve un iterador y el iterador da cada elemento con `__next__` hasta lanzar `StopIteration`",
+     "error": null
+    },
+    {
+     "text": "`__next__` devuelve una lista con todos los elementos de una vez",
+     "error": null,
+     "why": "`__next__` da **un** elemento cada vez que se le llama."
+    },
+    {
+     "text": "`__iter__` imprime los elementos uno a uno",
+     "error": "poo-metodos-especiales.imprime-en-vez-de-devolver",
+     "why": "`__iter__` no imprime nada: devuelve el iterador que usará el `for`."
+    },
+    {
+     "text": "`for` llama a `__len__` y después accede a cada posición",
+     "error": null,
+     "why": "`for` no necesita saber cuántos elementos hay: pide un iterador y espera a `StopIteration`."
+    }
+   ],
+   "answer": 0,
+   "explain": "Así funciona `for` por dentro: llama a `__iter__` para tener un iterador y le pide elementos con `__next__` hasta que este lanza `StopIteration`.",
+   "codeOptions": false,
+   "bank": true,
+   "qtype": "teoria"
+  },
+  {
+   "id": "poo8-09",
+   "concept": "poo-metodos-especiales",
+   "kind": "output",
+   "level": 2,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "class Clase:\n    def __init__(self, *alumnos):\n        self._alumnos = list(alumnos)\n\n    def __iter__(self):\n        return iter(self._alumnos)\n\nfor nombre in Clase(\"Ana\", \"Luis\"):\n    print(nombre.upper())",
+   "stdin": "",
+   "expect": "ANA\nLUIS",
+   "traps": {
+    "Ana\nLuis": null,
+    "TypeError": "poo-metodos-especiales.iter-no-iterador"
+   },
+   "explain": "`for` llama a `__iter__`, que devuelve el iterador de la lista interna. Así el objeto se recorre igual que una lista."
+  },
+  {
+   "id": "poo8-10",
+   "concept": "poo-metodos-especiales",
+   "kind": "code",
+   "level": 2,
+   "daw": false,
+   "q": "**Ejercicio guiado: puntos.** La clase `Punto(x, y)` ya está. Sigue los pasos:\n\n1. Añade `__str__`, que devuelva `\"(1, 2)\"`.\n2. Añade `__repr__`, que devuelva `\"Punto(1, 2)\"`.\n3. Añade `__eq__`: dos puntos son iguales si tienen las mismas coordenadas; si el otro objeto no es un `Punto`, devuelve `NotImplemented`.",
+   "starter": "class Punto:\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n\n    # Paso 1: __str__\n\n    # Paso 2: __repr__\n\n    # Paso 3: __eq__\n\n\na = Punto(1, 2)\nprint(a)\nprint([a, Punto(3, 4)])\nprint(a == Punto(1, 2), a == (1, 2))",
+   "solution": "class Punto:\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n\n    def __str__(self):\n        return f\"({self.x}, {self.y})\"\n\n    def __repr__(self):\n        return f\"Punto({self.x}, {self.y})\"\n\n    def __eq__(self, otro):\n        if not isinstance(otro, Punto):\n            return NotImplemented\n        return self.x == otro.x and self.y == otro.y\n\n\na = Punto(1, 2)\nprint(a)\nprint([a, Punto(3, 4)])\nprint(a == Punto(1, 2), a == (1, 2))",
+   "checks": [
+    {
+     "stdin": "",
+     "test": "p = Punto(1, 2)\nassert str(p) == \"(1, 2)\", f\"str(Punto(1, 2)) debe ser '(1, 2)'; es {str(p)!r}\"",
+     "error": "poo-metodos-especiales.nombre-especial-mal"
+    },
+    {
+     "stdin": "",
+     "test": "p = Punto(3, -4)\nassert repr(p) == \"Punto(3, -4)\", f\"repr(Punto(3, -4)) debe ser 'Punto(3, -4)'; es {repr(p)!r}\"\nassert str([p]) == \"[Punto(3, -4)]\", \"Una lista muestra sus puntos con __repr__\"",
+     "error": "poo-metodos-especiales.lista-usa-str"
+    },
+    {
+     "stdin": "",
+     "test": "assert Punto(1, 2) == Punto(1, 2), \"Dos puntos con las mismas coordenadas deben ser iguales con ==\"\nassert Punto(1, 2) != Punto(2, 1), \"Puntos con coordenadas distintas no son iguales\"\nassert (Punto(1, 2) == (1, 2)) is False, \"Comparar con algo que no es un Punto debe dar False (devuelve NotImplemented)\"",
+     "error": "poo-metodos-especiales.eq-identidad"
+    }
+   ],
+   "hint": "Usa f-strings: `return f\"Punto({self.x}, {self.y})\"`. En `__eq__`, empieza por `if not isinstance(otro, Punto): return NotImplemented`.",
+   "explain": "`__str__` da el texto para el usuario, `__repr__` el del programador (por eso la lista lo usa) y `__eq__` compara el contenido. `NotImplemented` hace que comparar con una tupla dé `False` en vez de un error.",
+   "expect": "(1, 2)\n[Punto(1, 2), Punto(3, 4)]\nTrue False\n"
+  },
+  {
+   "id": "poo8-11",
+   "concept": "poo-metodos-especiales",
+   "kind": "code",
+   "level": 2,
+   "daw": false,
+   "q": "**Práctica: lista de reproducción.** Crea `Playlist(nombre)` con una lista interna de canciones y:\n\n- `agregar(cancion)`.\n- `__len__`: cuántas canciones tiene.\n- `__contains__`: si una canción está en la lista.\n- `__iter__`: para recorrerla con `for` (delega en la lista interna).\n- `__str__`: `\"Estudio (2 canciones)\"`.",
+   "starter": "class Playlist:\n    ...",
+   "solution": "class Playlist:\n    def __init__(self, nombre):\n        self.nombre = nombre\n        self._canciones = []\n\n    def agregar(self, cancion):\n        self._canciones.append(cancion)\n\n    def __len__(self):\n        return len(self._canciones)\n\n    def __contains__(self, cancion):\n        return cancion in self._canciones\n\n    def __iter__(self):\n        return iter(self._canciones)\n\n    def __str__(self):\n        return f\"{self.nombre} ({len(self)} canciones)\"\n\n\nlista = Playlist(\"Estudio\")\nlista.agregar(\"Lo-fi 1\")\nlista.agregar(\"Lo-fi 2\")\nprint(lista, \"Lo-fi 1\" in lista)\nfor cancion in lista:\n    print(\"-\", cancion)",
+   "checks": [
+    {
+     "stdin": "",
+     "test": "p = Playlist(\"Estudio\")\nassert len(p) == 0, \"Una playlist nueva tiene 0 canciones\"\np.agregar(\"A\")\np.agregar(\"B\")\nassert len(p) == 2, f\"len() debe dar 2; da {len(p)}\"\nassert str(p) == \"Estudio (2 canciones)\", f\"str() devuelve {str(p)!r}\"",
+     "error": null
+    },
+    {
+     "stdin": "",
+     "test": "p = Playlist(\"X\")\np.agregar(\"A\")\nassert \"A\" in p and \"Z\" not in p, \"in debe comprobar si la canción está en la lista\"",
+     "error": null
+    },
+    {
+     "stdin": "",
+     "test": "p = Playlist(\"X\")\nfor c in (\"A\", \"B\", \"C\"):\n    p.agregar(c)\nassert list(p) == [\"A\", \"B\", \"C\"], \"for debe recorrer las canciones en orden\"\nassert list(p) == [\"A\", \"B\", \"C\"], \"La playlist se debe poder recorrer más de una vez: devuelve iter(lista) en __iter__\"",
+     "error": "poo-metodos-especiales.iter-no-iterador"
+    }
+   ],
+   "hint": "En `__iter__`, `return iter(self._canciones)`. En `__str__` puedes usar `len(self)`, que llama a tu propio `__len__`.",
+   "explain": "Cada método especial delega en la lista interna. La playlist se usa como una lista (`len`, `in`, `for`), pero solo ofrece lo que tú decides.",
+   "expect": "Estudio (2 canciones) True\n- Lo-fi 1\n- Lo-fi 2\n"
+  },
+  {
+   "id": "poo8-12",
+   "concept": "poo-metodos-especiales",
+   "kind": "code",
+   "level": 3,
+   "daw": false,
+   "q": "**Práctica avanzada: un iterador a mano.** Crea `Pares(limite)`, un iterador que da los números pares desde 0 hasta `limite` (incluido si es par):\n\n- `__iter__` devuelve `self`.\n- `__next__` devuelve el siguiente par y, cuando se pasa del límite, lanza `StopIteration`.\n\nAsí, `list(Pares(7))` da `[0, 2, 4, 6]`.",
+   "starter": "class Pares:\n    def __init__(self, limite):\n        self.limite = limite\n        self.actual = 0\n\n    def __iter__(self):\n        return self\n\n    def __next__(self):\n        ...",
+   "solution": "class Pares:\n    def __init__(self, limite):\n        self.limite = limite\n        self.actual = 0\n\n    def __iter__(self):\n        return self\n\n    def __next__(self):\n        if self.actual > self.limite:\n            raise StopIteration\n        valor = self.actual\n        self.actual += 2\n        return valor\n\n\nprint(list(Pares(7)))\nfor n in Pares(4):\n    print(n)",
+   "checks": [
+    {
+     "stdin": "",
+     "test": "assert list(Pares(7)) == [0, 2, 4, 6], f\"list(Pares(7)) da {list(Pares(7))}\"\nassert list(Pares(4)) == [0, 2, 4], \"Si el límite es par, se incluye\"",
+     "error": null
+    },
+    {
+     "stdin": "",
+     "test": "assert list(Pares(-1)) == [], \"Si el límite es negativo, no hay pares\"\nit = Pares(2)\nassert next(it) == 0 and next(it) == 2, \"next() da los pares uno a uno\"\ntry:\n    next(it)\nexcept StopIteration:\n    pass\nelse:\n    raise AssertionError(\"Al pasarse del límite, __next__ debe lanzar StopIteration\")",
+     "error": null
+    }
+   ],
+   "hint": "Comprueba primero si `self.actual > self.limite`; si no, guarda el valor, suma 2 y devuélvelo.",
+   "explain": "`__next__` recuerda por dónde va (`self.actual`) y avisa con `StopIteration` cuando acaba. Es lo que hace `for` con cualquier iterador. Como `__iter__` devuelve `self`, el iterador se gasta tras recorrerlo una vez.",
+   "expect": "[0, 2, 4, 6]\n0\n2\n4\n"
+  },
+  {
+   "id": "poo8-13",
+   "concept": "poo-metodos-especiales",
+   "kind": "choice",
+   "level": 2,
+   "daw": false,
+   "q": "`print(alumno)` muestra `<__main__.Alumno object at 0x7f…>`. ¿Cuál es la solución?",
+   "code": null,
+   "options": [
+    {
+     "text": "Añadir a `Alumno` un `__str__` que devuelva el texto que quieres ver",
+     "error": null
+    },
+    {
+     "text": "Escribir `print(alumno.__str__)`",
+     "error": "poo-metodos-especiales.llamada-directa",
+     "why": "Sin paréntesis se imprime el propio método; y aunque se llamara, sigue sin haber un `__str__` propio."
+    },
+    {
+     "text": "Añadir un `__str__` que haga `print(self.nombre)`",
+     "error": "poo-metodos-especiales.imprime-en-vez-de-devolver",
+     "why": "`__str__` debe devolver el texto; si imprime y no devuelve nada, `print` da `TypeError`."
+    },
+    {
+     "text": "Añadir un método `str(self)` sin guiones bajos",
+     "error": "poo-metodos-especiales.nombre-especial-mal",
+     "why": "Python solo reconoce el nombre exacto `__str__`."
+    }
+   ],
+   "answer": 0,
+   "explain": "`print` busca `__str__` (o, si no hay, `__repr__`). Sin ninguno de los dos, muestra la clase y la dirección de memoria.",
+   "codeOptions": false,
+   "bank": true,
+   "qtype": "solucion"
+  },
+  {
+   "id": "poo8-14",
+   "concept": "poo-metodos-especiales",
+   "kind": "output",
+   "level": 2,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "class Moneda:\n    def __init__(self, valor):\n        self.valor = valor\n\na = Moneda(2)\nb = Moneda(2)\nprint(a == b, a == a)",
+   "stdin": "",
+   "expect": "False True",
+   "traps": {
+    "True True": "poo-metodos-especiales.eq-identidad",
+    "False False": null
+   },
+   "explain": "`Moneda` no define `__eq__`, así que `==` compara identidad: `a` y `b` son objetos distintos aunque valgan lo mismo. `a == a` sí es `True`."
+  },
+  {
+   "id": "poo8-15",
+   "concept": "poo-metodos-especiales",
+   "kind": "code",
+   "level": 3,
+   "daw": false,
+   "q": "**Ejercicio principal: `CarritoCompra`.** Crea:\n\n- `Producto(nombre, precio)` con `__repr__` → `Producto('Pan', 1.2)` y `__eq__`: dos productos son iguales si tienen el mismo nombre y precio (con otro tipo, `NotImplemented`).\n- `CarritoCompra()` con:\n  - `agregar(producto, cantidad=1)`: si la cantidad no es mayor que 0, `ValueError`; si ya hay un producto **igual** en el carrito, suma la cantidad.\n  - `total()`: el importe total.\n  - `__len__`: el número total de **unidades**.\n  - `__contains__`: si un producto está en el carrito (vale uno igual creado aparte).\n  - `__str__` → `\"Carrito: 3 unidades, 4.50 €\"`.\n  - `__repr__` → `\"CarritoCompra(productos=2, unidades=3)\"`.",
+   "starter": "class Producto:\n    ...\n\n\nclass CarritoCompra:\n    ...",
+   "solution": "class Producto:\n    def __init__(self, nombre, precio):\n        self.nombre = nombre\n        self.precio = precio\n\n    def __repr__(self):\n        return f\"Producto({self.nombre!r}, {self.precio!r})\"\n\n    def __eq__(self, otro):\n        if not isinstance(otro, Producto):\n            return NotImplemented\n        return self.nombre == otro.nombre and self.precio == otro.precio\n\n\nclass CarritoCompra:\n    def __init__(self):\n        self._lineas = []  # pares [producto, cantidad]\n\n    def agregar(self, producto, cantidad=1):\n        if cantidad <= 0:\n            raise ValueError(\"La cantidad debe ser mayor que 0\")\n        for linea in self._lineas:\n            if linea[0] == producto:\n                linea[1] += cantidad\n                return\n        self._lineas.append([producto, cantidad])\n\n    def total(self):\n        return sum(producto.precio * cantidad for producto, cantidad in self._lineas)\n\n    def __len__(self):\n        return sum(cantidad for _, cantidad in self._lineas)\n\n    def __contains__(self, producto):\n        return any(p == producto for p, _ in self._lineas)\n\n    def __str__(self):\n        return f\"Carrito: {len(self)} unidades, {self.total():.2f} €\"\n\n    def __repr__(self):\n        return f\"CarritoCompra(productos={len(self._lineas)}, unidades={len(self)})\"\n\n\ncarrito = CarritoCompra()\ncarrito.agregar(Producto(\"Pan\", 1.2), 2)\ncarrito.agregar(Producto(\"Leche\", 2.1))\nprint(carrito)\nprint(repr(carrito))\nprint(Producto(\"Pan\", 1.2) in carrito, len(carrito))",
+   "checks": [
+    {
+     "stdin": "",
+     "test": "p = Producto(\"Pan\", 1.2)\nassert repr(p) == \"Producto('Pan', 1.2)\", f\"repr() devuelve {repr(p)!r}\"\nassert p == Producto(\"Pan\", 1.2), \"Productos con el mismo nombre y precio son iguales\"\nassert p != Producto(\"Pan\", 1.5), \"Si cambia el precio, no son iguales\"\nassert (p == \"Pan\") is False, \"Comparar con otro tipo debe dar False (NotImplemented)\"",
+     "error": "poo-metodos-especiales.eq-identidad"
+    },
+    {
+     "stdin": "",
+     "test": "c = CarritoCompra()\nassert len(c) == 0, \"Un carrito nuevo tiene 0 unidades\"\nc.agregar(Producto(\"Pan\", 1.2), 2)\nc.agregar(Producto(\"Leche\", 2.1))\nassert len(c) == 3, f\"len() cuenta unidades: debe dar 3; da {len(c)}\"\nassert abs(c.total() - 4.5) < 1e-9, f\"total() debe dar 4.5; da {c.total()}\"",
+     "error": "poo-metodos-especiales.len-no-entero"
+    },
+    {
+     "stdin": "",
+     "test": "c = CarritoCompra()\nc.agregar(Producto(\"Pan\", 1.2), 2)\nc.agregar(Producto(\"Pan\", 1.2), 3)\nassert len(c) == 5 and repr(c) == \"CarritoCompra(productos=1, unidades=5)\", f\"Un producto igual suma su cantidad; repr() devuelve {repr(c)!r}\"\nfor mala in (0, -2):\n    try:\n        c.agregar(Producto(\"Pan\", 1.2), mala)\n    except ValueError:\n        pass\n    else:\n        raise AssertionError(f\"agregar(producto, {mala}) debe lanzar ValueError\")",
+     "error": null
+    },
+    {
+     "stdin": "",
+     "test": "c = CarritoCompra()\nc.agregar(Producto(\"Pan\", 1.2))\nassert Producto(\"Pan\", 1.2) in c, \"in debe encontrar un producto igual, aunque sea otro objeto\"\nassert Producto(\"Leche\", 2.1) not in c, \"Un producto que no está no debe aparecer\"",
+     "error": null
+    },
+    {
+     "stdin": "",
+     "test": "c = CarritoCompra()\nc.agregar(Producto(\"Pan\", 1.2), 2)\nc.agregar(Producto(\"Leche\", 2.1))\nassert str(c) == \"Carrito: 3 unidades, 4.50 €\", f\"str() devuelve {str(c)!r}\"\nassert repr(c) == \"CarritoCompra(productos=2, unidades=3)\", f\"repr() devuelve {repr(c)!r}\"",
+     "error": "poo-metodos-especiales.imprime-en-vez-de-devolver"
+    }
+   ],
+   "hint": "Guarda pares `[producto, cantidad]` en una lista. `__len__` suma las cantidades y `__contains__` puede usar `any(p == producto for p, _ in self._lineas)`.",
+   "explain": "Gracias a los métodos especiales el carrito se usa con las mismas instrucciones que una colección de Python: `len`, `in`, `print` y `repr`. `__eq__` en `Producto` es lo que permite encontrar un producto igual creado aparte, tanto en `agregar` como en `in`.",
+   "expect": "Carrito: 3 unidades, 4.50 €\nCarritoCompra(productos=2, unidades=3)\nTrue 3\n"
+  },
+  {
+   "id": "poo8-16",
+   "concept": "poo-metodos-especiales",
+   "kind": "choice",
+   "level": 1,
+   "daw": false,
+   "q": "¿Para qué sirve cada uno, `__str__` y `__repr__`?",
+   "code": null,
+   "options": [
+    {
+     "text": "`__str__` da el texto para el usuario y `__repr__` el texto para el programador",
+     "error": null
+    },
+    {
+     "text": "`__str__` convierte el objeto en número y `__repr__` en texto",
+     "error": null,
+     "why": "Los dos devuelven texto; para convertir en número se usarían otros métodos especiales."
+    },
+    {
+     "text": "Son lo mismo: Python usa siempre `__str__`",
+     "error": "poo-metodos-especiales.lista-usa-str",
+     "why": "No son lo mismo: la consola y las listas usan `__repr__`."
+    },
+    {
+     "text": "`__repr__` imprime el objeto y `__str__` lo guarda",
+     "error": "poo-metodos-especiales.imprime-en-vez-de-devolver",
+     "why": "Ninguno imprime: los dos devuelven un texto y es `print` quien lo muestra."
+    }
+   ],
+   "answer": 0,
+   "explain": "`__str__` es la versión legible (`Pan (1.20 €)`) y `__repr__` la versión técnica, que dice qué objeto es (`Producto('Pan', 1.2)`).",
+   "codeOptions": false,
+   "bank": true,
+   "qtype": "teoria"
+  },
+  {
+   "id": "poo8-17",
+   "concept": "poo-metodos-especiales",
+   "kind": "choice",
+   "level": 1,
+   "daw": false,
+   "q": "¿Qué método especial llama Python al ejecutar `len(carrito)`?",
+   "code": null,
+   "options": [
+    {
+     "text": "`carrito.__len__()`",
+     "error": null
+    },
+    {
+     "text": "`carrito.__size__()`",
+     "error": "poo-metodos-especiales.nombre-especial-mal",
+     "why": "Ese método no existe en Python: `len()` solo busca `__len__`."
+    },
+    {
+     "text": "`carrito.len()`",
+     "error": "poo-metodos-especiales.nombre-especial-mal",
+     "why": "Un método normal llamado `len` no se usa con `len(carrito)`."
+    },
+    {
+     "text": "`carrito.__iter__()`, para contar los elementos uno a uno",
+     "error": null,
+     "why": "`len()` no recorre el objeto: pide directamente el número a `__len__`."
+    }
+   ],
+   "answer": 0,
+   "explain": "Cada función o instrucción de Python tiene su método especial: `len()` → `__len__`, `str()` → `__str__`, `in` → `__contains__`.",
+   "codeOptions": true,
+   "bank": true,
+   "qtype": "codigo"
+  },
+  {
+   "id": "poo8-18",
+   "concept": "poo-metodos-especiales",
+   "kind": "choice",
+   "level": 3,
+   "daw": false,
+   "q": "La clase guarda sus alumnos en `self._alumnos`, una lista. ¿Qué `__iter__` es correcto?",
+   "code": null,
+   "options": [
+    {
+     "text": "`return iter(self._alumnos)`",
+     "error": null
+    },
+    {
+     "text": "`return self._alumnos`",
+     "error": "poo-metodos-especiales.iter-no-iterador",
+     "why": "Una lista es recorrible, pero no es un iterador: `for` da `TypeError: iter() returned non-iterator`."
+    },
+    {
+     "text": "`for a in self._alumnos: print(a)`",
+     "error": "poo-metodos-especiales.imprime-en-vez-de-devolver",
+     "why": "`__iter__` no recorre ni imprime: devuelve el iterador que usará el `for`."
+    },
+    {
+     "text": "`return len(self._alumnos)`",
+     "error": null,
+     "why": "Eso es lo que haría `__len__`; un número no se puede recorrer."
+    }
+   ],
+   "answer": 0,
+   "explain": "`iter(lista)` devuelve un iterador nuevo de la lista cada vez, así que el objeto se puede recorrer tantas veces como quieras.",
+   "codeOptions": true,
+   "bank": true,
+   "qtype": "codigo"
+  },
+  {
+   "id": "poo8-19",
+   "concept": "poo-metodos-especiales",
+   "kind": "choice",
+   "level": 1,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "class Ciudad:\n    def __init__(self, nombre):\n        self.nombre = nombre\n\n    def __str__(self):\n        return f\"Ciudad: {self.nombre}\"\n\n    def __repr__(self):\n        return f\"Ciudad({self.nombre!r})\"\n\nprint(Ciudad(\"Soria\"))",
+   "options": [
+    {
+     "text": "Ciudad: Soria",
+     "error": null
+    },
+    {
+     "text": "Soria",
+     "error": null,
+     "why": "`print` usa el texto que devuelve `__str__`, que añade «Ciudad: »."
+    },
+    {
+     "text": "<__main__.Ciudad object>",
+     "error": "poo-metodos-especiales.nombre-especial-mal",
+     "why": "La clase sí define `__str__` con el nombre correcto, así que `print` lo usa."
+    },
+    {
+     "text": "Ciudad('Soria')",
+     "error": "poo-metodos-especiales.lista-usa-str",
+     "why": "Ese sería el texto de `__repr__`; `print` de un objeto suelto usa `__str__`."
+    }
+   ],
+   "answer": 0,
+   "explain": "`print(objeto)` llama a `__str__` y muestra lo que devuelve.",
+   "codeOptions": false,
+   "bank": true,
+   "qtype": "prediccion"
+  },
+  {
+   "id": "poo8-20",
+   "concept": "poo-metodos-especiales",
+   "kind": "choice",
+   "level": 2,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "class Ciudad:\n    def __init__(self, nombre):\n        self.nombre = nombre\n\n    def __str__(self):\n        return f\"Ciudad: {self.nombre}\"\n\n    def __repr__(self):\n        return f\"Ciudad({self.nombre!r})\"\n\nprint([Ciudad(\"Soria\"), Ciudad(\"Ávila\")])",
+   "options": [
+    {
+     "text": "[Ciudad('Soria'), Ciudad('Ávila')]",
+     "error": null
+    },
+    {
+     "text": "[Ciudad: Soria, Ciudad: Ávila]",
+     "error": "poo-metodos-especiales.lista-usa-str",
+     "why": "Una lista muestra sus elementos con `__repr__`, no con `__str__`."
+    },
+    {
+     "text": "Ciudad: Soria Ciudad: Ávila",
+     "error": null,
+     "why": "Se imprime la lista entera, con sus corchetes y comas."
+    },
+    {
+     "text": "['Soria', 'Ávila']",
+     "error": null,
+     "why": "La lista guarda objetos `Ciudad`, no los textos con sus nombres."
+    }
+   ],
+   "answer": 0,
+   "explain": "Al imprimir una lista, Python usa el `__repr__` de cada elemento. Por eso conviene que `__repr__` diga claramente qué objeto es.",
+   "codeOptions": false,
+   "bank": true,
+   "qtype": "prediccion"
+  },
+  {
+   "id": "poo8-21",
+   "concept": "poo-metodos-especiales",
+   "kind": "choice",
+   "level": 3,
+   "daw": false,
+   "q": "¿Qué muestra este programa?",
+   "code": "class CuentaAtras:\n    def __init__(self, desde):\n        self.actual = desde\n\n    def __iter__(self):\n        return self\n\n    def __next__(self):\n        if self.actual == 0:\n            raise StopIteration\n        self.actual -= 1\n        return self.actual + 1\n\nc = CuentaAtras(3)\nprint(list(c), list(c))",
+   "options": [
+    {
+     "text": "[3, 2, 1] []",
+     "error": null
+    },
+    {
+     "text": "[3, 2, 1] [3, 2, 1]",
+     "error": null,
+     "why": "`__iter__` devuelve `self` y `actual` ya llegó a 0: el iterador se gastó en el primer `list`."
+    },
+    {
+     "text": "[1, 2, 3] []",
+     "error": null,
+     "why": "`__next__` devuelve primero el valor más alto y va bajando."
+    },
+    {
+     "text": "StopIteration",
+     "error": null,
+     "why": "`list()` recoge la `StopIteration` como señal de fin: no llega a verse como error."
+    }
+   ],
+   "answer": 0,
+   "explain": "Un iterador que se devuelve a sí mismo en `__iter__` se **gasta**: el primer `list(c)` lo recorre entero y el segundo ya no recibe ningún elemento.",
+   "codeOptions": false,
+   "bank": true,
+   "qtype": "prediccion"
+  },
+  {
+   "id": "poo8-22",
+   "concept": "poo-metodos-especiales",
+   "kind": "choice",
+   "level": 2,
+   "daw": false,
+   "q": "`print(libro)` da `TypeError: __str__ returned non-string (type NoneType)`. ¿Cuál es el fallo?",
+   "code": "class Libro:\n    def __init__(self, titulo):\n        self.titulo = titulo\n\n    def __str__(self):\n        print(f\"Libro: {self.titulo}\")",
+   "options": [
+    {
+     "text": "`__str__` imprime el texto con `print` en vez de devolverlo con `return`",
+     "error": null
+    },
+    {
+     "text": "Falta llamar a `__str__` con paréntesis en `print(libro)`",
+     "error": "poo-metodos-especiales.llamada-directa",
+     "why": "`print(libro)` es correcto: Python ya llama a `__str__` por su cuenta."
+    },
+    {
+     "text": "El título es un número y no se puede imprimir",
+     "error": null,
+     "why": "El error dice que `__str__` devolvió `None`, no que falle el título."
+    },
+    {
+     "text": "Hay que definir `__repr__` además de `__str__`",
+     "error": null,
+     "why": "`__repr__` no es obligatorio; el problema es lo que devuelve `__str__`."
+    }
+   ],
+   "answer": 0,
+   "explain": "`__str__` tiene que **devolver** un `str`. Un método sin `return` devuelve `None`, y Python avisa con `TypeError`.",
+   "codeOptions": false,
+   "bank": true,
+   "qtype": "error"
+  },
+  {
+   "id": "poo8-23",
+   "concept": "poo-metodos-especiales",
+   "kind": "choice",
+   "level": 3,
+   "daw": false,
+   "q": "`for alumno in clase:` da `TypeError: iter() returned non-iterator of type 'list'`. ¿Qué falla?",
+   "code": "class Clase:\n    def __init__(self, alumnos):\n        self._alumnos = list(alumnos)\n\n    def __iter__(self):\n        return self._alumnos",
+   "options": [
+    {
+     "text": "`__iter__` devuelve la lista; debe devolver un iterador, por ejemplo `iter(self._alumnos)`",
+     "error": null
+    },
+    {
+     "text": "Las clases propias no se pueden recorrer con `for`",
+     "error": null,
+     "why": "Sí se pueden, si `__iter__` devuelve un iterador."
+    },
+    {
+     "text": "Falta definir `__len__`",
+     "error": null,
+     "why": "`for` no usa `__len__`: le basta con un iterador."
+    },
+    {
+     "text": "Hay que escribir `for alumno in clase.__iter__:`",
+     "error": "poo-metodos-especiales.llamada-directa",
+     "why": "Sin paréntesis se intenta recorrer el propio método; lo correcto es `for alumno in clase:`."
+    }
+   ],
+   "answer": 0,
+   "explain": "Una lista es recorrible, pero no es un iterador (no tiene `__next__`). `iter(lista)` sí lo es.",
+   "codeOptions": false,
+   "bank": true,
+   "qtype": "error"
+  },
+  {
+   "id": "poo8-24",
+   "concept": "poo-metodos-especiales",
+   "kind": "choice",
+   "level": 3,
+   "daw": false,
+   "q": "`Producto` define `__eq__`, y ahora `{Producto('Pan', 1.2)}` da `TypeError: unhashable type`. Quieres seguir comparando por contenido y poder meterlos en un `set`. ¿Qué haces?",
+   "code": null,
+   "options": [
+    {
+     "text": "Definir también `__hash__` con los mismos datos que compara `__eq__`: `return hash((self.nombre, self.precio))`",
+     "error": null
+    },
+    {
+     "text": "Borrar `__eq__`",
+     "error": "poo-metodos-especiales.eq-identidad",
+     "why": "Volverías a comparar identidad: dos productos iguales creados aparte ya no serían iguales."
+    },
+    {
+     "text": "Usar una lista en vez de un `set` en todo el programa",
+     "error": null,
+     "why": "Evita el error, pero no lo que se pide: los productos seguirían sin poder ir en un `set`."
+    },
+    {
+     "text": "Hacer que `__eq__` devuelva siempre `True`",
+     "error": null,
+     "why": "Todos los productos serían iguales entre sí: el `set` solo guardaría uno."
+    }
+   ],
+   "answer": 0,
+   "explain": "Al definir `__eq__`, Python quita el `__hash__` por defecto para que objetos iguales no tengan hashes distintos. Si defines `__hash__` con los mismos datos que compara `__eq__`, se pueden usar en `set` y como claves. Esos datos no deberían cambiar después.",
+   "codeOptions": false,
+   "bank": true,
+   "qtype": "solucion"
+  },
+  {
+   "id": "poo8-25",
+   "concept": "poo-metodos-especiales",
+   "kind": "choice",
+   "level": 1,
+   "daw": false,
+   "q": "¿En qué clase tiene sentido definir `__len__`?",
+   "code": null,
+   "options": [
+    {
+     "text": "En `Carrito`, que agrupa productos y tiene un tamaño claro",
+     "error": null
+    },
+    {
+     "text": "En `Persona`, para devolver su edad",
+     "error": null,
+     "why": "`len(persona)` no se entendería: la edad no es un número de elementos."
+    },
+    {
+     "text": "En todas las clases, por si acaso",
+     "error": null,
+     "why": "Un método especial sin sentido para la clase confunde a quien la usa."
+    },
+    {
+     "text": "En `Fecha`, para devolver el día del mes",
+     "error": null,
+     "why": "Una fecha no es una colección; para el día, mejor un atributo `dia`."
+    }
+   ],
+   "answer": 0,
+   "explain": "`__len__` es para objetos que son colecciones: el número de elementos que contienen.",
+   "codeOptions": false,
+   "bank": true,
+   "qtype": "diseno"
+  },
+  {
+   "id": "poo8-26",
+   "concept": "poo-metodos-especiales",
+   "kind": "choice",
+   "level": 2,
+   "daw": false,
+   "q": "Un alumno puede cambiar de nota o de correo, pero su DNI no cambia y no hay dos alumnos con el mismo. ¿Qué debe comparar `Alumno.__eq__`?",
+   "code": null,
+   "options": [
+    {
+     "text": "El DNI, que es lo que identifica al alumno",
+     "error": null
+    },
+    {
+     "text": "Todos los atributos: nombre, correo, nota y DNI",
+     "error": null,
+     "why": "Si el alumno cambia de nota dejaría de ser «igual» a sí mismo en otra parte del programa."
+    },
+    {
+     "text": "Nada: es mejor no definir `__eq__` y usar `is`",
+     "error": "poo-metodos-especiales.eq-identidad",
+     "why": "Dos objetos cargados por separado del mismo alumno no serían iguales."
+    },
+    {
+     "text": "La nota, porque es lo que más se consulta",
+     "error": null,
+     "why": "Dos alumnos distintos pueden tener la misma nota: no los identifica."
+    }
+   ],
+   "answer": 0,
+   "explain": "Decidir qué hace iguales a dos objetos es una decisión de diseño. Si un dato identifica al objeto y no cambia (DNI, ISBN, número de pedido), compara ese dato.",
    "codeOptions": false,
    "bank": true,
    "qtype": "diseno"

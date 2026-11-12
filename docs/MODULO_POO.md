@@ -17,7 +17,7 @@ Desde el 11/11/2026 el módulo sigue el plan de cinco PR del diseño de la Fase 
 | PR | Contenido | Estado |
 |---|---|---|
 | A | Formato nuevo (buenas prácticas, referencias, origen de los ejemplos, prácticas adicionales, banco) y Unidades 1 a 6 completas, con 90 preguntas de banco | En revisión |
-| B | Unidades 7 y 8 (relaciones entre objetos y métodos especiales) | Pendiente |
+| B | Unidades 7 y 8 (relaciones entre objetos y métodos especiales), con 30 preguntas de banco más (120 en total) | En revisión |
 | C | Unidades 9 y 10 (diseño y proyecto biblioteca) | Pendiente |
 | D | Banco cerrado de 150 preguntas, cuestionarios con nota, evaluación final y repaso | Pendiente |
 | E | Currículo, bibliografía general, progreso, motor adaptativo y documentación | Pendiente |
@@ -27,7 +27,7 @@ Desde el 11/11/2026 el módulo sigue el plan de cinco PR del diseño de la Fase 
 | Qué | Archivo |
 |---|---|
 | Índice de unidades, Unidad 2 y reunión de todas las unidades | `scripts/learning/poo_module.py` |
-| Una unidad completa por archivo (concepto, campos, ejercicios, banco y errores) | `scripts/learning/poo_u1.py` … `poo_u6.py` |
+| Una unidad completa por archivo (concepto, campos, ejercicios, banco y errores) | `scripts/learning/poo_u1.py` … `poo_u8.py` |
 | Correspondencias propuestas (`proposed`), catálogo de fuentes (`SOURCES`), `ref`, `practice` y reparto del banco | `scripts/learning/poo_common.py` |
 | Integración en el mapa de conceptos (área `poo`) | `scripts/learning/concepts.py` |
 | Validación y generación | `scripts/learning/build_learning.py` (`check_units`) |
@@ -54,9 +54,11 @@ sigue funcionando y nadie pierde su progreso. Las unidades que aún no existen s
 | 9 | `poo-diseno` | Diseño y buenas prácticas |
 | 10 | `poo-proyecto` | Proyecto final: gestión de una biblioteca |
 
-Publicadas: Unidades 1 a 6 (Sprints 2 y 3). En la ruta «Aprender» van seguidas. Prerrequisitos:
-`poo-fundamentos` (pide funciones y diccionarios) → `poo` → `poo-atributos-metodos`, que abre
-`poo-encapsulacion` y `poo-herencia`; `poo-polimorfismo` pide `poo-herencia`.
+Publicadas: Unidades 1 a 8 (Sprints 2 y 3, PR A y PR B). En la ruta «Aprender» van seguidas.
+Prerrequisitos: `poo-fundamentos` (pide funciones y diccionarios) → `poo` → `poo-atributos-metodos`,
+que abre `poo-encapsulacion` y `poo-herencia`; `poo-polimorfismo` pide `poo-herencia`;
+`poo-composicion` pide `poo-encapsulacion` y `poo-herencia`, y `poo-metodos-especiales` pide `poo` y
+`poo-atributos-metodos`.
 
 | Unidad | Lecciones | Ejercicios | Errores típicos nuevos | CE propuestos |
 |---|---|---|---|---|
@@ -66,6 +68,8 @@ Publicadas: Unidades 1 a 6 (Sprints 2 y 3). En la ruta «Aprender» van seguidas
 | 4 | Público, protegido y privado · `@property` y setter · Validar y proteger el estado | 26 (`poo4-01`…`26`) | privado-absoluto, privado-desde-fuera, property-con-parentesis, setter-recursivo, validacion-fuera, sin-setter | RA4-f, RA2-d, RA4-c |
 | 5 | Superclase y subclase · Constructores y `super()` · Sobrescribir y ampliar métodos · Herencia múltiple y MRO | 27 (`poo5-01`…`27`) | es-un-tiene-un, olvida-super, sobrescribir, jerarquia-al-reves | RA4-g, RA7-a, RA7-c, RA7-d, RA7-e |
 | 6 | Mismo método, distinto comportamiento · Duck typing · Clases abstractas (`abc`) | 27 (`poo6-01`…`27`) | isinstance-en-cadena, necesita-herencia, abstracta-instanciable, abstracta-sin-implementar, version-base, metodo-sin-llamar | RA7-i, RA7-g, RA7-f |
+| 7 | Asociación · Agregación y composición · Delegación · Herencia frente a composición | 27 (`poo7-01`…`27`) | copia-al-guardar, lista-por-defecto, herencia-por-tiene, no-delega, relacion-es-sintaxis | RA7-j, RA4-e, RA6-c |
+| 8 | Qué son y cuándo los llama Python · Esenciales (`__str__`, `__repr__`, `__eq__`, `__len__`) · Avanzados (`__contains__`, `__iter__`, `__next__`) | 26 (`poo8-01`…`26`) | nombre-especial-mal, llamada-directa, imprime-en-vez-de-devolver, lista-usa-str, eq-identidad, len-no-entero, iter-no-iterador | RA4-c, RA6-d, RA4-e |
 
 ## Formato de una unidad
 
