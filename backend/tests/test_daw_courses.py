@@ -237,3 +237,62 @@ def test_published_solutions_are_complete(course):
         assert solution["code"].strip() != lesson["starter"].strip(), (
             f"{lesson['slug']}: la solución es la plantilla"
         )
+
+
+# ---------- Correspondencia con los RA y CE oficiales (#106, curriculum_map.py) ----------
+
+STATUSES = {"verified", "proposed", "unassigned"}
+CRITERIA = {f"{ra}-{letter}" for ra, letters in OUTCOMES.items() for letter in letters}
+
+
+def check_mapping(where: str, ce: list[str], status: str, module: str) -> None:
+    assert status in STATUSES, f"{where}: estado «{status}» desconocido"
+    assert (status == "unassigned") == (not ce), f"{where}: «unassigned» va sin CE, y solo él"
+    assert len(set(ce)) == len(ce), f"{where}: CE repetido"
+    for ce_id in ce:
+        assert ce_id in CRITERIA, f"{where}: {ce_id} no existe en el currículo oficial"
+        assert ce_id.startswith(f"{module}-"), f"{where}: {ce_id} no es del módulo {module}"
+
+
+@pytest.mark.parametrize("course", COURSES)
+def test_lessons_map_to_existing_criteria_of_their_module(course):
+    module = module_of(course)
+    for lesson in lessons_of(course):
+        cur = lesson["curriculum"]
+        check_mapping(lesson["slug"], cur["ce"], cur["status"], module)
+        assert cur["ra"] == sorted({c.rsplit("-", 1)[0] for c in cur["ce"]}), lesson["slug"]
+        assert cur["source"], f"{lesson['slug']}: la correspondencia no dice de dónde sale"
+        # Verificado = lo ha revisado un docente: tiene que constar quién y cuándo
+        assert bool(cur["reviewed"]) == (cur["status"] == "verified"), lesson["slug"]
+
+
+@pytest.mark.parametrize("course", COURSES)
+def test_every_question_has_a_mapping_consistent_with_its_lesson(course):
+    lessons = {lesson["slug"]: lesson["curriculum"] for lesson in lessons_of(course)}
+    for q in DATA[course][1]["questions"]:
+        cur = q["curriculum"]
+        check_mapping(q["id"], cur["ce"], cur["status"], q["module"])
+        # Una pregunta no puede estar más verificada que su lección si hereda sus CE
+        if cur["ce"] == lessons[q["lesson"]]["ce"]:
+            assert cur["status"] == lessons[q["lesson"]]["status"], q["id"]
+
+
+@pytest.mark.parametrize("course", COURSES)
+def test_criteria_cited_in_objectives_are_in_the_mapping(course):
+    """Si un objetivo cita «RA2 a, d», la correspondencia de la lección incluye esos CE."""
+    module = module_of(course)
+    for lesson in lessons_of(course):
+        mapped = set(lesson["curriculum"]["ce"])
+        for line in lesson.get("objectives", []):
+            for match in CITATION.finditer(line):
+                cited = {f"{module}-RA{match.group(1)}-{x}" for x in cited_criteria(match.group(2))}
+                assert cited <= mapped, f"{lesson['slug']}: faltan {sorted(cited - mapped)}"
+
+
+def test_every_question_is_mapped_to_some_criterion():
+    """Las 520 preguntas tienen algún CE (hoy todos «proposed»: ningún docente lo ha revisado)."""
+    statuses = {
+        q["curriculum"]["status"] for course in COURSES for q in DATA[course][1]["questions"]
+    }
+    assert statuses <= STATUSES
+    assert "unassigned" not in statuses, "hay preguntas sin correspondencia con ningún CE"

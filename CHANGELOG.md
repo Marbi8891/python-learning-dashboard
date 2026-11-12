@@ -31,6 +31,10 @@ cambios se agrupan por fecha de merge, con el número de pull request entre par�
   `__str__`, `__repr__`, `__eq__`, `__len__` y, como avanzados, `__contains__`, `__iter__` y
   `__next__`; ejercicio principal CarritoCompra), con 53 ejercicios, 30 preguntas de banco y 12
   errores típicos nuevos.
+- Correspondencia con los RA y CE oficiales en los cursos de DAW: cada lección y cada pregunta (520)
+  dice qué CE trabaja y con qué estado (`verified`, `proposed` o `unassigned`). Hoy todo es
+  `proposed`, pendiente de revisión docente. Mapa en `scripts/courses/curriculum_map.py`, validado al
+  generar los cursos y en las pruebas (#106).
 - Monitor de CI: `ci-monitor.yml` diagnostica cada ejecución de CI y avisa con una incidencia
   `ci-monitor` (nuevo, recurrente, corregido, cancelado u obsoleto); `scripts/ci-monitor/` y
   `docs/CI_CD_MONITORING.md` (#103).

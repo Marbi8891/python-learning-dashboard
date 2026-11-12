@@ -66,6 +66,21 @@
        "url": "https://www.postgresql.org/docs/current/tutorial-sql.html"
       }
      ],
+     "curriculum": {
+      "ra": [
+       "0484-RA1"
+      ],
+      "ce": [
+       "0484-RA1-b",
+       "0484-RA1-c",
+       "0484-RA1-g",
+       "0484-RA1-h",
+       "0484-RA1-j"
+      ],
+      "status": "proposed",
+      "source": "Objetivos de la lección: su autor cita estos RA y CE",
+      "reviewed": null
+     },
      "objectives": [
       "Distinguir las bases de datos según dónde está la información: local, en la nube, centralizada o distribuida (RA1 c).",
       "Explicar para qué sirve una base de datos distribuida y sus inconvenientes (RA1 g).",
@@ -163,6 +178,21 @@
        "url": "https://dev.mysql.com/doc/refman/8.0/en/"
       }
      ],
+     "curriculum": {
+      "ra": [
+       "0484-RA1"
+      ],
+      "ce": [
+       "0484-RA1-a",
+       "0484-RA1-d",
+       "0484-RA1-e",
+       "0484-RA1-f",
+       "0484-RA1-i"
+      ],
+      "status": "proposed",
+      "source": "Objetivos de la lección: su autor cita estos RA y CE",
+      "reviewed": null
+     },
      "objectives": [
       "Comparar los ficheros planos, indexados y de acceso directo, y el acceso secuencial y aleatorio (RA1 a).",
       "Identificar el RGPD y la LOPDGDD y aplicar el principio de minimización al diseñar una tabla (RA1 i).",
@@ -267,6 +297,22 @@
        "url": "https://dev.mysql.com/doc/refman/8.0/en/"
       }
      ],
+     "curriculum": {
+      "ra": [
+       "0484-RA6"
+      ],
+      "ce": [
+       "0484-RA6-b",
+       "0484-RA6-c",
+       "0484-RA6-d",
+       "0484-RA6-e",
+       "0484-RA6-f",
+       "0484-RA6-g"
+      ],
+      "status": "proposed",
+      "source": "Objetivos de la lección: su autor cita estos RA y CE",
+      "reviewed": null
+     },
      "objectives": [
       "Pasar a tablas las relaciones 1:N, N:M y 1:1 de un diagrama entidad/relación (RA6 b, c, d).",
       "Elegir las claves primarias, candidatas y ajenas de cada tabla (RA6 e).",
@@ -364,6 +410,20 @@
        "url": "https://www.sqlite.org/lang.html"
       }
      ],
+     "curriculum": {
+      "ra": [
+       "0484-RA2"
+      ],
+      "ce": [
+       "0484-RA2-b",
+       "0484-RA2-c",
+       "0484-RA2-d",
+       "0484-RA2-e"
+      ],
+      "status": "proposed",
+      "source": "Objetivos de la lección: su autor cita estos RA y CE",
+      "reviewed": null
+     },
      "objectives": [
       "Crear tablas con `CREATE TABLE` eligiendo el tipo de dato adecuado a cada columna (RA2 b, c).",
       "Definir la clave primaria y las claves ajenas (RA2 d).",
@@ -460,6 +520,20 @@
        "url": "https://www.sqlite.org/lang.html"
       }
      ],
+     "curriculum": {
+      "ra": [
+       "0484-RA2"
+      ],
+      "ce": [
+       "0484-RA2-c",
+       "0484-RA2-f",
+       "0484-RA2-g",
+       "0484-RA2-h"
+      ],
+      "status": "proposed",
+      "source": "Objetivos de la lección: su autor cita estos RA y CE",
+      "reviewed": null
+     },
      "objectives": [
       "Tratar NULL correctamente y elegir el tipo de dato de cada columna (RA2 c).",
       "Cambiar la estructura de una tabla con `ALTER TABLE` y crear índices (RA2 h).",
@@ -565,6 +639,18 @@
        "url": "https://www.sqlite.org/lang.html"
       }
      ],
+     "curriculum": {
+      "ra": [
+       "0484-RA3"
+      ],
+      "ce": [
+       "0484-RA3-a",
+       "0484-RA3-b"
+      ],
+      "status": "proposed",
+      "source": "Objetivos de la lección: su autor cita estos RA y CE",
+      "reviewed": null
+     },
      "objectives": [
       "Escribir consultas `SELECT` sobre una tabla con columnas, expresiones y alias (RA3 a, b).",
       "Ordenar y limitar el resultado con `ORDER BY` y `LIMIT` (RA3 b).",
@@ -663,6 +749,17 @@
        "url": "https://www.sqlite.org/lang.html"
       }
      ],
+     "curriculum": {
+      "ra": [
+       "0484-RA3"
+      ],
+      "ce": [
+       "0484-RA3-b"
+      ],
+      "status": "proposed",
+      "source": "Objetivos de la lección: su autor cita estos RA y CE",
+      "reviewed": null
+     },
      "objectives": [
       "Filtrar filas con `WHERE` y los operadores de comparación y lógicos (RA3 b).",
       "Usar `BETWEEN`, `IN` y `LIKE` con sus comodines.",
@@ -759,6 +856,18 @@
        "url": "https://www.sqlite.org/lang.html"
       }
      ],
+     "curriculum": {
+      "ra": [
+       "0484-RA3"
+      ],
+      "ce": [
+       "0484-RA3-e",
+       "0484-RA3-f"
+      ],
+      "status": "proposed",
+      "source": "Objetivos de la lección: su autor cita estos RA y CE",
+      "reviewed": null
+     },
      "objectives": [
       "Resumir una tabla con `COUNT`, `SUM`, `AVG`, `MIN` y `MAX` (RA3 e).",
       "Explicar cómo tratan los agregados los valores NULL y sustituirlos con `COALESCE`.",
@@ -855,6 +964,17 @@
        "url": "https://www.postgresql.org/docs/current/tutorial-sql.html"
       }
      ],
+     "curriculum": {
+      "ra": [
+       "0484-RA3"
+      ],
+      "ce": [
+       "0484-RA3-e"
+      ],
+      "status": "proposed",
+      "source": "Objetivos de la lección: su autor cita estos RA y CE",
+      "reviewed": null
+     },
      "objectives": [
       "Agrupar filas con `GROUP BY` y calcular un resumen por grupo (RA3 e).",
       "Filtrar grupos con `HAVING` y distinguirlo de `WHERE` (RA3 e)."
@@ -950,6 +1070,18 @@
        "url": "https://www.postgresql.org/docs/current/tutorial-sql.html"
       }
      ],
+     "curriculum": {
+      "ra": [
+       "0484-RA3"
+      ],
+      "ce": [
+       "0484-RA3-c",
+       "0484-RA3-e"
+      ],
+      "status": "proposed",
+      "source": "Objetivos de la lección: su autor cita estos RA y CE",
+      "reviewed": null
+     },
      "objectives": [
       "Combinar dos tablas con `INNER JOIN` siguiendo la clave ajena (RA3 c).",
       "Calcular resúmenes sobre tablas combinadas (RA3 e).",
@@ -1046,6 +1178,18 @@
        "url": "https://www.postgresql.org/docs/current/tutorial-sql.html"
       }
      ],
+     "curriculum": {
+      "ra": [
+       "0484-RA3"
+      ],
+      "ce": [
+       "0484-RA3-d",
+       "0484-RA3-f"
+      ],
+      "status": "proposed",
+      "source": "Objetivos de la lección: su autor cita estos RA y CE",
+      "reviewed": null
+     },
      "objectives": [
       "Usar `LEFT JOIN` para conservar las filas sin pareja (RA3 d).",
       "Contar correctamente después de un `LEFT JOIN`.",
@@ -1141,6 +1285,20 @@
        "url": "https://www.postgresql.org/docs/current/tutorial-sql.html"
       }
      ],
+     "curriculum": {
+      "ra": [
+       "0484-RA3"
+      ],
+      "ce": [
+       "0484-RA3-d",
+       "0484-RA3-f",
+       "0484-RA3-g",
+       "0484-RA3-h"
+      ],
+      "status": "proposed",
+      "source": "Objetivos de la lección: su autor cita estos RA y CE",
+      "reviewed": null
+     },
      "objectives": [
       "Combinar los resultados de varias consultas con `UNION`, `INTERSECT` y `EXCEPT` (RA3 g).",
       "Usar composiciones externas y `COALESCE` (RA3 d).",
@@ -1246,6 +1404,20 @@
        "url": "https://www.sqlite.org/lang.html"
       }
      ],
+     "curriculum": {
+      "ra": [
+       "0484-RA4"
+      ],
+      "ce": [
+       "0484-RA4-a",
+       "0484-RA4-b",
+       "0484-RA4-c",
+       "0484-RA4-h"
+      ],
+      "status": "proposed",
+      "source": "Objetivos de la lección: su autor cita estos RA y CE",
+      "reviewed": null
+     },
      "objectives": [
       "Insertar, actualizar y borrar datos con `INSERT`, `UPDATE` y `DELETE` (RA4 a, b).",
       "Insertar en una tabla el resultado de una consulta (RA4 c).",
@@ -1342,6 +1514,22 @@
        "url": "https://www.postgresql.org/docs/current/tutorial-sql.html"
       }
      ],
+     "curriculum": {
+      "ra": [
+       "0484-RA2",
+       "0484-RA3",
+       "0484-RA4"
+      ],
+      "ce": [
+       "0484-RA4-e",
+       "0484-RA4-f",
+       "0484-RA2-f",
+       "0484-RA3-h"
+      ],
+      "status": "proposed",
+      "source": "Objetivos de la lección: su autor cita estos RA y CE",
+      "reviewed": null
+     },
      "objectives": [
       "Agrupar sentencias en una transacción y confirmarla o deshacerla con `COMMIT` y `ROLLBACK` (RA4 e, f).",
       "Explicar las propiedades ACID.",
