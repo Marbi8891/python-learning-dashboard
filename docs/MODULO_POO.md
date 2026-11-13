@@ -19,8 +19,8 @@ Desde el 11/11/2026 el módulo sigue el plan de cinco PR del diseño de la Fase 
 | A | Formato nuevo (buenas prácticas, referencias, origen de los ejemplos, prácticas adicionales, banco) y Unidades 1 a 6 completas, con 90 preguntas de banco | Hecho (#121) |
 | B | Unidades 7 y 8 (relaciones entre objetos y métodos especiales), con 30 preguntas de banco más (120 en total) | Hecho (#122) |
 | C | Unidades 9 y 10 (diseño y proyecto biblioteca, con diagrama de clases, rúbrica y retos), con 30 preguntas de banco más (150 en total) | Hecho (#134) |
-| D | Cuestionario de unidad con nota (70 %), evaluación final de 30 preguntas y repaso de las falladas | En revisión |
-| E | Currículo, bibliografía general, progreso, motor adaptativo y documentación | Pendiente |
+| D | Cuestionario de unidad con nota (70 %), evaluación final de 30 preguntas y repaso de las falladas | Hecho (#139) |
+| E | Índice del módulo con progreso por unidad (y si está superada), currículo propuesto y bibliografía general; pruebas del grafo de prerrequisitos; documentación | En revisión |
 
 ## Dónde está cada cosa
 
@@ -180,6 +180,23 @@ alumno nunca se envía al backend.
 - Las unidades de POO no entran en el simulacro de Preparación DAW ni en la prueba de nivel hasta
   decidirlo en el Sprint 7.
 
+## Índice del módulo (`#/poo`)
+
+De arriba abajo: las 10 unidades, la evaluación final, **Progreso por unidad**, tu progreso en el
+módulo, **Relación con el currículo de DAW** y **Bibliografía general**.
+
+- **Progreso por unidad**: una tabla (fichas en el móvil) con los prerrequisitos de cada unidad
+  («Requiere: U8, U9»), lecciones completadas, ejercicios obligatorios resueltos, mejor nota del
+  cuestionario, si el motor la marca como dominada y si está **superada**. Superada = obligatorios
+  resueltos + cuestionario aprobado + dominada (`unitProgress` en `poo-view.js`); es lo mismo que
+  enumera «Criterios de superación» en cada unidad.
+- **Prerrequisitos**: son los `requires` de cada concepto, que ya usa el motor adaptativo
+  (`missingPrerequisites`): la ruta y la página de la unidad avisan «Necesitas reforzar X antes de pasar
+  a este concepto». Cada unidad solo pide unidades anteriores, así que el grafo no tiene ciclos
+  (`test_poo_prerequisites_point_backwards_and_have_no_cycles`).
+- **Bibliografía general**: el catálogo cerrado `SOURCES` (`poo_common.py`) agrupado en documentación
+  de Python y normativa, con las unidades que cita cada fuente.
+
 ## Cuestionarios y evaluación final
 
 | | Cuestionario de la unidad | Evaluación final |
@@ -214,26 +231,27 @@ Fuente: RD 405/2023 (anexo I), con el texto oficial en `frontend/data/curriculum
 | `unassigned` | No hay una correspondencia clara | «Sin correspondencia» |
 
 Todas las correspondencias son `proposed` hasta que alguien las valide. Los CE del concepto (`ce`) son
-los de sus correspondencias asignadas. Propuesta para las 10 unidades:
+los de sus correspondencias asignadas. Correspondencias de las 10 unidades (todas `proposed`):
 
 | Unidad | CE propuestos |
 |---|---|
-| 1 | RA2-a, RA4-a |
-| 2 | RA2-h, RA4-b, RA4-d, RA4-e *(ya en el contenido)* |
+| 1 | RA2-a, RA2-c, RA4-a |
+| 2 | RA2-h, RA4-b, RA4-d, RA4-e |
 | 3 | RA2-d, RA2-e, RA2-f, RA4-c, RA4-h |
-| 4 | RA4-c, RA4-f |
+| 4 | RA4-f, RA2-d, RA4-c |
 | 5 | RA4-g, RA7-a, RA7-c, RA7-d, RA7-e |
-| 6 | RA7-d, RA7-g, RA7-i |
-| 7 | RA7-j |
-| 8 | RA6-d *(dudosa)* |
-| 9 | RA3-g, RA4-i, RA7-h, RA7-j |
-| 10 | RA3-d, RA3-f, RA4-e, RA7-e, RA7-f, RA7-g |
+| 6 | RA7-i, RA7-g, RA7-f |
+| 7 | RA7-j, RA4-e, RA6-c |
+| 8 | RA4-c, RA6-d, RA4-e |
+| 9 | RA3-g, RA7-h, RA4-i |
+| 10 | RA4-e, RA3-h, RA3-f |
 
 `unassigned`: RA7-b (en Python no hay modificadores que bloqueen la herencia; `typing.final` no lo
 impone el intérprete), RA6-f, RA8 y RA9.
 
-Hasta que existan las unidades 1 y 3, los CE RA2-a, RA4-a y RA4-c que tenía `poo` no tienen ningún
-concepto asociado (estaban sin revisar y pasan a las unidades que los trabajan).
+El índice `#/poo` reúne todos los CE en «Relación con el currículo de DAW» (`moduleCurriculum`), con
+las unidades que trabajan cada uno y el mismo aviso de propuesta. Las pruebas comprueban que ningún CE
+sale como validado y que la normativa de FP solo respalda el currículo, nunca un concepto de Python.
 
 ## Pruebas
 
