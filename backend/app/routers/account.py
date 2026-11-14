@@ -6,8 +6,8 @@ from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
 from sqlalchemy import delete, select
 
 from app import activity
-from app.entitlements import active_entitlements
 from app.deps import CurrentUser, DbSession
+from app.entitlements import active_entitlements
 from app.models import (
     AccountEvent,
     CourseState,
