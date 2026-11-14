@@ -1,6 +1,6 @@
 # Itinerario DevOps: Linux, Docker, GitHub y Python
 
-Estado: **diseño curricular inicial**. Este documento define el itinerario formativo que se incorporará a Python Learning Dashboard. No implica todavía que exista una nueva sección funcional en la interfaz.
+Estado: **MVP funcional en desarrollo**. La rama `feature/devops-academy-mvp` incorpora el catálogo `#/devops`, ocho lecciones del primer mes, cuestionarios autocorregibles y sincronización de progreso con la cuenta. El itinerario completo de nueve meses sigue siendo el plan de ampliación.
 
 ## 1. Objetivo
 
