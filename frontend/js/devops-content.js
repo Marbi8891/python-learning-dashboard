@@ -245,8 +245,6 @@ Cada instrucción puede crear una capa. Conviene ordenar los pasos para aprovech
 Los contenedores son efímeros por diseño. Para conservar datos entre recreaciones se usan volúmenes o montajes bind. No guardes datos importantes solo en la capa escribible del contenedor.`,
           example: `FROM python:3.12-slim
 WORKDIR /app
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 CMD ["python", "-c", "print('Hello from the container')"]
 `,
