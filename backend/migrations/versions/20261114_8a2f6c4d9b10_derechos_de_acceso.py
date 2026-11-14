@@ -26,7 +26,9 @@ def upgrade() -> None:
         sa.Column("feature_key", sa.String(length=80), nullable=False),
         sa.Column("source", sa.String(length=20), nullable=False),
         sa.Column("source_ref", sa.String(length=160), server_default="", nullable=False),
-        sa.Column("starts_at", sa.DateTime(timezone=True), server_default=sa.func.now(), nullable=False),
+        sa.Column(
+            "starts_at", sa.DateTime(timezone=True), server_default=sa.func.now(), nullable=False
+        ),
         sa.Column("ends_at", sa.DateTime(timezone=True), nullable=True),
         sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.func.now(), nullable=False),
         sa.ForeignKeyConstraint(["user_id"], ["users.id"], ondelete="CASCADE"),
