@@ -326,7 +326,6 @@ class LearningEventPage(BaseModel):
     offset: int
 
 
-
 # ---------- Derechos de acceso comerciales ----------
 
 
