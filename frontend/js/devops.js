@@ -86,7 +86,7 @@ function renderLesson(lesson) {
       <legend><span>${i + 1}.</span> ${escapeHtml(question.q)}</legend>
       <div class="devops-options">
         ${question.options.map((option, optionIndex) => `
-          <label><input type="radio" name="q-${i}" value="${optionIndex}" ${result?.answers?.[i] === optionIndex ? "checked" : ""} ${result ? "disabled" : ""}>
+          <label><input type="radio" name="q-${i}" value="${optionIndex}" ${result?.answers?.[i] === optionIndex ? "checked" : ""} ${result?.passed || done ? "disabled" : ""}>
             <span>${escapeHtml(option)}</span></label>`).join("")}
       </div>
       ${result ? `<p class="devops-explain" data-correct="${result.correct[i]}">${result.correct[i] ? "Correcto." : "Respuesta incorrecta."} ${escapeHtml(question.explain)}</p>` : ""}
@@ -94,7 +94,7 @@ function renderLesson(lesson) {
 
   const sources = lesson.sources.map((source) => `<li><a href="${safeUrl(source.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(source.title)}</a></li>`).join("");
   return `
-    <p class="daw-crumb"><a href="#/devops">Academia DevOps</a> › <a href="#/devops#${lesson.week.id}">${escapeHtml(lesson.week.title)}</a></p>
+    <p class="daw-crumb"><a href="#/devops">Academia DevOps</a> › <a href="#/devops">${escapeHtml(lesson.week.title)}</a></p>
     <header class="course-hero devops-lesson-hero">
       <p class="eyebrow">${escapeHtml(lesson.area)} · ${escapeHtml(lesson.week.title)}</p>
       <h1 class="course-hero__title" id="devops-title" tabindex="-1">${escapeHtml(lesson.title)}</h1>
@@ -105,7 +105,7 @@ function renderLesson(lesson) {
       <section class="course-section"><h2 class="section-title">Ejemplo</h2><pre class="devops-code" tabindex="0"><code>${escapeHtml(lesson.example)}</code></pre><p class="readiness__note">Ejemplo orientativo. Ejecútalo en tu máquina virtual después de revisar cada comando.</p></section>
       <section class="course-section"><h2 class="section-title">Laboratorio</h2><p>${escapeHtml(lesson.task)}</p><div class="devops-deliverable"><strong>Entrega verificable</strong><p>${escapeHtml(lesson.deliverable)}</p></div></section>
       <section class="course-section"><h2 class="section-title">Comprueba lo aprendido</h2>
-        ${result?.passed ? `<p class="devops-result devops-result--ok" role="status">Has acertado todas las preguntas. La lección está completada.</p>` : result ? `<p class="devops-result devops-result--retry" role="status">Has acertado ${result.correct.filter(Boolean).length} de ${lesson.quiz.length}. Revisa las explicaciones e inténtalo de nuevo.</p>` : ""}
+        ${result?.passed || done ? `<p class="devops-result devops-result--ok" role="status">Lección completada. El progreso se guarda en tu cuenta si has iniciado sesión.</p>` : result ? `<p class="devops-result devops-result--retry" role="status">Has acertado ${result.correct.filter(Boolean).length} de ${lesson.quiz.length}. Revisa las explicaciones e inténtalo de nuevo.</p>` : ""}
         <form id="devops-quiz" data-lesson="${lesson.slug}">
           ${quiz}
           ${result?.passed || done ? "" : '<button class="btn btn--primary" type="submit">Corregir respuestas</button>'}
