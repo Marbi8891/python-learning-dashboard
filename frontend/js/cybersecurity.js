@@ -40,7 +40,7 @@ function render(hash) {
   const match = hash.match(/^#\/ciberseguridad\/(semana-\d{2})$/);
   const week = match ? course.weeks.find((item)=>item.id===match[1]) : null;
   const root = $("#cyber-view");
-  if (match && !week) { root.innerHTML = `<h1 id="cyber-title">Semana no encontrada</h1><a href="#/ciberseguridad">Volver al curso</a>`; return; }
+  if (match && !week) { root.innerHTML = `<h1 id="cyber-title" tabindex="-1">Semana no encontrada</h1><a href="#/ciberseguridad">Volver al curso</a>`; return; }
   root.innerHTML = week ? weekPage(week) : catalog();
   document.title = week ? `Semana ${week.number} · Ciberseguridad · Python Learning Dashboard` : "Curso de Ciberseguridad · Python Learning Dashboard";
   root.querySelector("#cyber-title")?.focus({ preventScroll: true });
@@ -49,7 +49,7 @@ export async function openCyber(hash, { moveFocus = true } = {}) {
   loadState();
   coursePromise ??= fetch(COURSE_URL).then((r)=>{ if(!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); });
   try { course = await coursePromise; render(hash); }
-  catch (error) { $("#cyber-view").innerHTML = `<h1 id="cyber-title">No se pudo cargar el curso</h1><p>Comprueba la conexión y vuelve a intentarlo. ${escapeHtml(error.message)}</p>`; }
+  catch (error) { $("#cyber-view").innerHTML = `<h1 id="cyber-title" tabindex="-1">No se pudo cargar el curso</h1><p>Comprueba la conexión y vuelve a intentarlo. ${escapeHtml(error.message)}</p>`; }
 }
 export function initCyber() {
   $("#cyber-view").addEventListener("click",(event)=>{
