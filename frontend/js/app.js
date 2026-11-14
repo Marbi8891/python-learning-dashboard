@@ -660,6 +660,11 @@ function navigate({ moveFocus = true } = {}) {
     openDaw(location.hash, { moveFocus });
     return;
   }
+  if (location.hash === "#/devops" || location.hash.startsWith("#/devops/")) {
+    showPage("devops", { moveFocus: false });
+    openDevops(location.hash, { moveFocus });
+    return;
+  }
   if (!needsLessons(location.hash)) {
     showNotFound({}, { moveFocus });
     return;
