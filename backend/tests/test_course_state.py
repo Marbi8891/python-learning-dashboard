@@ -99,9 +99,21 @@ def test_planner_is_saved_per_user_with_versions(client, auth_headers):
 
 def test_devops_progress_is_saved_and_exported(client, auth_headers):
     """Academia DevOps utiliza el mismo documento versionado y aislado por usuario."""
-    devops = {"done": {"linux-terminal": "2026-11-14T10:00:00Z"}, "answers": {"devops-linux-terminal-q1": [True]}}
-    saved = client.put("/api/v1/course-state/devops", json={"data": devops}, headers=auth_headers)
+    devops = {
+        "done": {"linux-terminal": "2026-11-14T10:00:00Z"},
+        "answers": {"devops-linux-terminal-q1": [True]},
+    }
+    saved = client.put(
+        "/api/v1/course-state/devops",
+        json={"data": devops},
+        headers=auth_headers,
+    )
     assert saved.status_code == 200
-    assert client.get("/api/v1/course-state/devops", headers=auth_headers).json()["data"] == devops
+    saved_state = client.get(
+        "/api/v1/course-state/devops",
+        headers=auth_headers,
+    ).json()["data"]
+    assert saved_state == devops
     assert client.get("/api/v1/course-state/devops").status_code == 401
-    assert client.get("/api/v1/users/me/export", headers=auth_headers).json()["courses"]["devops"] == devops
+    exported = client.get("/api/v1/users/me/export", headers=auth_headers).json()
+    assert exported["courses"]["devops"] == devops
