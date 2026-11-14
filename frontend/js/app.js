@@ -421,7 +421,8 @@ const VIEWS = {
   // La zona PCAP se pinta sola (openPcap): tiene simulacros en curso que no se deben repintar
   pcap: { element: "#pcap-view", title: "Examen PCAP · Python Learning Dashboard", focus: null, render: null },
   // Los cursos de DAW también se pintan solos (openDaw): cargan su banco y tienen tandas en curso
-  daw: { element: "#daw-view", title: "Cursos de DAW · Python Learning Dashboard", focus: null, render: null },\n  devops: { element: "#devops-view", title: "Academia DevOps · Python Learning Dashboard", focus: null, render: null },
+  daw: { element: "#daw-view", title: "Cursos de DAW · Python Learning Dashboard", focus: null, render: null },
+  devops: { element: "#devops-view", title: "Academia DevOps · Python Learning Dashboard", focus: null, render: null },
   // Página no encontrada (NAV-01) o contenido que no se pudo cargar
   notfound: { element: "#notfound-view", title: () => content.statusTitle, focus: "#notfound-title", render: () => content.statusHtml },
 };
@@ -873,7 +874,10 @@ async function init() {
     if (content.loaded) refreshGame();
     refreshPcap();
   });
-  initCourseSync(() => {\n    refreshDaw();\n    refreshDevops();\n  });
+  initCourseSync(() => {
+    refreshDaw();
+    refreshDevops();
+  });
   initLearnSync();
   initPlannerSync();
   const flash = takeFlash(); // aviso tras cerrar sesión o borrar la cuenta
