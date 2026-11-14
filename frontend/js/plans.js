@@ -73,7 +73,10 @@ export function renderPlans() {
     <p class="plans__footnote">Esta pantalla informa de los planes previstos. Todavía no hay pagos, renovación automática ni bloqueos comerciales. El contenido que ya es público seguirá accesible.</p>`;
 }
 
-export function initPlans() {\n  subscribeStore((change) => {\n    if (change.type === "user" && location.hash === "#/planes") openPlans({ force: true });\n  });
+export function initPlans() {
+  subscribeStore((change) => {
+    if (change.type === "user" && location.hash === "#/planes") openPlans({ force: true });
+  });
   document.querySelector("#plans-view")?.addEventListener("click", (event) => {
     if (event.target.closest("[data-plans-login]")) openAccount("login");
     if (event.target.closest("[data-plans-retry]")) openPlans({ force: true });
