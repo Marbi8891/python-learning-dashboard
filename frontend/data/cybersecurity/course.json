@@ -40,31 +40,32 @@
       ],
       "quiz": [
         {
-          "question": [
-            "La autorización y el alcance",
-            "La explotación primero",
-            "Un escaneo de Internet",
-            "Un informe al final"
-          ],
-          "options": 0,
-          "answer": [
-            "La puntuación CVSS",
-            "La dirección IP",
-            "La licencia de Kali",
-            "El tamaño de disco"
-          ]
-        },
-        {
-          "question": 0,
+          "question": "¿Qué debe existir antes de realizar una prueba de pentesting?",
           "options": [
-            "Restaurar el estado de una VM",
-            "Aumentar la RAM",
-            "Abrir puertos",
-            "Crear usuarios"
+            "Autorización y alcance definidos",
+            "Una explotación funcional",
+            "Un escaneo de Internet"
           ],
           "answer": 0
         },
-        {}
+        {
+          "question": "¿Qué describe CVSS?",
+          "options": [
+            "La gravedad de una vulnerabilidad",
+            "La dirección IP del activo",
+            "La licencia del sistema"
+          ],
+          "answer": 0
+        },
+        {
+          "question": "¿Para qué sirve una instantánea de una máquina virtual?",
+          "options": [
+            "Restaurar su estado anterior",
+            "Aumentar su memoria RAM",
+            "Abrir puertos de red"
+          ],
+          "answer": 0
+        }
       ]
     },
     {
@@ -100,31 +101,32 @@
       ],
       "quiz": [
         {
-          "question": [
+          "question": "¿Qué tipo de información suele contener /etc?",
+          "options": [
             "Configuración del sistema",
             "Archivos temporales",
-            "Dispositivos",
-            "Directorios personales"
-          ],
-          "options": 0,
-          "answer": [
-            "Propietario rw-, grupo r--, otros ---",
-            "Todos pueden leer",
-            "Solo ejecución",
-            "Propietario lectura"
-          ]
-        },
-        {
-          "question": 0,
-          "options": [
-            "journalctl",
-            "chmod",
-            "mkdir",
-            "uname"
+            "Dispositivos de hardware"
           ],
           "answer": 0
         },
-        {}
+        {
+          "question": "¿Qué significa el permiso 640?",
+          "options": [
+            "Propietario rw-, grupo r--, otros sin permisos",
+            "Todos pueden leer y escribir",
+            "Solo permite ejecutar"
+          ],
+          "answer": 0
+        },
+        {
+          "question": "¿Qué comando consulta los registros del sistema con systemd?",
+          "options": [
+            "journalctl",
+            "chmod",
+            "mkdir"
+          ],
+          "answer": 0
+        }
       ]
     },
     {
@@ -160,31 +162,32 @@
       ],
       "quiz": [
         {
-          "question": [
+          "question": "¿Qué protocolo se utiliza normalmente para resolver nombres de dominio?",
+          "options": [
             "DNS",
             "SSH",
-            "FTP",
-            "ARP"
-          ],
-          "options": 0,
-          "answer": [
-            "TCP requiere conexión; UDP no",
-            "UDP siempre cifra",
-            "TCP no usa puertos",
-            "Son idénticos"
-          ]
-        },
-        {
-          "question": 0,
-          "options": [
-            "Rutas de red",
-            "Usuarios",
-            "Logs",
-            "Paquetes instalados"
+            "FTP"
           ],
           "answer": 0
         },
-        {}
+        {
+          "question": "¿Cuál es la diferencia general entre TCP y UDP?",
+          "options": [
+            "TCP establece conexión; UDP no",
+            "UDP cifra siempre el tráfico",
+            "TCP no utiliza puertos"
+          ],
+          "answer": 0
+        },
+        {
+          "question": "¿Qué muestra el comando ip route?",
+          "options": [
+            "La tabla de rutas",
+            "Los usuarios locales",
+            "Los paquetes instalados"
+          ],
+          "answer": 0
+        }
       ]
     },
     {
@@ -220,31 +223,32 @@
       ],
       "quiz": [
         {
-          "question": [
+          "question": "¿Qué opción de Nmap permite detectar versiones de servicios?",
+          "options": [
             "-sV",
             "-h",
-            "-oN",
             "-sn"
-          ],
-          "options": 0,
-          "answer": [
-            "XML",
-            "Solo imagen",
-            "SQL",
-            "PCAP"
-          ]
-        },
-        {
-          "question": 0,
-          "options": [
-            "No",
-            "Sí, siempre",
-            "Solo si es TCP",
-            "Si el puerto es 443"
           ],
           "answer": 0
         },
-        {}
+        {
+          "question": "¿Qué formato estructurado puede generar Nmap?",
+          "options": [
+            "XML",
+            "SQL",
+            "PCAP"
+          ],
+          "answer": 0
+        },
+        {
+          "question": "¿Un puerto abierto demuestra por sí solo que hay una vulnerabilidad?",
+          "options": [
+            "No, requiere análisis adicional",
+            "Sí, siempre",
+            "Solo si es el puerto 443"
+          ],
+          "answer": 0
+        }
       ]
     },
     {
@@ -281,31 +285,32 @@
       ],
       "quiz": [
         {
-          "question": [
-            "Identificador de vulnerabilidad",
-            "Puntuación de gravedad",
-            "Protocolo de red",
-            "Sistema operativo"
-          ],
-          "options": 0,
-          "answer": [
-            "Gravedad/severidad",
-            "Propietario del sistema",
-            "Número de puertos",
-            "Velocidad de red"
-          ]
-        },
-        {
-          "question": 0,
+          "question": "¿Qué identifica un CVE?",
           "options": [
-            "Puede haber falsos positivos o falta de contexto",
-            "El escáner siempre se equivoca",
-            "La validación es ilegal",
-            "No aporta nada"
+            "Una vulnerabilidad divulgada públicamente",
+            "La gravedad calculada por CVSS",
+            "Un protocolo de red"
           ],
           "answer": 0
         },
-        {}
+        {
+          "question": "¿Qué aporta CVSS?",
+          "options": [
+            "Una puntuación de severidad",
+            "El propietario del sistema",
+            "El número de puertos abiertos"
+          ],
+          "answer": 0
+        },
+        {
+          "question": "¿Por qué hay que validar los resultados de un escáner?",
+          "options": [
+            "Puede haber falsos positivos y falta de contexto",
+            "Los escáneres siempre fallan",
+            "La validación no aporta información"
+          ],
+          "answer": 0
+        }
       ]
     },
     {
@@ -341,31 +346,32 @@
       ],
       "quiz": [
         {
-          "question": [
-            "Tarea auxiliar de reconocimiento o apoyo",
-            "Payload ejecutable",
-            "CVE",
-            "Dirección IP"
-          ],
-          "options": 0,
-          "answer": [
-            "Acción/código ejecutado en el contexto de la prueba",
-            "Un puerto",
-            "Una licencia",
-            "Un usuario"
-          ]
-        },
-        {
-          "question": 0,
+          "question": "¿Para qué se utiliza principalmente un módulo auxiliary de Metasploit?",
           "options": [
-            "Para volver a un estado limpio y repetible",
-            "Para aumentar la RAM",
-            "Para cifrar tráfico",
-            "Para actualizar el kernel"
+            "Reconocimiento y tareas auxiliares",
+            "Ejecutar siempre un payload",
+            "Asignar direcciones IP"
           ],
           "answer": 0
         },
-        {}
+        {
+          "question": "¿Qué describe un payload?",
+          "options": [
+            "La acción o código que se ejecuta en una explotación",
+            "Un puerto abierto",
+            "Una licencia de software"
+          ],
+          "answer": 0
+        },
+        {
+          "question": "¿Por qué conviene restaurar un snapshot tras una práctica?",
+          "options": [
+            "Para recuperar un estado limpio y repetible",
+            "Para aumentar la RAM",
+            "Para actualizar el kernel"
+          ],
+          "answer": 0
+        }
       ]
     },
     {
@@ -402,31 +408,32 @@
       ],
       "quiz": [
         {
-          "question": [
-            "Método, ruta, cabeceras y cuerpo",
-            "Solo la IP",
-            "Solo el código fuente",
-            "Una contraseña"
-          ],
-          "options": 0,
-          "answer": [
-            "Autenticación verifica identidad; autorización permisos",
-            "Son sinónimos exactos",
-            "Autorización crea usuarios",
-            "Autenticación cifra DNS"
-          ]
-        },
-        {
-          "question": 0,
+          "question": "¿Qué elementos puede contener una solicitud HTTP?",
           "options": [
-            "Interceptar e inspeccionar tráfico HTTP de laboratorio",
-            "Escanear discos",
-            "Administrar usuarios Linux",
-            "Crear certificados"
+            "Método, ruta, cabeceras y cuerpo",
+            "Solo una dirección IP",
+            "Solo el código fuente"
           ],
           "answer": 0
         },
-        {}
+        {
+          "question": "¿Qué diferencia hay entre autenticación y autorización?",
+          "options": [
+            "Identidad frente a permisos",
+            "Son exactamente lo mismo",
+            "Autorización cifra el DNS"
+          ],
+          "answer": 0
+        },
+        {
+          "question": "¿Para qué sirve un proxy interceptador como Burp?",
+          "options": [
+            "Inspeccionar solicitudes y respuestas web",
+            "Administrar usuarios Linux",
+            "Crear máquinas virtuales"
+          ],
+          "answer": 0
+        }
       ]
     },
     {
@@ -462,31 +469,32 @@
       ],
       "quiz": [
         {
-          "question": [
+          "question": "¿Qué medida ayuda a prevenir SQL Injection?",
+          "options": [
             "Consultas parametrizadas",
             "Desactivar DNS",
-            "Usar FTP",
-            "Cambiar el puerto"
-          ],
-          "options": 0,
-          "answer": [
-            "Cross-Site Scripting",
-            "Cross-System Transfer",
-            "Secure XML",
-            "Extended Server Session"
-          ]
-        },
-        {
-          "question": 0,
-          "options": [
-            "Normalización y validación segura de rutas",
-            "Abrir todos los permisos",
-            "Desactivar logs",
-            "Usar nombres aleatorios"
+            "Cambiar el puerto HTTP"
           ],
           "answer": 0
         },
-        {}
+        {
+          "question": "¿Qué significa XSS?",
+          "options": [
+            "Cross-Site Scripting",
+            "Cross-System Transfer",
+            "Extended Server Session"
+          ],
+          "answer": 0
+        },
+        {
+          "question": "¿Qué ayuda a mitigar path traversal?",
+          "options": [
+            "Validar y normalizar rutas de forma segura",
+            "Dar permisos globales",
+            "Desactivar los logs"
+          ],
+          "answer": 0
+        }
       ]
     },
     {
@@ -523,31 +531,32 @@
       ],
       "quiz": [
         {
-          "question": [
-            "Acceso directo a objetos sin control de autorización adecuado",
-            "Un error DNS",
-            "Cifrado TLS",
-            "Un fallo de RAM"
-          ],
-          "options": 0,
-          "answer": [
-            "Server-Side Request Forgery",
-            "Secure Server Remote File",
-            "Session-Side Response Format",
-            "Ninguna"
-          ]
-        },
-        {
-          "question": 0,
+          "question": "¿Qué riesgo describe IDOR/BOLA?",
           "options": [
-            "Limitar la frecuencia de solicitudes",
-            "Aumentar el tamaño de cookie",
-            "Desactivar TLS",
-            "Ocultar el HTML"
+            "Acceso a objetos sin autorización adecuada",
+            "Un error de resolución DNS",
+            "Un fallo de memoria física"
           ],
           "answer": 0
         },
-        {}
+        {
+          "question": "¿Qué significa SSRF?",
+          "options": [
+            "Server-Side Request Forgery",
+            "Secure Server Remote File",
+            "Session-Side Response Format"
+          ],
+          "answer": 0
+        },
+        {
+          "question": "¿Qué aporta el rate limiting?",
+          "options": [
+            "Limitar la frecuencia de solicitudes",
+            "Aumentar el tamaño de las cookies",
+            "Desactivar TLS"
+          ],
+          "answer": 0
+        }
       ]
     },
     {
@@ -584,31 +593,32 @@
       ],
       "quiz": [
         {
-          "question": [
-            "El alcance y tipo de interacción",
-            "La marca del portátil",
-            "El tamaño de la pantalla",
-            "El lenguaje del informe"
-          ],
-          "options": 0,
-          "answer": [
-            "Para reproducir y auditar el hallazgo",
-            "Para adornar el informe",
-            "Para sustituir evidencias",
-            "No es necesario"
-          ]
-        },
-        {
-          "question": 0,
+          "question": "¿Qué debe definirse antes de un ejercicio OSINT?",
           "options": [
-            "Una observación interpretada que debe validarse",
-            "Un dato confirmado siempre",
-            "Una dirección MAC",
-            "Una CVE"
+            "Alcance y tipo de interacción permitida",
+            "La marca del equipo",
+            "El tamaño de la pantalla"
           ],
           "answer": 0
         },
-        {}
+        {
+          "question": "¿Por qué se registra la fuente y la fecha de consulta?",
+          "options": [
+            "Para poder verificar y reproducir el hallazgo",
+            "Para adornar el informe",
+            "Para sustituir las evidencias"
+          ],
+          "answer": 0
+        },
+        {
+          "question": "¿Qué diferencia un hecho de una inferencia?",
+          "options": [
+            "La inferencia es una interpretación que requiere validación",
+            "Un hecho siempre es una opinión",
+            "Una inferencia es una dirección MAC"
+          ],
+          "answer": 0
+        }
       ]
     },
     {
@@ -644,31 +654,32 @@
       ],
       "quiz": [
         {
-          "question": [
-            "Autenticación de red en entornos Windows",
-            "Compresión de archivos",
-            "Escaneo web",
-            "Gestión de paquetes"
-          ],
-          "options": 0,
-          "answer": [
-            "Dar solo los permisos necesarios",
-            "Dar admin a todos",
-            "Compartir contraseñas",
-            "Desactivar auditoría"
-          ]
-        },
-        {
-          "question": 0,
+          "question": "¿Para qué se utiliza Kerberos en entornos Windows?",
           "options": [
-            "Event Viewer / Windows Event Logs",
-            "Nmap",
-            "pip",
-            "Wireshark solamente"
+            "Autenticación en redes y dominios",
+            "Compresión de archivos",
+            "Escaneo de aplicaciones web"
           ],
           "answer": 0
         },
-        {}
+        {
+          "question": "¿Qué establece el principio de mínimo privilegio?",
+          "options": [
+            "Dar solo los permisos necesarios",
+            "Dar permisos de administrador a todos",
+            "Compartir credenciales"
+          ],
+          "answer": 0
+        },
+        {
+          "question": "¿Dónde se revisan los eventos de Windows?",
+          "options": [
+            "Windows Event Viewer",
+            "Nmap",
+            "pip"
+          ],
+          "answer": 0
+        }
       ]
     },
     {
@@ -705,31 +716,32 @@
       ],
       "quiz": [
         {
-          "question": [
-            "Definir argumentos de línea de comandos",
-            "Cifrar disco",
-            "Capturar paquetes",
-            "Gestionar servicios"
-          ],
-          "options": 0,
-          "answer": [
-            "Evita esperas indefinidas en conexiones",
-            "Aumenta privilegios",
-            "Oculta errores",
-            "Abre puertos"
-          ]
-        },
-        {
-          "question": 0,
+          "question": "¿Para qué sirve argparse en Python?",
           "options": [
-            "Estructura consistente y fácil de procesar",
-            "Evita validar datos",
-            "Hace el escaneo invisible",
-            "Sustituye a los tests"
+            "Definir argumentos de línea de comandos",
+            "Cifrar discos",
+            "Capturar paquetes"
           ],
           "answer": 0
         },
-        {}
+        {
+          "question": "¿Por qué se configura un timeout en sockets?",
+          "options": [
+            "Para evitar esperas indefinidas",
+            "Para aumentar privilegios",
+            "Para ocultar errores"
+          ],
+          "answer": 0
+        },
+        {
+          "question": "¿Qué ventaja tiene normalizar resultados en JSON?",
+          "options": [
+            "Mantener una estructura consistente y procesable",
+            "Evitar validar datos",
+            "Hacer el escaneo invisible"
+          ],
+          "answer": 0
+        }
       ]
     },
     {
@@ -766,31 +778,32 @@
       ],
       "quiz": [
         {
-          "question": [
+          "question": "¿Qué es un falso positivo en detección?",
+          "options": [
             "Una alerta que no corresponde a una amenaza real",
             "Una alerta confirmada",
-            "Una CVE",
-            "Un hash"
-          ],
-          "options": 0,
-          "answer": [
-            "Registrar eventos detallados de Windows",
-            "Cambiar IP",
-            "Crear contenedores",
-            "Gestionar SQL"
-          ]
-        },
-        {
-          "question": 0,
-          "options": [
-            "Tácticas y técnicas observadas de adversarios",
-            "Lista de usuarios",
-            "Protocolo criptográfico",
-            "Sistema de backup"
+            "Un identificador CVE"
           ],
           "answer": 0
         },
-        {}
+        {
+          "question": "¿Para qué sirve Sysmon?",
+          "options": [
+            "Registrar eventos detallados en Windows",
+            "Cambiar direcciones IP",
+            "Crear contenedores"
+          ],
+          "answer": 0
+        },
+        {
+          "question": "¿Qué describe MITRE ATT&CK?",
+          "options": [
+            "Tácticas y técnicas observadas de adversarios",
+            "Una lista de usuarios",
+            "Un protocolo criptográfico"
+          ],
+          "answer": 0
+        }
       ]
     },
     {
@@ -826,31 +839,32 @@
       ],
       "quiz": [
         {
-          "question": [
-            "Verificar integridad de la evidencia",
-            "Cifrar la evidencia",
-            "Borrar metadatos",
-            "Cambiar permisos"
-          ],
-          "options": 0,
-          "answer": [
-            "Registro de quién manejó la evidencia y cuándo",
-            "Una lista de IP",
-            "Una regla de firewall",
-            "Un hash de contraseña"
-          ]
-        },
-        {
-          "question": 0,
+          "question": "¿Para qué sirve calcular un hash de una evidencia?",
           "options": [
-            "Contención limita propagación; erradicación elimina causa/artefacto",
-            "Son sinónimos",
-            "Erradicación es el primer paso",
-            "Contención borra evidencias"
+            "Comprobar su integridad",
+            "Cifrarla automáticamente",
+            "Eliminar metadatos"
           ],
           "answer": 0
         },
-        {}
+        {
+          "question": "¿Qué es la cadena de custodia?",
+          "options": [
+            "Registro de quién manejó la evidencia y cuándo",
+            "Una lista de direcciones IP",
+            "Una regla de firewall"
+          ],
+          "answer": 0
+        },
+        {
+          "question": "¿Qué diferencia contención y erradicación?",
+          "options": [
+            "Contención limita el incidente; erradicación elimina su causa o artefactos",
+            "Son sinónimos",
+            "Erradicación siempre es el primer paso"
+          ],
+          "answer": 0
+        }
       ]
     },
     {
@@ -887,31 +901,32 @@
       ],
       "quiz": [
         {
-          "question": [
-            "Activos, límites y exclusiones",
-            "Solo herramientas",
-            "Contraseñas de clientes",
-            "Datos no relacionados"
-          ],
-          "options": 0,
-          "answer": [
-            "Evitar pruebas fuera de lo autorizado",
-            "Aumentar velocidad",
-            "Reducir el informe",
-            "No tiene utilidad"
-          ]
-        },
-        {
-          "question": 0,
+          "question": "¿Qué debe incluir el alcance de una auditoría?",
           "options": [
-            "Informe técnico detalla pruebas; ejecutivo resume riesgo y decisiones",
-            "Son idénticos",
-            "El ejecutivo contiene comandos solamente",
-            "El técnico omite evidencias"
+            "Activos, límites y exclusiones",
+            "Solo las herramientas",
+            "Contraseñas de clientes"
           ],
           "answer": 0
         },
-        {}
+        {
+          "question": "¿Por qué se documentan las exclusiones?",
+          "options": [
+            "Para evitar pruebas fuera de lo autorizado",
+            "Para aumentar la velocidad",
+            "Para reducir el informe"
+          ],
+          "answer": 0
+        },
+        {
+          "question": "¿Qué diferencia un informe técnico de uno ejecutivo?",
+          "options": [
+            "El técnico detalla pruebas; el ejecutivo resume riesgos y decisiones",
+            "Son idénticos",
+            "El técnico omite evidencias"
+          ],
+          "answer": 0
+        }
       ]
     },
     {
@@ -949,31 +964,32 @@
       ],
       "quiz": [
         {
-          "question": [
-            "Repetir pruebas para comprobar la corrección",
-            "Añadir nuevos exploits",
-            "Cambiar el nombre del hallazgo",
-            "Eliminar el informe"
-          ],
-          "options": 0,
-          "answer": [
-            "Impacto, probabilidad, exposición y contexto",
-            "Orden alfabético",
-            "Fecha de creación únicamente",
-            "Número de capturas"
-          ]
-        },
-        {
-          "question": 0,
+          "question": "¿Qué es un re-test?",
           "options": [
-            "Método, resultados, limitaciones y riesgos residuales",
-            "Solo una puntuación",
-            "Solo capturas",
-            "Solo el nombre de la herramienta"
+            "Repetir pruebas para comprobar una corrección",
+            "Añadir nuevos exploits",
+            "Cambiar el nombre de un hallazgo"
           ],
           "answer": 0
         },
-        {}
+        {
+          "question": "¿Cómo se prioriza un hallazgo?",
+          "options": [
+            "Por impacto, probabilidad, exposición y contexto",
+            "Por orden alfabético",
+            "Por fecha de creación únicamente"
+          ],
+          "answer": 0
+        },
+        {
+          "question": "¿Qué debe declarar un informe final?",
+          "options": [
+            "Método, resultados, limitaciones y riesgos residuales",
+            "Solo una puntuación",
+            "Solo capturas de pantalla"
+          ],
+          "answer": 0
+        }
       ]
     }
   ],
