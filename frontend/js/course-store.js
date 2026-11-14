@@ -42,7 +42,13 @@ export const DAW_COURSES = [
     id: "java", module: "0485", title: "Java", subtitle: "Para más adelante: Java desde cero", lang: "java",
     structure: "Curso propio de la plataforma para practicar Java; no sigue ningún temario.",
   },
-  {\n    id: "devops", module: "DEVOPS", title: "Academia DevOps", subtitle: "Linux, Docker, GitHub y Python · Itinerario profesional", lang: "python",\n    structure: "Itinerario propio de nueve meses con laboratorios guiados y proyecto integrador.",\n  },\n];\n\nconst key = (id) => `pld:course:${id}`;
+  {
+    id: "devops", module: "DEVOPS", title: "Academia DevOps", subtitle: "Linux, Docker, GitHub y Python · Itinerario profesional", lang: "python",
+    structure: "Itinerario propio de nueve meses con laboratorios guiados y proyecto integrador.",
+  },
+];
+
+const key = (id) => `pld:course:${id}`;
 
 const banks = new Map();
 
