@@ -1,6 +1,6 @@
 # Propuesta de catálogo Free, Pro y Academy
 
-**Estado:** propuesta de producto; no activa restricciones ni cambia permisos.
+**Estado:** criterio de producto aceptado por el propietario; todavía no activa restricciones ni cambia permisos.
 **Base:** inventario descrito en README y auditoría técnica del catálogo.
 **Objetivo:** que PLD siga siendo útil sin pagar y que Pro cobre por profundidad, continuidad y herramientas de aprendizaje.
 
@@ -12,7 +12,7 @@
 4. No se marcará como premium un fichero que siga publicado en GitHub Pages y pueda descargarse sin autenticación.
 5. El catálogo y los derechos se separarán del proveedor de pago.
 
-## Propuesta inicial
+## Distribución aprobada como criterio de producto
 
 | Área | Free | Pro | Academy |
 |---|---|---|---|
@@ -67,11 +67,10 @@ Se mantienen únicamente como hipótesis comerciales del plan de 90 días:
 
 No implementar importes definitivos en código hasta validar entrevistas, costes y disposición de pago. Academy debe revisarse por alumno activo, grupo y centro antes de fijar tarifa.
 
-## Decisiones que debe confirmar el propietario
+## Estado de las decisiones
 
-1. ¿Mantener esta división general: Free con ruta inicial completa y Pro con itinerarios completos y seguimiento avanzado?
-2. ¿Incluir PCAP y DAW completos en Pro, o dejar al menos un módulo completo de cada uno en Free?
-3. ¿Mantener el curso completo de ciberseguridad como Pro y publicar solo su primera fase como muestra?
-4. ¿Mantener los precios propuestos como precios de prueba para entrevistas, sin activarlos todavía?
+El propietario ha aceptado esta distribución como criterio general de producto: ruta inicial gratuita y contenidos/seguimiento avanzados en Pro. La matriz anterior queda aprobada como dirección de trabajo, pero todavía falta concretar qué unidades y ejercicios exactos pertenecen a cada nivel mediante un inventario del catálogo.
 
-Hasta confirmar estas decisiones, esta matriz es orientativa. No debe usarse para denegar rutas existentes ni para activar cobros.
+Los precios siguen siendo hipótesis para entrevistas y validación. La aceptación de esta distribución no autoriza a activar cobros ni a restringir rutas existentes.
+
+Siguiente paso técnico: inventariar los módulos, unidades, ejercicios y recursos que existen realmente; asignar cada elemento a Free o Pro; y diseñar cómo servir el contenido Pro desde backend sin dejarlo expuesto en GitHub Pages. Academy continúa pendiente de validar con centros y de desarrollar sus funciones.
