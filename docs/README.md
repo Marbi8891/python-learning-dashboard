@@ -31,7 +31,7 @@
 
 | Documento | Para qué sirve |
 |---|---|
-| [PLAN-ITINERARIO-DEVOPS.md](PLAN-ITINERARIO-DEVOPS.md) | Formación de 9 meses en Linux, Docker, GitHub y Python, con 20 horas semanales, laboratorios y evaluaciones |
+| [PLAN-ITINERARIO-DEVOPS.md](PLAN-ITINERARIO-DEVOPS.md) | Formación de 9 meses en Linux, Docker, GitHub y Python, con 20 horas semanales, laboratorios y evaluaciones |\n| [PLAN-CIBERSEGURIDAD.md](PLAN-CIBERSEGURIDAD.md) | Curso de ciberseguridad de 16 semanas y 320 horas: Red Team, Blue Team, OSINT, pentesting web y Python |
 
 ## Temario
 
