@@ -53,6 +53,8 @@ Son borradores técnicos que no ha revisado un abogado.
 | [PLAN_ADECUACION_LEGAL.md](PLAN_ADECUACION_LEGAL.md) | Plan de adecuación legal por fases |
 | [AUDITORIA_LEGAL.md](AUDITORIA_LEGAL.md) | Auditoría legal del 02/11/2026 |
 
+La política de seguridad está en [SECURITY.md](../SECURITY.md).
+
 ## Proyecto académico
 
 | Documento | Para qué sirve |
