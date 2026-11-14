@@ -187,3 +187,26 @@ class RateLimitWindow(Base):
     key: Mapped[str] = mapped_column(String(64), primary_key=True)
     window_start: Mapped[int] = mapped_column(BigInteger, primary_key=True)  # segundos Unix
     count: Mapped[int] = mapped_column(Integer)
+
+
+
+class Entitlement(Base):
+    """Derecho de acceso concedido a un usuario por una fuente comercial o administrativa."""
+
+    __tablename__ = "entitlements"
+    __table_args__ = (
+        UniqueConstraint(
+            "user_id", "feature_key", "source", "source_ref", name="uq_entitlement_source"
+        ),
+        Index("ix_entitlements_user_feature", "user_id", "feature_key"),
+    )
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    feature_key: Mapped[str] = mapped_column(String(80))
+    # Valores previstos: manual, stripe, academy, promotion. No se confía en ellos desde el cliente.
+    source: Mapped[str] = mapped_column(String(20))
+    source_ref: Mapped[str] = mapped_column(String(160), default="", server_default="")
+    starts_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    ends_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())

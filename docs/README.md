@@ -27,6 +27,7 @@
 | [DISENO.md](DISENO.md) | Sistema visual: tokens, colores, tipografía y componentes |
 | [REDISENO-FRONTEND.md](REDISENO-FRONTEND.md) | Alcance, áreas y criterios del rediseño integral del frontend |
 | [IDIOMAS.md](IDIOMAS.md) | Interfaz en inglés y cómo añadir textos traducidos |
+| [CATALOGO-FREE-PRO-ACADEMY.md](CATALOGO-FREE-PRO-ACADEMY.md) | Propuesta de catálogo gratuito, Pro y Academy; pendiente de confirmación |
 
 ## Itinerarios formativos
 

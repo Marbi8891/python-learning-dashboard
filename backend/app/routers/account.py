@@ -7,10 +7,12 @@ from sqlalchemy import delete, select
 
 from app import activity
 from app.deps import CurrentUser, DbSession
+from app.entitlements import active_entitlements
 from app.models import (
     AccountEvent,
     CourseState,
     ExerciseAttempt,
+    Entitlement,
     Lesson,
     LessonProgress,
     PasswordResetToken,
@@ -24,6 +26,7 @@ from app.routers.progress import list_progress
 from app.schemas import (
     ActivityOut,
     DeleteConfirm,
+    EntitlementOut,
     PasswordChange,
     ProfileUpdate,
     Token,
@@ -40,6 +43,12 @@ router = APIRouter(prefix="/users/me", tags=["cuenta"])
 @router.get("", response_model=UserOut)
 def read_me(user: CurrentUser) -> User:
     return user
+
+
+@router.get("/entitlements", response_model=list[EntitlementOut])
+def read_my_entitlements(user: CurrentUser, db: DbSession) -> list[Entitlement]:
+    """Lista los derechos vigentes de la cuenta. Sin derechos, la cuenta permanece en Free."""
+    return active_entitlements(db, user.id)
 
 
 @router.patch("", response_model=UserOut)
@@ -161,6 +170,7 @@ def delete_my_account(
         PcapState,
         CourseState,
         AccountEvent,
+        Entitlement,
     ):
         db.execute(delete(model).where(model.user_id == user.id))
     user_id = user.id

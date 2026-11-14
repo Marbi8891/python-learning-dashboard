@@ -48,6 +48,7 @@ import { initLearnSync } from "./learn/learn-store.js";
 import { initPlannerSync } from "./learn/planner-store.js";
 import { initPrefs } from "./prefs.js";
 import { badgesHtml, renderProfile } from "./profile.js";
+import { initPlans, openPlans, renderPlans } from "./plans.js";
 import { dashboardTitle, initDashboard, renderDashboard } from "./dashboard.js";
 import { initPrivate } from "./private.js";
 import { setQuizLesson } from "./quiz.js";
@@ -61,6 +62,7 @@ const RESET_ROUTE = "#/restablecer";
 const HOME_ROUTE = "#/inicio"; // portada del curso PCAP
 const LEARN_ROUTE = "#/aprender"; // página principal: ¿qué estudio ahora?
 const PROFILE_ROUTE = "#/perfil";
+const PLANS_ROUTE = "#/planes";
 const PCAP_ROUTE = "#/pcap";
 const CERTIFICATE_ROUTE = "#/certificado";
 const PRIVATE_ROUTE = "#/cuenta"; // antigua «Mi cuenta»: ahora es la sección «Mi perfil» del panel
@@ -407,6 +409,7 @@ const VIEWS = {
   learn: { element: "#learn-view", title: "Aprender · Python Learning Dashboard", focus: null, render: null },
   home: { element: "#home-view", title: "Curso PCAP · Python Learning Dashboard", focus: "#home-title", render: () => renderHome(content, defaultSlug()) },
   profile: { element: "#profile-view", title: "Mi aprendizaje · Python Learning Dashboard", focus: "#profile-title", render: () => renderProfile(content) },
+  plans: { element: "#plans-view", title: "Planes y cuenta · Python Learning Dashboard", focus: "#plans-title", render: () => renderPlans() },
   // Panel del alumno. Reúne lo que antes era «Mi cuenta»
   private: { element: "#private-view", title: dashboardTitle, focus: "#private-title", render: () => renderDashboard(content, apiEnabled) },
   certificate: {
@@ -453,7 +456,7 @@ function updatePrivateNav() {
 }
 
 /** Entrada del menú que corresponde a la vista actual. */
-const NAV_OF_VIEW = { cyber: "cyber", home: "pcap-curso", lesson: "pcap-curso", certificate: "pcap-curso", pcap: "pcap", daw: "daw", profile: "progreso", private: "panel" };
+const NAV_OF_VIEW = { plans: "planes", cyber: "cyber", home: "pcap-curso", lesson: "pcap-curso", certificate: "pcap-curso", pcap: "pcap", daw: "daw", profile: "progreso", private: "panel" };
 
 function updateSiteNav() {
   const key = content.view === "learn" ? learnNavKey(location.hash) : NAV_OF_VIEW[content.view];
@@ -653,6 +656,11 @@ function navigate({ moveFocus = true } = {}) {
   }
   closeLanding();
 
+  if (location.hash === PLANS_ROUTE) {
+    showPage("plans", { moveFocus });
+    openPlans();
+    return;
+  }
   if (isLearnRoute(location.hash)) {
     showPage("learn", { moveFocus: false });
     openLearn(location.hash, { moveFocus });
@@ -839,6 +847,7 @@ async function init() {
   initAssistant();
   initI18n();
   initAccount({ toast: showToast });
+  initPlans();
   initPrivate({ toast: showToast, refresh: refreshProgressViews });
   initDashboard({ toast: showToast, refresh: refreshProgressViews });
   initPrefs();
