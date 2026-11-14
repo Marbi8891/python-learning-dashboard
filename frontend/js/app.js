@@ -39,7 +39,7 @@ import { escapeHtml, renderMarkdown, safeUrl } from "./markdown.js";
 import { renderCertificate, renderCourseCertificate, saveCertificateName } from "./certificate.js";
 import { openPcap, refreshPcap } from "./pcap.js";
 import { initCourseSync } from "./course-store.js";
-import { openDaw, refreshDaw } from "./daw.js";
+import { openDaw, refreshDaw } from "./daw.js";\nimport { openDevops, refreshDevops } from "./devops.js";
 import { initPcapSync } from "./pcap-sync.js";
 import { isLearnRoute, learnNavKey, openLearn } from "./learn/learn-app.js";
 import { LANDING_ROUTE, closeLanding, isLandingRoute, openLanding } from "./landing.js";
@@ -420,7 +420,7 @@ const VIEWS = {
   // La zona PCAP se pinta sola (openPcap): tiene simulacros en curso que no se deben repintar
   pcap: { element: "#pcap-view", title: "Examen PCAP · Python Learning Dashboard", focus: null, render: null },
   // Los cursos de DAW también se pintan solos (openDaw): cargan su banco y tienen tandas en curso
-  daw: { element: "#daw-view", title: "Cursos de DAW · Python Learning Dashboard", focus: null, render: null },
+  daw: { element: "#daw-view", title: "Cursos de DAW · Python Learning Dashboard", focus: null, render: null },\n  devops: { element: "#devops-view", title: "Academia DevOps · Python Learning Dashboard", focus: null, render: null },
   // Página no encontrada (NAV-01) o contenido que no se pudo cargar
   notfound: { element: "#notfound-view", title: () => content.statusTitle, focus: "#notfound-title", render: () => content.statusHtml },
 };
@@ -450,7 +450,7 @@ function updatePrivateNav() {
 }
 
 /** Entrada del menú que corresponde a la vista actual. */
-const NAV_OF_VIEW = { home: "pcap-curso", lesson: "pcap-curso", certificate: "pcap-curso", pcap: "pcap", daw: "daw", profile: "progreso", private: "panel" };
+const NAV_OF_VIEW = { home: "pcap-curso", lesson: "pcap-curso", certificate: "pcap-curso", pcap: "pcap", daw: "daw", devops: "devops", profile: "progreso", private: "panel" };
 
 function updateSiteNav() {
   const key = content.view === "learn" ? learnNavKey(location.hash) : NAV_OF_VIEW[content.view];
@@ -867,7 +867,7 @@ async function init() {
     if (content.loaded) refreshGame();
     refreshPcap();
   });
-  initCourseSync(refreshDaw);
+  initCourseSync(() => {\n    refreshDaw();\n    refreshDevops();\n  });
   initLearnSync();
   initPlannerSync();
   const flash = takeFlash(); // aviso tras cerrar sesión o borrar la cuenta
