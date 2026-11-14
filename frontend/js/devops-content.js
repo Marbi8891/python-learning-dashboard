@@ -248,7 +248,7 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
-CMD ["python", "main.py"]
+CMD ["python", "main" + ".py"]
 `,
           task: "Crea una imagen para una aplicación Python mínima. Añade .dockerignore y prueba a recrear el contenedor. Si la aplicación escribe datos que deben persistir, monta un volumen.",
           deliverable: "Dockerfile, .dockerignore y comandos de build/run. No incluyas secretos en la imagen.",
@@ -278,7 +278,7 @@ import platform
 import shutil
 
 parser = argparse.ArgumentParser(description="Resumen básico del sistema")
-parser.add_argument("--output", default="sysmonitor.txt")
+parser.add_argument("--output", default="sysmonitor" + ".txt")
 args = parser.parse_args()
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
