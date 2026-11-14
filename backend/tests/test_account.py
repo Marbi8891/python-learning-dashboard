@@ -2,7 +2,7 @@
 
 import re
 
-from app.models import CourseState, ExerciseAttempt, LessonProgress, PcapState, User
+from app.models import CourseState, Entitlement, ExerciseAttempt, LessonProgress, PcapState, User
 from tests.conftest import PASSWORD, login, register
 
 
@@ -49,13 +49,18 @@ def test_delete_account_removes_everything(client, auth_headers):
     )
     client.put("/api/v1/pcap-state", json={"data": {"bestCombo": 3}}, headers=auth_headers)
     client.put("/api/v1/course-state/java", json={"data": {"bestCombo": 1}}, headers=auth_headers)
+    with client.engine.begin() as conn:
+        conn.exec_driver_sql(
+            "INSERT INTO entitlements (user_id, feature_key, source, source_ref) "
+            "VALUES (1, 'test_feature', 'manual', 'test-grant')"
+        )
     response = client.post(
         "/api/v1/users/me/delete", json={"password": PASSWORD}, headers=auth_headers
     )
     assert response.status_code == 204
     assert client.get("/api/v1/users/me", headers=auth_headers).status_code == 401
     with client.engine.connect() as conn:
-        for model in (User, LessonProgress, ExerciseAttempt, PcapState, CourseState):
+        for model in (User, LessonProgress, ExerciseAttempt, PcapState, CourseState, Entitlement):
             count = conn.exec_driver_sql(f"SELECT COUNT(*) FROM {model.__tablename__}").scalar_one()
             assert count == 0, f"Quedan filas en {model.__tablename__}"
     # El email vuelve a estar libre
