@@ -27,6 +27,12 @@
 | [DISENO.md](DISENO.md) | Sistema visual: tokens, colores, tipografía y componentes |
 | [IDIOMAS.md](IDIOMAS.md) | Interfaz en inglés y cómo añadir textos traducidos |
 
+## Itinerarios formativos
+
+| Documento | Para qué sirve |
+|---|---|
+| [PLAN-ITINERARIO-DEVOPS.md](PLAN-ITINERARIO-DEVOPS.md) | Formación de 9 meses en Linux, Docker, GitHub y Python, con 20 horas semanales, laboratorios y evaluaciones |
+
 ## Temario
 
 | Documento | Para qué sirve |
@@ -46,8 +52,6 @@ Son borradores técnicos que no ha revisado un abogado.
 | [RIESGOS_LEGALES.md](RIESGOS_LEGALES.md) | Riesgos legales abiertos y su estado |
 | [PLAN_ADECUACION_LEGAL.md](PLAN_ADECUACION_LEGAL.md) | Plan de adecuación legal por fases |
 | [AUDITORIA_LEGAL.md](AUDITORIA_LEGAL.md) | Auditoría legal del 02/11/2026 |
-
-La política de seguridad está en [SECURITY.md](../SECURITY.md).
 
 ## Proyecto académico
 
