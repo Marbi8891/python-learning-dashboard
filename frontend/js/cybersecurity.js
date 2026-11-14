@@ -11,8 +11,12 @@ function loadState() {
   try {
     const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
     state = {
-      completed: Array.isArray(saved.completed) ? [...new Set(saved.completed.filter((id) => /^semana-\d{2}$/.test(id)))].slice(0, 16) : [],
-      quizScores: saved.quizScores && typeof saved.quizScores === "object"\n        ? Object.fromEntries(Object.entries(saved.quizScores).filter(([id, score]) => /^semana-\\d{2}$/.test(id) && Number.isInteger(score) && score >= 0 && score <= 3))\n        : {},
+      completed: Array.isArray(saved.completed)
+        ? [...new Set(saved.completed.filter((id) => /^semana-\d{2}$/.test(id)))].slice(0, 16)
+        : [],
+      quizScores: saved.quizScores && typeof saved.quizScores === "object"
+        ? Object.fromEntries(Object.entries(saved.quizScores).filter(([id, score]) => /^semana-\d{2}$/.test(id) && Number.isInteger(score) && score >= 0 && score <= 3))
+        : {},
     };
   } catch { state = { completed: [], quizScores: {} }; }
 }
