@@ -42,10 +42,12 @@ export const DAW_COURSES = [
     id: "java", module: "0485", title: "Java", subtitle: "Para más adelante: Java desde cero", lang: "java",
     structure: "Curso propio de la plataforma para practicar Java; no sigue ningún temario.",
   },
-  {
-    id: "devops", module: "DEVOPS", title: "Academia DevOps", subtitle: "Linux, Docker, GitHub y Python · Itinerario profesional", lang: "python",
-    structure: "Itinerario propio de nueve meses con laboratorios guiados y proyecto integrador.",
-  },
+];
+
+// También sincronizamos itinerarios que no forman parte del catálogo curricular de DAW.
+export const SYNCED_COURSES = [
+  ...DAW_COURSES,
+  { id: "devops", title: "Academia DevOps" },
 ];
 
 const key = (id) => `pld:course:${id}`;
@@ -159,7 +161,7 @@ export function mergeCourse(id, remote = {}) {
 /** Al iniciar sesión, trae y fusiona el progreso de cada curso guardado en la cuenta.
     Cada curso se sube solo después de fusionarse bien; si falla, se reintenta. */
 export function initCourseSync(onMerged) {
-  for (const { id } of DAW_COURSES) {
+  for (const { id } of SYNCED_COURSES) {
     const mergeRemote = (remote) => {
       mergeCourse(id, remote.data);
       saveCourse(id);
@@ -190,7 +192,7 @@ export function initCourseSync(onMerged) {
         },
       }),
     );
-    const { title } = DAW_COURSES.find((course) => course.id === id);
+    const { title } = SYNCED_COURSES.find((course) => course.id === id);
     uploaders.set(
       id,
       createUploader({ name: `course:${id}`, label: `el curso ${title}`, gate: gates.get(id), push: () => docs.get(id).push() }),
