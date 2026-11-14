@@ -4,16 +4,16 @@ Guía del diseño de la web. Los valores están en **`frontend/css/tokens.css`**
 
 ## Principios
 
-1. **El contenido manda.** Primero el texto, el código y el ejercicio. Sin degradados de fondo, brillos, cristal ni animaciones decorativas. La jerarquía la dan la tipografía y el espacio antes que las cajas.
+1. **El contenido manda.** Primero el texto, el código y el ejercicio. La trama técnica del fondo y el degradado del isotipo son discretos; no se usan brillos, cristal ni animaciones decorativas. La jerarquía la dan la tipografía y el espacio antes que las cajas.
 2. **Un color, un significado.** El ámbar es para la acción principal, los enlaces y el foco. El verde, para el progreso y los aciertos. El rojo, para los errores. El color nunca va solo: siempre lo acompaña un texto o un icono (✓, ✗).
 3. **Datos reales.** No se muestran cifras que la web no pueda calcular: ni horas, ni porcentajes inventados, ni estadísticas de usuarios.
 4. **Accesible por defecto.** Contraste AA, foco visible, objetivos táctiles de 44 px y respeto por `prefers-reduced-motion`.
 
 ## Identidad
 
-- **Grafito y ámbar Python.** El fondo oscuro es un grafito (`#121417`), no negro, con superficies un punto más claras. El acento es un ámbar cálido que recuerda a Python y no se confunde con el verde de acierto ni con el rojo de error.
+- **Grafito y ámbar Python.** El fondo oscuro es un grafito (`#101318`), no negro, con superficies un punto más claras. El acento es un ámbar cálido que recuerda a Python y no se confunde con el verde de acierto ni con el rojo de error.
 - **Texto sobre el ámbar siempre oscuro** (`--color-on-primary`), en los dos temas: los botones principales son ámbar con texto casi negro.
-- **El tema claro no es una inversión.** Es un papel cálido (`#f6f4ef`) con superficies blancas. El ámbar claro solo se usa de fondo de botón; para texto, enlaces y marcas se usa un ámbar oscuro (`#8a5300`) que llega a AA. El código sigue en oscuro en los dos temas.
+- **El tema claro no es una inversión.** Es un papel cálido (`#f4f5f7`) con superficies blancas. El ámbar claro solo se usa de fondo de botón; para texto, enlaces y marcas se usa un ámbar oscuro (`#8c5708`) que llega a AA. El código sigue en oscuro en los dos temas.
 
 ## Color
 
@@ -22,16 +22,16 @@ Hay dos temas. El claro y el oscuro se eligen en «Aspecto» o siguen al sistema
 | Token | Uso | Oscuro | Claro |
 |---|---|---|---|
 | `--color-bg` | Fondo de la página | `#121417` | `#f6f4ef` |
-| `--color-surface` | Tarjetas y paneles | `#181b1f` | `#ffffff` |
-| `--color-surface-2` | Superficie secundaria | `#20242a` | `#eeebe4` |
-| `--color-border` | Separadores (decorativo) | `#2e333b` | `#dbd6cb` |
-| `--color-border-control` | Borde de campos y botones secundarios | `#6a727e` | `#8b867b` |
-| `--color-text` | Texto | `#ebe7df` | `#1c1e22` |
-| `--color-text-muted` | Texto secundario | `#a7abb2` | `#575c64` |
+| `--color-surface` | Tarjetas y paneles | `#171c23` | `#ffffff` |
+| `--color-surface-2` | Superficie secundaria | `#1d242d` | `#f7f8fa` |
+| `--color-border` | Separadores (decorativo) | `#2b3440` | `#e5e8ed` |
+| `--color-border-control` | Borde de campos y botones secundarios | `#697586` | `#aeb6c2` |
+| `--color-text` | Texto | `#e8edf4` | `#202631` |
+| `--color-text-muted` | Texto secundario | `#a8b2c0` | `#626d7b` |
 | `--color-primary` | Enlaces destacados, marcas, foco | `#f2b443` | `#8a5300` |
-| `--color-primary-strong` | Fondo del botón principal | `#f2b443` | `#e5a52b` |
+| `--color-primary-strong` | Fondo del botón principal | `#f2b443` | `#f3b84e` |
 | `--color-on-primary` | Texto sobre el botón principal | `#1b1405` | `#1b1405` |
-| `--color-link` | Enlaces | `#f5c66b` | `#8a5300` |
+| `--color-link` | Enlaces | `#f4c46d` | `#8a5300` |
 | `--color-accent` | Progreso, aciertos | `#3ccb72` | `#166534` |
 | `--color-danger` | Errores | `#f87171` | `#b91c1c` |
 | `--color-code-bg` | Fondo del código (oscuro en los dos temas) | `#0e1013` | `#16181c` |
@@ -130,3 +130,14 @@ Componentes que ya existen y se reutilizan (no se crean otros parecidos):
 1. Capturas antes y después de las vistas principales en los dos temas y a 1280 y 375 px. Si el cambio debía ser invisible (como mover tokens), las capturas tienen que coincidir píxel a píxel.
 2. `npm run test:e2e`: incluye axe-core en los dos temas.
 3. Revisar con teclado: el foco se ve en todos los controles.
+
+
+## Rediseño de interfaz
+
+El rediseño integral se aplica desde frontend/css/redesign.css. La hoja contiene las reglas de composición y componentes; los colores, radios, sombras y anchos siguen centralizados en frontend/css/tokens.css.
+
+La dirección visual utiliza superficies neutras, navegación lateral más compacta, jerarquía clara, paneles discretos y una distribución de escritorio que separa la lectura de la consola. En móvil la consola vuelve al flujo de lectura y la navegación utiliza el cajón lateral existente.
+
+El rediseño cubre la portada pública, el marco de la aplicación, navegación, panel del alumno, Aprender, teoría, práctica, lecciones, consola, PCAP, DAW, perfil, cuenta, asistente y módulos complementarios. No cambia los contratos de datos ni las rutas.
+
+La revisión de accesibilidad y pruebas visuales está documentada en REDISENO-FRONTEND.md. Los valores de contraste de la tabla anterior deben recalcularse cuando se modifiquen los tokens; no se debe dar por demostrada la conformidad WCAG por el mero hecho de conservar la estructura anterior.

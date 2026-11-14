@@ -1,0 +1,1037 @@
+{
+  "title": "Ciberseguridad: Ethical Hacking y Operaciones de Seguridad",
+  "subtitle": "Itinerario de 16 semanas para desarrollar competencias de pentesting, Red Team, Blue Team y automatización con Python.",
+  "level": "Intermedio",
+  "durationHours": 320,
+  "weeks": [
+    {
+      "id": "semana-01",
+      "number": 1,
+      "title": "Fundamentos y laboratorio",
+      "hours": 20,
+      "goal": "Comprender el proceso de pentesting y montar un entorno virtual aislado.",
+      "topics": [
+        "Ética, autorización, alcance y reglas de engagement",
+        "Fases de una auditoría: planificación, reconocimiento, enumeración, validación y reporting",
+        "CVE, CVSS, vulnerabilidad, exploit, payload y superficie de ataque",
+        "VirtualBox: redes NAT, red interna, snapshots y recursos",
+        "Kali Linux: instalación, actualización y estructura del sistema"
+      ],
+      "labs": [
+        "Instalar VirtualBox y Kali Linux",
+        "Crear la red interna PENTEST-LAB y documentar el direccionamiento",
+        "Crear una instantánea limpia de Kali",
+        "Preparar el repositorio y el registro de evidencias",
+        "Comprobar que los objetivos vulnerables no tienen adaptador puente"
+      ],
+      "deliverables": [
+        "Diagrama de arquitectura",
+        "Inventario de máquinas virtuales y adaptadores",
+        "Registro del snapshot inicial",
+        "Cuestionario de fundamentos"
+      ],
+      "assessment": "Revisión del aislamiento y cuestionario de conceptos.",
+      "resources": [
+        "Kali Docs",
+        "VirtualBox User Manual",
+        "CVE.org",
+        "FIRST CVSS",
+        "PTES"
+      ],
+      "quiz": [
+        {
+          "question": "¿Qué debe existir antes de realizar una prueba de pentesting?",
+          "options": [
+            "Autorización y alcance definidos",
+            "Una explotación funcional",
+            "Un escaneo de Internet"
+          ],
+          "answer": 0
+        },
+        {
+          "question": "¿Qué describe CVSS?",
+          "options": [
+            "La gravedad de una vulnerabilidad",
+            "La dirección IP del activo",
+            "La licencia del sistema"
+          ],
+          "answer": 0
+        },
+        {
+          "question": "¿Para qué sirve una instantánea de una máquina virtual?",
+          "options": [
+            "Restaurar su estado anterior",
+            "Aumentar su memoria RAM",
+            "Abrir puertos de red"
+          ],
+          "answer": 0
+        }
+      ]
+    },
+    {
+      "id": "semana-02",
+      "number": 2,
+      "title": "Linux para pentesters",
+      "hours": 20,
+      "goal": "Administrar Linux desde terminal y documentar su estado.",
+      "topics": [
+        "Jerarquía de directorios y shell",
+        "Usuarios, grupos, sudo, permisos y ACL",
+        "Procesos, servicios, systemd y paquetes",
+        "Logs, journalctl, almacenamiento y tareas programadas",
+        "Bash: variables, condiciones, bucles y funciones"
+      ],
+      "labs": [
+        "Crear usuario sin privilegios administrativos",
+        "Aplicar permisos 750 y 640 y explicar su significado",
+        "Consultar procesos, servicios, sockets y registros",
+        "Escribir system_info.sh para inventariar kernel, usuario, red, memoria y disco",
+        "Guardar salida y explicar qué datos son sensibles"
+      ],
+      "deliverables": [
+        "Script Bash documentado",
+        "Informe de usuarios, permisos y servicios",
+        "Registro de comandos y resultados"
+      ],
+      "assessment": "Práctica individual de administración Linux y revisión del script.",
+      "resources": [
+        "The Linux Command Line",
+        "How Linux Works",
+        "Kali Documentation"
+      ],
+      "quiz": [
+        {
+          "question": "¿Qué tipo de información suele contener /etc?",
+          "options": [
+            "Configuración del sistema",
+            "Archivos temporales",
+            "Dispositivos de hardware"
+          ],
+          "answer": 0
+        },
+        {
+          "question": "¿Qué significa el permiso 640?",
+          "options": [
+            "Propietario rw-, grupo r--, otros sin permisos",
+            "Todos pueden leer y escribir",
+            "Solo permite ejecutar"
+          ],
+          "answer": 0
+        },
+        {
+          "question": "¿Qué comando consulta los registros del sistema con systemd?",
+          "options": [
+            "journalctl",
+            "chmod",
+            "mkdir"
+          ],
+          "answer": 0
+        }
+      ]
+    },
+    {
+      "id": "semana-03",
+      "number": 3,
+      "title": "Redes y análisis de tráfico",
+      "hours": 20,
+      "goal": "Comprender protocolos y diagnosticar comunicaciones.",
+      "topics": [
+        "Modelo TCP/IP, Ethernet, IPv4, subnetting y routing",
+        "TCP, UDP, ICMP, ARP, DNS, DHCP, HTTP y TLS",
+        "Puertos, sockets y estados TCP",
+        "Wireshark: captura, filtros y seguimiento de conversaciones",
+        "Resolución de problemas de conectividad"
+      ],
+      "labs": [
+        "Calcular subredes de escenarios didácticos",
+        "Inspeccionar ip addr, ip route, ip neigh y ss",
+        "Capturar tráfico generado por la propia VM",
+        "Identificar DNS, TCP handshake, ICMP y HTTP de laboratorio",
+        "Preparar un diagrama de flujo de comunicación"
+      ],
+      "deliverables": [
+        "Hoja de direccionamiento",
+        "Captura PCAP de tráfico propio",
+        "Informe de análisis de protocolos"
+      ],
+      "assessment": "Examen de redes y análisis de una captura.",
+      "resources": [
+        "Computer Networking: A Top-Down Approach",
+        "Wireshark User Guide",
+        "RFC Editor"
+      ],
+      "quiz": [
+        {
+          "question": "¿Qué protocolo se utiliza normalmente para resolver nombres de dominio?",
+          "options": [
+            "DNS",
+            "SSH",
+            "FTP"
+          ],
+          "answer": 0
+        },
+        {
+          "question": "¿Cuál es la diferencia general entre TCP y UDP?",
+          "options": [
+            "TCP establece conexión; UDP no",
+            "UDP cifra siempre el tráfico",
+            "TCP no utiliza puertos"
+          ],
+          "answer": 0
+        },
+        {
+          "question": "¿Qué muestra el comando ip route?",
+          "options": [
+            "La tabla de rutas",
+            "Los usuarios locales",
+            "Los paquetes instalados"
+          ],
+          "answer": 0
+        }
+      ]
+    },
+    {
+      "id": "semana-04",
+      "number": 4,
+      "title": "Reconocimiento con Nmap",
+      "hours": 20,
+      "goal": "Descubrir activos y caracterizar servicios dentro del alcance autorizado.",
+      "topics": [
+        "Descubrimiento de hosts",
+        "Escaneos TCP y UDP; estados de puertos",
+        "Detección de servicios y versiones y sus limitaciones",
+        "NSE y categorías de scripts",
+        "Exportación XML y reporting"
+      ],
+      "labs": [
+        "Escanear localhost y máquinas propias del laboratorio",
+        "Descubrir hosts solo en PENTEST-LAB",
+        "Identificar servicios y versiones en la VM objetivo",
+        "Exportar resultados en texto y XML",
+        "Comparar resultados y explicar falsos positivos y negativos"
+      ],
+      "deliverables": [
+        "Comandos Nmap anotados",
+        "Resultados de escaneo XML",
+        "Informe de superficie de ataque"
+      ],
+      "assessment": "Práctica de reconocimiento sobre un objetivo interno asignado.",
+      "resources": [
+        "Nmap Network Scanning",
+        "Nmap Reference Guide",
+        "PTES"
+      ],
+      "quiz": [
+        {
+          "question": "¿Qué opción de Nmap permite detectar versiones de servicios?",
+          "options": [
+            "-sV",
+            "-h",
+            "-sn"
+          ],
+          "answer": 0
+        },
+        {
+          "question": "¿Qué formato estructurado puede generar Nmap?",
+          "options": [
+            "XML",
+            "SQL",
+            "PCAP"
+          ],
+          "answer": 0
+        },
+        {
+          "question": "¿Un puerto abierto demuestra por sí solo que hay una vulnerabilidad?",
+          "options": [
+            "No, requiere análisis adicional",
+            "Sí, siempre",
+            "Solo si es el puerto 443"
+          ],
+          "answer": 0
+        }
+      ]
+    },
+    {
+      "id": "semana-05",
+      "number": 5,
+      "title": "Enumeración y vulnerabilidades",
+      "hours": 20,
+      "goal": "Relacionar servicios, configuraciones y vulnerabilidades potenciales.",
+      "topics": [
+        "Enumeración de SSH, FTP, SMB, HTTP, DNS y bases de datos",
+        "Versiones, configuraciones inseguras y exposición",
+        "CVE, NVD, CVSS y aplicabilidad",
+        "Escáneres de vulnerabilidades y sus límites",
+        "Priorización según exposición, impacto y contexto"
+      ],
+      "labs": [
+        "Enumerar servicios de máquinas de laboratorio",
+        "Consultar CVE/NVD para versiones identificadas",
+        "Ejecutar un escaneo únicamente contra VM propia",
+        "Validar manualmente hallazgos sin explotarlos",
+        "Clasificar falsos positivos y preparar un plan de verificación"
+      ],
+      "deliverables": [
+        "Matriz de servicios y hallazgos",
+        "Exportación del escáner",
+        "Registro de validación y priorización"
+      ],
+      "assessment": "Defensa de tres hallazgos y justificación de su relevancia.",
+      "resources": [
+        "NIST NVD",
+        "Tenable Documentation",
+        "CIS Benchmarks",
+        "CVSS"
+      ],
+      "quiz": [
+        {
+          "question": "¿Qué identifica un CVE?",
+          "options": [
+            "Una vulnerabilidad divulgada públicamente",
+            "La gravedad calculada por CVSS",
+            "Un protocolo de red"
+          ],
+          "answer": 0
+        },
+        {
+          "question": "¿Qué aporta CVSS?",
+          "options": [
+            "Una puntuación de severidad",
+            "El propietario del sistema",
+            "El número de puertos abiertos"
+          ],
+          "answer": 0
+        },
+        {
+          "question": "¿Por qué hay que validar los resultados de un escáner?",
+          "options": [
+            "Puede haber falsos positivos y falta de contexto",
+            "Los escáneres siempre fallan",
+            "La validación no aporta información"
+          ],
+          "answer": 0
+        }
+      ]
+    },
+    {
+      "id": "semana-06",
+      "number": 6,
+      "title": "Metasploit y validación controlada",
+      "hours": 20,
+      "goal": "Comprender los módulos y validar fallos en objetivos de laboratorio.",
+      "topics": [
+        "Arquitectura: auxiliary, exploit, payload y post",
+        "msfconsole, búsqueda, información y opciones",
+        "Relación entre versión, configuración y vulnerabilidad",
+        "Validación de explotación, impacto y límites",
+        "Registro de evidencias y restauración de snapshots"
+      ],
+      "labs": [
+        "Explorar módulos y documentación sin ejecutarlos contra terceros",
+        "Identificar un módulo auxiliar adecuado para un servicio de laboratorio",
+        "Validar una vulnerabilidad conocida en una VM deliberadamente vulnerable",
+        "Documentar precondiciones, resultado y mitigación",
+        "Restaurar snapshot y verificar el estado"
+      ],
+      "deliverables": [
+        "Ficha técnica de módulo",
+        "Registro de prueba controlada",
+        "Informe de validación y mitigación"
+      ],
+      "assessment": "Práctica supervisada en VM vulnerable y evaluación de seguridad operacional.",
+      "resources": [
+        "Metasploit Documentation",
+        "Metasploit: The Penetration Tester's Guide",
+        "NVD"
+      ],
+      "quiz": [
+        {
+          "question": "¿Para qué se utiliza principalmente un módulo auxiliary de Metasploit?",
+          "options": [
+            "Reconocimiento y tareas auxiliares",
+            "Ejecutar siempre un payload",
+            "Asignar direcciones IP"
+          ],
+          "answer": 0
+        },
+        {
+          "question": "¿Qué describe un payload?",
+          "options": [
+            "La acción o código que se ejecuta en una explotación",
+            "Un puerto abierto",
+            "Una licencia de software"
+          ],
+          "answer": 0
+        },
+        {
+          "question": "¿Por qué conviene restaurar un snapshot tras una práctica?",
+          "options": [
+            "Para recuperar un estado limpio y repetible",
+            "Para aumentar la RAM",
+            "Para actualizar el kernel"
+          ],
+          "answer": 0
+        }
+      ]
+    },
+    {
+      "id": "semana-07",
+      "number": 7,
+      "title": "Fundamentos de seguridad web",
+      "hours": 20,
+      "goal": "Comprender HTTP y la arquitectura de aplicaciones web.",
+      "topics": [
+        "HTTP requests/responses, métodos y cabeceras",
+        "Cookies, sesiones, autenticación y autorización",
+        "Same-Origin Policy, CORS y TLS",
+        "Proxy interceptador y Burp Suite Community",
+        "Metodología OWASP WSTG y ASVS"
+      ],
+      "labs": [
+        "Configurar Burp Suite contra OWASP Juice Shop local",
+        "Inspeccionar solicitudes y respuestas propias",
+        "Mapear rutas, parámetros, cookies y sesiones",
+        "Analizar controles de acceso con cuentas de prueba",
+        "Crear un mapa de superficie de ataque web"
+      ],
+      "deliverables": [
+        "Mapa de aplicación",
+        "Colección de solicitudes de laboratorio sanitizada",
+        "Checklist OWASP inicial"
+      ],
+      "assessment": "Cuestionario HTTP y revisión del mapa de aplicación.",
+      "resources": [
+        "OWASP WSTG",
+        "OWASP ASVS",
+        "PortSwigger Web Security Academy",
+        "MDN HTTP"
+      ],
+      "quiz": [
+        {
+          "question": "¿Qué elementos puede contener una solicitud HTTP?",
+          "options": [
+            "Método, ruta, cabeceras y cuerpo",
+            "Solo una dirección IP",
+            "Solo el código fuente"
+          ],
+          "answer": 0
+        },
+        {
+          "question": "¿Qué diferencia hay entre autenticación y autorización?",
+          "options": [
+            "Identidad frente a permisos",
+            "Son exactamente lo mismo",
+            "Autorización cifra el DNS"
+          ],
+          "answer": 0
+        },
+        {
+          "question": "¿Para qué sirve un proxy interceptador como Burp?",
+          "options": [
+            "Inspeccionar solicitudes y respuestas web",
+            "Administrar usuarios Linux",
+            "Crear máquinas virtuales"
+          ],
+          "answer": 0
+        }
+      ]
+    },
+    {
+      "id": "semana-08",
+      "number": 8,
+      "title": "Vulnerabilidades web I",
+      "hours": 20,
+      "goal": "Identificar fallos de entrada y salida en aplicaciones vulnerables.",
+      "topics": [
+        "SQL Injection y consultas parametrizadas",
+        "XSS reflejado, almacenado y DOM",
+        "Path traversal y exposición de archivos",
+        "Validación de entradas y gestión de errores",
+        "Evidencia mínima y mitigaciones"
+      ],
+      "labs": [
+        "Resolver laboratorios SQLi introductorios en PortSwigger",
+        "Resolver laboratorios XSS introductorios",
+        "Practicar path traversal en entorno educativo",
+        "Comparar comportamiento vulnerable y corregido",
+        "Escribir casos de prueba de regresión"
+      ],
+      "deliverables": [
+        "Fichas de vulnerabilidad con evidencias",
+        "Recomendaciones de corrección",
+        "Casos de regresión"
+      ],
+      "assessment": "Prueba práctica en laboratorios educativos y explicación de mitigaciones.",
+      "resources": [
+        "PortSwigger Web Security Academy",
+        "OWASP Cheat Sheet Series",
+        "OWASP WSTG"
+      ],
+      "quiz": [
+        {
+          "question": "¿Qué medida ayuda a prevenir SQL Injection?",
+          "options": [
+            "Consultas parametrizadas",
+            "Desactivar DNS",
+            "Cambiar el puerto HTTP"
+          ],
+          "answer": 0
+        },
+        {
+          "question": "¿Qué significa XSS?",
+          "options": [
+            "Cross-Site Scripting",
+            "Cross-System Transfer",
+            "Extended Server Session"
+          ],
+          "answer": 0
+        },
+        {
+          "question": "¿Qué ayuda a mitigar path traversal?",
+          "options": [
+            "Validar y normalizar rutas de forma segura",
+            "Dar permisos globales",
+            "Desactivar los logs"
+          ],
+          "answer": 0
+        }
+      ]
+    },
+    {
+      "id": "semana-09",
+      "number": 9,
+      "title": "Vulnerabilidades web II",
+      "hours": 20,
+      "goal": "Evaluar fallos web adicionales y realizar una auditoría coherente.",
+      "topics": [
+        "SSRF, CSRF, IDOR/BOLA, command injection y file upload",
+        "Deserialización insegura y errores de configuración",
+        "Autenticación, sesiones y autorización",
+        "Riesgos de API: validación, rate limiting y exposición de datos",
+        "OWASP Top 10 y límites de la clasificación"
+      ],
+      "labs": [
+        "Completar laboratorios educativos de control de acceso",
+        "Probar cargas de archivos en Juice Shop local",
+        "Evaluar controles de sesión con usuarios de prueba",
+        "Revisar una API de laboratorio y registrar endpoints",
+        "Proponer correcciones y pruebas de regresión"
+      ],
+      "deliverables": [
+        "Informe de auditoría web",
+        "Matriz riesgo/impacto/corrección",
+        "Evidencias sin secretos ni datos reales"
+      ],
+      "assessment": "Auditoría práctica de una aplicación de laboratorio.",
+      "resources": [
+        "OWASP Top 10",
+        "OWASP API Security Top 10",
+        "PortSwigger Academy",
+        "ASVS"
+      ],
+      "quiz": [
+        {
+          "question": "¿Qué riesgo describe IDOR/BOLA?",
+          "options": [
+            "Acceso a objetos sin autorización adecuada",
+            "Un error de resolución DNS",
+            "Un fallo de memoria física"
+          ],
+          "answer": 0
+        },
+        {
+          "question": "¿Qué significa SSRF?",
+          "options": [
+            "Server-Side Request Forgery",
+            "Secure Server Remote File",
+            "Session-Side Response Format"
+          ],
+          "answer": 0
+        },
+        {
+          "question": "¿Qué aporta el rate limiting?",
+          "options": [
+            "Limitar la frecuencia de solicitudes",
+            "Aumentar el tamaño de las cookies",
+            "Desactivar TLS"
+          ],
+          "answer": 0
+        }
+      ]
+    },
+    {
+      "id": "semana-10",
+      "number": 10,
+      "title": "OSINT y reconocimiento de exposición",
+      "hours": 20,
+      "goal": "Recopilar información pública de forma legal, trazable y limitada al alcance.",
+      "topics": [
+        "OSINT pasivo frente a reconocimiento activo",
+        "Dominios, DNS, certificados y metadatos",
+        "Maltego y SpiderFoot",
+        "Validación, trazabilidad y calidad de fuentes",
+        "Privacidad y minimización de datos"
+      ],
+      "labs": [
+        "Realizar reconocimiento sobre dominio propio o dataset didáctico",
+        "Consultar DNS y fuentes públicas permitidas",
+        "Ejecutar SpiderFoot en objetivo autorizado o dataset",
+        "Construir un grafo con datos ficticios",
+        "Separar hechos, inferencias y datos no verificados"
+      ],
+      "deliverables": [
+        "Informe OSINT con fuentes y fecha",
+        "Grafo de activos de laboratorio",
+        "Registro de alcance y exclusiones"
+      ],
+      "assessment": "Evaluación de calidad, trazabilidad y cumplimiento del alcance.",
+      "resources": [
+        "OSINT Framework",
+        "SpiderFoot Documentation",
+        "Maltego Documentation",
+        "MITRE ATT&CK"
+      ],
+      "quiz": [
+        {
+          "question": "¿Qué debe definirse antes de un ejercicio OSINT?",
+          "options": [
+            "Alcance y tipo de interacción permitida",
+            "La marca del equipo",
+            "El tamaño de la pantalla"
+          ],
+          "answer": 0
+        },
+        {
+          "question": "¿Por qué se registra la fuente y la fecha de consulta?",
+          "options": [
+            "Para poder verificar y reproducir el hallazgo",
+            "Para adornar el informe",
+            "Para sustituir las evidencias"
+          ],
+          "answer": 0
+        },
+        {
+          "question": "¿Qué diferencia un hecho de una inferencia?",
+          "options": [
+            "La inferencia es una interpretación que requiere validación",
+            "Un hecho siempre es una opinión",
+            "Una inferencia es una dirección MAC"
+          ],
+          "answer": 0
+        }
+      ]
+    },
+    {
+      "id": "semana-11",
+      "number": 11,
+      "title": "Windows y Active Directory",
+      "hours": 20,
+      "goal": "Entender identidades, permisos y exposición en entornos Windows.",
+      "topics": [
+        "Usuarios, grupos, servicios, procesos y logs",
+        "NTFS, UAC, PowerShell y políticas",
+        "Dominio, AD DS, Kerberos, LDAP y DNS",
+        "Mínimo privilegio y gestión de credenciales",
+        "Riesgos de configuración y controles defensivos"
+      ],
+      "labs": [
+        "Crear VM Windows de laboratorio y cuentas ficticias",
+        "Revisar servicios, firewall, actualizaciones y eventos",
+        "Auditar grupos y permisos locales",
+        "Dibujar un dominio didáctico si hay recursos",
+        "Aplicar y verificar hardening básico"
+      ],
+      "deliverables": [
+        "Checklist de hardening Windows",
+        "Informe de cuentas, grupos y servicios",
+        "Evidencias antes/después"
+      ],
+      "assessment": "Prueba de administración y hardening en entorno propio.",
+      "resources": [
+        "Microsoft Learn",
+        "Windows Security Baselines",
+        "MITRE ATT&CK Enterprise"
+      ],
+      "quiz": [
+        {
+          "question": "¿Para qué se utiliza Kerberos en entornos Windows?",
+          "options": [
+            "Autenticación en redes y dominios",
+            "Compresión de archivos",
+            "Escaneo de aplicaciones web"
+          ],
+          "answer": 0
+        },
+        {
+          "question": "¿Qué establece el principio de mínimo privilegio?",
+          "options": [
+            "Dar solo los permisos necesarios",
+            "Dar permisos de administrador a todos",
+            "Compartir credenciales"
+          ],
+          "answer": 0
+        },
+        {
+          "question": "¿Dónde se revisan los eventos de Windows?",
+          "options": [
+            "Windows Event Viewer",
+            "Nmap",
+            "pip"
+          ],
+          "answer": 0
+        }
+      ]
+    },
+    {
+      "id": "semana-12",
+      "number": 12,
+      "title": "Python para automatización",
+      "hours": 20,
+      "goal": "Construir herramientas pequeñas y reproducibles para analizar datos de laboratorio.",
+      "topics": [
+        "Funciones, módulos, excepciones, logging y argparse",
+        "Sockets y timeouts; límites de concurrencia",
+        "Requests y APIs; gestión segura de secretos",
+        "Procesamiento XML/JSON y parsing de Nmap",
+        "Pruebas unitarias y calidad de código"
+      ],
+      "labs": [
+        "Crear comprobador de puertos limitado a localhost o IP de laboratorio",
+        "Parsear XML de Nmap y producir JSON normalizado",
+        "Añadir argparse, logging y manejo de errores",
+        "Escribir pruebas unitarias con datos de muestra",
+        "Generar informe HTML/Markdown con hallazgos ficticios"
+      ],
+      "deliverables": [
+        "Repositorio Python con README",
+        "Parser XML→JSON probado",
+        "Tests y ejemplo de informe"
+      ],
+      "assessment": "Revisión de código, pruebas y demostración funcional.",
+      "resources": [
+        "Python Documentation",
+        "Black Hat Python 2nd ed.",
+        "Scapy",
+        "FastAPI"
+      ],
+      "quiz": [
+        {
+          "question": "¿Para qué sirve argparse en Python?",
+          "options": [
+            "Definir argumentos de línea de comandos",
+            "Cifrar discos",
+            "Capturar paquetes"
+          ],
+          "answer": 0
+        },
+        {
+          "question": "¿Por qué se configura un timeout en sockets?",
+          "options": [
+            "Para evitar esperas indefinidas",
+            "Para aumentar privilegios",
+            "Para ocultar errores"
+          ],
+          "answer": 0
+        },
+        {
+          "question": "¿Qué ventaja tiene normalizar resultados en JSON?",
+          "options": [
+            "Mantener una estructura consistente y procesable",
+            "Evitar validar datos",
+            "Hacer el escaneo invisible"
+          ],
+          "answer": 0
+        }
+      ]
+    },
+    {
+      "id": "semana-13",
+      "number": 13,
+      "title": "Blue Team: hardening y detección",
+      "hours": 20,
+      "goal": "Aplicar controles y detectar actividad sospechosa en sistemas de laboratorio.",
+      "topics": [
+        "Hardening Linux y Windows",
+        "Logs de autenticación, sistema, web y red",
+        "Sysmon, Windows Event Logs, journald y auditd",
+        "Indicadores de compromiso y MITRE ATT&CK",
+        "Detección, falsos positivos y contexto"
+      ],
+      "labs": [
+        "Aplicar hardening a Ubuntu Server",
+        "Generar eventos benignos de autenticación y servicio",
+        "Recolectar y filtrar logs",
+        "Crear reglas sencillas sobre eventos de laboratorio",
+        "Mapear técnicas simuladas a MITRE ATT&CK"
+      ],
+      "deliverables": [
+        "Baseline de hardening",
+        "Consultas y reglas de detección",
+        "Informe de eventos"
+      ],
+      "assessment": "Investigación de eventos simulados.",
+      "resources": [
+        "MITRE ATT&CK",
+        "CIS Benchmarks",
+        "Ubuntu Security",
+        "Sysmon Documentation"
+      ],
+      "quiz": [
+        {
+          "question": "¿Qué es un falso positivo en detección?",
+          "options": [
+            "Una alerta que no corresponde a una amenaza real",
+            "Una alerta confirmada",
+            "Un identificador CVE"
+          ],
+          "answer": 0
+        },
+        {
+          "question": "¿Para qué sirve Sysmon?",
+          "options": [
+            "Registrar eventos detallados en Windows",
+            "Cambiar direcciones IP",
+            "Crear contenedores"
+          ],
+          "answer": 0
+        },
+        {
+          "question": "¿Qué describe MITRE ATT&CK?",
+          "options": [
+            "Tácticas y técnicas observadas de adversarios",
+            "Una lista de usuarios",
+            "Un protocolo criptográfico"
+          ],
+          "answer": 0
+        }
+      ]
+    },
+    {
+      "id": "semana-14",
+      "number": 14,
+      "title": "Análisis forense y respuesta a incidentes",
+      "hours": 20,
+      "goal": "Preservar evidencias y seguir un proceso básico de respuesta.",
+      "topics": [
+        "Preparación, identificación, contención, erradicación y recuperación",
+        "Cadena de custodia y preservación de evidencias",
+        "Hashing, timestamps y adquisición básica",
+        "Análisis de logs, artefactos y tráfico",
+        "Comunicación y lecciones aprendidas"
+      ],
+      "labs": [
+        "Crear dataset de logs de incidente ficticio",
+        "Calcular hashes SHA-256 de evidencias de práctica",
+        "Construir una línea temporal",
+        "Redactar cronología y alcance",
+        "Proponer contención, recuperación y prevención"
+      ],
+      "deliverables": [
+        "Registro de evidencias",
+        "Timeline del incidente",
+        "Informe de respuesta"
+      ],
+      "assessment": "Simulación de incidente con rúbrica de precisión y trazabilidad.",
+      "resources": [
+        "NIST SP 800-61",
+        "CISA Incident Response",
+        "The Art of Memory Forensics"
+      ],
+      "quiz": [
+        {
+          "question": "¿Para qué sirve calcular un hash de una evidencia?",
+          "options": [
+            "Comprobar su integridad",
+            "Cifrarla automáticamente",
+            "Eliminar metadatos"
+          ],
+          "answer": 0
+        },
+        {
+          "question": "¿Qué es la cadena de custodia?",
+          "options": [
+            "Registro de quién manejó la evidencia y cuándo",
+            "Una lista de direcciones IP",
+            "Una regla de firewall"
+          ],
+          "answer": 0
+        },
+        {
+          "question": "¿Qué diferencia contención y erradicación?",
+          "options": [
+            "Contención limita el incidente; erradicación elimina su causa o artefactos",
+            "Son sinónimos",
+            "Erradicación siempre es el primer paso"
+          ],
+          "answer": 0
+        }
+      ]
+    },
+    {
+      "id": "semana-15",
+      "number": 15,
+      "title": "Proyecto final: planificación y ejecución",
+      "hours": 20,
+      "goal": "Integrar reconocimiento, análisis, validación y documentación.",
+      "topics": [
+        "Definición de alcance, objetivos, exclusiones y reglas",
+        "Plan de pruebas y gestión de riesgos",
+        "Reconocimiento, enumeración y análisis",
+        "Validación controlada y medidas correctivas",
+        "Informe ejecutivo y técnico"
+      ],
+      "labs": [
+        "Seleccionar entorno de laboratorio propio",
+        "Crear reglas de engagement y plan de pruebas",
+        "Ejecutar inventario y reconocimiento",
+        "Validar hallazgos sin persistencia ni daño",
+        "Preparar borrador del informe"
+      ],
+      "deliverables": [
+        "Plan de pruebas",
+        "Inventario de activos y hallazgos",
+        "Borrador de informe ejecutivo y técnico"
+      ],
+      "assessment": "Revisión de alcance, evidencias, reproducibilidad y calidad del análisis.",
+      "resources": [
+        "PTES",
+        "NIST SP 800-115",
+        "OWASP WSTG",
+        "CVSS"
+      ],
+      "quiz": [
+        {
+          "question": "¿Qué debe incluir el alcance de una auditoría?",
+          "options": [
+            "Activos, límites y exclusiones",
+            "Solo las herramientas",
+            "Contraseñas de clientes"
+          ],
+          "answer": 0
+        },
+        {
+          "question": "¿Por qué se documentan las exclusiones?",
+          "options": [
+            "Para evitar pruebas fuera de lo autorizado",
+            "Para aumentar la velocidad",
+            "Para reducir el informe"
+          ],
+          "answer": 0
+        },
+        {
+          "question": "¿Qué diferencia un informe técnico de uno ejecutivo?",
+          "options": [
+            "El técnico detalla pruebas; el ejecutivo resume riesgos y decisiones",
+            "Son idénticos",
+            "El técnico omite evidencias"
+          ],
+          "answer": 0
+        }
+      ]
+    },
+    {
+      "id": "semana-16",
+      "number": 16,
+      "title": "Proyecto final: reporting y defensa",
+      "hours": 20,
+      "goal": "Entregar una auditoría reproducible y presentar resultados.",
+      "topics": [
+        "Priorización por impacto, probabilidad, exposición y contexto",
+        "Recomendaciones técnicas y plan de remediación",
+        "Re-test y verificación de correcciones",
+        "Lecciones aprendidas y limitaciones",
+        "Presentación ejecutiva y defensa técnica"
+      ],
+      "labs": [
+        "Completar informe técnico con evidencias y pasos reproducibles",
+        "Preparar resumen ejecutivo claro",
+        "Priorizar hallazgos y asignar recomendaciones",
+        "Repetir pruebas tras aplicar correcciones",
+        "Presentar la herramienta Python y defender decisiones"
+      ],
+      "deliverables": [
+        "Informe final PDF",
+        "Código fuente y README de la herramienta",
+        "Matriz de riesgos y plan de remediación",
+        "Presentación de resultados"
+      ],
+      "assessment": "Defensa final: informe 40%, laboratorio 30%, herramienta Python 20%, presentación 10%.",
+      "resources": [
+        "OWASP WSTG",
+        "PTES",
+        "CVSS",
+        "documentación oficial de herramientas"
+      ],
+      "quiz": [
+        {
+          "question": "¿Qué es un re-test?",
+          "options": [
+            "Repetir pruebas para comprobar una corrección",
+            "Añadir nuevos exploits",
+            "Cambiar el nombre de un hallazgo"
+          ],
+          "answer": 0
+        },
+        {
+          "question": "¿Cómo se prioriza un hallazgo?",
+          "options": [
+            "Por impacto, probabilidad, exposición y contexto",
+            "Por orden alfabético",
+            "Por fecha de creación únicamente"
+          ],
+          "answer": 0
+        },
+        {
+          "question": "¿Qué debe declarar un informe final?",
+          "options": [
+            "Método, resultados, limitaciones y riesgos residuales",
+            "Solo una puntuación",
+            "Solo capturas de pantalla"
+          ],
+          "answer": 0
+        }
+      ]
+    }
+  ],
+  "hoursPerWeek": 20,
+  "methodology": [
+    "4 h teoría y clases",
+    "4 h bibliografía y documentación",
+    "8 h laboratorios",
+    "2 h Python y automatización",
+    "2 h evaluación y documentación"
+  ],
+  "tracks": [
+    "Red Team: Linux, redes, reconocimiento, OSINT, explotación y seguridad web",
+    "Blue Team: hardening, análisis de tráfico, detección y respuesta a incidentes",
+    "Python: automatización, análisis de resultados y reporting"
+  ],
+  "environment": [
+    "Windows como sistema anfitrión",
+    "VirtualBox como hipervisor",
+    "Kali Linux como estación de auditoría",
+    "Máquinas objetivo vulnerables en red interna aislada"
+  ],
+  "assessment": [
+    {
+      "name": "Cuestionarios y exámenes teóricos",
+      "weight": 15
+    },
+    {
+      "name": "Laboratorios y prácticas técnicas",
+      "weight": 35
+    },
+    {
+      "name": "Ejercicios y scripts Python",
+      "weight": 15
+    },
+    {
+      "name": "Documentación y reporting",
+      "weight": 15
+    },
+    {
+      "name": "Proyecto final y defensa",
+      "weight": 20
+    }
+  ]
+}

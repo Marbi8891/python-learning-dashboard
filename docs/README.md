@@ -25,6 +25,7 @@
 | [CAREER_ROADMAP_ARCHITECTURE.md](CAREER_ROADMAP_ARCHITECTURE.md) | Career Roadmap: auditoría y arquitectura propuesta (Sprint 0) |
 | [CAREER_ROADMAP_AGENT_LOG.md](CAREER_ROADMAP_AGENT_LOG.md) | Career Roadmap: registro de sprints y decisiones |
 | [DISENO.md](DISENO.md) | Sistema visual: tokens, colores, tipografía y componentes |
+| [REDISENO-FRONTEND.md](REDISENO-FRONTEND.md) | Alcance, áreas y criterios del rediseño integral del frontend |
 | [IDIOMAS.md](IDIOMAS.md) | Interfaz en inglés y cómo añadir textos traducidos |
 
 ## Itinerarios formativos
@@ -32,6 +33,7 @@
 | Documento | Para qué sirve |
 |---|---|
 | [PLAN-ITINERARIO-DEVOPS.md](PLAN-ITINERARIO-DEVOPS.md) | Formación de 9 meses en Linux, Docker, GitHub y Python, con 20 horas semanales, laboratorios y evaluaciones |
+| [PLAN-CIBERSEGURIDAD.md](PLAN-CIBERSEGURIDAD.md) | Curso de ciberseguridad de 16 semanas y 320 horas: Red Team, Blue Team, OSINT, pentesting web y Python |
 
 ## Temario
 
