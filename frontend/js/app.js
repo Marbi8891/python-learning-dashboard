@@ -40,6 +40,7 @@ import { renderCertificate, renderCourseCertificate, saveCertificateName } from 
 import { openPcap, refreshPcap } from "./pcap.js";
 import { initCourseSync } from "./course-store.js";
 import { openDaw, refreshDaw } from "./daw.js";
+import { openDevops, refreshDevops } from "./devops.js";
 import { initPcapSync } from "./pcap-sync.js";
 import { isLearnRoute, learnNavKey, openLearn } from "./learn/learn-app.js";
 import { LANDING_ROUTE, closeLanding, isLandingRoute, openLanding } from "./landing.js";
@@ -421,6 +422,7 @@ const VIEWS = {
   pcap: { element: "#pcap-view", title: "Examen PCAP · Python Learning Dashboard", focus: null, render: null },
   // Los cursos de DAW también se pintan solos (openDaw): cargan su banco y tienen tandas en curso
   daw: { element: "#daw-view", title: "Cursos de DAW · Python Learning Dashboard", focus: null, render: null },
+  devops: { element: "#devops-view", title: "Academia DevOps · Python Learning Dashboard", focus: null, render: null },
   // Página no encontrada (NAV-01) o contenido que no se pudo cargar
   notfound: { element: "#notfound-view", title: () => content.statusTitle, focus: "#notfound-title", render: () => content.statusHtml },
 };
@@ -450,7 +452,7 @@ function updatePrivateNav() {
 }
 
 /** Entrada del menú que corresponde a la vista actual. */
-const NAV_OF_VIEW = { home: "pcap-curso", lesson: "pcap-curso", certificate: "pcap-curso", pcap: "pcap", daw: "daw", profile: "progreso", private: "panel" };
+const NAV_OF_VIEW = { home: "pcap-curso", lesson: "pcap-curso", certificate: "pcap-curso", pcap: "pcap", daw: "daw", devops: "devops", profile: "progreso", private: "panel" };
 
 function updateSiteNav() {
   const key = content.view === "learn" ? learnNavKey(location.hash) : NAV_OF_VIEW[content.view];
@@ -660,6 +662,11 @@ function navigate({ moveFocus = true } = {}) {
     openDaw(location.hash, { moveFocus });
     return;
   }
+  if (location.hash === "#/devops" || location.hash.startsWith("#/devops/")) {
+    showPage("devops", { moveFocus: false });
+    openDevops(location.hash, { moveFocus });
+    return;
+  }
   if (!needsLessons(location.hash)) {
     showNotFound({}, { moveFocus });
     return;
@@ -867,7 +874,10 @@ async function init() {
     if (content.loaded) refreshGame();
     refreshPcap();
   });
-  initCourseSync(refreshDaw);
+  initCourseSync(() => {
+    refreshDaw();
+    refreshDevops();
+  });
   initLearnSync();
   initPlannerSync();
   const flash = takeFlash(); // aviso tras cerrar sesión o borrar la cuenta

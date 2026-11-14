@@ -144,3 +144,23 @@ test("la teoría enlaza sus fuentes", async ({ page }) => {
   await expect(sources.first()).toHaveAttribute("href", /^https:\/\//);
   await expect(sources.first()).toHaveAttribute("rel", /noopener/);
 });
+
+
+test("Academia DevOps carga el primer mes y registra una lección al superar el quiz", async ({ page }) => {
+  await page.goto("/#/devops");
+  await expect(page.locator("#devops-title")).toHaveText("Academia DevOps");
+  await expect(page.locator(".devops-week")).toHaveCount(4);
+  await expect(page.locator(".devops-lesson")).toHaveCount(8);
+
+  await page.getByRole("link", { name: "Linux: terminal y sistema de archivos" }).click();
+  await expect(page.locator("#devops-title")).toHaveText("Linux: terminal y sistema de archivos");
+  await page.locator('input[name="q-0"][value="0"]').check();
+  await page.locator('input[name="q-1"][value="1"]').check();
+  await page.locator('input[name="q-2"][value="0"]').check();
+  await page.getByRole("button", { name: "Corregir respuestas" }).click();
+  await expect(page.locator(".devops-result--ok")).toContainText("Lección completada");
+
+  await page.getByRole("link", { name: "Academia DevOps" }).first().click();
+  await expect(page.locator(".devops-lesson[data-completed=true]")).toHaveCount(1);
+  await expect(page.locator(".devops-overall__label")).toContainText("1 de 8 lecciones");
+});
