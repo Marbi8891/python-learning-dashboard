@@ -164,5 +164,7 @@
   "el progreso por conceptos": "your progress by concept",
   "la XP y los logros": "your XP and badges",
   "las lecciones completadas": "your completed lessons",
-  "el curso {name}": "the {name} course"
+  "el curso {name}": "the {name} course",
+  "Academia DevOps": "DevOps Academy",
+  "Linux, Docker, GitHub y Python": "Linux, Docker, GitHub and Python"
 }
