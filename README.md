@@ -18,7 +18,7 @@ Proyecto de 2º de DAW: una web para **aprender Python entendiendo lo que haces*
 - **Motor adaptativo** en «Aprender»: dominio de cada concepto con evidencias, confianza y olvido, repaso espaciado común y plan de «Hoy» con el motivo de cada recomendación. Incluye un **planificador diario** (tiempo disponible, exámenes y entregas, tareas hechas, pospuestas o descartadas) que se sincroniza con la cuenta. Cómo funciona: [docs/ADAPTIVE_ENGINE.md](docs/ADAPTIVE_ENGINE.md); decisiones: [docs/DECISIONS.md](docs/DECISIONS.md).
 - **XP, niveles, racha y logros.**
 - **Cuenta opcional:** registro con email o con Google, recuperación de contraseña y panel del alumno. Puedes descargar tus datos o borrar la cuenta (RGPD).
-- **PWA:** se puede instalar y, después de la primera visita, funciona sin conexión en toda la web, también en las páginas que no se habían abierto.
+- **Interfaz rediseñada:** sistema visual unificado para la portada, panel, navegación, aprendizaje, lecciones, consola Python, PCAP, DAW, perfil y cuenta. Conserva HTML, CSS y JavaScript nativo, sin migrar a un framework. Documentación: [docs/REDISENO-FRONTEND.md](docs/REDISENO-FRONTEND.md).\n- **PWA:** se puede instalar y, después de la primera visita, funciona sin conexión en toda la web, también en las páginas que no se habían abierto.
 - **Tema claro y oscuro** y accesibilidad con objetivo WCAG 2.2 AA, comprobada con pruebas automáticas (axe-core con las reglas de WCAG 2.2 A/AA, foco y letra al 200 %). Que axe no encuentre fallos no demuestra la conformidad: todavía no se ha hecho la auditoría manual con lector de pantalla (NVDA, VoiceOver).
 
 Todo el temario se genera con los scripts de `scripts/`, que ejecutan el código de cada pregunta para comprobar que la respuesta es correcta.
