@@ -324,3 +324,15 @@ class LearningEventPage(BaseModel):
     total: int
     limit: int
     offset: int
+
+
+
+# ---------- Derechos de acceso comerciales ----------
+
+
+class EntitlementOut(BaseModel):
+    """Derecho activo de una cuenta. Nunca expone identificadores del proveedor de pago."""
+
+    feature_key: str
+    starts_at: datetime
+    ends_at: datetime | None
