@@ -1,0 +1,162 @@
+/* Academia DevOps: catálogo y lecciones. Comparte los tokens y componentes de DAW. */
+
+.devops-hero {
+  padding: var(--space-6) 0 var(--space-5);
+  border-bottom: var(--border-width) solid var(--color-border);
+}
+
+.devops-facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-3);
+  margin: var(--space-5) 0;
+}
+
+.devops-facts > div {
+  display: grid;
+  gap: var(--space-1);
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.devops-facts strong { font-size: var(--text-lg); }
+.devops-facts span,
+.devops-count { color: var(--color-text-muted); font-size: var(--text-sm); }
+
+.devops-overall { max-width: 44rem; }
+.devops-overall__label,
+.devops-week__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-2);
+}
+
+.devops-meter {
+  height: 8px;
+  overflow: hidden;
+  border-radius: 99px;
+  background: var(--color-border);
+}
+.devops-meter span {
+  display: block;
+  width: var(--devops-progress, 0%);
+  height: 100%;
+  border-radius: inherit;
+  background: var(--color-primary);
+  transition: width var(--transition);
+}
+
+.devops-catalog { margin-top: var(--space-6); }
+.devops-catalog__intro { margin-bottom: var(--space-4); }
+.devops-catalog__intro h2,
+.devops-week__head h2,
+.devops-project h2 {
+  margin: 0 0 var(--space-2);
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 500;
+}
+.devops-catalog__intro p,
+.devops-project p { color: var(--color-text-muted); }
+
+.devops-week {
+  margin: var(--space-5) 0;
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+.devops-week__head { align-items: end; }
+.devops-week__head .eyebrow { margin-bottom: var(--space-1); }
+
+.devops-lessons {
+  margin: var(--space-3) 0 0;
+  padding: 0;
+  list-style: none;
+}
+.devops-lesson {
+  display: grid;
+  grid-template-columns: 1.5rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) 0;
+  border-top: 1px solid var(--color-border);
+}
+.devops-lesson__status { color: var(--color-text-muted); font-size: 1.1rem; }
+.devops-lesson[data-completed="true"] .devops-lesson__status,
+.devops-lesson[data-completed="true"] .devops-lesson__state { color: var(--color-primary); }
+.devops-lesson__body h3 { margin: 0; font-size: 1rem; font-weight: 600; }
+.devops-lesson__body a { color: var(--color-text); text-decoration: none; }
+.devops-lesson__body a:hover { text-decoration: underline; }
+.devops-lesson__body p,
+.devops-lesson__state { margin: var(--space-1) 0 0; color: var(--color-text-muted); font-size: var(--text-sm); }
+
+.devops-project {
+  margin-top: var(--space-6);
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+.devops-project ul { padding-left: 1.3rem; }
+
+.devops-lesson-hero { padding-top: var(--space-3); }
+.devops-content { max-width: 56rem; }
+.devops-content .course-section { margin-top: var(--space-5); }
+.devops-code {
+  overflow-x: auto;
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-raised, var(--color-surface));
+  color: var(--color-text);
+  font-family: var(--font-mono);
+  font-size: .9rem;
+  line-height: 1.65;
+  tab-size: 4;
+}
+.devops-deliverable {
+  margin-top: var(--space-3);
+  padding: var(--space-3);
+  border-left: 3px solid var(--color-primary);
+  background: var(--color-surface);
+}
+.devops-deliverable p { margin: var(--space-1) 0 0; }
+
+.devops-question {
+  margin: var(--space-3) 0;
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+.devops-question legend { padding: 0 var(--space-1); font-weight: 600; }
+.devops-question legend span { color: var(--color-text-muted); }
+.devops-options { display: grid; gap: var(--space-2); margin-top: var(--space-2); }
+.devops-options label {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: var(--space-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+.devops-options label:has(input:checked) { border-color: var(--color-primary); }
+.devops-options input { margin-top: .25rem; }
+.devops-explain { margin: var(--space-2) 0 0; color: var(--color-text-muted); font-size: var(--text-sm); }
+.devops-explain[data-correct="true"] { color: var(--color-primary); }
+.devops-result { padding: var(--space-3); border-radius: var(--radius-sm); }
+.devops-result--ok { border: 1px solid var(--color-primary); }
+.devops-result--retry { border: 1px solid var(--color-border); }
+
+.devops-sources ul { padding-left: 1.3rem; }
+.devops-sources li { margin: var(--space-2) 0; }
+
+@media (max-width: 700px) {
+  .devops-facts { grid-template-columns: 1fr; }
+  .devops-week { padding: var(--space-3); }
+  .devops-week__head { align-items: start; flex-direction: column; }
+  .devops-lesson { grid-template-columns: 1.25rem minmax(0, 1fr); }
+  .devops-lesson__state { grid-column: 2; margin-top: 0; }
+}
