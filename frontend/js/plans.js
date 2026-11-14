@@ -2,7 +2,7 @@
 import { apiEnabled, request } from "./api.js";
 import { openAccount } from "./account.js";
 import { escapeHtml } from "./markdown.js";
-import { state } from "./store.js";
+import { state, subscribe as subscribeStore } from "./store.js";
 
 let entitlements = [];
 let entitlementStatus = "idle";
@@ -28,7 +28,7 @@ function entitlementList() {
   if (entitlementStatus === "error") return `<p class="plans__notice" role="alert">${escapeHtml(entitlementError)} <button class="btn btn--ghost" type="button" data-plans-retry>Reintentar</button></p>`;
   if (!entitlements.length) return '<p class="plans__muted">No hay derechos adicionales activos en esta cuenta.</p>';
   return `<ul class="plans__entitlements">${entitlements.map((item) => `
-    <li><span><strong>${escapeHtml(item.feature_key)}</strong><small>Desde ${escapeHtml(dateLabel(item.starts_at))}</small></span><span>${escapeHtml(dateLabel(item.ends_at))}</span></li>`).join("")}</ul>`;
+    <li><span><strong>${escapeHtml(item.feature_key)}</strong><small>Inicio: ${escapeHtml(new Intl.DateTimeFormat("es-ES", { dateStyle: "medium" }).format(new Date(item.starts_at)))}</small></span><span>${escapeHtml(dateLabel(item.ends_at))}</span></li>`).join("")}</ul>`;
 }
 
 export function renderPlans() {
