@@ -40,6 +40,7 @@ import { renderCertificate, renderCourseCertificate, saveCertificateName } from 
 import { openPcap, refreshPcap } from "./pcap.js";
 import { initCourseSync } from "./course-store.js";
 import { openDaw, refreshDaw } from "./daw.js";
+import { initCyber, openCyber } from "./cybersecurity.js";
 import { initPcapSync } from "./pcap-sync.js";
 import { isLearnRoute, learnNavKey, openLearn } from "./learn/learn-app.js";
 import { LANDING_ROUTE, closeLanding, isLandingRoute, openLanding } from "./landing.js";
@@ -65,6 +66,7 @@ const CERTIFICATE_ROUTE = "#/certificado";
 const PRIVATE_ROUTE = "#/cuenta"; // antigua «Mi cuenta»: ahora es la sección «Mi perfil» del panel
 const PANEL_ROUTE = "#/panel"; // panel del alumno: #/panel/<sección>
 const DAW_ROUTE = "#/daw";
+const CYBER_ROUTE = "#/ciberseguridad";
 const mobile = window.matchMedia("(max-width: 900px)");
 
 const content = {
@@ -421,6 +423,7 @@ const VIEWS = {
   pcap: { element: "#pcap-view", title: "Examen PCAP · Python Learning Dashboard", focus: null, render: null },
   // Los cursos de DAW también se pintan solos (openDaw): cargan su banco y tienen tandas en curso
   daw: { element: "#daw-view", title: "Cursos de DAW · Python Learning Dashboard", focus: null, render: null },
+  cyber: { element: "#cyber-view", title: "Curso de Ciberseguridad · Python Learning Dashboard", focus: null, render: null },
   // Página no encontrada (NAV-01) o contenido que no se pudo cargar
   notfound: { element: "#notfound-view", title: () => content.statusTitle, focus: "#notfound-title", render: () => content.statusHtml },
 };
@@ -450,7 +453,7 @@ function updatePrivateNav() {
 }
 
 /** Entrada del menú que corresponde a la vista actual. */
-const NAV_OF_VIEW = { home: "pcap-curso", lesson: "pcap-curso", certificate: "pcap-curso", pcap: "pcap", daw: "daw", profile: "progreso", private: "panel" };
+const NAV_OF_VIEW = { cyber: "cyber", home: "pcap-curso", lesson: "pcap-curso", certificate: "pcap-curso", pcap: "pcap", daw: "daw", profile: "progreso", private: "panel" };
 
 function updateSiteNav() {
   const key = content.view === "learn" ? learnNavKey(location.hash) : NAV_OF_VIEW[content.view];
@@ -655,6 +658,11 @@ function navigate({ moveFocus = true } = {}) {
     openLearn(location.hash, { moveFocus });
     return;
   }
+  if (location.hash === CYBER_ROUTE || location.hash.startsWith(`${CYBER_ROUTE}/`)) {
+    showPage("cyber", { moveFocus: false });
+    openCyber(location.hash, { moveFocus });
+    return;
+  }
   if (location.hash === DAW_ROUTE || location.hash.startsWith(`${DAW_ROUTE}/`)) {
     showPage("daw", { moveFocus: false });
     openDaw(location.hash, { moveFocus });
@@ -826,6 +834,7 @@ async function init() {
   initTabs();
   initActions();
   initMobileMenu();
+  initCyber();
   initConsole();
   initAssistant();
   initI18n();
