@@ -24,7 +24,7 @@
 | [DECISIONS.md](DECISIONS.md) | Registro de decisiones de arquitectura (DEC-NNN) |
 | [CAREER_ROADMAP_ARCHITECTURE.md](CAREER_ROADMAP_ARCHITECTURE.md) | Career Roadmap: auditoría y arquitectura propuesta (Sprint 0) |
 | [CAREER_ROADMAP_AGENT_LOG.md](CAREER_ROADMAP_AGENT_LOG.md) | Career Roadmap: registro de sprints y decisiones |
-| [DISENO.md](DISENO.md) | Sistema visual: tokens, colores, tipografía y componentes |
+| [DISENO.md](DISENO.md) | Sistema visual: tokens, colores, tipografía y componentes |\n| [REDISENO-FRONTEND.md](REDISENO-FRONTEND.md) | Alcance, áreas y criterios del rediseño integral del frontend |
 | [IDIOMAS.md](IDIOMAS.md) | Interfaz en inglés y cómo añadir textos traducidos |
 
 ## Itinerarios formativos
