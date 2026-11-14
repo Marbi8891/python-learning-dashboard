@@ -1,0 +1,33 @@
+/* Curso de ciberseguridad */
+.cyber-hero,.cyber-section,.cyber-detail{max-width:980px;margin:0 auto 28px}
+.cyber-hero{padding:clamp(22px,4vw,42px);border:1px solid var(--color-border);border-radius:var(--radius-lg);background:var(--color-surface-2)}
+.cyber-hero h1,.cyber-detail h1{max-width:800px;margin:8px 0 12px;font-size:clamp(28px,4vw,42px);line-height:1.12}
+.cyber-lead{max-width:760px;color:var(--color-text-muted);line-height:1.65}
+.cyber-stats{display:flex;flex-wrap:wrap;gap:18px;margin:22px 0 14px;color:var(--color-text-muted);font-size:13px}
+.cyber-stats strong{display:block;color:var(--color-text);font-size:22px}
+.cyber-progress{height:9px;overflow:hidden;border-radius:99px;background:var(--color-border)}
+.cyber-progress span{display:block;height:100%;border-radius:inherit;background:var(--color-accent);transition:width .2s ease}
+.cyber-progress-label,.cyber-note,.cyber-section-head p{font-size:13px;color:var(--color-text-muted)}
+.cyber-section{padding:0 2px}
+.cyber-section h2,.cyber-detail section h2{font-size:20px;margin:0 0 12px}
+.cyber-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.cyber-card{padding:18px;border:1px solid var(--color-border);border-radius:var(--radius-md);background:var(--color-surface)}
+.cyber-card h3{margin:0 0 8px}.cyber-card p{margin:0;color:var(--color-text-muted);font-size:14px;line-height:1.55}
+.cyber-warning{padding:14px;border-left:3px solid var(--color-warning);background:var(--color-surface-2);line-height:1.55}
+.cyber-weeks{display:grid;gap:8px}
+.cyber-week{display:flex;align-items:center;gap:14px;padding:14px;border:1px solid var(--color-border);border-radius:var(--radius-md);color:var(--color-text);text-decoration:none;background:var(--color-surface)}
+.cyber-week:hover{border-color:var(--color-primary)}.cyber-week.is-done{border-color:var(--color-success)}
+.cyber-week-number{display:grid;place-items:center;flex:0 0 42px;height:42px;border-radius:10px;background:var(--color-surface-2);font-weight:700}
+.cyber-week-main{display:grid;gap:4px;min-width:0;flex:1}.cyber-week-main small{color:var(--color-text-muted);line-height:1.4}
+.cyber-week-state{font-size:12px;color:var(--color-text-muted);white-space:nowrap}
+.cyber-assessment{display:grid;gap:8px}.cyber-assessment div{display:flex;justify-content:space-between;gap:12px;padding:10px 12px;border-bottom:1px solid var(--color-border)}
+.cyber-resources a{overflow-wrap:anywhere}.cyber-breadcrumb{max-width:980px;margin:0 auto 18px;display:flex;justify-content:space-between;gap:12px;font-size:13px;color:var(--color-text-muted)}
+.cyber-detail{padding:24px;border:1px solid var(--color-border);border-radius:var(--radius-lg);background:var(--color-surface)}
+.cyber-detail section{margin-top:28px}.cyber-detail li{margin:8px 0;line-height:1.55}
+.cyber-quiz fieldset{margin:16px 0;padding:14px;border:1px solid var(--color-border);border-radius:var(--radius-md)}
+.cyber-quiz legend{font-weight:650;padding:0 5px}.cyber-quiz label{display:block;margin:10px 0;line-height:1.5;cursor:pointer}
+.cyber-quiz input{margin-right:8px}.cyber-quiz-result{min-height:24px;color:var(--color-text-muted)}
+.cyber-complete{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:26px;padding-top:18px;border-top:1px solid var(--color-border)}
+.cyber-week-nav{display:flex;justify-content:space-between;gap:12px;margin-top:22px;padding-top:16px;border-top:1px solid var(--color-border)}
+.cyber-week-nav a{font-size:14px}
+@media(max-width:700px){.cyber-grid{grid-template-columns:1fr}.cyber-week{align-items:flex-start}.cyber-week-state{display:none}.cyber-complete{align-items:flex-start;flex-direction:column}.cyber-detail{padding:18px}.cyber-breadcrumb{flex-wrap:wrap}}
