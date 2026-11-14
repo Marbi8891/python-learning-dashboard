@@ -4,7 +4,7 @@ Guía del diseño de la web. Los valores están en **`frontend/css/tokens.css`**
 
 ## Principios
 
-1. **El contenido manda.** Primero el texto, el código y el ejercicio. Sin degradados de fondo, brillos, cristal ni animaciones decorativas. La jerarquía la dan la tipografía y el espacio antes que las cajas.
+1. **El contenido manda.** Primero el texto, el código y el ejercicio. La trama técnica del fondo y el degradado del isotipo son discretos; no se usan brillos, cristal ni animaciones decorativas. La jerarquía la dan la tipografía y el espacio antes que las cajas.
 2. **Un color, un significado.** El ámbar es para la acción principal, los enlaces y el foco. El verde, para el progreso y los aciertos. El rojo, para los errores. El color nunca va solo: siempre lo acompaña un texto o un icono (✓, ✗).
 3. **Datos reales.** No se muestran cifras que la web no pueda calcular: ni horas, ni porcentajes inventados, ni estadísticas de usuarios.
 4. **Accesible por defecto.** Contraste AA, foco visible, objetivos táctiles de 44 px y respeto por `prefers-reduced-motion`.
