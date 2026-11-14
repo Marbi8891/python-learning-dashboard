@@ -13,7 +13,7 @@ test("el curso tiene 16 semanas y 320 horas", () => {
 test("cada semana tiene objetivos, prácticas, entregables, evaluación y bibliografía", () => {
   for (const [index, week] of course.weeks.entries()) {
     assert.equal(week.number, index + 1);
-    assert.match(week.id, /^semana-\\d{2}$/);
+    assert.match(week.id, /^semana-\d{2}$/);
     assert.ok(week.title.length > 5);
     assert.ok(week.goal.length > 15);
     assert.ok(week.topics.length >= 4);
