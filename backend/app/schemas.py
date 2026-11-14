@@ -333,6 +333,8 @@ class LearningEventPage(BaseModel):
 class EntitlementOut(BaseModel):
     """Derecho activo de una cuenta. Nunca expone identificadores del proveedor de pago."""
 
+    model_config = ConfigDict(from_attributes=True)
+
     feature_key: str
     starts_at: datetime
     ends_at: datetime | None
