@@ -578,3 +578,160 @@ select, textarea {
   html { scroll-behavior: auto; }
   *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
 }
+
+
+/* =========================================================
+   Dirección visual developer: superficies técnicas y código
+   Se apoya en los tokens del tema activo; funciona en claro y oscuro.
+   ========================================================= */
+:root {
+  --dev-accent: #55c7e8;
+  --dev-accent-soft: rgb(85 199 232 / .12);
+  --dev-grid: rgb(128 151 177 / .055);
+  --dev-code-border: #344454;
+}
+:root[data-theme="light"] {
+  --dev-accent: #087eaa;
+  --dev-accent-soft: rgb(8 126 170 / .09);
+  --dev-grid: rgb(48 74 102 / .045);
+  --dev-code-border: #46566a;
+}
+
+/* Fondo técnico discreto: la trama no compite con el contenido. */
+body {
+  background-color: var(--color-bg);
+  background-image:
+    linear-gradient(var(--dev-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--dev-grid) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+.app { background: var(--color-bg); }
+.main { min-width: 0; }
+.sidebar {
+  background: color-mix(in srgb, var(--color-surface) 96%, var(--dev-accent) 4%);
+  box-shadow: 8px 0 32px -30px var(--shadow);
+}
+.brand__logo {
+  position: relative;
+  border-radius: 12px;
+  background: linear-gradient(145deg, var(--color-primary), var(--color-primary-hover));
+}
+.brand__tag { font-family: var(--font-mono); letter-spacing: .08em; }
+.site-nav__group,
+.path__title,
+.progress__label,
+.console__label,
+.lesson-header__crumb {
+  font-family: var(--font-mono);
+  letter-spacing: .07em;
+}
+.site-nav a { border-radius: 8px; }
+.site-nav a.active,
+.site-nav a[aria-current="page"] {
+  background: var(--dev-accent-soft);
+  border-color: color-mix(in srgb, var(--dev-accent) 30%, transparent);
+}
+.site-nav a.active::before,
+.site-nav a[aria-current="page"]::before { background: var(--dev-accent); }
+
+:where(.dash-card, .kpi, .lx-panel, .course-section, .account-card,
+  .account-form, .exam-q, .daw-card, .profile-card, .stats-panel,
+  .lesson-header, .guide, .cyber-hero, .cyber-detail) {
+  border-radius: 12px;
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--color-text) 3%, transparent),
+    var(--shadow-1);
+}
+:where(.dash-card, .kpi, .lx-panel, .course-section, .daw-card,
+  .lesson-header, .guide, .cyber-hero, .cyber-detail) {
+  position: relative;
+}
+.kpi,
+.dash-card,
+.daw-card,
+.course-section { border-top: 2px solid color-mix(in srgb, var(--dev-accent) 38%, var(--color-border)); }
+.kpi dd { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.lx-status,
+.console__file,
+.lesson-header__meta,
+.console__status { font-family: var(--font-mono); }
+.lx-status { letter-spacing: .015em; }
+
+.btn { border-radius: 8px; }
+.btn--primary {
+  box-shadow: none;
+  background: var(--color-primary);
+}
+.btn--primary:hover { box-shadow: 0 0 0 3px var(--color-primary-soft); }
+.btn--ghost { background: color-mix(in srgb, var(--color-surface) 88%, var(--dev-accent) 12%); }
+.btn--ghost:hover {
+  border-color: var(--dev-accent);
+  background: var(--dev-accent-soft);
+}
+:where(button, a, input, select, textarea):focus-visible {
+  outline-color: var(--dev-accent);
+  box-shadow: 0 0 0 3px var(--dev-accent-soft);
+}
+
+/* Código y consola: aspecto de editor, sin cambiar su ejecución. */
+.code-block,
+.console {
+  border-color: var(--dev-code-border);
+  border-radius: 12px;
+  box-shadow: 0 12px 36px -28px #000;
+}
+.code-block__bar,
+.console__head {
+  background: color-mix(in srgb, var(--color-code-bg) 88%, var(--dev-accent) 12%);
+}
+.code-block__file,
+.console__file,
+.console__label { font-family: var(--font-mono); }
+.code-block__file::before {
+  content: "● ";
+  color: var(--dev-accent);
+}
+.console__title::before {
+  content: "›_";
+  margin-right: 9px;
+  color: var(--dev-accent);
+  font-family: var(--font-mono);
+}
+.console__editor-shell {
+  border-color: var(--dev-code-border);
+  border-radius: 8px;
+}
+.console__editor {
+  caret-color: var(--dev-accent);
+  tab-size: 4;
+}
+.console__output {
+  border-color: var(--dev-code-border);
+  border-radius: 8px;
+}
+.tabs { border-radius: 10px 10px 0 0; }
+.tabs__tab { border-radius: 7px; }
+.tabs__tab[aria-selected="true"] {
+  box-shadow: inset 0 -2px 0 var(--dev-accent);
+}
+.panel { border-radius: 0 0 12px 12px; }
+.lesson-header__crumb { color: var(--dev-accent); }
+.lesson-header__meta > span {
+  padding: 5px 8px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  background: var(--color-surface-2);
+}
+.guide { border-left: 3px solid var(--dev-accent); }
+.step[data-state="current"] .step__dot {
+  box-shadow: 0 0 0 4px var(--dev-accent-soft);
+}
+.progress__bar { stroke: var(--dev-accent); }
+a { text-decoration-thickness: 1px; }
+
+@media (max-width: 900px) {
+  body { background-size: 24px 24px; }
+  .sidebar { background: var(--color-surface); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .site-nav a, .btn, .cyber-week { transition: none; }
+}
