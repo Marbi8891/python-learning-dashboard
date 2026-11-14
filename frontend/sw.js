@@ -7,7 +7,7 @@
 
 importScripts("precache.js");
 
-const VERSION = "v9";
+const VERSION = "v10";
 const SITE_CACHE = `pld-site-${VERSION}`;
 const PYODIDE_CACHE = "pld-pyodide"; // se conserva entre versiones: son ~10 MB inmutables
 const SHELL = ["./", "index.html", "config.js", "js/analytics.js", "manifest.webmanifest", "favicon.svg"];
