@@ -199,6 +199,8 @@ La integración de Stripe no resuelve por sí sola estas obligaciones.
 
 ## 10. Primer backlog de trabajo
 
+Diseño técnico de permisos: [MATRIZ-ACCESO-COMERCIAL.md](MATRIZ-ACCESO-COMERCIAL.md).
+
 1. Auditar estructura real de rutas, modelos, migraciones, pruebas y despliegue.
 2. Definir matriz de permisos Free/Pro/Academy.
 3. Diseñar entidades de facturación y migraciones.
