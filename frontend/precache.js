@@ -84,6 +84,7 @@ self.PLD_PRECACHE = [
  "css/learn.css",
  "css/pcap.css",
  "css/pro.css",
+ "css/redesign.css",
  "css/sidebar.css",
  "css/tokens.css",
  "css/ux.css",
