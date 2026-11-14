@@ -51,3 +51,17 @@ Se mantienen los controles de foco visible, el enlace para saltar al contenido, 
 2. Pruebas visuales de los estados vacíos, error, carga, progreso y cuenta.
 3. Auditoría manual de accesibilidad y contraste de los componentes heredados.
 4. Revisión de las páginas legales y de la experiencia de autenticación.
+
+
+## Dirección developer (noviembre de 2026)
+
+La segunda iteración adopta una estética de herramienta de desarrollo, manteniendo los dos temas:
+
+- Grafito y superficies claras/oscuras según `data-theme`; la preferencia puede ser clara, oscura o automática según el sistema.
+- Ámbar para acciones Python; cian para navegación activa, foco y detalles de interfaz. Verde y rojo conservan su significado de estado.
+- Trama de cuadrícula muy tenue en el fondo, sin competir con el texto.
+- Etiquetas técnicas y metadatos con JetBrains Mono.
+- Consola y bloques de código con bordes y cabeceras de editor.
+- Tarjetas más compactas y radios coherentes con herramientas de desarrollo.
+
+La implementación se añade al final de `redesign.css` y reutiliza los tokens y las preferencias existentes. No añade dependencias, componentes JavaScript ni cambios en la lógica. La comprobación visual en navegador y la validación de accesibilidad siguen siendo tareas pendientes antes de publicar.
