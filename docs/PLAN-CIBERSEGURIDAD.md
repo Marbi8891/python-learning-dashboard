@@ -69,7 +69,7 @@ Las máquinas deliberadamente vulnerables deben permanecer en una red interna ai
 - [MITRE ATT&CK](https://attack.mitre.org/)
 - [Python Documentation](https://docs.python.org/3/)
 
-## Evolución pendiente
+## Pruebas\n\n- `node --test tests/unit/cybersecurity-course.test.mjs`: valida duración, estructura de las 16 semanas, cuestionarios y ponderación de la evaluación.\n- La nueva vista debe probarse manualmente en `#/ciberseguridad`, en enlaces directos a semanas, recarga y persistencia local del progreso.\n\n## Evolución pendiente
 
 1. Sincronización del progreso con la cuenta y la app móvil mediante un documento de curso propio en backend.
 2. Evaluaciones prácticas con validación de entregables, no solo autoevaluación.
