@@ -18,17 +18,17 @@ export const DEVOPS_COURSE = {
 
 La terminal permite dar instrucciones al sistema mediante una shell. En Ubuntu, la shell habitual es Bash. Cada comando se ejecuta con los permisos del usuario actual.
 
-La ruta **absoluta** empieza en `/`; la **relativa** depende del directorio actual. Los directorios habituales incluyen `/home` para usuarios, `/etc` para configuración, `/var/log` para registros y `/tmp` para archivos temporales.
+La ruta **absoluta** empieza en \`/\`; la **relativa** depende del directorio actual. Los directorios habituales incluyen \`/home\` para usuarios, \`/etc\` para configuración, \`/var/log\` para registros y \`/tmp\` para archivos temporales.
 
 Comandos iniciales:
 
-- `pwd`: muestra el directorio actual.
-- `ls -la`: lista también archivos ocultos y permisos.
-- `cd`: cambia de directorio.
-- `mkdir -p`: crea directorios.
-- `cp`, `mv`, `rm`: copia, mueve y elimina.
-- `cat`, `less`, `head`, `tail`: consultan archivos.
-- `man comando`: abre el manual.`,
+- \`pwd\`: muestra el directorio actual.
+- \`ls -la\`: lista también archivos ocultos y permisos.
+- \`cd\`: cambia de directorio.
+- \`mkdir -p\`: crea directorios.
+- \`cp\`, \`mv\`, \`rm\`: copia, mueve y elimina.
+- \`cat\`, \`less\`, \`head\`, \`tail\`: consultan archivos.
+- \`man comando\`: abre el manual.`,
           example: `pwd
 ls -la
 mkdir -p ~/laboratorio/linux
@@ -56,14 +56,14 @@ Git es un sistema distribuido de control de versiones. Guarda instantáneas del 
 
 Flujo básico:
 
-1. `git init` crea un repositorio local.
-2. `git status` muestra los cambios.
-3. `git add` prepara los archivos.
-4. `git commit` guarda una instantánea.
-5. `git remote add origin` registra el repositorio remoto.
-6. `git push` publica los commits.
+1. \`git init\` crea un repositorio local.
+2. \`git status\` muestra los cambios.
+3. \`git add\` prepara los archivos.
+4. \`git commit\` guarda una instantánea.
+5. \`git remote add origin\` registra el repositorio remoto.
+6. \`git push\` publica los commits.
 
-Configura tu identidad con `git config --global user.name` y `git config --global user.email`. No guardes contraseñas, tokens ni claves en el repositorio.`,
+Configura tu identidad con \`git config --global user.name\` y \`git config --global user.email\`. No guardes contraseñas, tokens ni claves en el repositorio.`,
           example: `mkdir sysmonitor
 cd sysmonitor
 git init
@@ -97,9 +97,9 @@ git log --oneline
 
 Linux identifica usuarios y grupos mediante UID y GID. Cada archivo tiene propietario, grupo y permisos para propietario, grupo y otros.
 
-Los permisos básicos son lectura (`r`), escritura (`w`) y ejecución (`x`). `chmod` modifica permisos; `chown` cambia propietario y grupo. Evita recurrir a `chmod 777`: concede permisos innecesarios.
+Los permisos básicos son lectura (\`r\`), escritura (\`w\`) y ejecución (\`x\`). \`chmod\` modifica permisos; \`chown\` cambia propietario y grupo. Evita recurrir a \`chmod 777\`: concede permisos innecesarios.
 
-Un proceso es un programa en ejecución. `ps aux` lista procesos, `top` permite observarlos y `kill` envía señales. Para servicios gestionados por systemd se utilizan `systemctl` y `journalctl`.`,
+Un proceso es un programa en ejecución. \`ps aux\` lista procesos, \`top\` permite observarlos y \`kill\` envía señales. Para servicios gestionados por systemd se utilizan \`systemctl\` y \`journalctl\`.`,
           example: `id
 ls -l
 chmod 640 archivo.txt
@@ -125,16 +125,16 @@ journalctl -u ssh --since today
 
 Una imagen es una plantilla inmutable por capas. Un contenedor es una instancia ejecutable de esa imagen con su propio aislamiento de procesos, red y sistema de archivos.
 
-Docker utiliza una arquitectura cliente-servidor: el cliente `docker` envía instrucciones al daemon. Los contenedores comparten el kernel del anfitrión; no son máquinas virtuales completas.
+Docker utiliza una arquitectura cliente-servidor: el cliente \`docker\` envía instrucciones al daemon. Los contenedores comparten el kernel del anfitrión; no son máquinas virtuales completas.
 
 Comandos de ciclo de vida:
 
-- `docker pull`: descarga una imagen.
-- `docker run`: crea y arranca un contenedor.
-- `docker ps -a`: lista contenedores.
-- `docker logs`: consulta su salida.
-- `docker exec`: ejecuta un proceso dentro.
-- `docker stop` y `docker rm`: detiene y elimina.`,
+- \`docker pull\`: descarga una imagen.
+- \`docker run\`: crea y arranca un contenedor.
+- \`docker ps -a\`: lista contenedores.
+- \`docker logs\`: consulta su salida.
+- \`docker exec\`: ejecuta un proceso dentro.
+- \`docker stop\` y \`docker rm\`: detiene y elimina.`,
           example: `docker pull nginx:alpine
 docker run -d --name web-lab -p 8080:80 nginx:alpine
 docker ps
@@ -167,12 +167,12 @@ docker rm web-lab
 
 Para diagnosticar conectividad conviene avanzar por capas: interfaz, dirección IP, ruta, resolución DNS y servicio remoto.
 
-- `ip addr` muestra interfaces y direcciones.
-- `ip route` muestra rutas.
-- `ss -tulpn` lista sockets y puertos en escucha.
-- `ping` comprueba conectividad IP cuando ICMP está permitido.
-- `getent hosts` consulta la resolución de nombres.
-- `curl -I` consulta cabeceras HTTP.
+- \`ip addr\` muestra interfaces y direcciones.
+- \`ip route\` muestra rutas.
+- \`ss -tulpn\` lista sockets y puertos en escucha.
+- \`ping\` comprueba conectividad IP cuando ICMP está permitido.
+- \`getent hosts\` consulta la resolución de nombres.
+- \`curl -I\` consulta cabeceras HTTP.
 
 SSH permite administrar equipos de forma cifrada. Es preferible usar claves, proteger la clave privada y limitar el acceso remoto. No desactives la autenticación por contraseña hasta comprobar que el acceso por clave funciona.`,
           example: `ip addr
@@ -198,7 +198,7 @@ ssh-keygen -t ed25519
           minutes: 45,
           theory: `## Trabajar con ramas
 
-Una rama permite desarrollar cambios sin modificar directamente la línea principal. En Git moderno, `git switch -c` crea y activa una rama.
+Una rama permite desarrollar cambios sin modificar directamente la línea principal. En Git moderno, \`git switch -c\` crea y activa una rama.
 
 Un Pull Request propone integrar cambios. Facilita revisar el diff, comentar, ejecutar CI y decidir si el cambio cumple los requisitos.
 
@@ -238,7 +238,7 @@ git push -u origin feature/add-healthcheck
           minutes: 55,
           theory: `## Construir imágenes propias
 
-Un Dockerfile describe cómo construir una imagen. `FROM` elige la imagen base, `WORKDIR` define el directorio de trabajo, `COPY` incorpora archivos, `RUN` ejecuta pasos de construcción y `CMD` define el proceso por defecto.
+Un Dockerfile describe cómo construir una imagen. \`FROM\` elige la imagen base, \`WORKDIR\` define el directorio de trabajo, \`COPY\` incorpora archivos, \`RUN\` ejecuta pasos de construcción y \`CMD\` define el proceso por defecto.
 
 Cada instrucción puede crear una capa. Conviene ordenar los pasos para aprovechar la caché y copiar primero los archivos de dependencias cuando sea posible.
 
@@ -266,9 +266,9 @@ CMD ["python", "main.py"]
           minutes: 60,
           theory: `## Python para tareas de operación
 
-Python puede automatizar tareas repetibles. Para herramientas de terminal, `argparse` permite definir argumentos; `pathlib` facilita trabajar con rutas; `logging` registra eventos con niveles; y `subprocess` ejecuta programas externos.
+Python puede automatizar tareas repetibles. Para herramientas de terminal, \`argparse\` permite definir argumentos; \`pathlib\` facilita trabajar con rutas; \`logging\` registra eventos con niveles; y \`subprocess\` ejecuta programas externos.
 
-Valida las entradas y evita construir comandos de shell concatenando texto proporcionado por el usuario. Siempre que sea posible, pasa los argumentos como una lista a `subprocess.run` y deja `shell=False`.
+Valida las entradas y evita construir comandos de shell concatenando texto proporcionado por el usuario. Siempre que sea posible, pasa los argumentos como una lista a \`subprocess.run\` y deja \`shell=False\`.
 
 Los scripts de operaciones deben devolver códigos de salida útiles, registrar errores y no imprimir secretos.`,
           example: `from pathlib import Path
