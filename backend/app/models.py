@@ -189,6 +189,7 @@ class RateLimitWindow(Base):
     count: Mapped[int] = mapped_column(Integer)
 
 
+
 class Entitlement(Base):
     """Derecho de acceso concedido a un usuario por una fuente comercial o administrativa."""
 
