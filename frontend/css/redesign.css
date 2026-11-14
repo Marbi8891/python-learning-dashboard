@@ -584,18 +584,6 @@ select, textarea {
    Dirección visual developer: superficies técnicas y código
    Se apoya en los tokens del tema activo; funciona en claro y oscuro.
    ========================================================= */
-:root {
-  --dev-accent: #55c7e8;
-  --dev-accent-soft: rgb(85 199 232 / .12);
-  --dev-grid: rgb(128 151 177 / .055);
-  --dev-code-border: #344454;
-}
-:root[data-theme="light"] {
-  --dev-accent: #087eaa;
-  --dev-accent-soft: rgb(8 126 170 / .09);
-  --dev-grid: rgb(48 74 102 / .045);
-  --dev-code-border: #46566a;
-}
 
 /* Fondo técnico discreto: la trama no compite con el contenido. */
 body {
