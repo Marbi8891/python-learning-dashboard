@@ -157,7 +157,7 @@ const missing = (q) =>
 const LANG_LABEL = { python: "Python", sql: "SQL", javascript: "JavaScript", java: "Java" };
 
 function renderCatalog() {
-  const cards = DAW_COURSES.filter((course) => course.id !== "devops").map((course) => {
+  const cards = DAW_COURSES.map((course) => {
     const answers = Object.values(courseState(course.id).answers);
     const right = answers.filter((h) => h.at(-1)).length;
     const progress = answers.length
