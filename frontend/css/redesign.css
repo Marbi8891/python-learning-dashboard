@@ -4,53 +4,6 @@
    Dirección: estudio sereno, navegación clara y foco en el contenido.
    ========================================================= */
 
-:root {
-  --sidebar-width: 260px;
-  --content-max: 1280px;
-  --radius-sm: 10px;
-  --radius-md: 14px;
-  --radius-lg: 20px;
-  --shadow-1: 0 1px 2px rgb(20 24 30 / .06);
-  --shadow-2: 0 12px 34px -22px rgb(20 24 30 / .24);
-  --shadow-3: 0 24px 64px -36px rgb(20 24 30 / .38);
-}
-
-:root[data-theme="light"] {
-  --color-bg: #f4f5f7;
-  --color-surface: #fff;
-  --color-surface-2: #f7f8fa;
-  --color-border: #e5e8ed;
-  --color-border-control: #aeb6c2;
-  --color-text: #202631;
-  --color-text-muted: #626d7b;
-  --color-text-faint: #626d7b;
-  --color-strong: #141a23;
-  --color-primary: #a96500;
-  --color-primary-strong: #f3b84e;
-  --color-primary-hover: #f8c66c;
-  --color-primary-soft: rgb(199 128 20 / .11);
-  --color-link: #8c5708;
-  --shadow: rgb(28 37 50 / .10);
-}
-
-:root[data-theme="dark"] {
-  --color-bg: #101318;
-  --color-surface: #171c23;
-  --color-surface-2: #1d242d;
-  --color-border: #2b3440;
-  --color-border-control: #697586;
-  --color-text: #e8edf4;
-  --color-text-muted: #a8b2c0;
-  --color-text-faint: #a8b2c0;
-  --color-strong: #f7f9fc;
-  --color-primary: #f2b443;
-  --color-primary-strong: #f2b443;
-  --color-primary-hover: #ffd078;
-  --color-primary-soft: rgb(242 180 67 / .13);
-  --color-link: #f4c46d;
-  --shadow: rgb(0 0 0 / .28);
-}
-
 /* ---------- Marco de aplicación ---------- */
 html { scroll-behavior: smooth; }
 body {
