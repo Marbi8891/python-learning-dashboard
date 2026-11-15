@@ -9,6 +9,11 @@ cambios se agrupan por fecha de merge, con el número de pull request entre par�
 ## [Sin publicar]
 
 ### Añadido
+- Hitos verificados (#109): con cuenta, el simulacro del PCAP lo elige, cronometra y corrige el
+  servidor (`/api/v1/verified`), que rechaza respuestas imposibles, entregas fuera de tiempo y
+  entregas repetidas con otras respuestas, y no deja ver los de otra cuenta. La web distingue lo
+  verificado de lo local (orientativo) en el resultado, el panel del PCAP y los certificados
+  (`docs/HITOS_VERIFICADOS.md`).
 - Límites de intentos compartidos (#110): por IP, por cuenta y por email de recuperación se guardan
   en PostgreSQL (tabla `rate_limits`, con seudónimos HMAC), con una sola sentencia atómica por
   intento y ventana deslizante. Valen con varias instancias de la API; si la base de datos falla,

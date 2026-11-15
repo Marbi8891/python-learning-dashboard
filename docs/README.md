@@ -19,6 +19,7 @@
 |---|---|
 | [API.md](API.md) | Endpoints de la API REST (`/api/v1`) |
 | [auth.md](auth.md) | Recuperación de contraseña e inicio de sesión con Google |
+| [HITOS_VERIFICADOS.md](HITOS_VERIFICADOS.md) | Qué progreso es local (orientativo) y qué comprueba el servidor: simulacros del PCAP verificados |
 | [ADAPTIVE_ENGINE.md](ADAPTIVE_ENGINE.md) | Motor adaptativo: dominio, olvido, repaso espaciado y planificador |
 | [MODULO_POO.md](MODULO_POO.md) | Módulo de POO: unidades, formato, validadores, progreso y currículo |
 | [DECISIONS.md](DECISIONS.md) | Registro de decisiones de arquitectura (DEC-NNN) |
