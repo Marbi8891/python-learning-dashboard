@@ -135,7 +135,7 @@
 
   /* Acción principal: el ámbar claro va de fondo de los botones (texto oscuro, 8,5:1)
      y el ámbar oscuro en textos, bordes y marcas. */
-  --color-primary: #a96500;
+  --color-primary: #8f5600;
   --color-primary-soft: rgb(199 128 20 / .11);
   --color-primary-strong: #f3b84e;
   --color-primary-hover: #f8c66c;

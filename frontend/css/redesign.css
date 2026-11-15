@@ -224,8 +224,8 @@ body {
 }
 .btn:active { transform: translateY(1px); }
 .btn--primary {
-  border-color: var(--color-primary);
-  background: var(--color-primary);
+  border-color: var(--color-primary-strong);
+  background: var(--color-primary-strong);
   color: var(--color-on-primary);
   box-shadow: 0 5px 14px rgb(210 146 34 / .17);
 }
@@ -287,7 +287,7 @@ select, textarea {
 .dash-alert, .dash-pending { border-radius: 13px; }
 
 /* ---------- Aprender / teoría / práctica ---------- */
-.learn { display: grid; gap: 24px; }
+.learn { display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; } /* sin la columna, el contenido ancho desborda en el móvil */
 .lx-head { margin-bottom: 6px; }
 .lx-title { font-size: clamp(28px, 3.5vw, 40px); line-height: 1.12; }
 .lx-lead { max-width: 68ch; color: var(--color-text-muted); font-size: 15px; }
@@ -430,7 +430,7 @@ select, textarea {
   border-radius: 12px;
   background: var(--color-code-bg);
 }
-.console__line-numbers { color: #738092; background: #14191f; }
+.console__line-numbers { color: #8590a2; background: #14191f; } /* 5,5:1 */
 .console__editor { min-height: 230px; padding: 14px; font: 13px/1.7 var(--font-mono); }
 .console__help, .console__stdin { color: var(--color-text-muted); font-size: 11px; }
 .console__actions { display: flex; flex-wrap: wrap; gap: 8px; padding-block: 15px; }
@@ -558,12 +558,12 @@ select, textarea {
   .main { padding: 14px 12px 100px; }
   .topbar { padding-inline: 12px; }
   .dash-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .dash-grid, .lx-grid, .daw-grid { grid-template-columns: 1fr; }
+  .dash-grid, .lx-grid, .daw-grid { grid-template-columns: minmax(0, 1fr); }
   .course-hero { padding: 22px 18px; }
   .course-hero__cta, .lp-actions { align-items: stretch; flex-direction: column; }
   .course-hero__cta .btn, .lp-actions .lp-btn { width: 100%; }
   .tabs { overflow-x: auto; }
-  .tabs__tab { flex: 1 0 auto; }
+  .tabs__tab { flex: 1 1 0; min-width: 0; padding-inline: 8px; } /* MW-006: las tres pestañas caben */
   .console__head { align-items: flex-start; }
   .console__status { width: 100%; margin-left: 0; }
   .console > :not(.console__head) { margin-inline: 12px; }
@@ -647,7 +647,7 @@ body {
 .btn { border-radius: 8px; }
 .btn--primary {
   box-shadow: none;
-  background: var(--color-primary);
+  background: var(--color-primary-strong);
 }
 .btn--primary:hover { box-shadow: 0 0 0 3px var(--color-primary-soft); }
 .btn--ghost { background: color-mix(in srgb, var(--color-surface) 88%, var(--dev-accent) 12%); }
@@ -671,6 +671,11 @@ body {
 .console__head {
   background: color-mix(in srgb, var(--color-code-bg) 88%, var(--dev-accent) 12%);
 }
+/* La cabecera de la consola es oscura en los dos temas: su texto tiene que ser claro */
+.console__head, .console__title { color: var(--color-code-text); }
+.console__status { color: #a8b2c0; } /* 7,4:1 sobre la cabecera */
+.console__status[data-status="ready"] { color: #3ccb72; } /* 7,6:1 */
+.console__status[data-status="error"] { color: #f87171; } /* 5,8:1 */
 .code-block__file,
 .console__file,
 .console__label { font-family: var(--font-mono); }
