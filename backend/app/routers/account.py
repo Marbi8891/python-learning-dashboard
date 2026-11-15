@@ -11,8 +11,8 @@ from app.entitlements import active_entitlements
 from app.models import (
     AccountEvent,
     CourseState,
-    ExerciseAttempt,
     Entitlement,
+    ExerciseAttempt,
     Lesson,
     LessonProgress,
     PasswordResetToken,
