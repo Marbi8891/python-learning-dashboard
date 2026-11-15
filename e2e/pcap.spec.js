@@ -1,5 +1,21 @@
 // Zona de examen PCAP: panel, simulacro cronometrado, práctica por bloque, fichas y gamificación.
-const { test, expect } = require("./fixtures");
+const { test, expect, uniqueEmail } = require("./fixtures");
+
+const PASSWORD = "contraseña-e2e-123";
+const API = "http://127.0.0.1:8000";
+const dialog = (page) => page.locator("#account-dialog");
+
+async function register(page, email) {
+  await page.getByRole("button", { name: "Iniciar sesión" }).click();
+  await dialog(page).getByRole("link", { name: "Crea una" }).click();
+  const form = page.locator("#register-form");
+  await form.getByLabel("Nombre").fill("Ana");
+  await form.getByLabel("Email").fill(email);
+  await form.getByLabel(/Contraseña/).fill(PASSWORD);
+  await form.getByLabel(/He leído la política/).check();
+  await form.getByRole("button", { name: "Crear cuenta" }).click();
+  await expect(dialog(page)).toBeHidden();
+}
 
 const openPcap = async (page, route = "") => {
   await page.goto(`/#/pcap${route}`);
@@ -40,12 +56,40 @@ test("simulacro: 40 preguntas, marcar, saltar, terminar y revisar", async ({ pag
   await page.getByRole("button", { name: "Sí, terminar" }).click();
   await expect(page.locator("#pcap-title")).toContainText("No aprobado");
   await expect(page.locator(".review-item")).toHaveCount(40);
+  await expect(page.locator(".verified-badge")).toHaveAttribute("data-verified", "false"); // sin cuenta: local
   await page.getByLabel("Ver solo las falladas").check();
   await expect(page.locator('.review-item[data-ok="true"]').first()).toBeHidden();
 
   await page.getByRole("link", { name: "Volver al panel" }).click();
   await expect(page.locator(".history tbody tr")).toHaveCount(1);
   await expect(page.locator("#badges-count")).toHaveText(/^1\/20$/); // «Primer simulacro»
+});
+
+test("con cuenta, el servidor elige, corrige y guarda el simulacro verificado (#109)", async ({ page, request }) => {
+  const email = uniqueEmail("verificado");
+  await openPcap(page, "/simulacro");
+  await register(page, email);
+  await expect(page.locator(".exam-intro")).toContainText("el servidor elige las preguntas");
+  await page.getByRole("button", { name: "Empezar el simulacro" }).click();
+  await expect(page.locator(".exam-grid__item")).toHaveCount(40);
+  await page.locator(".exam-q input").first().check();
+  await page.locator(".exam-form").getByRole("button", { name: "Siguiente →" }).click();
+  await page.locator('[data-go="39"]').click();
+  await page.locator(".exam-form").getByRole("button", { name: "Terminar examen" }).click();
+  await page.getByRole("button", { name: "Sí, terminar" }).click();
+  await expect(page.locator(".verified-badge")).toHaveAttribute("data-verified", "true");
+  await expect(page.locator(".verified-badge")).toContainText("el servidor eligió las preguntas");
+
+  // La nota está en el servidor, no solo en este navegador
+  const login = await request.post(`${API}/api/v1/auth/login`, { form: { username: email, password: PASSWORD } });
+  const token = (await login.json()).access_token;
+  const summary = await (await request.get(`${API}/api/v1/verified`, { headers: { Authorization: `Bearer ${token}` } })).json();
+  expect(summary.exams).toHaveLength(1);
+  const shown = await page.locator("#pcap-title").textContent();
+  expect(shown).toContain(`${summary.exams[0].score} %`);
+
+  await page.getByRole("link", { name: "Volver al panel" }).click();
+  await expect(page.locator(".verified-line")).toContainText("verificados por el servidor: mejor nota");
 });
 
 test("al acabarse el tiempo el simulacro se corrige solo", async ({ page }) => {

@@ -16,6 +16,7 @@ RUN pip install -r requirements.txt
 COPY backend/ .
 COPY frontend/data/lessons.json /app/frontend/data/lessons.json
 COPY frontend/data/learning.json /app/frontend/data/learning.json
+COPY frontend/data/pcap.json /app/frontend/data/pcap.json
 
 # Usuario sin privilegios y sin permiso de escritura sobre el código (la base de datos es externa)
 RUN useradd --create-home --uid 1000 app

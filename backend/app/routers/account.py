@@ -18,6 +18,7 @@ from app.models import (
     PasswordResetToken,
     PcapState,
     User,
+    VerifiedExam,
 )
 from app.password_policy import weakness
 from app.rate_limit import limit_auth_attempts
@@ -119,6 +120,23 @@ def export_my_data(user: CurrentUser, db: DbSession) -> UserExport:
             for c in db.scalars(select(CourseState).where(CourseState.user_id == user.id))
         },
         activity=[ActivityOut.model_validate(e) for e in activity.recent(db, user.id)],
+        verified_exams=[
+            {
+                "exam_code": e.exam_code,
+                "status": e.status,
+                "question_ids": e.question_ids,
+                "answers": e.answers,
+                "correct": e.correct,
+                "score": e.score,
+                "started_at": e.started_at,
+                "finished_at": e.finished_at,
+            }
+            for e in db.scalars(
+                select(VerifiedExam)
+                .where(VerifiedExam.user_id == user.id)
+                .order_by(VerifiedExam.id)
+            )
+        ],
         exported_at=datetime.now(UTC),
     )
 
@@ -171,6 +189,7 @@ def delete_my_account(
         CourseState,
         AccountEvent,
         Entitlement,
+        VerifiedExam,
     ):
         db.execute(delete(model).where(model.user_id == user.id))
     user_id = user.id

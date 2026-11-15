@@ -209,3 +209,26 @@ class Entitlement(Base):
     starts_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     ends_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class VerifiedExam(Base):
+    """Simulacro del PCAP elegido, cronometrado y corregido por el servidor (#109).
+
+    El resto del progreso lo calcula el navegador y es orientativo. Este sí se puede comprobar: las
+    preguntas las elige el servidor, la hora de inicio es la suya y la nota la pone él al corregir.
+    Estados: `open` (en curso), `finished` (corregido), `expired` (entregado fuera de tiempo) y
+    `abandoned` (se empezó otro sin entregarlo)."""
+
+    __tablename__ = "verified_exams"
+    __table_args__ = (Index("ix_verified_exams_user_started", "user_id", "started_at"),)
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
+    exam_code: Mapped[str] = mapped_column(String(20))
+    question_ids: Mapped[list] = mapped_column(JSON)
+    status: Mapped[str] = mapped_column(String(10), default="open", server_default="open")
+    answers: Mapped[dict | None] = mapped_column(JSON)
+    correct: Mapped[int | None] = mapped_column(Integer)
+    score: Mapped[int | None] = mapped_column(Integer)
+    started_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    finished_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))

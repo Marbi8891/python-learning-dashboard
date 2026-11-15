@@ -73,6 +73,7 @@ self.PLD_PRECACHE = [
  "js/theme-init.js",
  "js/tour.js",
  "js/uploader.js",
+ "js/verified.js",
  "css/academy.css",
  "css/base.css",
  "css/certificate.css",

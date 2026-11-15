@@ -242,6 +242,7 @@ class UserExport(BaseModel):
     pcap: dict | None = None
     courses: dict[str, dict] = {}
     activity: list[ActivityOut] = []
+    verified_exams: list[dict] = []
     exported_at: datetime
 
 
@@ -337,3 +338,46 @@ class EntitlementOut(BaseModel):
     feature_key: str
     starts_at: datetime
     ends_at: datetime | None
+
+
+# ---------- Hitos verificados (#109) ----------
+
+QuestionId = Annotated[str, Field(min_length=1, max_length=40)]
+Option = Annotated[int, Field(ge=0, le=20)]
+
+
+class VerifiedExamStart(BaseModel):
+    """Simulacro empezado: el navegador pinta estas preguntas (ya tiene su texto en pcap.json)."""
+
+    id: int
+    exam_code: str
+    question_ids: list[str]
+    started_at: datetime
+    deadline: datetime
+
+
+class VerifiedExamAnswers(BaseModel):
+    """Opciones marcadas por pregunta. Las que no aparecen cuentan como sin contestar."""
+
+    answers: Annotated[
+        dict[QuestionId, Annotated[list[Option], Field(max_length=10)]], Field(max_length=60)
+    ]
+
+
+class VerifiedExamOut(BaseModel):
+    id: int
+    exam_code: str
+    status: str
+    started_at: datetime
+    finished_at: datetime | None
+    correct: int | None
+    total: int
+    score: int | None
+    passed: bool
+
+
+class VerifiedSummary(BaseModel):
+    pass_mark: int
+    best_score: int | None
+    passed: bool
+    exams: list[VerifiedExamOut]

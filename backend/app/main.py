@@ -28,6 +28,7 @@ from app.routers import (
     lessons,
     pcap,
     progress,
+    verified,
 )
 from app.security import get_jwt_secret
 from app.security_events import Event, record
@@ -172,6 +173,7 @@ for router in (
     pcap.router,
     course_state.router,
     dashboard.router,
+    verified.router,
 ):
     app.include_router(router, prefix=API_V1_PREFIX)
 
