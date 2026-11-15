@@ -66,6 +66,15 @@ La política de seguridad está en [SECURITY.md](../SECURITY.md).
 | [memoria/memoria.md](memoria/memoria.md) | Memoria del proyecto de 2º de DAW |
 | [DEMO-Y-DEFENSA.md](DEMO-Y-DEFENSA.md) | Guion de la demo y de la defensa |
 
+## Desarrollo académico y uso de IA
+
+| Documento | Para qué sirve |
+|---|---|
+| [desarrollo/PROCESO-DE-DESARROLLO.md](desarrollo/PROCESO-DE-DESARROLLO.md) | Método de trabajo, evidencias e iteraciones del desarrollo |
+| [desarrollo/USO-DE-INTELIGENCIA-ARTIFICIAL.md](desarrollo/USO-DE-INTELIGENCIA-ARTIFICIAL.md) | Declaración transparente y registro del uso de Claude Code, ChatGPT y otras herramientas |
+| [desarrollo/PROBLEMAS-Y-SOLUCIONES.md](desarrollo/PROBLEMAS-Y-SOLUCIONES.md) | Registro verificable de incidencias, investigación, soluciones y validación |
+| [desarrollo/PLAN-DE-APRENDIZAJE-Y-DEFENSA.md](desarrollo/PLAN-DE-APRENDIZAJE-Y-DEFENSA.md) | Prácticas para comprender, modificar y defender los componentes de PLD |
+
 ## Auditorías e informes
 
 Son fotos de un momento concreto: llevan fecha y commit, y no se actualizan después. Lo que sigue
