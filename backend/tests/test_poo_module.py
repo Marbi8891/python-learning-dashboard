@@ -126,10 +126,13 @@ def test_curriculum_mappings_have_status_source_and_date(unit):
     assert unit["ce"] == assigned
 
 
-def test_poo_units_stay_out_of_the_daw_simulation_and_diagnostic():
-    """El simulacro DAW y la prueba de nivel no cambian hasta decidirlo (Sprint 7)."""
-    in_daw = {c for comp in DATA["daw"] for c in comp["concepts"]}
-    assert not in_daw & {u["id"] for u in UNITS}
+def test_poo_units_enter_the_daw_simulation_only_with_their_bank():
+    """Decisión del autor (15/11/2026): la POO es la 4.ª competencia del simulacro, con su banco."""
+    poo = next(comp for comp in DATA["daw"] if comp["id"] == "poo")
+    assert poo["concepts"] == [u["id"] for u in MODULE["units"]]
+    assert [comp["weight"] for comp in DATA["daw"]] == [30, 30, 20, 20]
+    simulated = [e for e in DATA["exercises"] if e["daw"] and e["concept"] in poo["concepts"]]
+    assert {e["id"] for e in simulated} == {i for u in UNITS for i in u["bank"]}
 
 
 def _load_builder():

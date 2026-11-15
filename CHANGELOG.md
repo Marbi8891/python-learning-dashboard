@@ -9,6 +9,9 @@ cambios se agrupan por fecha de merge, con el número de pull request entre par�
 ## [Sin publicar]
 
 ### Añadido
+- La POO entra en el simulacro de Preparación DAW como cuarta competencia (peso 20; Fundamentos y
+  Programación pasan a 30 y Lógica a 20), solo con las 150 preguntas de su banco. La prueba de nivel no
+  cambia.
 - Hitos verificados (#109): con cuenta, el simulacro del PCAP lo elige, cronometra y corrige el
   servidor (`/api/v1/verified`), que rechaza respuestas imposibles, entregas fuera de tiempo y
   entregas repetidas con otras respuestas, y no deja ver los de otra cuenta. La web distingue lo

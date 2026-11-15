@@ -488,7 +488,8 @@ test.describe("Preparación DAW", () => {
     await page.goto("/#/daw");
     await expect(page.locator("#learn-title")).toHaveText("Preparación DAW");
     await expect(page.getByRole("navigation", { name: "Secciones" }).getByRole("link", { name: "DAW", exact: true })).toHaveAttribute("aria-current", "page");
-    await expect(page.locator(".lx-competency")).toHaveCount(3);
+    await expect(page.locator(".lx-competency")).toHaveCount(4);
+    await expect(page.locator("#comp-poo")).toContainText("Programación orientada a objetos");
     await expect(page.locator("#comp-programacion + .lx-muted ~ .lx-warning")).toContainText(/Necesitas reforzar .+ antes de pasar a Programación/);
     await expect(page.getByRole("link", { name: /Programación por unidades de trabajo/ })).toHaveAttribute("href", "#/daw/programacion");
   });

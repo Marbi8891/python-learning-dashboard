@@ -35,6 +35,8 @@ from poo_common import BANK_LEVELS, BANK_QTYPES, BANK_SIZE, REFERENCE_STATUS, SO
 from poo_module import EXERCISES as POO_EXERCISES  # noqa: E402
 from poo_module import MODULE, UNIT_FIELDS  # noqa: E402
 
+POO_IDS = {unit["id"] for unit in MODULE["units"]}
+
 E = [*BASE_EXERCISES, *POO_EXERCISES]
 
 KINDS = {"choice", "output", "fill", "order", "bug", "code"}
@@ -142,10 +144,14 @@ def check_concepts(problems: Problems) -> set[str]:
             if not 1 <= number <= lines:
                 problems.add(where, f"explicación de una línea inexistente: {number}")
     covered = [cid for comp in DAW_COMPETENCIES for cid in comp["concepts"]]
-    if sorted(covered) != sorted(c["id"] for c in CONCEPTS if c["area"] != "poo"):
-        problems.add(
-            "DAW", "cada concepto (salvo el módulo de POO, aparte) va en una sola competencia"
-        )
+    if sorted(covered) != sorted(c["id"] for c in CONCEPTS):
+        problems.add("DAW", "cada concepto va en una sola competencia")
+    # En el simulacro, de la POO solo entran las preguntas del banco (formato de examen)
+    for ex in E:
+        if ex["concept"] in POO_IDS and ex.get("daw") and not ex.get("bank"):
+            problems.add(
+                f"ejercicio {ex['id']}", "de la POO solo las preguntas del banco van al simulacro"
+            )
     if sum(comp["weight"] for comp in DAW_COMPETENCIES) != 100:
         problems.add("DAW", "los pesos de las competencias deben sumar 100")
     if sorted(PATH) != sorted(ids):
