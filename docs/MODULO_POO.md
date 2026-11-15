@@ -177,8 +177,11 @@ alumno nunca se envía al backend.
   intento y la fecha del primer aprobado, que no se pierde con una nota peor. Al fusionar dos copias gana
   la mejor nota y el primer aprobado. La nota no cuenta para el dominio; las respuestas sí, como
   cualquier intento.
-- Las unidades de POO no entran en el simulacro de Preparación DAW ni en la prueba de nivel hasta
-  decidirlo en el Sprint 7.
+- **Preparación DAW** (decisión del 15/11/2026): la POO es la cuarta competencia del simulacro, con
+  peso 20 (Fundamentos 30, Programación 30, Lógica 20). Solo entran las 150 preguntas del banco
+  (`daw: true` en `poo_module.py`); los ejercicios de código, salida o depuración de POO siguen fuera, y
+  el validador lo comprueba. La competencia pide Programación, así que «Necesitas reforzar…» avisa si
+  Programación está floja. La prueba de nivel sigue sin POO.
 
 ## Índice del módulo (`#/poo`)
 

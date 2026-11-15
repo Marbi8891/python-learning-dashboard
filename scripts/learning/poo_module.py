@@ -113,6 +113,12 @@ BANK_TAGS = {
 }
 tag_bank([*BASE_EXERCISES, *EXERCISES], BANK_TAGS)
 
+# Las preguntas del banco tienen formato de examen: entran en el simulacro de Preparación DAW (15/11/2026).
+# El resto de ejercicios de POO (código, salida, depurar…) siguen fuera, y la prueba de nivel no usa POO.
+for _exercise in [*BASE_EXERCISES, *EXERCISES]:
+    if _exercise.get("bank"):
+        _exercise["daw"] = True
+
 # Errores típicos nuevos de cada unidad (la Unidad 2 los añade a los del concepto `poo`)
 UNIT_ERRORS = {
     "poo-fundamentos": poo_u1.ERRORS,

@@ -95,7 +95,7 @@ DAW_COMPETENCIES = [
             "acumuladores",
             "validacion",
         ],
-        "weight": 35,
+        "weight": 30,
     },
     {
         "id": "programacion",
@@ -113,7 +113,7 @@ DAW_COMPETENCIES = [
             "excepciones",
             "archivos",
         ],
-        "weight": 35,
+        "weight": 30,
     },
     {
         "id": "logica",
@@ -121,7 +121,28 @@ DAW_COMPETENCIES = [
         "summary": "Comprender problemas, pseudocódigo, trazado de programas, complejidad básica y depuración.",
         "requires": ["fundamentos"],
         "concepts": ["algoritmos", "pseudocodigo", "trazado", "depuracion"],
-        "weight": 30,
+        "weight": 20,
+    },
+    {
+        # Decidido por el autor el 15/11/2026: la POO entra en el simulacro (no en la prueba de nivel),
+        # solo con las preguntas tipo test de su banco
+        "id": "poo",
+        "title": "Programación orientada a objetos",
+        "summary": "Clases y objetos, encapsulación, herencia, polimorfismo, relaciones entre objetos y diseño.",
+        "requires": ["programacion"],
+        "concepts": [
+            "poo-fundamentos",
+            "poo",
+            "poo-atributos-metodos",
+            "poo-encapsulacion",
+            "poo-herencia",
+            "poo-polimorfismo",
+            "poo-composicion",
+            "poo-metodos-especiales",
+            "poo-diseno",
+            "poo-proyecto",
+        ],
+        "weight": 20,
     },
 ]
 

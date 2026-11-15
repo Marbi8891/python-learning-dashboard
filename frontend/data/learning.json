@@ -71,7 +71,7 @@
     "acumuladores",
     "validacion"
    ],
-   "weight": 35
+   "weight": 30
   },
   {
    "id": "programacion",
@@ -91,7 +91,7 @@
     "excepciones",
     "archivos"
    ],
-   "weight": 35
+   "weight": 30
   },
   {
    "id": "logica",
@@ -106,7 +106,28 @@
     "trazado",
     "depuracion"
    ],
-   "weight": 30
+   "weight": 20
+  },
+  {
+   "id": "poo",
+   "title": "Programación orientada a objetos",
+   "summary": "Clases y objetos, encapsulación, herencia, polimorfismo, relaciones entre objetos y diseño.",
+   "requires": [
+    "programacion"
+   ],
+   "concepts": [
+    "poo-fundamentos",
+    "poo",
+    "poo-atributos-metodos",
+    "poo-encapsulacion",
+    "poo-herencia",
+    "poo-polimorfismo",
+    "poo-composicion",
+    "poo-metodos-especiales",
+    "poo-diseno",
+    "poo-proyecto"
+   ],
+   "weight": 20
   }
  ],
  "modules": [
@@ -8462,7 +8483,7 @@
    "concept": "poo",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "¿Qué falla en este método?",
    "code": "class Cuenta:\n    def __init__(self):\n        self.saldo = 0\n\n    def ingresar(self, cantidad):\n        saldo += cantidad",
    "options": [
@@ -8901,7 +8922,7 @@
    "concept": "poo-fundamentos",
    "kind": "choice",
    "level": 1,
-   "daw": false,
+   "daw": true,
    "q": "¿Cuál es la diferencia principal entre la programación procedural y la orientada a objetos?",
    "code": null,
    "options": [
@@ -8952,7 +8973,7 @@
    "concept": "poo-fundamentos",
    "kind": "choice",
    "level": 1,
-   "daw": false,
+   "daw": true,
    "q": "En la línea `teclado.con_descuento(25)`, ¿qué es `con_descuento`?",
    "code": null,
    "options": [
@@ -8987,7 +9008,7 @@
    "concept": "poo-fundamentos",
    "kind": "choice",
    "level": 1,
-   "daw": false,
+   "daw": true,
    "q": "Enunciado: «Un coche tiene matrícula y color, y puede arrancar y frenar». Si `Coche` es una clase, ¿qué son «matrícula» y «arrancar»?",
    "code": null,
    "options": [
@@ -9038,7 +9059,7 @@
    "concept": "poo-fundamentos",
    "kind": "choice",
    "level": 1,
-   "daw": false,
+   "daw": true,
    "q": "¿Cuál de estas frases describe una **instancia** y no una clase?",
    "code": null,
    "options": [
@@ -9073,7 +9094,7 @@
    "concept": "poo-fundamentos",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "¿En cuál de estos casos **no** merece la pena crear una clase?",
    "code": null,
    "options": [
@@ -9108,7 +9129,7 @@
    "concept": "poo-fundamentos",
    "kind": "choice",
    "level": 1,
-   "daw": false,
+   "daw": true,
    "q": "¿Qué pilar de la POO consiste en ocultar los detalles internos de un objeto y dejar usarlo solo a través de sus métodos?",
    "code": null,
    "options": [
@@ -9143,7 +9164,7 @@
    "concept": "poo-fundamentos",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "Esta clase `Alumno` es para la secretaría: guarda nombre, curso y notas, pero no el color favorito del alumno. ¿Qué pilar de la POO se está aplicando?",
    "code": "class Alumno:\n    def __init__(self, nombre, curso, notas):\n        self.nombre = nombre\n        self.curso = curso\n        self.notas = notas",
    "options": [
@@ -9238,7 +9259,7 @@
    "concept": "poo-fundamentos",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "Con este código, ¿cuál de estas afirmaciones es correcta?",
    "code": "class Producto:\n    def __init__(self, nombre):\n        self.nombre = nombre\n\na = Producto(\"Teclado\")\nb = Producto(\"Ratón\")",
    "options": [
@@ -9324,7 +9345,7 @@
    "concept": "poo-fundamentos",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "¿Qué muestra este programa?",
    "code": "class Producto:\n    def __init__(self, nombre, precio):\n        self.nombre = nombre\n        self.precio = precio\n\na = Producto(\"Teclado\", 40)\nb = Producto(\"Ratón\", 20)\na.precio = 35\nprint(a.precio, b.precio)",
    "options": [
@@ -9359,7 +9380,7 @@
    "concept": "poo-fundamentos",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "¿Qué muestra este programa?",
    "code": "saludo = \"hola\"\nprint(type(saludo).__name__, saludo.upper())",
    "options": [
@@ -9394,7 +9415,7 @@
    "concept": "poo-fundamentos",
    "kind": "choice",
    "level": 3,
-   "daw": false,
+   "daw": true,
    "q": "¿Qué muestra este programa?",
    "code": "class Carrito:\n    def __init__(self):\n        self.items = []\n\n    def meter(self, producto):\n        self.items.append(producto)\n\na = Carrito()\nb = Carrito()\na.meter(\"pan\")\nb.meter(\"leche\")\na.meter(\"sal\")\nprint(len(a.items), len(b.items))",
    "options": [
@@ -9429,7 +9450,7 @@
    "concept": "poo-fundamentos",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "Este programa termina con `TypeError`. ¿Cuál es la causa?",
    "code": "class Producto:\n    def __init__(self, nombre, precio):\n        self.nombre = nombre\n        self.precio = precio\n\np = Producto(\"Teclado\")",
    "options": [
@@ -9464,7 +9485,7 @@
    "concept": "poo-fundamentos",
    "kind": "choice",
    "level": 3,
-   "daw": false,
+   "daw": true,
    "q": "Debería mostrar `True`, pero muestra `False`. ¿Por qué?",
    "code": "class Lampara:\n    def __init__(self):\n        self.encendida = False\n\n    def encender(self):\n        self.encendida = True\n\nl = Lampara()\nl.encender\nprint(l.encendida)",
    "options": [
@@ -9499,7 +9520,7 @@
    "concept": "poo-fundamentos",
    "kind": "choice",
    "level": 3,
-   "daw": false,
+   "daw": true,
    "q": "Hay que guardar varios libros con su título y sus páginas, y saber si cada uno es largo (más de 300 páginas). ¿Qué diseño lo resuelve con POO?",
    "code": null,
    "options": [
@@ -9534,7 +9555,7 @@
    "concept": "poo-fundamentos",
    "kind": "choice",
    "level": 3,
-   "daw": false,
+   "daw": true,
    "q": "Con la clase `Producto(nombre, precio)`, ¿qué código muestra `Teclado Ratón`?",
    "code": null,
    "options": [
@@ -9615,7 +9636,7 @@
    "concept": "poo-atributos-metodos",
    "kind": "choice",
    "level": 1,
-   "daw": false,
+   "daw": true,
    "q": "En un método con `@classmethod`, ¿qué recibe el primer parámetro `cls`?",
    "code": null,
    "options": [
@@ -9696,7 +9717,7 @@
    "concept": "poo-atributos-metodos",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "Una `Cuenta` no debe quedarse nunca con saldo negativo. ¿Dónde es mejor comprobarlo?",
    "code": null,
    "options": [
@@ -9839,7 +9860,7 @@
    "concept": "poo-atributos-metodos",
    "kind": "choice",
    "level": 1,
-   "daw": false,
+   "daw": true,
    "q": "Quieres añadir a la clase `Cliente` una función `es_dni_valido(texto)` que no usa ningún dato del objeto ni de la clase. ¿Qué tipo de método encaja mejor?",
    "code": null,
    "options": [
@@ -9929,7 +9950,7 @@
    "concept": "poo-atributos-metodos",
    "kind": "choice",
    "level": 1,
-   "daw": false,
+   "daw": true,
    "q": "¿Qué es un atributo de clase?",
    "code": null,
    "options": [
@@ -9964,7 +9985,7 @@
    "concept": "poo-atributos-metodos",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "¿Qué diferencia hay entre `@staticmethod` y `@classmethod`?",
    "code": null,
    "options": [
@@ -9999,7 +10020,7 @@
    "concept": "poo-atributos-metodos",
    "kind": "choice",
    "level": 1,
-   "daw": false,
+   "daw": true,
    "q": "En esta clase, ¿qué es `iva`?",
    "code": "class Pedido:\n    iva = 21\n\n    def __init__(self, base):\n        self.base = base",
    "options": [
@@ -10034,7 +10055,7 @@
    "concept": "poo-atributos-metodos",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "¿Qué devuelve `Ficha.vacia()`?",
    "code": "class Ficha:\n    def __init__(self, nombre, puntos):\n        self.nombre = nombre\n        self.puntos = puntos\n\n    @classmethod\n    def vacia(cls):\n        return cls(\"\", 0)",
    "options": [
@@ -10069,7 +10090,7 @@
    "concept": "poo-atributos-metodos",
    "kind": "choice",
    "level": 3,
-   "daw": false,
+   "daw": true,
    "q": "Si se ejecuta `c.comision = 0` con una cuenta `c`, ¿qué pasa después al retirar dinero?",
    "code": "class Cuenta:\n    comision = 2\n\n    def __init__(self, saldo):\n        self.saldo = saldo\n\n    def retirar(self, cantidad):\n        self.saldo -= cantidad + self.comision",
    "options": [
@@ -10104,7 +10125,7 @@
    "concept": "poo-atributos-metodos",
    "kind": "choice",
    "level": 1,
-   "daw": false,
+   "daw": true,
    "q": "¿Qué muestra este programa?",
    "code": "class Alumno:\n    total = 0\n\n    def __init__(self, nombre):\n        self.nombre = nombre\n        Alumno.total += 1\n\nAlumno(\"Ana\")\nAlumno(\"Luis\")\nAlumno(\"Eva\")\nprint(Alumno.total)",
    "options": [
@@ -10139,7 +10160,7 @@
    "concept": "poo-atributos-metodos",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "¿Qué muestra este programa?",
    "code": "class Producto:\n    iva = 21\n\n    def __init__(self, precio):\n        self.precio = precio\n\na = Producto(10)\nb = Producto(20)\na.iva = 10\nprint(a.iva, b.iva, Producto.iva)",
    "options": [
@@ -10174,7 +10195,7 @@
    "concept": "poo-atributos-metodos",
    "kind": "choice",
    "level": 3,
-   "daw": false,
+   "daw": true,
    "q": "¿Qué muestra este programa?",
    "code": "class Equipo:\n    jugadores = []\n\n    def fichar(self, nombre):\n        self.jugadores.append(nombre)\n\na = Equipo()\nb = Equipo()\na.fichar(\"Ana\")\nb.fichar(\"Luis\")\nprint(len(a.jugadores), len(b.jugadores))",
    "options": [
@@ -10209,7 +10230,7 @@
    "concept": "poo-atributos-metodos",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "Este programa termina con `TypeError`. ¿Por qué?",
    "code": "class Conversor:\n    @staticmethod\n    def a_euros(self, pesetas):\n        return round(pesetas / 166.386, 2)\n\nprint(Conversor.a_euros(1000))",
    "options": [
@@ -10244,7 +10265,7 @@
    "concept": "poo-atributos-metodos",
    "kind": "choice",
    "level": 3,
-   "daw": false,
+   "daw": true,
    "q": "Este programa termina con `TypeError: … missing 1 required positional argument: 'texto'`. ¿Qué falta?",
    "code": "class Fecha:\n    def __init__(self, dia, mes, anio):\n        self.dia = dia\n        self.mes = mes\n        self.anio = anio\n\n    def desde_texto(cls, texto):\n        dia, mes, anio = texto.split(\"/\")\n        return cls(int(dia), int(mes), int(anio))\n\nf = Fecha.desde_texto(\"11/11/2026\")",
    "options": [
@@ -10279,7 +10300,7 @@
    "concept": "poo-atributos-metodos",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "La clase `Pedido` tiene el atributo de clase `creados = 0` para contar los pedidos. ¿Qué línea va dentro de `__init__`?",
    "code": null,
    "options": [
@@ -10314,7 +10335,7 @@
    "concept": "poo-atributos-metodos",
    "kind": "choice",
    "level": 3,
-   "daw": false,
+   "daw": true,
    "q": "Hay que crear un `Punto` a partir de un texto como `\"3,4\"`, y que funcione igual en las subclases de `Punto`. ¿Qué solución es la correcta?",
    "code": null,
    "options": [
@@ -10349,7 +10370,7 @@
    "concept": "poo-encapsulacion",
    "kind": "choice",
    "level": 1,
-   "daw": false,
+   "daw": true,
    "q": "En una clase aparece el atributo `self._saldo`. ¿Qué significa el guion bajo?",
    "code": null,
    "options": [
@@ -10479,7 +10500,7 @@
    "concept": "poo-encapsulacion",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "Dentro del setter de la propiedad `edad` se escribe `self.edad = valor` en vez de `self._edad = valor`. ¿Qué pasa al asignar una edad?",
    "code": null,
    "options": [
@@ -10514,7 +10535,7 @@
    "concept": "poo-encapsulacion",
    "kind": "choice",
    "level": 1,
-   "daw": false,
+   "daw": true,
    "q": "¿Qué ventaja tiene una propiedad `precio` frente a un método `get_precio()`?",
    "code": null,
    "options": [
@@ -10639,7 +10660,7 @@
    "concept": "poo-encapsulacion",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "¿Qué hace Python con un atributo `self.__pin` definido dentro de la clase `Caja`?",
    "code": null,
    "options": [
@@ -10730,7 +10751,7 @@
    "concept": "poo-encapsulacion",
    "kind": "choice",
    "level": 1,
-   "daw": false,
+   "daw": true,
    "q": "Con esta clase y `p = Producto(10)`, ¿cómo se lee el precio?",
    "code": "class Producto:\n    def __init__(self, precio):\n        self._precio = precio\n\n    @property\n    def precio(self):\n        return self._precio",
    "options": [
@@ -10765,7 +10786,7 @@
    "concept": "poo-encapsulacion",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "Con `t = Termometro(20)`, ¿qué ocurre al ejecutar `t.temperatura = 80`?",
    "code": "class Termometro:\n    def __init__(self, grados):\n        self.temperatura = grados\n\n    @property\n    def temperatura(self):\n        return self._temperatura\n\n    @temperatura.setter\n    def temperatura(self, valor):\n        if not -50 <= valor <= 50:\n            raise ValueError(\"Temperatura fuera de rango\")\n        self._temperatura = valor",
    "options": [
@@ -10800,7 +10821,7 @@
    "concept": "poo-encapsulacion",
    "kind": "choice",
    "level": 3,
-   "daw": false,
+   "daw": true,
    "q": "En esta clase, ¿por qué `__init__` escribe `self.temperatura = grados` y no `self._temperatura = grados`?",
    "code": "class Termometro:\n    def __init__(self, grados):\n        self.temperatura = grados\n\n    @property\n    def temperatura(self):\n        return self._temperatura\n\n    @temperatura.setter\n    def temperatura(self, valor):\n        if not -50 <= valor <= 50:\n            raise ValueError(\"Temperatura fuera de rango\")\n        self._temperatura = valor",
    "options": [
@@ -10835,7 +10856,7 @@
    "concept": "poo-encapsulacion",
    "kind": "choice",
    "level": 1,
-   "daw": false,
+   "daw": true,
    "q": "¿Qué muestra este programa?",
    "code": "class Caja:\n    def __init__(self):\n        self._items = 3\n\nc = Caja()\nc._items = 5\nprint(c._items)",
    "options": [
@@ -10870,7 +10891,7 @@
    "concept": "poo-encapsulacion",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "¿Qué muestra este programa?",
    "code": "class Cuenta:\n    def __init__(self, saldo):\n        self.__saldo = saldo\n\nc = Cuenta(100)\nc.__saldo = 0\nprint(c._Cuenta__saldo, c.__saldo)",
    "options": [
@@ -10905,7 +10926,7 @@
    "concept": "poo-encapsulacion",
    "kind": "choice",
    "level": 3,
-   "daw": false,
+   "daw": true,
    "q": "¿Qué muestra este programa?",
    "code": "class Producto:\n    def __init__(self, precio):\n        self.precio = precio\n\n    @property\n    def precio(self):\n        return self._precio\n\n    @precio.setter\n    def precio(self, valor):\n        self._precio = max(valor, 0)\n\np = Producto(-5)\np.precio = p.precio + 3\nprint(p.precio)",
    "options": [
@@ -10940,7 +10961,7 @@
    "concept": "poo-encapsulacion",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "Este programa termina con `TypeError: 'float' object is not callable`. ¿Qué lo arregla?",
    "code": "class Circulo:\n    def __init__(self, radio):\n        self.radio = radio\n\n    @property\n    def area(self):\n        return 3.14 * self.radio ** 2\n\nc = Circulo(2)\nprint(c.area())",
    "options": [
@@ -10975,7 +10996,7 @@
    "concept": "poo-encapsulacion",
    "kind": "choice",
    "level": 1,
-   "daw": false,
+   "daw": true,
    "q": "Queremos que el `saldo` de una cuenta se pueda leer desde fuera (`c.saldo`) pero no asignar. ¿Qué lo consigue?",
    "code": null,
    "options": [
@@ -11010,7 +11031,7 @@
    "concept": "poo-encapsulacion",
    "kind": "choice",
    "level": 3,
-   "daw": false,
+   "daw": true,
    "q": "El setter de la propiedad `edad` debe rechazar las edades negativas. ¿Qué versión es correcta?",
    "code": null,
    "options": [
@@ -11045,7 +11066,7 @@
    "concept": "poo-encapsulacion",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "La clase `Usuario` guarda una contraseña. ¿Qué interfaz pública es la más adecuada?",
    "code": null,
    "options": [
@@ -11080,7 +11101,7 @@
    "concept": "poo-encapsulacion",
    "kind": "choice",
    "level": 3,
-   "daw": false,
+   "daw": true,
    "q": "El `estado` de un `Pedido` solo puede pasar de `nuevo` a `enviado` y de `enviado` a `entregado`. ¿Qué diseño lo garantiza mejor?",
    "code": null,
    "options": [
@@ -11131,7 +11152,7 @@
    "concept": "poo-herencia",
    "kind": "choice",
    "level": 1,
-   "daw": false,
+   "daw": true,
    "q": "¿En cuál de estos casos encaja la herencia?",
    "code": null,
    "options": [
@@ -11263,7 +11284,7 @@
    "concept": "poo-herencia",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "`Gerente` hereda de `Empleado` y `Empleado` hereda de `Persona`. Con `g = Gerente(...)`, ¿qué es verdadero?",
    "code": null,
    "options": [
@@ -11388,7 +11409,7 @@
    "concept": "poo-herencia",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "Quieres reutilizar el código de la clase `Motor` en la clase `Coche`. ¿Debe `Coche` heredar de `Motor`?",
    "code": null,
    "options": [
@@ -11473,7 +11494,7 @@
    "concept": "poo-herencia",
    "kind": "choice",
    "level": 3,
-   "daw": false,
+   "daw": true,
    "q": "¿Qué muestra este programa?",
    "code": "class A:\n    def hola(self):\n        return \"A\"\n\nclass B(A):\n    pass\n\nclass C(A):\n    def hola(self):\n        return \"C\"\n\nclass D(B, C):\n    pass\n\nprint(D().hola())",
    "options": [
@@ -11508,7 +11529,7 @@
    "concept": "poo-herencia",
    "kind": "choice",
    "level": 1,
-   "daw": false,
+   "daw": true,
    "q": "¿Qué es el MRO de una clase?",
    "code": null,
    "options": [
@@ -11543,7 +11564,7 @@
    "concept": "poo-herencia",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "Con esta jerarquía, si `Becario` no define `descripcion`, ¿dónde la busca Python al hacer `b.descripcion()`?",
    "code": "class Exportable:\n    def exportar(self):\n        return str(vars(self))\n\nclass Empleado:\n    def descripcion(self):\n        return \"Empleado\"\n\nclass Becario(Exportable, Empleado):\n    pass\n\nb = Becario()",
    "options": [
@@ -11578,7 +11599,7 @@
    "concept": "poo-herencia",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "¿Qué es un *mixin*?",
    "code": null,
    "options": [
@@ -11613,7 +11634,7 @@
    "concept": "poo-herencia",
    "kind": "choice",
    "level": 1,
-   "daw": false,
+   "daw": true,
    "q": "¿Qué relación hay entre `Gato` y `Animal` en este código?",
    "code": "class Animal:\n    def sonido(self):\n        return \"...\"\n\nclass Gato(Animal):\n    def sonido(self):\n        return \"Miau\"",
    "options": [
@@ -11648,7 +11669,7 @@
    "concept": "poo-herencia",
    "kind": "choice",
    "level": 3,
-   "daw": false,
+   "daw": true,
    "q": "Con `h = Hija(\"Ana\", 20)`, ¿qué atributos tiene `h`?",
    "code": "class Base:\n    def __init__(self, nombre):\n        self.nombre = nombre\n\nclass Hija(Base):\n    def __init__(self, nombre, edad):\n        self.edad = edad",
    "options": [
@@ -11683,7 +11704,7 @@
    "concept": "poo-herencia",
    "kind": "choice",
    "level": 1,
-   "daw": false,
+   "daw": true,
    "q": "¿Qué muestra este programa?",
    "code": "class Vehiculo:\n    ruedas = 4\n\n    def describir(self):\n        return f\"{self.ruedas} ruedas\"\n\nclass Moto(Vehiculo):\n    ruedas = 2\n\nprint(Vehiculo().describir(), Moto().describir())",
    "options": [
@@ -11718,7 +11739,7 @@
    "concept": "poo-herencia",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "¿Qué muestra este programa?",
    "code": "class Producto:\n    def precio_final(self):\n        return 100\n\nclass Oferta(Producto):\n    def precio_final(self):\n        return super().precio_final() * 0.8\n\nprint(Oferta().precio_final(), isinstance(Oferta(), Producto))",
    "options": [
@@ -11753,7 +11774,7 @@
    "concept": "poo-herencia",
    "kind": "choice",
    "level": 1,
-   "daw": false,
+   "daw": true,
    "q": "Este programa termina con `AttributeError: 'Alumno' object has no attribute 'nombre'`. ¿Por qué?",
    "code": "class Persona:\n    def __init__(self, nombre):\n        self.nombre = nombre\n\nclass Alumno(Persona):\n    def __init__(self, nombre, curso):\n        self.curso = curso\n\na = Alumno(\"Ana\", \"1.º DAW\")\nprint(a.nombre)",
    "options": [
@@ -11788,7 +11809,7 @@
    "concept": "poo-herencia",
    "kind": "choice",
    "level": 3,
-   "daw": false,
+   "daw": true,
    "q": "Este programa termina con `TypeError: Rectangulo.__init__() takes 3 positional arguments but 4 were given`. ¿Por qué?",
    "code": "class Rectangulo:\n    def __init__(self, base, altura):\n        self.base = base\n        self.altura = altura\n\nclass Cuadrado(Rectangulo):\n    def __init__(self, lado):\n        super().__init__(self, lado, lado)\n\nc = Cuadrado(3)",
    "options": [
@@ -11823,7 +11844,7 @@
    "concept": "poo-herencia",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "`Empleado` pide `nombre` y `sueldo`, y `Gerente(Empleado)` añade un `plus`. ¿Qué constructor de `Gerente` es correcto?",
    "code": null,
    "options": [
@@ -11858,7 +11879,7 @@
    "concept": "poo-herencia",
    "kind": "choice",
    "level": 3,
-   "daw": false,
+   "daw": true,
    "q": "`Oferta(Producto)` debe mostrar la etiqueta de `Producto` y añadirle `(-10 %)` sin repetir código. ¿Qué método lo consigue?",
    "code": null,
    "options": [
@@ -11909,7 +11930,7 @@
    "concept": "poo-polimorfismo",
    "kind": "choice",
    "level": 1,
-   "daw": false,
+   "daw": true,
    "q": "¿Qué es el polimorfismo?",
    "code": null,
    "options": [
@@ -11974,7 +11995,7 @@
    "concept": "poo-polimorfismo",
    "kind": "choice",
    "level": 1,
-   "daw": false,
+   "daw": true,
    "q": "¿Qué necesita un objeto para poder pasarlo a `def imprimir(x): print(x.texto())`?",
    "code": null,
    "options": [
@@ -12164,7 +12185,7 @@
    "concept": "poo-polimorfismo",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "Una función tiene diez `elif isinstance(figura, …)` para calcular el área de cada tipo de figura. ¿Cuál es la mejora orientada a objetos?",
    "code": null,
    "options": [
@@ -12254,7 +12275,7 @@
    "concept": "poo-polimorfismo",
    "kind": "choice",
    "level": 1,
-   "daw": false,
+   "daw": true,
    "q": "¿Qué es el *duck typing*?",
    "code": null,
    "options": [
@@ -12289,7 +12310,7 @@
    "concept": "poo-polimorfismo",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "Una subclase de una clase abstracta olvida implementar un método abstracto. ¿Cuándo da error Python?",
    "code": null,
    "options": [
@@ -12324,7 +12345,7 @@
    "concept": "poo-polimorfismo",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "Para que esta función funcione, ¿qué tiene que cumplir cada elemento de `figuras`?",
    "code": "def total(figuras):\n    return sum(f.area() for f in figuras)",
    "options": [
@@ -12359,7 +12380,7 @@
    "concept": "poo-polimorfismo",
    "kind": "choice",
    "level": 3,
-   "daw": false,
+   "daw": true,
    "q": "En este código, ¿qué papel tiene el método `guardar` de `Exportador`?",
    "code": "from abc import ABC, abstractmethod\n\nclass Exportador(ABC):\n    @abstractmethod\n    def exportar(self, datos):\n        ...\n\n    def guardar(self, datos):\n        return f\"Guardado: {self.exportar(datos)}\"\n\nclass CSV(Exportador):\n    def exportar(self, datos):\n        return \",\".join(datos)",
    "options": [
@@ -12394,7 +12415,7 @@
    "concept": "poo-polimorfismo",
    "kind": "choice",
    "level": 1,
-   "daw": false,
+   "daw": true,
    "q": "¿Qué muestra este programa?",
    "code": "class Perro:\n    def hablar(self):\n        return \"Guau\"\n\nclass Robot:\n    def hablar(self):\n        return \"Bip\"\n\nfor x in [Perro(), Robot()]:\n    print(x.hablar(), end=\" \")",
    "options": [
@@ -12429,7 +12450,7 @@
    "concept": "poo-polimorfismo",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "¿Qué muestra este programa?",
    "code": "from abc import ABC, abstractmethod\n\nclass Forma(ABC):\n    @abstractmethod\n    def area(self):\n        ...\n\nclass Cuadrado(Forma):\n    def area(self):\n        return 4\n\ntry:\n    Forma()\n    resultado = \"creada\"\nexcept TypeError:\n    resultado = \"abstracta\"\nprint(resultado, Cuadrado().area())",
    "options": [
@@ -12464,7 +12485,7 @@
    "concept": "poo-polimorfismo",
    "kind": "choice",
    "level": 3,
-   "daw": false,
+   "daw": true,
    "q": "¿Qué muestra este programa?",
    "code": "class Base:\n    def saludar(self):\n        return \"Hola, \" + self.nombre()\n\n    def nombre(self):\n        return \"base\"\n\nclass Ana(Base):\n    def nombre(self):\n        return \"Ana\"\n\nprint(Base().saludar(), \"|\", Ana().saludar())",
    "options": [
@@ -12499,7 +12520,7 @@
    "concept": "poo-polimorfismo",
    "kind": "choice",
    "level": 1,
-   "daw": false,
+   "daw": true,
    "q": "Este programa termina con `TypeError: Can't instantiate abstract class Tarjeta…`. ¿Por qué?",
    "code": "from abc import ABC, abstractmethod\n\nclass Pago(ABC):\n    @abstractmethod\n    def cobrar(self, importe):\n        ...\n\nclass Tarjeta(Pago):\n    def cobro(self, importe):\n        return f\"Cobrados {importe} €\"\n\nt = Tarjeta()",
    "options": [
@@ -12534,7 +12555,7 @@
    "concept": "poo-polimorfismo",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "Debería mostrar `email` y `sms`, pero muestra `<bound method Email.enviar of …>` y algo parecido. ¿Por qué?",
    "code": "class Email:\n    def enviar(self):\n        return \"email\"\n\nclass SMS:\n    def enviar(self):\n        return \"sms\"\n\nfor canal in [Email(), SMS()]:\n    print(canal.enviar)",
    "options": [
@@ -12569,7 +12590,7 @@
    "concept": "poo-polimorfismo",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "¿Qué versión de `area_total(figuras)` sigue funcionando sin cambios si mañana se añade la clase `Triangulo` con su `area()`?",
    "code": null,
    "options": [
@@ -12604,7 +12625,7 @@
    "concept": "poo-polimorfismo",
    "kind": "choice",
    "level": 3,
-   "daw": false,
+   "daw": true,
    "q": "Toda subclase de `Exportador` debe tener obligatoriamente el método `exportar(datos)`. ¿Qué código lo garantiza?",
    "code": null,
    "options": [
@@ -12639,7 +12660,7 @@
    "concept": "poo-polimorfismo",
    "kind": "choice",
    "level": 3,
-   "daw": false,
+   "daw": true,
    "q": "Una tienda cobra con tarjeta, con Bizum y por transferencia, y añadirá más formas de pago. ¿Qué diseño encaja mejor?",
    "code": null,
    "options": [
@@ -12689,7 +12710,7 @@
    "concept": "poo-composicion",
    "kind": "choice",
    "level": 1,
-   "daw": false,
+   "daw": true,
    "q": "Un `Pedido` guarda en `self.cliente` un objeto `Cliente` que ya existía y que sigue existiendo cuando el pedido se borra. ¿Qué relación es?",
    "code": null,
    "options": [
@@ -12758,7 +12779,7 @@
    "concept": "poo-composicion",
    "kind": "choice",
    "level": 1,
-   "daw": false,
+   "daw": true,
    "q": "¿Qué distingue la **composición** de la **agregación**?",
    "code": null,
    "options": [
@@ -12824,7 +12845,7 @@
    "concept": "poo-composicion",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "Cada `Linea` tiene el método `subtotal()`. ¿Qué versión de `Pedido.total()` **delega** en las líneas?",
    "code": null,
    "options": [
@@ -12878,7 +12899,7 @@
    "concept": "poo-composicion",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "Un coche necesita un motor con `encender()` y `apagar()`. ¿Qué diseño es mejor?",
    "code": null,
    "options": [
@@ -12930,7 +12951,7 @@
    "concept": "poo-composicion",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "¿Qué es cierto sobre la asociación, la agregación y la composición en Python?",
    "code": null,
    "options": [
@@ -13055,7 +13076,7 @@
    "concept": "poo-composicion",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "En el programa principal aparece `print(pedido.lineas[0].producto.precio * pedido.lineas[0].cantidad)`. ¿Cuál es la mejor corrección?",
    "code": null,
    "options": [
@@ -13147,7 +13168,7 @@
    "concept": "poo-composicion",
    "kind": "choice",
    "level": 1,
-   "daw": false,
+   "daw": true,
    "q": "Tras ejecutar `p = Pedido(ana)`, cuyo constructor hace `self.cliente = cliente`, ¿qué guarda `p.cliente`?",
    "code": null,
    "options": [
@@ -13182,7 +13203,7 @@
    "concept": "poo-composicion",
    "kind": "choice",
    "level": 3,
-   "daw": false,
+   "daw": true,
    "q": "¿Qué línea hace que la relación entre `Factura` y sus `Linea` sea una **composición**?",
    "code": "class Factura:\n    def __init__(self, cliente):\n        self.cliente = cliente\n        self.lineas = []\n\n    def agregar(self, concepto, importe):\n        self.lineas.append(Linea(concepto, importe))",
    "options": [
@@ -13217,7 +13238,7 @@
    "concept": "poo-composicion",
    "kind": "choice",
    "level": 1,
-   "daw": false,
+   "daw": true,
    "q": "¿Qué muestra este programa?",
    "code": "class Persona:\n    def __init__(self, nombre):\n        self.nombre = nombre\n\nclass Perro:\n    def __init__(self, duena):\n        self.duena = duena\n\npepa = Persona(\"Pep\")\na = Perro(pepa)\nb = Perro(pepa)\na.duena.nombre = \"Pepa\"\nprint(a.duena.nombre, b.duena.nombre)",
    "options": [
@@ -13252,7 +13273,7 @@
    "concept": "poo-composicion",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "¿Qué muestra este programa?",
    "code": "class Clase:\n    def __init__(self, alumnos=[]):\n        self.alumnos = alumnos\n\n    def apuntar(self, nombre):\n        self.alumnos.append(nombre)\n\na = Clase()\nb = Clase()\na.apuntar(\"Ana\")\nb.apuntar(\"Luis\")\nprint(len(a.alumnos), len(b.alumnos))",
    "options": [
@@ -13287,7 +13308,7 @@
    "concept": "poo-composicion",
    "kind": "choice",
    "level": 3,
-   "daw": false,
+   "daw": true,
    "q": "¿Qué muestra este programa?",
    "code": "class Producto:\n    def __init__(self, precio):\n        self.precio = precio\n\nclass Linea:\n    def __init__(self, producto, cantidad):\n        self.producto = producto\n        self.cantidad = cantidad\n\n    def subtotal(self):\n        return self.producto.precio * self.cantidad\n\nclass Pedido:\n    def __init__(self):\n        self.lineas = []\n\n    def agregar(self, producto, cantidad):\n        self.lineas.append(Linea(producto, cantidad))\n\n    def total(self):\n        return sum(l.subtotal() for l in self.lineas)\n\nteclado = Producto(25)\nraton = Producto(10)\np = Pedido()\np.agregar(teclado, 2)\np.agregar(raton, 1)\nteclado.precio = 40\nprint(p.total(), len(p.lineas))",
    "options": [
@@ -13322,7 +13343,7 @@
    "concept": "poo-composicion",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "Cada biblioteca nueva debería empezar sin libros, pero la segunda ya tiene los de la primera. ¿Cuál es el fallo?",
    "code": "class Biblioteca:\n    def __init__(self, libros=[]):\n        self.libros = libros\n\n    def donar(self, libro):\n        self.libros.append(libro)",
    "options": [
@@ -13357,7 +13378,7 @@
    "concept": "poo-composicion",
    "kind": "choice",
    "level": 3,
-   "daw": false,
+   "daw": true,
    "q": "`Pila` hereda de `list` para aprovechar `append` y `pop`. ¿Qué problema de diseño tiene?",
    "code": "class Pila(list):\n    def apilar(self, x):\n        self.append(x)\n\n    def desapilar(self):\n        return self.pop()\n\np = Pila()\np.apilar(\"abajo\")\np.insert(0, \"colado\")",
    "options": [
@@ -13392,7 +13413,7 @@
    "concept": "poo-composicion",
    "kind": "choice",
    "level": 3,
-   "daw": false,
+   "daw": true,
    "q": "Un `Equipo` guarda directamente la lista que recibe. Quien la creó la sigue usando y los cambios se cuelan en el equipo. ¿Qué cambio lo evita?",
    "code": null,
    "options": [
@@ -13427,7 +13448,7 @@
    "concept": "poo-composicion",
    "kind": "choice",
    "level": 1,
-   "daw": false,
+   "daw": true,
    "q": "¿En qué pareja la relación es una **composición**?",
    "code": null,
    "options": [
@@ -13478,7 +13499,7 @@
    "concept": "poo-metodos-especiales",
    "kind": "choice",
    "level": 1,
-   "daw": false,
+   "daw": true,
    "q": "¿Quién llama normalmente a un método especial como `__len__`?",
    "code": null,
    "options": [
@@ -13544,7 +13565,7 @@
    "concept": "poo-metodos-especiales",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "¿Cuál es un `__eq__` correcto para que dos `Punto` sean iguales si tienen las mismas coordenadas?",
    "code": null,
    "options": [
@@ -13615,7 +13636,7 @@
    "concept": "poo-metodos-especiales",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "¿Qué hace cada método en un objeto que se recorre con `for`?",
    "code": null,
    "options": [
@@ -13751,7 +13772,7 @@
    "concept": "poo-metodos-especiales",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "`print(alumno)` muestra `<__main__.Alumno object at 0x7f…>`. ¿Cuál es la solución?",
    "code": null,
    "options": [
@@ -13842,7 +13863,7 @@
    "concept": "poo-metodos-especiales",
    "kind": "choice",
    "level": 1,
-   "daw": false,
+   "daw": true,
    "q": "¿Para qué sirve cada uno, `__str__` y `__repr__`?",
    "code": null,
    "options": [
@@ -13877,7 +13898,7 @@
    "concept": "poo-metodos-especiales",
    "kind": "choice",
    "level": 1,
-   "daw": false,
+   "daw": true,
    "q": "¿Qué método especial llama Python al ejecutar `len(carrito)`?",
    "code": null,
    "options": [
@@ -13912,7 +13933,7 @@
    "concept": "poo-metodos-especiales",
    "kind": "choice",
    "level": 3,
-   "daw": false,
+   "daw": true,
    "q": "La clase guarda sus alumnos en `self._alumnos`, una lista. ¿Qué `__iter__` es correcto?",
    "code": null,
    "options": [
@@ -13947,7 +13968,7 @@
    "concept": "poo-metodos-especiales",
    "kind": "choice",
    "level": 1,
-   "daw": false,
+   "daw": true,
    "q": "¿Qué muestra este programa?",
    "code": "class Ciudad:\n    def __init__(self, nombre):\n        self.nombre = nombre\n\n    def __str__(self):\n        return f\"Ciudad: {self.nombre}\"\n\n    def __repr__(self):\n        return f\"Ciudad({self.nombre!r})\"\n\nprint(Ciudad(\"Soria\"))",
    "options": [
@@ -13982,7 +14003,7 @@
    "concept": "poo-metodos-especiales",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "¿Qué muestra este programa?",
    "code": "class Ciudad:\n    def __init__(self, nombre):\n        self.nombre = nombre\n\n    def __str__(self):\n        return f\"Ciudad: {self.nombre}\"\n\n    def __repr__(self):\n        return f\"Ciudad({self.nombre!r})\"\n\nprint([Ciudad(\"Soria\"), Ciudad(\"Ávila\")])",
    "options": [
@@ -14017,7 +14038,7 @@
    "concept": "poo-metodos-especiales",
    "kind": "choice",
    "level": 3,
-   "daw": false,
+   "daw": true,
    "q": "¿Qué muestra este programa?",
    "code": "class CuentaAtras:\n    def __init__(self, desde):\n        self.actual = desde\n\n    def __iter__(self):\n        return self\n\n    def __next__(self):\n        if self.actual == 0:\n            raise StopIteration\n        self.actual -= 1\n        return self.actual + 1\n\nc = CuentaAtras(3)\nprint(list(c), list(c))",
    "options": [
@@ -14052,7 +14073,7 @@
    "concept": "poo-metodos-especiales",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "`print(libro)` da `TypeError: __str__ returned non-string (type NoneType)`. ¿Cuál es el fallo?",
    "code": "class Libro:\n    def __init__(self, titulo):\n        self.titulo = titulo\n\n    def __str__(self):\n        print(f\"Libro: {self.titulo}\")",
    "options": [
@@ -14087,7 +14108,7 @@
    "concept": "poo-metodos-especiales",
    "kind": "choice",
    "level": 3,
-   "daw": false,
+   "daw": true,
    "q": "`for alumno in clase:` da `TypeError: iter() returned non-iterator of type 'list'`. ¿Qué falla?",
    "code": "class Clase:\n    def __init__(self, alumnos):\n        self._alumnos = list(alumnos)\n\n    def __iter__(self):\n        return self._alumnos",
    "options": [
@@ -14122,7 +14143,7 @@
    "concept": "poo-metodos-especiales",
    "kind": "choice",
    "level": 3,
-   "daw": false,
+   "daw": true,
    "q": "`Producto` define `__eq__`, y ahora `{Producto('Pan', 1.2)}` da `TypeError: unhashable type`. Quieres seguir comparando por contenido y poder meterlos en un `set`. ¿Qué haces?",
    "code": null,
    "options": [
@@ -14157,7 +14178,7 @@
    "concept": "poo-metodos-especiales",
    "kind": "choice",
    "level": 1,
-   "daw": false,
+   "daw": true,
    "q": "¿En qué clase tiene sentido definir `__len__`?",
    "code": null,
    "options": [
@@ -14192,7 +14213,7 @@
    "concept": "poo-metodos-especiales",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "Un alumno puede cambiar de nota o de correo, pero su DNI no cambia y no hay dos alumnos con el mismo. ¿Qué debe comparar `Alumno.__eq__`?",
    "code": null,
    "options": [
@@ -14227,7 +14248,7 @@
    "concept": "poo-diseno",
    "kind": "choice",
    "level": 1,
-   "daw": false,
+   "daw": true,
    "q": "¿Qué dice el principio de responsabilidad única?",
    "code": null,
    "options": [
@@ -14278,7 +14299,7 @@
    "concept": "poo-diseno",
    "kind": "choice",
    "level": 1,
-   "daw": false,
+   "daw": true,
    "q": "¿Qué clase tiene **baja cohesión**?",
    "code": null,
    "options": [
@@ -14313,7 +14334,7 @@
    "concept": "poo-diseno",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "¿Qué pide el principio **abierto/cerrado** (la O de SOLID)?",
    "code": null,
    "options": [
@@ -14398,7 +14419,7 @@
    "concept": "poo-diseno",
    "kind": "choice",
    "level": 1,
-   "daw": false,
+   "daw": true,
    "q": "¿Qué métodos escribe por ti `@dataclass` en una clase con atributos anotados?",
    "code": null,
    "options": [
@@ -14448,7 +14469,7 @@
    "concept": "poo-diseno",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "`Pinguino` hereda de `Ave`, que tiene `volar()`. Como los pingüinos no vuelan, `Pinguino.volar()` lanza un error. ¿Qué dice esto del diseño?",
    "code": null,
    "options": [
@@ -14529,7 +14550,7 @@
    "concept": "poo-diseno",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "`procesar_venta()` comprueba el stock, calcula el total con IVA, imprime el ticket y guarda la venta en un archivo. ¿Cuál es la mejor reorganización?",
    "code": null,
    "options": [
@@ -14624,7 +14645,7 @@
    "concept": "poo-diseno",
    "kind": "choice",
    "level": 1,
-   "daw": false,
+   "daw": true,
    "q": "¿Qué es una docstring?",
    "code": null,
    "options": [
@@ -14659,7 +14680,7 @@
    "concept": "poo-diseno",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "¿Qué indica `def buscar(self, nombre: str) -> Producto | None:`?",
    "code": null,
    "options": [
@@ -14694,7 +14715,7 @@
    "concept": "poo-diseno",
    "kind": "choice",
    "level": 3,
-   "daw": false,
+   "daw": true,
    "q": "En una dataclass, ¿qué diferencia hay entre `etiquetas: list = field(default_factory=list)` y escribir en `__init__` `self.etiquetas = []`?",
    "code": null,
    "options": [
@@ -14729,7 +14750,7 @@
    "concept": "poo-diseno",
    "kind": "choice",
    "level": 1,
-   "daw": false,
+   "daw": true,
    "q": "¿Qué muestra este programa?",
    "code": "from dataclasses import dataclass\n\n@dataclass\nclass Punto:\n    x: int\n    y: int\n\nprint(Punto(1, 2))",
    "options": [
@@ -14764,7 +14785,7 @@
    "concept": "poo-diseno",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "¿Qué muestra este programa?",
    "code": "from dataclasses import dataclass\n\n@dataclass\nclass Libro:\n    titulo: str\n    paginas: int\n\na = Libro(\"Dune\", 600)\nb = Libro(\"Dune\", 600)\nprint(a == b, a is b)",
    "options": [
@@ -14799,7 +14820,7 @@
    "concept": "poo-diseno",
    "kind": "choice",
    "level": 3,
-   "daw": false,
+   "daw": true,
    "q": "¿Qué muestra este programa?",
    "code": "from dataclasses import dataclass\n\n@dataclass(order=True)\nclass Nota:\n    valor: int\n    alumno: str\n\nnotas = [Nota(7, \"Eva\"), Nota(5, \"Luis\"), Nota(7, \"Ana\")]\nprint([n.alumno for n in sorted(notas)])",
    "options": [
@@ -14834,7 +14855,7 @@
    "concept": "poo-diseno",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "¿Cuál es el problema de diseño de esta clase?",
    "code": "class Expediente:\n    def __init__(self, notas):\n        self.notas = notas\n\n    def media(self):\n        return sum(self.notas) / len(self.notas)\n\n    def informe_html(self):\n        return f\"<p>Media: {self.media():.1f}</p>\"\n\n    def guardar(self, ruta):\n        with open(ruta, \"w\") as f:\n            f.write(self.informe_html())",
    "options": [
@@ -14869,7 +14890,7 @@
    "concept": "poo-diseno",
    "kind": "choice",
    "level": 3,
-   "daw": false,
+   "daw": true,
    "q": "Al ejecutar este código Python da `ValueError` antes de crear ningún objeto. ¿Por qué?",
    "code": "from dataclasses import dataclass\n\n@dataclass\nclass Grupo:\n    nombre: str\n    alumnos: list = []",
    "options": [
@@ -14904,7 +14925,7 @@
    "concept": "poo-diseno",
    "kind": "choice",
    "level": 3,
-   "daw": false,
+   "daw": true,
    "q": "`precio_envio(pedido)` tiene un `if`/`elif` por cada transportista y hay que añadir uno nuevo cada mes. ¿Qué cambio sigue el principio abierto/cerrado?",
    "code": null,
    "options": [
@@ -15215,7 +15236,7 @@
    "concept": "poo-proyecto",
    "kind": "choice",
    "level": 1,
-   "daw": false,
+   "daw": true,
    "q": "En el proyecto, los libros se crean fuera y se registran en la biblioteca; si la biblioteca desapareciera, los libros seguirían existiendo. ¿Qué relación hay entre `Biblioteca` y `Libro`?",
    "code": null,
    "options": [
@@ -15250,7 +15271,7 @@
    "concept": "poo-proyecto",
    "kind": "choice",
    "level": 1,
-   "daw": false,
+   "daw": true,
    "q": "¿Por qué `Prestamo` es una clase propia en vez de guardar en cada libro el nombre de quien lo tiene?",
    "code": null,
    "options": [
@@ -15285,7 +15306,7 @@
    "concept": "poo-proyecto",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "¿Quién debería crear los objetos `Prestamo`?",
    "code": null,
    "options": [
@@ -15336,7 +15357,7 @@
    "concept": "poo-proyecto",
    "kind": "choice",
    "level": 1,
-   "daw": false,
+   "daw": true,
    "q": "Con el `Libro` del proyecto, ¿qué devuelve `str(Libro(\"978-1\", \"Dune\", \"Frank Herbert\"))`?",
    "code": null,
    "options": [
@@ -15371,7 +15392,7 @@
    "concept": "poo-proyecto",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "¿Qué muestra este programa?",
    "code": "class Usuario:\n    def __init__(self, nombre, max_prestamos=3):\n        self.nombre = nombre\n        self.max_prestamos = max_prestamos\n\n    def puede_prestar(self, activos):\n        return activos < self.max_prestamos\n\neva = Usuario(\"Eva\", max_prestamos=2)\nprint(eva.puede_prestar(1), eva.puede_prestar(2), eva.puede_prestar(3))",
    "options": [
@@ -15422,7 +15443,7 @@
    "concept": "poo-proyecto",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "En `Prestamo`, ¿qué ventaja tiene que `activo` sea una propiedad (`@property` que devuelve `self.fin is None`) en vez de un atributo que se pone a `False` al cerrar?",
    "code": null,
    "options": [
@@ -15457,7 +15478,7 @@
    "concept": "poo-proyecto",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "Este `cerrar` tiene un fallo. ¿Cuál?",
    "code": "def cerrar(self, fecha):\n    self.fin = fecha\n    if fecha < self.inicio:\n        raise ValueError(\"La devolución no puede ser anterior al préstamo\")",
    "options": [
@@ -15508,7 +15529,7 @@
    "concept": "poo-proyecto",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "¿Para qué sirve que todas las excepciones del proyecto hereden de `ErrorBiblioteca`?",
    "code": null,
    "options": [
@@ -15543,7 +15564,7 @@
    "concept": "poo-proyecto",
    "kind": "choice",
    "level": 3,
-   "daw": false,
+   "daw": true,
    "q": "¿Qué muestra este programa?",
    "code": "class ErrorBiblioteca(Exception):\n    pass\n\nclass LibroNoEncontrado(ErrorBiblioteca):\n    pass\n\ntry:\n    raise LibroNoEncontrado(\"978-9\")\nexcept ErrorBiblioteca:\n    print(\"general\")\nexcept LibroNoEncontrado:\n    print(\"concreto\")",
    "options": [
@@ -15578,7 +15599,7 @@
    "concept": "poo-proyecto",
    "kind": "choice",
    "level": 3,
-   "daw": false,
+   "daw": true,
    "q": "¿Qué prueba comprueba bien que un libro **no se puede prestar dos veces**?",
    "code": null,
    "options": [
@@ -15613,7 +15634,7 @@
    "concept": "poo-proyecto",
    "kind": "choice",
    "level": 3,
-   "daw": false,
+   "daw": true,
    "q": "Este `prestar` marca el libro como prestado antes de comprobar el límite del usuario. ¿Qué pasa si el usuario ya está en su límite?",
    "code": "def prestar(self, isbn, usuario_id, fecha):\n    libro = self._libro(isbn)\n    usuario = self._usuario(usuario_id)\n    activos = self.prestamos_activos(usuario_id)\n    libro.disponible = False\n    if not usuario.puede_prestar(len(activos)):\n        raise LimiteAlcanzado(usuario.nombre)\n    prestamo = Prestamo(libro, usuario, fecha)\n    self._prestamos.append(prestamo)\n    return prestamo",
    "options": [
@@ -15648,7 +15669,7 @@
    "concept": "poo-proyecto",
    "kind": "choice",
    "level": 1,
-   "daw": false,
+   "daw": true,
    "q": "¿Qué es la **integración** en un proyecto construido por fases?",
    "code": null,
    "options": [
@@ -15683,7 +15704,7 @@
    "concept": "poo-proyecto",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "Quieres saber si `devolver` lanza `ErrorBiblioteca` con un libro que no está prestado. ¿Qué prueba es correcta?",
    "code": null,
    "options": [
@@ -15734,7 +15755,7 @@
    "concept": "poo-proyecto",
    "kind": "choice",
    "level": 3,
-   "daw": false,
+   "daw": true,
    "q": "En la `Biblioteca`, ¿qué hace `prestamos_activos(7)`?",
    "code": "def prestamos_activos(self, usuario_id=None):\n    return [\n        p\n        for p in self._prestamos\n        if p.activo and (usuario_id is None or p.usuario.id == usuario_id)\n    ]",
    "options": [
@@ -15769,7 +15790,7 @@
    "concept": "poo-proyecto",
    "kind": "choice",
    "level": 1,
-   "daw": false,
+   "daw": true,
    "q": "¿Qué muestra este programa?",
    "code": "registrados = [(\"3\", \"Neuromante\"), (\"1\", \"Dune\"), (\"2\", \"Fundación\")]\nprint([titulo for _, titulo in sorted(registrados, key=lambda l: l[1])])",
    "options": [
@@ -15804,7 +15825,7 @@
    "concept": "poo",
    "kind": "choice",
    "level": 1,
-   "daw": false,
+   "daw": true,
    "q": "Con la clase `Producto` ya definida, ¿qué hace la línea `p = Producto()`?",
    "code": null,
    "options": [
@@ -15919,7 +15940,7 @@
    "concept": "poo",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "`a` es un objeto con el atributo `x = 1`. Se ejecuta `b = a` y después `b.x = 9`. ¿Cuánto vale `a.x`?",
    "code": null,
    "options": [
@@ -16014,7 +16035,7 @@
    "concept": "poo",
    "kind": "choice",
    "level": 1,
-   "daw": false,
+   "daw": true,
    "q": "¿Cuál de estas afirmaciones sobre `__init__` es correcta?",
    "code": null,
    "options": [
@@ -16099,7 +16120,7 @@
    "concept": "poo",
    "kind": "choice",
    "level": 1,
-   "daw": false,
+   "daw": true,
    "q": "¿Qué muestra este programa?",
    "code": "class Vehiculo:\n    def __init__(self, marca, modelo):\n        self.marca = marca\n        self.modelo = modelo\n\n    def __str__(self):\n        return f\"{self.marca} {self.modelo}\"\n\ncoche = Vehiculo(\"Seat\", \"Ibiza\")\nprint(coche)",
    "options": [
@@ -16134,7 +16155,7 @@
    "concept": "poo",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "Este programa muestra `Ana (1.º DAW)` y después termina con `TypeError`. ¿Por qué?",
    "code": "class Alumno:\n    def __init__(self, nombre, curso):\n        self.nombre = nombre\n        self.curso = curso\n\n    def __str__(self):\n        print(f\"{self.nombre} ({self.curso})\")\n\nana = Alumno(\"Ana\", \"1.º DAW\")\nprint(ana)",
    "options": [
@@ -16169,7 +16190,7 @@
    "concept": "poo",
    "kind": "choice",
    "level": 1,
-   "daw": false,
+   "daw": true,
    "q": "¿Cuándo usa Python el método `__str__` de un objeto?",
    "code": null,
    "options": [
@@ -16204,7 +16225,7 @@
    "concept": "poo",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "¿Qué muestra este programa?",
    "code": "class Contador:\n    def __init__(self, inicio=0):\n        self.valor = inicio\n\n    def sumar(self, n=1):\n        self.valor += n\n\na = Contador()\nb = Contador(10)\na.sumar()\nb.sumar(5)\na.sumar(2)\nprint(a.valor, b.valor)",
    "options": [
@@ -16239,7 +16260,7 @@
    "concept": "poo",
    "kind": "choice",
    "level": 3,
-   "daw": false,
+   "daw": true,
    "q": "¿Qué muestra este programa?",
    "code": "class Caja:\n    def __init__(self, contenido):\n        self.contenido = contenido\n\na = Caja(\"libros\")\nb = a\nc = Caja(\"libros\")\nb.contenido = \"ropa\"\nprint(a.contenido, c.contenido, a is c)",
    "options": [
@@ -16274,7 +16295,7 @@
    "concept": "poo",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "Dentro de un método, ¿qué es `self`?",
    "code": null,
    "options": [
@@ -16309,7 +16330,7 @@
    "concept": "poo",
    "kind": "choice",
    "level": 1,
-   "daw": false,
+   "daw": true,
    "q": "Con esta clase, ¿qué hace la línea `ana.poner_nota(8)`?",
    "code": "class Alumno:\n    def __init__(self, nombre):\n        self.nombre = nombre\n        self.notas = []\n\n    def poner_nota(self, nota):\n        self.notas.append(nota)",
    "options": [
@@ -16344,7 +16365,7 @@
    "concept": "poo",
    "kind": "choice",
    "level": 3,
-   "daw": false,
+   "daw": true,
    "q": "Cada cuenta debe guardar su titular y empezar con saldo 0. ¿Qué constructor es correcto?",
    "code": null,
    "options": [
@@ -16379,7 +16400,7 @@
    "concept": "poo",
    "kind": "choice",
    "level": 3,
-   "daw": false,
+   "daw": true,
    "q": "Queremos que `print(v)` muestre `Seat Ibiza (2020)`. ¿Qué método lo consigue?",
    "code": null,
    "options": [
@@ -16414,7 +16435,7 @@
    "concept": "poo",
    "kind": "choice",
    "level": 2,
-   "daw": false,
+   "daw": true,
    "q": "Una aplicación de gimnasio guarda los socios con su nombre y su cuota, y tiene que poder cambiar la cuota de un socio. ¿Qué diseño encaja?",
    "code": null,
    "options": [
@@ -16449,7 +16470,7 @@
    "concept": "poo",
    "kind": "choice",
    "level": 3,
-   "daw": false,
+   "daw": true,
    "q": "Cada `Pista` de pádel tiene su propia lista de reservas. ¿Dónde conviene crear esa lista?",
    "code": null,
    "options": [
