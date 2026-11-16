@@ -183,12 +183,24 @@ class AttemptOut(BaseModel):
 
 MAX_PCAP_STATE_BYTES = 200_000  # ~1000 simulacros y todas las respuestas caben de sobra
 
-# Cursos de DAW que se pueden guardar en la cuenta,
-# más "learn": el progreso por conceptos del núcleo educativo, "game": XP, racha y
+# Cursos de DAW y de las academias (Excel profesional) que se pueden guardar en la cuenta; tienen
+# que coincidir con SYNCED_COURSES de frontend/js/catalog.js (tests/test_course_catalog.py).
+# Además, "learn": el progreso por conceptos del núcleo educativo, "game": XP, racha y
 # logros de la web, que antes solo vivían en el navegador, y "planner": el planificador diario
 # (tiempo disponible, fechas de exámenes y entregas, tareas hechas, pospuestas o rechazadas).
 # Lista cerrada: evita que un cliente cree documentos con nombres arbitrarios.
-COURSES = ("sql", "js", "java", "entornos", "marcas", "programacion", "learn", "game", "planner")
+COURSES = (
+    "sql",
+    "js",
+    "java",
+    "entornos",
+    "marcas",
+    "programacion",
+    "excel",
+    "learn",
+    "game",
+    "planner",
+)
 
 
 class PcapStateIn(BaseModel):

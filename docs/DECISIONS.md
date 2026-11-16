@@ -80,3 +80,10 @@ comportamiento que fijaba el test anterior: lo aprobó el autor al aprobar la au
 **Decisión:** cada relación unidad → CE lleva `status` (`verified`, `proposed`, `unassigned`), `source` y `reviewed`. Todas nacen `proposed`; solo una persona puede marcarlas `verified` (`by`).
 **Por qué:** no se pueden presentar como oficiales relaciones que nadie ha validado (auditoría del piloto DAW).
 **Consecuencia:** la web enseña «pendiente de validar» junto a cada CE propuesto; el validador rechaza un `verified` sin autor.
+
+## DEC-018 · Catálogo de cursos por familias (Excel profesional, P0)
+
+**Decisión:** los cursos con documento de progreso se registran en `frontend/js/catalog.js` en dos familias: `daw` (`DAW_COURSES`, sin cambios) y `academia` (`ACADEMY_COURSES`, hoy solo `excel`). La sincronización recorre `SYNCED_COURSES` (las dos); las vistas, el panel por módulo, la portada y los certificados de DAW siguen usando solo `DAW_COURSES`.
+**Por qué:** Excel profesional no es un módulo del ciclo y no debe contarse ni certificarse como DAW, pero tiene que reutilizar el progreso, la sincronización con versión y 409, la exportación y el borrado de la cuenta sin duplicarlos. Lo aprobó el autor el 16/11/2026, junto con el nombre visible «Excel profesional» y la ruta `#/academia/excel`.
+**Consecuencia:** el backend solo gana el id `excel` en `COURSES` (sin tablas ni migraciones). Una prueba comprueba que el catálogo y `COURSES` coinciden y otra que `DAW_COURSES` es idéntico al anterior. El curso está registrado (`status: "planned"`) pero no tiene contenido ni ruta visibles hasta P1.
+

@@ -9,6 +9,9 @@ cambios se agrupan por fecha de merge, con el número de pull request entre par�
 ## [Sin publicar]
 
 ### Añadido
+- Excel profesional, fase P0: catálogo de cursos por familias (`frontend/js/catalog.js`, DEC-018).
+  El curso `excel` (familia academia) tiene ya documento de progreso en la cuenta y sincronización,
+  sin contenido ni ruta visibles todavía. Los cursos de DAW no cambian.
 - La POO entra en el simulacro de Preparación DAW como cuarta competencia (peso 20; Fundamentos y
   Programación pasan a 30 y Lógica a 20), solo con las 150 preguntas de su banco. La prueba de nivel no
   cambia.

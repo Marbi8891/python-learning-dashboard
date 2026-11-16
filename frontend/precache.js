@@ -16,6 +16,7 @@ self.PLD_PRECACHE = [
  "js/api.js",
  "js/app.js",
  "js/assistant.js",
+ "js/catalog.js",
  "js/celebrate.js",
  "js/certificate.js",
  "js/console.js",
