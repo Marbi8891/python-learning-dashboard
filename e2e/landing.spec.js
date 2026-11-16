@@ -42,6 +42,37 @@ test("la portada tiene su propia cabecera, oculta la app y lleva a cada sección
   await expect(page.locator("#lp-title")).toBeVisible();
 });
 
+test("la portada se pinta sin esperar al temario y no enseña la plantilla de la app", async ({ page }) => {
+  // learning.json (unos 740 KB) llega tarde a propósito: el hero no debe esperarlo (MWG-01)
+  let release;
+  const held = new Promise((resolve) => (release = resolve));
+  await page.route("**/data/learning.json", async (route) => {
+    await held;
+    await route.continue();
+  });
+  await page.goto("/#/portada/temario");
+  await expect(page.locator("#lp-title")).toBeVisible();
+  await expect(page.locator(".app")).toBeHidden();
+  await expect(page.getByText("Cargando lección…")).toBeHidden();
+  await expect(page.locator("#lp-temario")).toHaveCount(0);
+
+  const heroTop = await page.locator("#lp-title").evaluate((el) => el.getBoundingClientRect().top + scrollY);
+  release();
+  // Con los datos, las secciones se añaden debajo y el enlace profundo se desplaza a la suya
+  await expect(page.locator("#lp-temario-title")).toBeInViewport();
+  await expect(page.locator(".lp-footer")).toHaveCount(1);
+  expect(await page.locator("#lp-title").evaluate((el) => el.getBoundingClientRect().top + scrollY)).toBe(heroTop);
+});
+
+test("la plantilla de la app vuelve a verse al salir de la portada", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.locator("#lp-title")).toBeVisible();
+  await expect(page.locator("html")).not.toHaveAttribute("data-boot", /.*/);
+  await expect(page.locator(".boot-splash")).toBeHidden();
+  await page.goto("/#/aprender");
+  await expect(page.locator(".app")).toBeVisible();
+});
+
 test("demostración: el ejercicio real se corrige y explica el error de la respuesta trampa", async ({ page }) => {
   await page.goto("/#/portada/demo");
   const demo = page.locator("#lp-demo");
