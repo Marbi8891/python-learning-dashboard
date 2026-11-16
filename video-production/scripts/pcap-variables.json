@@ -1,0 +1,384 @@
+{
+  "lesson_id": "pcap-variables",
+  "title": {
+    "es": "Variables y print()",
+    "en": "Variables and print()"
+  },
+  "course": {
+    "es": "Curso PCAP · Bases de Python",
+    "en": "PCAP course · Python basics"
+  },
+  "objectives": [
+    {
+      "es": "Crear variables y entender que = asigna",
+      "en": "Create variables and understand that = assigns"
+    },
+    {
+      "es": "Mostrar valores con print() y f-strings",
+      "en": "Show values with print() and f-strings"
+    },
+    {
+      "es": "Nombrar variables según PEP 8",
+      "en": "Name variables following PEP 8"
+    }
+  ],
+  "origin": "edited",
+  "source_hash": "8f2ee640b5b80437d746ec5c4458ed2039c110e1a82c81c8232a3f4a194a9c55",
+  "scenes": [
+    {
+      "id": "s01-title",
+      "type": "title",
+      "section": "intro",
+      "estimated_seconds": 9.0,
+      "narration": {
+        "es": "Hola. En esta lección vas a aprender a guardar datos en variables y a mostrarlos en la consola con print.",
+        "en": "Hi. In this lesson you will learn how to store data in variables and how to show it on the console with print."
+      },
+      "heading": {
+        "es": "Variables y print()",
+        "en": "Variables and print()"
+      },
+      "data": {
+        "kicker": {
+          "es": "Curso PCAP · Bases de Python",
+          "en": "PCAP course · Python basics"
+        }
+      },
+      "visual_notes": "Cabecera del curso, título grande y línea de acento."
+    },
+    {
+      "id": "s02-variable",
+      "type": "variable",
+      "section": "explanation",
+      "estimated_seconds": 19.8,
+      "narration": {
+        "es": "Una variable es un nombre que apunta a un valor guardado en memoria. Piensa en una etiqueta pegada a una caja: la caja es el valor y la etiqueta, el nombre. Aquí, la etiqueta nombre apunta al texto Carlos. Y la etiqueta edad apunta al número 30.",
+        "en": "A variable is a name that points to a value stored in memory. Think of a label stuck on a box: the box is the value and the label is the name. Here, the label nombre points to the text Carlos. And the label edad points to the number 30."
+      },
+      "heading": {
+        "es": "¿Qué es una variable?",
+        "en": "What is a variable?"
+      },
+      "steps": [
+        {
+          "key": "nombre",
+          "sentence": 2
+        },
+        {
+          "key": "edad",
+          "sentence": 3
+        }
+      ],
+      "data": {
+        "assignments": [
+          {
+            "name": "nombre",
+            "value": "\"Carlos\"",
+            "code": "nombre = \"Carlos\""
+          },
+          {
+            "name": "edad",
+            "value": "30",
+            "code": "edad = 30"
+          }
+        ]
+      },
+      "visual_notes": "Cada asignación crea una caja (valor) con su etiqueta (nombre) cuando la narración la menciona."
+    },
+    {
+      "id": "s03-assign",
+      "type": "variable",
+      "section": "explanation",
+      "estimated_seconds": 16.2,
+      "narration": {
+        "es": "El signo igual no significa «igual»: significa asignar. Python evalúa primero lo que hay a la derecha. Después guarda ese resultado con el nombre de la izquierda. Por eso tiene sentido escribir edad igual a edad más uno.",
+        "en": "The equals sign does not mean “equal”: it means assign. Python first evaluates what is on the right. Then it stores that result under the name on the left. That is why it makes sense to write edad equals edad plus one."
+      },
+      "heading": {
+        "es": "= significa asignar",
+        "en": "= means assign"
+      },
+      "steps": [
+        {
+          "key": "edad",
+          "sentence": 0
+        },
+        {
+          "key": "edad",
+          "sentence": 2
+        }
+      ],
+      "data": {
+        "assignments": [
+          {
+            "name": "edad",
+            "value": "30",
+            "code": "edad = 30"
+          },
+          {
+            "name": "edad",
+            "value": "31",
+            "code": "edad = edad + 1"
+          }
+        ]
+      },
+      "visual_notes": "La caja de edad pasa de 30 a 31 al ejecutar edad = edad + 1."
+    },
+    {
+      "id": "s04-print",
+      "type": "code",
+      "section": "explanation",
+      "estimated_seconds": 15.8,
+      "narration": {
+        "es": "La función print muestra valores en la consola. Python recibe la instrucción y escribe el resultado. Admite varios argumentos separados por comas. Y con el parámetro sep eliges qué se escribe entre ellos: aquí, una barra vertical.",
+        "en": "The print function shows values on the console. Python receives the instruction and writes the result. It accepts several arguments separated by commas. And with the sep parameter you choose what is written between them: here, a vertical bar."
+      },
+      "heading": {
+        "es": "print() escribe en la consola",
+        "en": "print() writes to the console"
+      },
+      "code": "print(\"DAW\", \"DAM\", \"ASIR\", sep=\" | \")",
+      "output": "DAW | DAM | ASIR",
+      "steps": [
+        {
+          "line": 1,
+          "sentence": 0
+        }
+      ],
+      "data": {
+        "run_at_sentence": 1,
+        "filename": "programa.py"
+      },
+      "visual_notes": "La instrucción viaja del editor a Python y el texto aparece en la consola."
+    },
+    {
+      "id": "s05-fstring",
+      "type": "code",
+      "section": "explanation",
+      "estimated_seconds": 13.0,
+      "narration": {
+        "es": "Para combinar texto y variables, usa una f-string: una f delante de las comillas y las variables entre llaves. Python sustituye cada llave por el valor de su variable.",
+        "en": "To combine text and variables, use an f-string: an f before the quotes and the variables inside curly braces. Python replaces each pair of braces with the value of its variable."
+      },
+      "heading": {
+        "es": "f-strings: texto y variables",
+        "en": "f-strings: text and variables"
+      },
+      "code": "nombre = \"Carlos\"\nedad = 30\n\nprint(f\"{nombre} tiene {edad} años\")",
+      "output": "Carlos tiene 30 años",
+      "steps": [
+        {
+          "line": 4,
+          "sentence": 0
+        }
+      ],
+      "data": {
+        "run_at_sentence": 1,
+        "filename": "programa.py"
+      }
+    },
+    {
+      "id": "s06-names",
+      "type": "concept",
+      "section": "explanation",
+      "estimated_seconds": 19.4,
+      "narration": {
+        "es": "Para nombrar variables, sigue la guía de estilo PEP 8. Usa minúsculas y separa las palabras con un guion bajo. Elige nombres descriptivos, como precio_total. Un nombre no puede empezar por un número ni llevar espacios o guiones. Y recuerda que Python distingue mayúsculas de minúsculas.",
+        "en": "To name variables, follow the PEP 8 style guide. Use lowercase and separate words with an underscore. Choose descriptive names, like precio_total. A name cannot start with a digit or contain spaces or hyphens. And remember that Python is case sensitive."
+      },
+      "heading": {
+        "es": "Reglas para los nombres (PEP 8)",
+        "en": "Naming rules (PEP 8)"
+      },
+      "steps": [
+        {
+          "text": {
+            "es": "snake_case: minúsculas y palabras separadas por _",
+            "en": "snake_case: lowercase words separated by _"
+          },
+          "sentence": 1
+        },
+        {
+          "text": {
+            "es": "Nombres descriptivos: precio_total, no pt",
+            "en": "Descriptive names: precio_total, not pt"
+          },
+          "sentence": 2
+        },
+        {
+          "text": {
+            "es": "No empiezan por número ni llevan espacios o guiones",
+            "en": "No leading digit, no spaces, no hyphens"
+          },
+          "sentence": 3
+        },
+        {
+          "text": {
+            "es": "edad y Edad son variables distintas",
+            "en": "edad and Edad are different variables"
+          },
+          "sentence": 4
+        }
+      ]
+    },
+    {
+      "id": "s07-example",
+      "type": "code",
+      "section": "example",
+      "estimated_seconds": 20.2,
+      "narration": {
+        "es": "Veamos el ejemplo completo de la lección. Primero se crean dos variables: nombre y edad. El primer print usa una f-string. El segundo separa tres textos con una barra. Después, edad se reasigna y pasa de 30 a 31. Y el último print muestra el nuevo valor.",
+        "en": "Let's look at the full example from the lesson. First, two variables are created: nombre and edad. The first print uses an f-string. The second one separates three texts with a bar. Then edad is reassigned and goes from 30 to 31. And the last print shows the new value."
+      },
+      "heading": {
+        "es": "Ejemplo completo",
+        "en": "Full example"
+      },
+      "code": "nombre = \"Carlos\"\nedad = 30\n\nprint(f\"{nombre} tiene {edad} años\")\nprint(\"DAW\", \"DAM\", \"ASIR\", sep=\" | \")\n\nedad = edad + 1  # reasignación: evalúa la derecha y guarda el resultado\nprint(f\"El año que viene tendrá {edad}\")",
+      "steps": [
+        {
+          "line": 1,
+          "sentence": 1
+        },
+        {
+          "line": 2,
+          "sentence": 1
+        },
+        {
+          "line": 4,
+          "sentence": 2
+        },
+        {
+          "line": 5,
+          "sentence": 3
+        },
+        {
+          "line": 7,
+          "sentence": 4
+        },
+        {
+          "line": 8,
+          "sentence": 5
+        }
+      ],
+      "data": {
+        "filename": "programa.py"
+      }
+    },
+    {
+      "id": "s08-result",
+      "type": "terminal",
+      "section": "result",
+      "estimated_seconds": 9.8,
+      "narration": {
+        "es": "Al ejecutar el programa, la consola muestra tres líneas, una por cada print. Fíjate en la última: la edad ya vale 31.",
+        "en": "When you run the program, the console shows three lines, one for each print. Look at the last one: edad is now 31."
+      },
+      "heading": {
+        "es": "Resultado en la consola",
+        "en": "Console output"
+      },
+      "output": "Carlos tiene 30 años\nDAW | DAM | ASIR\nEl año que viene tendrá 31",
+      "data": {
+        "command": "python programa.py",
+        "output_at_sentence": 0
+      }
+    },
+    {
+      "id": "s09-exercise",
+      "type": "exercise",
+      "section": "exercise",
+      "estimated_seconds": 19.0,
+      "narration": {
+        "es": "Ahora te toca a ti. Crea las variables producto, precio, cantidad y en_stock. Calcula el total multiplicando el precio por la cantidad. Muestra un ticket con f-strings, con una línea por dato. Y como extra, imprime el tipo de total: ¿es el que esperabas?",
+        "en": "Now it is your turn. Create the variables producto, precio, cantidad and en_stock. Compute the total by multiplying the price by the quantity. Print a receipt with f-strings, one line per value. And as an extra, print the type of total: is it the one you expected?"
+      },
+      "heading": {
+        "es": "Tu turno",
+        "en": "Your turn"
+      },
+      "code": "# Ticket de compra\nproducto = ...\nprecio = ...\ncantidad = ...\nen_stock = ...\n\ntotal = ...\n\nprint(\"===== TICKET =====\")",
+      "steps": [
+        {
+          "text": {
+            "es": "Crea producto, precio, cantidad y en_stock",
+            "en": "Create producto, precio, cantidad and en_stock"
+          },
+          "sentence": 1
+        },
+        {
+          "text": {
+            "es": "Calcula total = precio * cantidad",
+            "en": "Compute total = precio * cantidad"
+          },
+          "sentence": 2
+        },
+        {
+          "text": {
+            "es": "Muestra un ticket con f-strings",
+            "en": "Print a receipt with f-strings"
+          },
+          "sentence": 3
+        },
+        {
+          "text": {
+            "es": "Extra: imprime type(total)",
+            "en": "Extra: print type(total)"
+          },
+          "sentence": 4
+        }
+      ]
+    },
+    {
+      "id": "s10-summary",
+      "type": "summary",
+      "section": "summary",
+      "estimated_seconds": 22.6,
+      "narration": {
+        "es": "En resumen. Una variable es un nombre que apunta a un valor. El signo igual asigna: primero se evalúa la derecha. La función print muestra valores en la consola. Las f-strings combinan texto y variables. Y los nombres se escriben en minúsculas y son descriptivos. Ahora, abre la consola y haz el ejercicio.",
+        "en": "To sum up. A variable is a name that points to a value. The equals sign assigns: the right side is evaluated first. The print function shows values on the console. F-strings combine text and variables. And names are lowercase and descriptive. Now open the console and do the exercise."
+      },
+      "heading": {
+        "es": "Resumen",
+        "en": "Summary"
+      },
+      "steps": [
+        {
+          "text": {
+            "es": "Una variable es un nombre que apunta a un valor",
+            "en": "A variable is a name that points to a value"
+          },
+          "sentence": 1
+        },
+        {
+          "text": {
+            "es": "= asigna: primero se evalúa la derecha",
+            "en": "= assigns: the right side is evaluated first"
+          },
+          "sentence": 2
+        },
+        {
+          "text": {
+            "es": "print() muestra valores; sep cambia el separador",
+            "en": "print() shows values; sep changes the separator"
+          },
+          "sentence": 3
+        },
+        {
+          "text": {
+            "es": "Las f-strings combinan texto y variables",
+            "en": "f-strings combine text and variables"
+          },
+          "sentence": 4
+        },
+        {
+          "text": {
+            "es": "Nombres en snake_case y descriptivos",
+            "en": "Descriptive snake_case names"
+          },
+          "sentence": 5
+        }
+      ]
+    }
+  ]
+}

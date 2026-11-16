@@ -36,6 +36,7 @@ Las e2e arrancan solas el frontend (`e2e/serve_frontend.py`, un `http.server` co
 | Archivos sin conexión | `node scripts/web/build_precache.mjs --check` (también `tests/unit/precache.test.mjs`) | `frontend/precache.js`, la lista que el service worker guarda al instalarse, está al día |
 | Safari (WebKit) | `PW_WEBKIT=1 npx playwright test --project=webkit e2e/navigation.spec.js e2e/landing.spec.js e2e/account.spec.js` | Prueba de humo en WebKit, con la cuenta y el cierre de sesión (trabajo `webkit` de CI) |
 | Inspección de la web | `node scripts/web/inspeccionar_web.mjs [--rutas a,b] [--tema claro\|oscuro\|ambos] [--comparar <carpeta>]` | Capturas en móvil y escritorio (y en tema oscuro con `--tema`), axe, errores de consola, desbordamiento y peso de cada ruta (no es una prueba que falle: es evidencia de antes y después) |
+| Fábrica de vídeos | `python -m pytest video_factory/tests -q` y `ruff check video_factory && ruff format --check video_factory` (con el entorno de `video_factory/requirements-dev.txt`) | Catálogo al día y sin lecciones inventadas, guiones, tiempos de la narración, subtítulos, caché, reanudación y validación; con Manim instalado, también el render de los 14 componentes ([`VIDEO_FACTORY.md`](VIDEO_FACTORY.md)) |
 | Dependencias | `pip-audit -r backend/requirements.txt` y `npm audit --audit-level=high` | Vulnerabilidades conocidas |
 | Despliegue (sin desplegar) | `cp -r frontend _site && python scripts/security/production_csp.py _site && python scripts/qa/verify_pages_artifact.py _site` y `node --experimental-vm-modules scripts/qa/frontend_static.mjs --root _site` | Lo que publicaría Pages: archivos necesarios, CSP sin orígenes de desarrollo, sin restos ni secretos, imports y referencias. En CI (`deployment-check.yml`) también construye la imagen Docker de Render, comprueba `/api/health` y valida los workflows con actionlint |
 
@@ -75,6 +76,7 @@ rm frontend/_pyo
 | Módulo de POO (`scripts/learning/poo_module.py`, `frontend/js/learn/poo-view.js`) | Lo anterior, `cd backend && python -m pytest -q tests/test_poo_module.py`, `npm run test:unit` y `npx playwright test e2e/poo.spec.js` |
 | `scripts/courses/**` | `python scripts/courses/<curso>_course.py --check`, `python scripts/courses/lock_ids.py` si hay ids nuevos y `cd backend && python -m pytest -q tests/test_daw_courses.py` |
 | `backend/**` | Lint, formato y pytest con cobertura |
+| `video_factory/**`, `video-production/scripts/**` o el temario (`frontend/data/`) | `python -m video_factory inventory` si cambió el temario y `python -m pytest video_factory/tests -q` |
 | `scripts/resources/**` | `python scripts/resources/build_resources.py --check` y `cd backend && python -m pytest -q tests/test_resources.py` |
 | `scripts/curriculum/**` | `python scripts/curriculum/build_curriculum.py --check` y `cd backend && python -m pytest -q tests/test_curriculum.py` |
 | `docs/memoria/img/*.dot` | `dot -Tpng <archivo>.dot -o <archivo>.png` (Graphviz) para regenerar el diagrama |

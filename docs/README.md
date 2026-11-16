@@ -27,6 +27,7 @@
 | [CAREER_ROADMAP_AGENT_LOG.md](CAREER_ROADMAP_AGENT_LOG.md) | Career Roadmap: registro de sprints y decisiones |
 | [DISENO.md](DISENO.md) | Sistema visual: tokens, colores, tipografía y componentes |
 | [REDISENO-FRONTEND.md](REDISENO-FRONTEND.md) | Alcance, áreas y criterios del rediseño integral del frontend |
+| [VIDEO_FACTORY.md](VIDEO_FACTORY.md) | Fábrica de vídeos de las lecciones: instalación, órdenes, guiones, componentes y control de calidad |
 | [IDIOMAS.md](IDIOMAS.md) | Interfaz en inglés y cómo añadir textos traducidos |
 | [CATALOGO-FREE-PRO-ACADEMY.md](CATALOGO-FREE-PRO-ACADEMY.md) | Propuesta de catálogo gratuito, Pro y Academy; pendiente de confirmación |
 

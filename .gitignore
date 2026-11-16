@@ -42,3 +42,10 @@ frontend/_pyo
 # Copias de la base de datos: tienen datos personales (scripts/ops/copia_bd.py)
 copias/
 *.dump
+
+# PLD Video Factory: audio, clips y vídeos son pesados y se regeneran (docs/VIDEO_FACTORY.md)
+video-production/audio/
+video-production/renders/
+video-production/.cache/
+video-production/factory.log
+frontend/videos/

@@ -1,0 +1,18 @@
+{
+  "_comment": "Sustituciones solo para la voz (los subtítulos conservan el texto original). Cada clave es una expresión regular.",
+  "es": {
+    "\\bPEP 8\\b": "pep ocho",
+    "\\bf-strings\\b": "efe estrings",
+    "\\bf-string\\b": "efe estring",
+    "\\bprint\\b": "print",
+    "\\bsep\\b": "sep",
+    "\\bsnake_case\\b": "esneik queis",
+    "_": " "
+  },
+  "en": {
+    "\\bPEP 8\\b": "pep eight",
+    "\\bsep\\b": "sep",
+    "\\bsnake_case\\b": "snake case",
+    "_": " "
+  }
+}
