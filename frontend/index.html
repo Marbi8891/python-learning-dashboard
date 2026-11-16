@@ -217,11 +217,13 @@
       <section class="page" id="notfound-view" aria-labelledby="notfound-title" hidden></section>
 
       <!-- ============ LECCIÓN: contenido | consola ============ -->
-      <div class="workspace" id="lesson-view">
+      <!-- workspace--loading: hasta que llega lessons.json solo se ve el título (app.js), para que
+           las pestañas y la consola no salten al pintarse la lección (MWG-02, CLS) -->
+      <div class="workspace workspace--loading" id="lesson-view" aria-busy="true">
       <div class="workspace__lesson">
       <header class="lesson-header">
         <p class="lesson-header__crumb" id="lesson-crumb"></p>
-        <h1 class="lesson-header__title" id="lesson-title" tabindex="-1">Cargando lección…</h1>
+        <h1 class="lesson-header__title" id="lesson-title" tabindex="-1">Cargando…</h1>
         <p class="lesson-header__meta" id="lesson-meta"></p>
       </header>
 

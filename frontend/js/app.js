@@ -858,7 +858,11 @@ async function init() {
   navigate({ moveFocus: false });
   window.addEventListener("hashchange", () => navigate());
 
-  if (await lessonsLoaded) {
+  const loaded = await lessonsLoaded;
+  // En la misma tarea que el primer pintado de la lección: no hay un fotograma intermedio vacío
+  $("#lesson-view").classList.remove("workspace--loading");
+  $("#lesson-view").removeAttribute("aria-busy");
+  if (loaded) {
     renderSidebar();
     initGameUi();
     initGame([...content.lessons.values()]);
