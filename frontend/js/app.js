@@ -813,10 +813,23 @@ function initSkipLink() {
   });
 }
 
+const UPDATE_MESSAGE = "Hay una versión nueva de la web: recarga la página para usarla.";
+
 /** PWA: la web se puede instalar y funciona sin conexión tras la primera visita. */
 function registerServiceWorker() {
   if (!window.PLD_CONFIG?.serviceWorker || !("serviceWorker" in navigator)) return;
-  navigator.serviceWorker.register("sw.js").catch((error) => console.warn("Sin modo sin conexión:", error.message));
+  // Si ya había uno y otro toma el control, se ha publicado una versión nueva. No se recarga sola:
+  // el alumno podría perder el código que está escribiendo (MWG-06)
+  const hadController = Boolean(navigator.serviceWorker.controller);
+  navigator.serviceWorker.addEventListener("controllerchange", () => {
+    if (hadController) showToast(UPDATE_MESSAGE);
+  });
+  // Se registra al terminar de cargar: su instalación guarda toda la web (~1 MB) y no debe competir
+  // con la primera carga en un móvil (MWG-05)
+  const register = () =>
+    navigator.serviceWorker.register("sw.js").catch((error) => console.warn("Sin modo sin conexión:", error.message));
+  if (document.readyState === "complete") register();
+  else window.addEventListener("load", register, { once: true });
 }
 
 /** Carga lessons.json. Devuelve si se pudo; si no, las rutas que lo necesitan muestran el error. */

@@ -20,6 +20,11 @@ export const serverInfo = apiEnabled
       .catch(() => null)
   : Promise.resolve(null);
 
+// Sin respuesta en este tiempo, la petición se cancela con un error que se puede reintentar (MWG-07).
+// Es largo a propósito: el plan gratuito de Render tarda hasta un minuto en despertar.
+const API_TIMEOUT_MS = config.apiTimeoutMs ?? 90_000;
+const TIMEOUT_MESSAGE = "El servidor no ha respondido a tiempo. Inténtalo de nuevo en unos segundos.";
+
 export class ApiError extends Error {
   /** `fields`: campos del formulario a los que se refiere el error (los 422 de validación los traen). */
   constructor(status, message, fields = []) {
@@ -82,11 +87,14 @@ export async function request(method, path, { json, form, auth = true, cookie = 
           ? API_V1_PREFIX + path.slice(4)
           : path;
 
+  // Quien pasa su propia señal decide cuándo cancelar; si no, se pone un tiempo límite
+  const timeout = !signal && typeof AbortSignal.timeout === "function" ? AbortSignal.timeout(API_TIMEOUT_MS) : undefined;
   let response;
   try {
-    response = await fetch(`${API_URL}${apiPath}`, { method, headers, body, credentials: "include", signal });
+    response = await fetch(`${API_URL}${apiPath}`, { method, headers, body, credentials: "include", signal: signal ?? timeout });
   } catch (error) {
     if (signal?.aborted) throw error; // cancelada por quien la hizo: no es un fallo de red
+    if (timeout?.aborted) throw new ApiError(0, TIMEOUT_MESSAGE);
     throw new ApiError(0, "No se pudo conectar con el servidor. Inténtalo de nuevo en unos segundos.");
   }
 
