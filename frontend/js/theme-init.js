@@ -21,6 +21,12 @@
   if (prefs.spacing) document.documentElement.dataset.spacing = "amplio";
   if (prefs.contrast) document.documentElement.dataset.contrast = "alto";
   if (prefs.motion) document.documentElement.dataset.motion = "reducido";
+  // La portada es lo primero que ve quien llega a la raíz: hasta que landing.js la pinta no se enseña
+  // la plantilla de la app («Cargando lección…» con la consola vacía) (MWG-01)
+  var hash = location.hash;
+  if (hash === "" || hash === "#" || hash === "#/" || hash === "#/portada" || hash.indexOf("#/portada/") === 0) {
+    document.documentElement.dataset.boot = "landing";
+  }
   // Otro idioma: se oculta la página hasta traducirla (i18n.js), como mucho 2 s
   if (prefs.lang && prefs.lang !== "es") {
     document.documentElement.lang = prefs.lang;

@@ -732,12 +732,18 @@ function footerHtml() {
     </footer>`;
 }
 
-function pageHtml(index, content) {
-  const concept = index?.concepts.get(DEMO_CONCEPT);
+/** Lo que se pinta al momento: cabecera y hero no dependen de los JSON del temario (MWG-01). */
+function shellHtml() {
   return `
     ${headerHtml()}
     <main class="lp-main" id="landing-main" tabindex="-1">
-      ${heroHtml(concept)}
+      ${heroHtml(null)}
+    </main>`;
+}
+
+/** El resto de la portada, con las cifras y el ejemplo reales de learning.json y lessons.json. */
+function restHtml(index, content) {
+  return `
       <div data-lp-activity>${activityHtml(index, content)}</div>
       <div data-lp-routes>${routesHtml(index, content)}</div>
       ${catalogHtml(index, content)}
@@ -747,14 +753,20 @@ function pageHtml(index, content) {
       ${codefeedHtml()}
       ${techHtml()}
       ${faqHtml(index)}
-      ${ctaHtml()}
-    </main>
-    ${footerHtml()}`;
+      ${ctaHtml()}`;
 }
+
+const fragment = (html) => {
+  const template = document.createElement("template");
+  template.innerHTML = html;
+  return template.content;
+};
 
 /* ---------- Comportamiento ---------- */
 
 let rendered = false;
+let restFilled = false; // las secciones que dependen del temario ya están pintadas
+let restReady = null; // promesa de fillRest()
 let exerciseData = null; // { exercise, concept, options }
 let source = { index: null, content: null }; // para volver a pintar «Tu actividad»
 let activityShown = null; // último HTML pintado (no se repinta si no cambia: no se pierde el foco)
@@ -879,32 +891,49 @@ function scrollToSection(section, { moveFocus }) {
   if (moveFocus) target?.querySelector(".lp-section__title")?.focus({ preventScroll: true });
 }
 
+/** Completa la portada cuando llegan los datos del temario: las secciones se añaden debajo del hero,
+    así que lo que ya se ve no se mueve (CLS). */
+async function fillRest(view, content) {
+  // También espera a lessons.json (si se está cargando) para poder decir cuántas lecciones hay
+  const [index] = await Promise.all([loadLearningContent().catch(() => null), content?.ready]);
+  source = { index, content };
+  const concept = index?.concepts.get(DEMO_CONCEPT);
+  if (concept) view.querySelector(".lp-window")?.replaceWith(fragment(heroVisual(concept)));
+  view.querySelector("#landing-main").append(fragment(restHtml(index, content)));
+  view.append(fragment(footerHtml()));
+  const exercise = index?.exercises.get(DEMO_EXERCISE);
+  if (exercise) exerciseData = { exercise, concept, options: demoOptions(exercise) };
+  restFilled = true;
+  refreshActivity();
+}
+
 /** Muestra la portada (la pinta la primera vez) y se desplaza a la sección de la ruta. */
 export async function openLanding(hash, { content, moveFocus = true } = {}) {
   const view = $("#landing-view");
   if (!rendered) {
-    // También espera a lessons.json (si se está cargando) para poder decir cuántas lecciones hay
-    const [index] = await Promise.all([loadLearningContent().catch(() => null), content?.ready]);
-    if (!isLandingRoute(location.hash)) return; // el usuario ya se ha ido a otra parte
-    source = { index, content };
-    view.innerHTML = pageHtml(index, content);
-    const exercise = index?.exercises.get(DEMO_EXERCISE);
-    if (exercise) {
-      exerciseData = { exercise, concept: index.concepts.get(DEMO_CONCEPT), options: demoOptions(exercise) };
-    }
+    view.innerHTML = shellHtml();
     bind(view);
     rendered = true;
+    restReady = fillRest(view, content);
   }
   updateAccount();
   setMenu(false);
   view.hidden = false;
+  delete document.documentElement.dataset.boot; // ver theme-init.js
   refreshActivity();
   document.body.dataset.page = "landing";
   document.title = LANDING_TITLE;
-  scrollToSection(hash.slice(LANDING_ROUTE.length + 1), { moveFocus });
+  const section = hash.slice(LANDING_ROUTE.length + 1);
+  // Las secciones llegan con los datos: un enlace profundo espera a que existan
+  if (SECTIONS.has(section) && !restFilled) {
+    await restReady;
+    if (location.hash !== hash) return; // el usuario ya se ha ido a otra parte
+  }
+  scrollToSection(section, { moveFocus });
 }
 
 export function closeLanding() {
+  delete document.documentElement.dataset.boot;
   const view = $("#landing-view");
   if (view.hidden) return;
   view.hidden = true;

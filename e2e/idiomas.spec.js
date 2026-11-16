@@ -50,6 +50,10 @@ test.describe("navegador en otro idioma", () => {
     await openLesson(page, "variables");
     const banner = page.getByRole("complementary", { name: "Language" });
     await expect(banner).toBeVisible();
+    // El aviso flota abajo: no empuja la página (MWG-04)
+    await expect(page.locator(".app")).toHaveJSProperty("offsetTop", 0);
+    const box = await banner.boundingBox();
+    expect(Math.round(box.y + box.height)).toBe(page.viewportSize().height);
     await banner.getByRole("button", { name: "Seguir en español" }).click();
     await expect(banner).toHaveCount(0);
     await page.reload();

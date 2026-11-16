@@ -197,8 +197,15 @@ button {
   visibility: hidden;
 }
 
-/* Aviso único para navegadores que no están en español (i18n.js) */
+/* Aviso único para navegadores que no están en español (i18n.js). Aparece después de cargar el JS:
+   flota abajo en vez de empujar la página hacia abajo (MWG-04, CLS). Va por encima del botón del
+   asistente y por debajo del menú lateral del móvil. */
 .lang-banner {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 36;
+  box-shadow: 0 -8px 24px -12px var(--shadow);
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -206,7 +213,7 @@ button {
   gap: var(--space-2) var(--space-4);
   padding: var(--space-3) var(--space-4);
   background: var(--color-surface-2);
-  border-bottom: 1px solid var(--color-border-control);
+  border-top: 1px solid var(--color-border-control);
   color: var(--color-text);
 }
 
