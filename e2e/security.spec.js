@@ -3,14 +3,21 @@ const { test, expect, uniqueEmail, openLesson } = require("./fixtures");
 
 const API = "http://127.0.0.1:8000";
 
-test("sin estilos en línea: la CSP no permite 'unsafe-inline' y las barras de progreso se pintan (RT-004)", async ({ page }) => {
+test("la web no usa estilos en línea propios: funciona con style-src sin 'unsafe-inline' (RT-004)", async ({ page }) => {
+  // La CSP publicada sigue con 'unsafe-inline' solo porque el botón de Google (GSI) inyecta <style> y
+  // style="…". Aquí se sirve la página con la CSP estricta para que ningún código propio vuelva a usarlos.
+  await page.route(/\/(index\.html)?$/, async (route) => {
+    const response = await route.fetch();
+    const body = (await response.text()).replace("style-src 'self' 'unsafe-inline'", "style-src 'self'");
+    await route.fulfill({ response, body });
+  });
   await page.addInitScript(() => {
     window.__violations = [];
     document.addEventListener("securitypolicyviolation", (e) => window.__violations.push(`${e.violatedDirective} ${e.blockedURI}`));
   });
   const csp = async () => page.locator('meta[http-equiv="Content-Security-Policy"]').getAttribute("content");
   await page.goto("/#/portada");
-  expect((await csp()).match(/style-src[^;]*/)[0]).not.toContain("unsafe-inline");
+  expect((await csp()).match(/style-src[^;]*/)[0]).not.toContain("unsafe-inline"); // la estricta se aplica
   await page.locator("#lp-temario").waitFor();
   for (const route of ["/#/aprender", "/#/practicar", "/#/progreso", "/#/inicio", "/#/pcap", "/#/daw", "/#/ciberseguridad", "/#/planes", "/#/perfil"]) {
     await page.goto(route);
