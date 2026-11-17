@@ -7,7 +7,8 @@ Tres tipos de ejercicio:
   error frecuente tiene que fallar alguna (lo comprueba el motor de fórmulas con Node).
 
 Las unidades siguen la plantilla del currículo: objetivos, explicación, ejemplos resueltos,
-ejercicio guiado, caso, test, criterios para superarla, errores frecuentes, resumen y fuentes con fecha.
+ejercicio guiado, caso, test, criterios para superarla, errores frecuentes, resumen y
+fuentes con fecha.
 """
 
 from __future__ import annotations
