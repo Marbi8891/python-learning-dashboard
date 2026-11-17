@@ -32,7 +32,7 @@
 | 4. Ejercicios y preguntas | 520 preguntas, ejercicios y retos, con las respuestas de código comprobadas al ejecutarlas | Ídem, y «son práctica, no evaluaciones del centro» |
 | 5. Recursos de terceros | Las fuentes de cada lección y los 24 recursos complementarios, con autor y licencia | Ya existía. Programación sigue el orden de las UT del curso «DAW-Programacion» de César San Juan Pastor (CC BY-NC), sin copiar su texto. Ahora también se dice en el panel del curso |
 
-Cada curso dice ahora de dónde sale el orden de sus unidades (campo `structure` de `DAW_COURSES` en `course-store.js`): las UT de un curso abierto con licencia, el temario del centro, los RA del real decreto o una selección propia.
+Cada curso dice ahora de dónde sale el orden de sus unidades (campo `structure` de `DAW_COURSES` en `catalog.js`): las UT de un curso abierto con licencia, el temario del centro, los RA del real decreto o una selección propia.
 
 ## 2. Módulos del ciclo y contenido de la plataforma
 

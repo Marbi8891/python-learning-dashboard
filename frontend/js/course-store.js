@@ -12,37 +12,11 @@ import { createDocSync } from "./doc-sync.js";
 import { createSyncGate } from "./sync-gate.js";
 import { mergeLessonProgress } from "./lesson-progress.js";
 import { createUploader } from "./uploader.js";
+import { SYNCED_COURSES } from "./catalog.js";
 
-/** Cursos de DAW, en el orden del catálogo. `lang` es el lenguaje para resaltar el código y
-    `module`, el código del módulo oficial que trabaja (sus recursos salen de data/resources.json).
-    `structure` dice de dónde sale el orden de las unidades (Fase D, 6.1): los textos, ejemplos y
-    preguntas son siempre propios de la plataforma (ver daw.js, «De dónde sale este contenido»). */
-export const DAW_COURSES = [
-  {
-    id: "programacion", module: "0485", title: "Programación", subtitle: "Módulo 0485 en Python · UT1-UT9", lang: "python",
-    structure: "Sigue el orden y los contenidos de las UT1-UT9 del curso «DAW-Programacion» de César San Juan Pastor (IES Arcipreste de Hita, licencia CC BY-NC), sin copiar su texto.",
-  },
-  {
-    id: "sql", module: "0484", title: "Bases de datos", subtitle: "Módulo 0484 · SQL · UD1-UD3 del centro", lang: "sql",
-    structure: "Sigue el orden de las UD1-UD3 del temario del centro, con un bloque de ampliación propio.",
-  },
-  {
-    id: "entornos", module: "0487", title: "Entornos de desarrollo", subtitle: "Módulo 0487 · UD1 del centro", lang: "python",
-    structure: "Sigue el orden de la UD1 «Desarrollo de software» del temario del centro.",
-  },
-  {
-    id: "marcas", module: "0373", title: "Lenguajes de marcas", subtitle: "Módulo 0373 · XML, HTML, JSON y XPath", lang: "python",
-    structure: "Las unidades se organizan por los resultados de aprendizaje del Real Decreto 405/2023. Los objetivos de cada lección los resumen con palabras propias y citan el RA y sus criterios.",
-  },
-  {
-    id: "js", module: "0612", title: "JavaScript", subtitle: "Entorno cliente", lang: "javascript",
-    structure: "Selección propia de la plataforma para el módulo 0612; no sigue ningún temario.",
-  },
-  {
-    id: "java", module: "0485", title: "Java", subtitle: "Para más adelante: Java desde cero", lang: "java",
-    structure: "Curso propio de la plataforma para practicar Java; no sigue ningún temario.",
-  },
-];
+// El catálogo de cursos vive en catalog.js (familias DAW y academia). DAW_COURSES se sigue
+// exportando desde aquí para no cambiar ningún import existente.
+export { DAW_COURSES } from "./catalog.js";
 
 const key = (id) => `pld:course:${id}`;
 
@@ -152,10 +126,11 @@ export function mergeCourse(id, remote = {}) {
   mergeLessonProgress(local, clean); // lecciones completadas (unión) y última lección (la más reciente)
 }
 
-/** Al iniciar sesión, trae y fusiona el progreso de cada curso guardado en la cuenta.
+/** Al iniciar sesión, trae y fusiona el progreso de cada curso guardado en la cuenta
+    (los de DAW y los de las academias: SYNCED_COURSES de catalog.js).
     Cada curso se sube solo después de fusionarse bien; si falla, se reintenta. */
 export function initCourseSync(onMerged) {
-  for (const { id } of DAW_COURSES) {
+  for (const { id } of SYNCED_COURSES) {
     const mergeRemote = (remote) => {
       mergeCourse(id, remote.data);
       saveCourse(id);
@@ -186,7 +161,7 @@ export function initCourseSync(onMerged) {
         },
       }),
     );
-    const { title } = DAW_COURSES.find((course) => course.id === id);
+    const { title } = SYNCED_COURSES.find((course) => course.id === id);
     uploaders.set(
       id,
       createUploader({ name: `course:${id}`, label: `el curso ${title}`, gate: gates.get(id), push: () => docs.get(id).push() }),
