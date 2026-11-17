@@ -3,6 +3,29 @@ const { test, expect, uniqueEmail, openLesson } = require("./fixtures");
 
 const API = "http://127.0.0.1:8000";
 
+test("sin estilos en línea: la CSP no permite 'unsafe-inline' y las barras de progreso se pintan (RT-004)", async ({ page }) => {
+  await page.addInitScript(() => {
+    window.__violations = [];
+    document.addEventListener("securitypolicyviolation", (e) => window.__violations.push(`${e.violatedDirective} ${e.blockedURI}`));
+  });
+  const csp = async () => page.locator('meta[http-equiv="Content-Security-Policy"]').getAttribute("content");
+  await page.goto("/#/portada");
+  expect((await csp()).match(/style-src[^;]*/)[0]).not.toContain("unsafe-inline");
+  await page.locator("#lp-temario").waitFor();
+  for (const route of ["/#/aprender", "/#/practicar", "/#/progreso", "/#/inicio", "/#/pcap", "/#/daw", "/#/ciberseguridad", "/#/planes", "/#/perfil"]) {
+    await page.goto(route);
+    await page.locator("#main").waitFor();
+    await page.waitForLoadState("networkidle");
+  }
+  // Las barras reciben su valor (data-meter → --value) aunque no haya style="…"
+  await page.goto("/#/daw");
+  const meters = page.locator("[data-meter]");
+  await expect(meters.first()).toBeAttached();
+  const values = await meters.evaluateAll((els) => els.map((el) => [el.dataset.meter, el.style.getPropertyValue("--value")]));
+  for (const [value, css] of values) expect(css).toBe(`${Math.min(100, Math.max(0, Number(value)))}%`);
+  expect(await page.evaluate(() => window.__violations)).toEqual([]);
+});
+
 test("la política de seguridad (CSP) está activa y no bloquea nada de la app", async ({ page }) => {
   await page.addInitScript(() => {
     window.__violations = [];

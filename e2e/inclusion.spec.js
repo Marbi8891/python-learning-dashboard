@@ -123,9 +123,14 @@ for (const viewport of [
 
 test("WCAG 1.4.12: la lección aguanta el espaciado de texto máximo sin cortarse", async ({ page }) => {
   await openLesson(page, "variables");
-  await page.addStyleTag({
-    content: `* { line-height: 1.5 !important; letter-spacing: 0.12em !important; word-spacing: 0.16em !important; }
-              p { margin-bottom: 2em !important; }`,
+  // Como una hoja de estilos del usuario: con CSSOM (hoja construida), que la CSP sin 'unsafe-inline' no bloquea
+  // (un <style> inyectado sí quedaría bloqueado y la prueba no mediría nada, RT-004)
+  await page.evaluate(() => {
+    const sheet = new CSSStyleSheet();
+    sheet.replaceSync(`* { line-height: 1.5 !important; letter-spacing: 0.12em !important; word-spacing: 0.16em !important; }
+                       p { margin-bottom: 2em !important; }`);
+    document.adoptedStyleSheets = [...document.adoptedStyleSheets, sheet];
   });
+  expect(await page.locator("#lesson-view p").first().evaluate((el) => getComputedStyle(el).wordSpacing)).not.toBe("0px");
   expect(await horizontalOverflow(page)).toBeLessThanOrEqual(0);
 });

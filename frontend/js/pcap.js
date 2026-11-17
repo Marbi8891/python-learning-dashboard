@@ -65,7 +65,7 @@ function langSwitch() {
 function meter(value, label, gold = false) {
   const pct = Math.round((value ?? 0) * 100);
   return `<span class="meter${gold ? " meter--gold" : ""}" role="progressbar" aria-label="${escapeHtml(label)}"
-    aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}"><span class="meter__fill" style="--value: ${pct}%"></span></span>`;
+    aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}"><span class="meter__fill" data-meter="${pct}"></span></span>`;
 }
 
 /* ---------- Preparación y logros ---------- */

@@ -118,7 +118,7 @@ export function planHtml() {
           <select data-daily-goal>${GOALS.map((g) => `<option value="${g}"${g === goal ? " selected" : ""}>${g} preguntas</option>`).join("")}</select>
         </label>
         <div class="meter meter--gold" role="progressbar" aria-label="Meta de hoy" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}">
-          <span class="meter__fill" style="--value: ${pct}%"></span>
+          <span class="meter__fill" data-meter="${pct}"></span>
         </div>
         <p class="account-card__meta">Hoy llevas <strong>${done}</strong> de ${goal} preguntas${done >= goal ? " · ¡meta cumplida!" : ""}. Racha: ${days} ${days === 1 ? "día" : "días"}.</p>
       </div>
@@ -176,7 +176,7 @@ export async function fillCourse(c) {
     ${
       enough
         ? `<div class="meter" role="progressbar" aria-label="Dominio de ${escapeHtml(c.title)}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${score}">
-      <span class="meter__fill" style="--value: ${score}%"></span>
+      <span class="meter__fill" data-meter="${score}"></span>
     </div>`
         : ""
     }

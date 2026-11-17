@@ -36,7 +36,7 @@
 .xp__bar::before {
   content: "";
   display: block;
-  width: var(--xp);
+  width: var(--xp, 0%);
   height: 100%;
   border-radius: inherit;
   background: linear-gradient(90deg, var(--color-gold), var(--color-accent));

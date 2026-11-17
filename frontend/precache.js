@@ -56,6 +56,7 @@ self.PLD_PRECACHE = [
  "js/lesson-progress.js",
  "js/local-owner.js",
  "js/markdown.js",
+ "js/meters.js",
  "js/not-found.js",
  "js/pcap-store.js",
  "js/pcap-sync.js",
