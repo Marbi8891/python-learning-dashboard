@@ -11,6 +11,15 @@ async function audit(page) {
 
 const header = (page) => page.getByRole("banner");
 
+// La portada pinta primero la cabecera y el héroe, y luego añade las secciones que dependen del
+// temario (y cambia la ventana del héroe). Un clic durante ese cambio puede caer en otro sitio
+// (pasaba en WebKit), así que se espera a que esté entera y con las fuentes cargadas.
+async function openPortada(page) {
+  await page.goto("/#/portada");
+  await expect(page.locator(".lp-step")).toHaveCount(4);
+  await page.evaluate(() => document.fonts.ready);
+}
+
 test("la portada tiene su propia cabecera, oculta la app y lleva a cada sección por su ruta", async ({ page }) => {
   await page.goto("/#/portada");
   await expect(page.locator("#lp-title")).toHaveText("Aprende programación entendiendo lo que haces");
@@ -25,7 +34,7 @@ test("la portada tiene su propia cabecera, oculta la app y lleva a cada sección
   await expect(page.locator("#lp-funcionalidades-title")).toBeInViewport();
 
   // «Descubrir cómo funciona» y el enlace profundo con recarga
-  await page.goto("/#/portada");
+  await openPortada(page);
   await page.getByRole("link", { name: "Descubrir cómo funciona" }).click();
   await expect(page).toHaveURL(/#\/portada\/como-funciona$/);
   await expect(page.locator(".lp-step")).toHaveCount(4);
@@ -34,7 +43,7 @@ test("la portada tiene su propia cabecera, oculta la app y lleva a cada sección
   await expect(page.locator("#lp-preguntas-title")).toBeInViewport();
 
   // Volver atrás desde la app regresa a la portada
-  await page.goto("/#/portada");
+  await openPortada(page);
   await page.getByRole("link", { name: "Entrar en Python Learning Dashboard" }).click();
   await expect(page).toHaveURL(/#\/aprender$/);
   await expect(page.locator("#landing-view")).toBeHidden();
