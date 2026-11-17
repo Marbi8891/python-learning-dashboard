@@ -1,14 +1,15 @@
 /* Service worker: la web funciona sin conexión después de la primera visita.
    - Archivos de la web: primero la red (siempre la versión nueva) y, sin conexión o si la red tarda
      más de NETWORK_TIMEOUT_MS, la copia guardada (la red sigue y actualiza la copia, MWG-06).
-   - Pyodide (Python en el navegador): primero la copia guardada; sus URL llevan la versión y no cambian.
+   - Pyodide (Python en el navegador, en pyodide/v<versión>/ de la propia web): primero la copia guardada;
+     sus URL llevan la versión y no cambian.
    - API del backend: nunca se guarda (datos personales y siempre actuales).
    - Al instalarse guarda también toda la web (precache.js, AUD-008): así se puede estudiar sin conexión
      aunque no se hayan abierto antes todas las páginas. */
 
 importScripts("precache.js");
 
-const VERSION = "v12";
+const VERSION = "v13";
 const SITE_CACHE = `pld-site-${VERSION}`;
 const PYODIDE_CACHE = "pld-pyodide"; // se conserva entre versiones: son ~10 MB inmutables
 const NETWORK_TIMEOUT_MS = 4000; // con «lie-fi» (conectado pero sin datos) no se espera para siempre
@@ -36,6 +37,12 @@ self.addEventListener("activate", (event) => {
           keys.filter((k) => k.startsWith("pld-site-") && k !== SITE_CACHE).map((k) => caches.delete(k)),
         ),
       )
+      // Python ya no se descarga de un CDN (RT-002): se borran las copias de otro origen (~13 MB)
+      .then(() => caches.open(PYODIDE_CACHE))
+      .then(async (cache) => {
+        const old = (await cache.keys()).filter((request) => new URL(request.url).origin !== self.location.origin);
+        await Promise.all(old.map((request) => cache.delete(request)));
+      })
       .then(() => self.clients.claim()),
   );
 });
@@ -83,11 +90,12 @@ self.addEventListener("fetch", (event) => {
   if (request.method !== "GET") return;
   const url = new URL(request.url);
   if (url.pathname.startsWith("/api/") || url.pathname.includes("/api/")) return; // API: sin caché
-  if (url.origin === self.location.origin) {
+  // Python (pyodide/v<versión>/) no cambia nunca dentro de una versión: primero la copia (RT-002)
+  if (url.pathname.includes("/pyodide/")) {
+    event.respondWith(cacheFirst(request));
+  } else if (url.origin === self.location.origin) {
     const network = fetchAndStore(request);
     event.waitUntil(network.catch(() => {})); // aunque se responda con la copia, la descarga termina
     event.respondWith(networkFirst(request, network));
-  } else if (url.pathname.includes("pyodide")) {
-    event.respondWith(cacheFirst(request));
   }
 });

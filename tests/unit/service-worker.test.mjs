@@ -13,6 +13,8 @@ function loadServiceWorker(fetchImpl, { timers = { setTimeout } } = {}) {
   const stored = new Map();
   const cache = {
     match: async (request) => stored.get(typeof request === "string" ? `${ORIGIN}/${request}` : request.url),
+    keys: async () => [...stored.keys()].map((url) => ({ url })),
+    delete: async (request) => stored.delete(request.url),
     put: async (request, response) => void stored.set(request.url, response),
     add: async () => {},
     addAll: async () => {},
@@ -45,7 +47,12 @@ function loadServiceWorker(fetchImpl, { timers = { setTimeout } } = {}) {
     });
     return { response: responded, done: Promise.all(waits) };
   };
-  return { dispatch, stored };
+  const activate = async () => {
+    const waits = [];
+    listeners.activate({ waitUntil: (promise) => waits.push(promise) });
+    await Promise.all(waits);
+  };
+  return { dispatch, activate, stored };
 }
 
 const ok = (body) => ({ ok: true, body, clone: () => ok(body) });
@@ -101,4 +108,24 @@ test("una navegación sin conexión y sin su copia abre index.html", async () =>
   });
   sw.stored.set(`${ORIGIN}/index.html`, ok("index"));
   assert.equal((await sw.dispatch(`${ORIGIN}/`, "navigate").response).body, "index");
+});
+
+test("Python de la propia web: primero la copia guardada, sin ir a la red (RT-002)", async () => {
+  let calls = 0;
+  const sw = loadServiceWorker(async () => {
+    calls += 1;
+    return ok("red");
+  });
+  const wasm = `${ORIGIN}/pyodide/v314.0.7/pyodide.asm.wasm`;
+  sw.stored.set(wasm, ok("guardada"));
+  assert.equal((await sw.dispatch(wasm).response).body, "guardada");
+  assert.equal(calls, 0);
+});
+
+test("al activarse borra las copias de Python que venían del CDN (RT-002)", async () => {
+  const sw = loadServiceWorker(async () => ok("red"));
+  sw.stored.set("https://cdn.jsdelivr.net/pyodide/v314.0.7/full/pyodide.asm.wasm", ok("cdn"));
+  sw.stored.set(`${ORIGIN}/pyodide/v314.0.7/pyodide.asm.wasm`, ok("propia"));
+  await sw.activate();
+  assert.deepEqual([...sw.stored.keys()], [`${ORIGIN}/pyodide/v314.0.7/pyodide.asm.wasm`]);
 });
