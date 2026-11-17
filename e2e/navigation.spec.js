@@ -17,6 +17,37 @@ test("la portada del curso PCAP lleva a la primera lección pendiente y la barra
   await expect(page.locator("#panel-theory code.hljs")).toHaveCount(1); // resaltado de sintaxis
 });
 
+test("entrar directo a una lección no hace saltar la página mientras llega el temario", async ({ page, browserName }) => {
+  // lessons.json llega tarde a propósito: mientras tanto solo se ve «Cargando…» (MWG-02)
+  let release;
+  const held = new Promise((resolve) => (release = resolve));
+  await page.route("**/data/lessons.json", async (route) => {
+    await held;
+    await route.continue();
+  });
+  await page.addInitScript(() => {
+    window.__shift = 0;
+    if (PerformanceObserver.supportedEntryTypes?.includes("layout-shift")) {
+      new PerformanceObserver((list) => {
+        for (const entry of list.getEntries()) if (!entry.hadRecentInput) window.__shift += entry.value;
+      }).observe({ type: "layout-shift", buffered: true });
+    }
+  });
+  await page.goto("/#/leccion/variables");
+  await expect(page.locator("#lesson-title")).toHaveText("Cargando…");
+  await expect(page.locator("#lesson-view")).toHaveAttribute("aria-busy", "true");
+  await expect(page.locator(".console")).toBeHidden();
+  await expect(page.locator("#lesson-view .tabs")).toBeHidden();
+
+  release();
+  await expect(page.locator("#lesson-title")).toHaveText("Variables y print()");
+  await expect(page.locator(".console")).toBeVisible();
+  await expect(page.locator("#lesson-view")).not.toHaveAttribute("aria-busy", /.*/);
+  await page.waitForTimeout(500); // las entradas de layout-shift llegan después del pintado
+  // Solo Chromium mide layout-shift (Core Web Vitals: «bueno» es ≤ 0,1)
+  if (browserName === "chromium") expect(await page.evaluate(() => window.__shift)).toBeLessThanOrEqual(0.1);
+});
+
 test("una lección que no existe dice que no existe y deja volver", async ({ page }) => {
   // Antes abría otra lección sin avisar (NAV-01)
   await openLesson(page, "no-existe");

@@ -3,12 +3,31 @@
    Usa los tokens de base.css: mismos colores, tipografías y temas que la app.
    ========================================================= */
 
-/* Con la portada a la vista se oculta la estructura de la app (menú lateral, asistente) */
+/* Con la portada a la vista se oculta la estructura de la app (menú lateral, asistente).
+   html[data-boot="landing"] (theme-init.js) hace lo mismo mientras carga la portada. */
 body[data-page="landing"] .app,
 body[data-page="landing"] .topbar,
 body[data-page="landing"] .sidebar-backdrop,
-body[data-page="landing"] .assistant {
+body[data-page="landing"] .assistant,
+html[data-boot="landing"] .app,
+html[data-boot="landing"] .topbar,
+html[data-boot="landing"] .sidebar-backdrop,
+html[data-boot="landing"] .assistant {
   display: none;
+}
+
+.boot-splash {
+  display: none;
+}
+
+html[data-boot="landing"] .boot-splash {
+  display: flex;
+  min-height: 100dvh;
+  margin: 0;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  color: var(--color-text-muted, var(--color-text));
 }
 
 .landing {
