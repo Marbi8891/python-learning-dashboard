@@ -122,6 +122,8 @@
   "Conectando con el servidor…": "Connecting to the server…",
   "El servidor se está despertando: la primera vez puede tardar hasta un minuto. No cierres esta ventana.": "The server is waking up: the first time it can take up to a minute. Don't close this window.",
   "No se pudo conectar con el servidor. Inténtalo de nuevo en unos segundos.": "Could not connect to the server. Try again in a few seconds.",
+  "El servidor no ha respondido a tiempo. Inténtalo de nuevo en unos segundos.": "The server did not respond in time. Try again in a few seconds.",
+  "Hay una versión nueva de la web: recarga la página para usarla.": "There is a new version of the site: reload the page to use it.",
   "Idioma": "Language",
   "· Language": "",
   "Tema": "Theme",

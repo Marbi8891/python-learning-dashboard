@@ -70,6 +70,20 @@ test("errores de validación y credenciales en español", async ({ page }) => {
   await expect(page.locator("#account-message")).toHaveText("Email o contraseña incorrectos");
 });
 
+test("si el servidor no responde, el inicio de sesión termina con un aviso y se puede reintentar (MWG-07)", async ({ page }) => {
+  await page.addInitScript(() => {
+    window.PLD_CONFIG = Object.assign(window.PLD_CONFIG ?? {}, { apiTimeoutMs: 1500 });
+  });
+  await page.route("**/api/v1/auth/login", () => {}); // la petición se queda colgada: nunca responde
+  await openLesson(page);
+  await page.getByRole("button", { name: "Iniciar sesión" }).click();
+  await dialog(page).locator("#login-form").getByLabel("Email").fill("nadie@example.com");
+  await dialog(page).locator("#login-form").getByLabel("Contraseña").fill("incorrecta-123");
+  await dialog(page).getByRole("button", { name: "Entrar" }).click();
+  await expect(page.locator("#account-message")).toHaveText("El servidor no ha respondido a tiempo. Inténtalo de nuevo en unos segundos.");
+  await expect(dialog(page).getByRole("button", { name: "Entrar" })).toBeEnabled();
+});
+
 /* WebKit, como Safari, no guarda la cookie de la API: es de otro sitio (la web va en localhost y la
    API en 127.0.0.1) y la bloquea. La web entonces entra con el token solo en memoria (account.js).
    Las pruebas de sesión comprueban en cada motor el modo que le toca: Chromium SIEMPRE con cookie. */

@@ -79,6 +79,11 @@ cambios se agrupan por fecha de merge, con el número de pull request entre par�
   WCAG 2.2 AA y que falta la revisión manual con lector de pantalla.
 
 ### Corregido
+- Sin conexión fiable la web ya no se queda esperando: el service worker usa la copia guardada si la
+  red tarda más de 4 s (y la red la actualiza después), se registra al terminar de cargar para no
+  competir con la primera visita y avisa cuando hay una versión nueva. Las llamadas a la API tienen
+  tiempo límite (90 s, por el arranque en frío de Render) con un mensaje para reintentar.
+  Diagnóstico Modern Web Guidance MWG-05, MWG-06 y MWG-07.
 - La portada ya no enseña «Cargando lección…» con la consola vacía mientras carga: la cabecera y el
   hero se pintan sin esperar a `learning.json` y `lessons.json`, y el resto de secciones se añade debajo
   al llegar los datos (LCP móvil medido en local con 4G lenta: 11,7 s → 6,2 s). El aviso para cambiar a

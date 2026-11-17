@@ -1,5 +1,6 @@
 /* Service worker: la web funciona sin conexión después de la primera visita.
-   - Archivos de la web: primero la red (siempre la versión nueva) y, sin conexión, la copia guardada.
+   - Archivos de la web: primero la red (siempre la versión nueva) y, sin conexión o si la red tarda
+     más de NETWORK_TIMEOUT_MS, la copia guardada (la red sigue y actualiza la copia, MWG-06).
    - Pyodide (Python en el navegador): primero la copia guardada; sus URL llevan la versión y no cambian.
    - API del backend: nunca se guarda (datos personales y siempre actuales).
    - Al instalarse guarda también toda la web (precache.js, AUD-008): así se puede estudiar sin conexión
@@ -7,9 +8,10 @@
 
 importScripts("precache.js");
 
-const VERSION = "v11";
+const VERSION = "v12";
 const SITE_CACHE = `pld-site-${VERSION}`;
 const PYODIDE_CACHE = "pld-pyodide"; // se conserva entre versiones: son ~10 MB inmutables
+const NETWORK_TIMEOUT_MS = 4000; // con «lie-fi» (conectado pero sin datos) no se espera para siempre
 const SHELL = ["./", "index.html", "config.js", "js/analytics.js", "manifest.webmanifest", "favicon.svg"];
 
 self.addEventListener("install", (event) => {
@@ -38,18 +40,33 @@ self.addEventListener("activate", (event) => {
   );
 });
 
-async function networkFirst(request) {
+const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+/** `network` es la descarga ya lanzada (ver el evento fetch): si tarda, se responde con la copia. */
+async function networkFirst(request, network) {
   const cache = await caches.open(SITE_CACHE);
+  const cached = () =>
+    cache.match(request, { ignoreSearch: true }).then(
+      (hit) => hit ?? (request.mode === "navigate" ? cache.match("index.html") : undefined),
+    );
   try {
-    const response = await fetch(request);
-    if (response.ok) cache.put(request, response.clone());
-    return response;
+    return await Promise.race([network, wait(NETWORK_TIMEOUT_MS).then(async () => (await cached()) ?? network)]);
   } catch (error) {
-    const cached = await cache.match(request, { ignoreSearch: true });
-    if (cached) return cached;
-    if (request.mode === "navigate") return (await cache.match("index.html")) ?? Response.error();
+    const hit = await cached();
+    if (hit) return hit;
+    if (request.mode === "navigate") return Response.error();
     throw error;
   }
+}
+
+/** Descarga y guarda la copia (solo respuestas correctas). */
+async function fetchAndStore(request) {
+  const response = await fetch(request);
+  if (response.ok) {
+    const cache = await caches.open(SITE_CACHE);
+    await cache.put(request, response.clone());
+  }
+  return response;
 }
 
 async function cacheFirst(request) {
@@ -67,7 +84,9 @@ self.addEventListener("fetch", (event) => {
   const url = new URL(request.url);
   if (url.pathname.startsWith("/api/") || url.pathname.includes("/api/")) return; // API: sin caché
   if (url.origin === self.location.origin) {
-    event.respondWith(networkFirst(request));
+    const network = fetchAndStore(request);
+    event.waitUntil(network.catch(() => {})); // aunque se responda con la copia, la descarga termina
+    event.respondWith(networkFirst(request, network));
   } else if (url.pathname.includes("pyodide")) {
     event.respondWith(cacheFirst(request));
   }
