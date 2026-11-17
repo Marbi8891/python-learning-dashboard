@@ -30,6 +30,7 @@ import {
   startPlanItem,
   startSession,
 } from "./session-view.js";
+import { isLearnRoute } from "./routes.js";
 import { codeBlock, errorExplanation, escapeHtml, KIND_LABEL, masteryText, meter, percent, renderInline, renderMarkdown, STATUS, statusBadge } from "./ui.js";
 
 const $ = (selector) => document.querySelector(selector);
@@ -797,17 +798,5 @@ function pageTitle(section, arg) {
   return { bienvenida: "Bienvenida", practicar: "Practicar", progreso: "Tu progreso", daw: "Preparación DAW" }[section] ?? "Aprender";
 }
 
-export const LEARN_ROUTES = ["#/bienvenida", "#/aprender", "#/teoria", "#/poo", "#/practicar", "#/progreso", "#/sesion"];
-
-/** ¿La ruta es del núcleo educativo? `#/daw` es la Preparación DAW; `#/daw/<curso>` sigue en daw.js. */
-export const isLearnRoute = (hash) => hash === "#/daw" || LEARN_ROUTES.some((r) => hash === r || hash.startsWith(`${r}/`));
-
-/** Clave del menú principal para una ruta del núcleo. */
-export function learnNavKey(hash) {
-  if (hash.startsWith("#/bienvenida")) return "bienvenida"; // ninguna entrada del menú
-  if (hash.startsWith("#/teoria") || hash.startsWith("#/poo")) return "teoria";
-  if (hash.startsWith("#/practicar")) return "practicar";
-  if (hash.startsWith("#/progreso")) return "progreso";
-  if (hash.startsWith("#/daw")) return "daw";
-  return "aprender";
-}
+// Viven en routes.js: app.js las usa sin descargar esta zona
+export { LEARN_ROUTES, isLearnRoute, learnNavKey } from "./routes.js";

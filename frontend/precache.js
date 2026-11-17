@@ -47,6 +47,7 @@ self.PLD_PRECACHE = [
  "js/learn/planner.js",
  "js/learn/poo-view.js",
  "js/learn/recommend.js",
+ "js/learn/routes.js",
  "js/learn/session-view.js",
  "js/learn/session.js",
  "js/learn/ui.js",
