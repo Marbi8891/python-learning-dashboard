@@ -53,8 +53,8 @@
   --hairline: linear-gradient(90deg, transparent, rgb(212 175 106 / 0.45), transparent);
 
   /* Tipografía */
-  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-display: "Fraunces", Georgia, "Times New Roman", serif;
+  --font-sans: "Inter", "Inter Fallback", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Fraunces", "Fraunces Fallback", Georgia, "Times New Roman", serif;
   --font-mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
 
   /* Escala de tamaños de letra (rem: respeta el tamaño que elige el navegador).
