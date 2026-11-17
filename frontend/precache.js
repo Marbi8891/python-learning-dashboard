@@ -27,6 +27,7 @@ self.PLD_PRECACHE = [
  "js/dashboard-data.js",
  "js/dashboard.js",
  "js/daw.js",
+ "js/dialogs.js",
  "js/doc-sync.js",
  "js/form-errors.js",
  "js/game-data.js",

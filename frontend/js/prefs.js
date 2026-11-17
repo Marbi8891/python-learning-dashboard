@@ -2,6 +2,7 @@
    (texto espaciado, contraste alto y sin animaciones).
    index.html las aplica antes de pintar la página; aquí se gestionan los cambios. */
 
+import { lightDismiss } from "./dialogs.js";
 import { language, setLanguage } from "./i18n.js";
 
 const KEY = "pld:prefs";
@@ -67,6 +68,7 @@ export function initPrefs() {
     $("#appearance-dialog").showModal();
   });
   $("#appearance-close").addEventListener("click", () => $("#appearance-dialog").close());
+  lightDismiss($("#appearance-dialog"));
   form.addEventListener("change", (event) => {
     // El idioma recarga la página: así todo se pinta ya traducido
     if (event.target.name === "lang") {
