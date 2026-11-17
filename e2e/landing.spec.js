@@ -100,17 +100,22 @@ test("rutas de aprendizaje con cifras contadas del temario y acceso directo a pr
   await expect(page.getByRole("link", { name: "Practicar Python" })).toHaveAttribute("href", "#/practicar");
   await expect(page.locator("[data-lp-start]")).toHaveText(/Empezar a aprender/);
   const routes = page.locator("#lp-rutas .lp-route");
-  await expect(routes).toHaveCount(3);
+  await expect(routes).toHaveCount(4); // Python, PCAP, DAW y Excel profesional (DP-09: visible desde P2)
   const counts = await page.evaluate(async () => {
     const learning = await (await fetch("data/learning.json")).json();
     const lessons = await (await fetch("data/lessons.json")).json();
-    return [learning.concepts.length, learning.exercises.length, lessons.modules.reduce((n, m) => n + m.lessons.length, 0), lessons.modules.length];
+    const excel = await (await fetch("data/academia/excel/lessons.json")).json();
+    const bank = await (await fetch("data/academia/excel/bank.json")).json();
+    return [learning.concepts.length, learning.exercises.length, lessons.modules.reduce((n, m) => n + m.lessons.length, 0), lessons.modules.length, excel.modules.reduce((n, m) => n + m.lessons.length, 0), bank.questions.length];
   });
   await expect(routes.nth(0)).toContainText(`${counts[0]} conceptos · ${counts[1]} ejercicios corregidos`);
   await expect(routes.nth(1)).toContainText(`${counts[2]} lecciones · ${counts[3]} módulos`);
   await expect(routes.nth(0).getByRole("link", { name: /Empezar la ruta/ })).toHaveAttribute("href", "#/aprender");
   await expect(routes.nth(1).getByRole("link", { name: /Ver el curso/ })).toHaveAttribute("href", "#/inicio");
   await expect(routes.nth(2).getByRole("link", { name: /Ver los cursos/ })).toHaveAttribute("href", "#/daw/cursos");
+  // Las cifras de Excel están escritas a mano en landing.js: tienen que seguir cuadrando con sus datos
+  await expect(routes.nth(3)).toContainText(`${counts[4]} unidades · ${counts[5]} ejercicios`);
+  await expect(routes.nth(3).getByRole("link", { name: /Ver el curso/ })).toHaveAttribute("href", "#/academia/excel");
   // Sin actividad guardada no hay bloque «Tu actividad» ni progreso en las rutas
   await expect(page.locator("#lp-actividad")).toHaveCount(0);
   await expect(page.locator("#lp-rutas")).not.toContainText("dominados");

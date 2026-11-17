@@ -1,0 +1,4281 @@
+{
+ "exam": {
+  "code": "EXCEL",
+  "questions": 0,
+  "minutes": 0,
+  "pass": 0,
+  "blocks": [
+   {
+    "slug": "xl-m01",
+    "weight": 50,
+    "items": 56,
+    "title": {
+     "es": "M01 · Fundamentos de Excel",
+     "en": "M01 · Fundamentos de Excel"
+    }
+   },
+   {
+    "slug": "xl-m02",
+    "weight": 50,
+    "items": 55,
+    "title": {
+     "es": "M02 · Fórmulas y funciones básicas",
+     "en": "M02 · Fórmulas y funciones básicas"
+    }
+   }
+  ]
+ },
+ "questions": [
+  {
+   "id": "xl1-int-01",
+   "block": "xl-m01",
+   "q": {
+    "es": "¿Qué es un **libro** de Excel?",
+    "en": "¿Qué es un **libro** de Excel?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "El archivo de Excel, que contiene una o varias hojas",
+     "en": "El archivo de Excel, que contiene una o varias hojas"
+    },
+    {
+     "es": "Una sola hoja de cálculo",
+     "en": "Una sola hoja de cálculo"
+    },
+    {
+     "es": "Una fila de datos",
+     "en": "Una fila de datos"
+    },
+    {
+     "es": "La cinta de opciones",
+     "en": "La cinta de opciones"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "El libro es el archivo (.xlsx). Las hojas son las pestañas que tiene dentro.",
+    "en": "El libro es el archivo (.xlsx). Las hojas son las pestañas que tiene dentro."
+   },
+   "lesson": "xl1-interfaz"
+  },
+  {
+   "id": "xl1-int-02",
+   "block": "xl-m01",
+   "q": {
+    "es": "¿Cuántas celdas tiene el rango `B2:D5`?",
+    "en": "¿Cuántas celdas tiene el rango `B2:D5`?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "12",
+     "en": "12"
+    },
+    {
+     "es": "9",
+     "en": "9"
+    },
+    {
+     "es": "16",
+     "en": "16"
+    },
+    {
+     "es": "20",
+     "en": "20"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "B, C y D son 3 columnas; de la fila 2 a la 5 hay 4 filas: 3 × 4 = 12.",
+    "en": "B, C y D son 3 columnas; de la fila 2 a la 5 hay 4 filas: 3 × 4 = 12."
+   },
+   "lesson": "xl1-interfaz"
+  },
+  {
+   "id": "xl1-int-03",
+   "block": "xl-m01",
+   "q": {
+    "es": "¿Dónde ves la fórmula que guarda la celda activa?",
+    "en": "¿Dónde ves la fórmula que guarda la celda activa?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "En la barra de fórmulas",
+     "en": "En la barra de fórmulas"
+    },
+    {
+     "es": "En el cuadro de nombres",
+     "en": "En el cuadro de nombres"
+    },
+    {
+     "es": "En la pestaña Inicio",
+     "en": "En la pestaña Inicio"
+    },
+    {
+     "es": "En la propia celda, siempre",
+     "en": "En la propia celda, siempre"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "La celda muestra el resultado; la barra de fórmulas muestra lo que guarda.",
+    "en": "La celda muestra el resultado; la barra de fórmulas muestra lo que guarda."
+   },
+   "lesson": "xl1-interfaz"
+  },
+  {
+   "id": "xl1-int-04",
+   "block": "xl-m01",
+   "q": {
+    "es": "¿Cuál es la forma más rápida de ir a la celda `K250`?",
+    "en": "¿Cuál es la forma más rápida de ir a la celda `K250`?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Escribir K250 en el cuadro de nombres y pulsar Intro",
+     "en": "Escribir K250 en el cuadro de nombres y pulsar Intro"
+    },
+    {
+     "es": "Escribir K250 en la barra de fórmulas",
+     "en": "Escribir K250 en la barra de fórmulas"
+    },
+    {
+     "es": "Pulsar Ctrl+Inicio",
+     "en": "Pulsar Ctrl+Inicio"
+    },
+    {
+     "es": "Hacer doble clic en la pestaña de la hoja",
+     "en": "Hacer doble clic en la pestaña de la hoja"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "El cuadro de nombres, a la izquierda de la barra de fórmulas, lleva a la celda que escribas. Ctrl+Inicio va a A1.",
+    "en": "El cuadro de nombres, a la izquierda de la barra de fórmulas, lleva a la celda que escribas. Ctrl+Inicio va a A1."
+   },
+   "lesson": "xl1-interfaz"
+  },
+  {
+   "id": "xl1-int-05",
+   "block": "xl-m01",
+   "q": {
+    "es": "Seleccionas el rango `A1:C3` empezando a arrastrar desde `A1`. ¿Cuál es la celda activa?",
+    "en": "Seleccionas el rango `A1:C3` empezando a arrastrar desde `A1`. ¿Cuál es la celda activa?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "A1, la que se ve en blanco dentro de la selección",
+     "en": "A1, la que se ve en blanco dentro de la selección"
+    },
+    {
+     "es": "C3",
+     "en": "C3"
+    },
+    {
+     "es": "Todas las del rango",
+     "en": "Todas las del rango"
+    },
+    {
+     "es": "B2, la del centro",
+     "en": "B2, la del centro"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "En una selección solo hay una celda activa: aquella desde la que empezaste. Se ve sin sombrear.",
+    "en": "En una selección solo hay una celda activa: aquella desde la que empezaste. Se ve sin sombrear."
+   },
+   "lesson": "xl1-interfaz"
+  },
+  {
+   "id": "xl1-int-06",
+   "block": "xl-m01",
+   "q": {
+    "es": "La celda `D2` muestra **150** y en la barra de fórmulas pone `=B2*C2`. ¿Qué guarda `D2`?",
+    "en": "La celda `D2` muestra **150** y en la barra de fórmulas pone `=B2*C2`. ¿Qué guarda `D2`?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "La fórmula =B2*C2; 150 es su resultado",
+     "en": "La fórmula =B2*C2; 150 es su resultado"
+    },
+    {
+     "es": "El número 150",
+     "en": "El número 150"
+    },
+    {
+     "es": "El texto «=B2*C2»",
+     "en": "El texto «=B2*C2»"
+    },
+    {
+     "es": "Nada: el valor está en B2",
+     "en": "Nada: el valor está en B2"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "La celda guarda la fórmula y muestra el resultado. Si cambias B2 o C2, el 150 cambia solo.",
+    "en": "La celda guarda la fórmula y muestra el resultado. Si cambias B2 o C2, el 150 cambia solo."
+   },
+   "lesson": "xl1-interfaz"
+  },
+  {
+   "id": "xl1-int-07",
+   "block": "xl-m01",
+   "q": {
+    "es": "¿Cómo se llama la celda de la **columna C** y la **fila 4**?",
+    "en": "¿Cómo se llama la celda de la **columna C** y la **fila 4**?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "C4",
+     "en": "C4"
+    },
+    {
+     "es": "4C",
+     "en": "4C"
+    },
+    {
+     "es": "C-4",
+     "en": "C-4"
+    },
+    {
+     "es": "D3",
+     "en": "D3"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Primero la letra de la columna y después el número de la fila.",
+    "en": "Primero la letra de la columna y después el número de la fila."
+   },
+   "lesson": "xl1-interfaz"
+  },
+  {
+   "id": "xl1-int-08",
+   "block": "xl-m01",
+   "q": {
+    "es": "La Gestoría Albaida quiere separar clientes, facturas y notas **en el mismo archivo**. ¿Qué hace?",
+    "en": "La Gestoría Albaida quiere separar clientes, facturas y notas **en el mismo archivo**. ¿Qué hace?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Crea tres hojas en el mismo libro y les cambia el nombre",
+     "en": "Crea tres hojas en el mismo libro y les cambia el nombre"
+    },
+    {
+     "es": "Crea tres libros distintos",
+     "en": "Crea tres libros distintos"
+    },
+    {
+     "es": "Lo escribe todo en la misma columna",
+     "en": "Lo escribe todo en la misma columna"
+    },
+    {
+     "es": "Crea tres cintas de opciones",
+     "en": "Crea tres cintas de opciones"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Un libro puede tener muchas hojas. Cada hoja con un nombre claro mantiene el archivo ordenado.",
+    "en": "Un libro puede tener muchas hojas. Cada hoja con un nombre claro mantiene el archivo ordenado."
+   },
+   "lesson": "xl1-interfaz"
+  },
+  {
+   "id": "xl1-int-09",
+   "block": "xl-m01",
+   "q": {
+    "es": "¿Qué devuelve la fórmula con estos datos?",
+    "en": "¿Qué devuelve la fórmula con estos datos?"
+   },
+   "kind": "formula-result",
+   "excel": {
+    "grid": {
+     "A1": "Cliente",
+     "B1": "Cuota",
+     "A2": "Ana Ruiz",
+     "B2": 45,
+     "A3": "Talleres Sol",
+     "B3": 120,
+     "A4": "Luis Gil",
+     "B4": 60
+    },
+    "formula": "=B3",
+    "answer": 120,
+    "input": "number"
+   },
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "`=B3` lee la celda B3: columna B (Cuota), fila 3 (Talleres Sol).",
+    "en": "`=B3` lee la celda B3: columna B (Cuota), fila 3 (Talleres Sol)."
+   },
+   "lesson": "xl1-interfaz"
+  },
+  {
+   "id": "xl1-int-10",
+   "block": "xl-m01",
+   "q": {
+    "es": "¿Qué devuelve la fórmula con estos datos? Escribe el texto tal cual.",
+    "en": "¿Qué devuelve la fórmula con estos datos? Escribe el texto tal cual."
+   },
+   "kind": "formula-result",
+   "excel": {
+    "grid": {
+     "A1": "Cliente",
+     "B1": "Cuota",
+     "A2": "Ana Ruiz",
+     "B2": 45,
+     "A3": "Talleres Sol",
+     "B3": 120,
+     "A4": "Luis Gil",
+     "B4": 60
+    },
+    "formula": "=A4",
+    "answer": "Luis Gil",
+    "input": "text"
+   },
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "`=A4` lee la celda A4: columna A (Cliente), fila 4.",
+    "en": "`=A4` lee la celda A4: columna A (Cliente), fila 4."
+   },
+   "lesson": "xl1-interfaz"
+  },
+  {
+   "id": "xl1-int-11",
+   "block": "xl-m01",
+   "q": {
+    "es": "La celda `C2` está vacía. ¿Qué devuelve la fórmula?",
+    "en": "La celda `C2` está vacía. ¿Qué devuelve la fórmula?"
+   },
+   "kind": "formula-result",
+   "excel": {
+    "grid": {
+     "A1": "Cliente",
+     "B1": "Cuota",
+     "A2": "Ana Ruiz",
+     "B2": 45,
+     "A3": "Talleres Sol",
+     "B3": 120,
+     "A4": "Luis Gil",
+     "B4": 60
+    },
+    "formula": "=C2",
+    "answer": 0,
+    "input": "choice",
+    "options": [
+     0,
+     45,
+     "Ana Ruiz"
+    ]
+   },
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "Una fórmula que lee una celda vacía muestra 0: al calcular, Excel trata la celda vacía como 0.",
+    "en": "Una fórmula que lee una celda vacía muestra 0: al calcular, Excel trata la celda vacía como 0."
+   },
+   "lesson": "xl1-interfaz"
+  },
+  {
+   "id": "xl1-dat-01",
+   "block": "xl-m01",
+   "q": {
+    "es": "Con Excel en español de España escribes `1,200` en una celda. ¿Qué guarda?",
+    "en": "Con Excel en español de España escribes `1,200` en una celda. ¿Qué guarda?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "El número 1,2",
+     "en": "El número 1,2"
+    },
+    {
+     "es": "El número mil doscientos",
+     "en": "El número mil doscientos"
+    },
+    {
+     "es": "El texto «1,200»",
+     "en": "El texto «1,200»"
+    },
+    {
+     "es": "Un error",
+     "en": "Un error"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "En es-ES la coma es el separador decimal: 1,200 es 1,2.",
+    "en": "En es-ES la coma es el separador decimal: 1,200 es 1,2."
+   },
+   "lesson": "xl1-datos"
+  },
+  {
+   "id": "xl1-dat-02",
+   "block": "xl-m01",
+   "q": {
+    "es": "Con el formato General, ¿cómo distingues a simple vista un número de un texto?",
+    "en": "Con el formato General, ¿cómo distingues a simple vista un número de un texto?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "El número se alinea a la derecha y el texto a la izquierda",
+     "en": "El número se alinea a la derecha y el texto a la izquierda"
+    },
+    {
+     "es": "Los números salen en negrita",
+     "en": "Los números salen en negrita"
+    },
+    {
+     "es": "El texto sale en rojo",
+     "en": "El texto sale en rojo"
+    },
+    {
+     "es": "No se pueden distinguir",
+     "en": "No se pueden distinguir"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Es una pista útil: un «número» alineado a la izquierda probablemente es texto.",
+    "en": "Es una pista útil: un «número» alineado a la izquierda probablemente es texto."
+   },
+   "lesson": "xl1-datos"
+  },
+  {
+   "id": "xl1-dat-03",
+   "block": "xl-m01",
+   "q": {
+    "es": "Una celda con 250 tiene un triángulo verde en la esquina superior izquierda. ¿Qué significa?",
+    "en": "Una celda con 250 tiene un triángulo verde en la esquina superior izquierda. ¿Qué significa?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Excel avisa de un posible problema, como un número almacenado como texto",
+     "en": "Excel avisa de un posible problema, como un número almacenado como texto"
+    },
+    {
+     "es": "La celda está protegida",
+     "en": "La celda está protegida"
+    },
+    {
+     "es": "La celda tiene una nota",
+     "en": "La celda tiene una nota"
+    },
+    {
+     "es": "La celda está vinculada a otro libro",
+     "en": "La celda está vinculada a otro libro"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "El triángulo verde es un aviso de comprobación de errores. Al seleccionar la celda aparece un menú con la explicación.",
+    "en": "El triángulo verde es un aviso de comprobación de errores. Al seleccionar la celda aparece un menú con la explicación."
+   },
+   "lesson": "xl1-datos"
+  },
+  {
+   "id": "xl1-dat-04",
+   "block": "xl-m01",
+   "q": {
+    "es": "Escribes `17/11/2026`. ¿Qué guarda Excel?",
+    "en": "Escribes `17/11/2026`. ¿Qué guarda Excel?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Una fecha: un número de serie que se muestra con formato de fecha",
+     "en": "Una fecha: un número de serie que se muestra con formato de fecha"
+    },
+    {
+     "es": "El texto «17/11/2026»",
+     "en": "El texto «17/11/2026»"
+    },
+    {
+     "es": "La división 17 entre 11 entre 2026",
+     "en": "La división 17 entre 11 entre 2026"
+    },
+    {
+     "es": "Tres números en tres celdas",
+     "en": "Tres números en tres celdas"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Excel reconoce la fecha y guarda un número de serie; así puede calcular con fechas.",
+    "en": "Excel reconoce la fecha y guarda un número de serie; así puede calcular con fechas."
+   },
+   "lesson": "xl1-datos"
+  },
+  {
+   "id": "xl1-dat-05",
+   "block": "xl-m01",
+   "q": {
+    "es": "Escribes 5 en `A1` y 10 en `A2`, seleccionas las dos y arrastras el controlador de relleno hasta `A5`. ¿Qué aparece en `A3:A5`?",
+    "en": "Escribes 5 en `A1` y 10 en `A2`, seleccionas las dos y arrastras el controlador de relleno hasta `A5`. ¿Qué aparece en `A3:A5`?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "15, 20 y 25",
+     "en": "15, 20 y 25"
+    },
+    {
+     "es": "5, 10 y 5",
+     "en": "5, 10 y 5"
+    },
+    {
+     "es": "10, 10 y 10",
+     "en": "10, 10 y 10"
+    },
+    {
+     "es": "15, 15 y 15",
+     "en": "15, 15 y 15"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Con dos valores seleccionados, Excel calcula el paso (5) y continúa la serie.",
+    "en": "Con dos valores seleccionados, Excel calcula el paso (5) y continúa la serie."
+   },
+   "lesson": "xl1-datos"
+  },
+  {
+   "id": "xl1-dat-06",
+   "block": "xl-m01",
+   "q": {
+    "es": "Acabas de borrar sin querer una columna llena de datos. ¿Qué haces primero?",
+    "en": "Acabas de borrar sin querer una columna llena de datos. ¿Qué haces primero?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Pulsar Ctrl+Z para deshacer",
+     "en": "Pulsar Ctrl+Z para deshacer"
+    },
+    {
+     "es": "Volver a escribirlo todo",
+     "en": "Volver a escribirlo todo"
+    },
+    {
+     "es": "Pulsar Ctrl+Y",
+     "en": "Pulsar Ctrl+Y"
+    },
+    {
+     "es": "Cerrar el libro sin guardar, siempre",
+     "en": "Cerrar el libro sin guardar, siempre"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Ctrl+Z deshace el último cambio. Ctrl+Y rehace lo que acabas de deshacer.",
+    "en": "Ctrl+Z deshace el último cambio. Ctrl+Y rehace lo que acabas de deshacer."
+   },
+   "lesson": "xl1-datos"
+  },
+  {
+   "id": "xl1-dat-07",
+   "block": "xl-m01",
+   "q": {
+    "es": "B3 guarda la cuota «60» como **texto**. ¿Qué devuelve la fórmula?",
+    "en": "B3 guarda la cuota «60» como **texto**. ¿Qué devuelve la fórmula?"
+   },
+   "kind": "formula-result",
+   "excel": {
+    "grid": {
+     "A1": "Cliente",
+     "B1": "Cuota",
+     "A2": "Ana Ruiz",
+     "B2": 45,
+     "A3": "Luis Gil",
+     "B3": "60",
+     "A4": "Marta Sanz",
+     "B4": 30
+    },
+    "formula": "=SUMA(B2:B4)",
+    "answer": 75,
+    "input": "number"
+   },
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "SUMA ignora el texto de un rango: suma solo 45 + 30.",
+    "en": "SUMA ignora el texto de un rango: suma solo 45 + 30."
+   },
+   "lesson": "xl1-datos"
+  },
+  {
+   "id": "xl1-dat-08",
+   "block": "xl-m01",
+   "q": {
+    "es": "B3 guarda la cuota «60» como **texto**. ¿Qué devuelve la fórmula?",
+    "en": "B3 guarda la cuota «60» como **texto**. ¿Qué devuelve la fórmula?"
+   },
+   "kind": "formula-result",
+   "excel": {
+    "grid": {
+     "A1": "Cliente",
+     "B1": "Cuota",
+     "A2": "Ana Ruiz",
+     "B2": 45,
+     "A3": "Luis Gil",
+     "B3": "60",
+     "A4": "Marta Sanz",
+     "B4": 30
+    },
+    "formula": "=B2+B3+B4",
+    "answer": 135,
+    "input": "number"
+   },
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "El operador `+` convierte el texto «60» en número: 45 + 60 + 30.",
+    "en": "El operador `+` convierte el texto «60» en número: 45 + 60 + 30."
+   },
+   "lesson": "xl1-datos"
+  },
+  {
+   "id": "xl1-dat-09",
+   "block": "xl-m01",
+   "q": {
+    "es": "Alguien escribió `1,200` en A1 queriendo decir mil doscientos. ¿Qué devuelve la fórmula?",
+    "en": "Alguien escribió `1,200` en A1 queriendo decir mil doscientos. ¿Qué devuelve la fórmula?"
+   },
+   "kind": "formula-result",
+   "excel": {
+    "grid": {
+     "A1": 1.2
+    },
+    "formula": "=A1*1000",
+    "answer": 1200,
+    "input": "number"
+   },
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "A1 guarda 1,2 (la coma es decimal), así que 1,2 × 1000 = 1200. El error de A1 se arrastra a todo lo que la use.",
+    "en": "A1 guarda 1,2 (la coma es decimal), así que 1,2 × 1000 = 1200. El error de A1 se arrastra a todo lo que la use."
+   },
+   "lesson": "xl1-datos"
+  },
+  {
+   "id": "xl1-dat-10",
+   "block": "xl-m01",
+   "q": {
+    "es": "A3 tiene 30 y A4 está vacía. ¿Qué devuelve la fórmula?",
+    "en": "A3 tiene 30 y A4 está vacía. ¿Qué devuelve la fórmula?"
+   },
+   "kind": "formula-result",
+   "excel": {
+    "grid": {
+     "A1": "Cuota",
+     "A2": 15,
+     "A3": 30
+    },
+    "formula": "=A3+A4",
+    "answer": 30,
+    "input": "number"
+   },
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "Una celda vacía vale 0 al operar: 30 + 0.",
+    "en": "Una celda vacía vale 0 al operar: 30 + 0."
+   },
+   "lesson": "xl1-datos"
+  },
+  {
+   "id": "xl1-dat-11",
+   "block": "xl-m01",
+   "q": {
+    "es": "A2 guarda «9» como **texto** y A3 el número 9. ¿Qué devuelve la fórmula?",
+    "en": "A2 guarda «9» como **texto** y A3 el número 9. ¿Qué devuelve la fórmula?"
+   },
+   "kind": "formula-result",
+   "excel": {
+    "grid": {
+     "A1": "Unidades",
+     "A2": "9",
+     "A3": 9
+    },
+    "formula": "=SUMA(A2:A3)+A2",
+    "answer": 18,
+    "input": "number"
+   },
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "SUMA(A2:A3) ignora el texto y da 9; después `+A2` convierte el texto «9» y suma 9 más: 18.",
+    "en": "SUMA(A2:A3) ignora el texto y da 9; después `+A2` convierte el texto «9» y suma 9 más: 18."
+   },
+   "lesson": "xl1-datos"
+  },
+  {
+   "id": "xl1-for-01",
+   "block": "xl-m01",
+   "q": {
+    "es": "Una celda muestra **2,68 €** y en la barra de fórmulas pone **2,675**. ¿Qué valor usa una fórmula que la lea?",
+    "en": "Una celda muestra **2,68 €** y en la barra de fórmulas pone **2,675**. ¿Qué valor usa una fórmula que la lea?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "2,675",
+     "en": "2,675"
+    },
+    {
+     "es": "2,68",
+     "en": "2,68"
+    },
+    {
+     "es": "2,7",
+     "en": "2,7"
+    },
+    {
+     "es": "3",
+     "en": "3"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "El formato solo cambia lo que se ve; las fórmulas usan el valor guardado.",
+    "en": "El formato solo cambia lo que se ve; las fórmulas usan el valor guardado."
+   },
+   "lesson": "xl1-formatos"
+  },
+  {
+   "id": "xl1-for-02",
+   "block": "xl-m01",
+   "q": {
+    "es": "¿Qué hace el formato Porcentaje con una celda que guarda 0,15?",
+    "en": "¿Qué hace el formato Porcentaje con una celda que guarda 0,15?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "La muestra como 15 % sin cambiar el valor 0,15",
+     "en": "La muestra como 15 % sin cambiar el valor 0,15"
+    },
+    {
+     "es": "Cambia el valor a 15",
+     "en": "Cambia el valor a 15"
+    },
+    {
+     "es": "Cambia el valor a 0,0015",
+     "en": "Cambia el valor a 0,0015"
+    },
+    {
+     "es": "La convierte en texto",
+     "en": "La convierte en texto"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "El porcentaje multiplica por 100 solo al mostrar.",
+    "en": "El porcentaje multiplica por 100 solo al mostrar."
+   },
+   "lesson": "xl1-formatos"
+  },
+  {
+   "id": "xl1-for-03",
+   "block": "xl-m01",
+   "q": {
+    "es": "¿En qué se diferencia el formato Contabilidad del formato Moneda?",
+    "en": "¿En qué se diferencia el formato Contabilidad del formato Moneda?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Contabilidad alinea el símbolo y los decimales en la columna y muestra el 0 como un guion",
+     "en": "Contabilidad alinea el símbolo y los decimales en la columna y muestra el 0 como un guion"
+    },
+    {
+     "es": "Moneda solo sirve para dólares",
+     "en": "Moneda solo sirve para dólares"
+    },
+    {
+     "es": "Contabilidad redondea los importes",
+     "en": "Contabilidad redondea los importes"
+    },
+    {
+     "es": "No hay ninguna diferencia",
+     "en": "No hay ninguna diferencia"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Los dos muestran el símbolo de moneda; Contabilidad está pensado para columnas de importes.",
+    "en": "Los dos muestran el símbolo de moneda; Contabilidad está pensado para columnas de importes."
+   },
+   "lesson": "xl1-formatos"
+  },
+  {
+   "id": "xl1-for-04",
+   "block": "xl-m01",
+   "q": {
+    "es": "Una celda contiene **21** y le aplicas el formato Porcentaje. ¿Qué se ve?",
+    "en": "Una celda contiene **21** y le aplicas el formato Porcentaje. ¿Qué se ve?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "2100 %",
+     "en": "2100 %"
+    },
+    {
+     "es": "21 %",
+     "en": "21 %"
+    },
+    {
+     "es": "0,21 %",
+     "en": "0,21 %"
+    },
+    {
+     "es": "0,21",
+     "en": "0,21"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "El valor es 21 y el porcentaje lo multiplica por 100 al mostrarlo: 2100 %. Había que escribir 0,21.",
+    "en": "El valor es 21 y el porcentaje lo multiplica por 100 al mostrarlo: 2100 %. Había que escribir 0,21."
+   },
+   "lesson": "xl1-formatos"
+  },
+  {
+   "id": "xl1-for-05",
+   "block": "xl-m01",
+   "q": {
+    "es": "Quieres que los precios se vean siempre con dos decimales **sin cambiar su valor**. ¿Qué haces?",
+    "en": "Quieres que los precios se vean siempre con dos decimales **sin cambiar su valor**. ¿Qué haces?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Aplicar formato Número o Moneda con 2 decimales",
+     "en": "Aplicar formato Número o Moneda con 2 decimales"
+    },
+    {
+     "es": "Escribir los precios como texto",
+     "en": "Escribir los precios como texto"
+    },
+    {
+     "es": "Borrar a mano los decimales que sobran",
+     "en": "Borrar a mano los decimales que sobran"
+    },
+    {
+     "es": "Multiplicarlos por 100",
+     "en": "Multiplicarlos por 100"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "El formato cambia solo la presentación, que es lo que se pide.",
+    "en": "El formato cambia solo la presentación, que es lo que se pide."
+   },
+   "lesson": "xl1-formatos"
+  },
+  {
+   "id": "xl1-for-06",
+   "block": "xl-m01",
+   "q": {
+    "es": "¿Qué formato pondrías a una columna con las fechas de las facturas?",
+    "en": "¿Qué formato pondrías a una columna con las fechas de las facturas?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Fecha",
+     "en": "Fecha"
+    },
+    {
+     "es": "Porcentaje",
+     "en": "Porcentaje"
+    },
+    {
+     "es": "Contabilidad",
+     "en": "Contabilidad"
+    },
+    {
+     "es": "Texto",
+     "en": "Texto"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Con formato Fecha se ven como días del calendario y siguen siendo números con los que calcular.",
+    "en": "Con formato Fecha se ven como días del calendario y siguen siendo números con los que calcular."
+   },
+   "lesson": "xl1-formatos"
+  },
+  {
+   "id": "xl1-for-07",
+   "block": "xl-m01",
+   "q": {
+    "es": "B2 se ve **20,00** pero guarda 19,999. ¿Qué devuelve la fórmula? Escribe todos los decimales.",
+    "en": "B2 se ve **20,00** pero guarda 19,999. ¿Qué devuelve la fórmula? Escribe todos los decimales."
+   },
+   "kind": "formula-result",
+   "excel": {
+    "grid": {
+     "A2": "Precio",
+     "B2": {
+      "v": 19.999,
+      "format": 2
+     }
+    },
+    "formula": "=B2*10",
+    "answer": 199.99,
+    "input": "number",
+    "tolerance": 0.0001
+   },
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "La fórmula usa el valor guardado: 19,999 × 10 = 199,99 (no 200).",
+    "en": "La fórmula usa el valor guardado: 19,999 × 10 = 199,99 (no 200)."
+   },
+   "lesson": "xl1-formatos"
+  },
+  {
+   "id": "xl1-for-08",
+   "block": "xl-m01",
+   "q": {
+    "es": "C1 se ve **7 %**. ¿Qué devuelve la fórmula?",
+    "en": "C1 se ve **7 %**. ¿Qué devuelve la fórmula?"
+   },
+   "kind": "formula-result",
+   "excel": {
+    "grid": {
+     "A1": "Base",
+     "A2": 1500,
+     "B1": "Tipo",
+     "C1": {
+      "v": 0.07,
+      "format": "percent"
+     }
+    },
+    "formula": "=A2*C1",
+    "answer": 105,
+    "input": "number"
+   },
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "C1 guarda 0,07: 1500 × 0,07 = 105.",
+    "en": "C1 guarda 0,07: 1500 × 0,07 = 105."
+   },
+   "lesson": "xl1-formatos"
+  },
+  {
+   "id": "xl1-for-09",
+   "block": "xl-m01",
+   "q": {
+    "es": "B2 se ve **50 %**. ¿Qué devuelve la fórmula?",
+    "en": "B2 se ve **50 %**. ¿Qué devuelve la fórmula?"
+   },
+   "kind": "formula-result",
+   "excel": {
+    "grid": {
+     "A2": "Descuento",
+     "B2": {
+      "v": 0.5,
+      "format": "percent"
+     }
+    },
+    "formula": "=B2+1",
+    "answer": 1.5,
+    "input": "number"
+   },
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "B2 guarda 0,5: 0,5 + 1 = 1,5.",
+    "en": "B2 guarda 0,5: 0,5 + 1 = 1,5."
+   },
+   "lesson": "xl1-formatos"
+  },
+  {
+   "id": "xl1-for-10",
+   "block": "xl-m01",
+   "q": {
+    "es": "Las tres celdas se ven **1,00** pero cada una guarda 1,004. ¿Qué devuelve la fórmula? Escribe todos los decimales.",
+    "en": "Las tres celdas se ven **1,00** pero cada una guarda 1,004. ¿Qué devuelve la fórmula? Escribe todos los decimales."
+   },
+   "kind": "formula-result",
+   "excel": {
+    "grid": {
+     "B1": "Importe",
+     "B2": {
+      "v": 1.004,
+      "format": 2
+     },
+     "B3": {
+      "v": 1.004,
+      "format": 2
+     },
+     "B4": {
+      "v": 1.004,
+      "format": 2
+     }
+    },
+    "formula": "=B2+B3+B4",
+    "answer": 3.012,
+    "input": "number",
+    "tolerance": 0.0001
+   },
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "Se suman los valores guardados: 1,004 × 3 = 3,012. Por eso a veces un total «no cuadra» con lo que se ve.",
+    "en": "Se suman los valores guardados: 1,004 × 3 = 3,012. Por eso a veces un total «no cuadra» con lo que se ve."
+   },
+   "lesson": "xl1-formatos"
+  },
+  {
+   "id": "xl1-for-11",
+   "block": "xl-m01",
+   "q": {
+    "es": "A1 se ve **1.234,50 €**. ¿Qué devuelve la fórmula?",
+    "en": "A1 se ve **1.234,50 €**. ¿Qué devuelve la fórmula?"
+   },
+   "kind": "formula-result",
+   "excel": {
+    "grid": {
+     "A1": {
+      "v": 1234.5,
+      "format": "currency"
+     }
+    },
+    "formula": "=A1/2",
+    "answer": 617.25,
+    "input": "number"
+   },
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "A1 guarda 1234,5: 1234,5 / 2 = 617,25. El símbolo € es solo formato.",
+    "en": "A1 guarda 1234,5: 1234,5 / 2 = 617,25. El símbolo € es solo formato."
+   },
+   "lesson": "xl1-formatos"
+  },
+  {
+   "id": "xl1-ref-01",
+   "block": "xl-m01",
+   "q": {
+    "es": "Copias `=A1+B1` de `C1` a `C2`. ¿Qué fórmula queda en `C2`?",
+    "en": "Copias `=A1+B1` de `C1` a `C2`. ¿Qué fórmula queda en `C2`?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "=A2+B2",
+     "en": "=A2+B2"
+    },
+    {
+     "es": "=A1+B1",
+     "en": "=A1+B1"
+    },
+    {
+     "es": "=A2+B1",
+     "en": "=A2+B1"
+    },
+    {
+     "es": "=B2+C2",
+     "en": "=B2+C2"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Las referencias relativas bajan una fila, igual que la fórmula.",
+    "en": "Las referencias relativas bajan una fila, igual que la fórmula."
+   },
+   "lesson": "xl1-referencias"
+  },
+  {
+   "id": "xl1-ref-02",
+   "block": "xl-m01",
+   "q": {
+    "es": "¿Qué referencia **no cambia** ni al copiar hacia abajo ni hacia la derecha?",
+    "en": "¿Qué referencia **no cambia** ni al copiar hacia abajo ni hacia la derecha?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "$E$1",
+     "en": "$E$1"
+    },
+    {
+     "es": "E$1",
+     "en": "E$1"
+    },
+    {
+     "es": "$E1",
+     "en": "$E1"
+    },
+    {
+     "es": "E1",
+     "en": "E1"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Con $ delante de la columna y de la fila, la referencia queda totalmente fija.",
+    "en": "Con $ delante de la columna y de la fila, la referencia queda totalmente fija."
+   },
+   "lesson": "xl1-referencias"
+  },
+  {
+   "id": "xl1-ref-03",
+   "block": "xl-m01",
+   "q": {
+    "es": "Copias `=B$1` una fila hacia abajo y una columna hacia la derecha. ¿Qué queda?",
+    "en": "Copias `=B$1` una fila hacia abajo y una columna hacia la derecha. ¿Qué queda?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "=C$1",
+     "en": "=C$1"
+    },
+    {
+     "es": "=B$1",
+     "en": "=B$1"
+    },
+    {
+     "es": "=C$2",
+     "en": "=C$2"
+    },
+    {
+     "es": "=B$2",
+     "en": "=B$2"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "La fila está fija ($1); la columna es relativa y pasa de B a C.",
+    "en": "La fila está fija ($1); la columna es relativa y pasa de B a C."
+   },
+   "lesson": "xl1-referencias"
+  },
+  {
+   "id": "xl1-ref-04",
+   "block": "xl-m01",
+   "q": {
+    "es": "Con el cursor sobre `E1` dentro de una fórmula pulsas **F4** una vez. ¿Qué queda?",
+    "en": "Con el cursor sobre `E1` dentro de una fórmula pulsas **F4** una vez. ¿Qué queda?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "$E$1",
+     "en": "$E$1"
+    },
+    {
+     "es": "E$1",
+     "en": "E$1"
+    },
+    {
+     "es": "$E1",
+     "en": "$E1"
+    },
+    {
+     "es": "E1 entre comillas",
+     "en": "E1 entre comillas"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "La primera pulsación fija columna y fila; las siguientes pasan por E$1, $E1 y vuelven a E1.",
+    "en": "La primera pulsación fija columna y fila; las siguientes pasan por E$1, $E1 y vuelven a E1."
+   },
+   "lesson": "xl1-referencias"
+  },
+  {
+   "id": "xl1-ref-05",
+   "block": "xl-m01",
+   "q": {
+    "es": "¿Por qué es mejor `=B2*$E$1` (con 0,21 en E1) que `=B2*0,21`?",
+    "en": "¿Por qué es mejor `=B2*$E$1` (con 0,21 en E1) que `=B2*0,21`?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Si el tipo cambia, se cambia en una sola celda y todas las fórmulas se actualizan",
+     "en": "Si el tipo cambia, se cambia en una sola celda y todas las fórmulas se actualizan"
+    },
+    {
+     "es": "Porque 0,21 da error en una fórmula",
+     "en": "Porque 0,21 da error en una fórmula"
+    },
+    {
+     "es": "Porque las fórmulas no admiten decimales",
+     "en": "Porque las fórmulas no admiten decimales"
+    },
+    {
+     "es": "Porque ocupa menos memoria",
+     "en": "Porque ocupa menos memoria"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Los datos que pueden cambiar van en celdas; las fórmulas solo los referencian.",
+    "en": "Los datos que pueden cambiar van en celdas; las fórmulas solo los referencian."
+   },
+   "lesson": "xl1-referencias"
+  },
+  {
+   "id": "xl1-ref-06",
+   "block": "xl-m01",
+   "q": {
+    "es": "Copias `=$A2` tres columnas a la derecha. ¿Qué queda?",
+    "en": "Copias `=$A2` tres columnas a la derecha. ¿Qué queda?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "=$A2",
+     "en": "=$A2"
+    },
+    {
+     "es": "=D2",
+     "en": "=D2"
+    },
+    {
+     "es": "=$D2",
+     "en": "=$D2"
+    },
+    {
+     "es": "=$A5",
+     "en": "=$A5"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "La columna está fija ($A) y la fila no cambia porque no te has movido en vertical.",
+    "en": "La columna está fija ($A) y la fila no cambia porque no te has movido en vertical."
+   },
+   "lesson": "xl1-referencias"
+  },
+  {
+   "id": "xl1-ref-07",
+   "block": "xl-m01",
+   "q": {
+    "es": "Escribe en `D2` el IVA de la factura (base × tipo de `E1`) de forma que funcione al copiarla hasta `D6`.",
+    "en": "Escribe en `D2` el IVA de la factura (base × tipo de `E1`) de forma que funcione al copiarla hasta `D6`."
+   },
+   "kind": "formula",
+   "excel": {
+    "grid": {
+     "A1": "Factura",
+     "B1": "Base",
+     "A2": "F-101",
+     "B2": 100,
+     "A3": "F-102",
+     "B3": 250,
+     "A4": "F-103",
+     "B4": 80,
+     "A5": "F-104",
+     "B5": 40,
+     "A6": "F-105",
+     "B6": 1000,
+     "D1": "IVA",
+     "E1": 0.21
+    },
+    "cell": "D2",
+    "expect": 21,
+    "checks": [
+     {
+      "type": "value"
+     },
+     {
+      "type": "fill",
+      "to": "D6",
+      "expect": [
+       52.5,
+       16.8,
+       8.4,
+       210
+      ]
+     },
+     {
+      "type": "variants",
+      "count": 2
+     },
+     {
+      "type": "references",
+      "must": [
+       "B2",
+       "$E$1"
+      ]
+     },
+     {
+      "type": "noConstants"
+     }
+    ],
+    "solution": {
+     "formula": "=B2*$E$1"
+    },
+    "mistakes": [
+     {
+      "error": "=B2*E1",
+      "fix": "Al copiarla, E1 pasa a E2, E3…, que están vacías, y el IVA sale 0."
+     },
+     {
+      "error": "=B2*0,21",
+      "fix": "Funciona, pero el tipo está escrito a mano: si cambia, hay que cambiar todas las fórmulas."
+     }
+    ],
+    "hints": [
+     "La base cambia en cada fila; el tipo de IVA es siempre el de E1.",
+     "Fija E1 con $ (tecla F4): $E$1."
+    ],
+    "vary": [
+     "B2:B6",
+     "E1"
+    ]
+   },
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "`=B2*$E$1`: B2 se mueve al copiar (cada factura su base) y $E$1 se queda fija.",
+    "en": "`=B2*$E$1`: B2 se mueve al copiar (cada factura su base) y $E$1 se queda fija."
+   },
+   "lesson": "xl1-referencias"
+  },
+  {
+   "id": "xl1-ref-08",
+   "block": "xl-m01",
+   "q": {
+    "es": "Alguien copió `=B2*E1` de `D2` a `D3`, y en `D3` quedó esta fórmula. ¿Qué devuelve?",
+    "en": "Alguien copió `=B2*E1` de `D2` a `D3`, y en `D3` quedó esta fórmula. ¿Qué devuelve?"
+   },
+   "kind": "formula-result",
+   "excel": {
+    "grid": {
+     "A1": "Factura",
+     "B1": "Base",
+     "A2": "F-101",
+     "B2": 100,
+     "A3": "F-102",
+     "B3": 250,
+     "A4": "F-103",
+     "B4": 80,
+     "A5": "F-104",
+     "B5": 40,
+     "A6": "F-105",
+     "B6": 1000,
+     "D1": "IVA",
+     "E1": 0.21
+    },
+    "formula": "=B3*E2",
+    "answer": 0,
+    "input": "number",
+    "cell": "D3"
+   },
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "E2 está vacía (vale 0): 250 × 0 = 0. Es el error típico de no fijar la tasa.",
+    "en": "E2 está vacía (vale 0): 250 × 0 = 0. Es el error típico de no fijar la tasa."
+   },
+   "lesson": "xl1-referencias"
+  },
+  {
+   "id": "xl1-ref-09",
+   "block": "xl-m01",
+   "q": {
+    "es": "Esta es la copia en `D3` de `=$A2*B$1`. ¿Qué devuelve?",
+    "en": "Esta es la copia en `D3` de `=$A2*B$1`. ¿Qué devuelve?"
+   },
+   "kind": "formula-result",
+   "excel": {
+    "grid": {
+     "A2": 1,
+     "A3": 2,
+     "A4": 3,
+     "B1": 1,
+     "C1": 2,
+     "D1": 3
+    },
+    "formula": "=$A3*D$1",
+    "answer": 6,
+    "input": "number",
+    "cell": "D3"
+   },
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "Fila 3 de la columna A (2) por la columna D de la fila 1 (3): 6.",
+    "en": "Fila 3 de la columna A (2) por la columna D de la fila 1 (3): 6."
+   },
+   "lesson": "xl1-referencias"
+  },
+  {
+   "id": "xl1-ref-10",
+   "block": "xl-m01",
+   "q": {
+    "es": "Escribe en `B2` una fórmula que, copiada hasta `D4`, dé la tabla de multiplicar de los números de la columna A por los de la fila 1.",
+    "en": "Escribe en `B2` una fórmula que, copiada hasta `D4`, dé la tabla de multiplicar de los números de la columna A por los de la fila 1."
+   },
+   "kind": "formula",
+   "excel": {
+    "grid": {
+     "A2": 1,
+     "A3": 2,
+     "A4": 3,
+     "B1": 1,
+     "C1": 2,
+     "D1": 3
+    },
+    "cell": "B2",
+    "expect": 1,
+    "checks": [
+     {
+      "type": "value"
+     },
+     {
+      "type": "fill",
+      "to": "D4",
+      "expect": [
+       2,
+       3,
+       2,
+       4,
+       6,
+       3,
+       6,
+       9
+      ]
+     }
+    ],
+    "solution": {
+     "formula": "=$A2*B$1"
+    },
+    "mistakes": [
+     {
+      "error": "=A2*B1",
+      "fix": "Al copiarla a la derecha, A2 pasa a B2; y hacia abajo, B1 pasa a B2: la tabla sale mal."
+     },
+     {
+      "error": "=$A$2*$B$1",
+      "fix": "Todo fijo: todas las celdas dan 1 × 1."
+     }
+    ],
+    "hints": [
+     "Al copiar a la derecha, la columna A no se puede mover.",
+     "Al copiar hacia abajo, la fila 1 no se puede mover.",
+     "Necesitas dos referencias mixtas: $A2 y B$1."
+    ]
+   },
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "`=$A2*B$1`: $A fija la columna de los números de la izquierda y $1 la fila de los de arriba.",
+    "en": "`=$A2*B$1`: $A fija la columna de los números de la izquierda y $1 la fila de los de arriba."
+   },
+   "lesson": "xl1-referencias"
+  },
+  {
+   "id": "xl1-ref-11",
+   "block": "xl-m01",
+   "q": {
+    "es": "¿Qué devuelve la fórmula?",
+    "en": "¿Qué devuelve la fórmula?"
+   },
+   "kind": "formula-result",
+   "excel": {
+    "grid": {
+     "A1": "Tarifa",
+     "B1": 10,
+     "A2": 5,
+     "A3": 7
+    },
+    "formula": "=$B$1*A3",
+    "answer": 70,
+    "input": "number",
+    "cell": "C3"
+   },
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "$B$1 vale 10 y A3 vale 7: 70.",
+    "en": "$B$1 vale 10 y A3 vale 7: 70."
+   },
+   "lesson": "xl1-referencias"
+  },
+  {
+   "id": "xl1-ref-12",
+   "block": "xl-m01",
+   "q": {
+    "es": "Esta es la copia en `C4` de `=B2/$B$6`. ¿Qué devuelve?",
+    "en": "Esta es la copia en `C4` de `=B2/$B$6`. ¿Qué devuelve?"
+   },
+   "kind": "formula-result",
+   "excel": {
+    "grid": {
+     "A1": "Zona",
+     "B1": "Ventas",
+     "B2": 200,
+     "B3": 300,
+     "B4": 100,
+     "B5": 400,
+     "A6": "Total",
+     "B6": 1000
+    },
+    "formula": "=B4/$B$6",
+    "answer": 0.1,
+    "input": "number",
+    "cell": "C4"
+   },
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "B4 (100) entre el total fijo $B$6 (1000): 0,1, es decir, un 10 %.",
+    "en": "B4 (100) entre el total fijo $B$6 (1000): 0,1, es decir, un 10 %."
+   },
+   "lesson": "xl1-referencias"
+  },
+  {
+   "id": "xl1-ref-13",
+   "block": "xl-m01",
+   "q": {
+    "es": "Escribe en `C2` la comisión del vendedor (ventas × porcentaje de `F1`) y que funcione al copiarla hasta `C5`.",
+    "en": "Escribe en `C2` la comisión del vendedor (ventas × porcentaje de `F1`) y que funcione al copiarla hasta `C5`."
+   },
+   "kind": "formula",
+   "excel": {
+    "grid": {
+     "A1": "Vendedor",
+     "B1": "Ventas",
+     "A2": "Ana",
+     "B2": 1200,
+     "A3": "Luis",
+     "B3": 800,
+     "A4": "Marta",
+     "B4": 1500,
+     "A5": "Raúl",
+     "B5": 600,
+     "E1": "Comisión",
+     "F1": 0.05
+    },
+    "cell": "C2",
+    "expect": 60,
+    "checks": [
+     {
+      "type": "value"
+     },
+     {
+      "type": "fill",
+      "to": "C5",
+      "expect": [
+       40,
+       75,
+       30
+      ]
+     },
+     {
+      "type": "references",
+      "must": [
+       "B2",
+       "$F$1"
+      ]
+     },
+     {
+      "type": "noConstants"
+     }
+    ],
+    "solution": {
+     "formula": "=B2*$F$1"
+    },
+    "mistakes": [
+     {
+      "error": "=B2*F1",
+      "fix": "Al copiarla, F1 pasa a F2, F3…, vacías: la comisión sale 0."
+     },
+     {
+      "error": "=B2*0,05",
+      "fix": "El porcentaje está escrito a mano en vez de usar F1."
+     }
+    ],
+    "hints": [
+     "Cada fila usa sus ventas; el porcentaje es siempre el de F1.",
+     "Fija F1 con $."
+    ]
+   },
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "`=B2*$F$1`: las ventas son relativas y el porcentaje, absoluto.",
+    "en": "`=B2*$F$1`: las ventas son relativas y el porcentaje, absoluto."
+   },
+   "lesson": "xl1-referencias"
+  },
+  {
+   "id": "xl1-ref-14",
+   "block": "xl-m01",
+   "q": {
+    "es": "Escribe en `B2` el precio con el descuento de cada tarifa (precio de la columna A × (1 − descuento de la fila 1)) para copiarla hasta `D4`.",
+    "en": "Escribe en `B2` el precio con el descuento de cada tarifa (precio de la columna A × (1 − descuento de la fila 1)) para copiarla hasta `D4`."
+   },
+   "kind": "formula",
+   "excel": {
+    "grid": {
+     "A1": "Precio",
+     "B1": 0.05,
+     "C1": 0.1,
+     "D1": 0.15,
+     "A2": 100,
+     "A3": 250,
+     "A4": 40
+    },
+    "cell": "B2",
+    "expect": 95,
+    "checks": [
+     {
+      "type": "value"
+     },
+     {
+      "type": "fill",
+      "to": "D4",
+      "expect": [
+       90,
+       85,
+       237.5,
+       225,
+       212.5,
+       38,
+       36,
+       34
+      ]
+     },
+     {
+      "type": "noConstants",
+      "except": [
+       1
+      ]
+     }
+    ],
+    "solution": {
+     "formula": "=$A2*(1-B$1)"
+    },
+    "mistakes": [
+     {
+      "error": "=A2*(1-B1)",
+      "fix": "Sin $, al copiarla a la derecha el precio deja de ser el de la columna A."
+     },
+     {
+      "error": "=$A$2*(1-$B$1)",
+      "fix": "Todo fijo: todas las celdas dan el precio de A2 con el descuento de B1."
+     }
+    ],
+    "hints": [
+     "El precio siempre está en la columna A; el descuento, siempre en la fila 1.",
+     "Usa referencias mixtas: $A2 y B$1."
+    ]
+   },
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "`=$A2*(1-B$1)`: $A fija la columna del precio y $1 la fila del descuento. El 1 de «1 − descuento» es la única constante permitida.",
+    "en": "`=$A2*(1-B$1)`: $A fija la columna del precio y $1 la fila del descuento. El 1 de «1 − descuento» es la única constante permitida."
+   },
+   "lesson": "xl1-referencias"
+  },
+  {
+   "id": "xl1-ref-15",
+   "block": "xl-m01",
+   "q": {
+    "es": "Escribe en `C2` qué parte del total (`B6`) es cada zona, para copiarla hasta `C5`.",
+    "en": "Escribe en `C2` qué parte del total (`B6`) es cada zona, para copiarla hasta `C5`."
+   },
+   "kind": "formula",
+   "excel": {
+    "grid": {
+     "A1": "Zona",
+     "B1": "Ventas",
+     "A2": "Norte",
+     "B2": 200,
+     "A3": "Sur",
+     "B3": 300,
+     "A4": "Este",
+     "B4": 100,
+     "A5": "Oeste",
+     "B5": 400,
+     "A6": "Total",
+     "B6": 1000
+    },
+    "cell": "C2",
+    "expect": 0.2,
+    "checks": [
+     {
+      "type": "value"
+     },
+     {
+      "type": "fill",
+      "to": "C5",
+      "expect": [
+       0.3,
+       0.1,
+       0.4
+      ]
+     },
+     {
+      "type": "references",
+      "must": [
+       "$B$6"
+      ]
+     },
+     {
+      "type": "noConstants"
+     }
+    ],
+    "solution": {
+     "formula": "=B2/$B$6"
+    },
+    "mistakes": [
+     {
+      "error": "=B2/B6",
+      "fix": "Al copiarla, B6 pasa a B7, que está vacía: #¡DIV/0!."
+     },
+     {
+      "error": "=B2/1000",
+      "fix": "El total está escrito a mano: si cambian las ventas, la fórmula no se entera."
+     }
+    ],
+    "hints": [
+     "Ventas de la zona entre el total.",
+     "El total siempre es el de B6: fíjalo con $."
+    ]
+   },
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "`=B2/$B$6`: cada zona entre el total fijo. Con formato porcentaje se ve 20 %, 30 %…",
+    "en": "`=B2/$B$6`: cada zona entre el total fijo. Con formato porcentaje se ve 20 %, 30 %…"
+   },
+   "lesson": "xl1-referencias"
+  },
+  {
+   "id": "xl1-arc-01",
+   "block": "xl-m01",
+   "q": {
+    "es": "Tienes que enviar un presupuesto a un cliente para que lo lea e imprima, **sin que pueda modificarlo**. ¿Qué formato eliges?",
+    "en": "Tienes que enviar un presupuesto a un cliente para que lo lea e imprima, **sin que pueda modificarlo**. ¿Qué formato eliges?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "PDF",
+     "en": "PDF"
+    },
+    {
+     "es": ".xlsx",
+     "en": ".xlsx"
+    },
+    {
+     "es": ".csv",
+     "en": ".csv"
+    },
+    {
+     "es": ".xlsm",
+     "en": ".xlsm"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "El PDF conserva el aspecto y no se edita como una hoja de cálculo.",
+    "en": "El PDF conserva el aspecto y no se edita como una hoja de cálculo."
+   },
+   "lesson": "xl1-archivos"
+  },
+  {
+   "id": "xl1-arc-02",
+   "block": "xl-m01",
+   "q": {
+    "es": "Tu libro tiene macros que quieres conservar. ¿Con qué formato lo guardas?",
+    "en": "Tu libro tiene macros que quieres conservar. ¿Con qué formato lo guardas?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": ".xlsm",
+     "en": ".xlsm"
+    },
+    {
+     "es": ".xlsx",
+     "en": ".xlsx"
+    },
+    {
+     "es": ".csv",
+     "en": ".csv"
+    },
+    {
+     "es": "PDF",
+     "en": "PDF"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "El .xlsx no guarda macros; el .xlsm sí.",
+    "en": "El .xlsx no guarda macros; el .xlsm sí."
+   },
+   "lesson": "xl1-archivos"
+  },
+  {
+   "id": "xl1-arc-03",
+   "block": "xl-m01",
+   "q": {
+    "es": "Guardas como CSV un libro con tres hojas, fórmulas y formatos. ¿Qué se guarda?",
+    "en": "Guardas como CSV un libro con tres hojas, fórmulas y formatos. ¿Qué se guarda?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Solo la hoja activa, con los valores, sin fórmulas ni formato",
+     "en": "Solo la hoja activa, con los valores, sin fórmulas ni formato"
+    },
+    {
+     "es": "Las tres hojas",
+     "en": "Las tres hojas"
+    },
+    {
+     "es": "Las fórmulas de la hoja activa",
+     "en": "Las fórmulas de la hoja activa"
+    },
+    {
+     "es": "Todo, igual que en .xlsx",
+     "en": "Todo, igual que en .xlsx"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Un CSV es texto: una tabla de valores. Excel avisa de lo que se pierde.",
+    "en": "Un CSV es texto: una tabla de valores. Excel avisa de lo que se pierde."
+   },
+   "lesson": "xl1-archivos"
+  },
+  {
+   "id": "xl1-arc-04",
+   "block": "xl-m01",
+   "q": {
+    "es": "Abres un CSV y donde ponía «Málaga» ves «MÃ¡laga». ¿Qué ha pasado?",
+    "en": "Abres un CSV y donde ponía «Málaga» ves «MÃ¡laga». ¿Qué ha pasado?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "El archivo está en UTF-8 y se ha leído con otra codificación: vuelve a importarlo eligiendo UTF-8",
+     "en": "El archivo está en UTF-8 y se ha leído con otra codificación: vuelve a importarlo eligiendo UTF-8"
+    },
+    {
+     "es": "El archivo está roto sin remedio",
+     "en": "El archivo está roto sin remedio"
+    },
+    {
+     "es": "Hay que cambiar la fuente de la celda",
+     "en": "Hay que cambiar la fuente de la celda"
+    },
+    {
+     "es": "Hay que guardarlo como PDF",
+     "en": "Hay que guardarlo como PDF"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Es un problema de codificación. Datos > De texto/CSV permite elegir 65001: Unicode (UTF-8).",
+    "en": "Es un problema de codificación. Datos > De texto/CSV permite elegir 65001: Unicode (UTF-8)."
+   },
+   "lesson": "xl1-archivos"
+  },
+  {
+   "id": "xl1-arc-05",
+   "block": "xl-m01",
+   "q": {
+    "es": "¿Por qué en España los CSV suelen separar las columnas con «;»?",
+    "en": "¿Por qué en España los CSV suelen separar las columnas con «;»?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Porque la coma es el separador decimal",
+     "en": "Porque la coma es el separador decimal"
+    },
+    {
+     "es": "Porque lo exige la ley",
+     "en": "Porque lo exige la ley"
+    },
+    {
+     "es": "Porque Excel no admite comas",
+     "en": "Porque Excel no admite comas"
+    },
+    {
+     "es": "Porque ocupa menos espacio",
+     "en": "Porque ocupa menos espacio"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Si las columnas se separasen con comas, «45,50» se partiría en dos columnas.",
+    "en": "Si las columnas se separasen con comas, «45,50» se partiría en dos columnas."
+   },
+   "lesson": "xl1-archivos"
+  },
+  {
+   "id": "xl1-arc-06",
+   "block": "xl-m01",
+   "q": {
+    "es": "Recibes `factura.xlsm` de un remitente que no conoces y Excel te pide habilitar las macros. ¿Qué haces?",
+    "en": "Recibes `factura.xlsm` de un remitente que no conoces y Excel te pide habilitar las macros. ¿Qué haces?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "No las habilito y confirmo con el remitente por otra vía",
+     "en": "No las habilito y confirmo con el remitente por otra vía"
+    },
+    {
+     "es": "Las habilito para ver la factura",
+     "en": "Las habilito para ver la factura"
+    },
+    {
+     "es": "Desactivo el antivirus para abrirlo",
+     "en": "Desactivo el antivirus para abrirlo"
+    },
+    {
+     "es": "Lo reenvío a mis compañeros",
+     "en": "Lo reenvío a mis compañeros"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Las macros son código. Pedir que las actives para ver el contenido es un truco habitual de los ataques.",
+    "en": "Las macros son código. Pedir que las actives para ver el contenido es un truco habitual de los ataques."
+   },
+   "lesson": "xl1-archivos"
+  },
+  {
+   "id": "xl1-arc-07",
+   "block": "xl-m01",
+   "q": {
+    "es": "En el curso, una función lleva la etiqueta **[2021+]**. ¿Qué significa?",
+    "en": "En el curso, una función lleva la etiqueta **[2021+]**. ¿Qué significa?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Existe en Excel 2021 y posteriores (y en Microsoft 365); en versiones anteriores da #¿NOMBRE?",
+     "en": "Existe en Excel 2021 y posteriores (y en Microsoft 365); en versiones anteriores da #¿NOMBRE?"
+    },
+    {
+     "es": "Es obligatoria desde 2021",
+     "en": "Es obligatoria desde 2021"
+    },
+    {
+     "es": "Solo funciona en Excel para la web",
+     "en": "Solo funciona en Excel para la web"
+    },
+    {
+     "es": "Es de pago",
+     "en": "Es de pago"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Las etiquetas avisan de la versión mínima. Una función desconocida para tu versión da #¿NOMBRE?.",
+    "en": "Las etiquetas avisan de la versión mínima. Una función desconocida para tu versión da #¿NOMBRE?."
+   },
+   "lesson": "xl1-archivos"
+  },
+  {
+   "id": "xl1-arc-08",
+   "block": "xl-m01",
+   "q": {
+    "es": "¿En qué formato guardas normalmente un libro de trabajo sin macros?",
+    "en": "¿En qué formato guardas normalmente un libro de trabajo sin macros?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": ".xlsx",
+     "en": ".xlsx"
+    },
+    {
+     "es": ".csv",
+     "en": ".csv"
+    },
+    {
+     "es": ".xls",
+     "en": ".xls"
+    },
+    {
+     "es": "PDF",
+     "en": "PDF"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": ".xlsx es el formato actual y guarda fórmulas, formatos y varias hojas.",
+    "en": ".xlsx es el formato actual y guarda fórmulas, formatos y varias hojas."
+   },
+   "lesson": "xl1-archivos"
+  },
+  {
+   "id": "xl2-op-01",
+   "block": "xl-m02",
+   "q": {
+    "es": "¿Con qué carácter empieza siempre una fórmula?",
+    "en": "¿Con qué carácter empieza siempre una fórmula?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "=",
+     "en": "="
+    },
+    {
+     "es": "+",
+     "en": "+"
+    },
+    {
+     "es": "@",
+     "en": "@"
+    },
+    {
+     "es": "#",
+     "en": "#"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Sin el =, Excel guarda lo que escribes como texto o como número.",
+    "en": "Sin el =, Excel guarda lo que escribes como texto o como número."
+   },
+   "lesson": "xl2-operadores"
+  },
+  {
+   "id": "xl2-op-02",
+   "block": "xl-m02",
+   "q": {
+    "es": "¿En qué orden calcula Excel `=2+3*4`?",
+    "en": "¿En qué orden calcula Excel `=2+3*4`?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Primero 3*4 y después le suma 2",
+     "en": "Primero 3*4 y después le suma 2"
+    },
+    {
+     "es": "De izquierda a derecha: 2+3 y luego *4",
+     "en": "De izquierda a derecha: 2+3 y luego *4"
+    },
+    {
+     "es": "Primero 2+3",
+     "en": "Primero 2+3"
+    },
+    {
+     "es": "Depende del formato de la celda",
+     "en": "Depende del formato de la celda"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "La multiplicación va antes que la suma: 2 + 12 = 14.",
+    "en": "La multiplicación va antes que la suma: 2 + 12 = 14."
+   },
+   "lesson": "xl2-operadores"
+  },
+  {
+   "id": "xl2-op-03",
+   "block": "xl-m02",
+   "q": {
+    "es": "¿Por qué `=-2^2` da 4 en Excel?",
+    "en": "¿Por qué `=-2^2` da 4 en Excel?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Porque Excel aplica la negación antes que la potencia: (−2)²",
+     "en": "Porque Excel aplica la negación antes que la potencia: (−2)²"
+    },
+    {
+     "es": "Porque Excel calcula mal las potencias",
+     "en": "Porque Excel calcula mal las potencias"
+    },
+    {
+     "es": "Porque ^ multiplica",
+     "en": "Porque ^ multiplica"
+    },
+    {
+     "es": "Por el formato de la celda",
+     "en": "Por el formato de la celda"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "En Excel la negación tiene más prioridad que ^. Para −4, `=-(2^2)`.",
+    "en": "En Excel la negación tiene más prioridad que ^. Para −4, `=-(2^2)`."
+   },
+   "lesson": "xl2-operadores"
+  },
+  {
+   "id": "xl2-op-04",
+   "block": "xl-m02",
+   "q": {
+    "es": "¿Qué operador une dos textos?",
+    "en": "¿Qué operador une dos textos?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "&",
+     "en": "&"
+    },
+    {
+     "es": "+",
+     "en": "+"
+    },
+    {
+     "es": "*",
+     "en": "*"
+    },
+    {
+     "es": ";",
+     "en": ";"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "& concatena: `=\"Taller \"&\"Montesol\"` da «Taller Montesol».",
+    "en": "& concatena: `=\"Taller \"&\"Montesol\"` da «Taller Montesol»."
+   },
+   "lesson": "xl2-operadores"
+  },
+  {
+   "id": "xl2-op-05",
+   "block": "xl-m02",
+   "q": {
+    "es": "¿Qué devuelve `=5>3`?",
+    "en": "¿Qué devuelve `=5>3`?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "VERDADERO",
+     "en": "VERDADERO"
+    },
+    {
+     "es": "FALSO",
+     "en": "FALSO"
+    },
+    {
+     "es": "5",
+     "en": "5"
+    },
+    {
+     "es": "2",
+     "en": "2"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Una comparación devuelve un valor lógico: VERDADERO o FALSO.",
+    "en": "Una comparación devuelve un valor lógico: VERDADERO o FALSO."
+   },
+   "lesson": "xl2-operadores"
+  },
+  {
+   "id": "xl2-op-06",
+   "block": "xl-m02",
+   "q": {
+    "es": "Cantidad en A2, precio en B2 y descuento en C2 (0,1). ¿Qué fórmula calcula el importe con descuento?",
+    "en": "Cantidad en A2, precio en B2 y descuento en C2 (0,1). ¿Qué fórmula calcula el importe con descuento?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "=A2*B2*(1-C2)",
+     "en": "=A2*B2*(1-C2)"
+    },
+    {
+     "es": "=A2*B2*1-C2",
+     "en": "=A2*B2*1-C2"
+    },
+    {
+     "es": "=A2*B2-C2",
+     "en": "=A2*B2-C2"
+    },
+    {
+     "es": "=A2*(B2-C2)",
+     "en": "=A2*(B2-C2)"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Se paga (1 − descuento) del importe; los paréntesis hacen que la resta vaya primero.",
+    "en": "Se paga (1 − descuento) del importe; los paréntesis hacen que la resta vaya primero."
+   },
+   "lesson": "xl2-operadores"
+  },
+  {
+   "id": "xl2-op-07",
+   "block": "xl-m02",
+   "q": {
+    "es": "¿Qué devuelve la fórmula?",
+    "en": "¿Qué devuelve la fórmula?"
+   },
+   "kind": "formula-result",
+   "excel": {
+    "grid": {},
+    "formula": "=-2^2",
+    "answer": 4,
+    "input": "number"
+   },
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "La negación va antes que la potencia: (−2)² = 4.",
+    "en": "La negación va antes que la potencia: (−2)² = 4."
+   },
+   "lesson": "xl2-operadores"
+  },
+  {
+   "id": "xl2-op-08",
+   "block": "xl-m02",
+   "q": {
+    "es": "¿Qué devuelve la fórmula?",
+    "en": "¿Qué devuelve la fórmula?"
+   },
+   "kind": "formula-result",
+   "excel": {
+    "grid": {},
+    "formula": "=2+3*4",
+    "answer": 14,
+    "input": "number"
+   },
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "Primero 3 × 4 = 12 y después 2 + 12.",
+    "en": "Primero 3 × 4 = 12 y después 2 + 12."
+   },
+   "lesson": "xl2-operadores"
+  },
+  {
+   "id": "xl2-op-09",
+   "block": "xl-m02",
+   "q": {
+    "es": "¿Qué devuelve la fórmula?",
+    "en": "¿Qué devuelve la fórmula?"
+   },
+   "kind": "formula-result",
+   "excel": {
+    "grid": {},
+    "formula": "=200*10%",
+    "answer": 20,
+    "input": "number"
+   },
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "10 % es 0,1: 200 × 0,1 = 20.",
+    "en": "10 % es 0,1: 200 × 0,1 = 20."
+   },
+   "lesson": "xl2-operadores"
+  },
+  {
+   "id": "xl2-op-10",
+   "block": "xl-m02",
+   "q": {
+    "es": "¿Qué devuelve la fórmula? Escribe el texto tal cual.",
+    "en": "¿Qué devuelve la fórmula? Escribe el texto tal cual."
+   },
+   "kind": "formula-result",
+   "excel": {
+    "grid": {},
+    "formula": "=\"Total: \"&2+3",
+    "answer": "Total: 5",
+    "input": "text"
+   },
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "La suma va antes que &: 2 + 3 = 5, y después se une con «Total: ».",
+    "en": "La suma va antes que &: 2 + 3 = 5, y después se une con «Total: »."
+   },
+   "lesson": "xl2-operadores"
+  },
+  {
+   "id": "xl2-op-11",
+   "block": "xl-m02",
+   "q": {
+    "es": "¿Qué devuelve la fórmula?",
+    "en": "¿Qué devuelve la fórmula?"
+   },
+   "kind": "formula-result",
+   "excel": {
+    "grid": {
+     "A1": "Cantidad",
+     "B1": "Precio",
+     "C1": "Rebaja (€)",
+     "A2": 3,
+     "B2": 12.5,
+     "C2": 5
+    },
+    "formula": "=A2*B2-C2",
+    "answer": 32.5,
+    "input": "number"
+   },
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "Primero 3 × 12,5 = 37,5 y después se resta C2 (5): 32,5. Aquí C2 es un importe, no un porcentaje.",
+    "en": "Primero 3 × 12,5 = 37,5 y después se resta C2 (5): 32,5. Aquí C2 es un importe, no un porcentaje."
+   },
+   "lesson": "xl2-operadores"
+  },
+  {
+   "id": "xl2-op-12",
+   "block": "xl-m02",
+   "q": {
+    "es": "Escribe en `D2` el importe de la línea (cantidad × precio con el descuento aplicado), para copiarla hasta `D4`.",
+    "en": "Escribe en `D2` el importe de la línea (cantidad × precio con el descuento aplicado), para copiarla hasta `D4`."
+   },
+   "kind": "formula",
+   "excel": {
+    "grid": {
+     "A1": "Cantidad",
+     "B1": "Precio",
+     "C1": "Descuento",
+     "A2": 3,
+     "B2": 12.5,
+     "C2": 0.1,
+     "A3": 10,
+     "B3": 4,
+     "C3": 0,
+     "A4": 2,
+     "B4": 99.9,
+     "C4": 0.25
+    },
+    "cell": "D2",
+    "expect": 33.75,
+    "checks": [
+     {
+      "type": "value"
+     },
+     {
+      "type": "fill",
+      "to": "D4",
+      "expect": [
+       40,
+       149.85
+      ]
+     },
+     {
+      "type": "variants",
+      "count": 2
+     },
+     {
+      "type": "noConstants",
+      "except": [
+       1
+      ]
+     }
+    ],
+    "solution": {
+     "formula": "=A2*B2*(1-C2)"
+    },
+    "mistakes": [
+     {
+      "error": "=A2*B2*1-C2",
+      "fix": "Sin paréntesis, Excel resta el descuento al final: 37,4 en vez de 33,75."
+     },
+     {
+      "error": "=A2*B2",
+      "fix": "Falta aplicar el descuento."
+     }
+    ],
+    "hints": [
+     "Cantidad por precio: A2*B2.",
+     "Se paga 1 menos el descuento: (1-C2). Los paréntesis son imprescindibles."
+    ],
+    "vary": [
+     "A2:C4"
+    ]
+   },
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "`=A2*B2*(1-C2)`: 3 × 12,5 × 0,9 = 33,75. Al copiarla, cada línea usa sus celdas.",
+    "en": "`=A2*B2*(1-C2)`: 3 × 12,5 × 0,9 = 33,75. Al copiarla, cada línea usa sus celdas."
+   },
+   "lesson": "xl2-operadores"
+  },
+  {
+   "id": "xl2-op-13",
+   "block": "xl-m02",
+   "q": {
+    "es": "¿Qué devuelve la fórmula?",
+    "en": "¿Qué devuelve la fórmula?"
+   },
+   "kind": "formula-result",
+   "excel": {
+    "grid": {},
+    "formula": "=10/4*2",
+    "answer": 5,
+    "input": "number"
+   },
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "División y multiplicación tienen la misma prioridad y se hacen de izquierda a derecha: 10 / 4 = 2,5 y 2,5 × 2 = 5.",
+    "en": "División y multiplicación tienen la misma prioridad y se hacen de izquierda a derecha: 10 / 4 = 2,5 y 2,5 × 2 = 5."
+   },
+   "lesson": "xl2-operadores"
+  },
+  {
+   "id": "xl2-op-14",
+   "block": "xl-m02",
+   "q": {
+    "es": "Escribe en `C2` el precio con IVA (precio × (1 + tipo de `E1`)), para copiarla hasta `C4`.",
+    "en": "Escribe en `C2` el precio con IVA (precio × (1 + tipo de `E1`)), para copiarla hasta `C4`."
+   },
+   "kind": "formula",
+   "excel": {
+    "grid": {
+     "A1": "Pieza",
+     "B1": "Precio",
+     "A2": "Filtro",
+     "B2": 100,
+     "A3": "Bujía",
+     "B3": 40,
+     "A4": "Junta",
+     "B4": 12.5,
+     "D1": "IVA",
+     "E1": 0.21
+    },
+    "cell": "C2",
+    "expect": 121,
+    "checks": [
+     {
+      "type": "value"
+     },
+     {
+      "type": "fill",
+      "to": "C4",
+      "expect": [
+       48.4,
+       15.125
+      ]
+     },
+     {
+      "type": "references",
+      "must": [
+       "$E$1"
+      ]
+     },
+     {
+      "type": "noConstants",
+      "except": [
+       1
+      ]
+     }
+    ],
+    "solution": {
+     "formula": "=B2*(1+$E$1)"
+    },
+    "mistakes": [
+     {
+      "error": "=B2*1+$E$1",
+      "fix": "Sin paréntesis suma el tipo (0,21) al final: 100,21."
+     },
+     {
+      "error": "=B2*(1+E1)",
+      "fix": "Al copiarla, E1 pasa a E2, vacía: el IVA desaparece."
+     }
+    ],
+    "hints": [
+     "El precio con IVA es el precio por (1 + tipo).",
+     "Pon paréntesis y fija E1 con $."
+    ]
+   },
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "`=B2*(1+$E$1)`: 100 × 1,21 = 121. El 1 es la única constante permitida.",
+    "en": "`=B2*(1+$E$1)`: 100 × 1,21 = 121. El 1 es la única constante permitida."
+   },
+   "lesson": "xl2-operadores"
+  },
+  {
+   "id": "xl2-op-15",
+   "block": "xl-m02",
+   "q": {
+    "es": "Escribe en `C2` el nombre completo (nombre, un espacio y apellido), para copiarla hasta `C4`.",
+    "en": "Escribe en `C2` el nombre completo (nombre, un espacio y apellido), para copiarla hasta `C4`."
+   },
+   "kind": "formula",
+   "excel": {
+    "grid": {
+     "A1": "Nombre",
+     "B1": "Apellido",
+     "A2": "Ana",
+     "B2": "Ruiz",
+     "A3": "Luis",
+     "B3": "Gil",
+     "A4": "Marta",
+     "B4": "Sanz"
+    },
+    "cell": "C2",
+    "expect": "Ana Ruiz",
+    "checks": [
+     {
+      "type": "value"
+     },
+     {
+      "type": "fill",
+      "to": "C4",
+      "expect": [
+       "Luis Gil",
+       "Marta Sanz"
+      ]
+     }
+    ],
+    "solution": {
+     "formula": "=A2&\" \"&B2"
+    },
+    "mistakes": [
+     {
+      "error": "=A2&B2",
+      "fix": "Sin el espacio sale «AnaRuiz»."
+     },
+     {
+      "error": "=A2+\" \"+B2",
+      "fix": "El + intenta sumar textos y da #¡VALOR!."
+     }
+    ],
+    "hints": [
+     "Para unir textos se usa &.",
+     "El espacio es un texto: \" \"."
+    ]
+   },
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "`=A2&\" \"&B2`: une el nombre, un espacio y el apellido.",
+    "en": "`=A2&\" \"&B2`: une el nombre, un espacio y el apellido."
+   },
+   "lesson": "xl2-operadores"
+  },
+  {
+   "id": "xl2-est-01",
+   "block": "xl-m02",
+   "q": {
+    "es": "En Excel en español, ¿qué separa los argumentos de una función?",
+    "en": "En Excel en español, ¿qué separa los argumentos de una función?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "El punto y coma: =SUMA(B2;B5)",
+     "en": "El punto y coma: =SUMA(B2;B5)"
+    },
+    {
+     "es": "La coma: =SUMA(B2,B5)",
+     "en": "La coma: =SUMA(B2,B5)"
+    },
+    {
+     "es": "El punto: =SUMA(B2.B5)",
+     "en": "El punto: =SUMA(B2.B5)"
+    },
+    {
+     "es": "Un espacio",
+     "en": "Un espacio"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "La coma es el separador decimal en español, así que los argumentos se separan con ;.",
+    "en": "La coma es el separador decimal en español, así que los argumentos se separan con ;."
+   },
+   "lesson": "xl2-estadisticas"
+  },
+  {
+   "id": "xl2-est-02",
+   "block": "xl-m02",
+   "q": {
+    "es": "`B2:B5` tiene 10, 20, una celda vacía y 30. ¿Qué devuelve `=PROMEDIO(B2:B5)`?",
+    "en": "`B2:B5` tiene 10, 20, una celda vacía y 30. ¿Qué devuelve `=PROMEDIO(B2:B5)`?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "20",
+     "en": "20"
+    },
+    {
+     "es": "15",
+     "en": "15"
+    },
+    {
+     "es": "30",
+     "en": "30"
+    },
+    {
+     "es": "60",
+     "en": "60"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "La vacía no cuenta: (10 + 20 + 30) / 3 = 20.",
+    "en": "La vacía no cuenta: (10 + 20 + 30) / 3 = 20."
+   },
+   "lesson": "xl2-estadisticas"
+  },
+  {
+   "id": "xl2-est-03",
+   "block": "xl-m02",
+   "q": {
+    "es": "¿Qué hace SUMA con un texto que está dentro del rango?",
+    "en": "¿Qué hace SUMA con un texto que está dentro del rango?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Lo ignora",
+     "en": "Lo ignora"
+    },
+    {
+     "es": "Da #¡VALOR!",
+     "en": "Da #¡VALOR!"
+    },
+    {
+     "es": "Lo cuenta como 1",
+     "en": "Lo cuenta como 1"
+    },
+    {
+     "es": "Lo convierte siempre en número",
+     "en": "Lo convierte siempre en número"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Las funciones ignoran el texto de un rango; el operador + no.",
+    "en": "Las funciones ignoran el texto de un rango; el operador + no."
+   },
+   "lesson": "xl2-estadisticas"
+  },
+  {
+   "id": "xl2-est-04",
+   "block": "xl-m02",
+   "q": {
+    "es": "¿Qué ventaja tiene `=SUMA(B2:B7)` frente a `=B2+B3+B4+B5+B6+B7`?",
+    "en": "¿Qué ventaja tiene `=SUMA(B2:B7)` frente a `=B2+B3+B4+B5+B6+B7`?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Es más corta y, si insertas una fila dentro del rango, la incluye sola",
+     "en": "Es más corta y, si insertas una fila dentro del rango, la incluye sola"
+    },
+    {
+     "es": "Es más precisa con los decimales",
+     "en": "Es más precisa con los decimales"
+    },
+    {
+     "es": "Redondea el resultado",
+     "en": "Redondea el resultado"
+    },
+    {
+     "es": "Permite sumar textos",
+     "en": "Permite sumar textos"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "El resultado es el mismo, pero SUMA es más fácil de leer y de mantener.",
+    "en": "El resultado es el mismo, pero SUMA es más fácil de leer y de mantener."
+   },
+   "lesson": "xl2-estadisticas"
+  },
+  {
+   "id": "xl2-est-05",
+   "block": "xl-m02",
+   "q": {
+    "es": "`A1:A4` tiene 5, −2, una celda vacía y 8. ¿Qué devuelve `=MIN(A1:A4)`?",
+    "en": "`A1:A4` tiene 5, −2, una celda vacía y 8. ¿Qué devuelve `=MIN(A1:A4)`?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "−2",
+     "en": "−2"
+    },
+    {
+     "es": "0",
+     "en": "0"
+    },
+    {
+     "es": "5",
+     "en": "5"
+    },
+    {
+     "es": "8",
+     "en": "8"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "La vacía no cuenta como 0: el mínimo de 5, −2 y 8 es −2.",
+    "en": "La vacía no cuenta como 0: el mínimo de 5, −2 y 8 es −2."
+   },
+   "lesson": "xl2-estadisticas"
+  },
+  {
+   "id": "xl2-est-06",
+   "block": "xl-m02",
+   "q": {
+    "es": "En un PROMEDIO, ¿qué diferencia hay entre una celda con 0 y una vacía?",
+    "en": "En un PROMEDIO, ¿qué diferencia hay entre una celda con 0 y una vacía?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "El 0 cuenta y baja la media; la vacía no cuenta",
+     "en": "El 0 cuenta y baja la media; la vacía no cuenta"
+    },
+    {
+     "es": "Ninguna de las dos cuenta",
+     "en": "Ninguna de las dos cuenta"
+    },
+    {
+     "es": "Las dos cuentan igual",
+     "en": "Las dos cuentan igual"
+    },
+    {
+     "es": "La vacía cuenta como 0",
+     "en": "La vacía cuenta como 0"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Si un mes sin ventas tiene que contar en la media, escribe 0.",
+    "en": "Si un mes sin ventas tiene que contar en la media, escribe 0."
+   },
+   "lesson": "xl2-estadisticas"
+  },
+  {
+   "id": "xl2-est-07",
+   "block": "xl-m02",
+   "q": {
+    "es": "B4 tiene el texto «sin datos» y B5 está vacía. ¿Qué devuelve la fórmula? (Dos decimales)",
+    "en": "B4 tiene el texto «sin datos» y B5 está vacía. ¿Qué devuelve la fórmula? (Dos decimales)"
+   },
+   "kind": "formula-result",
+   "excel": {
+    "grid": {
+     "A1": "Mes",
+     "B1": "Ventas",
+     "A2": "Enero",
+     "B2": 1200,
+     "A3": "Febrero",
+     "B3": 950,
+     "A4": "Marzo",
+     "B4": "sin datos",
+     "A5": "Abril",
+     "A6": "Mayo",
+     "B6": 1850
+    },
+    "formula": "=PROMEDIO(B2:B6)",
+    "answer": 1333.33,
+    "input": "number"
+   },
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "Solo cuentan los tres números: (1200 + 950 + 1850) / 3 = 1333,33.",
+    "en": "Solo cuentan los tres números: (1200 + 950 + 1850) / 3 = 1333,33."
+   },
+   "lesson": "xl2-estadisticas"
+  },
+  {
+   "id": "xl2-est-08",
+   "block": "xl-m02",
+   "q": {
+    "es": "¿Qué devuelve la fórmula?",
+    "en": "¿Qué devuelve la fórmula?"
+   },
+   "kind": "formula-result",
+   "excel": {
+    "grid": {
+     "A1": "Mes",
+     "B1": "Ventas",
+     "A2": "Enero",
+     "B2": 1200,
+     "A3": "Febrero",
+     "B3": 950,
+     "A4": "Marzo",
+     "B4": "sin datos",
+     "A5": "Abril",
+     "A6": "Mayo",
+     "B6": 1850
+    },
+    "formula": "=SUMA(B2:B6)",
+    "answer": 4000,
+    "input": "number"
+   },
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "1200 + 950 + 1850; el texto y la vacía se ignoran.",
+    "en": "1200 + 950 + 1850; el texto y la vacía se ignoran."
+   },
+   "lesson": "xl2-estadisticas"
+  },
+  {
+   "id": "xl2-est-09",
+   "block": "xl-m02",
+   "q": {
+    "es": "Escribe en `B8` el total de ventas del semestre con la función SUMA.",
+    "en": "Escribe en `B8` el total de ventas del semestre con la función SUMA."
+   },
+   "kind": "formula",
+   "excel": {
+    "grid": {
+     "A1": "Mes",
+     "B1": "Ventas",
+     "A2": "Enero",
+     "B2": 1200,
+     "A3": "Febrero",
+     "B3": 950,
+     "A4": "Marzo",
+     "B4": 1430,
+     "A5": "Abril",
+     "B5": 1100,
+     "A6": "Mayo",
+     "B6": 1850,
+     "A7": "Junio",
+     "B7": 1620
+    },
+    "cell": "B8",
+    "expect": 8150,
+    "checks": [
+     {
+      "type": "value"
+     },
+     {
+      "type": "variants",
+      "count": 2
+     },
+     {
+      "type": "functions",
+      "requires": [
+       "SUM"
+      ]
+     }
+    ],
+    "solution": {
+     "formula": "=SUMA(B2:B7)"
+    },
+    "mistakes": [
+     {
+      "error": "=SUMA(B2:B6)",
+      "fix": "El rango deja fuera junio: 6530."
+     },
+     {
+      "error": "=B2+B3+B4+B5+B6+B7",
+      "fix": "Da el total, pero el ejercicio pide usar SUMA."
+     }
+    ],
+    "hints": [
+     "Las ventas van de B2 a B7.",
+     "=SUMA(rango)."
+    ],
+    "vary": [
+     "B2:B7"
+    ]
+   },
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "`=SUMA(B2:B7)`: 8150. Comprueba siempre que el rango llega hasta el último mes.",
+    "en": "`=SUMA(B2:B7)`: 8150. Comprueba siempre que el rango llega hasta el último mes."
+   },
+   "lesson": "xl2-estadisticas"
+  },
+  {
+   "id": "xl2-est-10",
+   "block": "xl-m02",
+   "q": {
+    "es": "¿Qué devuelve la fórmula?",
+    "en": "¿Qué devuelve la fórmula?"
+   },
+   "kind": "formula-result",
+   "excel": {
+    "grid": {
+     "A1": "Mes",
+     "B1": "Ventas",
+     "A2": "Enero",
+     "B2": 1200,
+     "A3": "Febrero",
+     "B3": 950,
+     "A4": "Marzo",
+     "B4": "sin datos",
+     "A5": "Abril",
+     "A6": "Mayo",
+     "B6": 1850
+    },
+    "formula": "=MIN(B2:B6)",
+    "answer": 950,
+    "input": "number"
+   },
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "El texto y la vacía no cuentan: el mínimo de 1200, 950 y 1850 es 950.",
+    "en": "El texto y la vacía no cuentan: el mínimo de 1200, 950 y 1850 es 950."
+   },
+   "lesson": "xl2-estadisticas"
+  },
+  {
+   "id": "xl2-est-11",
+   "block": "xl-m02",
+   "q": {
+    "es": "¿Qué devuelve la fórmula?",
+    "en": "¿Qué devuelve la fórmula?"
+   },
+   "kind": "formula-result",
+   "excel": {
+    "grid": {
+     "A1": "Mes",
+     "B1": "Ventas",
+     "A2": "Enero",
+     "B2": 1200,
+     "A3": "Febrero",
+     "B3": 950,
+     "A4": "Marzo",
+     "B4": "sin datos",
+     "A5": "Abril",
+     "A6": "Mayo",
+     "B6": 1850
+    },
+    "formula": "=MAX(B2:B6)",
+    "answer": 1850,
+    "input": "number"
+   },
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "El valor más grande de los números del rango.",
+    "en": "El valor más grande de los números del rango."
+   },
+   "lesson": "xl2-estadisticas"
+  },
+  {
+   "id": "xl2-est-12",
+   "block": "xl-m02",
+   "q": {
+    "es": "C3 tiene un 0 y C5 está vacía. ¿Qué devuelve la fórmula?",
+    "en": "C3 tiene un 0 y C5 está vacía. ¿Qué devuelve la fórmula?"
+   },
+   "kind": "formula-result",
+   "excel": {
+    "grid": {
+     "C1": "Ventas",
+     "C2": 10,
+     "C3": 0,
+     "C4": 20
+    },
+    "formula": "=PROMEDIO(C2:C5)",
+    "answer": 10,
+    "input": "number"
+   },
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "El 0 cuenta y la vacía no: (10 + 0 + 20) / 3 = 10.",
+    "en": "El 0 cuenta y la vacía no: (10 + 0 + 20) / 3 = 10."
+   },
+   "lesson": "xl2-estadisticas"
+  },
+  {
+   "id": "xl2-est-13",
+   "block": "xl-m02",
+   "q": {
+    "es": "Escribe en `B8` la media mensual de ventas del semestre con la función PROMEDIO.",
+    "en": "Escribe en `B8` la media mensual de ventas del semestre con la función PROMEDIO."
+   },
+   "kind": "formula",
+   "excel": {
+    "grid": {
+     "A1": "Mes",
+     "B1": "Ventas",
+     "A2": "Enero",
+     "B2": 1200,
+     "A3": "Febrero",
+     "B3": 950,
+     "A4": "Marzo",
+     "B4": 1430,
+     "A5": "Abril",
+     "B5": 1100,
+     "A6": "Mayo",
+     "B6": 1850,
+     "A7": "Junio",
+     "B7": 1620
+    },
+    "cell": "B8",
+    "expect": 1358.3333333333333,
+    "checks": [
+     {
+      "type": "value"
+     },
+     {
+      "type": "variants",
+      "count": 2
+     },
+     {
+      "type": "functions",
+      "requires": [
+       "AVERAGE"
+      ]
+     }
+    ],
+    "solution": {
+     "formula": "=PROMEDIO(B2:B7)"
+    },
+    "mistakes": [
+     {
+      "error": "=PROMEDIO(B2:B6)",
+      "fix": "El rango deja fuera junio."
+     },
+     {
+      "error": "=SUMA(B2:B7)/6",
+      "fix": "Da la media, pero el ejercicio pide usar PROMEDIO."
+     }
+    ],
+    "hints": [
+     "Las ventas van de B2 a B7.",
+     "=PROMEDIO(rango)."
+    ],
+    "vary": [
+     "B2:B7"
+    ]
+   },
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "`=PROMEDIO(B2:B7)`: 8150 / 6 = 1358,33.",
+    "en": "`=PROMEDIO(B2:B7)`: 8150 / 6 = 1358,33."
+   },
+   "lesson": "xl2-estadisticas"
+  },
+  {
+   "id": "xl2-est-14",
+   "block": "xl-m02",
+   "q": {
+    "es": "Escribe en `E2` la mejor venta del semestre con la función MAX.",
+    "en": "Escribe en `E2` la mejor venta del semestre con la función MAX."
+   },
+   "kind": "formula",
+   "excel": {
+    "grid": {
+     "A1": "Mes",
+     "B1": "Ventas",
+     "A2": "Enero",
+     "B2": 1200,
+     "A3": "Febrero",
+     "B3": 950,
+     "A4": "Marzo",
+     "B4": 1430,
+     "A5": "Abril",
+     "B5": 1100,
+     "A6": "Mayo",
+     "B6": 1620,
+     "A7": "Junio",
+     "B7": 1850,
+     "D2": "Mejor mes"
+    },
+    "cell": "E2",
+    "expect": 1850,
+    "checks": [
+     {
+      "type": "value"
+     },
+     {
+      "type": "variants",
+      "count": 2
+     },
+     {
+      "type": "functions",
+      "requires": [
+       "MAX"
+      ]
+     }
+    ],
+    "solution": {
+     "formula": "=MAX(B2:B7)"
+    },
+    "mistakes": [
+     {
+      "error": "=MAX(B2:B6)",
+      "fix": "El rango deja fuera junio, que es el mejor mes."
+     },
+     {
+      "error": "=MIN(B2:B7)",
+      "fix": "MIN da la peor venta, no la mejor."
+     }
+    ],
+    "hints": [
+     "Las ventas van de B2 a B7.",
+     "=MAX(rango)."
+    ],
+    "vary": [
+     "B2:B7"
+    ]
+   },
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "`=MAX(B2:B7)`: 1850, la venta de junio.",
+    "en": "`=MAX(B2:B7)`: 1850, la venta de junio."
+   },
+   "lesson": "xl2-estadisticas"
+  },
+  {
+   "id": "xl2-con-01",
+   "block": "xl-m02",
+   "q": {
+    "es": "¿Qué diferencia hay entre CONTAR y CONTARA?",
+    "en": "¿Qué diferencia hay entre CONTAR y CONTARA?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "CONTAR cuenta celdas con números; CONTARA, celdas que no están vacías",
+     "en": "CONTAR cuenta celdas con números; CONTARA, celdas que no están vacías"
+    },
+    {
+     "es": "Son iguales",
+     "en": "Son iguales"
+    },
+    {
+     "es": "CONTAR cuenta textos y CONTARA números",
+     "en": "CONTAR cuenta textos y CONTARA números"
+    },
+    {
+     "es": "CONTARA solo cuenta celdas vacías",
+     "en": "CONTARA solo cuenta celdas vacías"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "CONTARA cuenta todo lo que no esté vacío: números, textos y errores.",
+    "en": "CONTARA cuenta todo lo que no esté vacío: números, textos y errores."
+   },
+   "lesson": "xl2-contar"
+  },
+  {
+   "id": "xl2-con-02",
+   "block": "xl-m02",
+   "q": {
+    "es": "`A1:A5` tiene «Ana», 3, una celda vacía, 0 y «No». ¿Qué devuelve `=CONTARA(A1:A5)`?",
+    "en": "`A1:A5` tiene «Ana», 3, una celda vacía, 0 y «No». ¿Qué devuelve `=CONTARA(A1:A5)`?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "4",
+     "en": "4"
+    },
+    {
+     "es": "2",
+     "en": "2"
+    },
+    {
+     "es": "5",
+     "en": "5"
+    },
+    {
+     "es": "3",
+     "en": "3"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Cuatro celdas no están vacías. El 0 es un valor y cuenta.",
+    "en": "Cuatro celdas no están vacías. El 0 es un valor y cuenta."
+   },
+   "lesson": "xl2-contar"
+  },
+  {
+   "id": "xl2-con-03",
+   "block": "xl-m02",
+   "q": {
+    "es": "¿Qué hace REDONDEAR con `núm_decimales` igual a 0?",
+    "en": "¿Qué hace REDONDEAR con `núm_decimales` igual a 0?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Redondea a un número entero",
+     "en": "Redondea a un número entero"
+    },
+    {
+     "es": "Quita los decimales sin redondear",
+     "en": "Quita los decimales sin redondear"
+    },
+    {
+     "es": "Da un error",
+     "en": "Da un error"
+    },
+    {
+     "es": "Devuelve 0",
+     "en": "Devuelve 0"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "`=REDONDEAR(2,5;0)` da 3 y `=REDONDEAR(2,4;0)` da 2.",
+    "en": "`=REDONDEAR(2,5;0)` da 3 y `=REDONDEAR(2,4;0)` da 2."
+   },
+   "lesson": "xl2-contar"
+  },
+  {
+   "id": "xl2-con-04",
+   "block": "xl-m02",
+   "q": {
+    "es": "¿En qué se diferencia «Disminuir decimales» de REDONDEAR?",
+    "en": "¿En qué se diferencia «Disminuir decimales» de REDONDEAR?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Disminuir decimales solo cambia lo que se ve; REDONDEAR cambia el valor guardado",
+     "en": "Disminuir decimales solo cambia lo que se ve; REDONDEAR cambia el valor guardado"
+    },
+    {
+     "es": "Son lo mismo",
+     "en": "Son lo mismo"
+    },
+    {
+     "es": "REDONDEAR solo cambia lo que se ve",
+     "en": "REDONDEAR solo cambia lo que se ve"
+    },
+    {
+     "es": "Disminuir decimales es más exacto",
+     "en": "Disminuir decimales es más exacto"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Los cálculos usan el valor guardado: solo REDONDEAR lo cambia.",
+    "en": "Los cálculos usan el valor guardado: solo REDONDEAR lo cambia."
+   },
+   "lesson": "xl2-contar"
+  },
+  {
+   "id": "xl2-con-05",
+   "block": "xl-m02",
+   "q": {
+    "es": "`A1:A3` tiene 2, una celda vacía y 5. ¿Qué devuelve `=PRODUCTO(A1:A3)`?",
+    "en": "`A1:A3` tiene 2, una celda vacía y 5. ¿Qué devuelve `=PRODUCTO(A1:A3)`?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "10",
+     "en": "10"
+    },
+    {
+     "es": "0",
+     "en": "0"
+    },
+    {
+     "es": "7",
+     "en": "7"
+    },
+    {
+     "es": "2",
+     "en": "2"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "PRODUCTO ignora la celda vacía: 2 × 5 = 10. En cambio, `=A1*A2*A3` daría 0.",
+    "en": "PRODUCTO ignora la celda vacía: 2 × 5 = 10. En cambio, `=A1*A2*A3` daría 0."
+   },
+   "lesson": "xl2-contar"
+  },
+  {
+   "id": "xl2-con-06",
+   "block": "xl-m02",
+   "q": {
+    "es": "¿Qué devuelve `=REDONDEAR(-2,5;0)`?",
+    "en": "¿Qué devuelve `=REDONDEAR(-2,5;0)`?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "−3",
+     "en": "−3"
+    },
+    {
+     "es": "−2",
+     "en": "−2"
+    },
+    {
+     "es": "2",
+     "en": "2"
+    },
+    {
+     "es": "3",
+     "en": "3"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "REDONDEAR aleja el 5 del cero: −2,5 pasa a −3.",
+    "en": "REDONDEAR aleja el 5 del cero: −2,5 pasa a −3."
+   },
+   "lesson": "xl2-contar"
+  },
+  {
+   "id": "xl2-con-07",
+   "block": "xl-m02",
+   "q": {
+    "es": "¿Qué devuelve la fórmula?",
+    "en": "¿Qué devuelve la fórmula?"
+   },
+   "kind": "formula-result",
+   "excel": {
+    "grid": {
+     "A1": "Factura",
+     "A2": "F-001",
+     "A3": 120,
+     "A5": "pendiente",
+     "A6": 80
+    },
+    "formula": "=CONTAR(A2:A6)",
+    "answer": 2,
+    "input": "number"
+   },
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "Solo 120 y 80 son números.",
+    "en": "Solo 120 y 80 son números."
+   },
+   "lesson": "xl2-contar"
+  },
+  {
+   "id": "xl2-con-08",
+   "block": "xl-m02",
+   "q": {
+    "es": "¿Qué devuelve la fórmula?",
+    "en": "¿Qué devuelve la fórmula?"
+   },
+   "kind": "formula-result",
+   "excel": {
+    "grid": {
+     "A1": "Factura",
+     "A2": "F-001",
+     "A3": 120,
+     "A5": "pendiente",
+     "A6": 80
+    },
+    "formula": "=CONTARA(A2:A6)",
+    "answer": 4,
+    "input": "number"
+   },
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "Cuatro celdas no están vacías: «F-001», 120, «pendiente» y 80.",
+    "en": "Cuatro celdas no están vacías: «F-001», 120, «pendiente» y 80."
+   },
+   "lesson": "xl2-contar"
+  },
+  {
+   "id": "xl2-con-09",
+   "block": "xl-m02",
+   "q": {
+    "es": "¿Qué devuelve la fórmula?",
+    "en": "¿Qué devuelve la fórmula?"
+   },
+   "kind": "formula-result",
+   "excel": {
+    "grid": {
+     "A1": "Cantidad",
+     "B1": "Precio",
+     "C1": "Pagas",
+     "A2": 3,
+     "B2": 12.5,
+     "C2": 0.9
+    },
+    "formula": "=PRODUCTO(A2:C2)",
+    "answer": 33.75,
+    "input": "number"
+   },
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "3 × 12,5 × 0,9 = 33,75.",
+    "en": "3 × 12,5 × 0,9 = 33,75."
+   },
+   "lesson": "xl2-contar"
+  },
+  {
+   "id": "xl2-con-10",
+   "block": "xl-m02",
+   "q": {
+    "es": "¿Qué devuelve la fórmula?",
+    "en": "¿Qué devuelve la fórmula?"
+   },
+   "kind": "formula-result",
+   "excel": {
+    "grid": {},
+    "formula": "=REDONDEAR(1234,567;-2)",
+    "answer": 1200,
+    "input": "number"
+   },
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "Con −2 decimales redondea a centenas: 1234,567 queda en 1200.",
+    "en": "Con −2 decimales redondea a centenas: 1234,567 queda en 1200."
+   },
+   "lesson": "xl2-contar"
+  },
+  {
+   "id": "xl2-con-11",
+   "block": "xl-m02",
+   "q": {
+    "es": "Escribe en `C2` el IVA de la línea (precio × tipo de `E1`) **redondeado a céntimos**, para copiarla hasta `C4`.",
+    "en": "Escribe en `C2` el IVA de la línea (precio × tipo de `E1`) **redondeado a céntimos**, para copiarla hasta `C4`."
+   },
+   "kind": "formula",
+   "excel": {
+    "grid": {
+     "A1": "Concepto",
+     "B1": "Precio",
+     "A2": "Cable",
+     "B2": 19.99,
+     "A3": "Clavija",
+     "B3": 7.4,
+     "A4": "Router",
+     "B4": 133.33,
+     "D1": "IVA",
+     "E1": 0.21
+    },
+    "cell": "C2",
+    "expect": 4.2,
+    "checks": [
+     {
+      "type": "value"
+     },
+     {
+      "type": "fill",
+      "to": "C4",
+      "expect": [
+       1.55,
+       28
+      ]
+     },
+     {
+      "type": "functions",
+      "requires": [
+       "ROUND"
+      ]
+     },
+     {
+      "type": "references",
+      "must": [
+       "$E$1"
+      ]
+     }
+    ],
+    "solution": {
+     "formula": "=REDONDEAR(B2*$E$1;2)"
+    },
+    "mistakes": [
+     {
+      "error": "=B2*$E$1",
+      "fix": "Sin redondear da 4,1979: se ve 4,20 con formato, pero el valor no está redondeado."
+     },
+     {
+      "error": "=REDONDEAR(B2*E1;2)",
+      "fix": "Al copiarla, E1 pasa a E2, vacía."
+     }
+    ],
+    "hints": [
+     "Primero el IVA: B2*$E$1.",
+     "Mételo en REDONDEAR con 2 decimales: =REDONDEAR(…;2)."
+    ],
+    "tolerance": 0.0001
+   },
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "`=REDONDEAR(B2*$E$1;2)`: 4,1979 pasa a 4,20; 1,554 a 1,55; 27,9993 a 28,00.",
+    "en": "`=REDONDEAR(B2*$E$1;2)`: 4,1979 pasa a 4,20; 1,554 a 1,55; 27,9993 a 28,00."
+   },
+   "lesson": "xl2-contar"
+  },
+  {
+   "id": "xl2-con-12",
+   "block": "xl-m02",
+   "q": {
+    "es": "¿Qué devuelve la fórmula?",
+    "en": "¿Qué devuelve la fórmula?"
+   },
+   "kind": "formula-result",
+   "excel": {
+    "grid": {},
+    "formula": "=REDONDEAR(4,1979;2)",
+    "answer": 4.2,
+    "input": "number",
+    "tolerance": 0.0001
+   },
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "A dos decimales: el tercer decimal es 7, así que el 9 sube y queda 4,20.",
+    "en": "A dos decimales: el tercer decimal es 7, así que el 9 sube y queda 4,20."
+   },
+   "lesson": "xl2-contar"
+  },
+  {
+   "id": "xl2-con-13",
+   "block": "xl-m02",
+   "q": {
+    "es": "Escribe en `B8` cuántas facturas tienen **importe** (número) con la función CONTAR.",
+    "en": "Escribe en `B8` cuántas facturas tienen **importe** (número) con la función CONTAR."
+   },
+   "kind": "formula",
+   "excel": {
+    "grid": {
+     "A1": "Factura",
+     "B1": "Importe",
+     "A2": "F-001",
+     "B2": 120,
+     "A3": "F-002",
+     "B3": "pendiente",
+     "A4": "F-003",
+     "B4": 95,
+     "A6": "F-005",
+     "B6": 300,
+     "A7": "F-006",
+     "B7": "anulada"
+    },
+    "cell": "B8",
+    "expect": 3,
+    "checks": [
+     {
+      "type": "value"
+     },
+     {
+      "type": "functions",
+      "requires": [
+       "COUNT"
+      ]
+     }
+    ],
+    "solution": {
+     "formula": "=CONTAR(B2:B7)"
+    },
+    "mistakes": [
+     {
+      "error": "=CONTARA(B2:B7)",
+      "fix": "CONTARA cuenta también «pendiente» y «anulada»: 5."
+     },
+     {
+      "error": "=CONTAR(B2:B5)",
+      "fix": "El rango deja fuera las dos últimas filas."
+     }
+    ],
+    "hints": [
+     "Los importes están en B2:B7.",
+     "CONTAR cuenta solo los números."
+    ]
+   },
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "`=CONTAR(B2:B7)`: 120, 95 y 300 son números; los textos y la vacía no cuentan.",
+    "en": "`=CONTAR(B2:B7)`: 120, 95 y 300 son números; los textos y la vacía no cuentan."
+   },
+   "lesson": "xl2-contar"
+  },
+  {
+   "id": "xl2-con-14",
+   "block": "xl-m02",
+   "q": {
+    "es": "Escribe en `D2` el importe de la línea multiplicando cantidad, precio y factor de IVA con la función PRODUCTO, para copiarla hasta `D4`.",
+    "en": "Escribe en `D2` el importe de la línea multiplicando cantidad, precio y factor de IVA con la función PRODUCTO, para copiarla hasta `D4`."
+   },
+   "kind": "formula",
+   "excel": {
+    "grid": {
+     "A1": "Cantidad",
+     "B1": "Precio",
+     "C1": "Con IVA",
+     "A2": 4,
+     "B2": 2.5,
+     "C2": 1.21,
+     "A3": 2,
+     "B3": 19.9,
+     "C3": 1.21,
+     "A4": 10,
+     "B4": 0.75,
+     "C4": 1.21
+    },
+    "cell": "D2",
+    "expect": 12.1,
+    "checks": [
+     {
+      "type": "value"
+     },
+     {
+      "type": "fill",
+      "to": "D4",
+      "expect": [
+       48.158,
+       9.075
+      ]
+     },
+     {
+      "type": "functions",
+      "requires": [
+       "PRODUCT"
+      ]
+     }
+    ],
+    "solution": {
+     "formula": "=PRODUCTO(A2:C2)"
+    },
+    "mistakes": [
+     {
+      "error": "=SUMA(A2:C2)",
+      "fix": "SUMA suma, no multiplica."
+     },
+     {
+      "error": "=PRODUCTO(A2:B2)",
+      "fix": "Falta el factor de IVA de la columna C."
+     }
+    ],
+    "hints": [
+     "Los tres factores están en A2:C2.",
+     "=PRODUCTO(rango)."
+    ]
+   },
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "`=PRODUCTO(A2:C2)`: 4 × 2,5 × 1,21 = 12,1.",
+    "en": "`=PRODUCTO(A2:C2)`: 4 × 2,5 × 1,21 = 12,1."
+   },
+   "lesson": "xl2-contar"
+  },
+  {
+   "id": "xl2-hoj-01",
+   "block": "xl-m02",
+   "q": {
+    "es": "¿Cómo se escribe la celda `B5` de la hoja **Enero**?",
+    "en": "¿Cómo se escribe la celda `B5` de la hoja **Enero**?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Enero!B5",
+     "en": "Enero!B5"
+    },
+    {
+     "es": "B5!Enero",
+     "en": "B5!Enero"
+    },
+    {
+     "es": "Enero.B5",
+     "en": "Enero.B5"
+    },
+    {
+     "es": "[Enero]B5",
+     "en": "[Enero]B5"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Primero la hoja, después ! y la celda.",
+    "en": "Primero la hoja, después ! y la celda."
+   },
+   "lesson": "xl2-hojas"
+  },
+  {
+   "id": "xl2-hoj-02",
+   "block": "xl-m02",
+   "q": {
+    "es": "¿Cómo se escribe la celda `B5` de la hoja **Primer trimestre**?",
+    "en": "¿Cómo se escribe la celda `B5` de la hoja **Primer trimestre**?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "'Primer trimestre'!B5",
+     "en": "'Primer trimestre'!B5"
+    },
+    {
+     "es": "Primer trimestre!B5",
+     "en": "Primer trimestre!B5"
+    },
+    {
+     "es": "\"Primer trimestre\"!B5",
+     "en": "\"Primer trimestre\"!B5"
+    },
+    {
+     "es": "(Primer trimestre)!B5",
+     "en": "(Primer trimestre)!B5"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Con espacios en el nombre, la hoja va entre comillas simples.",
+    "en": "Con espacios en el nombre, la hoja va entre comillas simples."
+   },
+   "lesson": "xl2-hojas"
+  },
+  {
+   "id": "xl2-hoj-03",
+   "block": "xl-m02",
+   "q": {
+    "es": "En la hoja Resumen escribes `=B5`. ¿A qué celda se refiere?",
+    "en": "En la hoja Resumen escribes `=B5`. ¿A qué celda se refiere?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "A Resumen!B5",
+     "en": "A Resumen!B5"
+    },
+    {
+     "es": "A la B5 de la primera hoja del libro",
+     "en": "A la B5 de la primera hoja del libro"
+    },
+    {
+     "es": "A la B5 de todas las hojas",
+     "en": "A la B5 de todas las hojas"
+    },
+    {
+     "es": "A ninguna: da error",
+     "en": "A ninguna: da error"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Sin nombre de hoja, la referencia es de la hoja donde está la fórmula.",
+    "en": "Sin nombre de hoja, la referencia es de la hoja donde está la fórmula."
+   },
+   "lesson": "xl2-hojas"
+  },
+  {
+   "id": "xl2-hoj-04",
+   "block": "xl-m02",
+   "q": {
+    "es": "Borras la hoja Febrero, que usaba la fórmula `=Enero!B5+Febrero!B5`. ¿Qué pasa?",
+    "en": "Borras la hoja Febrero, que usaba la fórmula `=Enero!B5+Febrero!B5`. ¿Qué pasa?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "La fórmula da #¡REF!",
+     "en": "La fórmula da #¡REF!"
+    },
+    {
+     "es": "Excel suma solo Enero",
+     "en": "Excel suma solo Enero"
+    },
+    {
+     "es": "La fórmula se borra",
+     "en": "La fórmula se borra"
+    },
+    {
+     "es": "No pasa nada",
+     "en": "No pasa nada"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "La referencia apunta a una hoja que ya no existe: #¡REF!.",
+    "en": "La referencia apunta a una hoja que ya no existe: #¡REF!."
+   },
+   "lesson": "xl2-hojas"
+  },
+  {
+   "id": "xl2-hoj-05",
+   "block": "xl-m02",
+   "q": {
+    "es": "Cambias el nombre de la hoja Enero a «Ene». ¿Qué pasa con `=Enero!B5`?",
+    "en": "Cambias el nombre de la hoja Enero a «Ene». ¿Qué pasa con `=Enero!B5`?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Excel la cambia sola a =Ene!B5",
+     "en": "Excel la cambia sola a =Ene!B5"
+    },
+    {
+     "es": "Da #¡REF!",
+     "en": "Da #¡REF!"
+    },
+    {
+     "es": "Da #¿NOMBRE?",
+     "en": "Da #¿NOMBRE?"
+    },
+    {
+     "es": "Sigue poniendo Enero y da 0",
+     "en": "Sigue poniendo Enero y da 0"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Excel actualiza las referencias cuando se renombra una hoja.",
+    "en": "Excel actualiza las referencias cuando se renombra una hoja."
+   },
+   "lesson": "xl2-hojas"
+  },
+  {
+   "id": "xl2-hoj-06",
+   "block": "xl-m02",
+   "q": {
+    "es": "¿Qué hace `=SUMA(Enero:Marzo!B5)` en Excel?",
+    "en": "¿Qué hace `=SUMA(Enero:Marzo!B5)` en Excel?"
+   },
+   "code": null,
+   "options": [
+    {
+     "es": "Suma B5 de Enero, de Marzo y de todas las hojas que hay entre ellas",
+     "en": "Suma B5 de Enero, de Marzo y de todas las hojas que hay entre ellas"
+    },
+    {
+     "es": "Suma solo B5 de Enero y de Marzo",
+     "en": "Suma solo B5 de Enero y de Marzo"
+    },
+    {
+     "es": "Da error siempre",
+     "en": "Da error siempre"
+    },
+    {
+     "es": "Suma B5 de la hoja activa",
+     "en": "Suma B5 de la hoja activa"
+    }
+   ],
+   "answer": [
+    0
+   ],
+   "explain": {
+    "es": "Es una referencia 3D: incluye las hojas que estén entre las dos en el orden de las pestañas. PLD aún no la corrige.",
+    "en": "Es una referencia 3D: incluye las hojas que estén entre las dos en el orden de las pestañas. PLD aún no la corrige."
+   },
+   "lesson": "xl2-hojas"
+  },
+  {
+   "id": "xl2-hoj-07",
+   "block": "xl-m02",
+   "q": {
+    "es": "¿Qué devuelve la fórmula?",
+    "en": "¿Qué devuelve la fórmula?"
+   },
+   "kind": "formula-result",
+   "excel": {
+    "grid": {
+     "'Hoja 2'!A1": 15
+    },
+    "formula": "='Hoja 2'!A1*2",
+    "answer": 30,
+    "input": "number"
+   },
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "'Hoja 2'!A1 vale 15: 15 × 2 = 30. Las comillas son por el espacio del nombre.",
+    "en": "'Hoja 2'!A1 vale 15: 15 × 2 = 30. Las comillas son por el espacio del nombre."
+   },
+   "lesson": "xl2-hojas"
+  },
+  {
+   "id": "xl2-hoj-08",
+   "block": "xl-m02",
+   "q": {
+    "es": "En la hoja **Resumen**, escribe en `B2` el total de ventas del trimestre (la celda `B5` de las hojas Enero, Febrero y Marzo).",
+    "en": "En la hoja **Resumen**, escribe en `B2` el total de ventas del trimestre (la celda `B5` de las hojas Enero, Febrero y Marzo)."
+   },
+   "kind": "formula",
+   "excel": {
+    "grid": {
+     "Enero!A5": "Ventas",
+     "Enero!B5": 4200,
+     "Febrero!A5": "Ventas",
+     "Febrero!B5": 3900,
+     "Marzo!A5": "Ventas",
+     "Marzo!B5": 4650,
+     "A2": "Total del trimestre"
+    },
+    "cell": "B2",
+    "expect": 12750,
+    "checks": [
+     {
+      "type": "value"
+     },
+     {
+      "type": "variants",
+      "count": 2
+     },
+     {
+      "type": "references",
+      "must": [
+       "Enero!B5",
+       "Febrero!B5",
+       "Marzo!B5"
+      ]
+     }
+    ],
+    "solution": {
+     "formula": "=Enero!B5+Febrero!B5+Marzo!B5"
+    },
+    "mistakes": [
+     {
+      "error": "=B5+B5+B5",
+      "fix": "Sin nombre de hoja las tres son Resumen!B5, que está vacía: 0."
+     },
+     {
+      "error": "=Enero!B5+Febrero!B5",
+      "fix": "Falta marzo."
+     }
+    ],
+    "hints": [
+     "Cada mes está en la celda B5 de su hoja.",
+     "Escribe la hoja, ! y la celda: Enero!B5.",
+     "También vale SUMA con las tres referencias separadas por ;."
+    ],
+    "sheet": "Resumen",
+    "vary": [
+     "Enero!B5",
+     "Febrero!B5",
+     "Marzo!B5"
+    ]
+   },
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "`=Enero!B5+Febrero!B5+Marzo!B5` o `=SUMA(Enero!B5;Febrero!B5;Marzo!B5)`: 12 750.",
+    "en": "`=Enero!B5+Febrero!B5+Marzo!B5` o `=SUMA(Enero!B5;Febrero!B5;Marzo!B5)`: 12 750."
+   },
+   "lesson": "xl2-hojas"
+  },
+  {
+   "id": "xl2-hoj-09",
+   "block": "xl-m02",
+   "q": {
+    "es": "¿Qué devuelve la fórmula?",
+    "en": "¿Qué devuelve la fórmula?"
+   },
+   "kind": "formula-result",
+   "excel": {
+    "grid": {
+     "Enero!B2": 100,
+     "Enero!B3": 200,
+     "Enero!B4": 300
+    },
+    "formula": "=SUMA(Enero!B2:B4)",
+    "answer": 600,
+    "input": "number",
+    "sheet": "Resumen"
+   },
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "Un rango de otra hoja se escribe igual: la hoja y el rango. 100 + 200 + 300.",
+    "en": "Un rango de otra hoja se escribe igual: la hoja y el rango. 100 + 200 + 300."
+   },
+   "lesson": "xl2-hojas"
+  },
+  {
+   "id": "xl2-hoj-10",
+   "block": "xl-m02",
+   "q": {
+    "es": "¿Qué devuelve la fórmula?",
+    "en": "¿Qué devuelve la fórmula?"
+   },
+   "kind": "formula-result",
+   "excel": {
+    "grid": {
+     "Ventas!B2": 4200,
+     "Gastos!B2": 3100
+    },
+    "formula": "=Ventas!B2-Gastos!B2",
+    "answer": 1100,
+    "input": "number",
+    "sheet": "Resumen"
+   },
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "4200 de Ventas menos 3100 de Gastos.",
+    "en": "4200 de Ventas menos 3100 de Gastos."
+   },
+   "lesson": "xl2-hojas"
+  },
+  {
+   "id": "xl2-hoj-11",
+   "block": "xl-m02",
+   "q": {
+    "es": "En la hoja **Resumen**, escribe en `B3` los gastos del semestre: la celda `C10` de las hojas «Primer trimestre» y «Segundo trimestre».",
+    "en": "En la hoja **Resumen**, escribe en `B3` los gastos del semestre: la celda `C10` de las hojas «Primer trimestre» y «Segundo trimestre»."
+   },
+   "kind": "formula",
+   "excel": {
+    "grid": {
+     "'Primer trimestre'!C10": 2300,
+     "'Segundo trimestre'!C10": 2750,
+     "A3": "Gastos del semestre"
+    },
+    "cell": "B3",
+    "expect": 5050,
+    "checks": [
+     {
+      "type": "value"
+     },
+     {
+      "type": "variants",
+      "count": 2
+     }
+    ],
+    "solution": {
+     "formula": "='Primer trimestre'!C10+'Segundo trimestre'!C10"
+    },
+    "mistakes": [
+     {
+      "error": "=Primer trimestre!C10+Segundo trimestre!C10",
+      "fix": "Sin comillas simples Excel no entiende un nombre de hoja con espacios."
+     },
+     {
+      "error": "=C10+C10",
+      "fix": "Sin nombre de hoja son Resumen!C10, vacía."
+     }
+    ],
+    "hints": [
+     "Los nombres tienen espacios: van entre comillas simples.",
+     "'Primer trimestre'!C10."
+    ],
+    "sheet": "Resumen",
+    "vary": [
+     "'Primer trimestre'!C10",
+     "'Segundo trimestre'!C10"
+    ]
+   },
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "`='Primer trimestre'!C10+'Segundo trimestre'!C10`: 2300 + 2750 = 5050.",
+    "en": "`='Primer trimestre'!C10+'Segundo trimestre'!C10`: 2300 + 2750 = 5050."
+   },
+   "lesson": "xl2-hojas"
+  },
+  {
+   "id": "xl2-hoj-12",
+   "block": "xl-m02",
+   "q": {
+    "es": "En la hoja **Resumen**, escribe en `B4` la venta media diaria de la hoja Enero (rango `B2:B6`) con PROMEDIO.",
+    "en": "En la hoja **Resumen**, escribe en `B4` la venta media diaria de la hoja Enero (rango `B2:B6`) con PROMEDIO."
+   },
+   "kind": "formula",
+   "excel": {
+    "grid": {
+     "Enero!A1": "Día",
+     "Enero!B1": "Ventas",
+     "Enero!B2": 310,
+     "Enero!B3": 285,
+     "Enero!B4": 402,
+     "Enero!B5": 198,
+     "Enero!B6": 355,
+     "A4": "Media de enero"
+    },
+    "cell": "B4",
+    "expect": 310,
+    "checks": [
+     {
+      "type": "value"
+     },
+     {
+      "type": "variants",
+      "count": 2
+     },
+     {
+      "type": "functions",
+      "requires": [
+       "AVERAGE"
+      ]
+     }
+    ],
+    "solution": {
+     "formula": "=PROMEDIO(Enero!B2:B6)"
+    },
+    "mistakes": [
+     {
+      "error": "=PROMEDIO(B2:B6)",
+      "fix": "Sin la hoja es el rango de Resumen, vacío: #¡DIV/0!."
+     },
+     {
+      "error": "=SUMA(Enero!B2:B6)",
+      "fix": "SUMA da el total, no la media."
+     }
+    ],
+    "hints": [
+     "El rango está en otra hoja: Enero!B2:B6.",
+     "=PROMEDIO(…)."
+    ],
+    "sheet": "Resumen",
+    "vary": [
+     "Enero!B2:B6"
+    ]
+   },
+   "options": [],
+   "answer": [],
+   "explain": {
+    "es": "`=PROMEDIO(Enero!B2:B6)`: 1550 / 5 = 310.",
+    "en": "`=PROMEDIO(Enero!B2:B6)`: 1550 / 5 = 310."
+   },
+   "lesson": "xl2-hojas"
+  }
+ ],
+ "cards": [],
+ "engine": "1.0.0"
+}

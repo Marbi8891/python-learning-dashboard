@@ -63,6 +63,8 @@ const ZONE_LOADERS = {
   learn: (load) => load("./learn/learn-app.js"),
   pcap: (load) => load("./pcap.js"),
   daw: (load) => load("./daw.js"),
+  // Excel profesional: el motor de fórmulas solo se descarga en sus rutas
+  excel: (load) => load("./excel/course.js"),
   cyber: (load) =>
     load("./cybersecurity.js").then((module) => {
       module.initCyber();
@@ -138,6 +140,8 @@ const CERTIFICATE_ROUTE = "#/certificado";
 const PRIVATE_ROUTE = "#/cuenta"; // antigua «Mi cuenta»: ahora es la sección «Mi perfil» del panel
 const PANEL_ROUTE = "#/panel"; // panel del alumno: #/panel/<sección>
 const DAW_ROUTE = "#/daw";
+const EXCEL_ROUTE = "#/academia/excel";
+const EXCEL_ALIAS = "#/excel-academy"; // nombre alternativo: se reescribe a EXCEL_ROUTE
 const CYBER_ROUTE = "#/ciberseguridad";
 const mobile = window.matchMedia("(max-width: 900px)");
 
@@ -497,6 +501,8 @@ const VIEWS = {
   // Los cursos de DAW también se pintan solos (openDaw): cargan su banco y tienen tandas en curso
   daw: { element: "#daw-view", title: "Cursos de DAW · Python Learning Dashboard", focus: null, render: null },
   cyber: { element: "#cyber-view", title: "Curso de Ciberseguridad · Python Learning Dashboard", focus: null, render: null },
+  // Excel profesional se pinta solo (openExcel): tiene ejercicios a medio escribir que no se deben repintar
+  excel: { element: "#excel-view", title: "Excel profesional · Python Learning Dashboard", focus: null, render: null },
   // Página no encontrada (NAV-01) o contenido que no se pudo cargar
   notfound: { element: "#notfound-view", title: () => content.statusTitle, focus: "#notfound-title", render: () => content.statusHtml },
 };
@@ -526,7 +532,7 @@ function updatePrivateNav() {
 }
 
 /** Entrada del menú que corresponde a la vista actual. */
-const NAV_OF_VIEW = { plans: "planes", cyber: "cyber", home: "pcap-curso", lesson: "pcap-curso", certificate: "pcap-curso", pcap: "pcap", daw: "daw", profile: "progreso", private: "panel" };
+const NAV_OF_VIEW = { plans: "planes", cyber: "cyber", home: "pcap-curso", lesson: "pcap-curso", certificate: "pcap-curso", pcap: "pcap", daw: "daw", excel: "excel", profile: "progreso", private: "panel" };
 
 function updateSiteNav() {
   const key = content.view === "learn" ? learnNavKey(location.hash) : NAV_OF_VIEW[content.view];
@@ -744,6 +750,15 @@ function navigate({ moveFocus = true } = {}) {
     if (awaitZone("cyber", moveFocus)) return;
     showPage("cyber", { moveFocus: false });
     zones.cyber.openCyber(location.hash, { moveFocus });
+    return;
+  }
+  if (location.hash === EXCEL_ALIAS || location.hash.startsWith(`${EXCEL_ALIAS}/`)) {
+    history.replaceState(null, "", `${EXCEL_ROUTE}${location.hash.slice(EXCEL_ALIAS.length)}`);
+  }
+  if (location.hash === EXCEL_ROUTE || location.hash.startsWith(`${EXCEL_ROUTE}/`)) {
+    if (awaitZone("excel", moveFocus)) return;
+    showPage("excel", { moveFocus: false });
+    zones.excel.openExcel(location.hash, { moveFocus });
     return;
   }
   if (location.hash === DAW_ROUTE || location.hash.startsWith(`${DAW_ROUTE}/`)) {
@@ -979,7 +994,10 @@ async function init() {
     if (content.loaded) refreshGame();
     zones.pcap?.refreshPcap(); // sin la zona cargada no hay nada que repintar
   });
-  initCourseSync(() => zones.daw?.refreshDaw());
+  initCourseSync(() => {
+    zones.daw?.refreshDaw();
+    zones.excel?.refreshExcel();
+  });
   initLearnSync();
   initPlannerSync();
   const flash = takeFlash(); // aviso tras cerrar sesión o borrar la cuenta

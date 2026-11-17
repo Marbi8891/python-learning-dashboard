@@ -290,6 +290,15 @@ function routesHtml(index, content) {
       href: "#/daw/cursos",
       action: "Ver los cursos",
     },
+    {
+      title: "Excel profesional",
+      level: "Academia · desde cero",
+      text: "Excel de Microsoft 365 en español con ejercicios que se corrigen calculando: datos, formatos, referencias, operadores y funciones básicas. Ya están los módulos M01 y M02.",
+      facts: ["9 unidades", "111 ejercicios"],
+      progress: "",
+      href: "#/academia/excel",
+      action: "Ver el curso",
+    },
   ];
   const items = routes
     .map(
@@ -580,6 +589,11 @@ function catalogHtml(index, content) {
             <h3>Cursos de DAW</h3>
             <p class="lp-muted">Lecciones y bancos de preguntas de otros módulos del ciclo.</p>
             <ul>${courses}</ul>
+          </div>
+          <div>
+            <h3>Excel profesional</h3>
+            <p class="lp-muted">Itinerario de la academia con ejercicios de fórmulas corregidos en el navegador. No está afiliado a Microsoft.</p>
+            <ul><li><a href="#/academia/excel">Excel profesional</a> <span class="lp-muted">M01 y M02 · 9 unidades</span></li></ul>
           </div>
           <div>
             <h3>Certificación PCAP</h3>

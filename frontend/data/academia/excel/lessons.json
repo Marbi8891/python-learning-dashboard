@@ -1,0 +1,1113 @@
+{
+ "modules": [
+  {
+   "slug": "xl-m01",
+   "title": "M01 · Fundamentos de Excel",
+   "summary": "Moverse por un libro, introducir datos, formatos de número y referencias que se copian bien.",
+   "lessons": [
+    {
+     "slug": "xl1-interfaz",
+     "title": "Interfaz, libros y hojas",
+     "theory": "## Libro, hoja, celda y rango\n\n- Un **libro** es el archivo de Excel (por ejemplo, `clientes.xlsx`). Dentro tiene una o varias **hojas**, que se ven como pestañas en la parte de abajo.\n- Cada hoja es una cuadrícula. Las **columnas** se nombran con letras (A, B… Z, AA, AB… hasta XFD: 16 384 columnas) y las **filas**, con números (de 1 a 1 048 576).\n- Una **celda** es el cruce de una columna y una fila. Su nombre es la letra y después el número: `C4` es la columna C y la fila 4.\n- Un **rango** es un rectángulo de celdas. Se escribe con la celda de arriba a la izquierda, dos puntos y la de abajo a la derecha: `B2:D5`.\n\nPara contar las celdas de un rango, multiplica columnas por filas. `B2:D5` va de la columna B a la D (3 columnas) y de la fila 2 a la 5 (4 filas): 3 × 4 = **12 celdas**.\n\n## La ventana de Excel\n\n- **Cinta de opciones:** la franja de arriba, con pestañas (Inicio, Insertar, Disposición de página, Fórmulas, Datos, Revisar, Vista). Cada pestaña agrupa botones por tareas.\n- **Cuadro de nombres:** a la izquierda de la barra de fórmulas. Dice qué celda está activa. Si escribes `K250` y pulsas Intro, Excel salta a esa celda.\n- **Barra de fórmulas:** enseña lo que **guarda** la celda activa. Si la celda tiene una fórmula, en la barra ves la fórmula y en la celda ves su resultado.\n- **Celda activa:** la que tiene el borde grueso. Cuando seleccionas un rango, la celda activa es la que se queda en blanco dentro de la selección.\n\n## Moverse y organizar hojas\n\n- Flechas, Tab e Intro mueven la celda activa. **Ctrl+Inicio** vuelve a `A1`; **Ctrl+flecha** salta al borde de los datos.\n- El botón **+** junto a las pestañas añade una hoja. Con doble clic en la pestaña se cambia su nombre, y arrastrándola se cambia de sitio.\n- **Ctrl+AvPág** y **Ctrl+RePág** pasan a la hoja siguiente o a la anterior.\n\n## Una fórmula que solo lee una celda\n\nUna fórmula empieza siempre por `=`. La más sencilla es una referencia: `=B3` devuelve lo que hay en `B3`. Si la celda está vacía, la fórmula muestra **0**. En la cuadrícula de los ejercicios verás las letras de columna arriba y los números de fila a la izquierda, como en Excel.",
+     "example_code": "",
+     "exercise": "La Gestoría Albaida (empresa ficticia) tiene todo en una sola hoja: clientes, facturas y notas mezclados. Te piden ordenarlo **sin crear archivos nuevos**.\n\n1. Crea un libro y cambia el nombre de la primera hoja a «Clientes» (doble clic en la pestaña).\n2. Añade dos hojas con el botón **+** y llámalas «Facturas» y «Notas».\n3. En «Clientes», escribe en `A1` «Cliente» y en `B1` «Cuota», y debajo tres clientes inventados.\n4. Usa el cuadro de nombres para ir a `B4` y comprueba en la barra de fórmulas qué guarda.\n\nHazlo en Excel o en Excel para la web (gratis con una cuenta de Microsoft). PLD no comprueba este caso: los ejercicios de abajo sí se corrigen.",
+     "starter": "\n",
+     "quiz": [],
+     "challenge": {
+      "title": "Caso: el libro de clientes de la Gestoría Albaida",
+      "stars": 1,
+      "exercise": "La Gestoría Albaida (empresa ficticia) tiene todo en una sola hoja: clientes, facturas y notas mezclados. Te piden ordenarlo **sin crear archivos nuevos**.\n\n1. Crea un libro y cambia el nombre de la primera hoja a «Clientes» (doble clic en la pestaña).\n2. Añade dos hojas con el botón **+** y llámalas «Facturas» y «Notas».\n3. En «Clientes», escribe en `A1` «Cliente» y en `B1` «Cuota», y debajo tres clientes inventados.\n4. Usa el cuadro de nombres para ir a `B4` y comprueba en la barra de fórmulas qué guarda.\n\nHazlo en Excel o en Excel para la web (gratis con una cuenta de Microsoft). PLD no comprueba este caso: los ejercicios de abajo sí se corrigen.",
+      "starter": "\n",
+      "hint": "Lo que hay en esa celda es lo que devuelve la fórmula."
+     },
+     "assistant": {
+      "hint": "Busca la letra de la columna en la fila de arriba de la cuadrícula.",
+      "faq": [
+       {
+        "q": "¿Necesito tener Excel instalado?",
+        "a": "No para este curso: los ejercicios se hacen aquí. Para practicar fuera, Excel para la web es gratuito con una cuenta de Microsoft."
+       },
+       {
+        "q": "¿Por qué una celda vacía da 0 en una fórmula?",
+        "a": "Porque Excel trata la celda vacía como 0 al calcular. Lo verás en `=C2` cuando C2 no tiene nada."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "¿Qué es Excel? (Soporte de Microsoft, en español; consultado el 17/11/2026)",
+       "url": "https://support.microsoft.com/es-es/excel/get-started/what-is-excel"
+      },
+      {
+       "title": "Tareas básicas en Excel (Soporte de Microsoft, en español; consultado el 17/11/2026)",
+       "url": "https://support.microsoft.com/es-es/office/tareas-b%C3%A1sicas-en-excel-dc775dd1-fa52-430f-9c3c-d998d1735fca"
+      },
+      {
+       "title": "Glosario de Excel (Soporte de Microsoft, en español; consultado el 17/11/2026)",
+       "url": "https://support.microsoft.com/es-es/excel/excel-glossary"
+      }
+     ],
+     "objectives": [
+      "Reconocer la cinta de opciones, la barra de fórmulas y el cuadro de nombres.",
+      "Distinguir libro, hoja, celda y rango.",
+      "Nombrar una celda (C4) y un rango (B2:D5) y saber cuántas celdas tiene un rango."
+     ],
+     "mistakes": [
+      {
+       "error": "Confundir la celda activa con el rango seleccionado.",
+       "fix": "En un rango seleccionado solo hay una celda activa: la que se ve en blanco. Lo que escribas va a esa celda."
+      },
+      {
+       "error": "Creer que la celda guarda lo que muestra.",
+       "fix": "Mira la barra de fórmulas: ahí está lo que guarda (una fórmula, un número con todos sus decimales…)."
+      },
+      {
+       "error": "Llamar «libro» a una hoja.",
+       "fix": "El libro es el archivo entero; las hojas son las pestañas que hay dentro."
+      }
+     ],
+     "summary": [
+      "Libro = archivo; hoja = pestaña; celda = columna + fila (C4); rango = rectángulo (B2:D5).",
+      "Celdas de un rango = columnas × filas.",
+      "La barra de fórmulas enseña lo que guarda la celda; la celda enseña el resultado.",
+      "El cuadro de nombres dice la celda activa y sirve para ir a cualquier celda."
+     ],
+     "excel": {
+      "hours": 1.5,
+      "level": 1,
+      "requires": [],
+      "examples": [
+       {
+        "title": "¿Cuántas celdas tiene B2:D5?",
+        "text": "Columnas B, C y D: 3. Filas 2, 3, 4 y 5: 4. Total: 3 × 4 = **12 celdas**."
+       },
+       {
+        "id": "xl1-int-ej1",
+        "title": "Leer una celda por su nombre",
+        "grid": {
+         "A1": "Cliente",
+         "B1": "Cuota",
+         "A2": "Ana Ruiz",
+         "B2": 45,
+         "A3": "Talleres Sol",
+         "B3": 120,
+         "A4": "Luis Gil",
+         "B4": 60
+        },
+        "formula": "=B3",
+        "input": "number",
+        "answer": 120,
+        "explain": "`=B3` devuelve lo que guarda la celda B3: la cuota de Talleres Sol, 120."
+       }
+      ],
+      "guided": {
+       "question": "xl1-int-09",
+       "steps": [
+        "Busca la letra de la columna en la fila de arriba de la cuadrícula.",
+        "Baja por esa columna hasta el número de fila que dice la fórmula.",
+        "Lo que hay en esa celda es lo que devuelve la fórmula."
+       ]
+      },
+      "case": {
+       "title": "Caso: el libro de clientes de la Gestoría Albaida",
+       "text": "La Gestoría Albaida (empresa ficticia) tiene todo en una sola hoja: clientes, facturas y notas mezclados. Te piden ordenarlo **sin crear archivos nuevos**.\n\n1. Crea un libro y cambia el nombre de la primera hoja a «Clientes» (doble clic en la pestaña).\n2. Añade dos hojas con el botón **+** y llámalas «Facturas» y «Notas».\n3. En «Clientes», escribe en `A1` «Cliente» y en `B1` «Cuota», y debajo tres clientes inventados.\n4. Usa el cuadro de nombres para ir a `B4` y comprueba en la barra de fórmulas qué guarda.\n\nHazlo en Excel o en Excel para la web (gratis con una cuenta de Microsoft). PLD no comprueba este caso: los ejercicios de abajo sí se corrigen."
+      },
+      "pass": {
+       "test": 0.8,
+       "required": []
+      },
+      "checked": "2026-11-17"
+     }
+    },
+    {
+     "slug": "xl1-datos",
+     "title": "Introducir datos",
+     "theory": "## Cómo decide Excel el tipo de dato\n\nCuando escribes en una celda y pulsas Intro, Excel decide qué es:\n\n| Escribes | Excel guarda | Pista visual (formato General) |\n|---|---|---|\n| `Ana Ruiz` | Texto | Alineado a la izquierda |\n| `12,5` | Número 12,5 | Alineado a la derecha |\n| `1.200` | Número 1200 | Alineado a la derecha |\n| `17/11/2026` | Una fecha (un número de serie con formato de fecha) | Alineado a la derecha |\n| `9:30` | Una hora (una fracción de día) | Alineado a la derecha |\n\nEn Excel en español de España **la coma es el separador decimal** y el punto separa los miles. Si escribes `1,200` creyendo que es mil doscientos, Excel guarda **1,2**.\n\n## Números almacenados como texto\n\nA veces un número llega como texto: copiado de una web, de un CSV o escrito con un apóstrofo delante (`'120`). Se nota porque se alinea a la izquierda y Excel pone un **triángulo verde** en la esquina con el aviso «Número almacenado como texto».\n\n- Las funciones como `SUMA` **ignoran el texto** de un rango: `=SUMA(A2:A3)` con «120» (texto) y 80 da **80**.\n- Los operadores como `+` **sí convierten** el texto que parece un número: `=A2+A3` da **200**.\n\nPor eso un número como texto es peligroso: unas fórmulas lo cuentan y otras no. La solución es convertirlo en número (el menú del triángulo verde ofrece «Convertir en número»).\n\n## Autorrelleno y deshacer\n\n- El **controlador de relleno** es el cuadradito de la esquina inferior derecha de la celda activa. Si escribes `5` y `10` en dos celdas, las seleccionas y arrastras, Excel sigue la serie: 15, 20, 25…\n- Con textos conocidos también funciona: «enero» → «febrero», «marzo»…\n- **Ctrl+Z** deshace el último cambio y **Ctrl+Y** lo rehace.",
+     "example_code": "",
+     "exercise": "La Gestoría Albaida da de alta 10 clientes con su **fecha de alta** y su **cuota mensual**. Un compañero copió las cuotas desde un correo y algunas llegaron como texto.\n\n1. Escribe en una hoja las columnas Cliente, Fecha de alta y Cuota con 10 clientes inventados.\n2. Escribe las fechas como `dd/mm/aaaa` y comprueba que se alinean a la derecha.\n3. Escribe una cuota con un apóstrofo delante (`'60`) y observa el triángulo verde.\n4. Pon un total con `=SUMA(...)` debajo: ¿cuenta esa cuota? Conviértela en número y vuelve a mirar el total.",
+     "starter": "\n",
+     "quiz": [],
+     "challenge": {
+      "title": "Caso: alta de clientes de la gestoría",
+      "stars": 1,
+      "exercise": "La Gestoría Albaida da de alta 10 clientes con su **fecha de alta** y su **cuota mensual**. Un compañero copió las cuotas desde un correo y algunas llegaron como texto.\n\n1. Escribe en una hoja las columnas Cliente, Fecha de alta y Cuota con 10 clientes inventados.\n2. Escribe las fechas como `dd/mm/aaaa` y comprueba que se alinean a la derecha.\n3. Escribe una cuota con un apóstrofo delante (`'60`) y observa el triángulo verde.\n4. Pon un total con `=SUMA(...)` debajo: ¿cuenta esa cuota? Conviértela en número y vuelve a mirar el total.",
+      "starter": "\n",
+      "hint": "Suma solo las celdas que son números."
+     },
+     "assistant": {
+      "hint": "Mira cada celda del rango: ¿cuál es un número y cuál un texto (está entre comillas en el enunciado o alineada a la izquierda)?",
+      "faq": [
+       {
+        "q": "¿Por qué Excel guarda las fechas como números?",
+        "a": "Para poder calcular con ellas: restar dos fechas da los días que hay entre ellas. El formato de fecha solo cambia cómo se ve. Las funciones de fechas llegan en M07."
+       },
+       {
+        "q": "¿Y si quiero que un código como 00123 no pierda los ceros?",
+        "a": "Escríbelo como texto (con formato Texto o con un apóstrofo delante). Es un código, no un número para sumar."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "Introducir datos manualmente en celdas de hojas de cálculo (Soporte de Microsoft, en español; consultado el 17/11/2026)",
+       "url": "https://support.microsoft.com/es-es/office/introducir-datos-manualmente-en-celdas-de-hojas-de-c%C3%A1lculo-c798181d-d75a-41b1-92ad-6c0800f80038"
+      },
+      {
+       "title": "Escribir una serie de números, fechas u otros elementos (Soporte de Microsoft, en español; consultado el 17/11/2026)",
+       "url": "https://support.microsoft.com/es-es/excel/enter-a-series-of-numbers-dates-or-other-items"
+      },
+      {
+       "title": "Corregir números con formato de texto aplicando un formato de número (Soporte de Microsoft, en español; consultado el 17/11/2026)",
+       "url": "https://support.microsoft.com/es-es/office/corregir-n%C3%BAmeros-con-formato-de-texto-aplicando-un-formato-de-n%C3%BAmero-6599c03a-954d-4d83-b78a-23af2c8845d0"
+      }
+     ],
+     "objectives": [
+      "Introducir texto, números, fechas y horas sabiendo cómo los interpreta Excel.",
+      "Reconocer un «número almacenado como texto» y lo que provoca en los cálculos.",
+      "Usar el autorrelleno para crear series y deshacer un error con Ctrl+Z."
+     ],
+     "mistakes": [
+      {
+       "error": "Escribir `1,200` creyendo que es mil doscientos.",
+       "fix": "En es-ES la coma es decimal: queda 1,2. Para mil doscientos escribe `1200` o `1.200`."
+      },
+      {
+       "error": "Dejar números con espacios o copiados como texto.",
+       "fix": "Si un número se alinea a la izquierda o tiene el triángulo verde, conviértelo en número antes de sumar."
+      },
+      {
+       "error": "Escribir las fechas como texto (`17-nov`, `17.11.2026`).",
+       "fix": "Usa el formato que Excel reconoce en es-ES, `17/11/2026`, y comprueba que se alinea a la derecha."
+      }
+     ],
+     "summary": [
+      "Texto a la izquierda, números y fechas a la derecha (con formato General).",
+      "En es-ES, coma decimal y punto de miles.",
+      "SUMA ignora el texto de un rango; `+` convierte el texto numérico.",
+      "El controlador de relleno continúa series; Ctrl+Z deshace."
+     ],
+     "excel": {
+      "hours": 2,
+      "level": 1,
+      "requires": [
+       "xl1-interfaz"
+      ],
+      "examples": [
+       {
+        "id": "xl1-dat-ej1",
+        "title": "SUMA ignora el número escrito como texto",
+        "grid": {
+         "A1": "Importe",
+         "A2": "120",
+         "A3": 80
+        },
+        "formula": "=SUMA(A2:A3)",
+        "input": "number",
+        "answer": 80,
+        "explain": "A2 guarda el texto «120», no el número. SUMA ignora el texto de un rango y solo suma el 80."
+       },
+       {
+        "id": "xl1-dat-ej2",
+        "title": "El operador + sí lo convierte",
+        "grid": {
+         "A1": "Importe",
+         "A2": "120",
+         "A3": 80
+        },
+        "formula": "=A2+A3",
+        "input": "number",
+        "answer": 200,
+        "explain": "El operador `+` convierte el texto «120» en el número 120 y suma 120 + 80."
+       }
+      ],
+      "guided": {
+       "question": "xl1-dat-07",
+       "steps": [
+        "Mira cada celda del rango: ¿cuál es un número y cuál un texto (está entre comillas en el enunciado o alineada a la izquierda)?",
+        "SUMA solo suma los números del rango.",
+        "Suma solo las celdas que son números."
+       ]
+      },
+      "case": {
+       "title": "Caso: alta de clientes de la gestoría",
+       "text": "La Gestoría Albaida da de alta 10 clientes con su **fecha de alta** y su **cuota mensual**. Un compañero copió las cuotas desde un correo y algunas llegaron como texto.\n\n1. Escribe en una hoja las columnas Cliente, Fecha de alta y Cuota con 10 clientes inventados.\n2. Escribe las fechas como `dd/mm/aaaa` y comprueba que se alinean a la derecha.\n3. Escribe una cuota con un apóstrofo delante (`'60`) y observa el triángulo verde.\n4. Pon un total con `=SUMA(...)` debajo: ¿cuenta esa cuota? Conviértela en número y vuelve a mirar el total."
+      },
+      "pass": {
+       "test": 0.8,
+       "required": []
+      },
+      "checked": "2026-11-17"
+     }
+    },
+    {
+     "slug": "xl1-formatos",
+     "title": "Formatos de número",
+     "theory": "## El formato cambia cómo se ve, no lo que vale\n\nUn formato de número es una «máscara» sobre el valor. La celda puede mostrar `2,68 €` mientras guarda `2,675`: lo ves en la barra de fórmulas. **Las fórmulas siempre usan el valor guardado.**\n\n| Formato | El valor 1234,5 se ve | Para qué |\n|---|---|---|\n| General | 1234,5 | Lo que Excel decide |\n| Número (2 decimales, miles) | 1.234,50 | Cantidades |\n| Moneda | 1.234,50 € | Importes sueltos |\n| Contabilidad | 1.234,50 € (símbolo y decimales alineados en la columna; el 0 se ve como un guion) | Columnas de importes |\n| Porcentaje | 123450,00 % | Tasas: 0,21 se ve 21 % |\n| Fecha | Un día del calendario | Fechas |\n\nSe cambian en **Inicio > Número** o con **Ctrl+1** (Formato de celdas).\n\n## Decimales que se ven y decimales que se guardan\n\nLos botones «Aumentar decimales» y «Disminuir decimales» solo cambian lo que se ve. Si tres celdas guardan 1,004 y se ven «1,00», su suma da **3,012**, no 3. Para cambiar el valor de verdad se usa la función `REDONDEAR` (unidad xl2-contar).\n\n## Porcentajes\n\nEl formato porcentaje **multiplica por 100 solo al mostrar**: la celda guarda 0,21 y se ve «21 %». Por eso:\n\n- `=100*C1` con C1 = 0,21 da **21**.\n- Si una celda ya contiene **21** y le aplicas formato porcentaje, verás **2100 %**: el valor sigue siendo 21. Escribe 0,21 (o escribe 21 % directamente).\n\n## Formato personalizado (idea básica)\n\nEn Formato de celdas > Personalizada, el código `0,00` fija dos decimales y `#.##0` añade el separador de miles. Más adelante (M03) se ven con detalle.",
+     "example_code": "",
+     "exercise": "El Taller Montesol (empresa ficticia) publica una tarifa con los precios con IVA y quiere que todos se vean con **dos decimales y el símbolo €**.\n\n1. Escribe cinco servicios con su precio sin IVA y en otra celda el tipo de IVA, 0,21, con formato porcentaje.\n2. Calcula el precio con IVA de cada servicio (en M01 ya sabes multiplicar celdas; en xl1-referencias aprenderás a copiar la fórmula).\n3. Aplica formato Moneda a los precios y compara con Contabilidad: ¿qué cambia en la columna?\n4. Mira en la barra de fórmulas un precio que se vea redondeado: ¿cuántos decimales guarda?",
+     "starter": "\n",
+     "quiz": [],
+     "challenge": {
+      "title": "Caso: la tarifa de precios del Taller Montesol",
+      "stars": 2,
+      "exercise": "El Taller Montesol (empresa ficticia) publica una tarifa con los precios con IVA y quiere que todos se vean con **dos decimales y el símbolo €**.\n\n1. Escribe cinco servicios con su precio sin IVA y en otra celda el tipo de IVA, 0,21, con formato porcentaje.\n2. Calcula el precio con IVA de cada servicio (en M01 ya sabes multiplicar celdas; en xl1-referencias aprenderás a copiar la fórmula).\n3. Aplica formato Moneda a los precios y compara con Contabilidad: ¿qué cambia en la columna?\n4. Mira en la barra de fórmulas un precio que se vea redondeado: ¿cuántos decimales guarda?",
+      "starter": "\n",
+      "hint": "Escribe el resultado con todos sus decimales."
+     },
+     "assistant": {
+      "hint": "Fíjate en el valor guardado, no en el que se ve (el enunciado lo dice).",
+      "faq": [
+       {
+        "q": "¿Dónde están todos los formatos?",
+        "a": "En Inicio > Número, en la lista desplegable, o con Ctrl+1 (Formato de celdas), que tiene todas las opciones."
+       },
+       {
+        "q": "¿El formato se copia con la celda?",
+        "a": "Sí. Copiar y pegar lleva el valor y el formato; Pegado especial permite pegar solo uno de los dos."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "Formatos de número disponibles en Excel (Soporte de Microsoft, en español; consultado el 17/11/2026)",
+       "url": "https://support.microsoft.com/es-es/excel/get-started/available-number-formats-in-excel"
+      },
+      {
+       "title": "Dar formato a números como moneda en Excel (Soporte de Microsoft, en español; consultado el 17/11/2026)",
+       "url": "https://support.microsoft.com/es-es/excel/format-numbers-as-currency-in-excel"
+      }
+     ],
+     "objectives": [
+      "Aplicar los formatos General, Número, Moneda, Contabilidad, Porcentaje y Fecha.",
+      "Explicar que el formato cambia cómo se ve un valor, no el valor guardado.",
+      "Predecir el resultado de una fórmula que usa celdas con formato."
+     ],
+     "mistakes": [
+      {
+       "error": "Creer que reducir decimales redondea el valor.",
+       "fix": "Solo cambia lo que se ve. Los cálculos siguen usando todos los decimales; para redondear el valor usa REDONDEAR."
+      },
+      {
+       "error": "Escribir 21 en una celda y aplicarle después formato porcentaje (se ve 2100 %).",
+       "fix": "Escribe 0,21, o escribe directamente 21 %, que Excel guarda como 0,21."
+      },
+      {
+       "error": "Confundir Moneda y Contabilidad.",
+       "fix": "Las dos muestran el símbolo; Contabilidad además alinea símbolo y decimales en la columna y muestra el 0 como un guion."
+      }
+     ],
+     "summary": [
+      "El formato es una máscara: la barra de fórmulas enseña el valor de verdad.",
+      "Las fórmulas usan el valor guardado, con todos sus decimales.",
+      "Porcentaje: 0,21 se ve 21 %.",
+      "Para cambiar el valor, REDONDEAR; para cambiar cómo se ve, el formato."
+     ],
+     "excel": {
+      "hours": 2,
+      "level": 2,
+      "requires": [
+       "xl1-datos"
+      ],
+      "examples": [
+       {
+        "id": "xl1-for-ej1",
+        "title": "La fórmula usa el valor guardado",
+        "grid": {
+         "A2": "Precio",
+         "B2": {
+          "v": 2.675,
+          "format": "currency"
+         }
+        },
+        "formula": "=B2*100",
+        "input": "number",
+        "answer": 267.5,
+        "explain": "B2 se ve «2,68 €» pero guarda 2,675: 2,675 × 100 = 267,5."
+       },
+       {
+        "id": "xl1-for-ej2",
+        "title": "Un porcentaje es un número entre 0 y 1",
+        "grid": {
+         "B1": "IVA",
+         "C1": {
+          "v": 0.21,
+          "format": "percent"
+         }
+        },
+        "formula": "=100*C1",
+        "input": "number",
+        "answer": 21,
+        "explain": "C1 se ve «21 %» y guarda 0,21: 100 × 0,21 = 21."
+       }
+      ],
+      "guided": {
+       "question": "xl1-for-07",
+       "steps": [
+        "Fíjate en el valor guardado, no en el que se ve (el enunciado lo dice).",
+        "Haz la operación con el valor guardado.",
+        "Escribe el resultado con todos sus decimales."
+       ]
+      },
+      "case": {
+       "title": "Caso: la tarifa de precios del Taller Montesol",
+       "text": "El Taller Montesol (empresa ficticia) publica una tarifa con los precios con IVA y quiere que todos se vean con **dos decimales y el símbolo €**.\n\n1. Escribe cinco servicios con su precio sin IVA y en otra celda el tipo de IVA, 0,21, con formato porcentaje.\n2. Calcula el precio con IVA de cada servicio (en M01 ya sabes multiplicar celdas; en xl1-referencias aprenderás a copiar la fórmula).\n3. Aplica formato Moneda a los precios y compara con Contabilidad: ¿qué cambia en la columna?\n4. Mira en la barra de fórmulas un precio que se vea redondeado: ¿cuántos decimales guarda?"
+      },
+      "pass": {
+       "test": 0.8,
+       "required": []
+      },
+      "checked": "2026-11-17"
+     }
+    },
+    {
+     "slug": "xl1-referencias",
+     "title": "Referencias relativas, absolutas y mixtas",
+     "theory": "## Copiar una fórmula mueve sus referencias\n\nSi `D2` tiene `=B2*C2` y la copias a `D3`, Excel escribe `=B3*C3`: las referencias se desplazan lo mismo que la fórmula. Son **referencias relativas** y son lo que quieres casi siempre (cada fila calcula con sus datos).\n\nPara copiar, arrastra el **controlador de relleno** o haz doble clic en él: rellena hasta el final de los datos de la columna de al lado.\n\n## Fijar con $\n\nA veces una celda tiene que quedarse quieta: el tipo de IVA en `E1` vale para todas las facturas. El símbolo `$` fija lo que va detrás:\n\n| Referencia | Al copiar hacia abajo | Al copiar hacia la derecha | Nombre |\n|---|---|---|---|\n| `E1` | `E2`, `E3`… | `F1`, `G1`… | Relativa |\n| `$E$1` | `$E$1` | `$E$1` | Absoluta |\n| `E$1` | `E$1` | `F$1`, `G$1`… | Mixta: fila fija |\n| `$E1` | `$E2`, `$E3`… | `$E1` | Mixta: columna fija |\n\nCon el cursor sobre una referencia de la fórmula, **F4** la va cambiando: `E1` → `$E$1` → `E$1` → `$E1` → `E1`.\n\n## El IVA, paso a paso\n\n1. En `D2` escribe `=B2*` y haz clic en `E1`.\n2. Pulsa **F4**: queda `=B2*$E$1`. Intro.\n3. Copia `D2` hasta `D6`. En `D3` verás `=B3*$E$1`: la base cambia y el tipo no.\n\nSi hubieras escrito `=B2*E1`, en `D3` quedaría `=B3*E2`, que está vacía: el IVA saldría 0. Y si escribes `=B2*0,21`, funciona hoy, pero el día que cambie el tipo tendrás que cambiar todas las fórmulas. **Las tasas van en una celda de datos.**\n\n## Tablas de doble entrada\n\nPara una tabla que se copia en horizontal y en vertical hacen falta referencias mixtas. En una tabla de multiplicar, `=$A2*B$1` fija la columna A (los números de la izquierda) y la fila 1 (los de arriba).",
+     "example_code": "",
+     "exercise": "La Gestoría Albaida prepara el IVA de las facturas de un cliente. El tipo general está en la celda `E1` para poder cambiarlo si cambia la ley.\n\n1. Escribe cinco facturas con su base imponible en `B2:B6` y 0,21 en `E1`.\n2. En `D2` calcula el IVA con una sola fórmula y cópiala hasta `D6`.\n3. Cambia `E1` a 0,10: ¿se actualizan todas las cuotas?\n4. Añade en `F2` el total de la factura (base + IVA) y cópialo hacia abajo.",
+     "starter": "\n",
+     "quiz": [],
+     "challenge": {
+      "title": "Caso: el IVA de las facturas del mes",
+      "stars": 2,
+      "exercise": "La Gestoría Albaida prepara el IVA de las facturas de un cliente. El tipo general está en la celda `E1` para poder cambiarlo si cambia la ley.\n\n1. Escribe cinco facturas con su base imponible en `B2:B6` y 0,21 en `E1`.\n2. En `D2` calcula el IVA con una sola fórmula y cópiala hasta `D6`.\n3. Cambia `E1` a 0,10: ¿se actualizan todas las cuotas?\n4. Añade en `F2` el total de la factura (base + IVA) y cópialo hacia abajo.",
+      "starter": "\n",
+      "hint": "Fija el tipo con $ (tecla F4): $E$1."
+     },
+     "assistant": {
+      "hint": "Escribe la fórmula para la primera factura: base por tipo de IVA.",
+      "faq": [
+       {
+        "q": "¿Y si muevo una fórmula en vez de copiarla?",
+        "a": "Al cortar y pegar, Excel no cambia las referencias: la fórmula sigue apuntando a las mismas celdas."
+       },
+       {
+        "q": "¿F4 funciona en un portátil?",
+        "a": "En muchos portátiles hay que pulsar Fn+F4. También puedes escribir el $ a mano."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "Cambiar entre referencias relativas, absolutas y mixtas (Soporte de Microsoft, en español; consultado el 17/11/2026)",
+       "url": "https://support.microsoft.com/es-es/excel/switch-between-relative-absolute-and-mixed-references"
+      },
+      {
+       "title": "Mover o copiar una fórmula (Soporte de Microsoft, en español; consultado el 17/11/2026)",
+       "url": "https://support.microsoft.com/es-es/excel/move-or-copy-a-formula-in-excel"
+      }
+     ],
+     "objectives": [
+      "Explicar qué le pasa a `A1`, `$A$1`, `A$1` y `$A1` al copiar una fórmula.",
+      "Elegir el tipo de referencia correcto para que una fórmula se pueda copiar.",
+      "Cambiar el tipo de referencia con F4 y guardar las tasas en una celda, nunca dentro de la fórmula."
+     ],
+     "mistakes": [
+      {
+       "error": "Copiar `=B2*E1` hacia abajo.",
+       "fix": "E1 se desplaza a E2, E3… que están vacías, y el IVA sale 0. Fija la tasa: `=B2*$E$1`."
+      },
+      {
+       "error": "Escribir la tasa dentro de la fórmula (`=B2*0,21`).",
+       "fix": "Funciona hasta que cambia el tipo. Pon la tasa en una celda y referénciala con $."
+      },
+      {
+       "error": "Fijarlo todo con $ «por si acaso» (`=$B$2*$E$1`).",
+       "fix": "Entonces todas las filas calculan con B2. Fija solo lo que no debe moverse."
+      }
+     ],
+     "summary": [
+      "Relativa (A1): se mueve al copiar. Absoluta ($A$1): no se mueve.",
+      "Mixtas: A$1 fija la fila; $A1 fija la columna.",
+      "F4 cambia el tipo de referencia.",
+      "Las tasas y constantes van en celdas de datos, no dentro de la fórmula."
+     ],
+     "excel": {
+      "hours": 3,
+      "level": 2,
+      "requires": [
+       "xl1-formatos"
+      ],
+      "examples": [
+       {
+        "id": "xl1-ref-ej1",
+        "title": "IVA con la tasa fija",
+        "grid": {
+         "A1": "Factura",
+         "B1": "Base",
+         "A2": "F-101",
+         "B2": 100,
+         "A3": "F-102",
+         "B3": 250,
+         "A4": "F-103",
+         "B4": 80,
+         "A5": "F-104",
+         "B5": 40,
+         "A6": "F-105",
+         "B6": 1000,
+         "D1": "IVA",
+         "E1": 0.21
+        },
+        "formula": "=B2*$E$1",
+        "input": "number",
+        "answer": 21,
+        "explain": "100 × 0,21 = 21. Al copiarla, B2 pasa a B3, B4… y $E$1 se queda fija.",
+        "cell": "D2"
+       },
+       {
+        "id": "xl1-ref-ej2",
+        "title": "La copia de una fórmula mixta",
+        "grid": {
+         "A2": 1,
+         "A3": 2,
+         "A4": 3,
+         "B1": 1,
+         "C1": 2,
+         "D1": 3
+        },
+        "formula": "=$A3*C$1",
+        "input": "number",
+        "answer": 4,
+        "explain": "Es `=$A2*B$1` copiada de B2 a C3: la columna A y la fila 1 no se mueven. 2 × 2 = 4.",
+        "cell": "C3"
+       }
+      ],
+      "guided": {
+       "question": "xl1-ref-07",
+       "steps": [
+        "Escribe la fórmula para la primera factura: base por tipo de IVA.",
+        "Piensa qué pasa al copiarla hacia abajo: la base tiene que cambiar y el tipo no.",
+        "Fija el tipo con $ (tecla F4): $E$1."
+       ]
+      },
+      "case": {
+       "title": "Caso: el IVA de las facturas del mes",
+       "text": "La Gestoría Albaida prepara el IVA de las facturas de un cliente. El tipo general está en la celda `E1` para poder cambiarlo si cambia la ley.\n\n1. Escribe cinco facturas con su base imponible en `B2:B6` y 0,21 en `E1`.\n2. En `D2` calcula el IVA con una sola fórmula y cópiala hasta `D6`.\n3. Cambia `E1` a 0,10: ¿se actualizan todas las cuotas?\n4. Añade en `F2` el total de la factura (base + IVA) y cópialo hacia abajo."
+      },
+      "pass": {
+       "test": 0.8,
+       "required": [
+        "xl1-ref-07",
+        "xl1-ref-10"
+       ]
+      },
+      "checked": "2026-11-17"
+     }
+    },
+    {
+     "slug": "xl1-archivos",
+     "title": "Guardar, exportar y compatibilidad",
+     "theory": "## Formatos de archivo\n\n| Formato | Qué guarda | Cuándo |\n|---|---|---|\n| `.xlsx` | Todo: hojas, fórmulas, formatos, gráficos. **Sin macros** | El formato normal de trabajo |\n| `.xlsm` | Lo mismo **y macros** (código VBA) | Solo si el libro necesita macros |\n| `.xls` | Formato antiguo (Excel 97-2003) | Para versiones muy antiguas |\n| `.csv` | Texto con los **valores** de **una** hoja, sin fórmulas ni formato | Para pasar datos a otro programa |\n| PDF | Una «foto» para leer e imprimir | Para enviar sin que se modifique |\n\nGuardar como CSV un libro con varias hojas y fórmulas guarda **solo la hoja activa y solo los valores**. Excel avisa: lee el aviso antes de aceptar.\n\n## CSV en español\n\nEn España la coma es el separador decimal, así que los CSV suelen separar las columnas con **punto y coma** (`;`). Además, las tildes y la ñ necesitan la codificación **UTF-8**. Si al abrir un CSV ves `MÃ¡laga` en vez de `Málaga`, se ha leído con otra codificación.\n\nPara abrirlo bien: **Datos > Obtener datos > De texto/CSV**, elige el origen **65001: Unicode (UTF-8)** y el delimitador **punto y coma**. Para crearlo: **Archivo > Guardar como** y el tipo **CSV UTF-8 (delimitado por comas)**; con la configuración regional de España, Excel separa con `;`.\n\n## Exportar a PDF\n\n**Archivo > Exportar > Crear documento PDF/XPS** (o Guardar como, tipo PDF). Revisa antes la vista previa de impresión: lo que no cabe en la página se corta.\n\n## Macros: seguridad\n\nUn `.xlsm` puede llevar código que se ejecuta en tu equipo. **No habilites las macros de un archivo de origen desconocido.** Microsoft 365 bloquea por defecto las macros de los archivos descargados de internet; si un correo te insiste en que las actives para «ver el contenido», desconfía y confirma con el remitente por otra vía.\n\n## Versiones de Excel\n\nAlgunas funciones solo existen en versiones recientes. En este curso las marcamos así: **[2019+]** (Excel 2019 y posteriores), **[2021+]** (Excel 2021 y posteriores) y **[365]** (solo Microsoft 365 y Excel para la web). En una versión que no la tiene, la fórmula da `#¿NOMBRE?`. En M01 y M02 todas las funciones existen en cualquier versión.",
+     "example_code": "",
+     "exercise": "La gestoría tiene que pasar su listado de clientes a un programa de facturación que solo lee CSV.\n\n1. Crea una hoja con Cliente, Ciudad (con tildes: Málaga, Cádiz) y Cuota con decimales.\n2. Guárdala como **CSV UTF-8** y lee el aviso de Excel.\n3. Ábrela con el Bloc de notas: ¿qué separa las columnas? ¿Se ven bien las tildes?\n4. Vuelve a abrirla en Excel con Datos > De texto/CSV, eligiendo UTF-8 y punto y coma.",
+     "starter": "\n",
+     "quiz": [],
+     "challenge": {
+      "title": "Caso: exportar el listado de clientes",
+      "stars": 1,
+      "exercise": "La gestoría tiene que pasar su listado de clientes a un programa de facturación que solo lee CSV.\n\n1. Crea una hoja con Cliente, Ciudad (con tildes: Málaga, Cádiz) y Cuota con decimales.\n2. Guárdala como **CSV UTF-8** y lee el aviso de Excel.\n3. Ábrela con el Bloc de notas: ¿qué separa las columnas? ¿Se ven bien las tildes?\n4. Vuelve a abrirla en Excel con Datos > De texto/CSV, eligiendo UTF-8 y punto y coma.",
+      "starter": "\n",
+      "hint": "Elige la opción que lo dice."
+     },
+     "assistant": {
+      "hint": "Piensa qué guarda un CSV: texto, valores y una sola hoja.",
+      "faq": [
+       {
+        "q": "¿Pierdo algo al abrir un .xlsx en Excel para la web?",
+        "a": "Casi nada en lo básico. Las macros no se ejecutan en la web y algunas funciones avanzadas cambian: el curso lo indica cuando importa."
+       },
+       {
+        "q": "¿Por qué el CSV no guarda las otras hojas?",
+        "a": "Porque un CSV es un archivo de texto con una sola tabla. Si necesitas varias, guarda un CSV por hoja."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "Formatos de archivo que admite Excel (Soporte de Microsoft, en español; consultado el 17/11/2026)",
+       "url": "https://support.microsoft.com/es-es/excel/file-formats-that-are-supported-in-excel"
+      },
+      {
+       "title": "Importar o exportar archivos de texto (.txt o .csv) (Soporte de Microsoft, en español; consultado el 17/11/2026)",
+       "url": "https://support.microsoft.com/es-es/excel/get-started/import-or-export-text-txt-or-csv-files"
+      },
+      {
+       "title": "Habilitar o deshabilitar macros en archivos de Microsoft 365 (Soporte de Microsoft, en español; consultado el 17/11/2026)",
+       "url": "https://support.microsoft.com/es-es/office/habilitar-o-deshabilitar-macros-en-archivos-de-microsoft-365-12b036fd-d140-4e74-b45e-16fed1a7e5c6"
+      }
+     ],
+     "objectives": [
+      "Elegir entre .xlsx, .xlsm, .csv y PDF según para qué sea el archivo.",
+      "Abrir un CSV con separador «;» y tildes sin que se estropee.",
+      "Saber que hay funciones que no existen en versiones antiguas y qué indican las etiquetas [2019+], [2021+] y [365]."
+     ],
+     "mistakes": [
+      {
+       "error": "Guardar como CSV y perder las fórmulas y el formato sin darte cuenta.",
+       "fix": "Trabaja en .xlsx y exporta una copia a CSV solo cuando la necesites."
+      },
+      {
+       "error": "Abrir un CSV en UTF-8 como si fuera ANSI (tildes estropeadas).",
+       "fix": "Impórtalo con Datos > De texto/CSV y elige 65001: Unicode (UTF-8)."
+      },
+      {
+       "error": "Habilitar las macros por costumbre.",
+       "fix": "Solo en archivos de confianza. Si no sabes de dónde viene un .xlsm, no las actives."
+      }
+     ],
+     "summary": [
+      ".xlsx para trabajar, .xlsm solo con macros, CSV para pasar datos, PDF para enviar.",
+      "CSV = valores de una hoja, sin fórmulas ni formato.",
+      "En es-ES, CSV con «;» y en UTF-8.",
+      "No habilites macros de origen desconocido."
+     ],
+     "excel": {
+      "hours": 1.5,
+      "level": 1,
+      "requires": [
+       "xl1-datos"
+      ],
+      "examples": [
+       {
+        "title": "Un CSV de clientes, por dentro",
+        "text": "`Cliente;Ciudad;Cuota` en la primera línea y `Ana Ruiz;Málaga;45,50` en la segunda: columnas separadas por `;`, decimales con coma y la tilde guardada en UTF-8."
+       }
+      ],
+      "guided": {
+       "question": "xl1-arc-03",
+       "steps": [
+        "Piensa qué guarda un CSV: texto, valores y una sola hoja.",
+        "Las fórmulas y los formatos no son «valores».",
+        "Elige la opción que lo dice."
+       ]
+      },
+      "case": {
+       "title": "Caso: exportar el listado de clientes",
+       "text": "La gestoría tiene que pasar su listado de clientes a un programa de facturación que solo lee CSV.\n\n1. Crea una hoja con Cliente, Ciudad (con tildes: Málaga, Cádiz) y Cuota con decimales.\n2. Guárdala como **CSV UTF-8** y lee el aviso de Excel.\n3. Ábrela con el Bloc de notas: ¿qué separa las columnas? ¿Se ven bien las tildes?\n4. Vuelve a abrirla en Excel con Datos > De texto/CSV, eligiendo UTF-8 y punto y coma."
+      },
+      "pass": {
+       "test": 0.8,
+       "required": []
+      },
+      "checked": "2026-11-17",
+      "warning": "Un archivo .xlsm puede contener macros, que son código que se ejecuta en tu equipo. No habilites las macros de archivos de origen desconocido."
+     }
+    }
+   ]
+  },
+  {
+   "slug": "xl-m02",
+   "title": "M02 · Fórmulas y funciones básicas",
+   "summary": "Operadores y prioridad, SUMA, PROMEDIO, MIN, MAX, CONTAR, CONTARA, PRODUCTO, REDONDEAR y hojas.",
+   "lessons": [
+    {
+     "slug": "xl2-operadores",
+     "title": "Fórmulas y operadores",
+     "theory": "## Una fórmula empieza por =\n\nTodo lo que empieza por `=` es una fórmula: Excel la calcula y la celda muestra el resultado. Sin el `=`, Excel guarda un texto.\n\n## Operadores\n\n| Operador | Hace | Ejemplo | Resultado |\n|---|---|---|---|\n| `+` `-` | Suma y resta | `=10-4` | 6 |\n| `*` `/` | Multiplica y divide | `=10/4` | 2,5 |\n| `^` | Potencia | `=2^3` | 8 |\n| `%` | Divide entre 100 | `=200*10%` | 20 |\n| `&` | Une textos | `=\"Hola \"&\"Ana\"` | Hola Ana |\n| `=` `<>` `<` `>` `<=` `>=` | Compara | `=5>3` | VERDADERO |\n\n## Prioridad: qué se calcula antes\n\nExcel no calcula de izquierda a derecha sin más. Este es su orden, de primero a último:\n\n1. Paréntesis.\n2. Negación (el signo `-` delante de un valor).\n3. Porcentaje `%`.\n4. Potencia `^`.\n5. Multiplicación y división, de izquierda a derecha.\n6. Suma y resta, de izquierda a derecha.\n7. Unir textos `&`.\n8. Comparaciones.\n\nConsecuencias que conviene recordar:\n\n- `=2+3*4` da **14** (primero 3 × 4); `=(2+3)*4` da **20**.\n- `=-2^2` da **4**: Excel aplica la negación antes que la potencia, así que calcula (−2)². En matemáticas, −2² sería −4. Si quieres −4, escribe `=-(2^2)`.\n- `=\"Total: \"&2+3` da **«Total: 5»**: la suma va antes que `&`.\n\n## Una línea de factura, paso a paso\n\nCantidad en A2, precio en B2 y descuento en C2 (0,1 es un 10 %):\n\n1. Importe sin descuento: `=A2*B2`.\n2. La parte que se paga es `1-C2` (el 90 %).\n3. Junta las dos con paréntesis: `=A2*B2*(1-C2)`.\n\nSin paréntesis, `=A2*B2*1-C2` resta el descuento (0,1) al final y da un importe casi entero: un error que no avisa.",
+     "example_code": "",
+     "exercise": "El Taller Montesol (empresa ficticia) factura piezas con cantidad, precio y un descuento por línea.\n\n1. Escribe cuatro líneas con Cantidad, Precio y Descuento (como 0,1 o 10 %).\n2. En la columna Importe calcula cantidad × precio con el descuento aplicado.\n3. Añade una columna Concepto que una el nombre de la pieza y la cantidad con `&` («Filtro × 3»).\n4. Comprueba una línea a mano con la calculadora.",
+     "starter": "\n",
+     "quiz": [],
+     "challenge": {
+      "title": "Caso: las líneas de factura del Taller Montesol",
+      "stars": 2,
+      "exercise": "El Taller Montesol (empresa ficticia) factura piezas con cantidad, precio y un descuento por línea.\n\n1. Escribe cuatro líneas con Cantidad, Precio y Descuento (como 0,1 o 10 %).\n2. En la columna Importe calcula cantidad × precio con el descuento aplicado.\n3. Añade una columna Concepto que una el nombre de la pieza y la cantidad con `&` («Filtro × 3»).\n4. Comprueba una línea a mano con la calculadora.",
+      "starter": "\n",
+      "hint": "Multiplica las dos partes y copia la fórmula hasta D4."
+     },
+     "assistant": {
+      "hint": "Primero, cantidad por precio: A2*B2.",
+      "faq": [
+       {
+        "q": "¿Puedo poner espacios dentro de una fórmula?",
+        "a": "Sí, entre operadores y valores (`= A2 * B2`). Excel los ignora. No dentro de un nombre de celda ni de función."
+       },
+       {
+        "q": "¿Por qué =\"Total: \"&2,5 no muestra el formato de moneda?",
+        "a": "Al unir con &, el número se convierte en texto sin formato. Para darle formato al unir hace falta la función TEXTO, que llega en M06."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "Operadores de cálculo y prioridad (Soporte de Microsoft, en español; consultado el 17/11/2026)",
+       "url": "https://support.microsoft.com/es-es/office/operadores-de-c%C3%A1lculo-y-prioridad-36de9366-46fe-43a3-bfa8-cf6d8068eacc"
+      },
+      {
+       "title": "Información general sobre fórmulas en Excel (Soporte de Microsoft, en español; consultado el 17/11/2026)",
+       "url": "https://support.microsoft.com/es-es/office/informaci%C3%B3n-general-sobre-f%C3%B3rmulas-en-excel-ecfdc708-9162-49e8-b993-c311f47ca173"
+      }
+     ],
+     "objectives": [
+      "Escribir fórmulas con los operadores + - * / ^ % y &.",
+      "Aplicar la prioridad de Excel y usar paréntesis para cambiarla.",
+      "Explicar por qué `=-2^2` da 4 en Excel."
+     ],
+     "mistakes": [
+      {
+       "error": "Olvidar los paréntesis: `=A2*B2*1-C2`.",
+       "fix": "Excel multiplica antes de restar: resta el descuento al final. Escribe `=A2*B2*(1-C2)`."
+      },
+      {
+       "error": "Esperar −4 de `=-2^2`.",
+       "fix": "En Excel la negación va antes que la potencia: da 4. Para −4, `=-(2^2)`."
+      },
+      {
+       "error": "Unir textos con `+` (`=A2+\" \"+B2`).",
+       "fix": "El `+` intenta sumar y da #¡VALOR!. Para unir textos se usa `&`."
+      }
+     ],
+     "summary": [
+      "Toda fórmula empieza por =.",
+      "Orden: paréntesis, negación, %, ^, * /, + -, &, comparaciones.",
+      "`=-2^2` da 4 en Excel.",
+      "& une textos; las comparaciones devuelven VERDADERO o FALSO."
+     ],
+     "excel": {
+      "hours": 2,
+      "level": 2,
+      "requires": [
+       "xl1-referencias"
+      ],
+      "examples": [
+       {
+        "id": "xl2-op-ej1",
+        "title": "Los paréntesis cambian el orden",
+        "grid": {},
+        "formula": "=(2+3)*4",
+        "input": "number",
+        "answer": 20,
+        "explain": "Primero el paréntesis (5) y después × 4. Sin paréntesis daría 14."
+       },
+       {
+        "id": "xl2-op-ej2",
+        "title": "Importe de una línea con descuento",
+        "grid": {
+         "A1": "Cantidad",
+         "B1": "Precio",
+         "C1": "Descuento",
+         "A2": 3,
+         "B2": 12.5,
+         "C2": 0.1,
+         "A3": 10,
+         "B3": 4,
+         "C3": 0,
+         "A4": 2,
+         "B4": 99.9,
+         "C4": 0.25
+        },
+        "formula": "=A2*B2*(1-C2)",
+        "input": "number",
+        "answer": 33.75,
+        "explain": "3 × 12,5 = 37,5; con un 10 % de descuento se paga el 90 %: 37,5 × 0,9 = 33,75.",
+        "cell": "D2"
+       }
+      ],
+      "guided": {
+       "question": "xl2-op-12",
+       "steps": [
+        "Primero, cantidad por precio: A2*B2.",
+        "La parte que se paga es 1 menos el descuento: (1-C2). Los paréntesis son obligatorios.",
+        "Multiplica las dos partes y copia la fórmula hasta D4."
+       ]
+      },
+      "case": {
+       "title": "Caso: las líneas de factura del Taller Montesol",
+       "text": "El Taller Montesol (empresa ficticia) factura piezas con cantidad, precio y un descuento por línea.\n\n1. Escribe cuatro líneas con Cantidad, Precio y Descuento (como 0,1 o 10 %).\n2. En la columna Importe calcula cantidad × precio con el descuento aplicado.\n3. Añade una columna Concepto que una el nombre de la pieza y la cantidad con `&` («Filtro × 3»).\n4. Comprueba una línea a mano con la calculadora."
+      },
+      "pass": {
+       "test": 0.8,
+       "required": [
+        "xl2-op-12"
+       ]
+      },
+      "checked": "2026-11-17"
+     }
+    },
+    {
+     "slug": "xl2-estadisticas",
+     "title": "SUMA, PROMEDIO, MIN y MAX",
+     "theory": "## Cómo se escribe una función\n\n`=NOMBRE(argumento1;argumento2;…)`. En Excel en español los argumentos se separan con **punto y coma**. Un argumento puede ser un número, una celda o un rango: `=SUMA(B2:B7)`, `=SUMA(B2;B5;100)`.\n\n## Las cuatro funciones\n\n| Función | Devuelve | Ejemplo |\n|---|---|---|\n| `SUMA` | La suma | `=SUMA(B2:B7)` |\n| `PROMEDIO` | La media aritmética | `=PROMEDIO(B2:B7)` |\n| `MIN` | El valor más pequeño | `=MIN(B2:B7)` |\n| `MAX` | El valor más grande | `=MAX(B2:B7)` |\n\n## Vacíos, textos y ceros\n\nDentro de un rango, las cuatro funciones **ignoran las celdas vacías y los textos**. Un **0 sí cuenta**.\n\nEsto importa sobre todo en `PROMEDIO`: con 1200, 950, «sin datos», una celda vacía y 1850 en `B2:B6`, la media es 4000 / 3 = **1333,33**, no 4000 / 5. Si un mes sin ventas debe contar, escribe 0, no lo dejes vacío.\n\n## Por qué usar SUMA\n\n`=B2+B3+B4+B5+B6+B7` da lo mismo que `=SUMA(B2:B7)`, pero:\n\n- es más larga y es fácil saltarse una celda;\n- si insertas una fila dentro del rango, `SUMA` la incluye sola;\n- `+` falla con un texto (#¡VALOR!) y `SUMA` lo ignora.\n\nEl botón **Autosuma** (Inicio > Edición) escribe `=SUMA(...)` con el rango que cree que quieres: revísalo siempre antes de aceptar.",
+     "example_code": "",
+     "exercise": "Una tienda de bicicletas (ficticia) tiene sus ventas de enero a junio en `B2:B7`.\n\n1. Escribe los seis meses con sus ventas.\n2. Debajo calcula el total, la media, el peor mes y el mejor mes, cada uno con su función.\n3. Borra las ventas de un mes: ¿qué cambia en la media? Escribe 0 en su lugar: ¿y ahora?\n4. Inserta una fila en mitad del rango con un mes nuevo y comprueba que el total la incluye.",
+     "starter": "\n",
+     "quiz": [],
+     "challenge": {
+      "title": "Caso: las ventas del semestre de una tienda",
+      "stars": 2,
+      "exercise": "Una tienda de bicicletas (ficticia) tiene sus ventas de enero a junio en `B2:B7`.\n\n1. Escribe los seis meses con sus ventas.\n2. Debajo calcula el total, la media, el peor mes y el mejor mes, cada uno con su función.\n3. Borra las ventas de un mes: ¿qué cambia en la media? Escribe 0 en su lugar: ¿y ahora?\n4. Inserta una fila en mitad del rango con un mes nuevo y comprueba que el total la incluye.",
+      "starter": "\n",
+      "hint": "Cierra el paréntesis y comprueba que el rango incluye junio."
+     },
+     "assistant": {
+      "hint": "Busca el rango con las ventas de los seis meses: de B2 a B7.",
+      "faq": [
+       {
+        "q": "¿Qué devuelve MIN si el rango no tiene números?",
+        "a": "0. Y PROMEDIO de un rango sin números da #¡DIV/0!, porque no puede dividir entre 0."
+       },
+       {
+        "q": "¿Puedo mezclar rangos y celdas sueltas?",
+        "a": "Sí: `=SUMA(B2:B7;D2;100)` suma el rango, D2 y 100."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "Función SUMA (Soporte de Microsoft, en español; consultado el 17/11/2026)",
+       "url": "https://support.microsoft.com/es-es/excel/functions/sum-function"
+      },
+      {
+       "title": "Función PROMEDIO (Soporte de Microsoft, en español; consultado el 17/11/2026)",
+       "url": "https://support.microsoft.com/es-es/office/promedio-funci%C3%B3n-promedio-047bac88-d466-426c-a32b-8f33eb960cf6"
+      },
+      {
+       "title": "Función MIN (Soporte de Microsoft, en español; consultado el 17/11/2026)",
+       "url": "https://support.microsoft.com/es-es/office/funci%C3%B3n-min-61635d12-920f-4ce2-a70f-96f202dcc152"
+      },
+      {
+       "title": "Función MAX (Soporte de Microsoft, en español; consultado el 17/11/2026)",
+       "url": "https://support.microsoft.com/es-es/office/funci%C3%B3n-max-e0012414-9ac8-4b34-9a47-73e662c08098"
+      }
+     ],
+     "objectives": [
+      "Usar SUMA, PROMEDIO, MIN y MAX con rangos.",
+      "Predecir cómo tratan las celdas vacías y los textos.",
+      "Elegir una función en vez de sumar celda a celda."
+     ],
+     "mistakes": [
+      {
+       "error": "Dejar fuera del rango la última fila (`=SUMA(B2:B6)` en vez de `B2:B7`).",
+       "fix": "Revisa siempre el rango, sobre todo el que propone Autosuma."
+      },
+      {
+       "error": "Creer que PROMEDIO divide entre el número de filas.",
+       "fix": "Divide entre el número de celdas con números: las vacías y los textos no cuentan."
+      },
+      {
+       "error": "Separar los argumentos con coma (`=SUMA(B2,B5)`).",
+       "fix": "En Excel en español el separador es el punto y coma: `=SUMA(B2;B5)`."
+      }
+     ],
+     "summary": [
+      "Sintaxis: =FUNCIÓN(arg1;arg2), con punto y coma.",
+      "SUMA, PROMEDIO, MIN y MAX ignoran vacías y textos de un rango; el 0 cuenta.",
+      "PROMEDIO divide entre las celdas con números.",
+      "Revisa siempre el rango de la función."
+     ],
+     "excel": {
+      "hours": 2,
+      "level": 2,
+      "requires": [
+       "xl2-operadores"
+      ],
+      "examples": [
+       {
+        "id": "xl2-est-ej1",
+        "title": "PROMEDIO ignora textos y vacías",
+        "grid": {
+         "A1": "Mes",
+         "B1": "Ventas",
+         "A2": "Julio",
+         "B2": 300,
+         "A3": "Agosto",
+         "B3": "pendiente",
+         "A4": "Septiembre",
+         "B4": 500
+        },
+        "formula": "=PROMEDIO(B2:B4)",
+        "input": "number",
+        "answer": 400,
+        "explain": "Solo hay dos números (300 y 500): (300 + 500) / 2 = 400. «pendiente» no cuenta."
+       },
+       {
+        "id": "xl2-est-ej2",
+        "title": "Total del trimestre",
+        "grid": {
+         "A1": "Mes",
+         "B1": "Ventas",
+         "A2": "Julio",
+         "B2": 300,
+         "A3": "Agosto",
+         "B3": "pendiente",
+         "A4": "Septiembre",
+         "B4": 500
+        },
+        "formula": "=SUMA(B2:B4)",
+        "input": "number",
+        "answer": 800,
+        "explain": "SUMA suma los números del rango e ignora el texto: 300 + 500."
+       }
+      ],
+      "guided": {
+       "question": "xl2-est-09",
+       "steps": [
+        "Busca el rango con las ventas de los seis meses: de B2 a B7.",
+        "Escribe =SUMA( y selecciona el rango.",
+        "Cierra el paréntesis y comprueba que el rango incluye junio."
+       ]
+      },
+      "case": {
+       "title": "Caso: las ventas del semestre de una tienda",
+       "text": "Una tienda de bicicletas (ficticia) tiene sus ventas de enero a junio en `B2:B7`.\n\n1. Escribe los seis meses con sus ventas.\n2. Debajo calcula el total, la media, el peor mes y el mejor mes, cada uno con su función.\n3. Borra las ventas de un mes: ¿qué cambia en la media? Escribe 0 en su lugar: ¿y ahora?\n4. Inserta una fila en mitad del rango con un mes nuevo y comprueba que el total la incluye."
+      },
+      "pass": {
+       "test": 0.8,
+       "required": [
+        "xl2-est-09"
+       ]
+      },
+      "checked": "2026-11-17"
+     }
+    },
+    {
+     "slug": "xl2-contar",
+     "title": "CONTAR, CONTARA, PRODUCTO y REDONDEAR",
+     "theory": "## Contar\n\n| Función | Cuenta | `A2:A6` = «F-001», 120, vacía, «pendiente», 80 |\n|---|---|---|\n| `CONTAR` | Celdas con **números** (y fechas) | **2** |\n| `CONTARA` | Celdas **no vacías** (números, textos, errores…) | **4** |\n\nÚsalas así: `CONTAR` para saber cuántos importes hay; `CONTARA` para saber cuántas filas tienen algo escrito.\n\n## PRODUCTO\n\n`=PRODUCTO(A2:C2)` multiplica los números del rango (ignora textos y vacías). Con 3, 12,5 y 0,9 da **33,75**. Es lo mismo que `=A2*B2*C2`, pero más corto cuando hay muchos factores.\n\n## REDONDEAR\n\n`=REDONDEAR(número;núm_decimales)` **cambia el valor**, no solo cómo se ve:\n\n| Fórmula | Resultado | Por qué |\n|---|---|---|\n| `=REDONDEAR(4,1979;2)` | 4,2 | A céntimos |\n| `=REDONDEAR(2,5;0)` | 3 | A entero; el 5 sube |\n| `=REDONDEAR(-2,5;0)` | −3 | El 5 se aleja del cero |\n| `=REDONDEAR(1234,567;-2)` | 1200 | A centenas |\n\nCon decimales negativos redondea a la izquierda de la coma: −1 a decenas, −2 a centenas.\n\n## Formato frente a REDONDEAR\n\nSi el IVA de una línea es 4,1979 y solo reduces decimales, se **ve** 4,20 pero se **suma** 4,1979. En una factura con muchas líneas, el total que se ve puede no coincidir con la suma de lo que se ve. Por eso es habitual redondear el IVA de cada línea a céntimos: `=REDONDEAR(B2*$E$1;2)`.",
+     "example_code": "",
+     "exercise": "La gestoría revisa el libro de facturas de un cliente: hay números de factura, importes, celdas con «anulada» y filas en blanco.\n\n1. Cuenta cuántas facturas tienen importe (CONTAR) y cuántas filas tienen algo escrito (CONTARA).\n2. Calcula el IVA de cada línea redondeado a céntimos con REDONDEAR.\n3. Suma el IVA con y sin redondear: ¿coinciden?\n4. Aplica formato de 2 decimales a la columna sin redondear y compara lo que se ve con lo que se suma.",
+     "starter": "\n",
+     "quiz": [],
+     "challenge": {
+      "title": "Caso: recuento de facturas y redondeo del IVA",
+      "stars": 2,
+      "exercise": "La gestoría revisa el libro de facturas de un cliente: hay números de factura, importes, celdas con «anulada» y filas en blanco.\n\n1. Cuenta cuántas facturas tienen importe (CONTAR) y cuántas filas tienen algo escrito (CONTARA).\n2. Calcula el IVA de cada línea redondeado a céntimos con REDONDEAR.\n3. Suma el IVA con y sin redondear: ¿coinciden?\n4. Aplica formato de 2 decimales a la columna sin redondear y compara lo que se ve con lo que se suma.",
+      "starter": "\n",
+      "hint": "Copia la fórmula hasta C4 y comprueba los céntimos."
+     },
+     "assistant": {
+      "hint": "Primero el IVA sin redondear: B2*$E$1 (con E1 fijo).",
+      "faq": [
+       {
+        "q": "¿Hay funciones para redondear siempre hacia arriba o hacia abajo?",
+        "a": "Sí: REDONDEAR.MAS y REDONDEAR.MENOS. Llegan en un módulo posterior; en este solo se usa REDONDEAR."
+       },
+       {
+        "q": "¿CONTARA cuenta una celda con un espacio?",
+        "a": "Sí: un espacio es un texto y la celda no está vacía. Es un error frecuente en datos copiados."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "Función CONTAR (Soporte de Microsoft, en español; consultado el 17/11/2026)",
+       "url": "https://support.microsoft.com/es-es/excel/functions/count-function"
+      },
+      {
+       "title": "Función CONTARA (Soporte de Microsoft, en español; consultado el 17/11/2026)",
+       "url": "https://support.microsoft.com/es-es/office/funci%C3%B3n-contara-7dc98875-d5c1-46f1-9a82-53f3219e2509"
+      },
+      {
+       "title": "Función PRODUCTO (Soporte de Microsoft, en español; consultado el 17/11/2026)",
+       "url": "https://support.microsoft.com/es-ES/Excel/product-function"
+      },
+      {
+       "title": "Función REDONDEAR (Soporte de Microsoft, en español; consultado el 17/11/2026)",
+       "url": "https://support.microsoft.com/es-es/office/redondear-funci%C3%B3n-redondear-c018c5d8-40fb-4053-90b1-b3e7f61a213c"
+      }
+     ],
+     "objectives": [
+      "Distinguir CONTAR (cuenta números) de CONTARA (cuenta celdas no vacías).",
+      "Multiplicar un rango con PRODUCTO.",
+      "Redondear el valor con REDONDEAR, frente a solo cambiar los decimales que se ven."
+     ],
+     "mistakes": [
+      {
+       "error": "Usar CONTARA para contar importes.",
+       "fix": "CONTARA cuenta también los textos («anulada»). Para números, CONTAR."
+      },
+      {
+       "error": "Creer que reducir decimales redondea.",
+       "fix": "Solo cambia lo que se ve. Para cambiar el valor, REDONDEAR."
+      },
+      {
+       "error": "Olvidar fijar la tasa dentro de REDONDEAR (`=REDONDEAR(B2*E1;2)`).",
+       "fix": "Al copiarla, E1 se desplaza. Escribe `=REDONDEAR(B2*$E$1;2)`."
+      }
+     ],
+     "summary": [
+      "CONTAR: números. CONTARA: no vacías.",
+      "PRODUCTO multiplica los números de un rango.",
+      "REDONDEAR(número;decimales) cambia el valor; el 5 se aleja del cero.",
+      "Redondea el IVA por línea para que lo que se ve cuadre con lo que se suma."
+     ],
+     "excel": {
+      "hours": 2,
+      "level": 2,
+      "requires": [
+       "xl2-estadisticas"
+      ],
+      "examples": [
+       {
+        "id": "xl2-con-ej1",
+        "title": "CONTAR solo cuenta números",
+        "grid": {
+         "A1": "Factura",
+         "A2": 101,
+         "A3": "anulada",
+         "A4": 102
+        },
+        "formula": "=CONTAR(A2:A4)",
+        "input": "number",
+        "answer": 2,
+        "explain": "101 y 102 son números; «anulada» es texto y no cuenta."
+       },
+       {
+        "id": "xl2-con-ej2",
+        "title": "IVA redondeado a céntimos",
+        "grid": {},
+        "formula": "=REDONDEAR(19,99*0,21;2)",
+        "input": "number",
+        "answer": 4.2,
+        "explain": "19,99 × 0,21 = 4,1979, que redondeado a dos decimales es 4,20."
+       }
+      ],
+      "guided": {
+       "question": "xl2-con-11",
+       "steps": [
+        "Primero el IVA sin redondear: B2*$E$1 (con E1 fijo).",
+        "Mételo dentro de REDONDEAR con 2 decimales: REDONDEAR(…;2).",
+        "Copia la fórmula hasta C4 y comprueba los céntimos."
+       ]
+      },
+      "case": {
+       "title": "Caso: recuento de facturas y redondeo del IVA",
+       "text": "La gestoría revisa el libro de facturas de un cliente: hay números de factura, importes, celdas con «anulada» y filas en blanco.\n\n1. Cuenta cuántas facturas tienen importe (CONTAR) y cuántas filas tienen algo escrito (CONTARA).\n2. Calcula el IVA de cada línea redondeado a céntimos con REDONDEAR.\n3. Suma el IVA con y sin redondear: ¿coinciden?\n4. Aplica formato de 2 decimales a la columna sin redondear y compara lo que se ve con lo que se suma."
+      },
+      "pass": {
+       "test": 0.8,
+       "required": [
+        "xl2-con-11"
+       ]
+      },
+      "checked": "2026-11-17"
+     }
+    },
+    {
+     "slug": "xl2-hojas",
+     "title": "Referencias entre hojas",
+     "theory": "## Hoja!Celda\n\nPara usar una celda de otra hoja se escribe el nombre de la hoja, un signo de exclamación y la celda: `=Enero!B5`. Sin nombre de hoja, la referencia es de la hoja donde está la fórmula: en la hoja Resumen, `=B5` es `Resumen!B5`.\n\nSi el nombre de la hoja tiene **espacios** u otros caracteres especiales, va entre **comillas simples**: `='Primer trimestre'!B5`.\n\nNo hace falta escribirlo a mano: escribe `=`, haz clic en la pestaña de la otra hoja, haz clic en la celda y pulsa Intro. Excel escribe la referencia, con comillas si hacen falta.\n\n## Un resumen trimestral, paso a paso\n\nLas hojas Enero, Febrero y Marzo tienen las ventas del mes en `B5`. En la hoja Resumen:\n\n1. Escribe `=` en `B2`.\n2. Clic en la pestaña Enero, clic en `B5`, escribe `+`.\n3. Lo mismo con Febrero y Marzo. Intro: `=Enero!B5+Febrero!B5+Marzo!B5`.\n\nTambién vale `=SUMA(Enero!B5;Febrero!B5;Marzo!B5)`. Y un rango de otra hoja: `=SUMA(Enero!B2:B4)`.\n\n## Si cambias o borras hojas\n\n- Si **renombras** una hoja, Excel actualiza solo todas las fórmulas que la usan.\n- Si **borras** una hoja que usaba una fórmula, la fórmula da `#¡REF!`.\n\n## Referencias 3D (información)\n\nExcel permite `=SUMA(Enero:Marzo!B5)`: suma `B5` de Enero, de Marzo y de todas las hojas que estén **entre** ellas en el orden de las pestañas. Es cómodo, pero mover una hoja de sitio cambia el resultado sin avisar. **El corrector de PLD no las admite todavía**: si la escribes en un ejercicio, te dirá que no está soportada.",
+     "example_code": "",
+     "exercise": "El taller lleva una hoja por mes (Enero, Febrero, Marzo) con la misma estructura: las ventas en `B5` y los gastos en `B6`.\n\n1. Crea las tres hojas con sus ventas y gastos y una hoja Resumen.\n2. En Resumen calcula el total de ventas, el de gastos y el resultado (ventas − gastos) del trimestre.\n3. Cambia el nombre de la hoja Enero por «Ene»: ¿qué les pasa a las fórmulas?\n4. Haz una copia del libro y borra la hoja Febrero en la copia: ¿qué aparece en Resumen?",
+     "starter": "\n",
+     "quiz": [],
+     "challenge": {
+      "title": "Caso: el resumen trimestral del Taller Montesol",
+      "stars": 3,
+      "exercise": "El taller lleva una hoja por mes (Enero, Febrero, Marzo) con la misma estructura: las ventas en `B5` y los gastos en `B6`.\n\n1. Crea las tres hojas con sus ventas y gastos y una hoja Resumen.\n2. En Resumen calcula el total de ventas, el de gastos y el resultado (ventas − gastos) del trimestre.\n3. Cambia el nombre de la hoja Enero por «Ene»: ¿qué les pasa a las fórmulas?\n4. Haz una copia del libro y borra la hoja Febrero en la copia: ¿qué aparece en Resumen?",
+      "starter": "\n",
+      "hint": "Suma los tres meses."
+     },
+     "assistant": {
+      "hint": "Cada mes está en su hoja, en la celda B5.",
+      "faq": [
+       {
+        "q": "¿Puedo referenciar otro libro?",
+        "a": "Sí, con un vínculo de libro (`=[Ventas.xlsx]Enero!B5`). Se ve en módulos posteriores; aquí todo está en el mismo libro."
+       },
+       {
+        "q": "¿Por qué PLD no corrige las referencias 3D?",
+        "a": "El motor de PLD es propio y de momento solo admite referencias de una hoja. Está previsto para más adelante."
+       }
+      ]
+     },
+     "sources": [
+      {
+       "title": "Crear o modificar una referencia de celda (Soporte de Microsoft, en español; consultado el 17/11/2026)",
+       "url": "https://support.microsoft.com/es-es/office/crear-o-modificar-una-referencia-de-celda-c7b8b95d-c594-4488-947e-c835903cebaa"
+      },
+      {
+       "title": "Crear una referencia al mismo rango de celdas en varias hojas de cálculo (Soporte de Microsoft, en español; consultado el 17/11/2026)",
+       "url": "https://support.microsoft.com/es-es/office/crear-una-referencia-al-mismo-rango-de-celdas-en-varias-hojas-de-c%C3%A1lculo-c906f8b4-c648-4aa0-8063-65d38d03370f"
+      }
+     ],
+     "objectives": [
+      "Escribir referencias a otra hoja, como `Enero!B5` y `'Primer trimestre'!B5`.",
+      "Construir un resumen con datos de varias hojas.",
+      "Saber qué son las referencias 3D, aunque PLD no las corrija."
+     ],
+     "mistakes": [
+      {
+       "error": "Escribir `=B5+B5+B5` en Resumen.",
+       "fix": "Sin nombre de hoja, las tres son Resumen!B5. Escribe `=Enero!B5+Febrero!B5+Marzo!B5`."
+      },
+      {
+       "error": "Olvidar las comillas en una hoja con espacios (`=Primer trimestre!B5`).",
+       "fix": "Escribe `='Primer trimestre'!B5`, o haz clic en la celda y deja que Excel la escriba."
+      },
+      {
+       "error": "Borrar una hoja que otras fórmulas usan.",
+       "fix": "Las fórmulas pasan a #¡REF!. Antes de borrar, busca qué la usa (Fórmulas > Rastrear dependientes)."
+      }
+     ],
+     "summary": [
+      "Otra hoja: Hoja!Celda (Enero!B5).",
+      "Con espacios, entre comillas simples: 'Primer trimestre'!B5.",
+      "Renombrar una hoja actualiza las fórmulas; borrarla da #¡REF!.",
+      "Las referencias 3D existen, pero PLD aún no las corrige."
+     ],
+     "excel": {
+      "hours": 2,
+      "level": 3,
+      "requires": [
+       "xl2-operadores",
+       "xl1-referencias"
+      ],
+      "examples": [
+       {
+        "id": "xl2-hoj-ej1",
+        "title": "Sumar dos hojas desde Resumen",
+        "grid": {
+         "Enero!A5": "Ventas",
+         "Enero!B5": 4200,
+         "Febrero!A5": "Ventas",
+         "Febrero!B5": 3900,
+         "Marzo!A5": "Ventas",
+         "Marzo!B5": 4650,
+         "A2": "Total del trimestre"
+        },
+        "formula": "=Enero!B5+Febrero!B5",
+        "input": "number",
+        "answer": 8100,
+        "explain": "Enero!B5 (4200) + Febrero!B5 (3900).",
+        "sheet": "Resumen",
+        "cell": "B3"
+       },
+       {
+        "id": "xl2-hoj-ej2",
+        "title": "Una hoja con espacios en el nombre",
+        "grid": {
+         "'Primer trimestre'!B5": 12750
+        },
+        "formula": "='Primer trimestre'!B5*2",
+        "input": "number",
+        "answer": 25500,
+        "explain": "Las comillas simples son obligatorias porque el nombre tiene un espacio: 12 750 × 2.",
+        "sheet": "Resumen"
+       }
+      ],
+      "guided": {
+       "question": "xl2-hoj-08",
+       "steps": [
+        "Cada mes está en su hoja, en la celda B5.",
+        "Escribe el nombre de la hoja, ! y la celda: Enero!B5.",
+        "Suma los tres meses."
+       ]
+      },
+      "case": {
+       "title": "Caso: el resumen trimestral del Taller Montesol",
+       "text": "El taller lleva una hoja por mes (Enero, Febrero, Marzo) con la misma estructura: las ventas en `B5` y los gastos en `B6`.\n\n1. Crea las tres hojas con sus ventas y gastos y una hoja Resumen.\n2. En Resumen calcula el total de ventas, el de gastos y el resultado (ventas − gastos) del trimestre.\n3. Cambia el nombre de la hoja Enero por «Ene»: ¿qué les pasa a las fórmulas?\n4. Haz una copia del libro y borra la hoja Febrero en la copia: ¿qué aparece en Resumen?"
+      },
+      "pass": {
+       "test": 0.8,
+       "required": [
+        "xl2-hoj-08"
+       ]
+      },
+      "checked": "2026-11-17"
+     }
+    }
+   ]
+  }
+ ]
+}

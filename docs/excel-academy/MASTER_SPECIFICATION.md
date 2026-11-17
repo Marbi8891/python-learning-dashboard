@@ -1,6 +1,6 @@
 # Especificación maestra · Excel profesional (proyecto «Excel Academy»)
 
-**Versión:** 1.1 · **Fecha:** 17/11/2026 · **Estado:** el 17/11/2026 el propietario autorizó P1, la fusión del PR #159, la incorporación de estos documentos al repositorio y las 16 resoluciones de §4 (ver §6). El resto de las decisiones pendientes de §7 siguen abiertas.
+**Versión:** 1.2 · **Fecha:** 17/11/2026 · **Estado:** el 17/11/2026 el propietario autorizó P1, la fusión del PR #159, la incorporación de estos documentos al repositorio y las 16 resoluciones de §4; P1 se fusionó (PR #164) y después autorizó P2 y fijó las decisiones DA-22 a DA-27 (ver §6). El resto de las decisiones pendientes de §7 siguen abiertas.
 **Base comprobada:** `main` en `3b2dd8b`; rama `claude/project-thread-tr7z7w` en `ebda151` (PR #159, borrador, CI 7/7 en verde). Esta fase no ha modificado el repositorio, ninguna rama ni el PR.
 Leyenda: **[H]** hecho comprobado · **[R]** recomendación · **[Hip]** hipótesis · **[D]** decisión pendiente.
 
@@ -83,11 +83,11 @@ Ubicación: `/mnt/project-files/excel-academy/docs/excel-academy/`. Los diez tie
 | Motor de fórmulas | Doc 04 | **Sí (P1)**: 8 funciones, 37 previstas | `frontend/js/excel/formula/`; 194 casos de referencia |
 | Tipos `formula-result`, `formula`, `rubric` | Doc 06 | **Sí (P1)** los dos primeros; `rubric` en P3 | `frontend/js/excel/checks.js`, `course_builder.py` |
 | `module` opcional en el generador | Doc 08 Fase 4 | **Sí (P1)** | `course_builder.py`; `scripts/courses/tests/` |
-| Ruta `#/academia/excel` | Docs 02, 03 | **No** (solo el campo `route` del catálogo) | `app.js` sin cambios |
-| Contenido M01-M02 | Doc 07 | **No** | No existe `frontend/data/courses/excel/` |
+| Ruta `#/academia/excel` y alias `#/excel-academy` | Docs 02, 03; DA-25 | **Sí (P2)** | `app.js`, `frontend/js/excel/course.js`; `e2e/excel.spec.js` |
+| Contenido M01-M02 | Doc 07 | **Sí (P2)**: 9 unidades, 111 ejercicios | `scripts/courses/excel/m01.py`, `m02.py`; `frontend/data/academia/excel/` (DT-06) |
 | Campos `xlsx` y `rubrics` | Doc 03 §3.7 | **No** | `progress-guard.js` sin cambios |
 | Lector XLSX | Doc 05 | **No** (en pausa) | — |
-| Indicadores del panel | Doc 02 §5 | **No** | — |
+| Indicadores del panel | Doc 02 §5 | **Parcial (P2)**: unidades completadas y superadas, ejercicios resueltos | `frontend/js/excel/progress.js`; resto en P3 |
 
 ### 2.2 Archivos revisados (rama del PR #159)
 
@@ -167,7 +167,7 @@ Ubicación: `/mnt/project-files/excel-academy/docs/excel-academy/`. Los diez tie
 
 ## 6. Registro de decisiones aprobadas
 
-Fuentes: DA-01…17, mensaje del propietario «Autorización condicionada: Excel profesional en PLD», 16/11/2026 08:31; DA-18…21, mensajes del propietario del 17/11/2026.
+Fuentes: DA-01…17, mensaje del propietario «Autorización condicionada: Excel profesional en PLD», 16/11/2026 08:31; DA-18…27, mensajes del propietario del 17/11/2026.
 
 | Id | Decisión | Efecto |
 |---|---|---|
@@ -192,8 +192,19 @@ Fuentes: DA-01…17, mensaje del propietario «Autorización condicionada: Excel
 | DA-19 | Fusionar el PR #159 con CI en verde, 17/11/2026 | DP-05 cerrada |
 | DA-20 | Incorporar estos documentos a `docs/excel-academy/`, 17/11/2026 | DP-02 cerrada |
 | DA-21 | Dar por buenas las 16 resoluciones de §4, 17/11/2026 | Cierra DP-06 (numeración P0-P5), DP-12 (simulacro por bloques), DP-13 (completada y superada) y DP-14 (motor v1 sin grafo) |
+| DA-22 | Autorizar P2 (contenido M1-M2), 17/11/2026 | DP-04 cerrada. Lector XLSX y M3+ siguen fuera |
+| DA-23 | Al fusionar P2, el curso es **visible para todos**: `status: "active"`, entrada en el menú y en la portada, 17/11/2026 | DP-09 cerrada (en lugar de esperar a P5) |
+| DA-24 | Esta especificación consolidada **prevalece** sobre la «Especificación funcional y técnica de Excel Academy» v1.0 recibida el 17/11/2026; de esa propuesta solo se toma lo compatible, fase a fase | Ver DA-25 a DA-27 |
+| DA-25 | Ruta principal `#/academia/excel` con el **alias** `#/excel-academy` (reescribe a la principal) | `app.js` (P2) |
+| DA-26 | Se mantienen: sin XP ni insignias en el piloto (DA-07); **tutor de IA fuera** del alcance; sin tablas nuevas (DA-09); progreso con el documento de curso de la cuenta; contenido en archivos versionados y generados | Rechaza las tablas `Excel*`, la API `/api/excel-academy/*` y el tutor de Ollama de la propuesta del 17/11 |
+| DA-27 | Se mantienen los **25 módulos** y las fases P0-P5; los **cuatro proyectos empresariales** de la propuesta (finanzas, personal, inventario y cuadro de mando) se añaden al final, en M24-M25 (P4.5); el **laboratorio interactivo** libre se aplaza | Antes de un cambio incompatible se actualiza esta documentación; las decisiones aprobadas no se reabren sin justificación técnica |
 
 **Decisiones técnicas tomadas dentro de P0** (en DEC-018, implementadas en el PR #159, pendientes de la revisión del propietario junto con el PR): DT-01 las fichas de DAW no llevan `family`; DT-02 el PCAP no entra en el catálogo; DT-03 Excel se sincroniza desde P0 aunque no se vea; DT-04 el catálogo es una constante JS, no un JSON descargado.
+
+**Decisiones técnicas tomadas dentro de P2** (en DEC-020, pendientes de la revisión del propietario junto con su PR). Concretan DA-03 («reutilizar generador, vistas y almacén») sin cambiar su intención:
+
+- **DT-05 · Vista propia en `frontend/js/excel/course.js` en lugar de ampliar `daw.js`.** Se reutilizan el generador (`course_builder.py`), el almacén (`course-store.js`, `lesson-progress.js`, repaso de `srs.js`), el Markdown seguro, la página 404 y los estilos de DAW. Motivo técnico: `daw.js` está atado a DAW (migas, currículo oficial del BOE, `DAW_COURSES`, tandas de práctica) y ampliarlo era el riesgo R-05; con un módulo aparte, DAW no cambia ni un byte (RF-23) y el motor solo se descarga en las rutas de Excel.
+- **DT-06 · Los JSON del curso van en `frontend/data/academia/excel/`, no en `frontend/data/courses/`.** Esa carpeta la recorren como «cursos de DAW» las pruebas de DAW, el currículo, los recursos y el registro de ids; meter Excel allí obligaba a cambiar todas. Los ids de Excel tienen su propio registro estable, `scripts/courses/academia.lock.json`, que comprueba `backend/tests/test_excel_course.py`.
 
 ## 7. Registro de decisiones pendientes
 
@@ -202,12 +213,12 @@ Fuentes: DA-01…17, mensaje del propietario «Autorización condicionada: Excel
 | DP-01 | Aprobar esta especificación maestra | Revisarla; aprobar o pedir cambios | Pendiente |
 | DP-02 | Incorporar estos documentos a `docs/excel-academy/` del repositorio | Sí, en un PR solo de documentación, después de DP-01 | Aprobada (DA-20) |
 | DP-03 | Autorizar P1 (motor y base funcional) | Sí, tras revisar P0: no cambia nada visible | Aprobada (DA-18) |
-| DP-04 | Autorizar P2 (contenido M1-M2) | Después de revisar P1 | Pendiente |
+| DP-04 | Autorizar P2 (contenido M1-M2) | Después de revisar P1 | Aprobada (DA-22) |
 | DP-05 | Fusionar el PR #159 | Apto: CI verde, nada visible; antes, actualizar su descripción | Aprobada (DA-19) |
 | DP-06 | Adoptar la numeración P0-P5 | Sí, con la tabla de equivalencias | Aprobada (DA-21) |
 | DP-07 | XP y logros después del piloto | No decidir hasta tener los datos de P3 | Pendiente |
 | DP-08 | Lugar del lector XLSX | P4.3, con autorización propia | Pendiente |
-| DP-09 | Cuándo se ve el curso en la web publicada | No fusionar P2 hasta P5, o fusionarlo con `status: "planned"` | Pendiente |
+| DP-09 | Cuándo se ve el curso en la web publicada | No fusionar P2 hasta P5, o fusionarlo con `status: "planned"` | Decidida: visible al fusionar P2 (DA-23) |
 | DP-10 | Evaluación verificada en el servidor | Después del piloto | Pendiente |
 | DP-11 | Mapa con MOS MO-210/211 | Antes de M23; el propietario descarga la guía oficial | Pendiente |
 | DP-12 | Definición de «simulación» | Simulacro por bloques al final del módulo | Aprobada (DA-21) |

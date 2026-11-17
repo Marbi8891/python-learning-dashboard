@@ -40,7 +40,7 @@ Prioridad: A alta · M media · B baja. «Piloto» = M01 y M02.
 | RF-01 | Página principal del curso con presentación, horas, módulos, progreso y «Continuar» | A | e2e P-E2E-01: enlace directo y recarga en `#/academia/excel` | P2 |
 | RF-02 | Lista de los 25 módulos con unidades, horas, nivel y estado | A | M01 y M02 activos; M03-M25 visibles como «próximamente», sin enlace | P2 |
 | RF-03 | Página de unidad con los apartados de la plantilla de unidad ([CURRICULUM_M1_M2.md](CURRICULUM_M1_M2.md) §2) | A | El generador rechaza una unidad sin los mínimos; e2e abre una unidad y la recarga | P2 |
-| RF-26 | Rutas `#/academia/excel`, `#/academia/excel/<unidad>` y `#/academia/excel/<unidad>/practica`; las rutas desconocidas dan la página 404 existente | A | e2e de enlace directo, recarga y 404 | P2 |
+| RF-26 | Rutas `#/academia/excel`, `#/academia/excel/<unidad>`, `#/academia/excel/<unidad>/practica` y `#/academia/excel/repaso`; el alias `#/excel-academy[/…]` lleva a la ruta principal (DA-25); las rutas desconocidas dan la página 404 existente | A | e2e de enlace directo, recarga y 404 | P2 |
 
 ### 4.2 Ejercicios
 

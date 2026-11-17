@@ -65,14 +65,15 @@ Cada flecha exige que la fase anterior cumpla sus criterios de aceptación **y**
 | Apartado | Detalle |
 |---|---|
 | Objetivo | Las 9 unidades y 111 ejercicios de [CURRICULUM_M1_M2.md](CURRICULUM_M1_M2.md), con la ruta `#/academia/excel` |
-| Alcance | `scripts/courses/excel/build.py`, `m01.py`, `m02.py`; `frontend/data/courses/excel/*` (generado); `daw.js` acepta la familia academia y delega los tipos nuevos; rutas y menú en `app.js` e `index.html`; avisos; indicadores básicos; `catalog.js` pasa `excel` a `active`; paso de CI `excel_course.py --check` |
+| Alcance | `scripts/courses/excel_course.py`, `excel/m01.py`, `excel/m02.py`; `frontend/data/academia/excel/*` (generado, DT-06); vista propia `excel/course.js` en lugar de ampliar `daw.js` (DT-05); rutas y menú en `app.js` e `index.html`; avisos; indicadores básicos; `catalog.js` pasa `excel` a `active`; paso de CI `excel_course.py --check` |
 | Dependencias | P1 |
 | Riesgos | R-05 (`daw.js`), R-15 (marca), R-17 (publicación) |
 | Pruebas | P-INT-07, P-E2E-01 a 09, P-SEG-02, P-ACC-01 a 03, REG-01 a 07 |
 | Aceptación | 9 unidades con sus mínimos; e2e y axe verdes; DAW sin cambios; CI verde |
 | Para avanzar | El propietario estudia las unidades (puede hacerlo en local o en una vista previa) y autoriza P3 |
 | Esfuerzo | **[Hip]** 25-40 h (la mitad, contenido) |
-| Publicación | Fusionar P2 publica el curso (R-17). **[R]** DP-09: dejar el PR de P2 sin fusionar hasta P5, o fusionarlo con `status: "planned"` para que no aparezca en el menú |
+| Publicación | Fusionar P2 publica el curso (R-17). Decidido (DA-23): al fusionar, el curso es visible para todos (`status: "active"`, menú y portada) |
+| Estado | **[H]** Implementada el 17/11/2026 (DT-05: vista propia `excel/course.js`; DT-06: datos en `data/academia/excel/`). La fusión la decide el propietario |
 
 ### P3 · Evaluación y seguimiento
 

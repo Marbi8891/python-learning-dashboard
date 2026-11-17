@@ -1,6 +1,7 @@
 /* Piezas de interfaz de Excel profesional: la cuadrícula de datos y los ejercicios de fórmulas.
 
-   En P1 no las usa ninguna ruta todavía (la ruta #/academia/excel llega con el contenido, en P2).
+   Las usa la ruta #/academia/excel (excel/course.js) desde la fase P2.
+   Con `q: ""` no se pinta el enunciado: lo pinta quien monta el ejercicio (excel/course.js, con Markdown).
    Accesibilidad (ARCHITECTURE.md §11): la cuadrícula es una <table> con encabezados de fila y de
    columna; el editor tiene etiqueta y ayuda; el resultado se anuncia en role="status" y no depende
    solo del color. Todo texto se escapa o se pinta con textContent. */
@@ -120,7 +121,7 @@ export function mountFormulaExercise(container, question, { onResult } = {}) {
   const helpId = `${inputId}-help`;
   const sheet = question.sheet ?? DEFAULT_SHEET;
   container.innerHTML = `<div class="xl-exercise" data-kind="formula">
-  <p class="xl-exercise__question">${escapeHtml(question.q ?? "")}</p>
+  ${question.q ? `<p class="xl-exercise__question">${escapeHtml(question.q)}</p>` : ""}
   ${gridHtml(question.grid, { sheet, highlight: question.cell })}
   <form class="xl-exercise__form" novalidate>
     <label for="${inputId}">Fórmula para ${escapeHtml(question.cell)}</label>
@@ -171,7 +172,7 @@ export function mountResultExercise(container, question, { onResult } = {}) {
     : `<label for="${inputId}">Resultado</label>
     <input id="${inputId}" class="xl-exercise__input" type="text" inputmode="${question.input === "number" ? "decimal" : "text"}" autocomplete="off" />`;
   container.innerHTML = `<div class="xl-exercise" data-kind="formula-result">
-  <p class="xl-exercise__question">${escapeHtml(question.q ?? "¿Qué devuelve la fórmula con estos datos?")}</p>
+  ${question.q === "" ? "" : `<p class="xl-exercise__question">${escapeHtml(question.q ?? "¿Qué devuelve la fórmula con estos datos?")}</p>`}
   ${gridHtml(question.grid, { sheet, highlight: question.cell ?? null })}
   <p class="xl-exercise__formula"><span class="visually-hidden">Fórmula: </span><code>${escapeHtml(question.formula)}</code></p>
   <form class="xl-exercise__form" novalidate>

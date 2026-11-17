@@ -1,6 +1,6 @@
 # Arquitectura · Excel profesional
 
-**Anexo 2 de la [especificación maestra](MASTER_SPECIFICATION.md)** · Versión 1.0 · 16/11/2026 · Estado: pendiente de revisión.
+**Anexo 2 de la [especificación maestra](MASTER_SPECIFICATION.md)** · Versión 1.1 · 17/11/2026 · Estado: P0, P1 y P2 implementadas. La v1.1 recoge DT-05 y DT-06 (especificación maestra §6): vista propia `excel/course.js` y datos en `data/academia/excel/`.
 Base: `main` en `3b2dd8b` y rama `claude/project-thread-tr7z7w` en `ebda151` (PR #159). Todo lo marcado **[H]** está comprobado en el código de esa rama; lo demás es diseño.
 
 ## 1. Principios
@@ -8,14 +8,14 @@ Base: `main` en `3b2dd8b` y rama `claude/project-thread-tr7z7w` en `ebda151` (PR
 1. **Reutilizar, no duplicar** (DA-03, DA-10): el curso usa el generador, las vistas, el almacén de progreso y la sincronización de los cursos de DAW.
 2. **DAW no cambia** (RF-23): las fichas de DAW, sus JSON y sus vistas quedan idénticos.
 3. **Sin dependencias, tablas ni frameworks nuevos** (RNF-01, RNF-02; prompt maestro: «no migres el frontend a otro framework»).
-4. **Lo que es de Excel vive en `frontend/js/excel/`**; `daw.js` solo delega en los tipos nuevos (R-05).
+4. **Lo que es de Excel vive en `frontend/js/excel/`**. Desde P2 (DT-05), el curso tiene su propia vista, `excel/course.js`, y `daw.js` no cambia (R-05 evitado).
 
 ## 2. Vista general
 
 ```mermaid
 flowchart TB
   subgraph Navegador["Navegador (GitHub Pages, PWA)"]
-    APP["app.js<br/>rutas hash"] --> DAW["daw.js<br/>vistas de curso (reutilizadas)"]
+    APP["app.js<br/>rutas hash"] --> DAW["excel/course.js<br/>panel, unidad y práctica (P2)"]
     APP --> XV["excel/views.js<br/>cuadrícula y editor (nuevo)"]
     DAW --> XV
     XV --> MOTOR["excel/formula/*<br/>motor (nuevo)"]
@@ -26,7 +26,7 @@ flowchart TB
     CS --> CAT["catalog.js<br/>familias daw y academia [H]"]
     CS --> GATE["sync-gate.js + doc-sync.js + uploader.js [H]"]
     CS --> LS[("localStorage<br/>pld:course:excel [H]")]
-    DATA[("data/courses/excel/<br/>lessons.json, bank.json")] --> DAW
+    DATA[("data/academia/excel/<br/>lessons.json, bank.json")] --> DAW
   end
   subgraph Servidor["API FastAPI (Render) + PostgreSQL (Neon)"]
     API["/api/v1/course-state/{course} [H]"] --> DB[("course_states<br/>data JSON + version [H]")]
@@ -49,13 +49,13 @@ flowchart TB
 | Guardado con versión y 409 | `doc-sync.js`, `uploader.js` | **[H]** existente | Reutilizado | Ninguno |
 | Limpieza del progreso | `progress-guard.js` | **[H]** existente | Reutilizado | Añadir `rubrics` en P3 y `xlsx` en P4 |
 | Dueño del progreso local | `local-owner.js` (AUTH-02) | **[H]** existente | Reutilizado | Ninguno |
-| Vistas de curso | `daw.js` (756 líneas) | **[H]** existente | Reutilizado | P2: aceptar cursos de la familia academia y delegar los tipos `formula-result` y `formula` |
-| Rutas | `app.js` | **[H]** existente | Reutilizado | P2: `#/academia/excel` y subrutas; entrada en el menú cuando `status` sea `active` |
+| Vistas de curso | `excel/course.js` y `excel/progress.js` | **[H] P2** | Nuevo (DT-05); reutiliza el almacén, `lesson-progress.js`, el Markdown seguro, la 404 y los estilos de DAW | `daw.js` sin cambios |
+| Rutas | `app.js` | **[H] P2** | Reutilizado | Zona `excel` con carga diferida; `#/academia/excel` y subrutas; alias `#/excel-academy` (DA-25); entrada en el menú (DA-23) |
 | Motor de fórmulas | `excel/formula/*.js` | Diseño | Nuevo | P1 |
 | Comprobaciones de ejercicios | `excel/checks.js` | Diseño | Nuevo | P1 |
 | Cuadrícula y editor | `excel/views.js`, `css/excel.css` | Diseño | Nuevo | P1 (componentes), P2 (uso) |
 | Generador | `course_builder.py` | **[H]** existente | Reutilizado | P1: `module` opcional, tipos nuevos, campos opcionales, llamada a `eval.mjs` |
-| Contenido del curso | `scripts/courses/excel/*.py` | Diseño | Nuevo | P2 |
+| Contenido del curso | `scripts/courses/excel_course.py`, `excel/m01.py`, `excel/m02.py`, `excel/units.py` | **[H] P2** | Nuevo | JSON en `frontend/data/academia/excel/` (DT-06); ids en `academia.lock.json` |
 | API de progreso | `routers/course_state.py` | **[H] P0** | Reutilizado | Solo `"excel"` en `COURSES` (hecho) |
 | Precache | `precache.js` (generado) | **[H]** | Reutilizado | Regenerar en cada fase |
 | Lector XLSX | `excel/xlsx/*` | En pausa (DA-11) | Nuevo | P4 con autorización |
