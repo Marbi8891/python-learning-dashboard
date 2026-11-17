@@ -502,8 +502,7 @@ function renderProgress() {
     })
     .join("");
   const exams = learning.exams
-    .slice()
-    .reverse()
+    .toReversed()
     .map((e) => `<li class="lx-row"><span>${formatDay(e.date)} · ${e.correct} de ${e.total}</span><span class="lx-row__value">${percent(e.total ? e.correct / e.total : 0)} · ${Math.round(e.seconds / 60)} min</span></li>`)
     .join("");
   return `

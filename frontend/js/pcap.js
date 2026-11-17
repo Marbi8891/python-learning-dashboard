@@ -137,7 +137,7 @@ function renderPlan(stats) {
   const perWeek = Math.min(pending.length, Math.ceil(pending.length / weeks));
   // Primero los bloques donde más puntos se pierden: lo que falta por acertar × peso en el examen
   const loss = (b) => (1 - (stats[b.slug].rate ?? 0)) * b.weight;
-  const focus = [...data.exam.blocks].sort((a, b) => loss(b) - loss(a)).slice(0, 2);
+  const focus = data.exam.blocks.toSorted((a, b) => loss(b) - loss(a)).slice(0, 2);
   const recentExams = pcap.exams.filter((e) => Date.now() - new Date(e.date) < 7 * DAY_MS).length;
   const examTarget = weeks <= 1 ? 2 : weeks <= 3 || !pending.length ? 1 : 0;
   const due = dueQuestions().length + dueCards().length;
