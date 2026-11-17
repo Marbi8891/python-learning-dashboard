@@ -30,7 +30,7 @@ function renderSuggestions() {
 
 export function setAssistantLesson(lesson, nextLesson, goTo) {
   context = { lesson, nextLesson, goTo };
-  $("#assistant-messages").innerHTML = "";
+  $("#assistant-messages").replaceChildren();
   addMessage(`<p>Estás en <strong>${escapeHtml(lesson.title)}</strong>. ¿En qué te ayudo?</p>`, "bot");
   renderSuggestions();
 }

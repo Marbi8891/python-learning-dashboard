@@ -42,6 +42,7 @@ import { isLearnRoute, learnNavKey } from "./learn/routes.js";
 import { LANDING_ROUTE, closeLanding, isLandingRoute, openLanding } from "./landing.js";
 import { initLearnSync, loadLearningContent } from "./learn/learn-store.js";
 import { initPlannerSync } from "./learn/planner-store.js";
+import { lightDismiss } from "./dialogs.js";
 import { initPrefs } from "./prefs.js";
 import { badgesHtml, renderProfile } from "./profile.js";
 import { setQuizLesson } from "./quiz.js";
@@ -849,6 +850,7 @@ function initGameUi() {
     $("#badges-dialog").showModal();
   });
   $("#badges-close").addEventListener("click", () => $("#badges-dialog").close());
+  lightDismiss($("#badges-dialog"));
 }
 
 /* ---------- Arranque ---------- */

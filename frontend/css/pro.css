@@ -580,10 +580,14 @@ body {
   background: var(--color-surface);
   color: var(--color-text);
   box-shadow: 0 30px 90px rgb(0 0 0 / .35);
+  overscroll-behavior: contain; /* desplazarse dentro del diálogo no mueve la página de fondo (MWG-08) */
 }
 
 .account::backdrop {
   background: rgb(2 6 12 / .68);
+  /* Ni sobre el fondo oscuro: overflow hidden lo convierte en contenedor y contain corta el desplazamiento */
+  overflow: hidden;
+  overscroll-behavior: contain;
 }
 
 .account__head {

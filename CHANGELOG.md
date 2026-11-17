@@ -81,6 +81,14 @@ cambios se agrupan por fecha de merge, con el número de pull request entre par�
   (`docs/DEPLOY.md` §5).
 
 ### Cambiado
+- Diálogos (MWG-08): Aspecto y Logros se cierran al pulsar fuera (`closedby="any"`, con respaldo para
+  Safari); el de la cuenta no, para no perder lo escrito. Desplazarse sobre un diálogo ya no mueve la
+  página de fondo (`overscroll-behavior`).
+- Manifest de la app (MWG-09): nombre actual, `id`, categoría, accesos directos a Aprender, Practicar y
+  DAW, y la app instalada empieza en Aprender en vez del curso PCAP.
+- Fuentes (MWG-10): respaldos con las medidas de Inter y Fraunces (`size-adjust`, `ascent-override`):
+  mientras llegan, el salto de la portada pasa de 138 px a 34 px.
+- Código (MWG-11): `toSorted()`, `toReversed()` y `replaceChildren()` donde el `legacy-scan` lo indicaba.
 - Rendimiento (MWG-03): Aprender, Teoría, Practicar y el panel piden el contenido (`learning.json`,
   172 KB comprimido) a la vez que el módulo de su zona, no después. En un móvil con 4G lenta el
   contenido principal de Practicar y Teoría aparece unos 0,25 s antes (5,8 s → 5,6 s).
