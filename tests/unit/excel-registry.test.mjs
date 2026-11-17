@@ -6,13 +6,17 @@ import { evaluate, FUNCTIONS, functionStatus, parseFormula } from "../../fronten
 import { FUNCTION_NAMES } from "../../frontend/js/excel/formula/locale-es.js";
 
 const run = (formula, grid = {}) => evaluate(parseFormula(formula), { grid });
-const IMPLEMENTED = ["SUM", "PRODUCT", "ROUND", "AVERAGE", "MIN", "MAX", "COUNT", "COUNTA"];
+const IMPLEMENTED = [
+  ...["SUM", "PRODUCT", "ROUND", "AVERAGE", "MIN", "MAX", "COUNT", "COUNTA"], // v1 (M01-M02)
+  ...["ROUNDUP", "INT", "MOD", "IF", "AND", "OR", "NOT", "IFS", "IFERROR"], // M04
+  ...["SUMIF", "SUMIFS", "COUNTIF", "COUNTIFS", "AVERAGEIF", "MAXIFS", "MINIFS"], // M05
+];
 
-test("el registro tiene las 45 funciones de la especificación: 8 implementadas y 37 previstas", () => {
+test("el registro tiene las 45 funciones de la especificación: 24 implementadas y 21 previstas", () => {
   assert.equal(FUNCTIONS.length, 45);
   assert.equal(Object.keys(FUNCTION_NAMES).length, 45);
   assert.deepEqual(FUNCTIONS.filter((f) => f.status === "implemented").map((f) => f.name).sort(), [...IMPLEMENTED].sort());
-  assert.equal(FUNCTIONS.filter((f) => f.status === "planned").length, 37);
+  assert.equal(FUNCTIONS.filter((f) => f.status === "planned").length, 21);
   for (const f of FUNCTIONS) {
     assert.ok(f.spanish, `${f.name} sin nombre en español`);
     assert.ok(f.since && f.category, `${f.name} sin versión o categoría`);
@@ -21,6 +25,9 @@ test("el registro tiene las 45 funciones de la especificación: 8 implementadas 
   }
   assert.equal(functionStatus("BUSCARX"), "planned");
   assert.equal(functionStatus("suma"), "implemented");
+  assert.equal(functionStatus("SUMAR.SI.CONJUNTO"), "implemented");
+  assert.equal(FUNCTIONS.find((f) => f.name === "IFS").since, "2019");
+  assert.equal(FUNCTIONS.find((f) => f.name === "XLOOKUP").since, "2021");
   assert.equal(functionStatus("SUM"), "implemented");
   assert.equal(functionStatus("NOEXISTE"), null);
 });

@@ -155,6 +155,11 @@
   background: var(--color-surface-2);
 }
 
+/* Sobre el fondo gris de «Próximamente», el gris atenuado no llega a 4,5:1: texto normal */
+.xl-module--soon .xl-module__meta {
+  color: var(--color-text);
+}
+
 .xl-module__title {
   margin: 0;
   font-size: var(--text-md);

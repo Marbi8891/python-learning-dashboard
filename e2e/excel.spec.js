@@ -131,9 +131,9 @@ test("el panel de Excel profesional se abre por enlace directo, resiste la recar
   await expect(view).toContainText("no está afiliado a Microsoft");
   await expect(view).toContainText("La corrección se hace en tu navegador y sirve para aprender; no es una evaluación oficial");
   await expect(view.locator(".xl-module")).toHaveCount(25);
-  await expect(view.locator(".xl-module--soon")).toHaveCount(23);
+  await expect(view.locator(".xl-module--soon")).toHaveCount(20);
   await expect(view.locator(".xl-module--soon a")).toHaveCount(0);
-  await expect(view.locator(".xl-unit")).toHaveCount(9);
+  await expect(view.locator(".xl-unit")).toHaveCount(15);
   await expect(page.locator('.site-nav a[data-nav="excel"]')).toHaveAttribute("aria-current", "page");
   await expect(page).toHaveTitle(/Excel profesional/);
 });
@@ -195,8 +195,13 @@ test("la práctica corrige test y fórmulas con teclado, guarda las respuestas y
 
   // xl1-archivos solo tiene test: con todo bien, queda superada
   await page.goto("/#/academia/excel/xl1-archivos/practica");
+  const answers = await page.evaluate(async () => {
+    const bank = await (await fetch("data/academia/excel/bank.json")).json();
+    return Object.fromEntries(bank.questions.map((q) => [q.id, q.answer?.[0]]));
+  });
   for (const item of await view.locator(".xl-item").all()) {
-    await item.locator('input[type="radio"][value="0"]').check();
+    const id = await item.locator("[data-xl-question]").getAttribute("data-xl-question");
+    await item.locator(`input[type="radio"][value="${answers[id]}"]`).check();
     await item.getByRole("button", { name: "Comprobar" }).click();
   }
   await expect(view.locator("#xl-status")).toContainText("8 de 8 bien");
@@ -205,10 +210,37 @@ test("la práctica corrige test y fórmulas con teclado, guarda las respuestas y
   await expect(view.locator(".xl-unit").filter({ hasText: "Guardar, exportar y compatibilidad" })).toContainText("✓ Superada");
 });
 
+test("M04 y M05: SI y SUMAR.SI se corrigen en el navegador y «elige el resultado» muestra errores", async ({ page }) => {
+  await page.goto("/#/academia/excel/xl4-si/practica");
+  const view = page.locator("#excel-view");
+  const estado = view.locator(".xl-item").filter({ hasText: "xl4-si-12" });
+  const input = estado.getByLabel("Fórmula para D2");
+  await input.fill('=SI(C2>B2;"Cobrada";"Pendiente")');
+  await input.press("Enter");
+  await expect(estado.getByRole("status").first()).toContainText("Todavía no.");
+  await input.fill('=SI(C2>=B2;"Cobrada";"Pendiente")');
+  await input.press("Enter");
+  await expect(estado.getByRole("status").first()).toContainText("Correcto.");
+
+  const division = view.locator(".xl-item").filter({ hasText: "xl4-si-11" });
+  await expect(division.getByRole("radio", { name: "#¡DIV/0!" })).toHaveCount(1);
+  await expect(division.getByRole("radio", { name: "FALSO" })).toHaveCount(1);
+
+  await page.goto("/#/academia/excel/xl5-sumar-si/practica");
+  const zona = view.locator(".xl-item").filter({ hasText: "xl5-sum-11" });
+  const total = zona.getByLabel("Fórmula para H2");
+  await total.fill("=SUMAR.SI(B2:B7;G2;D2:D7)");
+  await total.press("Enter");
+  await expect(zona.getByRole("status").first()).toContainText("Todavía no.");
+  await total.fill("=SUMAR.SI($B$2:$B$7;G2;$D$2:$D$7)");
+  await total.press("Enter");
+  await expect(zona.getByRole("status").first()).toContainText("Correcto.");
+});
+
 for (const colorScheme of ["light", "dark"]) {
   test(`las páginas de Excel profesional no tienen infracciones WCAG en tema ${colorScheme}`, async ({ page }) => {
     await page.emulateMedia({ colorScheme });
-    for (const route of ["/#/academia/excel", "/#/academia/excel/xl2-hojas", "/#/academia/excel/xl1-formatos/practica"]) {
+    for (const route of ["/#/academia/excel", "/#/academia/excel/xl2-hojas", "/#/academia/excel/xl1-formatos/practica", "/#/academia/excel/xl4-logicas/practica"]) {
       await page.goto(route);
       await expect(page.locator("#excel-view h1")).toBeVisible();
       await expect(page.locator("#excel-view [data-xl-question]").first().or(page.locator("#xl-path-title"))).toBeVisible();

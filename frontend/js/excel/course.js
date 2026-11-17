@@ -1,4 +1,4 @@
-/* Excel profesional en la web: panel del curso, unidades y práctica (fase P2).
+/* Excel profesional en la web: panel del curso, unidades y práctica (P2 y P4.1: M01-M05).
 
    Rutas (app.js carga este módulo solo en ellas, así la portada y DAW no descargan el motor):
      #/academia/excel                      panel: avisos, progreso e itinerario de 25 módulos
@@ -27,9 +27,14 @@ const root = () => $("#excel-view");
 const t = (value) => (typeof value === "string" ? value : value?.es ?? "");
 const info = ACADEMY_COURSES.find((course) => course.id === ID);
 const hours = (h) => `${String(h).replace(".", ",")} h`;
+/** «M01 a M05» o «M01 y M02»: los módulos que ya tienen contenido. */
+const modulesLabel = (modules) => {
+  const codes = modules.map((m) => m.title.slice(0, 3));
+  return codes.length > 2 ? `${codes[0]} a ${codes.at(-1)}` : codes.join(" y ");
+};
 const percent = (value) => `${Math.round(value * 100)} %`;
 
-/** Itinerario completo (doc original 07 §2). Solo M01 y M02 tienen contenido en el piloto. */
+/** Itinerario completo (doc original 07 §2). Tienen contenido los módulos que trae lessons.json. */
 export const ITINERARY = [
   ["M01", "Fundamentos de Excel", 10],
   ["M02", "Fórmulas y funciones básicas", 8],
@@ -161,7 +166,7 @@ function renderPanel(course) {
       <p class="eyebrow">Academia · ${escapeHtml(info.subtitle)}</p>
       <h1 class="course-hero__title" id="xl-title" tabindex="-1">${escapeHtml(info.title)}</h1>
       <p class="course-hero__lead">Excel desde cero con ejercicios que se corrigen calculando, como Excel en español.
-        Ya están M01 y M02: ${summary.units} unidades, ${summary.questions} ejercicios y unas ${hours(totalHours)} de dedicación estimada.
+        Ya están ${modulesLabel(course.modules)}: ${summary.units} unidades, ${summary.questions} ejercicios y unas ${hours(totalHours)} de dedicación estimada.
         El resto del itinerario de ${ITINERARY.length} módulos llegará por partes.</p>
       <p class="daw-units" id="xl-units">${summary.done} de ${summary.units} unidades completadas · ${summary.passed} superadas ·
         ${summary.solved} de ${summary.questions} ejercicios bien resueltos</p>

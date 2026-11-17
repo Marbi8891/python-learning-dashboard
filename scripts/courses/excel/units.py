@@ -13,6 +13,7 @@ fuentes con fecha.
 
 from __future__ import annotations
 
+import random
 import sys
 from pathlib import Path
 
@@ -23,8 +24,17 @@ CHECKED = "2026-11-17"  # fecha en que se consultaron las fuentes
 SOURCE_NOTE = "Soporte de Microsoft, en español; consultado el 17/11/2026"
 
 
+def shuffled(qid: str, options: list, answer: int) -> tuple[list, int]:
+    """Baraja las opciones con una semilla fija (el id): la correcta no va siempre en el mismo
+    sitio y el orden no cambia entre ejecuciones del generador."""
+    order = list(range(len(options)))
+    random.Random(qid).shuffle(order)
+    return [options[i] for i in order], order.index(answer)
+
+
 def T(qid: str, q: str, options: list[str], answer: int, explain: str) -> Q:
-    """Pregunta de test con una sola respuesta correcta."""
+    """Pregunta de test con una sola respuesta correcta (en los módulos se escribe la primera)."""
+    options, answer = shuffled(qid, options, answer)
     return Q(id=qid, q=q, explain=explain, options=options, answer=answer)
 
 
@@ -42,7 +52,10 @@ def R(
     options: list | None = None,
     tolerance: float | None = None,
 ) -> Q:
-    """«¿Qué devuelve esta fórmula?». Con `options` el alumno elige; si no, escribe el resultado."""
+    """«¿Qué devuelve esta fórmula?». Con `options` el alumno elige y `answer` es el índice de la
+    correcta (número, texto, booleano o {"error": …}); si no, escribe el resultado."""
+    if options is not None:
+        options, answer = shuffled(qid, options, answer)
     excel: dict = {"grid": grid or {}, "formula": formula, "answer": answer}
     excel["input"] = "choice" if options is not None else answer_input
     if options is not None:

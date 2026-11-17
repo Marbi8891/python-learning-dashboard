@@ -1,6 +1,6 @@
 # Especificación maestra · Excel profesional (proyecto «Excel Academy»)
 
-**Versión:** 1.2 · **Fecha:** 17/11/2026 · **Estado:** el 17/11/2026 el propietario autorizó P1, la fusión del PR #159, la incorporación de estos documentos al repositorio y las 16 resoluciones de §4; P1 se fusionó (PR #164) y después autorizó P2 y fijó las decisiones DA-22 a DA-27 (ver §6). El resto de las decisiones pendientes de §7 siguen abiertas.
+**Versión:** 1.3 · **Fecha:** 17/11/2026 · **Estado:** el 17/11/2026 el propietario autorizó P1, la fusión del PR #159, la incorporación de estos documentos al repositorio y las 16 resoluciones de §4; P1 se fusionó (PR #164); autorizó P2 y fijó DA-22 a DA-27; P2 se fusionó (PR #172) y después pidió seguir con las lecciones (DA-28: P4.1, M03-M05). El resto de las decisiones pendientes de §7 siguen abiertas.
 **Base comprobada:** `main` en `3b2dd8b`; rama `claude/project-thread-tr7z7w` en `ebda151` (PR #159, borrador, CI 7/7 en verde). Esta fase no ha modificado el repositorio, ninguna rama ni el PR.
 Leyenda: **[H]** hecho comprobado · **[R]** recomendación · **[Hip]** hipótesis · **[D]** decisión pendiente.
 
@@ -85,6 +85,7 @@ Ubicación: `/mnt/project-files/excel-academy/docs/excel-academy/`. Los diez tie
 | `module` opcional en el generador | Doc 08 Fase 4 | **Sí (P1)** | `course_builder.py`; `scripts/courses/tests/` |
 | Ruta `#/academia/excel` y alias `#/excel-academy` | Docs 02, 03; DA-25 | **Sí (P2)** | `app.js`, `frontend/js/excel/course.js`; `e2e/excel.spec.js` |
 | Contenido M01-M02 | Doc 07 | **Sí (P2)**: 9 unidades, 111 ejercicios | `scripts/courses/excel/m01.py`, `m02.py`; `frontend/data/academia/excel/` (DT-06) |
+| Contenido M03-M05 y 16 funciones más del motor | Doc 07 §4; FORMULA_ENGINE_SPEC §6.2 | **Sí (P4.1)**: 6 unidades, 79 ejercicios; lógicas y condicionales | `scripts/courses/excel/m03.py`…`m05.py`; `frontend/js/excel/formula/functions/` (DT-07) |
 | Campos `xlsx` y `rubrics` | Doc 03 §3.7 | **No** | `progress-guard.js` sin cambios |
 | Lector XLSX | Doc 05 | **No** (en pausa) | — |
 | Indicadores del panel | Doc 02 §5 | **Parcial (P2)**: unidades completadas y superadas, ejercicios resueltos | `frontend/js/excel/progress.js`; resto en P3 |
@@ -118,7 +119,7 @@ Ubicación: `/mnt/project-files/excel-academy/docs/excel-academy/`. Los diez tie
 | **Rutas de aprendizaje** | El itinerario M01 → M25 con dependencias **recomendadas** (no bloquean) | M01 → M02 | CURRICULUM §3; doc 07 §2 |
 | **Módulos** | Agrupan unidades; tienen horas, nivel y requisitos | M01 (10 h) y M02 (8 h); M03-M25 «próximamente» | CURRICULUM §6-7 |
 | **Unidades y lecciones** | Una **unidad** es lo que el JSON llama `lessons[]`; una **lección** o apartado es cada parte de la unidad (explicación, ejemplos, test…) | 9 unidades | C-12 |
-| **Ejercicios** | `choice`, `formula-result`, `formula`; `rubric` en P3; `xlsx` en P4 | 111 (58 T, 36 R, 17 F) | CURRICULUM §8 |
+| **Ejercicios** | `choice`, `formula-result`, `formula`; `rubric` en P3; `xlsx` en P4 | 190 (98 T, 59 R, 33 F) con M01-M05 | CURRICULUM_M1_M2 §8, CURRICULUM_M3_M5 §4 |
 | **Simulaciones** | Simulacro por bloques al final de cada módulo, con datos nuevos y sin pistas (reutiliza el simulacro de DAW) | P3 | RF-28; C-11 |
 | **Evaluaciones** | Formativas, en el navegador. «Superada» = criterios de la unidad | P3 | CURRICULUM §5 |
 | **Progreso** | Documento `excel` (local y cuenta), los mismos campos que DAW | **[H]** sincroniza desde P0 | DATA_MODEL §4 |
@@ -197,7 +198,12 @@ Fuentes: DA-01…17, mensaje del propietario «Autorización condicionada: Excel
 | DA-24 | Esta especificación consolidada **prevalece** sobre la «Especificación funcional y técnica de Excel Academy» v1.0 recibida el 17/11/2026; de esa propuesta solo se toma lo compatible, fase a fase | Ver DA-25 a DA-27 |
 | DA-25 | Ruta principal `#/academia/excel` con el **alias** `#/excel-academy` (reescribe a la principal) | `app.js` (P2) |
 | DA-26 | Se mantienen: sin XP ni insignias en el piloto (DA-07); **tutor de IA fuera** del alcance; sin tablas nuevas (DA-09); progreso con el documento de curso de la cuenta; contenido en archivos versionados y generados | Rechaza las tablas `Excel*`, la API `/api/excel-academy/*` y el tutor de Ollama de la propuesta del 17/11 |
+| DA-28 | «Sigue con las lecciones de Excel», 17/11/2026: se autoriza **P4.1 (M03-M05)** antes de cerrar P3. P3 (evaluación del piloto) sigue pendiente y se hace con M01-M05 | Lector XLSX (P4.3) y M06+ siguen sin autorizar; DA-11 y DA-12 se mantienen para lo que no es P4.1 |
 | DA-27 | Se mantienen los **25 módulos** y las fases P0-P5; los **cuatro proyectos empresariales** de la propuesta (finanzas, personal, inventario y cuadro de mando) se añaden al final, en M24-M25 (P4.5); el **laboratorio interactivo** libre se aplaza | Antes de un cambio incompatible se actualiza esta documentación; las decisiones aprobadas no se reabren sin justificación técnica |
+
+**Decisión técnica tomada en P4.1** (DEC-021):
+
+- **DT-07 · Funciones `lazy` en el motor.** SI, SI.CONJUNTO y SI.ERROR reciben sus argumentos sin calcular para no evaluar la rama que no toca (MF-21), y la familia SUMAR.SI los recibe igual para conocer la posición de cada rango (MF-22). Se hace con una marca `lazy` en el registro y `lazyArgs` en el evaluador, sin tocar el resto de funciones. El motor queda en 61 387 bytes de 61 440 (RNF-10): **antes de P4.2** habrá que decidir si se amplía el presupuesto o se divide el motor por módulos (DP-17).
 
 **Decisiones técnicas tomadas dentro de P0** (en DEC-018, implementadas en el PR #159, pendientes de la revisión del propietario junto con el PR): DT-01 las fichas de DAW no llevan `family`; DT-02 el PCAP no entra en el catálogo; DT-03 Excel se sincroniza desde P0 aunque no se vea; DT-04 el catálogo es una constante JS, no un JSON descargado.
 
@@ -226,6 +232,7 @@ Fuentes: DA-01…17, mensaje del propietario «Autorización condicionada: Excel
 | DP-14 | Motor v1 sin grafo de dependencias | Sí; grafo cuando lleguen los proyectos | Aprobada (DA-21) |
 | DP-15 | Dónde van las ejecuciones largas de pruebas | CI de GitHub desde la rama | Pendiente |
 | DP-16 | Dependencias entre unidades como recomendación, no bloqueo | Sí, como en DAW | Pendiente |
+| DP-17 | Presupuesto de tamaño del motor (RNF-10, < 60 KB) con las 21 funciones de M06-M09 | Cargar las funciones de cada módulo aparte, para que la portada y M01 no paguen las de M09; o subir el límite con una medida de rendimiento | Pendiente (antes de P4.2) |
 
 ---
 
@@ -262,7 +269,8 @@ Documento original → Requisito → Componente → Prueba → Fase.
 | — | RF-28 Simulacro | Simulacro de DAW | e2e | P3 |
 | 04 §9 | MF-VAL-04 Excel 365 | Casos de referencia | P-EXT-01 | P3 |
 | 05 | RF-09, RF-10 .xlsx | `excel/xlsx/*` | Doc 05 | P4.3 |
-| 07 §2 | M03-M25 | Generador | — | P4 |
+| 07 §2 | M03-M05 | `scripts/courses/excel/m03.py`…`m05.py` | `backend/tests/test_excel_course.py`, `e2e/excel.spec.js` | P4.1 (hecho) |
+| 07 §2 | M06-M25 | Generador | — | P4.2+ |
 
 ## 9. Control de calidad
 

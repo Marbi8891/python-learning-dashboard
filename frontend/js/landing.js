@@ -293,8 +293,8 @@ function routesHtml(index, content) {
     {
       title: "Excel profesional",
       level: "Academia · desde cero",
-      text: "Excel de Microsoft 365 en español con ejercicios que se corrigen calculando: datos, formatos, referencias, operadores y funciones básicas. Ya están los módulos M01 y M02.",
-      facts: ["9 unidades", "111 ejercicios"],
+      text: "Excel de Microsoft 365 en español con ejercicios que se corrigen calculando: datos, formatos, referencias, funciones básicas, SI y SUMAR.SI. Ya están los módulos M01 a M05.",
+      facts: ["15 unidades", "190 ejercicios"],
       progress: "",
       href: "#/academia/excel",
       action: "Ver el curso",
@@ -593,7 +593,7 @@ function catalogHtml(index, content) {
           <div>
             <h3>Excel profesional</h3>
             <p class="lp-muted">Itinerario de la academia con ejercicios de fórmulas corregidos en el navegador. No está afiliado a Microsoft.</p>
-            <ul><li><a href="#/academia/excel">Excel profesional</a> <span class="lp-muted">M01 y M02 · 9 unidades</span></li></ul>
+            <ul><li><a href="#/academia/excel">Excel profesional</a> <span class="lp-muted">M01 a M05 · 15 unidades</span></li></ul>
           </div>
           <div>
             <h3>Certificación PCAP</h3>

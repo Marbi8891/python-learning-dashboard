@@ -92,6 +92,9 @@ export function compareValues(a, b) {
   return left === right ? 0 : left ? 1 : -1;
 }
 
+/** Operador de comparación aplicado al resultado de compareValues (-1, 0 o 1). */
+export const COMPARE = Object.freeze({ "=": (o) => o === 0, "<>": (o) => o !== 0, "<": (o) => o < 0, ">": (o) => o > 0, "<=": (o) => o <= 0, ">=": (o) => o >= 0 });
+
 /** Valor en el formato público de la API: { type, value } (y `message` en los errores). */
 export function publicValue(value) {
   if (isError(value)) return { type: "error", value: value.code, message: value.message };

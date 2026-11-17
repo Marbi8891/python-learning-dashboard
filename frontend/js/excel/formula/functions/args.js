@@ -7,13 +7,15 @@
 import { ERROR_CODES, isError, xlError } from "../errors.js";
 import { toNumber } from "../values.js";
 
+/** Valores de un argumento que es un rango o una celda. */
+export const cellValues = (arg) => (arg.kind === "range" ? arg.value.values() : [arg.value]);
+
 /** Números de los argumentos de una función de agregación (SUMA, PROMEDIO, MIN, MAX, PRODUCTO). */
 export function collectNumbers(args) {
   const out = [];
   for (const arg of args) {
     if (arg.kind === "range" || arg.kind === "ref") {
-      const values = arg.kind === "range" ? arg.value.values() : [arg.value];
-      for (const value of values) {
+      for (const value of cellValues(arg)) {
         if (isError(value)) return value;
         if (typeof value === "number") out.push(value);
       }

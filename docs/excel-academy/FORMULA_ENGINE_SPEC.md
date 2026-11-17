@@ -39,9 +39,9 @@ El motor evalúa fórmulas de Excel en español sobre una cuadrícula pequeña d
 | 8 funciones: SUMA, PROMEDIO, MIN, MAX, CONTAR, CONTARA, PRODUCTO, REDONDEAR | Obligatoria v1 | MF-10 |
 | Nombres en español (es-ES) con `;` como separador | Obligatoria v1 | MF-11 |
 | Detección de ciclos | Obligatoria v1 | MF-12 |
-| Las otras 37 funciones de la lista de 45 (§6) | Prevista | MF-20 |
-| Lógica perezosa de SI y SI.CONJUNTO, captura de SI.ERROR | Prevista (M04) | MF-21 |
-| Criterios de SUMAR.SI y familia (`">100"`, comodines, `~`) | Prevista (M05) | MF-22 |
+| Las otras 37 funciones de la lista de 45 (§6) | Prevista; 16 hechas en P4.1 (§6.2), 21 previstas (§6.3) | MF-20 |
+| Lógica perezosa de SI y SI.CONJUNTO, captura de SI.ERROR | **Hecha (P4.1, M04)** | MF-21 |
+| Criterios de SUMAR.SI y familia (`">100"`, comodines, `~`) | **Hecha (P4.1, M05)** | MF-22 |
 | Matrices dinámicas y desbordamiento (FILTRAR, ORDENAR, UNICOS) | Prevista (M09) | MF-23 |
 | Fechas como número de serie (sistema 1900, desde el 01/03/1900) | Prevista (M07) | MF-24 |
 | Nombres en inglés y conversión `toEnglish` / `toSpanish` (para leer .xlsx) | Prevista (con el lector, P4) | MF-25 |
@@ -163,9 +163,31 @@ Propagación: un error en un argumento evaluado se devuelve tal cual. En v1 no h
 
 Cada una con al menos 6 casos: normal, límite, inválido, anidado, error propagado y celda vacía.
 
-### 6.2 Previstas (37, estado `planned`)
+### 6.2 Implementadas en P4.1 (16, para M04 y M05)
 
-Matemáticas: REDONDEAR.MAS, ENTERO, RESIDUO. Lógicas: SI, Y, O, NO, SI.CONJUNTO **[2019+]**, SI.ERROR. Condicionales: SUMAR.SI, SUMAR.SI.CONJUNTO, CONTAR.SI, CONTAR.SI.CONJUNTO, PROMEDIO.SI, MAX.SI.CONJUNTO **[2019+]**, MIN.SI.CONJUNTO **[2019+]**. Texto: CONCAT **[2019+]**, IZQUIERDA, DERECHA, EXTRAE, LARGO, ESPACIOS, MAYUSC, HALLAR. Fecha: FECHA, AÑO, MES, DIA, FIN.MES, DIAS.LAB. Búsqueda: BUSCARV, INDICE, COINCIDIR, BUSCARX **[2021+]**. Dinámicas **[2021+]**: FILTRAR, ORDENAR, UNICOS.
+| Español | Canónico | Firma | Notas |
+|---|---|---|---|
+| REDONDEAR.MAS | ROUNDUP | 2 | Se aleja de cero |
+| ENTERO | INT | 1 | Hacia abajo: ENTERO(-2,5) = -3 |
+| RESIDUO | MOD | 2 | Signo del divisor; divisor 0 → `#¡DIV/0!` |
+| SI | IF | 1-3 | `lazy`: solo calcula la rama que toca. Sin rama → VERDADERO, FALSO o 0 (argumento vacío) |
+| Y, O | AND, OR | 1-64 | En rangos y celdas ignoran textos y vacías; sin ningún valor lógico → `#¡VALOR!` |
+| NO | NOT | 1 | |
+| SI.CONJUNTO **[2019+]** | IFS | 2-64 | `lazy`. Ninguna condición o número impar de argumentos → `#N/D` |
+| SI.ERROR | IFERROR | 2 | `lazy`. Captura los errores de Excel, **no** los del motor (CICLO, LÍMITE) |
+| SUMAR.SI, PROMEDIO.SI | SUMIF, AVERAGEIF | 2-3 | El rango de suma toma el tamaño del rango del criterio. PROMEDIO.SI sin coincidencias → `#¡DIV/0!` |
+| SUMAR.SI.CONJUNTO, MAX.SI.CONJUNTO **[2019+]**, MIN.SI.CONJUNTO **[2019+]** | SUMIFS, MAXIFS, MINIFS | 3-63 | El rango del resultado va primero; rangos de distinto tamaño → `#¡VALOR!`; MAX/MIN sin coincidencias → 0 |
+| CONTAR.SI, CONTAR.SI.CONJUNTO | COUNTIF, COUNTIFS | 2 / 2-64 | |
+
+Una condición se convierte a lógico como en Excel: un número es VERDADERO si no es 0, la celda vacía es FALSO y un texto solo vale si es «VERDADERO» o «FALSO»; cualquier otro texto da `#¡VALOR!`.
+
+**Criterios** (`functions/criteria.js`): número (`5`), lógico, o texto con operador delante (`">100"`, `"<>Pagada"`, `"="` para vacías, `"<>"` para no vacías). Los textos se comparan sin mayúsculas, y con `=` y `<>` valen los comodines `*`, `?` y `~` (se comparan con un algoritmo propio, sin expresiones regulares, en O(n·m)). Reglas propias del motor, donde Excel no documenta todo el detalle: un criterio numérico solo casa con celdas numéricas (no con el texto «5»); `"<>x"` casa también con vacías y con celdas de otro tipo; una celda con error nunca casa; una celda de criterio vacía vale 0. Las prueba `tests/unit/excel-conditional.test.mjs`.
+
+**Contraste:** 58 casos nuevos en `tests/fixtures/excel/reference-cases.json` (`log-`, `red-`, `cond-`), todos comprobados con LibreOffice 24.2 (`scripts/excel/oracle_libreoffice.py`, 196 de 196 casos coinciden el 17/11/2026). Dos casos que daban distinto se quitaron porque dependían de cálculo matricial (`O(B1:B4>1000)`) y de notación científica en un criterio, que el motor no admite.
+
+### 6.3 Previstas (21, estado `planned`)
+
+Texto: CONCAT **[2019+]**, IZQUIERDA, DERECHA, EXTRAE, LARGO, ESPACIOS, MAYUSC, HALLAR. Fecha: FECHA, AÑO, MES, DIA, FIN.MES, DIAS.LAB. Búsqueda: BUSCARV, INDICE, COINCIDIR, BUSCARX **[2021+]**. Dinámicas **[2021+]**: FILTRAR, ORDENAR, UNICOS.
 
 Su semántica detallada está en el doc original 04 §6.3-§6.8 y se revisará al empezar su módulo. **[H]** LibreOffice 24.2 no calcula BUSCARX, UNICOS, ORDENAR ni FILTRAR, así que su contraste necesitará otra versión o el Excel 365 del propietario (R-09).
 
@@ -206,7 +228,7 @@ functionStatus("BUSCARX");                                          // "planned"
 | Referencia circular | Aviso y 0 | Error «referencia circular» |
 | Representación de 15 dígitos | Exacta en todos los casos | Doble precisión con tolerancia |
 
-Las del doc original 04 para funciones previstas (SUMAR.SI con rangos de distinto tamaño, criterios numéricos sobre texto numérico, INDICE con fila o columna 0) se mantienen y se revisarán en P4.
+SUMAR.SI con rangos de distinto tamaño y criterios numéricos sobre texto numérico quedan resueltos en §6.2. INDICE con fila o columna 0 se revisará en P4.2.
 
 ## 10. Validación
 
@@ -214,7 +236,7 @@ Las del doc original 04 para funciones previstas (SUMAR.SI con rangos de distint
 |---|---|---|
 | MF-VAL-01 | Unitarias de tokenizer, parser, referencias, copia, errores, límites y funciones | ≥ 150 casos de referencia del piloto, 100 % verde |
 | MF-VAL-02 | Mismos casos en Node y en el navegador | 0 diferencias |
-| MF-VAL-03 | Contraste con LibreOffice 24.2 (local, `scripts/excel/oracle_libreoffice.py`, opcional) | Las 8 funciones de v1 coinciden |
+| MF-VAL-03 | Contraste con LibreOffice 24.2 (local, `scripts/excel/oracle_libreoffice.py`, opcional) | Las 8 funciones de v1 y las 16 de P4.1 coinciden |
 | MF-VAL-04 | Contraste con el Excel 365 del propietario | ≥ 30 casos, 0 diferencias no declaradas (P3) |
 | MF-SEG-01 | El código no contiene `eval(`, `new Function`, `Function(` ni `setTimeout("` | Prueba que lee los archivos fuente |
 

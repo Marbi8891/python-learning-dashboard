@@ -43,7 +43,7 @@ export const DAW_COURSES = [
 ];
 
 /** Itinerarios de la familia «academia». `status: "active"`: con contenido, ruta y entrada en el menú
-    (Excel profesional desde la fase P2: M01 y M02; el resto del itinerario sale como «Próximamente»). */
+    (Excel profesional: M01-M05 desde P4.1; el resto del itinerario sale como «Próximamente»). */
 export const ACADEMY_COURSES = [
   {
     id: "excel", family: "academia", title: "Excel profesional", subtitle: "Excel de Microsoft 365 en español",

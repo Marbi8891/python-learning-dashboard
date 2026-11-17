@@ -70,7 +70,7 @@ class ExcelBuilderTest(unittest.TestCase):
             ]
         )
         bank = course["bank.json"]
-        self.assertEqual(bank["engine"], "1.0.0")
+        self.assertEqual(bank["engine"], "1.1.0")
         first, second = bank["questions"]
         self.assertEqual(first["kind"], "formula")
         self.assertEqual(first["excel"]["solution"]["formula"], "=B2*$E$1")
