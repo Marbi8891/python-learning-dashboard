@@ -1,0 +1,119 @@
+/* Excel profesional: cuadrícula de datos y ejercicios de fórmulas (frontend/js/excel/views.js).
+   Usa solo los tokens de tokens.css, así funciona en tema claro y oscuro. */
+
+.xl-grid__scroll {
+  max-width: 100%;
+  overflow-x: auto;
+  margin-block: var(--space-3);
+  border-radius: var(--radius-sm);
+}
+
+.xl-grid__scroll:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.xl-grid {
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+
+.xl-grid caption {
+  caption-side: top;
+  text-align: start;
+  padding-block-end: var(--space-2);
+  font-family: var(--font-sans);
+  color: var(--color-text-muted);
+}
+
+.xl-grid th,
+.xl-grid td {
+  border: 1px solid var(--color-border-control);
+  padding: var(--space-1) var(--space-2);
+  min-width: 4.5rem;
+  white-space: nowrap;
+}
+
+.xl-grid th {
+  background: var(--color-surface-2);
+  color: var(--color-text-muted);
+  font-weight: 600;
+  min-width: 2.5rem;
+  text-align: center;
+}
+
+.xl-grid td.is-number {
+  text-align: end;
+}
+
+.xl-grid td.is-target {
+  outline: 2px solid var(--color-primary);
+  outline-offset: -2px;
+  text-align: center;
+  font-weight: 700;
+}
+
+.xl-exercise__form {
+  display: grid;
+  gap: var(--space-2);
+  max-width: 40rem;
+}
+
+.xl-exercise__input {
+  font-family: var(--font-mono);
+  font-size: var(--text-md);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border-control);
+  border-radius: var(--radius-sm);
+  background: var(--color-input-bg);
+  color: var(--color-text);
+}
+
+.xl-exercise__input:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.xl-exercise__help {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.xl-exercise__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.xl-exercise__status:empty {
+  display: none;
+}
+
+.xl-exercise__status {
+  padding: var(--space-2) var(--space-3);
+  border-inline-start: 4px solid var(--color-border-control);
+  background: var(--color-surface-2);
+}
+
+.xl-exercise__status[data-state="ok"] {
+  border-inline-start-color: var(--color-accent);
+}
+
+.xl-exercise__status[data-state="fail"] {
+  border-inline-start-color: var(--color-danger);
+}
+
+.xl-exercise__formula code {
+  font-family: var(--font-mono);
+}
+
+.xl-exercise__options {
+  display: grid;
+  gap: var(--space-1);
+  border: 0;
+  padding: 0;
+}

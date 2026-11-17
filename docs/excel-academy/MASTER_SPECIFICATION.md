@@ -80,9 +80,9 @@ Ubicación: `/mnt/project-files/excel-academy/docs/excel-academy/`. Los diez tie
 | Precache con `catalog.js` | — | **Sí** | `frontend/precache.js` |
 | CHANGELOG y DEC-018 | — | **Sí** | `CHANGELOG.md` «Sin publicar»; `docs/DECISIONS.md` |
 | Familias certificación e independiente | Doc 03 §2.1 | No (solo diseño, DA-04) | — |
-| Motor de fórmulas | Doc 04 | **No** | No existe `frontend/js/excel/` |
-| Tipos `formula-result`, `formula`, `rubric` | Doc 06 | **No** | `course_builder.py` sin cambios |
-| `module` opcional en el generador | Doc 08 Fase 4 | **No** | — |
+| Motor de fórmulas | Doc 04 | **Sí (P1)**: 8 funciones, 37 previstas | `frontend/js/excel/formula/`; 194 casos de referencia |
+| Tipos `formula-result`, `formula`, `rubric` | Doc 06 | **Sí (P1)** los dos primeros; `rubric` en P3 | `frontend/js/excel/checks.js`, `course_builder.py` |
+| `module` opcional en el generador | Doc 08 Fase 4 | **Sí (P1)** | `course_builder.py`; `scripts/courses/tests/` |
 | Ruta `#/academia/excel` | Docs 02, 03 | **No** (solo el campo `route` del catálogo) | `app.js` sin cambios |
 | Contenido M01-M02 | Doc 07 | **No** | No existe `frontend/data/courses/excel/` |
 | Campos `xlsx` y `rubrics` | Doc 03 §3.7 | **No** | `progress-guard.js` sin cambios |

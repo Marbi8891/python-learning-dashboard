@@ -153,3 +153,5 @@ jobs:
           python3 scripts/courses/marcas_course.py --check
           python3 scripts/courses/programacion_course.py --check
           python3 scripts/resources/build_resources.py --check
+      - name: Generador de cursos con ejercicios de fórmulas de Excel
+        run: python3 -m unittest discover -s scripts/courses/tests -v
