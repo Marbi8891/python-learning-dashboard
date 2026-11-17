@@ -43,6 +43,7 @@
 |---|---|
 | [PLAN-CURRICULO-DAW.md](PLAN-CURRICULO-DAW.md) | Currículo oficial de DAW y cómo se genera el catálogo |
 | [AMPLIAR-TEMARIO-DAW.md](AMPLIAR-TEMARIO-DAW.md) | Cómo añadir asignaturas, unidades y recursos |
+| [excel-academy/MASTER_SPECIFICATION.md](excel-academy/MASTER_SPECIFICATION.md) | Excel profesional: especificación maestra, decisiones y anexos (arquitectura, motor de fórmulas, currículo M1-M2, pruebas, riesgos y hoja de ruta) |
 | [AUDITORIA-Y-LICENCIAS.md](AUDITORIA-Y-LICENCIAS.md) | Origen y licencias de las fuentes de contenido |
 
 ## Privacidad y cumplimiento legal
