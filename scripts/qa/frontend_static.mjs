@@ -165,7 +165,12 @@ export async function checkFrontend(root = path.join(REPO, "frontend")) {
       continue;
     }
     if (file.endsWith(".webmanifest")) {
-      const refs = [data.start_url, data.scope, ...(data.icons ?? []).map((i) => i.src)];
+      const refs = [
+        data.start_url,
+        data.scope,
+        ...(data.icons ?? []).map((i) => i.src),
+        ...(data.shortcuts ?? []).flatMap((s) => (s.icons ?? []).map((i) => i.src)),
+      ];
       for (const ref of refs) {
         if (!ref || EXTERNAL.test(ref)) continue;
         stats.references++;
