@@ -1,0 +1,2446 @@
+{
+ "description": "Casos de referencia del motor de fórmulas de Excel profesional (P1). Cada caso guarda su fuente: «libreoffice» (comprobado con LibreOffice 24.2 con scripts/excel/oracle_libreoffice.py), «regla» (regla de Excel en español documentada por Microsoft; ver note) o «motor» (comportamiento propio del motor, especificado en docs/excel-academy/FORMULA_ENGINE_SPEC.md). Ningún resultado se ha copiado de la salida del propio motor.",
+ "checked": "2026-11-17",
+ "cases": [
+  {
+   "id": "op-01",
+   "formula": "=1+2",
+   "expect": 3,
+   "source": "libreoffice"
+  },
+  {
+   "id": "op-02",
+   "formula": "=7-10",
+   "expect": -3,
+   "source": "libreoffice"
+  },
+  {
+   "id": "op-03",
+   "formula": "=6*7",
+   "expect": 42,
+   "source": "libreoffice"
+  },
+  {
+   "id": "op-04",
+   "formula": "=7/2",
+   "expect": 3.5,
+   "source": "libreoffice"
+  },
+  {
+   "id": "op-05",
+   "formula": "=2^10",
+   "expect": 1024,
+   "source": "libreoffice"
+  },
+  {
+   "id": "op-06",
+   "formula": "=2+3*4",
+   "expect": 14,
+   "source": "libreoffice"
+  },
+  {
+   "id": "op-07",
+   "formula": "=(2+3)*4",
+   "expect": 20,
+   "source": "libreoffice"
+  },
+  {
+   "id": "op-08",
+   "formula": "=10-4-3",
+   "expect": 3,
+   "source": "libreoffice"
+  },
+  {
+   "id": "op-09",
+   "formula": "=100/10/5",
+   "expect": 2,
+   "source": "libreoffice"
+  },
+  {
+   "id": "op-10",
+   "formula": "=2^3^2",
+   "expect": 64,
+   "source": "libreoffice"
+  },
+  {
+   "id": "op-11",
+   "formula": "=-2^2",
+   "expect": 4,
+   "source": "libreoffice"
+  },
+  {
+   "id": "op-12",
+   "formula": "=-(2^2)",
+   "expect": -4,
+   "source": "libreoffice"
+  },
+  {
+   "id": "op-13",
+   "formula": "=2*-3",
+   "expect": -6,
+   "source": "libreoffice"
+  },
+  {
+   "id": "op-14",
+   "formula": "=2^-1",
+   "expect": 0.5,
+   "source": "libreoffice"
+  },
+  {
+   "id": "op-15",
+   "formula": "=--5",
+   "expect": 5,
+   "source": "libreoffice"
+  },
+  {
+   "id": "op-16",
+   "formula": "=10%",
+   "expect": 0.1,
+   "source": "libreoffice"
+  },
+  {
+   "id": "op-17",
+   "formula": "=200*10%",
+   "expect": 20,
+   "source": "libreoffice"
+  },
+  {
+   "id": "op-18",
+   "formula": "=50%%",
+   "expect": 0.005,
+   "source": "libreoffice"
+  },
+  {
+   "id": "op-19",
+   "formula": "=-10%",
+   "expect": -0.1,
+   "source": "libreoffice"
+  },
+  {
+   "id": "op-20",
+   "formula": "=1+2*3^2",
+   "expect": 19,
+   "source": "libreoffice"
+  },
+  {
+   "id": "op-21",
+   "formula": "=(1+2)*(3+4)",
+   "expect": 21,
+   "source": "libreoffice"
+  },
+  {
+   "id": "op-22",
+   "formula": "=1,5+2,25",
+   "expect": 3.75,
+   "source": "libreoffice"
+  },
+  {
+   "id": "op-23",
+   "formula": "=0,1+0,2",
+   "expect": 0.3,
+   "source": "libreoffice"
+  },
+  {
+   "id": "op-24",
+   "formula": "=1E3",
+   "expect": 1000,
+   "source": "libreoffice"
+  },
+  {
+   "id": "op-25",
+   "formula": "=2,5E-1",
+   "expect": 0.25,
+   "source": "libreoffice"
+  },
+  {
+   "id": "op-26",
+   "formula": "=3-2^2*2",
+   "expect": -5,
+   "source": "libreoffice"
+  },
+  {
+   "id": "op-27",
+   "formula": "=10/4*2",
+   "expect": 5,
+   "source": "libreoffice"
+  },
+  {
+   "id": "op-28",
+   "formula": "=2^0,5*2^0,5",
+   "expect": 2,
+   "source": "libreoffice"
+  },
+  {
+   "id": "cmp-01",
+   "formula": "=1=1",
+   "expect": true,
+   "source": "libreoffice"
+  },
+  {
+   "id": "cmp-02",
+   "formula": "=1<>1",
+   "expect": false,
+   "source": "libreoffice"
+  },
+  {
+   "id": "cmp-03",
+   "formula": "=2<3",
+   "expect": true,
+   "source": "libreoffice"
+  },
+  {
+   "id": "cmp-04",
+   "formula": "=3<=3",
+   "expect": true,
+   "source": "libreoffice"
+  },
+  {
+   "id": "cmp-05",
+   "formula": "=4>=5",
+   "expect": false,
+   "source": "libreoffice"
+  },
+  {
+   "id": "cmp-06",
+   "formula": "=5>4",
+   "expect": true,
+   "source": "libreoffice"
+  },
+  {
+   "id": "cmp-07",
+   "formula": "=1+1=2",
+   "expect": true,
+   "source": "libreoffice"
+  },
+  {
+   "id": "cmp-08",
+   "formula": "=0,1+0,2=0,3",
+   "expect": true,
+   "source": "libreoffice"
+  },
+  {
+   "id": "txt-01",
+   "formula": "=\"a\"&\"b\"",
+   "expect": "ab",
+   "source": "regla",
+   "note": "Concatenación de Excel en español"
+  },
+  {
+   "id": "txt-02",
+   "formula": "=\"a\"&1+1",
+   "expect": "a2",
+   "source": "regla",
+   "note": "Concatenación de Excel en español"
+  },
+  {
+   "id": "txt-03",
+   "formula": "=\"Total: \"&2+3",
+   "expect": "Total: 5",
+   "source": "regla",
+   "note": "Concatenación de Excel en español"
+  },
+  {
+   "id": "txt-04",
+   "formula": "=1&2",
+   "expect": "12",
+   "source": "regla",
+   "note": "Concatenación de Excel en español"
+  },
+  {
+   "id": "txt-05",
+   "formula": "=\"x\"&VERDADERO",
+   "expect": "xVERDADERO",
+   "source": "regla",
+   "note": "Concatenación de Excel en español"
+  },
+  {
+   "id": "txt-06",
+   "formula": "=\"\"&\"\"",
+   "expect": "",
+   "source": "regla",
+   "note": "Concatenación de Excel en español"
+  },
+  {
+   "id": "txt-07",
+   "formula": "=\"IVA \"&21&\" %\"",
+   "expect": "IVA 21 %",
+   "source": "regla",
+   "note": "Concatenación de Excel en español"
+  },
+  {
+   "id": "txt-08",
+   "formula": "=\"dijo \"\"sí\"\"\"",
+   "expect": "dijo \"sí\"",
+   "source": "regla",
+   "note": "Concatenación de Excel en español"
+  },
+  {
+   "id": "txt-09",
+   "formula": "=\"A\"=\"a\"",
+   "expect": true,
+   "source": "libreoffice",
+   "note": "Comparación sin distinguir mayúsculas"
+  },
+  {
+   "id": "txt-10",
+   "formula": "=\"b\">\"a\"",
+   "expect": true,
+   "source": "libreoffice"
+  },
+  {
+   "id": "txt-11",
+   "formula": "=\"a\"<\"b\"",
+   "expect": true,
+   "source": "libreoffice"
+  },
+  {
+   "id": "cmp-09",
+   "formula": "=1<\"a\"",
+   "expect": true,
+   "source": "regla",
+   "note": "Entre tipos distintos: número < texto < booleano"
+  },
+  {
+   "id": "cmp-10",
+   "formula": "=\"z\"<VERDADERO",
+   "expect": true,
+   "source": "regla",
+   "note": "Entre tipos distintos: número < texto < booleano"
+  },
+  {
+   "id": "cmp-11",
+   "formula": "=VERDADERO>FALSO",
+   "expect": true,
+   "source": "libreoffice"
+  },
+  {
+   "id": "cmp-12",
+   "formula": "=VERDADERO=1",
+   "expect": false,
+   "source": "regla",
+   "note": "Un booleano no es igual a un número en una comparación"
+  },
+  {
+   "id": "conv-01",
+   "formula": "=A1+A2",
+   "expect": 200,
+   "grid": {
+    "A1": "120",
+    "A2": 80,
+    "A3": "abc",
+    "A4": true,
+    "A6": "3,5"
+   },
+   "source": "regla",
+   "note": "Conversión de texto numérico en español (Excel es-ES)"
+  },
+  {
+   "id": "conv-02",
+   "formula": "=A1*2",
+   "expect": 240,
+   "grid": {
+    "A1": "120",
+    "A2": 80,
+    "A3": "abc",
+    "A4": true,
+    "A6": "3,5"
+   },
+   "source": "regla",
+   "note": "Conversión de texto numérico en español (Excel es-ES)"
+  },
+  {
+   "id": "conv-03",
+   "formula": "=A4+1",
+   "expect": 2,
+   "grid": {
+    "A1": "120",
+    "A2": 80,
+    "A3": "abc",
+    "A4": true,
+    "A6": "3,5"
+   },
+   "source": "regla",
+   "note": "Conversión de texto numérico en español (Excel es-ES)"
+  },
+  {
+   "id": "conv-04",
+   "formula": "=A5+1",
+   "expect": 1,
+   "grid": {
+    "A1": "120",
+    "A2": 80,
+    "A3": "abc",
+    "A4": true,
+    "A6": "3,5"
+   },
+   "source": "regla",
+   "note": "Conversión de texto numérico en español (Excel es-ES)"
+  },
+  {
+   "id": "conv-05",
+   "formula": "=A5*3",
+   "expect": 0,
+   "grid": {
+    "A1": "120",
+    "A2": 80,
+    "A3": "abc",
+    "A4": true,
+    "A6": "3,5"
+   },
+   "source": "regla",
+   "note": "Conversión de texto numérico en español (Excel es-ES)"
+  },
+  {
+   "id": "conv-06",
+   "formula": "=A3+1",
+   "expect": {
+    "error": "#¡VALOR!"
+   },
+   "grid": {
+    "A1": "120",
+    "A2": 80,
+    "A3": "abc",
+    "A4": true,
+    "A6": "3,5"
+   },
+   "source": "regla",
+   "note": "Conversión de texto numérico en español (Excel es-ES)"
+  },
+  {
+   "id": "conv-07",
+   "formula": "=\"3,5\"+1",
+   "expect": 4.5,
+   "grid": {
+    "A1": "120",
+    "A2": 80,
+    "A3": "abc",
+    "A4": true,
+    "A6": "3,5"
+   },
+   "source": "regla",
+   "note": "Conversión de texto numérico en español (Excel es-ES)"
+  },
+  {
+   "id": "conv-08",
+   "formula": "=A6*2",
+   "expect": 7,
+   "grid": {
+    "A1": "120",
+    "A2": 80,
+    "A3": "abc",
+    "A4": true,
+    "A6": "3,5"
+   },
+   "source": "regla",
+   "note": "Conversión de texto numérico en español (Excel es-ES)"
+  },
+  {
+   "id": "conv-09",
+   "formula": "=VERDADERO+VERDADERO",
+   "expect": 2,
+   "grid": {
+    "A1": "120",
+    "A2": 80,
+    "A3": "abc",
+    "A4": true,
+    "A6": "3,5"
+   },
+   "source": "regla",
+   "note": "Conversión de texto numérico en español (Excel es-ES)"
+  },
+  {
+   "id": "conv-10",
+   "formula": "=FALSO*5",
+   "expect": 0,
+   "grid": {
+    "A1": "120",
+    "A2": 80,
+    "A3": "abc",
+    "A4": true,
+    "A6": "3,5"
+   },
+   "source": "regla",
+   "note": "Conversión de texto numérico en español (Excel es-ES)"
+  },
+  {
+   "id": "conv-11",
+   "formula": "=-A4",
+   "expect": -1,
+   "grid": {
+    "A1": "120",
+    "A2": 80,
+    "A3": "abc",
+    "A4": true,
+    "A6": "3,5"
+   },
+   "source": "regla",
+   "note": "Conversión de texto numérico en español (Excel es-ES)"
+  },
+  {
+   "id": "conv-12",
+   "formula": "=A5&\"x\"",
+   "expect": "x",
+   "grid": {
+    "A1": "120",
+    "A2": 80,
+    "A3": "abc",
+    "A4": true,
+    "A6": "3,5"
+   },
+   "source": "regla",
+   "note": "Conversión de texto numérico en español (Excel es-ES)"
+  },
+  {
+   "id": "conv-13",
+   "formula": "=A2&\"\"",
+   "expect": "80",
+   "grid": {
+    "A1": "120",
+    "A2": 80,
+    "A3": "abc",
+    "A4": true,
+    "A6": "3,5"
+   },
+   "source": "regla",
+   "note": "Conversión de texto numérico en español (Excel es-ES)"
+  },
+  {
+   "id": "conv-14",
+   "formula": "=A5=0",
+   "expect": true,
+   "grid": {
+    "A1": "120",
+    "A2": 80,
+    "A3": "abc",
+    "A4": true,
+    "A6": "3,5"
+   },
+   "source": "regla",
+   "note": "Conversión de texto numérico en español (Excel es-ES)"
+  },
+  {
+   "id": "conv-15",
+   "formula": "=A5=\"\"",
+   "expect": true,
+   "grid": {
+    "A1": "120",
+    "A2": 80,
+    "A3": "abc",
+    "A4": true,
+    "A6": "3,5"
+   },
+   "source": "regla",
+   "note": "Conversión de texto numérico en español (Excel es-ES)"
+  },
+  {
+   "id": "conv-16",
+   "formula": "=A2=\"80\"",
+   "expect": false,
+   "grid": {
+    "A1": "120",
+    "A2": 80,
+    "A3": "abc",
+    "A4": true,
+    "A6": "3,5"
+   },
+   "source": "regla",
+   "note": "Conversión de texto numérico en español (Excel es-ES)"
+  },
+  {
+   "id": "conv-17",
+   "formula": "=\"5\"*\"2\"",
+   "expect": 10,
+   "grid": {
+    "A1": "120",
+    "A2": 80,
+    "A3": "abc",
+    "A4": true,
+    "A6": "3,5"
+   },
+   "source": "regla",
+   "note": "Conversión de texto numérico en español (Excel es-ES)"
+  },
+  {
+   "id": "conv-18",
+   "formula": "=\" 7 \"+1",
+   "expect": 8,
+   "grid": {
+    "A1": "120",
+    "A2": 80,
+    "A3": "abc",
+    "A4": true,
+    "A6": "3,5"
+   },
+   "source": "regla",
+   "note": "Conversión de texto numérico en español (Excel es-ES)"
+  },
+  {
+   "id": "ref-01",
+   "formula": "=A1",
+   "expect": 10,
+   "grid": {
+    "A1": 10,
+    "B1": 20,
+    "C1": 30,
+    "A2": 1,
+    "B2": 2,
+    "C2": 3,
+    "Enero!B5": 4200,
+    "Febrero!B5": 3900,
+    "Marzo!B5": 4650,
+    "Hoja 2!A1": 15
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "ref-02",
+   "formula": "=$A$1",
+   "expect": 10,
+   "grid": {
+    "A1": 10,
+    "B1": 20,
+    "C1": 30,
+    "A2": 1,
+    "B2": 2,
+    "C2": 3,
+    "Enero!B5": 4200,
+    "Febrero!B5": 3900,
+    "Marzo!B5": 4650,
+    "Hoja 2!A1": 15
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "ref-03",
+   "formula": "=A$1+$B1",
+   "expect": 30,
+   "grid": {
+    "A1": 10,
+    "B1": 20,
+    "C1": 30,
+    "A2": 1,
+    "B2": 2,
+    "C2": 3,
+    "Enero!B5": 4200,
+    "Febrero!B5": 3900,
+    "Marzo!B5": 4650,
+    "Hoja 2!A1": 15
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "ref-04",
+   "formula": "=A1+B1+C1",
+   "expect": 60,
+   "grid": {
+    "A1": 10,
+    "B1": 20,
+    "C1": 30,
+    "A2": 1,
+    "B2": 2,
+    "C2": 3,
+    "Enero!B5": 4200,
+    "Febrero!B5": 3900,
+    "Marzo!B5": 4650,
+    "Hoja 2!A1": 15
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "ref-05",
+   "formula": "=C2*A1",
+   "expect": 30,
+   "grid": {
+    "A1": 10,
+    "B1": 20,
+    "C1": 30,
+    "A2": 1,
+    "B2": 2,
+    "C2": 3,
+    "Enero!B5": 4200,
+    "Febrero!B5": 3900,
+    "Marzo!B5": 4650,
+    "Hoja 2!A1": 15
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "ref-06",
+   "formula": "=Z99",
+   "expect": 0,
+   "grid": {
+    "A1": 10,
+    "B1": 20,
+    "C1": 30,
+    "A2": 1,
+    "B2": 2,
+    "C2": 3,
+    "Enero!B5": 4200,
+    "Febrero!B5": 3900,
+    "Marzo!B5": 4650,
+    "Hoja 2!A1": 15
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "ref-07",
+   "formula": "=Enero!B5",
+   "expect": 4200,
+   "grid": {
+    "A1": 10,
+    "B1": 20,
+    "C1": 30,
+    "A2": 1,
+    "B2": 2,
+    "C2": 3,
+    "Enero!B5": 4200,
+    "Febrero!B5": 3900,
+    "Marzo!B5": 4650,
+    "Hoja 2!A1": 15
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "ref-08",
+   "formula": "=Enero!B5+Febrero!B5+Marzo!B5",
+   "expect": 12750,
+   "grid": {
+    "A1": 10,
+    "B1": 20,
+    "C1": 30,
+    "A2": 1,
+    "B2": 2,
+    "C2": 3,
+    "Enero!B5": 4200,
+    "Febrero!B5": 3900,
+    "Marzo!B5": 4650,
+    "Hoja 2!A1": 15
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "ref-09",
+   "formula": "='Hoja 2'!A1*2",
+   "expect": 30,
+   "grid": {
+    "A1": 10,
+    "B1": 20,
+    "C1": 30,
+    "A2": 1,
+    "B2": 2,
+    "C2": 3,
+    "Enero!B5": 4200,
+    "Febrero!B5": 3900,
+    "Marzo!B5": 4650,
+    "Hoja 2!A1": 15
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "ref-10",
+   "formula": "=enero!b5",
+   "expect": 4200,
+   "grid": {
+    "A1": 10,
+    "B1": 20,
+    "C1": 30,
+    "A2": 1,
+    "B2": 2,
+    "C2": 3,
+    "Enero!B5": 4200,
+    "Febrero!B5": 3900,
+    "Marzo!B5": 4650,
+    "Hoja 2!A1": 15
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "ref-11",
+   "formula": "=SUMA(A1:C2)",
+   "expect": 66,
+   "grid": {
+    "A1": 10,
+    "B1": 20,
+    "C1": 30,
+    "A2": 1,
+    "B2": 2,
+    "C2": 3,
+    "Enero!B5": 4200,
+    "Febrero!B5": 3900,
+    "Marzo!B5": 4650,
+    "Hoja 2!A1": 15
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "ref-12",
+   "formula": "=SUMA(C2:A1)",
+   "expect": 66,
+   "grid": {
+    "A1": 10,
+    "B1": 20,
+    "C1": 30,
+    "A2": 1,
+    "B2": 2,
+    "C2": 3,
+    "Enero!B5": 4200,
+    "Febrero!B5": 3900,
+    "Marzo!B5": 4650,
+    "Hoja 2!A1": 15
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "ref-13",
+   "formula": "=SUMA(A1:A1)",
+   "expect": 10,
+   "grid": {
+    "A1": 10,
+    "B1": 20,
+    "C1": 30,
+    "A2": 1,
+    "B2": 2,
+    "C2": 3,
+    "Enero!B5": 4200,
+    "Febrero!B5": 3900,
+    "Marzo!B5": 4650,
+    "Hoja 2!A1": 15
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "ref-14",
+   "formula": "=A1:A1*2",
+   "expect": 20,
+   "grid": {
+    "A1": 10,
+    "B1": 20,
+    "C1": 30,
+    "A2": 1,
+    "B2": 2,
+    "C2": 3,
+    "Enero!B5": 4200,
+    "Febrero!B5": 3900,
+    "Marzo!B5": 4650,
+    "Hoja 2!A1": 15
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "ref-15",
+   "formula": "=SUMA(Enero!B5;Febrero!B5;Marzo!B5)",
+   "expect": 12750,
+   "grid": {
+    "A1": 10,
+    "B1": 20,
+    "C1": 30,
+    "A2": 1,
+    "B2": 2,
+    "C2": 3,
+    "Enero!B5": 4200,
+    "Febrero!B5": 3900,
+    "Marzo!B5": 4650,
+    "Hoja 2!A1": 15
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "ref-16",
+   "formula": "=SUMA(Enero!B4:B5)",
+   "expect": 4200,
+   "grid": {
+    "A1": 10,
+    "B1": 20,
+    "C1": 30,
+    "A2": 1,
+    "B2": 2,
+    "C2": 3,
+    "Enero!B5": 4200,
+    "Febrero!B5": 3900,
+    "Marzo!B5": 4650,
+    "Hoja 2!A1": 15
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "ref-17",
+   "formula": "=Hoja9!A1",
+   "expect": {
+    "error": "#¡REF!"
+   },
+   "grid": {
+    "A1": 10,
+    "B1": 20,
+    "C1": 30,
+    "A2": 1,
+    "B2": 2,
+    "C2": 3,
+    "Enero!B5": 4200,
+    "Febrero!B5": 3900,
+    "Marzo!B5": 4650,
+    "Hoja 2!A1": 15
+   },
+   "source": "motor",
+   "note": "Hoja inexistente en la cuadrícula: #¡REF!"
+  },
+  {
+   "id": "ref-18",
+   "formula": "=A1:B1+1",
+   "expect": {
+    "error": "#¡VALOR!"
+   },
+   "grid": {
+    "A1": 10,
+    "B1": 20,
+    "C1": 30,
+    "A2": 1,
+    "B2": 2,
+    "C2": 3,
+    "Enero!B5": 4200,
+    "Febrero!B5": 3900,
+    "Marzo!B5": 4650,
+    "Hoja 2!A1": 15
+   },
+   "source": "motor",
+   "note": "Diferencia declarada v1: un rango de varias celdas donde se espera un valor"
+  },
+  {
+   "id": "sum-01",
+   "formula": "=SUMA(B2:B6)",
+   "expect": 4000,
+   "grid": {
+    "B2": 1200,
+    "B3": 950,
+    "B4": "sin datos",
+    "B6": 1850,
+    "C2": 1200,
+    "C3": 950,
+    "C4": 1430,
+    "C5": 1100,
+    "C6": 1850,
+    "C7": 1620,
+    "D2": true,
+    "D3": "5"
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "sum-02",
+   "formula": "=SUMA(C2:C7)",
+   "expect": 8150,
+   "grid": {
+    "B2": 1200,
+    "B3": 950,
+    "B4": "sin datos",
+    "B6": 1850,
+    "C2": 1200,
+    "C3": 950,
+    "C4": 1430,
+    "C5": 1100,
+    "C6": 1850,
+    "C7": 1620,
+    "D2": true,
+    "D3": "5"
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "sum-03",
+   "formula": "=SUMA(1;2;3)",
+   "expect": 6,
+   "grid": {
+    "B2": 1200,
+    "B3": 950,
+    "B4": "sin datos",
+    "B6": 1850,
+    "C2": 1200,
+    "C3": 950,
+    "C4": 1430,
+    "C5": 1100,
+    "C6": 1850,
+    "C7": 1620,
+    "D2": true,
+    "D3": "5"
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "sum-04",
+   "formula": "=SUMA(B2;B3)",
+   "expect": 2150,
+   "grid": {
+    "B2": 1200,
+    "B3": 950,
+    "B4": "sin datos",
+    "B6": 1850,
+    "C2": 1200,
+    "C3": 950,
+    "C4": 1430,
+    "C5": 1100,
+    "C6": 1850,
+    "C7": 1620,
+    "D2": true,
+    "D3": "5"
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "sum-05",
+   "formula": "=SUMA(D2:D3)",
+   "expect": 0,
+   "grid": {
+    "B2": 1200,
+    "B3": 950,
+    "B4": "sin datos",
+    "B6": 1850,
+    "C2": 1200,
+    "C3": 950,
+    "C4": 1430,
+    "C5": 1100,
+    "C6": 1850,
+    "C7": 1620,
+    "D2": true,
+    "D3": "5"
+   },
+   "source": "regla",
+   "note": "Excel ignora los booleanos y los textos que hay en las referencias (documentación de Microsoft de SUMA, PROMEDIO, MIN, MAX y CONTAR). LibreOffice guarda VERDADERO como el número 1, así que aquí no sirve de oráculo"
+  },
+  {
+   "id": "sum-06",
+   "formula": "=SUMA(\"3\";VERDADERO)",
+   "expect": 4,
+   "grid": {
+    "B2": 1200,
+    "B3": 950,
+    "B4": "sin datos",
+    "B6": 1850,
+    "C2": 1200,
+    "C3": 950,
+    "C4": 1430,
+    "C5": 1100,
+    "C6": 1850,
+    "C7": 1620,
+    "D2": true,
+    "D3": "5"
+   },
+   "source": "regla",
+   "note": "Excel convierte los números escritos como texto directamente en los argumentos (documentación de Microsoft de PROMEDIO y CONTAR). LibreOffice, con su configuración por defecto, da #VALUE!"
+  },
+  {
+   "id": "sum-07",
+   "formula": "=SUMA(B2:B6;100)",
+   "expect": 4100,
+   "grid": {
+    "B2": 1200,
+    "B3": 950,
+    "B4": "sin datos",
+    "B6": 1850,
+    "C2": 1200,
+    "C3": 950,
+    "C4": 1430,
+    "C5": 1100,
+    "C6": 1850,
+    "C7": 1620,
+    "D2": true,
+    "D3": "5"
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "sum-08",
+   "formula": "=SUMA(Z1:Z9)",
+   "expect": 0,
+   "grid": {
+    "B2": 1200,
+    "B3": 950,
+    "B4": "sin datos",
+    "B6": 1850,
+    "C2": 1200,
+    "C3": 950,
+    "C4": 1430,
+    "C5": 1100,
+    "C6": 1850,
+    "C7": 1620,
+    "D2": true,
+    "D3": "5"
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "sum-09",
+   "formula": "=SUMA(1;)",
+   "expect": 1,
+   "grid": {
+    "B2": 1200,
+    "B3": 950,
+    "B4": "sin datos",
+    "B6": 1850,
+    "C2": 1200,
+    "C3": 950,
+    "C4": 1430,
+    "C5": 1100,
+    "C6": 1850,
+    "C7": 1620,
+    "D2": true,
+    "D3": "5"
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "sum-10",
+   "formula": "=SUMA(-5;5)",
+   "expect": 0,
+   "grid": {
+    "B2": 1200,
+    "B3": 950,
+    "B4": "sin datos",
+    "B6": 1850,
+    "C2": 1200,
+    "C3": 950,
+    "C4": 1430,
+    "C5": 1100,
+    "C6": 1850,
+    "C7": 1620,
+    "D2": true,
+    "D3": "5"
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "sum-11",
+   "formula": "=SUMA(D2)",
+   "expect": 0,
+   "grid": {
+    "B2": 1200,
+    "B3": 950,
+    "B4": "sin datos",
+    "B6": 1850,
+    "C2": 1200,
+    "C3": 950,
+    "C4": 1430,
+    "C5": 1100,
+    "C6": 1850,
+    "C7": 1620,
+    "D2": true,
+    "D3": "5"
+   },
+   "source": "regla",
+   "note": "Excel ignora los booleanos y los textos que hay en las referencias (documentación de Microsoft de SUMA, PROMEDIO, MIN, MAX y CONTAR). LibreOffice guarda VERDADERO como el número 1, así que aquí no sirve de oráculo"
+  },
+  {
+   "id": "sum-12",
+   "formula": "=SUMA(D3)",
+   "expect": 0,
+   "grid": {
+    "B2": 1200,
+    "B3": 950,
+    "B4": "sin datos",
+    "B6": 1850,
+    "C2": 1200,
+    "C3": 950,
+    "C4": 1430,
+    "C5": 1100,
+    "C6": 1850,
+    "C7": 1620,
+    "D2": true,
+    "D3": "5"
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "avg-01",
+   "formula": "=PROMEDIO(B2:B6)",
+   "expect": 1333.3333333333333,
+   "grid": {
+    "B2": 1200,
+    "B3": 950,
+    "B4": "sin datos",
+    "B6": 1850,
+    "C2": 1200,
+    "C3": 950,
+    "C4": 1430,
+    "C5": 1100,
+    "C6": 1850,
+    "C7": 1620,
+    "D2": true,
+    "D3": "5"
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "avg-02",
+   "formula": "=PROMEDIO(C2:C7)",
+   "expect": 1358.3333333333333,
+   "grid": {
+    "B2": 1200,
+    "B3": 950,
+    "B4": "sin datos",
+    "B6": 1850,
+    "C2": 1200,
+    "C3": 950,
+    "C4": 1430,
+    "C5": 1100,
+    "C6": 1850,
+    "C7": 1620,
+    "D2": true,
+    "D3": "5"
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "avg-03",
+   "formula": "=PROMEDIO(1;2;3;4)",
+   "expect": 2.5,
+   "grid": {
+    "B2": 1200,
+    "B3": 950,
+    "B4": "sin datos",
+    "B6": 1850,
+    "C2": 1200,
+    "C3": 950,
+    "C4": 1430,
+    "C5": 1100,
+    "C6": 1850,
+    "C7": 1620,
+    "D2": true,
+    "D3": "5"
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "avg-04",
+   "formula": "=PROMEDIO(Z1:Z3)",
+   "expect": {
+    "error": "#¡DIV/0!"
+   },
+   "grid": {
+    "B2": 1200,
+    "B3": 950,
+    "B4": "sin datos",
+    "B6": 1850,
+    "C2": 1200,
+    "C3": 950,
+    "C4": 1430,
+    "C5": 1100,
+    "C6": 1850,
+    "C7": 1620,
+    "D2": true,
+    "D3": "5"
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "avg-05",
+   "formula": "=PROMEDIO(B4)",
+   "expect": {
+    "error": "#¡DIV/0!"
+   },
+   "grid": {
+    "B2": 1200,
+    "B3": 950,
+    "B4": "sin datos",
+    "B6": 1850,
+    "C2": 1200,
+    "C3": 950,
+    "C4": 1430,
+    "C5": 1100,
+    "C6": 1850,
+    "C7": 1620,
+    "D2": true,
+    "D3": "5"
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "avg-06",
+   "formula": "=PROMEDIO(B2;\"4\")",
+   "expect": 602,
+   "grid": {
+    "B2": 1200,
+    "B3": 950,
+    "B4": "sin datos",
+    "B6": 1850,
+    "C2": 1200,
+    "C3": 950,
+    "C4": 1430,
+    "C5": 1100,
+    "C6": 1850,
+    "C7": 1620,
+    "D2": true,
+    "D3": "5"
+   },
+   "source": "regla",
+   "note": "Excel convierte los números escritos como texto directamente en los argumentos (documentación de Microsoft de PROMEDIO y CONTAR). LibreOffice, con su configuración por defecto, da #VALUE!"
+  },
+  {
+   "id": "avg-07",
+   "formula": "=PROMEDIO(D2:D3)",
+   "expect": {
+    "error": "#¡DIV/0!"
+   },
+   "grid": {
+    "B2": 1200,
+    "B3": 950,
+    "B4": "sin datos",
+    "B6": 1850,
+    "C2": 1200,
+    "C3": 950,
+    "C4": 1430,
+    "C5": 1100,
+    "C6": 1850,
+    "C7": 1620,
+    "D2": true,
+    "D3": "5"
+   },
+   "source": "regla",
+   "note": "Excel ignora los booleanos y los textos que hay en las referencias (documentación de Microsoft de SUMA, PROMEDIO, MIN, MAX y CONTAR). LibreOffice guarda VERDADERO como el número 1, así que aquí no sirve de oráculo"
+  },
+  {
+   "id": "avg-08",
+   "formula": "=PROMEDIO(VERDADERO;3)",
+   "expect": 2,
+   "grid": {
+    "B2": 1200,
+    "B3": 950,
+    "B4": "sin datos",
+    "B6": 1850,
+    "C2": 1200,
+    "C3": 950,
+    "C4": 1430,
+    "C5": 1100,
+    "C6": 1850,
+    "C7": 1620,
+    "D2": true,
+    "D3": "5"
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "avg-09",
+   "formula": "=PROMEDIO(B2:B3)",
+   "expect": 1075,
+   "grid": {
+    "B2": 1200,
+    "B3": 950,
+    "B4": "sin datos",
+    "B6": 1850,
+    "C2": 1200,
+    "C3": 950,
+    "C4": 1430,
+    "C5": 1100,
+    "C6": 1850,
+    "C7": 1620,
+    "D2": true,
+    "D3": "5"
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "avg-10",
+   "formula": "=PROMEDIO(-4;4)",
+   "expect": 0,
+   "grid": {
+    "B2": 1200,
+    "B3": 950,
+    "B4": "sin datos",
+    "B6": 1850,
+    "C2": 1200,
+    "C3": 950,
+    "C4": 1430,
+    "C5": 1100,
+    "C6": 1850,
+    "C7": 1620,
+    "D2": true,
+    "D3": "5"
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "min-01",
+   "formula": "=MIN(B2:B6)",
+   "expect": 950,
+   "grid": {
+    "B2": 1200,
+    "B3": 950,
+    "B4": "sin datos",
+    "B6": 1850,
+    "C2": 1200,
+    "C3": 950,
+    "C4": 1430,
+    "C5": 1100,
+    "C6": 1850,
+    "C7": 1620,
+    "D2": true,
+    "D3": "5"
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "min-02",
+   "formula": "=MIN(C2:C7)",
+   "expect": 950,
+   "grid": {
+    "B2": 1200,
+    "B3": 950,
+    "B4": "sin datos",
+    "B6": 1850,
+    "C2": 1200,
+    "C3": 950,
+    "C4": 1430,
+    "C5": 1100,
+    "C6": 1850,
+    "C7": 1620,
+    "D2": true,
+    "D3": "5"
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "min-03",
+   "formula": "=MIN(3;1;2)",
+   "expect": 1,
+   "grid": {
+    "B2": 1200,
+    "B3": 950,
+    "B4": "sin datos",
+    "B6": 1850,
+    "C2": 1200,
+    "C3": 950,
+    "C4": 1430,
+    "C5": 1100,
+    "C6": 1850,
+    "C7": 1620,
+    "D2": true,
+    "D3": "5"
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "min-04",
+   "formula": "=MIN(Z1:Z3)",
+   "expect": 0,
+   "grid": {
+    "B2": 1200,
+    "B3": 950,
+    "B4": "sin datos",
+    "B6": 1850,
+    "C2": 1200,
+    "C3": 950,
+    "C4": 1430,
+    "C5": 1100,
+    "C6": 1850,
+    "C7": 1620,
+    "D2": true,
+    "D3": "5"
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "min-05",
+   "formula": "=MIN(B4)",
+   "expect": 0,
+   "grid": {
+    "B2": 1200,
+    "B3": 950,
+    "B4": "sin datos",
+    "B6": 1850,
+    "C2": 1200,
+    "C3": 950,
+    "C4": 1430,
+    "C5": 1100,
+    "C6": 1850,
+    "C7": 1620,
+    "D2": true,
+    "D3": "5"
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "min-06",
+   "formula": "=MIN(-1;B2)",
+   "expect": -1,
+   "grid": {
+    "B2": 1200,
+    "B3": 950,
+    "B4": "sin datos",
+    "B6": 1850,
+    "C2": 1200,
+    "C3": 950,
+    "C4": 1430,
+    "C5": 1100,
+    "C6": 1850,
+    "C7": 1620,
+    "D2": true,
+    "D3": "5"
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "min-07",
+   "formula": "=MIN(D2:D3)",
+   "expect": 0,
+   "grid": {
+    "B2": 1200,
+    "B3": 950,
+    "B4": "sin datos",
+    "B6": 1850,
+    "C2": 1200,
+    "C3": 950,
+    "C4": 1430,
+    "C5": 1100,
+    "C6": 1850,
+    "C7": 1620,
+    "D2": true,
+    "D3": "5"
+   },
+   "source": "regla",
+   "note": "Excel ignora los booleanos y los textos que hay en las referencias (documentación de Microsoft de SUMA, PROMEDIO, MIN, MAX y CONTAR). LibreOffice guarda VERDADERO como el número 1, así que aquí no sirve de oráculo"
+  },
+  {
+   "id": "min-08",
+   "formula": "=MIN(\"2\";5)",
+   "expect": 2,
+   "grid": {
+    "B2": 1200,
+    "B3": 950,
+    "B4": "sin datos",
+    "B6": 1850,
+    "C2": 1200,
+    "C3": 950,
+    "C4": 1430,
+    "C5": 1100,
+    "C6": 1850,
+    "C7": 1620,
+    "D2": true,
+    "D3": "5"
+   },
+   "source": "regla",
+   "note": "Excel convierte los números escritos como texto directamente en los argumentos (documentación de Microsoft de PROMEDIO y CONTAR). LibreOffice, con su configuración por defecto, da #VALUE!"
+  },
+  {
+   "id": "max-01",
+   "formula": "=MAX(B2:B6)",
+   "expect": 1850,
+   "grid": {
+    "B2": 1200,
+    "B3": 950,
+    "B4": "sin datos",
+    "B6": 1850,
+    "C2": 1200,
+    "C3": 950,
+    "C4": 1430,
+    "C5": 1100,
+    "C6": 1850,
+    "C7": 1620,
+    "D2": true,
+    "D3": "5"
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "max-02",
+   "formula": "=MAX(C2:C7)",
+   "expect": 1850,
+   "grid": {
+    "B2": 1200,
+    "B3": 950,
+    "B4": "sin datos",
+    "B6": 1850,
+    "C2": 1200,
+    "C3": 950,
+    "C4": 1430,
+    "C5": 1100,
+    "C6": 1850,
+    "C7": 1620,
+    "D2": true,
+    "D3": "5"
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "max-03",
+   "formula": "=MAX(3;1;2)",
+   "expect": 3,
+   "grid": {
+    "B2": 1200,
+    "B3": 950,
+    "B4": "sin datos",
+    "B6": 1850,
+    "C2": 1200,
+    "C3": 950,
+    "C4": 1430,
+    "C5": 1100,
+    "C6": 1850,
+    "C7": 1620,
+    "D2": true,
+    "D3": "5"
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "max-04",
+   "formula": "=MAX(Z1:Z3)",
+   "expect": 0,
+   "grid": {
+    "B2": 1200,
+    "B3": 950,
+    "B4": "sin datos",
+    "B6": 1850,
+    "C2": 1200,
+    "C3": 950,
+    "C4": 1430,
+    "C5": 1100,
+    "C6": 1850,
+    "C7": 1620,
+    "D2": true,
+    "D3": "5"
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "max-05",
+   "formula": "=MAX(-5;-2)",
+   "expect": -2,
+   "grid": {
+    "B2": 1200,
+    "B3": 950,
+    "B4": "sin datos",
+    "B6": 1850,
+    "C2": 1200,
+    "C3": 950,
+    "C4": 1430,
+    "C5": 1100,
+    "C6": 1850,
+    "C7": 1620,
+    "D2": true,
+    "D3": "5"
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "max-06",
+   "formula": "=MAX(B2:B6;2000)",
+   "expect": 2000,
+   "grid": {
+    "B2": 1200,
+    "B3": 950,
+    "B4": "sin datos",
+    "B6": 1850,
+    "C2": 1200,
+    "C3": 950,
+    "C4": 1430,
+    "C5": 1100,
+    "C6": 1850,
+    "C7": 1620,
+    "D2": true,
+    "D3": "5"
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "max-07",
+   "formula": "=MAX(D2:D3)",
+   "expect": 0,
+   "grid": {
+    "B2": 1200,
+    "B3": 950,
+    "B4": "sin datos",
+    "B6": 1850,
+    "C2": 1200,
+    "C3": 950,
+    "C4": 1430,
+    "C5": 1100,
+    "C6": 1850,
+    "C7": 1620,
+    "D2": true,
+    "D3": "5"
+   },
+   "source": "regla",
+   "note": "Excel ignora los booleanos y los textos que hay en las referencias (documentación de Microsoft de SUMA, PROMEDIO, MIN, MAX y CONTAR). LibreOffice guarda VERDADERO como el número 1, así que aquí no sirve de oráculo"
+  },
+  {
+   "id": "max-08",
+   "formula": "=MAX(VERDADERO;0)",
+   "expect": 1,
+   "grid": {
+    "B2": 1200,
+    "B3": 950,
+    "B4": "sin datos",
+    "B6": 1850,
+    "C2": 1200,
+    "C3": 950,
+    "C4": 1430,
+    "C5": 1100,
+    "C6": 1850,
+    "C7": 1620,
+    "D2": true,
+    "D3": "5"
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "count-01",
+   "formula": "=CONTAR(A2:A6)",
+   "expect": 2,
+   "grid": {
+    "A2": "F-001",
+    "A3": 120,
+    "A5": "pendiente",
+    "A6": 80,
+    "B1": true,
+    "B2": "7",
+    "B3": 0
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "count-02",
+   "formula": "=CONTAR(B1:B3)",
+   "expect": 1,
+   "grid": {
+    "A2": "F-001",
+    "A3": 120,
+    "A5": "pendiente",
+    "A6": 80,
+    "B1": true,
+    "B2": "7",
+    "B3": 0
+   },
+   "source": "regla",
+   "note": "Excel ignora los booleanos y los textos que hay en las referencias (documentación de Microsoft de SUMA, PROMEDIO, MIN, MAX y CONTAR). LibreOffice guarda VERDADERO como el número 1, así que aquí no sirve de oráculo"
+  },
+  {
+   "id": "count-03",
+   "formula": "=CONTAR(1;2;\"a\")",
+   "expect": 2,
+   "grid": {
+    "A2": "F-001",
+    "A3": 120,
+    "A5": "pendiente",
+    "A6": 80,
+    "B1": true,
+    "B2": "7",
+    "B3": 0
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "count-04",
+   "formula": "=CONTAR(\"3\")",
+   "expect": 1,
+   "grid": {
+    "A2": "F-001",
+    "A3": 120,
+    "A5": "pendiente",
+    "A6": 80,
+    "B1": true,
+    "B2": "7",
+    "B3": 0
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "count-05",
+   "formula": "=CONTAR(VERDADERO)",
+   "expect": 1,
+   "grid": {
+    "A2": "F-001",
+    "A3": 120,
+    "A5": "pendiente",
+    "A6": 80,
+    "B1": true,
+    "B2": "7",
+    "B3": 0
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "count-06",
+   "formula": "=CONTAR(Z1:Z5)",
+   "expect": 0,
+   "grid": {
+    "A2": "F-001",
+    "A3": 120,
+    "A5": "pendiente",
+    "A6": 80,
+    "B1": true,
+    "B2": "7",
+    "B3": 0
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "count-07",
+   "formula": "=CONTAR(A2:A6;B1:B3)",
+   "expect": 3,
+   "grid": {
+    "A2": "F-001",
+    "A3": 120,
+    "A5": "pendiente",
+    "A6": 80,
+    "B1": true,
+    "B2": "7",
+    "B3": 0
+   },
+   "source": "regla",
+   "note": "Excel ignora los booleanos y los textos que hay en las referencias (documentación de Microsoft de SUMA, PROMEDIO, MIN, MAX y CONTAR). LibreOffice guarda VERDADERO como el número 1, así que aquí no sirve de oráculo"
+  },
+  {
+   "id": "count-08",
+   "formula": "=CONTAR(A3)",
+   "expect": 1,
+   "grid": {
+    "A2": "F-001",
+    "A3": 120,
+    "A5": "pendiente",
+    "A6": 80,
+    "B1": true,
+    "B2": "7",
+    "B3": 0
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "count-09",
+   "formula": "=CONTAR(A2)",
+   "expect": 0,
+   "grid": {
+    "A2": "F-001",
+    "A3": 120,
+    "A5": "pendiente",
+    "A6": 80,
+    "B1": true,
+    "B2": "7",
+    "B3": 0
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "count-10",
+   "formula": "=CONTAR(B1)",
+   "expect": 0,
+   "grid": {
+    "A2": "F-001",
+    "A3": 120,
+    "A5": "pendiente",
+    "A6": 80,
+    "B1": true,
+    "B2": "7",
+    "B3": 0
+   },
+   "source": "regla",
+   "note": "Excel ignora los booleanos y los textos que hay en las referencias (documentación de Microsoft de SUMA, PROMEDIO, MIN, MAX y CONTAR). LibreOffice guarda VERDADERO como el número 1, así que aquí no sirve de oráculo"
+  },
+  {
+   "id": "counta-01",
+   "formula": "=CONTARA(A2:A6)",
+   "expect": 4,
+   "grid": {
+    "A2": "F-001",
+    "A3": 120,
+    "A5": "pendiente",
+    "A6": 80,
+    "B1": true,
+    "B2": "7",
+    "B3": 0
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "counta-02",
+   "formula": "=CONTARA(B1:B3)",
+   "expect": 3,
+   "grid": {
+    "A2": "F-001",
+    "A3": 120,
+    "A5": "pendiente",
+    "A6": 80,
+    "B1": true,
+    "B2": "7",
+    "B3": 0
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "counta-03",
+   "formula": "=CONTARA(1;\"a\";VERDADERO)",
+   "expect": 3,
+   "grid": {
+    "A2": "F-001",
+    "A3": 120,
+    "A5": "pendiente",
+    "A6": 80,
+    "B1": true,
+    "B2": "7",
+    "B3": 0
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "counta-04",
+   "formula": "=CONTARA(Z1:Z5)",
+   "expect": 0,
+   "grid": {
+    "A2": "F-001",
+    "A3": 120,
+    "A5": "pendiente",
+    "A6": 80,
+    "B1": true,
+    "B2": "7",
+    "B3": 0
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "counta-05",
+   "formula": "=CONTARA(A2:B6)",
+   "expect": 6,
+   "grid": {
+    "A2": "F-001",
+    "A3": 120,
+    "A5": "pendiente",
+    "A6": 80,
+    "B1": true,
+    "B2": "7",
+    "B3": 0
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "counta-06",
+   "formula": "=CONTARA(A4)",
+   "expect": 0,
+   "grid": {
+    "A2": "F-001",
+    "A3": 120,
+    "A5": "pendiente",
+    "A6": 80,
+    "B1": true,
+    "B2": "7",
+    "B3": 0
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "counta-07",
+   "formula": "=CONTARA(A2:A6;Z1)",
+   "expect": 4,
+   "grid": {
+    "A2": "F-001",
+    "A3": 120,
+    "A5": "pendiente",
+    "A6": 80,
+    "B1": true,
+    "B2": "7",
+    "B3": 0
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "counta-08",
+   "formula": "=CONTARA(\"\")",
+   "expect": 1,
+   "grid": {
+    "A2": "F-001",
+    "A3": 120,
+    "A5": "pendiente",
+    "A6": 80,
+    "B1": true,
+    "B2": "7",
+    "B3": 0
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "product-01",
+   "formula": "=PRODUCTO(A2:C2)",
+   "expect": 33.75,
+   "grid": {
+    "A2": 3,
+    "B2": 12.5,
+    "C2": 0.9,
+    "D2": "x"
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "product-02",
+   "formula": "=PRODUCTO(2;3;4)",
+   "expect": 24,
+   "grid": {
+    "A2": 3,
+    "B2": 12.5,
+    "C2": 0.9,
+    "D2": "x"
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "product-03",
+   "formula": "=PRODUCTO(A2:D2)",
+   "expect": 33.75,
+   "grid": {
+    "A2": 3,
+    "B2": 12.5,
+    "C2": 0.9,
+    "D2": "x"
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "product-04",
+   "formula": "=PRODUCTO(Z1:Z3)",
+   "expect": 0,
+   "grid": {
+    "A2": 3,
+    "B2": 12.5,
+    "C2": 0.9,
+    "D2": "x"
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "product-05",
+   "formula": "=PRODUCTO(A2;-1)",
+   "expect": -3,
+   "grid": {
+    "A2": 3,
+    "B2": 12.5,
+    "C2": 0.9,
+    "D2": "x"
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "product-06",
+   "formula": "=PRODUCTO(\"2\";5)",
+   "expect": 10,
+   "grid": {
+    "A2": 3,
+    "B2": 12.5,
+    "C2": 0.9,
+    "D2": "x"
+   },
+   "source": "regla",
+   "note": "Excel convierte los números escritos como texto directamente en los argumentos (documentación de Microsoft de PROMEDIO y CONTAR). LibreOffice, con su configuración por defecto, da #VALUE!"
+  },
+  {
+   "id": "product-07",
+   "formula": "=PRODUCTO(A2:B2;2)",
+   "expect": 75,
+   "grid": {
+    "A2": 3,
+    "B2": 12.5,
+    "C2": 0.9,
+    "D2": "x"
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "product-08",
+   "formula": "=PRODUCTO(0;5)",
+   "expect": 0,
+   "grid": {
+    "A2": 3,
+    "B2": 12.5,
+    "C2": 0.9,
+    "D2": "x"
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "round-01",
+   "formula": "=REDONDEAR(2,675;2)",
+   "expect": 2.68,
+   "source": "libreoffice"
+  },
+  {
+   "id": "round-02",
+   "formula": "=REDONDEAR(2,5;0)",
+   "expect": 3,
+   "source": "libreoffice"
+  },
+  {
+   "id": "round-03",
+   "formula": "=REDONDEAR(-2,5;0)",
+   "expect": -3,
+   "source": "libreoffice"
+  },
+  {
+   "id": "round-04",
+   "formula": "=REDONDEAR(1234,5678;2)",
+   "expect": 1234.57,
+   "source": "libreoffice"
+  },
+  {
+   "id": "round-05",
+   "formula": "=REDONDEAR(1234,5678;-2)",
+   "expect": 1200,
+   "source": "libreoffice"
+  },
+  {
+   "id": "round-06",
+   "formula": "=REDONDEAR(1250;-2)",
+   "expect": 1300,
+   "source": "libreoffice"
+  },
+  {
+   "id": "round-07",
+   "formula": "=REDONDEAR(4,1979;2)",
+   "expect": 4.2,
+   "source": "libreoffice"
+  },
+  {
+   "id": "round-08",
+   "formula": "=REDONDEAR(1,554;2)",
+   "expect": 1.55,
+   "source": "libreoffice"
+  },
+  {
+   "id": "round-09",
+   "formula": "=REDONDEAR(27,9993;2)",
+   "expect": 28,
+   "source": "libreoffice"
+  },
+  {
+   "id": "round-10",
+   "formula": "=REDONDEAR(0,125;2)",
+   "expect": 0.13,
+   "source": "libreoffice"
+  },
+  {
+   "id": "round-11",
+   "formula": "=REDONDEAR(1,005;2)",
+   "expect": 1.01,
+   "source": "libreoffice"
+  },
+  {
+   "id": "round-12",
+   "formula": "=REDONDEAR(3,14159;3)",
+   "expect": 3.142,
+   "source": "libreoffice"
+  },
+  {
+   "id": "round-13",
+   "formula": "=REDONDEAR(2,4;)",
+   "expect": 2,
+   "source": "libreoffice"
+  },
+  {
+   "id": "round-14",
+   "formula": "=REDONDEAR(19,99*0,21;2)",
+   "expect": 4.2,
+   "source": "libreoffice"
+  },
+  {
+   "id": "round-15",
+   "formula": "=REDONDEAR(-1,005;2)",
+   "expect": -1.01,
+   "source": "libreoffice"
+  },
+  {
+   "id": "round-16",
+   "formula": "=REDONDEAR(7,5;0,9)",
+   "expect": 8,
+   "source": "libreoffice"
+  },
+  {
+   "id": "err-01",
+   "formula": "=1/0",
+   "expect": {
+    "error": "#¡DIV/0!"
+   },
+   "grid": {
+    "A1": 10,
+    "B1": 0
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "err-02",
+   "formula": "=A1/B1",
+   "expect": {
+    "error": "#¡DIV/0!"
+   },
+   "grid": {
+    "A1": 10,
+    "B1": 0
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "err-03",
+   "formula": "=A1/C1",
+   "expect": {
+    "error": "#¡DIV/0!"
+   },
+   "grid": {
+    "A1": 10,
+    "B1": 0
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "err-04",
+   "formula": "=#N/D+1",
+   "expect": {
+    "error": "#N/D"
+   },
+   "grid": {
+    "A1": 10,
+    "B1": 0
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "err-05",
+   "formula": "=SUMA(1;#N/D)",
+   "expect": {
+    "error": "#N/D"
+   },
+   "grid": {
+    "A1": 10,
+    "B1": 0
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "err-06",
+   "formula": "=1/0+#N/D",
+   "expect": {
+    "error": "#¡DIV/0!"
+   },
+   "grid": {
+    "A1": 10,
+    "B1": 0
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "err-07",
+   "formula": "=\"a\"&1/0",
+   "expect": {
+    "error": "#¡DIV/0!"
+   },
+   "grid": {
+    "A1": 10,
+    "B1": 0
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "err-08",
+   "formula": "=CONTAR(1/0;2)",
+   "expect": 1,
+   "grid": {
+    "A1": 10,
+    "B1": 0
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "err-09",
+   "formula": "=CONTARA(1/0;2)",
+   "expect": 2,
+   "grid": {
+    "A1": 10,
+    "B1": 0
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "err-10",
+   "formula": "=REDONDEAR(1/0;2)",
+   "expect": {
+    "error": "#¡DIV/0!"
+   },
+   "grid": {
+    "A1": 10,
+    "B1": 0
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "err-11",
+   "formula": "=0^0",
+   "expect": {
+    "error": "#¡NUM!"
+   },
+   "grid": {
+    "A1": 10,
+    "B1": 0
+   },
+   "source": "regla",
+   "note": "Excel da #¡NUM! (documentación de Microsoft de POTENCIA y del operador ^); LibreOffice calcula un valor"
+  },
+  {
+   "id": "err-12",
+   "formula": "=(-8)^(1/3)",
+   "expect": {
+    "error": "#¡NUM!"
+   },
+   "grid": {
+    "A1": 10,
+    "B1": 0
+   },
+   "source": "regla",
+   "note": "Excel da #¡NUM! (documentación de Microsoft de POTENCIA y del operador ^); LibreOffice calcula un valor"
+  },
+  {
+   "id": "err-13",
+   "formula": "=-1/0",
+   "expect": {
+    "error": "#¡DIV/0!"
+   },
+   "grid": {
+    "A1": 10,
+    "B1": 0
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "err-14",
+   "formula": "=#¡REF!",
+   "expect": {
+    "error": "#¡REF!"
+   },
+   "grid": {
+    "A1": 10,
+    "B1": 0
+   },
+   "source": "libreoffice"
+  },
+  {
+   "id": "motor-01",
+   "formula": "=D2+1",
+   "expect": {
+    "error": "CICLO"
+   },
+   "at": "D2",
+   "source": "motor",
+   "note": "Referencia a su propia celda: error de ciclo propio del motor"
+  },
+  {
+   "id": "motor-02",
+   "formula": "=SUMA(D1:D5)",
+   "expect": {
+    "error": "CICLO"
+   },
+   "at": "D2",
+   "source": "motor",
+   "note": "Un rango que contiene la celda de la fórmula"
+  },
+  {
+   "id": "motor-03",
+   "formula": "=A1",
+   "expect": {
+    "error": "CICLO"
+   },
+   "grid": {
+    "A1": {
+     "f": "=B1"
+    },
+    "B1": {
+     "f": "=A1"
+    }
+   },
+   "at": "C1",
+   "source": "motor",
+   "note": "Ciclo entre dos celdas del ejercicio"
+  },
+  {
+   "id": "motor-04",
+   "formula": "=A1*2",
+   "expect": 20,
+   "grid": {
+    "A1": {
+     "f": "=B1+5"
+    },
+    "B1": 5
+   },
+   "source": "motor",
+   "note": "Celda del ejercicio con fórmula del autor"
+  },
+  {
+   "id": "planned-01",
+   "formula": "=SI(1;2;3)",
+   "expect": {
+    "error": "#¿NOMBRE?"
+   },
+   "source": "motor",
+   "note": "Función prevista: todavía no disponible en PLD"
+  },
+  {
+   "id": "planned-02",
+   "formula": "=BUSCARX(1;A1:A2;B1:B2)",
+   "expect": {
+    "error": "#¿NOMBRE?"
+   },
+   "source": "motor",
+   "note": "Función prevista: todavía no disponible en PLD"
+  },
+  {
+   "id": "planned-03",
+   "formula": "=SUMAR.SI(A1:A3;\">1\")",
+   "expect": {
+    "error": "#¿NOMBRE?"
+   },
+   "source": "motor",
+   "note": "Función prevista: todavía no disponible en PLD"
+  },
+  {
+   "id": "planned-04",
+   "formula": "=FILTRAR(A1:A3;A1:A3>1)",
+   "expect": {
+    "error": "#¿NOMBRE?"
+   },
+   "source": "motor",
+   "note": "Función prevista: todavía no disponible en PLD"
+  },
+  {
+   "id": "planned-05",
+   "formula": "=CONCAT(\"a\";\"b\")",
+   "expect": {
+    "error": "#¿NOMBRE?"
+   },
+   "source": "motor",
+   "note": "Función prevista: todavía no disponible en PLD"
+  },
+  {
+   "id": "planned-06",
+   "formula": "=BUSCARV(1;A1:B3;2;FALSO)",
+   "expect": {
+    "error": "#¿NOMBRE?"
+   },
+   "source": "motor",
+   "note": "Función prevista: todavía no disponible en PLD"
+  },
+  {
+   "id": "planned-07",
+   "formula": "=FOO(1)",
+   "expect": {
+    "error": "#¿NOMBRE?"
+   },
+   "source": "libreoffice",
+   "note": "Función que no existe"
+  },
+  {
+   "id": "planned-08",
+   "formula": "=hola",
+   "expect": {
+    "error": "#¿NOMBRE?"
+   },
+   "source": "libreoffice",
+   "note": "Nombre no definido"
+  },
+  {
+   "id": "motor-05",
+   "formula": "=SUMA(A1:CVA100)",
+   "expect": {
+    "error": "LÍMITE"
+   },
+   "source": "motor",
+   "note": "Rango de más de 10 000 celdas"
+  }
+ ]
+}

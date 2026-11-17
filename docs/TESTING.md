@@ -75,6 +75,8 @@ Sin ella, fallan las e2e que ejecutan Python. Si cambias la versión, cámbiala 
 | `scripts/learning/**` | `python scripts/learning/build_learning.py` y después `--check` |
 | Módulo de POO (`scripts/learning/poo_module.py`, `frontend/js/learn/poo-view.js`) | Lo anterior, `cd backend && python -m pytest -q tests/test_poo_module.py`, `npm run test:unit` y `npx playwright test e2e/poo.spec.js` |
 | `scripts/courses/**` | `python scripts/courses/<curso>_course.py --check`, `python scripts/courses/lock_ids.py` si hay ids nuevos y `cd backend && python -m pytest -q tests/test_daw_courses.py` |
+| Motor de fórmulas de Excel (`frontend/js/excel/**`) | `npm run test:unit` (casos de referencia en `tests/fixtures/excel/reference-cases.json`), `npx playwright test e2e/excel.spec.js` y, si cambian casos con fuente «libreoffice», `python scripts/excel/oracle_libreoffice.py` (necesita LibreOffice y openpyxl) |
+| `scripts/courses/course_builder.py` | Lo de `scripts/courses/**` y `python -m unittest discover -s scripts/courses/tests` |
 | `backend/**` | Lint, formato y pytest con cobertura |
 | `scripts/resources/**` | `python scripts/resources/build_resources.py --check` y `cd backend && python -m pytest -q tests/test_resources.py` |
 | `scripts/curriculum/**` | `python scripts/curriculum/build_curriculum.py --check` y `cd backend && python -m pytest -q tests/test_curriculum.py` |

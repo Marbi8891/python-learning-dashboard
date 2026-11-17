@@ -9,6 +9,11 @@ cambios se agrupan por fecha de merge, con el número de pull request entre par�
 ## [Sin publicar]
 
 ### Añadido
+- Excel profesional, fase P1: motor de fórmulas propio (`frontend/js/excel/formula/`, DEC-019) con
+  8 funciones, operadores, referencias y copia de fórmulas; corrección de ejercicios por lo que hace la
+  fórmula (`frontend/js/excel/checks.js`); cuadrícula y editor accesibles (`frontend/js/excel/views.js`);
+  194 casos de referencia (138 contrastados con LibreOffice). El generador de cursos acepta cursos sin
+  módulo oficial y ejercicios de fórmulas. Sin cambios visibles: la ruta llega con el contenido (P2).
 - Excel profesional, fase P0: catálogo de cursos por familias (`frontend/js/catalog.js`, DEC-018).
   El curso `excel` (familia academia) tiene ya documento de progreso en la cuenta y sincronización,
   sin contenido ni ruta visibles todavía. Los cursos de DAW no cambian.
