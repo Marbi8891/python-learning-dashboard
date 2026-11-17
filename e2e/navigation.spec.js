@@ -82,7 +82,8 @@ test("en el móvil, si se abre el menú mientras carga una zona, sigue abierto c
     await held;
     await route.continue();
   });
-  await page.goto("/#/bienvenida");
+  // WebKit no da por cargada la página hasta que llega la zona: aquí se espera solo al HTML
+  await page.goto("/#/bienvenida", { waitUntil: "domcontentloaded" });
   await page.locator("#menu-toggle").click();
   await expect(page.locator("#menu-toggle")).toHaveAttribute("aria-expanded", "true");
   release();
