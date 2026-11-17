@@ -49,7 +49,7 @@ Clic derecho en `Iniciar-Dashboard.bat` → **Mostrar más opciones** → **Envi
 | «No se ha encontrado Python 3.11 o superior» | Python no instalado, o solo el acceso directo de Microsoft Store | `winget install --id Python.Python.3.12` y vuelve a abrir el `.bat` |
 | «Windows protegió su PC» al abrir el `.bat` | SmartScreen: archivo descargado de Internet | **Más información → Ejecutar de todas formas**, o desbloquea el zip (paso 2.1) |
 | Error que menciona «directiva de Control de aplicaciones», «Application Control policy» o «bloqueado por el administrador» | Tu equipo tiene la directiva de control de aplicaciones **impuesta** (Smart App Control o una directiva de empresa) y ha bloqueado un archivo sin firma, normalmente una librería instalada con `pip` | Mira la sección siguiente |
-| La web se abre pero la consola dice «No se pudo cargar Python» | Sin Internet la primera vez, o un proxy o antivirus bloquea `cdn.jsdelivr.net` | Conéctate y recarga la página |
+| La web se abre pero la consola dice «No se pudo cargar Python» | Sin Internet la primera vez que arrancas: el lanzador descarga Python (unos 6 MB) de `registry.npmjs.org`, o un proxy o antivirus lo bloquea | Conéctate y vuelve a abrir `Iniciar-Dashboard.bat` |
 | Se abre en `:8001` u otro puerto | El 8000 estaba ocupado | Normal: el lanzador busca un puerto libre |
 
 ### Control de aplicaciones de Windows (NEEDS_HUMAN)

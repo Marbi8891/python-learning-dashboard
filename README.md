@@ -51,7 +51,7 @@ docs/       documentación del proyecto (índice en docs/README.md)
 ```
 Navegador ──► GitHub Pages (HTML, CSS, JS y el temario en JSON)
    │
-   ├─► Web Worker con Pyodide ──► jsDelivr (solo la primera vez, para descargar Python)
+   ├─► Web Worker con Pyodide (servido desde la propia web, comprobado por sha256)
    │
    └─► API FastAPI en Render (/api/v1) ──► PostgreSQL en Neon
         (solo si el alumno inicia sesión)
