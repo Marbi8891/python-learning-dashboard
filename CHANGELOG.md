@@ -81,6 +81,10 @@ cambios se agrupan por fecha de merge, con el número de pull request entre par�
   (`docs/DEPLOY.md` §5).
 
 ### Cambiado
+- Seguridad (RT-004): la CSP ya no permite estilos en línea (`style-src` sin `'unsafe-inline'`). Las
+  barras de progreso pintan `data-meter="NN"` y `frontend/js/meters.js` lo pasa a `--value` con el
+  CSSOM; los pocos `style="…"` fijos de `index.html` pasan a clases. Una e2e comprueba que no hay
+  ninguna violación de la CSP en 11 rutas.
 - Seguridad (RT-002): Python (Pyodide 314.0.7) se sirve desde la propia web, en `pyodide/v314.0.7/`, y
   no desde cdn.jsdelivr.net. `scripts/web/vendor_pyodide.py` lo toma del paquete npm de versión exacta,
   comprueba la huella sha512 de `package-lock.json` y la sha256 de cada archivo, y lo copian Pages, la

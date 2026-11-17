@@ -233,3 +233,7 @@ button {
   display: flex;
   gap: var(--space-2);
 }
+
+/* Sin estilos en línea (RT-004: la CSP no permite style="…") */
+.noscript { padding: 24px; font-family: sans-serif; }
+.fill-primary-strong { fill: var(--color-primary-strong); }

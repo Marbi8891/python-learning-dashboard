@@ -92,7 +92,7 @@ export function renderProfile(content) {
           <span class="module-progress__name">${escapeHtml(module.title)}</span>
           <span class="module-progress__count">${finished}/${module.lessons.length}</span>
           <span class="meter" role="progressbar" aria-label="${escapeHtml(module.title)}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${percent}">
-            <span class="meter__fill" style="--value: ${percent}%"></span>
+            <span class="meter__fill" data-meter="${percent}"></span>
           </span>
         </li>`;
     })
@@ -107,7 +107,7 @@ export function renderProfile(content) {
         <div class="level-card__body">
           <p class="level-card__name">Nivel ${level.number} · ${escapeHtml(level.name)}</p>
           <div class="meter meter--gold" role="progressbar" aria-label="Progreso hacia el siguiente nivel" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${level.progress}">
-            <span class="meter__fill" style="--value: ${level.progress}%"></span>
+            <span class="meter__fill" data-meter="${level.progress}"></span>
           </div>
           <p class="level-card__next">${level.xp} XP · ${level.next ? `${level.next.xp - level.xp} XP para «${escapeHtml(level.next.name)}»` : "Nivel máximo"}</p>
         </div>

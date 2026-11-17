@@ -43,12 +43,15 @@ import { LANDING_ROUTE, closeLanding, isLandingRoute, openLanding } from "./land
 import { initLearnSync, loadLearningContent } from "./learn/learn-store.js";
 import { initPlannerSync } from "./learn/planner-store.js";
 import { lightDismiss } from "./dialogs.js";
+import { watchMeters } from "./meters.js";
 import { initPrefs } from "./prefs.js";
 import { badgesHtml, renderProfile } from "./profile.js";
 import { setQuizLesson } from "./quiz.js";
 import { recordAttempt, restoreSession, setCompleted, state, subscribe } from "./store.js";
 
 hljs.registerLanguage("python", python);
+
+watchMeters(); // barras de progreso sin style="…" (RT-004), antes de pintar nada
 
 /* ---------- Zonas con carga diferida (AUD-024) ----------
    Cada zona grande se descarga la primera vez que se abre su ruta, no al cargar la web: la portada
