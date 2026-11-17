@@ -42,3 +42,6 @@ frontend/_pyo
 # Copias de la base de datos: tienen datos personales (scripts/ops/copia_bd.py)
 copias/
 *.dump
+
+# Python (Pyodide) copiado a la web por scripts/web/vendor_pyodide.py
+frontend/pyodide/

@@ -3,7 +3,8 @@
 Un solo proceso sirve la web y la API en http://127.0.0.1:<puerto>, solo accesible
 desde este equipo. La primera vez crea la base de datos (backend/local.db) y una clave
 secreta propia (backend/.local-secret). Tus datos no salen del ordenador; la consola
-de Python necesita Internet la primera vez para descargar Pyodide.
+de Python necesita Internet la primera vez para descargar Pyodide (unos 6 MB, con su
+huella comprobada).
 
 Uso: doble clic en Iniciar-Dashboard.bat, o bien  python scripts/run_local.py
 """
@@ -63,6 +64,14 @@ def main() -> None:
         FRONTEND_URL=url,
         CORS_ORIGINS="[]",  # la web y la API comparten origen
     )
+    # La consola de Python se sirve desde la propia web (RT-002):
+    # la primera vez se descarga y se comprueba
+    sys.path.insert(0, str(ROOT / "scripts" / "web"))
+    import vendor_pyodide
+
+    if vendor_pyodide.main([""]) != 0:
+        print("  Aviso: sin Python en la web, la consola no funcionará hasta que haya conexión.\n")
+
     os.chdir(BACKEND)  # alembic.ini y el paquete app están aquí
     sys.path.insert(0, str(BACKEND))
 

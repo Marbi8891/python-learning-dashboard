@@ -190,7 +190,9 @@ export async function checkFrontend(root = path.join(REPO, "frontend")) {
   }
 
   // ---------- JavaScript: grafo de módulos ----------
-  const jsFiles = walk(root, (f) => /\.(m?js)$/.test(f) && !f.includes(`${path.sep}vendor${path.sep}`));
+  // vendor/ y pyodide/ son código de terceros (Pyodide se comprueba por sha256 en vendor_pyodide.py)
+  const thirdParty = (f) => f.includes(`${path.sep}vendor${path.sep}`) || f.includes(`${path.sep}pyodide${path.sep}`);
+  const jsFiles = walk(root, (f) => /\.(m?js)$/.test(f) && !thirdParty(f));
   const sources = new Map(jsFiles.map((f) => [f, read(f)]));
   const sourceOf = (f) => sources.get(f) ?? read(f);
 

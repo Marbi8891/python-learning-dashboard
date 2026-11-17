@@ -1,6 +1,7 @@
 # Todo el proyecto en local con PostgreSQL:
 #   JWT_SECRET=<valor> docker compose up --build
 # Frontend: http://localhost:5500 · API: http://localhost:8000/docs
+# Antes, una vez: python scripts/web/vendor_pyodide.py (Python para la consola, sin CDN)
 services:
   db:
     image: postgres:16
