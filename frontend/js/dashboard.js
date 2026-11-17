@@ -176,7 +176,7 @@ function ago(date, now = new Date()) {
 function meter(value, label) {
   const pct = Math.max(0, Math.min(100, value));
   return `<div class="meter" role="progressbar" aria-label="${escapeHtml(label)}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}">
-    <span class="meter__fill" style="--value: ${pct}%"></span></div>`;
+    <span class="meter__fill" data-meter="${pct}"></span></div>`;
 }
 
 function kpi(label, value, hint = "") {

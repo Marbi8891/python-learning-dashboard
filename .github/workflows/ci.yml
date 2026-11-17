@@ -80,6 +80,8 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - name: Python en la web (Pyodide comprobado por sha256, sin CDN)
+        run: python3 scripts/web/vendor_pyodide.py
       - name: Tests unitarios del frontend (dominio, repaso, recomendación y sesiones)
         run: npm run test:unit
       - name: Dependencias de npm sin vulnerabilidades altas
@@ -114,6 +116,8 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - name: Python en la web (Pyodide comprobado por sha256, sin CDN)
+        run: python3 scripts/web/vendor_pyodide.py
       - run: npx playwright install --with-deps webkit
       - name: Prueba de humo en WebKit
         run: npx playwright test --project=webkit e2e/navigation.spec.js e2e/landing.spec.js e2e/account.spec.js

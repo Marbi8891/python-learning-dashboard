@@ -4,6 +4,7 @@
 
 Comprueba, sin publicar nada:
   - que están los archivos que necesita la web (páginas, service worker, manifiesto, config)
+    y Python (pyodide/v<versión>/, de scripts/web/vendor_pyodide.py: sin CDN, RT-002)
   - que la CSP publicada no deja orígenes de desarrollo (localhost) ni http:
   - que cada archivo de la lista sin conexión (precache.js) existe en el artefacto
   - que no se cuelan restos de desarrollo o secretos (.env, claves, node_modules, enlaces, _pyo)
@@ -35,7 +36,14 @@ FORBIDDEN = re.compile(
     r"(^|/)(\.env(\..*)?|.*\.(pem|key|p12|jks|keystore|db|sqlite3?)|node_modules|_pyo|__pycache__|"
     r"\.DS_Store|Thumbs\.db|.*\.log)$"
 )
-MAX_BYTES = 100 * 1024 * 1024  # aviso muy por debajo de 1 GB: la web pesa unos pocos MB
+PYODIDE_FILES = [
+    "pyodide.mjs",
+    "pyodide.asm.mjs",
+    "pyodide.asm.wasm",
+    "python_stdlib.zip",
+    "pyodide-lock.json",
+]
+MAX_BYTES = 100 * 1024 * 1024  # aviso muy por debajo de 1 GB: la web pesa unos 20 MB con Python
 
 
 def main(site: Path) -> int:
@@ -46,6 +54,20 @@ def main(site: Path) -> int:
     for name in REQUIRED:
         if name not in rel:
             errors.append(f"{name}: falta en el artefacto")
+
+    runner = site / "js" / "python-runner.js"
+    version = (
+        re.search(r'PYODIDE_VERSION = "([^"]+)"', runner.read_text(encoding="utf-8"))
+        if runner.exists()
+        else None
+    )
+    if not version:
+        errors.append("js/python-runner.js: no se encuentra PYODIDE_VERSION")
+    else:
+        for name in PYODIDE_FILES:
+            path = f"pyodide/v{version.group(1)}/{name}"
+            if path not in rel:
+                errors.append(f"{path}: falta (¿se ejecutó scripts/web/vendor_pyodide.py?)")
 
     for p in files:
         name = p.relative_to(site).as_posix()

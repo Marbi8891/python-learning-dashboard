@@ -259,7 +259,7 @@ El frontend se publica en GitHub Pages con el workflow `pages.yml`. El backend e
 - **LSSI:** aviso legal con los datos del titular.
 - **Cookies:** solo hay una, la de sesión, y solo si inicias sesión. Es técnica y necesaria, así que no hace falta banner de cookies.
 - **Analítica:** está preparada con GoatCounter, que no usa cookies ni guarda la IP, pero está desactivada (`goatcounter: ""` en `frontend/config.js`). Mientras siga así, la política de privacidad oculta ese apartado y no se mide nada.
-- **Terceros:** Pyodide se descarga de jsDelivr la primera vez que se usa la consola, así que jsDelivr recibe la IP. Está indicado en la política.
+- **Terceros:** Pyodide se sirve desde la propia web desde el 17/11/2026 (RT-002, `scripts/web/vendor_pyodide.py`): ya no hay CDN que reciba la IP del alumno.
 - **Licencias:** el código es MIT y las fuentes (Inter, JetBrains Mono y Fraunces) son OFL. PCAP es una marca de Python Institute y el proyecto no tiene relación con ellos; el certificado que genera la web no es oficial.
 - **Contenido:** las explicaciones y las preguntas son propias, con las fuentes enlazadas.
 

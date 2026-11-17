@@ -165,7 +165,12 @@ export async function checkFrontend(root = path.join(REPO, "frontend")) {
       continue;
     }
     if (file.endsWith(".webmanifest")) {
-      const refs = [data.start_url, data.scope, ...(data.icons ?? []).map((i) => i.src)];
+      const refs = [
+        data.start_url,
+        data.scope,
+        ...(data.icons ?? []).map((i) => i.src),
+        ...(data.shortcuts ?? []).flatMap((s) => (s.icons ?? []).map((i) => i.src)),
+      ];
       for (const ref of refs) {
         if (!ref || EXTERNAL.test(ref)) continue;
         stats.references++;
@@ -185,7 +190,9 @@ export async function checkFrontend(root = path.join(REPO, "frontend")) {
   }
 
   // ---------- JavaScript: grafo de módulos ----------
-  const jsFiles = walk(root, (f) => /\.(m?js)$/.test(f) && !f.includes(`${path.sep}vendor${path.sep}`));
+  // vendor/ y pyodide/ son código de terceros (Pyodide se comprueba por sha256 en vendor_pyodide.py)
+  const thirdParty = (f) => f.includes(`${path.sep}vendor${path.sep}`) || f.includes(`${path.sep}pyodide${path.sep}`);
+  const jsFiles = walk(root, (f) => /\.(m?js)$/.test(f) && !thirdParty(f));
   const sources = new Map(jsFiles.map((f) => [f, read(f)]));
   const sourceOf = (f) => sources.get(f) ?? read(f);
 

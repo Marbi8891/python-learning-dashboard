@@ -86,6 +86,32 @@ cambios se agrupan por fecha de merge, con el número de pull request entre par�
   (`docs/DEPLOY.md` §5).
 
 ### Cambiado
+- Seguridad (RT-004): la CSP ya no permite estilos en línea (`style-src` sin `'unsafe-inline'`). Las
+  barras de progreso pintan `data-meter="NN"` y `frontend/js/meters.js` lo pasa a `--value` con el
+  CSSOM; los pocos `style="…"` fijos de `index.html` pasan a clases. Una e2e comprueba que no hay
+  ninguna violación de la CSP en 11 rutas.
+- Seguridad (RT-002): Python (Pyodide 314.0.7) se sirve desde la propia web, en `pyodide/v314.0.7/`, y
+  no desde cdn.jsdelivr.net. `scripts/web/vendor_pyodide.py` lo toma del paquete npm de versión exacta,
+  comprueba la huella sha512 de `package-lock.json` y la sha256 de cada archivo, y lo copian Pages, la
+  comprobación de despliegue, las e2e y el lanzador local. La CSP ya no permite el CDN, el service
+  worker guarda Python primero en caché y borra las copias antiguas del CDN, y la política de
+  privacidad deja de citar a jsDelivr como tercero.
+- Diálogos (MWG-08): Aspecto y Logros se cierran al pulsar fuera (`closedby="any"`, con respaldo para
+  Safari); el de la cuenta no, para no perder lo escrito. Desplazarse sobre un diálogo ya no mueve la
+  página de fondo (`overscroll-behavior`).
+- Manifest de la app (MWG-09): nombre actual, `id`, categoría, accesos directos a Aprender, Practicar y
+  DAW, y la app instalada empieza en Aprender en vez del curso PCAP.
+- Fuentes (MWG-10): respaldos con las medidas de Inter y Fraunces (`size-adjust`, `ascent-override`):
+  mientras llegan, el salto de la portada pasa de 138 px a 34 px.
+- Código (MWG-11): `toSorted()`, `toReversed()` y `replaceChildren()` donde el `legacy-scan` lo indicaba.
+- Rendimiento (MWG-03): Aprender, Teoría, Practicar y el panel piden el contenido (`learning.json`,
+  172 KB comprimido) a la vez que el módulo de su zona, no después. En un móvil con 4G lenta el
+  contenido principal de Practicar y Teoría aparece unos 0,25 s antes (5,8 s → 5,6 s).
+- Rendimiento (AUD-024): Aprender, PCAP, DAW, Ciberseguridad, Planes, el panel y el certificado se
+  descargan la primera vez que se abren, no al cargar la web. La portada pasa de 68 a 50 scripts y de
+  ~2 MB a ~1,7 MB; en un móvil con 4G lenta su LCP baja de 6,3 s a 4,6 s y el de una lección de 7,9 s
+  a 6,3 s. Si una zona no se puede descargar se dice, y al volver a abrirla se reintenta. Si el menú del
+  móvil se abre mientras llega una zona, se queda abierto.
 - Todas las auditorías de axe de las e2e usan las reglas de WCAG 2.2 A/AA; el README y las guías dicen
   WCAG 2.2 AA y que falta la revisión manual con lector de pantalla.
 

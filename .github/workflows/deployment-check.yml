@@ -38,6 +38,7 @@ jobs:
         run: |
           cp -r frontend _site
           python3 scripts/security/production_csp.py _site
+          python3 scripts/web/vendor_pyodide.py _site
       - name: Verificar el artefacto
         run: python3 scripts/qa/verify_pages_artifact.py _site
       - name: Referencias, imports y recursos del artefacto

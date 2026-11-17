@@ -13,6 +13,7 @@ pip install -r backend/requirements-dev.txt
 # Node 22 (solo para las pruebas del frontend)
 npm ci
 npx playwright install chromium        # solo para las e2e
+python scripts/web/vendor_pyodide.py   # Python para la consola (frontend/pyodide/, sin CDN)
 ```
 
 Las e2e arrancan solas el frontend (`e2e/serve_frontend.py`, un `http.server` con HTTP/1.1) y el backend (`e2e/start_backend.py`, con una SQLite temporal). Está en `playwright.config.js`.
@@ -52,15 +53,15 @@ lee el portapapeles real.
 
 En un portátil, las e2e en paralelo pueden agotar el tiempo de espera, porque cada navegador descarga Pyodide (unos 10 MB) a la vez. Si pasa, ejecútalas en serie: `npx playwright test --workers=1`.
 
-Sin acceso a `cdn.jsdelivr.net` (por ejemplo, en un contenedor en la nube), Pyodide no se descarga y fallan las e2e que
-ejecutan Python, sin que sea un fallo de la web. Para servirlo en local con la misma versión que la CSP de `index.html`:
+Python (Pyodide) se sirve desde la propia web, en `frontend/pyodide/v<versión>/` (RT-002). Esa carpeta no está en
+el repositorio: créala una vez, después de `npm ci`, con
 
 ```bash
-npm i --prefix "$TMP/pyo" pyodide@314.0.7          # fuera del repositorio
-ln -s "$TMP/pyo/node_modules/pyodide" frontend/_pyo   # enlace temporal: bórralo al terminar
-PYODIDE_URL=http://localhost:5500/_pyo/ npm run test:e2e
-rm frontend/_pyo
+python scripts/web/vendor_pyodide.py   # copia y comprueba la sha256 de cada archivo
 ```
+
+Sin ella, fallan las e2e que ejecutan Python. Si cambias la versión, cámbiala a la vez en `package.json`
+(exacta), en `PYODIDE_VERSION` de `frontend/js/python-runner.js` y en las sha256 de `vendor_pyodide.py`.
 
 ## Qué ejecutar según lo que cambies
 

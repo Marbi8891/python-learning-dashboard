@@ -13,6 +13,13 @@
 @font-face { font-family: "Fraunces"; font-weight: 500; font-display: swap; src: url("../fonts/fraunces-latin-500-normal.woff2") format("woff2"); }
 @font-face { font-family: "Fraunces"; font-weight: 500; font-style: italic; font-display: swap; src: url("../fonts/fraunces-latin-500-italic.woff2") format("woff2"); }
 
+/* Respaldos con las medidas de Inter y Fraunces (MWG-10): mientras llegan las fuentes, el texto ocupa casi
+   lo mismo y no salta al cambiar. Calculados con fontTools sobre Arial/Liberation Sans y Times New Roman/
+   Liberation Serif (misma métrica): size-adjust = ancho medio de un texto en español; ascent y descent
+   = los de la fuente web divididos por size-adjust. */
+@font-face { font-family: "Inter Fallback"; src: local("Arial"), local("ArialMT"), local("Liberation Sans"); size-adjust: 106.32%; ascent-override: 91.12%; descent-override: 22.69%; line-gap-override: 0%; }
+@font-face { font-family: "Fraunces Fallback"; src: local("Times New Roman"), local("TimesNewRomanPSMT"), local("Liberation Serif"); size-adjust: 117.95%; ascent-override: 82.92%; descent-override: 21.62%; line-gap-override: 0%; }
+
 /* Los tokens de diseño (colores, tipografía, espaciado…) están en tokens.css */
 
 /* ---------- Reset mínimo ---------- */
@@ -226,3 +233,7 @@ button {
   display: flex;
   gap: var(--space-2);
 }
+
+/* Sin estilos en línea (RT-004: la CSP no permite style="…") */
+.noscript { padding: 24px; font-family: sans-serif; }
+.fill-primary-strong { fill: var(--color-primary-strong); }

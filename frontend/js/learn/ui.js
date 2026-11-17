@@ -50,7 +50,7 @@ export function codeBlock(source, { label = "Código", numbered = false, plain =
 
 export function meter(value, label) {
   const pct = Math.round((value ?? 0) * 100);
-  return `<span class="meter" role="progressbar" aria-label="${escapeHtml(label)}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}"><span class="meter__fill" style="--value: ${pct}%"></span></span>`;
+  return `<span class="meter" role="progressbar" aria-label="${escapeHtml(label)}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}"><span class="meter__fill" data-meter="${pct}"></span></span>`;
 }
 
 export function statusBadge(stats) {

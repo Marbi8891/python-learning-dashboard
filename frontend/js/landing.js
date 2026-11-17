@@ -481,7 +481,7 @@ function activityHtml(index, content) {
       <article class="lp-activity__card">
         <h3>Curso PCAP</h3>
         <p class="lp-activity__next"><strong>${pcap.done}</strong> de ${pcap.total} lecciones completadas</p>
-        <span class="lp-meter" aria-hidden="true"><span style="--value: ${percent}%"></span></span>
+        <span class="lp-meter" aria-hidden="true"><span data-meter="${percent}"></span></span>
         ${
           lesson
             ? `<a class="lp-btn lp-btn--ghost" href="#/leccion/${escapeHtml(lesson.slug)}">Seguir con «${escapeHtml(lesson.title)}»</a>`

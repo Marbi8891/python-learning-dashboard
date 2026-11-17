@@ -85,6 +85,26 @@ test("con el teclado: el primer Tab ofrece saltar al contenido y se ve dónde es
   await expect(page.locator("#appearance-dialog")).toBeHidden();
 });
 
+test("los diálogos: Aspecto se cierra al pulsar fuera, la cuenta no, y el fondo no se desplaza (MWG-08)", async ({ page }) => {
+  await openLesson(page, "variables");
+  await openAppearance(page);
+  await page.getByRole("heading", { name: "Aspecto" }).click(); // dentro: sigue abierto
+  await expect(page.locator("#appearance-dialog")).toBeVisible();
+  // La rueda sobre el fondo oscuro no mueve la página de debajo
+  await page.mouse.move(8, 400);
+  await page.mouse.wheel(0, 600);
+  await page.waitForTimeout(200);
+  expect(await page.evaluate(() => window.scrollY)).toBe(0);
+  await page.mouse.click(8, 400); // fuera: se cierra
+  await expect(page.locator("#appearance-dialog")).toBeHidden();
+
+  // El de la cuenta tiene formularios: un clic fuera no debe borrar lo escrito
+  await page.getByRole("button", { name: "Iniciar sesión" }).click();
+  await expect(page.locator("#account-dialog")).toBeVisible();
+  await page.mouse.click(8, 400);
+  await expect(page.locator("#account-dialog")).toBeVisible();
+});
+
 // WCAG 1.4.10: a 320 px (o con zoom al 200 % en una pantalla de 1280 × 720) no hay scroll lateral
 const ROUTES = ["/#/portada", "/#/aprender", "/#/leccion/variables", "/#/practicar", "/#/progreso", "/#/pcap", "/#/daw"];
 for (const viewport of [
@@ -103,9 +123,14 @@ for (const viewport of [
 
 test("WCAG 1.4.12: la lección aguanta el espaciado de texto máximo sin cortarse", async ({ page }) => {
   await openLesson(page, "variables");
-  await page.addStyleTag({
-    content: `* { line-height: 1.5 !important; letter-spacing: 0.12em !important; word-spacing: 0.16em !important; }
-              p { margin-bottom: 2em !important; }`,
+  // Como una hoja de estilos del usuario: con CSSOM (hoja construida), que la CSP sin 'unsafe-inline' no bloquea
+  // (un <style> inyectado sí quedaría bloqueado y la prueba no mediría nada, RT-004)
+  await page.evaluate(() => {
+    const sheet = new CSSStyleSheet();
+    sheet.replaceSync(`* { line-height: 1.5 !important; letter-spacing: 0.12em !important; word-spacing: 0.16em !important; }
+                       p { margin-bottom: 2em !important; }`);
+    document.adoptedStyleSheets = [...document.adoptedStyleSheets, sheet];
   });
+  expect(await page.locator("#lesson-view p").first().evaluate((el) => getComputedStyle(el).wordSpacing)).not.toBe("0px");
   expect(await horizontalOverflow(page)).toBeLessThanOrEqual(0);
 });
