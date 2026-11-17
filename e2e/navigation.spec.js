@@ -62,6 +62,20 @@ test("cada zona se descarga al abrirla, no al cargar la web (AUD-024)", async ({
   expect(requested.has("/js/daw.js")).toBe(false);
 });
 
+test("el contenido de Practicar se pide a la vez que su módulo, no después (MWG-03)", async ({ page }) => {
+  let release;
+  const held = new Promise((resolve) => (release = resolve));
+  await page.route("**/js/learn/learn-app.js", async (route) => {
+    await held;
+    await route.continue();
+  });
+  const learning = page.waitForRequest("**/data/learning.json");
+  await page.goto("/#/practicar", { waitUntil: "domcontentloaded" });
+  await learning; // llega aunque el módulo de la zona aún no se ha descargado
+  release();
+  await expect(page.locator("#learn-title")).toBeVisible();
+});
+
 test("si una zona no se puede descargar, se dice y la siguiente vez se reintenta", async ({ page }) => {
   let fail = true;
   await page.route("**/js/pcap.js", (route) => (fail ? route.abort() : route.continue()));

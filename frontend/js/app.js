@@ -40,7 +40,7 @@ import { initCourseSync } from "./course-store.js";
 import { initPcapSync } from "./pcap-sync.js";
 import { isLearnRoute, learnNavKey } from "./learn/routes.js";
 import { LANDING_ROUTE, closeLanding, isLandingRoute, openLanding } from "./landing.js";
-import { initLearnSync } from "./learn/learn-store.js";
+import { initLearnSync, loadLearningContent } from "./learn/learn-store.js";
 import { initPlannerSync } from "./learn/planner-store.js";
 import { initPrefs } from "./prefs.js";
 import { badgesHtml, renderProfile } from "./profile.js";
@@ -729,6 +729,8 @@ function navigate({ moveFocus = true } = {}) {
     return;
   }
   if (isLearnRoute(location.hash)) {
+    // El contenido (learning.json) se pide ya, a la vez que el módulo de la zona, no después (MWG-03)
+    if (!zones.learn) loadLearningContent().catch(() => {});
     if (awaitZone("learn", moveFocus)) return;
     showPage("learn", { moveFocus: false });
     zones.learn.openLearn(location.hash, { moveFocus });
@@ -762,6 +764,7 @@ function navigate({ moveFocus = true } = {}) {
   }
   if (location.hash === PRIVATE_ROUTE) history.replaceState(null, "", `${PANEL_ROUTE}/perfil`);
   if (location.hash === PANEL_ROUTE || location.hash.startsWith(`${PANEL_ROUTE}/`)) {
+    if (!zones.panel) loadLearningContent().catch(() => {}); // el panel también lo usa (MWG-03)
     if (awaitZone("panel", moveFocus)) return;
     showPage("private", { moveFocus });
     return;
