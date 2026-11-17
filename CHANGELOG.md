@@ -81,6 +81,9 @@ cambios se agrupan por fecha de merge, con el número de pull request entre par�
   (`docs/DEPLOY.md` §5).
 
 ### Cambiado
+- Rendimiento (MWG-03): Aprender, Teoría, Practicar y el panel piden el contenido (`learning.json`,
+  172 KB comprimido) a la vez que el módulo de su zona, no después. En un móvil con 4G lenta el
+  contenido principal de Practicar y Teoría aparece unos 0,25 s antes (5,8 s → 5,6 s).
 - Rendimiento (AUD-024): Aprender, PCAP, DAW, Ciberseguridad, Planes, el panel y el certificado se
   descargan la primera vez que se abren, no al cargar la web. La portada pasa de 68 a 50 scripts y de
   ~2 MB a ~1,7 MB; en un móvil con 4G lenta su LCP baja de 6,3 s a 4,6 s y el de una lección de 7,9 s
