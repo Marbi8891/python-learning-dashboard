@@ -30,6 +30,15 @@ body {
   max-width: var(--content-max);
   margin-inline: auto;
 }
+/* Mientras llega lessons.json solo se ve el título «Cargando…» (index.html, app.js). Lo demás aparece
+   de una vez debajo y nada de lo que ya se veía se mueve (MWG-02, CLS) */
+.workspace--loading > :not(.workspace__lesson),
+.workspace--loading .workspace__lesson > :not(.lesson-header) {
+  display: none;
+}
+.workspace--loading .lesson-header__title {
+  color: var(--color-text-muted);
+}
 .page { min-width: 0; }
 :where(.page, .workspace) :where(h1, h2, h3) {
   letter-spacing: -.025em;

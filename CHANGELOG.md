@@ -83,6 +83,9 @@ cambios se agrupan por fecha de merge, con el número de pull request entre par�
   hero se pintan sin esperar a `learning.json` y `lessons.json`, y el resto de secciones se añade debajo
   al llegar los datos (LCP móvil medido en local con 4G lenta: 11,7 s → 6,2 s). El aviso para cambiar a
   inglés flota abajo y ya no empuja la página (CLS 0,16 → 0). Diagnóstico Modern Web Guidance MWG-01 y MWG-04.
+- Al entrar directo a una lección (enlace compartido o recarga) la página ya no salta: hasta que llega
+  `lessons.json` solo se ve «Cargando…» y lo demás aparece de una vez (CLS medido en local: móvil 0,81 →
+  0,01; escritorio 0,16 → 0,03). Diagnóstico Modern Web Guidance MWG-02.
 - En el panel, las secciones («Cursos», «Logros»…) ya no pierden el foco de teclado al repintarse la vista
   cuando llega el progreso de la cuenta: sus enlaces no tenían con qué volver a encontrarlos (#106).
 - Las pruebas e2e del panel y de la cuenta fallaban a veces porque seguían antes de que se cerrara el

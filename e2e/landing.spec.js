@@ -53,7 +53,7 @@ test("la portada se pinta sin esperar al temario y no enseña la plantilla de la
   await page.goto("/#/portada/temario");
   await expect(page.locator("#lp-title")).toBeVisible();
   await expect(page.locator(".app")).toBeHidden();
-  await expect(page.getByText("Cargando lección…")).toBeHidden();
+  await expect(page.locator("#lesson-title")).toBeHidden(); // ni la plantilla de la lección
   await expect(page.locator("#lp-temario")).toHaveCount(0);
 
   const heroTop = await page.locator("#lp-title").evaluate((el) => el.getBoundingClientRect().top + scrollY);
