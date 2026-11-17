@@ -75,7 +75,7 @@ test("Excel profesional es de la familia academia y no está entre los cursos de
   const [excel] = ACADEMY_COURSES;
   assert.equal(excel.title, "Excel profesional");
   assert.equal(excel.route, "#/academia/excel");
-  assert.equal(excel.status, "planned");
+  assert.equal(excel.status, "active"); // fase P2: con contenido y en el menú
   assert.equal("module" in excel, false, "una academia no tiene módulo oficial de DAW");
   assert.equal(DAW_COURSES.some((c) => c.id === "excel"), false);
   assert.equal(familyOf("excel"), "academia");

@@ -1,6 +1,6 @@
 # Currículo del piloto: M01 y M02
 
-**Anexo 7 de la [especificación maestra](MASTER_SPECIFICATION.md)** · Versión 1.0 · 16/11/2026 · Estado: **diseño; el contenido no está escrito ni autorizado** (fase P2, DP-04).
+**Anexo 7 de la [especificación maestra](MASTER_SPECIFICATION.md)** · Versión 1.0 · 16/11/2026 · Estado: **escrito en P2** (autorizada el 17/11/2026, DA-22): `scripts/courses/excel/m01.py` y `m02.py`, generados en `frontend/data/academia/excel/`.
 Fuente: doc original 07 §2-§4 y doc 06. Cambio principal respecto al original: **las correcciones «X» (práctica .xlsx) se sustituyen** por ejercicios de cuadrícula (`formula-result` y `formula`), porque el lector XLSX no se desarrolla (DA-11).
 
 Las respuestas de los ejercicios de ejemplo de este anexo se han calculado a mano y con Python el 16/11/2026. El generador las volverá a calcular con el motor y se parará si alguna no cuadra.

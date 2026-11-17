@@ -9,6 +9,12 @@ cambios se agrupan por fecha de merge, con el número de pull request entre par�
 ## [Sin publicar]
 
 ### Añadido
+- Excel profesional, fase P2: el curso ya se ve en `#/academia/excel` (alias `#/excel-academy`), en
+  el menú y en la portada. M01 y M02: 9 unidades con explicación, ejemplos resueltos, ejercicio guiado,
+  caso, errores frecuentes, resumen y fuentes, y 111 ejercicios (58 de test, 36 de «¿qué devuelve?» y 17
+  de «escribe la fórmula») comprobados con el motor al generar el curso. Práctica por unidad, repaso
+  espaciado, unidades «completadas» y «superadas», y avisos de no afiliación y de corrección formativa
+  (DEC-020). Sin XP, sin tablas nuevas: el progreso va en el documento del curso de la cuenta.
 - Excel profesional, fase P1: motor de fórmulas propio (`frontend/js/excel/formula/`, DEC-019) con
   8 funciones, operadores, referencias y copia de fórmulas; corrección de ejercicios por lo que hace la
   fórmula (`frontend/js/excel/checks.js`); cuadrícula y editor accesibles (`frontend/js/excel/views.js`);

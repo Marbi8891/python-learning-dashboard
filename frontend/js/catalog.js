@@ -42,12 +42,12 @@ export const DAW_COURSES = [
   },
 ];
 
-/** Itinerarios de la familia «academia». `status: "planned"`: registrado (documento de progreso y
-    sincronización) pero todavía sin contenido ni ruta visibles (fase P0 de Excel profesional). */
+/** Itinerarios de la familia «academia». `status: "active"`: con contenido, ruta y entrada en el menú
+    (Excel profesional desde la fase P2: M01 y M02; el resto del itinerario sale como «Próximamente»). */
 export const ACADEMY_COURSES = [
   {
     id: "excel", family: "academia", title: "Excel profesional", subtitle: "Excel de Microsoft 365 en español",
-    lang: "excel", route: "#/academia/excel", hours: 120, status: "planned",
+    lang: "excel", route: "#/academia/excel", hours: 120, status: "active",
     structure: "Itinerario propio de la plataforma. No sigue ningún temario oficial ni de Microsoft.",
   },
 ];

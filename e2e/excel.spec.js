@@ -2,7 +2,9 @@
 // P0: el curso está registrado en el catálogo (familia academia) y su progreso se fusiona y sincroniza
 // con la cuenta como el de cualquier curso, sin aparecer todavía en la web ni entre los cursos de DAW.
 // P1: el motor de fórmulas da lo mismo en el navegador que en Node, y los ejercicios de fórmulas se
-// pueden usar con teclado y sin infracciones de accesibilidad. Todavía no hay ninguna ruta visible.
+// pueden usar con teclado y sin infracciones de accesibilidad.
+// P2: el curso tiene su ruta (#/academia/excel, con el alias #/excel-academy), sus avisos, sus 9
+// unidades y su práctica, guarda el progreso y no tiene infracciones de accesibilidad.
 const { readFileSync } = require("node:fs");
 const path = require("node:path");
 const { pathToFileURL } = require("node:url");
@@ -114,4 +116,112 @@ test("un ejercicio de fórmula se corrige con teclado y es accesible", async ({ 
 
   const results = await new AxeBuilder({ page }).include("#xl-prueba").withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]).analyze();
   expect(results.violations).toEqual([]);
+});
+
+/* ---------- P2: el curso en la web ---------- */
+
+const WCAG = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"];
+
+test("el panel de Excel profesional se abre por enlace directo, resiste la recarga y muestra los avisos", async ({ page }) => {
+  await page.goto("/#/academia/excel");
+  const view = page.locator("#excel-view");
+  await expect(view.getByRole("heading", { level: 1, name: "Excel profesional" })).toBeVisible();
+  await page.reload();
+  await expect(view.getByRole("heading", { level: 1, name: "Excel profesional" })).toBeVisible();
+  await expect(view).toContainText("no está afiliado a Microsoft");
+  await expect(view).toContainText("La corrección se hace en tu navegador y sirve para aprender; no es una evaluación oficial");
+  await expect(view.locator(".xl-module")).toHaveCount(25);
+  await expect(view.locator(".xl-module--soon")).toHaveCount(23);
+  await expect(view.locator(".xl-module--soon a")).toHaveCount(0);
+  await expect(view.locator(".xl-unit")).toHaveCount(9);
+  await expect(page.locator('.site-nav a[data-nav="excel"]')).toHaveAttribute("aria-current", "page");
+  await expect(page).toHaveTitle(/Excel profesional/);
+});
+
+test("el alias #/excel-academy lleva a la ruta del curso", async ({ page }) => {
+  await page.goto("/#/excel-academy/xl1-datos");
+  await expect(page).toHaveURL(/#\/academia\/excel\/xl1-datos$/);
+  await expect(page.locator("#excel-view").getByRole("heading", { level: 1, name: "Introducir datos" })).toBeVisible();
+});
+
+test("una unidad o una página que no existen dan la página 404", async ({ page }) => {
+  await page.goto("/#/academia/excel/xl9-nada");
+  await expect(page.locator("#excel-view [data-not-found]")).toBeVisible();
+  await page.goto("/#/academia/excel/xl1-datos/otra-cosa");
+  await expect(page.locator("#excel-view [data-not-found]")).toBeVisible();
+});
+
+test("una unidad tiene sus apartados, se completa y «Continuar» la recuerda", async ({ page }) => {
+  await page.goto("/#/academia/excel/xl1-referencias");
+  const view = page.locator("#excel-view");
+  for (const name of ["Al terminar sabrás", "Ejemplos resueltos", "Ejercicio guiado", "Errores frecuentes", "Resumen", "Para superar la unidad", "Fuentes"]) {
+    await expect(view.getByRole("heading", { level: 2, name })).toBeVisible();
+  }
+  await expect(view.getByRole("table", { name: /Datos del ejemplo: IVA con la tasa fija/ })).toBeVisible();
+  await view.getByRole("button", { name: "Marcar la unidad como completada" }).click();
+  await expect(view.locator(".daw-complete .daw-done")).toBeFocused();
+  await page.reload();
+  await expect(view.getByText("Completada", { exact: true })).toBeVisible();
+  const saved = await page.evaluate(() => JSON.parse(localStorage.getItem("pld:course:excel")));
+  expect(Object.keys(saved.done)).toEqual(["xl1-referencias"]);
+  expect(saved.lastLesson.slug).toBe("xl1-referencias");
+  await page.goto("/#/academia/excel");
+  await expect(view.getByRole("link", { name: /^Continuar: Interfaz, libros y hojas/ })).toBeVisible();
+});
+
+test("la práctica corrige test y fórmulas con teclado, guarda las respuestas y da la unidad por superada", async ({ page }) => {
+  await page.goto("/#/academia/excel/xl1-referencias/practica");
+  const view = page.locator("#excel-view");
+  const formula = view.locator(".xl-item").filter({ hasText: "xl1-ref-07" });
+  const input = formula.getByLabel("Fórmula para D2");
+  await input.fill("=B2*E1");
+  await input.press("Enter");
+  await expect(formula.getByRole("status").first()).toContainText("Todavía no.");
+  await input.fill("=B2*$E$1");
+  await input.press("Enter");
+  await expect(formula.getByRole("status").first()).toContainText("Correcto.");
+  await expect(formula).toContainText("Último intento: bien");
+  await expect(view.locator("#xl-status")).toContainText("obligatorios: 1 de 2");
+
+  const choice = view.locator(".xl-item").filter({ hasText: "xl1-ref-02" });
+  await choice.getByRole("radio", { name: "$E$1" }).check();
+  await choice.getByRole("button", { name: "Comprobar" }).click();
+  await expect(choice.getByRole("status")).toContainText("Correcto.");
+  await expect(choice).toContainText("Con $ delante de la columna y de la fila");
+
+  const saved = await page.evaluate(() => JSON.parse(localStorage.getItem("pld:course:excel")));
+  expect(saved.answers["xl1-ref-07"]).toEqual([false, true]);
+  expect(saved.answers["xl1-ref-02"]).toEqual([true]);
+
+  // xl1-archivos solo tiene test: con todo bien, queda superada
+  await page.goto("/#/academia/excel/xl1-archivos/practica");
+  for (const item of await view.locator(".xl-item").all()) {
+    await item.locator('input[type="radio"][value="0"]').check();
+    await item.getByRole("button", { name: "Comprobar" }).click();
+  }
+  await expect(view.locator("#xl-status")).toContainText("8 de 8 bien");
+  await expect(view.locator("#xl-status")).toContainText("✓ Unidad superada.");
+  await page.goto("/#/academia/excel");
+  await expect(view.locator(".xl-unit").filter({ hasText: "Guardar, exportar y compatibilidad" })).toContainText("✓ Superada");
+});
+
+for (const colorScheme of ["light", "dark"]) {
+  test(`las páginas de Excel profesional no tienen infracciones WCAG en tema ${colorScheme}`, async ({ page }) => {
+    await page.emulateMedia({ colorScheme });
+    for (const route of ["/#/academia/excel", "/#/academia/excel/xl2-hojas", "/#/academia/excel/xl1-formatos/practica"]) {
+      await page.goto(route);
+      await expect(page.locator("#excel-view h1")).toBeVisible();
+      await expect(page.locator("#excel-view [data-xl-question]").first().or(page.locator("#xl-path-title"))).toBeVisible();
+      const results = await new AxeBuilder({ page }).include("#excel-view").withTags(WCAG).analyze();
+      expect(results.violations, route).toEqual([]);
+    }
+  });
+}
+
+test("en un móvil de 320 px la práctica no se desplaza en horizontal", async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 720 });
+  await page.goto("/#/academia/excel/xl1-referencias/practica");
+  await expect(page.locator("#excel-view h1")).toBeVisible();
+  const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+  expect(overflow).toBeLessThanOrEqual(0);
 });

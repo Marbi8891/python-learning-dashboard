@@ -116,6 +116,9 @@ class Lesson:
     )  # (error frecuente, cómo evitarlo)
     summary: list[str] = field(default_factory=list)  # ideas clave
     solution: tuple[str, str] | None = None  # solución del ejercicio: (código, explicación)
+    # Unidades de Excel profesional: horas, nivel, ejemplos con cuadrícula, criterios… Los ejemplos
+    # (`examples`) se comprueban con el motor de fórmulas como ejercicios «formula-result».
+    excel: dict = field(default_factory=dict)
 
 
 @dataclass
@@ -258,7 +261,18 @@ def unit_extras(lesson: Lesson) -> dict:
         solution, explain = lesson.solution
         assert solution.strip() and explain.strip(), f"{lesson.slug}: solución vacía"
         extras["solution"] = {"code": solution.strip() + "\n", "explain": explain.strip()}
+    if lesson.excel:
+        extras["excel"] = lesson.excel
     return extras
+
+
+def example_questions(lesson: Lesson) -> list[dict]:
+    """Ejemplos con fórmula de una unidad de Excel, para que el motor compruebe su resultado."""
+    return [
+        {"kind": "formula-result", "q": example["title"], **example}
+        for example in lesson.excel.get("examples", [])
+        if "formula" in example
+    ]
 
 
 def build(
@@ -281,6 +295,7 @@ def build(
             if module is not None:
                 check(mapping, module, known, lesson.slug)
             examples(lesson.example)  # el ejemplo de la teoría también tiene que funcionar
+            formulas.extend(example_questions(lesson))
             quiz = []
             for q in lesson.quiz:
                 options, answer = resolve(q, runner)
@@ -422,11 +437,13 @@ def main(
     examples: Callable[[str], None],
     *,
     module: str | None,
+    assets: Path = ASSETS,
 ) -> None:
     """`module`: código del módulo oficial de DAW que trabaja el curso (Orden EDU/1311/2024).
-    None en los cursos de la familia academia, que no siguen ningún módulo oficial."""
+    None en los cursos de la familia academia, que no siguen ningún módulo oficial.
+    `assets`: carpeta de los JSON (los de la academia van en frontend/data/academia)."""
     files = build(course_id, blocks, runner, examples, module)
-    folder = ASSETS / course_id
+    folder = assets / course_id
     if "--check" in sys.argv:
         stale = [
             name
