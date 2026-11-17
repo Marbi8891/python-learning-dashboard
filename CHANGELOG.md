@@ -81,6 +81,11 @@ cambios se agrupan por fecha de merge, con el número de pull request entre par�
   (`docs/DEPLOY.md` §5).
 
 ### Cambiado
+- Rendimiento (AUD-024): Aprender, PCAP, DAW, Ciberseguridad, Planes, el panel y el certificado se
+  descargan la primera vez que se abren, no al cargar la web. La portada pasa de 68 a 50 scripts y de
+  ~2 MB a ~1,7 MB; en un móvil con 4G lenta su LCP baja de 6,3 s a 4,6 s y el de una lección de 7,9 s
+  a 6,3 s. Si una zona no se puede descargar se dice, y al volver a abrirla se reintenta. Si el menú del
+  móvil se abre mientras llega una zona, se queda abierto.
 - Todas las auditorías de axe de las e2e usan las reglas de WCAG 2.2 A/AA; el README y las guías dicen
   WCAG 2.2 AA y que falta la revisión manual con lector de pantalla.
 

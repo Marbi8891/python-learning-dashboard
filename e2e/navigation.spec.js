@@ -48,6 +48,48 @@ test("entrar directo a una lección no hace saltar la página mientras llega el 
   if (browserName === "chromium") expect(await page.evaluate(() => window.__shift)).toBeLessThanOrEqual(0.1);
 });
 
+test("cada zona se descarga al abrirla, no al cargar la web (AUD-024)", async ({ page }) => {
+  const requested = new Set();
+  page.on("request", (request) => requested.add(new URL(request.url()).pathname));
+  const ZONES = ["/js/pcap.js", "/js/daw.js", "/js/dashboard.js", "/js/plans.js", "/js/learn/learn-app.js", "/js/learn/poo-view.js"];
+  await page.goto("/#/portada");
+  await page.locator("#lp-temario").waitFor();
+  expect(ZONES.filter((zone) => requested.has(zone))).toEqual([]);
+
+  await page.goto("/#/pcap");
+  await expect(page.locator("#pcap-title")).toContainText("Prepara el examen PCAP");
+  expect(requested.has("/js/pcap.js")).toBe(true);
+  expect(requested.has("/js/daw.js")).toBe(false);
+});
+
+test("si una zona no se puede descargar, se dice y la siguiente vez se reintenta", async ({ page }) => {
+  let fail = true;
+  await page.route("**/js/pcap.js", (route) => (fail ? route.abort() : route.continue()));
+  await openLesson(page);
+  await page.goto("/#/pcap");
+  await expect(page.locator("#notfound-title")).toHaveText("No se pudo cargar el contenido");
+  fail = false;
+  await page.goto("/#/aprender");
+  await page.goto("/#/pcap");
+  await expect(page.locator("#pcap-title")).toContainText("Prepara el examen PCAP");
+});
+
+test("en el móvil, si se abre el menú mientras carga una zona, sigue abierto cuando llega", async ({ page }) => {
+  await page.setViewportSize({ width: 360, height: 780 });
+  let release;
+  const held = new Promise((resolve) => (release = resolve));
+  await page.route("**/js/learn/learn-app.js", async (route) => {
+    await held;
+    await route.continue();
+  });
+  await page.goto("/#/bienvenida");
+  await page.locator("#menu-toggle").click();
+  await expect(page.locator("#menu-toggle")).toHaveAttribute("aria-expanded", "true");
+  release();
+  await expect(page.getByRole("heading", { name: "Aprende Python entendiendo lo que haces" })).toBeVisible();
+  await expect(page.locator("#menu-toggle")).toHaveAttribute("aria-expanded", "true");
+});
+
 test("una lección que no existe dice que no existe y deja volver", async ({ page }) => {
   // Antes abría otra lección sin avisar (NAV-01)
   await openLesson(page, "no-existe");
