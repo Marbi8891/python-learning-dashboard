@@ -81,6 +81,12 @@ cambios se agrupan por fecha de merge, con el número de pull request entre par�
   (`docs/DEPLOY.md` §5).
 
 ### Cambiado
+- Seguridad (RT-002): Python (Pyodide 314.0.7) se sirve desde la propia web, en `pyodide/v314.0.7/`, y
+  no desde cdn.jsdelivr.net. `scripts/web/vendor_pyodide.py` lo toma del paquete npm de versión exacta,
+  comprueba la huella sha512 de `package-lock.json` y la sha256 de cada archivo, y lo copian Pages, la
+  comprobación de despliegue, las e2e y el lanzador local. La CSP ya no permite el CDN, el service
+  worker guarda Python primero en caché y borra las copias antiguas del CDN, y la política de
+  privacidad deja de citar a jsDelivr como tercero.
 - Diálogos (MWG-08): Aspecto y Logros se cierran al pulsar fuera (`closedby="any"`, con respaldo para
   Safari); el de la cuenta no, para no perder lo escrito. Desplazarse sobre un diálogo ya no mueve la
   página de fondo (`overscroll-behavior`).

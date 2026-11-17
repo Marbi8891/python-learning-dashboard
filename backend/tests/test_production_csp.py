@@ -34,13 +34,11 @@ def test_published_csp_drops_only_the_development_origins():
     for name, sources in before.items():
         expected = [s for s in sources if s not in production_csp.DEV_ORIGINS]
         assert after[name] == expected, name
-    # La web publicada sigue llegando a su API, a Google y a Pyodide
-    for origin in (
-        "https://pld-api.onrender.com",
-        "https://accounts.google.com/gsi/",
-        "https://cdn.jsdelivr.net/pyodide/v314.0.7/full/",
-    ):
+    # La web publicada sigue llegando a su API y a Google;
+    # Python se sirve desde la propia web (RT-002)
+    for origin in ("https://pld-api.onrender.com", "https://accounts.google.com/gsi/"):
         assert origin in after["connect-src"]
+    assert not any("jsdelivr" in s for sources in after.values() for s in sources)
     assert after["object-src"] == ["'none'"] and "'unsafe-eval'" not in after["script-src"]
 
 
