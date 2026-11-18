@@ -52,9 +52,7 @@ test("al entrar se fusiona con la copia de la cuenta y lo nuevo se sube sin perd
   // La respuesta llega antes de que termine la fusión: se espera a ver la copia de la cuenta aquí
   const localUnits = () => page.evaluate(async () => Object.keys((await import("/js/career/career-store.js")).career.roadmaps["applied-ai-engineer"]?.units ?? {}));
   await expect.poll(localUnits).toEqual(["m1.git"]);
-  // Espera a que termine la subida inicial tras entrar. Un flush a la vez que esa subida puede
-  // devolver false aunque todo se guarde: es un fallo previo del patrón común (uploader.js), anotado
-  // en docs/AI_CAREER_PATH.md §7 para arreglarlo en su propia rama.
+  // Sin depender del momento: la subida inicial tras entrar ya ha terminado
   await expect.poll(() => page.evaluate(async () => (await import("/js/sync-status.js")).syncState("career"))).toBe("saved");
   expect(await markUnit(page, "m1.poo")).toBe(true);
   await expect.poll(() => savedUnits(request, headers)).toEqual(["m1.git", "m1.poo"]);

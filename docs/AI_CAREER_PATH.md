@@ -125,11 +125,8 @@ Para la Fase C:
 - `nextActivities` no está conectado al planificador ni al plan de «Hoy» (Fase E).
 - Las evidencias las declara el alumno; el navegador no puede verificar un PR. Por eso una competencia
   nunca sube solo con evidencias.
-- **Fallo previo encontrado (no es de esta fase):** si `flush()` coincide con la subida inicial que
-  sigue en vuelo tras iniciar sesión, las dos subidas llevan la misma versión. La segunda recibe 409 y
-  `doc-sync` relee y fusiona; esa fusión llama a `save*()` y vuelve a marcar el almacén como pendiente,
-  así que `flush()` devuelve `false` aunque el servidor lo tenga todo. Afecta a todos los almacenes con
-  este patrón (`planner-store.js` incluido) y explica fallos intermitentes ya presentes en `main` al
-  cerrar sesión justo después de entrar: `account.spec.js:194` falló 2 de 10 veces y `security.spec.js:40`
-  1 de 10, con 3 workers, el 18/11/2026. Propuesta: una sola subida a la vez en `uploader.js`
-  (`flush` espera a la que está en curso), en su propia rama `fix/…`.
+- **Fallos previos corregidos en `fix/subida-unica` (base de esta rama):** (1) un `flush()` durante la
+  subida inicial tras entrar mandaba un segundo PUT con la misma versión y bloqueaba el cierre de
+  sesión aunque todo estuviera guardado; ahora `uploader.js` hace una sola subida a la vez. (2) Los
+  repintados en segundo plano borraban lo escrito en los formularios (el nombre nuevo volvía al
+  antiguo); ahora lo conserva `form-keep.js`. Con 5 workers, los cuatro E2E que fallaban pasaron 60 de 60.
