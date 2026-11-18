@@ -9,7 +9,7 @@ DAW. Decisión: [DEC-012](DECISIONS.md). Auditoría y propuesta: [AI_CAREER_PATH
 |---|---|
 | A · Auditoría y propuesta | Aprobada el 18/11/2026 (D1-D6 y D8; D7 pendiente) |
 | **B · Modelo de datos y arquitectura** | **Implementada en `feature/ai-career-path`, pendiente de revisión** |
-| C · Pantalla «Mi Carrera en IA» | Sin empezar. Bloqueada por la decisión de §6 |
+| C · Pantalla «Mi Carrera en IA» | Sin empezar. Espera la aprobación de la Fase B (la decisión de §6 ya está tomada) |
 | D · Contenido de M1 y M4 y evaluaciones | Sin empezar |
 | E · Proyectos, evidencias en la interfaz, logros y tutor | Sin empezar (el tutor espera a `feature/tutor-nexaro`) |
 | F · Pruebas, documentación y despliegue | Sin empezar |
@@ -92,21 +92,28 @@ Programación, Bases de datos, JavaScript y Lenguajes de marcas). Ahí queda el 
 | `studyTotals` | Minutos apuntados: total, por módulo, 7 y 30 días |
 | `career-finance.js` `projection` | Por año: salario bruto, facturación, gastos, beneficio = facturación − gastos, combinado = salario + beneficio, distancia al objetivo y crecimiento. Sin IRPF |
 
-## 6. NEEDS_HUMAN: dónde se guardan los datos económicos
+## 6. Dónde se guardan los datos económicos (decidido: opción C)
 
-Al cerrar sesión, `clearLocalData()` (`store.js`) borra todas las claves `pld:` del navegador: el
-progreso está en la cuenta y no se pierde. Los datos económicos **no** están en la cuenta (D3), así que
-con una clave `pld:` se borrarían en cada cierre de sesión, sin aviso. Por eso la Fase B deja hechas
-las funciones puras (proyección, fusión, exportación e importación) pero **no** decide la clave ni el
-almacén. Opciones:
+Al cerrar sesión, `clearLocalData()` (`store.js`) borra del navegador lo personal porque su copia está
+en la cuenta. Los datos económicos **no** están en la cuenta (D3), así que se perderían. El 18/11/2026
+el autor eligió la opción C entre estas:
 
 | Opción | Qué pasa | Problema |
 |---|---|---|
 | A. Clave fuera de `pld:` | Sobrevive al cierre de sesión | AUTH-02 no la aparta por cuenta: otra cuenta en el mismo navegador la vería |
 | B. Clave `pld:` normal | AUTH-02 la aparta por cuenta | Se borra en cada cierre de sesión |
-| **C. Clave `pld:` + excluida del borrado al cerrar sesión (recomendada)** | No se pierde al cerrar sesión, y si entra otra cuenta se aparta para la primera (AUTH-02) | Sin sesión, quien use ese navegador la ve, como cualquier progreso sin cuenta. Hacen falta un botón «Borrar mis datos económicos» y la exportación |
+| **C. Clave `pld:` excluida del borrado al cerrar sesión (elegida)** | No se pierde al cerrar sesión, y si entra otra cuenta se aparta para la primera (AUTH-02) | Sin sesión, quien use ese navegador la ve, como cualquier progreso sin cuenta |
 
-C cambia una línea de `clearLocalData` (con su test) y no borra nada que hoy se conserve.
+Implementación: `FINANCE_KEY = "pld:career-finance"` (`career-finance.js`) está en `LOCAL_ONLY_KEYS`, y
+`clearedOnLogout()` (`local-owner.js`) decide qué borra el cierre de sesión. Lo prueban
+`tests/unit/local-owner.test.mjs` y `e2e/security.spec.js`.
+
+Para la Fase C:
+- Botón «Borrar mis datos económicos» y la exportación a mano.
+- Cuando haya datos económicos, el aviso tras cerrar sesión no puede decir solo «Tus datos se han borrado
+  de este navegador»: tiene que decir que los económicos se quedan aquí.
+- Borrar la cuenta tampoco los borra (no están en ella): la pantalla de borrado debe decirlo y ofrecer
+  borrarlos.
 
 ## 7. Limitaciones conocidas
 

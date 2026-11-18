@@ -98,6 +98,8 @@ backend y sin conexión; añadir un itinerario es añadir datos.
 los datos económicos no se ven en otro dispositivo; los umbrales (0,7 adquirida, 180 días de validez,
 7 días de prioridad DAW) son hipótesis iniciales sin datos de uso.
 **Consecuencias:** `frontend/js/career/` (`career-data.js`, `career-store.js`, `career-finance.js`).
-**NEEDS_HUMAN antes de la Fase C:** dónde guardar los datos económicos en el navegador. Hoy el cierre
-de sesión (`clearLocalData` en `store.js`) borra todas las claves `pld:` porque su copia está en la
-cuenta; los datos económicos no la tienen y se perderían. Ver `AI_CAREER_PATH.md` §6.
+**Almacén de los datos económicos (decidido por el autor el 18/11/2026, opción C):** clave
+`pld:career-finance`, en `LOCAL_ONLY_KEYS` de `local-owner.js`. Cerrar sesión (`clearLocalData`) ya no la
+borra, porque no tiene copia en la cuenta y se perdería; sigue contando como progreso, así que si entra
+otra cuenta en el mismo navegador se aparta para su dueño (AUTH-02). Trade-off aceptado: sin sesión, quien
+use ese navegador la ve. Ver `AI_CAREER_PATH.md` §6.

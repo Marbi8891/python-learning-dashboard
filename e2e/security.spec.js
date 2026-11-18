@@ -47,6 +47,8 @@ test("cerrar sesión borra del navegador los datos personales, salvo las prefere
     localStorage.setItem("pld:prefs", JSON.stringify({ theme: "light" }));
     localStorage.setItem("pld:draft:variables", "print('mi código')");
     localStorage.setItem("pld:course:sql", JSON.stringify({ answers: { "sql-01": [true] } }));
+    // Solo existen en este navegador (sin copia en la cuenta): cerrar sesión no puede borrarlos (DEC-012)
+    localStorage.setItem("pld:career-finance", JSON.stringify({ v: 1, targets: null, years: {} }));
   });
   await page.goto("/#/daw");
   await page.getByRole("button", { name: "Iniciar sesión" }).click();
@@ -61,8 +63,9 @@ test("cerrar sesión borra del navegador los datos personales, salvo las prefere
   await expect(page.locator("#toast")).toContainText("Sesión cerrada en todos tus dispositivos");
   await expect(page.locator("#account-label")).toHaveText("Iniciar sesión");
   const left = await page.evaluate(() => Object.keys(localStorage).filter((k) => k.startsWith("pld:")));
-  expect(left.filter((k) => !["pld:prefs", "pld:game"].includes(k))).toEqual([]);
+  expect(left.filter((k) => !["pld:prefs", "pld:game", "pld:career-finance"].includes(k))).toEqual([]);
   expect(left).toContain("pld:prefs");
+  expect(left).toContain("pld:career-finance");
   // El progreso del curso sí se subió a la cuenta antes de borrarlo del navegador
   const login = await request.post(`${API}/api/v1/auth/login`, { form: { username: email, password } });
   const headers = { Authorization: `Bearer ${(await login.json()).access_token}` };

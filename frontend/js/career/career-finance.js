@@ -1,9 +1,9 @@
 /* Objetivo económico del itinerario profesional (DEC-012, D3). Funciones puras: no tocan el DOM ni el
    almacenamiento, así que se prueban con node --test.
 
-   Estos datos NO se suben a la cuenta: solo viven en el navegador y se pueden exportar e importar en
-   JSON. Dónde se guardan en el navegador está pendiente de decisión (NEEDS_HUMAN en DEC-012): el cierre
-   de sesión borra hoy todas las claves pld: del navegador y estos datos no tienen copia en la cuenta.
+   Estos datos NO se suben a la cuenta: solo viven en el navegador (FINANCE_KEY) y se pueden exportar
+   e importar en JSON. Cerrar sesión no los borra (LOCAL_ONLY_KEYS de local-owner.js, DEC-012 opción C)
+   y, si entra otra cuenta en el mismo navegador, se apartan para su dueño como el resto del progreso.
 
    Conceptos que no se mezclan nunca:
    - salary:   salario BRUTO anual por cuenta ajena;
@@ -16,6 +16,7 @@
    Documento: { v: 1, targets: { combined, salary, at } | null, years: { "AAAA": { salary, revenue, expenses, at } } } */
 
 export const FORMAT = "pld-career-finance";
+export const FINANCE_KEY = "pld:career-finance";
 export const MAX_AMOUNT = 10_000_000;
 export const MAX_YEARS = 40;
 const YEAR = /^20\d{2}$/;
