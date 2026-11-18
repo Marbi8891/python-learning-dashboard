@@ -19,7 +19,9 @@
 | [auth.md](auth.md) | Recuperación de contraseña e inicio de sesión con Google |
 | [ADAPTIVE_ENGINE.md](ADAPTIVE_ENGINE.md) | Motor adaptativo: dominio, olvido, repaso espaciado y planificador |
 | [DECISIONS.md](DECISIONS.md) | Registro de decisiones de arquitectura (DEC-NNN) |
-| [CAREER_ROADMAP_ARCHITECTURE.md](CAREER_ROADMAP_ARCHITECTURE.md) | Career Roadmap: auditoría y arquitectura propuesta (Sprint 0) |
+| [AI_CAREER_PATH.md](AI_CAREER_PATH.md) | Itinerario AI Engineer & AI Product Developer: arquitectura, modelo de datos y estado por fases |
+| [AI_CAREER_PATH_AUDIT.md](AI_CAREER_PATH_AUDIT.md) | Itinerario de IA: auditoría y propuesta técnica (Fase A, aprobada) |
+| [CAREER_ROADMAP_ARCHITECTURE.md](CAREER_ROADMAP_ARCHITECTURE.md) | Career Roadmap: auditoría y arquitectura propuesta (Sprint 0; sustituido por AI_CAREER_PATH donde choquen) |
 | [CAREER_ROADMAP_AGENT_LOG.md](CAREER_ROADMAP_AGENT_LOG.md) | Career Roadmap: registro de sprints y decisiones |
 | [DISENO.md](DISENO.md) | Sistema visual: tokens, colores, tipografía y componentes |
 | [IDIOMAS.md](IDIOMAS.md) | Interfaz en inglés y cómo añadir textos traducidos |

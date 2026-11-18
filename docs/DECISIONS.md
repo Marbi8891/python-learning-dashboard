@@ -66,3 +66,38 @@ comportamiento que fijaba el test anterior: lo aprobó el autor al aprobar la au
 
 **Decisión:** todo el motor se escribe en JavaScript sin bibliotecas nuevas. El backend solo gana un id de documento.
 **Por qué:** coste de mantenimiento y arquitectura actual (HTML, CSS, ES modules, FastAPI).
+
+## DEC-012 · Itinerario profesional «AI Engineer & AI Product Developer» (18/11/2026)
+
+DEC-011 está reservado por la rama `feature/tutor-nexaro` (tutor con NEXARO), todavía sin fusionar.
+
+**Estado:** aceptada por el autor (Fase A, [AI_CAREER_PATH_AUDIT.md](AI_CAREER_PATH_AUDIT.md) §9).
+**Contexto:** el autor quiere una ruta profesional de 8 módulos hacia Applied AI Engineer que conviva
+con DAW, use sus proyectos como laboratorios y siga un objetivo económico. El Career Roadmap (Sprint 0,
+04/11) ya había diseñado la capa y sus decisiones D1-D4 seguían pendientes.
+**Opciones:** (A) tablas y endpoints nuevos; (B) catálogo estático generado + un documento por usuario.
+**Decisión:** B, con estas reglas:
+- D1. Catálogo en `frontend/data/career/` generado por `scripts/career/build_career.py` (`--check` en CI,
+  ids en `ids.lock.json`, que solo crece) y progreso en el documento `career` de
+  `/api/v1/course-state/career` (un id más en `COURSES`). Sin migraciones.
+- D2. El itinerario «Python Backend Junior» del Sprint 0 queda dentro de M1 y M2: un solo itinerario activo.
+- D3. Los datos económicos no se suben a la cuenta: solo en el navegador, con exportación e importación JSON.
+- D4. Contenido propio completo primero para M1 y M4 (Fase D); el resto, esqueleto con enlaces.
+- D5. El tutor sobre la ruta espera a que `feature/tutor-nexaro` esté fusionada.
+- D6. Se reutilizan los agentes existentes; no se crean agentes `career-*`.
+- D7. Pendiente: NEXARO Risk Engine no se asocia a ningún repositorio hasta que el autor lo confirme.
+- Una competencia agrega fuentes que ya miden otros módulos (dominio de conceptos de `mastery.js`,
+  bloques de los cursos con la cobertura de `pcap-store.js`, evaluación del módulo y criterios de
+  proyecto con evidencia). **Marcar una unidad como estudiada no suma nada.** Pesos: evaluación 0,4,
+  práctica 0,3, proyecto 0,3, normalizados sobre los grupos que declara la competencia.
+- Los módulos «bloqueados» son orientativos: se pueden abrir; solo dejan de recomendarse.
+- DAW primero: con un examen o entrega del planificador a 7 días o menos, la ruta no propone nada.
+**Por qué:** reutiliza sincronización, versiones, aislamiento entre usuarios y límites; funciona sin
+backend y sin conexión; añadir un itinerario es añadir datos.
+**Trade-offs:** las evidencias de proyecto las declara el alumno (se exige evidencia **y** evaluación);
+los datos económicos no se ven en otro dispositivo; los umbrales (0,7 adquirida, 180 días de validez,
+7 días de prioridad DAW) son hipótesis iniciales sin datos de uso.
+**Consecuencias:** `frontend/js/career/` (`career-data.js`, `career-store.js`, `career-finance.js`).
+**NEEDS_HUMAN antes de la Fase C:** dónde guardar los datos económicos en el navegador. Hoy el cierre
+de sesión (`clearLocalData` en `store.js`) borra todas las claves `pld:` porque su copia está en la
+cuenta; los datos económicos no la tienen y se perderían. Ver `AI_CAREER_PATH.md` §6.

@@ -1,0 +1,3242 @@
+{
+ "id": "applied-ai-engineer",
+ "version": 1,
+ "title": {
+  "es": "AI Engineer & AI Product Developer",
+  "en": "AI Engineer & AI Product Developer"
+ },
+ "specialization": {
+  "es": "Applied AI Engineering + AI Product Development: construir aplicaciones y sistemas de IA, no investigación ni entrenamiento de modelos desde cero.",
+  "en": "Applied AI Engineering + AI Product Development: building AI applications and systems, not research or training models from scratch."
+ },
+ "levels": [
+  {
+   "id": "fundamentos",
+   "title": {
+    "es": "Fundamentos",
+    "en": "Fundamentals"
+   }
+  },
+  {
+   "id": "intermedio",
+   "title": {
+    "es": "Intermedio",
+    "en": "Intermediate"
+   }
+  },
+  {
+   "id": "avanzado",
+   "title": {
+    "es": "Avanzado",
+    "en": "Advanced"
+   }
+  },
+  {
+   "id": "profesional",
+   "title": {
+    "es": "Profesional",
+    "en": "Professional"
+   }
+  }
+ ],
+ "categories": [
+  {
+   "id": "programming",
+   "title": {
+    "es": "Programación",
+    "en": "Programming"
+   }
+  },
+  {
+   "id": "backend",
+   "title": {
+    "es": "Backend",
+    "en": "Backend"
+   }
+  },
+  {
+   "id": "databases",
+   "title": {
+    "es": "Bases de datos",
+    "en": "Databases"
+   }
+  },
+  {
+   "id": "frontend",
+   "title": {
+    "es": "Frontend",
+    "en": "Frontend"
+   }
+  },
+  {
+   "id": "ai-ml",
+   "title": {
+    "es": "IA y ML",
+    "en": "AI & ML"
+   }
+  },
+  {
+   "id": "llm",
+   "title": {
+    "es": "LLM",
+    "en": "LLM"
+   }
+  },
+  {
+   "id": "agents",
+   "title": {
+    "es": "Agentes",
+    "en": "Agents"
+   }
+  },
+  {
+   "id": "devops",
+   "title": {
+    "es": "Infraestructura",
+    "en": "Infrastructure"
+   }
+  },
+  {
+   "id": "product",
+   "title": {
+    "es": "Producto",
+    "en": "Product"
+   }
+  },
+  {
+   "id": "professional",
+   "title": {
+    "es": "Carrera y negocio",
+    "en": "Career & business"
+   }
+  }
+ ],
+ "salary": {
+  "source": {
+   "es": "Objetivos orientativos del autor (bruto anual). No son datos de mercado: contrástalos con ofertas reales.",
+   "en": "The author's own indicative targets (gross per year). Not market data: check them against real job offers."
+  },
+  "bands": [
+   {
+    "id": "junior",
+    "title": {
+     "es": "Junior / entrada",
+     "en": "Junior / entry"
+    },
+    "min": 25000,
+    "max": 32000
+   },
+   {
+    "id": "developer",
+    "title": {
+     "es": "Developer",
+     "en": "Developer"
+    },
+    "min": 32000,
+    "max": 42000
+   },
+   {
+    "id": "applied",
+    "title": {
+     "es": "Applied AI Engineer",
+     "en": "Applied AI Engineer"
+    },
+    "min": 42000,
+    "max": 55000
+   },
+   {
+    "id": "senior",
+    "title": {
+     "es": "Senior AI Engineer",
+     "en": "Senior AI Engineer"
+    },
+    "min": 55000,
+    "max": 70000
+   },
+   {
+    "id": "lead",
+    "title": {
+     "es": "Especialista / liderazgo",
+     "en": "Specialist / lead"
+    },
+    "min": 70000,
+    "max": null
+   }
+  ],
+  "defaultTarget": 70000
+ },
+ "stages": [
+  {
+   "id": "s1",
+   "months": 6,
+   "modules": [
+    "m1",
+    "m2",
+    "m8"
+   ],
+   "title": {
+    "es": "Consolidación de DAW, Python y backend",
+    "en": "DAW, Python and backend consolidation"
+   }
+  },
+  {
+   "id": "s2",
+   "months": 6,
+   "modules": [
+    "m3",
+    "m4"
+   ],
+   "title": {
+    "es": "Fundamentos de IA, LLM Engineering y RAG",
+    "en": "AI fundamentals, LLM engineering and RAG"
+   }
+  },
+  {
+   "id": "s3",
+   "months": 6,
+   "modules": [
+    "m5",
+    "m6"
+   ],
+   "title": {
+    "es": "Agentes, MCP, infraestructura y despliegues",
+    "en": "Agents, MCP, infrastructure and deployments"
+   }
+  },
+  {
+   "id": "s4",
+   "months": 6,
+   "modules": [
+    "m7",
+    "m8"
+   ],
+   "title": {
+    "es": "Experiencia en producción y primeros clientes",
+    "en": "Production experience and first clients"
+   }
+  },
+  {
+   "id": "s5",
+   "months": 6,
+   "modules": [
+    "m4",
+    "m5",
+    "m7"
+   ],
+   "title": {
+    "es": "Especialización y crecimiento profesional",
+    "en": "Specialization and professional growth"
+   }
+  },
+  {
+   "id": "s6",
+   "months": 6,
+   "modules": [
+    "m8"
+   ],
+   "title": {
+    "es": "Puestos mejor remunerados y expansión de la actividad propia",
+    "en": "Better-paid roles and growing your own business"
+   }
+  }
+ ],
+ "modules": [
+  {
+   "id": "m1",
+   "requires": [],
+   "title": {
+    "es": "Python Engineering",
+    "en": "Python Engineering"
+   },
+   "summary": {
+    "es": "Python de nivel profesional: diseño, tipos, errores, asincronía, tests y Git.",
+    "en": "Professional-level Python: design, types, errors, async, tests and Git."
+   },
+   "units": [
+    {
+     "id": "m1.poo",
+     "level": "fundamentos",
+     "title": {
+      "es": "Programación orientada a objetos",
+      "en": "Object-oriented programming"
+     },
+     "objectives": [
+      "Diseñar clases con responsabilidades claras",
+      "Elegir entre herencia y composición con criterio"
+     ],
+     "skills": [
+      "py-oop"
+     ],
+     "links": [
+      {
+       "kind": "concept",
+       "id": "poo"
+      },
+      {
+       "kind": "block",
+       "id": "programacion:prog-ut4"
+      },
+      {
+       "kind": "block",
+       "id": "programacion:prog-ut5"
+      }
+     ],
+     "pending": true
+    },
+    {
+     "id": "m1.errores",
+     "level": "fundamentos",
+     "title": {
+      "es": "Gestión de errores",
+      "en": "Error handling"
+     },
+     "objectives": [
+      "Lanzar y capturar excepciones propias",
+      "Validar entradas sin ocultar fallos"
+     ],
+     "skills": [
+      "py-errors"
+     ],
+     "links": [
+      {
+       "kind": "concept",
+       "id": "excepciones"
+      },
+      {
+       "kind": "concept",
+       "id": "validacion"
+      }
+     ],
+     "pending": true
+    },
+    {
+     "id": "m1.git",
+     "level": "fundamentos",
+     "title": {
+      "es": "Git y GitHub",
+      "en": "Git and GitHub"
+     },
+     "objectives": [
+      "Trabajar con ramas, commits pequeños y pull requests",
+      "Revisar un diff antes de cada commit"
+     ],
+     "skills": [
+      "git-workflow"
+     ],
+     "links": [
+      {
+       "kind": "resource",
+       "id": "res-pro-git"
+      }
+     ],
+     "pending": true
+    },
+    {
+     "id": "m1.tipado",
+     "level": "intermedio",
+     "title": {
+      "es": "Tipado y estructuras de datos",
+      "en": "Typing and data structures"
+     },
+     "objectives": [
+      "Anotar tipos y comprobarlos",
+      "Elegir la estructura de datos según el coste de las operaciones"
+     ],
+     "skills": [
+      "py-types-data"
+     ],
+     "links": [
+      {
+       "kind": "concept",
+       "id": "tipos"
+      },
+      {
+       "kind": "concept",
+       "id": "diccionarios"
+      },
+      {
+       "kind": "concept",
+       "id": "tuplas-conjuntos"
+      },
+      {
+       "kind": "resource",
+       "id": "res-python-tutorial"
+      }
+     ],
+     "pending": true
+    },
+    {
+     "id": "m1.iteradores",
+     "level": "intermedio",
+     "title": {
+      "es": "Iteradores, generadores y decoradores",
+      "en": "Iterators, generators and decorators"
+     },
+     "objectives": [
+      "Escribir generadores que procesan datos sin cargarlos enteros",
+      "Entender y escribir un decorador"
+     ],
+     "skills": [
+      "py-types-data",
+      "py-architecture"
+     ],
+     "links": [
+      {
+       "kind": "concept",
+       "id": "recorridos"
+      }
+     ],
+     "pending": true
+    },
+    {
+     "id": "m1.testing",
+     "level": "intermedio",
+     "title": {
+      "es": "Testing con pytest",
+      "en": "Testing with pytest"
+     },
+     "objectives": [
+      "Escribir tests unitarios con fixtures y parametrización",
+      "Medir la cobertura y saber qué no cubre"
+     ],
+     "skills": [
+      "py-testing"
+     ],
+     "links": [
+      {
+       "kind": "concept",
+       "id": "depuracion"
+      }
+     ],
+     "pending": true
+    },
+    {
+     "id": "m1.asyncio",
+     "level": "avanzado",
+     "title": {
+      "es": "Asyncio y programación asíncrona",
+      "en": "Asyncio and asynchronous programming"
+     },
+     "objectives": [
+      "Distinguir concurrencia de paralelismo",
+      "Coordinar tareas con async/await sin bloquear el bucle"
+     ],
+     "skills": [
+      "py-async"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m1.arquitectura",
+     "level": "avanzado",
+     "title": {
+      "es": "Arquitectura de software",
+      "en": "Software architecture"
+     },
+     "objectives": [
+      "Separar dominio, aplicación e infraestructura sin capas inútiles",
+      "Gestionar dependencias entre módulos"
+     ],
+     "skills": [
+      "py-architecture"
+     ],
+     "links": [
+      {
+       "kind": "concept",
+       "id": "modulos"
+      }
+     ],
+     "pending": true
+    },
+    {
+     "id": "m1.datos",
+     "level": "avanzado",
+     "title": {
+      "es": "Procesamiento de datos",
+      "en": "Data processing"
+     },
+     "objectives": [
+      "Leer, transformar y validar ficheros de datos",
+      "Normalizar datos de fuentes distintas a un esquema común"
+     ],
+     "skills": [
+      "py-data-processing"
+     ],
+     "links": [
+      {
+       "kind": "concept",
+       "id": "archivos"
+      },
+      {
+       "kind": "concept",
+       "id": "recorridos"
+      }
+     ],
+     "pending": true
+    },
+    {
+     "id": "m1.clean-code",
+     "level": "profesional",
+     "title": {
+      "es": "Clean code y revisión de código",
+      "en": "Clean code and code review"
+     },
+     "objectives": [
+      "Refactorizar con tests como red de seguridad",
+      "Hacer y recibir revisiones de código con evidencias"
+     ],
+     "skills": [
+      "py-architecture",
+      "git-workflow"
+     ],
+     "links": [],
+     "pending": true
+    }
+   ],
+   "assessment": {
+    "id": "m1",
+    "pass": 0.7,
+    "bank": null
+   },
+   "project": {
+    "criteria": [
+     "npa-servicio-tests",
+     "re-normalizacion"
+    ],
+    "checklists": []
+   }
+  },
+  {
+   "id": "m2",
+   "requires": [
+    "m1"
+   ],
+   "title": {
+    "es": "Backend Engineering",
+    "en": "Backend Engineering"
+   },
+   "summary": {
+    "es": "APIs de producción con FastAPI, PostgreSQL y Redis, seguras y modulares.",
+    "en": "Production APIs with FastAPI, PostgreSQL and Redis, secure and modular."
+   },
+   "units": [
+    {
+     "id": "m2.rest",
+     "level": "fundamentos",
+     "title": {
+      "es": "Diseño de APIs REST",
+      "en": "REST API design"
+     },
+     "objectives": [
+      "Modelar recursos, métodos y códigos de estado",
+      "Versionar una API sin romper clientes"
+     ],
+     "skills": [
+      "api-design"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m2.sql",
+     "level": "fundamentos",
+     "title": {
+      "es": "SQL avanzado",
+      "en": "Advanced SQL"
+     },
+     "objectives": [
+      "Escribir consultas con JOIN, agregados y subconsultas",
+      "Leer un plan de ejecución"
+     ],
+     "skills": [
+      "sql"
+     ],
+     "links": [
+      {
+       "kind": "block",
+       "id": "sql:bd-ud2"
+      },
+      {
+       "kind": "block",
+       "id": "sql:bd-ud3"
+      }
+     ],
+     "pending": true
+    },
+    {
+     "id": "m2.cliente",
+     "level": "fundamentos",
+     "title": {
+      "es": "Consumir la API desde el navegador",
+      "en": "Consuming the API from the browser"
+     },
+     "objectives": [
+      "Llamar a una API con fetch y gestionar errores",
+      "Entender CORS y las cookies de sesión"
+     ],
+     "skills": [
+      "web-client"
+     ],
+     "links": [
+      {
+       "kind": "block",
+       "id": "js:js-asincronia"
+      },
+      {
+       "kind": "block",
+       "id": "js:js-dom"
+      },
+      {
+       "kind": "block",
+       "id": "marcas:mar-json"
+      },
+      {
+       "kind": "resource",
+       "id": "res-mdn-js"
+      }
+     ],
+     "pending": true
+    },
+    {
+     "id": "m2.pydantic",
+     "level": "intermedio",
+     "title": {
+      "es": "Pydantic",
+      "en": "Pydantic"
+     },
+     "objectives": [
+      "Validar entradas y salidas con esquemas",
+      "Separar el modelo de la API del de la base de datos"
+     ],
+     "skills": [
+      "api-design"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m2.fastapi",
+     "level": "intermedio",
+     "title": {
+      "es": "FastAPI avanzado",
+      "en": "Advanced FastAPI"
+     },
+     "objectives": [
+      "Usar dependencias, routers y ciclo de vida",
+      "Probar endpoints con el cliente de tests"
+     ],
+     "skills": [
+      "api-design"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m2.migraciones",
+     "level": "intermedio",
+     "title": {
+      "es": "Migraciones de base de datos",
+      "en": "Database migrations"
+     },
+     "objectives": [
+      "Crear migraciones versionadas y reversibles",
+      "Migrar datos existentes sin perderlos"
+     ],
+     "skills": [
+      "db-postgres-redis"
+     ],
+     "links": [
+      {
+       "kind": "block",
+       "id": "sql:bd-ampliacion"
+      }
+     ],
+     "pending": true
+    },
+    {
+     "id": "m2.auth",
+     "level": "avanzado",
+     "title": {
+      "es": "Autenticación y autorización",
+      "en": "Authentication and authorization"
+     },
+     "objectives": [
+      "Implementar sesiones o tokens y su revocación",
+      "Aplicar autorización sin IDOR"
+     ],
+     "skills": [
+      "api-auth-security"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m2.postgres",
+     "level": "avanzado",
+     "title": {
+      "es": "PostgreSQL",
+      "en": "PostgreSQL"
+     },
+     "objectives": [
+      "Usar índices, transacciones y bloqueos",
+      "Diagnosticar consultas lentas"
+     ],
+     "skills": [
+      "db-postgres-redis",
+      "sql"
+     ],
+     "links": [
+      {
+       "kind": "block",
+       "id": "sql:bd-ampliacion"
+      }
+     ],
+     "pending": true
+    },
+    {
+     "id": "m2.redis",
+     "level": "avanzado",
+     "title": {
+      "es": "Redis",
+      "en": "Redis"
+     },
+     "objectives": [
+      "Usar Redis como caché y para límites de peticiones",
+      "Decidir cuándo no hace falta Redis"
+     ],
+     "skills": [
+      "db-postgres-redis"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m2.modular",
+     "level": "profesional",
+     "title": {
+      "es": "Arquitectura modular",
+      "en": "Modular architecture"
+     },
+     "objectives": [
+      "Organizar un monolito modular",
+      "Decidir con datos cuándo separar un servicio"
+     ],
+     "skills": [
+      "api-design",
+      "py-architecture"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m2.seguridad",
+     "level": "profesional",
+     "title": {
+      "es": "Seguridad de APIs",
+      "en": "API security"
+     },
+     "objectives": [
+      "Revisar una API con el OWASP API Security Top 10",
+      "Configurar límites, cabeceras y registros de seguridad"
+     ],
+     "skills": [
+      "api-auth-security"
+     ],
+     "links": [],
+     "pending": true
+    }
+   ],
+   "assessment": {
+    "id": "m2",
+    "pass": 0.7,
+    "bank": null
+   },
+   "project": {
+    "criteria": [
+     "npa-backend-produccion",
+     "jr-conectores",
+     "pld-fullstack"
+    ],
+    "checklists": []
+   }
+  },
+  {
+   "id": "m3",
+   "requires": [
+    "m1"
+   ],
+   "title": {
+    "es": "AI Fundamentals",
+    "en": "AI Fundamentals"
+   },
+   "summary": {
+    "es": "Lo necesario de ML, deep learning y transformers para usar y elegir modelos con criterio.",
+    "en": "The ML, deep learning and transformer basics needed to use and choose models wisely."
+   },
+   "units": [
+    {
+     "id": "m3.ml",
+     "level": "fundamentos",
+     "title": {
+      "es": "Fundamentos de machine learning",
+      "en": "Machine learning fundamentals"
+     },
+     "objectives": [
+      "Distinguir entrenamiento, validación y prueba",
+      "Interpretar métricas básicas de un modelo"
+     ],
+     "skills": [
+      "ml-foundations"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m3.open-source",
+     "level": "fundamentos",
+     "title": {
+      "es": "Modelos open source y Hugging Face",
+      "en": "Open-source models and Hugging Face"
+     },
+     "objectives": [
+      "Leer la ficha de un modelo: licencia, tamaño y datos",
+      "Elegir un modelo para una tarea concreta"
+     ],
+     "skills": [
+      "local-models"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m3.ollama",
+     "level": "fundamentos",
+     "title": {
+      "es": "Ollama en local",
+      "en": "Ollama locally"
+     },
+     "objectives": [
+      "Servir y consultar un modelo local por API",
+      "Medir latencia y memoria"
+     ],
+     "skills": [
+      "local-models"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m3.redes",
+     "level": "intermedio",
+     "title": {
+      "es": "Redes neuronales y deep learning",
+      "en": "Neural networks and deep learning"
+     },
+     "objectives": [
+      "Explicar capas, pesos y retropropagación con un ejemplo pequeño",
+      "Entender por qué hacen falta tantos datos"
+     ],
+     "skills": [
+      "ml-foundations"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m3.tokenizacion",
+     "level": "intermedio",
+     "title": {
+      "es": "Tokenización",
+      "en": "Tokenization"
+     },
+     "objectives": [
+      "Contar tokens y estimar costes y contexto",
+      "Ver cómo cambia la tokenización entre idiomas"
+     ],
+     "skills": [
+      "transformers-embeddings"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m3.embeddings",
+     "level": "intermedio",
+     "title": {
+      "es": "Embeddings",
+      "en": "Embeddings"
+     },
+     "objectives": [
+      "Calcular similitud coseno entre vectores",
+      "Elegir un modelo de embeddings para español"
+     ],
+     "skills": [
+      "transformers-embeddings"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m3.inferencia",
+     "level": "intermedio",
+     "title": {
+      "es": "Inferencia",
+      "en": "Inference"
+     },
+     "objectives": [
+      "Ajustar temperatura, top-p y longitud",
+      "Entender qué hace el modelo al generar token a token"
+     ],
+     "skills": [
+      "transformers-embeddings",
+      "local-models"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m3.transformers",
+     "level": "avanzado",
+     "title": {
+      "es": "Transformers y atención",
+      "en": "Transformers and attention"
+     },
+     "objectives": [
+      "Explicar la atención con un ejemplo numérico",
+      "Relacionar la ventana de contexto con la arquitectura"
+     ],
+     "skills": [
+      "transformers-embeddings"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m3.cuantizacion",
+     "level": "avanzado",
+     "title": {
+      "es": "Cuantización y rendimiento",
+      "en": "Quantization and performance"
+     },
+     "objectives": [
+      "Comparar formatos cuantizados por calidad y memoria",
+      "Elegir el modelo que cabe en el hardware disponible"
+     ],
+     "skills": [
+      "local-models"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m3.comparar",
+     "level": "profesional",
+     "title": {
+      "es": "Comparar modelos locales",
+      "en": "Comparing local models"
+     },
+     "objectives": [
+      "Diseñar una comparativa reproducible",
+      "Decidir con datos, no con impresiones"
+     ],
+     "skills": [
+      "local-models",
+      "llm-evaluation"
+     ],
+     "links": [],
+     "pending": true
+    }
+   ],
+   "assessment": {
+    "id": "m3",
+    "pass": 0.7,
+    "bank": null
+   },
+   "project": {
+    "criteria": [
+     "npa-comparativa-modelos"
+    ],
+    "checklists": []
+   }
+  },
+  {
+   "id": "m4",
+   "requires": [
+    "m1",
+    "m3"
+   ],
+   "title": {
+    "es": "LLM Engineering",
+    "en": "LLM Engineering"
+   },
+   "summary": {
+    "es": "Construir sistemas con LLM fiables: prompts, salidas estructuradas, RAG híbrido y evaluación.",
+    "en": "Building reliable LLM systems: prompts, structured outputs, hybrid RAG and evaluation."
+   },
+   "units": [
+    {
+     "id": "m4.prompting",
+     "level": "fundamentos",
+     "title": {
+      "es": "Prompt engineering",
+      "en": "Prompt engineering"
+     },
+     "objectives": [
+      "Escribir instrucciones con contexto, ejemplos y formato",
+      "Probar un prompt con casos que deben fallar"
+     ],
+     "skills": [
+      "llm-prompting-structured"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m4.structured",
+     "level": "intermedio",
+     "title": {
+      "es": "Structured outputs",
+      "en": "Structured outputs"
+     },
+     "objectives": [
+      "Pedir JSON y validarlo contra un esquema",
+      "Reintentar o rechazar una salida inválida"
+     ],
+     "skills": [
+      "llm-prompting-structured"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m4.function-calling",
+     "level": "intermedio",
+     "title": {
+      "es": "Function calling",
+      "en": "Function calling"
+     },
+     "objectives": [
+      "Declarar herramientas con esquemas",
+      "Ejecutar solo llamadas permitidas y validadas"
+     ],
+     "skills": [
+      "llm-prompting-structured",
+      "agents-tools"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m4.streaming",
+     "level": "intermedio",
+     "title": {
+      "es": "Streaming",
+      "en": "Streaming"
+     },
+     "objectives": [
+      "Enviar la respuesta por fragmentos al cliente",
+      "Gestionar cancelaciones y errores a mitad"
+     ],
+     "skills": [
+      "llm-prompting-structured",
+      "api-design"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m4.contexto",
+     "level": "intermedio",
+     "title": {
+      "es": "Gestión del contexto",
+      "en": "Context management"
+     },
+     "objectives": [
+      "Presupuestar tokens entre instrucciones, historial y documentos",
+      "Resumir o recortar sin perder lo importante"
+     ],
+     "skills": [
+      "llm-rag-search"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m4.rag",
+     "level": "intermedio",
+     "title": {
+      "es": "RAG",
+      "en": "RAG"
+     },
+     "objectives": [
+      "Explicar las fases: ingesta, troceado, recuperación y generación",
+      "Citar las fuentes en cada respuesta"
+     ],
+     "skills": [
+      "llm-rag-search"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m4.semantica",
+     "level": "intermedio",
+     "title": {
+      "es": "Búsqueda semántica",
+      "en": "Semantic search"
+     },
+     "objectives": [
+      "Indexar fragmentos con embeddings",
+      "Recuperar por similitud y fijar un umbral"
+     ],
+     "skills": [
+      "llm-rag-search",
+      "transformers-embeddings"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m4.hibrida",
+     "level": "avanzado",
+     "title": {
+      "es": "Búsqueda híbrida BM25 + embeddings",
+      "en": "Hybrid search: BM25 + embeddings"
+     },
+     "objectives": [
+      "Implementar BM25 y combinarlo con embeddings (RRF)",
+      "Medir si la combinación mejora a cada método solo"
+     ],
+     "skills": [
+      "llm-rag-search"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m4.reranking",
+     "level": "avanzado",
+     "title": {
+      "es": "Reranking",
+      "en": "Reranking"
+     },
+     "objectives": [
+      "Reordenar candidatos con un modelo o reglas",
+      "Valorar el coste en latencia del reranking"
+     ],
+     "skills": [
+      "llm-rag-search"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m4.vectores",
+     "level": "avanzado",
+     "title": {
+      "es": "Bases de datos vectoriales: Qdrant o pgvector",
+      "en": "Vector databases: Qdrant or pgvector"
+     },
+     "objectives": [
+      "Elegir entre Qdrant y pgvector con criterios",
+      "Filtrar por metadatos y permisos en la búsqueda"
+     ],
+     "skills": [
+      "llm-rag-search",
+      "db-postgres-redis"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m4.evaluacion",
+     "level": "profesional",
+     "title": {
+      "es": "Evaluación de respuestas",
+      "en": "Answer evaluation"
+     },
+     "objectives": [
+      "Construir un conjunto de preguntas con respuestas esperadas",
+      "Medir recuperación y fidelidad antes y después de un cambio"
+     ],
+     "skills": [
+      "llm-evaluation"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m4.alucinaciones",
+     "level": "profesional",
+     "title": {
+      "es": "Gestión de alucinaciones",
+      "en": "Handling hallucinations"
+     },
+     "objectives": [
+      "Detectar respuestas sin respaldo en las fuentes",
+      "Responder «no lo sé» cuando falta información"
+     ],
+     "skills": [
+      "llm-evaluation"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m4.seguridad-aplicada",
+     "level": "profesional",
+     "title": {
+      "es": "IA aplicada a resultados de seguridad",
+      "en": "AI applied to security findings"
+     },
+     "objectives": [
+      "Usar un LLM para resumir y priorizar hallazgos sin delegarle la decisión",
+      "Explicar cada prioridad con datos verificables"
+     ],
+     "skills": [
+      "applied-ai-security"
+     ],
+     "links": [],
+     "pending": true
+    }
+   ],
+   "assessment": {
+    "id": "m4",
+    "pass": 0.7,
+    "bank": null
+   },
+   "project": {
+    "criteria": [
+     "npa-rag-eval",
+     "jr-extraccion",
+     "re-riesgo"
+    ],
+    "checklists": []
+   }
+  },
+  {
+   "id": "m5",
+   "requires": [
+    "m4"
+   ],
+   "title": {
+    "es": "AI Agents",
+    "en": "AI Agents"
+   },
+   "summary": {
+    "es": "Agentes que usan herramientas con permisos, supervisión humana y evaluación.",
+    "en": "Agents that use tools with permissions, human oversight and evaluation."
+   },
+   "units": [
+    {
+     "id": "m5.arquitectura",
+     "level": "fundamentos",
+     "title": {
+      "es": "Arquitectura de agentes",
+      "en": "Agent architecture"
+     },
+     "objectives": [
+      "Distinguir un flujo fijo de un agente",
+      "Decidir cuándo un agente no aporta valor"
+     ],
+     "skills": [
+      "agents-tools"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m5.tools",
+     "level": "fundamentos",
+     "title": {
+      "es": "Tool calling",
+      "en": "Tool calling"
+     },
+     "objectives": [
+      "Registrar herramientas con esquema y descripción",
+      "Tratar los resultados de herramientas como datos no confiables"
+     ],
+     "skills": [
+      "agents-tools"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m5.planificacion",
+     "level": "intermedio",
+     "title": {
+      "es": "Planificación y ejecución",
+      "en": "Planning and execution"
+     },
+     "objectives": [
+      "Implementar un bucle planificar-actuar-observar con límite de pasos",
+      "Recuperarse de una herramienta que falla"
+     ],
+     "skills": [
+      "agents-tools"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m5.memoria",
+     "level": "intermedio",
+     "title": {
+      "es": "Memoria",
+      "en": "Memory"
+     },
+     "objectives": [
+      "Separar memoria de la conversación y memoria persistente",
+      "Decidir qué se guarda y quién puede verlo"
+     ],
+     "skills": [
+      "agents-tools",
+      "llm-app-security-privacy"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m5.permisos",
+     "level": "intermedio",
+     "title": {
+      "es": "Gestión de permisos",
+      "en": "Permission management"
+     },
+     "objectives": [
+      "Aplicar mínimo privilegio a cada herramienta",
+      "Probar que una acción no permitida se rechaza"
+     ],
+     "skills": [
+      "agents-safety-hitl"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m5.hitl",
+     "level": "intermedio",
+     "title": {
+      "es": "Human-in-the-loop",
+      "en": "Human-in-the-loop"
+     },
+     "objectives": [
+      "Pedir confirmación antes de acciones irreversibles",
+      "Diseñar la pantalla de aprobación"
+     ],
+     "skills": [
+      "agents-safety-hitl"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m5.mcp",
+     "level": "avanzado",
+     "title": {
+      "es": "MCP",
+      "en": "MCP"
+     },
+     "objectives": [
+      "Exponer herramientas por MCP",
+      "Conectar un cliente MCP con permisos acotados"
+     ],
+     "skills": [
+      "agents-safety-hitl",
+      "agents-tools"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m5.langgraph",
+     "level": "avanzado",
+     "title": {
+      "es": "LangGraph",
+      "en": "LangGraph"
+     },
+     "objectives": [
+      "Modelar un agente como grafo de estados",
+      "Comparar LangGraph con un bucle propio"
+     ],
+     "skills": [
+      "agents-tools"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m5.multiagente",
+     "level": "avanzado",
+     "title": {
+      "es": "Sistemas multiagente",
+      "en": "Multi-agent systems"
+     },
+     "objectives": [
+      "Repartir una tarea entre agentes con roles",
+      "Medir si varios agentes mejoran a uno"
+     ],
+     "skills": [
+      "agents-tools"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m5.observabilidad",
+     "level": "profesional",
+     "title": {
+      "es": "Observabilidad de agentes",
+      "en": "Agent observability"
+     },
+     "objectives": [
+      "Registrar cada paso, herramienta y coste",
+      "Reconstruir por qué un agente tomó una decisión"
+     ],
+     "skills": [
+      "agents-observability-eval"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m5.evaluacion",
+     "level": "profesional",
+     "title": {
+      "es": "Evaluación de agentes",
+      "en": "Agent evaluation"
+     },
+     "objectives": [
+      "Definir tareas de prueba con criterio de éxito",
+      "Comparar versiones de un agente con los mismos casos"
+     ],
+     "skills": [
+      "agents-observability-eval"
+     ],
+     "links": [],
+     "pending": true
+    }
+   ],
+   "assessment": {
+    "id": "m5",
+    "pass": 0.7,
+    "bank": null
+   },
+   "project": {
+    "criteria": [
+     "npa-agente-permisos",
+     "jr-documentos"
+    ],
+    "checklists": []
+   }
+  },
+  {
+   "id": "m6",
+   "requires": [
+    "m2"
+   ],
+   "title": {
+    "es": "AI Infrastructure & MLOps",
+    "en": "AI Infrastructure & MLOps"
+   },
+   "summary": {
+    "es": "Desplegar, observar y mantener aplicaciones de IA con costes controlados.",
+    "en": "Deploying, observing and running AI applications with controlled costs."
+   },
+   "units": [
+    {
+     "id": "m6.linux",
+     "level": "fundamentos",
+     "title": {
+      "es": "Linux para despliegues",
+      "en": "Linux for deployments"
+     },
+     "objectives": [
+      "Gestionar servicios, usuarios y permisos",
+      "Diagnosticar con registros y procesos"
+     ],
+     "skills": [
+      "containers-linux"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m6.compose",
+     "level": "fundamentos",
+     "title": {
+      "es": "Docker Compose",
+      "en": "Docker Compose"
+     },
+     "objectives": [
+      "Definir servicios, redes y volúmenes",
+      "Arrancar el entorno completo con un comando"
+     ],
+     "skills": [
+      "containers-linux"
+     ],
+     "links": [
+      {
+       "kind": "resource",
+       "id": "res-docker-docs"
+      }
+     ],
+     "pending": true
+    },
+    {
+     "id": "m6.docker",
+     "level": "intermedio",
+     "title": {
+      "es": "Docker avanzado",
+      "en": "Advanced Docker"
+     },
+     "objectives": [
+      "Construir imágenes pequeñas multi-etapa",
+      "Ejecutar contenedores sin root"
+     ],
+     "skills": [
+      "containers-linux"
+     ],
+     "links": [
+      {
+       "kind": "resource",
+       "id": "res-docker-docs"
+      }
+     ],
+     "pending": true
+    },
+    {
+     "id": "m6.ci-cd",
+     "level": "intermedio",
+     "title": {
+      "es": "CI/CD con GitHub Actions",
+      "en": "CI/CD with GitHub Actions"
+     },
+     "objectives": [
+      "Automatizar lint, tests y build",
+      "Proteger secretos y permisos del flujo"
+     ],
+     "skills": [
+      "ci-cd"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m6.logging",
+     "level": "intermedio",
+     "title": {
+      "es": "Logging y monitorización",
+      "en": "Logging and monitoring"
+     },
+     "objectives": [
+      "Escribir registros estructurados",
+      "Definir alertas útiles"
+     ],
+     "skills": [
+      "cloud-deploy-ops"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m6.cloud",
+     "level": "avanzado",
+     "title": {
+      "es": "AWS o Azure",
+      "en": "AWS or Azure"
+     },
+     "objectives": [
+      "Desplegar un servicio gestionado básico",
+      "Entender el modelo de responsabilidad compartida"
+     ],
+     "skills": [
+      "cloud-deploy-ops"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m6.modelos",
+     "level": "avanzado",
+     "title": {
+      "es": "Despliegue de modelos",
+      "en": "Model deployment"
+     },
+     "objectives": [
+      "Servir un modelo con límites de concurrencia",
+      "Elegir entre modelo local y API externa por coste y privacidad"
+     ],
+     "skills": [
+      "cloud-deploy-ops",
+      "local-models"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m6.observabilidad",
+     "level": "avanzado",
+     "title": {
+      "es": "Observabilidad",
+      "en": "Observability"
+     },
+     "objectives": [
+      "Relacionar métricas, trazas y registros",
+      "Medir latencia y coste por petición de IA"
+     ],
+     "skills": [
+      "cloud-deploy-ops",
+      "agents-observability-eval"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m6.costes",
+     "level": "profesional",
+     "title": {
+      "es": "Gestión de costes",
+      "en": "Cost management"
+     },
+     "objectives": [
+      "Estimar el coste mensual de un servicio de IA",
+      "Poner topes de gasto"
+     ],
+     "skills": [
+      "cloud-deploy-ops"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m6.escalabilidad",
+     "level": "profesional",
+     "title": {
+      "es": "Escalabilidad",
+      "en": "Scalability"
+     },
+     "objectives": [
+      "Encontrar el cuello de botella con medidas",
+      "Escalar solo lo que lo necesita"
+     ],
+     "skills": [
+      "cloud-deploy-ops"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m6.seguridad",
+     "level": "profesional",
+     "title": {
+      "es": "Seguridad de infraestructura",
+      "en": "Infrastructure security"
+     },
+     "objectives": [
+      "Endurecer un servidor y sus contenedores",
+      "Gestionar secretos y copias de seguridad"
+     ],
+     "skills": [
+      "containers-linux",
+      "cloud-deploy-ops"
+     ],
+     "links": [],
+     "pending": true
+    }
+   ],
+   "assessment": {
+    "id": "m6",
+    "pass": 0.7,
+    "bank": null
+   },
+   "project": {
+    "criteria": [
+     "npa-despliegue",
+     "pld-fullstack"
+    ],
+    "checklists": []
+   }
+  },
+  {
+   "id": "m7",
+   "requires": [
+    "m2",
+    "m4"
+   ],
+   "title": {
+    "es": "AI Product Engineering",
+    "en": "AI Product Engineering"
+   },
+   "summary": {
+    "es": "Convertir un sistema de IA en un producto útil, seguro, legal y medible.",
+    "en": "Turning an AI system into a useful, secure, lawful and measurable product."
+   },
+   "units": [
+    {
+     "id": "m7.diseno",
+     "level": "fundamentos",
+     "title": {
+      "es": "Diseño de productos de IA",
+      "en": "Designing AI products"
+     },
+     "objectives": [
+      "Definir el problema y el usuario antes que el modelo",
+      "Decidir dónde la IA aporta valor real"
+     ],
+     "skills": [
+      "saas-architecture",
+      "product-ux-metrics"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m7.ux",
+     "level": "fundamentos",
+     "title": {
+      "es": "UX para aplicaciones de IA",
+      "en": "UX for AI applications"
+     },
+     "objectives": [
+      "Mostrar incertidumbre, fuentes y errores",
+      "Diseñar con accesibilidad WCAG desde el principio"
+     ],
+     "skills": [
+      "product-ux-metrics"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m7.privacidad",
+     "level": "intermedio",
+     "title": {
+      "es": "Privacidad y protección de datos",
+      "en": "Privacy and data protection"
+     },
+     "objectives": [
+      "Aplicar minimización y base legal (RGPD)",
+      "Documentar un tratamiento de datos"
+     ],
+     "skills": [
+      "llm-app-security-privacy"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m7.seguridad-llm",
+     "level": "intermedio",
+     "title": {
+      "es": "Seguridad de aplicaciones LLM",
+      "en": "LLM application security"
+     },
+     "objectives": [
+      "Revisar una aplicación con el OWASP Top 10 para LLM",
+      "Mitigar inyección de prompts y fuga de datos"
+     ],
+     "skills": [
+      "llm-app-security-privacy",
+      "applied-ai-security"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m7.apis",
+     "level": "intermedio",
+     "title": {
+      "es": "Integración de APIs",
+      "en": "API integration"
+     },
+     "objectives": [
+      "Integrar servicios externos con reintentos y límites",
+      "Aislar al proveedor para poder cambiarlo"
+     ],
+     "skills": [
+      "api-design",
+      "saas-architecture"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m7.usuarios",
+     "level": "intermedio",
+     "title": {
+      "es": "Gestión de usuarios",
+      "en": "User management"
+     },
+     "objectives": [
+      "Modelar cuentas, roles y equipos",
+      "Gestionar alta, baja y exportación de datos"
+     ],
+     "skills": [
+      "saas-architecture",
+      "api-auth-security"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m7.saas",
+     "level": "avanzado",
+     "title": {
+      "es": "Arquitectura SaaS",
+      "en": "SaaS architecture"
+     },
+     "objectives": [
+      "Diseñar un SaaS empezando por un monolito",
+      "Separar configuración por cliente"
+     ],
+     "skills": [
+      "saas-architecture"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m7.multi-tenancy",
+     "level": "avanzado",
+     "title": {
+      "es": "Multi-tenancy",
+      "en": "Multi-tenancy"
+     },
+     "objectives": [
+      "Comparar modelos de aislamiento entre clientes",
+      "Probar que un cliente no ve datos de otro"
+     ],
+     "skills": [
+      "saas-architecture",
+      "api-auth-security"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m7.pagos",
+     "level": "avanzado",
+     "title": {
+      "es": "Suscripciones y pagos",
+      "en": "Subscriptions and payments"
+     },
+     "objectives": [
+      "Modelar planes, pruebas y cancelaciones",
+      "Delegar los datos de pago en un proveedor certificado"
+     ],
+     "skills": [
+      "saas-architecture"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m7.metricas",
+     "level": "profesional",
+     "title": {
+      "es": "Métricas de producto",
+      "en": "Product metrics"
+     },
+     "objectives": [
+      "Definir activación, retención y coste por usuario",
+      "Medir sin recoger más datos de los necesarios"
+     ],
+     "skills": [
+      "product-ux-metrics"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m7.validacion",
+     "level": "profesional",
+     "title": {
+      "es": "Validación con usuarios",
+      "en": "User validation"
+     },
+     "objectives": [
+      "Preparar entrevistas y pruebas con usuarios reales",
+      "Decidir qué construir con lo aprendido"
+     ],
+     "skills": [
+      "product-ux-metrics"
+     ],
+     "links": [],
+     "pending": true
+    }
+   ],
+   "assessment": {
+    "id": "m7",
+    "pass": 0.7,
+    "bank": null
+   },
+   "project": {
+    "criteria": [
+     "npa-producto",
+     "pld-a11y"
+    ],
+    "checklists": []
+   }
+  },
+  {
+   "id": "m8",
+   "requires": [],
+   "title": {
+    "es": "Career & Business Development",
+    "en": "Career & Business Development"
+   },
+   "summary": {
+    "es": "Hacer visible el trabajo, conseguir el puesto y construir una actividad propia rentable.",
+    "en": "Making the work visible, landing the role and building a profitable own business."
+   },
+   "units": [
+    {
+     "id": "m8.github",
+     "level": "fundamentos",
+     "title": {
+      "es": "GitHub profesional",
+      "en": "Professional GitHub"
+     },
+     "objectives": [
+      "Presentar repositorios que se entienden en dos minutos",
+      "Mostrar tests, CI y decisiones"
+     ],
+     "skills": [
+      "portfolio-presence"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m8.portfolio",
+     "level": "fundamentos",
+     "title": {
+      "es": "Portfolio profesional",
+      "en": "Professional portfolio"
+     },
+     "objectives": [
+      "Elegir tres proyectos que demuestran el perfil",
+      "Contar problema, solución y resultado"
+     ],
+     "skills": [
+      "portfolio-presence"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m8.cv",
+     "level": "fundamentos",
+     "title": {
+      "es": "CV técnico",
+      "en": "Technical CV"
+     },
+     "objectives": [
+      "Escribir logros medibles en lugar de tareas",
+      "Adaptar el CV a cada puesto"
+     ],
+     "skills": [
+      "portfolio-presence"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m8.linkedin",
+     "level": "fundamentos",
+     "title": {
+      "es": "LinkedIn",
+      "en": "LinkedIn"
+     },
+     "objectives": [
+      "Alinear el perfil con el puesto objetivo",
+      "Publicar avances de proyectos con regularidad"
+     ],
+     "skills": [
+      "portfolio-presence"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m8.ingles",
+     "level": "intermedio",
+     "title": {
+      "es": "Inglés técnico",
+      "en": "Technical English"
+     },
+     "objectives": [
+      "Explicar una arquitectura en inglés",
+      "Leer y escribir documentación técnica"
+     ],
+     "skills": [
+      "interviews-english"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m8.entrevistas",
+     "level": "intermedio",
+     "title": {
+      "es": "Entrevistas técnicas",
+      "en": "Technical interviews"
+     },
+     "objectives": [
+      "Preparar ejercicios de código y de diseño de sistemas",
+      "Responder con ejemplos propios"
+     ],
+     "skills": [
+      "interviews-english"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m8.negociacion",
+     "level": "intermedio",
+     "title": {
+      "es": "Negociación salarial",
+      "en": "Salary negotiation"
+     },
+     "objectives": [
+      "Investigar la banda real del puesto",
+      "Negociar el paquete completo, no solo el sueldo"
+     ],
+     "skills": [
+      "interviews-english"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m8.freelance",
+     "level": "intermedio",
+     "title": {
+      "es": "Freelance",
+      "en": "Freelancing"
+     },
+     "objectives": [
+      "Conocer las obligaciones de un autónomo en España",
+      "Separar facturación, gastos y beneficio"
+     ],
+     "skills": [
+      "business-consulting"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m8.consultoria",
+     "level": "avanzado",
+     "title": {
+      "es": "Consultoría de IA",
+      "en": "AI consulting"
+     },
+     "objectives": [
+      "Diagnosticar dónde la IA ahorra tiempo o dinero a un cliente",
+      "Definir alcance y entregables"
+     ],
+     "skills": [
+      "business-consulting"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m8.captacion",
+     "level": "avanzado",
+     "title": {
+      "es": "Captación de clientes",
+      "en": "Finding clients"
+     },
+     "objectives": [
+      "Definir el cliente ideal",
+      "Preparar una propuesta y hacer seguimiento"
+     ],
+     "skills": [
+      "business-consulting"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m8.saas",
+     "level": "avanzado",
+     "title": {
+      "es": "Modelos SaaS",
+      "en": "SaaS business models"
+     },
+     "objectives": [
+      "Comparar suscripción, uso y licencias",
+      "Estimar ingresos recurrentes y abandono"
+     ],
+     "skills": [
+      "business-consulting",
+      "saas-architecture"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m8.pricing",
+     "level": "profesional",
+     "title": {
+      "es": "Pricing y rentabilidad",
+      "en": "Pricing and profitability"
+     },
+     "objectives": [
+      "Calcular precio con costes, horas y margen",
+      "Distinguir facturación, beneficio y salario"
+     ],
+     "skills": [
+      "business-consulting"
+     ],
+     "links": [],
+     "pending": true
+    },
+    {
+     "id": "m8.empresa",
+     "level": "profesional",
+     "title": {
+      "es": "Crear una empresa tecnológica",
+      "en": "Starting a tech company"
+     },
+     "objectives": [
+      "Comparar autónomo y sociedad con números",
+      "Planificar los primeros doce meses"
+     ],
+     "skills": [
+      "business-consulting"
+     ],
+     "links": [],
+     "pending": true
+    }
+   ],
+   "assessment": {
+    "id": "m8",
+    "pass": 0.7,
+    "bank": null
+   },
+   "project": {
+    "criteria": [],
+    "checklists": [
+     "portfolio",
+     "business"
+    ]
+   }
+  }
+ ],
+ "skills": [
+  {
+   "id": "py-oop",
+   "category": "programming",
+   "title": {
+    "es": "Programación orientada a objetos en Python",
+    "en": "Object-oriented programming in Python"
+   },
+   "sources": {
+    "concepts": [
+     "poo"
+    ],
+    "blocks": [
+     "programacion:prog-ut4",
+     "programacion:prog-ut5",
+     "programacion:prog-ut6"
+    ],
+    "assessments": [
+     "m1"
+    ],
+    "criteria": [
+     "npa-servicio-tests"
+    ],
+    "checklists": []
+   }
+  },
+  {
+   "id": "py-types-data",
+   "category": "programming",
+   "title": {
+    "es": "Tipado y estructuras de datos",
+    "en": "Typing and data structures"
+   },
+   "sources": {
+    "concepts": [
+     "tipos",
+     "listas",
+     "tuplas-conjuntos",
+     "diccionarios"
+    ],
+    "blocks": [],
+    "assessments": [
+     "m1"
+    ],
+    "criteria": [],
+    "checklists": []
+   }
+  },
+  {
+   "id": "py-errors",
+   "category": "programming",
+   "title": {
+    "es": "Gestión de errores",
+    "en": "Error handling"
+   },
+   "sources": {
+    "concepts": [
+     "excepciones",
+     "validacion"
+    ],
+    "blocks": [],
+    "assessments": [
+     "m1"
+    ],
+    "criteria": [],
+    "checklists": []
+   }
+  },
+  {
+   "id": "py-async",
+   "category": "programming",
+   "title": {
+    "es": "Programación asíncrona con asyncio",
+    "en": "Asynchronous programming with asyncio"
+   },
+   "sources": {
+    "concepts": [],
+    "blocks": [],
+    "assessments": [
+     "m1"
+    ],
+    "criteria": [],
+    "checklists": []
+   }
+  },
+  {
+   "id": "py-architecture",
+   "category": "programming",
+   "title": {
+    "es": "Arquitectura de software y clean code",
+    "en": "Software architecture and clean code"
+   },
+   "sources": {
+    "concepts": [
+     "modulos",
+     "funciones"
+    ],
+    "blocks": [],
+    "assessments": [
+     "m1"
+    ],
+    "criteria": [
+     "npa-servicio-tests"
+    ],
+    "checklists": []
+   }
+  },
+  {
+   "id": "py-testing",
+   "category": "programming",
+   "title": {
+    "es": "Testing con pytest",
+    "en": "Testing with pytest"
+   },
+   "sources": {
+    "concepts": [
+     "depuracion"
+    ],
+    "blocks": [],
+    "assessments": [
+     "m1"
+    ],
+    "criteria": [
+     "npa-servicio-tests",
+     "pld-fullstack"
+    ],
+    "checklists": []
+   }
+  },
+  {
+   "id": "py-data-processing",
+   "category": "programming",
+   "title": {
+    "es": "Procesamiento de datos con Python",
+    "en": "Data processing with Python"
+   },
+   "sources": {
+    "concepts": [
+     "archivos",
+     "recorridos"
+    ],
+    "blocks": [],
+    "assessments": [
+     "m1"
+    ],
+    "criteria": [
+     "re-normalizacion"
+    ],
+    "checklists": []
+   }
+  },
+  {
+   "id": "git-workflow",
+   "category": "programming",
+   "title": {
+    "es": "Git y GitHub profesional",
+    "en": "Professional Git and GitHub"
+   },
+   "sources": {
+    "concepts": [],
+    "blocks": [],
+    "assessments": [
+     "m1"
+    ],
+    "criteria": [
+     "pld-fullstack"
+    ],
+    "checklists": []
+   }
+  },
+  {
+   "id": "api-design",
+   "category": "backend",
+   "title": {
+    "es": "Diseño de APIs REST con FastAPI y Pydantic",
+    "en": "REST API design with FastAPI and Pydantic"
+   },
+   "sources": {
+    "concepts": [],
+    "blocks": [],
+    "assessments": [
+     "m2"
+    ],
+    "criteria": [
+     "npa-backend-produccion",
+     "jr-conectores"
+    ],
+    "checklists": []
+   }
+  },
+  {
+   "id": "api-auth-security",
+   "category": "backend",
+   "title": {
+    "es": "Autenticación, autorización y seguridad de APIs",
+    "en": "Authentication, authorization and API security"
+   },
+   "sources": {
+    "concepts": [],
+    "blocks": [],
+    "assessments": [
+     "m2"
+    ],
+    "criteria": [
+     "npa-backend-produccion"
+    ],
+    "checklists": []
+   }
+  },
+  {
+   "id": "sql",
+   "category": "databases",
+   "title": {
+    "es": "SQL avanzado",
+    "en": "Advanced SQL"
+   },
+   "sources": {
+    "concepts": [],
+    "blocks": [
+     "sql:bd-ud2",
+     "sql:bd-ud3",
+     "sql:bd-ampliacion"
+    ],
+    "assessments": [
+     "m2"
+    ],
+    "criteria": [],
+    "checklists": []
+   }
+  },
+  {
+   "id": "db-postgres-redis",
+   "category": "databases",
+   "title": {
+    "es": "PostgreSQL, Redis y migraciones",
+    "en": "PostgreSQL, Redis and migrations"
+   },
+   "sources": {
+    "concepts": [],
+    "blocks": [
+     "sql:bd-ampliacion"
+    ],
+    "assessments": [
+     "m2"
+    ],
+    "criteria": [
+     "npa-backend-produccion"
+    ],
+    "checklists": []
+   }
+  },
+  {
+   "id": "web-client",
+   "category": "frontend",
+   "title": {
+    "es": "Cliente web que consume APIs",
+    "en": "Web client consuming APIs"
+   },
+   "sources": {
+    "concepts": [],
+    "blocks": [
+     "js:js-dom",
+     "js:js-asincronia",
+     "marcas:mar-json"
+    ],
+    "assessments": [],
+    "criteria": [
+     "pld-fullstack"
+    ],
+    "checklists": []
+   }
+  },
+  {
+   "id": "ml-foundations",
+   "category": "ai-ml",
+   "title": {
+    "es": "Fundamentos de machine learning y deep learning",
+    "en": "Machine learning and deep learning foundations"
+   },
+   "sources": {
+    "concepts": [],
+    "blocks": [],
+    "assessments": [
+     "m3"
+    ],
+    "criteria": [],
+    "checklists": []
+   }
+  },
+  {
+   "id": "transformers-embeddings",
+   "category": "ai-ml",
+   "title": {
+    "es": "Transformers, tokenización y embeddings",
+    "en": "Transformers, tokenization and embeddings"
+   },
+   "sources": {
+    "concepts": [],
+    "blocks": [],
+    "assessments": [
+     "m3"
+    ],
+    "criteria": [],
+    "checklists": []
+   }
+  },
+  {
+   "id": "local-models",
+   "category": "ai-ml",
+   "title": {
+    "es": "Modelos open source en local (Ollama, Hugging Face)",
+    "en": "Local open-source models (Ollama, Hugging Face)"
+   },
+   "sources": {
+    "concepts": [],
+    "blocks": [],
+    "assessments": [
+     "m3"
+    ],
+    "criteria": [
+     "npa-comparativa-modelos"
+    ],
+    "checklists": []
+   }
+  },
+  {
+   "id": "llm-prompting-structured",
+   "category": "llm",
+   "title": {
+    "es": "Prompting, structured outputs y function calling",
+    "en": "Prompting, structured outputs and function calling"
+   },
+   "sources": {
+    "concepts": [],
+    "blocks": [],
+    "assessments": [
+     "m4"
+    ],
+    "criteria": [
+     "jr-extraccion"
+    ],
+    "checklists": []
+   }
+  },
+  {
+   "id": "llm-rag-search",
+   "category": "llm",
+   "title": {
+    "es": "RAG y búsqueda híbrida",
+    "en": "RAG and hybrid search"
+   },
+   "sources": {
+    "concepts": [],
+    "blocks": [],
+    "assessments": [
+     "m4"
+    ],
+    "criteria": [
+     "npa-rag-eval"
+    ],
+    "checklists": []
+   }
+  },
+  {
+   "id": "llm-evaluation",
+   "category": "llm",
+   "title": {
+    "es": "Evaluación de respuestas y control de alucinaciones",
+    "en": "Answer evaluation and hallucination control"
+   },
+   "sources": {
+    "concepts": [],
+    "blocks": [],
+    "assessments": [
+     "m4"
+    ],
+    "criteria": [
+     "npa-rag-eval",
+     "npa-comparativa-modelos"
+    ],
+    "checklists": []
+   }
+  },
+  {
+   "id": "applied-ai-security",
+   "category": "llm",
+   "title": {
+    "es": "IA aplicada a la ciberseguridad",
+    "en": "AI applied to cybersecurity"
+   },
+   "sources": {
+    "concepts": [],
+    "blocks": [],
+    "assessments": [
+     "m4",
+     "m7"
+    ],
+    "criteria": [
+     "re-riesgo"
+    ],
+    "checklists": []
+   }
+  },
+  {
+   "id": "agents-tools",
+   "category": "agents",
+   "title": {
+    "es": "Agentes con herramientas, planificación y memoria",
+    "en": "Agents with tools, planning and memory"
+   },
+   "sources": {
+    "concepts": [],
+    "blocks": [],
+    "assessments": [
+     "m5"
+    ],
+    "criteria": [
+     "npa-agente-permisos"
+    ],
+    "checklists": []
+   }
+  },
+  {
+   "id": "agents-safety-hitl",
+   "category": "agents",
+   "title": {
+    "es": "Permisos, MCP y human-in-the-loop",
+    "en": "Permissions, MCP and human-in-the-loop"
+   },
+   "sources": {
+    "concepts": [],
+    "blocks": [],
+    "assessments": [
+     "m5"
+    ],
+    "criteria": [
+     "npa-agente-permisos",
+     "jr-documentos"
+    ],
+    "checklists": []
+   }
+  },
+  {
+   "id": "agents-observability-eval",
+   "category": "agents",
+   "title": {
+    "es": "Observabilidad y evaluación de agentes",
+    "en": "Agent observability and evaluation"
+   },
+   "sources": {
+    "concepts": [],
+    "blocks": [],
+    "assessments": [
+     "m5"
+    ],
+    "criteria": [],
+    "checklists": []
+   }
+  },
+  {
+   "id": "containers-linux",
+   "category": "devops",
+   "title": {
+    "es": "Docker, Compose y Linux",
+    "en": "Docker, Compose and Linux"
+   },
+   "sources": {
+    "concepts": [],
+    "blocks": [],
+    "assessments": [
+     "m6"
+    ],
+    "criteria": [
+     "npa-despliegue"
+    ],
+    "checklists": []
+   }
+  },
+  {
+   "id": "ci-cd",
+   "category": "devops",
+   "title": {
+    "es": "CI/CD con GitHub Actions",
+    "en": "CI/CD with GitHub Actions"
+   },
+   "sources": {
+    "concepts": [],
+    "blocks": [],
+    "assessments": [
+     "m6"
+    ],
+    "criteria": [
+     "pld-fullstack"
+    ],
+    "checklists": []
+   }
+  },
+  {
+   "id": "cloud-deploy-ops",
+   "category": "devops",
+   "title": {
+    "es": "Despliegue, monitorización y costes",
+    "en": "Deployment, monitoring and costs"
+   },
+   "sources": {
+    "concepts": [],
+    "blocks": [],
+    "assessments": [
+     "m6"
+    ],
+    "criteria": [
+     "npa-despliegue"
+    ],
+    "checklists": []
+   }
+  },
+  {
+   "id": "saas-architecture",
+   "category": "product",
+   "title": {
+    "es": "Arquitectura SaaS y producto de IA",
+    "en": "SaaS architecture and AI product"
+   },
+   "sources": {
+    "concepts": [],
+    "blocks": [],
+    "assessments": [
+     "m7"
+    ],
+    "criteria": [
+     "npa-producto"
+    ],
+    "checklists": []
+   }
+  },
+  {
+   "id": "llm-app-security-privacy",
+   "category": "product",
+   "title": {
+    "es": "Seguridad de aplicaciones LLM y protección de datos",
+    "en": "LLM application security and data protection"
+   },
+   "sources": {
+    "concepts": [],
+    "blocks": [],
+    "assessments": [
+     "m7"
+    ],
+    "criteria": [
+     "npa-producto"
+    ],
+    "checklists": []
+   }
+  },
+  {
+   "id": "product-ux-metrics",
+   "category": "product",
+   "title": {
+    "es": "UX para IA, métricas y validación con usuarios",
+    "en": "AI UX, metrics and user validation"
+   },
+   "sources": {
+    "concepts": [],
+    "blocks": [],
+    "assessments": [
+     "m7"
+    ],
+    "criteria": [
+     "pld-a11y",
+     "npa-producto"
+    ],
+    "checklists": []
+   }
+  },
+  {
+   "id": "portfolio-presence",
+   "category": "professional",
+   "title": {
+    "es": "Portfolio, GitHub, CV y LinkedIn",
+    "en": "Portfolio, GitHub, CV and LinkedIn"
+   },
+   "sources": {
+    "concepts": [],
+    "blocks": [],
+    "assessments": [
+     "m8"
+    ],
+    "criteria": [],
+    "checklists": [
+     "portfolio"
+    ]
+   }
+  },
+  {
+   "id": "interviews-english",
+   "category": "professional",
+   "title": {
+    "es": "Entrevistas técnicas e inglés técnico",
+    "en": "Technical interviews and technical English"
+   },
+   "sources": {
+    "concepts": [],
+    "blocks": [],
+    "assessments": [
+     "m8"
+    ],
+    "criteria": [],
+    "checklists": [
+     "interview"
+    ]
+   }
+  },
+  {
+   "id": "business-consulting",
+   "category": "professional",
+   "title": {
+    "es": "Freelance, consultoría y modelo de negocio",
+    "en": "Freelance, consulting and business model"
+   },
+   "sources": {
+    "concepts": [],
+    "blocks": [],
+    "assessments": [
+     "m8"
+    ],
+    "criteria": [],
+    "checklists": [
+     "business"
+    ]
+   }
+  }
+ ],
+ "projects": [
+  {
+   "id": "nexaro-personal-ai",
+   "title": {
+    "es": "NEXARO Personal AI",
+    "en": "NEXARO Personal AI"
+   },
+   "repo": null,
+   "description": {
+    "es": "Asistente de IA local: FastAPI, Ollama, SQLite, RAG, memoria y agentes.",
+    "en": "Local AI assistant: FastAPI, Ollama, SQLite, RAG, memory and agents."
+   },
+   "criteria": [
+    {
+     "id": "npa-servicio-tests",
+     "module": "m1",
+     "title": {
+      "es": "Un servicio existente mejorado (tipado, errores, estructura) con tests pytest",
+      "en": "Un servicio existente mejorado (tipado, errores, estructura) con tests pytest"
+     },
+     "skills": [
+      "py-oop",
+      "py-architecture",
+      "py-testing"
+     ]
+    },
+    {
+     "id": "npa-backend-produccion",
+     "module": "m2",
+     "title": {
+      "es": "Backend de producción: autenticación, migraciones, límites y tests",
+      "en": "Backend de producción: autenticación, migraciones, límites y tests"
+     },
+     "skills": [
+      "api-design",
+      "api-auth-security",
+      "db-postgres-redis"
+     ]
+    },
+    {
+     "id": "npa-comparativa-modelos",
+     "module": "m3",
+     "title": {
+      "es": "Comparativa medida de varios modelos locales (calidad, latencia, memoria)",
+      "en": "Comparativa medida de varios modelos locales (calidad, latencia, memoria)"
+     },
+     "skills": [
+      "local-models",
+      "llm-evaluation"
+     ]
+    },
+    {
+     "id": "npa-rag-eval",
+     "module": "m4",
+     "title": {
+      "es": "Motor RAG híbrido con conjunto de evaluación y métricas antes/después",
+      "en": "Motor RAG híbrido con conjunto de evaluación y métricas antes/después"
+     },
+     "skills": [
+      "llm-rag-search",
+      "llm-evaluation"
+     ]
+    },
+    {
+     "id": "npa-agente-permisos",
+     "module": "m5",
+     "title": {
+      "es": "Agente con herramientas y permisos controlados, con tests de denegación",
+      "en": "Agente con herramientas y permisos controlados, con tests de denegación"
+     },
+     "skills": [
+      "agents-tools",
+      "agents-safety-hitl"
+     ]
+    },
+    {
+     "id": "npa-despliegue",
+     "module": "m6",
+     "title": {
+      "es": "Despliegue reproducible para usuarios reales: compose, logs, copias y monitorización",
+      "en": "Despliegue reproducible para usuarios reales: compose, logs, copias y monitorización"
+     },
+     "skills": [
+      "containers-linux",
+      "cloud-deploy-ops"
+     ]
+    },
+    {
+     "id": "npa-producto",
+     "module": "m7",
+     "title": {
+      "es": "Diseño de una versión comercial: propuesta de valor, precios, métricas y amenazas LLM",
+      "en": "Diseño de una versión comercial: propuesta de valor, precios, métricas y amenazas LLM"
+     },
+     "skills": [
+      "saas-architecture",
+      "llm-app-security-privacy",
+      "product-ux-metrics"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "nexaro-risk-engine",
+   "title": {
+    "es": "NEXARO Risk Engine",
+    "en": "NEXARO Risk Engine"
+   },
+   "repo": null,
+   "pendingIdentity": true,
+   "description": {
+    "es": "Análisis y normalización de resultados de herramientas de ciberseguridad. Repositorio pendiente de confirmar.",
+    "en": "Analysis and normalization of cybersecurity tool results. Repository pending confirmation."
+   },
+   "criteria": [
+    {
+     "id": "re-normalizacion",
+     "module": "m1",
+     "title": {
+      "es": "Resultados de varias herramientas normalizados a un esquema común, con tests",
+      "en": "Resultados de varias herramientas normalizados a un esquema común, con tests"
+     },
+     "skills": [
+      "py-data-processing"
+     ]
+    },
+    {
+     "id": "re-riesgo",
+     "module": "m4",
+     "title": {
+      "es": "Priorización de riesgos explicable, con la IA como apoyo y no como única fuente",
+      "en": "Priorización de riesgos explicable, con la IA como apoyo y no como única fuente"
+     },
+     "skills": [
+      "applied-ai-security"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "python-learning-dashboard",
+   "title": {
+    "es": "Python Learning Dashboard",
+    "en": "Python Learning Dashboard"
+   },
+   "repo": "https://github.com/Marbi8891/python-learning-dashboard",
+   "description": {
+    "es": "Plataforma educativa full-stack con Python, JavaScript y FastAPI.",
+    "en": "Full-stack learning platform with Python, JavaScript and FastAPI."
+   },
+   "criteria": [
+    {
+     "id": "pld-fullstack",
+     "module": "m2",
+     "title": {
+      "es": "Funcionalidad full-stack con tests unitarios, e2e y CI en verde",
+      "en": "Funcionalidad full-stack con tests unitarios, e2e y CI en verde"
+     },
+     "skills": [
+      "web-client",
+      "py-testing",
+      "git-workflow",
+      "ci-cd"
+     ]
+    },
+    {
+     "id": "pld-a11y",
+     "module": "m7",
+     "title": {
+      "es": "Accesibilidad WCAG 2.2 AA verificada en una funcionalidad nueva",
+      "en": "Accesibilidad WCAG 2.2 AA verificada en una funcionalidad nueva"
+     },
+     "skills": [
+      "product-ux-metrics"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "jobradar",
+   "title": {
+    "es": "JobRadar",
+    "en": "JobRadar"
+   },
+   "repo": null,
+   "description": {
+    "es": "Búsqueda y análisis de ofertas con generación de CV y cartas mediante IA (local).",
+    "en": "Job search and analysis with AI-generated CVs and cover letters (local)."
+   },
+   "criteria": [
+    {
+     "id": "jr-conectores",
+     "module": "m2",
+     "title": {
+      "es": "Conectores modulares por fuente, solo con APIs o RSS oficiales",
+      "en": "Conectores modulares por fuente, solo con APIs o RSS oficiales"
+     },
+     "skills": [
+      "api-design"
+     ]
+    },
+    {
+     "id": "jr-extraccion",
+     "module": "m4",
+     "title": {
+      "es": "Extracción estructurada de ofertas con salida validada contra un esquema",
+      "en": "Extracción estructurada de ofertas con salida validada contra un esquema"
+     },
+     "skills": [
+      "llm-prompting-structured"
+     ]
+    },
+    {
+     "id": "jr-documentos",
+     "module": "m5",
+     "title": {
+      "es": "Generación de CV y cartas con revisión humana obligatoria antes de enviar",
+      "en": "Generación de CV y cartas con revisión humana obligatoria antes de enviar"
+     },
+     "skills": [
+      "agents-safety-hitl"
+     ]
+    }
+   ]
+  }
+ ],
+ "checklists": {
+  "portfolio": [
+   {
+    "id": "pf-github",
+    "title": {
+     "es": "Perfil de GitHub con README y repositorios fijados",
+     "en": "Perfil de GitHub con README y repositorios fijados"
+    }
+   },
+   {
+    "id": "pf-readmes",
+    "title": {
+     "es": "README profesional en cada proyecto: problema, arquitectura, cómo ejecutarlo y tests",
+     "en": "README profesional en cada proyecto: problema, arquitectura, cómo ejecutarlo y tests"
+    }
+   },
+   {
+    "id": "pf-demo",
+    "title": {
+     "es": "Al menos una demo desplegada o un vídeo corto",
+     "en": "Al menos una demo desplegada o un vídeo corto"
+    }
+   },
+   {
+    "id": "pf-cv",
+    "title": {
+     "es": "CV técnico de una página orientado a Applied AI",
+     "en": "CV técnico de una página orientado a Applied AI"
+    }
+   },
+   {
+    "id": "pf-linkedin",
+    "title": {
+     "es": "LinkedIn actualizado con los proyectos",
+     "en": "LinkedIn actualizado con los proyectos"
+    }
+   }
+  ],
+  "interview": [
+   {
+    "id": "iv-proyecto",
+    "title": {
+     "es": "Explicar un proyecto propio en cinco minutos",
+     "en": "Explicar un proyecto propio en cinco minutos"
+    }
+   },
+   {
+    "id": "iv-diseno-rag",
+    "title": {
+     "es": "Diseñar un sistema RAG en una pizarra con sus trade-offs",
+     "en": "Diseñar un sistema RAG en una pizarra con sus trade-offs"
+    }
+   },
+   {
+    "id": "iv-codigo",
+    "title": {
+     "es": "Resolver un ejercicio de Python en vivo explicando el razonamiento",
+     "en": "Resolver un ejercicio de Python en vivo explicando el razonamiento"
+    }
+   },
+   {
+    "id": "iv-ingles",
+    "title": {
+     "es": "Responder preguntas de comportamiento en inglés",
+     "en": "Responder preguntas de comportamiento en inglés"
+    }
+   },
+   {
+    "id": "iv-salario",
+    "title": {
+     "es": "Preparar la banda salarial y la negociación",
+     "en": "Preparar la banda salarial y la negociación"
+    }
+   }
+  ],
+  "business": [
+   {
+    "id": "bz-propuesta",
+    "title": {
+     "es": "Propuesta comercial de servicios de IA",
+     "en": "Propuesta comercial de servicios de IA"
+    }
+   },
+   {
+    "id": "bz-tarifa",
+    "title": {
+     "es": "Tarifa calculada con costes, horas y margen",
+     "en": "Tarifa calculada con costes, horas y margen"
+    }
+   },
+   {
+    "id": "bz-contrato",
+    "title": {
+     "es": "Condiciones de servicio y protección de datos revisadas",
+     "en": "Condiciones de servicio y protección de datos revisadas"
+    }
+   },
+   {
+    "id": "bz-piloto",
+    "title": {
+     "es": "Primer cliente piloto o caso real documentado",
+     "en": "Primer cliente piloto o caso real documentado"
+    }
+   }
+  ]
+ },
+ "roles": [
+  {
+   "id": "python-backend-developer",
+   "band": "junior",
+   "title": {
+    "es": "Python Backend Developer",
+    "en": "Python Backend Developer"
+   },
+   "skills": {
+    "py-oop": 0.6,
+    "py-testing": 0.6,
+    "api-design": 0.6,
+    "sql": 0.6,
+    "git-workflow": 0.6,
+    "containers-linux": 0.5
+   }
+  },
+  {
+   "id": "ai-application-developer",
+   "band": "developer",
+   "title": {
+    "es": "AI Application Developer",
+    "en": "AI Application Developer"
+   },
+   "skills": {
+    "api-design": 0.7,
+    "py-testing": 0.6,
+    "llm-prompting-structured": 0.6,
+    "llm-rag-search": 0.6,
+    "web-client": 0.5
+   }
+  },
+  {
+   "id": "ai-automation-engineer",
+   "band": "developer",
+   "title": {
+    "es": "AI Automation Engineer",
+    "en": "AI Automation Engineer"
+   },
+   "skills": {
+    "api-design": 0.7,
+    "llm-prompting-structured": 0.7,
+    "agents-tools": 0.7,
+    "agents-safety-hitl": 0.7,
+    "ci-cd": 0.6
+   }
+  },
+  {
+   "id": "applied-ai-engineer",
+   "band": "applied",
+   "title": {
+    "es": "Applied AI Engineer",
+    "en": "Applied AI Engineer"
+   },
+   "skills": {
+    "api-design": 0.75,
+    "py-testing": 0.7,
+    "local-models": 0.6,
+    "llm-rag-search": 0.75,
+    "llm-evaluation": 0.7,
+    "agents-tools": 0.6,
+    "containers-linux": 0.6
+   }
+  },
+  {
+   "id": "generative-ai-engineer",
+   "band": "applied",
+   "title": {
+    "es": "Generative AI Engineer",
+    "en": "Generative AI Engineer"
+   },
+   "skills": {
+    "transformers-embeddings": 0.7,
+    "local-models": 0.7,
+    "llm-prompting-structured": 0.75,
+    "llm-rag-search": 0.75,
+    "llm-evaluation": 0.7
+   }
+  },
+  {
+   "id": "ai-solutions-engineer",
+   "band": "applied",
+   "title": {
+    "es": "AI Solutions Engineer",
+    "en": "AI Solutions Engineer"
+   },
+   "skills": {
+    "llm-rag-search": 0.7,
+    "agents-tools": 0.7,
+    "cloud-deploy-ops": 0.6,
+    "business-consulting": 0.6,
+    "interviews-english": 0.7
+   }
+  },
+  {
+   "id": "llm-engineer",
+   "band": "senior",
+   "title": {
+    "es": "LLM Engineer",
+    "en": "LLM Engineer"
+   },
+   "skills": {
+    "transformers-embeddings": 0.75,
+    "local-models": 0.75,
+    "llm-prompting-structured": 0.8,
+    "llm-rag-search": 0.8,
+    "llm-evaluation": 0.8,
+    "agents-tools": 0.6
+   }
+  },
+  {
+   "id": "ai-product-engineer",
+   "band": "senior",
+   "title": {
+    "es": "AI Product Engineer",
+    "en": "AI Product Engineer"
+   },
+   "skills": {
+    "api-design": 0.7,
+    "web-client": 0.6,
+    "llm-rag-search": 0.7,
+    "saas-architecture": 0.7,
+    "llm-app-security-privacy": 0.7,
+    "product-ux-metrics": 0.7
+   }
+  },
+  {
+   "id": "senior-applied-ai-engineer",
+   "band": "senior",
+   "title": {
+    "es": "Senior Applied AI Engineer",
+    "en": "Senior Applied AI Engineer"
+   },
+   "skills": {
+    "py-architecture": 0.85,
+    "llm-rag-search": 0.85,
+    "llm-evaluation": 0.85,
+    "agents-tools": 0.8,
+    "agents-safety-hitl": 0.8,
+    "agents-observability-eval": 0.8,
+    "cloud-deploy-ops": 0.75,
+    "saas-architecture": 0.7
+   }
+  }
+ ]
+}

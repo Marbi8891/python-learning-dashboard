@@ -125,3 +125,29 @@ def test_private_routes_require_a_session(client):
         for headers in ({}, {"Authorization": "Bearer no-es-un-token"}):
             response = getattr(client, method)(path, headers=headers)
             assert response.status_code == 401, (method, path, headers)
+
+
+def test_career_document_is_isolated_between_students(client):
+    """El itinerario profesional (DEC-012) usa el mismo documento por usuario: sin IDOR."""
+    ana = session_for(client, "ana@example.com", "Ana")
+    luis = session_for(client, "luis@example.com", "Luis")
+    mine = {"v": 1, "de": "Ana"}
+    assert (
+        client.put(f"{V1}/course-state/career", json={"data": mine}, headers=ana).status_code == 200
+    )
+    with Session(client.engine) as db:
+        ana_id = db.scalar(select(User.id).where(User.email == "ana@example.com"))
+
+    assert client.get(f"{V1}/course-state/career", headers=luis).json()["data"] == {}
+    got = client.get(f"{V1}/course-state/career", params={"user_id": ana_id}, headers=luis)
+    assert got.json()["data"] == {}
+    body = {"data": {"de": "Luis"}, "user_id": ana_id}
+    client.put(f"{V1}/course-state/career", json=body, headers=luis)
+    assert client.get(f"{V1}/course-state/career", headers=ana).json()["data"] == mine
+    assert client.get(f"{V1}/course-state/career").status_code == 401
+
+    assert (
+        client.post(f"{V1}/users/me/delete", json={"password": PASSWORD}, headers=luis).status_code
+        == 204
+    )
+    assert client.get(f"{V1}/course-state/career", headers=ana).json()["data"] == mine

@@ -9,6 +9,10 @@ cambios se agrupan por fecha de merge, con el número de pull request entre par�
 ## [Sin publicar]
 
 ### Añadido
+- Itinerario «AI Engineer & AI Product Developer», Fase B (DEC-012): catálogo generado y validado
+  (8 módulos, 90 unidades, 32 competencias, 9 puestos, plan de 36 meses), documento `career`
+  sincronizado con la cuenta y cálculo de competencias, módulos, puestos y siguiente actividad. Sin
+  pantalla todavía (Fase C).
 - Documentación de proyecto: `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, este `CHANGELOG.md`, índice
   de `docs/` y plantillas de issues y de pull request.
 
