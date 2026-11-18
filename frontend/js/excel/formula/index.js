@@ -14,7 +14,7 @@ export { address, columnLetters, formatRef, parseAddress, parseCell } from "./re
 export { DEFAULT_LIMITS } from "./tokenizer.js";
 
 /** Versión del motor. Se escribe en el JSON del curso generado. */
-export const ENGINE_VERSION = "1.0.0";
+export const ENGINE_VERSION = "1.1.0";
 
 /** «implemented», «planned» o null. Acepta el nombre en español («BUSCARX») o el canónico («XLOOKUP»). */
 export function functionStatus(name) {

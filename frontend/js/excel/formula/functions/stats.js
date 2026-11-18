@@ -2,7 +2,7 @@
 
 import { ERROR_CODES, isError, xlError } from "../errors.js";
 import { toNumber } from "../values.js";
-import { collectNumbers } from "./args.js";
+import { cellValues, collectNumbers } from "./args.js";
 
 export function AVERAGE(args) {
   const numbers = collectNumbers(args);
@@ -13,42 +13,22 @@ export function AVERAGE(args) {
   return total / numbers.length;
 }
 
-export function MIN(args) {
+const extreme = (fn) => (args) => {
   const numbers = collectNumbers(args);
-  if (isError(numbers)) return numbers;
-  return numbers.length === 0 ? 0 : Math.min(...numbers);
-}
+  return isError(numbers) ? numbers : numbers.length ? fn(...numbers) : 0;
+};
+export const MIN = extreme(Math.min);
+export const MAX = extreme(Math.max);
 
-export function MAX(args) {
-  const numbers = collectNumbers(args);
-  if (isError(numbers)) return numbers;
-  return numbers.length === 0 ? 0 : Math.max(...numbers);
-}
-
-/** CONTAR: en rangos y referencias cuenta solo números; escritos directamente, lo que se pueda convertir. */
-export function COUNT(args) {
+/** CONTAR: en rangos y celdas cuenta números; escritos directamente, lo que se pueda convertir.
+    CONTARA: lo que no está vacío, incluidos textos, booleanos y errores. */
+const counter = (inCells, direct) => (args) => {
   let count = 0;
   for (const arg of args) {
-    if (arg.kind === "range" || arg.kind === "ref") {
-      const values = arg.kind === "range" ? arg.value.values() : [arg.value];
-      for (const value of values) if (typeof value === "number") count += 1;
-      continue;
-    }
-    if (!isError(arg.value) && !isError(toNumber(arg.value))) count += 1;
+    if (arg.kind === "value") count += direct(arg.value) ? 1 : 0;
+    else for (const value of cellValues(arg)) count += inCells(value) ? 1 : 0;
   }
   return count;
-}
-
-/** CONTARA: cuenta lo que no está vacío, incluidos textos, booleanos y errores. */
-export function COUNTA(args) {
-  let count = 0;
-  for (const arg of args) {
-    if (arg.kind === "range" || arg.kind === "ref") {
-      const values = arg.kind === "range" ? arg.value.values() : [arg.value];
-      for (const value of values) if (value !== null && value !== undefined) count += 1;
-      continue;
-    }
-    count += 1;
-  }
-  return count;
-}
+};
+export const COUNT = counter((v) => typeof v === "number", (v) => !isError(v) && !isError(toNumber(v)));
+export const COUNTA = counter((v) => v !== null && v !== undefined, () => true);

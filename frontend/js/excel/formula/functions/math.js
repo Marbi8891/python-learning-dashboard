@@ -1,6 +1,6 @@
-/* Funciones matemáticas implementadas en la v1: SUMA, PRODUCTO y REDONDEAR. */
+/* Funciones matemáticas: SUMA, PRODUCTO y REDONDEAR (v1); REDONDEAR.MAS, ENTERO y RESIDUO (M04). */
 
-import { isError } from "../errors.js";
+import { ERROR_CODES, isError, xlError } from "../errors.js";
 import { round15 } from "../values.js";
 import { collectNumbers, numberArg } from "./args.js";
 
@@ -40,4 +40,30 @@ export function ROUND([numberArgument, digitsArgument]) {
   const digits = numberArg(digitsArgument);
   if (isError(digits)) return digits;
   return roundHalfAwayFromZero(number, Math.trunc(digits));
+}
+
+/** REDONDEAR.MAS: redondea alejándose de cero. */
+export function ROUNDUP([numberArgument, digitsArgument]) {
+  const number = numberArg(numberArgument);
+  const digits = numberArg(digitsArgument);
+  if (isError(number) || isError(digits)) return isError(number) ? number : digits;
+  const d = Math.trunc(digits);
+  const scale = 10 ** Math.abs(d);
+  const up = Math.ceil(round15(d >= 0 ? Math.abs(number) * scale : Math.abs(number) / scale));
+  return Math.sign(number) * (d >= 0 ? up / scale : up * scale);
+}
+
+/** ENTERO: hacia abajo (ENTERO(-2,5) da -3). */
+export function INT([arg]) {
+  const number = numberArg(arg);
+  return isError(number) ? number : Math.floor(round15(number));
+}
+
+/** RESIDUO: resto con el signo del divisor (RESIDUO(-3;2) da 1). */
+export function MOD([numberArgument, divisorArgument]) {
+  const n = numberArg(numberArgument);
+  const d = numberArg(divisorArgument);
+  if (isError(n) || isError(d)) return isError(n) ? n : d;
+  if (d === 0) return xlError(ERROR_CODES.DIV0);
+  return round15(n - d * Math.floor(round15(n / d)));
 }

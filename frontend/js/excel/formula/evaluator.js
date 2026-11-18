@@ -13,7 +13,7 @@ import { SPANISH_NAME } from "./locale-es.js";
 import { parseFormula } from "./parser.js";
 import { address, parseAddress } from "./references.js";
 import { DEFAULT_LIMITS } from "./tokenizer.js";
-import { compareValues, isRange, publicValue, RangeValue, toNumber, toText } from "./values.js";
+import { COMPARE, compareValues, isRange, publicValue, RangeValue, toNumber, toText } from "./values.js";
 
 export const DEFAULT_SHEET = "Hoja1";
 
@@ -161,48 +161,17 @@ class Context {
       const b = toText(right);
       return isError(b) ? b : a + b;
     }
-    if (["=", "<>", "<", ">", "<=", ">="].includes(node.op)) {
+    if (COMPARE[node.op]) {
       const order = compareValues(left, right);
-      if (isError(order)) return order;
-      switch (node.op) {
-        case "=":
-          return order === 0;
-        case "<>":
-          return order !== 0;
-        case "<":
-          return order < 0;
-        case ">":
-          return order > 0;
-        case "<=":
-          return order <= 0;
-        default:
-          return order >= 0;
-      }
+      return isError(order) ? order : COMPARE[node.op](order);
     }
     const a = toNumber(left);
     if (isError(a)) return a;
     const b = toNumber(right);
     if (isError(b)) return b;
-    let result;
-    switch (node.op) {
-      case "+":
-        result = a + b;
-        break;
-      case "-":
-        result = a - b;
-        break;
-      case "*":
-        result = a * b;
-        break;
-      case "/":
-        if (b === 0) return xlError(ERROR_CODES.DIV0);
-        result = a / b;
-        break;
-      default: // ^
-        if (a === 0 && b === 0) return xlError(ERROR_CODES.NUM, "0 elevado a 0 no tiene resultado en Excel.");
-        if (a === 0 && b < 0) return xlError(ERROR_CODES.DIV0);
-        result = a ** b;
-    }
+    if (node.op === "/" && b === 0) return xlError(ERROR_CODES.DIV0);
+    if (node.op === "^" && a === 0 && b <= 0) return b === 0 ? xlError(ERROR_CODES.NUM, "0 elevado a 0 no tiene resultado en Excel.") : xlError(ERROR_CODES.DIV0);
+    const result = { "+": a + b, "-": a - b, "*": a * b, "/": a / b, "^": a ** b }[node.op];
     return Number.isFinite(result) ? result : xlError(ERROR_CODES.NUM);
   }
 
@@ -214,12 +183,27 @@ class Context {
     if (info.status !== "implemented") {
       return xlError(ERROR_CODES.NAME, `${SPANISH_NAME[node.name]} todavía no está disponible en PLD.`);
     }
+    if (info.lazy) return info.impl(this.lazyArgs(node.args, sheet), this);
     const args = node.args.map((arg) => {
       const value = this.evaluate(arg, sheet);
       if (isRange(value)) return { kind: "range", value };
       return { kind: arg.type === "Ref" ? "ref" : "value", value };
     });
     return info.impl(args, this);
+  }
+
+  /** Argumentos sin calcular de una función `lazy`: value(i) (puede ser un rango), scalar(i),
+      range(i) (un rango o una celda; si no, #¡VALOR!) y rangeAt(hoja, c1, r1, c2, r2). */
+  lazyArgs(nodes, sheet) {
+    const value = (i) => this.evaluate(nodes[i], sheet);
+    const rangeAt = (target, c1, r1, c2, r2) => this.range({ start: { sheet: target, col: c1, row: r1 }, end: { col: c2, row: r2 } }, sheet);
+    const range = (i) => {
+      const { type, ref } = nodes[i];
+      if (type === "Ref") return rangeAt(ref.sheet ?? sheet, ref.col, ref.row, ref.col, ref.row);
+      const result = value(i);
+      return isRange(result) || isError(result) ? result : xlError(ERROR_CODES.VALUE, "Aquí va un rango de celdas, no un valor.");
+    };
+    return { count: nodes.length, value, scalar: (i) => scalarResult(value(i)), range, rangeAt };
   }
 }
 

@@ -54,7 +54,7 @@ test("completada (botón) y superada (criterios) se cuentan por separado", () =>
   const xl1 = unitQuestions(bank, "xl1-archivos");
   const answers = Object.fromEntries(xl1.map((q) => [q.id, [true]]));
   const summary = courseSummary(lessons, bank, { answers, done: { "xl1-interfaz": "2026-11-17T10:00:00.000Z" } });
-  assert.deepEqual(summary, { units: 9, done: 1, passed: 1, questions: 111, solved: xl1.length });
+  assert.deepEqual(summary, { units: 15, done: 1, passed: 1, questions: 190, solved: xl1.length });
 });
 
 test("cada ejercicio de fórmula publicado pasa la verificación del motor (mismo código que la web)", () => {

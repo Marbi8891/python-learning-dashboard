@@ -1,12 +1,12 @@
-"""Calidad y coherencia de Excel profesional (frontend/data/academia/excel/), fase P2.
+"""Calidad y coherencia de Excel profesional (frontend/data/academia/excel/), M01-M05.
 
 El generador (scripts/courses/excel_course.py --check) ya comprueba con el motor de fórmulas cada
 ejemplo y cada ejercicio de fórmula, y los mínimos de cada unidad. Aquí se comprueba lo que no
 depende del motor, como en test_daw_courses.py para los cursos de DAW:
 
 - Identificadores estables (scripts/courses/academia.lock.json): el progreso se guarda por id.
-- Volumen del piloto: 9 unidades y 111 ejercicios (docs/excel-academy/CURRICULUM_M1_M2.md §8).
-- Ningún contenido vacío, ninguna pregunta repetida y opciones bien formadas.
+- Volumen: 15 unidades y 190 ejercicios (CURRICULUM_M1_M2.md §8 y CURRICULUM_M3_M5.md §4).
+- Ningún contenido vacío, ninguna pregunta repetida y opciones bien formadas y barajadas.
 - Sin módulo oficial de DAW: el curso no se cuela en el currículo ni en los paneles de DAW.
 - Fuentes https con fecha y enlaces internos a rutas que existen.
 """
@@ -29,15 +29,16 @@ def text(value) -> str:
     return value.get("es", "") if isinstance(value, dict) else value or ""
 
 
-def test_pilot_volume():
-    assert [u["slug"] for u in UNITS] == ["xl-m01", "xl-m02"]
-    assert len(LESSONS) == 9
+def test_volume():
+    assert [u["slug"] for u in UNITS] == ["xl-m01", "xl-m02", "xl-m03", "xl-m04", "xl-m05"]
+    assert sum(b["weight"] for b in BANK["exam"]["blocks"]) == 100
+    assert len(LESSONS) == 15
     kinds = [q.get("kind", "choice") for q in BANK["questions"]]
-    assert len(kinds) == 111
+    assert len(kinds) == 190
     assert (kinds.count("choice"), kinds.count("formula-result"), kinds.count("formula")) == (
-        58,
-        36,
-        17,
+        98,
+        59,
+        33,
     )
     assert BANK["engine"], "falta la versión del motor que comprobó los ejercicios"
 
@@ -94,6 +95,14 @@ def test_questions_are_well_formed_and_not_repeated():
         )
         assert key not in seen, f"{q['id']} repite la pregunta {seen.get(key)}"
         seen[key] = q["id"]
+
+
+def test_the_right_answer_is_not_always_in_the_same_place():
+    """Las opciones se barajan con una semilla fija (scripts/courses/excel/units.py, shuffled)."""
+    positions = [q["answer"][0] for q in BANK["questions"] if q.get("kind", "choice") == "choice"]
+    for position in set(positions):
+        assert positions.count(position) < len(positions) / 2, f"la respuesta {position} domina"
+    assert len(set(positions)) >= 3
 
 
 def test_required_exercises_and_guided_exercise_belong_to_their_unit():

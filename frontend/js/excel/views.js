@@ -159,6 +159,14 @@ export function mountFormulaExercise(container, question, { onResult } = {}) {
  * Monta un ejercicio «¿Qué devuelve esta fórmula?» en `container`.
  * @returns {{ answer: (value: string|number) => object }}
  */
+/** Una opción de «elige el resultado» como resultado del motor: número, booleano, { error } o texto. */
+function optionResult(option) {
+  if (typeof option === "number") return { type: "number", value: option };
+  if (typeof option === "boolean") return { type: "boolean", value: option };
+  if (option !== null && typeof option === "object" && "error" in option) return { type: "error", value: option.error };
+  return { type: "text", value: String(option) };
+}
+
 export function mountResultExercise(container, question, { onResult } = {}) {
   const inputId = nextId("xl-result");
   const sheet = question.sheet ?? DEFAULT_SHEET;
@@ -166,7 +174,7 @@ export function mountResultExercise(container, question, { onResult } = {}) {
   const field = choice
     ? `<fieldset class="xl-exercise__options"><legend>Elige el resultado</legend>${question.options
         .map(
-          (option, i) => `<label><input type="radio" name="${inputId}" value="${i}" /> ${escapeHtml(describe(typeof option === "number" ? { type: "number", value: option } : { type: "text", value: String(option) }).replace(/^«|»$/g, ""))}</label>`,
+          (option, i) => `<label><input type="radio" name="${inputId}" value="${i}" /> ${escapeHtml(describe(optionResult(option)).replace(/^«|»$/g, ""))}</label>`,
         )
         .join("")}</fieldset>`
     : `<label for="${inputId}">Resultado</label>

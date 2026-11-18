@@ -9,6 +9,13 @@ cambios se agrupan por fecha de merge, con el número de pull request entre par�
 ## [Sin publicar]
 
 ### Añadido
+- Excel profesional, P4.1: módulos M03 (formato profesional y gestión de libros), M04 (funciones
+  lógicas) y M05 (agregación condicional). 6 unidades y 79 ejercicios más (190 en total), comprobados con
+  el motor. El motor calcula 16 funciones nuevas: SI, Y, O, NO, SI.CONJUNTO, SI.ERROR, REDONDEAR.MAS,
+  ENTERO, RESIDUO, SUMAR.SI, SUMAR.SI.CONJUNTO, CONTAR.SI, CONTAR.SI.CONJUNTO, PROMEDIO.SI,
+  MAX.SI.CONJUNTO y MIN.SI.CONJUNTO, con criterios y comodines (DEC-021); 58 casos de referencia nuevos
+  contrastados con LibreOffice.
+
 - Excel profesional, fase P2: el curso ya se ve en `#/academia/excel` (alias `#/excel-academy`), en
   el menú y en la portada. M01 y M02: 9 unidades con explicación, ejemplos resueltos, ejercicio guiado,
   caso, errores frecuentes, resumen y fuentes, y 111 ejercicios (58 de test, 36 de «¿qué devuelve?» y 17
@@ -90,6 +97,12 @@ cambios se agrupan por fecha de merge, con el número de pull request entre par�
   de `docs/` y plantillas de issues y de pull request.
 - Lista de comprobación para activar Brevo en Render, con plantilla, errores, abuso y remitente
   (`docs/DEPLOY.md` §5).
+
+### Corregido
+- Excel profesional: en las preguntas de test la respuesta correcta era siempre la primera opción.
+  Ahora las opciones se barajan con una semilla fija por pregunta.
+- Excel profesional: «elige el resultado» muestra bien los errores (#¡DIV/0!) y los valores lógicos.
+- Excel profesional: contraste insuficiente del texto de los módulos «Próximamente» en tema claro.
 
 ### Cambiado
 - Seguridad (RT-004): la web ya no usa estilos en línea propios. Las barras de progreso pintan

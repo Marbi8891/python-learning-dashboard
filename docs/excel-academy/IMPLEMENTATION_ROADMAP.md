@@ -9,10 +9,10 @@ Hay dos numeraciones en los documentos. Este anexo adopta la del prompt de conso
 | Esta hoja de ruta | Doc original 08 | Autorización del 16/11 (mañana) |
 |---|---|---|
 | **P0** Catálogo | Fase 1 (P0) | Autorizada y **hecha** (PR #159) |
-| **P1** Motor y base funcional | Fase 2 (P1a) | Formaba parte de «P1 = motor + M1-M2»; espera autorización tras revisar P0 |
-| **P2** Contenido M1-M2 | Fase 4 (P1b) | Ídem |
-| **P3** Evaluación y seguimiento | Fase 5 (validación) y parte de la 4 | Sin autorizar |
-| **P4** Ampliación y funciones profesionales | Fase 3 (lector XLSX, en pausa) y «fuera del plan» (M03+) | **No autorizada**. Lo que la autorización llamó «P2» (no avanzar sin nueva autorización) queda aquí |
+| **P1** Motor y base funcional | Fase 2 (P1a) | Autorizada y **hecha** (PR #164) |
+| **P2** Contenido M1-M2 | Fase 4 (P1b) | Autorizada y **hecha** (PR #172) |
+| **P3** Evaluación y seguimiento | Fase 5 (validación) y parte de la 4 | Sin autorizar; se hará con M01-M05 (DA-28) |
+| **P4** Ampliación y funciones profesionales | Fase 3 (lector XLSX, en pausa) y «fuera del plan» (M03+) | **P4.1 (M03-M05) autorizada el 17/11 (DA-28)**, antes de P3. El resto, cada bloque con su autorización |
 | **P5** Estabilización y producción | No existía | Sin autorizar |
 
 **Por qué cambia el orden respecto al prompt:** ninguno. Se mantiene P0 → P5. Lo único que se mueve es el lector XLSX, que pasa a P4 (DA-11), y la validación del propietario, que entra en P3.
@@ -94,8 +94,8 @@ Cada bloque necesita su propia autorización. Orden recomendado por dependencias
 
 | Bloque | Contenido | Requiere | Esfuerzo [Hip] |
 |---|---|---|---|
-| P4.1 | M03-M05: formato, lógicas (SI, SI.ERROR…) y agregación condicional; funciones previstas de esos módulos | P3 | 25-35 h |
-| P4.2 | M06-M09: texto, fechas, búsquedas, matrices dinámicas | P4.1 | 35-50 h |
+| P4.1 | M03-M05: formato, lógicas (SI, SI.ERROR…) y agregación condicional; funciones previstas de esos módulos | P2 (DA-28 adelanta P4.1 a P3) | 25-35 h · **hecho**: 6 unidades, 79 ejercicios, 16 funciones |
+| P4.2 | M06-M09: texto, fechas, búsquedas, matrices dinámicas | P4.1 y la decisión DP-17 (tamaño del motor) | 35-50 h |
 | P4.3 | Lector XLSX (doc original 05) y prácticas `.xlsx` (RF-09, RF-10) | Autorización expresa (DA-11) | 25-35 h |
 | P4.4 | M10-M23 | P4.2 y, para M10-M14, P4.3 | > 100 h |
 | P4.5 | Proyectos M24-M25 | P4.4 | 30-40 h |
