@@ -48,6 +48,7 @@ import { initPrefs } from "./prefs.js";
 import { badgesHtml, renderProfile } from "./profile.js";
 import { dashboardTitle, initDashboard, renderDashboard } from "./dashboard.js";
 import { initPrivate } from "./private.js";
+import { keepForms } from "./form-keep.js";
 import { setQuizLesson } from "./quiz.js";
 import { recordAttempt, restoreSession, setCompleted, state, subscribe } from "./store.js";
 
@@ -392,8 +393,11 @@ function refreshProgressViews() {
   if (!view?.render) return;
   const container = $(view.element);
   // Al llegar el progreso de la cuenta se repinta en segundo plano: el foco no se puede perder
+  // y lo que el alumno está escribiendo en un formulario tampoco (form-keep.js)
   const focused = focusSelector(container);
-  container.innerHTML = view.render();
+  keepForms(container, () => {
+    container.innerHTML = view.render();
+  });
   if (focused) container.querySelector(focused)?.focus();
 }
 

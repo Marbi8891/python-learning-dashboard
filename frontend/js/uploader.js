@@ -8,6 +8,10 @@
    - Solo pasa a "guardado" cuando el servidor confirma la copia que incluye el último cambio: si
      hubo otro cambio mientras se subía, sigue pendiente.
    - `flush()` sube ya lo pendiente (antes de cerrar sesión) y devuelve si quedó todo guardado.
+   - Nunca hay dos subidas del mismo documento a la vez: las dos llevarían la misma versión y el
+     servidor respondería 409 a la segunda, que al fusionar volvería a marcar el almacén como pendiente
+     aunque todo estuviera guardado (cierre de sesión justo después de entrar). Quien pide subir
+     mientras hay una en vuelo espera a que termine y solo vuelve a subir si quedó algo pendiente.
 
    No depende del DOM ni de la API, para poder probarlo con node --test. */
 
@@ -41,14 +45,24 @@ export function createUploader({
   let timer = null;
   let attempt = 0;
   let changes = 0; // cuántos cambios locales ha habido: la subida solo confirma los que llevaba
+  let running = null; // la subida en vuelo, si la hay
 
   function clear() {
     if (timer !== null) cancel(timer);
     timer = null;
   }
 
-  async function upload() {
+  /** Sube una vez, o se suma a la subida en vuelo y, si al acabar queda algo pendiente, sube otra. */
+  function upload() {
     clear();
+    if (running) return running.then(() => (syncState(name) === "pending" ? upload() : syncState(name) === "saved"));
+    running = uploadOnce().finally(() => {
+      running = null;
+    });
+    return running;
+  }
+
+  async function uploadOnce() {
     if (!gate.ready) return false;
     const sent = changes;
     try {
@@ -95,8 +109,11 @@ export function createUploader({
   /** Sube ya lo pendiente. Devuelve si el servidor tiene todo lo de este almacén. */
   async function flush() {
     if (!gate.ready && !(await gate.sync())) return syncState(name) === "saved";
-    if (syncState(name) === "saved") return true;
+    if (syncState(name) === "saved" && !running) return true;
     await upload();
+    // Si durante la subida entró un cambio (p. ej. la fusión tras un 409 de otra pestaña), se sube una
+    // vez más: la petición ya salió bien, así que lo que queda es solo ese último cambio.
+    if (syncState(name) === "pending") await upload();
     return syncState(name) === "saved";
   }
 

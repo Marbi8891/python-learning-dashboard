@@ -46,6 +46,7 @@ import {
 } from "./private.js";
 import { activityHtml } from "./profile.js";
 import { state, subscribe } from "./store.js";
+import { keepForms } from "./form-keep.js";
 
 const FEED_PAGE = 10;
 const CHART_DAYS = 30;
@@ -143,7 +144,9 @@ function paint() {
   // Los datos de la cuenta llegan en segundo plano: si el foco estaba en un control de la sección
   // (p. ej. la fecha del examen recién guardada), se devuelve al mismo control (EVO-16, WCAG 2.4.3)
   const keep = activeSelector(body);
-  body.innerHTML = bodyHtml(section);
+  keepForms(body, () => {
+    body.innerHTML = bodyHtml(section); // lo escrito en un formulario a medias se conserva
+  });
   afterPaint(section);
   if (keep) body.querySelector(keep)?.focus({ preventScroll: true });
 }
