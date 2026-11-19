@@ -104,4 +104,13 @@ comportamiento que fijaba el test anterior: lo aprobó el autor al aprobar la au
 **Decisión:** las funciones que no pueden recibir sus argumentos ya calculados llevan la marca `lazy` en el registro (`frontend/js/excel/formula/functions/registry.js`) y reciben un objeto `lazyArgs` del evaluador: SI, SI.CONJUNTO y SI.ERROR (solo calculan la rama que toca) y la familia SUMAR.SI (necesita la posición de cada rango). Los criterios se comparan con un algoritmo propio de comodines, sin expresiones regulares.
 **Por qué:** con los argumentos ya calculados, `=SI(B2=0;0;A2/B2)` daría #¡DIV/0! y SUMAR.SI no podría ajustar el rango de suma como Excel. Una marca en el registro deja igual las 8 funciones de la v1 y su prueba de referencia. Sin expresiones regulares no hay riesgo de vuelta atrás exponencial con un patrón como `*A*A*A…`. El autor pidió el 17/11/2026 seguir con las lecciones (DA-28: P4.1, M03-M05, antes de P3).
 **Consecuencia:** el motor ocupa 61 387 bytes de los 61 440 del presupuesto (RNF-10). Antes de M06 hay que decidir si cada módulo carga sus funciones aparte o si se amplía el límite con una medida de rendimiento (DP-17).
+## DEC-022 · Tutor opcional con NEXARO Personal AI (17/11/2026)
+
+**Decisión:** el asistente de la lección puede ofrecer un tutor con IA servido por NEXARO Personal AI
+(Ollama local), a través del backend (`/api/v1/tutor`). Está desactivado mientras no se configuren
+`NEXARO_URL` y `NEXARO_API_KEY`.
+**Por qué:** lo pidió el autor el 17/11/2026, revisando la retirada del tutor del 26/10 (PR #62) con
+estas condiciones: solo local, gratuito, clave solo en el backend y sin dependencias nuevas.
+**Consecuencia:** la web publicada no cambia. Las conversaciones van firmadas por alumno. Ver
+[TUTOR.md](TUTOR.md).
 

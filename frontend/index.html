@@ -291,7 +291,16 @@
       </header>
       <ol class="assistant__messages" id="assistant-messages" aria-live="polite"></ol>
       <div class="assistant__suggestions" id="assistant-suggestions" role="group" aria-label="Preguntas sugeridas"></div>
-      <p class="assistant__note">Respuestas preparadas y revisadas para cada lección.</p>
+      <!-- Tutor con IA: solo aparece si el servidor tiene NEXARO configurado (docs/TUTOR.md) -->
+      <form class="assistant__tutor" id="tutor-form" hidden>
+        <p class="assistant__tutor-status" id="tutor-status" role="status" data-state="checking">Comprobando el tutor…</p>
+        <button class="btn btn--ghost btn--sm" id="tutor-retry" type="button" hidden>Reintentar</button>
+        <label for="tutor-question">Pregunta al tutor</label>
+        <textarea id="tutor-question" rows="2" maxlength="2000" required></textarea>
+        <label class="assistant__tutor-code"><input type="checkbox" id="tutor-code"> Enviar también mi código</label>
+        <button class="btn btn--primary btn--sm" id="tutor-send" type="submit">Preguntar</button>
+      </form>
+      <p class="assistant__note" id="assistant-note">Respuestas preparadas y revisadas para cada lección.</p>
     </section>
     <button class="assistant__toggle" id="assistant-toggle" type="button" aria-controls="assistant-panel" aria-expanded="false">
       <svg viewBox="0 0 32 32" width="30" height="30" aria-hidden="true">

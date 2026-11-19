@@ -3,7 +3,7 @@
 from functools import lru_cache
 from pathlib import Path
 
-from pydantic import field_validator
+from pydantic import SecretStr, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 # Fuente única del contenido: la comparten frontend (GitHub Pages) y backend
@@ -62,6 +62,14 @@ class Settings(BaseSettings):
     smtp_user: str | None = None
     smtp_password: str | None = None
     smtp_from: str = "Python Learning Dashboard <no-reply@example.com>"
+
+    # Tutor de programación (opcional, docs/TUTOR.md): NEXARO Personal AI con Ollama en el equipo
+    # del autor. Sin NEXARO_URL y NEXARO_API_KEY el tutor está desactivado y no aparece en la web.
+    nexaro_url: str | None = None
+    nexaro_api_key: SecretStr | None = None
+    # Un modelo local en CPU tarda: el tope de NEXARO hacia Ollama es de 180 s
+    tutor_timeout_seconds: float = 200.0
+    tutor_rate_limit_per_minute: int = 10
 
     # Modo aplicación local: la API sirve también la web (ver app/local_site.py)
     serve_frontend: bool = False

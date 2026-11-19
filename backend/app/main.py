@@ -28,8 +28,10 @@ from app.routers import (
     lessons,
     pcap,
     progress,
+    tutor,
     verified,
 )
+from app.routers.tutor import tutor_enabled
 from app.security import get_jwt_secret
 from app.security_events import Event, record
 from app.session_cookie import MODE_HEADER
@@ -174,6 +176,7 @@ for router in (
     course_state.router,
     dashboard.router,
     verified.router,
+    tutor.router,
 ):
     app.include_router(router, prefix=API_V1_PREFIX)
 
@@ -187,6 +190,8 @@ def health() -> dict[str, str | bool]:
         "status": "ok",
         "email": email_enabled(),
         "google": bool(get_settings().google_client_id),
+        # "tutor": el panel del asistente solo ofrece preguntar al tutor si está configurado
+        "tutor": tutor_enabled(),
     }
 
 

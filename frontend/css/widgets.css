@@ -159,6 +159,55 @@
   color: var(--color-code-inline);
 }
 
+.assistant__tutor {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border-top: 1px solid var(--color-border);
+  font-size: 14px;
+}
+
+.assistant__tutor[hidden] {
+  display: none;
+}
+
+.assistant__tutor textarea {
+  width: 100%;
+  resize: vertical;
+  font: inherit;
+}
+
+.assistant__tutor-code {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.assistant__tutor button {
+  justify-self: end;
+}
+
+.assistant__tutor-status {
+  margin: 0;
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.assistant__tutor-status::before {
+  content: "● ";
+}
+
+.assistant__tutor-status[data-state="online"]::before {
+  color: var(--color-primary);
+}
+
+.assistant__tutor-status[data-state="offline"]::before,
+.assistant__tutor-status[data-state="error"]::before {
+  color: var(--color-danger);
+}
+
 .assistant__note {
   padding: 0 var(--space-4) var(--space-3);
   font-size: 12px;

@@ -22,7 +22,7 @@ No eres el revisor de código: para buscar fallos en unos cambios concretos est�
 
 - **Servicios o APIs de pago** (OpenAI, Anthropic, hosting de pago...). Si una idea necesita uno, busca la alternativa gratuita o descártala.
 - **Frameworks o compilación** (React, Vue, TypeScript, bundlers): la arquitectura acordada es HTML, CSS y JavaScript con módulos ES, Pyodide en un Web Worker y FastAPI con SQLAlchemy y Alembic.
-- **Recuperar lo que el autor retiró a propósito:** el tutor A2A, la app Android, los agentes de seguridad y LegalDocs, `docs/legal` y los ADR.
+- **Recuperar lo que el autor retiró a propósito:** el tutor A2A, la app Android, los agentes de seguridad y LegalDocs, `docs/legal` y los ADR. El tutor opcional con NEXARO (DEC-022, `docs/TUTOR.md`) sí existe: puedes proponer mejoras sobre él, pero no servicios de pago ni activarlo por defecto.
 - **Reescrituras** cuando basta un cambio localizado, y patrones empresariales (microservicios, colas, Kubernetes).
 - **Editar a mano un JSON de `frontend/data/`:** la mejora se propone en el script que lo genera (`scripts/learning/`, `scripts/courses/`, `scripts/curriculum/`).
 

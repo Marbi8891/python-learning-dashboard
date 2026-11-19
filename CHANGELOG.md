@@ -93,6 +93,11 @@ cambios se agrupan por fecha de merge, con el número de pull request entre par�
 - Monitor de CI: `ci-monitor.yml` diagnostica cada ejecución de CI y avisa con una incidencia
   `ci-monitor` (nuevo, recurrente, corregido, cancelado u obsoleto); `scripts/ci-monitor/` y
   `docs/CI_CD_MONITORING.md` (#103).
+- Tutor de programación opcional en el asistente de la lección, servido por NEXARO Personal AI con
+  Ollama en local: guía con pistas, desactivado si no hay `NEXARO_URL` y `NEXARO_API_KEY`, clave solo
+  en el backend y conversaciones firmadas por alumno (`docs/TUTOR.md`, DEC-022). El panel muestra si NEXARO está
+  conectado (`GET /api/v1/tutor/status`) y deja reintentar; el código solo se envía si se marca. Sustituye
+  al widget directo a `localhost:8001` del PR #180.
 - Documentación de proyecto: `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, este `CHANGELOG.md`, índice
   de `docs/` y plantillas de issues y de pull request.
 - Lista de comprobación para activar Brevo en Render, con plantilla, errores, abuso y remitente

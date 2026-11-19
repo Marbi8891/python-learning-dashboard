@@ -52,6 +52,20 @@ apartado 7.G de la auditoría.
 | Conservación | Mientras exista la cuenta |
 | Código | `models.py` (`LessonProgress`, `ExerciseAttempt`, `PcapState`, `CourseState`) |
 
+### RAT-6. Tutor de programación (opcional, solo local)
+
+| Campo | Contenido |
+|---|---|
+| Finalidad | Responder dudas del alumno sobre el ejercicio con un tutor con IA ([TUTOR.md](TUTOR.md)) |
+| Base jurídica | Ejecución del servicio (art. 6.1.b), solo cuando el alumno lo usa |
+| Interesados | Usuarios con cuenta que preguntan al tutor |
+| Datos | Pregunta, código del alumno (si marca enviarlo) y el enunciado del ejercicio |
+| Destinatarios | NEXARO Personal AI en el ordenador del responsable (no es un tercero) |
+| Transferencias | Ninguna: el modelo funciona en local con Ollama |
+| Conservación | El backend de PLD no guarda nada; NEXARO guarda la conversación hasta que se borra en NEXARO |
+| Código | `backend/app/routers/tutor.py` |
+| Estado | Desactivado en la web publicada. NEEDS_HUMAN antes de activarlo en un despliegue público |
+
 ### RAT-3. Seguridad de las cuentas
 
 | Campo | Contenido |

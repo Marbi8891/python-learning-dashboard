@@ -226,6 +226,8 @@ login_failures = SharedRateLimiter(
 reset_requests = SharedRateLimiter("reset_email", 3, 15 * 60)
 # Guardados de progreso por usuario (AUD-009): la base de datos gratuita tiene poco espacio
 write_limiter = RateLimiter(_settings.write_rate_limit_per_minute)
+# Preguntas al tutor por usuario: cada una ocupa la CPU del modelo durante segundos
+tutor_limiter = RateLimiter(_settings.tutor_rate_limit_per_minute)
 
 TOO_MANY = "Demasiados intentos. Espera un poco y vuelve a probar."
 TOO_MANY_WRITES = (

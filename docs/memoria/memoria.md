@@ -58,7 +58,7 @@ En el proyecto he usado contenidos de varios módulos:
 6. Que sea accesible (WCAG 2.1 AA) y funcione en móvil.
 7. Tener pruebas automáticas y despliegue continuo.
 
-**Fuera de alcance.** Certificados oficiales, pagos, tutorías en directo, ejecutar código en el servidor, un tutor con IA y una app móvil nativa. En el móvil se usa la web, que es adaptable y se puede instalar como PWA. Durante el desarrollo hice un prototipo de app Android y un tutor con IA, pero los retiré el 26 de octubre de 2026 para simplificar el proyecto (ver 9.1).
+**Fuera de alcance.** Certificados oficiales, pagos, tutorías en directo, ejecutar código en el servidor y una app móvil nativa. En el móvil se usa la web, que es adaptable y se puede instalar como PWA. Durante el desarrollo hice un prototipo de app Android y un tutor con IA, pero los retiré el 26 de octubre de 2026 para simplificar el proyecto (ver 9.1). El 17 de noviembre recuperé el tutor como función opcional y solo local, conectada a NEXARO Personal AI, mi asistente con Ollama ([TUTOR.md](../TUTOR.md)). La web publicada no lo incluye. [VERIFY: revisa esta frase con tus palabras.]
 
 # 3. Análisis
 
@@ -196,7 +196,7 @@ Elegí un diseño tipo editorial (colores tinta, marfil y dorado y titulares con
 
 **Temario comprobado.** El temario no se escribe a mano en los JSON: se genera con scripts de Python (`scripts/courses/` y `scripts/learning/`). Los scripts ejecutan el código de cada pregunta y fallan si la salida no es la que se espera, así no hay respuestas mal puestas. En la integración continua se comprueba que el JSON publicado está al día.
 
-**Asistente de la lección.** Cada lección tiene un asistente con preguntas frecuentes, una pista del ejercicio y un enlace al tema siguiente (`frontend/js/assistant.js`). No es una IA: las respuestas están escritas y revisadas en `lessons.json`, así que no hace falta ningún servicio externo.
+**Asistente de la lección.** Cada lección tiene un asistente con preguntas frecuentes, una pista del ejercicio y un enlace al tema siguiente (`frontend/js/assistant.js`). No es una IA: las respuestas están escritas y revisadas en `lessons.json`, así que no hace falta ningún servicio externo. Si el servidor tiene configurado NEXARO Personal AI, el mismo panel ofrece además un tutor con IA opcional que guía con pistas ([TUTOR.md](../TUTOR.md)).
 
 **Currículo oficial de DAW.** `scripts/curriculum/` genera el catálogo de los 17 módulos de la Orden EDU/1311/2024 con los resultados de aprendizaje del Real Decreto 405/2023 (`#/daw/curriculo`). Cada pregunta de los cursos está asociada a un módulo, y el panel del alumno muestra cuántas ha practicado y domina por módulo.
 
@@ -279,7 +279,7 @@ Las fechas salen del historial de Git, que empieza el 25 de septiembre de 2026 y
 | Pruebas y despliegue | Pruebas, CI, accesibilidad, publicación | Todo el proyecto; versión 1.0.0 el 29/09 | [VERIFY] |
 | Memoria y defensa | Documentación y presentación | 29/09 (primera memoria y diagramas) – 26/10 | [VERIFY] |
 
-También hubo trabajo que no ha llegado a la versión final: una app Android (27/09 – 04/10) y un tutor con IA (06/10 – 20/10). Los retiré el 26 de octubre (pull request #62) para simplificar el proyecto; además, el tutor necesitaba un modelo de IA de pago o instalado en local.
+También hubo trabajo que no ha llegado a la versión final: una app Android (27/09 – 04/10) y un tutor con IA (06/10 – 20/10). Los retiré el 26 de octubre (pull request #62) para simplificar el proyecto; además, el tutor necesitaba un modelo de IA de pago o instalado en local. El 17 de noviembre recuperé el tutor con un modelo instalado en local (NEXARO Personal AI con Ollama), como función opcional y desactivada por defecto (DEC-022).
 
 ## 9.2 Costes
 
