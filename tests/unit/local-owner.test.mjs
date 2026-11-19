@@ -1,7 +1,8 @@
 // AUTH-02: el progreso que queda en un navegador compartido no se sube a otra cuenta, ni se borra.
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { claimLocalProgress, isProgressKey, OWNER_KEY, STASH_PREFIX } from "../../frontend/js/local-owner.js";
+import { claimLocalProgress, clearedOnLogout, isProgressKey, LOCAL_ONLY_KEYS, OWNER_KEY, STASH_PREFIX } from "../../frontend/js/local-owner.js";
+import { FINANCE_KEY } from "../../frontend/js/career/career-finance.js";
 
 /** localStorage en memoria con la misma interfaz. */
 function memoryStorage(initial = {}) {
@@ -73,4 +74,19 @@ test("una cuenta sin progreso en el navegador simplemente pasa a ser la dueña",
   const storage = memoryStorage({ [OWNER_KEY]: "1", "pld:prefs": "p" });
   assert.deepEqual(claimLocalProgress(2, storage), { swapped: false });
   assert.equal(storage.getItem(OWNER_KEY), "2");
+});
+
+test("cerrar sesión borra lo personal salvo preferencias, lo apartado y lo que solo existe aquí (DEC-012)", () => {
+  for (const key of ["pld:pcap", "pld:course:sql", "pld:career", "pld:draft:variables", "pld:owner"]) assert.equal(clearedOnLogout(key), true, key);
+  for (const key of ["pld:prefs", `${STASH_PREFIX}7`, FINANCE_KEY, "otra:cosa"]) assert.equal(clearedOnLogout(key), false, key);
+  assert.ok(LOCAL_ONLY_KEYS.includes(FINANCE_KEY), "los datos económicos no tienen copia en la cuenta");
+});
+
+test("los datos económicos son progreso: si entra otra cuenta se apartan para su dueño y vuelven", () => {
+  assert.ok(isProgressKey(FINANCE_KEY));
+  const storage = memoryStorage({ [OWNER_KEY]: "1", [FINANCE_KEY]: "dinero-de-1" });
+  assert.deepEqual(claimLocalProgress(2, storage), { swapped: true });
+  assert.equal(storage.getItem(FINANCE_KEY), null, "la cuenta 2 no los ve");
+  assert.deepEqual(claimLocalProgress(1, storage), { swapped: true });
+  assert.equal(storage.getItem(FINANCE_KEY), "dinero-de-1");
 });

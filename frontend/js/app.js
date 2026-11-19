@@ -5,7 +5,6 @@
 import hljs from "../vendor/highlight/core.min.js";
 import python from "../vendor/highlight/python.min.js";
 import { apiEnabled } from "./api.js";
-import { keepTyped } from "./form-errors.js";
 import { initI18n } from "./i18n.js";
 import { initAccount, openAccount, openPasswordReset, takeFlash } from "./account.js";
 import { initAssistant, setAssistantLesson } from "./assistant.js";
@@ -42,10 +41,12 @@ import { isLearnRoute, learnNavKey } from "./learn/routes.js";
 import { LANDING_ROUTE, closeLanding, isLandingRoute, openLanding } from "./landing.js";
 import { initLearnSync, loadLearningContent } from "./learn/learn-store.js";
 import { initPlannerSync } from "./learn/planner-store.js";
+import { initCareerSync } from "./career/career-store.js";
 import { lightDismiss } from "./dialogs.js";
 import { watchMeters } from "./meters.js";
 import { initPrefs } from "./prefs.js";
 import { badgesHtml, renderProfile } from "./profile.js";
+import { focusSelector, keepForms } from "./form-keep.js";
 import { setQuizLesson } from "./quiz.js";
 import { recordAttempt, restoreSession, setCompleted, state, subscribe } from "./store.js";
 
@@ -456,25 +457,17 @@ function renderGuide() {
 
 /* ---------- Inicio ---------- */
 
-/** Selector para volver a encontrar el control que tiene el foco después de repintar. */
-function focusSelector(container) {
-  const active = document.activeElement;
-  if (!active || active === document.body || !container.contains(active)) return null;
-  if (active.id) return `#${CSS.escape(active.id)}`;
-  const data = [...active.attributes].find((a) => a.name.startsWith("data-"));
-  return data ? `[${data.name}="${CSS.escape(data.value)}"]` : null;
-}
-
 function refreshProgressViews() {
   renderGuide();
   const view = VIEWS[content.view];
   if (!view?.render) return;
   const container = $(view.element);
   // Al llegar el progreso de la cuenta se repinta en segundo plano: el foco no se puede perder
+  // y lo que el alumno está escribiendo en un formulario tampoco (form-keep.js)
   const focused = focusSelector(container);
-  const restoreTyped = keepTyped(container); // ni lo que se estaba escribiendo en un formulario
-  container.innerHTML = view.render();
-  restoreTyped(container);
+  keepForms(container, () => {
+    container.innerHTML = view.render();
+  });
   if (focused) container.querySelector(focused)?.focus();
 }
 
@@ -1000,6 +993,7 @@ async function init() {
   });
   initLearnSync();
   initPlannerSync();
+  initCareerSync();
   const flash = takeFlash(); // aviso tras cerrar sesión o borrar la cuenta
   if (flash) showToast(flash);
   restoreSession();

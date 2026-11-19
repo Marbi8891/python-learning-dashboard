@@ -2,7 +2,7 @@
 
 import { ApiError, apiEnabled, request, setToken } from "./api.js";
 import { createUploader } from "./uploader.js";
-import { claimLocalProgress, STASH_PREFIX } from "./local-owner.js";
+import { claimLocalProgress, clearedOnLogout } from "./local-owner.js";
 
 const PROGRESS_KEY = "pld:completed";
 // Solo un aviso de que hay una cookie de sesión (el token no se puede leer desde aquí): así, al
@@ -165,13 +165,11 @@ function claimOwnProgress(user, token) {
 }
 
 /** Borra de este navegador todo lo personal (progreso, borradores, nombre del certificado,
-    logros…). Se conservan solo las preferencias de aspecto. Para equipos compartidos. */
+    logros…). Se conservan las preferencias de aspecto, lo apartado de otras cuentas (AUTH-02) y lo
+    que solo existe aquí, como los datos económicos (clearedOnLogout). Para equipos compartidos. */
 export function clearLocalData() {
   try {
-    for (const key of Object.keys(localStorage)) {
-      // Lo apartado de otras cuentas (AUTH-02) no es de quien cierra la sesión: se conserva
-      if (key.startsWith("pld:") && key !== "pld:prefs" && !key.startsWith(STASH_PREFIX)) localStorage.removeItem(key);
-    }
+    for (const key of Object.keys(localStorage)) if (clearedOnLogout(key)) localStorage.removeItem(key);
   } catch {
     // sin almacenamiento: no hay nada que borrar
   }

@@ -94,6 +94,38 @@ test("perfil y seguridad: cambiar el nombre, la contraseña y ver la actividad",
   expect(old.status()).toBe(401);
 });
 
+test("un repintado en segundo plano no borra lo que el alumno está escribiendo", async ({ page, request }) => {
+  // Los datos del panel llegan cuando el alumno ya está escribiendo: se retienen hasta entonces
+  let release;
+  const held = new Promise((resolve) => {
+    release = resolve;
+  });
+  await page.route(`${API}/api/v1/dashboard?*`, async (route) => {
+    await held;
+    await route.continue();
+  });
+  await signIn(page, request);
+  await expect(page.locator(".dash-facts dd").nth(2)).toHaveText("…"); // los datos aún no han llegado
+  await page.getByLabel("Nombre que se muestra").fill("Ana María");
+  const form = page.locator("#password-form");
+  await form.getByLabel("Contraseña actual").fill(PASSWORD);
+  await form.getByLabel("Nueva contraseña (mínimo 8 caracteres)").fill("tortuga-azul-en-bici");
+  await form.getByLabel("Repite la nueva").fill("otra-distinta-123");
+  await form.getByRole("button", { name: "Cambiar contraseña" }).click();
+  await expect(form.locator(".form-message")).toHaveText("Las dos contraseñas nuevas no coinciden.");
+
+  const painted = page.waitForResponse((r) => r.url().includes("/api/v1/dashboard?"));
+  release();
+  await painted;
+  // Repintado con los datos: «Último acceso con» deja de mostrar «…»
+  await expect(page.locator(".dash-facts dd").nth(2)).not.toHaveText("…");
+  await expect(page.getByLabel("Nombre que se muestra")).toHaveValue("Ana María");
+  await expect(form.getByLabel("Repite la nueva")).toHaveValue("otra-distinta-123");
+  await expect(form.locator(".form-message")).toHaveText("Las dos contraseñas nuevas no coinciden.");
+  await expect(form.getByLabel("Repite la nueva")).toHaveAttribute("aria-invalid", "true");
+  await expect(form.getByLabel("Repite la nueva")).toHaveAttribute("aria-describedby", "password-form-message");
+});
+
 test("perfil: repintar en segundo plano no borra lo que se está escribiendo", async ({ page, request }) => {
   // Regresión: al llegar datos de la cuenta, la vista se repinta entera y la contraseña actual
   // escrita se perdía (fallo intermitente de la prueba anterior y del alumno real)
@@ -110,6 +142,21 @@ test("perfil: repintar en segundo plano no borra lo que se está escribiendo", a
   await expect(form.getByLabel("Nueva contraseña (mínimo 8 caracteres)")).toHaveValue("tortuga-azul-en-bici");
   await expect(form.getByLabel("Repite la nueva")).toHaveValue("");
   await expect(page.getByLabel("Nombre que se muestra")).toHaveValue("Ana");
+});
+
+test("un repintado en segundo plano no quita el foco a un campo sin id: lo tecleado después llega", async ({ page, request }) => {
+  // Regresión del fallo intermitente de la prueba anterior en CI: los campos de contraseña no tienen id
+  // ni data-, así que al repintar perdían el foco y lo que se tecleaba en ese momento no llegaba a ningún sitio
+  await signIn(page, request);
+  const current = page.locator("#password-form").getByLabel("Contraseña actual");
+  await current.focus();
+  await page.evaluate(async () => {
+    const { state, updateUser } = await import("/js/store.js");
+    updateUser({ ...state.user }); // repintado, como al llegar datos de la cuenta
+  });
+  await expect(current).toBeFocused();
+  await page.keyboard.type("abc");
+  await expect(current).toHaveValue("abc");
 });
 
 test("Mi cuenta sin infracciones WCAG", async ({ page, request }) => {

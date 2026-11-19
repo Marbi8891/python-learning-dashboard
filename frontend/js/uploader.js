@@ -7,12 +7,13 @@
      caducada) no se reintenta: se subirá al volver a entrar.
    - Solo pasa a "guardado" cuando el servidor confirma la copia que incluye el último cambio: si
      hubo otro cambio mientras se subía, sigue pendiente.
-   - Hay como mucho una subida en curso. Si llega otra petición mientras tanto, se sube otra vez al
-     terminar la primera: dos PUT a la vez con la misma versión chocaban entre sí (409) y el cierre
-     de sesión creía que faltaba algo por guardar.
-   - `flush()` sube ya lo pendiente (antes de cerrar sesión) y devuelve si quedó todo guardado.
-     Espera a la subida en curso y repite mientras quede algo pendiente (p. ej. la fusión de un 409
-     cuenta como cambio), con un límite.
+   - Hay como mucho una subida en curso: dos PUT a la vez con la misma versión chocaban entre sí
+     (409), la fusión del 409 volvía a marcar el almacén como pendiente y el cierre de sesión justo
+     después de entrar creía que faltaba algo por guardar. Quien pide subir mientras hay una en vuelo
+     se suma a ella, y al acabar solo se vuelve a subir si quedó algo pendiente.
+   - `flush()` sube ya lo pendiente (antes de cerrar sesión) y devuelve si quedó todo guardado. Espera
+     a la subida en curso y repite mientras quede algo pendiente (p. ej. la fusión de un 409 cuenta
+     como cambio), con un límite.
 
    No depende del DOM ni de la API, para poder probarlo con node --test. */
 
@@ -56,8 +57,8 @@ export function createUploader({
     timer = null;
   }
 
-  /** Sube ya. Si hay una subida en curso, se sube otra vez al terminar ella (con los datos de ese
-      momento) y se devuelve el resultado de esa última. */
+  /** Sube ya. Si hay una subida en curso, se suma a ella: al terminar, se sube otra vez (con los
+      datos de ese momento) solo si quedó algo pendiente. Devuelve el resultado de la última. */
   function upload() {
     clear();
     if (running) {
@@ -69,7 +70,7 @@ export function createUploader({
       do {
         again = false;
         ok = await uploadOnce();
-      } while (again && ok);
+      } while (ok && again && syncState(name) === "pending");
       return ok;
     })().finally(() => {
       running = null;
@@ -78,7 +79,6 @@ export function createUploader({
   }
 
   async function uploadOnce() {
-    clear();
     if (!gate.ready) return false;
     const sent = changes;
     try {
@@ -125,7 +125,9 @@ export function createUploader({
   /** Sube ya lo pendiente. Devuelve si el servidor tiene todo lo de este almacén. */
   async function flush() {
     if (!gate.ready && !(await gate.sync())) return syncState(name) === "saved";
-    for (let round = 0; round < MAX_FLUSH_UPLOADS && syncState(name) !== "saved"; round += 1) {
+    // Con una subida en vuelo se espera a ella aunque el estado ya diga «guardado»; si durante la
+    // subida entró un cambio (p. ej. la fusión tras un 409 de otra pestaña), se sube otra vez, con límite.
+    for (let round = 0; round < MAX_FLUSH_UPLOADS && (running || syncState(name) !== "saved"); round += 1) {
       if (!(await upload())) break; // fallo real: queda marcado y el alumno decide (SYNC-01)
     }
     return syncState(name) === "saved";

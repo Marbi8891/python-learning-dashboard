@@ -156,6 +156,10 @@ test("un fallo de red se explica y se puede reintentar", async ({ page }) => {
   const alert = panel(page).getByRole("alert");
   await expect(alert).toContainText("No se ha podido cargar parte de tu panel");
   await expect(alert).toContainText("No se pudo conectar con el servidor");
+  // Mientras termina la sincronización de la cuenta, el panel recarga solo sus datos y, con la red de
+  // vuelta, quitaría la alerta sin pulsar nada. Se espera a que acabe para probar el botón.
+  await expect.poll(() => page.evaluate(async () => (await import("/js/sync-status.js")).unsavedStores().length)).toBe(0);
+  await expect(alert).toBeVisible();
   fail = false;
   await alert.getByRole("button", { name: "Reintentar" }).click();
   await expect(panel(page).getByRole("alert")).toHaveCount(0);
