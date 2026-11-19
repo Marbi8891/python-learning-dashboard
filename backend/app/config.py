@@ -63,6 +63,16 @@ class Settings(BaseSettings):
     smtp_password: str | None = None
     smtp_from: str = "Python Learning Dashboard <no-reply@example.com>"
 
+    # Tutor con IA (app/tutor.py). Sin TUTOR_API_KEY está apagado y la web solo enseña las
+    # respuestas preparadas. Por defecto usa la capa gratuita de Groq (API compatible con OpenAI);
+    # se puede cambiar de proveedor con TUTOR_API_URL y TUTOR_MODEL sin tocar código.
+    tutor_api_key: str | None = None
+    tutor_api_url: str = "https://api.groq.com/openai/v1/chat/completions"
+    tutor_model: str = "llama-3.3-70b-versatile"
+    # Preguntas por alumno y hora: la capa gratuita del proveedor tiene un cupo diario compartido
+    tutor_questions_per_hour: int = 20
+    tutor_timeout_seconds: float = 30.0
+
     # Modo aplicación local: la API sirve también la web (ver app/local_site.py)
     serve_frontend: bool = False
     frontend_dir: Path = FRONTEND_DIR

@@ -28,11 +28,13 @@ from app.routers import (
     lessons,
     pcap,
     progress,
+    tutor,
     verified,
 )
 from app.security import get_jwt_secret
 from app.security_events import Event, record
 from app.session_cookie import MODE_HEADER
+from app.tutor import tutor_enabled
 
 logging.basicConfig(level=logging.INFO)
 
@@ -174,6 +176,7 @@ for router in (
     course_state.router,
     dashboard.router,
     verified.router,
+    tutor.router,
 ):
     app.include_router(router, prefix=API_V1_PREFIX)
 
@@ -183,10 +186,12 @@ for router in (
 def health() -> dict[str, str | bool]:
     # "email": el frontend solo ofrece la recuperación por email si se pueden enviar (Brevo o SMTP)
     # "google": y solo enseña «Continuar con Google» si el servidor tiene GOOGLE_CLIENT_ID
+    # "tutor": y solo ofrece escribir preguntas libres si hay TUTOR_API_KEY
     return {
         "status": "ok",
         "email": email_enabled(),
         "google": bool(get_settings().google_client_id),
+        "tutor": tutor_enabled(),
     }
 
 

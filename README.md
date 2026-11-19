@@ -17,6 +17,7 @@ Proyecto de 2º de DAW: una web para **aprender Python entendiendo lo que haces*
 - **Currículo oficial de DAW en Castilla y León** (`#/daw/curriculo`): los 17 módulos de la Orden EDU/1311/2024 y los resultados de aprendizaje y criterios de evaluación literales del Real Decreto 405/2023. Se genera con `scripts/curriculum/` (ver [docs/PLAN-CURRICULO-DAW.md](docs/PLAN-CURRICULO-DAW.md)). En «Mi panel › Mi progreso» se ve cuántas preguntas de cada módulo has practicado y cuántas dominas.
 - **Recursos complementarios de DAW** con autor, licencia y fecha de verificación. Cómo ampliar el temario: [docs/AMPLIAR-TEMARIO-DAW.md](docs/AMPLIAR-TEMARIO-DAW.md).
 - **Motor adaptativo** en «Aprender»: dominio de cada concepto con evidencias, confianza y olvido, repaso espaciado común y plan de «Hoy» con el motivo de cada recomendación. Incluye un **planificador diario** (tiempo disponible, exámenes y entregas, tareas hechas, pospuestas o descartadas) que se sincroniza con la cuenta. Cómo funciona: [docs/ADAPTIVE_ENGINE.md](docs/ADAPTIVE_ENGINE.md); decisiones: [docs/DECISIONS.md](docs/DECISIONS.md).
+- **Asistente de la lección con tutor con IA:** además de las respuestas preparadas, el alumno puede escribir cualquier duda con sus palabras y, si quiere, adjuntar su código y el error de la consola. Responde una IA con la capa gratuita de Groq, que explica paso a paso y da pistas en vez de la solución. Hace falta cuenta, se avisa de que contesta una IA y no se guarda nada. Se activa con `TUTOR_API_KEY`: [docs/TUTOR-IA.md](docs/TUTOR-IA.md).
 - **XP, niveles, racha y logros.**
 - **Cuenta opcional:** registro con email o con Google, recuperación de contraseña y panel del alumno. Puedes descargar tus datos o borrar la cuenta (RGPD).
 - **Interfaz rediseñada:** sistema visual unificado para la portada, panel, navegación, aprendizaje, lecciones, consola Python, PCAP, DAW, perfil y cuenta. Conserva HTML, CSS y JavaScript nativo, sin migrar a un framework. Documentación: [docs/REDISENO-FRONTEND.md](docs/REDISENO-FRONTEND.md).
@@ -84,6 +85,7 @@ Se copian de `backend/.env.example` a `backend/.env` (que no se sube al reposito
 | `FRONTEND_URL` | Para construir el enlace de recuperación de contraseña | No |
 | `GOOGLE_CLIENT_ID` | Activar «Continuar con Google» | No |
 | `BREVO_API_KEY` o `SMTP_*` | Enviar los emails de recuperación | No |
+| `TUTOR_API_KEY` | Activar el tutor con IA del asistente (capa gratuita de Groq, ver [docs/TUTOR-IA.md](docs/TUTOR-IA.md)) | No |
 | `ENABLE_DOCS` | Ver la documentación de la API en `/docs` | No |
 
 ## Usarlo en tu PC (Windows)
