@@ -1,0 +1,337 @@
+/* «Mi Carrera en IA» (#/carrera, career-app.js). Solo tokens de tokens.css: sirve en claro, oscuro y
+   alto contraste. Los estados llevan siempre texto, no solo color (WCAG 1.4.1). */
+
+.career-facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  gap: var(--space-3);
+  margin: var(--space-4) 0 0;
+}
+
+.career-facts div {
+  padding: var(--space-3);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.career-facts dt {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+.career-facts dd {
+  margin: var(--space-1) 0 0;
+  color: var(--color-strong);
+  font-size: var(--text-lg);
+  font-weight: 700;
+}
+
+.career-start {
+  margin: var(--space-4) 0 var(--space-2);
+}
+
+.career-note {
+  padding: var(--space-3) var(--space-4);
+  border-left: 4px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  background: var(--color-primary-soft);
+}
+
+.career-list,
+.career-modules,
+.career-units {
+  display: grid;
+  gap: var(--space-3);
+  margin: var(--space-3) 0;
+  padding: 0;
+  list-style: none;
+}
+
+.career-modules > li,
+.career-list > li {
+  min-width: 0;
+}
+
+.career-module {
+  padding: var(--space-4);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.career-module__title,
+.career-subtitle {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  align-items: center;
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-lg);
+}
+
+.career-subtitle {
+  margin-top: var(--space-5);
+}
+
+.career-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.career-muted {
+  margin: var(--space-1) 0 0;
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+.career-badge {
+  display: inline-block;
+  padding: 2px var(--space-2);
+  border: var(--border-width) solid var(--color-border-control);
+  border-radius: var(--radius-pill);
+  color: var(--color-text);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.career-badge[data-kind="completado"],
+.career-badge[data-kind="adquirida"] {
+  border-color: var(--color-accent);
+  background: var(--color-accent-soft);
+}
+
+.career-badge[data-kind="en-curso"],
+.career-badge[data-kind="progreso"],
+.career-badge[data-kind="aprendiendo"] {
+  border-color: var(--color-primary);
+  background: var(--color-primary-soft);
+}
+
+.career-badge[data-kind="repasar"] {
+  border-color: var(--color-danger);
+}
+
+.career-details summary {
+  cursor: pointer;
+  font-weight: 600;
+  padding: var(--space-2) 0;
+}
+
+.career-unit {
+  padding-top: var(--space-3);
+  border-top: var(--border-width) solid var(--color-border);
+}
+
+.career-check {
+  display: inline-flex;
+  gap: var(--space-2);
+  align-items: baseline;
+  cursor: pointer;
+}
+
+.career-check input {
+  flex: none;
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+.career-objectives {
+  margin: var(--space-2) 0;
+  padding-left: var(--space-5);
+}
+
+.career-links {
+  margin: var(--space-2) 0 0;
+  font-size: var(--text-sm);
+  overflow-wrap: anywhere;
+}
+
+.career-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  align-items: flex-end;
+  margin: var(--space-3) 0;
+}
+
+.career-form label {
+  display: grid;
+  gap: var(--space-1);
+  font-size: var(--text-sm);
+}
+
+/* Mismo campo que los formularios de la cuenta (widgets.css), con altura de toque de 44 px */
+.career-form input {
+  min-width: 0;
+  max-width: 100%;
+  min-height: 44px;
+  padding: 10px var(--space-3);
+  border: var(--border-width) solid var(--color-border-control);
+  border-radius: var(--radius-sm);
+  background: var(--color-input-bg);
+  color: var(--color-text);
+  font: inherit;
+  font-weight: 400;
+}
+
+.career-form input[type="number"] {
+  width: 10rem;
+}
+
+.career-form .form-message {
+  flex-basis: 100%;
+}
+
+.career-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.career-file {
+  cursor: pointer;
+}
+
+.career-file:focus-within {
+  outline: var(--focus-outline);
+  outline-offset: 2px;
+}
+
+.career-table-wrap {
+  position: relative; /* recorta también lo absoluto de dentro (el «Acciones» oculto de la cabecera) */
+  max-width: 100%;
+  margin: var(--space-4) 0;
+  overflow-x: auto;
+}
+
+.career-table-wrap:focus-visible {
+  outline: var(--focus-outline);
+}
+
+.career-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.career-table caption {
+  margin-bottom: var(--space-2);
+  text-align: left;
+  font-weight: 600;
+}
+
+.career-table th,
+.career-table td {
+  padding: var(--space-2);
+  border-bottom: var(--border-width) solid var(--color-border);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.career-table th:first-child,
+.career-table thead th {
+  text-align: left;
+}
+
+/* ---------- Gráfica (career-chart.js) ---------- */
+
+/* En pantallas estrechas la gráfica no se encoge hasta ser ilegible: se desplaza dentro de su caja */
+.career-chart {
+  position: relative;
+  margin: var(--space-4) 0;
+  overflow-x: auto;
+}
+
+.career-chart:focus-visible {
+  outline: var(--focus-outline);
+}
+
+.cc {
+  display: block;
+  width: 100%;
+  min-width: 480px;
+  height: auto;
+}
+
+.cc-grid {
+  stroke: var(--color-border);
+  stroke-width: 1;
+}
+
+.cc-axis {
+  fill: var(--color-text-muted);
+  font-size: 12px;
+}
+
+.cc-line {
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+}
+
+.cc-line--combined {
+  stroke: var(--color-primary);
+  stroke-width: 3.5;
+}
+
+.cc-line--salary {
+  stroke: var(--color-text-muted);
+  stroke-dasharray: 7 4;
+}
+
+.cc-line--profit {
+  stroke: var(--color-accent);
+  stroke-dasharray: 2 4;
+}
+
+.cc-dot {
+  fill: var(--color-surface);
+  stroke-dasharray: none;
+}
+
+.cc-target {
+  stroke: var(--color-danger);
+  stroke-width: 2;
+  stroke-dasharray: 12 6;
+}
+
+.cc-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-5);
+  margin: var(--space-2) 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--text-sm);
+}
+
+.cc-legend li {
+  display: inline-flex;
+  gap: var(--space-2);
+  align-items: center;
+}
+
+/* Muestra de cada serie: el mismo trazo que la línea, como borde superior */
+.cc-key {
+  display: inline-block;
+  width: 2rem;
+  height: 0;
+  border-top: 3px solid var(--color-primary);
+}
+
+.cc-key.cc-line--salary {
+  border-top: 3px dashed var(--color-text-muted);
+}
+
+.cc-key.cc-line--profit {
+  border-top: 3px dotted var(--color-accent);
+}
+
+.cc-key.cc-target {
+  border-top: 3px dashed var(--color-danger);
+}

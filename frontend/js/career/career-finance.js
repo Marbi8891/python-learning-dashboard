@@ -66,6 +66,11 @@ export function setYear(doc, year, { salary = 0, revenue = 0, expenses = 0 }, no
   return true;
 }
 
+/** Quita un año. Son datos solo de este navegador: no hace falta marcarlo como borrado para otra copia. */
+export function removeYear(doc, year) {
+  delete doc.years[String(year)];
+}
+
 /** Evolución anual, del año más antiguo al más reciente, con la distancia al objetivo combinado. */
 export function projection(doc) {
   const target = doc.targets?.combined ?? null;
