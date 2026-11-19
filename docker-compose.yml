@@ -27,6 +27,11 @@ services:
       FRONTEND_URL: http://localhost:5500
       TRUSTED_PROXY_HOPS: "0"  # en local no hay proxy delante
       ENABLE_DOCS: "true"
+      # Tutor opcional con NEXARO Personal AI (docs/TUTOR.md). Vacías = desactivado.
+      NEXARO_URL: ${NEXARO_URL:-}
+      NEXARO_API_KEY: ${NEXARO_API_KEY:-}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"  # Docker Desktop ya lo define; en Linux hace falta
     ports:
       - "8000:8000"
     depends_on:

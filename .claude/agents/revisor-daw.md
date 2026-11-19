@@ -81,6 +81,10 @@ El autor quitó el tutor A2A, la app Android, los agentes anteriores (los de seg
 - Hay restos que son intencionados: la migración `20261020_d7e2a9c4f1b8_uso_del_tutor.py` se conserva y `20261026_e1a2b3c4d5f6_quitar_tutor.py` borra su tabla, para no romper bases de datos que ya la aplicaron. El campo `app` del progreso PCAP se conserva para no borrar datos de cuentas existentes.
 - Si una regresión viene de estas eliminaciones, explica la causa probable y propón la solución sin tocar el contenido educativo.
 - Este agente (`revisor-daw`) es nuevo y lo ha pedido el autor: no es un agente retirado.
+- **Excepción decidida por el autor el 17/11/2026 (DEC-022):** el tutor opcional con NEXARO Personal AI
+  (`backend/app/routers/tutor.py`, `docs/TUTOR.md`) no es el tutor A2A retirado. No lo señales como
+  reintroducido. Revisa que siga desactivado por defecto, con la clave solo en el backend, con las
+  conversaciones firmadas por alumno y sin servicios de pago.
 
 ## 6. Pruebas
 

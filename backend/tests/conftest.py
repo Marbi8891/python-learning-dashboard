@@ -17,6 +17,7 @@ from app.rate_limit import (  # noqa: E402
     login_failures,
     reset_requests,
     set_engine,
+    tutor_limiter,
     write_limiter,
 )
 from app.seed import seed  # noqa: E402
@@ -42,13 +43,13 @@ def client():
 
     app.dependency_overrides[get_db] = override_get_db
     set_engine(engine)  # los límites compartidos, en la base de datos del test
-    for limiter in (auth_limiter, login_failures, reset_requests, write_limiter):
+    for limiter in (auth_limiter, login_failures, reset_requests, write_limiter, tutor_limiter):
         limiter.reset()
     with TestClient(app) as test_client:
         test_client.engine = engine
         yield test_client
     app.dependency_overrides.clear()
-    for limiter in (auth_limiter, login_failures, reset_requests, write_limiter):
+    for limiter in (auth_limiter, login_failures, reset_requests, write_limiter, tutor_limiter):
         limiter.reset()
     set_engine(None)
     engine.dispose()
@@ -69,6 +70,6 @@ def login(client, email="ana@example.com", password=PASSWORD):
 def auth_headers(client):
     register(client)
     token = login(client).json()["access_token"]
-    for limiter in (auth_limiter, login_failures, reset_requests, write_limiter):
+    for limiter in (auth_limiter, login_failures, reset_requests, write_limiter, tutor_limiter):
         limiter.reset()  # que el registro y el login de la fixture no consuman el límite
     return {"Authorization": f"Bearer {token}"}

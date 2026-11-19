@@ -101,7 +101,9 @@ Sincronizado como documento `game`. Ya cumple la regla del prompt de premiar res
 ### 1.6 IA
 
 **No hay ninguna IA en `main`.** El tutor, A2A y el proveedor Ollama/Anthropic se retiraron con el PR #62
-(26/10). El PR #65 (tutor con OpenAI, de pago) sigue sin fusionar y está aparcado.
+(26/10). El PR #65 (tutor con OpenAI, de pago) sigue sin fusionar y está aparcado. Actualización 17/11:
+la rama `feature/tutor-nexaro` añade un tutor opcional y solo local con NEXARO Personal AI (DEC-022,
+[TUTOR.md](TUTOR.md)).
 
 ### 1.7 Pruebas y CI (`docs/TESTING.md`, `.github/workflows/ci.yml`)
 

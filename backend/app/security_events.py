@@ -38,6 +38,7 @@ class Event(StrEnum):
     ACCOUNT_DELETED = "account.deleted"  # T1485 Data Destruction (si no lo pidió el titular)
     BODY_TOO_LARGE = "request.too_large"  # T1499.003 Application Exhaustion Flood
     WRITES_LIMITED = "progress.rate_limited"  # T1499.003: llenar la base de datos a guardados
+    TUTOR_LIMITED = "tutor.rate_limited"  # T1499.003: agotar la CPU del modelo a preguntas
 
 
 TECHNIQUE = {
@@ -55,6 +56,7 @@ TECHNIQUE = {
     Event.ACCOUNT_DELETED: "T1485",
     Event.BODY_TOO_LARGE: "T1499.003",
     Event.WRITES_LIMITED: "T1499.003",
+    Event.TUTOR_LIMITED: "T1499.003",
 }
 
 

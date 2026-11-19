@@ -5,7 +5,7 @@
   <!-- Seguridad. GitHub Pages no permite cabeceras propias: la política va en <meta>.
        Si activas GoatCounter (config.js), añade https://gc.zgo.at a script-src y tu
        https://<código>.goatcounter.com a connect-src e img-src. -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://accounts.google.com/gsi/client 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline' https://accounts.google.com/gsi/style; img-src 'self' data:; font-src 'self'; connect-src 'self' https://pld-api.onrender.com https://accounts.google.com/gsi/ http://127.0.0.1:8000 http://localhost:8000 http://127.0.0.1:8001 http://localhost:8001; frame-src https://accounts.google.com; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://accounts.google.com/gsi/client 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline' https://accounts.google.com/gsi/style; img-src 'self' data:; font-src 'self'; connect-src 'self' https://pld-api.onrender.com https://accounts.google.com/gsi/ http://127.0.0.1:8000 http://localhost:8000; frame-src https://accounts.google.com; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Python Learning Dashboard · Aprende programación entendiendo lo que haces</title>
@@ -49,7 +49,6 @@
   <link rel="stylesheet" href="css/landing.css">
   <link rel="preload" href="fonts/fraunces-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/redesign.css">
-  <link rel="stylesheet" href="css/local-ai.css">
 
   <!-- Tema y tamaño de letra antes de pintar la página (sin parpadeo) y defensa contra marcos -->
   <script src="js/theme-init.js"></script>
@@ -292,7 +291,16 @@
       </header>
       <ol class="assistant__messages" id="assistant-messages" aria-live="polite"></ol>
       <div class="assistant__suggestions" id="assistant-suggestions" role="group" aria-label="Preguntas sugeridas"></div>
-      <p class="assistant__note">Respuestas preparadas y revisadas para cada lección.</p>
+      <!-- Tutor con IA: solo aparece si el servidor tiene NEXARO configurado (docs/TUTOR.md) -->
+      <form class="assistant__tutor" id="tutor-form" hidden>
+        <p class="assistant__tutor-status" id="tutor-status" role="status" data-state="checking">Comprobando el tutor…</p>
+        <button class="btn btn--ghost btn--sm" id="tutor-retry" type="button" hidden>Reintentar</button>
+        <label for="tutor-question">Pregunta al tutor</label>
+        <textarea id="tutor-question" rows="2" maxlength="2000" required></textarea>
+        <label class="assistant__tutor-code"><input type="checkbox" id="tutor-code"> Enviar también mi código</label>
+        <button class="btn btn--primary btn--sm" id="tutor-send" type="submit">Preguntar</button>
+      </form>
+      <p class="assistant__note" id="assistant-note">Respuestas preparadas y revisadas para cada lección.</p>
     </section>
     <button class="assistant__toggle" id="assistant-toggle" type="button" aria-controls="assistant-panel" aria-expanded="false">
       <svg viewBox="0 0 32 32" width="30" height="30" aria-hidden="true">

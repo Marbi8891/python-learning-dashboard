@@ -5,7 +5,6 @@
 import hljs from "../vendor/highlight/core.min.js";
 import python from "../vendor/highlight/python.min.js";
 import { apiEnabled } from "./api.js";
-import { initLocalAI } from "./local-ai.js";
 import { keepTyped } from "./form-errors.js";
 import { initI18n } from "./i18n.js";
 import { initAccount, openAccount, openPasswordReset, takeFlash } from "./account.js";
@@ -954,7 +953,6 @@ async function init() {
   initMobileMenu();
   initConsole();
   initAssistant();
-  initLocalAI();
   initI18n();
   initAccount({ toast: showToast });
   initPrefs();
