@@ -1,5 +1,8 @@
 # Career Roadmap · Auditoría y arquitectura (Sprint 0)
 
+> **18/11/2026:** este diseño continúa en [AI_CAREER_PATH.md](AI_CAREER_PATH.md) (DEC-012). D1-D4 están
+> decididas allí y el itinerario «Python Backend Junior» queda dentro de M1 y M2. Donde choquen, manda AI_CAREER_PATH.
+
 Estado: **propuesta, sin código funcional**. Auditoría hecha sobre `main` en `d0c88c6` (04/11/2026,
 después de fusionar el motor adaptativo 2.0 del PR #97 y la documentación del PR #99).
 El Sprint 1 no empieza hasta que el autor apruebe este documento y las decisiones de §8.
