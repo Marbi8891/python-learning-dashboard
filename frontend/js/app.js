@@ -46,7 +46,7 @@ import { lightDismiss } from "./dialogs.js";
 import { watchMeters } from "./meters.js";
 import { initPrefs } from "./prefs.js";
 import { badgesHtml, renderProfile } from "./profile.js";
-import { keepForms } from "./form-keep.js";
+import { focusSelector, keepForms } from "./form-keep.js";
 import { setQuizLesson } from "./quiz.js";
 import { recordAttempt, restoreSession, setCompleted, state, subscribe } from "./store.js";
 
@@ -456,15 +456,6 @@ function renderGuide() {
 }
 
 /* ---------- Inicio ---------- */
-
-/** Selector para volver a encontrar el control que tiene el foco después de repintar. */
-function focusSelector(container) {
-  const active = document.activeElement;
-  if (!active || active === document.body || !container.contains(active)) return null;
-  if (active.id) return `#${CSS.escape(active.id)}`;
-  const data = [...active.attributes].find((a) => a.name.startsWith("data-"));
-  return data ? `[${data.name}="${CSS.escape(data.value)}"]` : null;
-}
 
 function refreshProgressViews() {
   renderGuide();
