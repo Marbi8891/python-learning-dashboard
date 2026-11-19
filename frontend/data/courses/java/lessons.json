@@ -66,7 +66,22 @@
        "title": "Java Language Specification (SE 17)",
        "url": "https://docs.oracle.com/javase/specs/jls/se17/html/"
       }
-     ]
+     ],
+     "curriculum": {
+      "ra": [
+       "0485-RA1"
+      ],
+      "ce": [
+       "0485-RA1-d",
+       "0485-RA1-e",
+       "0485-RA1-f",
+       "0485-RA1-g",
+       "0485-RA1-h"
+      ],
+      "status": "proposed",
+      "source": "Propuesta por el contenido de la lección",
+      "reviewed": null
+     }
     },
     {
      "slug": "java-strings",
@@ -129,7 +144,19 @@
        "title": "Java SE 17 — API",
        "url": "https://docs.oracle.com/en/java/javase/17/docs/api/"
       }
-     ]
+     ],
+     "curriculum": {
+      "ra": [
+       "0485-RA2"
+      ],
+      "ce": [
+       "0485-RA2-c",
+       "0485-RA2-d"
+      ],
+      "status": "proposed",
+      "source": "Propuesta por el contenido de la lección",
+      "reviewed": null
+     }
     }
    ]
   },
@@ -199,7 +226,18 @@
        "title": "Java Language Specification (SE 17)",
        "url": "https://docs.oracle.com/javase/specs/jls/se17/html/"
       }
-     ]
+     ],
+     "curriculum": {
+      "ra": [
+       "0485-RA3"
+      ],
+      "ce": [
+       "0485-RA3-a"
+      ],
+      "status": "proposed",
+      "source": "Propuesta por el contenido de la lección",
+      "reviewed": null
+     }
     },
     {
      "slug": "java-bucles-arrays",
@@ -263,7 +301,20 @@
        "title": "Java SE 17 — API",
        "url": "https://docs.oracle.com/en/java/javase/17/docs/api/"
       }
-     ]
+     ],
+     "curriculum": {
+      "ra": [
+       "0485-RA3",
+       "0485-RA6"
+      ],
+      "ce": [
+       "0485-RA3-b",
+       "0485-RA6-a"
+      ],
+      "status": "proposed",
+      "source": "Propuesta por el contenido de la lección",
+      "reviewed": null
+     }
     }
    ]
   },
@@ -333,7 +384,24 @@
        "title": "Java Language Specification (SE 17)",
        "url": "https://docs.oracle.com/javase/specs/jls/se17/html/"
       }
-     ]
+     ],
+     "curriculum": {
+      "ra": [
+       "0485-RA2",
+       "0485-RA4"
+      ],
+      "ce": [
+       "0485-RA4-a",
+       "0485-RA4-b",
+       "0485-RA4-c",
+       "0485-RA4-d",
+       "0485-RA4-e",
+       "0485-RA2-h"
+      ],
+      "status": "proposed",
+      "source": "Propuesta por el contenido de la lección",
+      "reviewed": null
+     }
     },
     {
      "slug": "java-encapsulacion",
@@ -396,7 +464,21 @@
        "title": "Java Language Specification (SE 17)",
        "url": "https://docs.oracle.com/javase/specs/jls/se17/html/"
       }
-     ]
+     ],
+     "curriculum": {
+      "ra": [
+       "0485-RA2",
+       "0485-RA4"
+      ],
+      "ce": [
+       "0485-RA4-f",
+       "0485-RA4-h",
+       "0485-RA2-e"
+      ],
+      "status": "proposed",
+      "source": "Propuesta por el contenido de la lección",
+      "reviewed": null
+     }
     }
    ]
   },
@@ -466,7 +548,22 @@
        "title": "Java Language Specification (SE 17)",
        "url": "https://docs.oracle.com/javase/specs/jls/se17/html/"
       }
-     ]
+     ],
+     "curriculum": {
+      "ra": [
+       "0485-RA7"
+      ],
+      "ce": [
+       "0485-RA7-a",
+       "0485-RA7-c",
+       "0485-RA7-d",
+       "0485-RA7-e",
+       "0485-RA7-g"
+      ],
+      "status": "proposed",
+      "source": "Propuesta por el contenido de la lección",
+      "reviewed": null
+     }
     },
     {
      "slug": "java-abstractas-interfaces",
@@ -529,7 +626,19 @@
        "title": "Java Language Specification (SE 17)",
        "url": "https://docs.oracle.com/javase/specs/jls/se17/html/"
       }
-     ]
+     ],
+     "curriculum": {
+      "ra": [
+       "0485-RA7"
+      ],
+      "ce": [
+       "0485-RA7-b",
+       "0485-RA7-i"
+      ],
+      "status": "proposed",
+      "source": "Propuesta por el contenido de la lección",
+      "reviewed": null
+     }
     }
    ]
   },
@@ -599,7 +708,21 @@
        "title": "Java SE 17 — API",
        "url": "https://docs.oracle.com/en/java/javase/17/docs/api/"
       }
-     ]
+     ],
+     "curriculum": {
+      "ra": [
+       "0485-RA6"
+      ],
+      "ce": [
+       "0485-RA6-b",
+       "0485-RA6-c",
+       "0485-RA6-d",
+       "0485-RA6-e"
+      ],
+      "status": "proposed",
+      "source": "Propuesta por el contenido de la lección",
+      "reviewed": null
+     }
     },
     {
      "slug": "java-excepciones",
@@ -662,7 +785,19 @@
        "title": "Java SE 17 — API",
        "url": "https://docs.oracle.com/en/java/javase/17/docs/api/"
       }
-     ]
+     ],
+     "curriculum": {
+      "ra": [
+       "0485-RA3"
+      ],
+      "ce": [
+       "0485-RA3-d",
+       "0485-RA3-h"
+      ],
+      "status": "proposed",
+      "source": "Propuesta por el contenido de la lección",
+      "reviewed": null
+     }
     }
    ]
   }

@@ -6,8 +6,10 @@ Junta tres fuentes y deja constancia de cada una:
   contenidos básicos de los módulos técnicos, extraídos literalmente por extract_boe.py.
 - La plataforma: cada pregunta de frontend/data/courses/<curso>/bank.json lleva el código del módulo
   que trabaja (campo `module`, lo pone scripts/courses/). De ahí salen los cursos y el número de
-  preguntas de cada módulo. Es una relación con el módulo, no con criterios concretos, porque esa
-  relación aún no la ha revisado nadie.
+  preguntas de cada módulo. Cada pregunta dice también qué criterios de evaluación (CE) trabaja y
+  con qué estado (campo `curriculum`, mapa en scripts/courses/curriculum_map.py). Cada CE recibe así
+  los ids de sus preguntas y el estado de la correspondencia: hoy «proposed», pendiente de revisión
+  docente.
 
 Lo que no tiene fuente comprobada se queda en `null` con `status: "pendiente"`. No se inventa nada.
 
@@ -107,18 +109,49 @@ def module_id(code: str | None, name: str) -> str:
     return code or ("optativo-1" if name.endswith(" I") else "optativo-2")
 
 
-def outcomes_of(code: str, official: dict) -> list[dict]:
+def outcomes_of(code: str, official: dict, by_criterion: dict) -> list[dict]:
     return [
         {
             "id": f"{code}-RA{o['number']}",
             "number": o["number"],
             "text": o["text"],
             "criteria": [
-                {"id": f"{code}-RA{o['number']}-{c['letter']}", **c} for c in o["criteria"]
+                criterion(f"{code}-RA{o['number']}-{c['letter']}", c, by_criterion)
+                for c in o["criteria"]
             ],
         }
         for o in official["learningOutcomes"]
     ]
+
+
+# Si las preguntas de un CE no tienen todas el mismo estado, manda el menos seguro
+STATUS_ORDER = ("unassigned", "proposed", "verified")
+
+
+def criterion(ce_id: str, official: dict, by_criterion: dict) -> dict:
+    entry = {"id": ce_id, **official}
+    if ce_id in by_criterion:
+        questions, statuses = by_criterion[ce_id]
+        entry["platformQuestionIds"] = {c: questions[c] for c in sorted(questions)}
+        entry["mapping"] = min(statuses, key=STATUS_ORDER.index)
+    return entry
+
+
+def questions_by_criterion(problems: Problems) -> dict[str, tuple[dict, set[str]]]:
+    """Id de CE -> ({curso: ids de sus preguntas}, estados de la correspondencia)."""
+    found: dict[str, tuple[dict, set[str]]] = {}
+    for bank in sorted((DATA / "courses").glob("*/bank.json")):
+        course_id = bank.parent.name
+        for q in json.loads(bank.read_text("utf-8"))["questions"]:
+            mapping = q.get("curriculum") or {}
+            if mapping.get("status") not in STATUS_ORDER:
+                problems.add(f"{course_id}/{q['id']}", "pregunta sin relación con el currículo")
+                continue
+            for ce_id in mapping.get("ce", []):
+                questions, statuses = found.setdefault(ce_id, (defaultdict(list), set()))
+                questions[course_id].append(q["id"])
+                statuses.add(mapping["status"])
+    return found
 
 
 def questions_by_module(problems: Problems) -> dict[str, dict[str, list[str]]]:
@@ -143,6 +176,7 @@ def build() -> dict:
     source_ids = {s["id"] for s in SOURCES}
     problems = Problems()
     tagged = questions_by_module(problems)
+    by_criterion = questions_by_criterion(problems)
     modules = []
 
     for code, name, hours, course, weekly in CYL_MODULES:
@@ -163,7 +197,7 @@ def build() -> dict:
             module |= {
                 "ects": rd_module["ects"],
                 "stateMinHours": rd_module["stateMinHours"],
-                "learningOutcomes": outcomes_of(code, rd_module),
+                "learningOutcomes": outcomes_of(code, rd_module, by_criterion),
                 "contents": rd_module["contents"],
                 "contribution": rd_module["contribution"],
                 "outcomesSource": "rd-405-2023#anexo-I",
@@ -191,6 +225,9 @@ def build() -> dict:
     codes = {m["code"] for m in modules}
     for code in sorted(set(tagged) - codes):
         problems.add(f"módulo {code}", "lo usan preguntas de los cursos, pero no está en la orden")
+    known = {c["id"] for m in modules for ra in m["learningOutcomes"] for c in ra["criteria"]}
+    for ce_id in sorted(set(by_criterion) - known):
+        problems.add(ce_id, "lo citan preguntas de los cursos, pero no está en el currículo")
     _validate(modules, official, source_ids, problems)
     if problems:
         print("\n".join(problems), file=sys.stderr)

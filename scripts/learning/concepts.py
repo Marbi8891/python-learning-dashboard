@@ -16,6 +16,8 @@ teoría, un ejemplo explicado línea a línea, cuándo usarlo y sus errores típ
 La salida de cada ejemplo no se escribe a mano: build_learning.py la obtiene ejecutándolo.
 """
 
+from poo_module import CONCEPTS_AFTER_POO, CONCEPTS_BEFORE_POO, UNIT_ERRORS, UNIT_OVERRIDES, UNITS
+
 AREAS = [
     {
         "id": "fundamentos",
@@ -32,7 +34,11 @@ AREAS = [
         "title": "Lógica",
         "summary": "Pensar antes de programar: algoritmos, pseudocódigo, trazas y depuración.",
     },
-    {"id": "avanzado", "title": "Más adelante", "summary": "Cuando la base esté firme."},
+    {
+        "id": "poo",
+        "title": "Programación orientada a objetos",
+        "summary": "Módulo de 10 unidades: de la primera clase a una aplicación completa (índice en #/poo).",
+    },
 ]
 
 # Orden recomendado de la ruta «Aprender»: intercala la lógica (pseudocódigo, trazas, depuración)
@@ -59,7 +65,16 @@ PATH = [
     "excepciones",
     "modulos",
     "archivos",
+    "poo-fundamentos",
     "poo",
+    "poo-atributos-metodos",
+    "poo-encapsulacion",
+    "poo-herencia",
+    "poo-polimorfismo",
+    "poo-composicion",
+    "poo-metodos-especiales",
+    "poo-diseno",
+    "poo-proyecto",
 ]
 
 # Competencias de «Preparación DAW» (las que pidió el autor), en el orden en que se trabajan.
@@ -80,7 +95,7 @@ DAW_COMPETENCIES = [
             "acumuladores",
             "validacion",
         ],
-        "weight": 35,
+        "weight": 30,
     },
     {
         "id": "programacion",
@@ -98,7 +113,7 @@ DAW_COMPETENCIES = [
             "excepciones",
             "archivos",
         ],
-        "weight": 35,
+        "weight": 30,
     },
     {
         "id": "logica",
@@ -106,7 +121,28 @@ DAW_COMPETENCIES = [
         "summary": "Comprender problemas, pseudocódigo, trazado de programas, complejidad básica y depuración.",
         "requires": ["fundamentos"],
         "concepts": ["algoritmos", "pseudocodigo", "trazado", "depuracion"],
-        "weight": 30,
+        "weight": 20,
+    },
+    {
+        # Decidido por el autor el 15/11/2026: la POO entra en el simulacro (no en la prueba de nivel),
+        # solo con las preguntas tipo test de su banco
+        "id": "poo",
+        "title": "Programación orientada a objetos",
+        "summary": "Clases y objetos, encapsulación, herencia, polimorfismo, relaciones entre objetos y diseño.",
+        "requires": ["programacion"],
+        "concepts": [
+            "poo-fundamentos",
+            "poo",
+            "poo-atributos-metodos",
+            "poo-encapsulacion",
+            "poo-herencia",
+            "poo-polimorfismo",
+            "poo-composicion",
+            "poo-metodos-especiales",
+            "poo-diseno",
+            "poo-proyecto",
+        ],
+        "weight": 20,
     },
 ]
 
@@ -1315,11 +1351,11 @@ CONCEPTS = [
         ],
         "related": ["trazado", "excepciones"],
     },
-    # ------------------------------------------------------------------ MÁS ADELANTE
+    # ------------------------------------------------------------------ POO (Unidad 2 del módulo; ver poo_module.py)
     {
         "id": "poo",
         "title": "Clases y objetos (introducción a la POO)",
-        "area": "avanzado",
+        "area": "poo",
         "requires": ["funciones", "diccionarios"],
         "daw": 2,
         "ut": "prog-ut5",
@@ -1384,5 +1420,20 @@ CURRICULUM_CE = {
     "pseudocodigo": ["0485-RA1-a"],
     "trazado": ["0485-RA3-f"],
     "depuracion": ["0485-RA3-f", "0485-RA3-i"],
-    "poo": ["0485-RA2-a", "0485-RA4-a", "0485-RA4-b", "0485-RA4-c", "0485-RA4-d", "0485-RA4-e"],
 }
+
+# ---------- Módulo de POO (unidades con campos propios; ver poo_module.py) ----------
+# Las unidades nuevas se colocan alrededor de `poo` (Unidad 2), en el orden del módulo.
+_poo = next(i for i, c in enumerate(CONCEPTS) if c["id"] == "poo")
+CONCEPTS[_poo : _poo + 1] = [*CONCEPTS_BEFORE_POO, CONCEPTS[_poo], *CONCEPTS_AFTER_POO]
+
+for _concept in CONCEPTS:
+    _concept.update(UNIT_OVERRIDES.get(_concept["id"], {}))
+    _concept["errors"] += [err(_concept["id"], *e) for e in UNIT_ERRORS.get(_concept["id"], [])]
+    _concept.update(UNITS.get(_concept["id"], {}))
+    if "curriculum" in _concept:
+        # Los CE de una unidad salen de sus correspondencias (propuestas o validadas, nunca las
+        # «unassigned»): así no hay dos listas que mantener a mano.
+        CURRICULUM_CE[_concept["id"]] = [
+            m["ce"] for m in _concept["curriculum"] if m["status"] != "unassigned"
+        ]

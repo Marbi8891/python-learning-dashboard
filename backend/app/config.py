@@ -9,6 +9,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 # Fuente única del contenido: la comparten frontend (GitHub Pages) y backend
 FRONTEND_DIR = Path(__file__).resolve().parents[2] / "frontend"
 DEFAULT_LESSONS_FILE = FRONTEND_DIR / "data" / "lessons.json"
+DEFAULT_PCAP_FILE = FRONTEND_DIR / "data" / "pcap.json"
 
 
 class Settings(BaseSettings):
@@ -16,6 +17,10 @@ class Settings(BaseSettings):
 
     database_url: str = "sqlite:///./dev.db"
     lessons_file: Path = DEFAULT_LESSONS_FILE
+    # Banco del PCAP: el servidor elige y corrige con él los simulacros verificados (#109)
+    pcap_file: Path = DEFAULT_PCAP_FILE
+    # Simulacros verificados que se pueden empezar por cuenta en 24 horas
+    verified_exams_per_day: int = 5
     cors_origins: list[str] = [
         "http://localhost:5500",
         "http://127.0.0.1:5500",

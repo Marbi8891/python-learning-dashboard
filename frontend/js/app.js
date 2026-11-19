@@ -35,25 +35,99 @@ import {
 } from "./game.js";
 import { renderHome } from "./home.js";
 import { escapeHtml, renderMarkdown, safeUrl } from "./markdown.js";
-import { renderCertificate, renderCourseCertificate, saveCertificateName } from "./certificate.js";
-import { openPcap, refreshPcap } from "./pcap.js";
 import { initCourseSync } from "./course-store.js";
-import { openDaw, refreshDaw } from "./daw.js";
 import { initPcapSync } from "./pcap-sync.js";
-import { isLearnRoute, learnNavKey, openLearn } from "./learn/learn-app.js";
+import { isLearnRoute, learnNavKey } from "./learn/routes.js";
 import { LANDING_ROUTE, closeLanding, isLandingRoute, openLanding } from "./landing.js";
-import { initLearnSync } from "./learn/learn-store.js";
+import { initLearnSync, loadLearningContent } from "./learn/learn-store.js";
 import { initPlannerSync } from "./learn/planner-store.js";
 import { initCareerSync } from "./career/career-store.js";
+import { lightDismiss } from "./dialogs.js";
+import { watchMeters } from "./meters.js";
 import { initPrefs } from "./prefs.js";
 import { badgesHtml, renderProfile } from "./profile.js";
-import { dashboardTitle, initDashboard, renderDashboard } from "./dashboard.js";
-import { initPrivate } from "./private.js";
 import { keepForms } from "./form-keep.js";
 import { setQuizLesson } from "./quiz.js";
 import { recordAttempt, restoreSession, setCompleted, state, subscribe } from "./store.js";
 
 hljs.registerLanguage("python", python);
+
+watchMeters(); // barras de progreso sin style="…" (RT-004), antes de pintar nada
+
+/* ---------- Zonas con carga diferida (AUD-024) ----------
+   Cada zona grande se descarga la primera vez que se abre su ruta, no al cargar la web: la portada
+   y las lecciones ya no esperan a los ~340 KB de PCAP, DAW, el panel o el núcleo educativo.
+   `zones` guarda el módulo ya cargado para usarlo sin esperar (repintados, menú). */
+// Cada loader recibe load(ruta), que descarga el módulo. El navegador recuerda un import() fallido de una
+// URL, así que tras un fallo (sin conexión) se pide la misma ruta con ?reintento=N para volver a descargarla.
+const ZONE_LOADERS = {
+  learn: (load) => load("./learn/learn-app.js"),
+  pcap: (load) => load("./pcap.js"),
+  daw: (load) => load("./daw.js"),
+  // Excel profesional: el motor de fórmulas solo se descarga en sus rutas
+  excel: (load) => load("./excel/course.js"),
+  cyber: (load) =>
+    load("./cybersecurity.js").then((module) => {
+      module.initCyber();
+      return module;
+    }),
+  plans: (load) =>
+    load("./plans.js").then((module) => {
+      module.initPlans();
+      return module;
+    }),
+  // Panel del alumno: lo pinta dashboard.js y sus acciones las atiende private.js
+  panel: (load) =>
+    Promise.all([load("./dashboard.js"), load("./private.js")]).then(([dashboard, privateZone]) => {
+      dashboard.initDashboard({ toast: showToast, refresh: refreshProgressViews });
+      privateZone.initPrivate({ toast: showToast, refresh: refreshProgressViews });
+      return dashboard;
+    }),
+  certificate: (load) => load("./certificate.js"),
+};
+const zones = {};
+const zoneLoads = {};
+
+let zoneRetries = 0;
+let keepMenuOpen = false;
+function loadModule(path) {
+  const url = new URL(path, import.meta.url);
+  if (zoneRetries) url.searchParams.set("reintento", zoneRetries);
+  return import(url.href);
+}
+
+function loadZone(name) {
+  zoneLoads[name] ??= ZONE_LOADERS[name](loadModule).then(
+    (module) => (zones[name] = module),
+    (error) => {
+      delete zoneLoads[name]; // sin conexión: se reintenta la próxima vez
+      zoneRetries += 1;
+      throw error;
+    },
+  );
+  return zoneLoads[name];
+}
+
+/** Si la zona aún no está, la carga y vuelve a navegar (si la ruta no ha cambiado). true = hay que esperar. */
+function awaitZone(name, moveFocus) {
+  if (zones[name]) return false;
+  const hash = location.hash;
+  if (mobile.matches) setMenu(false); // la navegación empieza ya, aunque la zona tarde
+  loadZone(name).then(
+    () => {
+      if (location.hash !== hash) return;
+      // Si mientras cargaba se abrió el menú, se deja abierto y con el foco donde está
+      keepMenuOpen = document.body.classList.contains("nav-open");
+      navigate({ moveFocus: moveFocus && !keepMenuOpen });
+      keepMenuOpen = false;
+    },
+    (error) => {
+      console.error(`No se pudo cargar la zona «${name}»:`, error);
+      if (location.hash === hash) showLoadError({ moveFocus });
+    },
+  );
+  return true;
+}
 
 const DATA_URL = "data/lessons.json";
 const ROUTE_PREFIX = "#/leccion/";
@@ -61,11 +135,15 @@ const RESET_ROUTE = "#/restablecer";
 const HOME_ROUTE = "#/inicio"; // portada del curso PCAP
 const LEARN_ROUTE = "#/aprender"; // página principal: ¿qué estudio ahora?
 const PROFILE_ROUTE = "#/perfil";
+const PLANS_ROUTE = "#/planes";
 const PCAP_ROUTE = "#/pcap";
 const CERTIFICATE_ROUTE = "#/certificado";
 const PRIVATE_ROUTE = "#/cuenta"; // antigua «Mi cuenta»: ahora es la sección «Mi perfil» del panel
 const PANEL_ROUTE = "#/panel"; // panel del alumno: #/panel/<sección>
 const DAW_ROUTE = "#/daw";
+const EXCEL_ROUTE = "#/academia/excel";
+const EXCEL_ALIAS = "#/excel-academy"; // nombre alternativo: se reescribe a EXCEL_ROUTE
+const CYBER_ROUTE = "#/ciberseguridad";
 const mobile = window.matchMedia("(max-width: 900px)");
 
 const content = {
@@ -407,8 +485,9 @@ const VIEWS = {
   learn: { element: "#learn-view", title: "Aprender · Python Learning Dashboard", focus: null, render: null },
   home: { element: "#home-view", title: "Curso PCAP · Python Learning Dashboard", focus: "#home-title", render: () => renderHome(content, defaultSlug()) },
   profile: { element: "#profile-view", title: "Mi aprendizaje · Python Learning Dashboard", focus: "#profile-title", render: () => renderProfile(content) },
+  plans: { element: "#plans-view", title: "Planes y cuenta · Python Learning Dashboard", focus: "#plans-title", render: () => zones.plans.renderPlans() },
   // Panel del alumno. Reúne lo que antes era «Mi cuenta»
-  private: { element: "#private-view", title: dashboardTitle, focus: "#private-title", render: () => renderDashboard(content, apiEnabled) },
+  private: { element: "#private-view", title: () => zones.panel.dashboardTitle(), focus: "#private-title", render: () => zones.panel.renderDashboard(content, apiEnabled) },
   certificate: {
     element: "#certificate-view",
     title: "Certificado · Python Learning Dashboard",
@@ -416,13 +495,16 @@ const VIEWS = {
     // #/certificado (PCAP) o #/certificado/<curso> (cursos de DAW)
     render: () =>
       location.hash.startsWith(`${CERTIFICATE_ROUTE}/`)
-        ? renderCourseCertificate(location.hash.slice(CERTIFICATE_ROUTE.length + 1))
-        : renderCertificate(content),
+        ? zones.certificate.renderCourseCertificate(location.hash.slice(CERTIFICATE_ROUTE.length + 1))
+        : zones.certificate.renderCertificate(content),
   },
   // La zona PCAP se pinta sola (openPcap): tiene simulacros en curso que no se deben repintar
   pcap: { element: "#pcap-view", title: "Examen PCAP · Python Learning Dashboard", focus: null, render: null },
   // Los cursos de DAW también se pintan solos (openDaw): cargan su banco y tienen tandas en curso
   daw: { element: "#daw-view", title: "Cursos de DAW · Python Learning Dashboard", focus: null, render: null },
+  cyber: { element: "#cyber-view", title: "Curso de Ciberseguridad · Python Learning Dashboard", focus: null, render: null },
+  // Excel profesional se pinta solo (openExcel): tiene ejercicios a medio escribir que no se deben repintar
+  excel: { element: "#excel-view", title: "Excel profesional · Python Learning Dashboard", focus: null, render: null },
   // Página no encontrada (NAV-01) o contenido que no se pudo cargar
   notfound: { element: "#notfound-view", title: () => content.statusTitle, focus: "#notfound-title", render: () => content.statusHtml },
 };
@@ -441,7 +523,7 @@ function showPage(name, { moveFocus = true } = {}) {
   document.title = typeof view.title === "function" ? view.title() : view.title;
   updateSidebar();
   updateSiteNav();
-  if (mobile.matches) setMenu(false);
+  if (mobile.matches && !keepMenuOpen) setMenu(false);
   if (moveFocus && view.focus) $(view.focus).focus();
   window.scrollTo({ top: 0 });
 }
@@ -452,7 +534,7 @@ function updatePrivateNav() {
 }
 
 /** Entrada del menú que corresponde a la vista actual. */
-const NAV_OF_VIEW = { home: "pcap-curso", lesson: "pcap-curso", certificate: "pcap-curso", pcap: "pcap", daw: "daw", profile: "progreso", private: "panel" };
+const NAV_OF_VIEW = { plans: "planes", cyber: "cyber", home: "pcap-curso", lesson: "pcap-curso", certificate: "pcap-curso", pcap: "pcap", daw: "daw", excel: "excel", profile: "progreso", private: "panel" };
 
 function updateSiteNav() {
   const key = content.view === "learn" ? learnNavKey(location.hash) : NAV_OF_VIEW[content.view];
@@ -652,14 +734,39 @@ function navigate({ moveFocus = true } = {}) {
   }
   closeLanding();
 
+  if (location.hash === PLANS_ROUTE) {
+    if (awaitZone("plans", moveFocus)) return;
+    showPage("plans", { moveFocus });
+    zones.plans.openPlans();
+    return;
+  }
   if (isLearnRoute(location.hash)) {
+    // El contenido (learning.json) se pide ya, a la vez que el módulo de la zona, no después (MWG-03)
+    if (!zones.learn) loadLearningContent().catch(() => {});
+    if (awaitZone("learn", moveFocus)) return;
     showPage("learn", { moveFocus: false });
-    openLearn(location.hash, { moveFocus });
+    zones.learn.openLearn(location.hash, { moveFocus });
+    return;
+  }
+  if (location.hash === CYBER_ROUTE || location.hash.startsWith(`${CYBER_ROUTE}/`)) {
+    if (awaitZone("cyber", moveFocus)) return;
+    showPage("cyber", { moveFocus: false });
+    zones.cyber.openCyber(location.hash, { moveFocus });
+    return;
+  }
+  if (location.hash === EXCEL_ALIAS || location.hash.startsWith(`${EXCEL_ALIAS}/`)) {
+    history.replaceState(null, "", `${EXCEL_ROUTE}${location.hash.slice(EXCEL_ALIAS.length)}`);
+  }
+  if (location.hash === EXCEL_ROUTE || location.hash.startsWith(`${EXCEL_ROUTE}/`)) {
+    if (awaitZone("excel", moveFocus)) return;
+    showPage("excel", { moveFocus: false });
+    zones.excel.openExcel(location.hash, { moveFocus });
     return;
   }
   if (location.hash === DAW_ROUTE || location.hash.startsWith(`${DAW_ROUTE}/`)) {
+    if (awaitZone("daw", moveFocus)) return;
     showPage("daw", { moveFocus: false });
-    openDaw(location.hash, { moveFocus });
+    zones.daw.openDaw(location.hash, { moveFocus });
     return;
   }
   if (!needsLessons(location.hash)) {
@@ -678,16 +785,20 @@ function navigate({ moveFocus = true } = {}) {
   }
   if (location.hash === PRIVATE_ROUTE) history.replaceState(null, "", `${PANEL_ROUTE}/perfil`);
   if (location.hash === PANEL_ROUTE || location.hash.startsWith(`${PANEL_ROUTE}/`)) {
+    if (!zones.panel) loadLearningContent().catch(() => {}); // el panel también lo usa (MWG-03)
+    if (awaitZone("panel", moveFocus)) return;
     showPage("private", { moveFocus });
     return;
   }
   if (location.hash === CERTIFICATE_ROUTE || location.hash.startsWith(`${CERTIFICATE_ROUTE}/`)) {
+    if (awaitZone("certificate", moveFocus)) return;
     showPage("certificate", { moveFocus });
     return;
   }
   if (location.hash === PCAP_ROUTE || location.hash.startsWith(`${PCAP_ROUTE}/`)) {
+    if (awaitZone("pcap", moveFocus)) return;
     showPage("pcap", { moveFocus: false });
-    openPcap(location.hash, content.modules, { moveFocus });
+    zones.pcap.openPcap(location.hash, content.modules, { moveFocus });
     return;
   }
   if (location.hash === HOME_ROUTE) {
@@ -718,7 +829,7 @@ function navigate({ moveFocus = true } = {}) {
   updateChallengeDone();
   setAssistantLesson(lesson, lessonAt(lesson.index + 1), goTo);
   renderGuide();
-  if (mobile.matches) setMenu(false);
+  if (mobile.matches && !keepMenuOpen) setMenu(false);
   if (moveFocus) $("#lesson-title").focus();
   window.scrollTo({ top: 0 });
 }
@@ -759,6 +870,7 @@ function initGameUi() {
     $("#badges-dialog").showModal();
   });
   $("#badges-close").addEventListener("click", () => $("#badges-dialog").close());
+  lightDismiss($("#badges-dialog"));
 }
 
 /* ---------- Arranque ---------- */
@@ -799,10 +911,23 @@ function initSkipLink() {
   });
 }
 
+const UPDATE_MESSAGE = "Hay una versión nueva de la web: recarga la página para usarla.";
+
 /** PWA: la web se puede instalar y funciona sin conexión tras la primera visita. */
 function registerServiceWorker() {
   if (!window.PLD_CONFIG?.serviceWorker || !("serviceWorker" in navigator)) return;
-  navigator.serviceWorker.register("sw.js").catch((error) => console.warn("Sin modo sin conexión:", error.message));
+  // Si ya había uno y otro toma el control, se ha publicado una versión nueva. No se recarga sola:
+  // el alumno podría perder el código que está escribiendo (MWG-06)
+  const hadController = Boolean(navigator.serviceWorker.controller);
+  navigator.serviceWorker.addEventListener("controllerchange", () => {
+    if (hadController) showToast(UPDATE_MESSAGE);
+  });
+  // Se registra al terminar de cargar: su instalación guarda toda la web (~1 MB) y no debe competir
+  // con la primera carga en un móvil (MWG-05)
+  const register = () =>
+    navigator.serviceWorker.register("sw.js").catch((error) => console.warn("Sin modo sin conexión:", error.message));
+  if (document.readyState === "complete") register();
+  else window.addEventListener("load", register, { once: true });
 }
 
 /** Carga lessons.json. Devuelve si se pudo; si no, las rutas que lo necesitan muestran el error. */
@@ -832,8 +957,6 @@ async function init() {
   initAssistant();
   initI18n();
   initAccount({ toast: showToast });
-  initPrivate({ toast: showToast, refresh: refreshProgressViews });
-  initDashboard({ toast: showToast, refresh: refreshProgressViews });
   initPrefs();
 
   // El enrutador no espera a lessons.json: la portada, «¿Qué estudio ahora?» y DAW no lo usan (AUD-010)
@@ -842,7 +965,11 @@ async function init() {
   navigate({ moveFocus: false });
   window.addEventListener("hashchange", () => navigate());
 
-  if (await lessonsLoaded) {
+  const loaded = await lessonsLoaded;
+  // En la misma tarea que el primer pintado de la lección: no hay un fotograma intermedio vacío
+  $("#lesson-view").classList.remove("workspace--loading");
+  $("#lesson-view").removeAttribute("aria-busy");
+  if (loaded) {
     renderSidebar();
     initGameUi();
     initGame([...content.lessons.values()]);
@@ -862,14 +989,17 @@ async function init() {
   updatePrivateNav();
   $("#certificate-view").addEventListener("submit", (event) => {
     event.preventDefault();
-    saveCertificateName(event.target.elements["cert-name"].value.trim());
+    zones.certificate?.saveCertificateName(event.target.elements["cert-name"].value.trim());
     showPage("certificate");
   });
   initPcapSync(() => {
     if (content.loaded) refreshGame();
-    refreshPcap();
+    zones.pcap?.refreshPcap(); // sin la zona cargada no hay nada que repintar
   });
-  initCourseSync(refreshDaw);
+  initCourseSync(() => {
+    zones.daw?.refreshDaw();
+    zones.excel?.refreshExcel();
+  });
   initLearnSync();
   initPlannerSync();
   initCareerSync();

@@ -5,6 +5,7 @@ import { courseBlockStats, courseReadiness, DAW_COURSES, loadCourseBank } from "
 import { escapeHtml } from "./markdown.js";
 import { pcap } from "./pcap-store.js";
 import { state } from "./store.js";
+import { canVerify, refreshVerified, verifiedLine, verifiedSummary } from "./verified.js";
 
 const NAME_KEY = "pld:cert-name";
 const PASS = 70;
@@ -34,8 +35,29 @@ export function certificateStatus(content) {
   return { lessons: lessons.length, done, best, ok: done === lessons.length && best >= PASS };
 }
 
+/** Lo verificado llega del servidor: se pinta en su hueco cuando responde. */
+function verifiedSlot() {
+  if (canVerify() && !verifiedSummary()) {
+    refreshVerified().then(() => {
+      for (const slot of document.querySelectorAll("[data-cert-verified]")) slot.innerHTML = verifiedHtml(slot.dataset.certVerified);
+    });
+  }
+  return (where) => `<span data-cert-verified="${where}">${verifiedHtml(where)}</span>`;
+}
+
+function verifiedHtml(where) {
+  const s = verifiedSummary();
+  if (where === "certificate") {
+    return s?.passed
+      ? `Simulacro corregido y verificado por el servidor: ${s.best_score} %.`
+      : "Requisitos comprobados en el navegador del alumno; el simulacro no está verificado por el servidor.";
+  }
+  return escapeHtml(verifiedLine());
+}
+
 export function renderCertificate(content) {
   const status = certificateStatus(content);
+  const slot = verifiedSlot();
   const header = `
     <header class="profile-hero no-print">
       <p class="eyebrow"><a href="#/perfil">Mi aprendizaje</a> · Certificado</p>
@@ -50,6 +72,7 @@ export function renderCertificate(content) {
           <li data-done="${status.done === status.lessons}">Completar las ${status.lessons} lecciones del temario del examen (llevas ${status.done}).</li>
           <li data-done="${status.best >= PASS}">Aprobar un simulacro con ${PASS} % o más (tu mejor nota: ${status.best} %).</li>
         </ul>
+        <p class="readiness__note">${slot("requirements")}</p>
         <div class="course-hero__cta">
           <a class="btn btn--primary" href="#/inicio">Seguir con el curso</a>
           <a class="btn btn--ghost" href="#/pcap/simulacro">Hacer un simulacro</a>
@@ -67,6 +90,7 @@ export function renderCertificate(content) {
         <button class="btn btn--primary" type="button" data-action="print-certificate">Descargar en PDF o imprimir</button>
       </form>
       <p class="readiness__note">En la ventana de impresión elige «Guardar como PDF».</p>
+      <p class="readiness__note">${slot("requirements")}</p>
     </section>
 
     <article class="certificate" aria-label="Certificado">
@@ -78,6 +102,7 @@ export function renderCertificate(content) {
         ${status.lessons} lecciones del temario del examen PCAP-31-03 con ejercicios corregidos,
         y ha aprobado un simulacro de examen con un <strong>${status.best} %</strong>.</p>
       <p class="certificate__date">${date}</p>
+      <p class="certificate__verified">${slot("certificate")}</p>
       <p class="certificate__disclaimer">Documento de un proyecto educativo. No es una certificación oficial
         del Python Institute ni la sustituye.</p>
     </article>`;
@@ -151,6 +176,7 @@ function courseCertificateBody(course, status, bank) {
         con un dominio del <strong>${status.score} %</strong> sobre ${bank.questions.length} preguntas comprobadas,
         repartidas en ${bank.exam.blocks.length} bloques.</p>
       <p class="certificate__date">${date}</p>
+      <p class="certificate__verified">Progreso comprobado en el navegador del alumno: orientativo, no verificado por el servidor.</p>
       <p class="certificate__disclaimer">Documento de un proyecto educativo. No es un título oficial ni sustituye
         a la evaluación del centro.</p>
     </article>`;

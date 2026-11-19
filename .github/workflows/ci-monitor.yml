@@ -1,0 +1,45 @@
+# Monitor de CI: cuando termina una ejecución del workflow «CI» (en cualquier rama o PR), la
+# diagnostica y avisa con una incidencia de GitHub (etiqueta ci-monitor, una por rama):
+#   - fallo nuevo → abre la incidencia (o comenta si ya había una con otro error)
+#   - fallo recurrente → comenta en la misma incidencia con el número de intento
+#   - fallo de un commit anterior o ejecución cancelada → solo el resumen, sin incidencia
+#   - en verde → cierra la incidencia de esa rama («corregido»)
+# GitHub avisa por email de cada incidencia y comentario. Detalles: docs/CI_CD_MONITORING.md.
+#
+# Seguridad: workflow_run se ejecuta siempre con el código de la rama principal (no con el de la
+# rama que falló), así que no ejecuta código de un PR. Solo lee la API y los logs, que se tratan
+# como datos. No usa secretos: solo el GITHUB_TOKEN con los permisos de abajo.
+name: CI monitor
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+
+permissions:
+  contents: read
+  actions: read   # leer la ejecución, sus jobs y sus logs
+  issues: write   # abrir, comentar y cerrar la incidencia
+
+concurrency:
+  # Las ejecuciones de una misma rama se procesan en orden: no se abren dos incidencias a la vez
+  group: ci-monitor-${{ github.event.workflow_run.head_branch }}
+  cancel-in-progress: false
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+          sparse-checkout: scripts/ci-monitor
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Diagnosticar e informar
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          RUN_ID: ${{ github.event.workflow_run.id }}
+        run: python scripts/ci-monitor/ci_monitor.py report --run-id "$RUN_ID"

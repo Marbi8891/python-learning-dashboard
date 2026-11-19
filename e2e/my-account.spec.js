@@ -15,6 +15,8 @@ async function signIn(page, request, section = "perfil") {
   await page.locator("#login-form").getByLabel("Contraseña").fill(PASSWORD);
   await page.locator("#login-form").getByRole("button", { name: "Entrar" }).click();
   await expect(page.locator("#account-label")).toHaveText("Ana");
+  // El nombre cambia antes de que termine la sincronización; el diálogo (modal) se cierra después
+  await expect(page.locator("#account-dialog")).toBeHidden();
   // La antigua «Mi cuenta» lleva al perfil del panel; cada parte vive en su sección
   await page.goto("/#/cuenta");
   await expect(page).toHaveURL(/#\/panel\/perfil$/);
@@ -124,13 +126,31 @@ test("un repintado en segundo plano no borra lo que el alumno está escribiendo"
   await expect(form.getByLabel("Repite la nueva")).toHaveAttribute("aria-describedby", "password-form-message");
 });
 
+test("perfil: repintar en segundo plano no borra lo que se está escribiendo", async ({ page, request }) => {
+  // Regresión: al llegar datos de la cuenta, la vista se repinta entera y la contraseña actual
+  // escrita se perdía (fallo intermitente de la prueba anterior y del alumno real)
+  await signIn(page, request);
+  const form = page.locator("#password-form");
+  await form.getByLabel("Contraseña actual").fill(PASSWORD);
+  await form.getByLabel("Nueva contraseña (mínimo 8 caracteres)").fill("tortuga-azul-en-bici");
+  // Lo mismo que hace la app al cambiar el perfil o el progreso: avisar a la vista para que se repinte
+  await page.evaluate(async () => {
+    const { state, updateUser } = await import("/js/store.js");
+    updateUser({ ...state.user });
+  });
+  await expect(form.getByLabel("Contraseña actual")).toHaveValue(PASSWORD);
+  await expect(form.getByLabel("Nueva contraseña (mínimo 8 caracteres)")).toHaveValue("tortuga-azul-en-bici");
+  await expect(form.getByLabel("Repite la nueva")).toHaveValue("");
+  await expect(page.getByLabel("Nombre que se muestra")).toHaveValue("Ana");
+});
+
 test("Mi cuenta sin infracciones WCAG", async ({ page, request }) => {
   await signIn(page, request, "cursos");
   await expect(page.locator('[data-course-card="java"] [data-course-detail]')).toContainText("Dominio:");
   await page.goto("/#/panel/perfil");
   await expect(page.locator("#account-activity li").first()).toBeVisible();
   await page.waitForFunction(() => !document.querySelector("#toast.toast--visible"), null, { timeout: 20_000 });
-  const results = await new AxeBuilder({ page }).include("#private-view").withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"]).analyze();
+  const results = await new AxeBuilder({ page }).include("#private-view").withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]).analyze();
   const summary = results.violations.map((v) => `${v.id} (${v.impact}): ${v.nodes.map((n) => n.target).join(", ")}`);
   expect(summary, summary.join("\n")).toEqual([]);
 });

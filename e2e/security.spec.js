@@ -3,6 +3,36 @@ const { test, expect, uniqueEmail, openLesson } = require("./fixtures");
 
 const API = "http://127.0.0.1:8000";
 
+test("la web no usa estilos en línea propios: funciona con style-src sin 'unsafe-inline' (RT-004)", async ({ page }) => {
+  // La CSP publicada sigue con 'unsafe-inline' solo porque el botón de Google (GSI) inyecta <style> y
+  // style="…". Aquí se sirve la página con la CSP estricta para que ningún código propio vuelva a usarlos.
+  await page.route(/\/(index\.html)?$/, async (route) => {
+    const response = await route.fetch();
+    const body = (await response.text()).replace("style-src 'self' 'unsafe-inline'", "style-src 'self'");
+    await route.fulfill({ response, body });
+  });
+  await page.addInitScript(() => {
+    window.__violations = [];
+    document.addEventListener("securitypolicyviolation", (e) => window.__violations.push(`${e.violatedDirective} ${e.blockedURI}`));
+  });
+  const csp = async () => page.locator('meta[http-equiv="Content-Security-Policy"]').getAttribute("content");
+  await page.goto("/#/portada");
+  expect((await csp()).match(/style-src[^;]*/)[0]).not.toContain("unsafe-inline"); // la estricta se aplica
+  await page.locator("#lp-temario").waitFor();
+  for (const route of ["/#/aprender", "/#/practicar", "/#/progreso", "/#/inicio", "/#/pcap", "/#/daw", "/#/ciberseguridad", "/#/planes", "/#/perfil"]) {
+    await page.goto(route);
+    await page.locator("#main").waitFor();
+    await page.waitForLoadState("networkidle");
+  }
+  // Las barras reciben su valor (data-meter → --value) aunque no haya style="…"
+  await page.goto("/#/daw");
+  const meters = page.locator("[data-meter]");
+  await expect(meters.first()).toBeAttached();
+  const values = await meters.evaluateAll((els) => els.map((el) => [el.dataset.meter, el.style.getPropertyValue("--value")]));
+  for (const [value, css] of values) expect(css).toBe(`${Math.min(100, Math.max(0, Number(value)))}%`);
+  expect(await page.evaluate(() => window.__violations)).toEqual([]);
+});
+
 test("la política de seguridad (CSP) está activa y no bloquea nada de la app", async ({ page }) => {
   await page.addInitScript(() => {
     window.__violations = [];

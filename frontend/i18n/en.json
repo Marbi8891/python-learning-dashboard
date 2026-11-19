@@ -1,6 +1,5 @@
 {
   "// nota": "Interfaz en inglés. Clave = texto original en español, tal cual se ve (espacios juntados). {nombre} = hueco. Las lecciones siguen en español. Ver frontend/js/i18n.js y docs/IDIOMAS.md.",
-
   "Python Learning Dashboard necesita JavaScript para funcionar: la consola de Python, los ejercicios y el progreso se ejecutan en tu navegador.": "Python Learning Dashboard needs JavaScript: the Python console, the exercises and your progress run in your browser.",
   "Saltar al contenido": "Skip to content",
   "Menú": "Menu",
@@ -44,15 +43,15 @@
   "Presentación": "Introduction",
   "Privacidad": "Privacy",
   "Aviso legal": "Legal notice",
-
   "Cargando lección…": "Loading lesson…",
+  "Cargando Python Learning Dashboard…": "Loading Python Learning Dashboard…",
+  "Cargando…": "Loading…",
   "Pasos de la lección": "Lesson steps",
   "Siguiente paso": "Next step",
   "Secciones de la lección": "Lesson sections",
   "Teoría y Ejemplos": "Theory and examples",
   "Práctica y Ejercicio": "Practice and exercise",
   "Quiz": "Quiz",
-
   "Consola de Python": "Python console",
   "Nombre del ejercicio": "Exercise name",
   "Código Python": "Python code",
@@ -79,13 +78,11 @@
   "Ejecutando…": "Running…",
   "No se pudo cargar Python. Revisa tu conexión y vuelve a intentarlo.": "Python could not be loaded. Check your connection and try again.",
   "Código copiado al portapapeles": "Code copied to the clipboard",
-
   "Asistente": "Assistant",
   "Cerrar asistente": "Close assistant",
   "Preguntas sugeridas": "Suggested questions",
   "Respuestas preparadas y revisadas para cada lección.": "Prepared and reviewed answers for each lesson.",
   "Abrir asistente": "Open assistant",
-
   "Tu cuenta": "Your account",
   "Cerrar": "Close",
   "He leído y acepto la": "I have read and accept the",
@@ -125,7 +122,8 @@
   "Conectando con el servidor…": "Connecting to the server…",
   "El servidor se está despertando: la primera vez puede tardar hasta un minuto. No cierres esta ventana.": "The server is waking up: the first time it can take up to a minute. Don't close this window.",
   "No se pudo conectar con el servidor. Inténtalo de nuevo en unos segundos.": "Could not connect to the server. Try again in a few seconds.",
-
+  "El servidor no ha respondido a tiempo. Inténtalo de nuevo en unos segundos.": "The server did not respond in time. Try again in a few seconds.",
+  "Hay una versión nueva de la web: recarga la página para usarla.": "There is a new version of the site: reload the page to use it.",
   "Idioma": "Language",
   "· Language": "",
   "Tema": "Theme",
@@ -141,13 +139,11 @@
   "Contraste alto": "High contrast",
   "Sin animaciones": "No animations",
   "Tus logros": "Your achievements",
-
   "{page} · Python Learning Dashboard": "{page} · Python Learning Dashboard",
   "Mi aprendizaje": "My learning",
   "Certificado": "Certificate",
   "Cursos de DAW": "DAW courses",
   "Las lecciones están en español. Puedes traducirlas con la opción «Traducir» de tu navegador: el código no se traduce.": "Lessons are in Spanish. You can translate them with your browser's “Translate” option: the code is never translated.",
-
   "Cambios sin guardar": "Unsaved changes",
   "Esto no se ha podido guardar en tu cuenta y todavía está solo en este navegador:": "This could not be saved to your account and is still only in this browser:",
   "Si cierras sesión y lo borras de este navegador, se perderá. Si lo conservas, se subirá a tu cuenta la próxima vez que entres aquí.": "If you sign out and delete it from this browser, it will be lost. If you keep it, it will be uploaded to your account the next time you sign in here.",
@@ -164,5 +160,8 @@
   "el progreso por conceptos": "your progress by concept",
   "la XP y los logros": "your XP and badges",
   "las lecciones completadas": "your completed lessons",
-  "el curso {name}": "the {name} course"
+  "el curso {name}": "the {name} course",
+  "Curso de Ciberseguridad": "Cybersecurity course",
+  "Excel profesional": "Professional Excel",
+  "Planes y cuenta": "Plans and account"
 }

@@ -1,4 +1,4 @@
-const { test, expect, openLesson } = require("./fixtures");
+const { test, expect, openLesson, watchClipboard } = require("./fixtures");
 
 test("la portada del curso PCAP lleva a la primera lección pendiente y la barra lateral navega", async ({ page }) => {
   await openLesson(page);
@@ -15,6 +15,94 @@ test("la portada del curso PCAP lleva a la primera lección pendiente y la barra
   await expect(page.locator("#lesson-title")).toHaveText("Tipos de datos");
   await expect(page.locator(".lesson[data-slug=tipos]")).toHaveAttribute("aria-current", "page");
   await expect(page.locator("#panel-theory code.hljs")).toHaveCount(1); // resaltado de sintaxis
+});
+
+test("entrar directo a una lección no hace saltar la página mientras llega el temario", async ({ page, browserName }) => {
+  // lessons.json llega tarde a propósito: mientras tanto solo se ve «Cargando…» (MWG-02)
+  let release;
+  const held = new Promise((resolve) => (release = resolve));
+  await page.route("**/data/lessons.json", async (route) => {
+    await held;
+    await route.continue();
+  });
+  await page.addInitScript(() => {
+    window.__shift = 0;
+    if (PerformanceObserver.supportedEntryTypes?.includes("layout-shift")) {
+      new PerformanceObserver((list) => {
+        for (const entry of list.getEntries()) if (!entry.hadRecentInput) window.__shift += entry.value;
+      }).observe({ type: "layout-shift", buffered: true });
+    }
+  });
+  await page.goto("/#/leccion/variables");
+  await expect(page.locator("#lesson-title")).toHaveText("Cargando…");
+  await expect(page.locator("#lesson-view")).toHaveAttribute("aria-busy", "true");
+  await expect(page.locator(".console")).toBeHidden();
+  await expect(page.locator("#lesson-view .tabs")).toBeHidden();
+
+  release();
+  await expect(page.locator("#lesson-title")).toHaveText("Variables y print()");
+  await expect(page.locator(".console")).toBeVisible();
+  await expect(page.locator("#lesson-view")).not.toHaveAttribute("aria-busy", /.*/);
+  await page.waitForTimeout(500); // las entradas de layout-shift llegan después del pintado
+  // Solo Chromium mide layout-shift (Core Web Vitals: «bueno» es ≤ 0,1)
+  if (browserName === "chromium") expect(await page.evaluate(() => window.__shift)).toBeLessThanOrEqual(0.1);
+});
+
+test("cada zona se descarga al abrirla, no al cargar la web (AUD-024)", async ({ page }) => {
+  const requested = new Set();
+  page.on("request", (request) => requested.add(new URL(request.url()).pathname));
+  const ZONES = ["/js/pcap.js", "/js/daw.js", "/js/dashboard.js", "/js/plans.js", "/js/learn/learn-app.js", "/js/learn/poo-view.js"];
+  await page.goto("/#/portada");
+  await page.locator("#lp-temario").waitFor();
+  expect(ZONES.filter((zone) => requested.has(zone))).toEqual([]);
+
+  await page.goto("/#/pcap");
+  await expect(page.locator("#pcap-title")).toContainText("Prepara el examen PCAP");
+  expect(requested.has("/js/pcap.js")).toBe(true);
+  expect(requested.has("/js/daw.js")).toBe(false);
+});
+
+test("el contenido de Practicar se pide a la vez que su módulo, no después (MWG-03)", async ({ page }) => {
+  let release;
+  const held = new Promise((resolve) => (release = resolve));
+  await page.route("**/js/learn/learn-app.js", async (route) => {
+    await held;
+    await route.continue();
+  });
+  const learning = page.waitForRequest("**/data/learning.json");
+  await page.goto("/#/practicar", { waitUntil: "domcontentloaded" });
+  await learning; // llega aunque el módulo de la zona aún no se ha descargado
+  release();
+  await expect(page.locator("#learn-title")).toBeVisible();
+});
+
+test("si una zona no se puede descargar, se dice y la siguiente vez se reintenta", async ({ page }) => {
+  let fail = true;
+  await page.route("**/js/pcap.js", (route) => (fail ? route.abort() : route.continue()));
+  await openLesson(page);
+  await page.goto("/#/pcap");
+  await expect(page.locator("#notfound-title")).toHaveText("No se pudo cargar el contenido");
+  fail = false;
+  await page.goto("/#/aprender");
+  await page.goto("/#/pcap");
+  await expect(page.locator("#pcap-title")).toContainText("Prepara el examen PCAP");
+});
+
+test("en el móvil, si se abre el menú mientras carga una zona, sigue abierto cuando llega", async ({ page }) => {
+  await page.setViewportSize({ width: 360, height: 780 });
+  let release;
+  const held = new Promise((resolve) => (release = resolve));
+  await page.route("**/js/learn/learn-app.js", async (route) => {
+    await held;
+    await route.continue();
+  });
+  // WebKit no da por cargada la página hasta que llega la zona: aquí se espera solo al HTML
+  await page.goto("/#/bienvenida", { waitUntil: "domcontentloaded" });
+  await page.locator("#menu-toggle").click();
+  await expect(page.locator("#menu-toggle")).toHaveAttribute("aria-expanded", "true");
+  release();
+  await expect(page.getByRole("heading", { name: "Aprende Python entendiendo lo que haces" })).toBeVisible();
+  await expect(page.locator("#menu-toggle")).toHaveAttribute("aria-expanded", "true");
 });
 
 test("una lección que no existe dice que no existe y deja volver", async ({ page }) => {
@@ -113,22 +201,24 @@ test("marcar como completada actualiza el progreso y persiste", async ({ page })
   await expect(page.locator(".module[data-module=fundamentos] .module__count")).toHaveText("1/8");
 });
 
-test("copiar y «Abrir en PyCharm» muestran la guía y la descarga", async ({ page, context, browserName }) => {
-  // WebKit no deja dar permisos de portapapeles a Playwright: allí se comprueba lo que se copia, sin leerlo del sistema
-  if (browserName === "chromium") await context.grantPermissions(["clipboard-read", "clipboard-write"]);
-  else {
-    await page.addInitScript(() => {
-      window.__copied = "";
-      navigator.clipboard.writeText = async (text) => {
-        window.__copied = text;
-      };
-    });
-  }
+test("copiar y «Abrir en PyCharm» muestran la guía y la descarga", async ({ page, browserName }) => {
+  const clipboard = await watchClipboard(page, browserName);
   await openLesson(page, "variables");
+  const code = await page.locator(".code-block pre code").first().textContent();
+  expect(code).toContain('nombre = "Carlos"');
+
+  // «Copiar al portapapeles»: la escritura real sale bien y la web lo confirma
+  await page.getByRole("button", { name: "Copiar al portapapeles" }).click();
+  await expect(page.locator("#toast")).toHaveText("Código copiado al portapapeles");
+  expect(await clipboard.writes()).toEqual([code]);
+  if (clipboard.read) expect(await clipboard.read()).toBe(code); // lo que hay de verdad en el portapapeles
+
+  // «Abrir en PyCharm»: vuelve a copiar el ejemplo y enseña la guía con la descarga
   await page.getByRole("button", { name: "Abrir en PyCharm" }).click();
   await expect(page.locator("#pycharm-hint")).toBeVisible();
-  const clipboard = await page.evaluate((chromium) => (chromium ? navigator.clipboard.readText() : window.__copied), browserName === "chromium");
-  expect(clipboard).toContain('nombre = "Carlos"');
+  expect(await clipboard.writes()).toEqual([code, code]);
+  if (clipboard.read) expect(await clipboard.read()).toBe(code);
+  await expect(page.locator("#toast")).not.toContainText("No se pudo copiar");
 
   const download = page.waitForEvent("download");
   await page.getByRole("link", { name: "Descargar variables.py" }).click();

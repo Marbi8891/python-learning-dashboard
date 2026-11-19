@@ -7,11 +7,13 @@
      caducada) no se reintenta: se subirá al volver a entrar.
    - Solo pasa a "guardado" cuando el servidor confirma la copia que incluye el último cambio: si
      hubo otro cambio mientras se subía, sigue pendiente.
-   - `flush()` sube ya lo pendiente (antes de cerrar sesión) y devuelve si quedó todo guardado.
-   - Nunca hay dos subidas del mismo documento a la vez: las dos llevarían la misma versión y el
-     servidor respondería 409 a la segunda, que al fusionar volvería a marcar el almacén como pendiente
-     aunque todo estuviera guardado (cierre de sesión justo después de entrar). Quien pide subir
-     mientras hay una en vuelo espera a que termine y solo vuelve a subir si quedó algo pendiente.
+   - Hay como mucho una subida en curso: dos PUT a la vez con la misma versión chocaban entre sí
+     (409), la fusión del 409 volvía a marcar el almacén como pendiente y el cierre de sesión justo
+     después de entrar creía que faltaba algo por guardar. Quien pide subir mientras hay una en vuelo
+     se suma a ella, y al acabar solo se vuelve a subir si quedó algo pendiente.
+   - `flush()` sube ya lo pendiente (antes de cerrar sesión) y devuelve si quedó todo guardado. Espera
+     a la subida en curso y repite mientras quede algo pendiente (p. ej. la fusión de un 409 cuenta
+     como cambio), con un límite.
 
    No depende del DOM ni de la API, para poder probarlo con node --test. */
 
@@ -19,6 +21,8 @@ import { RETRY_DELAYS_MS } from "./sync-gate.js";
 import { registerSyncStore, setSyncState, syncState } from "./sync-status.js";
 
 export const PUSH_DELAY_MS = 1500;
+/** Subidas seguidas que puede hacer `flush()` mientras siga habiendo algo pendiente. */
+export const MAX_FLUSH_UPLOADS = 3;
 
 /**
  * @param {object} options
@@ -45,18 +49,30 @@ export function createUploader({
   let timer = null;
   let attempt = 0;
   let changes = 0; // cuántos cambios locales ha habido: la subida solo confirma los que llevaba
-  let running = null; // la subida en vuelo, si la hay
+  let running = null; // la subida en curso (una sola a la vez)
+  let again = false; // alguien pidió subir mientras había una en curso
 
   function clear() {
     if (timer !== null) cancel(timer);
     timer = null;
   }
 
-  /** Sube una vez, o se suma a la subida en vuelo y, si al acabar queda algo pendiente, sube otra. */
+  /** Sube ya. Si hay una subida en curso, se suma a ella: al terminar, se sube otra vez (con los
+      datos de ese momento) solo si quedó algo pendiente. Devuelve el resultado de la última. */
   function upload() {
     clear();
-    if (running) return running.then(() => (syncState(name) === "pending" ? upload() : syncState(name) === "saved"));
-    running = uploadOnce().finally(() => {
+    if (running) {
+      again = true;
+      return running;
+    }
+    running = (async () => {
+      let ok;
+      do {
+        again = false;
+        ok = await uploadOnce();
+      } while (ok && again && syncState(name) === "pending");
+      return ok;
+    })().finally(() => {
       running = null;
     });
     return running;
@@ -109,11 +125,11 @@ export function createUploader({
   /** Sube ya lo pendiente. Devuelve si el servidor tiene todo lo de este almacén. */
   async function flush() {
     if (!gate.ready && !(await gate.sync())) return syncState(name) === "saved";
-    if (syncState(name) === "saved" && !running) return true;
-    await upload();
-    // Si durante la subida entró un cambio (p. ej. la fusión tras un 409 de otra pestaña), se sube una
-    // vez más: la petición ya salió bien, así que lo que queda es solo ese último cambio.
-    if (syncState(name) === "pending") await upload();
+    // Con una subida en vuelo se espera a ella aunque el estado ya diga «guardado»; si durante la
+    // subida entró un cambio (p. ej. la fusión tras un 409 de otra pestaña), se sube otra vez, con límite.
+    for (let round = 0; round < MAX_FLUSH_UPLOADS && (running || syncState(name) !== "saved"); round += 1) {
+      if (!(await upload())) break; // fallo real: queda marcado y el alumno decide (SYNC-01)
+    }
     return syncState(name) === "saved";
   }
 

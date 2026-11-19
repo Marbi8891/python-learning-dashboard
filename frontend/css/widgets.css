@@ -269,6 +269,16 @@
   margin-top: 4px;
 }
 
+/* WCAG 2.5.8 (tamaño del objetivo, AA): la casilla nativa mide 13 px y en el bloque de Google le
+   faltaba separación con los controles cercanos. Con 24 px cumple sin depender del espacio alrededor. */
+.account__check input[type="checkbox"] {
+  flex: none;
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
+  margin-top: 0;
+  accent-color: var(--color-primary);
+}
+
 .account__form a {
   color: var(--color-link);
   text-decoration: underline;

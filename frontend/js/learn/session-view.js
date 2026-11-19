@@ -5,7 +5,7 @@ import { pythonRunner } from "../console.js";
 import { codeResult, grade, missingAnswer } from "./answers.js";
 import { learning, saveLearning } from "./learn-store.js";
 import { planOptions } from "./planner-store.js";
-import { allStats, markRead } from "./mastery.js";
+import { allStats, markRead, QUIZ_PASS } from "./mastery.js";
 import { exercisesForError, selectExercises, todayPlan } from "./recommend.js";
 import { advance, createSession, currentItem, finish, isExpired, secondsLeft, stop, submit } from "./session.js";
 import {
@@ -134,6 +134,7 @@ function questionHtml() {
     : `<button class="btn btn--primary" type="submit">${ex.kind === "code" ? "Comprobar con los tests" : "Comprobar"}</button>
        ${session.feedback ? '<button class="btn btn--ghost" type="button" data-lx="skip">No lo sé: ver la explicación</button>' : ""}
        ${session.kind === "exam" ? '<button class="btn btn--ghost" type="button" data-lx="finish">Terminar el simulacro</button>' : ""}
+       ${session.kind === "final" ? '<button class="btn btn--ghost" type="button" data-lx="finish">Terminar la evaluación</button>' : ""}
        ${session.kind === "diagnostic" ? '<button class="btn btn--ghost" type="button" data-lx="skip-diag">No lo sé</button>' : ""}`;
   return `
     ${retryBanner}
@@ -168,18 +169,23 @@ function summaryHtml() {
     .join("");
   const next = todayPlan(index, learning, new Date(), undefined, planOptions())[0];
   const exam = session.kind === "exam";
-  const total = exam ? session.queue.length : summary.total;
+  const scored = Boolean(summary.quiz);
+  const total = exam || scored ? session.queue.length : summary.total;
   const message =
     total === 0 ? "" : summary.correct / total >= 0.8 ? "Muy bien: lo tienes claro." : summary.correct / total >= 0.5 ? "Vas bien, pero conviene repasar lo que has fallado." : "Toca repasar la teoría y volver a intentarlo.";
-  const review = exam || session.kind === "diagnostic" ? examReviewHtml() : "";
+  const review = exam || session.kind === "diagnostic" || session.kind === "final" ? examReviewHtml() : "";
+  const verdict = scored
+    ? `<p><span class="lx-status" data-status="${summary.quiz.passed ? "dominado" : "insuficiente"}">${summary.quiz.passed ? "Superado" : "Sin superar"}</span> Se piden ${Math.ceil(summary.quiz.total * QUIZ_PASS - 1e-9)} aciertos de ${summary.quiz.total} (${percent(QUIZ_PASS)}). ${summary.quiz.passed ? "" : "Repasa lo que has fallado y vuelve a intentarlo: se guarda tu mejor nota."}</p>`
+    : "";
   const placed = session.kind === "diagnostic" ? Object.entries(summary.byConcept).filter(([, [ok, t]]) => ok === t).map(([id]) => conceptTitle(id)) : [];
   return `
     <section class="course-section lx-summary" aria-labelledby="lx-summary-title">
-      <h2 class="section-title" id="lx-summary-title">${summary.correct} de ${total} correctos${exam ? ` · ${percent(total ? summary.correct / total : 0)}` : ""}</h2>
+      <h2 class="section-title" id="lx-summary-title">${summary.correct} de ${total} correctos${exam || scored ? ` · ${percent(total ? summary.correct / total : 0)}` : ""}</h2>
       <p class="lx-lead">${message}</p>
+      ${verdict}
       ${session.kind === "diagnostic" ? `<p>${placed.length ? `Superados en la prueba (la ruta no te bloqueará con ellos): ${escapeHtml(placed.join(", "))}.` : "No has superado ningún concepto todavía: la ruta empieza desde el principio."}</p>` : ""}
       ${summary.retried ? `<p>Nuevos intentos tras la explicación: ${summary.fixed} de ${summary.retried} bien resueltos.</p>` : ""}
-      ${exam && summary.unanswered ? `<p>Sin responder: ${summary.unanswered} (cuentan como fallos).</p>` : ""}
+      ${(exam || scored) && summary.unanswered ? `<p>Sin responder: ${summary.unanswered} (cuentan como fallos).</p>` : ""}
       ${concepts ? `<h3 class="lx-h4">Conceptos trabajados</h3><ul class="lx-list">${concepts}</ul>` : ""}
       ${errors ? `<h3 class="lx-h4">Errores que has cometido</h3><ul class="lx-errors">${errors}</ul>` : '<p>No se ha detectado ningún error típico en esta sesión.</p>'}
       ${review}

@@ -131,3 +131,42 @@ export function moduleProgress(modules, answersOf) {
       return { id: m.id, code: m.code, name: m.name, course: m.course, total: m.platformQuestions, practiced, mastered };
     });
 }
+
+/**
+ * Cobertura de los criterios de evaluación (CE) de un módulo con lo que el alumno ha practicado (#106).
+ * Un CE está «practicado» si el alumno ha respondido al menos una de sus preguntas. No es una
+ * evaluación del CE: eso lo hace el profesorado. La correspondencia pregunta → CE es por lección y
+ * hoy está «proposed» (pendiente de revisión docente).
+ * @param module módulo de daw-cyl.json (sus CE llevan platformQuestionIds y mapping si tienen preguntas)
+ * @param answersOf (curso) => { idPregunta: [aciertos…] } del progreso guardado
+ * @returns {{ total: number, withQuestions: number, practiced: number, outcomes: object[] }}
+ */
+export function criteriaProgress(module, answersOf) {
+  const answered = (course, id) => {
+    const history = (answersOf(course) ?? {})[id];
+    return Array.isArray(history) && history.length > 0;
+  };
+  const outcomes = (module.learningOutcomes ?? []).map((ra) => {
+    const criteria = ra.criteria.map((c) => {
+      const ids = Object.entries(c.platformQuestionIds ?? {});
+      const questions = ids.reduce((n, [, list]) => n + list.length, 0);
+      const practiced = ids.reduce((n, [course, list]) => n + list.filter((id) => answered(course, id)).length, 0);
+      return { id: c.id, letter: c.letter, text: c.text, questions, practiced, mapping: c.mapping ?? "unassigned" };
+    });
+    return {
+      id: ra.id,
+      number: ra.number,
+      text: ra.text,
+      criteria,
+      withQuestions: criteria.filter((c) => c.questions > 0).length,
+      practiced: criteria.filter((c) => c.practiced > 0).length,
+    };
+  });
+  const all = outcomes.flatMap((ra) => ra.criteria);
+  return {
+    total: all.length,
+    withQuestions: all.filter((c) => c.questions > 0).length,
+    practiced: all.filter((c) => c.practiced > 0).length,
+    outcomes,
+  };
+}

@@ -23,10 +23,30 @@ def c(text: str) -> str:
     return dedent(text).strip("\n")
 
 
+def option(text, error=None, why=None):
+    """Una opción de una pregunta tipo test. `why`: por qué esa opción es incorrecta."""
+    return {"text": text, "error": error, **({"why": why} if why else {})}
+
+
 def choice(
-    id, concept, q, options, answer, explain, code=None, level=1, daw=True, code_options=False
+    id,
+    concept,
+    q,
+    options,
+    answer,
+    explain,
+    code=None,
+    level=1,
+    daw=True,
+    code_options=False,
+    bank=False,
+    qtype=None,
 ):
-    return {
+    """Pregunta tipo test. Las opciones son (texto, error) o (texto, error, por qué es incorrecta).
+
+    `bank=True` la cuenta en el banco de preguntas evaluables del módulo de POO, con su `qtype`.
+    """
+    exercise = {
         "id": id,
         "concept": concept,
         "kind": "choice",
@@ -34,11 +54,14 @@ def choice(
         "daw": daw,
         "q": q,
         "code": c(code) if code else None,
-        "options": [{"text": t, "error": e} for t, e in options],
+        "options": [option(*o) for o in options],
         "answer": answer,
         "explain": explain,
         "codeOptions": code_options,
     }
+    if bank:
+        exercise.update(bank=True, qtype=qtype)
+    return exercise
 
 
 def output(

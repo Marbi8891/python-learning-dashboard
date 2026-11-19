@@ -9,7 +9,9 @@
 |---|---|
 | [EJECUTAR-EN-WINDOWS.md](EJECUTAR-EN-WINDOWS.md) | Usar la web y la API en tu PC con `Iniciar-Dashboard.bat` |
 | [TESTING.md](TESTING.md) | Todas las pruebas y cuáles ejecutar según lo que cambies |
+| [CI_CD_MONITORING.md](CI_CD_MONITORING.md) | Cómo se vigila cada subida a GitHub Actions, cómo se avisa y cómo se corrigen los fallos |
 | [DEPLOY.md](DEPLOY.md) | Desplegar la web en GitHub Pages y la API en Render con Neon |
+| [OPERACION.md](OPERACION.md) | Vigilar (`/api/v1/ready` y monitor externo), copiar, restaurar y volver atrás |
 
 ## Arquitectura y funcionamiento
 
@@ -17,14 +19,25 @@
 |---|---|
 | [API.md](API.md) | Endpoints de la API REST (`/api/v1`) |
 | [auth.md](auth.md) | Recuperación de contraseña e inicio de sesión con Google |
+| [HITOS_VERIFICADOS.md](HITOS_VERIFICADOS.md) | Qué progreso es local (orientativo) y qué comprueba el servidor: simulacros del PCAP verificados |
 | [ADAPTIVE_ENGINE.md](ADAPTIVE_ENGINE.md) | Motor adaptativo: dominio, olvido, repaso espaciado y planificador |
+| [MODULO_POO.md](MODULO_POO.md) | Módulo de POO: unidades, formato, validadores, progreso y currículo |
 | [DECISIONS.md](DECISIONS.md) | Registro de decisiones de arquitectura (DEC-NNN) |
 | [AI_CAREER_PATH.md](AI_CAREER_PATH.md) | Itinerario AI Engineer & AI Product Developer: arquitectura, modelo de datos y estado por fases |
 | [AI_CAREER_PATH_AUDIT.md](AI_CAREER_PATH_AUDIT.md) | Itinerario de IA: auditoría y propuesta técnica (Fase A, aprobada) |
 | [CAREER_ROADMAP_ARCHITECTURE.md](CAREER_ROADMAP_ARCHITECTURE.md) | Career Roadmap: auditoría y arquitectura propuesta (Sprint 0; sustituido por AI_CAREER_PATH donde choquen) |
 | [CAREER_ROADMAP_AGENT_LOG.md](CAREER_ROADMAP_AGENT_LOG.md) | Career Roadmap: registro de sprints y decisiones |
 | [DISENO.md](DISENO.md) | Sistema visual: tokens, colores, tipografía y componentes |
+| [REDISENO-FRONTEND.md](REDISENO-FRONTEND.md) | Alcance, áreas y criterios del rediseño integral del frontend |
 | [IDIOMAS.md](IDIOMAS.md) | Interfaz en inglés y cómo añadir textos traducidos |
+| [CATALOGO-FREE-PRO-ACADEMY.md](CATALOGO-FREE-PRO-ACADEMY.md) | Propuesta de catálogo gratuito, Pro y Academy; pendiente de confirmación |
+
+## Itinerarios formativos
+
+| Documento | Para qué sirve |
+|---|---|
+| [PLAN-ITINERARIO-DEVOPS.md](PLAN-ITINERARIO-DEVOPS.md) | Formación de 9 meses en Linux, Docker, GitHub y Python, con 20 horas semanales, laboratorios y evaluaciones |
+| [PLAN-CIBERSEGURIDAD.md](PLAN-CIBERSEGURIDAD.md) | Curso de ciberseguridad de 16 semanas y 320 horas: Red Team, Blue Team, OSINT, pentesting web y Python |
 
 ## Temario
 
@@ -32,6 +45,7 @@
 |---|---|
 | [PLAN-CURRICULO-DAW.md](PLAN-CURRICULO-DAW.md) | Currículo oficial de DAW y cómo se genera el catálogo |
 | [AMPLIAR-TEMARIO-DAW.md](AMPLIAR-TEMARIO-DAW.md) | Cómo añadir asignaturas, unidades y recursos |
+| [excel-academy/MASTER_SPECIFICATION.md](excel-academy/MASTER_SPECIFICATION.md) | Excel profesional: especificación maestra, decisiones y anexos (arquitectura, motor de fórmulas, currículo M1-M2, pruebas, riesgos y hoja de ruta) |
 | [AUDITORIA-Y-LICENCIAS.md](AUDITORIA-Y-LICENCIAS.md) | Origen y licencias de las fuentes de contenido |
 
 ## Privacidad y cumplimiento legal

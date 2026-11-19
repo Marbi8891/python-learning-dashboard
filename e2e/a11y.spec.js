@@ -3,16 +3,34 @@
 const AxeBuilder = require("@axe-core/playwright").default;
 const { test, expect, openLesson } = require("./fixtures");
 
-async function audit(page) {
-  // Espera a que acaben las animaciones de entrada: a media transición el contraste es menor
-  // y a que se vayan los avisos (toast), que se auditan a medio desvanecer
+// Los avisos van en cola (app.js): entre uno y el siguiente pasan 250 ms sin aviso visible. Esperar
+// solo a «no hay aviso» deja empezar axe en ese hueco, y el siguiente aparece a media transición
+// con el contraste rebajado por la opacidad. Por eso la calma tiene que durar más que ese hueco.
+const QUIET_MS = 400;
+
+async function waitForQuietUi(page) {
+  await page.evaluate(() => delete window.__pldQuietSince);
+  // Espera a que acaben las animaciones de entrada y a que se vacíe la cola de avisos (toast):
+  // a media transición el contraste es menor y axe lo cuenta como fallo
   await page.waitForFunction(
-    () =>
-      !document.querySelector("#toast.toast--visible") &&
-      document.getAnimations().every((a) => a.playState !== "running"),
-    null,
-    { timeout: 20_000 },
+    (quietMs) => {
+      const busy =
+        document.querySelector("#toast.toast--visible") ||
+        document.getAnimations().some((a) => a.playState === "running");
+      if (busy) {
+        delete window.__pldQuietSince;
+        return false;
+      }
+      window.__pldQuietSince ??= performance.now();
+      return performance.now() - window.__pldQuietSince >= quietMs;
+    },
+    QUIET_MS,
+    { timeout: 20_000, polling: 50 },
   );
+}
+
+async function audit(page) {
+  await waitForQuietUi(page);
   const results = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]).analyze();
   const summary = results.violations.map((v) => `${v.id} (${v.impact}): ${v.nodes.map((n) => n.target).join(", ")}`);
   expect(summary, summary.join("\n")).toEqual([]);
@@ -119,6 +137,48 @@ for (const colorScheme of ["light", "dark"]) {
       await page.getByRole("button", { name: "Ver respuesta" }).click();
       await audit(page);
     });
+  });
+}
+
+// Regresión del fallo de contraste en #toast (Sprint 0): terminar un simulacro encola dos avisos
+// («Simulacro terminado» y «Logro desbloqueado»), con un hueco de 250 ms entre ellos
+async function finishExamWithToasts(page) {
+  await page.addInitScript(() => {
+    window.__toastsShown = [];
+    document.addEventListener("DOMContentLoaded", () => {
+      const toast = document.querySelector("#toast");
+      new MutationObserver(() => {
+        if (toast.classList.contains("toast--visible")) window.__toastsShown.push(toast.textContent);
+      }).observe(toast, { attributes: true, attributeFilter: ["class"] });
+    });
+  });
+  await page.goto("/#/pcap/simulacro");
+  await page.getByRole("button", { name: "Empezar el simulacro" }).click();
+  await page.locator(".exam-q input").first().check();
+  await page.locator(".exam-nav").getByRole("button", { name: "Terminar examen" }).click();
+  await page.getByRole("button", { name: "Sí, terminar" }).click();
+}
+
+test("la auditoría espera a que se vacíe la cola de avisos", async ({ page }) => {
+  await finishExamWithToasts(page);
+  await waitForQuietUi(page);
+  const shown = await page.evaluate(() => window.__toastsShown);
+  expect(shown).toHaveLength(2);
+  expect(shown[1]).toContain("Logro desbloqueado");
+  await expect(page.locator("#toast")).not.toHaveClass(/toast--visible/);
+});
+
+for (const colorScheme of ["light", "dark"]) {
+  test(`el aviso visible tiene contraste suficiente en modo ${colorScheme}`, async ({ page }) => {
+    await page.emulateMedia({ colorScheme });
+    await finishExamWithToasts(page);
+    const toast = page.locator("#toast.toast--visible");
+    await expect(toast).toBeVisible();
+    // Contraste del aviso ya aparecido (opacidad 1), no a media transición
+    await expect(toast).toHaveCSS("opacity", "1");
+    const results = await new AxeBuilder({ page }).include("#toast").withRules(["color-contrast"]).analyze();
+    expect(results.violations.map((v) => v.id)).toEqual([]);
+    expect(results.passes.map((p) => p.id)).toContain("color-contrast");
   });
 }
 

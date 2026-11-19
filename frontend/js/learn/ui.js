@@ -50,7 +50,7 @@ export function codeBlock(source, { label = "Código", numbered = false, plain =
 
 export function meter(value, label) {
   const pct = Math.round((value ?? 0) * 100);
-  return `<span class="meter" role="progressbar" aria-label="${escapeHtml(label)}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}"><span class="meter__fill" style="--value: ${pct}%"></span></span>`;
+  return `<span class="meter" role="progressbar" aria-label="${escapeHtml(label)}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}"><span class="meter__fill" data-meter="${pct}"></span></span>`;
 }
 
 export function statusBadge(stats) {
@@ -165,6 +165,7 @@ function codeBody(ex, answer, reveal) {
     <label class="lx-field">Tu programa
       <textarea class="lx-editor" id="lx-code" rows="${Math.max(8, (answer.code ?? ex.starter).split("\n").length + 2)}" spellcheck="false" autocapitalize="off" autocomplete="off" aria-describedby="lx-code-help"${reveal ? " readonly" : ""}>${escapeHtml(answer.code ?? ex.starter)}</textarea>
     </label>
+    ${ex.expect ? `<p class="lx-note">Resultado esperado al ejecutar el programa:</p><pre class="lx-output lx-output--expected" tabindex="0">${escapeHtml(ex.expect)}</pre>` : ""}
     <p class="console__help" id="lx-code-help"><kbd>Tab</kbd> inserta 4 espacios · <kbd>Esc</kbd> y después <kbd>Tab</kbd> para salir del editor · ${RUN_KEYS_HTML} ejecuta</p>
     ${usesInput(ex) ? `<label class="lx-field">Entrada para probar (una línea por cada <code>input()</code>)<textarea id="lx-stdin" rows="2" spellcheck="false">${escapeHtml(answer.stdin ?? ex.checks.find((c) => c.stdin)?.stdin ?? "")}</textarea></label>` : ""}
     <div class="lx-actions">
@@ -197,6 +198,7 @@ export function feedbackHtml(ex, result, { error = null, conceptTitle = "", retr
   return `
     <section class="quiz__feedback lx-feedback" data-result="${result.ok ? "ok" : "ko"}" tabindex="-1" aria-labelledby="lx-verdict">
       <p class="quiz__verdict" id="lx-verdict">${result.ok ? "✓ Correcto" : "✗ No es correcto"}</p>
+      ${!result.ok && result.why ? `<div class="lx-feedback__chosen"><h3 class="lx-h4">Por qué tu opción no es correcta</h3><p>${renderInline(result.why)}</p></div>` : ""}
       <div class="lx-feedback__why"><h3 class="lx-h4">${result.ok ? "Por qué funciona" : "Cómo pensarlo"}</h3>${renderMarkdown(ex.explain)}</div>
       ${!result.ok && error ? `<h3 class="lx-h4">Error típico detectado</h3>${errorExplanation(error, { heading: "p" })}` : ""}
       ${!result.ok && retryNote ? '<p class="lx-note">Al final de la sesión volverás a intentarlo con un ejercicio parecido.</p>' : ""}

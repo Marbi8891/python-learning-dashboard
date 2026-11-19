@@ -22,4 +22,32 @@ async function openLesson(page, slug = "") {
   await page.locator(".lesson[data-slug]").first().waitFor({ state: "attached" });
 }
 
-module.exports = { test, expect: base.expect, uniqueEmail, openLesson };
+/* Portapapeles en los tres motores. Playwright no da los mismos permisos en todos (ver los mapas
+   de permisos de playwright-core): Chromium acepta «clipboard-read» y «clipboard-write», WebKit solo
+   «clipboard-read» (pedir «clipboard-write» lanza «Unknown permission») y Firefox ninguno de los dos.
+   Escribir no necesita permiso en ninguno si viene de un clic del usuario; leer sí. */
+const CLIPBOARD_PERMISSIONS = { chromium: ["clipboard-read", "clipboard-write"], webkit: ["clipboard-read"] };
+
+/**
+ * Prepara la página para comprobar lo que copia la web sin cambiar lo que hace:
+ * - envuelve navigator.clipboard.writeText para anotar cada texto que se copió BIEN (la llamada
+ *   real se hace igual; si el navegador la rechaza, no se anota y la web muestra su aviso);
+ * - da solo los permisos que admite el motor, para poder leer el portapapeles real.
+ * Devuelve { writes(), read() }: read() es null en los motores que no dejan leerlo (Firefox).
+ */
+async function watchClipboard(page, browserName) {
+  const permissions = CLIPBOARD_PERMISSIONS[browserName];
+  if (permissions) await page.context().grantPermissions(permissions);
+  await page.addInitScript(() => {
+    const clipboard = navigator.clipboard;
+    const writeText = clipboard.writeText.bind(clipboard);
+    window.__clipboardWrites = [];
+    clipboard.writeText = (text) => writeText(text).then(() => void window.__clipboardWrites.push(text));
+  });
+  return {
+    writes: () => page.evaluate(() => window.__clipboardWrites),
+    read: permissions ? () => page.evaluate(() => navigator.clipboard.readText()) : null,
+  };
+}
+
+module.exports = { test, expect: base.expect, uniqueEmail, openLesson, watchClipboard };

@@ -29,3 +29,25 @@ export function markInvalid(form, names, messageId) {
 
 /** Campos de un error de la API: los que trae un 422 de validación y los que añade quien llama. */
 export const errorFields = (error, extra = []) => [...(error?.fields ?? []), ...extra];
+
+const TYPED = "form[id] input:not([type=checkbox]):not([type=radio]):not([type=file]):not([type=hidden])[name], form[id] textarea[name]";
+
+/**
+ * Lo que el alumno está escribiendo en los formularios de `container`, para no perderlo cuando la
+ * vista se repinta entera en segundo plano (llega el progreso de la cuenta, cambia el perfil…).
+ * Sin esto, por ejemplo, la contraseña actual escrita en «Mi perfil» se borraba a mitad.
+ * Devuelve una función que lo vuelve a poner en los mismos campos del HTML nuevo.
+ * @param {ParentNode} container
+ * @returns {(next: ParentNode) => void}
+ */
+export function keepTyped(container) {
+  const typed = [...container.querySelectorAll(TYPED)]
+    .filter((field) => field.value !== field.defaultValue)
+    .map((field) => [field.form.id, field.name, field.value]);
+  return (next) => {
+    for (const [formId, name, value] of typed) {
+      const field = next.querySelector(`form[id="${CSS.escape(formId)}"] [name="${CSS.escape(name)}"]`);
+      if (field) field.value = value;
+    }
+  };
+}

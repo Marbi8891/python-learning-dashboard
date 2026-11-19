@@ -42,7 +42,10 @@ export function grade(exercise, answer) {
   switch (exercise.kind) {
     case "choice": {
       const ok = answer.choice === exercise.answer;
-      return { ok, error: ok ? null : (exercise.options[answer.choice]?.error ?? null) };
+      const chosen = exercise.options[answer.choice];
+      if (ok) return { ok, error: null };
+      // `why`: por qué es incorrecta la opción elegida (preguntas del banco de POO)
+      return { ok, error: chosen?.error ?? null, ...(chosen?.why ? { why: chosen.why } : {}) };
     }
     case "output": {
       const given = normalizeOutput(answer.text);

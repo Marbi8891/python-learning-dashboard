@@ -13,6 +13,13 @@
 @font-face { font-family: "Fraunces"; font-weight: 500; font-display: swap; src: url("../fonts/fraunces-latin-500-normal.woff2") format("woff2"); }
 @font-face { font-family: "Fraunces"; font-weight: 500; font-style: italic; font-display: swap; src: url("../fonts/fraunces-latin-500-italic.woff2") format("woff2"); }
 
+/* Respaldos con las medidas de Inter y Fraunces (MWG-10): mientras llegan las fuentes, el texto ocupa casi
+   lo mismo y no salta al cambiar. Calculados con fontTools sobre Arial/Liberation Sans y Times New Roman/
+   Liberation Serif (misma métrica): size-adjust = ancho medio de un texto en español; ascent y descent
+   = los de la fuente web divididos por size-adjust. */
+@font-face { font-family: "Inter Fallback"; src: local("Arial"), local("ArialMT"), local("Liberation Sans"); size-adjust: 106.32%; ascent-override: 91.12%; descent-override: 22.69%; line-gap-override: 0%; }
+@font-face { font-family: "Fraunces Fallback"; src: local("Times New Roman"), local("TimesNewRomanPSMT"), local("Liberation Serif"); size-adjust: 117.95%; ascent-override: 82.92%; descent-override: 21.62%; line-gap-override: 0%; }
+
 /* Los tokens de diseño (colores, tipografía, espaciado…) están en tokens.css */
 
 /* ---------- Reset mínimo ---------- */
@@ -183,6 +190,7 @@ button {
 :root[data-spacing="amplio"] p,
 :root[data-spacing="amplio"] li {
   margin-block-end: 0.9em;
+  line-height: 1.8; /* el rediseño fija 1,68 en los párrafos: sin esto la opción no los espacia */
 }
 
 :root[data-spacing="amplio"] :is(code, pre, kbd, samp, textarea) {
@@ -196,8 +204,15 @@ button {
   visibility: hidden;
 }
 
-/* Aviso único para navegadores que no están en español (i18n.js) */
+/* Aviso único para navegadores que no están en español (i18n.js). Aparece después de cargar el JS:
+   flota abajo en vez de empujar la página hacia abajo (MWG-04, CLS). Va por encima del botón del
+   asistente y por debajo del menú lateral del móvil. */
 .lang-banner {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 36;
+  box-shadow: 0 -8px 24px -12px var(--shadow);
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -205,7 +220,7 @@ button {
   gap: var(--space-2) var(--space-4);
   padding: var(--space-3) var(--space-4);
   background: var(--color-surface-2);
-  border-bottom: 1px solid var(--color-border-control);
+  border-top: 1px solid var(--color-border-control);
   color: var(--color-text);
 }
 
@@ -218,3 +233,7 @@ button {
   display: flex;
   gap: var(--space-2);
 }
+
+/* Sin estilos en línea (RT-004: la CSP no permite style="…") */
+.noscript { padding: 24px; font-family: sans-serif; }
+.fill-primary-strong { fill: var(--color-primary-strong); }

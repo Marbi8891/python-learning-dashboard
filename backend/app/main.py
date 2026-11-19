@@ -10,10 +10,13 @@ Documentación interactiva: http://127.0.0.1:8000/docs
 import logging
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, Request
+from fastapi import Depends, FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy.orm import Session
 
+from app import readiness
 from app.config import get_settings
+from app.database import get_db
 from app.local_site import mount_frontend
 from app.mailer import email_enabled
 from app.routers import (
@@ -25,6 +28,7 @@ from app.routers import (
     lessons,
     pcap,
     progress,
+    verified,
 )
 from app.security import get_jwt_secret
 from app.security_events import Event, record
@@ -169,6 +173,7 @@ for router in (
     pcap.router,
     course_state.router,
     dashboard.router,
+    verified.router,
 ):
     app.include_router(router, prefix=API_V1_PREFIX)
 
@@ -183,6 +188,16 @@ def health() -> dict[str, str | bool]:
         "email": email_enabled(),
         "google": bool(get_settings().google_client_id),
     }
+
+
+@app.get("/api/v1/ready", tags=["sistema"])
+def ready(response: Response, db: Session = Depends(get_db)) -> dict[str, str | int]:
+    """Lista para atender: base de datos y migraciones. Es lo que mira el monitor externo."""
+    ok, body = readiness.check(db)
+    response.headers["Cache-Control"] = "no-store"
+    if not ok:
+        response.status_code = 503
+    return body
 
 
 if get_settings().serve_frontend:

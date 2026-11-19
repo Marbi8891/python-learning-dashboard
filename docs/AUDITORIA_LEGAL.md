@@ -149,7 +149,7 @@ el responsable real y su lugar de residencia son **pendiente de información** (
 | T7 | Actividad de la cuenta: tipo, fecha y dispositivo aproximado («Windows · Firefox»), sin IP | Neon, `account_events` (20 últimos) | Que el usuario vea accesos sospechosos | Interés legítimo en la seguridad (6.1.f) | 20 últimos eventos | `backend/app/activity.py:14`, `models.py:156` |
 | T8 | Hash del enlace de recuperación | Neon, `password_reset_tokens` | Restablecer la contraseña | 6.1.b | Caduca a los 30 min; la fila se borra al pedir otro o al borrar la cuenta | `models.py:107`, `auth.py:218-241` |
 | T9 | Email del destinatario y cuerpo del mensaje de recuperación | Proveedor de email (Brevo o SMTP) | Enviar el enlace | 6.1.b | **Desconocida** (depende del proveedor) | `backend/app/mailer.py:60-80` |
-| T10 | IP en memoria | Memoria del proceso (no en disco) | Limitar intentos | 6.1.f | Ventana de 1 a 15 min; se pierde al reiniciar | `backend/app/rate_limit.py` |
+| T10 | Seudónimo HMAC de la IP y del email (desde #110) | Neon, `rate_limits` (y memoria del proceso si la base de datos falla) | Limitar intentos | 6.1.f | Como mucho 2 ventanas (2 a 30 min) | `backend/app/rate_limit.py` |
 | T11 | Registro de seguridad: evento, id interno, seudónimo HMAC de IP y email, ruta | Logs de Render | Detectar ataques | 6.1.f. Los seudónimos siguen siendo datos personales (RGPD cdo. 26) | **Desconocida** (la de Render) | `backend/app/security_events.py:80-85` |
 | T12 | IP y datos técnicos de cada petición | Logs de Render y de GitHub Pages | Funcionamiento del servicio | 6.1.f | **Desconocida** | Proveedores |
 | T13 | IP al descargar Pyodide | jsDelivr | Descargar Python | 6.1.f / servicio pedido | De jsDelivr | `pyodide-worker.js`, `privacidad.html` §4 |
@@ -392,7 +392,7 @@ sin una auditoría manual que lo respalde: conviene decir «objetivo WCAG 2.1 AA
 | Contraseñas | Argon2id, rehash automático, lista de contraseñas comunes | `backend/app/security.py`, `password_policy.py` |
 | Sesión | Cookie `__Host-`, `HttpOnly`, `Secure`, 30 min; `token_version` revoca todas | `session_cookie.py`, `config.py:28` |
 | CSRF | Cabecera `X-PLD-Session` obligatoria y CORS limitado a `marbi8891.github.io` | `main.py`, `render.yaml:21` |
-| Límite de intentos | Por IP (con `TRUSTED_PROXY_HOPS=1`), por cuenta y por email; en memoria, una sola instancia | `rate_limit.py`, `backend/Dockerfile:29` |
+| Límite de intentos | Por IP (con `TRUSTED_PROXY_HOPS=1`), por cuenta y por email; compartidos en PostgreSQL (#110) | `rate_limit.py`, `backend/Dockerfile:29` |
 | Cabeceras de la API | `nosniff`, `DENY`, HSTS, CSP `default-src 'none'`, `no-store` | `main.py` |
 | CSP de la web | En `<meta>` (GitHub Pages no permite cabeceras); `style-src 'unsafe-inline'`; la publicada quita los orígenes de desarrollo | `index.html:8`, `scripts/security/production_csp.py` |
 | Pyodide | Red cortada en el worker; corte a los 10 s; **sin SRI** | `pyodide-worker.js` |

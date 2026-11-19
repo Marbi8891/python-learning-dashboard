@@ -4,6 +4,7 @@ from datetime import datetime
 
 from sqlalchemy import (
     JSON,
+    BigInteger,
     DateTime,
     ForeignKey,
     Index,
@@ -172,3 +173,62 @@ class AccountEvent(Base):
     kind: Mapped[str] = mapped_column(String(30))
     device: Mapped[str] = mapped_column(String(60), default="")
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class RateLimitWindow(Base):
+    """Contador de intentos compartido por todas las instancias de la API (#110).
+
+    Una fila por límite (`scope`), clave y ventana fija. La clave es un HMAC con el secreto del
+    servidor: nunca se guarda el email ni la IP en claro. Las ventanas viejas se borran solas."""
+
+    __tablename__ = "rate_limits"
+
+    scope: Mapped[str] = mapped_column(String(20), primary_key=True)
+    key: Mapped[str] = mapped_column(String(64), primary_key=True)
+    window_start: Mapped[int] = mapped_column(BigInteger, primary_key=True)  # segundos Unix
+    count: Mapped[int] = mapped_column(Integer)
+
+
+class Entitlement(Base):
+    """Derecho de acceso concedido a un usuario por una fuente comercial o administrativa."""
+
+    __tablename__ = "entitlements"
+    __table_args__ = (
+        UniqueConstraint(
+            "user_id", "feature_key", "source", "source_ref", name="uq_entitlement_source"
+        ),
+        Index("ix_entitlements_user_feature", "user_id", "feature_key"),
+    )
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    feature_key: Mapped[str] = mapped_column(String(80))
+    # Valores previstos: manual, stripe, academy, promotion. No se confía en ellos desde el cliente.
+    source: Mapped[str] = mapped_column(String(20))
+    source_ref: Mapped[str] = mapped_column(String(160), default="", server_default="")
+    starts_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    ends_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class VerifiedExam(Base):
+    """Simulacro del PCAP elegido, cronometrado y corregido por el servidor (#109).
+
+    El resto del progreso lo calcula el navegador y es orientativo. Este sí se puede comprobar: las
+    preguntas las elige el servidor, la hora de inicio es la suya y la nota la pone él al corregir.
+    Estados: `open` (en curso), `finished` (corregido), `expired` (entregado fuera de tiempo) y
+    `abandoned` (se empezó otro sin entregarlo)."""
+
+    __tablename__ = "verified_exams"
+    __table_args__ = (Index("ix_verified_exams_user_started", "user_id", "started_at"),)
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
+    exam_code: Mapped[str] = mapped_column(String(20))
+    question_ids: Mapped[list] = mapped_column(JSON)
+    status: Mapped[str] = mapped_column(String(10), default="open", server_default="open")
+    answers: Mapped[dict | None] = mapped_column(JSON)
+    correct: Mapped[int | None] = mapped_column(Integer)
+    score: Mapped[int | None] = mapped_column(Integer)
+    started_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    finished_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))

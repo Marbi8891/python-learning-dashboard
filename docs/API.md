@@ -17,12 +17,14 @@ Interactive OpenAPI documentation is available at /docs when ENABLE_DOCS=true.
 | Authentication | /api/v1/auth/register, /api/v1/auth/login, /api/v1/auth/google, /api/v1/auth/logout, /api/v1/auth/logout-all |
 | Password recovery ([auth.md](auth.md)) | /api/v1/auth/password-reset/request, /api/v1/auth/password-reset/confirm |
 | Account | /api/v1/users/me, /api/v1/users/me/activity, /api/v1/users/me/export, POST /api/v1/users/me/delete (exactly one of `password` or `google_credential`, see [auth.md](auth.md)) |
-| Health | GET /api/v1/health → `status`, `email` (reset emails can be sent), `google` (`GOOGLE_CLIENT_ID` is set) |
+| Health | GET /api/v1/health → `status`, `email` (reset emails can be sent), `google` (`GOOGLE_CLIENT_ID` is set). Does not touch the database |
+| Ready | GET /api/v1/ready → 200 `{status, database, migrations, database_ms}` when the database answers and the schema is at the latest Alembic migration; 503 otherwise, without internal details (docs/OPERACION.md) |
 | Course content | /api/v1/modules, /api/v1/lessons/{slug} |
 | Progress | /api/v1/progress, /api/v1/progress/{slug} |
 | Exercise attempts | /api/v1/lessons/{slug}/attempts |
 | PCAP state | /api/v1/pcap-state |
 | DAW course state | /api/v1/course-state/{course} (`sql`, `js`, `java`, `entornos`, `marcas`, `programacion`, `learn`, `game`, `planner`) |
+| Verified milestones ([HITOS_VERIFICADOS.md](HITOS_VERIFICADOS.md)) | POST /api/v1/verified/pcap-exams (server picks 40 questions, 201), POST /api/v1/verified/pcap-exams/{id}/answers (server grades; same answers again → same result, other answers or late → 409, impossible answers → 422, another user's exam → 404), GET /api/v1/verified |
 | Student dashboard | GET /api/v1/dashboard?utc_offset_minutes=, GET /api/v1/dashboard/activity?limit=&offset= |
 
 ### Progress documents and versions

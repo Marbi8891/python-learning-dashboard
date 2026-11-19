@@ -1,0 +1,5 @@
+2026-11-05T06:25:29.0000000Z ##[group]Run npm ci
+2026-11-05T06:25:59.0000000Z npm error code ECONNRESET
+2026-11-05T06:25:59.0000000Z npm error network aborted
+2026-11-05T06:25:59.0000000Z npm error network This is a problem related to network connectivity.
+2026-11-05T06:25:59.1000000Z ##[error]Process completed with exit code 1.

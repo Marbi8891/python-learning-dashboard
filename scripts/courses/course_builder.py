@@ -9,6 +9,10 @@ Salida, con el mismo formato que `frontend/data/pcap.json` y `lessons.json` para
 reutilice su lector: frontend/data/courses/<id>/bank.json y .../lessons.json. La web los sirve
 tal cual.
 
+Los ejercicios de fórmulas de Excel (`formula` y `formula-result`) se comprueban con el motor de
+fórmulas de la web, en Node (`scripts/courses/excel/eval.mjs`): la solución tiene que pasar sus
+comprobaciones y cada error frecuente tiene que fallar alguna.
+
 Uso:  python scripts/courses/<curso>.py           (genera)
       python scripts/courses/<curso>.py --check   (CI: falla si los JSON no están al día)
 """
@@ -17,13 +21,43 @@ from __future__ import annotations
 
 import json
 import random
+import shutil
+import subprocess
 import sys
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from curriculum_map import Mapping, check, for_lesson, ra_of
+
 ROOT = Path(__file__).resolve().parents[2]
 ASSETS = ROOT / "frontend" / "data" / "courses"
+CURRICULUM = ROOT / "frontend" / "data" / "curriculum" / "daw-cyl.json"
+FROM_QUESTION = "Propuesta para esta pregunta"
+EXCEL_EVAL = ROOT / "scripts" / "courses" / "excel" / "eval.mjs"
+FORMULA_KINDS = ("formula", "formula-result")
+
+
+def known_criteria() -> set[str]:
+    """Ids de todos los CE del currículo oficial (`0484-RA3-b`)."""
+    catalog = json.loads(CURRICULUM.read_text(encoding="utf-8"))
+    return {
+        c["id"]
+        for m in catalog["modules"]
+        for ra in m.get("learningOutcomes", [])
+        for c in ra["criteria"]
+    }
+
+
+def lesson_curriculum(mapping: Mapping) -> dict:
+    """Lo que dice la lección de su correspondencia con el currículo (#106)."""
+    return {
+        "ra": sorted({ra_of(c) for c in mapping.ce}),
+        "ce": list(mapping.ce),
+        "status": mapping.status,
+        "source": mapping.source,
+        "reviewed": mapping.reviewed,
+    }
 
 
 @dataclass
@@ -52,6 +86,11 @@ class Q:
     target: str | None = None  # bug: lo que debería mostrar el programa corregido
     # Módulo oficial que trabaja (código del currículo). Vacío = el módulo del curso
     module: str | None = None
+    # CE propios de la pregunta (`0484-RA3-b`). Vacío = los de su lección (curriculum_map.py)
+    ce: list[str] = field(default_factory=list)
+    # Ejercicios de Excel (kind «formula» o «formula-result»): cuadrícula, fórmula, comprobaciones…
+    # (docs/excel-academy/CURRICULUM_M1_M2.md §4). Los comprueba el motor de fórmulas con Node.
+    excel: dict = field(default_factory=dict)
 
 
 @dataclass
@@ -77,6 +116,9 @@ class Lesson:
     )  # (error frecuente, cómo evitarlo)
     summary: list[str] = field(default_factory=list)  # ideas clave
     solution: tuple[str, str] | None = None  # solución del ejercicio: (código, explicación)
+    # Unidades de Excel profesional: horas, nivel, ejemplos con cuadrícula, criterios… Los ejemplos
+    # (`examples`) se comprueban con el motor de fórmulas como ejercicios «formula-result».
+    excel: dict = field(default_factory=dict)
 
 
 @dataclass
@@ -176,6 +218,36 @@ def practice(q: Q, runner: Callable[[str], str]) -> dict:
     raise ValueError(f"{q.id}: tipo desconocido {q.kind}")
 
 
+def check_formulas(questions: list[dict]) -> str:
+    """Comprueba con el motor de fórmulas (Node) los ejercicios de Excel.
+
+    Devuelve la versión del motor."""
+    node = shutil.which("node")
+    if node is None:
+        raise AssertionError("Hace falta Node 22 para comprobar los ejercicios de fórmulas")
+    result = subprocess.run(
+        [node, str(EXCEL_EVAL)],
+        input=json.dumps(questions, ensure_ascii=False),
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        check=False,
+    )
+    if result.returncode != 0:
+        raise AssertionError(f"El motor de fórmulas falló:\n{result.stderr}")
+    report = json.loads(result.stdout)
+    problems = [p for q in questions for p in report["problems"].get(q["id"], ["sin comprobar"])]
+    if problems:
+        raise AssertionError("Ejercicios de fórmulas incorrectos:\n" + "\n".join(problems))
+    return report["engine"]
+
+
+def formula_question(q: Q) -> dict:
+    """Ejercicio de Excel tal como lo comprueba el motor: id, tipo, enunciado y sus datos."""
+    assert q.kind in FORMULA_KINDS and q.excel, f"{q.id}: faltan los datos del ejercicio"
+    return {"id": q.id, "kind": q.kind, "q": q.q, **q.excel}
+
+
 def unit_extras(lesson: Lesson) -> dict:
     """Campos opcionales de una unidad completa, solo si el curso los tiene."""
     extras: dict = {}
@@ -189,7 +261,18 @@ def unit_extras(lesson: Lesson) -> dict:
         solution, explain = lesson.solution
         assert solution.strip() and explain.strip(), f"{lesson.slug}: solución vacía"
         extras["solution"] = {"code": solution.strip() + "\n", "explain": explain.strip()}
+    if lesson.excel:
+        extras["excel"] = lesson.excel
     return extras
+
+
+def example_questions(lesson: Lesson) -> list[dict]:
+    """Ejemplos con fórmula de una unidad de Excel, para que el motor compruebe su resultado."""
+    return [
+        {"kind": "formula-result", "q": example["title"], **example}
+        for example in lesson.excel.get("examples", [])
+        if "formula" in example
+    ]
 
 
 def build(
@@ -197,15 +280,22 @@ def build(
     blocks: list[Block],
     runner: Callable[[str], str],
     examples: Callable[[str], None],
-    module: str,
+    module: str | None,
 ) -> dict[str, str]:
+    """`module` None: curso sin módulo oficial de DAW (familia academia), sin mapa del currículo."""
     assert sum(b.weight for b in blocks) == 100, "los pesos de los bloques deben sumar 100"
     ids: set[str] = set()
+    known = known_criteria() if module is not None else set()
     bank_questions, modules = [], []
+    formulas: list[dict] = []
     for block in blocks:
         lessons = []
         for lesson in block.lessons:
+            mapping = for_lesson(lesson.slug)
+            if module is not None:
+                check(mapping, module, known, lesson.slug)
             examples(lesson.example)  # el ejemplo de la teoría también tiene que funcionar
+            formulas.extend(example_questions(lesson))
             quiz = []
             for q in lesson.quiz:
                 options, answer = resolve(q, runner)
@@ -221,6 +311,33 @@ def build(
             for q in lesson.questions:
                 assert q.id not in ids, f"id repetido: {q.id}"
                 ids.add(q.id)
+                if module is None:
+                    official = {}
+                else:
+                    own = Mapping(tuple(q.ce), FROM_QUESTION) if q.ce else mapping
+                    check(own, q.module or module, known, q.id)
+                    # Solo los CE y el estado: el resto (fuente, revisión) está en la lección
+                    official = {
+                        "module": q.module or module,
+                        "curriculum": {"ce": list(own.ce), "status": own.status},
+                    }
+                if q.kind in FORMULA_KINDS:
+                    formulas.append(formula_question(q))
+                    bank_questions.append(
+                        {
+                            "id": q.id,
+                            "block": block.slug,
+                            "q": {"es": q.q, "en": q.q},
+                            "kind": q.kind,
+                            "excel": q.excel,
+                            "options": [],
+                            "answer": [],
+                            "explain": {"es": q.explain, "en": q.explain},
+                            "lesson": lesson.slug,
+                            **official,
+                        }
+                    )
+                    continue
                 if q.kind != "choice":
                     entry = practice(q, runner)
                     extra = entry.pop("extra")
@@ -232,7 +349,7 @@ def build(
                             **entry,
                             "explain": {"es": q.explain + extra, "en": q.explain + extra},
                             "lesson": lesson.slug,
-                            "module": q.module or module,
+                            **official,
                         }
                     )
                     continue
@@ -250,7 +367,7 @@ def build(
                         "answer": [answer],
                         "explain": {"es": q.explain, "en": q.explain},
                         "lesson": lesson.slug,
-                        "module": q.module or module,
+                        **official,
                     }
                 )
             title, stars, text, starter, hint = lesson.challenge
@@ -275,6 +392,7 @@ def build(
                         "faq": [{"q": a, "a": b} for a, b in lesson.faq],
                     },
                     "sources": [{"title": t, "url": u} for t, u in lesson.sources],
+                    **({"curriculum": lesson_curriculum(mapping)} if module is not None else {}),
                     **unit_extras(lesson),
                 }
             )
@@ -282,6 +400,7 @@ def build(
             {"slug": block.slug, "title": block.title, "summary": block.summary, "lessons": lessons}
         )
 
+    engine = check_formulas(formulas) if formulas else None
     counts = {b.slug: sum(1 for q in bank_questions if q["block"] == b.slug) for b in blocks}
     bank = {
         "exam": {
@@ -301,6 +420,8 @@ def build(
         },
         "questions": bank_questions,
         "cards": [],
+        # Versión del motor con la que se comprobaron los ejercicios de fórmulas
+        **({"engine": engine} if engine else {}),
     }
     return {"bank.json": _dump(bank), "lessons.json": _dump({"modules": modules})}
 
@@ -315,11 +436,14 @@ def main(
     runner: Callable[[str], str],
     examples: Callable[[str], None],
     *,
-    module: str,
+    module: str | None,
+    assets: Path = ASSETS,
 ) -> None:
-    """`module`: código del módulo oficial de DAW que trabaja el curso (Orden EDU/1311/2024)."""
+    """`module`: código del módulo oficial de DAW que trabaja el curso (Orden EDU/1311/2024).
+    None en los cursos de la familia academia, que no siguen ningún módulo oficial.
+    `assets`: carpeta de los JSON (los de la academia van en frontend/data/academia)."""
     files = build(course_id, blocks, runner, examples, module)
-    folder = ASSETS / course_id
+    folder = assets / course_id
     if "--check" in sys.argv:
         stale = [
             name

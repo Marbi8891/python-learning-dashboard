@@ -32,7 +32,7 @@ test("en inglés no hay infracciones WCAG", async ({ page }) => {
   await openLesson(page, "funciones");
   await expect(page.locator("html")).toHaveAttribute("lang", "en");
   await expect(page.locator("html")).not.toHaveAttribute("data-i18n-pending", "");
-  const results = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"]).analyze();
+  const results = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]).analyze();
   const summary = results.violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target).join(", ")}`);
   expect(summary, summary.join("\n")).toEqual([]);
 });
@@ -50,6 +50,10 @@ test.describe("navegador en otro idioma", () => {
     await openLesson(page, "variables");
     const banner = page.getByRole("complementary", { name: "Language" });
     await expect(banner).toBeVisible();
+    // El aviso flota abajo: no empuja la página (MWG-04)
+    await expect(page.locator(".app")).toHaveJSProperty("offsetTop", 0);
+    const box = await banner.boundingBox();
+    expect(Math.round(box.y + box.height)).toBe(page.viewportSize().height);
     await banner.getByRole("button", { name: "Seguir en español" }).click();
     await expect(banner).toHaveCount(0);
     await page.reload();

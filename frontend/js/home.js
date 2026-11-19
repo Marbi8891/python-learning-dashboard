@@ -59,7 +59,7 @@ function renderProgress(done, total) {
         <span class="course-progress__value">${percent} %</span>
       </div>
       <div class="meter" role="progressbar" aria-label="Progreso del curso" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${percent}">
-        <span class="meter__fill" style="--value: ${percent}%"></span>
+        <span class="meter__fill" data-meter="${percent}"></span>
       </div>
       <ul class="course-progress__facts">
         <li><strong>${done}/${total}</strong> lecciones</li>

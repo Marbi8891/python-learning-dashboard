@@ -53,47 +53,209 @@
       {
        "id": "0373-RA1-a",
        "letter": "a",
-       "text": "Se han identificado las características generales de los lenguajes de marcas."
+       "text": "Se han identificado las características generales de los lenguajes de marcas.",
+       "platformQuestionIds": {
+        "marcas": [
+         "mar-01",
+         "mar-02",
+         "mar-03",
+         "mar-04",
+         "mar-05",
+         "mar-06",
+         "mar-07",
+         "mar-08",
+         "mar-09",
+         "mar-10",
+         "mar-11",
+         "mar-12",
+         "mar-13"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0373-RA1-b",
        "letter": "b",
-       "text": "Se han reconocido las ventajas que proporcionan en el tratamiento de la información."
+       "text": "Se han reconocido las ventajas que proporcionan en el tratamiento de la información.",
+       "platformQuestionIds": {
+        "marcas": [
+         "mar-01",
+         "mar-02",
+         "mar-03",
+         "mar-04",
+         "mar-05",
+         "mar-06",
+         "mar-07",
+         "mar-08",
+         "mar-09",
+         "mar-10",
+         "mar-11",
+         "mar-12",
+         "mar-13"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0373-RA1-c",
        "letter": "c",
-       "text": "Se han clasificado los lenguajes de marcas e identificado los más relevantes."
+       "text": "Se han clasificado los lenguajes de marcas e identificado los más relevantes.",
+       "platformQuestionIds": {
+        "marcas": [
+         "mar-01",
+         "mar-02",
+         "mar-03",
+         "mar-04",
+         "mar-05",
+         "mar-06",
+         "mar-07",
+         "mar-08",
+         "mar-09",
+         "mar-10",
+         "mar-11",
+         "mar-12",
+         "mar-13"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0373-RA1-d",
        "letter": "d",
-       "text": "Se han diferenciado sus ámbitos de aplicación."
+       "text": "Se han diferenciado sus ámbitos de aplicación.",
+       "platformQuestionIds": {
+        "marcas": [
+         "mar-01",
+         "mar-02",
+         "mar-03",
+         "mar-04",
+         "mar-05",
+         "mar-06",
+         "mar-07",
+         "mar-08",
+         "mar-09",
+         "mar-10",
+         "mar-11",
+         "mar-12",
+         "mar-13"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0373-RA1-e",
        "letter": "e",
-       "text": "Se han reconocido la necesidad y los ámbitos específicos de aplicación de un lenguaje de marcas de propósito general."
+       "text": "Se han reconocido la necesidad y los ámbitos específicos de aplicación de un lenguaje de marcas de propósito general.",
+       "platformQuestionIds": {
+        "marcas": [
+         "mar-01",
+         "mar-02",
+         "mar-03",
+         "mar-04",
+         "mar-05",
+         "mar-06",
+         "mar-07",
+         "mar-08",
+         "mar-09",
+         "mar-10",
+         "mar-11",
+         "mar-12",
+         "mar-13"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0373-RA1-f",
        "letter": "f",
-       "text": "Se han analizado las características propias de diferentes lenguajes de marcas."
+       "text": "Se han analizado las características propias de diferentes lenguajes de marcas.",
+       "platformQuestionIds": {
+        "marcas": [
+         "mar-01",
+         "mar-02",
+         "mar-03",
+         "mar-04",
+         "mar-05",
+         "mar-06",
+         "mar-07",
+         "mar-08",
+         "mar-09",
+         "mar-10",
+         "mar-11",
+         "mar-12",
+         "mar-13"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0373-RA1-g",
        "letter": "g",
-       "text": "Se han identificado la estructura de un documento y sus reglas sintácticas."
+       "text": "Se han identificado la estructura de un documento y sus reglas sintácticas.",
+       "platformQuestionIds": {
+        "marcas": [
+         "mar-01",
+         "mar-02",
+         "mar-03",
+         "mar-04",
+         "mar-05",
+         "mar-06",
+         "mar-07",
+         "mar-08",
+         "mar-09",
+         "mar-10",
+         "mar-11",
+         "mar-12",
+         "mar-13"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0373-RA1-h",
        "letter": "h",
-       "text": "Se han contrastado la necesidad de crear documentos bien formados y la influencia en su procesamiento."
+       "text": "Se han contrastado la necesidad de crear documentos bien formados y la influencia en su procesamiento.",
+       "platformQuestionIds": {
+        "marcas": [
+         "mar-01",
+         "mar-02",
+         "mar-03",
+         "mar-04",
+         "mar-05",
+         "mar-06",
+         "mar-07",
+         "mar-08",
+         "mar-09",
+         "mar-10",
+         "mar-11",
+         "mar-12",
+         "mar-13"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0373-RA1-i",
        "letter": "i",
-       "text": "Se han identificado las ventajas que aportan los espacios de nombres."
+       "text": "Se han identificado las ventajas que aportan los espacios de nombres.",
+       "platformQuestionIds": {
+        "marcas": [
+         "mar-01",
+         "mar-02",
+         "mar-03",
+         "mar-04",
+         "mar-05",
+         "mar-06",
+         "mar-07",
+         "mar-08",
+         "mar-09",
+         "mar-10",
+         "mar-11",
+         "mar-12",
+         "mar-13"
+        ]
+       },
+       "mapping": "proposed"
       }
      ]
     },
@@ -105,52 +267,216 @@
       {
        "id": "0373-RA2-a",
        "letter": "a",
-       "text": "Se han identificado y clasificado los lenguajes de marcas relacionados con la web y sus diferentes versiones y estándares."
+       "text": "Se han identificado y clasificado los lenguajes de marcas relacionados con la web y sus diferentes versiones y estándares.",
+       "platformQuestionIds": {
+        "marcas": [
+         "mar-14",
+         "mar-15",
+         "mar-16",
+         "mar-17",
+         "mar-18",
+         "mar-19",
+         "mar-20",
+         "mar-21",
+         "mar-22",
+         "mar-23",
+         "mar-24",
+         "mar-25"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0373-RA2-b",
        "letter": "b",
-       "text": "Se ha analizado la estructura de un documento HTML e identificado las secciones que lo componen."
+       "text": "Se ha analizado la estructura de un documento HTML e identificado las secciones que lo componen.",
+       "platformQuestionIds": {
+        "marcas": [
+         "mar-14",
+         "mar-15",
+         "mar-16",
+         "mar-17",
+         "mar-18",
+         "mar-19",
+         "mar-20",
+         "mar-21",
+         "mar-22",
+         "mar-23",
+         "mar-24",
+         "mar-25"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0373-RA2-c",
        "letter": "c",
-       "text": "Se han reconocido la funcionalidad de las principales etiquetas y los atributos del lenguaje HTML."
+       "text": "Se han reconocido la funcionalidad de las principales etiquetas y los atributos del lenguaje HTML.",
+       "platformQuestionIds": {
+        "marcas": [
+         "mar-14",
+         "mar-15",
+         "mar-16",
+         "mar-17",
+         "mar-18",
+         "mar-19",
+         "mar-20",
+         "mar-21",
+         "mar-22",
+         "mar-23",
+         "mar-24",
+         "mar-25"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0373-RA2-d",
        "letter": "d",
-       "text": "Se han establecido las semejanzas y diferencias entre las diferentes versiones de HTML."
+       "text": "Se han establecido las semejanzas y diferencias entre las diferentes versiones de HTML.",
+       "platformQuestionIds": {
+        "marcas": [
+         "mar-14",
+         "mar-15",
+         "mar-16",
+         "mar-17",
+         "mar-18",
+         "mar-19",
+         "mar-20",
+         "mar-21",
+         "mar-22",
+         "mar-23",
+         "mar-24",
+         "mar-25"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0373-RA2-e",
        "letter": "e",
-       "text": "Se han utilizado herramientas en la creación de documentos web."
+       "text": "Se han utilizado herramientas en la creación de documentos web.",
+       "platformQuestionIds": {
+        "marcas": [
+         "mar-14",
+         "mar-15",
+         "mar-16",
+         "mar-17",
+         "mar-18",
+         "mar-19",
+         "mar-20",
+         "mar-21",
+         "mar-22",
+         "mar-23",
+         "mar-24",
+         "mar-25"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0373-RA2-f",
        "letter": "f",
-       "text": "Se han identificado las ventajas que aporta la utilización de hojas de estilo."
+       "text": "Se han identificado las ventajas que aporta la utilización de hojas de estilo.",
+       "platformQuestionIds": {
+        "marcas": [
+         "mar-14",
+         "mar-15",
+         "mar-16",
+         "mar-17",
+         "mar-18",
+         "mar-19",
+         "mar-20",
+         "mar-21",
+         "mar-22",
+         "mar-23",
+         "mar-24",
+         "mar-25"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0373-RA2-g",
        "letter": "g",
-       "text": "Se han aplicado hojas de estilo."
+       "text": "Se han aplicado hojas de estilo.",
+       "platformQuestionIds": {
+        "marcas": [
+         "mar-14",
+         "mar-15",
+         "mar-16",
+         "mar-17",
+         "mar-18",
+         "mar-19",
+         "mar-20",
+         "mar-21",
+         "mar-22",
+         "mar-23",
+         "mar-24",
+         "mar-25"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0373-RA2-h",
        "letter": "h",
-       "text": "Se han validado documentos HTML y CSS."
+       "text": "Se han validado documentos HTML y CSS.",
+       "platformQuestionIds": {
+        "marcas": [
+         "mar-14",
+         "mar-15",
+         "mar-16",
+         "mar-17",
+         "mar-18",
+         "mar-19",
+         "mar-20",
+         "mar-21",
+         "mar-22",
+         "mar-23",
+         "mar-24",
+         "mar-25"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0373-RA2-i",
        "letter": "i",
-       "text": "Se han identificado las tecnologías en que se basa la sindicación de contenidos."
+       "text": "Se han identificado las tecnologías en que se basa la sindicación de contenidos.",
+       "platformQuestionIds": {
+        "marcas": [
+         "mar-58",
+         "mar-59",
+         "mar-60",
+         "mar-61",
+         "mar-62",
+         "mar-63",
+         "mar-64",
+         "mar-65",
+         "mar-66"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0373-RA2-j",
        "letter": "j",
-       "text": "Se han reconocido los ámbitos de aplicación de la sindicación de contenidos."
+       "text": "Se han reconocido los ámbitos de aplicación de la sindicación de contenidos.",
+       "platformQuestionIds": {
+        "marcas": [
+         "mar-58",
+         "mar-59",
+         "mar-60",
+         "mar-61",
+         "mar-62",
+         "mar-63",
+         "mar-64",
+         "mar-65",
+         "mar-66"
+        ]
+       },
+       "mapping": "proposed"
       }
      ]
     },
@@ -199,37 +525,142 @@
       {
        "id": "0373-RA4-a",
        "letter": "a",
-       "text": "Se ha establecido la necesidad de describir la información transmitida en los documentos y sus reglas."
+       "text": "Se ha establecido la necesidad de describir la información transmitida en los documentos y sus reglas.",
+       "platformQuestionIds": {
+        "marcas": [
+         "mar-26",
+         "mar-27",
+         "mar-28",
+         "mar-29",
+         "mar-30",
+         "mar-31",
+         "mar-32",
+         "mar-33",
+         "mar-34",
+         "mar-35"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0373-RA4-b",
        "letter": "b",
-       "text": "Se han identificado las tecnologías relacionadas con la definición de documentos."
+       "text": "Se han identificado las tecnologías relacionadas con la definición de documentos.",
+       "platformQuestionIds": {
+        "marcas": [
+         "mar-26",
+         "mar-27",
+         "mar-28",
+         "mar-29",
+         "mar-30",
+         "mar-31",
+         "mar-32",
+         "mar-33",
+         "mar-34",
+         "mar-35"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0373-RA4-c",
        "letter": "c",
-       "text": "Se ha analizado la estructura y sintaxis específica utilizada en la descripción."
+       "text": "Se ha analizado la estructura y sintaxis específica utilizada en la descripción.",
+       "platformQuestionIds": {
+        "marcas": [
+         "mar-26",
+         "mar-27",
+         "mar-28",
+         "mar-29",
+         "mar-30",
+         "mar-31",
+         "mar-32",
+         "mar-33",
+         "mar-34",
+         "mar-35"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0373-RA4-d",
        "letter": "d",
-       "text": "Se han creado descripciones de documentos."
+       "text": "Se han creado descripciones de documentos.",
+       "platformQuestionIds": {
+        "marcas": [
+         "mar-26",
+         "mar-27",
+         "mar-28",
+         "mar-29",
+         "mar-30",
+         "mar-31",
+         "mar-32",
+         "mar-33",
+         "mar-34",
+         "mar-35"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0373-RA4-e",
        "letter": "e",
-       "text": "Se han utilizado descripciones en la elaboración y validación de documentos."
+       "text": "Se han utilizado descripciones en la elaboración y validación de documentos.",
+       "platformQuestionIds": {
+        "marcas": [
+         "mar-26",
+         "mar-27",
+         "mar-28",
+         "mar-29",
+         "mar-30",
+         "mar-31",
+         "mar-32",
+         "mar-33",
+         "mar-34",
+         "mar-35"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0373-RA4-f",
        "letter": "f",
-       "text": "Se han asociado las descripciones con los documentos."
+       "text": "Se han asociado las descripciones con los documentos.",
+       "platformQuestionIds": {
+        "marcas": [
+         "mar-26",
+         "mar-27",
+         "mar-28",
+         "mar-29",
+         "mar-30",
+         "mar-31",
+         "mar-32",
+         "mar-33",
+         "mar-34",
+         "mar-35"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0373-RA4-g",
        "letter": "g",
-       "text": "Se han utilizado herramientas específicas."
+       "text": "Se han utilizado herramientas específicas.",
+       "platformQuestionIds": {
+        "marcas": [
+         "mar-26",
+         "mar-27",
+         "mar-28",
+         "mar-29",
+         "mar-30",
+         "mar-31",
+         "mar-32",
+         "mar-33",
+         "mar-34",
+         "mar-35"
+        ]
+       },
+       "mapping": "proposed"
       }
      ]
     },
@@ -251,27 +682,118 @@
       {
        "id": "0373-RA5-c",
        "letter": "c",
-       "text": "Se han analizado las tecnologías implicadas y su modo de funcionamiento."
+       "text": "Se han analizado las tecnologías implicadas y su modo de funcionamiento.",
+       "platformQuestionIds": {
+        "marcas": [
+         "mar-36",
+         "mar-37",
+         "mar-38",
+         "mar-39",
+         "mar-40",
+         "mar-41",
+         "mar-42",
+         "mar-43",
+         "mar-44",
+         "mar-45",
+         "mar-46"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0373-RA5-d",
        "letter": "d",
-       "text": "Se ha descrito la sintaxis específica utilizada en la conversión y adaptación de documentos para el intercambio de información."
+       "text": "Se ha descrito la sintaxis específica utilizada en la conversión y adaptación de documentos para el intercambio de información.",
+       "platformQuestionIds": {
+        "marcas": [
+         "mar-36",
+         "mar-37",
+         "mar-38",
+         "mar-39",
+         "mar-40",
+         "mar-41",
+         "mar-42",
+         "mar-43",
+         "mar-44",
+         "mar-45",
+         "mar-46"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0373-RA5-e",
        "letter": "e",
-       "text": "Se han creado especificaciones de conversión."
+       "text": "Se han creado especificaciones de conversión.",
+       "platformQuestionIds": {
+        "marcas": [
+         "mar-36",
+         "mar-37",
+         "mar-38",
+         "mar-39",
+         "mar-40",
+         "mar-41",
+         "mar-42",
+         "mar-43",
+         "mar-44",
+         "mar-45",
+         "mar-46"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0373-RA5-f",
        "letter": "f",
-       "text": "Se han identificado y caracterizado herramientas específicas relacionadas con la conversión de documentos para el intercambio de información."
+       "text": "Se han identificado y caracterizado herramientas específicas relacionadas con la conversión de documentos para el intercambio de información.",
+       "platformQuestionIds": {
+        "marcas": [
+         "mar-36",
+         "mar-37",
+         "mar-38",
+         "mar-39",
+         "mar-40",
+         "mar-41",
+         "mar-42",
+         "mar-43",
+         "mar-44",
+         "mar-45",
+         "mar-46"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0373-RA5-g",
        "letter": "g",
-       "text": "Se han realizado conversiones sobre documentos para el intercambio de información."
+       "text": "Se han realizado conversiones sobre documentos para el intercambio de información.",
+       "platformQuestionIds": {
+        "marcas": [
+         "mar-36",
+         "mar-37",
+         "mar-38",
+         "mar-39",
+         "mar-40",
+         "mar-41",
+         "mar-42",
+         "mar-43",
+         "mar-44",
+         "mar-45",
+         "mar-46",
+         "mar-47",
+         "mar-48",
+         "mar-49",
+         "mar-50",
+         "mar-51",
+         "mar-52",
+         "mar-53",
+         "mar-54",
+         "mar-55",
+         "mar-56",
+         "mar-57"
+        ]
+       },
+       "mapping": "proposed"
       }
      ]
     },
@@ -283,47 +805,191 @@
       {
        "id": "0373-RA6-a",
        "letter": "a",
-       "text": "Se han identificado los principales métodos de almacenamiento de la información utilizados en documentos de intercambio de datos."
+       "text": "Se han identificado los principales métodos de almacenamiento de la información utilizados en documentos de intercambio de datos.",
+       "platformQuestionIds": {
+        "marcas": [
+         "mar-47",
+         "mar-48",
+         "mar-49",
+         "mar-50",
+         "mar-51",
+         "mar-52",
+         "mar-53",
+         "mar-54",
+         "mar-55",
+         "mar-56",
+         "mar-57"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0373-RA6-b",
        "letter": "b",
-       "text": "Se han identificado las ventajas e inconvenientes de almacenar información en formatos de intercambio de datos."
+       "text": "Se han identificado las ventajas e inconvenientes de almacenar información en formatos de intercambio de datos.",
+       "platformQuestionIds": {
+        "marcas": [
+         "mar-47",
+         "mar-48",
+         "mar-49",
+         "mar-50",
+         "mar-51",
+         "mar-52",
+         "mar-53",
+         "mar-54",
+         "mar-55",
+         "mar-56",
+         "mar-57"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0373-RA6-c",
        "letter": "c",
-       "text": "Se han establecido tecnologías eficientes de almacenamiento de información en función de sus características."
+       "text": "Se han establecido tecnologías eficientes de almacenamiento de información en función de sus características.",
+       "platformQuestionIds": {
+        "marcas": [
+         "mar-47",
+         "mar-48",
+         "mar-49",
+         "mar-50",
+         "mar-51",
+         "mar-52",
+         "mar-53",
+         "mar-54",
+         "mar-55",
+         "mar-56",
+         "mar-57"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0373-RA6-d",
        "letter": "d",
-       "text": "Se han identificado lenguajes y herramientas para el tratamiento y almacenamiento de información y su inclusión en documentos de intercambio de datos."
+       "text": "Se han identificado lenguajes y herramientas para el tratamiento y almacenamiento de información y su inclusión en documentos de intercambio de datos.",
+       "platformQuestionIds": {
+        "marcas": [
+         "mar-47",
+         "mar-48",
+         "mar-49",
+         "mar-50",
+         "mar-51",
+         "mar-52",
+         "mar-53",
+         "mar-54",
+         "mar-55",
+         "mar-56",
+         "mar-57"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0373-RA6-e",
        "letter": "e",
-       "text": "Se han utilizado lenguajes de consulta y manipulación en documentos de intercambio de datos."
+       "text": "Se han utilizado lenguajes de consulta y manipulación en documentos de intercambio de datos.",
+       "platformQuestionIds": {
+        "marcas": [
+         "mar-36",
+         "mar-37",
+         "mar-38",
+         "mar-39",
+         "mar-40",
+         "mar-41",
+         "mar-42",
+         "mar-43",
+         "mar-44",
+         "mar-45",
+         "mar-46"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0373-RA6-f",
        "letter": "f",
-       "text": "Se han utilizado sistemas gestores de bases de datos relacionales en el almacenamiento de información en formatos de intercambio de datos."
+       "text": "Se han utilizado sistemas gestores de bases de datos relacionales en el almacenamiento de información en formatos de intercambio de datos.",
+       "platformQuestionIds": {
+        "marcas": [
+         "mar-47",
+         "mar-48",
+         "mar-49",
+         "mar-50",
+         "mar-51",
+         "mar-52",
+         "mar-53",
+         "mar-54",
+         "mar-55",
+         "mar-56",
+         "mar-57"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0373-RA6-g",
        "letter": "g",
-       "text": "Se han utilizado técnicas específicas para crear documentos de intercambio de datos a partir de información almacenada en bases de datos relacionales."
+       "text": "Se han utilizado técnicas específicas para crear documentos de intercambio de datos a partir de información almacenada en bases de datos relacionales.",
+       "platformQuestionIds": {
+        "marcas": [
+         "mar-47",
+         "mar-48",
+         "mar-49",
+         "mar-50",
+         "mar-51",
+         "mar-52",
+         "mar-53",
+         "mar-54",
+         "mar-55",
+         "mar-56",
+         "mar-57"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0373-RA6-h",
        "letter": "h",
-       "text": "Se han identificado las características de los sistemas."
+       "text": "Se han identificado las características de los sistemas.",
+       "platformQuestionIds": {
+        "marcas": [
+         "mar-36",
+         "mar-37",
+         "mar-38",
+         "mar-39",
+         "mar-40",
+         "mar-41",
+         "mar-42",
+         "mar-43",
+         "mar-44",
+         "mar-45",
+         "mar-46"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0373-RA6-i",
        "letter": "i",
-       "text": "Se han utilizado herramientas para gestionar la información almacenada en bases de datos nativas."
+       "text": "Se han utilizado herramientas para gestionar la información almacenada en bases de datos nativas.",
+       "platformQuestionIds": {
+        "marcas": [
+         "mar-36",
+         "mar-37",
+         "mar-38",
+         "mar-39",
+         "mar-40",
+         "mar-41",
+         "mar-42",
+         "mar-43",
+         "mar-44",
+         "mar-45",
+         "mar-46"
+        ]
+       },
+       "mapping": "proposed"
       }
      ]
     },
@@ -335,47 +1001,173 @@
       {
        "id": "0373-RA7-a",
        "letter": "a",
-       "text": "Se han identificado los principales sistemas de gestión empresarial."
+       "text": "Se han identificado los principales sistemas de gestión empresarial.",
+       "platformQuestionIds": {
+        "marcas": [
+         "mar-58",
+         "mar-59",
+         "mar-60",
+         "mar-61",
+         "mar-62",
+         "mar-63",
+         "mar-64",
+         "mar-65",
+         "mar-66"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0373-RA7-b",
        "letter": "b",
-       "text": "Se han reconocido las ventajas de los sistemas de gestión de información empresariales."
+       "text": "Se han reconocido las ventajas de los sistemas de gestión de información empresariales.",
+       "platformQuestionIds": {
+        "marcas": [
+         "mar-58",
+         "mar-59",
+         "mar-60",
+         "mar-61",
+         "mar-62",
+         "mar-63",
+         "mar-64",
+         "mar-65",
+         "mar-66"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0373-RA7-c",
        "letter": "c",
-       "text": "Se han evaluado las características de las principales aplicaciones de gestión empresarial."
+       "text": "Se han evaluado las características de las principales aplicaciones de gestión empresarial.",
+       "platformQuestionIds": {
+        "marcas": [
+         "mar-58",
+         "mar-59",
+         "mar-60",
+         "mar-61",
+         "mar-62",
+         "mar-63",
+         "mar-64",
+         "mar-65",
+         "mar-66"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0373-RA7-d",
        "letter": "d",
-       "text": "Se han instalado aplicaciones de gestión de la información empresarial."
+       "text": "Se han instalado aplicaciones de gestión de la información empresarial.",
+       "platformQuestionIds": {
+        "marcas": [
+         "mar-58",
+         "mar-59",
+         "mar-60",
+         "mar-61",
+         "mar-62",
+         "mar-63",
+         "mar-64",
+         "mar-65",
+         "mar-66"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0373-RA7-e",
        "letter": "e",
-       "text": "Se han configurado y administrado las aplicaciones."
+       "text": "Se han configurado y administrado las aplicaciones.",
+       "platformQuestionIds": {
+        "marcas": [
+         "mar-58",
+         "mar-59",
+         "mar-60",
+         "mar-61",
+         "mar-62",
+         "mar-63",
+         "mar-64",
+         "mar-65",
+         "mar-66"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0373-RA7-f",
        "letter": "f",
-       "text": "Se han establecido y verificado mecanismos de acceso seguro a la información."
+       "text": "Se han establecido y verificado mecanismos de acceso seguro a la información.",
+       "platformQuestionIds": {
+        "marcas": [
+         "mar-58",
+         "mar-59",
+         "mar-60",
+         "mar-61",
+         "mar-62",
+         "mar-63",
+         "mar-64",
+         "mar-65",
+         "mar-66"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0373-RA7-g",
        "letter": "g",
-       "text": "Se han generado informes."
+       "text": "Se han generado informes.",
+       "platformQuestionIds": {
+        "marcas": [
+         "mar-58",
+         "mar-59",
+         "mar-60",
+         "mar-61",
+         "mar-62",
+         "mar-63",
+         "mar-64",
+         "mar-65",
+         "mar-66"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0373-RA7-h",
        "letter": "h",
-       "text": "Se han realizado procedimientos de extracción de información para su tratamiento e incorporación a diversos sistemas."
+       "text": "Se han realizado procedimientos de extracción de información para su tratamiento e incorporación a diversos sistemas.",
+       "platformQuestionIds": {
+        "marcas": [
+         "mar-58",
+         "mar-59",
+         "mar-60",
+         "mar-61",
+         "mar-62",
+         "mar-63",
+         "mar-64",
+         "mar-65",
+         "mar-66"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0373-RA7-i",
        "letter": "i",
-       "text": "Se han elaborado documentos relativos a la explotación de la aplicación."
+       "text": "Se han elaborado documentos relativos a la explotación de la aplicación.",
+       "platformQuestionIds": {
+        "marcas": [
+         "mar-58",
+         "mar-59",
+         "mar-60",
+         "mar-61",
+         "mar-62",
+         "mar-63",
+         "mar-64",
+         "mar-65",
+         "mar-66"
+        ]
+       },
+       "mapping": "proposed"
       }
      ]
     }
@@ -996,52 +1788,222 @@
       {
        "id": "0484-RA1-a",
        "letter": "a",
-       "text": "Se han analizado los sistemas lógicos de almacenamiento y sus características."
+       "text": "Se han analizado los sistemas lógicos de almacenamiento y sus características.",
+       "platformQuestionIds": {
+        "sql": [
+         "bd-13",
+         "bd-14",
+         "bd-15",
+         "bd-16",
+         "bd-17",
+         "bd-18",
+         "bd-19",
+         "bd-20",
+         "bd-21",
+         "bd-22",
+         "bd-23",
+         "bd-24"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0484-RA1-b",
        "letter": "b",
-       "text": "Se han identificado los distintos tipos de bases de datos según el modelo de datos utilizado."
+       "text": "Se han identificado los distintos tipos de bases de datos según el modelo de datos utilizado.",
+       "platformQuestionIds": {
+        "sql": [
+         "bd-01",
+         "bd-02",
+         "bd-03",
+         "bd-04",
+         "bd-05",
+         "bd-06",
+         "bd-07",
+         "bd-08",
+         "bd-09",
+         "bd-10",
+         "bd-11",
+         "bd-12"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0484-RA1-c",
        "letter": "c",
-       "text": "Se han identificado los distintos tipos de bases de datos en función de la ubicación de la información."
+       "text": "Se han identificado los distintos tipos de bases de datos en función de la ubicación de la información.",
+       "platformQuestionIds": {
+        "sql": [
+         "bd-01",
+         "bd-02",
+         "bd-03",
+         "bd-04",
+         "bd-05",
+         "bd-06",
+         "bd-07",
+         "bd-08",
+         "bd-09",
+         "bd-10",
+         "bd-11",
+         "bd-12"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0484-RA1-d",
        "letter": "d",
-       "text": "Se ha evaluado la utilidad de un sistema gestor de bases de datos."
+       "text": "Se ha evaluado la utilidad de un sistema gestor de bases de datos.",
+       "platformQuestionIds": {
+        "sql": [
+         "bd-13",
+         "bd-14",
+         "bd-15",
+         "bd-16",
+         "bd-17",
+         "bd-18",
+         "bd-19",
+         "bd-20",
+         "bd-21",
+         "bd-22",
+         "bd-23",
+         "bd-24"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0484-RA1-e",
        "letter": "e",
-       "text": "Se ha reconocido la función de cada uno de los elementos de un sistema gestor de bases de datos."
+       "text": "Se ha reconocido la función de cada uno de los elementos de un sistema gestor de bases de datos.",
+       "platformQuestionIds": {
+        "sql": [
+         "bd-13",
+         "bd-14",
+         "bd-15",
+         "bd-16",
+         "bd-17",
+         "bd-18",
+         "bd-19",
+         "bd-20",
+         "bd-21",
+         "bd-22",
+         "bd-23",
+         "bd-24"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0484-RA1-f",
        "letter": "f",
-       "text": "Se han clasificado los sistemas gestores de bases de datos."
+       "text": "Se han clasificado los sistemas gestores de bases de datos.",
+       "platformQuestionIds": {
+        "sql": [
+         "bd-13",
+         "bd-14",
+         "bd-15",
+         "bd-16",
+         "bd-17",
+         "bd-18",
+         "bd-19",
+         "bd-20",
+         "bd-21",
+         "bd-22",
+         "bd-23",
+         "bd-24"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0484-RA1-g",
        "letter": "g",
-       "text": "Se ha reconocido la utilidad de las bases de datos distribuidas."
+       "text": "Se ha reconocido la utilidad de las bases de datos distribuidas.",
+       "platformQuestionIds": {
+        "sql": [
+         "bd-01",
+         "bd-02",
+         "bd-03",
+         "bd-04",
+         "bd-05",
+         "bd-06",
+         "bd-07",
+         "bd-08",
+         "bd-09",
+         "bd-10",
+         "bd-11",
+         "bd-12"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0484-RA1-h",
        "letter": "h",
-       "text": "Se han analizado las políticas de fragmentación de la información."
+       "text": "Se han analizado las políticas de fragmentación de la información.",
+       "platformQuestionIds": {
+        "sql": [
+         "bd-01",
+         "bd-02",
+         "bd-03",
+         "bd-04",
+         "bd-05",
+         "bd-06",
+         "bd-07",
+         "bd-08",
+         "bd-09",
+         "bd-10",
+         "bd-11",
+         "bd-12"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0484-RA1-i",
        "letter": "i",
-       "text": "Se ha identificado la legislación vigente sobre protección de datos."
+       "text": "Se ha identificado la legislación vigente sobre protección de datos.",
+       "platformQuestionIds": {
+        "sql": [
+         "bd-13",
+         "bd-14",
+         "bd-15",
+         "bd-16",
+         "bd-17",
+         "bd-18",
+         "bd-19",
+         "bd-20",
+         "bd-21",
+         "bd-22",
+         "bd-23",
+         "bd-24"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0484-RA1-j",
        "letter": "j",
-       "text": "Se han reconocido los conceptos de Big Data y de la inteligencia de negocios."
+       "text": "Se han reconocido los conceptos de Big Data y de la inteligencia de negocios.",
+       "platformQuestionIds": {
+        "sql": [
+         "bd-01",
+         "bd-02",
+         "bd-03",
+         "bd-04",
+         "bd-05",
+         "bd-06",
+         "bd-07",
+         "bd-08",
+         "bd-09",
+         "bd-10",
+         "bd-11",
+         "bd-12"
+        ]
+       },
+       "mapping": "proposed"
       }
      ]
     },
@@ -1058,37 +2020,173 @@
       {
        "id": "0484-RA2-b",
        "letter": "b",
-       "text": "Se han creado las tablas y las relaciones entre ellas."
+       "text": "Se han creado las tablas y las relaciones entre ellas.",
+       "platformQuestionIds": {
+        "sql": [
+         "sql-31",
+         "sql-32",
+         "sql-33",
+         "sql-34",
+         "sql-35"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0484-RA2-c",
        "letter": "c",
-       "text": "Se han seleccionado los tipos de datos adecuados."
+       "text": "Se han seleccionado los tipos de datos adecuados.",
+       "platformQuestionIds": {
+        "sql": [
+         "sql-31",
+         "sql-32",
+         "sql-33",
+         "sql-34",
+         "sql-35",
+         "bd-25",
+         "bd-26",
+         "bd-27",
+         "bd-28",
+         "bd-29",
+         "bd-30",
+         "bd-31",
+         "bd-32",
+         "bd-33",
+         "bd-34",
+         "bd-35",
+         "bd-36",
+         "bd-37",
+         "bd-38",
+         "bd-39",
+         "bd-40",
+         "bd-41",
+         "bd-42",
+         "bd-43"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0484-RA2-d",
        "letter": "d",
-       "text": "Se han definido los campos clave en las tablas."
+       "text": "Se han definido los campos clave en las tablas.",
+       "platformQuestionIds": {
+        "sql": [
+         "sql-31",
+         "sql-32",
+         "sql-33",
+         "sql-34",
+         "sql-35"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0484-RA2-e",
        "letter": "e",
-       "text": "Se han implantado las restricciones reflejadas en el diseño lógico."
+       "text": "Se han implantado las restricciones reflejadas en el diseño lógico.",
+       "platformQuestionIds": {
+        "sql": [
+         "sql-31",
+         "sql-32",
+         "sql-33",
+         "sql-34",
+         "sql-35"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0484-RA2-f",
        "letter": "f",
-       "text": "Se han creado vistas."
+       "text": "Se han creado vistas.",
+       "platformQuestionIds": {
+        "sql": [
+         "bd-25",
+         "bd-26",
+         "bd-27",
+         "bd-28",
+         "bd-29",
+         "bd-30",
+         "bd-31",
+         "bd-32",
+         "bd-33",
+         "bd-34",
+         "bd-35",
+         "bd-36",
+         "bd-37",
+         "bd-38",
+         "bd-39",
+         "bd-40",
+         "bd-41",
+         "bd-42",
+         "bd-43",
+         "sql-46",
+         "sql-47",
+         "sql-48",
+         "sql-49",
+         "sql-50"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0484-RA2-g",
        "letter": "g",
-       "text": "Se han creado los usuarios y se les han asignado privilegios."
+       "text": "Se han creado los usuarios y se les han asignado privilegios.",
+       "platformQuestionIds": {
+        "sql": [
+         "bd-25",
+         "bd-26",
+         "bd-27",
+         "bd-28",
+         "bd-29",
+         "bd-30",
+         "bd-31",
+         "bd-32",
+         "bd-33",
+         "bd-34",
+         "bd-35",
+         "bd-36",
+         "bd-37",
+         "bd-38",
+         "bd-39",
+         "bd-40",
+         "bd-41",
+         "bd-42",
+         "bd-43"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0484-RA2-h",
        "letter": "h",
-       "text": "Se han utilizado asistentes, herramientas gráficas y los lenguajes de definición y control de datos."
+       "text": "Se han utilizado asistentes, herramientas gráficas y los lenguajes de definición y control de datos.",
+       "platformQuestionIds": {
+        "sql": [
+         "bd-25",
+         "bd-26",
+         "bd-27",
+         "bd-28",
+         "bd-29",
+         "bd-30",
+         "bd-31",
+         "bd-32",
+         "bd-33",
+         "bd-34",
+         "bd-35",
+         "bd-36",
+         "bd-37",
+         "bd-38",
+         "bd-39",
+         "bd-40",
+         "bd-41",
+         "bd-42",
+         "bd-43"
+        ]
+       },
+       "mapping": "proposed"
       }
      ]
     },
@@ -1100,42 +2198,205 @@
       {
        "id": "0484-RA3-a",
        "letter": "a",
-       "text": "Se han identificado las herramientas y sentencias para realizar consultas."
+       "text": "Se han identificado las herramientas y sentencias para realizar consultas.",
+       "platformQuestionIds": {
+        "sql": [
+         "sql-01",
+         "sql-02",
+         "sql-03",
+         "sql-04",
+         "sql-05"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0484-RA3-b",
        "letter": "b",
-       "text": "Se han realizado consultas simples sobre una tabla."
+       "text": "Se han realizado consultas simples sobre una tabla.",
+       "platformQuestionIds": {
+        "sql": [
+         "sql-01",
+         "sql-02",
+         "sql-03",
+         "sql-04",
+         "sql-05",
+         "sql-06",
+         "sql-07",
+         "sql-08",
+         "sql-09",
+         "sql-10"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0484-RA3-c",
        "letter": "c",
-       "text": "Se han realizado consultas sobre el contenido de varias tablas mediante composiciones internas."
+       "text": "Se han realizado consultas sobre el contenido de varias tablas mediante composiciones internas.",
+       "platformQuestionIds": {
+        "sql": [
+         "sql-21",
+         "sql-22",
+         "sql-23",
+         "sql-24",
+         "sql-25"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0484-RA3-d",
        "letter": "d",
-       "text": "Se han realizado consultas sobre el contenido de varias tablas mediante composiciones externas."
+       "text": "Se han realizado consultas sobre el contenido de varias tablas mediante composiciones externas.",
+       "platformQuestionIds": {
+        "sql": [
+         "sql-26",
+         "sql-27",
+         "sql-28",
+         "sql-29",
+         "sql-30",
+         "bd-44",
+         "bd-45",
+         "bd-46",
+         "bd-47",
+         "bd-48",
+         "bd-49",
+         "bd-50",
+         "bd-51",
+         "bd-52",
+         "bd-53",
+         "bd-54",
+         "bd-55",
+         "bd-56",
+         "bd-57",
+         "bd-58",
+         "bd-59",
+         "bd-60"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0484-RA3-e",
        "letter": "e",
-       "text": "Se han realizado consultas resumen."
+       "text": "Se han realizado consultas resumen.",
+       "platformQuestionIds": {
+        "sql": [
+         "sql-11",
+         "sql-12",
+         "sql-13",
+         "sql-14",
+         "sql-15",
+         "sql-16",
+         "sql-17",
+         "sql-18",
+         "sql-19",
+         "sql-20",
+         "sql-21",
+         "sql-22",
+         "sql-23",
+         "sql-24",
+         "sql-25"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0484-RA3-f",
        "letter": "f",
-       "text": "Se han realizado consultas con subconsultas."
+       "text": "Se han realizado consultas con subconsultas.",
+       "platformQuestionIds": {
+        "sql": [
+         "sql-11",
+         "sql-12",
+         "sql-13",
+         "sql-14",
+         "sql-15",
+         "sql-26",
+         "sql-27",
+         "sql-28",
+         "sql-29",
+         "sql-30",
+         "bd-44",
+         "bd-45",
+         "bd-46",
+         "bd-47",
+         "bd-48",
+         "bd-49",
+         "bd-50",
+         "bd-51",
+         "bd-52",
+         "bd-53",
+         "bd-54",
+         "bd-55",
+         "bd-56",
+         "bd-57",
+         "bd-58",
+         "bd-59",
+         "bd-60"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0484-RA3-g",
        "letter": "g",
-       "text": "Se han realizado consultas que implican múltiples selecciones."
+       "text": "Se han realizado consultas que implican múltiples selecciones.",
+       "platformQuestionIds": {
+        "sql": [
+         "bd-44",
+         "bd-45",
+         "bd-46",
+         "bd-47",
+         "bd-48",
+         "bd-49",
+         "bd-50",
+         "bd-51",
+         "bd-52",
+         "bd-53",
+         "bd-54",
+         "bd-55",
+         "bd-56",
+         "bd-57",
+         "bd-58",
+         "bd-59",
+         "bd-60"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0484-RA3-h",
        "letter": "h",
-       "text": "Se han aplicado criterios de optimización de consultas."
+       "text": "Se han aplicado criterios de optimización de consultas.",
+       "platformQuestionIds": {
+        "sql": [
+         "bd-44",
+         "bd-45",
+         "bd-46",
+         "bd-47",
+         "bd-48",
+         "bd-49",
+         "bd-50",
+         "bd-51",
+         "bd-52",
+         "bd-53",
+         "bd-54",
+         "bd-55",
+         "bd-56",
+         "bd-57",
+         "bd-58",
+         "bd-59",
+         "bd-60",
+         "sql-46",
+         "sql-47",
+         "sql-48",
+         "sql-49",
+         "sql-50"
+        ]
+       },
+       "mapping": "proposed"
       }
      ]
     },
@@ -1147,17 +2408,47 @@
       {
        "id": "0484-RA4-a",
        "letter": "a",
-       "text": "Se han identificado las herramientas y sentencias para modificar el contenido de la base de datos."
+       "text": "Se han identificado las herramientas y sentencias para modificar el contenido de la base de datos.",
+       "platformQuestionIds": {
+        "sql": [
+         "sql-36",
+         "sql-37",
+         "sql-38",
+         "sql-39",
+         "sql-40"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0484-RA4-b",
        "letter": "b",
-       "text": "Se han insertado, borrado y actualizado datos en las tablas."
+       "text": "Se han insertado, borrado y actualizado datos en las tablas.",
+       "platformQuestionIds": {
+        "sql": [
+         "sql-36",
+         "sql-37",
+         "sql-38",
+         "sql-39",
+         "sql-40"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0484-RA4-c",
        "letter": "c",
-       "text": "Se ha incluido en una tabla la información resultante de la ejecución de una consulta."
+       "text": "Se ha incluido en una tabla la información resultante de la ejecución de una consulta.",
+       "platformQuestionIds": {
+        "sql": [
+         "sql-36",
+         "sql-37",
+         "sql-38",
+         "sql-39",
+         "sql-40"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0484-RA4-d",
@@ -1167,12 +2458,32 @@
       {
        "id": "0484-RA4-e",
        "letter": "e",
-       "text": "Se ha reconocido el funcionamiento de las transacciones."
+       "text": "Se ha reconocido el funcionamiento de las transacciones.",
+       "platformQuestionIds": {
+        "sql": [
+         "sql-46",
+         "sql-47",
+         "sql-48",
+         "sql-49",
+         "sql-50"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0484-RA4-f",
        "letter": "f",
-       "text": "Se han anulado parcial o totalmente los cambios producidos por una transacción."
+       "text": "Se han anulado parcial o totalmente los cambios producidos por una transacción.",
+       "platformQuestionIds": {
+        "sql": [
+         "sql-46",
+         "sql-47",
+         "sql-48",
+         "sql-49",
+         "sql-50"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0484-RA4-g",
@@ -1182,7 +2493,17 @@
       {
        "id": "0484-RA4-h",
        "letter": "h",
-       "text": "Se han adoptado medidas para mantener la integridad y consistencia de la información."
+       "text": "Se han adoptado medidas para mantener la integridad y consistencia de la información.",
+       "platformQuestionIds": {
+        "sql": [
+         "sql-36",
+         "sql-37",
+         "sql-38",
+         "sql-39",
+         "sql-40"
+        ]
+       },
+       "mapping": "proposed"
       }
      ]
     },
@@ -1256,32 +2577,92 @@
       {
        "id": "0484-RA6-b",
        "letter": "b",
-       "text": "Se han identificado las tablas del diseño lógico."
+       "text": "Se han identificado las tablas del diseño lógico.",
+       "platformQuestionIds": {
+        "sql": [
+         "sql-41",
+         "sql-42",
+         "sql-43",
+         "sql-44",
+         "sql-45"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0484-RA6-c",
        "letter": "c",
-       "text": "Se han identificado los campos que forman parte de las tablas del diseño lógico."
+       "text": "Se han identificado los campos que forman parte de las tablas del diseño lógico.",
+       "platformQuestionIds": {
+        "sql": [
+         "sql-41",
+         "sql-42",
+         "sql-43",
+         "sql-44",
+         "sql-45"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0484-RA6-d",
        "letter": "d",
-       "text": "Se han analizado las relaciones entre las tablas del diseño lógico."
+       "text": "Se han analizado las relaciones entre las tablas del diseño lógico.",
+       "platformQuestionIds": {
+        "sql": [
+         "sql-41",
+         "sql-42",
+         "sql-43",
+         "sql-44",
+         "sql-45"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0484-RA6-e",
        "letter": "e",
-       "text": "Se han identificado los campos clave."
+       "text": "Se han identificado los campos clave.",
+       "platformQuestionIds": {
+        "sql": [
+         "sql-41",
+         "sql-42",
+         "sql-43",
+         "sql-44",
+         "sql-45"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0484-RA6-f",
        "letter": "f",
-       "text": "Se han aplicado reglas de integridad."
+       "text": "Se han aplicado reglas de integridad.",
+       "platformQuestionIds": {
+        "sql": [
+         "sql-41",
+         "sql-42",
+         "sql-43",
+         "sql-44",
+         "sql-45"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0484-RA6-g",
        "letter": "g",
-       "text": "Se han aplicado reglas de normalización."
+       "text": "Se han aplicado reglas de normalización.",
+       "platformQuestionIds": {
+        "sql": [
+         "sql-41",
+         "sql-42",
+         "sql-43",
+         "sql-44",
+         "sql-45"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0484-RA6-h",
@@ -1551,7 +2932,27 @@
       {
        "id": "0485-RA1-a",
        "letter": "a",
-       "text": "Se han identificado los bloques que componen la estructura de un programa informático."
+       "text": "Se han identificado los bloques que componen la estructura de un programa informático.",
+       "platformQuestionIds": {
+        "programacion": [
+         "prog-01",
+         "prog-02",
+         "prog-03",
+         "prog-04",
+         "prog-05",
+         "prog-06",
+         "prog-07",
+         "prog-08",
+         "prog-09",
+         "prog-10",
+         "prog-11",
+         "prog-12",
+         "prog-13",
+         "prog-14",
+         "prog-15"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0485-RA1-b",
@@ -1566,32 +2967,208 @@
       {
        "id": "0485-RA1-d",
        "letter": "d",
-       "text": "Se han identificado los distintos tipos de variables y la utilidad específica de cada uno."
+       "text": "Se han identificado los distintos tipos de variables y la utilidad específica de cada uno.",
+       "platformQuestionIds": {
+        "java": [
+         "java-01",
+         "java-02",
+         "java-03",
+         "java-04",
+         "java-05",
+         "java-p01",
+         "java-p02",
+         "java-p03"
+        ],
+        "programacion": [
+         "prog-16",
+         "prog-17",
+         "prog-18",
+         "prog-19",
+         "prog-20",
+         "prog-21",
+         "prog-22",
+         "prog-23",
+         "prog-24",
+         "prog-25",
+         "prog-26",
+         "prog-27",
+         "prog-28",
+         "prog-29",
+         "prog-30",
+         "prog-31"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0485-RA1-e",
        "letter": "e",
-       "text": "Se ha modificado el código de un programa para crear y utilizar variables."
+       "text": "Se ha modificado el código de un programa para crear y utilizar variables.",
+       "platformQuestionIds": {
+        "java": [
+         "java-01",
+         "java-02",
+         "java-03",
+         "java-04",
+         "java-05",
+         "java-p01",
+         "java-p02",
+         "java-p03"
+        ],
+        "programacion": [
+         "prog-16",
+         "prog-17",
+         "prog-18",
+         "prog-19",
+         "prog-20",
+         "prog-21",
+         "prog-22",
+         "prog-23",
+         "prog-24",
+         "prog-25",
+         "prog-26",
+         "prog-27",
+         "prog-28",
+         "prog-29",
+         "prog-30",
+         "prog-31"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0485-RA1-f",
        "letter": "f",
-       "text": "Se han creado y utilizado constantes y literales."
+       "text": "Se han creado y utilizado constantes y literales.",
+       "platformQuestionIds": {
+        "java": [
+         "java-01",
+         "java-02",
+         "java-03",
+         "java-04",
+         "java-05",
+         "java-p01",
+         "java-p02",
+         "java-p03"
+        ],
+        "programacion": [
+         "prog-16",
+         "prog-17",
+         "prog-18",
+         "prog-19",
+         "prog-20",
+         "prog-21",
+         "prog-22",
+         "prog-23",
+         "prog-24",
+         "prog-25",
+         "prog-26",
+         "prog-27",
+         "prog-28",
+         "prog-29",
+         "prog-30",
+         "prog-31"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0485-RA1-g",
        "letter": "g",
-       "text": "Se han clasificado, reconocido y utilizado en expresiones los operadores del lenguaje."
+       "text": "Se han clasificado, reconocido y utilizado en expresiones los operadores del lenguaje.",
+       "platformQuestionIds": {
+        "java": [
+         "java-01",
+         "java-02",
+         "java-03",
+         "java-04",
+         "java-05",
+         "java-p01",
+         "java-p02",
+         "java-p03"
+        ],
+        "programacion": [
+         "prog-16",
+         "prog-17",
+         "prog-18",
+         "prog-19",
+         "prog-20",
+         "prog-21",
+         "prog-22",
+         "prog-23",
+         "prog-24",
+         "prog-25",
+         "prog-26",
+         "prog-27",
+         "prog-28",
+         "prog-29",
+         "prog-30",
+         "prog-31"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0485-RA1-h",
        "letter": "h",
-       "text": "Se ha comprobado el funcionamiento de las conversiones de tipo explícitas e implícitas."
+       "text": "Se ha comprobado el funcionamiento de las conversiones de tipo explícitas e implícitas.",
+       "platformQuestionIds": {
+        "java": [
+         "java-01",
+         "java-02",
+         "java-03",
+         "java-04",
+         "java-05",
+         "java-p01",
+         "java-p02",
+         "java-p03"
+        ],
+        "programacion": [
+         "prog-16",
+         "prog-17",
+         "prog-18",
+         "prog-19",
+         "prog-20",
+         "prog-21",
+         "prog-22",
+         "prog-23",
+         "prog-24",
+         "prog-25",
+         "prog-26",
+         "prog-27",
+         "prog-28",
+         "prog-29",
+         "prog-30",
+         "prog-31"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0485-RA1-i",
        "letter": "i",
-       "text": "Se han introducido comentarios en el código."
+       "text": "Se han introducido comentarios en el código.",
+       "platformQuestionIds": {
+        "programacion": [
+         "prog-16",
+         "prog-17",
+         "prog-18",
+         "prog-19",
+         "prog-20",
+         "prog-21",
+         "prog-22",
+         "prog-23",
+         "prog-24",
+         "prog-25",
+         "prog-26",
+         "prog-27",
+         "prog-28",
+         "prog-29",
+         "prog-30",
+         "prog-31"
+        ]
+       },
+       "mapping": "proposed"
       }
      ]
     },
@@ -1603,42 +3180,219 @@
       {
        "id": "0485-RA2-a",
        "letter": "a",
-       "text": "Se han identificado los fundamentos de la programación orientada a objetos."
+       "text": "Se han identificado los fundamentos de la programación orientada a objetos.",
+       "platformQuestionIds": {
+        "programacion": [
+         "prog-57",
+         "prog-58",
+         "prog-59",
+         "prog-60",
+         "prog-61",
+         "prog-62",
+         "prog-63",
+         "prog-64",
+         "prog-65",
+         "prog-66",
+         "prog-67",
+         "prog-68",
+         "prog-69"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0485-RA2-b",
        "letter": "b",
-       "text": "Se han escrito programas simples."
+       "text": "Se han escrito programas simples.",
+       "platformQuestionIds": {
+        "programacion": [
+         "prog-47",
+         "prog-48",
+         "prog-49",
+         "prog-50",
+         "prog-51",
+         "prog-52",
+         "prog-53",
+         "prog-54",
+         "prog-55",
+         "prog-56"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0485-RA2-c",
        "letter": "c",
-       "text": "Se han instanciado objetos a partir de clases predefinidas."
+       "text": "Se han instanciado objetos a partir de clases predefinidas.",
+       "platformQuestionIds": {
+        "java": [
+         "java-06",
+         "java-07",
+         "java-08",
+         "java-09",
+         "java-10",
+         "java-p04",
+         "java-p05",
+         "java-p06"
+        ],
+        "programacion": [
+         "prog-57",
+         "prog-58",
+         "prog-59",
+         "prog-60",
+         "prog-61",
+         "prog-62",
+         "prog-63",
+         "prog-64",
+         "prog-65",
+         "prog-66",
+         "prog-67",
+         "prog-68",
+         "prog-69"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0485-RA2-d",
        "letter": "d",
-       "text": "Se han utilizado métodos y propiedades de los objetos."
+       "text": "Se han utilizado métodos y propiedades de los objetos.",
+       "platformQuestionIds": {
+        "java": [
+         "java-06",
+         "java-07",
+         "java-08",
+         "java-09",
+         "java-10",
+         "java-p04",
+         "java-p05",
+         "java-p06"
+        ],
+        "programacion": [
+         "prog-57",
+         "prog-58",
+         "prog-59",
+         "prog-60",
+         "prog-61",
+         "prog-62",
+         "prog-63",
+         "prog-64",
+         "prog-65",
+         "prog-66",
+         "prog-67",
+         "prog-68",
+         "prog-69"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0485-RA2-e",
        "letter": "e",
-       "text": "Se han escrito llamadas a métodos estáticos."
+       "text": "Se han escrito llamadas a métodos estáticos.",
+       "platformQuestionIds": {
+        "java": [
+         "java-26",
+         "java-27",
+         "java-28",
+         "java-29",
+         "java-30",
+         "java-p16",
+         "java-p17",
+         "java-p18"
+        ],
+        "programacion": [
+         "prog-70",
+         "prog-71",
+         "prog-72",
+         "prog-73",
+         "prog-74",
+         "prog-75",
+         "prog-76",
+         "prog-77",
+         "prog-78",
+         "prog-79",
+         "prog-80",
+         "prog-81",
+         "prog-82",
+         "prog-83",
+         "prog-84"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0485-RA2-f",
        "letter": "f",
-       "text": "Se han utilizado parámetros en la llamada a métodos."
+       "text": "Se han utilizado parámetros en la llamada a métodos.",
+       "platformQuestionIds": {
+        "programacion": [
+         "prog-47",
+         "prog-48",
+         "prog-49",
+         "prog-50",
+         "prog-51",
+         "prog-52",
+         "prog-53",
+         "prog-54",
+         "prog-55",
+         "prog-56"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0485-RA2-g",
        "letter": "g",
-       "text": "Se han incorporado y utilizado librerías de objetos."
+       "text": "Se han incorporado y utilizado librerías de objetos.",
+       "platformQuestionIds": {
+        "programacion": [
+         "prog-85",
+         "prog-86",
+         "prog-87",
+         "prog-88",
+         "prog-89",
+         "prog-90",
+         "prog-91",
+         "prog-92",
+         "prog-93",
+         "prog-94"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0485-RA2-h",
        "letter": "h",
-       "text": "Se han utilizado constructores."
+       "text": "Se han utilizado constructores.",
+       "platformQuestionIds": {
+        "java": [
+         "java-21",
+         "java-22",
+         "java-23",
+         "java-24",
+         "java-25",
+         "java-p13",
+         "java-p14",
+         "java-p15"
+        ],
+        "programacion": [
+         "prog-57",
+         "prog-58",
+         "prog-59",
+         "prog-60",
+         "prog-61",
+         "prog-62",
+         "prog-63",
+         "prog-64",
+         "prog-65",
+         "prog-66",
+         "prog-67",
+         "prog-68",
+         "prog-69"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0485-RA2-i",
@@ -1655,32 +3409,191 @@
       {
        "id": "0485-RA3-a",
        "letter": "a",
-       "text": "Se ha escrito y probado código que haga uso de estructuras de selección."
+       "text": "Se ha escrito y probado código que haga uso de estructuras de selección.",
+       "platformQuestionIds": {
+        "java": [
+         "java-11",
+         "java-12",
+         "java-13",
+         "java-14",
+         "java-15",
+         "java-p07",
+         "java-p08",
+         "java-p09"
+        ],
+        "programacion": [
+         "prog-32",
+         "prog-33",
+         "prog-34",
+         "prog-35",
+         "prog-36",
+         "prog-37",
+         "prog-38",
+         "prog-39",
+         "prog-40",
+         "prog-41",
+         "prog-42",
+         "prog-43",
+         "prog-44",
+         "prog-45",
+         "prog-46"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0485-RA3-b",
        "letter": "b",
-       "text": "Se han utilizado estructuras de repetición."
+       "text": "Se han utilizado estructuras de repetición.",
+       "platformQuestionIds": {
+        "java": [
+         "java-16",
+         "java-17",
+         "java-18",
+         "java-19",
+         "java-20",
+         "java-p10",
+         "java-p11",
+         "java-p12"
+        ],
+        "programacion": [
+         "prog-32",
+         "prog-33",
+         "prog-34",
+         "prog-35",
+         "prog-36",
+         "prog-37",
+         "prog-38",
+         "prog-39",
+         "prog-40",
+         "prog-41",
+         "prog-42",
+         "prog-43",
+         "prog-44",
+         "prog-45",
+         "prog-46"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0485-RA3-c",
        "letter": "c",
-       "text": "Se han reconocido las posibilidades de las sentencias de salto."
+       "text": "Se han reconocido las posibilidades de las sentencias de salto.",
+       "platformQuestionIds": {
+        "programacion": [
+         "prog-32",
+         "prog-33",
+         "prog-34",
+         "prog-35",
+         "prog-36",
+         "prog-37",
+         "prog-38",
+         "prog-39",
+         "prog-40",
+         "prog-41",
+         "prog-42",
+         "prog-43",
+         "prog-44",
+         "prog-45",
+         "prog-46"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0485-RA3-d",
        "letter": "d",
-       "text": "Se ha escrito código utilizando control de excepciones."
+       "text": "Se ha escrito código utilizando control de excepciones.",
+       "platformQuestionIds": {
+        "java": [
+         "java-46",
+         "java-47",
+         "java-48",
+         "java-49",
+         "java-50",
+         "java-p28",
+         "java-p29",
+         "java-p30"
+        ],
+        "programacion": [
+         "prog-111",
+         "prog-112",
+         "prog-113",
+         "prog-114",
+         "prog-115",
+         "prog-116",
+         "prog-117",
+         "prog-118",
+         "prog-119",
+         "prog-120",
+         "prog-121",
+         "prog-122",
+         "prog-123",
+         "prog-124",
+         "prog-125"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0485-RA3-e",
        "letter": "e",
-       "text": "Se han creado programas ejecutables utilizando diferentes estructuras de control."
+       "text": "Se han creado programas ejecutables utilizando diferentes estructuras de control.",
+       "platformQuestionIds": {
+        "programacion": [
+         "prog-32",
+         "prog-33",
+         "prog-34",
+         "prog-35",
+         "prog-36",
+         "prog-37",
+         "prog-38",
+         "prog-39",
+         "prog-40",
+         "prog-41",
+         "prog-42",
+         "prog-43",
+         "prog-44",
+         "prog-45",
+         "prog-46",
+         "prog-126",
+         "prog-127",
+         "prog-128",
+         "prog-129",
+         "prog-130",
+         "prog-131",
+         "prog-132",
+         "prog-133",
+         "prog-134"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0485-RA3-f",
        "letter": "f",
-       "text": "Se han probado y depurado los programas."
+       "text": "Se han probado y depurado los programas.",
+       "platformQuestionIds": {
+        "programacion": [
+         "prog-32",
+         "prog-33",
+         "prog-34",
+         "prog-35",
+         "prog-36",
+         "prog-37",
+         "prog-38",
+         "prog-39",
+         "prog-40",
+         "prog-41",
+         "prog-42",
+         "prog-43",
+         "prog-44",
+         "prog-45",
+         "prog-46"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0485-RA3-g",
@@ -1690,7 +3603,37 @@
       {
        "id": "0485-RA3-h",
        "letter": "h",
-       "text": "Se han creado excepciones."
+       "text": "Se han creado excepciones.",
+       "platformQuestionIds": {
+        "java": [
+         "java-46",
+         "java-47",
+         "java-48",
+         "java-49",
+         "java-50",
+         "java-p28",
+         "java-p29",
+         "java-p30"
+        ],
+        "programacion": [
+         "prog-111",
+         "prog-112",
+         "prog-113",
+         "prog-114",
+         "prog-115",
+         "prog-116",
+         "prog-117",
+         "prog-118",
+         "prog-119",
+         "prog-120",
+         "prog-121",
+         "prog-122",
+         "prog-123",
+         "prog-124",
+         "prog-125"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0485-RA3-i",
@@ -1707,32 +3650,225 @@
       {
        "id": "0485-RA4-a",
        "letter": "a",
-       "text": "Se ha reconocido la sintaxis, estructura y componentes típicos de una clase."
+       "text": "Se ha reconocido la sintaxis, estructura y componentes típicos de una clase.",
+       "platformQuestionIds": {
+        "java": [
+         "java-21",
+         "java-22",
+         "java-23",
+         "java-24",
+         "java-25",
+         "java-p13",
+         "java-p14",
+         "java-p15"
+        ],
+        "programacion": [
+         "prog-57",
+         "prog-58",
+         "prog-59",
+         "prog-60",
+         "prog-61",
+         "prog-62",
+         "prog-63",
+         "prog-64",
+         "prog-65",
+         "prog-66",
+         "prog-67",
+         "prog-68",
+         "prog-69",
+         "prog-70",
+         "prog-71",
+         "prog-72",
+         "prog-73",
+         "prog-74",
+         "prog-75",
+         "prog-76",
+         "prog-77",
+         "prog-78",
+         "prog-79",
+         "prog-80",
+         "prog-81",
+         "prog-82",
+         "prog-83",
+         "prog-84"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0485-RA4-b",
        "letter": "b",
-       "text": "Se han definido clases."
+       "text": "Se han definido clases.",
+       "platformQuestionIds": {
+        "java": [
+         "java-21",
+         "java-22",
+         "java-23",
+         "java-24",
+         "java-25",
+         "java-p13",
+         "java-p14",
+         "java-p15"
+        ],
+        "programacion": [
+         "prog-70",
+         "prog-71",
+         "prog-72",
+         "prog-73",
+         "prog-74",
+         "prog-75",
+         "prog-76",
+         "prog-77",
+         "prog-78",
+         "prog-79",
+         "prog-80",
+         "prog-81",
+         "prog-82",
+         "prog-83",
+         "prog-84"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0485-RA4-c",
        "letter": "c",
-       "text": "Se han definido propiedades y métodos."
+       "text": "Se han definido propiedades y métodos.",
+       "platformQuestionIds": {
+        "java": [
+         "java-21",
+         "java-22",
+         "java-23",
+         "java-24",
+         "java-25",
+         "java-p13",
+         "java-p14",
+         "java-p15"
+        ],
+        "programacion": [
+         "prog-70",
+         "prog-71",
+         "prog-72",
+         "prog-73",
+         "prog-74",
+         "prog-75",
+         "prog-76",
+         "prog-77",
+         "prog-78",
+         "prog-79",
+         "prog-80",
+         "prog-81",
+         "prog-82",
+         "prog-83",
+         "prog-84"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0485-RA4-d",
        "letter": "d",
-       "text": "Se han creado constructores."
+       "text": "Se han creado constructores.",
+       "platformQuestionIds": {
+        "java": [
+         "java-21",
+         "java-22",
+         "java-23",
+         "java-24",
+         "java-25",
+         "java-p13",
+         "java-p14",
+         "java-p15"
+        ],
+        "programacion": [
+         "prog-70",
+         "prog-71",
+         "prog-72",
+         "prog-73",
+         "prog-74",
+         "prog-75",
+         "prog-76",
+         "prog-77",
+         "prog-78",
+         "prog-79",
+         "prog-80",
+         "prog-81",
+         "prog-82",
+         "prog-83",
+         "prog-84"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0485-RA4-e",
        "letter": "e",
-       "text": "Se han desarrollado programas que instancien y utilicen objetos de las clases creadas anteriormente."
+       "text": "Se han desarrollado programas que instancien y utilicen objetos de las clases creadas anteriormente.",
+       "platformQuestionIds": {
+        "java": [
+         "java-21",
+         "java-22",
+         "java-23",
+         "java-24",
+         "java-25",
+         "java-p13",
+         "java-p14",
+         "java-p15"
+        ],
+        "programacion": [
+         "prog-70",
+         "prog-71",
+         "prog-72",
+         "prog-73",
+         "prog-74",
+         "prog-75",
+         "prog-76",
+         "prog-77",
+         "prog-78",
+         "prog-79",
+         "prog-80",
+         "prog-81",
+         "prog-82",
+         "prog-83",
+         "prog-84"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0485-RA4-f",
        "letter": "f",
-       "text": "Se han utilizado mecanismos para controlar la visibilidad de las clases y de sus miembros."
+       "text": "Se han utilizado mecanismos para controlar la visibilidad de las clases y de sus miembros.",
+       "platformQuestionIds": {
+        "java": [
+         "java-26",
+         "java-27",
+         "java-28",
+         "java-29",
+         "java-30",
+         "java-p16",
+         "java-p17",
+         "java-p18"
+        ],
+        "programacion": [
+         "prog-70",
+         "prog-71",
+         "prog-72",
+         "prog-73",
+         "prog-74",
+         "prog-75",
+         "prog-76",
+         "prog-77",
+         "prog-78",
+         "prog-79",
+         "prog-80",
+         "prog-81",
+         "prog-82",
+         "prog-83",
+         "prog-84"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0485-RA4-g",
@@ -1742,12 +3878,57 @@
       {
        "id": "0485-RA4-h",
        "letter": "h",
-       "text": "Se han creado y utilizado métodos estáticos."
+       "text": "Se han creado y utilizado métodos estáticos.",
+       "platformQuestionIds": {
+        "java": [
+         "java-26",
+         "java-27",
+         "java-28",
+         "java-29",
+         "java-30",
+         "java-p16",
+         "java-p17",
+         "java-p18"
+        ],
+        "programacion": [
+         "prog-70",
+         "prog-71",
+         "prog-72",
+         "prog-73",
+         "prog-74",
+         "prog-75",
+         "prog-76",
+         "prog-77",
+         "prog-78",
+         "prog-79",
+         "prog-80",
+         "prog-81",
+         "prog-82",
+         "prog-83",
+         "prog-84"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0485-RA4-i",
        "letter": "i",
-       "text": "Se han creado y utilizado conjuntos y librerías de clases."
+       "text": "Se han creado y utilizado conjuntos y librerías de clases.",
+       "platformQuestionIds": {
+        "programacion": [
+         "prog-85",
+         "prog-86",
+         "prog-87",
+         "prog-88",
+         "prog-89",
+         "prog-90",
+         "prog-91",
+         "prog-92",
+         "prog-93",
+         "prog-94"
+        ]
+       },
+       "mapping": "proposed"
       }
      ]
     },
@@ -1759,42 +3940,210 @@
       {
        "id": "0485-RA5-a",
        "letter": "a",
-       "text": "Se ha utilizado la consola para realizar operaciones de entrada y salida de información."
+       "text": "Se ha utilizado la consola para realizar operaciones de entrada y salida de información.",
+       "platformQuestionIds": {
+        "programacion": [
+         "prog-16",
+         "prog-17",
+         "prog-18",
+         "prog-19",
+         "prog-20",
+         "prog-21",
+         "prog-22",
+         "prog-23",
+         "prog-24",
+         "prog-25",
+         "prog-26",
+         "prog-27",
+         "prog-28",
+         "prog-29",
+         "prog-30",
+         "prog-31",
+         "prog-126",
+         "prog-127",
+         "prog-128",
+         "prog-129",
+         "prog-130",
+         "prog-131",
+         "prog-132",
+         "prog-133",
+         "prog-134"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0485-RA5-b",
        "letter": "b",
-       "text": "Se han aplicado formatos en la visualización de la información."
+       "text": "Se han aplicado formatos en la visualización de la información.",
+       "platformQuestionIds": {
+        "programacion": [
+         "prog-16",
+         "prog-17",
+         "prog-18",
+         "prog-19",
+         "prog-20",
+         "prog-21",
+         "prog-22",
+         "prog-23",
+         "prog-24",
+         "prog-25",
+         "prog-26",
+         "prog-27",
+         "prog-28",
+         "prog-29",
+         "prog-30",
+         "prog-31"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0485-RA5-c",
        "letter": "c",
-       "text": "Se han reconocido las posibilidades de entrada / salida del lenguaje y las librerías asociadas."
+       "text": "Se han reconocido las posibilidades de entrada / salida del lenguaje y las librerías asociadas.",
+       "platformQuestionIds": {
+        "programacion": [
+         "prog-135",
+         "prog-136",
+         "prog-137",
+         "prog-138",
+         "prog-139",
+         "prog-140",
+         "prog-141",
+         "prog-142",
+         "prog-143",
+         "prog-144",
+         "prog-145",
+         "prog-146",
+         "prog-147",
+         "prog-148",
+         "prog-149",
+         "prog-150"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0485-RA5-d",
        "letter": "d",
-       "text": "Se han utilizado ficheros para almacenar y recuperar información."
+       "text": "Se han utilizado ficheros para almacenar y recuperar información.",
+       "platformQuestionIds": {
+        "programacion": [
+         "prog-135",
+         "prog-136",
+         "prog-137",
+         "prog-138",
+         "prog-139",
+         "prog-140",
+         "prog-141",
+         "prog-142",
+         "prog-143",
+         "prog-144",
+         "prog-145",
+         "prog-146",
+         "prog-147",
+         "prog-148",
+         "prog-149",
+         "prog-150"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0485-RA5-e",
        "letter": "e",
-       "text": "Se han creado programas que utilicen diversos métodos de acceso al contenido de los ficheros."
+       "text": "Se han creado programas que utilicen diversos métodos de acceso al contenido de los ficheros.",
+       "platformQuestionIds": {
+        "programacion": [
+         "prog-135",
+         "prog-136",
+         "prog-137",
+         "prog-138",
+         "prog-139",
+         "prog-140",
+         "prog-141",
+         "prog-142",
+         "prog-143",
+         "prog-144",
+         "prog-145",
+         "prog-146",
+         "prog-147",
+         "prog-148",
+         "prog-149",
+         "prog-150"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0485-RA5-f",
        "letter": "f",
-       "text": "Se han utilizado las herramientas del entorno de desarrollo para crear interfaces gráficos de usuario simples."
+       "text": "Se han utilizado las herramientas del entorno de desarrollo para crear interfaces gráficos de usuario simples.",
+       "platformQuestionIds": {
+        "programacion": [
+         "prog-151",
+         "prog-152",
+         "prog-153",
+         "prog-154",
+         "prog-155",
+         "prog-156",
+         "prog-157",
+         "prog-158",
+         "prog-159",
+         "prog-160",
+         "prog-161",
+         "prog-162",
+         "prog-163"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0485-RA5-g",
        "letter": "g",
-       "text": "Se han programado controladores de eventos."
+       "text": "Se han programado controladores de eventos.",
+       "platformQuestionIds": {
+        "programacion": [
+         "prog-151",
+         "prog-152",
+         "prog-153",
+         "prog-154",
+         "prog-155",
+         "prog-156",
+         "prog-157",
+         "prog-158",
+         "prog-159",
+         "prog-160",
+         "prog-161",
+         "prog-162",
+         "prog-163"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0485-RA5-h",
        "letter": "h",
-       "text": "Se han escrito programas que utilicen interfaces gráficos para la entrada y salida de información."
+       "text": "Se han escrito programas que utilicen interfaces gráficos para la entrada y salida de información.",
+       "platformQuestionIds": {
+        "programacion": [
+         "prog-151",
+         "prog-152",
+         "prog-153",
+         "prog-154",
+         "prog-155",
+         "prog-156",
+         "prog-157",
+         "prog-158",
+         "prog-159",
+         "prog-160",
+         "prog-161",
+         "prog-162",
+         "prog-163"
+        ]
+       },
+       "mapping": "proposed"
       }
      ]
     },
@@ -1806,27 +4155,164 @@
       {
        "id": "0485-RA6-a",
        "letter": "a",
-       "text": "Se han escrito programas que utilicen matrices (arrays)."
+       "text": "Se han escrito programas que utilicen matrices (arrays).",
+       "platformQuestionIds": {
+        "java": [
+         "java-16",
+         "java-17",
+         "java-18",
+         "java-19",
+         "java-20",
+         "java-p10",
+         "java-p11",
+         "java-p12"
+        ],
+        "programacion": [
+         "prog-95",
+         "prog-96",
+         "prog-97",
+         "prog-98",
+         "prog-99",
+         "prog-100",
+         "prog-101",
+         "prog-102",
+         "prog-103",
+         "prog-104",
+         "prog-105",
+         "prog-106",
+         "prog-107",
+         "prog-108",
+         "prog-109",
+         "prog-110"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0485-RA6-b",
        "letter": "b",
-       "text": "Se han reconocido las librerías de clases relacionadas con tipos de datos avanzados."
+       "text": "Se han reconocido las librerías de clases relacionadas con tipos de datos avanzados.",
+       "platformQuestionIds": {
+        "java": [
+         "java-41",
+         "java-42",
+         "java-43",
+         "java-44",
+         "java-45",
+         "java-p25",
+         "java-p26",
+         "java-p27"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0485-RA6-c",
        "letter": "c",
-       "text": "Se han utilizado listas para almacenar y procesar información."
+       "text": "Se han utilizado listas para almacenar y procesar información.",
+       "platformQuestionIds": {
+        "java": [
+         "java-41",
+         "java-42",
+         "java-43",
+         "java-44",
+         "java-45",
+         "java-p25",
+         "java-p26",
+         "java-p27"
+        ],
+        "programacion": [
+         "prog-95",
+         "prog-96",
+         "prog-97",
+         "prog-98",
+         "prog-99",
+         "prog-100",
+         "prog-101",
+         "prog-102",
+         "prog-103",
+         "prog-104",
+         "prog-105",
+         "prog-106",
+         "prog-107",
+         "prog-108",
+         "prog-109",
+         "prog-110"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0485-RA6-d",
        "letter": "d",
-       "text": "Se han utilizado iteradores para recorrer los elementos de las listas."
+       "text": "Se han utilizado iteradores para recorrer los elementos de las listas.",
+       "platformQuestionIds": {
+        "java": [
+         "java-41",
+         "java-42",
+         "java-43",
+         "java-44",
+         "java-45",
+         "java-p25",
+         "java-p26",
+         "java-p27"
+        ],
+        "programacion": [
+         "prog-95",
+         "prog-96",
+         "prog-97",
+         "prog-98",
+         "prog-99",
+         "prog-100",
+         "prog-101",
+         "prog-102",
+         "prog-103",
+         "prog-104",
+         "prog-105",
+         "prog-106",
+         "prog-107",
+         "prog-108",
+         "prog-109",
+         "prog-110"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0485-RA6-e",
        "letter": "e",
-       "text": "Se han reconocido las características y ventajas de cada una de las colecciones de datos disponibles."
+       "text": "Se han reconocido las características y ventajas de cada una de las colecciones de datos disponibles.",
+       "platformQuestionIds": {
+        "java": [
+         "java-41",
+         "java-42",
+         "java-43",
+         "java-44",
+         "java-45",
+         "java-p25",
+         "java-p26",
+         "java-p27"
+        ],
+        "programacion": [
+         "prog-95",
+         "prog-96",
+         "prog-97",
+         "prog-98",
+         "prog-99",
+         "prog-100",
+         "prog-101",
+         "prog-102",
+         "prog-103",
+         "prog-104",
+         "prog-105",
+         "prog-106",
+         "prog-107",
+         "prog-108",
+         "prog-109",
+         "prog-110"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0485-RA6-f",
@@ -1836,22 +4322,100 @@
       {
        "id": "0485-RA6-g",
        "letter": "g",
-       "text": "Se han utilizado expresiones regulares en la búsqueda de patrones en cadenas de texto."
+       "text": "Se han utilizado expresiones regulares en la búsqueda de patrones en cadenas de texto.",
+       "platformQuestionIds": {
+        "programacion": [
+         "prog-85",
+         "prog-86",
+         "prog-87",
+         "prog-88",
+         "prog-89",
+         "prog-90",
+         "prog-91",
+         "prog-92",
+         "prog-93",
+         "prog-94"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0485-RA6-h",
        "letter": "h",
-       "text": "Se han identificado las clases relacionadas con el tratamiento de documentos escritos en diferentes lenguajes de intercambio de datos."
+       "text": "Se han identificado las clases relacionadas con el tratamiento de documentos escritos en diferentes lenguajes de intercambio de datos.",
+       "platformQuestionIds": {
+        "programacion": [
+         "prog-135",
+         "prog-136",
+         "prog-137",
+         "prog-138",
+         "prog-139",
+         "prog-140",
+         "prog-141",
+         "prog-142",
+         "prog-143",
+         "prog-144",
+         "prog-145",
+         "prog-146",
+         "prog-147",
+         "prog-148",
+         "prog-149",
+         "prog-150"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0485-RA6-i",
        "letter": "i",
-       "text": "Se han realizado programas que realicen manipulaciones sobre documentos escritos en diferentes lenguajes de intercambio de datos."
+       "text": "Se han realizado programas que realicen manipulaciones sobre documentos escritos en diferentes lenguajes de intercambio de datos.",
+       "platformQuestionIds": {
+        "programacion": [
+         "prog-135",
+         "prog-136",
+         "prog-137",
+         "prog-138",
+         "prog-139",
+         "prog-140",
+         "prog-141",
+         "prog-142",
+         "prog-143",
+         "prog-144",
+         "prog-145",
+         "prog-146",
+         "prog-147",
+         "prog-148",
+         "prog-149",
+         "prog-150"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0485-RA6-j",
        "letter": "j",
-       "text": "Se han utilizado operaciones agregadas para el manejo de información almacenada en colecciones."
+       "text": "Se han utilizado operaciones agregadas para el manejo de información almacenada en colecciones.",
+       "platformQuestionIds": {
+        "programacion": [
+         "prog-95",
+         "prog-96",
+         "prog-97",
+         "prog-98",
+         "prog-99",
+         "prog-100",
+         "prog-101",
+         "prog-102",
+         "prog-103",
+         "prog-104",
+         "prog-105",
+         "prog-106",
+         "prog-107",
+         "prog-108",
+         "prog-109",
+         "prog-110"
+        ]
+       },
+       "mapping": "proposed"
       }
      ]
     },
@@ -1863,27 +4427,160 @@
       {
        "id": "0485-RA7-a",
        "letter": "a",
-       "text": "Se han identificado los conceptos de herencia, superclase y subclase."
+       "text": "Se han identificado los conceptos de herencia, superclase y subclase.",
+       "platformQuestionIds": {
+        "java": [
+         "java-31",
+         "java-32",
+         "java-33",
+         "java-34",
+         "java-35",
+         "java-p19",
+         "java-p20",
+         "java-p21"
+        ],
+        "programacion": [
+         "prog-111",
+         "prog-112",
+         "prog-113",
+         "prog-114",
+         "prog-115",
+         "prog-116",
+         "prog-117",
+         "prog-118",
+         "prog-119",
+         "prog-120",
+         "prog-121",
+         "prog-122",
+         "prog-123",
+         "prog-124",
+         "prog-125"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0485-RA7-b",
        "letter": "b",
-       "text": "Se han utilizado modificadores para bloquear y forzar la herencia de clases y métodos."
+       "text": "Se han utilizado modificadores para bloquear y forzar la herencia de clases y métodos.",
+       "platformQuestionIds": {
+        "java": [
+         "java-36",
+         "java-37",
+         "java-38",
+         "java-39",
+         "java-40",
+         "java-p22",
+         "java-p23",
+         "java-p24"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0485-RA7-c",
        "letter": "c",
-       "text": "Se ha reconocido la incidencia de los constructores en la herencia."
+       "text": "Se ha reconocido la incidencia de los constructores en la herencia.",
+       "platformQuestionIds": {
+        "java": [
+         "java-31",
+         "java-32",
+         "java-33",
+         "java-34",
+         "java-35",
+         "java-p19",
+         "java-p20",
+         "java-p21"
+        ],
+        "programacion": [
+         "prog-111",
+         "prog-112",
+         "prog-113",
+         "prog-114",
+         "prog-115",
+         "prog-116",
+         "prog-117",
+         "prog-118",
+         "prog-119",
+         "prog-120",
+         "prog-121",
+         "prog-122",
+         "prog-123",
+         "prog-124",
+         "prog-125"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0485-RA7-d",
        "letter": "d",
-       "text": "Se han creado clases heredadas que sobrescriben la implementación de métodos de la superclase."
+       "text": "Se han creado clases heredadas que sobrescriben la implementación de métodos de la superclase.",
+       "platformQuestionIds": {
+        "java": [
+         "java-31",
+         "java-32",
+         "java-33",
+         "java-34",
+         "java-35",
+         "java-p19",
+         "java-p20",
+         "java-p21"
+        ],
+        "programacion": [
+         "prog-111",
+         "prog-112",
+         "prog-113",
+         "prog-114",
+         "prog-115",
+         "prog-116",
+         "prog-117",
+         "prog-118",
+         "prog-119",
+         "prog-120",
+         "prog-121",
+         "prog-122",
+         "prog-123",
+         "prog-124",
+         "prog-125"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0485-RA7-e",
        "letter": "e",
-       "text": "Se han diseñado y aplicado jerarquías de clases."
+       "text": "Se han diseñado y aplicado jerarquías de clases.",
+       "platformQuestionIds": {
+        "java": [
+         "java-31",
+         "java-32",
+         "java-33",
+         "java-34",
+         "java-35",
+         "java-p19",
+         "java-p20",
+         "java-p21"
+        ],
+        "programacion": [
+         "prog-111",
+         "prog-112",
+         "prog-113",
+         "prog-114",
+         "prog-115",
+         "prog-116",
+         "prog-117",
+         "prog-118",
+         "prog-119",
+         "prog-120",
+         "prog-121",
+         "prog-122",
+         "prog-123",
+         "prog-124",
+         "prog-125"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0485-RA7-f",
@@ -1893,7 +4590,37 @@
       {
        "id": "0485-RA7-g",
        "letter": "g",
-       "text": "Se han realizado programas que implementen y utilicen jerarquías de clases."
+       "text": "Se han realizado programas que implementen y utilicen jerarquías de clases.",
+       "platformQuestionIds": {
+        "java": [
+         "java-31",
+         "java-32",
+         "java-33",
+         "java-34",
+         "java-35",
+         "java-p19",
+         "java-p20",
+         "java-p21"
+        ],
+        "programacion": [
+         "prog-111",
+         "prog-112",
+         "prog-113",
+         "prog-114",
+         "prog-115",
+         "prog-116",
+         "prog-117",
+         "prog-118",
+         "prog-119",
+         "prog-120",
+         "prog-121",
+         "prog-122",
+         "prog-123",
+         "prog-124",
+         "prog-125"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0485-RA7-h",
@@ -1903,7 +4630,20 @@
       {
        "id": "0485-RA7-i",
        "letter": "i",
-       "text": "Se han identificado y evaluado los escenarios de uso de interfaces."
+       "text": "Se han identificado y evaluado los escenarios de uso de interfaces.",
+       "platformQuestionIds": {
+        "java": [
+         "java-36",
+         "java-37",
+         "java-38",
+         "java-39",
+         "java-40",
+         "java-p22",
+         "java-p23",
+         "java-p24"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0485-RA7-j",
@@ -1967,22 +4707,106 @@
       {
        "id": "0485-RA9-a",
        "letter": "a",
-       "text": "Se han identificado las características y métodos de acceso a sistemas gestores de bases de datos."
+       "text": "Se han identificado las características y métodos de acceso a sistemas gestores de bases de datos.",
+       "platformQuestionIds": {
+        "programacion": [
+         "prog-135",
+         "prog-136",
+         "prog-137",
+         "prog-138",
+         "prog-139",
+         "prog-140",
+         "prog-141",
+         "prog-142",
+         "prog-143",
+         "prog-144",
+         "prog-145",
+         "prog-146",
+         "prog-147",
+         "prog-148",
+         "prog-149",
+         "prog-150"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0485-RA9-b",
        "letter": "b",
-       "text": "Se han programado conexiones con bases de datos."
+       "text": "Se han programado conexiones con bases de datos.",
+       "platformQuestionIds": {
+        "programacion": [
+         "prog-135",
+         "prog-136",
+         "prog-137",
+         "prog-138",
+         "prog-139",
+         "prog-140",
+         "prog-141",
+         "prog-142",
+         "prog-143",
+         "prog-144",
+         "prog-145",
+         "prog-146",
+         "prog-147",
+         "prog-148",
+         "prog-149",
+         "prog-150"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0485-RA9-c",
        "letter": "c",
-       "text": "Se ha escrito código para almacenar información en bases de datos."
+       "text": "Se ha escrito código para almacenar información en bases de datos.",
+       "platformQuestionIds": {
+        "programacion": [
+         "prog-135",
+         "prog-136",
+         "prog-137",
+         "prog-138",
+         "prog-139",
+         "prog-140",
+         "prog-141",
+         "prog-142",
+         "prog-143",
+         "prog-144",
+         "prog-145",
+         "prog-146",
+         "prog-147",
+         "prog-148",
+         "prog-149",
+         "prog-150"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0485-RA9-d",
        "letter": "d",
-       "text": "Se han creado programas para recuperar y mostrar información almacenada en bases de datos."
+       "text": "Se han creado programas para recuperar y mostrar información almacenada en bases de datos.",
+       "platformQuestionIds": {
+        "programacion": [
+         "prog-135",
+         "prog-136",
+         "prog-137",
+         "prog-138",
+         "prog-139",
+         "prog-140",
+         "prog-141",
+         "prog-142",
+         "prog-143",
+         "prog-144",
+         "prog-145",
+         "prog-146",
+         "prog-147",
+         "prog-148",
+         "prog-149",
+         "prog-150"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0485-RA9-e",
@@ -2394,32 +5218,163 @@
       {
        "id": "0487-RA1-b",
        "letter": "b",
-       "text": "Se han identificado las fases de desarrollo de una aplicación informática."
+       "text": "Se han identificado las fases de desarrollo de una aplicación informática.",
+       "platformQuestionIds": {
+        "entornos": [
+         "ent-35",
+         "ent-36",
+         "ent-37",
+         "ent-38",
+         "ent-39",
+         "ent-40",
+         "ent-41",
+         "ent-42",
+         "ent-43",
+         "ent-44",
+         "ent-45",
+         "ent-46",
+         "ent-50",
+         "ent-51",
+         "ent-47"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0487-RA1-c",
        "letter": "c",
-       "text": "Se han diferenciado los conceptos de código fuente, objeto y ejecutable."
+       "text": "Se han diferenciado los conceptos de código fuente, objeto y ejecutable.",
+       "platformQuestionIds": {
+        "entornos": [
+         "ent-12",
+         "ent-13",
+         "ent-14",
+         "ent-15",
+         "ent-16",
+         "ent-48",
+         "ent-49",
+         "ent-17",
+         "ent-18",
+         "ent-19",
+         "ent-20",
+         "ent-21"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0487-RA1-d",
        "letter": "d",
-       "text": "Se han reconocido las características de la generación de código intermedio para su ejecución en máquinas virtuales."
+       "text": "Se han reconocido las características de la generación de código intermedio para su ejecución en máquinas virtuales.",
+       "platformQuestionIds": {
+        "entornos": [
+         "ent-12",
+         "ent-13",
+         "ent-14",
+         "ent-15",
+         "ent-16",
+         "ent-48",
+         "ent-49",
+         "ent-17",
+         "ent-18",
+         "ent-19",
+         "ent-20",
+         "ent-21"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0487-RA1-e",
        "letter": "e",
-       "text": "Se han clasificado los lenguajes de programación, identificando sus características."
+       "text": "Se han clasificado los lenguajes de programación, identificando sus características.",
+       "platformQuestionIds": {
+        "entornos": [
+         "ent-01",
+         "ent-02",
+         "ent-03",
+         "ent-04",
+         "ent-05",
+         "ent-06",
+         "ent-07",
+         "ent-08",
+         "ent-09",
+         "ent-10",
+         "ent-11",
+         "ent-12",
+         "ent-13",
+         "ent-14",
+         "ent-15",
+         "ent-16",
+         "ent-48",
+         "ent-49",
+         "ent-17",
+         "ent-18",
+         "ent-19",
+         "ent-20",
+         "ent-21",
+         "ent-22",
+         "ent-23",
+         "ent-24",
+         "ent-25",
+         "ent-26",
+         "ent-27",
+         "ent-28",
+         "ent-29",
+         "ent-30",
+         "ent-31",
+         "ent-32",
+         "ent-33",
+         "ent-34"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0487-RA1-f",
        "letter": "f",
-       "text": "Se ha evaluado la funcionalidad ofrecida por las herramientas utilizadas en el desarrollo de software."
+       "text": "Se ha evaluado la funcionalidad ofrecida por las herramientas utilizadas en el desarrollo de software.",
+       "platformQuestionIds": {
+        "entornos": [
+         "ent-01",
+         "ent-02",
+         "ent-03",
+         "ent-04",
+         "ent-05",
+         "ent-06",
+         "ent-07",
+         "ent-08",
+         "ent-09",
+         "ent-10",
+         "ent-11"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0487-RA1-g",
        "letter": "g",
-       "text": "Se han identificado las características y escenarios de uso de las metodologías ágiles de desarrollo de software."
+       "text": "Se han identificado las características y escenarios de uso de las metodologías ágiles de desarrollo de software.",
+       "platformQuestionIds": {
+        "entornos": [
+         "ent-35",
+         "ent-36",
+         "ent-37",
+         "ent-38",
+         "ent-39",
+         "ent-40",
+         "ent-41",
+         "ent-42",
+         "ent-43",
+         "ent-44",
+         "ent-45",
+         "ent-46",
+         "ent-50",
+         "ent-51",
+         "ent-47"
+        ]
+       },
+       "mapping": "proposed"
       }
      ]
     },
@@ -2582,7 +5537,25 @@
       {
        "id": "0487-RA5-a",
        "letter": "a",
-       "text": "Se han identificado los conceptos básicos de la programación orientada a objetos."
+       "text": "Se han identificado los conceptos básicos de la programación orientada a objetos.",
+       "platformQuestionIds": {
+        "entornos": [
+         "ent-22",
+         "ent-23",
+         "ent-24",
+         "ent-25",
+         "ent-26",
+         "ent-27",
+         "ent-28",
+         "ent-29",
+         "ent-30",
+         "ent-31",
+         "ent-32",
+         "ent-33",
+         "ent-34"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0487-RA5-b",
@@ -2930,22 +5903,62 @@
       {
        "id": "0612-RA2-b",
        "letter": "b",
-       "text": "Se han utilizado los distintos tipos de variables y operadores disponibles en el lenguaje."
+       "text": "Se han utilizado los distintos tipos de variables y operadores disponibles en el lenguaje.",
+       "platformQuestionIds": {
+        "js": [
+         "js-01",
+         "js-02",
+         "js-03",
+         "js-04",
+         "js-05"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0612-RA2-c",
        "letter": "c",
-       "text": "Se han identificado los ámbitos de utilización de las variables."
+       "text": "Se han identificado los ámbitos de utilización de las variables.",
+       "platformQuestionIds": {
+        "js": [
+         "js-16",
+         "js-17",
+         "js-18",
+         "js-19",
+         "js-20"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0612-RA2-d",
        "letter": "d",
-       "text": "Se han reconocido y comprobado las peculiaridades del lenguaje respecto a las conversiones entre distintos tipos de datos."
+       "text": "Se han reconocido y comprobado las peculiaridades del lenguaje respecto a las conversiones entre distintos tipos de datos.",
+       "platformQuestionIds": {
+        "js": [
+         "js-06",
+         "js-07",
+         "js-08",
+         "js-09",
+         "js-10"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0612-RA2-e",
        "letter": "e",
-       "text": "Se han utilizado mecanismos de decisión en la creación de bloques de sentencias."
+       "text": "Se han utilizado mecanismos de decisión en la creación de bloques de sentencias.",
+       "platformQuestionIds": {
+        "js": [
+         "js-06",
+         "js-07",
+         "js-08",
+         "js-09",
+         "js-10"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0612-RA2-f",
@@ -2987,7 +6000,17 @@
       {
        "id": "0612-RA3-d",
        "letter": "d",
-       "text": "Se han generado textos y etiquetas como resultado de la ejecución de código en el navegador."
+       "text": "Se han generado textos y etiquetas como resultado de la ejecución de código en el navegador.",
+       "platformQuestionIds": {
+        "js": [
+         "js-31",
+         "js-32",
+         "js-33",
+         "js-34",
+         "js-35"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0612-RA3-e",
@@ -3019,47 +6042,137 @@
       {
        "id": "0612-RA4-a",
        "letter": "a",
-       "text": "Se han clasificado y utilizado las funciones predefinidas del lenguaje."
+       "text": "Se han clasificado y utilizado las funciones predefinidas del lenguaje.",
+       "platformQuestionIds": {
+        "js": [
+         "js-11",
+         "js-12",
+         "js-13",
+         "js-14",
+         "js-15"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0612-RA4-b",
        "letter": "b",
-       "text": "Se han creado y utilizado funciones definidas por el usuario."
+       "text": "Se han creado y utilizado funciones definidas por el usuario.",
+       "platformQuestionIds": {
+        "js": [
+         "js-11",
+         "js-12",
+         "js-13",
+         "js-14",
+         "js-15"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0612-RA4-c",
        "letter": "c",
-       "text": "Se han reconocido las características del lenguaje relativas a la creación y uso de matrices (arrays)."
+       "text": "Se han reconocido las características del lenguaje relativas a la creación y uso de matrices (arrays).",
+       "platformQuestionIds": {
+        "js": [
+         "js-21",
+         "js-22",
+         "js-23",
+         "js-24",
+         "js-25"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0612-RA4-d",
        "letter": "d",
-       "text": "Se han creado y utilizado matrices (arrays)."
+       "text": "Se han creado y utilizado matrices (arrays).",
+       "platformQuestionIds": {
+        "js": [
+         "js-21",
+         "js-22",
+         "js-23",
+         "js-24",
+         "js-25"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0612-RA4-e",
        "letter": "e",
-       "text": "Se han utilizado operaciones agregadas para el manejo de información almacenada en colecciones."
+       "text": "Se han utilizado operaciones agregadas para el manejo de información almacenada en colecciones.",
+       "platformQuestionIds": {
+        "js": [
+         "js-21",
+         "js-22",
+         "js-23",
+         "js-24",
+         "js-25"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0612-RA4-f",
        "letter": "f",
-       "text": "Se han reconocido las características de orientación a objetos del lenguaje."
+       "text": "Se han reconocido las características de orientación a objetos del lenguaje.",
+       "platformQuestionIds": {
+        "js": [
+         "js-26",
+         "js-27",
+         "js-28",
+         "js-29",
+         "js-30"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0612-RA4-g",
        "letter": "g",
-       "text": "Se ha creado código para definir la estructura de objetos."
+       "text": "Se ha creado código para definir la estructura de objetos.",
+       "platformQuestionIds": {
+        "js": [
+         "js-26",
+         "js-27",
+         "js-28",
+         "js-29",
+         "js-30"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0612-RA4-h",
        "letter": "h",
-       "text": "Se han creado métodos y propiedades."
+       "text": "Se han creado métodos y propiedades.",
+       "platformQuestionIds": {
+        "js": [
+         "js-26",
+         "js-27",
+         "js-28",
+         "js-29",
+         "js-30"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0612-RA4-i",
        "letter": "i",
-       "text": "Se ha creado código que haga uso de objetos definidos por el usuario."
+       "text": "Se ha creado código que haga uso de objetos definidos por el usuario.",
+       "platformQuestionIds": {
+        "js": [
+         "js-26",
+         "js-27",
+         "js-28",
+         "js-29",
+         "js-30"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0612-RA4-j",
@@ -3086,17 +6199,47 @@
       {
        "id": "0612-RA5-b",
        "letter": "b",
-       "text": "Se han identificado las características del lenguaje de programación relativas a la gestión de los eventos."
+       "text": "Se han identificado las características del lenguaje de programación relativas a la gestión de los eventos.",
+       "platformQuestionIds": {
+        "js": [
+         "js-36",
+         "js-37",
+         "js-38",
+         "js-39",
+         "js-40"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0612-RA5-c",
        "letter": "c",
-       "text": "Se han diferenciado los tipos de eventos que se pueden manejar."
+       "text": "Se han diferenciado los tipos de eventos que se pueden manejar.",
+       "platformQuestionIds": {
+        "js": [
+         "js-36",
+         "js-37",
+         "js-38",
+         "js-39",
+         "js-40"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0612-RA5-d",
        "letter": "d",
-       "text": "Se ha creado un código que capture y utilice eventos."
+       "text": "Se ha creado un código que capture y utilice eventos.",
+       "platformQuestionIds": {
+        "js": [
+         "js-36",
+         "js-37",
+         "js-38",
+         "js-39",
+         "js-40"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0612-RA5-e",
@@ -3128,27 +6271,77 @@
       {
        "id": "0612-RA6-a",
        "letter": "a",
-       "text": "Se ha reconocido el modelo de objetos del documento de una página web."
+       "text": "Se ha reconocido el modelo de objetos del documento de una página web.",
+       "platformQuestionIds": {
+        "js": [
+         "js-31",
+         "js-32",
+         "js-33",
+         "js-34",
+         "js-35"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0612-RA6-b",
        "letter": "b",
-       "text": "Se han identificado los objetos del modelo, sus propiedades y métodos."
+       "text": "Se han identificado los objetos del modelo, sus propiedades y métodos.",
+       "platformQuestionIds": {
+        "js": [
+         "js-31",
+         "js-32",
+         "js-33",
+         "js-34",
+         "js-35"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0612-RA6-c",
        "letter": "c",
-       "text": "Se ha creado y verificado un código que acceda a la estructura del documento."
+       "text": "Se ha creado y verificado un código que acceda a la estructura del documento.",
+       "platformQuestionIds": {
+        "js": [
+         "js-31",
+         "js-32",
+         "js-33",
+         "js-34",
+         "js-35"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0612-RA6-d",
        "letter": "d",
-       "text": "Se han creado nuevos elementos de la estructura y modificado elementos ya existentes."
+       "text": "Se han creado nuevos elementos de la estructura y modificado elementos ya existentes.",
+       "platformQuestionIds": {
+        "js": [
+         "js-31",
+         "js-32",
+         "js-33",
+         "js-34",
+         "js-35"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0612-RA6-e",
        "letter": "e",
-       "text": "Se han asociado acciones a los eventos del modelo."
+       "text": "Se han asociado acciones a los eventos del modelo.",
+       "platformQuestionIds": {
+        "js": [
+         "js-36",
+         "js-37",
+         "js-38",
+         "js-39",
+         "js-40"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0612-RA6-f",
@@ -3175,17 +6368,47 @@
       {
        "id": "0612-RA7-a",
        "letter": "a",
-       "text": "Se han evaluado las ventajas e inconvenientes de utilizar mecanismos de comunicación asíncrona entre cliente y servidor web."
+       "text": "Se han evaluado las ventajas e inconvenientes de utilizar mecanismos de comunicación asíncrona entre cliente y servidor web.",
+       "platformQuestionIds": {
+        "js": [
+         "js-41",
+         "js-42",
+         "js-43",
+         "js-44",
+         "js-45"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0612-RA7-b",
        "letter": "b",
-       "text": "Se han analizado los mecanismos disponibles para el establecimiento de la comunicación asíncrona."
+       "text": "Se han analizado los mecanismos disponibles para el establecimiento de la comunicación asíncrona.",
+       "platformQuestionIds": {
+        "js": [
+         "js-41",
+         "js-42",
+         "js-43",
+         "js-44",
+         "js-45"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0612-RA7-c",
        "letter": "c",
-       "text": "Se han utilizado los objetos relacionados."
+       "text": "Se han utilizado los objetos relacionados.",
+       "platformQuestionIds": {
+        "js": [
+         "js-46",
+         "js-47",
+         "js-48",
+         "js-49",
+         "js-50"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0612-RA7-d",
@@ -3195,12 +6418,32 @@
       {
        "id": "0612-RA7-e",
        "letter": "e",
-       "text": "Se ha utilizado comunicación asíncrona en la actualización dinámica del documento web."
+       "text": "Se ha utilizado comunicación asíncrona en la actualización dinámica del documento web.",
+       "platformQuestionIds": {
+        "js": [
+         "js-46",
+         "js-47",
+         "js-48",
+         "js-49",
+         "js-50"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0612-RA7-f",
        "letter": "f",
-       "text": "Se han utilizado distintos formatos en el envío y recepción de información."
+       "text": "Se han utilizado distintos formatos en el envío y recepción de información.",
+       "platformQuestionIds": {
+        "js": [
+         "js-46",
+         "js-47",
+         "js-48",
+         "js-49",
+         "js-50"
+        ]
+       },
+       "mapping": "proposed"
       },
       {
        "id": "0612-RA7-g",

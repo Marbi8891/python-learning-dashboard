@@ -1,0 +1,344 @@
+"""Módulo de POO del núcleo por conceptos (frontend/data/learning.json, área `poo`).
+
+build_learning.py --check ejecuta cada ejemplo y cada solución; aquí se comprueba la estructura
+que ve la web: el índice de 10 unidades, los once apartados de cada unidad publicada, el banco de
+preguntas y que las correspondencias con el currículo nunca se presenten como oficiales sin validar.
+"""
+
+import importlib.util
+import json
+import re
+import sys
+from pathlib import Path
+
+import pytest
+
+from app.config import FRONTEND_DIR
+
+DATA = json.loads((FRONTEND_DIR / "data" / "learning.json").read_text("utf-8"))
+CATALOG = json.loads((FRONTEND_DIR / "data" / "curriculum" / "daw-cyl.json").read_text("utf-8"))
+CRITERIA = {
+    ce["id"]
+    for module in CATALOG["modules"]
+    for ra in module.get("learningOutcomes", [])
+    for ce in ra["criteria"]
+}
+MODULE = next(m for m in DATA["modules"] if m["id"] == "poo")
+CONCEPTS = {c["id"]: c for c in DATA["concepts"]}
+EXERCISES = {e["id"]: e for e in DATA["exercises"]}
+UNITS = [CONCEPTS[u["id"]] for u in MODULE["units"] if u["available"]]
+FIELDS = ("objectives", "prior", "key", "sections", "guided", "autonomous", "selfcheck", "recap")
+LEARNING = Path(__file__).resolve().parents[2] / "scripts" / "learning"
+
+
+def test_index_has_ten_numbered_units_and_keeps_the_old_route():
+    assert [u["number"] for u in MODULE["units"]] == list(range(1, 11))
+    assert len({u["id"] for u in MODULE["units"]}) == 10
+    # #/teoria/poo sigue existiendo: es la Unidad 2 y conserva su id (y el progreso de los alumnos)
+    assert MODULE["units"][1]["id"] == "poo" and MODULE["units"][1]["available"]
+    for unit in MODULE["units"]:
+        assert unit["available"] == (unit["id"] in CONCEPTS)
+
+
+def test_published_units_follow_the_module_order_in_the_path():
+    # Las 10 unidades publicadas, encadenadas por prerrequisitos y en orden en la ruta
+    published = [u["id"] for u in MODULE["units"] if u["available"]]
+    assert published == [
+        "poo-fundamentos",
+        "poo",
+        "poo-atributos-metodos",
+        "poo-encapsulacion",
+        "poo-herencia",
+        "poo-polimorfismo",
+        "poo-composicion",
+        "poo-metodos-especiales",
+        "poo-diseno",
+        "poo-proyecto",
+    ]
+    path = DATA["path"]
+    assert [path.index(i) for i in published] == sorted(path.index(i) for i in published)
+    assert CONCEPTS["poo"]["requires"] == ["poo-fundamentos"]
+    assert CONCEPTS["poo-atributos-metodos"]["requires"] == ["poo"]
+    assert CONCEPTS["poo-encapsulacion"]["requires"] == ["poo-atributos-metodos"]
+    assert CONCEPTS["poo-herencia"]["requires"] == ["poo-atributos-metodos"]
+    assert CONCEPTS["poo-polimorfismo"]["requires"] == ["poo-herencia"]
+    assert CONCEPTS["poo-composicion"]["requires"] == ["poo-encapsulacion", "poo-herencia"]
+    assert CONCEPTS["poo-metodos-especiales"]["requires"] == ["poo", "poo-atributos-metodos"]
+    assert CONCEPTS["poo-diseno"]["requires"] == ["poo-polimorfismo", "poo-composicion"]
+    assert CONCEPTS["poo-proyecto"]["requires"] == ["poo-metodos-especiales", "poo-diseno"]
+    for number, uid in enumerate(published, start=1):
+        assert CONCEPTS[uid]["unit"] == {"module": "poo", "number": number}
+
+
+@pytest.mark.parametrize("unit", UNITS, ids=lambda u: u["id"])
+def test_unit_has_every_section(unit):
+    assert unit["area"] == "poo"
+    for field in FIELDS:
+        assert unit.get(field), f"falta {field}"
+    assert unit["errors"], "sin errores frecuentes"
+    assert 0 < unit["pass"]["minScore"] <= 1 and unit["pass"]["text"]
+    for section in unit["sections"]:
+        assert section["id"].startswith(f"{unit['id']}.")
+        assert section["theory"] and section["examples"]
+        assert len(section["quiz"]) == 3
+        for example in section["examples"]:
+            assert "output" in example, "la salida de cada ejemplo se calcula al generar"
+
+
+@pytest.mark.parametrize("unit", UNITS, ids=lambda u: u["id"])
+def test_unit_exercises_are_complete_and_not_repeated(unit):
+    own = [e for e in DATA["exercises"] if e["concept"] == unit["id"]]
+    assert len(own) >= 8
+    used = {i for s in unit["sections"] for i in s["quiz"]}
+    used |= set(unit["guided"] + unit["autonomous"] + unit["selfcheck"] + unit["pass"]["required"])
+    used |= set(unit.get("extras", []) + unit["bank"])
+    assert {e["id"] for e in own} <= used, "hay ejercicios que no aparecen en la unidad"
+    assert all(EXERCISES[i]["concept"] == unit["id"] for i in used)
+    texts = [" ".join(f"{e['q']} {e.get('code') or ''}".lower().split()) for e in own]
+    assert len(texts) == len(set(texts)), "preguntas repetidas"
+    errors = {error["id"] for error in unit["errors"]}
+    for ex in own:
+        assert ex["explain"], f"{ex['id']}: sin explicación"
+        if ex["kind"] == "choice":
+            assert len(ex["options"]) == 4, f"{ex['id']}: debe tener 4 opciones"
+            assert ex["options"][ex["answer"]]["error"] is None
+        if ex["kind"] == "code":
+            assert ex["solution"] and ex["hint"] and ex["checks"]
+        tags = [o["error"] for o in ex.get("options", [])]
+        tags += [c.get("error") for c in ex.get("checks", [])]
+        for tag in tags:
+            assert tag is None or tag in errors or tag.split(".")[0] in CONCEPTS
+
+
+@pytest.mark.parametrize("unit", UNITS, ids=lambda u: u["id"])
+def test_curriculum_mappings_have_status_source_and_date(unit):
+    assert unit["curriculum"]
+    for mapping in unit["curriculum"]:
+        assert mapping["status"] in {"verified", "proposed", "unassigned"}
+        assert mapping["source"].split("#")[0] in {s["id"] for s in CATALOG["sources"]}
+        assert re.fullmatch(r"\d{4}-\d{2}-\d{2}", mapping["reviewed"])
+        if mapping["status"] != "unassigned":
+            assert mapping["ce"] in CRITERIA
+        if mapping["status"] == "verified":
+            assert mapping["by"] not in ("", "plataforma"), "validar exige una persona"
+    # Los CE del concepto son exactamente los de sus correspondencias asignadas
+    assigned = [m["ce"] for m in unit["curriculum"] if m["status"] != "unassigned"]
+    assert unit["ce"] == assigned
+
+
+def test_poo_units_enter_the_daw_simulation_only_with_their_bank():
+    """Decisión del autor (15/11/2026): la POO es la 4.ª competencia del simulacro, con su banco."""
+    poo = next(comp for comp in DATA["daw"] if comp["id"] == "poo")
+    assert poo["concepts"] == [u["id"] for u in MODULE["units"]]
+    assert [comp["weight"] for comp in DATA["daw"]] == [30, 30, 20, 20]
+    simulated = [e for e in DATA["exercises"] if e["daw"] and e["concept"] in poo["concepts"]]
+    assert {e["id"] for e in simulated} == {i for u in UNITS for i in u["bank"]}
+
+
+def _load_builder():
+    sys.path.insert(0, str(LEARNING))
+    spec = importlib.util.spec_from_file_location("build_learning", LEARNING / "build_learning.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def test_validator_rejects_an_incomplete_unit(monkeypatch):
+    builder = _load_builder()
+    unit = next(c for c in builder.CONCEPTS if c["id"] == "poo")
+    monkeypatch.setitem(unit, "objectives", [])
+    monkeypatch.setitem(unit, "curriculum", [{**unit["curriculum"][0], "status": "oficial"}])
+    quiet = {"output": "", "error": None, "passed": False}
+    monkeypatch.setattr(builder, "execute", lambda *a, **k: quiet)
+    problems = builder.Problems()
+    builder.check_units(problems)
+    assert any("falta el apartado objectives" in p for p in problems)
+    assert any("estado no válido" in p for p in problems)
+
+
+BANK_QTYPES = {"teoria": 3, "codigo": 3, "prediccion": 3, "error": 2, "solucion": 2, "diseno": 2}
+
+
+@pytest.mark.parametrize("unit", UNITS, ids=lambda u: u["id"])
+def test_unit_bank_has_fifteen_balanced_questions(unit):
+    """Banco evaluable: 15 por unidad, 4 opciones, un porqué en cada distractor y reparto fijo."""
+    bank = [EXERCISES[i] for i in unit["bank"]]
+    assert len(bank) == 15 and len({q["id"] for q in bank}) == 15
+    assert {t: sum(q["qtype"] == t for q in bank) for t in BANK_QTYPES} == BANK_QTYPES
+    assert {n: sum(q["level"] == n for q in bank) for n in (1, 2, 3)} == {1: 5, 2: 6, 3: 4}
+    for q in bank:
+        assert q["kind"] == "choice" and q["bank"] is True and q["concept"] == unit["id"]
+        assert len(q["options"]) == 4 and q["explain"]
+        for i, option in enumerate(q["options"]):
+            assert (i == q["answer"]) or option.get("why"), f"{q['id']}: distractor sin porqué"
+        if q["qtype"] == "prediccion":
+            assert q["code"], f"{q['id']}: una pregunta de predicción lleva código"
+
+
+def test_bank_questions_are_only_those_listed_by_their_units():
+    listed = {i for u in UNITS for i in u["bank"]}
+    marked = {e["id"] for e in DATA["exercises"] if e.get("bank")}
+    assert listed == marked
+    assert len(listed) == 15 * len(UNITS)
+
+
+def test_bank_is_closed_at_150_with_the_level_split_of_the_design():
+    # PR D: banco cerrado de 150 (50 básicas, 60 intermedias, 40 avanzadas), sin textos repetidos
+    bank = [EXERCISES[i] for u in UNITS for i in u["bank"]]
+    assert len(UNITS) == 10 and len(bank) == 150
+    assert {n: sum(q["level"] == n for q in bank) for n in (1, 2, 3)} == {1: 50, 2: 60, 3: 40}
+    texts = [(q["q"], q.get("code") or "") for q in bank]
+    assert len(set(texts)) == 150, "dos preguntas del banco con el mismo enunciado y código"
+
+
+def test_validator_requires_the_closed_bank(monkeypatch):
+    builder = _load_builder()
+    units = [c for c in builder.CONCEPTS if c.get("unit", {}).get("module") == "poo"]
+    monkeypatch.setitem(units[0], "bank", units[0]["bank"][:-1])
+    problems = builder.Problems()
+    builder.check_bank_totals(units, problems)
+    assert any("el banco cerrado tiene 150 preguntas" in p for p in problems)
+
+
+@pytest.mark.parametrize("unit", UNITS, ids=lambda u: u["id"])
+def test_unit_practices_references_and_main_exercise(unit):
+    assert 4 <= len(unit["practices"]) <= 6
+    assert all(p["text"] and p["why"] for p in unit["practices"])
+    sources = MODULE["sources"]
+    assert unit["references"], "cada unidad cita al menos una fuente"
+    for reference in unit["references"]:
+        source = sources[reference["source"]]
+        # La normativa de FP no respalda conceptos de Python: solo aparece en el currículo
+        assert source["kind"] == "python"
+        assert source["url"].startswith("https://docs.python.org/es/3/")
+        assert reference["section"] and reference["supports"]
+        # Desde este entorno no se pueden abrir las fuentes: nada se presenta como comprobado
+        assert reference["status"] == "pending"
+    for section in unit["sections"]:
+        for example in section["examples"]:
+            assert example["origin"]["kind"] in {"original", "docs"}
+    main = EXERCISES[unit["autonomous"][0]]
+    assert main["kind"] == "code" and main["id"] in unit["pass"]["required"]
+    assert all(EXERCISES[i]["kind"] == "code" for i in unit.get("extras", []))
+
+
+def test_source_catalog_is_closed():
+    assert set(MODULE["sources"]) == {
+        "py-tutorial-classes",
+        "py-faq-programming",
+        "py-abc",
+        "py-dataclasses",
+        "rd-405-2023",
+        "rd-659-2023",
+    }
+
+
+def test_validator_rejects_bad_bank_and_references(monkeypatch):
+    builder = _load_builder()
+    unit = next(c for c in builder.CONCEPTS if c["id"] == "poo")
+    monkeypatch.setitem(unit, "bank", unit["bank"][:14])
+    monkeypatch.setitem(
+        unit,
+        "references",
+        [
+            {
+                "source": "rd-405-2023",
+                "section": "Anexo I",
+                "supports": ["clases"],
+                "status": "pending",
+            },
+            {"source": "otra-web", "section": "x", "supports": ["y"], "status": "pending"},
+            {
+                "source": "py-faq-programming",
+                "section": "x",
+                "supports": ["y"],
+                "status": "verified",
+            },
+        ],
+    )
+    monkeypatch.setitem(unit, "practices", unit["practices"][:2])
+    quiet = {"output": "", "error": None, "passed": False}
+    monkeypatch.setattr(builder, "execute", lambda *a, **k: quiet)
+    problems = builder.Problems()
+    builder.check_units(problems)
+    assert any("exactamente 15 preguntas" in p for p in problems)
+    assert any("la normativa de FP no respalda" in p for p in problems)
+    assert any("fuera del catálogo" in p for p in problems)
+    assert any("verified necesita quién" in p for p in problems)
+    assert any("buenas prácticas son de 4 a 6" in p for p in problems)
+    assert any("marcada bank pero fuera del banco" in p for p in problems)
+
+
+def test_validator_checks_prediction_answers_against_the_real_output(monkeypatch):
+    builder = _load_builder()
+    question = next(e for e in builder.E if e["id"] == "poo1-15")
+    wrong = {"output": "35 35\n", "error": None, "passed": False}
+    monkeypatch.setattr(builder, "execute", lambda *a, **k: wrong)
+    problems = builder.Problems()
+    builder.check_units(problems)
+    assert any(p.startswith(f"pregunta {question['id']}") and "salida real" in p for p in problems)
+
+
+def test_final_project_has_diagram_rubric_and_challenges():
+    project = CONCEPTS["poo-proyecto"]
+    boxes = {b["id"] for b in project["diagram"]["classes"]}
+    assert {r["from"] for r in project["diagram"]["relations"]} <= boxes
+    assert {r["to"] for r in project["diagram"]["relations"]} <= boxes
+    assert {r["kind"] for r in project["diagram"]["relations"]} == {
+        "agregacion",
+        "composicion",
+        "asociacion",
+    }
+    assert sum(item["points"] for item in project["rubric"]) == 100
+    assert len(project["challenges"]) >= 3
+    # el proyecto va por fases: un ejercicio por clase, de la fase guiada a la completa
+    assert project["guided"] == ["poo10-01"] and project["autonomous"] == ["poo10-06"]
+
+
+def test_validator_rejects_a_broken_diagram_and_rubric(monkeypatch):
+    builder = _load_builder()
+    project = next(c for c in builder.CONCEPTS if c["id"] == "poo-proyecto")
+    diagram = json.loads(json.dumps(project["diagram"]))
+    diagram["relations"].append({"from": "libro", "to": "socio", "kind": "uso", "text": ""})
+    diagram["classes"][1]["col"], diagram["classes"][1]["row"] = 1, 0
+    monkeypatch.setitem(project, "diagram", diagram)
+    monkeypatch.setitem(project, "rubric", project["rubric"][:-1])
+    monkeypatch.setitem(project, "challenges", ["", "reto"])
+    problems = builder.Problems()
+    builder.check_project_extras(project, "unidad 10", problems)
+    assert any("clase inexistente" in p for p in problems)
+    assert any("tipo de relación desconocido: uso" in p for p in problems)
+    assert any("se explica en texto" in p for p in problems)
+    assert any("misma celda" in p for p in problems)
+    assert any("sumar 100 puntos" in p for p in problems)
+    assert any("retos de ampliación" in p for p in problems)
+
+
+def test_poo_prerequisites_point_backwards_and_have_no_cycles():
+    # PR E: cada unidad solo pide unidades anteriores del módulo (o conceptos previos del temario),
+    # así que el grafo no tiene ciclos y la ruta puede enseñarlas en orden
+    path = DATA["path"]
+    numbers = {u["id"]: u["number"] for u in MODULE["units"]}
+    for unit in UNITS:
+        for required in unit["requires"]:
+            assert path.index(required) < path.index(unit["id"]), f"{unit['id']} pide {required}"
+            if required in numbers:
+                assert numbers[required] < unit["unit"]["number"]
+    # Desde la Unidad 10 se llega a todas las demás siguiendo prerrequisitos
+    seen, todo = set(), ["poo-proyecto"]
+    while todo:
+        current = todo.pop()
+        if current not in seen:
+            seen.add(current)
+            todo += CONCEPTS[current]["requires"]
+    assert set(numbers) <= seen
+
+
+def test_python_concepts_are_never_backed_by_fp_regulations():
+    # La normativa de FP solo respalda la correspondencia curricular, nunca un concepto de Python
+    norms = {k for k, s in MODULE["sources"].items() if s["kind"] == "norma"}
+    for unit in UNITS:
+        assert not {r["source"] for r in unit["references"]} & norms
+        for mapping in unit["curriculum"]:
+            assert mapping["status"] == "proposed", "ningún CE se presenta como validado"
+            assert mapping["source"].split("#")[0] in norms

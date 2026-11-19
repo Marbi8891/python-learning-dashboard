@@ -79,8 +79,7 @@ export function renderDawPrep(index, state) {
   }).join("");
 
   const history = state.exams
-    .slice()
-    .reverse()
+    .toReversed()
     .slice(0, 8)
     .map((e) => `<li class="lx-row"><span>${formatDay(e.date)} · ${e.kind === "daw-completo" ? "Temario completo" : "Lo estudiado"}</span><span class="lx-row__value">${e.correct} de ${e.total} · ${percent(e.total ? e.correct / e.total : 0)} · ${Math.round(e.seconds / 60)} min</span></li>`)
     .join("");

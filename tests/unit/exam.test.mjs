@@ -4,15 +4,25 @@ import { buildExam, competencyAdvice, competencyStats, examByCompetency, examMin
 import { allStats, markRead, recordAttempt } from "../../frontend/js/learn/mastery.js";
 import { exercisesOf, fresh, index, NOW, seeded } from "./helpers.mjs";
 
+// Las unidades del módulo de POO (área `poo`) entran en el simulacro (15/11/2026) pero no en la prueba de nivel
+const notPoo = (id) => index.concepts.get(id).area !== "poo";
+
 const master = (state, concept) => {
   for (const e of exercisesOf(concept)) recordAttempt(state, e, { ok: true, error: null }, { now: NOW });
 };
 
-test("las competencias de DAW cubren todos los conceptos salvo POO y sus pesos suman 100", () => {
+test("las competencias de DAW cubren todos los conceptos, la POO es la cuarta y los pesos suman 100", () => {
   const ids = index.data.daw.flatMap((c) => c.concepts);
   assert.equal(new Set(ids).size, ids.length);
-  assert.deepEqual([...ids].sort(), index.path.filter((id) => id !== "poo").sort());
+  assert.deepEqual([...ids].sort(), [...index.path].sort());
   assert.equal(index.data.daw.reduce((s, c) => s + c.weight, 0), 100);
+  const poo = index.data.daw.find((c) => c.id === "poo");
+  assert.deepEqual([...poo.concepts].sort(), index.path.filter((id) => !notPoo(id)).sort());
+  assert.deepEqual(poo.requires, ["programacion"]);
+  // De la POO, al simulacro solo van las 150 preguntas del banco
+  const pooDaw = index.data.exercises.filter((e) => e.daw && !notPoo(e.concept));
+  assert.equal(pooDaw.length, 150);
+  assert.ok(pooDaw.every((e) => e.bank && e.kind === "choice"));
 });
 
 test("competencyStats: dominio ponderado y conceptos más flojos", () => {
@@ -32,7 +42,8 @@ test("competencyAdvice: con Fundamentos flojo, pide reforzarlo antes de Programa
   master(state, "variables");
   recordAttempt(state, exercisesOf("funciones")[0], { ok: true, error: null }, { now: NOW });
   const advice = competencyAdvice(index, competencyStats(index, allStats(index, state, NOW)));
-  assert.deepEqual(advice.map((a) => a.before), ["programacion", "logica"]);
+  // La POO pide Programación, que también está empezada y floja
+  assert.deepEqual(advice.map((a) => a.before), ["programacion", "logica", "poo"]);
   assert.deepEqual(advice[0].concepts, competencyStats(index, allStats(index, state, NOW))[0].weakest);
   assert.match(advice[0].text, /^Necesitas reforzar .+ antes de pasar a Programación\.$/);
 });
@@ -44,8 +55,10 @@ test("competencyAdvice: sin avisos cuando la base está firme (ni antes de empez
   recordAttempt(state, exercisesOf("funciones")[0], { ok: false, error: null }, { now: NOW });
   const comps = competencyStats(index, allStats(index, state, NOW));
   assert.ok(comps[0].score >= 0.99);
-  assert.deepEqual(competencyAdvice(index, comps), []);
-  assert.ok(examReadiness(comps) > 0.3);
+  // Con Fundamentos firme no hay avisos que dependan de él; solo la POO avisa de que Programación está floja
+  assert.deepEqual(competencyAdvice(index, comps).map((a) => a.before), ["poo"]);
+  // Con Fundamentos dominado, la preparación es al menos su peso en el simulacro (30 %)
+  assert.ok(examReadiness(comps) >= (index.data.daw[0].weight / 100) * 0.99);
 });
 
 test("buildExam (todo el temario): tamaño, sin repetidos, reparto por competencias y 1-2 problemas de código", () => {
@@ -60,6 +73,8 @@ test("buildExam (todo el temario): tamaño, sin repetidos, reparto por competenc
       const n = exam.filter((e) => competency.concepts.includes(e.concept)).length;
       assert.ok(n >= 2, `seed ${seed}: ${competency.id} tiene ${n}`);
     }
+    // Los problemas de código no salen nunca de la POO (sus ejercicios de código no son de formato examen)
+    assert.ok(exam.filter((e) => e.kind === "code").every((e) => notPoo(e.concept)));
     assert.deepEqual(exam.map((e) => e.level), [...exam.map((e) => e.level)].sort(), "de sencillo a completo");
   }
 });
@@ -79,14 +94,14 @@ test("examMinutes y examByCompetency", () => {
   const byComp = examByCompetency(index, { concepts: { bucles: [1, 2], funciones: [0, 1], trazado: [2, 2] } });
   assert.deepEqual(
     byComp.map((c) => [c.id, c.ok, c.total]),
-    [["fundamentos", 1, 2], ["programacion", 0, 1], ["logica", 2, 2]],
+    [["fundamentos", 1, 2], ["programacion", 0, 1], ["logica", 2, 2], ["poo", 0, 0]],
   );
 });
 
 test("prueba de nivel: respuesta escrita o dos preguntas por concepto, sin código ni POO (AUD-002)", async () => {
   const { buildDiagnostic } = await import("../../frontend/js/learn/exam.js");
   const list = buildDiagnostic(index, { random: seeded(2) });
-  const concepts = index.path.filter((id) => id !== "poo");
+  const concepts = index.path.filter(notPoo);
   assert.deepEqual([...new Set(list.map((e) => e.concept))], concepts);
   assert.ok(list.every((e) => e.kind !== "code" && e.kind !== "order"));
   assert.equal(new Set(list.map((e) => e.id)).size, list.length, "sin repetidos");

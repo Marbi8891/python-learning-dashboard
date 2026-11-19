@@ -7,7 +7,8 @@
      no atiende mensajes, así que la única forma fiable de pararlo es terminarlo. */
 
 export const PYODIDE_VERSION = "314.0.7";
-const DEFAULT_INDEX_URL = `https://cdn.jsdelivr.net/pyodide/v${PYODIDE_VERSION}/full/`;
+// Python se sirve desde la propia web (RT-002): lo copia scripts/web/vendor_pyodide.py, que comprueba su sha256
+const DEFAULT_INDEX_URL = new URL(`../pyodide/v${PYODIDE_VERSION}/`, import.meta.url).href;
 
 // Con conexión lenta la primera descarga (unos 10 MB) puede tardar minutos: a los 20 s se avisa
 // de que sigue descargando y a los 5 min se abandona con un error que se puede reintentar.

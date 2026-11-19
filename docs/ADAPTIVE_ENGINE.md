@@ -49,6 +49,8 @@ Se distingue:
 | Qué | Dónde | Cuenta para el dominio |
 |---|---|---|
 | Contenido leído | `concepts[id].read` | No |
+| Lección completada (módulo de POO) | `sections[id]` | No |
+| Nota de un cuestionario con nota (POO) | `quizzes[id]`: mejor nota, último intento y primer aprobado | No (sus respuestas sí, como intentos) |
 | Ejercicio intentado | `ex[id]` existe | Sí, con su último resultado |
 | Respuesta correcta | `ex[id].h.at(-1) === true`, `okAt` | Sí |
 | Nuevo intento tras ver la explicación | solo `log` y errores | No |
@@ -169,6 +171,7 @@ daba el 100 % (AUD-006).
 | Ids estables y modelo de conocimiento | `backend/tests/test_learning_ids.py` |
 | Documento `planner` en la API | `backend/tests/test_course_state.py` |
 | Planificador en la web | `e2e/learn.spec.js` («planificador: …») |
+| Módulo de POO (lecciones, fusión, recomendaciones) | `tests/unit/poo-module.test.mjs`, `backend/tests/test_poo_module.py`, `e2e/poo.spec.js` |
 
 ## 10. Métricas para validar con uso real
 

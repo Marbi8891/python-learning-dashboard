@@ -66,6 +66,25 @@
        "url": "https://docs.python.org/es/3/library/xml.etree.elementtree.html"
       }
      ],
+     "curriculum": {
+      "ra": [
+       "0373-RA1"
+      ],
+      "ce": [
+       "0373-RA1-a",
+       "0373-RA1-b",
+       "0373-RA1-c",
+       "0373-RA1-d",
+       "0373-RA1-e",
+       "0373-RA1-f",
+       "0373-RA1-g",
+       "0373-RA1-h",
+       "0373-RA1-i"
+      ],
+      "status": "proposed",
+      "source": "Objetivos de la lección: su autor cita estos RA y CE",
+      "reviewed": null
+     },
      "objectives": [
       "Clasificar los lenguajes de marcas y reconocer los más usados y sus ámbitos (RA1 a-f).",
       "Identificar la estructura de un documento XML y sus reglas sintácticas (RA1 g).",
@@ -178,6 +197,24 @@
        "url": "https://validator.w3.org/"
       }
      ],
+     "curriculum": {
+      "ra": [
+       "0373-RA2"
+      ],
+      "ce": [
+       "0373-RA2-a",
+       "0373-RA2-b",
+       "0373-RA2-c",
+       "0373-RA2-d",
+       "0373-RA2-e",
+       "0373-RA2-f",
+       "0373-RA2-g",
+       "0373-RA2-h"
+      ],
+      "status": "proposed",
+      "source": "Objetivos de la lección: su autor cita estos RA y CE",
+      "reviewed": null
+     },
      "objectives": [
       "Reconocer las versiones de HTML y las diferencias de HTML5 (RA2 a, d).",
       "Analizar la estructura de un documento HTML y la función de sus etiquetas y atributos principales (RA2 b, c).",
@@ -286,6 +323,23 @@
        "url": "https://www.w3.org/TR/xmlschema11-1/"
       }
      ],
+     "curriculum": {
+      "ra": [
+       "0373-RA4"
+      ],
+      "ce": [
+       "0373-RA4-a",
+       "0373-RA4-b",
+       "0373-RA4-c",
+       "0373-RA4-d",
+       "0373-RA4-e",
+       "0373-RA4-f",
+       "0373-RA4-g"
+      ],
+      "status": "proposed",
+      "source": "Objetivos de la lección: su autor cita estos RA y CE",
+      "reviewed": null
+     },
      "objectives": [
       "Explicar por qué hay que describir los documentos que se intercambian (RA4 a, b).",
       "Leer y escribir modelos de contenido y atributos en una DTD (RA4 c, d).",
@@ -393,6 +447,25 @@
        "url": "https://docs.python.org/es/3/library/xml.etree.elementtree.html"
       }
      ],
+     "curriculum": {
+      "ra": [
+       "0373-RA5",
+       "0373-RA6"
+      ],
+      "ce": [
+       "0373-RA6-e",
+       "0373-RA6-h",
+       "0373-RA6-i",
+       "0373-RA5-c",
+       "0373-RA5-d",
+       "0373-RA5-e",
+       "0373-RA5-f",
+       "0373-RA5-g"
+      ],
+      "status": "proposed",
+      "source": "Objetivos de la lección: su autor cita estos RA y CE",
+      "reviewed": null
+     },
      "objectives": [
       "Seleccionar nodos de un documento XML con expresiones XPath (RA6 e).",
       "Escribir una hoja XSLT que convierta un XML en HTML (RA5 c-g).",
@@ -494,6 +567,24 @@
        "url": "https://docs.python.org/es/3/library/json.html"
       }
      ],
+     "curriculum": {
+      "ra": [
+       "0373-RA5",
+       "0373-RA6"
+      ],
+      "ce": [
+       "0373-RA6-a",
+       "0373-RA6-b",
+       "0373-RA6-c",
+       "0373-RA6-d",
+       "0373-RA6-f",
+       "0373-RA6-g",
+       "0373-RA5-g"
+      ],
+      "status": "proposed",
+      "source": "Objetivos de la lección: su autor cita estos RA y CE",
+      "reviewed": null
+     },
      "objectives": [
       "Escribir JSON válido y distinguirlo de un objeto de JavaScript o de Python (RA6 a, d).",
       "Comparar XML, JSON, CSV y YAML y elegir el adecuado (RA6 b, c).",
@@ -600,6 +691,28 @@
        "url": "https://www.odoo.com/documentation/"
       }
      ],
+     "curriculum": {
+      "ra": [
+       "0373-RA2",
+       "0373-RA7"
+      ],
+      "ce": [
+       "0373-RA2-i",
+       "0373-RA2-j",
+       "0373-RA7-a",
+       "0373-RA7-b",
+       "0373-RA7-c",
+       "0373-RA7-d",
+       "0373-RA7-e",
+       "0373-RA7-f",
+       "0373-RA7-g",
+       "0373-RA7-h",
+       "0373-RA7-i"
+      ],
+      "status": "proposed",
+      "source": "Objetivos de la lección: su autor cita estos RA y CE",
+      "reviewed": null
+     },
      "objectives": [
       "Reconocer las tecnologías de sindicación (RSS y Atom) y sus usos (RA2 i, j).",
       "Identificar los sistemas de gestión empresarial y sus ventajas (RA7 a-c).",

@@ -11,7 +11,8 @@ export function keepForms(container, repaint) {
   const saved = [...container.querySelectorAll("form[id]")].map((form) => ({
     id: form.id,
     fields: [...form.elements]
-      .filter((el) => el.name && (el.type === "checkbox" || el.type === "radio" ? el.checked !== el.defaultChecked : "defaultValue" in el && el.value !== el.defaultValue))
+      // Como keepTyped (form-errors.js): un input file no admite que se le asigne valor y uno hidden no lo escribe el alumno
+      .filter((el) => el.name && el.type !== "file" && el.type !== "hidden" && (el.type === "checkbox" || el.type === "radio" ? el.checked !== el.defaultChecked : "defaultValue" in el && el.value !== el.defaultValue))
       .map((el) => ({ name: el.name, value: el.value, checked: el.checked, radio: el.type === "radio" })),
     invalid: [...form.querySelectorAll("[aria-invalid]")].map((el) => ({ name: el.name, describedby: el.getAttribute("aria-describedby") })),
     message: form.querySelector(".form-message"),

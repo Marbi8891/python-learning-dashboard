@@ -59,9 +59,9 @@ apartado 7.G de la auditoría.
 | Finalidad | Que el usuario vea accesos a su cuenta; detectar ataques; limitar intentos |
 | Base jurídica | Interés legítimo en la seguridad (art. 6.1.f) |
 | Interesados | Usuarios con cuenta y quien intenta entrar |
-| Datos | Actividad de la cuenta (tipo, fecha, dispositivo aproximado, sin IP; 20 últimos); registro de seguridad con seudónimos HMAC de IP y email; IP en memoria unos minutos |
+| Datos | Actividad de la cuenta (tipo, fecha, dispositivo aproximado, sin IP; 20 últimos); registro de seguridad con seudónimos HMAC de IP y email; seudónimo HMAC de IP y email en la tabla `rate_limits` para limitar intentos (como mucho 2 ventanas, de 1 a 15 min) |
 | Destinatarios | Render (logs) |
-| Conservación | Actividad: 20 eventos. Logs: `[[TITULAR: retención de logs de Render]]`. IP: solo en memoria |
+| Conservación | Actividad: 20 eventos. Logs: `[[TITULAR: retención de logs de Render]]`. Límites de intentos: seudónimos HMAC, se borran tras 2 ventanas (2 a 30 min) |
 | Código | `backend/app/activity.py`, `security_events.py`, `rate_limit.py` |
 
 ### RAT-4. Registros técnicos de acceso

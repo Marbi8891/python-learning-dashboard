@@ -48,9 +48,9 @@ Se guarda en el mismo documento del curso, con dos campos nuevos (`frontend/js/l
 1. Crea `scripts/courses/<id>_course.py` copiando la estructura de `marcas_course.py`: bloques (`Block`), lecciones (`Lesson`) y preguntas (`Q`). Llama a `main("<id>", BLOCKS, runner, check_example, module="<código>")`, con el código oficial del módulo.
 2. Genera los JSON: `python scripts/courses/<id>_course.py`.
 3. Registra el curso:
-   - en `frontend/js/course-store.js` (`DAW_COURSES`: id, `module`, título, subtítulo y lenguaje);
+   - en `frontend/js/catalog.js` (`DAW_COURSES`: id, `module`, título, subtítulo y lenguaje; `course-store.js` lo reexporta). Un itinerario que no sea un módulo de DAW va en `ACADEMY_COURSES` (familia `academia`, sin `module`);
    - en `frontend/js/daw.js` (`TRY`, el texto de «Para probarlo»);
-   - en `backend/app/schemas.py` (`COURSES`): sin esto, la cuenta rechaza su progreso;
+   - en `backend/app/schemas.py` (`COURSES`): sin esto, la cuenta rechaza su progreso (`backend/tests/test_course_catalog.py` falla si el catálogo y `COURSES` no coinciden);
    - en `.github/workflows/ci.yml` (paso «Cursos al día»).
 4. Regenera el currículo para que cuente las preguntas del módulo: `python scripts/curriculum/build_curriculum.py`.
 5. Ajusta las e2e que cuentan cursos o módulos (`e2e/daw.spec.js`, `e2e/dashboard.spec.js`).
@@ -104,7 +104,7 @@ Para añadir uno: añade su ficha a `RESOURCES`, ejecuta `python scripts/resourc
 | Catálogo de recursos | `python scripts/resources/build_resources.py --check` y `backend/tests/test_resources.py` |
 | Fusión y validación del progreso por lección | `tests/unit/lesson-progress.test.mjs` |
 | Enlace directo, recarga, mini-quiz, práctica, completar, continuar, recursos y sincronización con la cuenta sin borrar lo de otro dispositivo | `e2e/daw.spec.js` |
-| Accesibilidad (axe, WCAG 2.1 AA) de una lección y del panel de Lenguajes de marcas | `e2e/daw.spec.js` |
+| Accesibilidad (axe, reglas de WCAG 2.2 A/AA) de una lección y del panel de Lenguajes de marcas | `e2e/daw.spec.js` |
 
 ## 8. Limitaciones conocidas y siguiente paso
 

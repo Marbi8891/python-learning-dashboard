@@ -13,6 +13,7 @@ pip install -r backend/requirements-dev.txt
 # Node 22 (solo para las pruebas del frontend)
 npm ci
 npx playwright install chromium        # solo para las e2e
+python scripts/web/vendor_pyodide.py   # Python para la consola (frontend/pyodide/, sin CDN)
 ```
 
 Las e2e arrancan solas el frontend (`e2e/serve_frontend.py`, un `http.server` con HTTP/1.1) y el backend (`e2e/start_backend.py`, con una SQLite temporal). Está en `playwright.config.js`.
@@ -32,24 +33,36 @@ Las e2e arrancan solas el frontend (`e2e/serve_frontend.py`, un `http.server` co
 | Frontend | `npm run test:unit` | Lógica del aprendizaje (dominio, confianza, retención), repaso espaciado común, recomendación, planificador, panel y Markdown seguro |
 | End-to-end y WCAG | `npm run test:e2e` | La web entera con el backend real y auditoría de accesibilidad (axe-core con las reglas de WCAG 2.2 A/AA, foco y letra al 200 %) |
 | Migraciones en PostgreSQL | `MIGRATION_TEST_DATABASE_URL=postgresql://… python -m pytest -q tests/test_migrations.py` (en `backend/`) | Migraciones sobre una BD vacía y con datos |
+| Límites compartidos | `RATE_LIMIT_TEST_DATABASE_URL=postgresql://postgres:…@localhost:5432/pld python -m pytest -q tests/test_shared_rate_limit.py` (en `backend/`) | 40 intentos a la vez desde 4 instancias contra PostgreSQL: pasan exactamente los del límite; sin la variable se prueba la lógica con SQLite |
+| Copia y restauración | `BACKUP_TEST_DATABASE_URL=postgresql://postgres:…@localhost:5432/postgres python -m pytest -q tests/test_copia_bd.py` (en `backend/`, con `pg_dump`) | Ensayo completo: migrar, copiar, restaurar en otra base y comparar filas; sin la variable solo corren las comprobaciones de seguridad |
 | Archivos sin conexión | `node scripts/web/build_precache.mjs --check` (también `tests/unit/precache.test.mjs`) | `frontend/precache.js`, la lista que el service worker guarda al instalarse, está al día |
-| Safari (WebKit) | `PW_WEBKIT=1 npx playwright test --project=webkit e2e/navigation.spec.js e2e/landing.spec.js` | Prueba de humo en WebKit (trabajo `webkit` de CI) |
+| Safari (WebKit) | `PW_WEBKIT=1 npx playwright test --project=webkit e2e/navigation.spec.js e2e/landing.spec.js e2e/account.spec.js` | Prueba de humo en WebKit, con la cuenta y el cierre de sesión (trabajo `webkit` de CI) |
 | Inspección de la web | `node scripts/web/inspeccionar_web.mjs [--rutas a,b] [--tema claro\|oscuro\|ambos] [--comparar <carpeta>]` | Capturas en móvil y escritorio (y en tema oscuro con `--tema`), axe, errores de consola, desbordamiento y peso de cada ruta (no es una prueba que falle: es evidencia de antes y después) |
 | Dependencias | `pip-audit -r backend/requirements.txt` y `npm audit --audit-level=high` | Vulnerabilidades conocidas |
+| Despliegue (sin desplegar) | `cp -r frontend _site && python scripts/security/production_csp.py _site && python scripts/qa/verify_pages_artifact.py _site` y `node --experimental-vm-modules scripts/qa/frontend_static.mjs --root _site` | Lo que publicaría Pages: archivos necesarios, CSP sin orígenes de desarrollo, sin restos ni secretos, imports y referencias. En CI (`deployment-check.yml`) también construye la imagen Docker de Render, comprueba `/api/health` y valida los workflows con actionlint |
 
 GitHub Actions (`ci.yml`) lo pasa todo en cada push y pull request.
 
+En CI cada e2e que falla se reintenta una vez para guardar su traza (`playwright-report`, se sube como artefacto),
+pero una prueba que solo pasa al reintentar hace fallar el trabajo (`failOnFlakyTests`): hay que arreglarla, no
+reintentarla. Para comprobar que una prueba es estable, repítela: `npx playwright test <archivo> -g "<nombre>" --repeat-each=5`.
+
+El portapapeles no se prueba igual en todos los motores, porque Playwright no da los mismos permisos:
+Chromium acepta `clipboard-read` y `clipboard-write`, WebKit solo `clipboard-read` y Firefox ninguno. Usa
+`watchClipboard(page, browserName)` de `e2e/fixtures.js`: anota lo que la web copia de verdad y, donde se puede,
+lee el portapapeles real.
+
 En un portátil, las e2e en paralelo pueden agotar el tiempo de espera, porque cada navegador descarga Pyodide (unos 10 MB) a la vez. Si pasa, ejecútalas en serie: `npx playwright test --workers=1`.
 
-Sin acceso a `cdn.jsdelivr.net` (por ejemplo, en un contenedor en la nube), Pyodide no se descarga y fallan las e2e que
-ejecutan Python, sin que sea un fallo de la web. Para servirlo en local con la misma versión que la CSP de `index.html`:
+Python (Pyodide) se sirve desde la propia web, en `frontend/pyodide/v<versión>/` (RT-002). Esa carpeta no está en
+el repositorio: créala una vez, después de `npm ci`, con
 
 ```bash
-npm i --prefix "$TMP/pyo" pyodide@314.0.7          # fuera del repositorio
-ln -s "$TMP/pyo/node_modules/pyodide" frontend/_pyo   # enlace temporal: bórralo al terminar
-PYODIDE_URL=http://localhost:5500/_pyo/ npm run test:e2e
-rm frontend/_pyo
+python scripts/web/vendor_pyodide.py   # copia y comprueba la sha256 de cada archivo
 ```
+
+Sin ella, fallan las e2e que ejecutan Python. Si cambias la versión, cámbiala a la vez en `package.json`
+(exacta), en `PYODIDE_VERSION` de `frontend/js/python-runner.js` y en las sha256 de `vendor_pyodide.py`.
 
 ## Qué ejecutar según lo que cambies
 
@@ -61,7 +74,11 @@ rm frontend/_pyo
 | Archivos de `frontend/` (nuevos, borrados o renombrados) o `frontend/sw.js` | `node scripts/web/build_precache.mjs` y `npx playwright test e2e/study.spec.js -g PWA` |
 | `frontend/data/lessons.json` o `pcap.json` | `cd backend && python -m pytest -q tests/test_content.py tests/test_pcap.py` |
 | `scripts/learning/**` | `python scripts/learning/build_learning.py` y después `--check` |
+| Módulo de POO (`scripts/learning/poo_module.py`, `frontend/js/learn/poo-view.js`) | Lo anterior, `cd backend && python -m pytest -q tests/test_poo_module.py`, `npm run test:unit` y `npx playwright test e2e/poo.spec.js` |
 | `scripts/courses/**` | `python scripts/courses/<curso>_course.py --check`, `python scripts/courses/lock_ids.py` si hay ids nuevos y `cd backend && python -m pytest -q tests/test_daw_courses.py` |
+| Motor de fórmulas de Excel (`frontend/js/excel/**`) | `npm run test:unit` (casos de referencia en `tests/fixtures/excel/reference-cases.json`; reglas de criterios en `excel-conditional.test.mjs`; el motor tiene que pesar < 60 KB), `npx playwright test e2e/excel.spec.js` y, si cambian casos con fuente «libreoffice», `python scripts/excel/oracle_libreoffice.py` (necesita LibreOffice y openpyxl) |
+| Contenido de Excel profesional (`scripts/courses/excel_course.py`, `scripts/courses/excel/m01.py`…`m05.py`) | `python scripts/courses/excel_course.py` y después `--check` (comprueba con el motor cada ejemplo y cada ejercicio de fórmula), `python scripts/courses/lock_ids.py --check` (ids en `scripts/courses/academia.lock.json`), `cd backend && python -m pytest -q tests/test_excel_course.py`, `npm run test:unit` y `npx playwright test e2e/excel.spec.js` |
+| `scripts/courses/course_builder.py` | Lo de `scripts/courses/**` y `python -m unittest discover -s scripts/courses/tests` |
 | `backend/**` | Lint, formato y pytest con cobertura |
 | `scripts/resources/**` | `python scripts/resources/build_resources.py --check` y `cd backend && python -m pytest -q tests/test_resources.py` |
 | `scripts/career/**` | `python scripts/career/build_career.py` y después `--check`; `cd backend && python -m pytest -q tests/test_career_catalog.py` |

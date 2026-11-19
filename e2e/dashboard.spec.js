@@ -17,6 +17,9 @@ async function register(page, email, name = "Ana") {
   await form.getByLabel(/He leído la política/).check();
   await form.getByRole("button", { name: "Crear cuenta" }).click();
   await expect(page.locator("#account-label")).toHaveText(name);
+  // El nombre cambia antes de que termine la sincronización; el diálogo (modal) se cierra después
+  // y, mientras está abierto, el resto de la página no recibe el foco
+  await expect(dialog(page)).toBeHidden();
 }
 
 async function login(page, email) {
@@ -38,7 +41,7 @@ async function audit(page) {
     null,
     { timeout: 20_000 },
   );
-  const results = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"]).analyze();
+  const results = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]).analyze();
   const summary = results.violations.map((v) => `${v.id} (${v.impact}): ${v.nodes.map((n) => n.target).join(", ")}`);
   expect(summary, summary.join("\n")).toEqual([]);
 }
@@ -194,6 +197,57 @@ test("en el móvil, el panel cabe sin desplazamiento horizontal y se navega con 
   await page.keyboard.press("Enter");
   await expect(page).toHaveURL(/#\/panel\/logros$/);
   await expect(page.locator("#private-title")).toBeFocused();
+});
+
+test("panel: repintar en segundo plano no quita el foco de las secciones", async ({ page }) => {
+  // Regresión: al llegar el progreso de la cuenta, la vista se repinta entera y el foco solo vuelve a
+  // un elemento con id o atributo data-; los enlaces de secciones no tenían ninguno y Enter no hacía nada
+  await openLesson(page);
+  await register(page, uniqueEmail());
+  await page.goto("/#/panel/cursos");
+  await expect(panel(page).locator('[data-course-card="learn"]')).toBeVisible();
+  await page.locator(".dash-nav a", { hasText: "Logros" }).focus();
+  await page.evaluate(async () => {
+    const { state, updateUser } = await import("/js/store.js");
+    updateUser({ ...state.user });
+  });
+  await expect(page.locator(".dash-nav a", { hasText: "Logros" })).toBeFocused();
+  await page.keyboard.press("Enter");
+  await expect(page).toHaveURL(/#\/panel\/logros$/);
+});
+
+test("Mi progreso: criterios de evaluación por RA, sin confundir practicado con superado (#106)", async ({ page }) => {
+  // sql-01..03 son de la lección sql-select, que trabaja 0484-RA3 a y b (propuesta)
+  await page.addInitScript(() => {
+    if (sessionStorage.getItem("seeded")) return;
+    sessionStorage.setItem("seeded", "1");
+    localStorage.setItem("pld:course:sql", JSON.stringify({ answers: { "sql-01": [true, true], "sql-02": [true], "sql-03": [false] } }));
+  });
+  await page.goto("/#/bienvenida");
+  await register(page, uniqueEmail());
+  await page.goto("/#/panel/progreso");
+  const bd = panel(page).locator("[data-module-progress] > ul > li", { hasText: "0484 · Bases de datos" });
+  const summary = bd.locator("summary");
+  await expect(summary).toHaveText("Criterios de evaluación: 2 de 57 practicados (37 con preguntas)");
+  // Se abre con el teclado
+  await summary.focus();
+  await page.keyboard.press("Enter");
+  const details = bd.locator("details");
+  await expect(details).toHaveAttribute("open", "");
+  await expect(details).toContainText("Practicar un criterio no es superarlo: lo evalúa tu profesorado");
+  await expect(details).toContainText("pendiente de revisión docente");
+  const ra3 = details.locator(".ce-outcome", { hasText: "RA3." });
+  await expect(ra3).toContainText("Practicados: 2 de 8 criterios");
+  await expect(ra3.locator(".ce-row").first()).toContainText("Practicado: has respondido 3 de");
+  await expect(details.locator(".ce-outcome", { hasText: "RA5." })).toContainText("Sin preguntas en la plataforma");
+  // Al repintarse en segundo plano sigue abierto y con el foco donde estaba
+  await page.evaluate(async () => {
+    const { state, updateUser } = await import("/js/store.js");
+    updateUser({ ...state.user });
+  });
+  await expect(details).toHaveAttribute("open", "");
+  await expect(summary).toBeFocused();
+  await audit(page);
 });
 
 test("Mi progreso: cada módulo de DAW separa preguntas practicadas y dominadas", async ({ page }) => {

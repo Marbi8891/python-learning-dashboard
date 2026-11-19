@@ -7,15 +7,18 @@ from sqlalchemy import delete, select
 
 from app import activity
 from app.deps import CurrentUser, DbSession
+from app.entitlements import active_entitlements
 from app.models import (
     AccountEvent,
     CourseState,
+    Entitlement,
     ExerciseAttempt,
     Lesson,
     LessonProgress,
     PasswordResetToken,
     PcapState,
     User,
+    VerifiedExam,
 )
 from app.password_policy import weakness
 from app.rate_limit import limit_auth_attempts
@@ -24,6 +27,7 @@ from app.routers.progress import list_progress
 from app.schemas import (
     ActivityOut,
     DeleteConfirm,
+    EntitlementOut,
     PasswordChange,
     ProfileUpdate,
     Token,
@@ -40,6 +44,12 @@ router = APIRouter(prefix="/users/me", tags=["cuenta"])
 @router.get("", response_model=UserOut)
 def read_me(user: CurrentUser) -> User:
     return user
+
+
+@router.get("/entitlements", response_model=list[EntitlementOut])
+def read_my_entitlements(user: CurrentUser, db: DbSession) -> list[Entitlement]:
+    """Lista los derechos vigentes de la cuenta. Sin derechos, la cuenta permanece en Free."""
+    return active_entitlements(db, user.id)
 
 
 @router.patch("", response_model=UserOut)
@@ -110,6 +120,23 @@ def export_my_data(user: CurrentUser, db: DbSession) -> UserExport:
             for c in db.scalars(select(CourseState).where(CourseState.user_id == user.id))
         },
         activity=[ActivityOut.model_validate(e) for e in activity.recent(db, user.id)],
+        verified_exams=[
+            {
+                "exam_code": e.exam_code,
+                "status": e.status,
+                "question_ids": e.question_ids,
+                "answers": e.answers,
+                "correct": e.correct,
+                "score": e.score,
+                "started_at": e.started_at,
+                "finished_at": e.finished_at,
+            }
+            for e in db.scalars(
+                select(VerifiedExam)
+                .where(VerifiedExam.user_id == user.id)
+                .order_by(VerifiedExam.id)
+            )
+        ],
         exported_at=datetime.now(UTC),
     )
 
@@ -161,6 +188,8 @@ def delete_my_account(
         PcapState,
         CourseState,
         AccountEvent,
+        Entitlement,
+        VerifiedExam,
     ):
         db.execute(delete(model).where(model.user_id == user.id))
     user_id = user.id

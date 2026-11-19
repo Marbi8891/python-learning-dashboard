@@ -65,7 +65,18 @@
        "title": "PSeInt — intérprete de pseudocódigo",
        "url": "https://pseint.sourceforge.net/"
       }
-     ]
+     ],
+     "curriculum": {
+      "ra": [
+       "0485-RA1"
+      ],
+      "ce": [
+       "0485-RA1-a"
+      ],
+      "status": "proposed",
+      "source": "Propuesta por el contenido de la lección",
+      "reviewed": null
+     }
     }
    ]
   },
@@ -138,7 +149,26 @@
        "title": "PEP 8 — Guía de estilo para el código Python",
        "url": "https://peps.python.org/pep-0008/"
       }
-     ]
+     ],
+     "curriculum": {
+      "ra": [
+       "0485-RA1",
+       "0485-RA5"
+      ],
+      "ce": [
+       "0485-RA1-d",
+       "0485-RA1-e",
+       "0485-RA1-f",
+       "0485-RA1-g",
+       "0485-RA1-h",
+       "0485-RA1-i",
+       "0485-RA5-a",
+       "0485-RA5-b"
+      ],
+      "status": "proposed",
+      "source": "Propuesta por el contenido de la lección",
+      "reviewed": null
+     }
     }
    ]
   },
@@ -211,7 +241,22 @@
        "title": "PEP 8 — Guía de estilo para el código Python",
        "url": "https://peps.python.org/pep-0008/"
       }
-     ]
+     ],
+     "curriculum": {
+      "ra": [
+       "0485-RA3"
+      ],
+      "ce": [
+       "0485-RA3-a",
+       "0485-RA3-b",
+       "0485-RA3-c",
+       "0485-RA3-e",
+       "0485-RA3-f"
+      ],
+      "status": "proposed",
+      "source": "Propuesta por el contenido de la lección",
+      "reviewed": null
+     }
     },
     {
      "slug": "prog-ut3-funciones",
@@ -273,7 +318,19 @@
        "title": "Tutorial oficial de Python (en español)",
        "url": "https://docs.python.org/es/3/tutorial/"
       }
-     ]
+     ],
+     "curriculum": {
+      "ra": [
+       "0485-RA2"
+      ],
+      "ce": [
+       "0485-RA2-b",
+       "0485-RA2-f"
+      ],
+      "status": "proposed",
+      "source": "Propuesta por el contenido de la lección",
+      "reviewed": null
+     }
     }
    ]
   },
@@ -342,7 +399,23 @@
        "title": "Tutorial oficial de Python (en español)",
        "url": "https://docs.python.org/es/3/tutorial/"
       }
-     ]
+     ],
+     "curriculum": {
+      "ra": [
+       "0485-RA2",
+       "0485-RA4"
+      ],
+      "ce": [
+       "0485-RA2-a",
+       "0485-RA2-c",
+       "0485-RA2-d",
+       "0485-RA2-h",
+       "0485-RA4-a"
+      ],
+      "status": "proposed",
+      "source": "Propuesta por el contenido de la lección",
+      "reviewed": null
+     }
     }
    ]
   },
@@ -411,7 +484,26 @@
        "title": "Tutorial oficial de Python (en español)",
        "url": "https://docs.python.org/es/3/tutorial/"
       }
-     ]
+     ],
+     "curriculum": {
+      "ra": [
+       "0485-RA2",
+       "0485-RA4"
+      ],
+      "ce": [
+       "0485-RA4-a",
+       "0485-RA4-b",
+       "0485-RA4-c",
+       "0485-RA4-d",
+       "0485-RA4-e",
+       "0485-RA4-f",
+       "0485-RA4-h",
+       "0485-RA2-e"
+      ],
+      "status": "proposed",
+      "source": "Propuesta por el contenido de la lección",
+      "reviewed": null
+     }
     },
     {
      "slug": "prog-ut5-modulos-cadenas",
@@ -473,7 +565,22 @@
        "title": "Tutorial oficial de Python (en español)",
        "url": "https://docs.python.org/es/3/tutorial/"
       }
-     ]
+     ],
+     "curriculum": {
+      "ra": [
+       "0485-RA2",
+       "0485-RA4",
+       "0485-RA6"
+      ],
+      "ce": [
+       "0485-RA2-g",
+       "0485-RA4-i",
+       "0485-RA6-g"
+      ],
+      "status": "proposed",
+      "source": "Propuesta por el contenido de la lección",
+      "reviewed": null
+     }
     }
    ]
   },
@@ -542,7 +649,22 @@
        "title": "Tutorial oficial de Python (en español)",
        "url": "https://docs.python.org/es/3/tutorial/"
       }
-     ]
+     ],
+     "curriculum": {
+      "ra": [
+       "0485-RA6"
+      ],
+      "ce": [
+       "0485-RA6-a",
+       "0485-RA6-c",
+       "0485-RA6-d",
+       "0485-RA6-e",
+       "0485-RA6-j"
+      ],
+      "status": "proposed",
+      "source": "Propuesta por el contenido de la lección",
+      "reviewed": null
+     }
     },
     {
      "slug": "prog-ut6-herencia-excepciones",
@@ -604,7 +726,25 @@
        "title": "Tutorial oficial de Python (en español)",
        "url": "https://docs.python.org/es/3/tutorial/"
       }
-     ]
+     ],
+     "curriculum": {
+      "ra": [
+       "0485-RA3",
+       "0485-RA7"
+      ],
+      "ce": [
+       "0485-RA7-a",
+       "0485-RA7-c",
+       "0485-RA7-d",
+       "0485-RA7-e",
+       "0485-RA7-g",
+       "0485-RA3-d",
+       "0485-RA3-h"
+      ],
+      "status": "proposed",
+      "source": "Propuesta por el contenido de la lección",
+      "reviewed": null
+     }
     }
    ]
   },
@@ -662,7 +802,20 @@
        "title": "Tutorial oficial de Python (en español)",
        "url": "https://docs.python.org/es/3/tutorial/"
       }
-     ]
+     ],
+     "curriculum": {
+      "ra": [
+       "0485-RA3",
+       "0485-RA5"
+      ],
+      "ce": [
+       "0485-RA3-e",
+       "0485-RA5-a"
+      ],
+      "status": "proposed",
+      "source": "Propuesta por el contenido de la lección",
+      "reviewed": null
+     }
     }
    ]
   },
@@ -735,7 +888,28 @@
        "title": "sqlite3 — DB-API 2.0 para SQLite",
        "url": "https://docs.python.org/es/3/library/sqlite3.html"
       }
-     ]
+     ],
+     "curriculum": {
+      "ra": [
+       "0485-RA5",
+       "0485-RA6",
+       "0485-RA9"
+      ],
+      "ce": [
+       "0485-RA5-c",
+       "0485-RA5-d",
+       "0485-RA5-e",
+       "0485-RA6-h",
+       "0485-RA6-i",
+       "0485-RA9-a",
+       "0485-RA9-b",
+       "0485-RA9-c",
+       "0485-RA9-d"
+      ],
+      "status": "proposed",
+      "source": "Propuesta por el contenido de la lección",
+      "reviewed": null
+     }
     }
    ]
   },
@@ -804,7 +978,20 @@
        "title": "Qt for Python (PySide6) — documentación oficial",
        "url": "https://doc.qt.io/qtforpython-6/"
       }
-     ]
+     ],
+     "curriculum": {
+      "ra": [
+       "0485-RA5"
+      ],
+      "ce": [
+       "0485-RA5-f",
+       "0485-RA5-g",
+       "0485-RA5-h"
+      ],
+      "status": "proposed",
+      "source": "Propuesta por el contenido de la lección",
+      "reviewed": null
+     }
     }
    ]
   }

@@ -183,8 +183,9 @@ class AttemptOut(BaseModel):
 
 MAX_PCAP_STATE_BYTES = 200_000  # ~1000 simulacros y todas las respuestas caben de sobra
 
-# Cursos de DAW que se pueden guardar en la cuenta,
-# más "learn": el progreso por conceptos del núcleo educativo, "game": XP, racha y
+# Cursos de DAW y de las academias (Excel profesional) que se pueden guardar en la cuenta; tienen
+# que coincidir con SYNCED_COURSES de frontend/js/catalog.js (tests/test_course_catalog.py).
+# Además, "learn": el progreso por conceptos del núcleo educativo, "game": XP, racha y
 # logros de la web, que antes solo vivían en el navegador, y "planner": el planificador diario
 # (tiempo disponible, fechas de exámenes y entregas, tareas hechas, pospuestas o rechazadas) y
 # "career": el itinerario profesional (unidades, evaluaciones, evidencias de proyecto y plan,
@@ -197,6 +198,7 @@ COURSES = (
     "entornos",
     "marcas",
     "programacion",
+    "excel",
     "learn",
     "game",
     "planner",
@@ -255,6 +257,7 @@ class UserExport(BaseModel):
     pcap: dict | None = None
     courses: dict[str, dict] = {}
     activity: list[ActivityOut] = []
+    verified_exams: list[dict] = []
     exported_at: datetime
 
 
@@ -337,3 +340,59 @@ class LearningEventPage(BaseModel):
     total: int
     limit: int
     offset: int
+
+
+# ---------- Derechos de acceso comerciales ----------
+
+
+class EntitlementOut(BaseModel):
+    """Derecho activo de una cuenta. Nunca expone identificadores del proveedor de pago."""
+
+    model_config = ConfigDict(from_attributes=True)
+
+    feature_key: str
+    starts_at: datetime
+    ends_at: datetime | None
+
+
+# ---------- Hitos verificados (#109) ----------
+
+QuestionId = Annotated[str, Field(min_length=1, max_length=40)]
+Option = Annotated[int, Field(ge=0, le=20)]
+
+
+class VerifiedExamStart(BaseModel):
+    """Simulacro empezado: el navegador pinta estas preguntas (ya tiene su texto en pcap.json)."""
+
+    id: int
+    exam_code: str
+    question_ids: list[str]
+    started_at: datetime
+    deadline: datetime
+
+
+class VerifiedExamAnswers(BaseModel):
+    """Opciones marcadas por pregunta. Las que no aparecen cuentan como sin contestar."""
+
+    answers: Annotated[
+        dict[QuestionId, Annotated[list[Option], Field(max_length=10)]], Field(max_length=60)
+    ]
+
+
+class VerifiedExamOut(BaseModel):
+    id: int
+    exam_code: str
+    status: str
+    started_at: datetime
+    finished_at: datetime | None
+    correct: int | None
+    total: int
+    score: int | None
+    passed: bool
+
+
+class VerifiedSummary(BaseModel):
+    pass_mark: int
+    best_score: int | None
+    passed: bool
+    exams: list[VerifiedExamOut]

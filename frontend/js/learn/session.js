@@ -8,12 +8,19 @@
    - errors:   ejercicios que trabajan errores concretos;
    - exam:     simulacro: sin corrección hasta el final, cronometrado y sin nuevos intentos;
    - diagnostic: prueba de nivel: como un simulacro, sin tiempo; cada concepto acertado se marca
-                 como superado para que la ruta pueda saltarlo. */
+                 como superado para que la ruta pueda saltarlo;
+   - quiz:     cuestionario con nota de una unidad del módulo de POO: corrige cada pregunta con el
+               porqué del fallo, pero sin nuevos intentos (la nota es la del primer intento);
+   - final:    evaluación final del módulo de POO: sin corrección hasta el final y sin tiempo. */
 
-import { markPlaced, recordAttempt, recordExam, reviewConcept } from "./mastery.js";
+import { markPlaced, QUIZ_PASS, recordAttempt, recordExam, recordQuiz, reviewConcept } from "./mastery.js";
 import { similarExercise } from "./recommend.js";
 
 export const MAX_RETRIES = 3; // nuevos intentos añadidos al final de una sesión, como mucho
+
+/** Sesiones con nota guardada (cuestionario de unidad y evaluación final): no añaden nuevos intentos. */
+export const SCORED = new Set(["quiz", "final"]);
+const NO_FEEDBACK = new Set(["exam", "diagnostic", "final"]);
 
 /**
  * @param {{kind: string, title: string, exercises: string[], timeLimit?: number, now?: Date, meta?: object}} options
@@ -23,7 +30,7 @@ export function createSession({ kind, title, exercises, timeLimit = null, now = 
     kind,
     title,
     meta,
-    feedback: kind !== "exam" && kind !== "diagnostic",
+    feedback: !NO_FEEDBACK.has(kind),
     queue: exercises.map((id) => ({ id, retry: false, retryOf: null })),
     index: 0,
     phase: exercises.length ? "answer" : "done",
@@ -57,7 +64,7 @@ export function submit(session, index, state, result, now = new Date()) {
   const notEvidence = item.retry || (session.kind === "diagnostic" && !result.ok);
   recordAttempt(state, exercise, result, { now, retry: notEvidence });
   session.results.push({ id: item.id, concept: exercise.concept, ok: Boolean(result.ok), error: result.error ?? null, retry: item.retry });
-  if (!result.ok && session.feedback && session.retries < MAX_RETRIES && !item.retryOf) {
+  if (!result.ok && session.feedback && !SCORED.has(session.kind) && session.retries < MAX_RETRIES && !item.retryOf) {
     const queued = session.queue.map((q) => q.id);
     const similar = similarExercise(index, exercise, result.error, queued);
     session.queue.push(similar ? { id: similar.id, retry: false, retryOf: item.id } : { id: item.id, retry: true, retryOf: item.id });
@@ -134,6 +141,12 @@ export function finish(session, index, state, now = new Date()) {
       seconds: Math.round((now - new Date(session.startedAt)) / 1000),
       concepts: summary.byConcept,
     });
+  }
+  if (SCORED.has(session.kind) && session.meta.quiz) {
+    // Las preguntas sin responder cuentan como falladas: la nota es sobre el total del cuestionario
+    const total = session.queue.length;
+    recordQuiz(state, session.meta.quiz, summary.correct, total, now);
+    summary.quiz = { id: session.meta.quiz, correct: summary.correct, total, passed: total > 0 && summary.correct / total >= QUIZ_PASS };
   }
   return summary;
 }

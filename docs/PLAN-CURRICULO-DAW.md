@@ -210,7 +210,7 @@ Siguen pendientes: los RA de los módulos transversales, el curso del 0616, la i
 | `frontend/js/daw.js` | Enruta `#/daw/curriculo` hacia `curriculum.js` y enlaza el currículo desde el catálogo de cursos |
 | `frontend/js/learn/daw-prep.js` | Enlace «Currículo oficial del ciclo» en la Preparación DAW |
 | `frontend/css/daw.css` | Estilos `curr-*`. Reutiliza `.table-wrap`, `.history`, `.daw-faq` y `.course-hero`. El estado se indica con texto, no solo con color |
-| `e2e/curriculum.spec.js` | 6 pruebas: navegación, contenido de un módulo, módulo pendiente sin datos inventados, módulo inexistente y axe (WCAG 2.1 AA) en claro y oscuro con un RA abierto |
+| `e2e/curriculum.spec.js` | 6 pruebas: navegación, contenido de un módulo, módulo pendiente sin datos inventados, módulo inexistente y axe (reglas de WCAG 2.2 A/AA) en claro y oscuro con un RA abierto |
 
 Un módulo pendiente explica dónde están sus RA (por ejemplo, el RD 659/2023) y no muestra ninguno. El aviso «las actividades de la plataforma son prácticas» aparece en el índice y en cada módulo.
 
@@ -254,6 +254,55 @@ Debajo indica cuántos módulos del ciclo aún no tienen preguntas en la platafo
 No hacen falta cambios en el backend: el progreso de cada curso ya se guarda en la cuenta (`/api/v1/course-state/{curso}`) y el cálculo se hace con esos datos.
 
 Siguiente fase: E (simulacro y prueba de nivel por módulo, reutilizando `learn/exam.js`).
+
+### Correspondencia con RA y CE (#106, Sprint 1 del piloto)
+
+Cada lección y cada pregunta de los cursos de DAW dice ahora qué criterios de evaluación (CE) oficiales trabaja, y con qué seguridad. La correspondencia está en un solo archivo, `scripts/courses/curriculum_map.py`, por lección. Cada pregunta hereda los CE de su lección, salvo que el curso le ponga los suyos con `Q(ce=[...])`.
+
+| Estado | Qué quiere decir | Hoy |
+|---|---|---|
+| `verified` | Un docente lo ha revisado. Exige `reviewed` («nombre, fecha») | 0 |
+| `proposed` | Lo propone el proyecto. Pendiente de revisión docente | 56 lecciones, 520 preguntas |
+| `unassigned` | Sin correspondencia todavía | 0 |
+
+De dónde sale cada propuesta (`source`):
+
+- SQL, Lenguajes de marcas y Entornos: los RA y CE que ya citaban los objetivos de cada lección. Una prueba comprueba que todo CE citado en un objetivo está en el mapa.
+- Programación, Java y JavaScript: propuesta por el contenido de la lección, porque sus objetivos no citan RA.
+
+Formato en los JSON generados:
+
+- `lessons.json`, en cada lección: `"curriculum": {"ra": [...], "ce": [...], "status", "source", "reviewed"}`.
+- `bank.json`, en cada pregunta: `"curriculum": {"ce": [...], "status"}`. La fuente y la revisión están en la lección.
+
+Límites, dichos claro:
+
+- Por lección. Una pregunta que hereda 9 CE no los trabaja todos: el mapa dice que su lección los trabaja. Afinar por pregunta es trabajo para la revisión docente.
+- Practicar un CE no es superarlo. La evaluación de un CE la hace el profesorado con sus propios instrumentos.
+
+CE con alguna pregunta: 0485, 58 de 79; 0612, 27 de 58; 0484, 37 de 57; 0373, 49 de 57; 0487, 7 de 47.
+
+Validación, en dos sitios:
+
+- `course_builder.py` no genera un curso si un CE no existe en `daw-cyl.json`, es de otro módulo, está repetido o el estado no cuadra.
+- `backend/tests/test_daw_courses.py` lo vuelve a comprobar sobre los JSON publicados.
+
+**En el panel** («Mi panel › Mi progreso › Módulos de DAW»), cada módulo con RA oficiales tiene un desplegable «Criterios de evaluación: N de T practicados (W con preguntas)». Dentro, por RA, cada CE aparece como:
+
+- «Practicado», si el alumno ha respondido alguna de sus preguntas (un fallo también cuenta como práctica);
+- «Sin practicar»;
+- «Sin preguntas en la plataforma».
+
+Encabeza la lista el aviso: «Practicar un criterio no es superarlo: lo evalúa tu profesorado», y que la relación es una propuesta pendiente de revisión docente.
+
+Cómo funciona:
+
+- `build_curriculum.py` lee el `curriculum` de cada pregunta y escribe en cada CE de `daw-cyl.json` `platformQuestionIds` y `mapping` (si sus preguntas tienen estados distintos, el menos seguro). El catálogo pasa de 150 KB a 214 KB, unos 28 KB con gzip.
+- `criteriaProgress()` (`dashboard-data.js`) hace el cálculo y lo prueba `tests/unit/dashboard.test.mjs`.
+- `e2e/dashboard.spec.js` prueba el teclado, el aviso, el repintado sin perder el foco ni el desplegable abierto, y axe con WCAG 2.2 AA.
+- Capturas en tema claro y oscuro, móvil y escritorio: `/mnt/project-files/piloto-daw/sprint-1/`.
+
+Para verificar una lección: el docente la revisa, se cambia `status="verified"` y `reviewed="Nombre, AAAA-MM-DD"` en el mapa y se regeneran los cursos.
 
 ## 6. Información que sigue haciendo falta
 

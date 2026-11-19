@@ -8,6 +8,7 @@ import { escapeHtml, renderInline } from "./markdown.js";
 import { notFoundHtml } from "./not-found.js";
 import { blockStats, dueIds, enoughEvidence, isoDay, MIN_EVIDENCE, pcap, readiness, recordAnswer, review, savePcap } from "./pcap-store.js";
 import { state as progress } from "./store.js";
+import { canVerify, refreshVerified, startVerifiedExam, submitVerifiedExam, verifiedLine, verifiedSummary } from "./verified.js";
 
 const DATA_URL = "data/pcap.json";
 const PRACTICE_SIZE = 10;
@@ -64,7 +65,7 @@ function langSwitch() {
 function meter(value, label, gold = false) {
   const pct = Math.round((value ?? 0) * 100);
   return `<span class="meter${gold ? " meter--gold" : ""}" role="progressbar" aria-label="${escapeHtml(label)}"
-    aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}"><span class="meter__fill" style="--value: ${pct}%"></span></span>`;
+    aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}"><span class="meter__fill" data-meter="${pct}"></span></span>`;
 }
 
 /* ---------- Preparación y logros ---------- */
@@ -136,7 +137,7 @@ function renderPlan(stats) {
   const perWeek = Math.min(pending.length, Math.ceil(pending.length / weeks));
   // Primero los bloques donde más puntos se pierden: lo que falta por acertar × peso en el examen
   const loss = (b) => (1 - (stats[b.slug].rate ?? 0)) * b.weight;
-  const focus = [...data.exam.blocks].sort((a, b) => loss(b) - loss(a)).slice(0, 2);
+  const focus = data.exam.blocks.toSorted((a, b) => loss(b) - loss(a)).slice(0, 2);
   const recentExams = pcap.exams.filter((e) => Date.now() - new Date(e.date) < 7 * DAY_MS).length;
   const examTarget = weeks <= 1 ? 2 : weeks <= 3 || !pending.length ? 1 : 0;
   const due = dueQuestions().length + dueCards().length;
@@ -197,6 +198,7 @@ function renderPanel() {
       (e) => `<tr><td>${new Date(e.date).toLocaleDateString(locale, { day: "numeric", month: "short" })}</td>
         <td>${e.score} %</td><td>${e.correct}/${e.total}</td><td>${clock(e.seconds)}</td>
         <td class="${e.score >= data.exam.pass ? "is-pass" : "is-fail"}">${e.score >= data.exam.pass ? "Aprobado" : "No aprobado"}</td></tr>`,
+
     )
     .join("");
 
@@ -231,6 +233,8 @@ function renderPanel() {
 
     <section class="course-section" aria-labelledby="pcap-history-title">
       <h2 class="section-title" id="pcap-history-title">Simulacros</h2>
+      <p class="verified-line" data-verified="${Boolean(verifiedSummary()?.passed)}">${escapeHtml(verifiedLine())}</p>
+      <p class="readiness__note">El historial de abajo se guarda en este navegador: es orientativo. Solo cuenta como verificado lo que corrige el servidor.</p>
       ${
         history
           ? `<div class="table-wrap" tabindex="0" role="region" aria-labelledby="pcap-history-title"><table class="history">
@@ -239,6 +243,16 @@ function renderPanel() {
           : `<p class="empty-state">Todavía no has hecho ningún simulacro. Cuando domines algún bloque, pruébate con uno completo.</p>`
       }
     </section>`;
+}
+
+/** Resultado de un simulacro: corregido por el servidor o solo en este navegador. */
+function verifiedBadge(verified, note) {
+  const text = verified
+    ? "Verificado: el servidor eligió las preguntas, controló el tiempo y puso la nota."
+    : "Simulacro local: corregido en este navegador. Es orientativo.";
+  return `<p class="verified-badge" data-verified="${verified}">${escapeHtml(text)}</p>${
+    note ? `<p class="readiness__note" role="status">${escapeHtml(note)}</p>` : ""
+  }`;
 }
 
 /* ---------- Pregunta (común a simulacro y práctica) ---------- */
@@ -288,16 +302,33 @@ function chosenFrom(form) {
 
 /* ---------- Simulacro ---------- */
 
-function startExam() {
-  const items = data.exam.blocks.flatMap((b) =>
-    shuffle(data.questions.filter((q) => q.block === b.slug)).slice(0, b.items),
-  );
+/** Con cuenta, las preguntas, la hora y la nota las pone el servidor (#109). Sin cuenta o si no
+    responde, el simulacro es local, como siempre, y se dice en el resultado. */
+async function startExam() {
+  let verified = null;
+  let note = "";
+  if (canVerify()) {
+    try {
+      const exam = await startVerifiedExam();
+      const byId = new Map(data.questions.map((q) => [q.id, q]));
+      const questions = exam.question_ids.map((id) => byId.get(id));
+      if (questions.every(Boolean)) verified = { id: exam.id, questions, deadline: Date.parse(exam.deadline) };
+      else note = "El servidor tiene otra versión del banco de preguntas: recarga la página.";
+    } catch (error) {
+      note = error.message;
+    }
+  }
+  const items =
+    verified?.questions ??
+    shuffle(data.exam.blocks.flatMap((b) => shuffle(data.questions.filter((q) => q.block === b.slug)).slice(0, b.items)));
   session = {
     kind: "exam",
-    items: shuffle(items).map((q) => ({ q, chosen: [], flagged: false })),
+    items: items.map((q) => ({ q, chosen: [], flagged: false })),
+    verified: verified && { id: verified.id },
+    note: canVerify() && !verified ? `No se ha podido empezar un simulacro verificado (${note}). Este es local.` : "",
     index: 0,
     started: Date.now(),
-    deadline: Date.now() + data.exam.minutes * 60_000,
+    deadline: verified?.deadline ?? Date.now() + data.exam.minutes * 60_000,
     announced: new Set(),
     result: null,
   };
@@ -322,7 +353,9 @@ function tick() {
   if (left <= 0) finishExam();
 }
 
-function finishExam() {
+async function finishExam() {
+  if (session.finishing) return; // el tiempo y el botón a la vez
+  session.finishing = true;
   clearInterval(ticker);
   const blocks = {};
   let correct = 0;
@@ -338,7 +371,17 @@ function finishExam() {
   const total = session.items.length;
   const score = Math.round((correct / total) * 100);
   const seconds = Math.min(Math.round((Date.now() - session.started) / 1000), data.exam.minutes * 60);
-  session.result = { date: new Date().toISOString(), correct, total, score, seconds, blocks };
+  session.result = { date: new Date().toISOString(), correct, total, score, seconds, blocks, verified: false };
+  if (session.verified) {
+    const answers = Object.fromEntries(session.items.filter((i) => i.chosen.length).map((i) => [i.q.id, i.chosen]));
+    try {
+      const graded = await submitVerifiedExam(session.verified.id, answers);
+      // La nota que cuenta es la del servidor (con el mismo banco, coincide con la de aquí)
+      Object.assign(session.result, { correct: graded.correct, total: graded.total, score: graded.score, verified: true });
+    } catch (error) {
+      session.note = `El servidor no ha podido corregirlo (${error.message}). Queda como simulacro local.`;
+    }
+  }
   pcap.exams.push(session.result);
   if (pcap.exams.length > 30) pcap.exams.shift();
   commit([`Simulacro terminado: ${score} %${score >= data.exam.pass ? " · ¡aprobado!" : ""}`]);
@@ -362,6 +405,11 @@ function renderExamIntro() {
         <li>Aprobado con ${data.exam.pass} %. Las de «elige dos» solo cuentan si aciertas las dos.</li>
         <li>Puedes marcar preguntas para revisarlas y moverte entre ellas.</li>
         <li>Las respuestas y explicaciones se muestran al terminar.</li>
+        <li>${
+          canVerify()
+            ? "Con tu cuenta, el servidor elige las preguntas, controla el tiempo y pone la nota: el resultado queda verificado."
+            : "Sin cuenta se corrige en este navegador y es orientativo. Inicia sesión para que el servidor lo verifique."
+        }</li>
       </ul>
       ${langSwitch()}
       <button class="btn btn--primary btn--lg" type="button" data-pcap="start-exam">Empezar el simulacro</button>
@@ -437,6 +485,7 @@ function renderExamResult() {
       <p class="eyebrow"><a href="#/pcap">Examen PCAP</a> · Resultado</p>
       <h1 class="profile-hero__title" id="pcap-title" tabindex="-1">${r.score} % · <em>${passed ? "Aprobado" : "No aprobado"}</em></h1>
       <p class="course-hero__lead">${r.correct} de ${r.total} correctas en ${clock(r.seconds)}. Para aprobar hace falta un ${data.exam.pass} %.</p>
+      ${verifiedBadge(r.verified, session.note)}
       <div class="course-hero__cta">
         <button class="btn btn--primary" type="button" data-pcap="new-exam">Nuevo simulacro</button>
         <a class="btn btn--ghost" href="#/pcap">Volver al panel</a>
@@ -656,8 +705,10 @@ function onClick(event) {
   switch (target.dataset.pcap) {
     case "start-exam":
     case "new-exam":
-      startExam();
-      return rerender();
+      // Con cuenta hay que esperar al servidor, que elige las preguntas
+      target.disabled = true;
+      target.textContent = "Preparando el simulacro…";
+      return startExam().then(() => rerender());
     case "prev":
       session.index -= 1;
       return rerender();
@@ -674,6 +725,8 @@ function onClick(event) {
     case "cancel-finish":
       return closeFinishConfirm();
     case "finish":
+      target.disabled = true;
+      target.textContent = "Corrigiendo…";
       return finishExam();
     case "clear-date":
       pcap.plan.examDate = null;
@@ -781,6 +834,7 @@ export async function openPcap(route, modules, { moveFocus = true } = {}) {
   }
   if (!location.hash.startsWith("#/pcap")) return; // el alumno se fue mientras cargaba
   render(route, { focus: moveFocus });
+  if (!verifiedSummary()) refreshVerified();
 }
 
 /** Repinta la zona PCAP si está a la vista (p. ej. al llegar la copia de la cuenta),

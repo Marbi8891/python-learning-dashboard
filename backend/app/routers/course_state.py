@@ -1,7 +1,7 @@
-"""Estado de los cursos de DAW guardado en la cuenta.
+"""Estado de los cursos guardado en la cuenta.
 
-El PCAP sigue en /api/pcap-state; aquí va cada
-curso de DAW (Programación, Bases de datos, Entornos, JavaScript y Java) en su documento.
+El PCAP sigue en /api/pcap-state; aquí va cada curso de DAW, cada academia (Excel profesional) y los
+almacenes del núcleo (learn, game, planner) en su documento. La lista está en `schemas.COURSES`.
 El usuario sale siempre del token de sesión, nunca del cuerpo de la petición.
 """
 

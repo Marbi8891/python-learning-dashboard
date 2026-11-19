@@ -12,7 +12,13 @@ from sqlalchemy.pool import StaticPool  # noqa: E402
 
 from app.database import Base, get_db  # noqa: E402
 from app.main import app  # noqa: E402
-from app.rate_limit import auth_limiter, login_failures, reset_requests, write_limiter  # noqa: E402
+from app.rate_limit import (  # noqa: E402
+    auth_limiter,
+    login_failures,
+    reset_requests,
+    set_engine,
+    write_limiter,
+)
 from app.seed import seed  # noqa: E402
 
 PASSWORD = "contraseña-segura-123"
@@ -35,6 +41,7 @@ def client():
             yield db
 
     app.dependency_overrides[get_db] = override_get_db
+    set_engine(engine)  # los límites compartidos, en la base de datos del test
     for limiter in (auth_limiter, login_failures, reset_requests, write_limiter):
         limiter.reset()
     with TestClient(app) as test_client:
@@ -43,6 +50,8 @@ def client():
     app.dependency_overrides.clear()
     for limiter in (auth_limiter, login_failures, reset_requests, write_limiter):
         limiter.reset()
+    set_engine(None)
+    engine.dispose()
 
 
 def register(client, email="ana@example.com", password=PASSWORD, name="Ana"):

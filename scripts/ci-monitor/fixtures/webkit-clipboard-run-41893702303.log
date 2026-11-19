@@ -1,0 +1,15 @@
+2026-11-04T19:08:11.3075055Z     Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+2026-11-04T19:08:11.3075296Z 
+2026-11-04T19:08:11.3075568Z     Error: browserContext.grantPermissions: Unknown permission: clipboard-write
+2026-11-04T19:08:11.3075847Z 
+2026-11-04T19:08:11.3075922Z       115 |
+2026-11-04T19:08:11.3076387Z       116 | test("copiar y «Abrir en PyCharm» muestran la guía y la descarga", async ({ page, context }) => {
+2026-11-04T19:08:11.3076906Z     > 117 |   await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+2026-11-04T19:08:11.3077246Z           |                 ^
+2026-11-04T19:08:11.3077551Z       118 |   await openLesson(page, "variables");
+2026-11-04T19:08:11.3079200Z         at /home/runner/work/python-learning-dashboard/python-learning-dashboard/e2e/navigation.spec.js:117:17
+2026-11-04T19:08:11.3082968Z   1 failed
+2026-11-04T19:08:11.3083272Z     [webkit] › e2e/navigation.spec.js:116:1 › copiar y «Abrir en PyCharm» muestran la guía y la descarga 
+2026-11-04T19:08:11.3083535Z   25 passed (33.1s)
+2026-11-04T19:08:11.3558121Z ##[error]Process completed with exit code 1.
+2026-11-04T19:08:11.3654893Z Post job cleanup.

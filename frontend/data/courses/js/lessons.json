@@ -66,7 +66,18 @@
        "title": "javascript.info (tutorial moderno)",
        "url": "https://es.javascript.info/"
       }
-     ]
+     ],
+     "curriculum": {
+      "ra": [
+       "0612-RA2"
+      ],
+      "ce": [
+       "0612-RA2-b"
+      ],
+      "status": "proposed",
+      "source": "Propuesta por el contenido de la lección",
+      "reviewed": null
+     }
     },
     {
      "slug": "js-coercion",
@@ -129,7 +140,19 @@
        "title": "javascript.info (tutorial moderno)",
        "url": "https://es.javascript.info/"
       }
-     ]
+     ],
+     "curriculum": {
+      "ra": [
+       "0612-RA2"
+      ],
+      "ce": [
+       "0612-RA2-d",
+       "0612-RA2-e"
+      ],
+      "status": "proposed",
+      "source": "Propuesta por el contenido de la lección",
+      "reviewed": null
+     }
     }
    ]
   },
@@ -199,7 +222,19 @@
        "title": "javascript.info (tutorial moderno)",
        "url": "https://es.javascript.info/"
       }
-     ]
+     ],
+     "curriculum": {
+      "ra": [
+       "0612-RA4"
+      ],
+      "ce": [
+       "0612-RA4-a",
+       "0612-RA4-b"
+      ],
+      "status": "proposed",
+      "source": "Propuesta por el contenido de la lección",
+      "reviewed": null
+     }
     },
     {
      "slug": "js-ambito",
@@ -262,7 +297,18 @@
        "title": "javascript.info (tutorial moderno)",
        "url": "https://es.javascript.info/"
       }
-     ]
+     ],
+     "curriculum": {
+      "ra": [
+       "0612-RA2"
+      ],
+      "ce": [
+       "0612-RA2-c"
+      ],
+      "status": "proposed",
+      "source": "Propuesta por el contenido de la lección",
+      "reviewed": null
+     }
     }
    ]
   },
@@ -332,7 +378,20 @@
        "title": "javascript.info (tutorial moderno)",
        "url": "https://es.javascript.info/"
       }
-     ]
+     ],
+     "curriculum": {
+      "ra": [
+       "0612-RA4"
+      ],
+      "ce": [
+       "0612-RA4-c",
+       "0612-RA4-d",
+       "0612-RA4-e"
+      ],
+      "status": "proposed",
+      "source": "Propuesta por el contenido de la lección",
+      "reviewed": null
+     }
     },
     {
      "slug": "js-objetos",
@@ -395,7 +454,21 @@
        "title": "javascript.info (tutorial moderno)",
        "url": "https://es.javascript.info/"
       }
-     ]
+     ],
+     "curriculum": {
+      "ra": [
+       "0612-RA4"
+      ],
+      "ce": [
+       "0612-RA4-f",
+       "0612-RA4-g",
+       "0612-RA4-h",
+       "0612-RA4-i"
+      ],
+      "status": "proposed",
+      "source": "Propuesta por el contenido de la lección",
+      "reviewed": null
+     }
     }
    ]
   },
@@ -464,7 +537,23 @@
        "title": "javascript.info (tutorial moderno)",
        "url": "https://es.javascript.info/"
       }
-     ]
+     ],
+     "curriculum": {
+      "ra": [
+       "0612-RA3",
+       "0612-RA6"
+      ],
+      "ce": [
+       "0612-RA6-a",
+       "0612-RA6-b",
+       "0612-RA6-c",
+       "0612-RA6-d",
+       "0612-RA3-d"
+      ],
+      "status": "proposed",
+      "source": "Propuesta por el contenido de la lección",
+      "reviewed": null
+     }
     },
     {
      "slug": "js-eventos",
@@ -526,7 +615,22 @@
        "title": "javascript.info (tutorial moderno)",
        "url": "https://es.javascript.info/"
       }
-     ]
+     ],
+     "curriculum": {
+      "ra": [
+       "0612-RA5",
+       "0612-RA6"
+      ],
+      "ce": [
+       "0612-RA5-b",
+       "0612-RA5-c",
+       "0612-RA5-d",
+       "0612-RA6-e"
+      ],
+      "status": "proposed",
+      "source": "Propuesta por el contenido de la lección",
+      "reviewed": null
+     }
     }
    ]
   },
@@ -596,7 +700,19 @@
        "title": "javascript.info (tutorial moderno)",
        "url": "https://es.javascript.info/"
       }
-     ]
+     ],
+     "curriculum": {
+      "ra": [
+       "0612-RA7"
+      ],
+      "ce": [
+       "0612-RA7-a",
+       "0612-RA7-b"
+      ],
+      "status": "proposed",
+      "source": "Propuesta por el contenido de la lección",
+      "reviewed": null
+     }
     },
     {
      "slug": "js-fetch-json",
@@ -659,7 +775,20 @@
        "title": "javascript.info (tutorial moderno)",
        "url": "https://es.javascript.info/"
       }
-     ]
+     ],
+     "curriculum": {
+      "ra": [
+       "0612-RA7"
+      ],
+      "ce": [
+       "0612-RA7-c",
+       "0612-RA7-e",
+       "0612-RA7-f"
+      ],
+      "status": "proposed",
+      "source": "Propuesta por el contenido de la lección",
+      "reviewed": null
+     }
     }
    ]
   }

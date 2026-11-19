@@ -18,7 +18,7 @@ async function startSession(page, options) {
 
 async function audit(page) {
   await page.waitForFunction(() => document.getAnimations().every((a) => a.playState !== "running"), null, { timeout: 20_000 });
-  const results = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"]).analyze();
+  const results = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]).analyze();
   const summary = results.violations.map((v) => `${v.id} (${v.impact}): ${v.nodes.map((n) => n.target).join(", ")}`);
   expect(summary, summary.join("\n")).toEqual([]);
 }
@@ -178,7 +178,7 @@ test("menú principal: Aprender, Teoría, Practicar, DAW y Progreso; el PCAP sig
 
 test("teoría: concepto con explicación, ejemplo línea a línea, cuándo usarlo y errores habituales", async ({ page }) => {
   await page.goto("/#/teoria");
-  await expect(page.locator(".lx-concept")).toHaveCount(22);
+  await expect(page.locator(".lx-concept")).toHaveCount(31);
   await page.getByRole("link", { name: "Bucles: while y for" }).click();
   await expect(page).toHaveURL(/#\/teoria\/bucles$/);
   await expect(page.locator("#learn-title")).toHaveText("Bucles: while y for");
@@ -325,6 +325,8 @@ test("el progreso por conceptos se sincroniza con la cuenta y se fusiona con el 
   await page.locator("#login-form").getByLabel("Contraseña").fill("contraseña-segura");
   await page.locator("#login-form").getByRole("button", { name: "Entrar" }).click();
   await expect(page.locator("#account-label")).toHaveText("Ana");
+  // El nombre cambia antes de que termine la sincronización; el diálogo (modal) se cierra después
+  await expect(page.locator("#account-dialog")).toBeHidden();
   await startSession(page, { kind: "practice", title: "Bucles", exercises: ["buc-01"] });
   await page.getByLabel(/Lo que muestra el programa/).fill("2 3 4 5");
   await page.getByRole("button", { name: "Comprobar", exact: true }).click();
@@ -379,8 +381,9 @@ test("planificador: tiempo, completar, posponer, deshacer, exámenes e historial
 
   await page.reload();
   await expect(page.locator(".lx-planner")).toContainText("Examen UT3");
-  const results = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]).analyze();
-  expect(results.violations.map((v) => v.id)).toEqual([]);
+  // Mismas reglas que antes, pero con la vista ya pintada: axe a media animación de entrada mide
+  // colores a medio fundir (contraste 3,2:1 que no ve nadie) y el resultado dependía del tiempo de carga
+  await audit(page);
 });
 
 for (const colorScheme of ["light", "dark"]) {
@@ -485,7 +488,8 @@ test.describe("Preparación DAW", () => {
     await page.goto("/#/daw");
     await expect(page.locator("#learn-title")).toHaveText("Preparación DAW");
     await expect(page.getByRole("navigation", { name: "Secciones" }).getByRole("link", { name: "DAW", exact: true })).toHaveAttribute("aria-current", "page");
-    await expect(page.locator(".lx-competency")).toHaveCount(3);
+    await expect(page.locator(".lx-competency")).toHaveCount(4);
+    await expect(page.locator("#comp-poo")).toContainText("Programación orientada a objetos");
     await expect(page.locator("#comp-programacion + .lx-muted ~ .lx-warning")).toContainText(/Necesitas reforzar .+ antes de pasar a Programación/);
     await expect(page.getByRole("link", { name: /Programación por unidades de trabajo/ })).toHaveAttribute("href", "#/daw/programacion");
   });

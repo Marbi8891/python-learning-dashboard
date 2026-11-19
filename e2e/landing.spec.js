@@ -4,12 +4,21 @@ const { test, expect } = require("./fixtures");
 
 async function audit(page) {
   await page.waitForFunction(() => document.getAnimations().every((a) => a.playState !== "running"), null, { timeout: 20_000 });
-  const results = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"]).analyze();
+  const results = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]).analyze();
   const summary = results.violations.map((v) => `${v.id} (${v.impact}): ${v.nodes.map((n) => n.target).join(", ")}`);
   expect(summary, summary.join("\n")).toEqual([]);
 }
 
 const header = (page) => page.getByRole("banner");
+
+// La portada pinta primero la cabecera y el héroe, y luego añade las secciones que dependen del
+// temario (y cambia la ventana del héroe). Un clic durante ese cambio puede caer en otro sitio
+// (pasaba en WebKit), así que se espera a que esté entera y con las fuentes cargadas.
+async function openPortada(page) {
+  await page.goto("/#/portada");
+  await expect(page.locator(".lp-step")).toHaveCount(4);
+  await page.evaluate(() => document.fonts.ready);
+}
 
 test("la portada tiene su propia cabecera, oculta la app y lleva a cada sección por su ruta", async ({ page }) => {
   await page.goto("/#/portada");
@@ -25,7 +34,7 @@ test("la portada tiene su propia cabecera, oculta la app y lleva a cada sección
   await expect(page.locator("#lp-funcionalidades-title")).toBeInViewport();
 
   // «Descubrir cómo funciona» y el enlace profundo con recarga
-  await page.goto("/#/portada");
+  await openPortada(page);
   await page.getByRole("link", { name: "Descubrir cómo funciona" }).click();
   await expect(page).toHaveURL(/#\/portada\/como-funciona$/);
   await expect(page.locator(".lp-step")).toHaveCount(4);
@@ -34,12 +43,43 @@ test("la portada tiene su propia cabecera, oculta la app y lleva a cada sección
   await expect(page.locator("#lp-preguntas-title")).toBeInViewport();
 
   // Volver atrás desde la app regresa a la portada
-  await page.goto("/#/portada");
+  await openPortada(page);
   await page.getByRole("link", { name: "Entrar en Python Learning Dashboard" }).click();
   await expect(page).toHaveURL(/#\/aprender$/);
   await expect(page.locator("#landing-view")).toBeHidden();
   await page.goBack();
   await expect(page.locator("#lp-title")).toBeVisible();
+});
+
+test("la portada se pinta sin esperar al temario y no enseña la plantilla de la app", async ({ page }) => {
+  // learning.json (unos 740 KB) llega tarde a propósito: el hero no debe esperarlo (MWG-01)
+  let release;
+  const held = new Promise((resolve) => (release = resolve));
+  await page.route("**/data/learning.json", async (route) => {
+    await held;
+    await route.continue();
+  });
+  await page.goto("/#/portada/temario");
+  await expect(page.locator("#lp-title")).toBeVisible();
+  await expect(page.locator(".app")).toBeHidden();
+  await expect(page.locator("#lesson-title")).toBeHidden(); // ni la plantilla de la lección
+  await expect(page.locator("#lp-temario")).toHaveCount(0);
+
+  const heroTop = await page.locator("#lp-title").evaluate((el) => el.getBoundingClientRect().top + scrollY);
+  release();
+  // Con los datos, las secciones se añaden debajo y el enlace profundo se desplaza a la suya
+  await expect(page.locator("#lp-temario-title")).toBeInViewport();
+  await expect(page.locator(".lp-footer")).toHaveCount(1);
+  expect(await page.locator("#lp-title").evaluate((el) => el.getBoundingClientRect().top + scrollY)).toBe(heroTop);
+});
+
+test("la plantilla de la app vuelve a verse al salir de la portada", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.locator("#lp-title")).toBeVisible();
+  await expect(page.locator("html")).not.toHaveAttribute("data-boot", /.*/);
+  await expect(page.locator(".boot-splash")).toBeHidden();
+  await page.goto("/#/aprender");
+  await expect(page.locator(".app")).toBeVisible();
 });
 
 test("demostración: el ejercicio real se corrige y explica el error de la respuesta trampa", async ({ page }) => {
@@ -69,17 +109,22 @@ test("rutas de aprendizaje con cifras contadas del temario y acceso directo a pr
   await expect(page.getByRole("link", { name: "Practicar Python" })).toHaveAttribute("href", "#/practicar");
   await expect(page.locator("[data-lp-start]")).toHaveText(/Empezar a aprender/);
   const routes = page.locator("#lp-rutas .lp-route");
-  await expect(routes).toHaveCount(3);
+  await expect(routes).toHaveCount(4); // Python, PCAP, DAW y Excel profesional (DP-09: visible desde P2)
   const counts = await page.evaluate(async () => {
     const learning = await (await fetch("data/learning.json")).json();
     const lessons = await (await fetch("data/lessons.json")).json();
-    return [learning.concepts.length, learning.exercises.length, lessons.modules.reduce((n, m) => n + m.lessons.length, 0), lessons.modules.length];
+    const excel = await (await fetch("data/academia/excel/lessons.json")).json();
+    const bank = await (await fetch("data/academia/excel/bank.json")).json();
+    return [learning.concepts.length, learning.exercises.length, lessons.modules.reduce((n, m) => n + m.lessons.length, 0), lessons.modules.length, excel.modules.reduce((n, m) => n + m.lessons.length, 0), bank.questions.length];
   });
   await expect(routes.nth(0)).toContainText(`${counts[0]} conceptos · ${counts[1]} ejercicios corregidos`);
   await expect(routes.nth(1)).toContainText(`${counts[2]} lecciones · ${counts[3]} módulos`);
   await expect(routes.nth(0).getByRole("link", { name: /Empezar la ruta/ })).toHaveAttribute("href", "#/aprender");
   await expect(routes.nth(1).getByRole("link", { name: /Ver el curso/ })).toHaveAttribute("href", "#/inicio");
   await expect(routes.nth(2).getByRole("link", { name: /Ver los cursos/ })).toHaveAttribute("href", "#/daw/cursos");
+  // Las cifras de Excel están escritas a mano en landing.js: tienen que seguir cuadrando con sus datos
+  await expect(routes.nth(3)).toContainText(`${counts[4]} unidades · ${counts[5]} ejercicios`);
+  await expect(routes.nth(3).getByRole("link", { name: /Ver el curso/ })).toHaveAttribute("href", "#/academia/excel");
   // Sin actividad guardada no hay bloque «Tu actividad» ni progreso en las rutas
   await expect(page.locator("#lp-actividad")).toHaveCount(0);
   await expect(page.locator("#lp-rutas")).not.toContainText("dominados");
@@ -98,7 +143,7 @@ test("«Continúa donde lo dejaste» resume solo el progreso guardado y se actua
   await expect(block.getByRole("heading", { name: "Continúa donde lo dejaste" })).toBeVisible();
   await expect(block).toContainText("guardado en este navegador");
   await expect(block).toContainText("Siguiente paso · Aprender: Comprender el problema y diseñar el algoritmo");
-  await expect(block).toContainText("0 de 22 conceptos dominados");
+  await expect(block).toContainText("0 de 31 conceptos dominados");
   await expect(block).toContainText("1 de 27 lecciones completadas");
   await expect(block.getByRole("link", { name: "Seguir con «Tipos de datos»" })).toHaveAttribute("href", "#/leccion/tipos");
   await expect(block.getByRole("link", { name: /Ver el plan de hoy/ })).toHaveAttribute("href", "#/aprender");
