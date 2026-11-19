@@ -66,6 +66,8 @@ const ZONE_LOADERS = {
   daw: (load) => load("./daw.js"),
   // Excel profesional: el motor de fórmulas solo se descarga en sus rutas
   excel: (load) => load("./excel/course.js"),
+  // Mi Carrera en IA (DEC-012): el itinerario profesional, solo en sus rutas
+  career: (load) => load("./career/career-app.js"),
   cyber: (load) =>
     load("./cybersecurity.js").then((module) => {
       module.initCyber();
@@ -144,6 +146,7 @@ const DAW_ROUTE = "#/daw";
 const EXCEL_ROUTE = "#/academia/excel";
 const EXCEL_ALIAS = "#/excel-academy"; // nombre alternativo: se reescribe a EXCEL_ROUTE
 const CYBER_ROUTE = "#/ciberseguridad";
+const CAREER_ROUTE = "#/carrera";
 const mobile = window.matchMedia("(max-width: 900px)");
 
 const content = {
@@ -505,6 +508,7 @@ const VIEWS = {
   cyber: { element: "#cyber-view", title: "Curso de Ciberseguridad · Python Learning Dashboard", focus: null, render: null },
   // Excel profesional se pinta solo (openExcel): tiene ejercicios a medio escribir que no se deben repintar
   excel: { element: "#excel-view", title: "Excel profesional · Python Learning Dashboard", focus: null, render: null },
+  career: { element: "#career-view", title: "Mi Carrera en IA · Python Learning Dashboard", focus: null, render: null },
   // Página no encontrada (NAV-01) o contenido que no se pudo cargar
   notfound: { element: "#notfound-view", title: () => content.statusTitle, focus: "#notfound-title", render: () => content.statusHtml },
 };
@@ -534,7 +538,7 @@ function updatePrivateNav() {
 }
 
 /** Entrada del menú que corresponde a la vista actual. */
-const NAV_OF_VIEW = { plans: "planes", cyber: "cyber", home: "pcap-curso", lesson: "pcap-curso", certificate: "pcap-curso", pcap: "pcap", daw: "daw", excel: "excel", profile: "progreso", private: "panel" };
+const NAV_OF_VIEW = { plans: "planes", cyber: "cyber", home: "pcap-curso", lesson: "pcap-curso", certificate: "pcap-curso", pcap: "pcap", daw: "daw", excel: "excel", career: "carrera", profile: "progreso", private: "panel" };
 
 function updateSiteNav() {
   const key = content.view === "learn" ? learnNavKey(location.hash) : NAV_OF_VIEW[content.view];
@@ -761,6 +765,12 @@ function navigate({ moveFocus = true } = {}) {
     if (awaitZone("excel", moveFocus)) return;
     showPage("excel", { moveFocus: false });
     zones.excel.openExcel(location.hash, { moveFocus });
+    return;
+  }
+  if (location.hash === CAREER_ROUTE || location.hash.startsWith(`${CAREER_ROUTE}/`)) {
+    if (awaitZone("career", moveFocus)) return;
+    showPage("career", { moveFocus: false });
+    zones.career.openCareer(location.hash, { moveFocus });
     return;
   }
   if (location.hash === DAW_ROUTE || location.hash.startsWith(`${DAW_ROUTE}/`)) {
@@ -999,6 +1009,7 @@ async function init() {
   initCourseSync(() => {
     zones.daw?.refreshDaw();
     zones.excel?.refreshExcel();
+    zones.career?.refreshCareer(); // las competencias usan la práctica de los cursos de DAW
   });
   initLearnSync();
   initPlannerSync();
