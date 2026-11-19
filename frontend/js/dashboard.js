@@ -47,7 +47,7 @@ import {
 } from "./private.js";
 import { activityHtml } from "./profile.js";
 import { state, subscribe } from "./store.js";
-import { keepForms } from "./form-keep.js";
+import { focusSelector, keepForms } from "./form-keep.js";
 
 const FEED_PAGE = 10;
 const CHART_DAYS = 30;
@@ -145,21 +145,12 @@ function paint() {
   const section = sectionFromRoute(location.hash);
   // Los datos de la cuenta llegan en segundo plano: si el foco estaba en un control de la sección
   // (p. ej. la fecha del examen recién guardada), se devuelve al mismo control (EVO-16, WCAG 2.4.3)
-  const keep = activeSelector(body);
+  const keep = focusSelector(body);
   keepForms(body, () => {
     body.innerHTML = bodyHtml(section); // lo escrito en un formulario a medias se conserva
   });
   afterPaint(section);
   if (keep) body.querySelector(keep)?.focus({ preventScroll: true });
-}
-
-/** Selector del control con el foco dentro de `container` (por id o por su primer atributo data-). */
-function activeSelector(container) {
-  const active = document.activeElement;
-  if (!active || active === document.body || !container.contains(active)) return null;
-  if (active.id) return `#${CSS.escape(active.id)}`;
-  const data = [...active.attributes].find((a) => a.name.startsWith("data-"));
-  return data ? `${active.tagName.toLowerCase()}[${data.name}="${CSS.escape(data.value)}"]` : null;
 }
 
 /* ---------- Piezas comunes ---------- */
@@ -813,7 +804,7 @@ async function fillModules() {
   }
   const el = target();
   if (!el) return; // el alumno cambió de sección mientras cargaba
-  const keep = activeSelector(el);
+  const keep = focusSelector(el);
   el.innerHTML = modulesHtml(curriculumData);
   if (keep) el.querySelector(keep)?.focus({ preventScroll: true });
 }

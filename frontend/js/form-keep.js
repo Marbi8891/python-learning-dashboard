@@ -6,6 +6,21 @@
 
    Solo para repintados que el alumno no ha pedido: cuando él guarda algo, la vista nueva manda. */
 
+/**
+ * Selector para volver a encontrar, después de repintar, el control de `container` que tiene el foco:
+ * por id, por su nombre dentro de un formulario con id (los campos de contraseña no tienen id) o por su
+ * primer atributo data-. Sin esto, lo que el alumno teclea justo durante el repintado se pierde.
+ * @returns {string | null}
+ */
+export function focusSelector(container) {
+  const active = document.activeElement;
+  if (!active || active === document.body || !container.contains(active)) return null;
+  if (active.id) return `#${CSS.escape(active.id)}`;
+  if (active.name && active.form?.id) return `form[id="${CSS.escape(active.form.id)}"] [name="${CSS.escape(active.name)}"]`;
+  const data = [...active.attributes].find((a) => a.name.startsWith("data-"));
+  return data ? `${active.tagName.toLowerCase()}[${data.name}="${CSS.escape(data.value)}"]` : null;
+}
+
 /** @param {Element} container  @param {() => void} repaint sustituye el contenido de `container` */
 export function keepForms(container, repaint) {
   const saved = [...container.querySelectorAll("form[id]")].map((form) => ({

@@ -144,6 +144,21 @@ test("perfil: repintar en segundo plano no borra lo que se está escribiendo", a
   await expect(page.getByLabel("Nombre que se muestra")).toHaveValue("Ana");
 });
 
+test("un repintado en segundo plano no quita el foco a un campo sin id: lo tecleado después llega", async ({ page, request }) => {
+  // Regresión del fallo intermitente de la prueba anterior en CI: los campos de contraseña no tienen id
+  // ni data-, así que al repintar perdían el foco y lo que se tecleaba en ese momento no llegaba a ningún sitio
+  await signIn(page, request);
+  const current = page.locator("#password-form").getByLabel("Contraseña actual");
+  await current.focus();
+  await page.evaluate(async () => {
+    const { state, updateUser } = await import("/js/store.js");
+    updateUser({ ...state.user }); // repintado, como al llegar datos de la cuenta
+  });
+  await expect(current).toBeFocused();
+  await page.keyboard.type("abc");
+  await expect(current).toHaveValue("abc");
+});
+
 test("Mi cuenta sin infracciones WCAG", async ({ page, request }) => {
   await signIn(page, request, "cursos");
   await expect(page.locator('[data-course-card="java"] [data-course-detail]')).toContainText("Dominio:");

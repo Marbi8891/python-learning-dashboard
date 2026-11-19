@@ -18,7 +18,7 @@ import { language, locale } from "../i18n.js";
 import { escapeHtml } from "../markdown.js";
 import { notFoundHtml } from "../not-found.js";
 import { courseBlockStats, loadCourseBank } from "../course-store.js";
-import { keepForms } from "../form-keep.js";
+import { focusSelector, keepForms } from "../form-keep.js";
 import { learning, loadLearningContent } from "../learn/learn-store.js";
 import { allStats } from "../learn/mastery.js";
 import { upcomingExams } from "../learn/planner.js";
@@ -483,15 +483,6 @@ async function render(route, { focus = false } = {}) {
     target.scrollIntoView({ block: "start" });
     if (focus) (target.querySelector("input, a") ?? target).focus({ preventScroll: true });
   } else if (focus) $("#career-title")?.focus();
-}
-
-/** Selector del control con el foco, para devolvérselo después de repintar. */
-function focusSelector(container) {
-  const active = document.activeElement;
-  if (!active || active === document.body || !container.contains(active)) return null;
-  if (active.id) return `#${CSS.escape(active.id)}`;
-  const attr = [...active.attributes].find((a) => a.name.startsWith("data-career"));
-  return attr ? `[${attr.name}="${CSS.escape(attr.value)}"]` : null;
 }
 
 /** Repinta la sección a la vista sin perder el foco, lo que se esté escribiendo ni las listas abiertas. */
