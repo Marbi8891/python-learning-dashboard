@@ -9,6 +9,12 @@ cambios se agrupan por fecha de merge, con el número de pull request entre par�
 ## [Sin publicar]
 
 ### Añadido
+- Tutor con IA en el asistente de la lección: el alumno escribe sus dudas con sus palabras y,
+  si quiere, adjunta el código y el error de la consola. Responde un modelo de la capa gratuita de Groq
+  a través de `POST /api/v1/tutor/ask`, con pistas en vez de soluciones. Hace falta cuenta y hay un
+  límite de 20 preguntas por hora. Se avisa de que contesta una IA y no se guarda nada. Se activa con
+  `TUTOR_API_KEY` ([docs/TUTOR-IA.md](docs/TUTOR-IA.md)).
+
 - Excel profesional, P4.1: módulos M03 (formato profesional y gestión de libros), M04 (funciones
   lógicas) y M05 (agregación condicional). 6 unidades y 79 ejercicios más (190 en total), comprobados con
   el motor. El motor calcula 16 funciones nuevas: SI, Y, O, NO, SI.CONJUNTO, SI.ERROR, REDONDEAR.MAS,
