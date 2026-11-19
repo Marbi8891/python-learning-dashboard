@@ -14,11 +14,15 @@ cambios se agrupan por fecha de merge, con el número de pull request entre par�
   a través de `POST /api/v1/tutor/ask`, con pistas en vez de soluciones. Hace falta cuenta y hay un
   límite de 20 preguntas por hora. Se avisa de que contesta una IA y no se guarda nada. Se activa con
   `TUTOR_API_KEY` ([docs/TUTOR-IA.md](docs/TUTOR-IA.md)).
-
+- «Mi Carrera en IA» (`#/carrera`), Fase C del itinerario (DEC-012): resumen con la siguiente actividad
+  (pausada si hay un examen o entrega de DAW a 7 días o menos), ruta de 8 módulos con sus unidades,
+  32 competencias explicadas, proyectos y criterios, plan de 36 meses editable, objetivo económico solo en el
+  navegador (tabla, gráfica SVG accesible, exportar, importar y borrar) y listas de preparación. Entrada en el
+  menú, en español e inglés y sin conexión. Cerrar sesión y borrar la cuenta avisan de que los datos
+  económicos se quedan en el navegador.
 - Itinerario «AI Engineer & AI Product Developer», Fase B (DEC-012): catálogo generado y validado
   (8 módulos, 90 unidades, 32 competencias, 9 puestos, plan de 36 meses), documento `career`
-  sincronizado con la cuenta y cálculo de competencias, módulos, puestos y siguiente actividad. Sin
-  pantalla todavía (Fase C).
+  sincronizado con la cuenta y cálculo de competencias, módulos, puestos y siguiente actividad.
 - Excel profesional, P4.1: módulos M03 (formato profesional y gestión de libros), M04 (funciones
   lógicas) y M05 (agregación condicional). 6 unidades y 79 ejercicios más (190 en total), comprobados con
   el motor. El motor calcula 16 funciones nuevas: SI, Y, O, NO, SI.CONJUNTO, SI.ERROR, REDONDEAR.MAS,

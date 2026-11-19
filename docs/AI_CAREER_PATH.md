@@ -8,8 +8,8 @@ DAW. Decisión: [DEC-012](DECISIONS.md). Auditoría y propuesta: [AI_CAREER_PATH
 | Fase | Estado |
 |---|---|
 | A · Auditoría y propuesta | Aprobada el 18/11/2026 (D1-D6 y D8; D7 pendiente) |
-| **B · Modelo de datos y arquitectura** | **Implementada en `feature/ai-career-path`, pendiente de revisión** |
-| C · Pantalla «Mi Carrera en IA» | Sin empezar. Espera la aprobación de la Fase B (la decisión de §6 ya está tomada) |
+| B · Modelo de datos y arquitectura | Implementada en `feature/ai-career-path` (PR #176), pendiente de fusionar |
+| **C · Pantalla «Mi Carrera en IA»** | **Implementada en `feature/ai-career-path-ui` (sobre la Fase B), pendiente de revisión** |
 | D · Contenido de M1 y M4 y evaluaciones | Sin empezar |
 | E · Proyectos, evidencias en la interfaz, logros y tutor | Sin empezar (el tutor espera a `feature/tutor-nexaro`) |
 | F · Pruebas, documentación y despliegue | Sin empezar |
@@ -33,8 +33,8 @@ frontend/js/career/career-finance.js  ── funciones puras; nunca va a la cuen
   límite de 200 kB, usuario sacado del token (sin IDOR), exportación RGPD y borrado de la cuenta.
   **Sin migraciones.**
 - **Frontend:** `initCareerSync()` en `app.js` y `flushCareerSync()` antes de cerrar sesión en `account.js`.
-  Todavía no hay pantalla ni entrada de menú.
-- **PWA:** los 3 módulos y los 2 JSON nuevos están en `precache.js`, así que funcionan sin conexión.
+  Pantalla «Mi Carrera en IA» en `#/carrera` (Fase C, §8).
+- **PWA:** los módulos y los 2 JSON del itinerario están en `precache.js`, así que funcionan sin conexión.
 
 ## 3. Catálogo (`frontend/data/career/applied-ai-engineer.json`)
 
@@ -108,16 +108,14 @@ Implementación: `FINANCE_KEY = "pld:career-finance"` (`career-finance.js`) est�
 `clearedOnLogout()` (`local-owner.js`) decide qué borra el cierre de sesión. Lo prueban
 `tests/unit/local-owner.test.mjs` y `e2e/security.spec.js`.
 
-Para la Fase C:
-- Botón «Borrar mis datos económicos» y la exportación a mano.
-- Cuando haya datos económicos, el aviso tras cerrar sesión no puede decir solo «Tus datos se han borrado
-  de este navegador»: tiene que decir que los económicos se quedan aquí.
-- Borrar la cuenta tampoco los borra (no están en ella): la pantalla de borrado debe decirlo y ofrecer
-  borrarlos.
+Hecho en la Fase C:
+- Botón «Borrar mis datos económicos» (pide una segunda pulsación), exportación e importación JSON.
+- Con datos económicos, el aviso tras cerrar sesión dice que se quedan en el navegador y dónde borrarlos.
+- Borrar la cuenta tampoco los borra (no están en ella): el formulario de borrado lo dice y ofrece una
+  casilla «Borrar también mis datos económicos de este navegador» (también al borrar con Google).
 
 ## 7. Limitaciones conocidas
 
-- Sin pantalla: la ruta solo se puede usar desde código hasta la Fase C.
 - Ningún banco de evaluación todavía (`bank: null`): hasta la Fase D ningún módulo se puede completar.
   Es intencionado: sin evaluación no hay competencia.
 - Los objetivos de las unidades y los títulos de los criterios solo están en español (el inglés repite el texto).
@@ -130,3 +128,33 @@ Para la Fase C:
   sesión aunque todo estuviera guardado; ahora `uploader.js` hace una sola subida a la vez. (2) Los
   repintados en segundo plano borraban lo escrito en los formularios (el nombre nuevo volvía al
   antiguo); ahora lo conserva `form-keep.js`. Con 5 workers, los cuatro E2E que fallaban pasaron 60 de 60.
+
+## 8. Pantalla «Mi Carrera en IA» (Fase C)
+
+`frontend/js/career/career-app.js`, cargado solo en `#/carrera` (zona diferida de `app.js`, como Excel).
+
+| Ruta | Contenido |
+|---|---|
+| `#/carrera` o `/resumen` | Siguiente actividad (o «DAW primero» con un examen o entrega a 7 días o menos), competencias y los 3 puestos más cercanos |
+| `/ruta` | Los 8 módulos con su estado, requisitos (orientativos), unidades con su casilla «estudiada» y enlaces a la teoría, la práctica de DAW o el recurso |
+| `/competencias` | Las 32 competencias por categoría, con dominio, estado y su explicación (`explainSkill`) |
+| `/proyectos` | Los 4 proyectos y sus criterios (cumplido solo con evidencia); añadir evidencias es la Fase E |
+| `/plan` | Las 6 etapas con fechas; tras empezar el itinerario, cada etapa se mueve o alarga y vuelve al plan original |
+| `/objetivo` | Objetivo y años (salario, facturación, gastos), tabla, gráfica SVG, bandas del catálogo, exportar, importar y borrar |
+| `/preparacion` | Listas de portfolio, entrevistas y negocio, y qué falta para cada puesto |
+
+- No calcula nada nuevo: todo sale de `career-data.js` con `allStats` (`mastery.js`) y `courseBlockStats`
+  de los cursos de DAW. Si no cargan `learning.json`, los bancos o `resources.json`, la pantalla sigue con 0.
+- Estados: «Cargando el itinerario…», sin empezar (botón «Empezar el itinerario») y error con «Reintentar».
+- Repintados sin perder el foco, lo escrito ni las listas abiertas (`form-keep.js`).
+- Gráfica: `career-chart.js`, función pura (probada con node), sin `style=` (CSP), con título, descripción,
+  leyenda, un trazo distinto por serie y la tabla con los mismos datos.
+- `finance-store.js` lee, guarda y borra `pld:career-finance`; `account.js` lo usa para los avisos de §6.
+- Pruebas: `tests/unit/career-chart.test.mjs`, `career-finance.test.mjs` y `e2e/career-ui.spec.js` (navegación,
+  estados, plan, leer ≠ dominar, prioridad DAW, objetivo local, avisos de la cuenta, 320/768/1440 px, axe en
+  claro y oscuro, inglés y sin conexión).
+
+**Desviación de la propuesta (§4.5 de la auditoría):** la gráfica no enseña «la cobertura por puesto en el
+tiempo», porque el documento no guarda ese historial (**UNKNOWN** cómo hacerlo sin otro bloque en `career`). Enseña
+la evolución económica por año frente al objetivo. Guardar una foto mensual de la cobertura sería un cambio del
+documento (Fase E o posterior, con su decisión).

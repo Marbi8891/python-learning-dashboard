@@ -10,6 +10,7 @@ import {
   MAX_AMOUNT,
   mergeFinance,
   projection,
+  removeYear,
   setTargets,
   setYear,
 } from "../../frontend/js/career/career-finance.js";
@@ -96,4 +97,16 @@ test("limpieza: años y fechas válidos, importes inválidos a 0 y objetivos a n
   assert.deepEqual(cleanFinance(null), emptyFinance());
   const merged = mergeFinance(emptyFinance(), doc);
   assert.deepEqual(merged, doc);
+});
+
+test("quitar un año lo saca de la evolución sin tocar los demás ni el objetivo", () => {
+  const doc = emptyFinance();
+  setTargets(doc, { combined: 70000 }, NOW);
+  setYear(doc, 2027, { salary: 26000 }, NOW);
+  setYear(doc, 2028, { salary: 30000 }, NOW);
+  removeYear(doc, "2027");
+  assert.deepEqual(projection(doc).map((r) => r.year), [2028]);
+  assert.equal(doc.targets.combined, 70000);
+  removeYear(doc, 1999); // un año que no está no hace nada
+  assert.deepEqual(Object.keys(doc.years), ["2028"]);
 });

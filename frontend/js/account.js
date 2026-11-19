@@ -10,6 +10,7 @@ import { flushPcapSync } from "./pcap-sync.js";
 import { flushLearnSync } from "./learn/learn-store.js";
 import { flushPlannerSync } from "./learn/planner-store.js";
 import { flushCareerSync } from "./career/career-store.js";
+import { clearFinance, hasFinance } from "./career/finance-store.js";
 import { clearLocalData, endSession, flushLessonsSync, startSession, state, subscribe } from "./store.js";
 import { failedStores, onSyncStateChange, unsavedStores } from "./sync-status.js";
 
@@ -74,6 +75,9 @@ async function submitting(form, action, { fieldsFor = () => [] } = {}) {
 
 const LOGOUT_FAILED = "No se pudo cerrar la sesión: no hay conexión con el servidor. Inténtalo de nuevo en unos segundos.";
 
+/** Aviso tras cerrar sesión: los datos económicos del itinerario no están en la cuenta y se quedan aquí. */
+const FINANCE_LEFT = "tus datos económicos del itinerario profesional, que no están en tu cuenta: siguen aquí y puedes borrarlos en Mi Carrera en IA › Objetivo.";
+
 /** Cierra la sesión y borra de este navegador los datos personales (equipos compartidos).
     Con `keep`, el alumno ha elegido conservar en este navegador lo que no se pudo subir (SYNC-01).
     Se recarga la página para que tampoco quede nada en memoria; el aviso se muestra al volver. */
@@ -92,9 +96,12 @@ async function leave(message, { keep = false, accountGone = false } = {}) {
   }
   endSession();
   if (!keep) clearLocalData();
+  // Los datos económicos del itinerario nunca están en la cuenta: el cierre de sesión no los borra (DEC-012)
   const after = keep
     ? "Tu progreso sigue en este navegador y se subirá a tu cuenta la próxima vez que entres."
-    : "Tus datos se han borrado de este navegador.";
+    : hasFinance()
+      ? `Tus datos se han borrado de este navegador, salvo ${FINANCE_LEFT}`
+      : "Tus datos se han borrado de este navegador.";
   try {
     sessionStorage.setItem(FLASH_KEY, `${message} ${after}`);
   } catch {
@@ -194,6 +201,7 @@ function showGoogleButton(target, action) {
 async function deleteWithGoogle(credential) {
   if (!state.user || !dialog().querySelector("[data-view=profile] .account__danger").open) return; // solo desde su botón
   await request("POST", "/api/users/me/delete", { json: { google_credential: credential } });
+  if ($("#delete-form").elements["clear-finance"].checked) clearFinance();
   await leave("Tu cuenta y todos sus datos se han borrado.", { accountGone: true });
 }
 
@@ -405,6 +413,7 @@ export function initAccount({ toast }) {
   const danger = dialog().querySelector("[data-view=profile] .account__danger");
   const googleDelete = dialog().querySelector("[data-google-delete]");
   danger.addEventListener("toggle", () => {
+    $("#delete-finance").hidden = !hasFinance(); // borrar la cuenta no los borra: se ofrece aquí
     googleDelete.hidden = !googleAvailable();
     if (danger.open && !googleDelete.hidden) showGoogleButton($("#google-delete"), deleteWithGoogle);
   });
@@ -413,6 +422,7 @@ export function initAccount({ toast }) {
     event.preventDefault();
     submitting(event.target, async (data) => {
       await request("POST", "/api/users/me/delete", { json: { password: data.get("password") } });
+      if (data.get("clear-finance")) clearFinance();
       await leave("Tu cuenta y todos sus datos se han borrado.", { accountGone: true });
     });
   });
