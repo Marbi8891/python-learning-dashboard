@@ -34,8 +34,14 @@ Interactive OpenAPI documentation is available at /docs when ENABLE_DOCS=true.
 client last read. If another tab or device saved in between, the server answers **409** and keeps
 what it has. The client then reads the document again, merges it with its local copy and retries
 with the new version. The check and the write happen in one `UPDATE ... WHERE version = :read`, so
-two concurrent requests cannot both win. A `PUT` without `version` (older versions of the app) still
-overwrites.
+two concurrent requests cannot both win.
+
+`version` is optional in `/api/v1` only to **create** the document: a `PUT` without it (or with
+`null`) when nothing is saved yet creates version 1. If the document already exists, a `PUT` without
+`version` gets **428 Precondition Required** and nothing is overwritten (PLD-003); the client must read,
+merge and save with the version it read. Old tabs keep their data in the browser and merge it after a
+reload. Details and the plan to make `version` mandatory in a future API version:
+[SYNC_VERSIONING.md](SYNC_VERSIONING.md).
 
 ## Authentication
 

@@ -108,6 +108,11 @@ cambios se agrupan por fecha de merge, con el número de pull request entre par�
   (`docs/DEPLOY.md` §5).
 
 ### Corregido
+- Sincronización (PLD-003): un guardado sin `version` ya no sobrescribe un documento de progreso que
+  ya existe en la cuenta. El servidor responde 428 y lo registra (`pld.sync`); sin versión solo se puede
+  crear el documento. La web nunca sube sin versión: si no la conoce, lee y fusiona antes, y trata el 428
+  como un 409. Pruebas de concurrencia con PostgreSQL real (`STATE_TEST_DATABASE_URL`). Ver
+  `docs/SYNC_VERSIONING.md`.
 - Excel profesional: en las preguntas de test la respuesta correcta era siempre la primera opción.
   Ahora las opciones se barajan con una semilla fija por pregunta.
 - Excel profesional: «elige el resultado» muestra bien los errores (#¡DIV/0!) y los valores lógicos.

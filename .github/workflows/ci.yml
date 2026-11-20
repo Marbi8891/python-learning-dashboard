@@ -60,6 +60,10 @@ jobs:
         env:
           RATE_LIMIT_TEST_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/pld
         run: python -m pytest -q tests/test_shared_rate_limit.py
+      - name: Versiones de documentos bajo concurrencia en PostgreSQL (PLD-003)
+        env:
+          STATE_TEST_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/pld
+        run: python -m pytest -q tests/test_state_versions_postgres.py
       - name: Ensayo de copia y restauración en PostgreSQL (docs/OPERACION.md)
         env:
           BACKUP_TEST_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/postgres
