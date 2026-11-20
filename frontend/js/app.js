@@ -42,6 +42,7 @@ import { LANDING_ROUTE, closeLanding, isLandingRoute, openLanding } from "./land
 import { initLearnSync, loadLearningContent } from "./learn/learn-store.js";
 import { initPlannerSync } from "./learn/planner-store.js";
 import { initCareerSync } from "./career/career-store.js";
+import { initCyberSync } from "./cybersecurity-store.js";
 import { lightDismiss } from "./dialogs.js";
 import { watchMeters } from "./meters.js";
 import { initPrefs } from "./prefs.js";
@@ -1005,6 +1006,7 @@ async function init() {
   initLearnSync();
   initPlannerSync();
   initCareerSync();
+  initCyberSync();
   const flash = takeFlash(); // aviso tras cerrar sesión o borrar la cuenta
   if (flash) showToast(flash);
   restoreSession();

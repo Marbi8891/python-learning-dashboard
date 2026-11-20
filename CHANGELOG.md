@@ -113,6 +113,12 @@ cambios se agrupan por fecha de merge, con el número de pull request entre par�
   crear el documento. La web nunca sube sin versión: si no la conoce, lee y fusiona antes, y trata el 428
   como un 409. Pruebas de concurrencia con PostgreSQL real (`STATE_TEST_DATABASE_URL`). Ver
   `docs/SYNC_VERSIONING.md`.
+- Curso de ciberseguridad: el progreso (semanas completadas y cuestionarios) solo vivía en el navegador y
+  «Cerrar sesión» lo borraba sin copia en la cuenta, aunque el aviso decía que se subiría. Ahora es el
+  documento `cybersecurity` de `/api/v1/course-state` (versión, 409, fusión al entrar, subida antes de
+  cerrar sesión y exportación RGPD). Cada semana guarda la fecha de su último cambio: al fusionar gana el
+  más reciente, así que desmarcar una semana en otro dispositivo no se deshace. El progreso guardado con la
+  versión anterior se lee y se sube al entrar.
 - Excel profesional: en las preguntas de test la respuesta correcta era siempre la primera opción.
   Ahora las opciones se barajan con una semilla fija por pregunta.
 - Excel profesional: «elige el resultado» muestra bien los errores (#¡DIV/0!) y los valores lógicos.

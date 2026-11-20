@@ -23,7 +23,7 @@ Interactive OpenAPI documentation is available at /docs when ENABLE_DOCS=true.
 | Progress | /api/v1/progress, /api/v1/progress/{slug} |
 | Exercise attempts | /api/v1/lessons/{slug}/attempts |
 | PCAP state | /api/v1/pcap-state |
-| DAW course state | /api/v1/course-state/{course} (`sql`, `js`, `java`, `entornos`, `marcas`, `programacion`, `learn`, `game`, `planner`) |
+| DAW course state | /api/v1/course-state/{course} (`sql`, `js`, `java`, `entornos`, `marcas`, `programacion`, `excel`, `learn`, `game`, `planner`, `career`, `cybersecurity`) |
 | Verified milestones ([HITOS_VERIFICADOS.md](HITOS_VERIFICADOS.md)) | POST /api/v1/verified/pcap-exams (server picks 40 questions, 201), POST /api/v1/verified/pcap-exams/{id}/answers (server grades; same answers again → same result, other answers or late → 409, impossible answers → 422, another user's exam → 404), GET /api/v1/verified |
 | Student dashboard | GET /api/v1/dashboard?utc_offset_minutes=, GET /api/v1/dashboard/activity?limit=&offset= |
 

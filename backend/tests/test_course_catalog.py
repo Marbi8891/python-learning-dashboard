@@ -11,8 +11,9 @@ from pathlib import Path
 from app.schemas import COURSES
 
 CATALOG = Path(__file__).resolve().parents[2] / "frontend" / "js" / "catalog.js"
-# Documentos del núcleo, no son cursos del catálogo ("career": itinerario profesional, DEC-012)
-CORE_STORES = {"learn", "game", "planner", "career"}
+# Documentos del núcleo, no son cursos del catálogo ("career": itinerario profesional, DEC-012;
+# "cybersecurity": curso de ciberseguridad, con su propio almacén)
+CORE_STORES = {"learn", "game", "planner", "career", "cybersecurity"}
 
 
 def catalog_ids() -> list[str]:

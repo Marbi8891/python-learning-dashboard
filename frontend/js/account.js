@@ -10,6 +10,7 @@ import { flushPcapSync } from "./pcap-sync.js";
 import { flushLearnSync } from "./learn/learn-store.js";
 import { flushPlannerSync } from "./learn/planner-store.js";
 import { flushCareerSync } from "./career/career-store.js";
+import { flushCyberSync } from "./cybersecurity-store.js";
 import { clearFinance, hasFinance } from "./career/finance-store.js";
 import { clearLocalData, endSession, flushLessonsSync, startSession, state, subscribe } from "./store.js";
 import { failedStores, onSyncStateChange, unsavedStores } from "./sync-status.js";
@@ -258,6 +259,7 @@ async function flushAll() {
     flushLearnSync(),
     flushPlannerSync(),
     flushCareerSync(),
+    flushCyberSync(),
     flushGameSync(),
   ]);
   return results.every(Boolean) && unsavedStores().length === 0;
