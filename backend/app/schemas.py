@@ -189,7 +189,8 @@ MAX_PCAP_STATE_BYTES = 200_000  # ~1000 simulacros y todas las respuestas caben 
 # logros de la web, que antes solo vivían en el navegador, y "planner": el planificador diario
 # (tiempo disponible, fechas de exámenes y entregas, tareas hechas, pospuestas o rechazadas) y
 # "career": el itinerario profesional (unidades, evaluaciones, evidencias de proyecto y plan,
-# DEC-012; los datos económicos no se guardan aquí: solo viven en el navegador).
+# DEC-012; los datos económicos no se guardan aquí: solo viven en el navegador) y "cybersecurity":
+# semanas completadas y cuestionarios del curso de ciberseguridad (antes solo en el navegador).
 # Lista cerrada: evita que un cliente cree documentos con nombres arbitrarios.
 COURSES = (
     "sql",
@@ -203,6 +204,7 @@ COURSES = (
     "game",
     "planner",
     "career",
+    "cybersecurity",
 )
 
 

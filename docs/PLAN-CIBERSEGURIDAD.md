@@ -11,7 +11,7 @@
 - Vista y progreso: `frontend/js/cybersecurity.js`.
 - Estilos: `frontend/css/cybersecurity.css`.
 
-La sección se incorpora como itinerario independiente para no mezclar sus evaluaciones con PCAP ni con el currículo oficial de DAW. El progreso inicial se guarda localmente en `localStorage` bajo `pld:cybersecurity:v1`; esta primera versión no lo sincroniza con la cuenta ni con la app móvil.
+La sección se incorpora como itinerario independiente para no mezclar sus evaluaciones con PCAP ni con el currículo oficial de DAW. El progreso se guarda en `localStorage` bajo `pld:cybersecurity:v1` y, con sesión iniciada, en la cuenta (documento `cybersecurity` de `/api/v1/course-state`, `frontend/js/cybersecurity-store.js`). Cada semana y cada cuestionario llevan la fecha de su último cambio, y al fusionar dos copias gana el más reciente (`frontend/js/cybersecurity-data.js`).
 
 ## Estructura
 

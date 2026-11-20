@@ -84,6 +84,7 @@ Sin ella, fallan las e2e que ejecutan Python. Si cambias la versión, cámbiala 
 | `scripts/resources/**` | `python scripts/resources/build_resources.py --check` y `cd backend && python -m pytest -q tests/test_resources.py` |
 | `scripts/career/**` | `python scripts/career/build_career.py` y después `--check`; `cd backend && python -m pytest -q tests/test_career_catalog.py` |
 | `frontend/js/career/*` | `npm run test:unit` y `npx playwright test e2e/career.spec.js` |
+| `frontend/js/cybersecurity*.js` | `npm run test:unit` y `npx playwright test e2e/cybersecurity.spec.js` |
 | `scripts/curriculum/**` | `python scripts/curriculum/build_curriculum.py --check` y `cd backend && python -m pytest -q tests/test_curriculum.py` |
 | `docs/memoria/img/*.dot` | `dot -Tpng <archivo>.dot -o <archivo>.png` (Graphviz) para regenerar el diagrama |
 
