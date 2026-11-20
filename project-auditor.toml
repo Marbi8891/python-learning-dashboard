@@ -1,0 +1,202 @@
+# Configuración del Project Auditor (docs/AUDITOR.md).
+# Se lee con tomllib (librería estándar de Python 3.11): sin dependencias nuevas.
+
+[auditor]
+# read-only (predeterminado) | plan | safe-fix. Ningún modo hace push ni merge.
+mode = "read-only"
+# Fuera de Git (.gitignore): el repositorio es público y los hallazgos de seguridad no se publican.
+output_dir = ".claude/informes/audit"
+# CRITICAL | HIGH | MEDIUM | LOW | INFO. Lo que quede por debajo se cuenta, pero no se muestra.
+min_severity = "LOW"
+# quick (solo pruebas) | standard (pruebas + agentes) | deep (además las e2e)
+depth = "standard"
+# Cada cuántos días conviene repetir la auditoría (el informe avisa si se ha pasado).
+frequency_days = 7
+
+categories = [
+  "security", "bugs", "architecture", "performance", "code-quality", "testing",
+  "ux-accessibility", "dependencies", "docs", "config-deploy", "integration", "content",
+]
+
+# Hallazgos en estos archivos se descartan (se cuentan en el informe).
+exclude = [
+  "node_modules/**", "frontend/pyodide/**", ".venv/**", "test-results/**",
+  "playwright-report/**", "_site/**",
+]
+
+[limits]
+# Agentes de IA por auditoría (revisor-daw, red-teamer, buscador-mejoras).
+max_agents = 3
+check_timeout_s = 900
+# Líneas finales de salida que se guardan de cada prueba.
+max_output_lines = 40
+
+[score]
+# Puntuación heurística: 100 menos estas penalizaciones, con mínimo 0.
+critical = 25
+high = 10
+medium = 4
+low = 1
+info = 0
+check_failed = 10
+check_not_run = 2
+
+[safe_fix]
+# Solo se corrige sin aprobación lo que cumple TODO esto.
+max_severity = "MEDIUM"
+allowed_fix_risk = ["low"]
+branch_prefix = "fix/audit-"
+# Estas categorías siempre piden aprobación.
+approval_categories = ["security", "architecture", "config-deploy"]
+# Autenticación, permisos, base de datos, API pública, producción, infraestructura y CI.
+approval_paths = [
+  "backend/app/security.py", "backend/app/session_cookie.py", "backend/app/deps.py",
+  "backend/app/entitlements.py", "backend/app/password_policy.py", "backend/app/rate_limit.py",
+  "backend/app/config.py", "backend/app/models.py", "backend/app/database.py",
+  "backend/app/routers/**", "backend/migrations/**", "backend/alembic.ini",
+  "backend/Dockerfile", "docker-compose.yml", "render.yaml", "deploy.ps1",
+  ".github/**", "frontend/sw.js", "scripts/security/**",
+]
+# Nunca se tocan: los JSON generados se cambian en su script (CLAUDE.md) y los secretos no se leen.
+forbidden_paths = [
+  "frontend/data/**/*.json", ".env", ".env.*", "**/.env", "backend/.local-secret",
+]
+
+# Pruebas que se ejecutan en solo lectura (docs/TESTING.md). {python} es el Python del .venv
+# del proyecto si existe; si no, el que ejecuta el auditor.
+# depth: profundidad mínima con la que corre. requires: programas que tienen que existir.
+# requires_modules: módulos de Python. requires_paths: rutas del repositorio.
+
+[[checks]]
+id = "ruff-lint"
+name = "Lint (ruff)"
+category = "code-quality"
+cwd = "backend"
+cmd = ["{python}", "-m", "ruff", "check", "--no-cache", ".", "../e2e", "../scripts"]
+requires_modules = ["ruff"]
+
+[[checks]]
+id = "ruff-format"
+name = "Formato (ruff)"
+category = "code-quality"
+cwd = "backend"
+cmd = ["{python}", "-m", "ruff", "format", "--check", "--no-cache", ".", "../e2e", "../scripts"]
+requires_modules = ["ruff"]
+
+[[checks]]
+id = "backend-tests"
+name = "Tests del backend (pytest)"
+category = "testing"
+cwd = "backend"
+cmd = ["{python}", "-m", "pytest", "-q", "-p", "no:cacheprovider"]
+requires_modules = ["pytest", "fastapi"]
+
+[[checks]]
+id = "frontend-unit"
+name = "Tests unitarios del frontend"
+category = "testing"
+cmd = ["node", "--test", "tests/unit/*.test.mjs"]
+requires = ["node"]
+
+[[checks]]
+id = "learning-content"
+name = "Núcleo educativo al día"
+category = "content"
+cmd = ["{python}", "scripts/learning/build_learning.py", "--check"]
+
+[[checks]]
+id = "curriculum"
+name = "Currículo de DAW al día"
+category = "content"
+cmd = ["{python}", "scripts/curriculum/build_curriculum.py", "--check"]
+
+[[checks]]
+id = "career"
+name = "Itinerarios profesionales al día"
+category = "content"
+cmd = ["{python}", "scripts/career/build_career.py", "--check"]
+
+[[checks]]
+id = "resources"
+name = "Recursos de DAW al día"
+category = "content"
+cmd = ["{python}", "scripts/resources/build_resources.py", "--check"]
+
+[[checks]]
+id = "course-sql"
+name = "Curso de SQL comprobado"
+category = "content"
+cmd = ["{python}", "scripts/courses/sql_course.py", "--check"]
+
+[[checks]]
+id = "course-js"
+name = "Curso de JavaScript comprobado"
+category = "content"
+cmd = ["{python}", "scripts/courses/js_course.py", "--check"]
+requires = ["node"]
+
+[[checks]]
+id = "course-java"
+name = "Curso de Java comprobado"
+category = "content"
+cmd = ["{python}", "scripts/courses/java_course.py", "--check"]
+requires = ["java", "javac"]
+
+[[checks]]
+id = "course-entornos"
+name = "Curso de Entornos comprobado"
+category = "content"
+cmd = ["{python}", "scripts/courses/entornos_course.py", "--check"]
+
+[[checks]]
+id = "course-marcas"
+name = "Curso de Lenguajes de Marcas comprobado"
+category = "content"
+cmd = ["{python}", "scripts/courses/marcas_course.py", "--check"]
+
+[[checks]]
+id = "course-programacion"
+name = "Curso de Programación comprobado"
+category = "content"
+cmd = ["{python}", "scripts/courses/programacion_course.py", "--check"]
+requires = ["java", "javac"]
+
+[[checks]]
+id = "course-excel"
+name = "Curso de Excel profesional comprobado"
+category = "content"
+cmd = ["{python}", "scripts/courses/excel_course.py", "--check"]
+requires = ["node"]
+
+[[checks]]
+id = "precache"
+name = "Lista sin conexión del service worker al día"
+category = "config-deploy"
+cmd = ["node", "scripts/web/build_precache.mjs", "--check"]
+requires = ["node"]
+
+[[checks]]
+id = "npm-audit"
+name = "Dependencias de npm sin vulnerabilidades altas"
+category = "dependencies"
+cmd = ["npm", "audit", "--audit-level=high"]
+requires = ["npm"]
+
+[[checks]]
+id = "pip-audit"
+name = "Dependencias de Python sin vulnerabilidades conocidas"
+category = "dependencies"
+cmd = ["{python}", "-m", "pip_audit", "-r", "backend/requirements.txt"]
+requires_modules = ["pip_audit"]
+
+[[checks]]
+id = "e2e"
+name = "End-to-end y WCAG (Playwright)"
+category = "ux-accessibility"
+depth = "deep"
+cmd = ["npx", "playwright", "test", "--workers=1"]
+requires = ["npx"]
+requires_paths = ["node_modules", "frontend/pyodide"]
+timeout_s = 1800
+# Crea backend/e2e-test.db y test-results/ (ignorados por Git) y arranca servidores locales.
+writes_files = true
