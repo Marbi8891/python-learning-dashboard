@@ -108,6 +108,12 @@ cambios se agrupan por fecha de merge, con el número de pull request entre par�
   (`docs/DEPLOY.md` §5).
 
 ### Corregido
+- Python en el navegador (PLD-004): un ejercicio ya no contamina los siguientes. Tras cada ejecución se
+  restauran los atributos de los módulos (`math.sqrt = …`), las clases y funciones de la biblioteca
+  estándar, `sys.path`, `sys.meta_path`, `sys.modules`, la carpeta, el entorno, `warnings`, `random` y
+  `decimal`; cada ejecución usa una carpeta temporal propia. Cuesta unos 8 ms por ejecución frente a los
+  ~2 s de reiniciar Pyodide; si no se puede restaurar, la página crea un Worker nuevo. Detalles y límites
+  en `docs/AISLAMIENTO_PYTHON.md`.
 - Excel profesional: en las preguntas de test la respuesta correcta era siempre la primera opción.
   Ahora las opciones se barajan con una semilla fija por pregunta.
 - Excel profesional: «elige el resultado» muestra bien los errores (#¡DIV/0!) y los valores lógicos.

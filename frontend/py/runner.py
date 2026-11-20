@@ -6,10 +6,18 @@ así que tiene que funcionar igual en los dos sitios: solo biblioteca estándar.
 
 import builtins
 import contextlib
+import gc
+import importlib
 import io
 import json
+import operator
+import os
+import shutil
 import sys
+import tempfile
 import traceback
+import types
+import warnings
 
 USER_FILE = "<tu código>"
 MAX_OUTPUT = 20_000
@@ -47,23 +55,214 @@ class _LimitedOutput(io.TextIOBase):
         return "".join(self._parts)
 
 
-def _snapshot() -> dict:
-    return {"modules": dict(sys.modules), "recursion": sys.getrecursionlimit()}
+# ---------- Aislamiento entre ejecuciones (PY-03, PLD-004) ----------
+#
+# Todas las ejecuciones comparten un intérprete: reiniciar Pyodide cuesta unos 2 s y aislar una
+# ejecución, unos pocos ms (docs/AISLAMIENTO_PYTHON.md). Por eso no se reinicia: antes de cada
+# ejecución se guarda lo que un programa puede cambiar y al terminar se deja como estaba. No es un
+# sandbox de seguridad: evita que un ejercicio contamine los siguientes, no que un programa escrito
+# para romper el intérprete lo consiga (si la restauración falla, la página crea un Worker nuevo).
+
+_IMMUTABLE_TYPE = 1 << 8  # Py_TPFLAGS_IMMUTABLETYPE: tipos de C que no admiten setattr (int, list…)
+_STREAMS = frozenset({"stdin", "stdout", "stderr"})  # los gestiona _execute (y pytest en las pruebas)
+_MISSING = object()
+# Las clases solo se copian de la biblioteca estándar: es lo único que se puede importar en la
+# consola (no hay micropip) y así las pruebas en CPython no tocan las de FastAPI, pytest…
+_STDLIB = frozenset(sys.stdlib_module_names)
+_Failure = Exception  # sin buscarlo en builtins, que el programa pudo vaciar
+
+# True si una restauración falló: run_for_js y check_for_js lo devuelven como "restart" y la página
+# crea un Worker nuevo para la siguiente ejecución (frontend/js/python-runner.js)
+_needs_restart = False
+
+
+class _FunctionJournal:
+    """Anota el valor anterior de __code__, __defaults__ y __kwdefaults__ de las funciones que cambia
+    el programa. CPython avisa a los hooks de auditoría antes de cada uno de esos cambios
+    («object.__setattr__»; asignar None avisa como «object.__delattr__»), así que no hace falta
+    copiar en cada ejecución las ~4 000 funciones cargadas (unos 8 ms en Pyodide). Solo se anotan
+    las de módulos que ya estaban cargados: las que define el alumno conservan sus cambios. Las
+    clases no avisan (type.__setattr__ no se audita) y se copian en _snapshot."""
+
+    def __init__(self) -> None:
+        self.active = False
+        self.skip: frozenset = frozenset()
+        self.modules: dict = {}
+        self.changes: dict = {}
+
+    def __call__(self, event: str, args: tuple) -> None:
+        if not self.active or event not in _FUNCTION_EVENTS or not isinstance(args[0], types.FunctionType):
+            return
+        function, part = args[0], args[1]
+        owner = getattr(function, "__module__", None)
+        if owner in self.skip or self.modules.get(owner) is None:
+            return
+        self.changes.setdefault((id(function), part), (function, part, getattr(function, part)))
+
+    def start(self, modules: dict, skip: frozenset) -> None:
+        self.modules, self.skip, self.changes, self.active = modules, skip, {}, True
+
+    def undo(self, trash: list) -> None:
+        self.active = False
+        for function, part, before in reversed(list(self.changes.values())):
+            trash.append(getattr(function, part))
+            setattr(function, part, before)
+        self.changes, self.modules = {}, {}
+
+
+_FUNCTION_EVENTS = frozenset({"object.__setattr__", "object.__delattr__"})  # = None es un delattr
+_journal = _FunctionJournal()
+sys.addaudithook(_journal)  # no se puede quitar; con la anotación inactiva solo mira una variable
+
+
+def _snapshot(skip: frozenset) -> dict:
+    """Foto de lo que un programa puede cambiar sin querer: módulos cargados, sus atributos y sus
+    clases (de la biblioteca estándar), listas de sys, directorio, entorno y estado de random y
+    decimal. `skip` es el __name__ del código del alumno ("__main__" o "solucion"): sus clases y
+    funciones conservan los cambios."""
+    modules = dict(sys.modules)
+    saved = {"modules": modules, "sys": dict(vars(sys)), "recursion": sys.getrecursionlimit(),
+             "trace": sys.gettrace(), "profile": sys.getprofile(), "cwd": os.getcwd(),
+             "lists": [(lst, list(lst)) for lst in (sys.path, sys.meta_path, sys.path_hooks, sys.argv)],
+             "importer_cache": dict(sys.path_importer_cache), "environ": dict(os.environ),
+             "gc": gc.isenabled(), "dicts": [], "classes": []}
+    for name, module in modules.items():
+        if not isinstance(module, types.ModuleType) or module is builtins or module is sys:
+            continue
+        namespace = vars(module)
+        saved["dicts"].append((namespace, dict(namespace)))
+        if name in skip or name.partition(".")[0] not in _STDLIB:
+            continue
+        for value in list(namespace.values()):
+            if isinstance(value, type) and not value.__flags__ & _IMMUTABLE_TYPE and value.__module__ == name:
+                saved["classes"].append((value, dict(vars(value))))
+    if hasattr(sys, "get_int_max_str_digits"):
+        saved["int_digits"] = sys.get_int_max_str_digits()
+    if "random" in modules and hasattr(modules["random"], "getstate"):
+        saved["random"] = modules["random"].getstate()
+    if "decimal" in modules:
+        saved["decimal"] = modules["decimal"].getcontext().copy()
+    _journal.start(modules, skip)
+    return saved
+
+
+def _unchanged(current, original: dict) -> bool:
+    """¿Mismas claves y mismos objetos, en el mismo orden? Todo en C y por identidad (`is`): no
+    llama al __eq__ de ningún objeto del alumno. Si el orden cambió, se restaura igualmente."""
+    return (len(current) == len(original) and all(map(operator.is_, current, original))
+            and all(map(operator.is_, current.values(), original.values())))
+
+
+def _restore_dict(current: dict, original: dict, trash: list, keep=frozenset()) -> None:
+    """Deja `current` con las mismas claves y objetos que `original` (compara por identidad)."""
+    if not keep and _unchanged(current, original):
+        return
+    for name in [name for name in current if name not in original and name not in keep]:
+        trash.append(current.pop(name))
+    for name, value in original.items():
+        if name not in keep and current.get(name, _MISSING) is not value:
+            trash.append(current.get(name))
+            current[name] = value
+
+
+def _restore_class(cls: type, original: dict, trash: list) -> None:
+    current = vars(cls)  # mappingproxy: solo se cambia con setattr y delattr
+    if _unchanged(current, original):
+        return
+    for name in [name for name in current if name not in original]:
+        trash.append(current[name])
+        delattr(cls, name)
+    for name, value in original.items():
+        if current.get(name, _MISSING) is not value:
+            trash.append(current.get(name))
+            setattr(cls, name, value)
 
 
 def _restore(saved: dict) -> None:
-    """Deja el intérprete como antes de ejecutar el código del alumno (PY-03)."""
+    """Deja el intérprete como antes de ejecutar el código del alumno (PY-03, PLD-004)."""
+    global _needs_restart
+    # Lo retirado se suelta al final: un __del__ del alumno no vuelve a cambiar lo ya restaurado
+    trash: list = []
+    try:
+        _restore_builtins()
+        _journal.undo(trash)
+        # sys primero: si se reasignaron sys.path, sys.modules… vuelven los objetos originales
+        _restore_dict(vars(sys), saved["sys"], trash, keep=_STREAMS)
+        for namespace, original in saved["dicts"]:
+            _restore_dict(namespace, original, trash)
+        for lst, items in saved["lists"]:
+            lst[:] = items
+        _restore_dict(sys.path_importer_cache, saved["importer_cache"], trash)
+        # Los módulos que el programa sustituyó o borró vuelven; los que importó por primera vez se
+        # descartan: el siguiente programa los importa de nuevo, sin los cambios que les hiciera este
+        _restore_dict(sys.modules, saved["modules"], trash)
+        for cls, original in saved["classes"]:
+            _restore_class(cls, original, trash)
+        sys.setrecursionlimit(saved["recursion"])
+        if "int_digits" in saved:
+            sys.set_int_max_str_digits(saved["int_digits"])
+        if sys.gettrace() is not saved["trace"]:
+            sys.settrace(saved["trace"])
+        if sys.getprofile() is not saved["profile"]:
+            sys.setprofile(saved["profile"])
+        if os.getcwd() != saved["cwd"]:
+            os.chdir(saved["cwd"])
+        if dict(os.environ) != saved["environ"]:
+            os.environ.clear()
+            os.environ.update(saved["environ"])
+        (gc.enable if saved["gc"] else gc.disable)()
+        if "random" in saved:
+            sys.modules["random"].setstate(saved["random"])
+        if "decimal" in saved:
+            sys.modules["decimal"].setcontext(saved["decimal"])
+    except _Failure:  # el programa dejó algo que no se puede deshacer desde Python
+        _needs_restart = True
+    finally:
+        _journal.active = False
+        trash.clear()
+
+
+def _restore_builtins() -> None:
+    """Vuelve a poner las funciones integradas. No usa ninguna (ni len, ni list…): el programa pudo
+    borrarlas, y todo lo demás (también salir de los `with`) las necesita."""
     current = vars(builtins)
     for name in [name for name in current if name not in _PRISTINE_BUILTINS]:
         del current[name]
     for name, value in _PRISTINE_BUILTINS.items():
-        if current.get(name) is not value:
+        if current.get(name, _MISSING) is not value:
             current[name] = value
-    # Módulos que el programa borró o sustituyó en sys.modules (los nuevos se quedan en caché)
-    for name, module in saved["modules"].items():
-        if sys.modules.get(name) is not module:
-            sys.modules[name] = module
-    sys.setrecursionlimit(saved["recursion"])
+
+
+def _no_audit_hooks(hook) -> None:
+    raise RuntimeError("sys.addaudithook no está disponible en la consola: no se podría deshacer.")
+
+
+@contextlib.contextmanager
+def _isolated(name: str):
+    """Ejecuta un bloque y deshace al terminar lo que haya cambiado en el intérprete."""
+    saved = _snapshot(frozenset({name}))
+    sys.addaudithook = _no_audit_hooks  # un hook de auditoría no se puede quitar una vez puesto
+    try:
+        with warnings.catch_warnings():  # filtros de warnings (simplefilter("error")…)
+            yield
+    finally:
+        _restore(saved)  # también devuelve el sys.addaudithook de verdad
+
+
+@contextlib.contextmanager
+def _working_directory():
+    """Cada ejecución (con los tests de su caso) trabaja en una carpeta temporal vacía que se borra
+    al terminar: sus archivos no aparecen en el ejercicio siguiente ni tapan módulos de la
+    biblioteca estándar (sys.path empieza por '', la carpeta actual)."""
+    previous = os.getcwd()
+    folder = tempfile.mkdtemp(prefix="pld-")
+    os.chdir(folder)
+    try:
+        yield
+    finally:
+        os.chdir(previous)
+        shutil.rmtree(folder, ignore_errors=True)
+        importlib.invalidate_caches()
 
 
 def _format_error(error: BaseException, code: str) -> str:
@@ -191,22 +390,32 @@ def explain_error(error: BaseException) -> dict | None:
     return {"title": title, "text": text, "line": _error_line(error)}
 
 
-def run_code(code: str, stdin: str = "", name: str = "__main__") -> dict:
-    """Ejecuta `code` con `stdin` como entrada. Devuelve salida, error y el espacio de nombres."""
+def _execute(code: str, stdin: str, name: str, *, filename: str = USER_FILE, namespace: dict | None = None,
+             capture_stderr: bool = True) -> tuple[_LimitedOutput, dict, BaseException | None]:
+    """Ejecuta `code` aislado (_isolated). Devuelve la salida, el espacio de nombres y el error."""
     output = _LimitedOutput()
-    namespace = {"__name__": name}
-    saved = _snapshot()
+    namespace = {"__name__": name} if namespace is None else namespace
+    errors = output if capture_stderr else sys.stderr
     old_stdin = sys.stdin
     sys.stdin = io.StringIO(stdin)
     caught = None
     try:
-        with contextlib.redirect_stdout(output), contextlib.redirect_stderr(output):
-            exec(compile(code, USER_FILE, "exec"), namespace)
+        with _isolated(name), contextlib.redirect_stdout(output), contextlib.redirect_stderr(errors):
+            try:
+                exec(compile(code, filename, "exec"), namespace)
+            finally:
+                _restore_builtins()  # lo primero: salir de los `with` usa funciones integradas
     except BaseException as exc:  # también SystemExit (exit()) y KeyboardInterrupt
         caught = exc
     finally:
         sys.stdin = old_stdin
-        _restore(saved)
+    return output, namespace, caught
+
+
+def run_code(code: str, stdin: str = "", name: str = "__main__") -> dict:
+    """Ejecuta `code` con `stdin` como entrada. Devuelve salida, error y el espacio de nombres."""
+    with _working_directory():
+        output, namespace, caught = _execute(code, stdin, name)
     # El error se describe con el intérprete ya restaurado (el programa pudo romper len, str…)
     error = _format_error(caught, code) if caught is not None else None
     hint = explain_error(caught) if caught is not None else None
@@ -226,47 +435,41 @@ def check_exercise(code: str, cases: list[dict]) -> dict:
     variables del alumno, su salida (`__output__`) y su código fuente (`__code__`).
     El código se ejecuta con __name__ = "solucion": lo que esté dentro de
     `if __name__ == "__main__":` no se ejecuta durante la comprobación.
+    Los tests de un caso se ejecutan con el intérprete ya restaurado (el código no puede engañarlos
+    cambiando `len` o `math`), pero en la misma carpeta, para que vean los archivos que creó.
     """
     for number, case in enumerate(cases, start=1):
         stdin = case.get("stdin", "")
-        result = run_code(code, stdin, name="solucion")
         base = {"passed": False, "case": number, "total": len(cases), "stdin": stdin}
-        if result["error"]:
-            return base | {"message": "Tu código da un error al ejecutarse.",
-                           "output": result["output"], "error": result["error"],
-                           "hint": result["hint"]}
-
-        namespace = result["namespace"]
-        namespace.update(__output__=result["output"], __code__=code)
-        test_output = _LimitedOutput()
-        sys.stdin, old_stdin = io.StringIO(""), sys.stdin
-        saved = _snapshot()
-        caught = None
-        try:
-            with contextlib.redirect_stdout(test_output):
-                exec(compile(case["test"], "<tests>", "exec"), namespace)
-        except BaseException as exc:
-            caught = exc
-        finally:
-            sys.stdin = old_stdin
-            _restore(saved)
-        if isinstance(caught, AssertionError):
-            return base | {"message": str(caught) or "Un test ha fallado.",
-                           "output": result["output"], "error": None}
+        with _working_directory():
+            output, namespace, caught = _execute(code, stdin, "solucion")
+            if caught is None:
+                namespace.update(__output__=output.getvalue(), __code__=code)
+                _, _, failure = _execute(case["test"], "", "solucion", filename="<tests>",
+                                         namespace=namespace, capture_stderr=False)
         if caught is not None:
-            return base | {"message": f"Al probar tu código se produjo {type(caught).__name__}: {caught}",
-                           "output": result["output"], "error": None}
+            return base | {"message": "Tu código da un error al ejecutarse.",
+                           "output": output.getvalue(), "error": _format_error(caught, code),
+                           "hint": explain_error(caught)}
+        if isinstance(failure, AssertionError):
+            return base | {"message": str(failure) or "Un test ha fallado.",
+                           "output": output.getvalue(), "error": None}
+        if failure is not None:
+            return base | {"message": f"Al probar tu código se produjo {type(failure).__name__}: {failure}",
+                           "output": output.getvalue(), "error": None}
     return {"passed": True, "case": len(cases), "total": len(cases),
             "message": "¡Todos los tests superados!"}
 
 
 # ---------- Puntos de entrada para JavaScript (reciben y devuelven JSON) ----------
+# "restart": la restauración falló y la página tiene que crear un Worker nuevo antes de seguir.
 
 def run_for_js(code: str, stdin: str) -> str:
     result = run_code(code, stdin)
     output = result["output"] + (TRUNCATED_NOTE if result["truncated"] else "")
-    return json.dumps({"output": output, "error": result["error"], "hint": result["hint"]})
+    return json.dumps({"output": output, "error": result["error"], "hint": result["hint"],
+                       "restart": _needs_restart})
 
 
 def check_for_js(code: str, cases_json: str) -> str:
-    return json.dumps(check_exercise(code, json.loads(cases_json)))
+    return json.dumps(check_exercise(code, json.loads(cases_json)) | {"restart": _needs_restart})

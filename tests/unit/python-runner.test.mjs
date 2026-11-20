@@ -69,3 +69,31 @@ test("también se puede detener mientras Pyodide se está cargando", async () =>
     FakeWorker.loads = true;
   }
 });
+
+test("si runner.py no pudo restaurar Python (restart), la siguiente ejecución usa un Worker nuevo (PLD-004)", async () => {
+  workers.length = 0;
+  const runner = new PythonRunner({ indexURL: "x/", timeoutMs: 60_000 });
+  const answer = (worker, result) => {
+    const { id } = worker.messages.find((m) => m.type === "run" && !m.answered);
+    worker.messages.find((m) => m.id === id).answered = true;
+    worker.onmessage({ data: { id, result } });
+  };
+
+  const first = runner.run("print(1)");
+  await tick();
+  answer(workers[0], { output: "1\n", error: null, restart: false });
+  assert.equal((await first).output, "1\n");
+  assert.equal(workers[0].terminated, false, "sin restart se reutiliza el mismo intérprete");
+
+  const second = runner.run("rompe()");
+  await tick();
+  answer(workers[0], { output: "", error: null, restart: true });
+  assert.equal((await second).restart, true, "el resultado llega igual");
+  assert.equal(workers[0].terminated, true);
+  assert.equal(runner.busy, false);
+
+  runner.run("print(2)").catch(() => {});
+  await tick();
+  assert.equal(workers.length, 2, "se carga un Python limpio");
+  runner.stop();
+});
