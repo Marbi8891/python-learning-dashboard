@@ -29,6 +29,8 @@ self.PLD_PRECACHE = [
  "js/course-store.js",
  "js/course.js",
  "js/curriculum.js",
+ "js/cybersecurity-data.js",
+ "js/cybersecurity-store.js",
  "js/cybersecurity.js",
  "js/dashboard-data.js",
  "js/dashboard.js",
