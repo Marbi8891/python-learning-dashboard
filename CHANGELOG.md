@@ -9,6 +9,12 @@ cambios se agrupan por fecha de merge, con el número de pull request entre par�
 ## [Sin publicar]
 
 ### Añadido
+- Project Auditor (DEC-022): comando `/auditar` que ejecuta las pruebas de `docs/TESTING.md` y lanza
+  `revisor-daw`, `red-teamer` y `buscador-mejoras`, y motor `scripts/audit/` (solo librería estándar)
+  que une sus hallazgos en un registro con huella estable. Cada auditoría dice qué es nuevo, qué ha
+  cambiado, qué ha vuelto (regresión) y qué se ha resuelto, siempre con evidencia, y da una puntuación
+  heurística de 0 a 100. Además, plan de corrección y modo SAFE FIX con rutas protegidas.
+  Configuración en `project-auditor.toml`; informes en `.claude/informes/audit/`, fuera de Git.
 - «Mi Carrera en IA» (`#/carrera`), Fase C del itinerario (DEC-012): resumen con la siguiente actividad
   (pausada si hay un examen o entrega de DAW a 7 días o menos), ruta de 8 módulos con sus unidades,
   32 competencias explicadas, proyectos y criterios, plan de 36 meses editable, objetivo económico solo en el

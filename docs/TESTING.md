@@ -38,6 +38,7 @@ Las e2e arrancan solas el frontend (`e2e/serve_frontend.py`, un `http.server` co
 | Archivos sin conexión | `node scripts/web/build_precache.mjs --check` (también `tests/unit/precache.test.mjs`) | `frontend/precache.js`, la lista que el service worker guarda al instalarse, está al día |
 | Safari (WebKit) | `PW_WEBKIT=1 npx playwright test --project=webkit e2e/navigation.spec.js e2e/landing.spec.js e2e/account.spec.js` | Prueba de humo en WebKit, con la cuenta y el cierre de sesión (trabajo `webkit` de CI) |
 | Inspección de la web | `node scripts/web/inspeccionar_web.mjs [--rutas a,b] [--tema claro\|oscuro\|ambos] [--comparar <carpeta>]` | Capturas en móvil y escritorio (y en tema oscuro con `--tema`), axe, errores de consola, desbordamiento y peso de cada ruta (no es una prueba que falle: es evidencia de antes y después) |
+| Project Auditor | `cd backend && python -m pytest -q tests/test_audit_engine.py tests/test_audit_report.py` | Configuración, ejecución de pruebas, validación y huella de hallazgos, registro entre auditorías, SAFE FIX, informe y CLI ([`AUDITOR.md`](AUDITOR.md)) |
 | Dependencias | `pip-audit -r backend/requirements.txt` y `npm audit --audit-level=high` | Vulnerabilidades conocidas |
 | Despliegue (sin desplegar) | `cp -r frontend _site && python scripts/security/production_csp.py _site && python scripts/qa/verify_pages_artifact.py _site` y `node --experimental-vm-modules scripts/qa/frontend_static.mjs --root _site` | Lo que publicaría Pages: archivos necesarios, CSP sin orígenes de desarrollo, sin restos ni secretos, imports y referencias. En CI (`deployment-check.yml`) también construye la imagen Docker de Render, comprueba `/api/health` y valida los workflows con actionlint |
 
@@ -73,6 +74,7 @@ Sin ella, fallan las e2e que ejecutan Python. Si cambias la versión, cámbiala 
 | HTML o CSS | `npm run test:e2e` |
 | Archivos de `frontend/` (nuevos, borrados o renombrados) o `frontend/sw.js` | `node scripts/web/build_precache.mjs` y `npx playwright test e2e/study.spec.js -g PWA` |
 | `frontend/data/lessons.json` o `pcap.json` | `cd backend && python -m pytest -q tests/test_content.py tests/test_pcap.py` |
+| `scripts/audit/**` o `project-auditor.toml` | `cd backend && python -m pytest -q tests/test_audit_engine.py tests/test_audit_report.py` y `python scripts/audit/auditor.py checks --depth quick` |
 | `scripts/learning/**` | `python scripts/learning/build_learning.py` y después `--check` |
 | Módulo de POO (`scripts/learning/poo_module.py`, `frontend/js/learn/poo-view.js`) | Lo anterior, `cd backend && python -m pytest -q tests/test_poo_module.py`, `npm run test:unit` y `npx playwright test e2e/poo.spec.js` |
 | `scripts/courses/**` | `python scripts/courses/<curso>_course.py --check`, `python scripts/courses/lock_ids.py` si hay ids nuevos y `cd backend && python -m pytest -q tests/test_daw_courses.py` |

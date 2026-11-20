@@ -36,4 +36,8 @@ Cada push queda vigilado hasta que GitHub Actions termina ([`docs/CI_CD_MONITORI
 - `mejorador-web`: inspecciona la web en local (`scripts/web/inspeccionar_web.mjs`) y aplica **una** mejora
   pequeña del frontend en una rama `mejora/…`, con antes y después y pruebas. Se lanza con `/mejorar-web`
   (vacío: solo propone candidatas MW-NNN; con `MJ-NNN` o una descripción: la aplica). No hace push ni merge.
+- `/auditar`: el Project Auditor ([`docs/AUDITOR.md`](docs/AUDITOR.md)). Ejecuta las pruebas, lanza los
+  agentes de revisión y une sus hallazgos en un registro con histórico en `.claude/informes/audit/` (fuera de
+  Git). Por defecto es de solo lectura; `/auditar plan` planifica y `/auditar safe-fix AUD-NNN` corrige un
+  hallazgo de bajo riesgo en su rama, sin push.
 - Los demás son de solo lectura: lo que propongan se implementa después, en otra rama, si el autor lo elige.

@@ -22,6 +22,7 @@
 | [HITOS_VERIFICADOS.md](HITOS_VERIFICADOS.md) | Qué progreso es local (orientativo) y qué comprueba el servidor: simulacros del PCAP verificados |
 | [ADAPTIVE_ENGINE.md](ADAPTIVE_ENGINE.md) | Motor adaptativo: dominio, olvido, repaso espaciado y planificador |
 | [MODULO_POO.md](MODULO_POO.md) | Módulo de POO: unidades, formato, validadores, progreso y currículo |
+| [AUDITOR.md](AUDITOR.md) | Project Auditor (`/auditar`): auditoría continua, registro de hallazgos, comparación, plan y SAFE FIX |
 | [DECISIONS.md](DECISIONS.md) | Registro de decisiones de arquitectura (DEC-NNN) |
 | [AI_CAREER_PATH.md](AI_CAREER_PATH.md) | Itinerario AI Engineer & AI Product Developer: arquitectura, modelo de datos y estado por fases |
 | [AI_CAREER_PATH_AUDIT.md](AI_CAREER_PATH_AUDIT.md) | Itinerario de IA: auditoría y propuesta técnica (Fase A, aprobada) |
