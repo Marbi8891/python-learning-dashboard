@@ -108,6 +108,9 @@ cambios se agrupan por fecha de merge, con el número de pull request entre par�
   (`docs/DEPLOY.md` §5).
 
 ### Corregido
+- Simulacros verificados (PLD-001): varios inicios a la vez de la misma cuenta ya no se saltan el límite diario
+  ni dejan dos simulacros abiertos. `start_exam` bloquea la fila del usuario antes de contar; prueba de
+  concurrencia con PostgreSQL en CI (`test_verified_concurrency.py`).
 - Excel profesional: en las preguntas de test la respuesta correcta era siempre la primera opción.
   Ahora las opciones se barajan con una semilla fija por pregunta.
 - Excel profesional: «elige el resultado» muestra bien los errores (#¡DIV/0!) y los valores lógicos.
