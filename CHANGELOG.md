@@ -9,6 +9,11 @@ cambios se agrupan por fecha de merge, con el número de pull request entre par�
 ## [Sin publicar]
 
 ### Añadido
+- Tutor con IA en el asistente de la lección: el alumno escribe sus dudas con sus palabras y,
+  si quiere, adjunta el código y el error de la consola. Responde un modelo de la capa gratuita de Groq
+  a través de `POST /api/v1/tutor/ask`, con pistas en vez de soluciones. Hace falta cuenta y hay un
+  límite de 20 preguntas por hora. Se avisa de que contesta una IA y no se guarda nada. Se activa con
+  `TUTOR_API_KEY` ([docs/TUTOR-IA.md](docs/TUTOR-IA.md)).
 - «Mi Carrera en IA» (`#/carrera`), Fase C del itinerario (DEC-012): resumen con la siguiente actividad
   (pausada si hay un examen o entrega de DAW a 7 días o menos), ruta de 8 módulos con sus unidades,
   32 competencias explicadas, proyectos y criterios, plan de 36 meses editable, objetivo económico solo en el

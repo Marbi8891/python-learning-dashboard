@@ -2,7 +2,7 @@
 
 import json
 from datetime import date, datetime
-from typing import Annotated
+from typing import Annotated, Literal
 
 from pydantic import (
     AfterValidator,
@@ -398,3 +398,34 @@ class VerifiedSummary(BaseModel):
     best_score: int | None
     passed: bool
     exams: list[VerifiedExamOut]
+
+
+# ---------- Tutor con IA ----------
+
+
+class TutorTurn(BaseModel):
+    """Un mensaje anterior de la conversación, para que el tutor entienda «y eso por qué»."""
+
+    role: Literal["user", "assistant"]
+    content: str = Field(min_length=1, max_length=3000)
+
+
+class TutorQuestion(BaseModel):
+    question: str = Field(min_length=1, max_length=1000)
+    # Lección abierta: el tutor recibe su teoría y su ejercicio para responder sobre lo mismo
+    lesson_slug: str | None = Field(default=None, max_length=50)
+    # Código de la consola y error que ha salido, si el alumno decide enviarlos
+    code: str | None = Field(default=None, max_length=4000)
+    error: str | None = Field(default=None, max_length=2000)
+    history: list[TutorTurn] = Field(default_factory=list, max_length=6)
+
+    @field_validator("question")
+    @classmethod
+    def not_blank(cls, value: str) -> str:
+        if not value.strip():
+            raise ValueError("Escribe tu pregunta")
+        return value.strip()
+
+
+class TutorAnswer(BaseModel):
+    answer: str

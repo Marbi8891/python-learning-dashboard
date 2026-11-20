@@ -297,9 +297,17 @@
         <h2 id="assistant-title">Asistente</h2>
         <button class="icon-button" id="assistant-close" type="button" aria-label="Cerrar asistente">✕</button>
       </header>
-      <ol class="assistant__messages" id="assistant-messages" aria-live="polite"></ol>
+      <ol class="assistant__messages" id="assistant-messages" aria-live="polite" aria-label="Conversación con el asistente" tabindex="0"></ol>
       <div class="assistant__suggestions" id="assistant-suggestions" role="group" aria-label="Preguntas sugeridas"></div>
-      <p class="assistant__note">Respuestas preparadas y revisadas para cada lección.</p>
+      <form class="assistant__form" id="assistant-form" hidden>
+        <label class="visually-hidden" for="assistant-input">Escribe tu duda</label>
+        <textarea id="assistant-input" rows="2" maxlength="1000" placeholder="Escribe tu duda con tus palabras…" aria-describedby="assistant-note"></textarea>
+        <div class="assistant__form-row">
+          <label class="assistant__attach"><input type="checkbox" id="assistant-attach" checked> Enviar mi código y el error de la consola</label>
+          <button class="btn btn--primary" id="assistant-send" type="submit">Preguntar</button>
+        </div>
+      </form>
+      <p class="assistant__note" id="assistant-note">Respuestas preparadas y revisadas para cada lección.</p>
     </section>
     <button class="assistant__toggle" id="assistant-toggle" type="button" aria-controls="assistant-panel" aria-expanded="false">
       <svg viewBox="0 0 32 32" width="30" height="30" aria-hidden="true">
