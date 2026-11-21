@@ -312,7 +312,7 @@ El Web Worker evita que la página se congele, **pero no es una barrera de segur
 - Corre en el mismo origen y no tiene una CSP propia.
 - La red se cierra con una lista negra de APIs (RT-005).
 - Pyodide se descarga de jsDelivr sin SRI (RT-002).
-- La restauración de PY-03 cubre las funciones integradas, `sys.modules` y la recursión. Un programa todavía puede cambiar atributos de otros módulos (`math.pi = 3`) para las ejecuciones siguientes. Recargar la página o usar «Detener», que reinicia el Worker, lo arregla.
+- La restauración de PY-03 cubre las funciones integradas, `sys.modules` y la recursión. ~~Un programa todavía puede cambiar atributos de otros módulos (`math.pi = 3`) para las ejecuciones siguientes.~~ Corregido en PLD-004: ahora también se restauran los atributos de los módulos, sus clases y funciones, `sys.path`, los archivos y más ([`AISLAMIENTO_PYTHON.md`](AISLAMIENTO_PYTHON.md), con los límites que quedan).
 
 ### 11.4 Riesgos pendientes
 

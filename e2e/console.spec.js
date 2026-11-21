@@ -89,6 +89,13 @@ test("un programa que cambia print no deja muda la consola (PY-03) y la salida e
   await expect(output(page)).toHaveText("3");
 });
 
+test("un ejercicio no contamina el siguiente: módulos, sys.path y archivos vuelven a su estado (PLD-004)", async ({ page }) => {
+  await openLesson(page, "bucles");
+  await run(page, "import math, sys\nmath.sqrt = lambda x: 999\nsys.path.clear()\nopen('notas.txt', 'w').write('hola')");
+  await run(page, "import math, os, sys\nprint(math.sqrt(16), len(sys.path) > 0, os.path.exists('notas.txt'))");
+  await expect(output(page)).toHaveText("4.0 True False");
+});
+
 test("Ctrl+Enter ejecuta y Tab inserta 4 espacios", async ({ page }) => {
   await openLesson(page, "variables");
   const editor = page.locator("#console-editor");
