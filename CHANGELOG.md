@@ -9,6 +9,22 @@ cambios se agrupan por fecha de merge, con el número de pull request entre par�
 ## [Sin publicar]
 
 ### Añadido
+- IA con NEXARO AI, Fase 4: «Preguntar al tutor IA» en el panel del asistente de cada lección (preguntar,
+  pedir pista, explicar mi error y revisar mi código), solo si el servidor ofrece la IA y con sesión iniciada. El
+  código solo viaja si se marca la casilla o se pide revisarlo; respuestas con Markdown seguro y la etiqueta «IA · no
+  es la corrección oficial»; nada se guarda en el navegador. En inglés, accesible y sin conexión (el tutor se oculta).
+  La lista de mensajes del asistente se puede recorrer con el teclado. `privacidad.html` describe el tutor.
+- IA con NEXARO AI, Fase 3: `POST /api/v1/ai/explain-error` (explica un error de la consola, hasta 4.000
+  caracteres) y `POST /api/v1/ai/review-code` (revisión estática en Markdown con posibles errores, explicación y
+  pruebas sugeridas; el código es texto y nadie lo ejecuta). Revisar usa el agente `NEXARO_AGENT_REVIEW`.
+- IA con NEXARO AI, Fase 2: `POST /api/v1/ai/chat` (tutor sobre la lección) y `POST /api/v1/ai/hint` (pistas de
+  nivel 1 a 3) con sesión. El contexto lo pone el servidor desde la lección; el código solo viaja si se envía y no
+  viaja nada que identifique al alumno. 10 preguntas por minuto y alumno (evento `ai.rate_limited`), 2 respuestas a
+  la vez como mucho, errores de NEXARO sin detalles y respuestas marcadas como IA, que nunca cambian el progreso.
+- IA con NEXARO AI, Fase 1 (`docs/architecture/NEXARO_INTEGRATION_*.md`): configuración `NEXARO_*`, desactivada
+  por defecto y validada al arrancar (URL sin credenciales ni ruta, host permitido, HTTPS fuera de la red local,
+  token fuera de este equipo); cliente de servidor a servidor sin redirecciones, con tiempo de espera y tope de
+  bytes; `GET /api/v1/ai/status` con sesión y el campo `ai` en `/health`. Sin interfaz ni rutas de generación todavía.
 - «Mi Carrera en IA» (`#/carrera`), Fase C del itinerario (DEC-012): resumen con la siguiente actividad
   (pausada si hay un examen o entrega de DAW a 7 días o menos), ruta de 8 módulos con sus unidades,
   32 competencias explicadas, proyectos y criterios, plan de 36 meses editable, objetivo económico solo en el

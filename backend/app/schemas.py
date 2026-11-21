@@ -2,7 +2,7 @@
 
 import json
 from datetime import date, datetime
-from typing import Annotated
+from typing import Annotated, Literal
 
 from pydantic import (
     AfterValidator,
@@ -398,3 +398,89 @@ class VerifiedSummary(BaseModel):
     best_score: int | None
     passed: bool
     exams: list[VerifiedExamOut]
+
+
+# ---------- IA (docs/architecture/NEXARO_INTEGRATION_CONTRACT.md) ----------
+# extra="forbid": el navegador no puede elegir usuario, modelo, agente, temperatura ni prompt de
+# sistema. Todo eso lo pone el servidor.
+
+
+class AiTurn(BaseModel):
+    """Un turno anterior de la conversación (solo vive en el navegador; PLD no lo guarda)."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    role: Literal["user", "assistant"]
+    content: str = Field(min_length=1, max_length=2000)
+
+
+def _not_blank(value: str, message: str) -> str:
+    if not value.strip():
+        raise ValueError(message)
+    return value
+
+
+class AiLessonRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    # v1: solo el curso de Python, el único cuyas lecciones están en la base de datos (D-05)
+    course: Literal["python"] = "python"
+    lesson_slug: str = Field(min_length=1, max_length=50)
+    # Solo si el alumno marca «Enviar mi código»: puede llevar datos personales
+    code: str = Field(default="", max_length=8000)
+    locale: Literal["es", "en"] = "es"
+    # Optativa en los modos que no la necesitan (explicar un error, revisar código)
+    question: str = Field(default="", max_length=2000)
+
+    @field_validator("question")
+    @classmethod
+    def strip_question(cls, value: str) -> str:
+        return value.strip()
+
+
+class AiRequest(AiLessonRequest):
+    question: str = Field(min_length=1, max_length=2000)
+
+    @field_validator("question")
+    @classmethod
+    def question_not_blank(cls, value: str) -> str:
+        return _not_blank(value, "Escribe tu pregunta")
+
+
+class AiChatRequest(AiRequest):
+    history: list[AiTurn] = Field(default_factory=list, max_length=6)
+
+
+class AiHintRequest(AiRequest):
+    # Pistas graduadas: de la idea general (1) a una guía paso a paso sin la solución (3)
+    hint_level: int = Field(default=1, ge=1, le=3)
+
+
+class AiErrorRequest(AiLessonRequest):
+    # El error que mostró la consola. El runner ya lo limita al código del alumno (frontend/py)
+    error: str = Field(min_length=1, max_length=4000)
+
+    @field_validator("error")
+    @classmethod
+    def error_not_blank(cls, value: str) -> str:
+        return _not_blank(value, "Falta el error que quieres entender")
+
+
+class AiReviewRequest(AiLessonRequest):
+    # Revisar código exige enviarlo: es texto, nadie lo ejecuta en el servidor
+    code: str = Field(min_length=1, max_length=8000)
+
+    @field_validator("code")
+    @classmethod
+    def code_not_blank(cls, value: str) -> str:
+        return _not_blank(value, "Falta el código que quieres revisar")
+
+
+class AiAnswer(BaseModel):
+    """Lo que ve el alumno: texto generado por IA que nunca es la evaluación oficial."""
+
+    answer: str
+    mode: Literal["chat", "hint", "explain-error", "review-code"]
+    ai_generated: Literal[True] = True
+    official_evaluation: Literal[False] = False
+    request_id: str

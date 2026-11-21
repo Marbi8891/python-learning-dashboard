@@ -13,6 +13,7 @@ from sqlalchemy.pool import StaticPool  # noqa: E402
 from app.database import Base, get_db  # noqa: E402
 from app.main import app  # noqa: E402
 from app.rate_limit import (  # noqa: E402
+    ai_limiter,
     auth_limiter,
     login_failures,
     reset_requests,
@@ -42,13 +43,13 @@ def client():
 
     app.dependency_overrides[get_db] = override_get_db
     set_engine(engine)  # los límites compartidos, en la base de datos del test
-    for limiter in (auth_limiter, login_failures, reset_requests, write_limiter):
+    for limiter in (auth_limiter, login_failures, reset_requests, write_limiter, ai_limiter):
         limiter.reset()
     with TestClient(app) as test_client:
         test_client.engine = engine
         yield test_client
     app.dependency_overrides.clear()
-    for limiter in (auth_limiter, login_failures, reset_requests, write_limiter):
+    for limiter in (auth_limiter, login_failures, reset_requests, write_limiter, ai_limiter):
         limiter.reset()
     set_engine(None)
     engine.dispose()
@@ -69,6 +70,21 @@ def login(client, email="ana@example.com", password=PASSWORD):
 def auth_headers(client):
     register(client)
     token = login(client).json()["access_token"]
-    for limiter in (auth_limiter, login_failures, reset_requests, write_limiter):
+    for limiter in (auth_limiter, login_failures, reset_requests, write_limiter, ai_limiter):
         limiter.reset()  # que el registro y el login de la fixture no consuman el límite
     return {"Authorization": f"Bearer {token}"}
+
+
+@pytest.fixture
+def fake_nexaro(client):
+    """NEXARO simulado en el cliente que usa la app (el lifespan lo cierra al terminar)."""
+    import httpx
+
+    from app.nexaro_client import NexaroClient
+    from tests.test_nexaro_client import TOKEN, FakeNexaro, settings
+
+    fake = FakeNexaro()
+    app.state.nexaro = NexaroClient(
+        settings(nexaro_service_token=TOKEN), transport=httpx.MockTransport(fake)
+    )
+    return fake

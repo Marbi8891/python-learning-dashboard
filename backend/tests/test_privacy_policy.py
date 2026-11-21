@@ -64,3 +64,15 @@ def test_no_claim_of_a_single_cookie():
     assert "Una sola cookie" not in policy_text()
     aviso = (FRONTEND / "aviso-legal.html").read_text(encoding="utf-8")
     assert "una cookie técnica de sesión" not in aviso
+
+
+def test_ai_tutor_is_described_as_it_works():
+    """El tutor IA (routers/ai.py): qué se envía, que no se guarda y que no es la nota oficial."""
+    text = policy_text()
+    assert "tutor IA" in text
+    assert "Enviar también mi código" in text and "Revisar mi código" in text
+    assert "No se envía tu email, tu nombre ni tu número de usuario" in text
+    assert "no se guardan" in text
+    assert "no cuenta como corrección oficial" in text
+    assert Settings(_env_file=None).nexaro_enabled is False  # desactivado salvo que se configure
+    assert "En la web publicada está desactivado" in text
