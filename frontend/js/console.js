@@ -64,6 +64,13 @@ export const pythonRunner = runner;
 let lesson = null;
 let busy = false;
 let onRun = () => {};
+// Último error de Python de esta lección (ya limitado al código del alumno por runner.py)
+let lastError = "";
+
+/** Lo usa el tutor IA para «Explicar mi error». */
+export function lastRunError() {
+  return lastError;
+}
 
 /** Permite a otros módulos (el juego) saber si cada ejecución fue bien. */
 export function setRunListener(listener) {
@@ -171,6 +178,7 @@ export function runConsole() {
     try {
       const result = await runner.run($("#console-editor").value, $("#console-stdin").value);
       showOutput(result);
+      lastError = typeof result.error === "string" ? result.error : "";
       onRun(!result.error);
     } finally {
       if ($("#console-status")?.dataset.status === "running") setStatus("ready");
@@ -210,6 +218,7 @@ export function checkCode({ checks, button, box, onResult }) {
   return withRunner(button, "Comprobando…", async () => {
     const code = $("#console-editor").value;
     const result = await runner.check(code, checks);
+    lastError = typeof result.error === "string" ? result.error : "";
     box.hidden = false;
     box.dataset.passed = String(result.passed);
     const [done, total] = [Number(result.case), Number(result.total)]; // números o NaN, nunca HTML
@@ -225,6 +234,7 @@ export function checkCode({ checks, button, box, onResult }) {
 /** Cambia la lección: carga el borrador guardado o el ejemplo. */
 export function setLesson(next) {
   lesson = next;
+  lastError = "";
   $("#console-file").textContent = `${next.slug.replace(/-/g, "_")}.py`;
   $("#console-editor").value = readDraft(next.slug) ?? next.example_code;
   syncLineNumbers();

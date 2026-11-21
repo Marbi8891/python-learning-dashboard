@@ -52,7 +52,9 @@ Verificación manual (solo T1): PLD nativo con `NEXARO_BASE_URL=http://127.0.0.1
 | `frontend/index.html`, `frontend/css/widgets.css`, `frontend/i18n/en.json` | Marcado, estilos (tema claro y oscuro, responsive) y textos |
 | `frontend/privacidad.html` + `backend/tests/test_privacy_policy.py` | Describir el tratamiento |
 | `frontend/precache.js` | Regenerado con `node scripts/web/build_precache.mjs` |
-| `tests/unit/ai-api.test.mjs`, `e2e/ai-tutor.spec.js` | Ver la tabla de pruebas |
+| `tests/unit/ai-logic.test.mjs`, `e2e/ai-tutor.spec.js` | Ver la tabla de pruebas |
+
+Implementado: la lógica sin DOM ni red (cuerpos, límites, historial, niveles de pista y mensajes de error) está en `frontend/js/ai/ai-logic.js`, que es lo que prueban los unitarios. `ai-api.js` depende de `window`. `console.js` expone `lastRunError()` para «Explicar mi error». `#assistant-messages` lleva `tabindex="0"`, porque con el tutor el panel tiene menos sitio y la lista pasa a tener scroll (axe `scrollable-region-focusable`).
 
 ## Fase 5: persistencia (solo con una decisión documentada, D-07)
 
@@ -103,7 +105,7 @@ NX-REQ-01 (token de servicio), NX-REQ-02 (host de servicio), NX-REQ-04 (agentes 
 | Nada en `localStorage`/`sessionStorage`/IndexedDB con el token de servicio ni URLs de NEXARO | `e2e/ai-tutor.spec.js` | 4 |
 | Uso con teclado (Tab, Escape, foco al cerrar) y axe WCAG 2.2 AA en tema claro y oscuro, móvil y escritorio | `e2e/ai-tutor.spec.js` | 4 |
 | Sin conexión: con el SW activo y sin red, la lección y Pyodide funcionan y el tutor IA aparece desactivado | `e2e/study.spec.js -g PWA` (ampliar) | 4 |
-| Lógica de `ai-api.js` (mapeo de errores, cancelación) | `tests/unit/ai-api.test.mjs` | 4 |
+| Lógica del tutor (cuerpos, límites, historial, pistas, mensajes de error) | `tests/unit/ai-logic.test.mjs` | 4 |
 
 ### Comandos de `docs/TESTING.md` que hay que ejecutar en cada fase
 
