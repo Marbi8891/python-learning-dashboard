@@ -9,6 +9,10 @@ cambios se agrupan por fecha de merge, con el número de pull request entre par�
 ## [Sin publicar]
 
 ### Añadido
+- IA con NEXARO AI, Fase 1 (`docs/architecture/NEXARO_INTEGRATION_*.md`): configuración `NEXARO_*`, desactivada
+  por defecto y validada al arrancar (URL sin credenciales ni ruta, host permitido, HTTPS fuera de la red local,
+  token fuera de este equipo); cliente de servidor a servidor sin redirecciones, con tiempo de espera y tope de
+  bytes; `GET /api/v1/ai/status` con sesión y el campo `ai` en `/health`. Sin interfaz ni rutas de generación todavía.
 - «Mi Carrera en IA» (`#/carrera`), Fase C del itinerario (DEC-012): resumen con la siguiente actividad
   (pausada si hay un examen o entrega de DAW a 7 días o menos), ruta de 8 módulos con sus unidades,
   32 competencias explicadas, proyectos y criterios, plan de 36 meses editable, objetivo económico solo en el

@@ -19,8 +19,10 @@ from app.config import get_settings
 from app.database import get_db
 from app.local_site import mount_frontend
 from app.mailer import email_enabled
+from app.nexaro_client import create_client as create_nexaro_client
 from app.routers import (
     account,
+    ai,
     attempts,
     auth,
     course_state,
@@ -38,9 +40,16 @@ logging.basicConfig(level=logging.INFO)
 
 
 @asynccontextmanager
-async def lifespan(_: FastAPI):
+async def lifespan(api: FastAPI):
     get_jwt_secret()  # falla al arrancar si falta JWT_SECRET, no en el primer login
-    yield
+    # IA opcional: con NEXARO_ENABLED=true y una configuración no válida, la API no arranca
+    api.state.nexaro = create_nexaro_client(get_settings())
+    try:
+        yield
+    finally:
+        if api.state.nexaro is not None:
+            await api.state.nexaro.aclose()
+        api.state.nexaro = None
 
 
 _docs = get_settings().enable_docs
@@ -174,17 +183,20 @@ for router in (
     course_state.router,
     dashboard.router,
     verified.router,
+    ai.router,
 ):
     app.include_router(router, prefix=API_V1_PREFIX)
 
 
 @app.get("/api/v1/health", tags=["sistema"])
 @app.get("/api/health", tags=["sistema"], include_in_schema=False)  # healthCheckPath de Render
-def health() -> dict[str, str | bool]:
+def health(request: Request) -> dict[str, str | bool]:
     # "email": el frontend solo ofrece la recuperación por email si se pueden enviar (Brevo o SMTP)
     # "google": y solo enseña «Continuar con Google» si el servidor tiene GOOGLE_CLIENT_ID
+    # "ai": y solo ofrece la IA si está activada. No llama a NEXARO ni revela su URL
     return {
         "status": "ok",
+        "ai": ai.nexaro_client(request) is not None,
         "email": email_enabled(),
         "google": bool(get_settings().google_client_id),
     }
