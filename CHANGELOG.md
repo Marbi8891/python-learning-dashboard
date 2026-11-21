@@ -124,6 +124,11 @@ cambios se agrupan por fecha de merge, con el número de pull request entre par�
   (`docs/DEPLOY.md` §5).
 
 ### Corregido
+- Sincronización (PLD-003): un guardado sin `version` ya no sobrescribe un documento de progreso que
+  ya existe en la cuenta. El servidor responde 428 y lo registra (`pld.sync`); sin versión solo se puede
+  crear el documento. La web nunca sube sin versión: si no la conoce, lee y fusiona antes, y trata el 428
+  como un 409. Pruebas de concurrencia con PostgreSQL real (`STATE_TEST_DATABASE_URL`). Ver
+  `docs/SYNC_VERSIONING.md`.
 - Curso de ciberseguridad: el progreso (semanas completadas y cuestionarios) solo vivía en el navegador y
   «Cerrar sesión» lo borraba sin copia en la cuenta, aunque el aviso decía que se subiría. Ahora es el
   documento `cybersecurity` de `/api/v1/course-state` (versión, 409, fusión al entrar, subida antes de

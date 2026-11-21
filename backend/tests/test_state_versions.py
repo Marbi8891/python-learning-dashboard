@@ -1,5 +1,7 @@
 """Control de versiones de los documentos de progreso: dos pestañas no se pisan (409)."""
 
+import logging
+
 import pytest
 
 PATHS = ["/api/v1/pcap-state", "/api/v1/course-state/sql"]
@@ -43,11 +45,86 @@ def test_version_of_a_document_that_does_not_exist_is_a_conflict(client, auth_he
 
 
 @pytest.mark.parametrize("path", PATHS)
-def test_without_version_it_still_saves_like_older_apps(client, auth_headers, path):
-    """Una pestaña con la versión anterior de la web (sin `version`) sigue pudiendo guardar."""
-    client.put(path, json={"data": {"v": 1}, "version": 0}, headers=auth_headers)
-    legacy = client.put(path, json={"data": {"v": "antigua"}}, headers=auth_headers)
-    assert legacy.status_code == 200 and legacy.json()["version"] == 2
+def test_without_version_it_can_still_create_the_document(client, auth_headers, path):
+    """Un cliente antiguo (sin `version`) puede crear el documento: no hay nada que pisar."""
+    created = client.put(path, json={"data": {"v": 1}}, headers=auth_headers)
+    assert created.status_code == 200 and created.json()["version"] == 1
+
+
+@pytest.mark.parametrize("path", PATHS)
+def test_without_version_an_existing_document_is_not_overwritten(
+    client, auth_headers, path, caplog
+):
+    """PLD-003: sin `version` no se sobrescribe en silencio lo guardado desde otro dispositivo."""
+    client.put(path, json={"data": {"de": "movil"}, "version": 0}, headers=auth_headers)
+    legacy = client.put(path, json={"data": {"de": "pestaña antigua"}}, headers=auth_headers)
+    assert legacy.status_code == 428
+    assert "vuelve a leer la cuenta" in legacy.json()["detail"]
+    current = client.get(path, headers=auth_headers).json()
+    assert current["data"] == {"de": "movil"} and current["version"] == 1
+    assert any("sync.version_missing" in r.getMessage() for r in caplog.records)
+    # Tras releer (como hace la web al recargar), guarda con la versión y funciona
+    merged = {"data": {"de": "movil+antigua"}, "version": current["version"]}
+    assert client.put(path, json=merged, headers=auth_headers).json()["version"] == 2
+
+
+@pytest.mark.parametrize("path", PATHS)
+def test_explicit_null_version_is_the_same_as_missing(client, auth_headers, path):
+    client.put(path, json={"data": {"a": 1}, "version": 0}, headers=auth_headers)
+    response = client.put(path, json={"data": {}, "version": None}, headers=auth_headers)
+    assert response.status_code == 428
+
+
+@pytest.mark.parametrize("path", PATHS)
+def test_version_from_the_future_is_a_conflict(client, auth_headers, path):
+    client.put(path, json={"data": {"a": 1}, "version": 0}, headers=auth_headers)
+    response = client.put(path, json={"data": {"a": 2}, "version": 7}, headers=auth_headers)
+    assert response.status_code == 409
+    assert client.get(path, headers=auth_headers).json() | {"updated_at": None} == {
+        "data": {"a": 1},
+        "version": 1,
+        "updated_at": None,
+    }
+
+
+@pytest.mark.parametrize("path", PATHS)
+def test_version_zero_on_an_existing_document_is_a_conflict(client, auth_headers, path):
+    """Una pestaña que leyó «vacío» antes de que otra creara el documento no lo pisa."""
+    client.put(path, json={"data": {"tab": "A"}, "version": 0}, headers=auth_headers)
+    stale = client.put(path, json={"data": {}, "version": 0}, headers=auth_headers)
+    assert stale.status_code == 409
+
+
+@pytest.mark.parametrize("path", PATHS)
+def test_conflict_is_logged_without_progress_data(client, auth_headers, path, caplog):
+    caplog.set_level(logging.INFO, logger="pld.sync")
+    client.put(path, json={"data": {"secreto": "respuesta"}, "version": 0}, headers=auth_headers)
+    caplog.clear()
+    client.put(path, json={"data": {"x": 1}, "version": 0}, headers=auth_headers)
+    lines = [r.getMessage() for r in caplog.records if r.name == "pld.sync"]
+    assert len(lines) == 1 and "sync.conflict" in lines[0] and "leida=0" in lines[0]
+    assert "respuesta" not in lines[0] and "secreto" not in lines[0]
+
+
+@pytest.mark.parametrize("path", PATHS)
+def test_retrying_the_same_save_after_it_succeeded_is_a_conflict_not_a_duplicate(
+    client, auth_headers, path
+):
+    """Si la respuesta se perdió y la app repite el PUT con la misma versión, no se aplica dos
+    veces: recibe 409, relee (ve que ya está guardado) y sigue."""
+    body = {"data": {"n": 1}, "version": 0}
+    assert client.put(path, json=body, headers=auth_headers).status_code == 200
+    assert client.put(path, json=body, headers=auth_headers).status_code == 409
+    assert client.get(path, headers=auth_headers).json()["version"] == 1
+
+
+def test_documents_of_other_users_and_courses_are_not_affected_by_a_conflict(client, auth_headers):
+    client.put("/api/v1/course-state/sql", json={"data": {}, "version": 0}, headers=auth_headers)
+    client.put("/api/v1/course-state/sql", json={"data": {}, "version": 0}, headers=auth_headers)
+    java = client.put(
+        "/api/v1/course-state/java", json={"data": {}, "version": 0}, headers=auth_headers
+    )
+    assert java.status_code == 200
 
 
 def test_negative_version_is_rejected(client, auth_headers):

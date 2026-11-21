@@ -211,7 +211,8 @@ COURSES = (
 class PcapStateIn(BaseModel):
     data: dict
     # Versión que leyó la app. Si no coincide con la de la cuenta, 409 (otra pestaña guardó antes).
-    # Sin ella se guarda sin comprobar, como hacían las versiones anteriores de la app.
+    # Es opcional en /api/v1 solo para crear el documento (versión 0): si ya existe, sin ella se
+    # responde 428 en vez de sobrescribir sin comprobar (PLD-003, app/state_documents.py).
     version: int | None = Field(default=None, ge=0)
 
     @field_validator("data")

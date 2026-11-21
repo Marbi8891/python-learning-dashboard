@@ -30,7 +30,9 @@ def test_each_course_is_a_separate_document(client, auth_headers):
     client.put("/api/v1/course-state/sql", json={"data": {"answers": {}}}, headers=auth_headers)
 
     java["answers"]["java-02"] = [True]
-    client.put("/api/v1/course-state/java", json={"data": java}, headers=auth_headers)
+    body = {"data": java, "version": saved.json()["version"]}
+    again = client.put("/api/v1/course-state/java", json=body, headers=auth_headers)
+    assert again.status_code == 200
     got = client.get("/api/v1/course-state/java", headers=auth_headers).json()["data"]
     assert got["answers"] == {"java-01": [False, True], "java-02": [True]}
     assert client.get("/api/v1/course-state/sql", headers=auth_headers).json()["data"] == {
