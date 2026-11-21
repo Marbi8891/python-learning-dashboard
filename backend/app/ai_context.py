@@ -9,14 +9,21 @@ ninguna ruta de IA escribe progreso ni resultados.
 """
 
 from app.models import Lesson
-from app.schemas import AiChatRequest, AiHintRequest, AiTurn
+from app.schemas import (
+    AiChatRequest,
+    AiErrorRequest,
+    AiHintRequest,
+    AiLessonRequest,
+    AiReviewRequest,
+    AiTurn,
+)
 
 # Lo que se manda de la lección: contexto suficiente sin llenar la ventana de un modelo pequeño
 EXERCISE_CHARS = 1500
 THEORY_CHARS = 3000
 # Lo que se devuelve al navegador como mucho
 ANSWER_CHARS = 6000
-_TAGS = ("teoria", "ejercicio", "codigo_del_alumno")
+_TAGS = ("teoria", "ejercicio", "codigo_del_alumno", "error_de_python")
 _LANGUAGES = {"es": "español", "en": "inglés"}
 
 COMMON_RULES = (
@@ -43,6 +50,18 @@ MODE_RULES = {
         "Da una pista detallada (nivel 3 de 3): guíale paso a paso, con pseudocódigo si ayuda, "
         "pero sin la solución completa en Python."
     ),
+    "explain-error": (
+        "Explica con palabras sencillas qué significa el error de Python que va entre etiquetas, "
+        "en qué línea aparece y por qué suele ocurrir. Dile cómo encontrar y arreglar la causa, "
+        "sin escribir la solución completa del ejercicio."
+    ),
+    "review-code": (
+        "Revisa el código del alumno como texto: no lo ejecutes ni digas que lo has ejecutado. "
+        "Responde en Markdown con tres apartados: **Posibles errores** (incluidos casos límite), "
+        "**Por qué** (explicación breve de cada uno) y **Pruebas sugeridas** (2 o 3 entradas con "
+        "el resultado esperado para probar en la consola). No reescribas la solución completa ni "
+        "digas si el ejercicio está bien resuelto."
+    ),
 }
 
 
@@ -61,7 +80,7 @@ def _block(tag: str, text: str) -> str:
     return f"<{tag}>\n{defang(text)}\n</{tag}>"
 
 
-def build_message(lesson: Lesson, data: AiChatRequest | AiHintRequest, rules: str) -> str:
+def build_message(lesson: Lesson, data: AiLessonRequest, rules: str) -> str:
     parts = [
         COMMON_RULES.format(language=_LANGUAGES[data.locale]),
         rules,
@@ -73,7 +92,10 @@ def build_message(lesson: Lesson, data: AiChatRequest | AiHintRequest, rules: st
         parts.append(_block("ejercicio", truncate(lesson.exercise, EXERCISE_CHARS)))
     if data.code.strip():
         parts.append(_block("codigo_del_alumno", data.code))
-    parts.append(f"Pregunta del alumno: {defang(data.question)}")
+    if isinstance(data, AiErrorRequest):
+        parts.append(_block("error_de_python", data.error))
+    if data.question:
+        parts.append(f"Pregunta del alumno: {defang(data.question)}")
     return "\n\n".join(parts)
 
 
@@ -89,6 +111,14 @@ def chat_messages(lesson: Lesson, data: AiChatRequest) -> list[dict[str, str]]:
 
 def hint_messages(lesson: Lesson, data: AiHintRequest) -> list[dict[str, str]]:
     return [{"role": "user", "content": build_message(lesson, data, MODE_RULES[data.hint_level])}]
+
+
+def error_messages(lesson: Lesson, data: AiErrorRequest) -> list[dict[str, str]]:
+    return [{"role": "user", "content": build_message(lesson, data, MODE_RULES["explain-error"])}]
+
+
+def review_messages(lesson: Lesson, data: AiReviewRequest) -> list[dict[str, str]]:
+    return [{"role": "user", "content": build_message(lesson, data, MODE_RULES["review-code"])}]
 
 
 def clip_answer(answer: str) -> str:

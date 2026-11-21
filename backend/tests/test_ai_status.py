@@ -28,7 +28,11 @@ def test_disabled_by_default(client, auth_headers):
 
 def test_enabled_and_available(client, auth_headers, fake_nexaro):
     response = client.get(STATUS, headers=auth_headers)
-    assert response.json() == {"enabled": True, "available": True, "modes": ["chat", "hint"]}
+    assert response.json() == {
+        "enabled": True,
+        "available": True,
+        "modes": ["chat", "hint", "explain-error", "review-code"],
+    }
     assert client.get("/api/v1/health").json()["ai"] is True
     # No revela nada de NEXARO al navegador
     for private in ("127.0.0.1", "8080", MODEL, TOKEN, "qwen"):
@@ -43,7 +47,11 @@ def test_enabled_but_nexaro_down(client, auth_headers, fake_nexaro):
     fake_nexaro.error = httpx.ConnectError("apagado")
     response = client.get(STATUS, headers=auth_headers)
     assert response.status_code == 200
-    assert response.json() == {"enabled": True, "available": False, "modes": ["chat", "hint"]}
+    assert response.json() == {
+        "enabled": True,
+        "available": False,
+        "modes": ["chat", "hint", "explain-error", "review-code"],
+    }
 
 
 def test_lifespan_creates_and_closes_the_client(monkeypatch):

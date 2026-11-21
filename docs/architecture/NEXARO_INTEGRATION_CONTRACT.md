@@ -167,9 +167,14 @@ Mientras NX-REQ-01 y 02 no estén fusionados en NEXARO, **solo** se admite la to
 | `NEXARO_MAX_RESPONSE_BYTES` | `262144` | — |
 | `AI_RATE_LIMIT_PER_MINUTE` | `10` | Por usuario. |
 | `AI_MAX_CONCURRENCY` | `2` | Plazas de PLD hacia NEXARO (≤ `NEXARO_MAX_CHAT_STREAMS`); sin plaza, 429 al momento. |
-| `NEXARO_AGENT_TUTOR` | `tutor-programacion` | Patrón de id de NEXARO. |
+| `NEXARO_AGENT_TUTOR` | `tutor-programacion` | Patrón de id de NEXARO. Chat, pistas y errores. |
+| `NEXARO_AGENT_REVIEW` | `programador` | Patrón de id de NEXARO. Revisión de código. |
 
-Implementado en la Fase 2: los tamaños (pregunta 2 000, código 8 000, turno 2 000, respuesta 6 000, enunciado 1 500, teoría 3 000) son constantes en `schemas.py` y `ai_context.py`, no variables de entorno. El único evento nuevo es `ai.rate_limited` (T1499.003); los fallos de NEXARO van al log `pld.ai` con `request_id`, sin contenido, porque no son una técnica de ataque.
+Implementado en la Fase 2: los tamaños (pregunta 2 000, código 8 000, turno 2 000, respuesta 6 000, enunciado 1 500, teoría 3 000) son constantes en `schemas.py` y `ai_context.py`, no variables de entorno.
+
+Fase 3: `error` llega ya recortado por el runner de Pyodide (`frontend/py/runner.py` quita las líneas internas del traceback), así que el servidor solo limita su tamaño y lo trata como texto no confiable. `review-code` devuelve Markdown con tres apartados que pide la instrucción. No se valida su estructura porque NEXARO no permite `format` (NX-REQ-06).
+
+El único evento nuevo es `ai.rate_limited` (T1499.003); los fallos de NEXARO van al log `pld.ai` con `request_id`, sin contenido, porque no son una técnica de ataque.
 
 Cliente HTTP: un único `httpx.AsyncClient` creado en `lifespan` y cerrado al salir, con `follow_redirects=False`, `trust_env=False` (ignora los proxies del entorno), `Timeout(connect=5, read=NEXARO_TIMEOUT_SECONDS, write=10, pool=5)` y un contador de respuestas en curso (`AI_MAX_CONCURRENCY`). Solo se registran el estado y la duración: nunca el cuerpo, las cabeceras ni el token.
 

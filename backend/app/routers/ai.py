@@ -15,19 +15,32 @@ from fastapi import APIRouter, HTTPException, Request, status
 from pydantic import BaseModel
 from starlette.concurrency import run_in_threadpool
 
-from app.ai_context import chat_messages, clip_answer, hint_messages
+from app.ai_context import (
+    chat_messages,
+    clip_answer,
+    error_messages,
+    hint_messages,
+    review_messages,
+)
 from app.config import get_settings
 from app.deps import CurrentUser, DbSession, get_lesson_or_404
 from app.models import User
 from app.nexaro_client import NexaroBusy, NexaroClient, NexaroUnavailable
 from app.rate_limit import ai_limiter
-from app.schemas import AiAnswer, AiChatRequest, AiHintRequest, AiRequest
+from app.schemas import (
+    AiAnswer,
+    AiChatRequest,
+    AiErrorRequest,
+    AiHintRequest,
+    AiLessonRequest,
+    AiReviewRequest,
+)
 from app.security_events import Event, record
 
 logger = logging.getLogger("pld.ai")
 router = APIRouter(prefix="/ai", tags=["ia"])
 
-MODES = ["chat", "hint"]
+MODES = ["chat", "hint", "explain-error", "review-code"]
 UNAVAILABLE = "La IA no está disponible"
 NOT_RESPONDING = "El tutor no responde ahora mismo. Vuelve a probar en un momento."
 BUSY = "El tutor está ocupado. Espera un poco y vuelve a preguntar."
@@ -57,8 +70,9 @@ async def ai_status(user: CurrentUser, request: Request) -> AiStatus:
 
 async def _answer(
     mode: str,
-    data: AiRequest,
+    data: AiLessonRequest,
     build: Callable,
+    agent: str,
     user: User,
     db: DbSession,
     request: Request,
@@ -73,7 +87,7 @@ async def _answer(
     lesson = await run_in_threadpool(get_lesson_or_404, db, data.lesson_slug)
     request_id = str(uuid4())
     try:
-        answer = await client.chat(get_settings().nexaro_agent_tutor, build(lesson, data))
+        answer = await client.chat(agent, build(lesson, data))
     except NexaroBusy:
         raise HTTPException(status_code=status.HTTP_429_TOO_MANY_REQUESTS, detail=BUSY) from None
     except NexaroUnavailable:
@@ -89,7 +103,8 @@ async def ai_chat(
     data: AiChatRequest, user: CurrentUser, db: DbSession, request: Request
 ) -> AiAnswer:
     """Tutor sobre la lección: explica conceptos y no da la solución completa del ejercicio."""
-    return await _answer("chat", data, chat_messages, user, db, request)
+    agent = get_settings().nexaro_agent_tutor
+    return await _answer("chat", data, chat_messages, agent, user, db, request)
 
 
 @router.post("/hint", response_model=AiAnswer)
@@ -97,4 +112,24 @@ async def ai_hint(
     data: AiHintRequest, user: CurrentUser, db: DbSession, request: Request
 ) -> AiAnswer:
     """Pista graduada (hint_level 1-3) del ejercicio de la lección, sin la solución."""
-    return await _answer("hint", data, hint_messages, user, db, request)
+    agent = get_settings().nexaro_agent_tutor
+    return await _answer("hint", data, hint_messages, agent, user, db, request)
+
+
+@router.post("/explain-error", response_model=AiAnswer)
+async def ai_explain_error(
+    data: AiErrorRequest, user: CurrentUser, db: DbSession, request: Request
+) -> AiAnswer:
+    """Explica un error de Python de la consola del alumno, sin darle la solución."""
+    agent = get_settings().nexaro_agent_tutor
+    return await _answer("explain-error", data, error_messages, agent, user, db, request)
+
+
+@router.post("/review-code", response_model=AiAnswer)
+async def ai_review_code(
+    data: AiReviewRequest, user: CurrentUser, db: DbSession, request: Request
+) -> AiAnswer:
+    """Revisión estática: el código es texto no confiable y nadie lo ejecuta (ni PLD ni NEXARO).
+    Ni aprueba el ejercicio ni cambia XP, progreso o resultados oficiales."""
+    agent = get_settings().nexaro_agent_review
+    return await _answer("review-code", data, review_messages, agent, user, db, request)

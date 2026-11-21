@@ -78,6 +78,8 @@ class Settings(BaseSettings):
     nexaro_max_response_bytes: int = Field(default=262_144, ge=1024, le=4_194_304)
     # Agente de NEXARO con las reglas del tutor (su prompt de sistema vive en NEXARO, no aquí)
     nexaro_agent_tutor: str = Field(default="tutor-programacion", pattern=r"^[a-zA-Z0-9_-]{1,64}$")
+    # Agente para revisar código (hasta que NEXARO tenga agentes PLD de solo lectura, NX-REQ-04)
+    nexaro_agent_review: str = Field(default="programador", pattern=r"^[a-zA-Z0-9_-]{1,64}$")
     # Preguntas a la IA por alumno y minuto: cada una ocupa la CPU del modelo durante segundos
     ai_rate_limit_per_minute: int = 10
     # Respuestas que PLD pide a la vez a NEXARO (NEXARO admite 2): la siguiente recibe 429 ya

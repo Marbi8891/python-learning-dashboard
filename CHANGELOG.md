@@ -9,6 +9,9 @@ cambios se agrupan por fecha de merge, con el número de pull request entre par�
 ## [Sin publicar]
 
 ### Añadido
+- IA con NEXARO AI, Fase 3: `POST /api/v1/ai/explain-error` (explica un error de la consola, hasta 4.000
+  caracteres) y `POST /api/v1/ai/review-code` (revisión estática en Markdown con posibles errores, explicación y
+  pruebas sugeridas; el código es texto y nadie lo ejecuta). Revisar usa el agente `NEXARO_AGENT_REVIEW`.
 - IA con NEXARO AI, Fase 2: `POST /api/v1/ai/chat` (tutor sobre la lección) y `POST /api/v1/ai/hint` (pistas de
   nivel 1 a 3) con sesión. El contexto lo pone el servidor desde la lección; el código solo viaja si se envía y no
   viaja nada que identifique al alumno. 10 preguntas por minuto y alumno (evento `ai.rate_limited`), 2 respuestas a
