@@ -23,11 +23,11 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  deploy:
+  # Construye la web y la sube como artefacto. El despliegue va en otro job: deploy-pages busca el artefacto
+  # en la API de Actions y, en el mismo job que lo subió, a veces aún no lo ve («Found 0 artifact(s)»,
+  # 19/11/2026). Es la estructura que recomienda la documentación de actions/deploy-pages.
+  build:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v7
         with:
@@ -44,5 +44,13 @@ jobs:
       - uses: actions/upload-pages-artifact@v5
         with:
           path: frontend
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - id: deployment
         uses: actions/deploy-pages@v5
