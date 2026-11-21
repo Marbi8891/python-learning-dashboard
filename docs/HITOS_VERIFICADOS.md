@@ -43,6 +43,7 @@ Reglas que hace cumplir el servidor (todas con prueba en `backend/tests/test_ver
 | Dos entregas a la vez | Solo una pasa de `open` a `finished` (UPDATE condicionado) |
 | Simulacro de otra cuenta | 404, igual que uno que no existe |
 | Más de `VERIFIED_EXAMS_PER_DAY` (5) en 24 horas | 429 |
+| Varios inicios a la vez de la misma cuenta | Van de uno en uno (bloqueo de la fila del usuario, PLD-001): nunca pasan del límite y solo queda uno `open`. Los de cuentas distintas no se esperan. Prueba con PostgreSQL en `backend/tests/test_verified_concurrency.py` |
 
 Sin cuenta, o si el servidor no responde, el simulacro es local, como antes de #109, y la web lo dice.
 
