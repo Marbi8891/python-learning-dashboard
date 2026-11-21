@@ -116,8 +116,12 @@ class FakeNexaro:
         self.requests.append(request)
         if self.error:
             raise self.error
-        return {"/api/health": self.health, "/api/models": self.models}.get(
+        response = {"/api/health": self.health, "/api/models": self.models}.get(
             request.url.path, self.chat
+        )
+        # Una copia nueva cada vez: el cuerpo de una respuesta solo se puede leer una vez
+        return httpx.Response(
+            response.status_code, headers=response.headers, content=response.content
         )
 
 
@@ -288,3 +292,22 @@ def test_logs_have_no_token_nor_content(caplog):
     assert "POST /api/chat -> 200" in caplog.text
     for secret in (TOKEN, "respuesta", "lista"):
         assert secret not in caplog.text
+
+
+def test_chat_does_not_queue_when_all_slots_are_busy():
+    fake = FakeNexaro()
+    client = make(fake, ai_max_concurrency=1)
+
+    async def scenario():
+        try:
+            client._in_flight = 1  # otra respuesta en curso
+            with pytest.raises(NexaroBusy):
+                await client.chat("tutor-programacion", [{"role": "user", "content": "hola"}])
+            client._in_flight = 0
+            answer = await client.chat("tutor-programacion", [{"role": "user", "content": "x"}])
+            return answer, client._in_flight
+        finally:
+            await client.aclose()
+
+    assert run(scenario()) == ("Hola", 0)
+    assert len(fake.requests) == 1  # la primera ni siquiera llegó a NEXARO

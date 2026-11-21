@@ -76,6 +76,12 @@ class Settings(BaseSettings):
     # Un modelo local en CPU tarda: es el tiempo máximo sin recibir datos de NEXARO
     nexaro_timeout_seconds: float = Field(default=120.0, gt=0, le=300)
     nexaro_max_response_bytes: int = Field(default=262_144, ge=1024, le=4_194_304)
+    # Agente de NEXARO con las reglas del tutor (su prompt de sistema vive en NEXARO, no aquí)
+    nexaro_agent_tutor: str = Field(default="tutor-programacion", pattern=r"^[a-zA-Z0-9_-]{1,64}$")
+    # Preguntas a la IA por alumno y minuto: cada una ocupa la CPU del modelo durante segundos
+    ai_rate_limit_per_minute: int = 10
+    # Respuestas que PLD pide a la vez a NEXARO (NEXARO admite 2): la siguiente recibe 429 ya
+    ai_max_concurrency: int = Field(default=2, ge=1, le=16)
 
     # Modo aplicación local: la API sirve también la web (ver app/local_site.py)
     serve_frontend: bool = False

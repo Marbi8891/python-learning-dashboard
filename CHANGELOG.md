@@ -9,6 +9,10 @@ cambios se agrupan por fecha de merge, con el número de pull request entre par�
 ## [Sin publicar]
 
 ### Añadido
+- IA con NEXARO AI, Fase 2: `POST /api/v1/ai/chat` (tutor sobre la lección) y `POST /api/v1/ai/hint` (pistas de
+  nivel 1 a 3) con sesión. El contexto lo pone el servidor desde la lección; el código solo viaja si se envía y no
+  viaja nada que identifique al alumno. 10 preguntas por minuto y alumno (evento `ai.rate_limited`), 2 respuestas a
+  la vez como mucho, errores de NEXARO sin detalles y respuestas marcadas como IA, que nunca cambian el progreso.
 - IA con NEXARO AI, Fase 1 (`docs/architecture/NEXARO_INTEGRATION_*.md`): configuración `NEXARO_*`, desactivada
   por defecto y validada al arrancar (URL sin credenciales ni ruta, host permitido, HTTPS fuera de la red local,
   token fuera de este equipo); cliente de servidor a servidor sin redirecciones, con tiempo de espera y tope de

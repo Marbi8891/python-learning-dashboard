@@ -8,7 +8,7 @@ from pydantic import SecretStr
 from app.config import get_settings
 from app.main import API_SECURITY_HEADERS, app
 from app.nexaro_client import NexaroClient, NexaroConfigError
-from tests.test_nexaro_client import MODEL, TOKEN, FakeNexaro, settings
+from tests.test_nexaro_client import MODEL, TOKEN
 
 STATUS = "/api/v1/ai/status"
 
@@ -26,19 +26,9 @@ def test_disabled_by_default(client, auth_headers):
         assert response.headers[name] == value
 
 
-@pytest.fixture
-def fake_nexaro(client):
-    """NEXARO simulado en el cliente que usa la app (el lifespan lo cierra al terminar)."""
-    fake = FakeNexaro()
-    app.state.nexaro = NexaroClient(
-        settings(nexaro_service_token=TOKEN), transport=httpx.MockTransport(fake)
-    )
-    return fake
-
-
 def test_enabled_and_available(client, auth_headers, fake_nexaro):
     response = client.get(STATUS, headers=auth_headers)
-    assert response.json() == {"enabled": True, "available": True, "modes": []}
+    assert response.json() == {"enabled": True, "available": True, "modes": ["chat", "hint"]}
     assert client.get("/api/v1/health").json()["ai"] is True
     # No revela nada de NEXARO al navegador
     for private in ("127.0.0.1", "8080", MODEL, TOKEN, "qwen"):
@@ -53,7 +43,7 @@ def test_enabled_but_nexaro_down(client, auth_headers, fake_nexaro):
     fake_nexaro.error = httpx.ConnectError("apagado")
     response = client.get(STATUS, headers=auth_headers)
     assert response.status_code == 200
-    assert response.json() == {"enabled": True, "available": False, "modes": []}
+    assert response.json() == {"enabled": True, "available": False, "modes": ["chat", "hint"]}
 
 
 def test_lifespan_creates_and_closes_the_client(monkeypatch):

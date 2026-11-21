@@ -166,10 +166,12 @@ Mientras NX-REQ-01 y 02 no estén fusionados en NEXARO, **solo** se admite la to
 | `NEXARO_TIMEOUT_SECONDS` | `120` | Total por petición (1-300). |
 | `NEXARO_MAX_RESPONSE_BYTES` | `262144` | — |
 | `AI_RATE_LIMIT_PER_MINUTE` | `10` | Por usuario. |
-| `AI_MAX_CONCURRENCY` | `2` | Semáforo global de PLD (≤ `NEXARO_MAX_CHAT_STREAMS`). |
-| `AI_MAX_QUESTION_CHARS` / `AI_MAX_CODE_CHARS` / `AI_MAX_ANSWER_CHARS` | `2000` / `8000` / `6000` | — |
+| `AI_MAX_CONCURRENCY` | `2` | Plazas de PLD hacia NEXARO (≤ `NEXARO_MAX_CHAT_STREAMS`); sin plaza, 429 al momento. |
+| `NEXARO_AGENT_TUTOR` | `tutor-programacion` | Patrón de id de NEXARO. |
 
-Cliente HTTP: un único `httpx.AsyncClient` creado en `lifespan` y cerrado al salir, con `follow_redirects=False`, `trust_env=False` (ignora los proxies del entorno), `Timeout(connect=5, read=NEXARO_TIMEOUT_SECONDS, write=10, pool=5)` y `Limits(max_connections=AI_MAX_CONCURRENCY)`. Solo se registran el estado y la duración: nunca el cuerpo, las cabeceras ni el token.
+Implementado en la Fase 2: los tamaños (pregunta 2 000, código 8 000, turno 2 000, respuesta 6 000, enunciado 1 500, teoría 3 000) son constantes en `schemas.py` y `ai_context.py`, no variables de entorno. El único evento nuevo es `ai.rate_limited` (T1499.003); los fallos de NEXARO van al log `pld.ai` con `request_id`, sin contenido, porque no son una técnica de ataque.
+
+Cliente HTTP: un único `httpx.AsyncClient` creado en `lifespan` y cerrado al salir, con `follow_redirects=False`, `trust_env=False` (ignora los proxies del entorno), `Timeout(connect=5, read=NEXARO_TIMEOUT_SECONDS, write=10, pool=5)` y un contador de respuestas en curso (`AI_MAX_CONCURRENCY`). Solo se registran el estado y la duración: nunca el cuerpo, las cabeceras ni el token.
 
 ## 6. Plantilla del mensaje (PLD → NEXARO)
 

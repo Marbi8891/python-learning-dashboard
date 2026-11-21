@@ -2,7 +2,7 @@
 
 import json
 from datetime import date, datetime
-from typing import Annotated
+from typing import Annotated, Literal
 
 from pydantic import (
     AfterValidator,
@@ -396,3 +396,56 @@ class VerifiedSummary(BaseModel):
     best_score: int | None
     passed: bool
     exams: list[VerifiedExamOut]
+
+
+# ---------- IA (docs/architecture/NEXARO_INTEGRATION_CONTRACT.md) ----------
+# extra="forbid": el navegador no puede elegir usuario, modelo, agente, temperatura ni prompt de
+# sistema. Todo eso lo pone el servidor.
+
+
+class AiTurn(BaseModel):
+    """Un turno anterior de la conversación (solo vive en el navegador; PLD no lo guarda)."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    role: Literal["user", "assistant"]
+    content: str = Field(min_length=1, max_length=2000)
+
+
+class AiRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    # v1: solo el curso de Python, el único cuyas lecciones están en la base de datos (D-05)
+    course: Literal["python"] = "python"
+    lesson_slug: str = Field(min_length=1, max_length=50)
+    question: str = Field(min_length=1, max_length=2000)
+    # Solo si el alumno marca «Enviar mi código»: puede llevar datos personales
+    code: str = Field(default="", max_length=8000)
+    locale: Literal["es", "en"] = "es"
+
+    @field_validator("question")
+    @classmethod
+    def question_not_blank(cls, value: str) -> str:
+        value = value.strip()
+        if not value:
+            raise ValueError("Escribe tu pregunta")
+        return value
+
+
+class AiChatRequest(AiRequest):
+    history: list[AiTurn] = Field(default_factory=list, max_length=6)
+
+
+class AiHintRequest(AiRequest):
+    # Pistas graduadas: de la idea general (1) a una guía paso a paso sin la solución (3)
+    hint_level: int = Field(default=1, ge=1, le=3)
+
+
+class AiAnswer(BaseModel):
+    """Lo que ve el alumno: texto generado por IA que nunca es la evaluación oficial."""
+
+    answer: str
+    mode: Literal["chat", "hint"]
+    ai_generated: Literal[True] = True
+    official_evaluation: Literal[False] = False
+    request_id: str

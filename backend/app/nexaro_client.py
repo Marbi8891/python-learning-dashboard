@@ -112,6 +112,10 @@ class NexaroClient:
             transport=transport,
         )
         self._status: tuple[float, bool] | None = None
+        # Respuestas en curso: NEXARO solo genera unas pocas a la vez y la siguiente no debe esperar
+        # minutos ocupando la petición del alumno (R-06/R-07). Un solo bucle de eventos.
+        self.max_concurrency = settings.ai_max_concurrency
+        self._in_flight = 0
 
     async def aclose(self) -> None:
         await self._client.aclose()
@@ -171,7 +175,17 @@ class NexaroClient:
         return result
 
     async def chat(self, agent_id: str, messages: list[dict[str, str]]) -> str:
-        """Respuesta completa del chat de NEXARO (NDJSON agregado). Solo roles user/assistant."""
+        """Respuesta completa del chat de NEXARO (NDJSON agregado). Solo roles user/assistant.
+        Con todas las plazas ocupadas lanza NexaroBusy sin llamar a NEXARO."""
+        if self._in_flight >= self.max_concurrency:
+            raise NexaroBusy
+        self._in_flight += 1
+        try:
+            return await self._chat(agent_id, messages)
+        finally:
+            self._in_flight -= 1
+
+    async def _chat(self, agent_id: str, messages: list[dict[str, str]]) -> str:
         body = {"model": self.model, "agent_id": agent_id, "messages": messages}
         parts: list[str] = []
         received = 0
