@@ -8,13 +8,14 @@ import { createDocSync } from "../doc-sync.js";
 import { createSyncGate } from "../sync-gate.js";
 import { createUploader } from "../uploader.js";
 import { buildIndex, cleanLearning, mergeLearning } from "./mastery.js";
+import { storage } from "../demo/demo-mode.js";
 
 const KEY = "pld:learn";
 const COURSE = "learn";
 
 function load() {
   try {
-    return cleanLearning(JSON.parse(localStorage.getItem(KEY)));
+    return cleanLearning(JSON.parse(storage.getItem(KEY)));
   } catch {
     return cleanLearning(null); // sin almacenamiento o dañado: se empieza de cero
   }
@@ -62,7 +63,7 @@ const uploader = createUploader({
 
 export function saveLearning() {
   try {
-    localStorage.setItem(KEY, JSON.stringify(learning));
+    storage.setItem(KEY, JSON.stringify(learning));
   } catch {
     // sin almacenamiento: dura hasta recargar
   }

@@ -293,5 +293,10 @@
   "Comprueba la conexión y vuelve a intentarlo.": "Check your connection and try again.",
   "Mi Carrera en IA · Python Learning Dashboard": "My AI Career · Python Learning Dashboard",
   "{a}: {b} o más": "{a}: {b} or more",
-  "Gráfica de la evolución económica (se puede desplazar)": "Financial trend chart (scrollable)"
+  "Gráfica de la evolución económica (se puede desplazar)": "Financial trend chart (scrollable)",
+  "Modo demostración": "Demo mode",
+  "Modo demostración.": "Demo mode.",
+  "Alex Developer es un alumno ficticio: los datos son inventados y solo están en esta pestaña.": "Alex Developer is a fictional student: the data is made up and only lives in this tab.",
+  "Reiniciar": "Restart",
+  "Salir de la demo": "Exit the demo"
 }

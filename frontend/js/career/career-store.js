@@ -10,13 +10,14 @@ import { createDocSync } from "../doc-sync.js";
 import { createSyncGate } from "../sync-gate.js";
 import { createUploader } from "../uploader.js";
 import { cleanCareer, mergeCareer } from "./career-data.js";
+import { storage } from "../demo/demo-mode.js";
 
 const KEY = "pld:career";
 const COURSE = "career";
 
 function load() {
   try {
-    return cleanCareer(JSON.parse(localStorage.getItem(KEY)));
+    return cleanCareer(JSON.parse(storage.getItem(KEY)));
   } catch {
     return cleanCareer(null);
   }
@@ -61,7 +62,7 @@ const uploader = createUploader({
 
 export function saveCareer() {
   try {
-    localStorage.setItem(KEY, JSON.stringify(career));
+    storage.setItem(KEY, JSON.stringify(career));
   } catch {
     // sin almacenamiento: dura hasta recargar
   }

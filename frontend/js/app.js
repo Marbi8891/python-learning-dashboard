@@ -50,6 +50,7 @@ import { badgesHtml, renderProfile } from "./profile.js";
 import { focusSelector, keepForms } from "./form-keep.js";
 import { setQuizLesson } from "./quiz.js";
 import { recordAttempt, restoreSession, setCompleted, state, subscribe } from "./store.js";
+import { initDemoBanner } from "./demo/demo-banner.js";
 
 hljs.registerLanguage("python", python);
 
@@ -524,9 +525,9 @@ function showPage(name, { moveFocus = true } = {}) {
   window.scrollTo({ top: 0 });
 }
 
-/** «Mi cuenta» solo aparece en el menú con la sesión iniciada. */
+/** «Mi cuenta» solo aparece en el menú con la sesión iniciada (o en la demo, con Alex). */
 function updatePrivateNav() {
-  $("#private-nav").hidden = !state.user;
+  $("#private-nav").hidden = !state.user && !state.demo;
 }
 
 /** Entrada del menú que corresponde a la vista actual. */
@@ -959,6 +960,7 @@ async function init() {
   initAssistant();
   initI18n();
   initAccount({ toast: showToast });
+  initDemoBanner();
   initPrefs();
 
   // El enrutador no espera a lessons.json: la portada, «¿Qué estudio ahora?» y DAW no lo usan (AUD-010)

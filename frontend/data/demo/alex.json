@@ -1,0 +1,753 @@
+{
+ "notice": "Datos ficticios del modo demostración. Alex Developer no es una persona real.",
+ "anchor": "2026-11-20",
+ "profile": {
+  "display_name": "Alex Developer",
+  "created_at": "2026-10-21T10:00:00.000Z",
+  "fictional": true
+ },
+ "feed": [
+  {
+   "kind": "attempt",
+   "lesson_slug": "funciones",
+   "lesson_title": "Funciones",
+   "passed": false,
+   "at": "2026-11-20T17:45:00.000Z"
+  },
+  {
+   "kind": "lesson_completed",
+   "lesson_slug": "bucles",
+   "lesson_title": "Bucles for y while",
+   "passed": null,
+   "at": "2026-11-15T18:00:00.000Z"
+  },
+  {
+   "kind": "attempt",
+   "lesson_slug": "bucles",
+   "lesson_title": "Bucles for y while",
+   "passed": true,
+   "at": "2026-11-15T17:50:00.000Z"
+  },
+  {
+   "kind": "lesson_completed",
+   "lesson_slug": "condicionales",
+   "lesson_title": "Condicionales",
+   "passed": null,
+   "at": "2026-11-11T18:00:00.000Z"
+  },
+  {
+   "kind": "attempt",
+   "lesson_slug": "condicionales",
+   "lesson_title": "Condicionales",
+   "passed": true,
+   "at": "2026-11-11T17:50:00.000Z"
+  },
+  {
+   "kind": "lesson_completed",
+   "lesson_slug": "input",
+   "lesson_title": "Entrada con input()",
+   "passed": null,
+   "at": "2026-11-09T18:00:00.000Z"
+  },
+  {
+   "kind": "attempt",
+   "lesson_slug": "input",
+   "lesson_title": "Entrada con input()",
+   "passed": true,
+   "at": "2026-11-09T17:50:00.000Z"
+  },
+  {
+   "kind": "lesson_completed",
+   "lesson_slug": "operadores",
+   "lesson_title": "Operadores",
+   "passed": null,
+   "at": "2026-11-06T18:00:00.000Z"
+  },
+  {
+   "kind": "attempt",
+   "lesson_slug": "operadores",
+   "lesson_title": "Operadores",
+   "passed": true,
+   "at": "2026-11-06T17:50:00.000Z"
+  },
+  {
+   "kind": "lesson_completed",
+   "lesson_slug": "tipos",
+   "lesson_title": "Tipos de datos",
+   "passed": null,
+   "at": "2026-11-02T18:00:00.000Z"
+  },
+  {
+   "kind": "attempt",
+   "lesson_slug": "tipos",
+   "lesson_title": "Tipos de datos",
+   "passed": true,
+   "at": "2026-11-02T17:50:00.000Z"
+  },
+  {
+   "kind": "lesson_completed",
+   "lesson_slug": "variables",
+   "lesson_title": "Variables y print()",
+   "passed": null,
+   "at": "2026-10-29T18:00:00.000Z"
+  },
+  {
+   "kind": "attempt",
+   "lesson_slug": "variables",
+   "lesson_title": "Variables y print()",
+   "passed": true,
+   "at": "2026-10-29T17:50:00.000Z"
+  }
+ ],
+ "storage": {
+  "pld:completed": [
+   "variables",
+   "tipos",
+   "operadores",
+   "input",
+   "condicionales",
+   "bucles"
+  ],
+  "pld:game": {
+   "quiz": {
+    "variables": 3,
+    "tipos": 3,
+    "operadores": 2,
+    "input": 3,
+    "condicionales": 2,
+    "bucles": 2
+   },
+   "read": [
+    "variables",
+    "tipos",
+    "operadores",
+    "input",
+    "condicionales",
+    "bucles",
+    "funciones"
+   ],
+   "passed": [
+    "variables",
+    "tipos",
+    "operadores",
+    "input",
+    "condicionales",
+    "bucles"
+   ],
+   "tried": [
+    "variables",
+    "tipos",
+    "operadores",
+    "input",
+    "condicionales",
+    "bucles",
+    "funciones"
+   ],
+   "firstTry": [
+    "variables",
+    "input"
+   ],
+   "challenges": [],
+   "days": [
+    "2026-10-29",
+    "2026-11-02",
+    "2026-11-06",
+    "2026-11-09",
+    "2026-11-11",
+    "2026-11-12",
+    "2026-11-15",
+    "2026-11-16",
+    "2026-11-17",
+    "2026-11-18",
+    "2026-11-19",
+    "2026-11-20"
+   ],
+   "flags": {
+    "firstRun": true,
+    "bugHunter": true,
+    "lastRunFailed": true
+   },
+   "badges": []
+  },
+  "pld:learn": {
+   "ex": {
+    "var-01": {
+     "h": [
+      true
+     ],
+     "last": "2026-11-15T18:10:00.000Z",
+     "n": 1,
+     "okAt": "2026-11-15T18:10:00.000Z"
+    },
+    "var-02": {
+     "h": [
+      false,
+      true
+     ],
+     "last": "2026-11-15T18:15:00.000Z",
+     "n": 2,
+     "okAt": "2026-11-15T18:15:00.000Z"
+    },
+    "var-03": {
+     "h": [
+      true
+     ],
+     "last": "2026-11-15T18:20:00.000Z",
+     "n": 1,
+     "okAt": "2026-11-15T18:20:00.000Z"
+    },
+    "var-04": {
+     "h": [
+      true
+     ],
+     "last": "2026-11-15T18:25:00.000Z",
+     "n": 1,
+     "okAt": "2026-11-15T18:25:00.000Z"
+    },
+    "var-05": {
+     "h": [
+      true
+     ],
+     "last": "2026-11-15T18:30:00.000Z",
+     "n": 1,
+     "okAt": "2026-11-15T18:30:00.000Z"
+    },
+    "var-06": {
+     "h": [
+      true
+     ],
+     "last": "2026-11-15T18:35:00.000Z",
+     "n": 1,
+     "okAt": "2026-11-15T18:35:00.000Z"
+    },
+    "tip-01": {
+     "h": [
+      true
+     ],
+     "last": "2026-11-16T18:10:00.000Z",
+     "n": 1,
+     "okAt": "2026-11-16T18:10:00.000Z"
+    },
+    "tip-02": {
+     "h": [
+      false,
+      true
+     ],
+     "last": "2026-11-16T18:15:00.000Z",
+     "n": 2,
+     "okAt": "2026-11-16T18:15:00.000Z"
+    },
+    "tip-03": {
+     "h": [
+      true
+     ],
+     "last": "2026-11-16T18:20:00.000Z",
+     "n": 1,
+     "okAt": "2026-11-16T18:20:00.000Z"
+    },
+    "tip-04": {
+     "h": [
+      true
+     ],
+     "last": "2026-11-16T18:25:00.000Z",
+     "n": 1,
+     "okAt": "2026-11-16T18:25:00.000Z"
+    },
+    "tip-05": {
+     "h": [
+      true
+     ],
+     "last": "2026-11-16T18:30:00.000Z",
+     "n": 1,
+     "okAt": "2026-11-16T18:30:00.000Z"
+    },
+    "ope-01": {
+     "h": [
+      true,
+      true
+     ],
+     "last": "2026-11-16T18:10:00.000Z",
+     "n": 2,
+     "okAt": "2026-11-16T18:10:00.000Z"
+    },
+    "ope-02": {
+     "h": [
+      false,
+      true
+     ],
+     "last": "2026-11-16T18:15:00.000Z",
+     "n": 2,
+     "okAt": "2026-11-16T18:15:00.000Z"
+    },
+    "ope-03": {
+     "h": [
+      true,
+      false
+     ],
+     "last": "2026-11-16T18:20:00.000Z",
+     "n": 2,
+     "okAt": "2026-11-16T18:20:00.000Z"
+    },
+    "es-01": {
+     "h": [
+      true
+     ],
+     "last": "2026-11-17T18:10:00.000Z",
+     "n": 1,
+     "okAt": "2026-11-17T18:10:00.000Z"
+    },
+    "es-02": {
+     "h": [
+      false
+     ],
+     "last": "2026-11-17T18:15:00.000Z",
+     "n": 1
+    },
+    "con-01": {
+     "h": [
+      true,
+      true
+     ],
+     "last": "2026-11-19T18:10:00.000Z",
+     "n": 2,
+     "okAt": "2026-11-19T18:10:00.000Z"
+    },
+    "con-02": {
+     "h": [
+      true
+     ],
+     "last": "2026-11-19T18:15:00.000Z",
+     "n": 1,
+     "okAt": "2026-11-19T18:15:00.000Z"
+    },
+    "con-03": {
+     "h": [
+      false,
+      true
+     ],
+     "last": "2026-11-19T18:20:00.000Z",
+     "n": 2,
+     "okAt": "2026-11-19T18:20:00.000Z"
+    },
+    "buc-01": {
+     "h": [
+      true
+     ],
+     "last": "2026-11-20T18:10:00.000Z",
+     "n": 1,
+     "okAt": "2026-11-20T18:10:00.000Z"
+    },
+    "buc-02": {
+     "h": [
+      false,
+      false
+     ],
+     "last": "2026-11-20T18:15:00.000Z",
+     "n": 2
+    }
+   },
+   "concepts": {
+    "variables": {
+     "box": 4,
+     "due": "2026-11-26",
+     "last": "2026-11-15T18:30:00.000Z",
+     "read": "2026-11-14T17:00:00.000Z",
+     "placed": null
+    },
+    "tipos": {
+     "box": 3,
+     "due": "2026-11-24",
+     "last": "2026-11-16T18:30:00.000Z",
+     "read": "2026-11-15T17:00:00.000Z",
+     "placed": null
+    },
+    "operadores": {
+     "box": 2,
+     "due": "2026-11-19",
+     "last": "2026-11-16T18:30:00.000Z",
+     "read": "2026-11-15T17:00:00.000Z",
+     "placed": null
+    },
+    "entrada-salida": {
+     "box": 1,
+     "due": "2026-11-18",
+     "last": "2026-11-17T18:30:00.000Z",
+     "read": "2026-11-16T17:00:00.000Z",
+     "placed": null
+    },
+    "condicionales": {
+     "box": 2,
+     "due": "2026-11-22",
+     "last": "2026-11-19T18:30:00.000Z",
+     "read": "2026-11-18T17:00:00.000Z",
+     "placed": null
+    },
+    "bucles": {
+     "box": 1,
+     "due": "2026-11-21",
+     "last": "2026-11-20T18:30:00.000Z",
+     "read": "2026-11-19T17:00:00.000Z",
+     "placed": null
+    },
+    "funciones": {
+     "box": 0,
+     "due": null,
+     "last": null,
+     "read": "2026-11-20T17:40:00.000Z",
+     "placed": null
+    }
+   },
+   "errors": {},
+   "log": [
+    {
+     "at": "2026-11-15T18:10:00.000Z",
+     "ex": "var-01",
+     "ok": true,
+     "err": null
+    },
+    {
+     "at": "2026-11-15T18:15:00.000Z",
+     "ex": "var-02",
+     "ok": false,
+     "err": null
+    },
+    {
+     "at": "2026-11-15T18:15:00.000Z",
+     "ex": "var-02",
+     "ok": true,
+     "err": null
+    },
+    {
+     "at": "2026-11-15T18:20:00.000Z",
+     "ex": "var-03",
+     "ok": true,
+     "err": null
+    },
+    {
+     "at": "2026-11-15T18:25:00.000Z",
+     "ex": "var-04",
+     "ok": true,
+     "err": null
+    },
+    {
+     "at": "2026-11-15T18:30:00.000Z",
+     "ex": "var-05",
+     "ok": true,
+     "err": null
+    },
+    {
+     "at": "2026-11-15T18:35:00.000Z",
+     "ex": "var-06",
+     "ok": true,
+     "err": null
+    },
+    {
+     "at": "2026-11-16T18:10:00.000Z",
+     "ex": "tip-01",
+     "ok": true,
+     "err": null
+    },
+    {
+     "at": "2026-11-16T18:10:00.000Z",
+     "ex": "ope-01",
+     "ok": true,
+     "err": null
+    },
+    {
+     "at": "2026-11-16T18:10:00.000Z",
+     "ex": "ope-01",
+     "ok": true,
+     "err": null
+    },
+    {
+     "at": "2026-11-16T18:15:00.000Z",
+     "ex": "tip-02",
+     "ok": false,
+     "err": null
+    },
+    {
+     "at": "2026-11-16T18:15:00.000Z",
+     "ex": "tip-02",
+     "ok": true,
+     "err": null
+    },
+    {
+     "at": "2026-11-16T18:15:00.000Z",
+     "ex": "ope-02",
+     "ok": false,
+     "err": null
+    },
+    {
+     "at": "2026-11-16T18:15:00.000Z",
+     "ex": "ope-02",
+     "ok": true,
+     "err": null
+    },
+    {
+     "at": "2026-11-16T18:20:00.000Z",
+     "ex": "tip-03",
+     "ok": true,
+     "err": null
+    },
+    {
+     "at": "2026-11-16T18:20:00.000Z",
+     "ex": "ope-03",
+     "ok": true,
+     "err": null
+    },
+    {
+     "at": "2026-11-16T18:20:00.000Z",
+     "ex": "ope-03",
+     "ok": false,
+     "err": null
+    },
+    {
+     "at": "2026-11-16T18:25:00.000Z",
+     "ex": "tip-04",
+     "ok": true,
+     "err": null
+    },
+    {
+     "at": "2026-11-16T18:30:00.000Z",
+     "ex": "tip-05",
+     "ok": true,
+     "err": null
+    },
+    {
+     "at": "2026-11-17T18:10:00.000Z",
+     "ex": "es-01",
+     "ok": true,
+     "err": null
+    },
+    {
+     "at": "2026-11-17T18:15:00.000Z",
+     "ex": "es-02",
+     "ok": false,
+     "err": null
+    },
+    {
+     "at": "2026-11-19T18:10:00.000Z",
+     "ex": "con-01",
+     "ok": true,
+     "err": null
+    },
+    {
+     "at": "2026-11-19T18:10:00.000Z",
+     "ex": "con-01",
+     "ok": true,
+     "err": null
+    },
+    {
+     "at": "2026-11-19T18:15:00.000Z",
+     "ex": "con-02",
+     "ok": true,
+     "err": null
+    },
+    {
+     "at": "2026-11-19T18:20:00.000Z",
+     "ex": "con-03",
+     "ok": false,
+     "err": null
+    },
+    {
+     "at": "2026-11-19T18:20:00.000Z",
+     "ex": "con-03",
+     "ok": true,
+     "err": null
+    },
+    {
+     "at": "2026-11-20T18:10:00.000Z",
+     "ex": "buc-01",
+     "ok": true,
+     "err": null
+    },
+    {
+     "at": "2026-11-20T18:15:00.000Z",
+     "ex": "buc-02",
+     "ok": false,
+     "err": null
+    },
+    {
+     "at": "2026-11-20T18:15:00.000Z",
+     "ex": "buc-02",
+     "ok": false,
+     "err": null
+    }
+   ],
+   "exams": []
+  },
+  "pld:pcap": {
+   "lang": "es",
+   "answers": {
+    "mod-01": [
+     false,
+     true
+    ],
+    "mod-02": [
+     true,
+     true
+    ],
+    "mod-03": [
+     true,
+     true
+    ],
+    "mod-04": [
+     false,
+     true
+    ],
+    "mod-05": [
+     true,
+     true
+    ],
+    "mod-06": [
+     true,
+     true
+    ],
+    "mod-07": [
+     false,
+     true
+    ],
+    "mod-08": [
+     true,
+     true
+    ],
+    "mod-09": [
+     true,
+     true
+    ],
+    "mod-10": [
+     false,
+     true
+    ],
+    "mod-11": [
+     true,
+     true
+    ],
+    "mod-12": [
+     true,
+     true
+    ],
+    "mod-13": [
+     false,
+     true
+    ],
+    "mod-14": [
+     true,
+     true
+    ]
+   },
+   "exams": [
+    {
+     "date": "2026-11-18T19:00:00.000Z",
+     "correct": 26,
+     "total": 42,
+     "score": 62,
+     "seconds": 3540,
+     "blocks": {}
+    }
+   ],
+   "known": [],
+   "bestCombo": 7,
+   "flags": {
+    "mastered": false,
+    "ready": false,
+    "allCards": false
+   },
+   "srs": {},
+   "plan": {
+    "examDate": "2026-12-30"
+   }
+  },
+  "pld:planner": {
+   "v": 1,
+   "minutes": 45,
+   "minutesAt": "2026-10-31T18:00:00.000Z",
+   "exams": [
+    {
+     "id": "demo-pcap",
+     "title": "Examen PCAP (ejemplo)",
+     "module": "pcap",
+     "date": "2026-12-30",
+     "kind": "examen",
+     "at": "2026-10-31T18:00:00.000Z"
+    }
+   ],
+   "days": {
+    "2026-11-19": {
+     "condicionales": {
+      "status": "hecha",
+      "at": "2026-11-19T18:45:00.000Z"
+     },
+     "operadores": {
+      "status": "hecha",
+      "at": "2026-11-19T18:45:00.000Z"
+     }
+    },
+    "2026-11-18": {
+     "tipos": {
+      "status": "hecha",
+      "at": "2026-11-18T18:45:00.000Z"
+     },
+     "entrada-salida": {
+      "status": "pospuesta",
+      "at": "2026-11-18T18:45:00.000Z"
+     }
+    },
+    "2026-11-17": {
+     "variables": {
+      "status": "hecha",
+      "at": "2026-11-17T18:45:00.000Z"
+     }
+    },
+    "2026-11-15": {
+     "operadores": {
+      "status": "hecha",
+      "at": "2026-11-15T18:45:00.000Z"
+     },
+     "tipos": {
+      "status": "hecha",
+      "at": "2026-11-15T18:45:00.000Z"
+     }
+    }
+   }
+  },
+  "pld:cybersecurity:v1": {
+   "v": 2,
+   "weeks": {
+    "semana-01": {
+     "done": true,
+     "at": "2026-11-14T19:00:00.000Z"
+    }
+   },
+   "quiz": {
+    "semana-01": {
+     "score": 3,
+     "at": "2026-11-14T19:15:00.000Z"
+    }
+   }
+  },
+  "pld:course:js": {
+   "lang": "es",
+   "done": {
+    "js-variables": "2026-11-11T19:00:00.000Z",
+    "js-coercion": "2026-11-12T19:00:00.000Z",
+    "js-funciones": "2026-11-16T19:00:00.000Z"
+   },
+   "lastLesson": {
+    "slug": "js-funciones",
+    "at": "2026-11-16T19:05:00.000Z"
+   }
+  },
+  "pld:course:sql": {
+   "lang": "es",
+   "done": {
+    "bd-tipos-y-modelos": "2026-11-06T19:00:00.000Z",
+    "sql-modelo-relacional": "2026-11-09T19:00:00.000Z"
+   },
+   "lastLesson": {
+    "slug": "sql-modelo-relacional",
+    "at": "2026-11-09T19:05:00.000Z"
+   }
+  }
+ }
+}

@@ -3,6 +3,8 @@
 import { ApiError, apiEnabled, request, setToken } from "./api.js";
 import { createUploader } from "./uploader.js";
 import { claimLocalProgress, clearedOnLogout } from "./local-owner.js";
+import { isDemo, storage } from "./demo/demo-mode.js";
+import { storageKeys } from "./demo/demo-data.js";
 
 const PROGRESS_KEY = "pld:completed";
 // Solo un aviso de que hay una cookie de sesión (el token no se puede leer desde aquí): así, al
@@ -12,7 +14,7 @@ const listeners = new Set();
 
 function readLocal() {
   try {
-    return new Set(JSON.parse(localStorage.getItem(PROGRESS_KEY)) ?? []);
+    return new Set(JSON.parse(storage.getItem(PROGRESS_KEY)) ?? []);
   } catch {
     return new Set();
   }
@@ -21,6 +23,8 @@ function readLocal() {
 export const state = {
   completed: readLocal(),
   user: null,
+  // Modo demostración: alumno ficticio sin cuenta ni servidor (demo/demo-mode.js)
+  demo: isDemo,
 };
 
 export function subscribe(listener) {
@@ -34,7 +38,7 @@ function emit(change) {
 
 function saveLocal() {
   try {
-    localStorage.setItem(PROGRESS_KEY, JSON.stringify([...state.completed]));
+    storage.setItem(PROGRESS_KEY, JSON.stringify([...state.completed]));
   } catch {
     // Sin almacenamiento: el progreso dura hasta recargar.
   }
@@ -102,8 +106,8 @@ async function syncProgress() {
 
 function rememberSession(active) {
   try {
-    if (active) localStorage.setItem(SESSION_KEY, "cookie");
-    else localStorage.removeItem(SESSION_KEY);
+    if (active) storage.setItem(SESSION_KEY, "cookie");
+    else storage.removeItem(SESSION_KEY);
   } catch {
     // sin almacenamiento: la sesión dura hasta recargar
   }
@@ -111,7 +115,7 @@ function rememberSession(active) {
 
 function hadSession() {
   try {
-    return localStorage.getItem(SESSION_KEY) === "cookie";
+    return storage.getItem(SESSION_KEY) === "cookie";
   } catch {
     return false;
   }
@@ -169,7 +173,7 @@ function claimOwnProgress(user, token) {
     que solo existe aquí, como los datos económicos (clearedOnLogout). Para equipos compartidos. */
 export function clearLocalData() {
   try {
-    for (const key of Object.keys(localStorage)) if (clearedOnLogout(key)) localStorage.removeItem(key);
+    for (const key of storageKeys(storage)) if (clearedOnLogout(key)) storage.removeItem(key);
   } catch {
     // sin almacenamiento: no hay nada que borrar
   }

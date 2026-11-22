@@ -6,6 +6,7 @@ import { escapeHtml } from "./markdown.js";
 import { pcap } from "./pcap-store.js";
 import { state } from "./store.js";
 import { canVerify, refreshVerified, verifiedLine, verifiedSummary } from "./verified.js";
+import { storage } from "./demo/demo-mode.js";
 
 const NAME_KEY = "pld:cert-name";
 const PASS = 70;
@@ -13,7 +14,7 @@ const OUT_OF_EXAM = "especializacion";
 
 function savedName() {
   try {
-    return localStorage.getItem(NAME_KEY) ?? "";
+    return storage.getItem(NAME_KEY) ?? "";
   } catch {
     return "";
   }
@@ -21,7 +22,7 @@ function savedName() {
 
 export function saveCertificateName(name) {
   try {
-    localStorage.setItem(NAME_KEY, name);
+    storage.setItem(NAME_KEY, name);
   } catch {
     // sin almacenamiento: el nombre dura hasta recargar
   }

@@ -9,6 +9,7 @@ import { createDocSync } from "../doc-sync.js";
 import { createSyncGate } from "../sync-gate.js";
 import { createUploader } from "../uploader.js";
 import { cleanPlanner, mergePlanner, postponedYesterday, setMinutes, todayTasks, upcomingExams } from "./planner.js";
+import { storage } from "../demo/demo-mode.js";
 
 const KEY = "pld:planner";
 const COURSE = "planner";
@@ -18,12 +19,12 @@ const OLD_MINUTES_KEY = "pld:daily-study-minutes";
 function load() {
   let planner;
   try {
-    planner = cleanPlanner(JSON.parse(localStorage.getItem(KEY)));
+    planner = cleanPlanner(JSON.parse(storage.getItem(KEY)));
   } catch {
     planner = cleanPlanner(null);
   }
   try {
-    const old = Number(localStorage.getItem(OLD_MINUTES_KEY));
+    const old = Number(storage.getItem(OLD_MINUTES_KEY));
     if (!planner.minutesAt && old) setMinutes(planner, old);
   } catch {
     // sin almacenamiento
@@ -70,7 +71,7 @@ const uploader = createUploader({
 
 export function savePlanner() {
   try {
-    localStorage.setItem(KEY, JSON.stringify(planner));
+    storage.setItem(KEY, JSON.stringify(planner));
   } catch {
     // sin almacenamiento: dura hasta recargar
   }

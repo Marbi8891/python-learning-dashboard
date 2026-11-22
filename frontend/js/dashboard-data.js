@@ -170,3 +170,32 @@ export function criteriaProgress(module, answersOf) {
     outcomes,
   };
 }
+
+/** Minutos que se cuentan por cada tarea del plan diario marcada como hecha (ACTION_MINUTES, el más común). */
+export const MINUTES_PER_TASK = 15;
+
+/**
+ * Tiempo de estudio ESTIMADO: tareas del planificador marcadas como hechas en los últimos `days`
+ * días × MINUTES_PER_TASK. La web no mide el tiempo real; esto es una estimación y se dice así.
+ * Devuelve null si no hay ninguna tarea hecha (no se inventa un cero).
+ * @param {{ days: Record<string, Record<string, { status: string }>> }} planner
+ */
+export function estimatedStudyMinutes(planner, now = new Date(), days = 30) {
+  const from = new Date(now);
+  from.setDate(from.getDate() - days + 1);
+  const first = isoDay(from);
+  let done = 0;
+  for (const [day, tasks] of Object.entries(planner?.days ?? {})) {
+    if (day < first || day > isoDay(now)) continue;
+    done += Object.values(tasks).filter((task) => task.status === "hecha").length;
+  }
+  return done ? { minutes: done * MINUTES_PER_TASK, tasks: done } : null;
+}
+
+/** «2 h 15 min», «45 min». */
+export function formatMinutes(total) {
+  const hours = Math.floor(total / 60);
+  const minutes = total % 60;
+  if (!hours) return `${minutes} min`;
+  return minutes ? `${hours} h ${minutes} min` : `${hours} h`;
+}

@@ -3,6 +3,7 @@
 import { MOD_KEY, RUN_KEYS_HTML } from "./keys.js";
 import { escapeHtml, renderInline } from "./markdown.js";
 import { PythonRunner, StoppedError, TimeoutError, isPythonCached } from "./python-runner.js";
+import { storage } from "./demo/demo-mode.js";
 
 const $ = (selector) => document.querySelector(selector);
 const DRAFT_PREFIX = "pld:draft:";
@@ -79,7 +80,7 @@ export function setRunListener(listener) {
 
 function readDraft(slug) {
   try {
-    return localStorage.getItem(DRAFT_PREFIX + slug);
+    return storage.getItem(DRAFT_PREFIX + slug);
   } catch {
     return null;
   }
@@ -88,7 +89,7 @@ function readDraft(slug) {
 function saveDraft() {
   if (!lesson) return;
   try {
-    localStorage.setItem(DRAFT_PREFIX + lesson.slug, $("#console-editor").value);
+    storage.setItem(DRAFT_PREFIX + lesson.slug, $("#console-editor").value);
   } catch {
     // sin almacenamiento
   }

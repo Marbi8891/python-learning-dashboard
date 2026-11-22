@@ -1,10 +1,13 @@
-/* Cliente de la API del backend. Sin API configurada, la app funciona en modo local. */
+/* Cliente de la API del backend. Sin API configurada, la app funciona en modo local.
+   En el modo demostración no hay servidor: ninguna petición sale de la web (demo/demo-mode.js). */
+
+import { isDemo } from "./demo/demo-mode.js";
 
 const config = window.PLD_CONFIG ?? {};
 const isLocalhost = ["localhost", "127.0.0.1"].includes(location.hostname);
 
 export const API_URL = (config.apiUrl || (isLocalhost ? "http://127.0.0.1:8000" : "")).replace(/\/+$/, "");
-export const apiEnabled = Boolean(API_URL);
+export const apiEnabled = Boolean(API_URL) && !isDemo;
 export const API_V1_PREFIX = "/api/v1";
 
 // Sesión: el token va en una cookie HttpOnly que pone la API y que JavaScript no puede
@@ -64,6 +67,7 @@ function formatDetail(detail, status) {
     `cookie: false` pide el token en la respuesta en vez de en la cookie (ver account.js).
     `headers` añade cabeceras propias. */
 export async function request(method, path, { json, form, auth = true, cookie = true, headers: extra = {}, signal } = {}) {
+  if (isDemo) throw new ApiError(0, "En la demo no hay cuenta ni servidor: los datos son ficticios y solo están en esta pestaña");
   if (!apiEnabled) throw new ApiError(0, "No hay servidor configurado");
   const headers = { ...extra };
   let body;
