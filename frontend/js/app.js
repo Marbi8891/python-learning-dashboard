@@ -90,6 +90,8 @@ const ZONE_LOADERS = {
   certificate: (load) => load("./certificate.js"),
   // Laboratorio de Python: editor con color y ejercicios con pruebas reales
   lab: (load) => load("./lab/lab.js"),
+  // Centro de aprendizaje: todos los cursos con su progreso
+  hub: (load) => load("./hub/hub.js"),
 };
 const zones = {};
 const zoneLoads = {};
@@ -152,6 +154,7 @@ const EXCEL_ALIAS = "#/excel-academy"; // nombre alternativo: se reescribe a EXC
 const CYBER_ROUTE = "#/ciberseguridad";
 const CAREER_ROUTE = "#/carrera";
 const LAB_ROUTE = "#/laboratorio"; // laboratorio de Python (lab/lab.js)
+const HUB_ROUTE = "#/cursos"; // centro de aprendizaje (hub/hub.js)
 const mobile = window.matchMedia("(max-width: 900px)");
 
 const content = {
@@ -507,6 +510,7 @@ const VIEWS = {
   career: { element: "#career-view", title: "Mi Carrera en IA · Python Learning Dashboard", focus: null, render: null },
   // El laboratorio se pinta solo (openLab): tiene código a medio escribir que no se debe repintar
   lab: { element: "#lab-view", title: "Laboratorio de Python · Python Learning Dashboard", focus: null, render: null },
+  hub: { element: "#hub-view", title: "Cursos · Python Learning Dashboard", focus: null, render: null },
   // Página no encontrada (NAV-01) o contenido que no se pudo cargar
   notfound: { element: "#notfound-view", title: () => content.statusTitle, focus: "#notfound-title", render: () => content.statusHtml },
 };
@@ -536,7 +540,7 @@ function updatePrivateNav() {
 }
 
 /** Entrada del menú que corresponde a la vista actual. */
-const NAV_OF_VIEW = { plans: "planes", cyber: "cyber", home: "pcap-curso", lesson: "pcap-curso", certificate: "pcap-curso", pcap: "pcap", daw: "daw", excel: "excel", career: "carrera", profile: "progreso", private: "panel", lab: "laboratorio" };
+const NAV_OF_VIEW = { plans: "planes", cyber: "cyber", home: "pcap-curso", lesson: "pcap-curso", certificate: "pcap-curso", pcap: "pcap", daw: "daw", excel: "excel", career: "carrera", profile: "progreso", private: "panel", lab: "laboratorio", hub: "cursos" };
 
 function updateSiteNav() {
   const key = content.view === "learn" ? learnNavKey(location.hash) : NAV_OF_VIEW[content.view];
@@ -763,6 +767,12 @@ function navigate({ moveFocus = true } = {}) {
     if (awaitZone("excel", moveFocus)) return;
     showPage("excel", { moveFocus: false });
     zones.excel.openExcel(location.hash, { moveFocus });
+    return;
+  }
+  if (location.hash === HUB_ROUTE) {
+    if (awaitZone("hub", moveFocus)) return;
+    showPage("hub", { moveFocus: false });
+    zones.hub.openHub({ moveFocus });
     return;
   }
   if (location.hash === LAB_ROUTE || location.hash.startsWith(`${LAB_ROUTE}/`)) {

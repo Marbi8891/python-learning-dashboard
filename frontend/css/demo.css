@@ -9,8 +9,10 @@
   justify-content: center;
   gap: .5rem 1rem;
   padding: .5rem 1rem;
-  background: var(--color-primary);
-  color: var(--color-on-primary);
+  /* Fondo de superficie con el acento en el borde: el texto usa el color normal (contraste AA en los dos temas) */
+  border-bottom: 3px solid var(--color-primary);
+  background: var(--color-surface);
+  color: var(--color-text);
   font-size: var(--text-sm);
   line-height: 1.4;
   text-align: center;
@@ -34,7 +36,8 @@
   cursor: pointer;
 }
 
-.demo-banner button:hover { background: rgb(0 0 0 / .08); }
+.demo-banner button { border-color: var(--color-border-control); }
+.demo-banner button:hover { background: var(--state-hover-bg); }
 
 .demo-banner button:focus-visible {
   outline: 2px solid currentColor;
@@ -182,3 +185,56 @@
 
 .lab__head { margin-bottom: var(--space-5, 1.5rem); }
 .lab__lead { max-width: var(--measure); color: var(--color-text-muted); font-size: var(--text-lg); }
+
+/* ---------- Centro de aprendizaje (js/hub/) ---------- */
+
+.hub-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+  gap: var(--space-4, 1rem);
+  margin-bottom: var(--space-5, 1.5rem);
+}
+
+.hub-card {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  padding: var(--space-4, 1rem);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  transition: border-color .2s var(--ease, ease), transform .2s var(--ease, ease);
+}
+
+.hub-card:hover { border-color: var(--color-border-control); transform: translateY(-1px); }
+
+.hub-card__title { margin: 0; font-size: var(--text-xl); }
+.hub-card__title a { color: inherit; text-decoration: none; }
+.hub-card__title a:hover { text-decoration: underline; }
+.hub-card__subtitle, .hub-card__meta, .hub-card__status { margin: 0; color: var(--color-text-muted); font-size: var(--text-sm); }
+
+.hub-card__progress progress {
+  width: 100%;
+  height: 8px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+  background: var(--color-primary-soft);
+  appearance: none;
+}
+
+.hub-card__progress progress::-webkit-progress-bar { background: var(--color-primary-soft); }
+.hub-card__progress progress::-webkit-progress-value { background: var(--color-primary); border-radius: var(--radius-pill); }
+.hub-card__progress progress::-moz-progress-bar { background: var(--color-primary); border-radius: var(--radius-pill); }
+
+.hub-card__actions { display: flex; flex-wrap: wrap; gap: .5rem; margin: .25rem 0 0; }
+
+.hub-card__lessons summary { cursor: pointer; font-size: var(--text-sm); font-weight: 600; }
+.hub-card__lessons ol { margin: .5rem 0 0; padding-left: 1.5rem; font-size: var(--text-sm); }
+.hub-card__lessons li { margin: .2rem 0; }
+.hub-card__done { color: var(--color-accent); font-weight: 700; }
+
+@media (prefers-reduced-motion: reduce) {
+  .hub-card { transition: none; }
+  .hub-card:hover { transform: none; }
+}

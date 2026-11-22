@@ -69,6 +69,8 @@ self.PLD_PRECACHE = [
  "js/game.js",
  "js/google-identity.js",
  "js/home.js",
+ "js/hub/hub-data.js",
+ "js/hub/hub.js",
  "js/i18n.js",
  "js/keys.js",
  "js/lab/lab-data.js",

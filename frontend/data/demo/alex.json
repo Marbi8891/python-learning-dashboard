@@ -167,7 +167,15 @@
     "bugHunter": true,
     "lastRunFailed": true
    },
-   "badges": []
+   "badges": [
+    "hola-mundo",
+    "primer-ejercicio",
+    "a-la-primera",
+    "cazabugs",
+    "quiz-perfecto",
+    "constancia",
+    "primer-simulacro"
+   ]
   },
   "pld:learn": {
    "ex": {

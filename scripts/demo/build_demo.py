@@ -39,6 +39,15 @@ READ = [*COMPLETED, "funciones"]
 QUIZ = {"variables": 3, "tipos": 3, "operadores": 2, "input": 3, "condicionales": 2, "bucles": 2}
 FIRST_TRY = ["variables", "input"]
 TRIED = [*COMPLETED, "funciones"]  # el ejercicio de funciones está empezado y sin superar
+BADGES = [
+    "hola-mundo",
+    "primer-ejercicio",
+    "a-la-primera",
+    "cazabugs",
+    "quiz-perfecto",
+    "constancia",
+    "primer-simulacro",
+]
 # Días con actividad (hace N días): 6 seguidos hasta hoy y algunos sueltos antes
 ACTIVE_DAYS_AGO = [0, 1, 2, 3, 4, 5, 8, 9, 11, 14, 18, 22]
 
@@ -236,7 +245,8 @@ def build() -> dict:
             "challenges": [],
             "days": sorted(day(n) for n in ACTIVE_DAYS_AGO),
             "flags": {"firstRun": True, "bugHunter": True, "lastRunFailed": True},
-            "badges": [],
+            # Los logros que ya cumplen estos datos (game.js los calcula): así no se «desbloquean» al entrar
+            "badges": BADGES,
         },
         "pld:learn": {
             "ex": ex_state,
