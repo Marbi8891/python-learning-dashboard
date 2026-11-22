@@ -42,6 +42,7 @@
   <link rel="stylesheet" href="css/daw.css">
   <link rel="stylesheet" href="css/excel.css">
   <link rel="stylesheet" href="css/cybersecurity.css">
+  <link rel="stylesheet" href="css/career.css">
   <link rel="stylesheet" href="css/pro.css">
   <link rel="stylesheet" href="css/plans.css">
   <link rel="stylesheet" href="css/learn.css">
@@ -111,6 +112,10 @@
           <a href="#/progreso" data-nav="progreso">
             <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
             <span class="site-nav__text">Progreso<span class="site-nav__hint" aria-hidden="true">Lo que ya dominas</span></span>
+          </a>
+          <a href="#/carrera" data-nav="carrera">
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 19h16M6 15l4-4l3 3l5-6M15 8h3v3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span class="site-nav__text">Mi Carrera en IA<span class="site-nav__hint" aria-hidden="true">Ruta AI Engineer</span></span>
           </a>
           <a href="#/planes" data-nav="planes" class="site-nav__secondary">
             <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 7h16M6 4h12v16H6zM9 11h6M9 15h4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -191,6 +196,9 @@
 
       <!-- ============ CURSO DE CIBERSEGURIDAD ============ -->
       <section class="page cyber" id="cyber-view" aria-labelledby="cyber-title" hidden></section>
+
+      <!-- ============ MI CARRERA EN IA (itinerario profesional, DEC-012) ============ -->
+      <section class="page career" id="career-view" aria-labelledby="career-title" hidden></section>
 
       <!-- ============ CURSO PCAP (portada) ============ -->
       <section class="page home" id="home-view" aria-labelledby="home-title" hidden></section>
@@ -289,8 +297,28 @@
         <h2 id="assistant-title">Asistente</h2>
         <button class="icon-button" id="assistant-close" type="button" aria-label="Cerrar asistente">✕</button>
       </header>
-      <ol class="assistant__messages" id="assistant-messages" aria-live="polite"></ol>
+      <ol class="assistant__messages" id="assistant-messages" aria-live="polite" tabindex="0" aria-label="Conversación con el asistente"></ol>
       <div class="assistant__suggestions" id="assistant-suggestions" role="group" aria-label="Preguntas sugeridas"></div>
+      <!-- Tutor IA (ai/ai-panel.js): oculto salvo que el servidor lo ofrezca (/health → ai) -->
+      <details class="assistant__ai" id="assistant-ai" hidden>
+        <summary>Preguntar al tutor IA</summary>
+        <div class="assistant__ai-body">
+          <p class="assistant__ai-status" id="assistant-ai-status" role="status" data-state="checking">Comprobando el tutor IA…</p>
+          <button class="btn btn--ghost assistant__ai-retry" id="assistant-ai-retry" type="button" hidden>Reintentar</button>
+          <form class="assistant__ai-form" id="assistant-ai-form" novalidate>
+            <label for="assistant-ai-question">Tu pregunta</label>
+            <textarea id="assistant-ai-question" rows="2" maxlength="2000"></textarea>
+            <label class="assistant__ai-check"><input type="checkbox" id="assistant-ai-code"> Enviar también mi código</label>
+            <div class="assistant__ai-actions">
+              <button class="btn btn--primary" type="submit" data-mode="chat">Preguntar</button>
+              <button class="btn btn--ghost" type="button" data-mode="hint">Pedir pista</button>
+              <button class="btn btn--ghost" type="button" data-mode="explain-error">Explicar mi error</button>
+              <button class="btn btn--ghost" type="button" data-mode="review-code">Revisar mi código</button>
+            </div>
+          </form>
+          <p class="assistant__note">Generado por IA: puede equivocarse y no es la corrección oficial. «Revisar mi código» envía tu código; en los demás casos, solo si marcas la casilla. No se guarda.</p>
+        </div>
+      </details>
       <p class="assistant__note">Respuestas preparadas y revisadas para cada lección.</p>
     </section>
     <button class="assistant__toggle" id="assistant-toggle" type="button" aria-controls="assistant-panel" aria-expanded="false">
@@ -367,6 +395,8 @@
         <form id="delete-form" class="account__form">
           <p>Se borrarán tu cuenta, tu progreso y tus ejercicios. No se puede deshacer.</p>
           <label>Confirma con tu contraseña <input name="password" type="password" autocomplete="current-password" required></label>
+          <p class="account__muted" id="delete-finance" hidden>Tus datos económicos del itinerario profesional solo están en este navegador: borrar la cuenta no los borra.
+            <label class="account__check"><input type="checkbox" name="clear-finance" value="1"> Borrar también mis datos económicos de este navegador</label></p>
           <button class="btn btn--danger" type="submit">Eliminar definitivamente</button>
         </form>
         <div class="account__google" data-google-delete hidden>

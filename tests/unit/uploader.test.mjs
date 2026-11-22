@@ -178,7 +178,7 @@ test("tras la fusión inicial se sube sin esperar (otro dispositivo puede entrar
   assert.equal(clock.pending()[0].ms, 5, "los cambios normales se siguen agrupando");
 });
 
-/** Una subida que no termina hasta que el test la suelta (para simular peticiones en vuelo). */
+/** Petición que no termina hasta que la prueba la suelta: simula un PUT en vuelo. */
 function deferred() {
   let resolve;
   const promise = new Promise((r) => {
@@ -186,6 +186,74 @@ function deferred() {
   });
   return { promise, resolve };
 }
+
+test("flush durante una subida en vuelo no lanza otra a la vez y la da por guardada", async () => {
+  // Al entrar, la subida inicial sale sola (onSynced). Si el alumno cierra sesión en ese momento, el
+  // flush no puede mandar un segundo PUT con la misma versión: el servidor respondería 409.
+  const inFlight = deferred();
+  let concurrent = 0;
+  let maxConcurrent = 0;
+  const ctx = setup({
+    responses: [
+      async () => {
+        concurrent += 1;
+        maxConcurrent = Math.max(maxConcurrent, concurrent);
+        await inFlight.promise;
+        concurrent -= 1;
+        return true;
+      },
+    ],
+  });
+  ctx.uploader.changed({ now: true });
+  const initial = ctx.clock.fireNext(); // la subida inicial empieza y se queda en vuelo
+  const flushed = ctx.uploader.flush(); // cierre de sesión mientras viaja
+  inFlight.resolve();
+  await initial;
+  assert.equal(await flushed, true);
+  assert.equal(maxConcurrent, 1, "nunca dos subidas del mismo documento a la vez");
+  assert.equal(ctx.calls.push, 1, "no hacía falta otra: la que viajaba ya lo llevaba todo");
+  assert.equal(ctx.uploader.state, "saved");
+});
+
+test("un cambio hecho durante una subida en vuelo se sube después, sin solaparse", async () => {
+  const inFlight = deferred();
+  let concurrent = 0;
+  let maxConcurrent = 0;
+  const slow = async () => {
+    concurrent += 1;
+    maxConcurrent = Math.max(maxConcurrent, concurrent);
+    await inFlight.promise;
+    concurrent -= 1;
+    return true;
+  };
+  const ctx = setup({ responses: [slow, slow] });
+  ctx.uploader.changed({ now: true });
+  const first = ctx.clock.fireNext();
+  ctx.uploader.changed(); // el alumno sigue estudiando mientras viaja la primera
+  const flushed = ctx.uploader.flush();
+  inFlight.resolve();
+  await first;
+  assert.equal(await flushed, true);
+  assert.equal(ctx.calls.push, 2, "el segundo cambio se sube en otra petición");
+  assert.equal(maxConcurrent, 1);
+  assert.equal(ctx.uploader.state, "saved");
+});
+
+test("flush: si un cambio entra mientras sube (fusión tras un 409 de otra pestaña), lo sube también", async () => {
+  let ctx;
+  ctx = setup({
+    responses: [
+      () => {
+        ctx.uploader.changed(); // doc-sync fusionó la copia de otra pestaña y guardó en local
+        return true;
+      },
+    ],
+  });
+  ctx.uploader.changed();
+  assert.equal(await ctx.uploader.flush(), true, "no avisa de datos sin guardar cuando están guardados");
+  assert.equal(ctx.calls.push, 2);
+  assert.equal(ctx.uploader.state, "saved");
+});
 
 test("nunca hay dos subidas a la vez: la segunda espera a la primera (sin 409 contra sí misma)", async () => {
   const first = deferred();

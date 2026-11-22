@@ -21,6 +21,16 @@ const NOT_PROGRESS = new Set(["pld:prefs", "pld:session", OWNER_KEY, "pld:flash"
 
 export const isProgressKey = (key) => key.startsWith("pld:") && !NOT_PROGRESS.has(key) && !key.startsWith(STASH_PREFIX);
 
+/** Datos que solo existen en este navegador, sin copia en la cuenta (DEC-012, opción C): son
+    progreso (si entra otra cuenta se apartan para su dueño), pero cerrar sesión no los borra,
+    porque se perderían. Se borran solo a petición del alumno. */
+export const LOCAL_ONLY_KEYS = Object.freeze(["pld:career-finance"]);
+
+/** Lo que cerrar sesión borra del navegador: todo lo personal salvo preferencias, lo apartado de
+    otras cuentas (AUTH-02) y lo que solo existe aquí. */
+export const clearedOnLogout = (key) =>
+  key.startsWith("pld:") && key !== "pld:prefs" && !key.startsWith(STASH_PREFIX) && !LOCAL_ONLY_KEYS.includes(key);
+
 const keysOf = (storage) => {
   const keys = [];
   for (let i = 0; i < storage.length; i += 1) keys.push(storage.key(i));

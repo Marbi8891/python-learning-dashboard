@@ -17,13 +17,14 @@ Interactive OpenAPI documentation is available at /docs when ENABLE_DOCS=true.
 | Authentication | /api/v1/auth/register, /api/v1/auth/login, /api/v1/auth/google, /api/v1/auth/logout, /api/v1/auth/logout-all |
 | Password recovery ([auth.md](auth.md)) | /api/v1/auth/password-reset/request, /api/v1/auth/password-reset/confirm |
 | Account | /api/v1/users/me, /api/v1/users/me/activity, /api/v1/users/me/export, POST /api/v1/users/me/delete (exactly one of `password` or `google_credential`, see [auth.md](auth.md)) |
-| Health | GET /api/v1/health → `status`, `email` (reset emails can be sent), `google` (`GOOGLE_CLIENT_ID` is set). Does not touch the database |
+| Health | GET /api/v1/health → `status`, `ai` (AI with NEXARO is enabled; no call to NEXARO), `email` (reset emails can be sent), `google` (`GOOGLE_CLIENT_ID` is set). Does not touch the database |
+| AI ([NEXARO_INTEGRATION_CONTRACT.md](architecture/NEXARO_INTEGRATION_CONTRACT.md)) | GET /api/v1/ai/status → `{enabled, available, modes}` (session required, 401 without it). `available`: NEXARO answers and has `NEXARO_MODEL` installed (cached 30 s). Never reveals NEXARO's URL, version, model or agents. POST /api/v1/ai/chat `{lesson_slug, question, code?, history?(≤6), locale?}` and POST /api/v1/ai/hint `{lesson_slug, question, code?, hint_level 1-3, locale?}` → `{answer, mode, ai_generated: true, official_evaluation: false, request_id}`. POST /api/v1/ai/explain-error `{lesson_slug, error (≤4000), code?, question?}` explains a Python error from the console; POST /api/v1/ai/review-code `{lesson_slug, code (required, ≤8000), question?}` is a static review in Markdown (possible errors, why, suggested tests): the code is text and nobody runs it. The server builds the context from the lesson; extra fields (user, model, agent, system prompt) → 422. 404 if AI is disabled or the lesson does not exist, 429 when busy or over `AI_RATE_LIMIT_PER_MINUTE` (10/min per user), 503 if NEXARO fails (no internal details). They never change progress |
 | Ready | GET /api/v1/ready → 200 `{status, database, migrations, database_ms}` when the database answers and the schema is at the latest Alembic migration; 503 otherwise, without internal details (docs/OPERACION.md) |
 | Course content | /api/v1/modules, /api/v1/lessons/{slug} |
 | Progress | /api/v1/progress, /api/v1/progress/{slug} |
 | Exercise attempts | /api/v1/lessons/{slug}/attempts |
 | PCAP state | /api/v1/pcap-state |
-| DAW course state | /api/v1/course-state/{course} (`sql`, `js`, `java`, `entornos`, `marcas`, `programacion`, `learn`, `game`, `planner`) |
+| DAW course state | /api/v1/course-state/{course} (`sql`, `js`, `java`, `entornos`, `marcas`, `programacion`, `excel`, `learn`, `game`, `planner`, `career`, `cybersecurity`) |
 | Verified milestones ([HITOS_VERIFICADOS.md](HITOS_VERIFICADOS.md)) | POST /api/v1/verified/pcap-exams (server picks 40 questions, 201), POST /api/v1/verified/pcap-exams/{id}/answers (server grades; same answers again → same result, other answers or late → 409, impossible answers → 422, another user's exam → 404), GET /api/v1/verified |
 | Student dashboard | GET /api/v1/dashboard?utc_offset_minutes=, GET /api/v1/dashboard/activity?limit=&offset= |
 

@@ -75,6 +75,21 @@ apartado 7.G de la auditoría.
 | Destinatarios | GitHub Pages, Render, jsDelivr (al descargar Pyodide) |
 | Conservación | La de cada proveedor `[[TITULAR: anotar la retención de cada uno]]` |
 
+### RAT-6. Tutor con IA (NEXARO AI)
+
+| Campo | Contenido |
+|---|---|
+| Finalidad | Responder dudas y dar pistas sobre la lección que estudia el alumno |
+| Base jurídica | Ejecución del servicio (art. 6.1.b), a petición del alumno en cada pregunta |
+| Interesados | Usuarios con cuenta que preguntan a la IA |
+| Datos | Pregunta, código del ejercicio solo si el alumno lo envía y los últimos turnos de la conversación de esa pestaña. No se envía id, email ni nombre |
+| Destinatarios | NEXARO AI y Ollama en el equipo del titular (sin terceros). Desactivado por defecto y no disponible en el despliegue público |
+| Transferencias | Ninguna |
+| Conservación | PLD no guarda las preguntas ni las respuestas. NEXARO v3 no guarda conversaciones; su log solo tiene método, ruta y estado |
+| Código | `backend/app/routers/ai.py`, `ai_context.py`, `nexaro_client.py`; ver `docs/architecture/NEXARO_INTEGRATION_AUDIT.md` §8 |
+
+`[[TITULAR: antes de activarlo fuera del equipo del titular, actualizar privacidad.html y revisar dónde corre el modelo]]`
+
 ### RAT-5. Atención de derechos y de incidentes
 
 | Campo | Contenido |

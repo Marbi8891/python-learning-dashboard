@@ -1,0 +1,16 @@
+{
+ "version": 1,
+ "roadmaps": [
+  {
+   "id": "applied-ai-engineer",
+   "version": 1,
+   "title": {
+    "es": "AI Engineer & AI Product Developer",
+    "en": "AI Engineer & AI Product Developer"
+   },
+   "modules": 8,
+   "units": 90,
+   "skills": 32
+  }
+ ]
+}

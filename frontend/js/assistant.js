@@ -1,6 +1,8 @@
 /* Asistente de la lección: respuestas preparadas por lección, pista y siguiente tema.
-   No es una IA: todo el contenido está revisado en data/lessons.json. */
+   Las respuestas preparadas no son una IA: están revisadas en data/lessons.json. Si el servidor la
+   ofrece, el panel añade además el tutor IA (ai/ai-panel.js), separado y marcado como tal. */
 
+import { initAiPanel, refreshAiPanel, setAiLesson } from "./ai/ai-panel.js";
 import { escapeHtml, renderMarkdown } from "./markdown.js";
 
 const $ = (selector) => document.querySelector(selector);
@@ -12,6 +14,7 @@ function addMessage(html, from) {
   item.innerHTML = html;
   $("#assistant-messages").append(item);
   item.scrollIntoView({ block: "nearest" });
+  return item;
 }
 
 function renderSuggestions() {
@@ -33,14 +36,17 @@ export function setAssistantLesson(lesson, nextLesson, goTo) {
   $("#assistant-messages").replaceChildren();
   addMessage(`<p>Estás en <strong>${escapeHtml(lesson.title)}</strong>. ¿En qué te ayudo?</p>`, "bot");
   renderSuggestions();
+  setAiLesson(lesson);
 }
 
 function toggle(open) {
   const panel = $("#assistant-panel");
   panel.hidden = !open;
   $("#assistant-toggle").setAttribute("aria-expanded", String(open));
-  if (open) panel.querySelector(".chip")?.focus();
-  else $("#assistant-toggle").focus();
+  if (open) {
+    panel.querySelector(".chip")?.focus();
+    refreshAiPanel();
+  } else $("#assistant-toggle").focus();
 }
 
 export function initAssistant() {
@@ -65,4 +71,5 @@ export function initAssistant() {
       context.goTo(nextLesson.slug);
     }
   });
+  initAiPanel({ onMessage: addMessage });
 }

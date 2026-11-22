@@ -95,3 +95,61 @@ def test_planner_is_saved_per_user_with_versions(client, auth_headers):
     assert saved["data"] == planner
     exported = client.get("/api/v1/users/me/export", headers=auth_headers).json()
     assert exported["courses"]["planner"] == planner
+
+
+def test_career_document_is_saved_per_user_with_versions(client, auth_headers):
+    """Itinerario profesional (DEC-012): documento propio, con versiones y límite de tamaño."""
+    career = {
+        "v": 1,
+        "active": "applied-ai-engineer",
+        "roadmaps": {
+            "applied-ai-engineer": {
+                "units": {"m1.poo": {"status": "hecha", "at": "2026-11-18T10:00:00.000Z"}},
+                "evidence": [
+                    {
+                        "id": "ev-1",
+                        "project": "python-learning-dashboard",
+                        "criterion": "pld-fullstack",
+                        "kind": "pr",
+                        "url": "https://github.com/Marbi8891/python-learning-dashboard/pull/1",
+                        "note": "",
+                        "at": "2026-11-18T10:00:00.000Z",
+                    }
+                ],
+            }
+        },
+    }
+    first = client.put("/api/v1/course-state/career", json={"data": career}, headers=auth_headers)
+    assert first.status_code == 200
+    stale = client.put(
+        "/api/v1/course-state/career",
+        json={"data": {}, "version": first.json()["version"] - 1},
+        headers=auth_headers,
+    )
+    assert stale.status_code == 409
+    assert client.get("/api/v1/course-state/career", headers=auth_headers).json()["data"] == career
+    exported = client.get("/api/v1/users/me/export", headers=auth_headers).json()
+    assert exported["courses"]["career"] == career
+
+    huge = {"roadmaps": {"x": {"note": "a" * MAX_PCAP_STATE_BYTES}}}
+    too_big = client.put("/api/v1/course-state/career", json={"data": huge}, headers=auth_headers)
+    assert too_big.status_code == 422
+
+
+def test_cybersecurity_document_is_saved_per_user_with_versions(client, auth_headers):
+    """Curso de ciberseguridad: antes solo vivía en el navegador y cerrar sesión lo borraba."""
+    cyber = {
+        "v": 2,
+        "weeks": {"semana-01": {"done": True, "at": "2026-11-20T10:00:00.000Z"}},
+        "quiz": {"semana-01": {"score": 3, "at": "2026-11-20T09:55:00.000Z"}},
+    }
+    path = "/api/v1/course-state/cybersecurity"
+    first = client.put(path, json={"data": cyber}, headers=auth_headers)
+    assert first.status_code == 200
+    stale = client.put(
+        path, json={"data": {}, "version": first.json()["version"] - 1}, headers=auth_headers
+    )
+    assert stale.status_code == 409
+    assert client.get(path, headers=auth_headers).json()["data"] == cyber
+    exported = client.get("/api/v1/users/me/export", headers=auth_headers).json()
+    assert exported["courses"]["cybersecurity"] == cyber

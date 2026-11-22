@@ -9,6 +9,31 @@ cambios se agrupan por fecha de merge, con el número de pull request entre par�
 ## [Sin publicar]
 
 ### Añadido
+- IA con NEXARO AI, Fase 4: «Preguntar al tutor IA» en el panel del asistente de cada lección (preguntar,
+  pedir pista, explicar mi error y revisar mi código), solo si el servidor ofrece la IA y con sesión iniciada. El
+  código solo viaja si se marca la casilla o se pide revisarlo; respuestas con Markdown seguro y la etiqueta «IA · no
+  es la corrección oficial»; nada se guarda en el navegador. En inglés, accesible y sin conexión (el tutor se oculta).
+  La lista de mensajes del asistente se puede recorrer con el teclado. `privacidad.html` describe el tutor.
+- IA con NEXARO AI, Fase 3: `POST /api/v1/ai/explain-error` (explica un error de la consola, hasta 4.000
+  caracteres) y `POST /api/v1/ai/review-code` (revisión estática en Markdown con posibles errores, explicación y
+  pruebas sugeridas; el código es texto y nadie lo ejecuta). Revisar usa el agente `NEXARO_AGENT_REVIEW`.
+- IA con NEXARO AI, Fase 2: `POST /api/v1/ai/chat` (tutor sobre la lección) y `POST /api/v1/ai/hint` (pistas de
+  nivel 1 a 3) con sesión. El contexto lo pone el servidor desde la lección; el código solo viaja si se envía y no
+  viaja nada que identifique al alumno. 10 preguntas por minuto y alumno (evento `ai.rate_limited`), 2 respuestas a
+  la vez como mucho, errores de NEXARO sin detalles y respuestas marcadas como IA, que nunca cambian el progreso.
+- IA con NEXARO AI, Fase 1 (`docs/architecture/NEXARO_INTEGRATION_*.md`): configuración `NEXARO_*`, desactivada
+  por defecto y validada al arrancar (URL sin credenciales ni ruta, host permitido, HTTPS fuera de la red local,
+  token fuera de este equipo); cliente de servidor a servidor sin redirecciones, con tiempo de espera y tope de
+  bytes; `GET /api/v1/ai/status` con sesión y el campo `ai` en `/health`. Sin interfaz ni rutas de generación todavía.
+- «Mi Carrera en IA» (`#/carrera`), Fase C del itinerario (DEC-012): resumen con la siguiente actividad
+  (pausada si hay un examen o entrega de DAW a 7 días o menos), ruta de 8 módulos con sus unidades,
+  32 competencias explicadas, proyectos y criterios, plan de 36 meses editable, objetivo económico solo en el
+  navegador (tabla, gráfica SVG accesible, exportar, importar y borrar) y listas de preparación. Entrada en el
+  menú, en español e inglés y sin conexión. Cerrar sesión y borrar la cuenta avisan de que los datos
+  económicos se quedan en el navegador.
+- Itinerario «AI Engineer & AI Product Developer», Fase B (DEC-012): catálogo generado y validado
+  (8 módulos, 90 unidades, 32 competencias, 9 puestos, plan de 36 meses), documento `career`
+  sincronizado con la cuenta y cálculo de competencias, módulos, puestos y siguiente actividad.
 - Excel profesional, P4.1: módulos M03 (formato profesional y gestión de libros), M04 (funciones
   lógicas) y M05 (agregación condicional). 6 unidades y 79 ejercicios más (190 en total), comprobados con
   el motor. El motor calcula 16 funciones nuevas: SI, Y, O, NO, SI.CONJUNTO, SI.ERROR, REDONDEAR.MAS,
@@ -99,6 +124,12 @@ cambios se agrupan por fecha de merge, con el número de pull request entre par�
   (`docs/DEPLOY.md` §5).
 
 ### Corregido
+- Curso de ciberseguridad: el progreso (semanas completadas y cuestionarios) solo vivía en el navegador y
+  «Cerrar sesión» lo borraba sin copia en la cuenta, aunque el aviso decía que se subiría. Ahora es el
+  documento `cybersecurity` de `/api/v1/course-state` (versión, 409, fusión al entrar, subida antes de
+  cerrar sesión y exportación RGPD). Cada semana guarda la fecha de su último cambio: al fusionar gana el
+  más reciente, así que desmarcar una semana en otro dispositivo no se deshace. El progreso guardado con la
+  versión anterior se lee y se sube al entrar.
 - Excel profesional: en las preguntas de test la respuesta correcta era siempre la primera opción.
   Ahora las opciones se barajan con una semilla fija por pregunta.
 - Excel profesional: «elige el resultado» muestra bien los errores (#¡DIV/0!) y los valores lógicos.

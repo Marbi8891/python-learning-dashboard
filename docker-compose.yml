@@ -27,6 +27,13 @@ services:
       FRONTEND_URL: http://localhost:5500
       TRUSTED_PROXY_HOPS: "0"  # en local no hay proxy delante
       ENABLE_DOCS: "true"
+      # IA opcional con NEXARO AI (docs/architecture/NEXARO_INTEGRATION_CONTRACT.md). Desactivada por
+      # defecto. Hoy NEXARO v3 solo acepta peticiones de este mismo equipo: desde este contenedor no
+      # se llega hasta que NEXARO tenga token de servicio (NX-REQ-01/02). No unas la api a la red de Ollama.
+      NEXARO_ENABLED: ${NEXARO_ENABLED:-false}
+      NEXARO_BASE_URL: ${NEXARO_BASE_URL:-}
+      NEXARO_MODEL: ${NEXARO_MODEL:-}
+      NEXARO_SERVICE_TOKEN: ${NEXARO_SERVICE_TOKEN:-}
     ports:
       - "8000:8000"
     depends_on:

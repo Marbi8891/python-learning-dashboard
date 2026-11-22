@@ -3,7 +3,7 @@
 from functools import lru_cache
 from pathlib import Path
 
-from pydantic import field_validator
+from pydantic import Field, SecretStr, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 # Fuente única del contenido: la comparten frontend (GitHub Pages) y backend
@@ -62,6 +62,28 @@ class Settings(BaseSettings):
     smtp_user: str | None = None
     smtp_password: str | None = None
     smtp_from: str = "Python Learning Dashboard <no-reply@example.com>"
+
+    # IA con NEXARO AI (docs/architecture/NEXARO_INTEGRATION_CONTRACT.md). Desactivada por defecto:
+    # sin NEXARO_ENABLED=true no se llama nunca a NEXARO y la web no ofrece la IA. Solo el backend
+    # conoce la URL y el token; el navegador nunca los ve. Se valida al arrancar (nexaro_client.py).
+    nexaro_enabled: bool = False
+    nexaro_base_url: str | None = None
+    # Hosts a los que puede apuntar NEXARO_BASE_URL (anti-SSRF por configuración)
+    nexaro_allowed_hosts: list[str] = ["127.0.0.1", "localhost", "nexaro-ai"]
+    # Obligatorio si NEXARO no está en este equipo (NEXARO v3 aún no lo comprueba: NX-REQ-01)
+    nexaro_service_token: SecretStr | None = None
+    nexaro_model: str | None = None
+    # Un modelo local en CPU tarda: es el tiempo máximo sin recibir datos de NEXARO
+    nexaro_timeout_seconds: float = Field(default=120.0, gt=0, le=300)
+    nexaro_max_response_bytes: int = Field(default=262_144, ge=1024, le=4_194_304)
+    # Agente de NEXARO con las reglas del tutor (su prompt de sistema vive en NEXARO, no aquí)
+    nexaro_agent_tutor: str = Field(default="tutor-programacion", pattern=r"^[a-zA-Z0-9_-]{1,64}$")
+    # Agente para revisar código (hasta que NEXARO tenga agentes PLD de solo lectura, NX-REQ-04)
+    nexaro_agent_review: str = Field(default="programador", pattern=r"^[a-zA-Z0-9_-]{1,64}$")
+    # Preguntas a la IA por alumno y minuto: cada una ocupa la CPU del modelo durante segundos
+    ai_rate_limit_per_minute: int = 10
+    # Respuestas que PLD pide a la vez a NEXARO (NEXARO admite 2): la siguiente recibe 429 ya
+    ai_max_concurrency: int = Field(default=2, ge=1, le=16)
 
     # Modo aplicación local: la API sirve también la web (ver app/local_site.py)
     serve_frontend: bool = False

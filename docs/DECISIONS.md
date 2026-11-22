@@ -67,6 +67,43 @@ comportamiento que fijaba el test anterior: lo aprobó el autor al aprobar la au
 **Decisión:** todo el motor se escribe en JavaScript sin bibliotecas nuevas. El backend solo gana un id de documento.
 **Por qué:** coste de mantenimiento y arquitectura actual (HTML, CSS, ES modules, FastAPI).
 
+## DEC-012 · Itinerario profesional «AI Engineer & AI Product Developer» (18/11/2026)
+
+DEC-011 está reservado por la rama `feature/tutor-nexaro` (tutor con NEXARO), todavía sin fusionar.
+
+**Estado:** aceptada por el autor (Fase A, [AI_CAREER_PATH_AUDIT.md](AI_CAREER_PATH_AUDIT.md) §9).
+**Contexto:** el autor quiere una ruta profesional de 8 módulos hacia Applied AI Engineer que conviva
+con DAW, use sus proyectos como laboratorios y siga un objetivo económico. El Career Roadmap (Sprint 0,
+04/11) ya había diseñado la capa y sus decisiones D1-D4 seguían pendientes.
+**Opciones:** (A) tablas y endpoints nuevos; (B) catálogo estático generado + un documento por usuario.
+**Decisión:** B, con estas reglas:
+- D1. Catálogo en `frontend/data/career/` generado por `scripts/career/build_career.py` (`--check` en CI,
+  ids en `ids.lock.json`, que solo crece) y progreso en el documento `career` de
+  `/api/v1/course-state/career` (un id más en `COURSES`). Sin migraciones.
+- D2. El itinerario «Python Backend Junior» del Sprint 0 queda dentro de M1 y M2: un solo itinerario activo.
+- D3. Los datos económicos no se suben a la cuenta: solo en el navegador, con exportación e importación JSON.
+- D4. Contenido propio completo primero para M1 y M4 (Fase D); el resto, esqueleto con enlaces.
+- D5. El tutor sobre la ruta espera a que `feature/tutor-nexaro` esté fusionada.
+- D6. Se reutilizan los agentes existentes; no se crean agentes `career-*`.
+- D7. Pendiente: NEXARO Risk Engine no se asocia a ningún repositorio hasta que el autor lo confirme.
+- Una competencia agrega fuentes que ya miden otros módulos (dominio de conceptos de `mastery.js`,
+  bloques de los cursos con la cobertura de `pcap-store.js`, evaluación del módulo y criterios de
+  proyecto con evidencia). **Marcar una unidad como estudiada no suma nada.** Pesos: evaluación 0,4,
+  práctica 0,3, proyecto 0,3, normalizados sobre los grupos que declara la competencia.
+- Los módulos «bloqueados» son orientativos: se pueden abrir; solo dejan de recomendarse.
+- DAW primero: con un examen o entrega del planificador a 7 días o menos, la ruta no propone nada.
+**Por qué:** reutiliza sincronización, versiones, aislamiento entre usuarios y límites; funciona sin
+backend y sin conexión; añadir un itinerario es añadir datos.
+**Trade-offs:** las evidencias de proyecto las declara el alumno (se exige evidencia **y** evaluación);
+los datos económicos no se ven en otro dispositivo; los umbrales (0,7 adquirida, 180 días de validez,
+7 días de prioridad DAW) son hipótesis iniciales sin datos de uso.
+**Consecuencias:** `frontend/js/career/` (`career-data.js`, `career-store.js`, `career-finance.js`).
+**Almacén de los datos económicos (decidido por el autor el 18/11/2026, opción C):** clave
+`pld:career-finance`, en `LOCAL_ONLY_KEYS` de `local-owner.js`. Cerrar sesión (`clearLocalData`) ya no la
+borra, porque no tiene copia en la cuenta y se perdería; sigue contando como progreso, así que si entra
+otra cuenta en el mismo navegador se aparta para su dueño (AUTH-02). Trade-off aceptado: sin sesión, quien
+use ese navegador la ve. Ver `AI_CAREER_PATH.md` §6.
+
 ## DEC-016 · El módulo de POO vive en el núcleo por conceptos
 
 (DEC-011 a DEC-015 están reservadas por el Career Roadmap, PR #101.)
@@ -104,4 +141,3 @@ comportamiento que fijaba el test anterior: lo aprobó el autor al aprobar la au
 **Decisión:** las funciones que no pueden recibir sus argumentos ya calculados llevan la marca `lazy` en el registro (`frontend/js/excel/formula/functions/registry.js`) y reciben un objeto `lazyArgs` del evaluador: SI, SI.CONJUNTO y SI.ERROR (solo calculan la rama que toca) y la familia SUMAR.SI (necesita la posición de cada rango). Los criterios se comparan con un algoritmo propio de comodines, sin expresiones regulares.
 **Por qué:** con los argumentos ya calculados, `=SI(B2=0;0;A2/B2)` daría #¡DIV/0! y SUMAR.SI no podría ajustar el rango de suma como Excel. Una marca en el registro deja igual las 8 funciones de la v1 y su prueba de referencia. Sin expresiones regulares no hay riesgo de vuelta atrás exponencial con un patrón como `*A*A*A…`. El autor pidió el 17/11/2026 seguir con las lecciones (DA-28: P4.1, M03-M05, antes de P3).
 **Consecuencia:** el motor ocupa 61 387 bytes de los 61 440 del presupuesto (RNF-10). Antes de M06 hay que decidir si cada módulo carga sus funciones aparte o si se amplía el límite con una medida de rendimiento (DP-17).
-

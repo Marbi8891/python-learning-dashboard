@@ -1,5 +1,8 @@
 # Career Roadmap · Registro de trabajo
 
+> **18/11/2026:** este diseño continúa en [AI_CAREER_PATH.md](AI_CAREER_PATH.md) (DEC-012). D1-D4 están
+> decididas allí y el itinerario «Python Backend Junior» queda dentro de M1 y M2. Donde choquen, manda AI_CAREER_PATH.
+
 Registro persistente del módulo Career Roadmap. Antes de cada sesión: leer este archivo y comprobar el
 estado real del repositorio (`git log`, PR abiertos). La arquitectura está en
 [`CAREER_ROADMAP_ARCHITECTURE.md`](CAREER_ROADMAP_ARCHITECTURE.md).
