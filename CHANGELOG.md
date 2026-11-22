@@ -9,6 +9,19 @@ cambios se agrupan por fecha de merge, con el número de pull request entre par�
 ## [Sin publicar]
 
 ### Añadido
+- Demo Edition ([docs/DEMO-EDITION.md](docs/DEMO-EDITION.md)): modo demostración sin registro con `?demo=1` como
+  Alex Developer, un alumno ficticio (XP, nivel, 7 logros, racha, lecciones hechas y pendientes, actividad). Los datos
+  salen de `scripts/demo/build_demo.py` (`--check` en CI), se guardan solo en la pestaña (`sessionStorage`, prefijo
+  `pld:demo:`) y no se llama al servidor; una franja fija avisa de que son ficticios, con Reiniciar y Salir.
+- Laboratorio de Python (`#/laboratorio`): editor con resaltado de sintaxis, ejecución real en el Web Worker de
+  Pyodide, consola con errores explicados, Detener, Restablecer, ejemplos y 14 ejercicios del temario con sus pruebas.
+- Centro de aprendizaje (`#/cursos`): los siete cursos principales con su progreso, la siguiente lección y la lista
+  de lecciones. «Todos los cursos» está en el menú lateral y el laboratorio se abre desde Practicar y desde Cursos.
+- Panel: «Tiempo estimado» (15 min por tarea del plan diario hecha en 30 días); la web sigue sin medir el tiempo real.
+
+### Arreglado
+- La prueba WCAG de Excel en tema claro fallaba 1 de cada 5 veces: axe medía durante la animación de entrada.
+
 - IA con NEXARO AI, Fase 4: «Preguntar al tutor IA» en el panel del asistente de cada lección (preguntar,
   pedir pista, explicar mi error y revisar mi código), solo si el servidor ofrece la IA y con sesión iniciada. El
   código solo viaja si se marca la casilla o se pide revisarlo; respuestas con Markdown seguro y la etiqueta «IA · no

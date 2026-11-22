@@ -68,6 +68,10 @@ La política de seguridad está en [SECURITY.md](../SECURITY.md).
 |---|---|
 | [memoria/memoria.md](memoria/memoria.md) | Memoria del proyecto de 2º de DAW |
 | [DEMO-Y-DEFENSA.md](DEMO-Y-DEFENSA.md) | Guion de la demo y de la defensa |
+| [DEMO-EDITION.md](DEMO-EDITION.md) | Demo Edition: modo demostración sin registro, laboratorio y centro de cursos |
+| [DEMO-ARCHITECTURE.md](DEMO-ARCHITECTURE.md) | Cómo está hecha la Demo Edition (aislamiento, datos, laboratorio) |
+| [DEMO-DEPLOYMENT.md](DEMO-DEPLOYMENT.md) | Ejecutar y publicar la Demo Edition |
+| [DEMO-TESTING.md](DEMO-TESTING.md) | Pruebas y seguridad de la Demo Edition |
 
 ## Auditorías e informes
 

@@ -29,6 +29,7 @@ Las e2e arrancan solas el frontend (`e2e/serve_frontend.py`, un `http.server` co
 | Cursos de DAW | `python scripts/courses/<curso>_course.py --check` (`sql`, `js`, `java`, `entornos`, `marcas`, `programacion`) | Cada respuesta de código se ejecuta (SQLite, Node, Java y Python) |
 | Coherencia de los cursos de DAW | `cd backend && python -m pytest -q tests/test_daw_courses.py` | Ids estables (`scripts/courses/ids.lock.json`), contenidos vacíos, preguntas repetidas, referencias a unidades, lecciones, módulos y RA, enlaces y soluciones |
 | Itinerarios profesionales | `python scripts/career/build_career.py --check` | Catálogo de `frontend/data/career/` al día y válido (referencias, prerrequisitos sin ciclos, ids registrados); las pruebas del validador están en `test_career_catalog.py` |
+| Datos de la demo | `python scripts/demo/build_demo.py --check` | `frontend/data/demo/alex.json` al día y con ids que existen en el temario (las pruebas están en `tests/unit/demo-data.test.mjs` y `e2e/demo.spec.js`) |
 | Recursos de DAW | `python scripts/resources/build_resources.py --check` | Catálogo de recursos al día y válido (ids, módulos, lecciones, URL, licencias); las pruebas están en `test_resources.py` |
 | Frontend | `npm run test:unit` | Lógica del aprendizaje (dominio, confianza, retención), repaso espaciado común, recomendación, planificador, panel y Markdown seguro |
 | End-to-end y WCAG | `npm run test:e2e` | La web entera con el backend real y auditoría de accesibilidad (axe-core con las reglas de WCAG 2.2 A/AA, foco y letra al 200 %) |
@@ -80,6 +81,7 @@ Sin ella, fallan las e2e que ejecutan Python. Si cambias la versión, cámbiala 
 | Contenido de Excel profesional (`scripts/courses/excel_course.py`, `scripts/courses/excel/m01.py`…`m05.py`) | `python scripts/courses/excel_course.py` y después `--check` (comprueba con el motor cada ejemplo y cada ejercicio de fórmula), `python scripts/courses/lock_ids.py --check` (ids en `scripts/courses/academia.lock.json`), `cd backend && python -m pytest -q tests/test_excel_course.py`, `npm run test:unit` y `npx playwright test e2e/excel.spec.js` |
 | `scripts/courses/course_builder.py` | Lo de `scripts/courses/**` y `python -m unittest discover -s scripts/courses/tests` |
 | `backend/**` | Lint, formato y pytest con cobertura |
+| Modo demo, laboratorio o centro de cursos (`frontend/js/demo/**`, `lab/**`, `hub/**`, `scripts/demo/**`) | `python scripts/demo/build_demo.py --check`, `npm run test:unit` y `npx playwright test e2e/demo.spec.js` ([`DEMO-TESTING.md`](DEMO-TESTING.md)) |
 | `scripts/resources/**` | `python scripts/resources/build_resources.py --check` y `cd backend && python -m pytest -q tests/test_resources.py` |
 | `scripts/career/**` | `python scripts/career/build_career.py` y después `--check`; `cd backend && python -m pytest -q tests/test_career_catalog.py` |
 | `frontend/js/career/*` | `npm run test:unit` y `npx playwright test e2e/career.spec.js` |
