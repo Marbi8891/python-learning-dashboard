@@ -298,5 +298,7 @@
   "Modo demostración.": "Demo mode.",
   "Alex Developer es un alumno ficticio: los datos son inventados y solo están en esta pestaña.": "Alex Developer is a fictional student: the data is made up and only lives in this tab.",
   "Reiniciar": "Restart",
-  "Salir de la demo": "Exit the demo"
+  "Salir de la demo": "Exit the demo",
+  "Laboratorio": "Lab",
+  "Ejecuta Python": "Run Python"
 }

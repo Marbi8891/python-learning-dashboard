@@ -88,6 +88,8 @@ const ZONE_LOADERS = {
       return dashboard;
     }),
   certificate: (load) => load("./certificate.js"),
+  // Laboratorio de Python: editor con color y ejercicios con pruebas reales
+  lab: (load) => load("./lab/lab.js"),
 };
 const zones = {};
 const zoneLoads = {};
@@ -149,6 +151,7 @@ const EXCEL_ROUTE = "#/academia/excel";
 const EXCEL_ALIAS = "#/excel-academy"; // nombre alternativo: se reescribe a EXCEL_ROUTE
 const CYBER_ROUTE = "#/ciberseguridad";
 const CAREER_ROUTE = "#/carrera";
+const LAB_ROUTE = "#/laboratorio"; // laboratorio de Python (lab/lab.js)
 const mobile = window.matchMedia("(max-width: 900px)");
 
 const content = {
@@ -502,6 +505,8 @@ const VIEWS = {
   // Excel profesional se pinta solo (openExcel): tiene ejercicios a medio escribir que no se deben repintar
   excel: { element: "#excel-view", title: "Excel profesional · Python Learning Dashboard", focus: null, render: null },
   career: { element: "#career-view", title: "Mi Carrera en IA · Python Learning Dashboard", focus: null, render: null },
+  // El laboratorio se pinta solo (openLab): tiene código a medio escribir que no se debe repintar
+  lab: { element: "#lab-view", title: "Laboratorio de Python · Python Learning Dashboard", focus: null, render: null },
   // Página no encontrada (NAV-01) o contenido que no se pudo cargar
   notfound: { element: "#notfound-view", title: () => content.statusTitle, focus: "#notfound-title", render: () => content.statusHtml },
 };
@@ -531,7 +536,7 @@ function updatePrivateNav() {
 }
 
 /** Entrada del menú que corresponde a la vista actual. */
-const NAV_OF_VIEW = { plans: "planes", cyber: "cyber", home: "pcap-curso", lesson: "pcap-curso", certificate: "pcap-curso", pcap: "pcap", daw: "daw", excel: "excel", career: "carrera", profile: "progreso", private: "panel" };
+const NAV_OF_VIEW = { plans: "planes", cyber: "cyber", home: "pcap-curso", lesson: "pcap-curso", certificate: "pcap-curso", pcap: "pcap", daw: "daw", excel: "excel", career: "carrera", profile: "progreso", private: "panel", lab: "laboratorio" };
 
 function updateSiteNav() {
   const key = content.view === "learn" ? learnNavKey(location.hash) : NAV_OF_VIEW[content.view];
@@ -758,6 +763,12 @@ function navigate({ moveFocus = true } = {}) {
     if (awaitZone("excel", moveFocus)) return;
     showPage("excel", { moveFocus: false });
     zones.excel.openExcel(location.hash, { moveFocus });
+    return;
+  }
+  if (location.hash === LAB_ROUTE || location.hash.startsWith(`${LAB_ROUTE}/`)) {
+    if (awaitZone("lab", moveFocus)) return;
+    showPage("lab", { moveFocus: false });
+    zones.lab.openLab(location.hash, { moveFocus });
     return;
   }
   if (location.hash === CAREER_ROUTE || location.hash.startsWith(`${CAREER_ROUTE}/`)) {

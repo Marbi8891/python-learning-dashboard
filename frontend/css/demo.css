@@ -40,3 +40,145 @@
   outline: 2px solid currentColor;
   outline-offset: 2px;
 }
+
+/* ---------- Laboratorio de Python (js/lab/) ---------- */
+
+.lab {
+  display: grid;
+  grid-template-columns: minmax(200px, 260px) minmax(0, 1fr);
+  gap: var(--space-5, 1.5rem);
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .lab { grid-template-columns: minmax(0, 1fr); }
+}
+
+.lab__list {
+  position: sticky;
+  top: var(--space-4, 1rem);
+  max-height: calc(100vh - 2rem);
+  overflow: auto;
+  padding: var(--space-3, .75rem);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+@media (max-width: 900px) {
+  .lab__list { position: static; max-height: none; }
+}
+
+.lab__list-title { margin: 0; font-size: var(--text-md); font-weight: 700; cursor: pointer; }
+.lab__list details[open] > .lab__list-title { margin-bottom: .5rem; }
+
+.lab__topic {
+  margin: .75rem 0 .25rem;
+  font-size: var(--text-xs);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.lab__items { margin: 0; padding: 0; list-style: none; }
+
+.lab__items a {
+  display: flex;
+  gap: .5rem;
+  padding: .4rem .5rem;
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  font-size: var(--text-sm);
+  text-decoration: none;
+}
+
+.lab__items a:hover { background: var(--state-hover-bg); }
+.lab__items a[aria-current="page"] { background: var(--color-primary-soft); font-weight: 600; }
+.lab__check { flex: 0 0 1em; color: var(--color-accent); font-weight: 700; }
+
+.lab__work { display: grid; gap: var(--space-4, 1rem); min-width: 0; }
+
+.lab__task {
+  padding: var(--space-4, 1rem);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.lab__task-title { margin: .25rem 0 .75rem; font-size: var(--text-xl); }
+.lab__done { color: var(--color-accent); font-weight: 600; }
+.lab__hint summary { cursor: pointer; }
+
+.lab__examples {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .5rem;
+  margin: .75rem 0;
+  font-size: var(--text-sm);
+}
+
+.lab__examples select {
+  min-height: 40px;
+  padding: .25rem .5rem;
+  border: 1px solid var(--color-border-control);
+  border-radius: var(--radius-sm);
+  background: var(--color-input-bg);
+  color: var(--color-text);
+  font: inherit;
+}
+
+/* Editor con color: el textarea (texto transparente) va encima de la capa coloreada */
+.lab-editor {
+  position: relative;
+  border: 1px solid var(--color-border-control);
+  border-radius: var(--radius-sm);
+  background: var(--color-code-bg);
+}
+
+.lab-editor:focus-within { outline: var(--focus-outline); outline-offset: 2px; }
+
+.lab-editor__highlight,
+.lab-editor__input {
+  margin: 0;
+  padding: var(--space-3, .75rem);
+  border: 0;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1.6;
+  tab-size: 4;
+  white-space: pre;
+  overflow-wrap: normal;
+  word-break: normal;
+  letter-spacing: normal;
+}
+
+.lab-editor__highlight {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  color: var(--color-code-text);
+}
+
+.lab-editor__highlight code.hljs { padding: 0; background: transparent; font: inherit; }
+
+.lab-editor__input {
+  position: relative;
+  display: block;
+  width: 100%;
+  min-height: 260px;
+  overflow: auto;
+  background: transparent;
+  color: transparent;
+  caret-color: var(--color-code-text);
+  resize: vertical;
+}
+
+.lab-editor__input:focus { outline: none; }
+.lab-editor__input::selection { background: rgb(242 180 67 / .35); color: transparent; }
+
+.lab__result { margin-top: .75rem; }
+
+.lab__head { margin-bottom: var(--space-5, 1.5rem); }
+.lab__lead { max-width: var(--measure); color: var(--color-text-muted); font-size: var(--text-lg); }

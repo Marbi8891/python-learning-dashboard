@@ -71,6 +71,8 @@ self.PLD_PRECACHE = [
  "js/home.js",
  "js/i18n.js",
  "js/keys.js",
+ "js/lab/lab-data.js",
+ "js/lab/lab.js",
  "js/landing.js",
  "js/learn/activity.js",
  "js/learn/answers.js",
