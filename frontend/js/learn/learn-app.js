@@ -414,7 +414,7 @@ function renderPractice() {
     <header class="lx-head">
       <p class="eyebrow">Practicar</p>
       <h1 class="lx-title" id="learn-title" tabindex="-1">Practicar</h1>
-      <p class="lx-lead">Cada fallo se explica y vuelve más tarde con un ejercicio parecido. La práctica evita repetir lo que ya dominas.</p>
+      <p class="lx-lead">Cada fallo se explica y vuelve más tarde con un ejercicio parecido. La práctica evita repetir lo que ya dominas. Para escribir tu propio código, usa el <a href="#/laboratorio">laboratorio de Python</a>.</p>
     </header>
     <div class="lx-grid lx-grid--2">
       <section class="lx-panel" aria-labelledby="lx-review-title">

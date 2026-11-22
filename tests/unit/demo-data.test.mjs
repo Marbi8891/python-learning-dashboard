@@ -26,8 +26,12 @@ function memoryStorage(initial = {}) {
   };
 }
 
-test("el prefijo de la demo nunca coincide con las claves reales pld:", () => {
-  assert.equal(DEMO_PREFIX.startsWith("pld:"), false);
+test("las claves de la demo van aparte de las reales y las cubre la política de privacidad", () => {
+  assert.ok(DEMO_PREFIX.startsWith("pld:")); // la política de privacidad describe todas las claves pld:
+  const backing = new Map();
+  const fake = { getItem: (k) => backing.get(k) ?? null, setItem: (k, v) => backing.set(k, String(v)), removeItem: (k) => backing.delete(k), key: (i) => [...backing.keys()][i] ?? null, get length() { return backing.size; } };
+  new PrefixedStorage(fake, DEMO_PREFIX).setItem("pld:completed", "[]");
+  assert.deepEqual([...backing.keys()], [`${DEMO_PREFIX}pld:completed`]); // nunca la clave real «pld:completed»
 });
 
 test("daysBetween cuenta días de calendario, también al cambiar de hora", () => {

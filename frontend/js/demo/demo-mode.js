@@ -2,7 +2,7 @@
 
    Se entra con «?demo=1» en la dirección (botón «Probar la demo» de la portada). Desde ese momento,
    en esta pestaña:
-   - todos los almacenes guardan en sessionStorage con el prefijo «pld-demo:» (`storage`), así que el
+   - todos los almacenes guardan en sessionStorage con el prefijo «pld:demo:» (`storage`), así que el
      progreso real del navegador (pld:* en localStorage) no se lee ni se escribe;
    - api.js no llama al servidor (ni sesiones, ni subidas, ni tutor IA).
    Cerrar la pestaña o «Salir de la demo» lo borra todo.

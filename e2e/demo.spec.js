@@ -62,14 +62,14 @@ test("la demo entra sin registro como Alex Developer, con datos ficticios y sin 
   await banner.getByRole("button", { name: "Salir de la demo" }).click();
   await expect(page).toHaveURL(/#\/portada$/);
   await expect(page.locator("#demo-banner")).toBeHidden();
-  expect(await page.evaluate(() => Object.keys(sessionStorage).filter((k) => k.startsWith("pld-demo:")))).toEqual([]);
+  expect(await page.evaluate(() => Object.keys(sessionStorage).filter((k) => k.startsWith("pld:demo:")))).toEqual([]);
   expect(await page.evaluate(() => localStorage.getItem("pld:completed"))).toBe('["paquetes"]');
 });
 
 test("reiniciar la demo deshace lo que hizo el visitante", async ({ page }) => {
   await page.goto("/?demo=1#/panel");
   await expect(page.locator("#private-title")).toHaveText("Hola, Alex Developer");
-  await page.evaluate(() => sessionStorage.setItem("pld-demo:pld:completed", JSON.stringify([])));
+  await page.evaluate(() => sessionStorage.setItem("pld:demo:pld:completed", JSON.stringify([])));
   await page.reload();
   await expect(page.locator(".dash-kpis")).toContainText("0/27");
   await page.locator("#demo-banner").getByRole("button", { name: "Reiniciar" }).click();

@@ -5,7 +5,7 @@
 Alex Developer no existe. No hay email ni ningún dato personal: solo progreso de ejemplo con el
 mismo formato que guarda la web en el navegador (pld:completed, pld:game, pld:learn, pld:pcap,
 pld:planner, pld:course:<id>, pld:cybersecurity:v1). La web lo carga en sessionStorage con el
-prefijo «pld-demo:» (frontend/js/demo/demo-mode.js) y nunca lo mezcla con el progreso real.
+prefijo «pld:demo:» (frontend/js/demo/demo-mode.js) y nunca lo mezcla con el progreso real.
 
 Las fechas giran alrededor de ANCHOR. Al entrar en la demo se desplazan para que ANCHOR sea hoy,
 así que la racha, el historial y los repasos pendientes tienen siempre la misma forma.

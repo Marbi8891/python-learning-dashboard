@@ -6,7 +6,7 @@
    así que la demo es reproducible y nunca sale caducada. */
 
 /** Prefijo de todas las claves de la demo en sessionStorage. Nunca coincide con «pld:». */
-export const DEMO_PREFIX = "pld-demo:";
+export const DEMO_PREFIX = "pld:demo:";
 /** Marca de que esta pestaña está en modo demo. */
 export const DEMO_FLAG = `${DEMO_PREFIX}active`;
 
