@@ -57,12 +57,39 @@ function renderTopics(){
  box.innerHTML=MODULES.map(m=>`<details class="dawcoach-topic-module" id="topics-${m.id}"><summary><span class="dawcoach-chip ${m.color}">${m.id}</span><strong>${esc(m.name)}</strong><span>${score(m.id)}%</span></summary><div class="dawcoach-topic-list">${m.topics.map(t=>{const v=Number(data.mastery[topicKey(m.id,t)]||0);return `<div class="dawcoach-topic"><span>${esc(t)}</span><div class="dawcoach-level" role="group" aria-label="Dominio de ${esc(t)}"><button data-level="${m.id}" data-topic="${esc(t)}" data-value="0" class="${v===0?"active":""}" title="Sin evaluar">—</button><button data-level="${m.id}" data-topic="${esc(t)}" data-value="1" class="${v===1?"active":""}" title="Lo estoy aprendiendo">1</button><button data-level="${m.id}" data-topic="${esc(t)}" data-value="2" class="${v===2?"active":""}" title="Lo entiendo">2</button><button data-level="${m.id}" data-topic="${esc(t)}" data-value="3" class="${v===3?"active":""}" title="Lo domino">3</button></div></div>`}).join("")}</div></details>`).join("");
 }
 function bind(){
+ $("#dawcoach-export")?.addEventListener("click",()=>{
+   const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+   const url=URL.createObjectURL(blob);const a=document.createElement("a");
+   a.href=url;a.download="daw-exam-coach-backup.json";a.click();URL.revokeObjectURL(url);
+ });
+ $("#dawcoach-import")?.addEventListener("change",async e=>{
+   const f=e.target.files?.[0];if(!f)return;
+   try{
+     const incoming=JSON.parse(await f.text());
+     if(!incoming||typeof incoming!=="object"||!incoming.mastery||!Array.isArray(incoming.sources)||!Array.isArray(incoming.errors)||!Array.isArray(incoming.sessions))throw new Error("Formato de copia no válido");
+     if(!confirm("Importar esta copia reemplazará tu progreso local de DAW Exam Coach. ¿Continuar?"))return;
+     data={mastery:incoming.mastery,sources:incoming.sources,errors:incoming.errors,sessions:incoming.sessions,tasks:Array.isArray(incoming.tasks)?incoming.tasks:[],minutes:Number(incoming.minutes)||90};
+     save();render();
+   }catch(err){alert("No se pudo importar la copia: "+err.message);}
+ });
  $("#dawcoach-minutes")?.addEventListener("change",e=>{data.minutes=Number(e.target.value);save();render();});
  document.querySelectorAll("[data-module]").forEach(b=>b.onclick=()=>{const d=$("#topics-"+b.dataset.module);d.open=true;d.scrollIntoView({behavior:"smooth",block:"start"});});
- document.querySelectorAll("[data-level]").forEach(b=>b.onclick=()=>{data.mastery[topicKey(b.dataset.level,b.dataset.topic)]=Number(b.dataset.value)*33.333;save();render();$("#topics-"+b.dataset.level).open=true;});
- document.querySelectorAll("[data-plan-topic]").forEach(b=>b.onclick=()=>{const mod=b.dataset.planTopic;$("#topics-"+mod).open=true;document.querySelectorAll("[data-topic]").forEach(x=>{if(x.dataset.topic===b.dataset.planName)x.scrollIntoView({behavior:"smooth",block:"center"});});});
+ document.querySelectorAll("[data-level]").forEach(b=>b.onclick=()=>{data.mastery[topicKey(b.dataset.level,b.dataset.topic)]=[0,33,67,100][Number(b.dataset.value)];save();render();$("#topics-"+b.dataset.level).open=true;});
+ document.querySelectorAll("[data-plan-topic]").forEach(b=>b.onclick=()=>{const mod=b.dataset.planTopic;$("#topics-"+mod).open=true;document.querySelectorAll(".dawcoach-topic").forEach(x=>{if(x.querySelector("span")?.textContent===b.dataset.planName)x.scrollIntoView({behavior:"smooth",block:"center"});});});
  $("#start-session")?.addEventListener("click",()=>{const p=todayPlan();data.sessions.push({date:new Date().toISOString(),minutes:data.minutes,focus:p.map(x=>x.module+" "+x.topic).join("; ")||"Repaso libre"});save();render();});
- $("#tutor-form")?.addEventListener("submit",e=>{e.preventDefault();const mod=$("#tutor-module").value;const question=$("#tutor-question").value.trim();const excerpts=data.sources.filter(s=>s.module===mod&&s.text).map(s=>`[Fuente: ${s.name}]\\n${s.text.slice(0,12000)}`).join("\\n\\n");const prompt=`Actúa como tutor de 2.º DAW. Ayúdame a entender, no me des directamente la solución si estoy practicando.\\nMódulo: ${mod}\\nPregunta: ${question}\\n\\nMaterial importado disponible:\\n${excerpts||"(No hay texto extraído de materiales para este módulo.)"}\\n\\nCita el material cuando lo uses. Si el material no contiene la respuesta, dilo y separa claramente conocimiento general. Explica con un ejemplo y termina con una pregunta para comprobar que lo he entendido.`;$("#tutor-output").innerHTML=`<pre class="dawcoach-prompt">${esc(prompt)}</pre><button id="copy-tutor" class="dawcoach-primary">Copiar consulta</button>`;$("#copy-tutor").onclick=async()=>{try{await navigator.clipboard.writeText(prompt);$("#copy-tutor").textContent="Copiado";}catch{const ta=document.createElement("textarea");ta.value=prompt;document.body.append(ta);ta.select();document.execCommand("copy");ta.remove();$("#copy-tutor").textContent="Copiado";}};});\n $("#source-form")?.addEventListener("submit",async e=>{e.preventDefault();const f=$("#source-file").files[0];if(!f)return;if(f.size>15*1024*1024){alert("El archivo supera el límite de 15 MB.");return;}const textTypes=["text/","application/json"];let textContent="";if(textTypes.some(t=>f.type.startsWith(t))||/\.(txt|md|json|csv|html)$/i.test(f.name)){textContent=await f.text();}data.sources.push({name:f.name,size:f.size,type:f.type,module:$("#source-module").value,added:new Date().toISOString(),text:textContent.slice(0,500000)});save();render();});
+ $("#tutor-form")?.addEventListener("submit",e=>{
+   e.preventDefault();const mod=$("#tutor-module").value;const question=$("#tutor-question").value.trim();
+   const excerpts=data.sources.filter(s=>s.module===mod&&s.text).map(s=>"[Fuente: "+s.name+"]\n"+s.text.slice(0,12000)).join("\n\n");
+   const prompt="Actúa como tutor de 2.º DAW. Ayúdame a entender, no me des directamente la solución si estoy practicando.\nMódulo: "+mod+"\nPregunta: "+question+"\n\nMaterial importado disponible:\n"+(excerpts||"(No hay texto extraído de materiales para este módulo.)")+"\n\nCita el material cuando lo uses. Si el material no contiene la respuesta, dilo y separa claramente conocimiento general. Explica con un ejemplo y termina con una pregunta para comprobar que lo he entendido.";
+   $("#tutor-output").innerHTML='<pre class="dawcoach-prompt">'+esc(prompt)+'</pre><button id="copy-tutor" class="dawcoach-primary">Copiar consulta</button>';
+   $("#copy-tutor").onclick=async()=>{try{await navigator.clipboard.writeText(prompt);}catch{const ta=document.createElement("textarea");ta.value=prompt;document.body.append(ta);ta.select();document.execCommand("copy");ta.remove();}$("#copy-tutor").textContent="Copiado";};
+ });
+ $("#source-form")?.addEventListener("submit",async e=>{
+   e.preventDefault();const f=$("#source-file").files[0];if(!f)return;
+   if(f.size>15*1024*1024){alert("El archivo supera el límite de 15 MB.");return;}
+   let textContent="";if(f.type.startsWith("text/")||f.type==="application/json"||/\.(txt|md|json|csv|html)$/i.test(f.name))textContent=await f.text();
+   data.sources.push({name:f.name,size:f.size,type:f.type,module:$("#source-module").value,added:new Date().toISOString(),text:textContent.slice(0,500000)});save();render();
+ });
  $("#error-form")?.addEventListener("submit",e=>{e.preventDefault();data.errors.push({module:$("#error-module").value,topic:$("#error-topic").value.trim(),note:$("#error-note").value.trim(),done:false,date:new Date().toISOString()});save();render();});
  document.querySelectorAll("[data-delete-source]").forEach(b=>b.onclick=()=>{data.sources.splice(Number(b.dataset.deleteSource),1);save();render();});
  document.querySelectorAll("[data-error-done]").forEach(b=>b.onclick=()=>{data.errors[Number(b.dataset.errorDone)].done=!data.errors[Number(b.dataset.errorDone)].done;save();render();});
