@@ -91,6 +91,7 @@ export function renderDawPrep(index, state) {
     : "";
 
   return `
+    <section class="lx-section" aria-label="Preparación de segundo curso"><h2>Tu espacio de 2.º DAW</h2><p class="lx-muted">Organiza DWEC, DWES, DIW y Despliegue, registra errores y prepara tu plan de estudio.</p><a class="btn btn--primary" href="#/daw2">Abrir DAW Exam Coach →</a></section>
     <header class="lx-head">
       <p class="eyebrow">Programación · 1.º DAW</p>
       <h1 class="lx-title" id="learn-title" tabindex="-1">Preparación DAW</h1>
