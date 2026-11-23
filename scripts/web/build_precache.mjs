@@ -11,7 +11,7 @@ import { fileURLToPath } from "node:url";
 const FRONTEND = fileURLToPath(new URL("../../frontend/", import.meta.url));
 export const OUT = join(FRONTEND, "precache.js");
 
-const FILES = ["index.html", "404.html", "aviso-legal.html", "privacidad.html", "config.js", "manifest.webmanifest", "favicon.svg", "i18n/en.json", "py/runner.py"];
+const FILES = ["index.html", "daw-coach-mobile.html", "daw-coach-mobile.webmanifest", "sw-daw-coach-mobile.js", "404.html", "aviso-legal.html", "privacidad.html", "config.js", "manifest.webmanifest", "favicon.svg", "i18n/en.json", "py/runner.py"];
 const FOLDERS = [
   ["js", /\.js$/],
   ["css", /\.css$/],
