@@ -65,6 +65,7 @@ const ZONE_LOADERS = {
   learn: (load) => load("./learn/learn-app.js"),
   pcap: (load) => load("./pcap.js"),
   daw: (load) => load("./daw.js"),
+  daw2: (load) => load("./daw-exam-coach.js"),
   // Excel profesional: el motor de fórmulas solo se descarga en sus rutas
   excel: (load) => load("./excel/course.js"),
   // Mi Carrera en IA (DEC-012): el itinerario profesional, solo en sus rutas
@@ -144,6 +145,7 @@ const CERTIFICATE_ROUTE = "#/certificado";
 const PRIVATE_ROUTE = "#/cuenta"; // antigua «Mi cuenta»: ahora es la sección «Mi perfil» del panel
 const PANEL_ROUTE = "#/panel"; // panel del alumno: #/panel/<sección>
 const DAW_ROUTE = "#/daw";
+const DAW2_ROUTE = "#/daw2";
 const EXCEL_ROUTE = "#/academia/excel";
 const EXCEL_ALIAS = "#/excel-academy"; // nombre alternativo: se reescribe a EXCEL_ROUTE
 const CYBER_ROUTE = "#/ciberseguridad";
@@ -497,6 +499,7 @@ const VIEWS = {
   pcap: { element: "#pcap-view", title: "Examen PCAP · Python Learning Dashboard", focus: null, render: null },
   // Los cursos de DAW también se pintan solos (openDaw): cargan su banco y tienen tandas en curso
   daw: { element: "#daw-view", title: "Cursos de DAW · Python Learning Dashboard", focus: null, render: null },
+  daw2: { element: "#daw-view", title: "DAW Exam Coach · Python Learning Dashboard", focus: "#daw2-title", render: () => zones.daw2.renderDawExamCoach() },
   cyber: { element: "#cyber-view", title: "Curso de Ciberseguridad · Python Learning Dashboard", focus: null, render: null },
   // Excel profesional se pinta solo (openExcel): tiene ejercicios a medio escribir que no se deben repintar
   excel: { element: "#excel-view", title: "Excel profesional · Python Learning Dashboard", focus: null, render: null },
@@ -530,7 +533,7 @@ function updatePrivateNav() {
 }
 
 /** Entrada del menú que corresponde a la vista actual. */
-const NAV_OF_VIEW = { plans: "planes", cyber: "cyber", home: "pcap-curso", lesson: "pcap-curso", certificate: "pcap-curso", pcap: "pcap", daw: "daw", excel: "excel", career: "carrera", profile: "progreso", private: "panel" };
+const NAV_OF_VIEW = { daw2: "daw", plans: "planes", cyber: "cyber", home: "pcap-curso", lesson: "pcap-curso", certificate: "pcap-curso", pcap: "pcap", daw: "daw", excel: "excel", career: "carrera", profile: "progreso", private: "panel" };
 
 function updateSiteNav() {
   const key = content.view === "learn" ? learnNavKey(location.hash) : NAV_OF_VIEW[content.view];
@@ -765,7 +768,7 @@ function navigate({ moveFocus = true } = {}) {
     zones.career.openCareer(location.hash, { moveFocus });
     return;
   }
-  if (location.hash === DAW_ROUTE || location.hash.startsWith(`${DAW_ROUTE}/`)) {
+  if (location.hash === DAW2_ROUTE || location.hash.startsWith(`${DAW2_ROUTE}/`)) {\n    if (awaitZone("daw2", moveFocus)) return;\n    showPage("daw2", { moveFocus });\n    zones.daw2.openDawExamCoach(location.hash);\n    return;\n  }\n  if (location.hash === DAW_ROUTE || location.hash.startsWith(`${DAW_ROUTE}/`)) {
     if (awaitZone("daw", moveFocus)) return;
     showPage("daw", { moveFocus: false });
     zones.daw.openDaw(location.hash, { moveFocus });
