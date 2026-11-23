@@ -38,7 +38,7 @@ function render(){
  root.innerHTML=`
  <div class="dawcoach">
  <header class="dawcoach-head"><div><p class="dawcoach-eyebrow">TU ESPACIO DE ESTUDIO · 2.º DAW</p><h1 id="daw2-title" tabindex="-1">DAW Exam Coach</h1><p>Organiza el temario, estudia tus puntos débiles y practica para los exámenes.</p></div>
- <div class="dawcoach-score"><button id="dawcoach-export" class="dawcoach-export">Exportar progreso</button><strong>${allScore()}%</strong><span>dominio estimado</span><div class="dawcoach-bar"><i style="width:${allScore()}%"></i></div></div></header>
+ <div class="dawcoach-score"><div class="dawcoach-backup"><button id="dawcoach-export" class="dawcoach-export">Exportar</button><label class="dawcoach-export">Importar<input id="dawcoach-import" type="file" accept="application/json,.json" hidden></label></div><strong>${allScore()}%</strong><span>dominio estimado</span><div class="dawcoach-bar"><i style="width:${allScore()}%"></i></div></div></header>
  <section class="dawcoach-grid dawcoach-stats">
  ${MODULES.map(m=>`<article class="dawcoach-card"><div class="dawcoach-card-top"><span class="dawcoach-chip ${m.color}">${m.id}</span><strong>${score(m.id)}%</strong></div><h2>${esc(m.name)}</h2><div class="dawcoach-bar"><i style="width:${score(m.id)}%"></i></div><button class="dawcoach-link" data-module="${m.id}">Ver temas <span aria-hidden="true">→</span></button></article>`).join("")}
  </section>
