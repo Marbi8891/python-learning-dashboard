@@ -71,3 +71,18 @@ Mantener HTML, CSS y JavaScript ES Modules, la navegación/hash existente, FastA
 ## Próximo paso de implementación
 
 Implementar fase 1 en una rama aislada, inspeccionando los patrones actuales de navegación, estilos, store y pruebas. Antes de integrar, ejecutar las pruebas documentadas en `docs/TESTING.md` y revisar el diff. No mergear a `main` ni publicar sin autorización del propietario.
+
+
+## Estado de implementación (23 nov 2026)
+
+La primera entrega frontend está implementada en la rama `feature/daw-exam-coach` y PR #195:
+
+- Ruta `#/daw2` y acceso desde Preparación DAW.
+- Panel de cuatro módulos y 40 temas con niveles 0–3.
+- Plan de estudio por dominio bajo y errores pendientes.
+- Biblioteca local: TXT, MD, JSON, CSV y HTML extraen texto; PDF se registra como metadata y aún no se procesa.
+- Tutor contextual: genera un prompt con extractos de materiales importados para copiar a una IA. La integración directa con Ollama/NEXARO está pendiente.
+- Flashcards iniciales, registro de errores, sesiones, import/export de copia JSON.
+- CSS responsive y recursos añadidos al precache del service worker.
+
+Pendiente antes de merge: CI completa, pruebas manuales en navegador, pruebas de almacenamiento/importación y revisión de accesibilidad. La rama no se ha fusionado ni desplegado.
