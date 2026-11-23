@@ -499,7 +499,7 @@ const VIEWS = {
   pcap: { element: "#pcap-view", title: "Examen PCAP · Python Learning Dashboard", focus: null, render: null },
   // Los cursos de DAW también se pintan solos (openDaw): cargan su banco y tienen tandas en curso
   daw: { element: "#daw-view", title: "Cursos de DAW · Python Learning Dashboard", focus: null, render: null },
-  daw2: { element: "#daw-view", title: "DAW Exam Coach · Python Learning Dashboard", focus: "#daw2-title", render: () => zones.daw2.renderDawExamCoach() },
+  daw2: { element: "#daw-view", title: "DAW Exam Coach · Python Learning Dashboard", focus: "#daw2-title", render: null },
   cyber: { element: "#cyber-view", title: "Curso de Ciberseguridad · Python Learning Dashboard", focus: null, render: null },
   // Excel profesional se pinta solo (openExcel): tiene ejercicios a medio escribir que no se deben repintar
   excel: { element: "#excel-view", title: "Excel profesional · Python Learning Dashboard", focus: null, render: null },
