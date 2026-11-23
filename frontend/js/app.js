@@ -768,7 +768,13 @@ function navigate({ moveFocus = true } = {}) {
     zones.career.openCareer(location.hash, { moveFocus });
     return;
   }
-  if (location.hash === DAW2_ROUTE || location.hash.startsWith(`${DAW2_ROUTE}/`)) {\n    if (awaitZone("daw2", moveFocus)) return;\n    showPage("daw2", { moveFocus });\n    zones.daw2.openDawExamCoach(location.hash);\n    return;\n  }\n  if (location.hash === DAW_ROUTE || location.hash.startsWith(`${DAW_ROUTE}/`)) {
+  if (location.hash === DAW2_ROUTE || location.hash.startsWith(`${DAW2_ROUTE}/`)) {
+    if (awaitZone("daw2", moveFocus)) return;
+    showPage("daw2", { moveFocus });
+    zones.daw2.openDawExamCoach(location.hash);
+    return;
+  }
+  if (location.hash === DAW_ROUTE || location.hash.startsWith(`${DAW_ROUTE}/`)) {
     if (awaitZone("daw", moveFocus)) return;
     showPage("daw", { moveFocus: false });
     zones.daw.openDaw(location.hash, { moveFocus });
