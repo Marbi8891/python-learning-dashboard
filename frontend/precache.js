@@ -2,7 +2,7 @@
    Archivos que sw.js guarda al instalarse para que la web funcione sin conexión (AUD-008). */
 self.PLD_PRECACHE = [
  "./",
- "index.html",
+ "index.html",\n "daw-coach-mobile.html",\n "daw-coach-mobile.webmanifest",\n "sw-daw-coach-mobile.js",
  "404.html",
  "aviso-legal.html",
  "privacidad.html",
@@ -36,7 +36,7 @@ self.PLD_PRECACHE = [
  "js/cybersecurity-store.js",
  "js/cybersecurity.js",
  "js/dashboard-data.js",
- "js/dashboard.js",
+ "js/daw-coach-mobile.js",\n "js/dashboard.js",
  "js/daw.js",
  "js/dialogs.js",
  "js/doc-sync.js",
@@ -117,7 +117,7 @@ self.PLD_PRECACHE = [
  "css/console.css",
  "css/content.css",
  "css/cybersecurity.css",
- "css/dashboard.css",
+ "css/daw-coach-mobile.css",\n "css/dashboard.css",
  "css/daw.css",
  "css/excel.css",
  "css/game.css",
