@@ -1,6 +1,6 @@
 /* DAW Exam Coach: personal study workspace for 2nd-year DAW.
    Local-first storage. No external AI/provider calls are made from this module. */
-const KEY = "pld.dawExamCoach.v1";
+const KEY = "pld:daw-exam-coach:v1";
 const MODULES = [
  {id:"DWEC",name:"Desarrollo Web en Entorno Cliente",color:"blue",topics:["JavaScript moderno y tipos","Funciones, arrays y objetos","DOM y selección de elementos","Eventos y propagación","Formularios y validación","Web Storage","Fetch y APIs","Promesas y async/await","JSON y módulos ES","Testing y depuración"]},
  {id:"DWES",name:"Desarrollo Web en Entorno Servidor",color:"green",topics:["Arquitectura cliente-servidor","PHP y sintaxis","Formularios y validación","Sesiones y cookies","SQL y persistencia","MVC y rutas","APIs REST","Autenticación y autorización","Seguridad web","Testing backend"]},
