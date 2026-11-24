@@ -503,6 +503,7 @@ const VIEWS = {
   // Excel profesional se pinta solo (openExcel): tiene ejercicios a medio escribir que no se deben repintar
   excel: { element: "#excel-view", title: "Excel profesional · Python Learning Dashboard", focus: null, render: null },
   career: { element: "#career-view", title: "Mi Carrera en IA · Python Learning Dashboard", focus: null, render: null },
+  aiacademy: { element: "#ai-academy-view", title: "AI Academy · Python Learning Dashboard", focus: "#ai-academy-title", render: () => renderAIacademy(location.hash) },
   // Página no encontrada (NAV-01) o contenido que no se pudo cargar
   notfound: { element: "#notfound-view", title: () => content.statusTitle, focus: "#notfound-title", render: () => content.statusHtml },
 };
