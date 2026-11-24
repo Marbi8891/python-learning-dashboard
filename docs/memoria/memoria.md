@@ -256,7 +256,7 @@ El frontend se publica en GitHub Pages con el workflow `pages.yml`. El backend e
 # 8. Aspectos legales
 
 - **RGPD:** la aplicación incorpora política de privacidad, controles de cuenta, exportación JSON y borrado de cuenta. La documentación y el aviso deben mantenerse alineados con los proveedores y tratamientos reales; esto describe medidas implementadas, no constituye una certificación de cumplimiento legal.
-- **LSSI-CE:** el aviso legal identifica al titular y ofrece un contacto por email. **[VERIFY]** Faltan por confirmar e incorporar NIF y domicilio del titular si resultan exigibles para la situación actual. El PR #63, que propone actualizar el aviso, continúa abierto en borrador y no está desplegado.
+- **LSSI-CE:** el aviso legal publicado identifica al titular y ofrece un contacto por email. **[VERIFY]** Faltan por confirmar los datos personales del titular que podrían ser exigibles (NIF y domicilio). El PR #63 sigue abierto en borrador y no está desplegado; propone aclarar la actividad del Pack PCAP y las donaciones, su gestión mediante plataformas externas y que la web no recibe ni conserva datos de pago.
 - **Cookies:** solo hay una, la de sesión, y solo si inicias sesión. Es técnica y necesaria, así que no hace falta banner de cookies.
 - **Analítica:** está preparada con GoatCounter, que no usa cookies ni guarda la IP, pero está desactivada (`goatcounter: ""` en `frontend/config.js`). Mientras siga así, la política de privacidad oculta ese apartado y no se mide nada.
 - **Terceros:** Pyodide se sirve desde la propia web desde el 17/11/2026 (RT-002, `scripts/web/vendor_pyodide.py`): ya no hay CDN que reciba la IP del alumno.
