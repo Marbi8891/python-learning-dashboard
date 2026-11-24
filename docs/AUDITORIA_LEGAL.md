@@ -128,8 +128,8 @@ publicada.
 | Analítica GoatCounter | Código presente, **desactivado** | No se carga | `frontend/config.js` (`goatcounter: ""`), `frontend/js/analytics.js` |
 | Service Worker y Cache Storage | Sí (sin conexión; nunca guarda la API) | Sí (solo fuera de localhost) | `frontend/sw.js` |
 | «Asistente» de la lección | Respuestas fijas, **no es IA** | Sí | `frontend/js/assistant.js:1-2` |
-| Tutor con IA, A2A, app Android | **Retirados** por el PR #62 | No | Historial de git; PR #65 (tutor con OpenAI) sigue abierto sin merge |
-| Pagos, donaciones, publicidad | **No** | No | Búsqueda en `frontend/` sin resultados; PR #63 (Pack PCAP y donaciones) abierto sin merge |
+| Tutor con IA, A2A, app Android | **Retirados** por el PR #62 | No | Historial de git; PR #65 (tutor con OpenAI) está cerrado sin merge |
+| Pagos, donaciones, publicidad | **No** | No | Búsqueda en `frontend/` sin resultados; PR #63 (actualización del aviso legal) abierto en borrador sin merge |
 | Funciones sociales (rankings, perfiles públicos) | No | No | Búsqueda en `frontend/js/` |
 | Certificado de finalización | Sí, generado en el navegador, con aviso «no oficial» | Sí | `frontend/js/certificate.js:1`, `:78-79` |
 
@@ -421,7 +421,7 @@ configuración, sin pruebas activas contra producción.
   proveedores y responsables del despliegue; el uso por una persona física en una actividad personal no
   profesional queda fuera de la definición de responsable del despliegue (art. 3.4, no releído hoy).
   **Condicionado** a si el proyecto pasa a ser una actividad profesional (LEG-042).
-- **Si se recupera el tutor con OpenAI (PR #65 abierto):** el titular sería responsable del despliegue
+- **Si se recuperase el tutor generativo (PR #65 cerrado sin merge):** el titular sería responsable del despliegue
   de un sistema que interactúa con personas. Habría que informar de que se habla con una IA (art. 50.1,
   aplicable desde el 2/8/2026 según la FAQ de la Comisión, F-13), revisar las transferencias a OpenAI,
   qué código del alumno se envía y con qué conservación, y actualizar la política. Es un cambio que
@@ -504,7 +504,7 @@ PD = pendiente de determinar; Dem. = demostrado; Sosp. = sospecha; Info = pendie
 | LEG-040 | TRLPI | — | Obl. | Originalidad del temario | Declarada en el aviso legal; no comparada con fuentes | No verificado | Bajo | Muestreo de originalidad antes de vender | P3 | F-14 | 02/11/2026 |
 | LEG-041 | Marcas (Ley 17/2001) | — | Obl. | Uso descriptivo de «Python» y «PCAP» | Aviso legal y certificado con descargo | Parcial | Bajo | Revisar política de marcas de la PSF | P3 | — | 02/11/2026 |
 | LEG-042 | RIA | 4 (mod. por Rgto. 2026/1744) | Cond. | Alfabetización en IA del personal | Uso de Claude Code como herramienta de desarrollo | Pendiente (Info) | Bajo | Reevaluar si es actividad profesional | P3 | F-11, F-12 | 02/11/2026 |
-| LEG-043 | RIA | 50.1 | N/A hoy | Informar de que se interactúa con una IA | Sin IA en el producto (`assistant.js:1-2`); PR #65 la reintroduciría | No aplicable hoy | Medio si se fusiona #65 | Revisar antes del merge de #65 | P2 | F-11, F-13 | 02/11/2026 |
+| LEG-043 | RIA | 50.1 | N/A hoy | Informar de que se interactúa con una IA | Sin IA en el producto (`assistant.js:1-2`); PR #65 se cerró sin merge | No aplicable hoy | Medio si se fusiona #65 | Revisar antes del merge de #65 | P2 | F-11, F-13 | 02/11/2026 |
 | LEG-044 | RGPD | 32 | Obl. | Dependencias sin vulnerabilidades conocidas | npm audit y pip-audit: 0 (§9); requisitos sin fijar ni hashes | Parcial (Dem.) | Bajo | Fijar versiones con hashes (PLD-SEC-005) | P3 | F-01 | 02/11/2026 |
 | LEG-045 | RGPD | 32 | Obl. | Integridad de código de terceros | Pyodide de jsDelivr sin SRI | Parcial (Dem.) | Bajo | SRI o alojar Pyodide | P3 | F-01 | 02/11/2026 |
 | LEG-046 | RGPD | 32 | Obl. | Límite de intentos robusto | En memoria, una instancia; se pierde al reiniciar | Parcial (Dem.) | Bajo | Aceptable hoy; revisar si hay varias instancias | P3 | F-01 | 02/11/2026 |
