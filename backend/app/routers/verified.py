@@ -12,7 +12,7 @@ from sqlalchemy import func, select, update
 from app import verified_exams as exams
 from app.config import get_settings
 from app.deps import CurrentUser, DbSession, WritingUser
-from app.models import VerifiedExam
+from app.models import User, VerifiedExam
 from app.schemas import (
     VerifiedExamAnswers,
     VerifiedExamOut,
@@ -49,7 +49,19 @@ def _own_exam(db: DbSession, user_id: int, exam_id: int) -> VerifiedExam:
 @router.post("/pcap-exams", response_model=VerifiedExamStart, status_code=201)
 def start_exam(user: WritingUser, db: DbSession) -> VerifiedExamStart:
     """Empieza un simulacro: el servidor elige las preguntas y apunta la hora. Uno en curso sin
-    entregar queda abandonado (no cuenta). Como mucho unos pocos al día por cuenta."""
+    entregar queda abandonado (no cuenta). Como mucho unos pocos al día por cuenta.
+
+    Contar, abandonar el anterior e insertar van en una sola transacción que empieza bloqueando
+    la fila del usuario (`SELECT … FOR NO KEY UPDATE`, PLD-001). Así dos peticiones a la vez de la
+    misma cuenta no cuentan lo mismo y se saltan el límite: la segunda espera a que la primera
+    confirme y ya ve su simulacro. Las de cuentas distintas bloquean filas distintas y no se
+    esperan. `NO KEY` deja pasar a quien solo inserta filas que apuntan al usuario (intentos,
+    progreso). El bloqueo se suelta con el commit, o con el rollback al cerrar la sesión si algo
+    falla."""
+    lock = select(User.id).where(User.id == user.id).with_for_update(key_share=True)
+    if db.scalar(lock) is None:
+        # La cuenta se borró entre la autenticación y aquí: no hay a quién apuntarle el simulacro
+        raise HTTPException(status.HTTP_401_UNAUTHORIZED, detail="Sesión no válida o caducada")
     now = datetime.now(UTC)
     started_today = db.scalar(
         select(func.count())

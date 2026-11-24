@@ -124,6 +124,9 @@ cambios se agrupan por fecha de merge, con el número de pull request entre par�
   (`docs/DEPLOY.md` §5).
 
 ### Corregido
+- Simulacros verificados (PLD-001): varios inicios a la vez de la misma cuenta ya no se saltan el límite diario
+  ni dejan dos simulacros abiertos. `start_exam` bloquea la fila del usuario antes de contar; prueba de
+  concurrencia con PostgreSQL en CI (`test_verified_concurrency.py`).
 - Curso de ciberseguridad: el progreso (semanas completadas y cuestionarios) solo vivía en el navegador y
   «Cerrar sesión» lo borraba sin copia en la cuenta, aunque el aviso decía que se subiría. Ahora es el
   documento `cybersecurity` de `/api/v1/course-state` (versión, 409, fusión al entrar, subida antes de
