@@ -3,6 +3,7 @@
    - El Worker evita que un bucle largo congele la página.
    - Si el código tarda más que timeoutMs (por ejemplo, un bucle infinito),
      se destruye el Worker y la siguiente ejecución lo vuelve a crear.
+   - Si runner.py avisa de que no pudo dejar Python como estaba ("restart"), también se recrea.
    - stop() hace lo mismo a petición del alumno (botón «Detener»): un Worker ocupado en un bucle
      no atiende mensajes, así que la única forma fiable de pararlo es terminarlo. */
 
@@ -138,6 +139,8 @@ export class PythonRunner {
     this.pending.delete(id);
     if (error) job.reject(new Error(error));
     else job.resolve(result);
+    // runner.py no pudo dejar Python como estaba (PLD-004): la siguiente ejecución usa un Worker nuevo
+    if (result?.restart && !this.busy) this.#reset();
   }
 
   #clearLoadTimers() {
