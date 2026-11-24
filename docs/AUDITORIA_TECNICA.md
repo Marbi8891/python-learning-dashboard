@@ -24,7 +24,7 @@ No se muestran secretos ni valores de variables de entorno.
 | CI (`ci.yml`) en `main` | Verde en `f6a475b` (run #215) | GitHub Actions |
 | Web publicada (GitHub Pages) | Desplegada desde `944af1e` (PR #62, 26/10). Los merges posteriores (#64, #66, #67) no tocan `frontend/`, y `pages.yml` solo se lanza con cambios en `frontend/**`, así que **la web publicada coincide con el `frontend/` de `main`** | `git diff --stat 944af1e HEAD -- frontend` vacío; `sw.js` publicado con `VERSION = "v8"` y el mismo `SHELL` que el repositorio (leído con WebFetch) |
 | API en Render | **No comprobado.** El proxy de este entorno rechaza `pld-api.onrender.com`. No se puede saber qué commit corre ni si `GOOGLE_CLIENT_ID` y Brevo están configurados | `curl` → `connect_rejected` |
-| PR abiertos | #68 (Docker local, CI verde), #65 (recuperar el tutor con OpenAI), #63 (aviso legal), **#61 (desfasado, base anterior a #62)**, y Dependabot #19, #16, #14, #13 (los de `/android` apuntan a una carpeta que ya no existe) | `list_pull_requests` |
+| PR abiertos | #68 (Docker local, CI verde),  #65 (tutor con OpenAI, cerrado sin merge), #63 (aviso legal), **#61 (desfasado, base anterior a #62)**, y Dependabot #19, #16, #14, #13 (los de `/android` apuntan a una carpeta que ya no existe) | `list_pull_requests` |
 
 ### 1.2 Pruebas ejecutadas en esta auditoría
 
@@ -88,7 +88,7 @@ La arquitectura es adecuada para un proyecto de una persona y **no hace falta ca
 | XP, niveles, racha, logros | toda la app | Funciona; racha y XP no cuentan todo (AUD-016) |
 | Cuenta: registro, login, Google, recuperación, panel, exportar y borrar datos | `#/panel/...` | En código y probada en local. **En producción no comprobado** (Google y email dependen de Render) |
 | Tema claro/oscuro, PWA | toda la app | Tema funciona. PWA sin conexión incompleta (AUD-008) |
-| Tutor con IA, A2A, app Android | — | **Retirados** en el PR #62. El PR #65 propone recuperar el tutor |
+| Tutor con IA, A2A, app Android | — | **Retirados** en el PR #62. El PR #65 se cerró sin merge; el tutor generativo no forma parte del producto |
 
 ---
 
