@@ -1,3 +1,15 @@
+> **English**
+>
+> Python Learning Dashboard is an interactive learning platform for Python, PCAP preparation and Web Application Development (DAW) topics. It combines browser-based Python execution with Pyodide, adaptive practice, quizzes, learning progress and a FastAPI backend.
+>
+> **Español**
+>
+> Python Learning Dashboard es una plataforma interactiva para aprender Python, preparar PCAP y estudiar contenidos de Desarrollo de Aplicaciones Web (DAW). Combina ejecución de Python en el navegador mediante Pyodide, práctica adaptativa, cuestionarios, seguimiento del aprendizaje y un backend FastAPI.
+>
+> **Live demo / Demo:** https://marbi8891.github.io/python-learning-dashboard/
+>
+> ---
+>
 # Python Learning Dashboard
 
 [![CI](https://github.com/Marbi8891/python-learning-dashboard/actions/workflows/ci.yml/badge.svg)](https://github.com/Marbi8891/python-learning-dashboard/actions/workflows/ci.yml)
