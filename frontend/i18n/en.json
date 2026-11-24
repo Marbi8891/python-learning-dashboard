@@ -1,5 +1,7 @@
 {
-  "// nota": "Interfaz en inglés. Clave = texto original en español, tal cual se ve (espacios juntados). {nombre} = hueco. Las lecciones siguen en español. Ver frontend/js/i18n.js y docs/IDIOMAS.md.",
+  "Roadmaps": "Learning paths",
+  "Rutas y objetivos": "Learning paths and goals",
+"// nota": "Interfaz en inglés. Clave = texto original en español, tal cual se ve (espacios juntados). {nombre} = hueco. Las lecciones siguen en español. Ver frontend/js/i18n.js y docs/IDIOMAS.md.",
   "Python Learning Dashboard necesita JavaScript para funcionar: la consola de Python, los ejercicios y el progreso se ejecutan en tu navegador.": "Python Learning Dashboard needs JavaScript: the Python console, the exercises and your progress run in your browser.",
   "Saltar al contenido": "Skip to content",
   "Menú": "Menu",
