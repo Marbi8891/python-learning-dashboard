@@ -26,7 +26,7 @@ PLD incorpora un currículo de Inteligencia Artificial de 20 cursos y 354 horas 
 - Catálogo en la ruta `#/ai-academy`.
 - Itinerarios por nivel y curso con índice curricular.
 - Seguimiento de temas local en el navegador.
-- Los índices están disponibles; las lecciones completas, laboratorios y evaluaciones se desarrollarán por fases. No se presentan todavía como formación completada ni certificación.
+- El curso 01 ya incluye 8 lecciones con explicación, ejemplos y quizzes. Los demás cursos tienen índice curricular; su contenido completo, laboratorios y evaluaciones se desarrollarán por fases. No se presenta como formación completada ni certificación.
 - Currículo: [docs/academy/AI-ACADEMY-CURRICULUM.md](docs/academy/AI-ACADEMY-CURRICULUM.md).
 - Plan de integración: [docs/academy/AI-ACADEMY-IMPLEMENTATION-SPEC.md](docs/academy/AI-ACADEMY-IMPLEMENTATION-SPEC.md).
 
