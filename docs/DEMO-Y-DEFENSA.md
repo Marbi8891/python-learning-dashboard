@@ -41,3 +41,10 @@ Duración orientativa: 10-12 minutos de exposición. **[VERIFY: ajusta al tiempo
 - [x] Versión 1.0.0 publicada (la etiqueta `v1.0.0` es del 29/09/2026)
 - [ ] Nueva versión con el estado de la defensa (la `v1.0.0` es anterior al currículo oficial y a la simplificación del 26/10)
 - [ ] Ensayo cronometrado al menos una vez
+
+## Estado actual y metricas de verificacion
+
+- **Pruebas unitarias (npm run test:unit):** 507/507 superadas (~5,15 s).
+- **Pruebas backend (pytest -q):** 808 passed, 2 skipped (~30,8 s).
+- **Pruebas E2E (Playwright):** 58 pruebas en e2e/landing.spec.js, e2e/widgets.spec.js, e2e/a11y.spec.js y e2e/navigation.spec.js con migraciones de Alembic aplicadas.
+- **Higiene del repositorio:** limpieza de archivos residuales generados por parseo de Markdown y mantenimiento del foco en los cambios reales.
