@@ -24,7 +24,7 @@ No se muestran secretos ni valores de variables de entorno.
 | CI (`ci.yml`) en `main` | Verde en `f6a475b` (run #215) | GitHub Actions |
 | Web publicada (GitHub Pages) | Desplegada desde `944af1e` (PR #62, 26/10). Los merges posteriores (#64, #66, #67) no tocan `frontend/`, y `pages.yml` solo se lanza con cambios en `frontend/**`, así que **la web publicada coincide con el `frontend/` de `main`** | `git diff --stat 944af1e HEAD -- frontend` vacío; `sw.js` publicado con `VERSION = "v8"` y el mismo `SHELL` que el repositorio (leído con WebFetch) |
 | API en Render | **No comprobado.** El proxy de este entorno rechaza `pld-api.onrender.com`. No se puede saber qué commit corre ni si `GOOGLE_CLIENT_ID` y Brevo están configurados | `curl` → `connect_rejected` |
-| PR abiertos | #68 (Docker local, CI verde),  #65 (tutor con OpenAI, cerrado sin merge), #63 (aviso legal), **#61 (desfasado, base anterior a #62)**, y Dependabot #19, #16, #14, #13 (los de `/android` apuntan a una carpeta que ya no existe) | `list_pull_requests` |
+| PR abiertos | #68 (Docker local, CI verde), #65 (tutor con OpenAI, cerrado sin merge), #63 (aviso legal), **#61 (desfasado, base anterior a #62)**, y Dependabot #19, #16, #14, #13 (los de `/android` apuntan a una carpeta que ya no existe) | `list_pull_requests` |
 
 ### 1.2 Pruebas ejecutadas en esta auditoría
 
@@ -274,7 +274,7 @@ Esfuerzo: S (horas), M (un día), L (varios días). «Fase» indica en qué fase
 5. **Fase 5 (accesibilidad y PWA):** AUD-008, AUD-022, AUD-023, revisión manual.
 6. **Fase 6 (seguridad):** AUD-009 y los RT.
 
-Antes de empezar convendría decidir qué hacer con el PR #61 (recomendado: cerrarlo y rehacer lo útil, como el botón Detener, en la Fase 3) y si el PR #65 (tutor con OpenAI, de pago) sigue en pie, porque el proyecto solo usa herramientas gratuitas.
+Antes de empezar convendría decidir qué hacer con el PR #61 (recomendado: cerrarlo y rehacer lo útil, como el botón Detener, en la Fase 3). El PR #65, que proponía recuperar el tutor con OpenAI, está cerrado sin merge.
 
 ---
 
