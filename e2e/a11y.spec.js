@@ -53,6 +53,8 @@ test("pestaña de práctica, asistente y diálogo de cuenta sin infracciones", a
   await openLesson(page, "bucles");
   await page.getByRole("tab", { name: "Práctica y Ejercicio" }).click();
   await page.getByRole("button", { name: "Abrir asistente" }).click();
+  await expect(page.locator("#assistant-panel")).toContainText("Respuestas preparadas y revisadas para cada lección.");
+  await expect(page.locator("#assistant-ai")).toHaveCount(0);
   await audit(page);
   await page.keyboard.press("Escape");
   await page.getByRole("button", { name: "Iniciar sesión" }).click();
