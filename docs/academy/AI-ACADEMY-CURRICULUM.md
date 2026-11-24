@@ -11,13 +11,13 @@ No se presupone que el alumno sepa programar al comenzar. Los itinerarios técni
 
 ## Itinerarios
 
-- **AI Essentials (nivel inicial):** cursos 01–05. 50 horas.
-- **AI Practitioner (aplicación profesional):** cursos 06–08 y 13. 65 horas.
-- **AI Developer (perfil técnico):** cursos 09–12 y 14–15. 115 horas.
-- **AI Specialist (optativas):** cursos 16–18. 70 horas.
+- **AI Essentials (nivel inicial):** cursos 01–05. 48 horas de cursos + 2 horas de orientación.
+- **AI Practitioner (aplicación profesional):** cursos 06, 08 y 13. 42 horas.
+- **AI Developer (perfil técnico):** cursos 07–12 y 14–15. 146 horas (incluye solapamientos con otros itinerarios).
+- **AI Specialist (especialización):** cursos 16–18 y al menos dos optativas del curso 19. 62 horas.
 - **Capstone:** proyecto final integrador. 30 horas.
 
-Carga recomendada completa: **330 horas**. Las horas son estimaciones de aprendizaje activo, no duración de vídeo. Los itinerarios pueden cursarse por separado.
+El catálogo suma **354 horas** si se cursan todas las optativas. El itinerario mínimo que elige dos optativas suma aproximadamente **314 horas**, incluidas 2 horas de orientación. Las rutas se solapan y no deben sumarse entre sí. Las horas son estimaciones de aprendizaje activo, no duración de vídeo.
 
 ## Competencias finales
 
@@ -373,7 +373,7 @@ Cada lección debe incluir: objetivos de aprendizaje medibles; explicación; eje
 
 **Laboratorio:** threat model y pruebas de seguridad de una aplicación de IA en entorno local/controlado.
 
-## 19. Especializaciones optativas (40 h, escoger al menos dos)
+## 19. Especializaciones optativas (10 h cada una; escoger al menos dos, 20 h mínimo)
 ### 19A. IA para análisis de datos (10 h)
 - Preparación de datos con asistentes
 - Exploración y visualización
