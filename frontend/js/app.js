@@ -43,6 +43,7 @@ import { initLearnSync, loadLearningContent } from "./learn/learn-store.js";
 import { initPlannerSync } from "./learn/planner-store.js";
 import { initCareerSync } from "./career/career-store.js";
 import { initCyberSync } from "./cybersecurity-store.js";
+import { renderAIacademy } from "./ai-academy.js";
 import { lightDismiss } from "./dialogs.js";
 import { watchMeters } from "./meters.js";
 import { initPrefs } from "./prefs.js";
@@ -69,6 +70,7 @@ const ZONE_LOADERS = {
   excel: (load) => load("./excel/course.js"),
   // Mi Carrera en IA (DEC-012): el itinerario profesional, solo en sus rutas
   career: (load) => load("./career/career-app.js"),
+  aiacademy: (load) => load("./ai-academy.js"),
   cyber: (load) =>
     load("./cybersecurity.js").then((module) => {
       module.initCyber();
@@ -530,7 +532,7 @@ function updatePrivateNav() {
 }
 
 /** Entrada del menú que corresponde a la vista actual. */
-const NAV_OF_VIEW = { plans: "planes", cyber: "cyber", home: "pcap-curso", lesson: "pcap-curso", certificate: "pcap-curso", pcap: "pcap", daw: "daw", excel: "excel", career: "carrera", profile: "progreso", private: "panel" };
+const NAV_OF_VIEW = { aiacademy: "ai-academy", plans: "planes", cyber: "cyber", home: "pcap-curso", lesson: "pcap-curso", certificate: "pcap-curso", pcap: "pcap", daw: "daw", excel: "excel", career: "carrera", profile: "progreso", private: "panel" };
 
 function updateSiteNav() {
   const key = content.view === "learn" ? learnNavKey(location.hash) : NAV_OF_VIEW[content.view];
@@ -757,6 +759,11 @@ function navigate({ moveFocus = true } = {}) {
     if (awaitZone("excel", moveFocus)) return;
     showPage("excel", { moveFocus: false });
     zones.excel.openExcel(location.hash, { moveFocus });
+    return;
+  }
+  if (location.hash === "#/ai-academy" || location.hash.startsWith("#/ai-academy/")) {
+    if (awaitZone("aiacademy", moveFocus)) return;
+    showPage("aiacademy", { moveFocus });
     return;
   }
   if (location.hash === CAREER_ROUTE || location.hash.startsWith(`${CAREER_ROUTE}/`)) {
