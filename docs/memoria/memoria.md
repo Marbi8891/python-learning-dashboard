@@ -58,7 +58,7 @@ En el proyecto he usado contenidos de varios módulos:
 6. Que sea accesible (WCAG 2.1 AA) y funcione en móvil.
 7. Tener pruebas automáticas y despliegue continuo.
 
-**Fuera de alcance.** Certificados oficiales, pagos, tutorías en directo, ejecutar código en el servidor, un tutor con IA y una app móvil nativa. En el móvil se usa la web, que es adaptable y se puede instalar como PWA. Durante el desarrollo hice un prototipo de app Android y un tutor con IA, pero los retiré el 26 de octubre de 2026 para simplificar el proyecto (ver 9.1).
+**Fuera de alcance.** Certificados oficiales, pagos, tutorías en directo, ejecutar código en el servidor, un tutor generativo y una app móvil nativa. En el móvil se usa la web, que es adaptable y se puede instalar como PWA. Durante el desarrollo hice un prototipo de app Android y un tutor generativo, pero los retiré el 26 de octubre de 2026 para simplificar el proyecto (ver 9.1).
 
 # 3. Análisis
 
@@ -118,7 +118,7 @@ En el proyecto he usado contenidos de varios módulos:
 
 ![Arquitectura del sistema](img/arquitectura.png)
 
-El frontend es estático y se publica en GitHub Pages. El backend en FastAPI se despliega en Render (Frankfurt) y la base de datos PostgreSQL está en Neon (Frankfurt), así los datos se quedan en la UE. Python se ejecuta en el navegador del alumno, dentro de un Web Worker.
+El frontend es estático y se publica en GitHub Pages. El backend en FastAPI se despliega en Render (Frankfurt) y la base de datos PostgreSQL está en Neon (Frankfurt). Python se ejecuta en el navegador del alumno, dentro de un Web Worker. El motor de aprendizaje está desacoplado del contenido mediante definiciones declarativas y catálogos de itinerarios: el caso de uso principal y la evaluación de este proyecto se centran en DAW y Python/PCAP, pero pueden añadirse rutas de IA, Ciberseguridad o Excel sin cambiar el backend ni el runtime de ejecución.
 
 ## 4.2 Modelo de datos
 
@@ -196,7 +196,7 @@ Elegí un diseño tipo editorial (colores tinta, marfil y dorado y titulares con
 
 **Temario comprobado.** El temario no se escribe a mano en los JSON: se genera con scripts de Python (`scripts/courses/` y `scripts/learning/`). Los scripts ejecutan el código de cada pregunta y fallan si la salida no es la que se espera, así no hay respuestas mal puestas. En la integración continua se comprueba que el JSON publicado está al día.
 
-**Asistente de la lección.** Cada lección tiene un asistente con preguntas frecuentes, una pista del ejercicio y un enlace al tema siguiente (`frontend/js/assistant.js`). No es una IA: las respuestas están escritas y revisadas en `lessons.json`, así que no hace falta ningún servicio externo.
+**Asistente de la lección.** Cada lección tiene un asistente con preguntas frecuentes, una pista del ejercicio y un enlace al tema siguiente (`frontend/js/assistant.js`). Es determinista: las respuestas están preparadas y revisadas en las definiciones de cada lección, por lo que no necesita un servicio externo ni genera contenido al vuelo. La línea del tutor generativo se descartó (PR #62; PR #65 se cerró sin fusionar, y la issue #113 documentó la decisión) para reducir alucinaciones pedagógicas, costes variables de API, latencia adicional —especialmente cuando Render arranca en frío— y exposición del código del alumnado a proveedores externos.
 
 **Currículo oficial de DAW.** `scripts/curriculum/` genera el catálogo de los 17 módulos de la Orden EDU/1311/2024 con los resultados de aprendizaje del Real Decreto 405/2023 (`#/daw/curriculo`). Cada pregunta de los cursos está asociada a un módulo, y el panel del alumno muestra cuántas ha practicado y domina por módulo.
 
@@ -255,8 +255,8 @@ El frontend se publica en GitHub Pages con el workflow `pages.yml`. El backend e
 
 # 8. Aspectos legales
 
-- **RGPD:** hay política de privacidad con el responsable, para qué se usan los datos, la base legal, los proveedores, los plazos y los derechos. El alumno puede descargar sus datos en JSON y borrar su cuenta.
-- **LSSI:** aviso legal con los datos del titular.
+- **RGPD:** la aplicación incorpora política de privacidad, controles de cuenta, exportación JSON y borrado de cuenta. La documentación y el aviso deben mantenerse alineados con los proveedores y tratamientos reales; esto describe medidas implementadas, no constituye una certificación de cumplimiento legal.
+- **LSSI-CE:** el aviso legal identifica al titular y ofrece un contacto por email. **[VERIFY]** Faltan por confirmar e incorporar NIF y domicilio del titular si resultan exigibles para la situación actual. El PR #63, que propone actualizar el aviso, continúa abierto en borrador y no está desplegado.
 - **Cookies:** solo hay una, la de sesión, y solo si inicias sesión. Es técnica y necesaria, así que no hace falta banner de cookies.
 - **Analítica:** está preparada con GoatCounter, que no usa cookies ni guarda la IP, pero está desactivada (`goatcounter: ""` en `frontend/config.js`). Mientras siga así, la política de privacidad oculta ese apartado y no se mide nada.
 - **Terceros:** Pyodide se sirve desde la propia web desde el 17/11/2026 (RT-002, `scripts/web/vendor_pyodide.py`): ya no hay CDN que reciba la IP del alumno.
@@ -279,7 +279,7 @@ Las fechas salen del historial de Git, que empieza el 25 de septiembre de 2026 y
 | Pruebas y despliegue | Pruebas, CI, accesibilidad, publicación | Todo el proyecto; versión 1.0.0 el 29/09 | [VERIFY] |
 | Memoria y defensa | Documentación y presentación | 29/09 (primera memoria y diagramas) – 26/10 | [VERIFY] |
 
-También hubo trabajo que no ha llegado a la versión final: una app Android (27/09 – 04/10) y un tutor con IA (06/10 – 20/10). Los retiré el 26 de octubre (pull request #62) para simplificar el proyecto; además, el tutor necesitaba un modelo de IA de pago o instalado en local.
+También hubo trabajo que no ha llegado a la versión final: una app Android (27/09 – 04/10) y un tutor generativo (06/10 – 20/10). Los retiré el 26 de octubre mediante el PR #62. El PR #65, que proponía recuperar el tutor con OpenAI, se cerró sin fusionar; la issue #113 recoge el cierre de esa línea. La decisión evita depender de un proveedor generativo y sus costes, reduce la latencia del backend y evita enviar código del alumnado a un servicio externo. El asistente actual se limita a respuestas preparadas y revisadas por lección.
 
 ## 9.2 Costes
 
