@@ -50,6 +50,7 @@ import { badgesHtml, renderProfile } from "./profile.js";
 import { focusSelector, keepForms } from "./form-keep.js";
 import { setQuizLesson } from "./quiz.js";
 import { recordAttempt, restoreSession, setCompleted, state, subscribe } from "./store.js";
+import { initDemoBanner } from "./demo/demo-banner.js";
 
 hljs.registerLanguage("python", python);
 
@@ -87,6 +88,10 @@ const ZONE_LOADERS = {
       return dashboard;
     }),
   certificate: (load) => load("./certificate.js"),
+  // Laboratorio de Python: editor con color y ejercicios con pruebas reales
+  lab: (load) => load("./lab/lab.js"),
+  // Centro de aprendizaje: todos los cursos con su progreso
+  hub: (load) => load("./hub/hub.js"),
 };
 const zones = {};
 const zoneLoads = {};
@@ -148,6 +153,8 @@ const EXCEL_ROUTE = "#/academia/excel";
 const EXCEL_ALIAS = "#/excel-academy"; // nombre alternativo: se reescribe a EXCEL_ROUTE
 const CYBER_ROUTE = "#/ciberseguridad";
 const CAREER_ROUTE = "#/carrera";
+const LAB_ROUTE = "#/laboratorio"; // laboratorio de Python (lab/lab.js)
+const HUB_ROUTE = "#/cursos"; // centro de aprendizaje (hub/hub.js)
 const mobile = window.matchMedia("(max-width: 900px)");
 
 const content = {
@@ -501,6 +508,9 @@ const VIEWS = {
   // Excel profesional se pinta solo (openExcel): tiene ejercicios a medio escribir que no se deben repintar
   excel: { element: "#excel-view", title: "Excel profesional · Python Learning Dashboard", focus: null, render: null },
   career: { element: "#career-view", title: "Mi Carrera en IA · Python Learning Dashboard", focus: null, render: null },
+  // El laboratorio se pinta solo (openLab): tiene código a medio escribir que no se debe repintar
+  lab: { element: "#lab-view", title: "Laboratorio de Python · Python Learning Dashboard", focus: null, render: null },
+  hub: { element: "#hub-view", title: "Cursos · Python Learning Dashboard", focus: null, render: null },
   // Página no encontrada (NAV-01) o contenido que no se pudo cargar
   notfound: { element: "#notfound-view", title: () => content.statusTitle, focus: "#notfound-title", render: () => content.statusHtml },
 };
@@ -524,13 +534,13 @@ function showPage(name, { moveFocus = true } = {}) {
   window.scrollTo({ top: 0 });
 }
 
-/** «Mi cuenta» solo aparece en el menú con la sesión iniciada. */
+/** «Mi cuenta» solo aparece en el menú con la sesión iniciada (o en la demo, con Alex). */
 function updatePrivateNav() {
-  $("#private-nav").hidden = !state.user;
+  $("#private-nav").hidden = !state.user && !state.demo;
 }
 
 /** Entrada del menú que corresponde a la vista actual. */
-const NAV_OF_VIEW = { plans: "planes", cyber: "cyber", home: "pcap-curso", lesson: "pcap-curso", certificate: "pcap-curso", pcap: "pcap", daw: "daw", excel: "excel", career: "carrera", profile: "progreso", private: "panel" };
+const NAV_OF_VIEW = { plans: "planes", cyber: "cyber", home: "pcap-curso", lesson: "pcap-curso", certificate: "pcap-curso", pcap: "pcap", daw: "daw", excel: "excel", career: "carrera", profile: "progreso", private: "panel", lab: "practicar", hub: "cursos" };
 
 function updateSiteNav() {
   const key = content.view === "learn" ? learnNavKey(location.hash) : NAV_OF_VIEW[content.view];
@@ -759,6 +769,18 @@ function navigate({ moveFocus = true } = {}) {
     zones.excel.openExcel(location.hash, { moveFocus });
     return;
   }
+  if (location.hash === HUB_ROUTE) {
+    if (awaitZone("hub", moveFocus)) return;
+    showPage("hub", { moveFocus: false });
+    zones.hub.openHub({ moveFocus });
+    return;
+  }
+  if (location.hash === LAB_ROUTE || location.hash.startsWith(`${LAB_ROUTE}/`)) {
+    if (awaitZone("lab", moveFocus)) return;
+    showPage("lab", { moveFocus: false });
+    zones.lab.openLab(location.hash, { moveFocus });
+    return;
+  }
   if (location.hash === CAREER_ROUTE || location.hash.startsWith(`${CAREER_ROUTE}/`)) {
     if (awaitZone("career", moveFocus)) return;
     showPage("career", { moveFocus: false });
@@ -959,6 +981,7 @@ async function init() {
   initAssistant();
   initI18n();
   initAccount({ toast: showToast });
+  initDemoBanner();
   initPrefs();
 
   // El enrutador no espera a lessons.json: la portada, «¿Qué estudio ahora?» y DAW no lo usan (AUD-010)

@@ -3,6 +3,7 @@
 import { MOD_KEY, RUN_KEYS_HTML } from "./keys.js";
 import { escapeHtml, renderInline } from "./markdown.js";
 import { PythonRunner, StoppedError, TimeoutError, isPythonCached } from "./python-runner.js";
+import { storage } from "./demo/demo-mode.js";
 
 const $ = (selector) => document.querySelector(selector);
 const DRAFT_PREFIX = "pld:draft:";
@@ -41,10 +42,12 @@ export function statusText(status, { cached = pythonCached, slow = isSlowConnect
 /** Indicador de estado de la cabecera de la consola (punto de color y texto, anunciado con aria-live). */
 function setStatus(status) {
   currentStatus = status;
-  const box = $("#console-status");
-  if (!box) return;
-  box.textContent = statusText(status);
-  box.dataset.status = status === "slow-loading" ? "loading" : status;
+  // La misma Python sirve a la consola de las lecciones y al laboratorio (lab/lab.js)
+  for (const box of [$("#console-status"), $("#lab-status")]) {
+    if (!box) continue;
+    box.textContent = statusText(status);
+    box.dataset.status = status === "slow-loading" ? "loading" : status;
+  }
 }
 
 const runner = new PythonRunner({
@@ -79,7 +82,7 @@ export function setRunListener(listener) {
 
 function readDraft(slug) {
   try {
-    return localStorage.getItem(DRAFT_PREFIX + slug);
+    return storage.getItem(DRAFT_PREFIX + slug);
   } catch {
     return null;
   }
@@ -88,7 +91,7 @@ function readDraft(slug) {
 function saveDraft() {
   if (!lesson) return;
   try {
-    localStorage.setItem(DRAFT_PREFIX + lesson.slug, $("#console-editor").value);
+    storage.setItem(DRAFT_PREFIX + lesson.slug, $("#console-editor").value);
   } catch {
     // sin almacenamiento
   }
@@ -191,7 +194,7 @@ const MAX_SHOWN_OUTPUT = 2000; // la salida de un bucle infinito no debe llenar 
 /** Ejercicio no superado: qué falla, con qué entrada, qué mostró el programa y cómo seguir.
     Nunca enseña la solución: el alumno corrige y vuelve a intentarlo. Todo lo que llega del Worker
     se escapa (el código del alumno puede falsearlo). */
-function failureHtml(result, where) {
+export function checkFailureHtml(result, where) {
   const label = (text) => `<p class="check__label">${text}</p>`;
   const stdin = typeof result.stdin === "string" ? result.stdin : "";
   let output = typeof result.output === "string" ? result.output : "";
@@ -225,7 +228,7 @@ export function checkCode({ checks, button, box, onResult }) {
     const where = total > 1 && !result.passed ? ` (prueba ${done} de ${total})` : "";
     box.innerHTML = result.passed
       ? `<p class="check__title">✓ ¡Correcto!</p><p>${escapeHtml(result.message)}</p>`
-      : failureHtml(result, where);
+      : checkFailureHtml(result, where);
     box.focus();
     await onResult(result, code);
   });

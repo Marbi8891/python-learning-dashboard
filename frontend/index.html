@@ -50,6 +50,7 @@
   <link rel="stylesheet" href="css/landing.css">
   <link rel="preload" href="fonts/fraunces-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/redesign.css">
+  <link rel="stylesheet" href="css/demo.css">
 
   <!-- Tema y tamaño de letra antes de pintar la página (sin parpadeo) y defensa contra marcos -->
   <script src="js/theme-init.js"></script>
@@ -60,6 +61,15 @@
 <body>
   <noscript><p class="noscript">Python Learning Dashboard necesita JavaScript para funcionar: la consola de Python, los ejercicios y el progreso se ejecutan en tu navegador.</p></noscript>
   <a class="skip-link" href="#main">Saltar al contenido</a>
+
+  <!-- ============ MODO DEMOSTRACIÓN (js/demo/): solo visible con ?demo=1 ============ -->
+  <aside class="demo-banner" id="demo-banner" aria-label="Modo demostración" hidden>
+    <p><strong>Modo demostración.</strong> Alex Developer es un alumno ficticio: los datos son inventados y solo están en esta pestaña.</p>
+    <div class="demo-banner__actions">
+      <button type="button" data-demo-action="reset">Reiniciar</button>
+      <button type="button" data-demo-action="exit">Salir de la demo</button>
+    </div>
+  </aside>
 
   <!-- ============ BARRA SUPERIOR (solo móvil) ============ -->
   <header class="topbar">
@@ -116,6 +126,10 @@
           <a href="#/carrera" data-nav="carrera">
             <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 19h16M6 15l4-4l3 3l5-6M15 8h3v3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
             <span class="site-nav__text">Mi Carrera en IA<span class="site-nav__hint" aria-hidden="true">Ruta AI Engineer</span></span>
+          </a>
+          <a href="#/cursos" data-nav="cursos" class="site-nav__secondary">
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M3 7l9-4l9 4l-9 4zM7 9v5c0 1.7 2.2 3 5 3s5-1.3 5-3V9M21 7v6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Todos los cursos
           </a>
           <a href="#/planes" data-nav="planes" class="site-nav__secondary">
             <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 7h16M6 4h12v16H6zM9 11h6M9 15h4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -199,6 +213,12 @@
 
       <!-- ============ MI CARRERA EN IA (itinerario profesional, DEC-012) ============ -->
       <section class="page career" id="career-view" aria-labelledby="career-title" hidden></section>
+
+      <!-- ============ CENTRO DE APRENDIZAJE (hub/hub.js) ============ -->
+      <section class="page hub-page" id="hub-view" aria-labelledby="hub-title" hidden></section>
+
+      <!-- ============ LABORATORIO DE PYTHON (lab/lab.js) ============ -->
+      <section class="page lab-page" id="lab-view" aria-labelledby="lab-title" hidden></section>
 
       <!-- ============ CURSO PCAP (portada) ============ -->
       <section class="page home" id="home-view" aria-labelledby="home-title" hidden></section>

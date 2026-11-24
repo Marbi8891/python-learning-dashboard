@@ -3,6 +3,7 @@
 
 import { cleanProgress } from "./progress-guard.js";
 import { isoDay, scheduleAnswer } from "./srs.js";
+import { storage } from "./demo/demo-mode.js";
 
 export { isoDay };
 
@@ -23,7 +24,7 @@ function empty() {
 
 function load() {
   try {
-    const saved = cleanProgress(JSON.parse(localStorage.getItem(KEY)));
+    const saved = cleanProgress(JSON.parse(storage.getItem(KEY)));
     return {
       ...empty(),
       ...saved,
@@ -44,7 +45,7 @@ export const onPcapSave = (listener) => saveListeners.add(listener);
 
 export function savePcap() {
   try {
-    localStorage.setItem(KEY, JSON.stringify(pcap));
+    storage.setItem(KEY, JSON.stringify(pcap));
   } catch {
     // sin almacenamiento: dura hasta recargar
   }

@@ -12,7 +12,9 @@ import { loadCurriculum } from "./curriculum.js";
 import { request } from "./api.js";
 import {
   dailySeries,
+  estimatedStudyMinutes,
   examSummary,
+  formatMinutes,
   latestActivity,
   lastPractice,
   MASTERY_STREAK,
@@ -27,7 +29,7 @@ import {
 } from "./dashboard-data.js";
 import { BADGES, game, levelInfo, streak } from "./game.js";
 import { dailyBudget } from "./learn/learn-app.js";
-import { planOptions } from "./learn/planner-store.js";
+import { planOptions, planner } from "./learn/planner-store.js";
 import { learning, loadLearningContent } from "./learn/learn-store.js";
 import { activeErrors, allStats, lastActivity } from "./learn/mastery.js";
 import { fitPlanToBudget, todayPlan } from "./learn/recommend.js";
@@ -47,6 +49,8 @@ import {
 } from "./private.js";
 import { activityHtml } from "./profile.js";
 import { state, subscribe } from "./store.js";
+import { demoData, exitDemo, resetDemo } from "./demo/demo-mode.js";
+import { demoDashboard } from "./demo/demo-data.js";
 import { focusSelector, keepForms } from "./form-keep.js";
 
 const FEED_PAGE = 10;
@@ -85,7 +89,22 @@ function reset() {
 
 const utcOffset = () => -new Date().getTimezoneOffset();
 
+/** Quién ve el panel: el alumno con sesión o, en la demo, Alex Developer (ficticio). */
+function panelUser() {
+  if (state.user) return state.user;
+  const demo = state.demo ? demoData() : null;
+  return demo ? { ...demo.profile, email: "" } : null;
+}
+
+/** En la demo, los datos del servidor se construyen en el navegador: no sale ninguna petición. */
+function loadDemo() {
+  const demo = demoData();
+  const data = demoDashboard({ profile: demo.profile, feed: demo.feed, completed: state.completed, modules: lastContent?.modules ?? [] });
+  Object.assign(remote, { data, feed: demo.feed.slice(0, FEED_PAGE), total: demo.feed.length, error: null, feedError: null, loaded: remote.version });
+}
+
 async function load() {
+  if (state.demo) return loadDemo();
   if (remote.loading) return;
   remote.loading = true;
   const version = remote.version;
@@ -106,6 +125,12 @@ async function load() {
 }
 
 async function loadMore() {
+  if (state.demo) {
+    remote.feed = demoData().feed;
+    paint();
+    $("#dash-feed li:last-child a")?.focus();
+    return;
+  }
   if (remote.feedLoading) return;
   remote.feedLoading = true;
   paint();
@@ -141,7 +166,7 @@ function ensureData() {
 /** Repinta solo el contenido de la sección (no la cabecera ni el menú, donde puede estar el foco). */
 function paint() {
   const body = $("#dash-body");
-  if (!body || !state.user || !location.hash.startsWith(PANEL_ROUTE)) return;
+  if (!body || !panelUser() || !location.hash.startsWith(PANEL_ROUTE)) return;
   const section = sectionFromRoute(location.hash);
   // Los datos de la cuenta llegan en segundo plano: si el foco estaba en un control de la sección
   // (p. ej. la fecha del examen recién guardada), se devuelve al mismo control (EVO-16, WCAG 2.4.3)
@@ -240,12 +265,21 @@ function headerHtml(user) {
           <div>
             <p class="eyebrow">Mi panel · <time datetime="${now.toISOString().slice(0, 10)}">${escapeHtml(TODAY.format(now))}</time></p>
             <h1 class="profile-hero__title" id="private-title" tabindex="-1">Hola, ${escapeHtml(user.display_name)}</h1>
-            <p class="account-card__meta">Tu espacio de estudio: lo que llevas hecho y lo siguiente que te toca.</p>
+            <p class="account-card__meta">${
+              state.demo
+                ? "Alumno ficticio de demostración: los datos son inventados y solo están en esta pestaña."
+                : "Tu espacio de estudio: lo que llevas hecho y lo siguiente que te toca."
+            }</p>
           </div>
         </div>
         <div class="dash-hero__actions">
-          <a class="btn btn--ghost" href="${PANEL_ROUTE}/perfil">Mi perfil y cuenta</a>
-          <button class="btn btn--ghost" type="button" data-panel="logout">Cerrar sesión</button>
+          ${
+            state.demo
+              ? `<button class="btn btn--ghost" type="button" data-panel="demo-reset">Reiniciar la demo</button>
+                 <button class="btn btn--ghost" type="button" data-panel="demo-exit">Salir de la demo</button>`
+              : `<a class="btn btn--ghost" href="${PANEL_ROUTE}/perfil">Mi perfil y cuenta</a>
+                 <button class="btn btn--ghost" type="button" data-panel="logout">Cerrar sesión</button>`
+          }
         </div>
       </div>
     </header>`;
@@ -288,6 +322,7 @@ function summaryHtml() {
   const exams = examSummary({ learnExams: learning.exams, courseExams: COURSES.flatMap((c) => stateOf(c.id).exams) });
   const level = levelInfo();
   const days = streak();
+  const time = estimatedStudyMinutes(planner);
   return `
     <section class="course-section" aria-labelledby="dash-kpis-title">
       <h2 class="section-title" id="dash-kpis-title">Resumen académico</h2>
@@ -304,8 +339,13 @@ function summaryHtml() {
         ${kpi("Nivel", `${level.number}`, `${escapeHtml(level.name)} · ${level.xp} XP`)}
         ${kpi("Racha", `${days}<small> ${days === 1 ? "día" : "días"}</small>`, days ? "Días seguidos estudiando" : "Estudia hoy para empezar una racha")}
         ${kpi("Logros", `${game.badges.length}<small>/${BADGES.length}</small>`, `<a href="${PANEL_ROUTE}/logros">Ver mis logros</a>`)}
+        ${kpi(
+          "Tiempo estimado",
+          time ? `≈ ${formatMinutes(time.minutes)}` : "—",
+          time ? `${plural(time.tasks, "tarea", "tareas")} del plan diario hechas en 30 días` : "Marca como hechas las tareas del plan diario",
+        )}
       </dl>
-      <p class="account-card__meta">El tiempo de estudio no se muestra porque la web no lo mide de forma fiable.</p>
+      <p class="account-card__meta">La web no mide el tiempo real de estudio: el tiempo estimado cuenta 15 minutos por cada tarea del plan diario que marcas como hecha.</p>
     </section>
     ${continueHtml(courses)}`;
 }
@@ -677,7 +717,32 @@ function achievementsSectionHtml(content) {
 
 /* ---------- Mi perfil ---------- */
 
+/** «Mi perfil» en la demo: no hay cuenta, contraseña ni datos que descargar. */
+function demoProfileHtml(user) {
+  const prefs = currentPrefs();
+  return `
+    <section class="course-section" aria-labelledby="dash-account-title">
+      <h2 class="section-title" id="dash-account-title">Cuenta de demostración</h2>
+      <dl class="dash-facts">
+        <div><dt>Nombre</dt><dd>${escapeHtml(user.display_name)} (ficticio)</dd></div>
+        <div><dt>Correo</dt><dd>Sin correo: no es una cuenta real</dd></div>
+        <div><dt>Dónde se guarda</dt><dd>Solo en esta pestaña del navegador. Se borra al cerrarla o al salir de la demo</dd></div>
+      </dl>
+      <p>El progreso real de este navegador no se lee ni se modifica, y la demo no se conecta con el servidor.</p>
+      <p class="dash-card__actions">
+        <button class="btn btn--ghost" type="button" data-panel="demo-reset">Reiniciar la demo</button>
+        <button class="btn btn--primary" type="button" data-panel="demo-exit">Salir de la demo</button>
+      </p>
+    </section>
+    <section class="course-section" aria-labelledby="dash-prefs-title">
+      <h2 class="section-title" id="dash-prefs-title">Preferencias y accesibilidad</h2>
+      <p>Tema ${THEME[prefs.theme] ?? "automático"} · letra ${FONT[prefs.font] ?? "normal"}. Se guardan en este navegador.</p>
+      <p><button class="btn btn--ghost" type="button" data-panel="appearance">Cambiar tema y tamaño de letra</button></p>
+    </section>`;
+}
+
 function profileHtml(user) {
+  if (state.demo) return demoProfileHtml(user);
   const method = remote.data?.user.sign_in_method;
   const prefs = currentPrefs();
   return `
@@ -711,7 +776,7 @@ function profileHtml(user) {
 /* ---------- Página ---------- */
 
 function bodyHtml(section, content = lastContent) {
-  const user = state.user;
+  const user = panelUser();
   const html = {
     resumen: summaryHtml,
     cursos: coursesHtml,
@@ -824,7 +889,7 @@ let lastContent = null;
  */
 export function renderDashboard(content, apiEnabled) {
   lastContent = content;
-  const user = state.user;
+  const user = panelUser();
   if (!user) return signedOut(apiEnabled);
   const section = sectionFromRoute(location.hash);
   ensureData();
@@ -872,6 +937,12 @@ export function initDashboard({ refresh, toast }) {
         target.disabled = true;
         // Si algo no se pudo guardar, la sesión sigue abierta y se explica en el diálogo (SYNC-01)
         if (!(await logout())) target.disabled = false;
+        break;
+      case "demo-reset":
+        resetDemo();
+        break;
+      case "demo-exit":
+        exitDemo();
         break;
       case "retry":
         remote.error = null;

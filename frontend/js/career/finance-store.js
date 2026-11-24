@@ -5,11 +5,12 @@
    así que account.js pregunta aquí si hay algo para avisar de que se queda en el navegador. */
 
 import { cleanFinance, FINANCE_KEY } from "./career-finance.js";
+import { storage } from "../demo/demo-mode.js";
 
 /** Documento económico guardado (vacío si no hay o si está dañado). */
 export function loadFinance() {
   try {
-    return cleanFinance(JSON.parse(localStorage.getItem(FINANCE_KEY)));
+    return cleanFinance(JSON.parse(storage.getItem(FINANCE_KEY)));
   } catch {
     return cleanFinance(null);
   }
@@ -17,7 +18,7 @@ export function loadFinance() {
 
 export function saveFinance(doc) {
   try {
-    localStorage.setItem(FINANCE_KEY, JSON.stringify(doc));
+    storage.setItem(FINANCE_KEY, JSON.stringify(doc));
     return true;
   } catch {
     return false; // sin almacenamiento: dura hasta recargar
@@ -33,7 +34,7 @@ export function hasFinance() {
 /** Borra los datos económicos de este navegador. No hay copia en la cuenta: no se pueden recuperar. */
 export function clearFinance() {
   try {
-    localStorage.removeItem(FINANCE_KEY);
+    storage.removeItem(FINANCE_KEY);
   } catch {
     // sin almacenamiento: no había nada guardado
   }

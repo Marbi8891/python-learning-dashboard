@@ -14,6 +14,7 @@ import { state as store, subscribe as onStore } from "./store.js";
 import { createDocSync } from "./doc-sync.js";
 import { createSyncGate } from "./sync-gate.js";
 import { createUploader } from "./uploader.js";
+import { storage } from "./demo/demo-mode.js";
 
 const KEY = "pld:game";
 const XP = {
@@ -43,7 +44,7 @@ const listeners = new Set();
 
 function load() {
   try {
-    return cleanGame(JSON.parse(localStorage.getItem(KEY)));
+    return cleanGame(JSON.parse(storage.getItem(KEY)));
   } catch {
     return emptyGame();
   }
@@ -84,7 +85,7 @@ const uploader = createUploader({ name: "game", label: "la XP y los logros", gat
 
 function save() {
   try {
-    localStorage.setItem(KEY, JSON.stringify(game));
+    storage.setItem(KEY, JSON.stringify(game));
   } catch {
     // sin almacenamiento: el juego dura hasta recargar
   }

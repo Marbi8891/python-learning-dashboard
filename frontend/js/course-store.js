@@ -13,6 +13,7 @@ import { createSyncGate } from "./sync-gate.js";
 import { mergeLessonProgress } from "./lesson-progress.js";
 import { createUploader } from "./uploader.js";
 import { SYNCED_COURSES } from "./catalog.js";
+import { storage } from "./demo/demo-mode.js";
 
 // El catálogo de cursos vive en catalog.js (familias DAW y academia). DAW_COURSES se sigue
 // exportando desde aquí para no cambiar ningún import existente.
@@ -48,7 +49,7 @@ export function courseState(id) {
   if (!states.has(id)) {
     let saved = null;
     try {
-      saved = cleanProgress(JSON.parse(localStorage.getItem(key(id))));
+      saved = cleanProgress(JSON.parse(storage.getItem(key(id))));
     } catch {
       // almacenamiento no disponible o dañado: se empieza de cero
     }
@@ -67,7 +68,7 @@ const uploaders = new Map();
 
 export function saveCourse(id) {
   try {
-    localStorage.setItem(key(id), JSON.stringify(courseState(id)));
+    storage.setItem(key(id), JSON.stringify(courseState(id)));
   } catch {
     // sin almacenamiento: dura hasta recargar
   }

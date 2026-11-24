@@ -244,6 +244,8 @@ for (const colorScheme of ["light", "dark"]) {
       await page.goto(route);
       await expect(page.locator("#excel-view h1")).toBeVisible();
       await expect(page.locator("#excel-view [data-xl-question]").first().or(page.locator("#xl-path-title"))).toBeVisible();
+      // axe mezcla los colores de un texto que aún está apareciendo (opacidad de la animación de entrada)
+      await page.waitForFunction(() => document.getAnimations().every((a) => a.playState !== "running"));
       const results = await new AxeBuilder({ page }).include("#excel-view").withTags(WCAG).analyze();
       expect(results.violations, route).toEqual([]);
     }

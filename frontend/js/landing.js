@@ -10,6 +10,7 @@
 
 import { prefersReducedMotion } from "./prefs.js";
 import { apiEnabled } from "./api.js";
+import { DEMO_ENTRY, isDemo } from "./demo/demo-mode.js";
 import { openAccount } from "./account.js";
 import { DAW_COURSES } from "./course-store.js";
 import { pythonRunner } from "./console.js";
@@ -341,6 +342,11 @@ function heroHtml(concept) {
             <a class="lp-btn lp-btn--primary lp-btn--lg" href="#/aprender" data-lp-start>Empezar a aprender ${icon("arrow", 18)}</a>
             <a class="lp-btn lp-btn--ghost lp-btn--lg" href="#/practicar">Practicar Python</a>
           </div>
+          <p class="lp-hero__more">${
+            isDemo
+              ? `<a href="#/panel" data-lp-demo>Volver al panel de Alex Developer (demo)</a>`
+              : `<a href="${DEMO_ENTRY}" data-lp-demo>Probar la demo sin registrarte</a>: entra como Alex Developer, un alumno ficticio con progreso de ejemplo`
+          }</p>
           <p class="lp-hero__more"><a href="${LANDING_ROUTE}/como-funciona" data-lp-section="como-funciona">Descubrir cómo funciona</a></p>
           <ul class="lp-facts" aria-label="Condiciones de uso">
             <li>${icon("check", 16)} Gratuito y sin publicidad</li>

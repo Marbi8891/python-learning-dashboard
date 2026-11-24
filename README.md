@@ -21,6 +21,9 @@ Proyecto de 2º de DAW: una web para **aprender Python entendiendo lo que haces*
 
 ## Qué tiene
 
+- **Demo sin registro** (`?demo=1#/panel`): entra como Alex Developer, un alumno ficticio con progreso, XP, logros y racha de ejemplo. Los datos son inventados, se quedan en la pestaña y no tocan ni el progreso real ni el servidor. Ver [docs/DEMO-EDITION.md](docs/DEMO-EDITION.md).
+- **Laboratorio de Python** (`#/laboratorio`): editor con color, ejecución real con Pyodide, errores explicados y 14 ejercicios del temario corregidos con pruebas automáticas.
+- **Centro de aprendizaje** (`#/cursos`): Python, PCAP, Programación, JavaScript, Java, Bases de datos y Ciberseguridad con su progreso y sus lecciones.
 - **Teoría y ejercicios por conceptos:** 22 conceptos con explicación, ejemplo línea a línea y 131 ejercicios. Cuando fallas, te explica el error típico y te pone otro ejercicio parecido.
 - **Consola de Python en el navegador** con [Pyodide](https://pyodide.org). No hay que instalar nada. Admite `input()` y corta los bucles infinitos a los 10 segundos.
 - **Curso del PCAP:** 27 lecciones, mini-quiz en cada una, retos y un simulacro de 40 preguntas en 65 minutos con el reparto oficial del examen. 126 preguntas en español o inglés.
@@ -158,6 +161,7 @@ Todas las pruebas y qué ejecutar según lo que cambies: [docs/TESTING.md](docs/
 El índice completo está en [docs/README.md](docs/README.md). Los más usados:
 
 - [Memoria del proyecto](docs/memoria/memoria.md) y [guion de la defensa](docs/DEMO-Y-DEFENSA.md)
+- [Demo Edition](docs/DEMO-EDITION.md): [arquitectura](docs/DEMO-ARCHITECTURE.md), [despliegue](docs/DEMO-DEPLOYMENT.md) y [pruebas](docs/DEMO-TESTING.md)
 - [API](docs/API.md) y [recuperación de contraseña y login con Google](docs/auth.md)
 - [Motor adaptativo](docs/ADAPTIVE_ENGINE.md) y [decisiones de arquitectura](docs/DECISIONS.md)
 - [Despliegue](docs/DEPLOY.md), [pruebas](docs/TESTING.md) y [ejecutar en Windows](docs/EJECUTAR-EN-WINDOWS.md)
