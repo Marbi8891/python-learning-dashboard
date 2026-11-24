@@ -21,7 +21,7 @@ Proyecto de 2º de DAW: una web para **aprender Python entendiendo lo que haces*
 
 ## AI Academy (en desarrollo)
 
-PLD incorpora un currículo de Inteligencia Artificial de 20 cursos y aproximadamente 330 horas: fundamentos, IA generativa, prompting, productividad, Python para IA, Machine Learning, Deep Learning, LLM Engineering, RAG, agentes, automatización, despliegue, IA local, multimodalidad, seguridad y proyecto final.
+PLD incorpora un currículo de Inteligencia Artificial de 20 cursos y 354 horas de catálogo (314 horas mínimo si se cursan dos optativas): fundamentos, IA generativa, prompting, productividad, Python para IA, Machine Learning, Deep Learning, LLM Engineering, RAG, agentes, automatización, despliegue, IA local, multimodalidad, seguridad y proyecto final.
 
 - Catálogo en la ruta `#/ai-academy`.
 - Itinerarios por nivel y curso con índice curricular.
