@@ -143,7 +143,7 @@
       </header>
 
       <nav class="path" aria-label="Ruta de aprendizaje">
-        <h2 class="path__title">Lecciones del curso PCAP</h2>
+        <h2 class="path__title">Itinerario activo</h2>
         <div id="modules"><!-- Se genera desde data/lessons.json --></div>
       </nav>
 
@@ -233,7 +233,7 @@
       <div class="workspace__lesson">
       <header class="lesson-header">
         <p class="lesson-header__crumb" id="lesson-crumb"></p>
-        <h1 class="lesson-header__title" id="lesson-title" tabindex="-1">Cargando…</h1>
+        <h1 class="lesson-header__title" id="lesson-title" tabindex="-1">Python Learning Dashboard</h1>
         <p class="lesson-header__meta" id="lesson-meta"></p>
       </header>
 
@@ -299,26 +299,6 @@
       </header>
       <ol class="assistant__messages" id="assistant-messages" aria-live="polite" tabindex="0" aria-label="Conversación con el asistente"></ol>
       <div class="assistant__suggestions" id="assistant-suggestions" role="group" aria-label="Preguntas sugeridas"></div>
-      <!-- Tutor IA (ai/ai-panel.js): oculto salvo que el servidor lo ofrezca (/health → ai) -->
-      <details class="assistant__ai" id="assistant-ai" hidden>
-        <summary>Preguntar al tutor IA</summary>
-        <div class="assistant__ai-body">
-          <p class="assistant__ai-status" id="assistant-ai-status" role="status" data-state="checking">Comprobando el tutor IA…</p>
-          <button class="btn btn--ghost assistant__ai-retry" id="assistant-ai-retry" type="button" hidden>Reintentar</button>
-          <form class="assistant__ai-form" id="assistant-ai-form" novalidate>
-            <label for="assistant-ai-question">Tu pregunta</label>
-            <textarea id="assistant-ai-question" rows="2" maxlength="2000"></textarea>
-            <label class="assistant__ai-check"><input type="checkbox" id="assistant-ai-code"> Enviar también mi código</label>
-            <div class="assistant__ai-actions">
-              <button class="btn btn--primary" type="submit" data-mode="chat">Preguntar</button>
-              <button class="btn btn--ghost" type="button" data-mode="hint">Pedir pista</button>
-              <button class="btn btn--ghost" type="button" data-mode="explain-error">Explicar mi error</button>
-              <button class="btn btn--ghost" type="button" data-mode="review-code">Revisar mi código</button>
-            </div>
-          </form>
-          <p class="assistant__note">Generado por IA: puede equivocarse y no es la corrección oficial. «Revisar mi código» envía tu código; en los demás casos, solo si marcas la casilla. No se guarda.</p>
-        </div>
-      </details>
       <p class="assistant__note">Respuestas preparadas y revisadas para cada lección.</p>
     </section>
     <button class="assistant__toggle" id="assistant-toggle" type="button" aria-controls="assistant-panel" aria-expanded="false">
