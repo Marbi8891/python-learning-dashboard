@@ -51,7 +51,7 @@ Cada lección debe incluir: objetivos de aprendizaje medibles; explicación; eje
 
 **Entrega:** perfil inicial y plan de aprendizaje personal.
 
-## 01. Fundamentos de Inteligencia Artificial (8 h)
+## 01. Fundamentos de Inteligencia Artificial (8 h)\n\nEstado en PLD: ocho lecciones iniciales desarrolladas con lectura, ejemplo y quiz formativo; el currículo completo de este curso todavía requiere ampliar prácticas y evaluación.
 - 01.1 Qué es la IA: definiciones, alcance y límites
 - 01.2 Evolución histórica: sistemas expertos, ML y modelos generativos
 - 01.3 IA simbólica, aprendizaje automático y redes neuronales
