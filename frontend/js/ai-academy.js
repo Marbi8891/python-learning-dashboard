@@ -77,7 +77,8 @@ function refreshCourseProgress(course){
 export function renderAIacademy(route){
  const root=$("#ai-academy-view");
  if(!root)return;
- if(route.startsWith(ROOT+"/leccion/")){const id=decodeURIComponent(route.slice((ROOT+"/leccion/").length));if(!renderLesson(id))root.innerHTML=renderCatalog();return}\n if(route.startsWith(ROOT+"/curso/")){if(!openCourse(route))root.innerHTML=renderCatalog();return}
+ if(route.startsWith(ROOT+"/leccion/")){const id=decodeURIComponent(route.slice((ROOT+"/leccion/").length));if(!renderLesson(id))root.innerHTML=renderCatalog();return}
+ if(route.startsWith(ROOT+"/curso/")){if(!openCourse(route))root.innerHTML=renderCatalog();return}
  root.innerHTML=renderCatalog();
  const search=$("#ai-academy-search");
  search?.addEventListener("input",()=>{
