@@ -335,3 +335,52 @@
 .cc-key.cc-target {
   border-top: 3px dashed var(--color-danger);
 }
+
+/* Programming Path practical activities */
+.career-practices {
+  display: grid;
+  gap: var(--space-2);
+  margin: var(--space-3) 0;
+}
+.career-practice {
+  padding: var(--space-3);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+.career-practice summary {
+  cursor: pointer;
+  display: grid;
+  gap: var(--space-1);
+}
+.career-practice h4 {
+  margin: var(--space-3) 0 var(--space-1);
+  font-size: var(--text-sm);
+}
+.career-practice ol,
+.career-practice ul {
+  padding-left: var(--space-5);
+}
+.career-practice-form {
+  display: grid;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+.career-practice-form label:not(.career-check) {
+  display: grid;
+  gap: var(--space-1);
+}
+.career-practice-form input[type="url"],
+.career-practice-form textarea {
+  width: 100%;
+  min-width: 0;
+  padding: var(--space-2);
+  border: var(--border-width) solid var(--color-border-control);
+  border-radius: var(--radius-sm);
+  background: var(--color-input-bg);
+  color: var(--color-text);
+  font: inherit;
+}
+.career-practice-form textarea {
+  resize: vertical;
+}
