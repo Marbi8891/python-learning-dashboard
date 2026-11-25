@@ -26,7 +26,7 @@
 
 import { addDays, daysBetween, isoDay } from "../srs.js";
 import { FULL_COVERAGE } from "../pcap-store.js";
-import { READY_SCORE } from "../learn/recommend.js";
+import { READY_SCORE } from "../learn/recommend.js";\nimport { cleanPracticeMap, mergePractice } from "./career-practice.js";
 
 export const LIMITS = Object.freeze({ roadmaps: 5, evidence: 100, studyLog: 366, attempts: 10, note: 120, url: 240, minutes: 600 });
 export const UNIT_STATUSES = Object.freeze(["hecha", "pendiente"]);
@@ -52,7 +52,7 @@ const later = (a, b) => ((a?.at ?? "") >= (b?.at ?? "") ? a : b);
 const LEVEL_ORDER = ["fundamentos", "intermedio", "avanzado", "profesional"];
 
 export const emptyCareer = () => ({ v: 1, active: null, activeAt: null, roadmaps: {} });
-export const emptyRoadmap = () => ({ startedAt: null, stages: {}, units: {}, assessments: {}, evidence: [], criteria: {}, checklists: {}, studyLog: [] });
+export const emptyRoadmap = () => ({ startedAt: null, stages: {}, units: {}, assessments: {}, evidence: [], criteria: {}, checklists: {}, studyLog: [], practice: {} });
 const ROADMAP_KEYS = new Set(Object.keys(emptyRoadmap()));
 const TOP_KEYS = new Set(Object.keys(emptyCareer()));
 
