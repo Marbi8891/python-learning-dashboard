@@ -260,3 +260,12 @@ No incluir teoría duplicada, soluciones copiadas, quizzes repetidos ni nuevos b
 - Los JSON son generados por scripts y CI comprueba que están actualizados.
 - No hay dependencias nuevas innecesarias, migraciones ni endpoints adicionales.
 - El roadmap no se declara “experto” sin evidencias de proyectos, tests, despliegues y criterios evaluados.
+
+
+### Prácticas de brechas — implementación en draft
+
+- Se añadieron 28 retos estructurados en `frontend/data/career/programming-path-practice.json`.
+- Cada actividad contiene unidad del itinerario, nivel, tipo, horas orientativas, descripción, tareas, entregables, criterios de aceptación y referencias.
+- Se evitan soluciones que dupliquen bancos existentes. Las tareas son proyectos/experimentos/auditorías de brechas.
+- Estado: catálogo creado y referencias verificables; todavía no cargado por el runtime, ni vinculado al progreso/evidencias.
+- Antes de activarlo: validator JSON, IDs únicos, referencias existentes, unit IDs, traducción si la UI requiere ES/EN, diseño de evidencia y pruebas de integración.
