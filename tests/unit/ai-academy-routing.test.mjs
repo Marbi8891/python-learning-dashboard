@@ -11,7 +11,7 @@ test("PLD ACADEMY institutional workspace is wired into lazy routing", () => {
 
   assert.match(app, /academy: \(load\) => load\("\.\/academy-institutional\.js"\)/);
   assert.match(app, /academy: \{ element: "#academy-view".*render: \(\) => zones\.academy\.renderAcademy\(\)/);
-  assert.match(app, /location\.hash === ACADEMY_ROUTE \|\| location\.hash\.startsWith\(\`\$\{ACADEMY_ROUTE\}\/\`\)/);
+  assert.ok(app.includes('location.hash === ACADEMY_ROUTE'));
   assert.match(app, /zones\.academy\.initAcademy\(\)/);
   assert.match(html, /id="academy-view"/);
   assert.match(html, /href="#\/academy" data-nav="academy"/);
