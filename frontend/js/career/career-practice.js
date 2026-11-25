@@ -1,6 +1,6 @@
 /* Programming Path practice catalog + persisted evidence helpers.
    Activities are content; completion and evidence live in the existing career roadmap document. */
-import { safeHttpsUrl } from "./career-data.js";
+function safeHttpsUrl(value) {\n  if (typeof value !== "string" || !value.trim() || value.length > 240) return null;\n  try {\n    const url = new URL(value.trim());\n    if (url.protocol !== "https:" || url.username || url.password || !url.hostname.includes(".")) return null;\n    return url.href.length <= 240 ? url.href : null;\n  } catch { return null; }\n}
 
 const ID = /^[a-z0-9][a-z0-9.-]{0,60}$/;
 const ISO = /^\d{4}-\d{2}-\d{2}T[\d:.+-]+Z?$/;
