@@ -1,8 +1,8 @@
 # Contrato de integración NEXARO AI ↔ PLD
 
-Estado: **borrador de la Fase 0, pendiente de aprobación**. Nada de esto está implementado.
-Base: PLD `main` `78080ca` y NEXARO AI 3.0.0 (`main` `5af114e`). Auditoría en
-[`NEXARO_INTEGRATION_AUDIT.md`](NEXARO_INTEGRATION_AUDIT.md).
+Estado: **integración PLD implementada en backend y frontend; contrato interno con NEXARO sujeto a las limitaciones descritas en §3.4**. Este documento contiene decisiones de arquitectura y pendientes del lado NEXARO; no debe leerse como si las rutas de PLD estuvieran pendientes.
+
+La implementación actual está en `backend/app/routers/ai.py`, `backend/app/ai_context.py`, `backend/app/nexaro_client.py` y `frontend/js/ai/`. Guía de uso/configuración: [`docs/TUTOR-IA.md`](../TUTOR-IA.md).
 
 El contrato tiene dos capas:
 
@@ -126,7 +126,7 @@ Respuesta: `200 application/x-ndjson`. PLD lee línea a línea:
 
 Errores antes del stream: `400` (modelo no instalado), `404` (agente borrado), `422`, `429` (más de 2 streams o 120 escrituras/min por IP), `403` (Origin o Sec-Fetch-Site), `400 Host no permitido`, `413`, `415`.
 
-### 3.4 Lo que **no** existe en NEXARO (pendiente)
+### 3.4 Lo que **no** existe en NEXARO (pendiente; PLD ya lo adapta)
 
 | Elemento | Estado |
 |---|---|
