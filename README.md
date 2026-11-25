@@ -84,6 +84,12 @@ Navegador ──► GitHub Pages (HTML, CSS, JS y el temario en JSON)
 
 Un Web Worker no es un aislamiento de seguridad completo: el código se ejecuta en el mismo origen que la web. Para este proyecto basta, porque cada alumno solo ejecuta su propio código en su navegador.
 
+## Tutor IA de PLD
+
+PLD incluye un tutor contextual opcional integrado en el asistente de las lecciones. Explica conceptos, ofrece pistas graduadas, interpreta errores de Python y revisa código como texto. La integración está detrás del backend y usa NEXARO AI; por defecto permanece desactivada.
+
+Guía de configuración y privacidad: [docs/TUTOR-IA.md](docs/TUTOR-IA.md).
+
 ## Variables de entorno del backend
 
 Se copian de `backend/.env.example` a `backend/.env` (que no se sube al repositorio).
