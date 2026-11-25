@@ -6,6 +6,69 @@ Añadir a PLD un itinerario profesional de programación desde fundamentos hasta
 
 No sustituye los cursos DAW, Python, JavaScript, Java, SQL ni el itinerario AI Engineer. Los enlaza y los organiza en un camino progresivo.
 
+## Política y catálogo de fuentes fiables
+
+Programming Path debe utilizar una jerarquía de fuentes y registrar enlaces por tema. No se debe generar lecciones basadas únicamente en blogs, respuestas de foros, vídeos sin documentación o contenido SEO.
+
+### Jerarquía de confianza
+
+1. **Nivel A — Fuente primaria:** documentación oficial del lenguaje, estándar, framework, herramienta, organismo de estándares o universidad que imparte el curso.
+2. **Nivel B — Curso universitario abierto / libro abierto revisado:** universidades, OpenCourseWare y libros educativos de autores reconocidos con edición y ejercicios.
+3. **Nivel C — Plataformas educativas estructuradas:** currículos con ejercicios y proyectos; sirven para práctica y explicación, contrastando afirmaciones técnicas con Nivel A.
+4. **Nivel D — Comunidad / artículos:** Stack Overflow, blogs, Reddit, YouTube y tutoriales independientes. Útiles para troubleshooting, ejemplos o perspectivas, pero no como fuente única de teoría ni para recomendaciones críticas.
+
+Para cada recurso se debe registrar: título, URL directa, organización/autor, tipo, idioma, módulos relacionados, nivel, fecha de última revisión, estado (verified/needs-review), licencia si se reutiliza contenido, y notas. Verificar enlaces y actualidad antes de incorporarlos. No copiar contenido protegido; PLD debe enlazar, resumir con sus propias palabras y respetar licencias.
+
+### Catálogo inicial recomendado
+
+| Área | Fuente principal (Nivel A/B) | Complemento de práctica |
+|---|---|---|
+| Computer Science general | Harvard CS50x — https://cs50.harvard.edu/x/ | Problem sets y proyecto final CS50 |
+| Python fundamentos | Python docs/tutorial — https://docs.python.org/3/tutorial/ ; Harvard CS50P — https://cs50.harvard.edu/python/ | Exercism Python — https://exercism.org/tracks/python |
+| Python práctico | Think Python (libro abierto) — https://allendowney.github.io/thinkpython/ | Automate the Boring Stuff — https://automatetheboringstuff.com/ |
+| Terminal/Git tooling | MIT Missing Semester — https://missing.csail.mit.edu/ ; Git docs — https://git-scm.com/doc | Learn Git Branching — https://learngitbranching.js.org/ |
+| Algorithms/CS | MIT OCW — https://ocw.mit.edu/ ; CS50 — https://cs50.harvard.edu/x/ | VisuAlgo — https://visualgo.net/ ; LeetCode solo para práctica |
+| Web fundamentals | MDN Learn — https://developer.mozilla.org/en-US/docs/Learn_web_development | freeCodeCamp — https://www.freecodecamp.org/ ; The Odin Project — https://www.theodinproject.com/ |
+| HTML/CSS | WHATWG HTML — https://html.spec.whatwg.org/ ; MDN HTML/CSS | web.dev — https://web.dev/learn/ |
+| JavaScript | MDN JS Guide — https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide ; ECMAScript spec — https://tc39.es/ecma262/ | javascript.info — https://javascript.info/ ; Exercism |
+| TypeScript | TypeScript Handbook — https://www.typescriptlang.org/docs/ | Total TypeScript / Type Challenges (practice; verify current availability) |
+| React | React docs — https://react.dev/learn | Full Stack Open — https://fullstackopen.com/en/ |
+| Next.js | Next.js official Learn — https://nextjs.org/learn | Official docs — https://nextjs.org/docs |
+| SQL | PostgreSQL docs — https://www.postgresql.org/docs/ ; SQL standard material where accessible | SQLBolt — https://sqlbolt.com/ ; PGExercises — https://pgexercises.com/ |
+| Database concepts | CMU Database Systems — https://15445.courses.cs.cmu.edu/ | PostgreSQL exercises |
+| Backend/API | FastAPI docs — https://fastapi.tiangolo.com/tutorial/ ; HTTP/REST primary references | Microsoft Learn web app material / project exercises |
+| Java | Dev.java — https://dev.java/learn/ ; Java API docs — https://docs.oracle.com/en/java/ | University of Helsinki Java MOOC — https://java-programming.mooc.fi/ |
+| Spring | Spring official guides — https://spring.io/guides | Spring tutorials and project labs |
+| Software engineering | MIT OCW, university courses; Google Engineering Practices — https://google.github.io/eng-practices/ | Refactoring exercises and code reviews |
+| Testing | pytest docs — https://docs.pytest.org/ ; Playwright — https://playwright.dev/docs/ ; Vitest — https://vitest.dev/ | PLD projects and labs |
+| Linux | Linux man-pages — https://man7.org/linux/man-pages/ ; Ubuntu docs — https://ubuntu.com/tutorials | The Linux Command Line (free book) — https://linuxcommand.org/tlcl.php |
+| Docker | Docker docs — https://docs.docker.com/ | Official getting-started labs |
+| Cloud | Official provider training/documentation (AWS, Azure, Google Cloud) selected per track | Cloud Skills platforms; only official labs as primary |
+| Kubernetes | Kubernetes docs — https://kubernetes.io/docs/tutorials/ | Kubernetes interactive tutorials |
+| Systems/networking | RFC Editor — https://www.rfc-editor.org/ ; Linux man-pages | CS50, MIT OCW and labs |
+| AI/ML | scikit-learn docs — https://scikit-learn.org/stable/ ; PyTorch tutorials — https://pytorch.org/tutorials/ ; Hugging Face course — https://huggingface.co/learn | University courses and reproducible notebooks |
+| LLM/GenAI | Official provider API docs; Hugging Face docs; research papers from arXiv (label as preprints) | RAG/agent labs with evaluation and safety criteria |
+| Secure coding | OWASP Top 10 — https://owasp.org/www-project-top-ten/ ; Cheat Sheet Series — https://cheatsheetseries.owasp.org/ | PortSwigger Web Security Academy — https://portswigger.net/web-security ; secure coding labs |
+| Architecture/System Design | University course material, vendor architecture docs, original papers where relevant | System Design Primer — https://github.com/donnemartin/system-design-primer (community, Level C/D) |
+| Programming tracks | roadmap.sh — https://roadmap.sh/ (roadmap inspiration only; not a technical authority) | Project-based path plus official docs |
+
+### Reglas de selección de recursos por unidad
+
+- Preferir un recurso oficial o universitario primario y, como máximo, uno o dos complementos de práctica que aporten valor real.
+- No añadir enlaces por volumen. La unidad debe tener una fuente que enseñe y una actividad que permita demostrar la competencia.
+- Comprobar que el enlace existe, que el contenido está actualizado y que el nivel corresponde al estudiante.
+- Cuando existan versiones, fijar la versión relevante (p. ej., Python, Java, framework) y revisar cambios.
+- Para contenido de seguridad, IA, cloud o APIs que cambia rápidamente, registrar fecha de verificación y hacer revisión periódica.
+- Distinguir documentación de referencia, tutorial, curso, práctica, estándar y fuente de investigación.
+- No considerar roadmap.sh, blogs ni rankings como autoridades técnicas; pueden orientar la secuencia, pero los conceptos se contrastan con documentación oficial.
+- No usar Stack Overflow/Reddit como fundamento único de una lección. Las respuestas se contrastan con documentación, especificaciones o reproducibilidad.
+- Las fuentes no sustituyen el contenido existente de PLD: se enlazan desde la ficha curricular y se evita duplicar lecciones.
+
+### Auditoría de recursos existentes antes de añadir
+
+La implementación debe cruzar el catálogo anterior con `frontend/data/resources.json`, cursos y unidades, y Career roadmaps. Si el mismo recurso ya está catalogado, reutilizar su ID y metadata. Si un recurso no se encuentra, proponerlo en una lista de gaps para revisión, no crear duplicados automáticamente.
+
+
 ## Regla de no duplicación (obligatoria)
 
 **Programming Path es una capa de navegación, secuenciación y requisitos de dominio; no es un segundo repositorio de lecciones.** Antes de crear cualquier unidad, ejercicio, evaluación, recurso o proyecto, buscar su equivalente en PLD y reutilizarlo.
