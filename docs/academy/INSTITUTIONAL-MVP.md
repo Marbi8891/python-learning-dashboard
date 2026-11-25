@@ -47,3 +47,9 @@ The tenant boundary must be enforced on the backend for every query and write. F
 - Use stable content IDs so course updates do not invalidate student progress.
 - Do not send identifiable student data to external AI services by default.
 - Educational analytics are advisory; avoid automated high-stakes decisions.
+
+## Demo comercial guiada
+- Etiqueta visible de entorno de demostración.
+- Recorrido breve para dirección: resumen, grupos, actividades, seguimiento y simulación de roles.
+- El recorrido aclara que los datos son sintéticos y que el cambio de rol no es autenticación ni autorización.
+- Los datos de demo se pueden restaurar desde la configuración del centro.
