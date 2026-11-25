@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { cleanPracticeEntry, cleanPracticeMap, mergePractice, practiceStats, setPractice } from "../../frontend/js/career/career-practice.js";
+import { cleanPracticeEntry, cleanPracticeMap, mergePractice, practiceStats, setPractice } from "../../frontend/js/career/career-practice.js";\nimport { cleanCareer, emptyCareer, enroll, mergeCareer } from "../../frontend/js/career/career-data.js";
 
 const NOW = new Date("2026-11-25T12:00:00.000Z");
 
@@ -44,4 +44,26 @@ test("merge uses the latest timestamp and preserves other activities", () => {
 test("practice progress stats handle empty and completed lists", () => {
   assert.deepEqual(practiceStats([], {}), { total: 0, done: 0, remaining: 0, ratio: 0 });
   assert.deepEqual(practiceStats([{ id: "a" }, { id: "b" }], { a: { done: true } }), { total: 2, done: 1, remaining: 1, ratio: 0.5 });
+});
+
+test("career document retains and validates practice progress", () => {
+  const doc = emptyCareer();
+  const progress = enroll(doc, "applied-ai-engineer", NOW);
+  setPractice(progress, "practice-1", { done: true, note: "Evidence stored" }, NOW);
+  const cleaned = cleanCareer(doc);
+  assert.equal(cleaned.roadmaps["applied-ai-engineer"].practice["practice-1"].done, true);
+  assert.equal(cleaned.roadmaps["applied-ai-engineer"].practice["practice-1"].note, "Evidence stored");
+});
+
+test("career sync merge combines practice records by last update", () => {
+  const local = emptyCareer();
+  const lp = enroll(local, "applied-ai-engineer", NOW);
+  setPractice(lp, "practice-1", { done: false }, new Date("2026-11-20T00:00:00Z"));
+  const remote = emptyCareer();
+  const rp = enroll(remote, "applied-ai-engineer", NOW);
+  setPractice(rp, "practice-1", { done: true, note: "remote" }, new Date("2026-11-21T00:00:00Z"));
+  setPractice(rp, "practice-2", { done: true }, new Date("2026-11-22T00:00:00Z"));
+  mergeCareer(local, remote);
+  assert.equal(local.roadmaps["applied-ai-engineer"].practice["practice-1"].done, true);
+  assert.equal(local.roadmaps["applied-ai-engineer"].practice["practice-2"].done, true);
 });
