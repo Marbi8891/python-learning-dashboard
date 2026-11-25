@@ -130,6 +130,7 @@ function cleanRoadmap(raw) {
   r.criteria = cleanMap(raw.criteria, (c) => (typeof c.met === "boolean" && isIso(c.at) ? { met: c.met, at: c.at } : null));
   r.checklists = cleanMap(raw.checklists, (c) => (typeof c.done === "boolean" && isIso(c.at) ? { done: c.done, at: c.at } : null));
   r.studyLog = (Array.isArray(raw.studyLog) ? raw.studyLog : []).map(cleanStudy).filter(Boolean).slice(-LIMITS.studyLog);
+  r.practice = cleanPracticeMap(raw.practice);
   return r;
 }
 
@@ -167,6 +168,7 @@ function mergeRoadmap(local, remote) {
   }
   local.evidence = mergeList(local.evidence, remote.evidence, LIMITS.evidence);
   local.studyLog = mergeList(local.studyLog, remote.studyLog, LIMITS.studyLog);
+  mergePractice(local.practice, remote.practice);
   for (const [key, raw] of Object.entries(remote)) if (!(key in local)) local[key] = raw;
 }
 
