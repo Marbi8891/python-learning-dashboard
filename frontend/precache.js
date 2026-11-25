@@ -154,7 +154,6 @@ self.PLD_PRECACHE = [
  "data/career/applied-ai-engineer.json",
  "data/career/index.json",
  "data/career/programming-path-practice.json",
- "data/career/programming-path-practice.json",
  "data/courses/entornos/bank.json",
  "data/courses/entornos/lessons.json",
  "data/courses/java/bank.json",
