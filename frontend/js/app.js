@@ -736,7 +736,7 @@ function navigate({ moveFocus = true } = {}) {
   if (location.hash === ACADEMY_ROUTE || location.hash.startsWith(`${ACADEMY_ROUTE}/`)) {
     if (awaitZone("academy", moveFocus)) return;
     zones.academy.initAcademy();
-    showPage("academy", { moveFocus: false });
+    showPage("academy", { moveFocus });
     return;
   }
 
