@@ -33,7 +33,8 @@ const esc = (value) => String(value ?? "").replace(/[&<>"']/g, (char) => ({
   "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
 }[char]));
 const groupName = (id) => state.groups.find((g) => g.id === id)?.name || "Grupo eliminado";
-const persist = () => { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (error) { console.warn("Academy demo storage unavailable", error); } };\nconst newId = () => globalThis.crypto?.randomUUID?.() ?? `demo-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+const persist = () => { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (error) { console.warn("Academy demo storage unavailable", error); } };
+const newId = () => globalThis.crypto?.randomUUID?.() ?? `demo-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
 
 function metric(label, value, note, icon) {
   return `<article class="academy-stat"><span class="academy-stat__icon" aria-hidden="true">${icon}</span><div><p>${esc(label)}</p><strong>${esc(value)}</strong><small>${esc(note)}</small></div></article>`;
@@ -81,7 +82,9 @@ function teacherView() {
 function mountModal(type) {
   const old = document.querySelector(".academy-dialog"); old?.remove();
   document.querySelector("#academy-view")?.insertAdjacentHTML("beforeend", modalForm(type));
-  const dialog = document.querySelector(".academy-dialog");\n  try { dialog?.showModal(); } catch { dialog?.setAttribute("open", ""); }\n  dialog?.querySelector("input")?.focus();
+  const dialog = document.querySelector(".academy-dialog");
+  try { dialog?.showModal(); } catch { dialog?.setAttribute("open", ""); }
+  dialog?.querySelector("input")?.focus();
 }
 function showToast(text) {
   let toast = document.querySelector(".academy-toast");
