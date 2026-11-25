@@ -47,3 +47,22 @@ Before activating the roadmap in `frontend/data/career/index.json`:
 5. Add the generated JSON and index entry only after all checks pass.
 6. Run the full CI, including Career generator validation and UI tests.
 7. Keep the PR draft until this is complete. Do not publish to main or Pages automatically.
+
+
+## New gap-specific references (audit 2026-11-25)
+
+These sources were added because the existing PLD content does not fully cover the corresponding advanced objectives. They are external links only; PLD does not copy lessons or exercises.
+
+| Gap | Resource IDs | Source |
+|---|---|---|
+| Python typing, async, packaging, advanced testing | `res-python-typing`, `res-python-asyncio`, `res-python-packaging`, `res-python-testing`, `res-hypothesis` | Python docs, Python Packaging Authority, Hypothesis |
+| Advanced algorithms and structures | `res-princeton-algorithms` | Princeton University Algorithms |
+| Accessibility and web performance | `res-w3c-wai-tutorials`, `res-webdev-performance` | W3C WAI, web.dev |
+| API-specific security | `res-owasp-api-top10` | OWASP API Security |
+| Deployment configuration and CI/CD | `res-12factor`, `res-github-actions` | Twelve-Factor App, GitHub Actions docs |
+| NoSQL | `res-mongodb-docs` | MongoDB official manual |
+| ML foundations | `res-google-mlcc` | Google Machine Learning Crash Course |
+| Cloud fundamentals and native ecosystem | `res-azure-fundamentals`, `res-cncft-cloud-native` | Microsoft Learn, CNCF |
+| System reliability / expert systems | `res-google-sre` | Google SRE resource library |
+
+All curriculum resource references were checked against the source catalog: no missing resource IDs. Resource source and generated catalog synchronization still needs to be run with the project generator and CI.
