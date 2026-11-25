@@ -52,6 +52,20 @@ Para cada recurso se debe registrar: título, URL directa, organización/autor, 
 | Architecture/System Design | University course material, vendor architecture docs, original papers where relevant | System Design Primer — https://github.com/donnemartin/system-design-primer (community, Level C/D) |
 | Programming tracks | roadmap.sh — https://roadmap.sh/ (roadmap inspiration only; not a technical authority) | Project-based path plus official docs |
 
+### Fuentes incorporadas al catálogo PLD
+
+Se añadieron al catálogo existente de `frontend/data/resources.json` estos recursos, usando IDs estables y enlazando a los cursos originales:
+
+| ID | Fuente | Uso en Programming Path |
+|---|---|---|
+| `res-harvard-cs50x` | Harvard CS50x | Fundamentos, pensamiento computacional, algoritmos y conceptos de informática. |
+| `res-harvard-cs50p` | Harvard CS50P | Complemento de práctica Python, testing, debugging, funciones, OOP y archivos. |
+| `res-harvard-cs50sql` | Harvard CS50 SQL | Práctica complementaria de bases de datos; no reemplaza ni duplica el curso SQL de PLD. |
+| `res-harvard-cs50web` | Harvard CS50 Web | Práctica de desarrollo web/full-stack; enlaza temas existentes y no duplica sus lecciones. |
+| `res-mit-missing-semester` | MIT Missing Semester | Shell, herramientas, debugging, Git, empaquetado y flujo de trabajo de desarrollo. |
+
+Los enlaces a estos recursos se revisaron el 25-11-2026. Harvard CS50 publica cursos abiertos con ejercicios y proyectos; MIT Missing Semester ofrece clases y ejercicios sobre herramientas de desarrollo. Se mantiene la regla de enlazar al original y no copiar sus materiales.
+
 ### Reglas de selección de recursos por unidad
 
 - Preferir un recurso oficial o universitario primario y, como máximo, uno o dos complementos de práctica que aporten valor real.
