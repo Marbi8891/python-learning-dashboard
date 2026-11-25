@@ -178,3 +178,5 @@ de una vulnerabilidad, sigue la [política de seguridad](SECURITY.md) y no abras
 ## Licencia
 
 MIT. Autor: Mrabeh Fathi Boussayff.
+
+<!-- test -->
