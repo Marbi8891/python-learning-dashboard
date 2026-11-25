@@ -21,7 +21,7 @@ const seed = {
 function readState() {
   try {
     const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
-    if (saved && Array.isArray(saved.groups) && Array.isArray(saved.assignments)) return saved;
+    if (saved && saved.organization && Array.isArray(saved.groups) && Array.isArray(saved.assignments)) return saved;
   } catch {}
   return structuredClone(seed);
 }
@@ -33,7 +33,7 @@ const esc = (value) => String(value ?? "").replace(/[&<>"']/g, (char) => ({
   "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
 }[char]));
 const groupName = (id) => state.groups.find((g) => g.id === id)?.name || "Grupo eliminado";
-const persist = () => localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+const persist = () => { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (error) { console.warn("Academy demo storage unavailable", error); } };\nconst newId = () => globalThis.crypto?.randomUUID?.() ?? `demo-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
 
 function metric(label, value, note, icon) {
   return `<article class="academy-stat"><span class="academy-stat__icon" aria-hidden="true">${icon}</span><div><p>${esc(label)}</p><strong>${esc(value)}</strong><small>${esc(note)}</small></div></article>`;
@@ -64,8 +64,8 @@ function settingsView() {
   return `<div class="academy-page-head"><div><p class="academy-eyebrow">Administración</p><h1 id="academy-title" tabindex="-1">Centro y configuración</h1><p>Datos del espacio institucional.</p></div></div><section class="academy-card academy-settings"><form id="academy-org-form"><label>Nombre del centro<input name="name" maxlength="120" required value="${esc(state.organization.name)}"></label><label>Tipo de institución<input name="type" maxlength="80" value="${esc(state.organization.type)}"></label><label>Curso académico<input name="academicYear" maxlength="20" value="${esc(state.organization.academicYear)}"></label><button class="academy-button academy-button--primary" type="submit">Guardar cambios</button></form><div class="academy-demo-note"><strong>Prototipo institucional</strong><p>En esta versión los datos se guardan en este navegador. Todavía no hay aislamiento multi-centro, cuentas de docentes, matrículas reales ni sincronización con backend.</p><button class="academy-button academy-button--secondary" data-academy-action="reset-demo">Restablecer datos demo</button></div></section>`;
 }
 function modalForm(type) {
-  if (type === "group") return `<dialog class="academy-dialog" open><form id="academy-group-form" method="dialog"><header><h2>Crear grupo</h2><button type="button" class="academy-close" data-academy-action="close-modal" aria-label="Cerrar">×</button></header><label>Nombre del grupo<input name="name" required maxlength="80" placeholder="Ej. 1.º DAW A"></label><label>Programa<input name="program" required maxlength="120" placeholder="Programa formativo"></label><label>Asignatura<input name="subject" required maxlength="100" placeholder="Asignatura"></label><label>Profesor responsable<input name="teacher" required maxlength="100" placeholder="Nombre del docente"></label><label>Alumnos<input name="students" type="number" min="0" max="5000" required value="0"></label><footer><button class="academy-button academy-button--secondary" type="button" data-academy-action="close-modal">Cancelar</button><button class="academy-button academy-button--primary" type="submit">Crear grupo</button></footer></form></dialog>`;
-  return `<dialog class="academy-dialog" open><form id="academy-assignment-form" method="dialog"><header><h2>Nueva actividad</h2><button type="button" class="academy-close" data-academy-action="close-modal" aria-label="Cerrar">×</button></header><label>Título<input name="title" required maxlength="160" placeholder="Nombre de la actividad"></label><label>Grupo<select name="groupId" required>${state.groups.map(g=>`<option value="${esc(g.id)}">${esc(g.name)}</option>`).join("")}</select></label><label>Tipo<select name="type"><option>Práctica</option><option>Actividad</option><option>Examen</option><option>Proyecto</option></select></label><label>Fecha límite<input name="due" type="date"></label><label>Estado<select name="status"><option value="published">Publicar</option><option value="draft">Guardar como borrador</option></select></label><footer><button class="academy-button academy-button--secondary" type="button" data-academy-action="close-modal">Cancelar</button><button class="academy-button academy-button--primary" type="submit">Guardar actividad</button></footer></form></dialog>`;
+  if (type === "group") return `<dialog class="academy-dialog" aria-labelledby="academy-dialog-title"><form id="academy-group-form" method="dialog"><header><h2 id="academy-dialog-title">Crear grupo</h2><button type="button" class="academy-close" data-academy-action="close-modal" aria-label="Cerrar">×</button></header><label>Nombre del grupo<input name="name" required maxlength="80" placeholder="Ej. 1.º DAW A"></label><label>Programa<input name="program" required maxlength="120" placeholder="Programa formativo"></label><label>Asignatura<input name="subject" required maxlength="100" placeholder="Asignatura"></label><label>Profesor responsable<input name="teacher" required maxlength="100" placeholder="Nombre del docente"></label><label>Alumnos<input name="students" type="number" min="0" max="5000" required value="0"></label><footer><button class="academy-button academy-button--secondary" type="button" data-academy-action="close-modal">Cancelar</button><button class="academy-button academy-button--primary" type="submit">Crear grupo</button></footer></form></dialog>`;
+  return `<dialog class="academy-dialog" aria-labelledby="academy-dialog-title"><form id="academy-assignment-form" method="dialog"><header><h2 id="academy-dialog-title">Nueva actividad</h2><button type="button" class="academy-close" data-academy-action="close-modal" aria-label="Cerrar">×</button></header><label>Título<input name="title" required maxlength="160" placeholder="Nombre de la actividad"></label><label>Grupo<select name="groupId" required>${state.groups.map(g=>`<option value="${esc(g.id)}">${esc(g.name)}</option>`).join("")}</select></label><label>Tipo<select name="type"><option>Práctica</option><option>Actividad</option><option>Examen</option><option>Proyecto</option></select></label><label>Fecha límite<input name="due" type="date"></label><label>Estado<select name="status"><option value="published">Publicar</option><option value="draft">Guardar como borrador</option></select></label><footer><button class="academy-button academy-button--secondary" type="button" data-academy-action="close-modal">Cancelar</button><button class="academy-button academy-button--primary" type="submit">Guardar actividad</button></footer></form></dialog>`;
 }
 function render() {
   const tabContent = { overview, groups: groupsView, assignments: assignmentsView, analytics: analyticsView, settings: settingsView }[activeTab]();
@@ -81,7 +81,7 @@ function teacherView() {
 function mountModal(type) {
   const old = document.querySelector(".academy-dialog"); old?.remove();
   document.querySelector("#academy-view")?.insertAdjacentHTML("beforeend", modalForm(type));
-  document.querySelector(".academy-dialog")?.querySelector("input")?.focus();
+  const dialog = document.querySelector(".academy-dialog");\n  try { dialog?.showModal(); } catch { dialog?.setAttribute("open", ""); }\n  dialog?.querySelector("input")?.focus();
 }
 function showToast(text) {
   let toast = document.querySelector(".academy-toast");
@@ -101,12 +101,12 @@ function handleClick(event) {
 function handleSubmit(event) {
   if (event.target.id === "academy-group-form") {
     event.preventDefault(); const data = new FormData(event.target);
-    const group = {id: crypto.randomUUID(), name:data.get("name").trim(), program:data.get("program").trim(), subject:data.get("subject").trim(), teacher:data.get("teacher").trim(), students:Number(data.get("students"))||0};
+    const group = {id: newId(), name:data.get("name").trim(), program:data.get("program").trim(), subject:data.get("subject").trim(), teacher:data.get("teacher").trim(), students:Number(data.get("students"))||0};
     state.groups.push(group); persist(); activeTab="groups"; document.querySelector("#academy-view").innerHTML=render(); showToast("Grupo creado."); return;
   }
   if (event.target.id === "academy-assignment-form") {
     event.preventDefault(); const data = new FormData(event.target);
-    state.assignments.unshift({id:crypto.randomUUID(), title:data.get("title").trim(), groupId:data.get("groupId"), type:data.get("type"), due:data.get("due"), completed:0, total:state.groups.find(g=>g.id===data.get("groupId"))?.students||0, status:data.get("status")});
+    state.assignments.unshift({id:newId(), title:data.get("title").trim(), groupId:data.get("groupId"), type:data.get("type"), due:data.get("due"), completed:0, total:state.groups.find(g=>g.id===data.get("groupId"))?.students||0, status:data.get("status")});
     persist(); activeTab="assignments"; document.querySelector("#academy-view").innerHTML=render(); showToast("Actividad guardada."); return;
   }
   if (event.target.id === "academy-org-form") {
