@@ -417,7 +417,7 @@ RESOURCES: list[dict] = [
         "access": "obsoleto",
         "quality": "baja",
         "description": "Ficha del ciclo con el plan antiguo (RD 686/2010: FOL, EIE y FCT), centros por provincia, calendario y foro. No sirve como currículo vigente.",
-    },,
+    },
     {
         "id": "res-harvard-cs50x",
         "title": "Harvard CS50x: Introduction to Computer Science",
