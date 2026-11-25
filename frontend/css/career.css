@@ -384,3 +384,14 @@
 .career-practice-form textarea {
   resize: vertical;
 }
+
+.career-practice-unit {
+  margin: var(--space-3) 0;
+  padding-top: var(--space-2);
+  border-top: var(--border-width) solid var(--color-border);
+}
+.career-practice-unit h4 {
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-sm);
+  overflow-wrap: anywhere;
+}
