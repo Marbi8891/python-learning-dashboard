@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { cleanPracticeEntry, cleanPracticeMap, mergePractice, practiceStats, setPractice } from "../../frontend/js/career/career-practice.js";\nimport { cleanCareer, emptyCareer, enroll, mergeCareer } from "../../frontend/js/career/career-data.js";
+import { cleanPracticeEntry, cleanPracticeMap, mergePractice, practiceStats, setPractice } from "../../frontend/js/career/career-practice.js";
+import { cleanCareer, emptyCareer, enroll, mergeCareer } from "../../frontend/js/career/career-data.js";
 
 const NOW = new Date("2026-11-25T12:00:00.000Z");
 
