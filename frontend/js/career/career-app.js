@@ -165,7 +165,6 @@ const skillTitle = (id) => t(data.index.skills.get(id)?.title) || id;
 const moduleTitle = (id) => t(data.index.modules.get(id)?.title) || id;
 const roleTitle = (id) => t(data.catalog.roles.find((r) => r.id === id)?.title) || id;
 const projectOf = (id) => data.catalog.projects.find((p) => p.id === id);
-const practicesFor = (unitId) => (data.practiceCatalog?.activities ?? []).filter((a) => a.unit === unitId);
 
 function blockTitle(blockId) {
   const [course, slug] = blockId.split(":");
@@ -282,7 +281,7 @@ function renderRoute(state) {
     })
     .join("");
   return `<section class="course-section" aria-labelledby="career-route-title">
-      <h2 class="section-title" id="career-route-title">Programming Path · 17 módulos</h2>
+      <h2 class="section-title" id="career-route-title">Ruta de 8 módulos</h2>
       <p class="readiness__note">Marca las unidades que ya has estudiado para organizarte. Para que cuenten, practica sus conceptos, aprueba la evaluación del módulo y demuéstralo en un proyecto.</p>
       <ol class="career-modules">${items}</ol>
     </section>`;
@@ -662,19 +661,6 @@ function onSubmit(event) {
     saveCareer();
     say("#career-plan-status", "Etapa guardada. Las siguientes se han desplazado.");
     return;
-  }
-  const practiceId = form.dataset.careerPractice;
-  if (practiceId) {
-    event.preventDefault();
-    const fields = new FormData(form);
-    const url = String(fields.get("url") ?? "").trim();
-    const note = String(fields.get("note") ?? "").trim();
-    if (url && !safeHttpsUrl(url)) return say(`#practice-${practiceId} .form-message`, "El enlace debe ser HTTPS, sin credenciales y con dominio válido.", false);
-    const progress = writable();
-    if (!setPractice(progress, practiceId, { done: fields.get("done") === "on", url, note })) return say(`#practice-${practiceId} .form-message`, "No se pudo guardar la práctica.", false);
-    saveCareer();
-    repaint();
-    return say(`#practice-${practiceId} .form-message`, "Práctica guardada y sincronizable con tu cuenta.");
   }
   const practiceId = form.dataset.careerPractice;
   if (practiceId) {
