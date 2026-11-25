@@ -322,6 +322,34 @@ function renderPractices(unit, progress) {
   </section>`;
 }
 
+function renderPracticeCatalog(state) {
+  const activities = data.practiceCatalog?.activities ?? [];
+  const progress = state.progress.practice ?? {};
+  const stats = practiceStats(activities, progress);
+  const moduleNames = { m4: "Python intermedio y profesional", m6: "Algoritmos y estructuras de datos", m8: "Frontend moderno", m9: "Bases de datos y SQL", m10: "Backend y APIs", m11: "Ingeniería de software", m12: "Java y programación empresarial", m13: "Linux, redes y sistemas", m14: "DevOps, CI/CD y cloud", m15: "Seguridad en el desarrollo", m16: "IA y Machine Learning aplicado", m17: "Especialización y nivel experto" };
+  const grouped = new Map();
+  for (const activity of activities) {
+    const modules = grouped.get(activity.module) ?? new Map();
+    const units = modules.get(activity.unit) ?? [];
+    units.push(activity); modules.set(activity.unit, units); grouped.set(activity.module, modules);
+  }
+  const sections = [...grouped.entries()].map(([moduleId, units]) => {
+    const moduleActivities = [...units.values()].flat();
+    const moduleStats = practiceStats(moduleActivities, progress);
+    const unitHtml = [...units.entries()].map(([unitId, unitActivities]) => `<section class="career-practice-unit"><h4>${escapeHtml(unitId)}</h4>${renderPracticeCards(unitActivities, progress)}</section>`).join("");
+    return `<details class="career-module" id="practice-module-${escapeHtml(moduleId)}"><summary><h3 class="career-module__title">${escapeHtml(moduleId.toUpperCase())} · ${escapeHtml(moduleNames[moduleId] ?? moduleId)} <span class="career-muted">${moduleStats.done}/${moduleStats.total} completadas</span></h3></summary>${meter(moduleStats.ratio, `Prácticas completadas de ${moduleId}`)}${unitHtml}</details>`;
+  }).join("");
+  return `<section class="course-section" aria-labelledby="career-practices-title"><h2 class="section-title" id="career-practices-title">Prácticas de programación</h2><p>Retos añadidos para cubrir brechas del currículo. El progreso y las evidencias se guardan en el mismo documento Career y se sincronizan con tu cuenta si has iniciado sesión.</p><p class="career-row"><strong>${stats.done} de ${stats.total} completadas</strong><span>${Math.round(stats.ratio * 100)} %</span></p>${meter(stats.ratio, "Progreso de prácticas")}${sections || '<p class="empty-state">No hay prácticas disponibles en el catálogo.</p>'}</section>`;
+}
+
+function renderPracticeCards(activities, progress) {
+  const cards = activities.map((a) => {
+    const saved = progress[a.id] ?? {};
+    const escList = (items) => items.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
+    return `<details class="career-practice" id="practice-${escapeHtml(a.id)}"><summary><span class="career-row"><strong>${escapeHtml(a.title)}</strong>${badge(saved.done ? "Completada" : "Pendiente", saved.done ? "completado" : "disponible")}</span><span class="career-muted">${escapeHtml(a.level)} · ${Number(a.estimated_hours) || 0} h · ${escapeHtml(a.type)}</span></summary><p>${escapeHtml(a.description)}</p>${a.tasks?.length ? `<h4>Qué hacer</h4><ol>${escList(a.tasks)}</ol>` : ""}${a.deliverables?.length ? `<h4>Entregables</h4><ul>${escList(a.deliverables)}</ul>` : ""}${a.acceptance?.length ? `<h4>Criterios de aceptación</h4><ul>${escList(a.acceptance)}</ul>` : ""}<form class="career-practice-form" data-career-practice="${escapeHtml(a.id)}"><label class="career-check"><input type="checkbox" name="done"${saved.done ? " checked" : ""}> Marcar como completada</label><label>Enlace a la evidencia (GitHub, demo, documentación)<input type="url" name="url" maxlength="240" placeholder="https://..." value="${escapeHtml(saved.url ?? "")}"></label><label>Notas / evidencia<textarea name="note" maxlength="1000" rows="3" placeholder="Qué implementaste, decisiones y resultados">${escapeHtml(saved.note ?? "")}</textarea></label><button class="btn btn--secondary" type="submit">Guardar práctica</button><p class="form-message" role="status">${saved.at ? `Guardado: ${escapeHtml(new Date(saved.at).toLocaleDateString(locale))}` : "Aún no guardada"}</p></form></details>`;
+  }).join("");
+  return `<div class="career-practices">${cards}</div>`;
+}
 function renderSkills(state) {
   const groups = data.catalog.categories
     .map((c) => {
