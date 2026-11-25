@@ -9,7 +9,7 @@
 
 importScripts("precache.js");
 
-const VERSION = "v13";
+const VERSION = "v14";
 const SITE_CACHE = `pld-site-${VERSION}`;
 const PYODIDE_CACHE = "pld-pyodide"; // se conserva entre versiones: son ~10 MB inmutables
 const NETWORK_TIMEOUT_MS = 4000; // con «lie-fi» (conectado pero sin datos) no se espera para siempre
