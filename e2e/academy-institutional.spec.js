@@ -7,6 +7,13 @@ test.describe("PLD ACADEMY institutional workspace MVP", () => {
     await expect(page.getByRole("heading", { name: "Buenos días" })).toBeVisible();
   });
 
+  test("opens the public Academy landing and enters the demo", async ({ page }) => {
+    await page.goto("/#/academy-info");
+    await expect(page.getByRole("heading", { name: /La programación, organizada para todo el centro/ })).toBeVisible();
+    await page.getByRole("link", { name: "Explorar demo del centro" }).click();
+    await expect(page.getByRole("heading", { name: "Buenos días" })).toBeVisible();
+  });
+
   test("shows the center workspace and group overview", async ({ page }) => {
     await expect(page.getByText("Centro de Formación PLD", { exact: true })).toBeVisible();
     await expect(page.getByText("1.º DAW A", { exact: true }).first()).toBeVisible();
