@@ -294,32 +294,32 @@ function renderPractices(unit, progress) {
   const stats = practiceStats(activities, progress);
   const cards = activities.map((a) => {
     const saved = progress[a.id] ?? {};
-    const escList = (items) => items.map((item) => \`<li>\${escapeHtml(item)}</li>\`).join("");
-    return \`<details class="career-practice" id="practice-\${escapeHtml(a.id)}">
-      <summary><span class="career-row"><strong>\${escapeHtml(a.title)}</strong>\${badge(saved.done ? "Completada" : "Pendiente", saved.done ? "completado" : "disponible")}</span>
-        <span class="career-muted">\${escapeHtml(a.level)} · \${Number(a.estimated_hours) || 0} h · \${escapeHtml(a.type)}</span></summary>
-      <p>\${escapeHtml(a.description)}</p>
-      \${a.tasks?.length ? \`<h4>Qué hacer</h4><ol>\${escList(a.tasks)}</ol>\` : ""}
-      \${a.deliverables?.length ? \`<h4>Entregables</h4><ul>\${escList(a.deliverables)}</ul>\` : ""}
-      \${a.acceptance?.length ? \`<h4>Criterios de aceptación</h4><ul>\${escList(a.acceptance)}</ul>\` : ""}
-      <form class="career-practice-form" data-career-practice="\${escapeHtml(a.id)}">
-        <label class="career-check"><input type="checkbox" name="done"\${saved.done ? " checked" : ""}> Marcar como completada</label>
+    const escList = (items) => items.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
+    return `<details class="career-practice" id="practice-${escapeHtml(a.id)}">
+      <summary><span class="career-row"><strong>${escapeHtml(a.title)}</strong>${badge(saved.done ? "Completada" : "Pendiente", saved.done ? "completado" : "disponible")}</span>
+        <span class="career-muted">${escapeHtml(a.level)} · ${Number(a.estimated_hours) || 0} h · ${escapeHtml(a.type)}</span></summary>
+      <p>${escapeHtml(a.description)}</p>
+      ${a.tasks?.length ? `<h4>Qué hacer</h4><ol>${escList(a.tasks)}</ol>` : ""}
+      ${a.deliverables?.length ? `<h4>Entregables</h4><ul>${escList(a.deliverables)}</ul>` : ""}
+      ${a.acceptance?.length ? `<h4>Criterios de aceptación</h4><ul>${escList(a.acceptance)}</ul>` : ""}
+      <form class="career-practice-form" data-career-practice="${escapeHtml(a.id)}">
+        <label class="career-check"><input type="checkbox" name="done"${saved.done ? " checked" : ""}> Marcar como completada</label>
         <label>Enlace a la evidencia (GitHub, demo, documentación)
-          <input type="url" name="url" maxlength="240" placeholder="https://..." value="\${escapeHtml(saved.url ?? "")}">
+          <input type="url" name="url" maxlength="240" placeholder="https://..." value="${escapeHtml(saved.url ?? "")}">
         </label>
         <label>Notas / evidencia
-          <textarea name="note" maxlength="1000" rows="3" placeholder="Qué implementaste, decisiones y resultados">\${escapeHtml(saved.note ?? "")}</textarea>
+          <textarea name="note" maxlength="1000" rows="3" placeholder="Qué implementaste, decisiones y resultados">${escapeHtml(saved.note ?? "")}</textarea>
         </label>
         <button class="btn btn--secondary" type="submit">Guardar práctica</button>
-        <p class="form-message" role="status">\${saved.at ? \`Guardado: \${escapeHtml(new Date(saved.at).toLocaleDateString(locale))}\` : "Aún no guardada"}</p>
+        <p class="form-message" role="status">${saved.at ? `Guardado: ${escapeHtml(new Date(saved.at).toLocaleDateString(locale))}` : "Aún no guardada"}</p>
       </form>
-    </details>\`;
+    </details>`;
   }).join("");
-  return \`<section class="career-practices" aria-label="Prácticas de la unidad">
-    <p class="career-muted">Prácticas de brechas curriculares: \${stats.done} de \${stats.total} completadas</p>
-    \${meter(stats.ratio, \`Prácticas completadas de \${t(unit.title)}\`)}
-    \${cards}
-  </section>\`;
+  return `<section class="career-practices" aria-label="Prácticas de la unidad">
+    <p class="career-muted">Prácticas de brechas curriculares: ${stats.done} de ${stats.total} completadas</p>
+    ${meter(stats.ratio, `Prácticas completadas de ${t(unit.title)}`)}
+    ${cards}
+  </section>`;
 }
 
 function renderSkills(state) {
@@ -641,12 +641,12 @@ function onSubmit(event) {
     const fields = new FormData(form);
     const url = String(fields.get("url") ?? "").trim();
     const note = String(fields.get("note") ?? "").trim();
-    if (url && !safeHttpsUrl(url)) return say(\`#practice-\${practiceId} .form-message\`, "El enlace debe ser HTTPS, sin credenciales y con dominio válido.", false);
+    if (url && !safeHttpsUrl(url)) return say(`#practice-${practiceId} .form-message`, "El enlace debe ser HTTPS, sin credenciales y con dominio válido.", false);
     const progress = writable();
-    if (!setPractice(progress, practiceId, { done: fields.get("done") === "on", url, note })) return say(\`#practice-\${practiceId} .form-message\`, "No se pudo guardar la práctica.", false);
+    if (!setPractice(progress, practiceId, { done: fields.get("done") === "on", url, note })) return say(`#practice-${practiceId} .form-message`, "No se pudo guardar la práctica.", false);
     saveCareer();
     repaint();
-    return say(\`#practice-\${practiceId} .form-message\`, "Práctica guardada y sincronizable con tu cuenta.");
+    return say(`#practice-${practiceId} .form-message`, "Práctica guardada y sincronizable con tu cuenta.");
   }
   const kind = form.dataset.careerForm;
   if (!kind) return;
