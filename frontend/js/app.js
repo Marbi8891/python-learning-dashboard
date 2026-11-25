@@ -150,6 +150,7 @@ const EXCEL_ALIAS = "#/excel-academy"; // nombre alternativo: se reescribe a EXC
 const CYBER_ROUTE = "#/ciberseguridad";
 const CAREER_ROUTE = "#/carrera";
 const ACADEMY_ROUTE = "#/academy";
+const ACADEMY_INFO_ROUTE = "#/academy-info";
 const mobile = window.matchMedia("(max-width: 900px)");
 
 const content = {
@@ -503,6 +504,7 @@ const VIEWS = {
   // Excel profesional se pinta solo (openExcel): tiene ejercicios a medio escribir que no se deben repintar
   excel: { element: "#excel-view", title: "Excel profesional · Python Learning Dashboard", focus: null, render: null },
   career: { element: "#career-view", title: "Mi Carrera en IA · Python Learning Dashboard", focus: null, render: null },
+  academyInfo: { element: "#academy-info-view", title: "PLD ACADEMY · Solución para centros educativos", focus: "#academy-info-title", render: () => renderAcademyInfo() },
   academy: { element: "#academy-view", title: "PLD ACADEMY · Centros educativos", focus: "#academy-title", render: () => zones.academy.renderAcademy() },
   // Página no encontrada (NAV-01) o contenido que no se pudo cargar
   notfound: { element: "#notfound-view", title: () => content.statusTitle, focus: "#notfound-title", render: () => content.statusHtml },
@@ -533,7 +535,7 @@ function updatePrivateNav() {
 }
 
 /** Entrada del menú que corresponde a la vista actual. */
-const NAV_OF_VIEW = { academy: "academy", plans: "planes", cyber: "cyber", home: "pcap-curso", lesson: "pcap-curso", certificate: "pcap-curso", pcap: "pcap", daw: "daw", excel: "excel", career: "carrera", profile: "progreso", private: "panel" };
+const NAV_OF_VIEW = { academyInfo: "academy", academy: "academy", plans: "planes", cyber: "cyber", home: "pcap-curso", lesson: "pcap-curso", certificate: "pcap-curso", pcap: "pcap", daw: "daw", excel: "excel", career: "carrera", profile: "progreso", private: "panel" };
 
 function updateSiteNav() {
   const key = content.view === "learn" ? learnNavKey(location.hash) : NAV_OF_VIEW[content.view];
@@ -715,6 +717,8 @@ function showNotFound(options = {}, { moveFocus = true } = {}) {
   showPage("notfound", { moveFocus });
 }
 
+function renderAcademyInfo() { return "<main class=\"academy-public__wrap\"><header class=\"academy-public__hero\"><p class=\"academy-eyebrow\">PLD ACADEMY · Para centros educativos</p><h1 id=\"academy-info-title\" tabindex=\"-1\">La programación, organizada para todo el centro.</h1><p>Una plataforma para que centros de FP, academias y bootcamps organicen grupos, actividades y seguimiento del aprendizaje con los contenidos y herramientas de Python Learning Dashboard.</p><div class=\"academy-public__actions\"><a class=\"academy-button academy-button--primary\" href=\"#/academy\">Explorar demo del centro</a><a class=\"academy-button academy-button--secondary\" href=\"#/academy\">Ver el espacio docente</a></div><p class=\"academy-public__note\">Demo navegable con datos ficticios. No requiere registro.</p></header><section class=\"academy-public__features\" aria-label=\"Funciones de PLD ACADEMY\"><article><span aria-hidden=\"true\">▦</span><h2>Organiza grupos</h2><p>Gestiona grupos, programas, asignaturas, docentes y número de alumnos desde un espacio común.</p></article><article><span aria-hidden=\"true\">☷</span><h2>Asigna actividades</h2><p>Prepara prácticas, tareas, exámenes y proyectos, con grupo y fecha de entrega.</p></article><article><span aria-hidden=\"true\">↗</span><h2>Revisa el progreso</h2><p>Consulta indicadores agregados de entregas y detecta qué grupos pueden necesitar refuerzo.</p></article><article><span aria-hidden=\"true\">⌘</span><h2>Conecta con PLD Learning</h2><p>El objetivo es reutilizar las rutas, lecciones, ejercicios y progreso de la plataforma actual, sin duplicar el contenido.</p></article></section><section class=\"academy-public__bottom\"><div><h2>Prueba un centro de formación ficticio</h2><p>Explora el panel, cambia entre los roles de administrador, docente y alumno, y sigue una visita guiada de cinco pasos.</p></div><a class=\"academy-button academy-button--primary\" href=\"#/academy\">Abrir demo</a></section><p class=\"academy-public__disclaimer\">Esta versión es un prototipo. No dispone de cuentas institucionales, permisos reales, datos sincronizados ni almacenamiento de alumnado en servidor.</p></main>"; }
+
 function navigate({ moveFocus = true } = {}) {
   if (location.hash.startsWith(RESET_ROUTE)) {
     const token = new URLSearchParams(location.hash.split("?")[1] ?? "").get("token");
@@ -732,6 +736,8 @@ function navigate({ moveFocus = true } = {}) {
     return;
   }
   closeLanding();
+
+  if (location.hash === ACADEMY_INFO_ROUTE) { showPage("academyInfo", { moveFocus }); return; }
 
   if (location.hash === ACADEMY_ROUTE || location.hash.startsWith(`${ACADEMY_ROUTE}/`)) {
     if (awaitZone("academy", moveFocus)) return;
