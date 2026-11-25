@@ -38,8 +38,10 @@ STAGES=[
 def skill(id_,cat,es,en,links,assessment):
  sources={"concepts":[],"blocks":[],"assessments":[assessment],"criteria":[],"checklists":[]}
  for kind,ref in links:
-  if kind=="concept": sources["concepts"].append(ref)
-  elif kind=="block": sources["blocks"].append(ref)
+  if kind=="concept":
+   sources["concepts"].append(ref)
+  elif kind=="block":
+   sources["blocks"].append(ref)
  return {"id":id_,"category":cat,"title":{"es":es,"en":en},"sources":sources}
 def unit(id_,level,es,en,objectives,skill_id,links=()):
  return {"id":id_,"level":level,"title":{"es":es,"en":en},"objectives":objectives,"skills":[skill_id],"links":[{"kind":k,"id":v} for k,v in links],"pending":not bool(links)}
