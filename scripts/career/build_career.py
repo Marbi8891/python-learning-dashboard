@@ -33,9 +33,8 @@ LOCK = HERE / "ids.lock.json"
 
 sys.path.insert(0, str(HERE))
 import applied_ai  # noqa: E402
-import programming_path  # noqa: E402
 
-ROADMAPS = [applied_ai, programming_path]
+ROADMAPS = [applied_ai]
 ID = re.compile(r"^[a-z0-9][a-z0-9.-]{0,60}$")
 LINK_KINDS = ("concept", "block", "resource")
 EVALUABLE = ("concepts", "blocks", "assessments")
