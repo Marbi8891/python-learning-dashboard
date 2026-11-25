@@ -56,6 +56,7 @@ export const SECTIONS = Object.freeze([
   { id: "plan", label: "Plan" },
   { id: "objetivo", label: "Objetivo" },
   { id: "preparacion", label: "Preparación" },
+  { id: "practicas", label: "Prácticas de programación" },
 ]);
 
 const MODULE_STATUS = {
@@ -263,7 +264,6 @@ function renderRoute(state) {
               <span class="career-muted">${escapeHtml(levels.get(u.level) ?? u.level)}${u.pending ? " · contenido propio en preparación" : ""}</span>
               ${u.objectives.length ? `<ul class="career-objectives">${u.objectives.map((o) => `<li>${escapeHtml(t(o))}</li>`).join("")}</ul>` : ""}
               ${u.links.length ? `<p class="career-links">${u.links.map(linkHtml).join(" · ")}</p>` : ""}
-              ${renderPractices(u, state.progress.practice ?? {})}
             </li>`;
         })
         .join("");
@@ -482,7 +482,7 @@ function renderPreparation(state) {
     </section>`;
 }
 
-const RENDER = { resumen: renderSummary, ruta: renderRoute, competencias: renderSkills, proyectos: renderProjects, plan: renderPlan, objetivo: renderGoal, preparacion: renderPreparation };
+const RENDER = { resumen: renderSummary, ruta: renderRoute, competencias: renderSkills, proyectos: renderProjects, plan: renderPlan, objetivo: renderGoal, preparacion: renderPreparation, practicas: renderPracticeCatalog };
 
 /* ---------- Rutas ---------- */
 
