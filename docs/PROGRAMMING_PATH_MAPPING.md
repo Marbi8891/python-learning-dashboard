@@ -68,7 +68,7 @@ These sources were added because the existing PLD content does not fully cover t
 All curriculum resource references were checked against the source catalog: no missing resource IDs. Resource source and generated catalog synchronization still needs to be run with the project generator and CI.
 
 
-## Prácticas nuevas para brechas (draft)
+## Prácticas nuevas para brechas (runtime)
 
 Se ha creado un catálogo estructurado, `frontend/data/career/programming-path-practice.json`, con 28 actividades para objetivos que no tienen ejercicios equivalentes verificados en los cursos existentes. No contiene soluciones ni copia teoría; cada actividad incluye reto, pasos, entregables, criterios de aceptación, duración estimada, nivel y referencias.
 
