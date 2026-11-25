@@ -53,3 +53,9 @@ The tenant boundary must be enforced on the backend for every query and write. F
 - Recorrido breve para dirección: resumen, grupos, actividades, seguimiento y simulación de roles.
 - El recorrido aclara que los datos son sintéticos y que el cambio de rol no es autenticación ni autorización.
 - Los datos de demo se pueden restaurar desde la configuración del centro.
+
+## Public commercial demo
+- Public product page at `#/academy-info` explaining the institutional value and core capabilities.
+- CTA opens the fictional centre workspace at `#/academy`.
+- The public page is responsive and clearly labels the experience as a demo.
+- E2E test covers the landing page and the CTA transition.
