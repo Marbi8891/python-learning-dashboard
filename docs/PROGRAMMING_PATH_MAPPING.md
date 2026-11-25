@@ -66,3 +66,12 @@ These sources were added because the existing PLD content does not fully cover t
 | System reliability / expert systems | `res-google-sre` | Google SRE resource library |
 
 All curriculum resource references were checked against the source catalog: no missing resource IDs. Resource source and generated catalog synchronization still needs to be run with the project generator and CI.
+
+
+## Prácticas nuevas para brechas (draft)
+
+Se ha creado un catálogo estructurado, `frontend/data/career/programming-path-practice.json`, con 28 actividades para objetivos que no tienen ejercicios equivalentes verificados en los cursos existentes. No contiene soluciones ni copia teoría; cada actividad incluye reto, pasos, entregables, criterios de aceptación, duración estimada, nivel y referencias.
+
+Cobertura: Python avanzado y testing; empaquetado; algoritmos/grafos; TypeScript/React; accesibilidad/performance; NoSQL; contratos REST; autorización y testing API; patrones y CI; Spring; concurrencia y diagnóstico de red; CI/CD, cloud y Kubernetes; threat modelling y secure code review; ML, RAG y agentes; system design y capstone full-stack.
+
+El catálogo no está registrado en el runtime ni en el índice Career. Antes de activarlo, el sistema debe importar el catálogo, validar IDs/unidades/recursos y decidir cómo se registrarán entregables y evidencias sin duplicar el progreso existente.
