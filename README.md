@@ -90,6 +90,12 @@ PLD incluye un tutor contextual opcional integrado en el asistente de las leccio
 
 Guía de configuración y privacidad: [docs/TUTOR-IA.md](docs/TUTOR-IA.md).
 
+## Tutor IA de PLD
+
+PLD incluye un tutor contextual opcional integrado en el asistente de las lecciones. Explica conceptos, ofrece pistas graduadas, interpreta errores de Python y revisa código como texto. La integración está detrás del backend y usa NEXARO AI; por defecto permanece desactivada.
+
+Guía de configuración y privacidad: [docs/TUTOR-IA.md](docs/TUTOR-IA.md).
+
 ## Variables de entorno del backend
 
 Se copian de `backend/.env.example` a `backend/.env` (que no se sube al repositorio).
@@ -178,5 +184,3 @@ de una vulnerabilidad, sigue la [política de seguridad](SECURITY.md) y no abras
 ## Licencia
 
 MIT. Autor: Mrabeh Fathi Boussayff.
-
-<!-- test -->
