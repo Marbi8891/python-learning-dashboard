@@ -26,7 +26,8 @@
 
 import { addDays, daysBetween, isoDay } from "../srs.js";
 import { FULL_COVERAGE } from "../pcap-store.js";
-import { READY_SCORE } from "../learn/recommend.js";\nimport { cleanPracticeMap, mergePractice } from "./career-practice.js";
+import { READY_SCORE } from "../learn/recommend.js";
+import { cleanPracticeMap, mergePractice } from "./career-practice.js";
 
 export const LIMITS = Object.freeze({ roadmaps: 5, evidence: 100, studyLog: 366, attempts: 10, note: 120, url: 240, minutes: 600 });
 export const UNIT_STATUSES = Object.freeze(["hecha", "pendiente"]);
