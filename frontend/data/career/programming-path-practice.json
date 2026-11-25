@@ -3,7 +3,7 @@
   "id": "programming-path-practice",
   "title": "Programming Path — Prácticas para brechas curriculares",
   "language": "es",
-  "status": "draft_not_runtime_registered",
+  "status": "runtime_registered",
   "policy": "Prácticas nuevas solo para objetivos no cubiertos. Los cursos existentes, tests y proyectos se reutilizan como fuentes; estas actividades no duplican lecciones ni bancos.",
   "activities": [
     {
