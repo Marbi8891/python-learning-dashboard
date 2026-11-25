@@ -13,6 +13,21 @@ test.describe("PLD ACADEMY institutional workspace MVP", () => {
     await expect(page.getByRole("button", { name: "Grupos" })).toBeVisible();
   });
 
+  test("walks through the guided commercial demo", async ({ page }) => {
+    await page.getByRole("button", { name: "Guía de demo" }).click();
+    await expect(page.getByRole("heading", { name: "Una vista para dirección" })).toBeVisible();
+    await page.getByRole("button", { name: "Siguiente" }).click();
+    await expect(page.getByRole("heading", { name: "Organiza las clases" })).toBeVisible();
+    await page.getByRole("button", { name: "Siguiente" }).click();
+    await expect(page.getByRole("heading", { name: "Publica actividades" })).toBeVisible();
+    await page.getByRole("button", { name: "Siguiente" }).click();
+    await expect(page.getByRole("heading", { name: "Seguimiento del progreso" })).toBeVisible();
+    await page.getByRole("button", { name: "Siguiente" }).click();
+    await expect(page.getByRole("heading", { name: "Vista del alumnado" })).toBeVisible();
+    await page.getByRole("button", { name: "Terminar" }).click();
+    await expect(page.locator(".academy-tour")).not.toBeVisible();
+  });
+
   test("creates a group and persists it in the demo workspace", async ({ page }) => {
     await page.getByRole("button", { name: "＋ Crear grupo" }).click();
     await page.getByRole("heading", { name: "Crear grupo" }).waitFor();
