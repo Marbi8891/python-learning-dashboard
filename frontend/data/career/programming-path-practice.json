@@ -32,7 +32,8 @@
       "resources": [
         "res-python-typing",
         "res-python-tutorial"
-      ]
+      ],
+      "id": "m4-tipado-de-una-biblioteca-de-utilidades-01"
     },
     {
       "module": "m4",
@@ -60,7 +61,8 @@
       "resources": [
         "res-python-tutorial",
         "res-python-typing"
-      ]
+      ],
+      "id": "m4-iteradores-generadores-y-decoradores-02"
     },
     {
       "module": "m4",
@@ -89,7 +91,8 @@
         "res-hypothesis",
         "res-pytest-docs",
         "res-python-testing"
-      ]
+      ],
+      "id": "m4-pruebas-de-propiedades-para-validadores-03"
     },
     {
       "module": "m4",
@@ -117,7 +120,8 @@
       "resources": [
         "res-python-packaging",
         "res-python-tutorial"
-      ]
+      ],
+      "id": "m4-empaquetar-y-publicar-una-cli-04"
     },
     {
       "module": "m6",
@@ -145,7 +149,8 @@
       "resources": [
         "res-mit-algorithms",
         "res-princeton-algorithms"
-      ]
+      ],
+      "id": "m6-comparar-soluciones-y-complejidad-05"
     },
     {
       "module": "m6",
@@ -173,7 +178,8 @@
       "resources": [
         "res-mit-algorithms",
         "res-princeton-algorithms"
-      ]
+      ],
+      "id": "m6-recorrido-de-grafo-y-deteccion-de-rutas-06"
     },
     {
       "module": "m8",
@@ -200,7 +206,8 @@
       ],
       "resources": [
         "res-typescript-handbook"
-      ]
+      ],
+      "id": "m8-migracion-gradual-de-javascript-a-typescript-07"
     },
     {
       "module": "m8",
@@ -228,7 +235,8 @@
       "resources": [
         "res-react-learn",
         "res-fullstackopen"
-      ]
+      ],
+      "id": "m8-mini-aplicacion-react-con-estado-y-formulario-08"
     },
     {
       "module": "m8",
@@ -256,7 +264,8 @@
       "resources": [
         "res-w3c-wai-tutorials",
         "res-webdev-performance"
-      ]
+      ],
+      "id": "m8-auditoria-de-accesibilidad-y-rendimiento-09"
     },
     {
       "module": "m9",
@@ -285,7 +294,8 @@
         "res-postgresql-docs",
         "res-mongodb-docs",
         "res-cmu-db"
-      ]
+      ],
+      "id": "m9-modelado-relacional-frente-a-documental-10"
     },
     {
       "module": "m10",
@@ -313,7 +323,8 @@
       "resources": [
         "res-mdn-http",
         "res-harvard-cs50web"
-      ]
+      ],
+      "id": "m10-diseno-de-contrato-rest-11"
     },
     {
       "module": "m10",
@@ -342,7 +353,8 @@
         "res-owasp-api-top10",
         "res-owasp-cheatsheets",
         "res-fastapi-tutorial"
-      ]
+      ],
+      "id": "m10-autorizacion-por-roles-y-propiedad-12"
     },
     {
       "module": "m10",
@@ -371,7 +383,8 @@
         "res-pytest-docs",
         "res-fastapi-tutorial",
         "res-github-actions"
-      ]
+      ],
+      "id": "m10-testing-de-contrato-y-regresion-api-13"
     },
     {
       "module": "m11",
@@ -399,7 +412,8 @@
       "resources": [
         "res-harvard-cs50web",
         "res-fullstackopen"
-      ]
+      ],
+      "id": "m11-refactor-con-patron-strategy-14"
     },
     {
       "module": "m11",
@@ -427,7 +441,8 @@
       "resources": [
         "res-pytest-docs",
         "res-github-actions"
-      ]
+      ],
+      "id": "m11-piramide-de-pruebas-y-ci-15"
     },
     {
       "module": "m12",
@@ -455,7 +470,8 @@
       "resources": [
         "res-dev-java",
         "res-spring-guides"
-      ]
+      ],
+      "id": "m12-api-crud-con-spring-boot-16"
     },
     {
       "module": "m13",
@@ -483,7 +499,8 @@
       "resources": [
         "res-python-asyncio",
         "res-mit-missing-semester"
-      ]
+      ],
+      "id": "m13-simular-concurrencia-y-race-conditions-17"
     },
     {
       "module": "m13",
@@ -511,7 +528,8 @@
       "resources": [
         "res-mdn-http",
         "res-linux-manpages"
-      ]
+      ],
+      "id": "m13-diagnostico-de-una-aplicacion-de-red-18"
     },
     {
       "module": "m14",
@@ -539,7 +557,8 @@
       "resources": [
         "res-github-actions",
         "res-12factor"
-      ]
+      ],
+      "id": "m14-pipeline-de-ci-cd-con-despliegue-controlado-19"
     },
     {
       "module": "m14",
@@ -568,7 +587,8 @@
         "res-azure-fundamentals",
         "res-cncft-cloud-native",
         "res-google-sre"
-      ]
+      ],
+      "id": "m14-arquitectura-cloud-para-una-app-pequena-20"
     },
     {
       "module": "m14",
@@ -596,7 +616,8 @@
       "resources": [
         "res-kubernetes-docs",
         "res-cncft-cloud-native"
-      ]
+      ],
+      "id": "m14-desplegar-aplicacion-en-kubernetes-21"
     },
     {
       "module": "m15",
@@ -624,7 +645,8 @@
       "resources": [
         "res-owasp-top10",
         "res-owasp-api-top10"
-      ]
+      ],
+      "id": "m15-threat-model-de-una-aplicacion-web-22"
     },
     {
       "module": "m15",
@@ -652,7 +674,8 @@
       "resources": [
         "res-owasp-cheatsheets",
         "res-owasp-api-top10"
-      ]
+      ],
+      "id": "m15-revision-de-seguridad-del-codigo-23"
     },
     {
       "module": "m16",
@@ -680,7 +703,8 @@
       "resources": [
         "res-google-mlcc",
         "res-pytorch-tutorials"
-      ]
+      ],
+      "id": "m16-experimento-ml-con-baseline-y-metricas-24"
     },
     {
       "module": "m16",
@@ -708,7 +732,8 @@
       "resources": [
         "res-huggingface-learn",
         "res-google-mlcc"
-      ]
+      ],
+      "id": "m16-rag-minimo-con-evaluacion-25"
     },
     {
       "module": "m16",
@@ -736,7 +761,8 @@
       "resources": [
         "res-huggingface-learn",
         "res-owasp-cheatsheets"
-      ]
+      ],
+      "id": "m16-agente-con-herramientas-y-permisos-minimos-26"
     },
     {
       "module": "m17",
@@ -765,7 +791,8 @@
         "res-google-sre",
         "res-cmu-db",
         "res-kubernetes-docs"
-      ]
+      ],
+      "id": "m17-diseno-de-sistema-plataforma-de-aprendizaje-27"
     },
     {
       "module": "m17",
@@ -800,7 +827,8 @@
         "res-harvard-cs50web",
         "res-github-actions",
         "res-owasp-cheatsheets"
-      ]
+      ],
+      "id": "m17-capstone-full-stack-desplegado-28"
     }
   ]
 }
