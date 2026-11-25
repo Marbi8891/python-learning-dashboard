@@ -75,4 +75,3 @@ Sin IA, el asistente de respuestas preparadas sigue funcionando.
 - `POST /api/v1/ai/hint`
 - `POST /api/v1/ai/explain-error`
 - `POST /api/v1/ai/review-code`
-
