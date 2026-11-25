@@ -676,6 +676,19 @@ function onSubmit(event) {
     repaint();
     return say(`#practice-${practiceId} .form-message`, "Práctica guardada y sincronizable con tu cuenta.");
   }
+  const practiceId = form.dataset.careerPractice;
+  if (practiceId) {
+    event.preventDefault();
+    const fields = new FormData(form);
+    const url = String(fields.get("url") ?? "").trim();
+    const note = String(fields.get("note") ?? "").trim();
+    if (url && !safeHttpsUrl(url)) return say(`#practice-${practiceId} .form-message`, "El enlace debe ser HTTPS, sin credenciales y con dominio válido.", false);
+    const progress = writable();
+    if (!setPractice(progress, practiceId, { done: fields.get("done") === "on", url, note })) return say(`#practice-${practiceId} .form-message`, "No se pudo guardar la práctica.", false);
+    saveCareer();
+    repaint();
+    return say(`#practice-${practiceId} .form-message`, "Práctica guardada y sincronizable con tu cuenta.");
+  }
   const kind = form.dataset.careerForm;
   if (!kind) return;
   event.preventDefault();
