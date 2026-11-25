@@ -262,10 +262,10 @@ No incluir teoría duplicada, soluciones copiadas, quizzes repetidos ni nuevos b
 - El roadmap no se declara “experto” sin evidencias de proyectos, tests, despliegues y criterios evaluados.
 
 
-### Prácticas de brechas — implementación en draft
+### Prácticas de brechas — integración runtime inicial
 
 - Se añadieron 28 retos estructurados en `frontend/data/career/programming-path-practice.json`.
 - Cada actividad contiene unidad del itinerario, nivel, tipo, horas orientativas, descripción, tareas, entregables, criterios de aceptación y referencias.
 - Se evitan soluciones que dupliquen bancos existentes. Las tareas son proyectos/experimentos/auditorías de brechas.
-- Estado: catálogo creado y referencias verificables; todavía no cargado por el runtime, ni vinculado al progreso/evidencias.
-- Antes de activarlo: validator JSON, IDs únicos, referencias existentes, unit IDs, traducción si la UI requiere ES/EN, diseño de evidencia y pruebas de integración.
+- Estado: catálogo cargado desde Career en la sección «Prácticas de programación». Las actividades se agrupan por módulo y unidad; se puede marcar completada y guardar una URL HTTPS y notas de evidencia. El progreso se almacena en el documento Career existente (`pld:career`) y se fusiona por marca temporal, sin tabla, endpoint ni almacenamiento paralelo.
+- Pendiente: ejecutar CI y pruebas de interfaz en el navegador; validar accesibilidad y sincronización entre dispositivos.
