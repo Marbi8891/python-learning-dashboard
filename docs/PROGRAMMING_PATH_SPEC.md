@@ -6,6 +6,14 @@ Añadir a PLD un itinerario profesional de programación desde fundamentos hasta
 
 No sustituye los cursos DAW, Python, JavaScript, Java, SQL ni el itinerario AI Engineer. Los enlaza y los organiza en un camino progresivo.
 
+## Implementation progress (2026-11-25)
+
+- Added `docs/PROGRAMMING_PATH_MAPPING.md`: curriculum map with explicit reuse of existing DAW lessons, Career roadmap units, and gap-only content.
+- Added a draft data source `scripts/career/programming_path.py` with a 17-module sequence, linked objectives and resource/block/concept references. It is intentionally **not registered in the Career generator or runtime index yet** because this environment cannot execute the repository generator locally. Activation requires generating the static catalog, validating IDs and references, and running CI. This prevents an ungenerated catalog from breaking the existing Career pipeline.
+- Expanded the resource catalog source and output with 24 programming resources. Resource references are mapped to existing PLD lesson IDs where applicable.
+- The resource catalog source and generated JSON were compared structurally: 48 resources, 48 matching IDs, no duplicate IDs, and zero source/output field differences. 129 curriculum references in the draft were checked against existing concepts, blocks and resources; none are invalid.
+- The resource generator now recognizes the `curso` resource type.
+
 ## Política y catálogo de fuentes fiables
 
 Programming Path debe utilizar una jerarquía de fuentes y registrar enlaces por tema. No se debe generar lecciones basadas únicamente en blogs, respuestas de foros, vídeos sin documentación o contenido SEO.
