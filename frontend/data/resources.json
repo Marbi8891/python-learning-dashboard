@@ -10,7 +10,8 @@
     "repositorio": "Repositorio de código",
     "herramienta": "Herramienta en línea",
     "indice": "Índice de recursos",
-    "normativa": "Normativa oficial"
+    "normativa": "Normativa oficial",
+    "curso": "Curso universitario o plataforma educativa estructurada"
   },
   "access": {
     "accesible": "Accesible sin registro",
@@ -609,6 +610,22 @@
       "access": "accesible",
       "quality": "alta",
       "description": "Curso de desarrollo web con Python, JavaScript, SQL y frameworks, que incluye diseño de bases de datos, APIs, interfaces, testing, CI/CD, escalabilidad y seguridad.",
+      "checked": "2026-11-25"
+    },
+    {
+      "id": "res-mit-missing-semester",
+      "title": "MIT Missing Semester of Your CS Education",
+      "modules": [],
+      "lessons": [],
+      "author": "MIT CSAIL / MIT Student Information Processing Board",
+      "url": "https://missing.csail.mit.edu/",
+      "lang": "en",
+      "type": "curso",
+      "license": "CC BY-NC-SA según la página oficial; revisar licencia de cada material antes de reutilizarlo.",
+      "reuse": "Enlazar al curso original. No copiar materiales sin comprobar la licencia y conservar atribución.",
+      "access": "accesible",
+      "quality": "alta",
+      "description": "Práctica de herramientas de desarrollo: shell, terminal, entorno de desarrollo, debugging, profiling, Git, empaquetado, código y workflows asistidos por IA. La edición 2026 organiza el contenido en nueve sesiones.",
       "checked": "2026-11-25"
     }
   ]
