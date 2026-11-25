@@ -44,6 +44,7 @@ import { exportFinance, importFinance, projection, removeYear, setTargets, setYe
 import { financeChart, SERIES } from "./career-chart.js";
 import { career, loadRoadmap, onCareerChange, saveCareer } from "./career-store.js";
 import { clearFinance, loadFinance, saveFinance } from "./finance-store.js";
+import { setPractice, practiceStats } from "./career-practice.js";
 
 export const BASE = "#/carrera";
 const DEFAULT_ROADMAP = "applied-ai-engineer";
@@ -101,12 +102,13 @@ function loadData() {
     const catalog = await loadRoadmap(career.active ?? DEFAULT_ROADMAP);
     const index = indexRoadmap(catalog);
     const courses = [...new Set(catalog.skills.flatMap((s) => s.sources.blocks).map((id) => id.split(":")[0]))];
-    const [learnIndex, resources, ...banks] = await Promise.all([
+    const [learnIndex, resources, practiceCatalog, ...banks] = await Promise.all([
       loadLearningContent().catch(() => null),
       fetchJson("data/resources.json").then((r) => new Map((r.resources ?? []).map((item) => [item.id, item])), () => new Map()),
+      fetchJson("data/career/programming-path-practice.json").catch(() => ({ activities: [] })),
       ...courses.map((id) => loadCourseBank(id).then((bank) => [id, bank], () => null)),
     ]);
-    return { catalog, index, learnIndex, resources, banks: new Map(banks.filter(Boolean)) };
+    return { catalog, index, learnIndex, resources, practiceCatalog, banks: new Map(banks.filter(Boolean)) };
   })();
   loading.catch(() => {
     loading = null; // sin conexión: se reintenta la próxima vez
@@ -162,6 +164,7 @@ const skillTitle = (id) => t(data.index.skills.get(id)?.title) || id;
 const moduleTitle = (id) => t(data.index.modules.get(id)?.title) || id;
 const roleTitle = (id) => t(data.catalog.roles.find((r) => r.id === id)?.title) || id;
 const projectOf = (id) => data.catalog.projects.find((p) => p.id === id);
+const practicesFor = (unitId) => (data.practiceCatalog?.activities ?? []).filter((a) => a.unit === unitId);
 
 function blockTitle(blockId) {
   const [course, slug] = blockId.split(":");
@@ -260,6 +263,7 @@ function renderRoute(state) {
               <span class="career-muted">${escapeHtml(levels.get(u.level) ?? u.level)}${u.pending ? " · contenido propio en preparación" : ""}</span>
               ${u.objectives.length ? `<ul class="career-objectives">${u.objectives.map((o) => `<li>${escapeHtml(t(o))}</li>`).join("")}</ul>` : ""}
               ${u.links.length ? `<p class="career-links">${u.links.map(linkHtml).join(" · ")}</p>` : ""}
+              ${renderPractices(u, state.progress.practice ?? {})}
             </li>`;
         })
         .join("");
@@ -278,10 +282,44 @@ function renderRoute(state) {
     })
     .join("");
   return `<section class="course-section" aria-labelledby="career-route-title">
-      <h2 class="section-title" id="career-route-title">Ruta de 8 módulos</h2>
+      <h2 class="section-title" id="career-route-title">Programming Path · 17 módulos</h2>
       <p class="readiness__note">Marca las unidades que ya has estudiado para organizarte. Para que cuenten, practica sus conceptos, aprueba la evaluación del módulo y demuéstralo en un proyecto.</p>
       <ol class="career-modules">${items}</ol>
     </section>`;
+}
+
+function renderPractices(unit, progress) {
+  const activities = practicesFor(unit.id);
+  if (!activities.length) return "";
+  const stats = practiceStats(activities, progress);
+  const cards = activities.map((a) => {
+    const saved = progress[a.id] ?? {};
+    const escList = (items) => items.map((item) => \`<li>\${escapeHtml(item)}</li>\`).join("");
+    return \`<details class="career-practice" id="practice-\${escapeHtml(a.id)}">
+      <summary><span class="career-row"><strong>\${escapeHtml(a.title)}</strong>\${badge(saved.done ? "Completada" : "Pendiente", saved.done ? "completado" : "disponible")}</span>
+        <span class="career-muted">\${escapeHtml(a.level)} · \${Number(a.estimated_hours) || 0} h · \${escapeHtml(a.type)}</span></summary>
+      <p>\${escapeHtml(a.description)}</p>
+      \${a.tasks?.length ? \`<h4>Qué hacer</h4><ol>\${escList(a.tasks)}</ol>\` : ""}
+      \${a.deliverables?.length ? \`<h4>Entregables</h4><ul>\${escList(a.deliverables)}</ul>\` : ""}
+      \${a.acceptance?.length ? \`<h4>Criterios de aceptación</h4><ul>\${escList(a.acceptance)}</ul>\` : ""}
+      <form class="career-practice-form" data-career-practice="\${escapeHtml(a.id)}">
+        <label class="career-check"><input type="checkbox" name="done"\${saved.done ? " checked" : ""}> Marcar como completada</label>
+        <label>Enlace a la evidencia (GitHub, demo, documentación)
+          <input type="url" name="url" maxlength="240" placeholder="https://..." value="\${escapeHtml(saved.url ?? "")}">
+        </label>
+        <label>Notas / evidencia
+          <textarea name="note" maxlength="1000" rows="3" placeholder="Qué implementaste, decisiones y resultados">\${escapeHtml(saved.note ?? "")}</textarea>
+        </label>
+        <button class="btn btn--secondary" type="submit">Guardar práctica</button>
+        <p class="form-message" role="status">\${saved.at ? \`Guardado: \${escapeHtml(new Date(saved.at).toLocaleDateString(locale))}\` : "Aún no guardada"}</p>
+      </form>
+    </details>\`;
+  }).join("");
+  return \`<section class="career-practices" aria-label="Prácticas de la unidad">
+    <p class="career-muted">Prácticas de brechas curriculares: \${stats.done} de \${stats.total} completadas</p>
+    \${meter(stats.ratio, \`Prácticas completadas de \${t(unit.title)}\`)}
+    \${cards}
+  </section>\`;
 }
 
 function renderSkills(state) {
@@ -596,6 +634,19 @@ function onSubmit(event) {
     saveCareer();
     say("#career-plan-status", "Etapa guardada. Las siguientes se han desplazado.");
     return;
+  }
+  const practiceId = form.dataset.careerPractice;
+  if (practiceId) {
+    event.preventDefault();
+    const fields = new FormData(form);
+    const url = String(fields.get("url") ?? "").trim();
+    const note = String(fields.get("note") ?? "").trim();
+    if (url && !safeHttpsUrl(url)) return say(\`#practice-\${practiceId} .form-message\`, "El enlace debe ser HTTPS, sin credenciales y con dominio válido.", false);
+    const progress = writable();
+    if (!setPractice(progress, practiceId, { done: fields.get("done") === "on", url, note })) return say(\`#practice-\${practiceId} .form-message\`, "No se pudo guardar la práctica.", false);
+    saveCareer();
+    repaint();
+    return say(\`#practice-\${practiceId} .form-message\`, "Práctica guardada y sincronizable con tu cuenta.");
   }
   const kind = form.dataset.careerForm;
   if (!kind) return;
