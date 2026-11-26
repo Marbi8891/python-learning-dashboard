@@ -9,19 +9,20 @@
 Do not publish or merge the release until every required item below is verified.
 
 ### Scope and integration
-- [ ] Confirm the release branch is based on the intended, current `main` commit.
-- [ ] Review PR #223 (PLD ACADEMY institutional demo) against the release branch.
-- [ ] Review PR #224 (Programming Path) against the release branch.
-- [ ] Confirm these features reuse existing progress and storage systems and do not duplicate or overwrite content.
-- [ ] Decide whether PR #227 (Pentest Lab dashboard) is in Beta scope. It is a UI prototype; it does not perform real scans or deploy Docker labs.
+- [x] Confirm the release branch is based on the current `main` commit (`be801c5afa1c27ba6d5f24695236fe8ee67bdcee`; 0 commits behind at audit time).
+- [ ] Review PR #223 (PLD ACADEMY institutional demo) against the updated release branch; it needs rebasing after #224.
+- [x] Review and integrate PR #224 (Programming Path) into the release branch.
+- [x] Confirm Programming Path reuses existing career-roadmap progress and lesson/resource IDs; it does not create a parallel progress store or duplicate existing lessons.
+- [ ] Confirm Academy demo storage isolation and flows in CI/manual review. The prototype uses a namespaced localStorage key and synthetic data, but its CI has failures and it is not production multi-tenant.
+- [ ] Decide whether PR #227 (Pentest Lab dashboard) is in Beta scope. It is UI-only; it does not perform real scans or deploy Docker labs.
 - [ ] Record included and excluded features in the release notes.
 
 ### Quality and security
 - [ ] CI is green on the exact release commit.
-- [ ] Backend tests and coverage pass.
-- [ ] Frontend unit tests pass.
-- [ ] Playwright E2E tests pass.
-- [ ] Curriculum/content validation scripts pass.
+- [ ] Backend tests and coverage pass on the exact release commit.
+- [ ] Frontend unit tests pass on the exact release commit.
+- [ ] Playwright E2E tests pass on the exact release commit.
+- [ ] Curriculum/content validation scripts pass on the exact release commit.
 - [ ] Dependency/security checks have no unreviewed blocking findings.
 - [ ] Check secrets, personal data, debug flags, and unsafe demo defaults.
 - [ ] Verify authentication, persistence, and demo-mode isolation.
@@ -31,7 +32,7 @@ Do not publish or merge the release until every required item below is verified.
 - [ ] README has current feature summary, setup instructions, screenshots, demo link, and clear project status.
 - [ ] Demo route works without requiring a real account and does not touch real user data.
 - [ ] Academy demo explains institutional use and limitations.
-- [ ] Programming Path is visible and its progress integration is verified.
+- [x] Programming Path is integrated into the Beta branch; runtime/progress smoke test still pending.
 - [ ] Screenshots are current and do not expose personal information.
 - [ ] Spanish and English copy is checked for consistency.
 - [ ] Legal/privacy documentation is current for the features included.
@@ -50,9 +51,11 @@ Do not publish or merge the release until every required item below is verified.
 - PR #101 was closed as superseded by the Programming Path work.
 - PR #193 was closed as an older AI Tutor specification.
 - PR #203 was closed as outdated relative to the current AI Tutor direction.
-- PR #223 and #224 target this release branch and are the primary Beta integration candidates.
-- PR #227 remains separate on `main`; scope decision and review are pending.
-- The repository still has multiple open PRs. They have not been declared integrated merely because they are listed here.
+- PR #224 merged into `release/beta-0.1.0` at `1c104b3816f82a55bc883b18e8896a5b011c6597`. Its CI jobs (backend, e2e, webkit, courses) and Deployment check were green on the PR head SHA. Post-merge CI on the merge commit is not yet verified.
+- PR #223 remains open and is not mergeable at present. Its base branch advanced when #224 merged; it must be rebased/updated and CI rerun. The last CI run failed two E2E tests: the Academy persistence test clicks the public landing-page nav link but then expects the workspace Groups tab; another existing PCAP viewport assertion failed. Fix the route expectation and investigate the viewport failure before merging.
+- PR #227 remains separate against `main`; scope decision is pending. CI failures include missing English translation for the new “Pentest Lab” label and a WebKit account-recovery test failing to find the expected mailto link.
+- `release/beta-0.1.0` is currently 34 commits ahead of `main` and 0 behind; `main` was not modified.
+- There are still several open PRs targeting `main`; they are not considered integrated into the Beta unless separately ported/reviewed.
 
 ## Known limitations to disclose
 
