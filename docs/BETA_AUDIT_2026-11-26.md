@@ -44,7 +44,7 @@
 | #205 | Documentación Tutor IA | Docs solamente; debe conciliarse con la decisión vigente de tutor IA y NEXARO. |
 | #203 | Retirada/limpieza de Tutor IA | Elimina interfaz y módulos; conflicto funcional con #190/#180/#193/#205. No integrar hasta resolver una decisión de producto. |
 | #201 | Roadmaps hub | UI ligera, pero su progreso es local y necesita reconciliarse con el Learning Engine/Career antes de integrarse. |
-| #199 | AI Academy | Catálogo y curso inicial; contenido parcial. CI ha mostrado fallo de routing. Revisar antes de integrar. |
+| #199 | AI Academy | Integrada en Beta vía #216; catálogo y curso inicial. Contenido parcial, progreso local propio pendiente de unificación. |
 | #196 | DAW Coach mobile | PWA independiente; potencial duplicación del Coach/Second Brain. Requiere revisar integración y precache/service worker. |
 | #195 | DAW Exam Coach | Workspace local-first; potencial solapamiento con preparación DAW y progreso. |
 | #193 | Tutor IA spec | Documentación, no código. |
@@ -110,6 +110,7 @@
 - [x] Integrar #185 (PLD-004) en Beta vía PR #211.
 - [ ] Port/rebase #186 (PLD-003): PR #212 bloqueada por conflictos.
 - [ ] Port/rebase #184 (PLD-001): pendiente.
+- [x] Integrar AI Academy (#216) tras CI verde.
 - [ ] Integrar fixes P0 uno por uno.
 - [ ] Consolidar catálogo/rutas/Academies.
 - [ ] Consolidar DAW Coach y preparación.
