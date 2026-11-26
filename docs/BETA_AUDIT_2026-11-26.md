@@ -105,7 +105,11 @@
 - [x] Confirmar `main` SHA y que beta parte de ese mismo commit.
 - [x] Inventariar árbol y arquitectura de alto nivel.
 - [x] Inventariar PRs recientes y cambios/solapamientos.
-- [ ] Descargar/revisar diffs completos y CI de cada PR priorizada.
+- [x] Revisar diffs prioritarios y snapshots CI de fixes/features.
+- [x] Integrar #183 (Pages workflow) en Beta.
+- [x] Integrar #185 (PLD-004) en Beta vía PR #211.
+- [ ] Port/rebase #186 (PLD-003): PR #212 bloqueada por conflictos.
+- [ ] Port/rebase #184 (PLD-001): pendiente.
 - [ ] Integrar fixes P0 uno por uno.
 - [ ] Consolidar catálogo/rutas/Academies.
 - [ ] Consolidar DAW Coach y preparación.
