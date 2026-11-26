@@ -29,6 +29,7 @@ test("Paths link to existing PLD zones and use internal routes",()=>{
 });
 
 import { pathProgress } from "../../frontend/js/paths-progress.js";
+import { AI_ACADEMY_COURSES, aiCourseLessons } from "../../frontend/js/ai-academy-data.js";
 
 test("Python Path aggregates existing concept progress",async()=>{
   const oldFetch=globalThis.fetch,oldStorage=globalThis.localStorage;
@@ -44,4 +45,13 @@ test("Excel Path reuses completed lessons from the existing course store",async(
   globalThis.localStorage={getItem(key){return key==="pld:course:excel"?JSON.stringify({done:{xl1:"2026-01-01"}}):null}};
   try{assert.deepEqual(await pathProgress("excel-professional"),{done:1,total:2,label:"unidades Excel",percent:50})}
   finally{globalThis.fetch=oldFetch;if(oldStorage===undefined)delete globalThis.localStorage;else globalThis.localStorage=oldStorage}
+});
+
+test("AI Path counts Academy topics and deduplicates stored completion IDs",async()=>{
+  const oldStorage=globalThis.localStorage;
+  const first=AI_ACADEMY_COURSES[0],lessons=aiCourseLessons(first);
+  const total=AI_ACADEMY_COURSES.reduce((n,course)=>n+aiCourseLessons(course).length,0);
+  globalThis.localStorage={getItem(key){return key==="pld:ai-academy:progress"?JSON.stringify({[first.id]:[lessons[0].id,lessons[0].id]}):null}};
+  try{assert.deepEqual(await pathProgress("ai-engineer"),{done:1,total,label:"temas IA",percent:Math.round(1/total*100)})}
+  finally{if(oldStorage===undefined)delete globalThis.localStorage;else globalThis.localStorage=oldStorage}
 });
