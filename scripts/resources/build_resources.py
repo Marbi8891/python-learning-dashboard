@@ -18,6 +18,7 @@ Uso:  python scripts/resources/build_resources.py           (genera)
 
 from __future__ import annotations
 
+import difflib
 import json
 import re
 import sys
@@ -27,7 +28,7 @@ ROOT = Path(__file__).resolve().parents[2]
 DATA = ROOT / "frontend" / "data"
 OUT = DATA / "resources.json"
 
-CHECKED = "2026-11-02"
+CHECKED = "2026-11-25"
 
 TYPES = {
     "documentacion": "Documentación oficial",
@@ -1182,7 +1183,10 @@ def main() -> None:
     text = json.dumps(build(), ensure_ascii=False, indent=1) + "\n"
     summary = f"{len(RESOURCES)} recursos"
     if "--check" in sys.argv:
-        if not OUT.exists() or OUT.read_text("utf-8") != text:
+        actual = OUT.read_text("utf-8") if OUT.exists() else ""
+        if actual != text:
+            diff = difflib.unified_diff(actual.splitlines(True), text.splitlines(True), fromfile="resources.json", tofile="generated")
+            print("".join(diff))
             sys.exit("resources.json no está al día: python scripts/resources/build_resources.py")
         print(f"resources.json al día y válido: {summary}")
         return
