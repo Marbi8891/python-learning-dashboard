@@ -20,6 +20,7 @@
 | [API.md](API.md) | Endpoints de la API REST (`/api/v1`) |
 | [auth.md](auth.md) | Recuperación de contraseña e inicio de sesión con Google |
 | [AISLAMIENTO_PYTHON.md](AISLAMIENTO_PYTHON.md) | Cómo se evita que un ejercicio de Python contamine los siguientes, qué se midió y qué no cubre |
+| [SYNC_VERSIONING.md](SYNC_VERSIONING.md) | Versiones de los documentos sincronizados: 409, 428 sin versión, compatibilidad y pruebas (PLD-003) |
 | [HITOS_VERIFICADOS.md](HITOS_VERIFICADOS.md) | Qué progreso es local (orientativo) y qué comprueba el servidor: simulacros del PCAP verificados |
 | [ADAPTIVE_ENGINE.md](ADAPTIVE_ENGINE.md) | Motor adaptativo: dominio, olvido, repaso espaciado y planificador |
 | [MODULO_POO.md](MODULO_POO.md) | Módulo de POO: unidades, formato, validadores, progreso y currículo |
