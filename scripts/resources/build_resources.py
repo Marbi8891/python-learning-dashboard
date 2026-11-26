@@ -1093,7 +1093,7 @@ RESOURCES: list[dict] = [
         "quality": "alta",
         "description": "Recursos y proyectos del ecosistema cloud-native para comprender contenedores, observabilidad y orquestación.",
         "checked": "2026-11-25",
-    }
+    },
 ]
 
 ID = re.compile(r"^res-[a-z0-9-]+$")
