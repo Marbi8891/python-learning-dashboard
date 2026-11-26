@@ -7,6 +7,8 @@ repetir la recompensa, entregar fuera de tiempo ni tocar los simulacros de otra 
 from collections import Counter
 from datetime import UTC, datetime, timedelta
 
+import pytest
+from fastapi import HTTPException
 from sqlalchemy import select, update
 from sqlalchemy.orm import Session
 
@@ -133,6 +135,21 @@ def test_only_a_few_verified_exams_a_day(client, auth_headers, monkeypatch):
     start(client, auth_headers)
     start(client, auth_headers)
     assert client.post(URL, headers=auth_headers).status_code == 429
+
+
+def test_an_account_deleted_before_starting_gets_401(client, auth_headers):
+    """La cuenta desaparece entre la autenticación y el bloqueo de su fila (PLD-001)."""
+    from app.models import User
+    from app.routers.verified import start_exam
+
+    with Session(client.engine) as db:
+        user = db.scalar(select(User))
+        db.delete(user)
+        db.flush()
+        with pytest.raises(HTTPException) as error:
+            start_exam(user, db)
+        assert error.value.status_code == 401
+        db.rollback()
 
 
 def test_nobody_can_see_or_submit_another_users_exam(client, auth_headers):
