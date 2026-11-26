@@ -1,6 +1,7 @@
 # ruff: noqa: E501
 """Programming Path: currículo secuenciado que reutiliza PLD y enlaza fuentes fiables."""
-# fmt: off  # La fuente compacta se mantiene estable hasta generar el catálogo y validarla.
+# fmt: off
+# La fuente compacta se mantiene estable hasta generar el catálogo y validarla.
 ID = "programming-path"
 VERSION = 1
 TITLE = {"es": "Programming Path · De 0 a Experto", "en": "Programming Path · Zero to Expert"}
