@@ -48,8 +48,10 @@ test.describe("PLD ACADEMY institutional workspace MVP", () => {
     await page.getByRole("button", { name: "Crear grupo", exact: true }).click();
     await expect(page.getByText("2.º DAW B", { exact: true })).toBeVisible();
     await page.reload();
-    await expect(page.getByRole("link", { name: /PLD ACADEMY/ })).toBeVisible();
     await page.getByRole("link", { name: /PLD ACADEMY/ }).click();
+    await expect(page.getByRole("heading", { name: /La programación, organizada para todo el centro/ })).toBeVisible();
+    await page.getByRole("link", { name: "Explorar demo del centro" }).click();
+    await expect(page.getByRole("heading", { name: "Buenos días" })).toBeVisible();
     await page.getByRole("button", { name: "Grupos" }).click();
     await expect(page.getByText("2.º DAW B", { exact: true })).toBeVisible();
   });
