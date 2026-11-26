@@ -52,8 +52,8 @@ Do not publish or merge the release until every required item below is verified.
 - PR #193 was closed as an older AI Tutor specification.
 - PR #203 was closed as outdated relative to the current AI Tutor direction.
 - PR #224 merged into `release/beta-0.1.0` at `1c104b3816f82a55bc883b18e8896a5b011c6597`. Its CI jobs (backend, e2e, webkit, courses) and Deployment check were green on the PR head SHA. Post-merge CI on the merge commit is not yet verified.
-- PR #223 remains open and cannot currently merge. The base branch advanced when #224 merged. The Academy persistence E2E was corrected in head commit `230dfa2015eed29425f6e282004e04aae85d60a0` to follow the public landing CTA to the workspace. No CI run is available for that commit, and the branch still diverges from the current release branch. The GitHub connector has no branch-rebase/update operation; it must be rebased or ported before integration. The separate PCAP viewport assertion failure also remains to be checked.
-- PR #227 remains separate against `main`; scope decision is pending. The missing English translation for “Pentest Lab” was added in head commit `67ca9b23ace5676e635164a3b0b3356428121038`; CI has not run on that head. A WebKit account-recovery test still failed to find the expected mailto link in the previous run.
+- PR #223 remains open as draft. Its head is `230dfa2015eed29425f6e282004e04aae85d60a0`; compare against current Beta shows 12 commits ahead and 32 behind (diverged). CI #622 failed in `e2e/learn.spec.js:558` on the PCAP sidebar heading viewport assertion. Deployment Check #309 passed. The branch must be rebased or ported before integration; the connector has no safe branch-rebase/update operation.
+- PR #227 remains draft against `main`; scope decision is pending. Head `67ca9b23ace5676e635164a3b0b3356428121038` has CI #623 failed in the new `ai-academy-routing.test.mjs` assertion, which expects an `aiacademy` loader absent from this PR's `app.js`/base. Deployment Check #310 passed. This is an unrelated test/branch-content mismatch; resolve it before marking the PR ready.
 - `release/beta-0.1.0` remains based on the current `main` SHA and is ahead of it; `main` was not modified. The Academy PR base is stale and requires rebase/porting.
 - There are still several open PRs targeting `main`; they are not considered integrated into the Beta unless separately ported/reviewed.
 
@@ -63,3 +63,17 @@ Do not publish or merge the release until every required item below is verified.
 - Do not describe institutional Academy features as production multi-tenant unless server-side tenant isolation, roles, and authorization are implemented and audited.
 - Clearly distinguish demo data from persisted user data.
 - Treat any unverified test claims in PR descriptions as claims, not release evidence. Re-run checks on the final release commit.
+
+
+## Audit update (2026-11-26, 19:34 CET)
+
+- Current refs verified: `main` = `be801c5afa1c27ba6d5f24695236fe8ee67bdcee`; `release/beta-0.1.0` = `c31244aaf6abdf8743bab4f629d382bbd7b4ba7d`. Beta is 48 commits ahead, 0 behind. Main was not modified.
+- No Actions runs are associated with the Beta branch head; the commit status is pending with zero status entries. Do not treat the green main `CI monitor` run (#45872078451) as a full Beta test.
+- PR #229 is ready-for-review (not draft), head `066804beb7967d6d5014525a1c1f607a07c1f146`, 25 commits ahead of Beta and 0 behind. CI #636 failed only the E2E job; backend, course validation, WebKit smoke, frontend unit tests, npm audit and pip-audit passed. The failing E2E is the same PCAP sidebar viewport assertion at `e2e/learn.spec.js:558`; Deployment Check #323 passed. No review is recorded.
+- PR #223 is draft. CI #622 has the same E2E viewport assertion failure; backend, course checks, WebKit and Deployment Check #309 passed. No review is recorded.
+- PR #227 is draft. CI #623 fails the unit test `tests/unit/ai-academy-routing.test.mjs`, whose expectation for the `aiacademy` loader is not present in this branch. Other jobs skipped after the unit-test failure; backend, courses and WebKit were successful; Deployment Check #310 passed. No review is recorded.
+- PR #224 is closed and merged into Beta at `1c104b3816f82a55bc883b18e8896a5b011c6597`; no post-merge CI run was found for the current Beta head.
+- The five obsolete PRs #207, #209, #101, #193 and #203 are confirmed closed without merge.
+- `main` and `release/beta-0.1.0` report `protected: false`. Required branch protection is not configured/verified; treat this as a release risk.
+- Branch cleanup review: `beta/programming-path-rebased` is fully behind Beta (0 ahead, 19 behind), so it is a deletion candidate. Other listed beta port branches diverge and have unique commits; preserve them until their content is inspected. Branch deletion is not available through the current GitHub connector.
+- No PR merges, branch deletions, force pushes, release tags, or production deployments were performed in this audit.
