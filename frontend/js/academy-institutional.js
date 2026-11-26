@@ -1,7 +1,7 @@
 /* PLD ACADEMY — Institutional MVP.
  * This prototype stores demo workspace data locally. It is not multi-tenant production storage.
  */
-const STORAGE_KEY = "pld-academy-institutional-demo-v1";
+const STORAGE_KEY = "pld:academy:institutional-demo:v1";
 
 const seed = {
   organization: { name: "Centro de Formación PLD", type: "Centro de formación", academicYear: "2026–2027" },
@@ -117,7 +117,11 @@ function handleClick(event) {
   if (tab) { activeTab = tab.dataset.academyTab; document.querySelector("#academy-view").innerHTML = render(); return; }
   const action = event.target.closest("[data-academy-action]")?.dataset.academyAction;
   if (!action) return;
-  if (action === "tour-open") showTour();\n  if (action === "tour-close") document.querySelector(".academy-tour")?.close();\n  if (action === "tour-back") { if (tourIndex > 0) { tourIndex--; const d=document.querySelector(".academy-tour"); if(d) renderTourStep(d); } }\n  if (action === "tour-next") { const d=document.querySelector(".academy-tour"); if(d){ if(tourIndex === tourSteps.length-1) d.close(); else { tourIndex++; renderTourStep(d); } } }\n  if (action === "new-group") mountModal("group");
+  if (action === "tour-open") showTour();
+  if (action === "tour-close") document.querySelector(".academy-tour")?.close();
+  if (action === "tour-back") { if (tourIndex > 0) { tourIndex--; const d=document.querySelector(".academy-tour"); if(d) renderTourStep(d); } }
+  if (action === "tour-next") { const d=document.querySelector(".academy-tour"); if(d){ if(tourIndex === tourSteps.length-1) d.close(); else { tourIndex++; renderTourStep(d); } } }
+  if (action === "new-group") mountModal("group");
   if (action === "new-assignment") mountModal("assignment");
   if (action === "close-modal") document.querySelector(".academy-dialog")?.remove();
   if (action === "reset-demo") { state = structuredClone(seed); persist(); activeTab="overview"; document.querySelector("#academy-view").innerHTML=render(); showToast("Datos de demostración restaurados."); }
