@@ -8,7 +8,6 @@ cambios se agrupan por fecha de merge, con el número de pull request entre par�
 
 ## [Sin publicar]
 
-## [Beta 0.1.0 — en preparación] - 2026-11-26
 
 ### Añadido
 - Programming Path: mapa de 17 módulos y 28 prácticas guiadas, con tareas, entregables, criterios de aceptación y evidencia; el progreso se guarda y sincroniza en el documento Career existente, sin duplicar lecciones ni crear un store paralelo.
@@ -227,6 +226,8 @@ cambios se agrupan por fecha de merge, con el número de pull request entre par�
 - Si la API no puede cerrar la sesión, se avisa en vez de fingir que se ha cerrado (#103).
 - «Mi perfil» ya no borra lo que se está escribiendo cuando la vista se repinta (#103).
 - La prueba del portapapeles usa el portapapeles real en Chromium y WebKit (#103).
+
+## [Beta 0.1.0 — en preparación] - 2026-11-26
 
 ## 2026-11-04
 
