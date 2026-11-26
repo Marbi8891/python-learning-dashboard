@@ -41,7 +41,7 @@ Repositorio: `Marbi8891/python-learning-dashboard`. Se obtuvieron 97 ramas en la
 | `chore/brand-transition-and-trademark-notice` | #102 | Marca/legal |
 | `feature/ai-career-path` | #101 | Career Backend Junior |
 | `docs/resultado-pagable` | #95 | Memoria académica |
-| `chore/legal-pack-pcap-donations` | #63 | Aviso legal |
+| (rama no identificada en la consulta) | #63 | Aviso legal |
 
 ## Ramas de trabajo / experimentación / infraestructura sin PR abierta en la consulta
 
