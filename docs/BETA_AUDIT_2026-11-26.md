@@ -1,5 +1,15 @@
 # Auditoría PLD Beta 0.1.0 — 26/11/2026
 
+> **Estado actualizado después del snapshot inicial:** consulta `docs/RELEASE-BETA-0.1.0-CHECKLIST.md` y `docs/BETA_INTEGRATION_LOG.md` para el estado actual. Este inventario de PR/funciones es una fotografía inicial, no una lista viva.
+
+- Programming Path (#224) ya se integró en `release/beta-0.1.0`; CI del head fuente y Deployment check pasaron.
+- Hardening PLD-001/003/004 y AI Academy (#211, #216, #219) ya están integrados en Beta.
+- PRs obsoletas #207, #209, #101, #193 y #203 cerradas sin merge.
+- PR #223 sigue abierta, desfasada de la Beta; su test de ruta se corrigió en head, pero no hay CI para ese commit y necesita rebase/port.
+- PR #227 sigue en `main`, fuera de Beta; se añadió la traducción que faltaba, CI nuevo pendiente y el alcance no está decidido.
+- `main` no se ha modificado.
+
+
 ## Alcance y reglas
 
 - Repositorio: `Marbi8891/python-learning-dashboard`.
