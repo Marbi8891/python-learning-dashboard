@@ -533,7 +533,7 @@ function updatePrivateNav() {
 const NAV_OF_VIEW = { plans: "planes", cyber: "cyber", home: "pcap-curso", lesson: "pcap-curso", certificate: "pcap-curso", pcap: "pcap", daw: "daw", excel: "excel", career: "carrera", profile: "progreso", private: "panel" };
 
 function updateSiteNav() {
-  const key = content.view === "learn" ? learnNavKey(location.hash) : NAV_OF_VIEW[content.view];
+  const key = content.view === "learn" ? learnNavKey(location.hash) : content.view === "cyber" && location.hash === "#/ciberseguridad/lab" ? "pentest-lab" : NAV_OF_VIEW[content.view];
   for (const link of document.querySelectorAll(".site-nav a")) {
     if (link.dataset.nav === key) link.setAttribute("aria-current", "page");
     else link.removeAttribute("aria-current");
