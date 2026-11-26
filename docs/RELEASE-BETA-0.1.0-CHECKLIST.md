@@ -103,3 +103,13 @@ Do not publish or merge the release until every required item below is verified.
 - Security review of Academy draft found stored demo count fields interpolated without escaping in several views. Fixed them on the Academy branch and added a hostile-localStorage E2E test. Latest PR head is `346b19d704d22caf1f193e320fa20b206c3ed2b3`; CI #640 is in progress. This code is not in Beta.
 - CI run #638 is still running on the previous Beta audit commit. The new sync fix + checklist commit will trigger another full CI run on the updated release head.
 - Current scope remains: #223 and #229 draft/unreviewed; #227 draft/scope decision pending; #224 merged. No release, deployment or merge was made.
+
+
+## CI and PR status follow-up (2026-11-26, 20:45 CET)
+
+- CI #638 completed **success** on `edad622986d336208f51a5d6cfe6e46b8b618d09`. CI #641 completed **success** on the sync-fix commit `f7ffc75391a5a689b670b1e1656ac42d4848e4e6`: backend, WebKit, courses and E2E all passed. This validates the code changes on that commit; the next checklist-only commit will have a fresh CI run.
+- PR #223 current head `084ead3b25f5cfe08be9b177ab4b3f71fd06a33e` is 16 ahead/39 behind Beta, draft. Academy escaping, E2E assertion and sidebar-order fixes are present. CI #644 is running; Deployment Check #328 passed. Earlier #640 failed on a misplaced text assertion plus the sidebar viewport check; the assertion and layout were changed after that run.
+- PR #229 current head `2b97957c48e65d39fc0d030d5694bfb31f639a8b` is 28 ahead/7 behind Beta, draft. Read-only adapter tests were added. CI #645 is running. CI #636 failed the sidebar viewport assertion; #643 is for an earlier layout commit.
+- PR #227 remains draft against main; CI #623 failed the AI Academy routing test because the loader expected by the test is absent in main. This is outside the Pentest Lab scope; no changes to main.
+- Dependabot: #126, #127, #129–#133 have successful CI; #128 (axe-core Playwright) fails serious `label-content-name-mismatch` accessibility checks on the brand links. Do not merge it until investigated.
+- Branch cleanup: `beta/programming-path-rebased` has 0 unique commits and is 25 behind current Beta; redundant, but the connector has no branch-delete action. Other port branches diverge with unique commits, so retain pending review.
