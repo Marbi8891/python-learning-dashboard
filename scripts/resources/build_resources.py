@@ -418,7 +418,6 @@ RESOURCES: list[dict] = [
         "quality": "baja",
         "description": "Ficha del ciclo con el plan antiguo (RD 686/2010: FOL, EIE y FCT), centros por provincia, calendario y foro. No sirve como currículo vigente.",
     },
-    # fmt: off
     {
         "id": "res-harvard-cs50x",
         "title": "Harvard CS50x: Introduction to Computer Science",
@@ -433,13 +432,22 @@ RESOURCES: list[dict] = [
         "access": "accesible",
         "quality": "alta",
         "description": "Curso universitario abierto de fundamentos de informática, pensamiento computacional, algoritmos, C, Python, SQL, HTML, CSS y JavaScript.",
-        "checked": "2026-11-25"
+        "checked": "2026-11-25",
     },
     {
         "id": "res-harvard-cs50p",
         "title": "Harvard CS50P: Introduction to Programming with Python",
         "modules": [],
-        "lessons": ["programacion/prog-ut2-elementos","programacion/prog-ut3-control","programacion/prog-ut3-funciones","programacion/prog-ut5-clases","programacion/prog-ut5-modulos-cadenas","programacion/prog-ut6-colecciones","programacion/prog-ut6-herencia-excepciones","programacion/prog-ut8-ficheros-bd"],
+        "lessons": [
+            "programacion/prog-ut2-elementos",
+            "programacion/prog-ut3-control",
+            "programacion/prog-ut3-funciones",
+            "programacion/prog-ut5-clases",
+            "programacion/prog-ut5-modulos-cadenas",
+            "programacion/prog-ut6-colecciones",
+            "programacion/prog-ut6-herencia-excepciones",
+            "programacion/prog-ut8-ficheros-bd",
+        ],
         "author": "Harvard University · CS50",
         "url": "https://cs50.harvard.edu/python/",
         "lang": "en",
@@ -449,13 +457,27 @@ RESOURCES: list[dict] = [
         "access": "accesible",
         "quality": "alta",
         "description": "Curso práctico de Python: funciones, variables, tipos, condiciones, bucles, excepciones, debugging, pruebas, expresiones regulares, clases, objetos y ficheros.",
-        "checked": "2026-11-25"
+        "checked": "2026-11-25",
     },
     {
         "id": "res-harvard-cs50sql",
         "title": "Harvard CS50 SQL: Introduction to Databases with SQL",
         "modules": [],
-        "lessons": ["sql/bd-tipos-y-modelos","sql/sql-modelo-relacional","sql/sql-crear-tablas","sql/bd-null-indices-dcl","sql/sql-select","sql/sql-where","sql/sql-agregados","sql/sql-group-by","sql/sql-inner-join","sql/sql-left-join-subconsultas","sql/bd-conjuntos-y-optimizacion","sql/sql-modificar-datos","sql/sql-transacciones-vistas"],
+        "lessons": [
+            "sql/bd-tipos-y-modelos",
+            "sql/sql-modelo-relacional",
+            "sql/sql-crear-tablas",
+            "sql/bd-null-indices-dcl",
+            "sql/sql-select",
+            "sql/sql-where",
+            "sql/sql-agregados",
+            "sql/sql-group-by",
+            "sql/sql-inner-join",
+            "sql/sql-left-join-subconsultas",
+            "sql/bd-conjuntos-y-optimizacion",
+            "sql/sql-modificar-datos",
+            "sql/sql-transacciones-vistas",
+        ],
         "author": "Harvard University · CS50",
         "url": "https://cs50.harvard.edu/sql/",
         "lang": "en",
@@ -465,13 +487,26 @@ RESOURCES: list[dict] = [
         "access": "accesible",
         "quality": "alta",
         "description": "Curso de bases de datos relacionales: modelado, tablas, tipos, restricciones, normalización, joins, vistas, índices y conexión desde otros lenguajes.",
-        "checked": "2026-11-25"
+        "checked": "2026-11-25",
     },
     {
         "id": "res-harvard-cs50web",
         "title": "Harvard CS50 Web: Programming with Python and JavaScript",
         "modules": [],
-        "lessons": ["js/js-variables","js/js-coercion","js/js-funciones","js/js-ambito","js/js-arrays","js/js-objetos","js/js-dom","js/js-eventos","js/js-asincronia","js/js-fetch-json","marcas/mar-html-css","marcas/mar-json-intercambio"],
+        "lessons": [
+            "js/js-variables",
+            "js/js-coercion",
+            "js/js-funciones",
+            "js/js-ambito",
+            "js/js-arrays",
+            "js/js-objetos",
+            "js/js-dom",
+            "js/js-eventos",
+            "js/js-asincronia",
+            "js/js-fetch-json",
+            "marcas/mar-html-css",
+            "marcas/mar-json-intercambio",
+        ],
         "author": "Harvard University · CS50",
         "url": "https://cs50.harvard.edu/web/",
         "lang": "en",
@@ -481,7 +516,7 @@ RESOURCES: list[dict] = [
         "access": "accesible",
         "quality": "alta",
         "description": "Curso de desarrollo web con Python, JavaScript, SQL y frameworks: bases de datos, APIs, interfaces, testing, CI/CD, escalabilidad y seguridad.",
-        "checked": "2026-11-25"
+        "checked": "2026-11-25",
     },
     {
         "id": "res-mit-missing-semester",
@@ -497,7 +532,7 @@ RESOURCES: list[dict] = [
         "access": "accesible",
         "quality": "alta",
         "description": "Curso sobre herramientas de desarrollo: shell, terminal, entorno, debugging, profiling, Git, empaquetado y workflows.",
-        "checked": "2026-11-25"
+        "checked": "2026-11-25",
     },
     {
         "id": "res-typescript-handbook",
@@ -513,7 +548,7 @@ RESOURCES: list[dict] = [
         "access": "accesible",
         "quality": "alta",
         "description": "Manual oficial de TypeScript: tipos, narrowing, generics, módulos y configuración.",
-        "checked": "2026-11-25"
+        "checked": "2026-11-25",
     },
     {
         "id": "res-react-learn",
@@ -529,7 +564,7 @@ RESOURCES: list[dict] = [
         "access": "accesible",
         "quality": "alta",
         "description": "Guía oficial de React: componentes, estado, eventos, efectos y composición.",
-        "checked": "2026-11-25"
+        "checked": "2026-11-25",
     },
     {
         "id": "res-fastapi-tutorial",
@@ -545,7 +580,7 @@ RESOURCES: list[dict] = [
         "access": "accesible",
         "quality": "alta",
         "description": "Tutorial oficial para APIs, validación, dependencias, seguridad y testing.",
-        "checked": "2026-11-25"
+        "checked": "2026-11-25",
     },
     {
         "id": "res-postgresql-docs",
@@ -561,7 +596,7 @@ RESOURCES: list[dict] = [
         "access": "accesible",
         "quality": "alta",
         "description": "Documentación oficial de PostgreSQL: SQL, diseño, índices, transacciones y administración.",
-        "checked": "2026-11-25"
+        "checked": "2026-11-25",
     },
     {
         "id": "res-pytest-docs",
@@ -577,7 +612,7 @@ RESOURCES: list[dict] = [
         "access": "accesible",
         "quality": "alta",
         "description": "Documentación oficial de pytest para pruebas, fixtures, parametrización y plugins.",
-        "checked": "2026-11-25"
+        "checked": "2026-11-25",
     },
     {
         "id": "res-owasp-top10",
@@ -593,7 +628,7 @@ RESOURCES: list[dict] = [
         "access": "accesible",
         "quality": "alta",
         "description": "Lista de riesgos principales de seguridad en aplicaciones web.",
-        "checked": "2026-11-25"
+        "checked": "2026-11-25",
     },
     {
         "id": "res-owasp-cheatsheets",
@@ -609,7 +644,7 @@ RESOURCES: list[dict] = [
         "access": "accesible",
         "quality": "alta",
         "description": "Guías prácticas de controles de seguridad de aplicaciones.",
-        "checked": "2026-11-25"
+        "checked": "2026-11-25",
     },
     {
         "id": "res-pytorch-tutorials",
@@ -625,7 +660,7 @@ RESOURCES: list[dict] = [
         "access": "accesible",
         "quality": "alta",
         "description": "Tutoriales oficiales de PyTorch para ML, deep learning y workflows.",
-        "checked": "2026-11-25"
+        "checked": "2026-11-25",
     },
     {
         "id": "res-huggingface-learn",
@@ -641,7 +676,7 @@ RESOURCES: list[dict] = [
         "access": "accesible",
         "quality": "alta",
         "description": "Cursos sobre Transformers, datasets, NLP y aplicaciones de modelos.",
-        "checked": "2026-11-25"
+        "checked": "2026-11-25",
     },
     {
         "id": "res-linux-manpages",
@@ -657,7 +692,7 @@ RESOURCES: list[dict] = [
         "access": "accesible",
         "quality": "alta",
         "description": "Referencia de interfaces de sistema y comandos Linux.",
-        "checked": "2026-11-25"
+        "checked": "2026-11-25",
     },
     {
         "id": "res-kubernetes-docs",
@@ -673,7 +708,7 @@ RESOURCES: list[dict] = [
         "access": "accesible",
         "quality": "alta",
         "description": "Documentación oficial de Kubernetes y tutoriales interactivos.",
-        "checked": "2026-11-25"
+        "checked": "2026-11-25",
     },
     {
         "id": "res-dev-java",
@@ -689,7 +724,7 @@ RESOURCES: list[dict] = [
         "access": "accesible",
         "quality": "alta",
         "description": "Material oficial para aprender Java y sus herramientas.",
-        "checked": "2026-11-25"
+        "checked": "2026-11-25",
     },
     {
         "id": "res-spring-guides",
@@ -705,7 +740,7 @@ RESOURCES: list[dict] = [
         "access": "accesible",
         "quality": "alta",
         "description": "Guías oficiales de Spring para aplicaciones Java.",
-        "checked": "2026-11-25"
+        "checked": "2026-11-25",
     },
     {
         "id": "res-mdn-http",
@@ -721,7 +756,7 @@ RESOURCES: list[dict] = [
         "access": "accesible",
         "quality": "alta",
         "description": "Referencia didáctica de HTTP, métodos, códigos, headers, caching y seguridad.",
-        "checked": "2026-11-25"
+        "checked": "2026-11-25",
     },
     {
         "id": "res-mit-algorithms",
@@ -737,7 +772,7 @@ RESOURCES: list[dict] = [
         "access": "accesible",
         "quality": "alta",
         "description": "Curso universitario de algoritmos, estructuras de datos, análisis y resolución de problemas.",
-        "checked": "2026-11-25"
+        "checked": "2026-11-25",
     },
     {
         "id": "res-cmu-db",
@@ -753,7 +788,7 @@ RESOURCES: list[dict] = [
         "access": "accesible",
         "quality": "alta",
         "description": "Curso de sistemas de bases de datos: almacenamiento, consultas, índices y arquitectura.",
-        "checked": "2026-11-25"
+        "checked": "2026-11-25",
     },
     {
         "id": "res-webdev-roadmap",
@@ -769,7 +804,7 @@ RESOURCES: list[dict] = [
         "access": "accesible",
         "quality": "alta",
         "description": "Currículo práctico de desarrollo web por proyectos; complemento, no autoridad primaria.",
-        "checked": "2026-11-25"
+        "checked": "2026-11-25",
     },
     {
         "id": "res-freecodecamp",
@@ -785,7 +820,7 @@ RESOURCES: list[dict] = [
         "access": "accesible",
         "quality": "alta",
         "description": "Ejercicios prácticos y proyectos para desarrollo web y programación.",
-        "checked": "2026-11-25"
+        "checked": "2026-11-25",
     },
     {
         "id": "res-fullstackopen",
@@ -801,7 +836,7 @@ RESOURCES: list[dict] = [
         "access": "accesible",
         "quality": "alta",
         "description": "Curso de desarrollo full-stack moderno, APIs, React, testing, CI/CD y contenedores.",
-        "checked": "2026-11-25"
+        "checked": "2026-11-25",
     },
     {
         "id": "res-python-typing",
@@ -817,7 +852,7 @@ RESOURCES: list[dict] = [
         "access": "accesible",
         "quality": "alta",
         "description": "Referencia oficial de anotaciones, generics, protocols, type aliases y tipos avanzados.",
-        "checked": "2026-11-25"
+        "checked": "2026-11-25",
     },
     {
         "id": "res-python-asyncio",
@@ -833,7 +868,7 @@ RESOURCES: list[dict] = [
         "access": "accesible",
         "quality": "alta",
         "description": "Documentación oficial de concurrencia asíncrona, coroutines, tasks, queues, synchronization y networking.",
-        "checked": "2026-11-25"
+        "checked": "2026-11-25",
     },
     {
         "id": "res-python-packaging",
@@ -849,7 +884,7 @@ RESOURCES: list[dict] = [
         "access": "accesible",
         "quality": "alta",
         "description": "Guía de empaquetado, pyproject.toml, dependencias, builds, publicación y distribución de paquetes.",
-        "checked": "2026-11-25"
+        "checked": "2026-11-25",
     },
     {
         "id": "res-python-testing",
@@ -865,7 +900,7 @@ RESOURCES: list[dict] = [
         "access": "accesible",
         "quality": "alta",
         "description": "Referencia de unittest y herramientas de pruebas incluidas en Python; complemento para pytest.",
-        "checked": "2026-11-25"
+        "checked": "2026-11-25",
     },
     {
         "id": "res-hypothesis",
@@ -881,7 +916,7 @@ RESOURCES: list[dict] = [
         "access": "accesible",
         "quality": "alta",
         "description": "Pruebas basadas en propiedades y generación de casos para encontrar errores de borde.",
-        "checked": "2026-11-25"
+        "checked": "2026-11-25",
     },
     {
         "id": "res-princeton-algorithms",
@@ -897,7 +932,7 @@ RESOURCES: list[dict] = [
         "access": "accesible",
         "quality": "alta",
         "description": "Material universitario, código y ejercicios de algoritmos y estructuras de datos.",
-        "checked": "2026-11-25"
+        "checked": "2026-11-25",
     },
     {
         "id": "res-w3c-wai-tutorials",
@@ -913,7 +948,7 @@ RESOURCES: list[dict] = [
         "access": "accesible",
         "quality": "alta",
         "description": "Tutoriales técnicos sobre accesibilidad web: imágenes, tablas, formularios, navegación y componentes.",
-        "checked": "2026-11-25"
+        "checked": "2026-11-25",
     },
     {
         "id": "res-webdev-performance",
@@ -929,7 +964,7 @@ RESOURCES: list[dict] = [
         "access": "accesible",
         "quality": "alta",
         "description": "Curso sobre rendimiento web, carga, métricas, optimización de recursos y experiencia de usuario.",
-        "checked": "2026-11-25"
+        "checked": "2026-11-25",
     },
     {
         "id": "res-owasp-api-top10",
@@ -945,7 +980,7 @@ RESOURCES: list[dict] = [
         "access": "accesible",
         "quality": "alta",
         "description": "Riesgos y controles específicos para APIs, autorización, autenticación, consumo de recursos y SSRF.",
-        "checked": "2026-11-25"
+        "checked": "2026-11-25",
     },
     {
         "id": "res-12factor",
@@ -961,7 +996,7 @@ RESOURCES: list[dict] = [
         "access": "accesible",
         "quality": "alta",
         "description": "Principios para crear aplicaciones desplegables: configuración, dependencias, procesos, logs y paridad de entornos.",
-        "checked": "2026-11-25"
+        "checked": "2026-11-25",
     },
     {
         "id": "res-github-actions",
@@ -977,7 +1012,7 @@ RESOURCES: list[dict] = [
         "access": "accesible",
         "quality": "alta",
         "description": "Automatización de CI/CD: workflows, jobs, runners, secrets, artifacts y despliegues.",
-        "checked": "2026-11-25"
+        "checked": "2026-11-25",
     },
     {
         "id": "res-mongodb-docs",
@@ -993,7 +1028,7 @@ RESOURCES: list[dict] = [
         "access": "accesible",
         "quality": "alta",
         "description": "Documentación oficial de bases de datos documentales, modelado, queries, índices, agregaciones y operaciones.",
-        "checked": "2026-11-25"
+        "checked": "2026-11-25",
     },
     {
         "id": "res-google-mlcc",
@@ -1009,7 +1044,7 @@ RESOURCES: list[dict] = [
         "access": "accesible",
         "quality": "alta",
         "description": "Curso práctico de fundamentos ML con visualizaciones y ejercicios; requiere base de Python, álgebra y estadística.",
-        "checked": "2026-11-25"
+        "checked": "2026-11-25",
     },
     {
         "id": "res-google-sre",
@@ -1025,7 +1060,7 @@ RESOURCES: list[dict] = [
         "access": "accesible",
         "quality": "alta",
         "description": "Biblioteca de recursos sobre SLO, monitorización, incidentes, fiabilidad, capacidad y sistemas distribuidos.",
-        "checked": "2026-11-25"
+        "checked": "2026-11-25",
     },
     {
         "id": "res-azure-fundamentals",
@@ -1041,7 +1076,7 @@ RESOURCES: list[dict] = [
         "access": "accesible",
         "quality": "alta",
         "description": "Ruta inicial de cloud: conceptos, arquitectura, servicios, gestión y gobernanza, con módulos y prácticas.",
-        "checked": "2026-11-25"
+        "checked": "2026-11-25",
     },
     {
         "id": "res-cncft-cloud-native",
@@ -1057,9 +1092,8 @@ RESOURCES: list[dict] = [
         "access": "accesible",
         "quality": "alta",
         "description": "Recursos y proyectos del ecosistema cloud-native para comprender contenedores, observabilidad y orquestación.",
-        "checked": "2026-11-25"
+        "checked": "2026-11-25",
     }
-    # fmt: on
 ]
 
 ID = re.compile(r"^res-[a-z0-9-]+$")
