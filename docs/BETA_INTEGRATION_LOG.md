@@ -69,7 +69,7 @@
 - Merge commit: `648ed43fea067902339528638d3733301e1f60ac`.
 - PR #219 es el port rebaseado sobre la Beta actual; PRs originales #184/#186 no se modificaron.
 
-## Integraciones pendientes
+## Integraciones recientes
 
 ### PR #223 — PLD ACADEMY institucional
 
