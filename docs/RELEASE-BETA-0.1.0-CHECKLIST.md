@@ -38,7 +38,7 @@ Do not publish or merge the release until every required item below is verified.
 - [ ] Legal/privacy documentation is current for the features included.
 
 ### Release
-- [ ] Create final changelog entry.
+- [x] Add a provisional Beta 0.1.0 changelog entry; final release notes remain pending validation.
 - [ ] Tag the exact validated commit as `v0.1.0-beta` (or agreed version).
 - [ ] Publish GitHub Release with notes, known limitations, and demo link.
 - [ ] Verify GitHub Pages deployment and smoke-test the public site.
@@ -53,8 +53,8 @@ Do not publish or merge the release until every required item below is verified.
 - PR #203 was closed as outdated relative to the current AI Tutor direction.
 - PR #224 merged into `release/beta-0.1.0` at `1c104b3816f82a55bc883b18e8896a5b011c6597`. Its CI jobs (backend, e2e, webkit, courses) and Deployment check were green on the PR head SHA. Post-merge CI on the merge commit is not yet verified.
 - PR #223 remains open and cannot currently merge. The base branch advanced when #224 merged. The Academy persistence E2E was corrected in head commit `230dfa2015eed29425f6e282004e04aae85d60a0` to follow the public landing CTA to the workspace. No CI run is available for that commit, and the branch still diverges (12 commits ahead / 19 behind the current release branch at last comparison). The GitHub connector has no branch-rebase/update operation; it must be rebased or ported before integration. The separate PCAP viewport assertion failure also remains to be checked.
-- PR #227 remains separate against `main`; scope decision is pending. CI failures include missing English translation for the new “Pentest Lab” label and a WebKit account-recovery test failing to find the expected mailto link.
-- `release/beta-0.1.0` is currently 35 commits ahead of `main` and 0 behind; `main` was not modified.
+- PR #227 remains separate against `main`; scope decision is pending. The missing English translation for “Pentest Lab” was added in head commit `67ca9b23ace5676e635164a3b0b3356428121038`; CI has not run on that head. A WebKit account-recovery test still failed to find the expected mailto link in the previous run.
+- `release/beta-0.1.0` is currently 37 commits ahead of `main` and 0 behind (after audit documentation updates); `main` was not modified.
 - There are still several open PRs targeting `main`; they are not considered integrated into the Beta unless separately ported/reviewed.
 
 ## Known limitations to disclose
