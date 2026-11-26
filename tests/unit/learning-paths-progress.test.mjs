@@ -25,8 +25,8 @@ test("Python Path aggregates existing concept read/mastery without creating stor
 });
 
 test("DAW and Web Paths read the same course lesson completion store", async () => {
-  saved.set("pld:course:programacion", { done: { programacion-1: "2026-01-01" } });
-  saved.set("pld:course:js", { done: { js-2: "2026-01-02" } });
+  saved.set("pld:course:programacion", { done: { "programacion-1": "2026-01-01" } });
+  saved.set("pld:course:js", { done: { "js-2": "2026-01-02" } });
   const daw = await pathProgress("daw-developer");
   const web = await pathProgress("web-developer");
   assert.deepEqual(daw, { done: 2, total: 12, label: "lecciones DAW", percent: 17 });
@@ -34,7 +34,7 @@ test("DAW and Web Paths read the same course lesson completion store", async () 
 });
 
 test("Excel Path reads the existing Excel course state", async () => {
-  saved.set("pld:course:excel", { done: { excel-2: "2026-01-02" } });
+  saved.set("pld:course:excel", { done: { "excel-2": "2026-01-02" } });
   assert.deepEqual(await pathProgress("excel-professional"), { done: 1, total: 2, label: "unidades Excel", percent: 50 });
 });
 
