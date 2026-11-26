@@ -27,7 +27,7 @@ ROOT = Path(__file__).resolve().parents[2]
 DATA = ROOT / "frontend" / "data"
 OUT = DATA / "resources.json"
 
-CHECKED = "2026-11-02"
+CHECKED = "2026-11-25"
 
 TYPES = {
     "documentacion": "Documentación oficial",
