@@ -16,6 +16,10 @@ async function daw(){
  ids.forEach((id,i)=>{const list=lessonsIn(sets[i]);total+=list.length;const saved=courseState(id).done||{};done+=list.filter(l=>saved[l.slug]).length});
  return metric(done,total,"lecciones DAW");
 }
+async function excel(){
+ const data=await getJson("data/academia/excel/lessons.json"),list=lessonsIn(data),saved=courseState("excel").done||{};
+ return metric(list.filter(l=>saved[l.slug]).length,list.length,"unidades Excel");
+}
 async function web(){
  const ids=["marcas","js"],sets=await Promise.all(ids.map(id=>getJson(`data/courses/${id}/lessons.json`)));
  let done=0,total=0;ids.forEach((id,i)=>{const list=lessonsIn(sets[i]);total+=list.length;const saved=courseState(id).done||{};done+=list.filter(l=>saved[l.slug]).length});
@@ -32,5 +36,5 @@ function ai(){
  return metric(done,total,"lecciones IA");
 }
 export async function pathProgress(id){
- try{switch(id){case"python-developer":return await python();case"daw-developer":return await daw();case"web-developer":return await web();case"cybersecurity":return await cyber();case"ai-engineer":return ai();default:return null}}catch{return null}
+ try{switch(id){case"python-developer":return await python();case"daw-developer":return await daw();case"web-developer":return await web();case"cybersecurity":return await cyber();case"ai-engineer":return ai();case"excel-professional":return await excel();default:return null}}catch{return null}
 }
