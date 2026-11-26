@@ -67,7 +67,7 @@ Do not publish or merge the release until every required item below is verified.
 
 ## Audit update (2026-11-26, 19:34 CET)
 
-- Current refs verified: `main` = `be801c5afa1c27ba6d5f24695236fe8ee67bdcee`; `release/beta-0.1.0` = `c31244aaf6abdf8743bab4f629d382bbd7b4ba7d`. Beta is 51 commits ahead, 0 behind. Main was not modified.
+- Current refs verified: `main` = `be801c5afa1c27ba6d5f24695236fe8ee67bdcee`; `release/beta-0.1.0` = `c31244aaf6abdf8743bab4f629d382bbd7b4ba7d`. Beta is based on the current main commit and remains 0 commits behind; the ahead count changes as audit documentation is updated. Main was not modified.
 - No Actions runs are associated with the Beta branch head; the commit status is pending with zero status entries. Do not treat the green main `CI monitor` run (#45872078451) as a full Beta test.
 - PR #229 is draft, head `066804beb7967d6d5014525a1c1f607a07c1f146`; it was 25 commits ahead of the previous Beta base and now requires refresh after the audit documentation commit(s). CI #636 failed only the E2E job; backend, course validation, WebKit smoke, frontend unit tests, npm audit and pip-audit passed. The failing E2E is the same PCAP sidebar viewport assertion at `e2e/learn.spec.js:558`; Deployment Check #323 passed. No review is recorded.
 - PR #223 is draft. CI #622 has the same E2E viewport assertion failure; backend, course checks, WebKit and Deployment Check #309 passed. No review is recorded.
@@ -75,9 +75,9 @@ Do not publish or merge the release until every required item below is verified.
 - PR #224 is closed and merged into Beta at `1c104b3816f82a55bc883b18e8896a5b011c6597`; no post-merge CI run was found for the current Beta head.
 - The five obsolete PRs #207, #209, #101, #193 and #203 are confirmed closed without merge.
 - `main` and `release/beta-0.1.0` report `protected: false`. Required branch protection is not configured/verified; treat this as a release risk.
-- Branch cleanup review: `beta/programming-path-rebased` is fully behind Beta (0 ahead, 21 behind after the audit documentation commits), so it is a deletion candidate. Other listed beta port branches diverge and have unique commits; preserve them until their content is inspected. Branch deletion is not available through the current GitHub connector.
+- Branch cleanup review: `beta/programming-path-rebased` has 0 unique commits ahead of Beta and is fully behind, so it is a deletion candidate. Other listed beta port branches diverge and have unique commits; preserve them until their content is inspected. Branch deletion is not available through the current GitHub connector.
 - No PR merges, branch deletions, force pushes, release tags, or production deployments were performed in this audit.
 
 - PR #229 was converted back to draft during this audit to prevent merge while CI is failing; its description now records the failure and refresh requirement.
 
-- Latest branch comparisons after this documentation update: Academy rebased branch 12 ahead/35 behind Beta; Learning Paths 25 ahead/3 behind Beta; Pentest Lab 16 ahead/0 behind main. These counts are informational and will change when branches are refreshed.
+- Latest branch comparisons confirm the Academy and Learning Paths branches diverge from the current Beta; Pentest Lab is based on current main. Exact behind counts are not retained here because audit documentation commits advance Beta.
