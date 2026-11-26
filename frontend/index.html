@@ -48,6 +48,7 @@
   <link rel="stylesheet" href="css/plans.css">
   <link rel="stylesheet" href="css/learn.css">
   <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/paths.css">
   <link rel="stylesheet" href="css/landing.css">
   <link rel="preload" href="fonts/fraunces-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/redesign.css">
@@ -93,6 +94,9 @@
           <a href="#/panel" data-nav="panel" id="private-nav" hidden>
             <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 4h7v7H4zM13 4h7v4h-7zM13 10h7v10h-7zM4 13h7v7H4z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
             <span class="site-nav__text">Mi panel<span class="site-nav__hint" aria-hidden="true">Resumen, cursos y cuenta</span></span>
+          </a>
+          <a href="#/paths" data-nav="paths">
+            <span class="site-nav__text">Learning Paths<span class="site-nav__hint" aria-hidden="true">Elige tus objetivos</span></span>
           </a>
           <a href="#/aprender" data-nav="aprender">
             <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M12 8a4 4 0 1 0 0 8a4 4 0 1 0 0-8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -193,6 +197,9 @@
 
     <!-- ============ CONTENIDO PRINCIPAL ============ -->
     <main id="main" class="main" tabindex="-1">
+      <!-- ============ LEARNING PATHS: selección libre de itinerarios ============ -->
+      <section class="page paths" id="paths-view" aria-labelledby="paths-title" hidden></section>
+
       <!-- ============ NÚCLEO EDUCATIVO: Aprender, Teoría, Practicar, Progreso y sesiones ============ -->
       <section class="page learn" id="learn-view" aria-labelledby="learn-title" hidden></section>
 
