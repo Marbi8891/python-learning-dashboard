@@ -19,6 +19,17 @@ Proyecto de 2º de DAW: una web para **aprender Python entendiendo lo que haces*
 
 **Demo:** https://marbi8891.github.io/python-learning-dashboard/ · **Qué estudio hoy:** [#/aprender](https://marbi8891.github.io/python-learning-dashboard/#/aprender)
 
+## Beta 0.1.0 (en preparación)
+
+La rama `release/beta-0.1.0` contiene cambios que todavía no se han publicado en la demo pública, que sigue apuntando a `main`.
+
+- **Programming Path:** mapa de 17 módulos y 28 prácticas para cubrir brechas curriculares. Incluye tareas, entregables, criterios de aceptación y evidencias. El progreso reutiliza el documento Career existente.
+- **AI Academy:** catálogo de 20 cursos y 5 rutas; Fundamentals tiene 8 lecciones desarrolladas. Los demás cursos están en fase de outline.
+- **Hardening:** mejoras de sincronización del progreso, concurrencia de simulacros verificados y aislamiento del runtime Python.
+- **PLD ACADEMY institucional** y **Pentest Lab** no se presentan como funcionalidades integradas/validadas de esta Beta; están pendientes de revisión.
+
+La Beta aún requiere validación del commit final, pruebas de runtime, E2E, accesibilidad, despliegue de Pages y aprobación antes de publicar.
+
 ## AI Academy (en desarrollo)
 
 PLD incorpora un currículo de Inteligencia Artificial de 20 cursos y 354 horas de catálogo (314 horas mínimo si se cursan dos optativas): fundamentos, IA generativa, prompting, productividad, Python para IA, Machine Learning, Deep Learning, LLM Engineering, RAG, agentes, automatización, despliegue, IA local, multimodalidad, seguridad y proyecto final.
