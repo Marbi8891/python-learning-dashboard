@@ -55,3 +55,28 @@ test("AI Path counts Academy topics and deduplicates stored completion IDs",asyn
   try{assert.deepEqual(await pathProgress("ai-engineer"),{done:1,total,label:"temas IA",percent:Math.round(1/total*100)})}
   finally{if(oldStorage===undefined)delete globalThis.localStorage;else globalThis.localStorage=oldStorage}
 });
+
+test("DAW and Web Paths aggregate lesson completion from their existing course stores",async()=>{
+  const oldFetch=globalThis.fetch,oldStorage=globalThis.localStorage;
+  const ids=["programacion","sql","entornos","marcas","js","java"];
+  globalThis.fetch=async url=>{
+    const id=url.match(/data\/courses\/([^/]+)\/lessons\.json/)?.[1];
+    return {ok:true,json:async()=>({modules:[{lessons:[{slug:id+"-1"},{slug:id+"-2"}]}]})};
+  };
+  globalThis.localStorage={getItem(key){
+    const id=key.match(/^pld:course:(.+)$/)?.[1];
+    return ["programacion","marcas","js"].includes(id)?JSON.stringify({done:{[id+"-1"]:"2026-01-01"}}):null;
+  }};
+  try{
+    assert.deepEqual(await pathProgress("daw-developer"),{done:3,total:12,label:"lecciones DAW",percent:25});
+    assert.deepEqual(await pathProgress("web-developer"),{done:2,total:4,label:"lecciones web",percent:50});
+  }finally{globalThis.fetch=oldFetch;if(oldStorage===undefined)delete globalThis.localStorage;else globalThis.localStorage=oldStorage}
+});
+
+test("Cybersecurity Path reads the existing completed-week store",async()=>{
+  const oldFetch=globalThis.fetch,oldStorage=globalThis.localStorage;
+  globalThis.fetch=async()=>({ok:true,json:async()=>({weeks:[{id:"semana-01"},{id:"semana-02"},{id:"semana-03"}]})});
+  globalThis.localStorage={getItem(key){return key==="pld:cybersecurity:v1"?JSON.stringify({weeks:{"semana-01":{done:true},"semana-02":{done:false}}}):null}};
+  try{assert.deepEqual(await pathProgress("cybersecurity"),{done:1,total:3,label:"semanas",percent:33})}
+  finally{globalThis.fetch=oldFetch;if(oldStorage===undefined)delete globalThis.localStorage;else globalThis.localStorage=oldStorage}
+});
