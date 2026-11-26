@@ -34,6 +34,7 @@ import {
   subscribe as onGame,
 } from "./game.js";
 import { renderHome } from "./home.js";
+import { openRoadmaps } from "./roadmaps.js";
 import { escapeHtml, renderMarkdown, safeUrl } from "./markdown.js";
 import { initCourseSync } from "./course-store.js";
 import { initPcapSync } from "./pcap-sync.js";
@@ -478,6 +479,7 @@ function refreshProgressViews() {
 const VIEWS = {
   // Núcleo educativo: Aprender, Teoría, Practicar, Progreso y sesiones (se pinta solo: openLearn)
   learn: { element: "#learn-view", title: "Aprender · Python Learning Dashboard", focus: null, render: null },
+  roadmaps: { element: "#roadmaps-view", title: "Roadmaps · Python Learning Dashboard", focus: "#roadmaps-title", render: null },
   home: { element: "#home-view", title: "Curso PCAP · Python Learning Dashboard", focus: "#home-title", render: () => renderHome(content, defaultSlug()) },
   profile: { element: "#profile-view", title: "Mi aprendizaje · Python Learning Dashboard", focus: "#profile-title", render: () => renderProfile(content) },
   plans: { element: "#plans-view", title: "Planes y cuenta · Python Learning Dashboard", focus: "#plans-title", render: () => zones.plans.renderPlans() },
@@ -530,7 +532,7 @@ function updatePrivateNav() {
 }
 
 /** Entrada del menú que corresponde a la vista actual. */
-const NAV_OF_VIEW = { plans: "planes", cyber: "cyber", home: "pcap-curso", lesson: "pcap-curso", certificate: "pcap-curso", pcap: "pcap", daw: "daw", excel: "excel", career: "carrera", profile: "progreso", private: "panel" };
+const NAV_OF_VIEW = { plans: "planes", cyber: "cyber", home: "pcap-curso", lesson: "pcap-curso", certificate: "pcap-curso", pcap: "pcap", daw: "daw", excel: "excel", career: "carrera", profile: "progreso", private: "panel", roadmaps: "roadmaps" };
 
 function updateSiteNav() {
   const key = content.view === "learn" ? learnNavKey(location.hash) : NAV_OF_VIEW[content.view];
@@ -730,6 +732,11 @@ function navigate({ moveFocus = true } = {}) {
   }
   closeLanding();
 
+  if (location.hash === "#/roadmaps" || location.hash.startsWith("#/roadmaps/")) {
+    showPage("roadmaps", { moveFocus: false });
+    openRoadmaps(location.hash);
+    return;
+  }
   if (location.hash === PLANS_ROUTE) {
     if (awaitZone("plans", moveFocus)) return;
     showPage("plans", { moveFocus });
