@@ -1185,7 +1185,12 @@ def main() -> None:
     if "--check" in sys.argv:
         actual = OUT.read_text("utf-8") if OUT.exists() else ""
         if actual != text:
-            diff = difflib.unified_diff(actual.splitlines(True), text.splitlines(True), fromfile="resources.json", tofile="generated")
+            diff = difflib.unified_diff(
+                actual.splitlines(True),
+                text.splitlines(True),
+                fromfile="resources.json",
+                tofile="generated",
+            )
             print("".join(diff))
             sys.exit("resources.json no está al día: python scripts/resources/build_resources.py")
         print(f"resources.json al día y válido: {summary}")
