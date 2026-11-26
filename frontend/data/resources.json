@@ -43,7 +43,7 @@
    "access": "accesible",
    "quality": "alta",
    "description": "Referencia de todas las etiquetas y atributos de HTML, con guías para empezar.",
-   "checked": "2026-11-02"
+   "checked": "2026-11-25"
   },
   {
    "id": "res-mdn-css",
@@ -64,7 +64,7 @@
    "access": "accesible",
    "quality": "alta",
    "description": "Selectores, cascada, modelo de caja, Flexbox, Grid y diseño adaptable.",
-   "checked": "2026-11-02"
+   "checked": "2026-11-25"
   },
   {
    "id": "res-mdn-js",
@@ -82,7 +82,7 @@
    "access": "accesible",
    "quality": "alta",
    "description": "Guía y referencia del lenguaje, el DOM y las API del navegador.",
-   "checked": "2026-11-02"
+   "checked": "2026-11-25"
   },
   {
    "id": "res-php-manual",
@@ -100,7 +100,7 @@
    "access": "accesible",
    "quality": "alta",
    "description": "Referencia oficial del lenguaje, sus funciones, sesiones, formularios y acceso a bases de datos.",
-   "checked": "2026-11-02"
+   "checked": "2026-11-25"
   },
   {
    "id": "res-docker-docs",
@@ -118,7 +118,7 @@
    "access": "accesible",
    "quality": "alta",
    "description": "Contenedores, imágenes, Docker Compose y despliegue.",
-   "checked": "2026-11-02"
+   "checked": "2026-11-25"
   },
   {
    "id": "res-pro-git",
@@ -138,7 +138,7 @@
    "access": "descargable",
    "quality": "alta",
    "description": "El libro de referencia de Git: ramas, repositorios remotos, flujos de trabajo y GitHub.",
-   "checked": "2026-11-02"
+   "checked": "2026-11-25"
   },
   {
    "id": "res-python-tutorial",
@@ -156,7 +156,7 @@
    "access": "accesible",
    "quality": "alta",
    "description": "Introducción oficial al lenguaje, de los tipos de datos a las clases y los módulos.",
-   "checked": "2026-11-02"
+   "checked": "2026-11-25"
   },
   {
    "id": "res-python-etree",
@@ -177,7 +177,7 @@
    "access": "accesible",
    "quality": "alta",
    "description": "Leer, recorrer y crear XML desde Python, con el subconjunto de XPath que admite.",
-   "checked": "2026-11-02"
+   "checked": "2026-11-25"
   },
   {
    "id": "res-w3c-xml",
@@ -198,7 +198,7 @@
    "access": "accesible",
    "quality": "alta",
    "description": "La especificación de XML: documentos bien formados, DTD y entidades.",
-   "checked": "2026-11-02"
+   "checked": "2026-11-25"
   },
   {
    "id": "res-w3c-xsd",
@@ -218,7 +218,7 @@
    "access": "accesible",
    "quality": "alta",
    "description": "Elementos, tipos complejos, cardinalidades y restricciones de XML Schema.",
-   "checked": "2026-11-02"
+   "checked": "2026-11-25"
   },
   {
    "id": "res-w3c-xpath",
@@ -238,7 +238,7 @@
    "access": "accesible",
    "quality": "alta",
    "description": "Rutas, predicados y funciones del lenguaje de consulta de XML.",
-   "checked": "2026-11-02"
+   "checked": "2026-11-25"
   },
   {
    "id": "res-w3c-xslt",
@@ -258,7 +258,7 @@
    "access": "accesible",
    "quality": "alta",
    "description": "Plantillas y transformaciones de XML a XML, HTML o texto.",
-   "checked": "2026-11-02"
+   "checked": "2026-11-25"
   },
   {
    "id": "res-w3c-validator",
@@ -279,7 +279,7 @@
    "access": "accesible",
    "quality": "alta",
    "description": "Comprueba que un documento HTML cumple el estándar y señala cada error con su línea.",
-   "checked": "2026-11-02"
+   "checked": "2026-11-25"
   },
   {
    "id": "res-rss-spec",
@@ -299,7 +299,7 @@
    "access": "accesible",
    "quality": "alta",
    "description": "Elementos obligatorios y opcionales de un canal RSS 2.0.",
-   "checked": "2026-11-02"
+   "checked": "2026-11-25"
   },
   {
    "id": "res-odoo-docs",
@@ -319,7 +319,7 @@
    "access": "accesible",
    "quality": "alta",
    "description": "Instalación, módulos, usuarios y permisos, importación de datos y API de un ERP de software libre.",
-   "checked": "2026-11-02"
+   "checked": "2026-11-25"
   },
   {
    "id": "res-boe-rd-405-2023",
@@ -345,7 +345,7 @@
    "access": "accesible",
    "quality": "alta",
    "description": "Resultados de aprendizaje, criterios de evaluación y contenidos básicos de cada módulo técnico.",
-   "checked": "2026-11-02"
+   "checked": "2026-11-25"
   },
   {
    "id": "res-bocyl-edu-1311-2024",
@@ -371,7 +371,7 @@
    "access": "descargable",
    "quality": "alta",
    "description": "Horas, curso y horas semanales de cada módulo en Castilla y León. Otras comunidades tienen su propia norma.",
-   "checked": "2026-11-02"
+   "checked": "2026-11-25"
   },
   {
    "id": "res-sitiolibre",
@@ -397,7 +397,7 @@
    "access": "accesible",
    "quality": "media",
    "description": "Temarios y apuntes de los módulos del plan anterior (LOE). Útil como consulta; revisa que el tema siga en el currículo vigente.",
-   "checked": "2026-11-02"
+   "checked": "2026-11-25"
   },
   {
    "id": "res-temario-daw-statickidz",
@@ -423,7 +423,7 @@
    "access": "licencia-no-identificada",
    "quality": "media",
    "description": "Carpetas por módulo del plan anterior (incluye FOL y EIE, ya suprimidos por el RD 500/2024).",
-   "checked": "2026-11-02"
+   "checked": "2026-11-25"
   },
   {
    "id": "res-2-daw-publico",
@@ -444,7 +444,7 @@
    "access": "licencia-no-identificada",
    "quality": "media",
    "description": "Prácticas de un alumno: Apache y Tomcat, JavaScript, PHP con sesiones y bases de datos, Flexbox, Grid y Sass.",
-   "checked": "2026-11-02"
+   "checked": "2026-11-25"
   },
   {
    "id": "res-cibered-daw",
@@ -470,7 +470,7 @@
    "access": "accesible",
    "quality": "media",
    "description": "Índice de libros y apuntes por módulo del plan anterior. Cada enlace tiene sus propias condiciones.",
-   "checked": "2026-11-02"
+   "checked": "2026-11-25"
   },
   {
    "id": "res-apuntes-fp-informatica",
@@ -486,7 +486,7 @@
    "access": "licencia-no-identificada",
    "quality": "media",
    "description": "Recursos para profesorado y alumnado de informática con filtro por módulo. No se ha podido comprobar qué módulos de DAW cubre.",
-   "checked": "2026-11-02"
+   "checked": "2026-11-25"
   },
   {
    "id": "res-apuntesdam",
@@ -502,7 +502,7 @@
    "access": "no-verificado",
    "quality": "media",
    "description": "Apuntes de DAM. La web no permite la consulta automática (robots.txt), así que no se ha podido revisar.",
-   "checked": "2026-11-02"
+   "checked": "2026-11-25"
   },
   {
    "id": "res-fp-informatica-daw",
@@ -518,7 +518,7 @@
    "access": "obsoleto",
    "quality": "baja",
    "description": "Ficha del ciclo con el plan antiguo (RD 686/2010: FOL, EIE y FCT), centros por provincia, calendario y foro. No sirve como currículo vigente.",
-   "checked": "2026-11-02"
+   "checked": "2026-11-25"
   },
   {
    "id": "res-harvard-cs50x",
