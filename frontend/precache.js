@@ -96,6 +96,7 @@ self.PLD_PRECACHE = [
  "js/not-found.js",
  "js/paths-app.js",
  "js/paths-registry.js",
+ "js/paths-progress.js",
  "js/pcap-store.js",
  "js/pcap-sync.js",
  "js/pcap.js",
