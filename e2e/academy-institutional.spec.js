@@ -56,6 +56,30 @@ test.describe("PLD ACADEMY institutional workspace MVP", () => {
     await expect(page.getByText("2.º DAW B", { exact: true })).toBeVisible();
   });
 
+
+  test("escapes hostile values restored from demo storage in every role view", async ({ page }) => {
+    const hostile = '<img src=x onerror="window.__academyXss=1">';
+    await page.addInitScript((value) => {
+      localStorage.setItem("pld:academy:institutional-demo:v1", JSON.stringify({
+        organization: { name: "Test Center", type: "Demo", academicYear: "2026" },
+        groups: [{ id: "g-x", name: "Test Group", program: "DAW", subject: "Programming", teacher: "Teacher", students: value }],
+        assignments: [{ id: "a-x", title: "Test Activity", groupId: "g-x", type: "Practice", due: "", completed: value, total: "1", status: "published" }],
+        activityLog: []
+      }));
+    }, hostile);
+    await page.goto("/#/academy");
+    await expect(page.locator("#academy-view img")).toHaveCount(0);
+    await expect(page.locator("#academy-view")).toContainText(hostile);
+    await page.getByRole("button", { name: "Grupos" }).click();
+    await page.locator("#academy-role").selectOption("teacher");
+    await expect(page.locator("#academy-view img")).toHaveCount(0);
+    await page.getByRole("button", { name: "Actividades" }).click();
+    await expect(page.locator("#academy-view img")).toHaveCount(0);
+    await page.locator("#academy-role").selectOption("student");
+    await expect(page.locator("#academy-view img")).toHaveCount(0);
+    expect(await page.evaluate(() => window.__academyXss)).toBeUndefined();
+  });
+
   test("creates an activity and switches to teacher/student preview", async ({ page }) => {
     await page.getByRole("button", { name: "＋ Crear actividad" }).click();
     await page.locator("#academy-assignment-form [name=title]").fill("Repaso de funciones");
