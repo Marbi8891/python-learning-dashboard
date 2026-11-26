@@ -91,6 +91,7 @@ export function renderDawPrep(index, state) {
     : "";
 
   return `
+    <section class="lx-section" aria-label="Estudio móvil"><h2>Estudia desde el móvil</h2><p class="lx-muted">Sesiones cortas de conceptos, recuperación activa y preguntas tipo test. Puedes instalar DAW Coach en tu Android.</p><a class="btn btn--primary" href="./daw-coach-mobile.html">Abrir DAW Coach móvil →</a></section>
     <header class="lx-head">
       <p class="eyebrow">Programación · 1.º DAW</p>
       <h1 class="lx-title" id="learn-title" tabindex="-1">Preparación DAW</h1>
