@@ -111,7 +111,7 @@
 - [ ] Port/rebase #186 (PLD-003): PR #212 bloqueada por conflictos.
 - [ ] Port/rebase #184 (PLD-001): pendiente.
 - [x] Integrar AI Academy (#216) tras CI verde.
-- [ ] Integrar fixes P0 uno por uno.
+- [x] Integrar fixes P0 PLD-001/003/004 vía #219 tras CI verde.
 - [ ] Consolidar catálogo/rutas/Academies.
 - [ ] Consolidar DAW Coach y preparación.
 - [ ] Integrar Demo Edition.
