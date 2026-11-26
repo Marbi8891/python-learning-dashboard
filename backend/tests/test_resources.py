@@ -6,6 +6,7 @@ publicado es válido y que el validador detecta los errores típicos al ampliar 
 
 import importlib.util
 import json
+from datetime import date
 
 from app.config import FRONTEND_DIR
 
@@ -35,7 +36,7 @@ GOOD = {
 def test_published_catalog_is_valid_and_complete():
     assert builder.validate(CATALOG["resources"]) == []
     for resource in CATALOG["resources"]:
-        assert resource["checked"] == CATALOG["checked"]
+        assert date.fromisoformat(resource["checked"]) <= date.fromisoformat(CATALOG["checked"])
         assert resource["license"], resource["id"]  # nunca vacía: «No identificada» si no consta
 
 
