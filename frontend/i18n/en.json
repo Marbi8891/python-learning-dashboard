@@ -296,5 +296,6 @@
   "Comprueba la conexión y vuelve a intentarlo.": "Check your connection and try again.",
   "Mi Carrera en IA · Python Learning Dashboard": "My AI Career · Python Learning Dashboard",
   "{a}: {b} o más": "{a}: {b} or more",
-  "Gráfica de la evolución económica (se puede desplazar)": "Financial trend chart (scrollable)"
+  "Gráfica de la evolución económica (se puede desplazar)": "Financial trend chart (scrollable)",
+  "Rutas de aprendizaje": "Learning Paths"
 }
