@@ -16,7 +16,8 @@ def test_empty_state_then_save_and_read(client, auth_headers):
     saved = client.put("/api/v1/pcap-state", json={"data": state}, headers=auth_headers)
     assert saved.status_code == 200 and saved.json()["updated_at"]
     state["bestCombo"] = 7
-    client.put("/api/v1/pcap-state", json={"data": state}, headers=auth_headers)
+    body = {"data": state, "version": saved.json()["version"]}
+    assert client.put("/api/v1/pcap-state", json=body, headers=auth_headers).status_code == 200
     assert client.get("/api/v1/pcap-state", headers=auth_headers).json()["data"]["bestCombo"] == 7
 
 
