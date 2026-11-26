@@ -124,6 +124,12 @@ cambios se agrupan por fecha de merge, con el número de pull request entre par�
   (`docs/DEPLOY.md` §5).
 
 ### Corregido
+- Python en el navegador (PLD-004): un ejercicio ya no contamina los siguientes. Tras cada ejecución se
+  restauran los atributos de los módulos (`math.sqrt = …`), las clases y funciones de la biblioteca
+  estándar, `sys.path`, `sys.meta_path`, `sys.modules`, la carpeta, el entorno, `warnings`, `random` y
+  `decimal`; cada ejecución usa una carpeta temporal propia. Cuesta unos 8 ms por ejecución frente a los
+  ~2 s de reiniciar Pyodide; si no se puede restaurar, la página crea un Worker nuevo. Detalles y límites
+  en `docs/AISLAMIENTO_PYTHON.md`.
 - Curso de ciberseguridad: el progreso (semanas completadas y cuestionarios) solo vivía en el navegador y
   «Cerrar sesión» lo borraba sin copia en la cuenta, aunque el aviso decía que se subiría. Ahora es el
   documento `cybersecurity` de `/api/v1/course-state` (versión, 409, fusión al entrar, subida antes de
