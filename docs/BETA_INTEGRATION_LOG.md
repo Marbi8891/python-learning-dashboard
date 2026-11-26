@@ -49,3 +49,12 @@
 2. Portar PLD-001 (#184), integrando sin duplicar los tests de CI y changelog.
 3. Revisar la estrategia de merge de los PRs de features; actualizar branches base y corregir CI.
 4. Consolidar Learning Hub, Programming Path, AI Academy, DAW Coach y Demo Edition en el orden de dependencias.
+
+### Integración BETA-005 — AI Academy (#199)
+
+- Estado: integrada en Beta vía PR #216, squash merge.
+- Añade catálogo de 20 cursos y 5 rutas, navegación, pantalla de catálogo/detalle, índice de módulos y 8 lecciones authored en AI Fundamentals.
+- Corrige el literal mal cerrado del curso ai-19 y el test de routing duplicado; regenera `frontend/precache.js` usando el recorrido de directorios exacto del builder.
+- Validación final: CI completa en verde (backend, cursos, E2E, WebKit) y Deployment check en verde (artefacto Pages, Docker, workflows/Render).
+- Merge commit Beta: `d92519c7a7687a35031d747b41594b3386080d7a`.
+- Limitación de contenido: la mayoría de los cursos son outlines; solo Fundamentals tiene lecciones desarrolladas. El checklist de AI Academy usa almacenamiento local propio, pendiente de adaptarse al progreso compartido.
