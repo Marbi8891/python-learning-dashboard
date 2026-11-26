@@ -58,3 +58,13 @@
 - Validación final: CI completa en verde (backend, cursos, E2E, WebKit) y Deployment check en verde (artefacto Pages, Docker, workflows/Render).
 - Merge commit Beta: `d92519c7a7687a35031d747b41594b3386080d7a`.
 - Limitación de contenido: la mayoría de los cursos son outlines; solo Fundamentals tiene lecciones desarrolladas. El checklist de AI Academy usa almacenamiento local propio, pendiente de adaptarse al progreso compartido.
+
+### Integración BETA-006 — PLD-001 + PLD-003 + PLD-004 (#219)
+
+- Estado: integrada en Beta vía PR #219, squash merge.
+- PLD-003: versión de documentos sincronizados; un write sin versión no sobrescribe progreso existente; cliente lee/mergea y maneja 428/409; PostgreSQL concurrency regression.
+- PLD-001: serializa el inicio de simulacros verificados por usuario; protege límite diario y evita dos simulacros abiertos; PostgreSQL concurrency regression.
+- PLD-004: aislamiento de ejecución Python ya integrado en #211 y conservado.
+- CI final: backend (100% coverage, Ruff), E2E, WebKit, cursos, Docker, Pages artifact y deployment workflows en verde.
+- Merge commit: `648ed43fea067902339528638d3733301e1f60ac`.
+- PR #219 es el port rebaseado sobre la Beta actual; PRs originales #184/#186 no se modificaron.
