@@ -1,6 +1,6 @@
 # Inventario de ramas — 26/11/2026
 
-Repositorio: `Marbi8891/python-learning-dashboard`. Se obtuvieron 100 ramas en la consulta (página adicional vacía). `main` es la rama por defecto. Este inventario clasifica nombres, no declara que todas las ramas estén actualizadas ni sean mergeables.
+Repositorio: `Marbi8891/python-learning-dashboard`. Se obtuvieron 102 ramas en la consulta, incluyendo una segunda página con dos ramas. `main` es la rama por defecto. Este inventario clasifica nombres, no declara que todas las ramas estén actualizadas ni sean mergeables.
 
 ## Ramas de Beta creadas durante la auditoría
 
@@ -10,7 +10,9 @@ Repositorio: `Marbi8891/python-learning-dashboard`. Se obtuvieron 100 ramas en l
 - `beta/port-pld003`: port anterior PLD-003, PR #214 cerrada como supersedida.
 - `beta/hardening-rebased`: port actualizado PLD-001/003/004, PR #219.
 - `beta/academy-institutional-port`: port PLD ACADEMY, PR #220.
-- `beta/programming-path-port`: port Programming Path, PR #221.
+- `beta/programming-path-port`: port Programming Path, PR #221 (supersedida).
+- `beta/academy-institutional-rebased`: port institucional rebasado, PR #223.
+- `beta/programming-path-rebased`: port Programming Path rebasado, PR #224.
 
 ## Ramas asociadas a PRs abiertas
 
