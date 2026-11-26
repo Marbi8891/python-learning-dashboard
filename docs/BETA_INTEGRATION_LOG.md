@@ -21,34 +21,34 @@
 
 ### BETA-003 — State document versioning (PLD-003, #186)
 
-- Estado: bloqueada para integración automática.
-- Se creó PR de integración #212 hacia Beta, pero GitHub reporta `mergeable_state=dirty`.
-- La rama fuente está 8 commits detrás de `main` y diverge desde `525f1b89`; además, solapa documentación/Changelog con la integración PLD-004.
-- Checks del commit fuente #186: backend, E2E, WebKit, cursos, Docker, Pages artefacto y Render workflows en verde.
-- No se fuerza el merge. Se necesita rebase/port manual sobre el estado Beta, preservando cambios recientes y #185, y repetir CI.
-- PR #212 es una PR de integración a Beta; no cambia el destino de la PR original #186.
+- Estado: integrado en Beta mediante PR #219; PR de port #212 se cerró sin merge como supersedido.
+- Un write sin versión no sobrescribe progreso existente; cliente lee/mergea y maneja 409/428.
+- Añade regresiones de concurrencia en PostgreSQL y documentación del contrato de sincronización.
+- CI final de #219 en verde: backend, E2E, WebKit, cursos y deployment check.
+- PR original #186 sigue dirigido a `main`; no se ha integrado allí.
 
 ### BETA-004 — Verified exam concurrency (PLD-001, #184)
 
-- Estado: pendiente de port/rebase.
-- Checks del commit fuente #184 estaban en verde (backend, E2E, WebKit, cursos, artefacto Pages, Docker y Render).
-- Cambia `verified.py`, añade prueba PostgreSQL, actualiza tests/docs/CI. Solapa `CHANGELOG.md` y `docs/TESTING.md` con PLD-004 y tiene una base antigua; se revisará después de PLD-003.
-- No se integró aún.
+- Estado: integrado en Beta mediante PR #219.
+- Serializa el inicio de simulacros verificados por usuario; protege el límite diario y evita más de un simulacro abierto.
+- Añade pruebas de concurrencia PostgreSQL y documentación.
+- CI final de #219 en verde: backend, E2E, WebKit, cursos y deployment check.
+- PR original #184 sigue dirigido a `main`; no se ha integrado allí.
 
-## CI de features candidatas (snapshot revisado)
+## CI de features candidatas (snapshot histórico)
 
-- #199 AI Academy: fallan artefacto Pages, E2E y WebKit; backend/cursos/Render/Docker pasan.
-- #207 Programming Path: fallan backend (Ruff format) y E2E; artefacto Pages, WebKit, cursos, Docker y Render pasan.
-- #209 PLD ACADEMY institucional: fallan artefacto Pages, backend (cobertura) y E2E; WebKit, cursos, Docker y Render pasan.
-- #175 Demo Edition: PR reporta pruebas locales verdes, pero el estado de CI del branch debe comprobarse de nuevo antes de portarlo.
-- Estos resultados son snapshots de runs asociados a los SHAs de PR; no son prueba de que el CI actual de Beta haya ejecutado esas pruebas.
+- #199 AI Academy: los fallos de los snapshots previos quedaron resueltos al port; integrada en Beta vía #216. La validación de #216 fue verde.
+- #207 Programming Path: PR original cerrada como supersedida por #224; su port rebased se integró en Beta y CI de #224 fue verde.
+- #209 PLD ACADEMY: PR original cerrada como supersedida por #223. La nueva PR #223 tiene E2E fallido en el último run y necesita rebase/CI.
+- #175 Demo Edition: PR reporta pruebas locales verdes, pero el estado de CI debe comprobarse antes de portarla.
+- Estos snapshots antiguos no son evidencia del CI actual de Beta.
 
 ## Próximo orden
 
-1. Rebase/adaptar PLD-003 (#186) y ejecutar CI contra Beta.
-2. Portar PLD-001 (#184), integrando sin duplicar los tests de CI y changelog.
-3. Revisar la estrategia de merge de los PRs de features; actualizar branches base y corregir CI.
-4. Consolidar Learning Hub, Programming Path, AI Academy, DAW Coach y Demo Edition en el orden de dependencias.
+1. Actualizar/portar PR #223 PLD ACADEMY sobre el head actual de Beta y ejecutar CI completo; corregir el E2E de viewport pendiente.
+2. Decidir el alcance de #227 Pentest Lab; corregir las pruebas y validar el prototipo UI-only si se decide incluir.
+3. Ejecutar CI en el commit final de Beta, smoke test del runtime y revisar accesibilidad/precache/Pages.
+4. Preparar release notes y pedir aprobación antes de publicar o integrar a `main`.
 
 ### Integración BETA-005 — AI Academy (#199)
 
@@ -69,7 +69,33 @@
 - Merge commit: `648ed43fea067902339528638d3733301e1f60ac`.
 - PR #219 es el port rebaseado sobre la Beta actual; PRs originales #184/#186 no se modificaron.
 
-## Integraciones en validación
+## Integraciones pendientes
+
+### PR #223 — PLD ACADEMY institucional
+
+- Port rebased previo sobre Beta, incluyendo hardening #219; ahora su base está desfasada tras el merge de #224.
+- Añade landing pública, workspace demo local, grupos, actividades, analítica, role preview y tour.
+- Se corrigió el test de persistencia para seguir el CTA desde la landing al workspace en head commit `230dfa2015eed29425f6e282004e04aae85d60a0`.
+- Último CI del head anterior: backend/cursos/WebKit y Deployment check verdes; E2E falló en la persistencia (expectativa de ruta) y un test de viewport PCAP. No hay CI disponible para el head corregido.
+- El conector no dispone de operación de rebase/update-branch. Requiere rebase/port manual antes de merge.
+- No usar con datos reales; faltan tenancy/auth/permisos/persistencia/auditoría.
+
+### PR #227 — Pentest Lab dashboard
+
+- PR separada contra `main`; no está en Beta y el alcance está pendiente de decisión.
+- UI-only: no ejecuta scans ni Docker labs; infraestructura se muestra desconectada.
+- Se añadió la traducción faltante de “Pentest Lab” en head commit `67ca9b23ace5676e635164a3b0b3356428121038`; CI no ha corrido en ese head.
+- El run anterior falló unit test de traducciones y WebKit por un test de recuperación de cuenta (`mailto:`). Repetir y resolver antes de integrar.
+
+### BETA-007 — Programming Path (#224)
+
+- Estado: integrado en `release/beta-0.1.0` mediante merge commit `1c104b3816f82a55bc883b18e8896a5b011c6597` el 26/11/2026.
+- Añade 17 módulos de mapa curricular y 28 prácticas con tareas, entregables, criterios y evidencias.
+- Reutiliza el documento Career/store y IDs de recursos/lecciones existentes; no duplica progreso ni bancos.
+- CI del head #224 verde: backend, E2E, WebKit, cursos y Deployment check.
+- Post-merge CI sobre el merge commit no confirmado; runtime/progress smoke test pendiente.
+
+
 
 ### PR #223 — PLD ACADEMY institucional (rebase)
 
