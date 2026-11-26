@@ -36,6 +36,8 @@ test.describe("PLD ACADEMY institutional workspace MVP", () => {
   });
 
   test("creates a group and persists it in the demo workspace", async ({ page }) => {
+    await page.getByRole("button", { name: "Grupos" }).click();
+    await expect(page.getByRole("heading", { name: "Grupos" })).toBeVisible();
     await page.getByRole("button", { name: "＋ Crear grupo" }).click();
     await page.getByRole("heading", { name: "Crear grupo" }).waitFor();
     await page.locator("#academy-group-form [name=name]").fill("2.º DAW B");
