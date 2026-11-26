@@ -8,6 +8,26 @@ cambios se agrupan por fecha de merge, con el número de pull request entre par�
 
 ## [Sin publicar]
 
+## [Beta 0.1.0 — en preparación] - 2026-11-26
+
+### Añadido
+- Programming Path: mapa de 17 módulos y 28 prácticas guiadas, con tareas, entregables, criterios de aceptación y evidencia; el progreso se guarda y sincroniza en el documento Career existente, sin duplicar lecciones ni crear un store paralelo.
+- AI Academy: catálogo de 20 cursos y 5 rutas; Fundamentals contiene 8 lecciones desarrolladas. El resto del catálogo son outlines, no cursos completos.
+- PLD ACADEMY institucional: prototipo visual/demo pendiente de integración; no es multi-tenant ni está listo para datos reales.
+- Documentación de release Beta, mapeo curricular y catálogo de recursos con referencias externas.
+
+### Seguridad y fiabilidad
+- PLD-001: serializa el inicio de simulacros verificados por usuario para respetar límites y evitar simulacros abiertos concurrentes.
+- PLD-003: los documentos de progreso no se sobrescriben si el cliente no aporta versión; el flujo relee, fusiona y maneja 409/428.
+- PLD-004: restaura el estado del intérprete Pyodide entre ejecuciones y reinicia el Worker cuando no puede garantizar aislamiento.
+- Pages: separación del job de construcción/subida de artefacto del job de despliegue. La Beta no publica a GitHub Pages.
+
+### Estado
+- Programming Path (#224) integrado en `release/beta-0.1.0`. Checks CI y Deployment check del PR fuente en verde; falta validar CI en el commit de integración y smoke test del runtime.
+- Academy (#223) y Pentest Lab (#227) siguen pendientes de revisión/decisión y no se consideran integrados.
+- Esta sección es provisional; no implica que `v0.1.0-beta` se haya publicado.
+
+
 ### Añadido
 - IA con NEXARO AI, Fase 4: «Preguntar al tutor IA» en el panel del asistente de cada lección (preguntar,
   pedir pista, explicar mi error y revisar mi código), solo si el servidor ofrece la IA y con sesión iniciada. El
