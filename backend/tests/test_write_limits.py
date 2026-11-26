@@ -31,19 +31,28 @@ def test_default_limit_leaves_room_for_real_use():
     ],
 )
 def test_writes_are_limited_per_user(client, auth_headers, small_limit, method, path, body):
-    send = getattr(client, method)
-    kwargs = {"headers": auth_headers}
-    if body is not None:
-        kwargs["json"] = body
-    # Sin versión, el estado se sobrescribe: no hay 409 entre un guardado y el siguiente
-    codes = [send(path, **kwargs).status_code for _ in range(4)]
+    def save():
+        kwargs = {"headers": auth_headers}
+        if body is not None:
+            kwargs["json"] = body
+        if "state" in path:  # documentos con versión: cada guardado lleva la que acaba de leer
+            kwargs["json"] = body | {"version": _version(client, path, auth_headers)}
+        return getattr(client, method)(path, **kwargs)
+
+    codes = [save().status_code for _ in range(4)]
     assert all(code < 400 for code in codes[:3]), codes
     assert codes[3] == 429
-    assert "Tu progreso sigue en este navegador" in send(path, **kwargs).json()["detail"]
+    assert "Tu progreso sigue en este navegador" in save().json()["detail"]
+
+
+def _version(client, path, headers):
+    return client.get(path, headers=headers).json()["version"]  # leer no cuenta para el límite
 
 
 def _save(client, headers):
-    return client.put("/api/v1/pcap-state", headers=headers, json={"data": {}}).status_code
+    path = "/api/v1/pcap-state"
+    body = {"data": {}, "version": _version(client, path, headers)}
+    return client.put(path, headers=headers, json=body).status_code
 
 
 def test_limit_is_per_user_and_reads_are_free(client, auth_headers, small_limit):
