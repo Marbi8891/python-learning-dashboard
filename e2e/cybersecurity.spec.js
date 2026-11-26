@@ -47,7 +47,10 @@ test("una semana completada sigue en la cuenta después de cerrar sesión y volv
 
   // Cerrar sesión sin conservar los datos: este navegador se queda sin el progreso…
   await page.locator("#account-button").click();
+  // Cerrar sesión recarga la página (account.js, leave): se espera a la recarga antes de leer localStorage
+  const reloaded = page.waitForEvent("load");
   await dialog(page).getByRole("button", { name: "Cerrar sesión" }).click();
+  await reloaded;
   await expect(page.locator("#account-label")).toHaveText("Iniciar sesión");
   expect(await page.evaluate(() => localStorage.getItem("pld:cybersecurity:v1"))).toBeNull();
 
