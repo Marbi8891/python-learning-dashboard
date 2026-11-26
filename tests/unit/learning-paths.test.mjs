@@ -27,3 +27,21 @@ test("Paths link to existing PLD zones and use internal routes",()=>{
   assert.ok(allLinks.includes("#/ciberseguridad"));
   assert.ok(allLinks.every(href=>href.startsWith("#/")));
 });
+
+import { pathProgress } from "../../frontend/js/paths-progress.js";
+
+test("Python Path aggregates existing concept progress",async()=>{
+  const oldFetch=globalThis.fetch,oldStorage=globalThis.localStorage;
+  globalThis.fetch=async()=>({ok:true,json:async()=>({concepts:[{id:"a"},{id:"b"},{id:"c"}]})});
+  globalThis.localStorage={getItem(key){return key==="pld:learn"?JSON.stringify({concepts:{a:{read:"2026-01-01"},b:{box:2},c:{box:1}}}):null}};
+  try{assert.deepEqual(await pathProgress("python-developer"),{done:2,total:3,label:"conceptos",percent:67})}
+  finally{globalThis.fetch=oldFetch;if(oldStorage===undefined)delete globalThis.localStorage;else globalThis.localStorage=oldStorage}
+});
+
+test("Excel Path reuses completed lessons from the existing course store",async()=>{
+  const oldFetch=globalThis.fetch,oldStorage=globalThis.localStorage;
+  globalThis.fetch=async()=>({ok:true,json:async()=>({modules:[{lessons:[{slug:"xl1"},{slug:"xl2"}]}]})});
+  globalThis.localStorage={getItem(key){return key==="pld:course:excel"?JSON.stringify({done:{xl1:"2026-01-01"}}):null}};
+  try{assert.deepEqual(await pathProgress("excel-professional"),{done:1,total:2,label:"unidades Excel",percent:50})}
+  finally{globalThis.fetch=oldFetch;if(oldStorage===undefined)delete globalThis.localStorage;else globalThis.localStorage=oldStorage}
+});
