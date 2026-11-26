@@ -95,3 +95,11 @@ Do not publish or merge the release until every required item below is verified.
 - GitHub reports `protected:false` for both `main` and Beta; the repository has no rulesets returned. Protect main and the release branch before release (PR-only changes, required checks, prevent force-push/deletion, review).
 - `beta/programming-path-rebased` is 23 commits behind Beta and 0 ahead; it is a redundant-branch deletion candidate, but branch deletion is not available through the current connector. Other beta port branches diverge and have unique commits; retain them pending file-level review.
 - The current CI monitor on main passed, but it is not evidence of a full suite on Beta. No tag, release, deployment, merge, or branch deletion was performed.
+
+
+## Audit update (2026-11-26, 20:38 CET)
+
+- **Progress-sync mismatch found and ported:** Beta backend rejects PUTs without a known version (428), but its `frontend/js/doc-sync.js` only handled 409 and could attempt an unversioned PUT before reading the account. Ported the PLD-003 client fix from `fix/state-document-versioning`: reread+merge before first PUT when version is unknown, treat 428 as a conflict, and retry with the adopted version. Expanded `tests/unit/doc-sync.test.mjs` to cover this and prove that remote answers are preserved. This is a targeted fix to avoid progress overwrites; validation is pending the new Beta CI run.
+- Security review of Academy draft found stored demo count fields interpolated without escaping in several views. Fixed them on the Academy branch and added a hostile-localStorage E2E test. Latest PR head is `346b19d704d22caf1f193e320fa20b206c3ed2b3`; CI #640 is in progress. This code is not in Beta.
+- CI run #638 is still running on the previous Beta audit commit. The new sync fix + checklist commit will trigger another full CI run on the updated release head.
+- Current scope remains: #223 and #229 draft/unreviewed; #227 draft/scope decision pending; #224 merged. No release, deployment or merge was made.
