@@ -418,6 +418,7 @@ RESOURCES: list[dict] = [
         "quality": "baja",
         "description": "Ficha del ciclo con el plan antiguo (RD 686/2010: FOL, EIE y FCT), centros por provincia, calendario y foro. No sirve como currículo vigente.",
     },
+    # fmt: off
     {
         "id": "res-harvard-cs50x",
         "title": "Harvard CS50x: Introduction to Computer Science",
@@ -1058,6 +1059,7 @@ RESOURCES: list[dict] = [
         "description": "Recursos y proyectos del ecosistema cloud-native para comprender contenedores, observabilidad y orquestación.",
         "checked": "2026-11-25"
     }
+    # fmt: on
 ]
 
 ID = re.compile(r"^res-[a-z0-9-]+$")
