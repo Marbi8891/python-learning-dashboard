@@ -69,11 +69,12 @@ test.describe("PLD ACADEMY institutional workspace MVP", () => {
     }, hostile);
     await page.goto("/#/academy");
     await expect(page.locator("#academy-view img")).toHaveCount(0);
-    await expect(page.locator("#academy-view")).toContainText(hostile);
     await page.getByRole("button", { name: "Grupos" }).click();
     await page.locator("#academy-role").selectOption("teacher");
+    await expect(page.locator("#academy-view")).toContainText(hostile);
     await expect(page.locator("#academy-view img")).toHaveCount(0);
     await page.getByRole("button", { name: "Actividades" }).click();
+    await expect(page.locator("#academy-view")).toContainText(hostile);
     await expect(page.locator("#academy-view img")).toHaveCount(0);
     await page.locator("#academy-role").selectOption("student");
     await expect(page.locator("#academy-view img")).toHaveCount(0);
