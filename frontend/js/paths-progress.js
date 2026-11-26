@@ -33,7 +33,7 @@ async function cyber(){
 function ai(){
  const saved=read("pld:ai-academy:progress");let done=0,total=0;
  for(const course of AI_ACADEMY_COURSES){const lessons=aiCourseLessons(course);total+=lessons.length;done+=(saved[course.id]||[]).length}
- return metric(done,total,"lecciones IA");
+ return metric(done,total,"temas IA");
 }
 export async function pathProgress(id){
  try{switch(id){case"python-developer":return await python();case"daw-developer":return await daw();case"web-developer":return await web();case"cybersecurity":return await cyber();case"ai-engineer":return ai();case"excel-professional":return await excel();default:return null}}catch{return null}
