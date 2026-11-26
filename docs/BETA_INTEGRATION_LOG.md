@@ -68,3 +68,21 @@
 - CI final: backend (100% coverage, Ruff), E2E, WebKit, cursos, Docker, Pages artifact y deployment workflows en verde.
 - Merge commit: `648ed43fea067902339528638d3733301e1f60ac`.
 - PR #219 es el port rebaseado sobre la Beta actual; PRs originales #184/#186 no se modificaron.
+
+## Integraciones en validación
+
+### PR #223 — PLD ACADEMY institucional (rebase)
+
+- Port sobre el head actual de Beta, incluyendo hardening #219.
+- Añade landing pública, workspace local/demo, grupos, actividades, analítica, role preview y tour.
+- Se corrigió la prueba de creación de grupos para entrar primero en la pestaña Grupos.
+- Deployment check: verde. Backend/cursos: verdes. E2E y WebKit: en ejecución.
+- No usar con datos reales; faltan tenancy/auth/permisos/persistencia/auditoría.
+
+### PR #224 — Programming Path (rebase)
+
+- Port sobre el head actual de Beta, incluyendo hardening #219.
+- 17 módulos de currículo, 28 prácticas y evidencia; reutiliza Career document/store, sin progreso paralelo.
+- Añade mapping/spec, builder, catálogo de recursos y pruebas.
+- Backend/cursos/WebKit: en ejecución; se corrigió el builder para que el catálogo y las fechas de revisión coincidan.
+- E2E: en ejecución.
