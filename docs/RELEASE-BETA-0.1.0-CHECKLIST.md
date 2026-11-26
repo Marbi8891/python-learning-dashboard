@@ -81,3 +81,17 @@ Do not publish or merge the release until every required item below is verified.
 - PR #229 was converted back to draft during this audit to prevent merge while CI is failing; its description now records the failure and refresh requirement.
 
 - Latest branch comparisons confirm the Academy and Learning Paths branches diverge from the current Beta; Pentest Lab is based on current main. Exact behind counts are not retained here because audit documentation commits advance Beta.
+
+
+## Audit update (2026-11-26, 20:28 CET)
+
+- Fresh refs: `main` = `be801c5afa1c27ba6d5f24695236fe8ee67bdcee`; Beta before this update = `7be9e8234b35b6de11b0c420bd2c0a374344950f`. Compare shows Beta 52 commits ahead, 0 behind. No changes were made to `main`.
+- `.github/workflows/ci.yml` on Beta was updated at commit `a993adeca5e53beabc81bdd909e89d7a7879f324` to run CI on pushes to both `main` and `release/beta-0.1.0`. A run on the resulting Beta head must be checked; this trigger change does not itself prove CI passed.
+- PR #224 remains merged into Beta (merge commit `1c104b3816f82a55bc883b18e8896a5b011c6597`). Its checks passed on the PR head; no full post-merge run on Beta was verified.
+- PR #223 is draft, no reviews. Compare current head `230dfa2015eed29425f6e282004e04aae85d60a0` with Beta: 12 commits ahead, 36 behind (diverged). CI #622 failed at `e2e/learn.spec.js:558` because the PCAP sidebar heading is resolved but has viewport ratio 0. Deployment Check passed. Do not integrate until refreshed and tested.
+- PR #229 is draft, no reviews. Head `066804beb7967d6d5014525a1c1f607a07c1f146`; compare: 25 commits ahead, 4 behind. CI #636 failed the same PCAP sidebar viewport assertion. Backend, course validation, WebKit, frontend unit tests, npm audit and pip-audit passed; Deployment Check #323 passed. Refresh/rebase and rerun CI before ready.
+- PR #227 is draft, no reviews, targets `main`; CI #623 failed the routing test because it expects an `aiacademy` loader expression absent from the branch's `app.js`. Backend, courses and WebKit passed; Deployment Check passed. Scope remains undecided and this PR is not integrated into Beta.
+- The obsolete PRs #207, #209, #101, #193 and #203 remain closed without merge. No reopen action was taken.
+- GitHub reports `protected:false` for both `main` and Beta; the repository has no rulesets returned. Protect main and the release branch before release (PR-only changes, required checks, prevent force-push/deletion, review).
+- `beta/programming-path-rebased` is 23 commits behind Beta and 0 ahead; it is a redundant-branch deletion candidate, but branch deletion is not available through the current connector. Other beta port branches diverge and have unique commits; retain them pending file-level review.
+- The current CI monitor on main passed, but it is not evidence of a full suite on Beta. No tag, release, deployment, merge, or branch deletion was performed.
