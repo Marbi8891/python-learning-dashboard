@@ -32,7 +32,11 @@ async function cyber(){
 }
 function ai(){
  const saved=read("pld:ai-academy:progress");let done=0,total=0;
- for(const course of AI_ACADEMY_COURSES){const lessons=aiCourseLessons(course);total+=lessons.length;done+=(saved[course.id]||[]).length}
+ for(const course of AI_ACADEMY_COURSES){
+  const lessons=aiCourseLessons(course),valid=new Set(lessons.map(lesson=>lesson.id));
+  total+=lessons.length;
+  done+=new Set((saved[course.id]||[]).filter(id=>valid.has(id))).size;
+ }
  return metric(done,total,"temas IA");
 }
 export async function pathProgress(id){
