@@ -52,9 +52,9 @@ Do not publish or merge the release until every required item below is verified.
 - PR #193 was closed as an older AI Tutor specification.
 - PR #203 was closed as outdated relative to the current AI Tutor direction.
 - PR #224 merged into `release/beta-0.1.0` at `1c104b3816f82a55bc883b18e8896a5b011c6597`. Its CI jobs (backend, e2e, webkit, courses) and Deployment check were green on the PR head SHA. Post-merge CI on the merge commit is not yet verified.
-- PR #223 remains open and is not mergeable at present. Its base branch advanced when #224 merged; it must be rebased/updated and CI rerun. The last CI run failed two E2E tests: the Academy persistence test clicks the public landing-page nav link but then expects the workspace Groups tab; another existing PCAP viewport assertion failed. Fix the route expectation and investigate the viewport failure before merging.
+- PR #223 remains open and cannot currently merge. The base branch advanced when #224 merged. The Academy persistence E2E was corrected in head commit `230dfa2015eed29425f6e282004e04aae85d60a0` to follow the public landing CTA to the workspace. No CI run is available for that commit, and the branch still diverges (12 commits ahead / 19 behind the current release branch at last comparison). The GitHub connector has no branch-rebase/update operation; it must be rebased or ported before integration. The separate PCAP viewport assertion failure also remains to be checked.
 - PR #227 remains separate against `main`; scope decision is pending. CI failures include missing English translation for the new “Pentest Lab” label and a WebKit account-recovery test failing to find the expected mailto link.
-- `release/beta-0.1.0` is currently 34 commits ahead of `main` and 0 behind; `main` was not modified.
+- `release/beta-0.1.0` is currently 35 commits ahead of `main` and 0 behind; `main` was not modified.
 - There are still several open PRs targeting `main`; they are not considered integrated into the Beta unless separately ported/reviewed.
 
 ## Known limitations to disclose
