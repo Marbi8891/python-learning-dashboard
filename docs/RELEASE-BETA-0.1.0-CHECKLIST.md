@@ -1,70 +1,69 @@
-# PLD Beta 0.1.0 — release checklist
+# PLD Beta 0.1.0 — checklist de lanzamiento
 
-**Updated:** 2026-11-27 (latest audit check)  
+**Actualizado:** 2026-11-27, 07:43 CET  
 **Main:** `be801c5afa1c27ba6d5f24695236fe8ee67bdcee`  
-**Beta head before this document refresh:** `acabdabe7ce785f29c8f779ef774fdaa0a3eec80`  
+**Beta:** `960086f65ee812d941b7c454a3f68f60ab134ec6` (75 commits ahead, 0 behind main)  
 **Demo:** https://marbi8891.github.io/python-learning-dashboard/
 
-## Release gate
+## Gate de publicación
 
-Do not tag or publish Beta until the included scope is approved, CI is green on the exact candidate commit, and manual demo/accessibility checks are completed.
+No crear tag ni publicar Release hasta que el alcance esté aprobado, CI pase sobre el commit exacto candidato y se complete la revisión manual de demo y accesibilidad.
 
-## Scope and PR status
+## PR candidatas
 
-- [x] Beta is based on main: 74 commits ahead, 0 behind.
-- [x] PR #224 Programming Path merged to Beta at `1c104b3816f82a55bc883b18e8896a5b011c6597`.
-- [ ] PR #223 Academy: draft, head `9d674df`, 17 ahead / 58 behind Beta. CI #45890668077 and Deployment Check #45890668052 passed on this head. No approvals. Refresh against Beta, inspect overlap/conflicts, then rerun checks. Prototype is synthetic/localStorage only; no tenant isolation, institutional auth, server persistence or permissions.
-- [ ] PR #229 Learning Paths: draft, head `88b9434`, 32 ahead / 26 behind Beta (merge base `c31244a`). CI #45934058607 failed E2E on `Learning Paths selection is optional and persisted locally`: after `page.reload()`, `#paths-view` remained empty. I downloaded and inspected the Playwright artifact; both first attempt and retry show the same failure. Rerun of the failed E2E job is accepted and in progress. Deployment Check #45934058622 passed. No approvals. Review read-only progress adapters and shared frontend files; update/integrate sequentially, not in parallel.
-- [ ] PR #227 Pentest Lab: draft against main, head `67ca9b2`, 16 ahead / 0 behind main. Latest CI #45851158102 failed frontend unit tests at `ai-academy-routing.test.mjs`: it asserts the AI Academy loader/view is present, but `main`'s `frontend/js/app.js` does not contain that loader. This is a baseline/main mismatch, not a Pentest Lab test. Backend, courses and WebKit passed; E2E was skipped. Deployment Check #45851158126 passed. No further rerun requested. Decide scope; UI only, no Docker execution or real scans.
-- [x] Obsolete PRs #207, #209, #101, #193 and #203 remain closed without merge.
+- [x] **#224 Programming Path:** merged en Beta; merge commit `1c104b3816f82a55bc883b18e8896a5b011c6597`.
+- [ ] **#223 Academy:** draft; head `9d674df`, 17 ahead / 59 behind Beta (merge base `5182b1ce`). CI #45890668077 y Deployment Check #45890668052 passed en su head; sin reviews. Actualizar contra Beta, revisar conflictos y repetir checks. Demo localStorage con datos sintéticos; no tiene aislamiento multi-tenant, auth institucional, persistencia backend ni permisos reales.
+- [ ] **#229 Learning Paths:** draft; head `88b9434`, 32 ahead / 27 behind Beta (merge base `c31244a`). CI #45934058607 falló E2E en la persistencia tras reload: `#paths-view` queda vacío y no muestra “Mis Paths” (286 tests pasaron, 1 falló). Deployment Check #45934058622 passed. Reintento de jobs fallidos solicitado; attempt 4 está en curso: backend, cursos y WebKit passed; E2E sigue running. Solo reviews COMMENTED, sin aprobación. No integrar aún.
+- [ ] **#227 Pentest Lab:** draft contra main; head `67ca9b2`, 16 ahead / 0 behind. CI #45851158102 falló en `ai-academy-routing.test.mjs` por loader de AI Academy ausente en main; no es una prueba propia de Pentest Lab. Deployment Check #45851158126 passed; sin reviews. UI-only: no ejecuta Docker ni scans. Decidir alcance y corregir el bloqueo de baseline antes de integrar.
+- [x] PR obsoletas #207, #209, #101, #193 y #203 cerradas sin merge.
 
-## CI evidence
+## CI y estado de main
 
-- [x] Historical exact Beta head `e415c925`: CI #45934210432 passed all four jobs. Current code candidate `5754170`: CI #45940620642 first attempt failed WebKit smoke test `e2e/landing.spec.js` at `#/portada/como-funciona` (URL remained `#/portada`, marked flaky); failed-job rerun then passed all four jobs. This validates `5754170`, not the newest checklist-only commits `18406e9` and `acabdabe`. https://github.com/Marbi8891/python-learning-dashboard/actions/runs/45940620642
-- [ ] PR #229: run #45934058607 failed after reload because the Paths view remained blank; artifact confirms the same failure on retry. E2E rerun is accepted and in progress. Deployment check passed.
-- [x] PR #223: run #45890668077 passed all four jobs; deployment check #45890668052 passed. This does not validate against current Beta.
-- [ ] PR #227: run #45851158102 failed a unit assertion requiring the AI Academy loader that is absent from main; this unrelated baseline mismatch blocks CI. Deployment check passed.
-- [ ] Main: last full CI recorded in previous audit failed AI Academy routing (569/570 tests); not rechecked this run. Current CI-monitor runs on main are green but are not full-suite evidence.
-- [ ] Fix/retest AI Academy routing failure on #227 and related hardening PR before considering those branches.
-- [ ] Verify Dependabot heads before merging. Latest known: #126, #127, #129–#133 had green checks; #128 had one green and one failed check (accessibility issue previously reported as serious `label-content-name-mismatch`). #185 runtime isolation also had one green and one failed check. #183, #184 and #186 had green checks in the last queried runs.
+- [x] CI #45949035755 passed sobre **Beta exacta `960086f`**: backend, cursos, E2E y WebKit. Backend incluye Ruff, pip-audit, cobertura 100%, PostgreSQL y pruebas de concurrencia. E2E incluye unit tests y npm audit de vulnerabilidades altas. https://github.com/Marbi8891/python-learning-dashboard/actions/runs/45949035755
+- [x] CI #45948792247 passed sobre `18406e9` (commit anterior).
+- [ ] Main `be801c5` no ha cambiado. Las últimas ejecuciones consultadas son CI monitor y están verdes; no equivalen a suite completa. Último fallo completo conocido en la auditoría previa: routing de AI Academy (569/570). No se reejecutó la suite completa de main en esta pasada.
+- [ ] La CI exacta de #223/#229/#227 no valida integración contra la Beta actual. Actualizar branches y correr checks antes de merge.
 
-## Security and release quality
+## Seguridad y calidad
 
-- [x] Workflow review from prior audit: CI uses read-only contents permissions, checkout with `persist-credentials: false`, backend `pip-audit`, frontend `npm audit --audit-level=high`. Recheck workflow changes before release.
-- [ ] Review current dependency findings, secrets, debug settings, unsafe defaults and privacy notices on release candidate.
-- [ ] Manual accessibility, responsive and public-demo smoke test.
-- [ ] Confirm that demo walkthrough does not touch real account/progress data.
+- [x] Revisión previa de workflows: CI con `contents: read`, checkout `persist-credentials: false`, `pip-audit` y `npm audit --audit-level=high`.
+- [ ] Revisar findings actuales de dependencias, secretos, defaults inseguros y avisos de privacidad en el candidato.
+- [ ] Revisar accesibilidad y responsive manualmente.
+- [ ] Confirmar que la demo no toca cuentas ni progreso real.
+- [ ] Verificar Dependabot antes de integrar: #128 tiene fallo de accesibilidad reportado (`label-content-name-mismatch`); #185 tenía un check fallido en la última revisión. No se revalidaron todos los heads en esta pasada.
 
-## Main and branches
+## Ramas y protección
 
-- Main remains at `be801c5`; no writes made.
-- Branch listing paginated: 106 branches (100 on page 1, 6 on page 2). All returned branches report `protected:false`; main and Beta are unprotected. Rulesets endpoint returned an empty list. Branch-protection detail endpoint is forbidden to the connector; no settings changed.
-- PR #223: 17 ahead / 56 behind Beta; PR #229: 32 ahead / 24 behind Beta. Both overlap on app navigation, index, precache and English translations; inspect conflicts and integrate sequentially.
-- `beta/programming-path-rebased` compares 0 ahead / 45 behind Beta, with no unique commits in ancestry; redundant candidate. No branch-deletion tool is available, so it was not deleted.
-- Other beta-port branches diverge and retain unique commits; preserve until their commits/files are reviewed. No branch deletions or force-pushes performed.
+- Main sigue intacta.
+- Inventario de ramas paginado: **106 ramas**; todas las devueltas indican `protected:false`.
+- Main y Beta no están protegidas. Rulesets: lista vacía. Endpoint de protección detallada devuelve 403 al conector; no se modificó configuración.
+- `beta/programming-path-rebased`: 0 commits únicos ahead / 46 behind Beta; candidata redundante. No se borró (sin herramienta de eliminación disponible).
+- Las demás ramas beta-port tienen commits propios; conservar hasta revisar sus cambios. No se borraron ramas ni se hizo force-push.
 
-## Presentation and release
+## Tags y Release
 
-- [ ] README, setup instructions and changelog reflect the final included scope.
-- [ ] Screenshots are current and contain no personal data.
-- [ ] Spanish/English copy, legal and privacy notices reviewed.
-- [ ] Demo walkthrough works without touching real progress/account data.
-- [ ] Manual smoke test of published Pages site.
-- [ ] Create a new Beta tag on the exact validated commit (name to approve); do not move/reuse `v1.0.0`.
-- [ ] Publish GitHub Release with notes, known limitations and demo link.
-- [ ] Main stays unchanged until explicit release/merge approval.
+- [x] Tag existente `v1.0.0`, anotado, **sin firma**; apunta al commit `fdf64098556f0e835e08ad5ce58c230a21b5f591`. No mover ni reutilizar.
+- [x] GitHub Releases: ninguna publicada.
+- [ ] Aprobar nombre de tag nuevo y crearlo sobre el commit exacto validado.
+- [ ] Publicar Release con alcance, limitaciones conocidas y enlace a demo.
 
-## Known limitations to disclose
+## Presentación
 
-Academy is a local demo with synthetic data, not a production multi-tenant institution service. Learning Paths aggregates existing progress read-only; no duplicate lesson/XP store is intended. Pentest Lab is a planning dashboard, not a working scanner/lab. State which checks ran against the exact release candidate.
+- [ ] README, instrucciones y changelog corresponden al alcance final.
+- [ ] Capturas actualizadas, sin datos personales.
+- [ ] Textos ES/EN, avisos legales y privacidad revisados.
+- [ ] Demo walkthrough sin tocar progreso real.
+- [ ] Smoke test manual de Pages.
+- [ ] Notas de versión y lista de limitaciones.
 
-## Audit record — 2026-11-27 (latest check)
+## Limitaciones que deben declararse
 
-- Main `be801c5` unchanged. Beta `acabdabe` is 74 ahead / 0 behind main; the two newest commits are checklist-only. No status checks are available for exact head `acabdabe` through this connector.
-- CI #45940620642 rerun passed all four jobs on code commit `5754170` (backend, courses, E2E and WebKit). The first WebKit attempt was flaky on the landing route; rerun passed.
-- #229 CI #45934058607: backend, courses and WebKit passed in the rerun; E2E remains in progress. The failed attempt's artifact confirms the selection-persistence test leaves `#paths-view` blank after reload. The failed-job rerun is still running; no code changes made.
-- #227 CI #45851158102 fails an existing routing assertion requiring an AI Academy loader absent from `main`; unrelated to Pentest Lab. Deployment Check passed.
-- #223 remains draft, 17 ahead / 58 behind Beta; CI #648 and Deployment Check passed on head; no reviews. #224 remains merged. #229 has COMMENTED reviews only, no approval; #227 no reviews.
-- PRs #207, #209, #101, #193 and #203 remain closed without merge.
-- Branch inventory: 106 total; redundant Programming Path rebase is 0 ahead / 45 behind.
-- No merge, branch deletion, force-push, tag, release or production deployment performed.
+Academy es una demo local con datos sintéticos, no un servicio institucional multi-tenant. Learning Paths consulta el progreso existente; no debe crear un almacén paralelo de XP/progreso. Pentest Lab es una interfaz de planificación, no un scanner/laboratorio operativo. En la release se deben indicar las pruebas que se ejecutaron sobre el commit exacto.
+
+## Registro de esta auditoría
+
+- Confirmado head Beta `960086f`, 75 ahead / 0 behind main; CI #45949035755 verde sobre este SHA exacto.
+- #223 y #229 continúan divergentes y en draft; #227 permanece contra main y con fallo de test base.
+- Se solicitó re-run de jobs fallidos de #229; attempt 4 está en curso al cerrar esta revisión.
+- PR #207, #209, #101, #193 y #203 verificadas cerradas sin merge.
+- No se hicieron merges, branch deletions, force-pushes, tags, releases ni deployments. Main sin cambios.
