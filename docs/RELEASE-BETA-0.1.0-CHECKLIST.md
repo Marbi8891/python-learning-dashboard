@@ -43,7 +43,7 @@ No se investigaron los logs de todas las PR ni se integró ninguna de ellas.
 - [ ] Confirmar demo con datos sintéticos, sin progreso personal.
 
 ## Ramas y protección
-- Inventario paginado: **106 ramas (100 + 6)**; todas devuelven `protected:false` (lectura actual).
+- Inventario paginado: **107 ramas (100 + 7)**; todas devuelven `protected:false` (lectura actual).
 - Rulesets: **[]**. Endpoint detallado de branch protection devuelve 403 a la integración; no se pudo inspeccionar la configuración.
 - `beta/programming-path-rebased`: **0 ahead / 52 behind** Beta; no tiene commits únicos, candidata redundante. No borrada.
 - Comparaciones actuales contra Beta:
@@ -73,6 +73,6 @@ Conservar las ramas divergentes hasta revisar commits únicos.
 Academy es demo local sintética, no servicio multi-tenant. Learning Paths reutiliza progreso existente, sin XP/store paralelo. Pentest Lab es planificación, no scanner ni laboratorio operativo.
 
 ## Registro
-- 2026-11-27 15:12: Base Beta `dee08c96` (85 ahead / 0 behind main). CI #680 passed exact SHA `94efd96`; run #681 está en curso en `dee08c96`. Main `be801c5` intacta; monitor #46012047656 passed. PR #223: 17/69; #229: 32/37; #227: 16/0 respecto a main. Inventario 106 ramas y 27 PR abiertas. Se propone hardening de Pages en branch separada; no desplegado.
+- 2026-11-27 15:12: Base Beta `dee08c96` (85 ahead / 0 behind main). CI #680 passed exact SHA `94efd96`; run #681 está en curso en `dee08c96`. Main `be801c5` intacta; monitor #46012047656 passed. PR #223: 17/69; #229: 32/37; #227: 16/0 respecto a main. Inventario 107 ramas y 28 PR abiertas. Se propone hardening de Pages en branch separada; no desplegado.
 - Checklist refrescado con el CI exacto #680 y comparaciones recalculadas. La descripción de PR y los checks de las candidatas se actualizarán en esta auditoría; no se repiten comentarios.
 - No merges adicionales, branch deletions, force-pushes, tags, releases ni deployments.
