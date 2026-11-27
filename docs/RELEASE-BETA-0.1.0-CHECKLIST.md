@@ -2,7 +2,7 @@
 
 **Actualizado:** 2026-11-27 15:54 CET  
 **Main:** `be801c5afa1c27ba6d5f24695236fe8ee67bdcee` (sin cambios)  
-**Beta audit snapshot:** `dee08c96ec3da7b79fa190612afc3b3116f1175b` (**85 ahead / 0 behind main**; CI #681 passed on this exact SHA). PR #237 head `326e4c86`; CI #683 passed on merge commit `7a320dc` (head + Beta base `dee08c96`). Deployment Check not verified. This checklist update on the PR branch will trigger another CI run.  
+**Beta audit snapshot:** `dee08c96ec3da7b79fa190612afc3b3116f1175b` (**85 ahead / 0 behind main**; CI #681 passed on this exact SHA). PR #237 head `8cbd010`; CI #684 is running (Backend, Cursos, E2E and WebKit); Deployment Check #338 passed. Previous head CI #683 passed on merge commit `7a320dc`. This checklist update triggers another CI run.  
 **Demo:** https://marbi8891.github.io/python-learning-dashboard/
 
 ## Gate de publicación
@@ -43,8 +43,8 @@ No se investigaron los logs de todas las PR ni se integró ninguna de ellas.
 - [ ] Confirmar demo con datos sintéticos, sin progreso personal.
 
 ## Ramas y protección
-- Inventario paginado: **107 ramas (100 + 7)**; todas devuelven `protected:false` (lectura actual).
-- Rulesets: **[]**. Endpoint detallado de branch protection devuelve 403 a la integración; no se pudo inspeccionar la configuración.
+- Inventario paginado: **107 ramas (100 + 7)**. Current branch-search connector does not expose protection flags. Prior audit (106 branches) reported `protected:false`; not revalidated for all 107 in this run.
+- Rulesets were previously reported as **[]**. Detailed branch-protection endpoint returned 403; current settings cannot be rechecked.
 - `beta/programming-path-rebased`: **0 ahead / 52 behind** Beta; no tiene commits únicos, candidata redundante. No borrada.
 - Comparaciones actuales contra Beta:
   - `beta/academy-institutional-port`: 11/73
@@ -73,6 +73,6 @@ Conservar las ramas divergentes hasta revisar commits únicos.
 Academy es demo local sintética, no servicio multi-tenant. Learning Paths reutiliza progreso existente, sin XP/store paralelo. Pentest Lab es planificación, no scanner ni laboratorio operativo.
 
 ## Registro
-- 2026-11-27 15:54: Base Beta `dee08c96` (85 ahead / 0 behind main). CI #681 passed exact SHA `dee08c96`; main `be801c5` intacta. Monitor #46012047656 passed (not full suite). PR #223: 17/69 and CI green; #229: 32/37 with 286/1 E2E; #227: 16/0 main with 571/1 unit gate. Inventory 107 branches and 28 open PRs. PR #237 CI #683 passed on merge commit `7a320dc`; this checklist update will trigger another run.
+- 2026-11-27 15:54: Base Beta `dee08c96` (85 ahead / 0 behind main). CI #681 passed exact SHA; main `be801c5` intact. Monitor #46012047656 passed (not full suite). PR #223: 17/69, CI green; #229: 32/37, 286/1 E2E; #227: 16/0 main, 571/1 unit gate. Inventory 107 branches and 28 open PRs. PR #237: CI #683 passed on prior merge SHA `7a320dc`; #684 in progress on head `8cbd010`, Deployment Check #338 passed. Branch protection for 107 branches not verified. This update triggers CI on the new checklist commit.
 - Checklist refrescado con el CI exacto #680 y comparaciones recalculadas. La descripción de PR y los checks de las candidatas se actualizarán en esta auditoría; no se repiten comentarios.
 - No merges adicionales, branch deletions, force-pushes, tags, releases ni deployments.
