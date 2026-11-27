@@ -104,3 +104,17 @@ Do not describe Academy as production multi-tenant, Pentest Lab as real scanning
 - Beta port branches currently listed: `beta/academy-institutional-port`, `beta/academy-institutional-rebased`, `beta/ai-academy-port`, `beta/hardening-rebased`, `beta/port-hardening`, `beta/port-pld003`, `beta/programming-path-port`, `beta/programming-path-rebased`. Only the programming-path-rebased branch was compared this run: 0 ahead / 34 behind; it is ancestry-redundant. Other branch ahead/behind figures from earlier audits are stale and need a fresh compare before deletion.
 - Branch search returned a cursor; the inventory is not exhaustive from this call.
 - No branch deletion, tag, release, deployment or main write performed.
+
+
+## Audit follow-up — 2026-11-27 03:39 CET
+
+- Beta head is now `b5e1e1f`; compare confirms it is identical to that commit and remains 63 commits ahead of main, 0 behind. Main is unchanged at `be801c5`.
+- CI #655 passed all four jobs (backend, cursos, E2E, WebKit) on `63da4a4`. The new documentation commit `b5e1e1f` has no status contexts returned yet; its CI result is not verified.
+- Fresh PR comparisons: #223 is 17 ahead / 47 behind Beta (head `9d674df`); #229 is 28 ahead / 15 behind (head `2b97957`). Both are draft, have no reviews, and their last recorded CI + Deployment Check runs passed. Overlapping files include `frontend/index.html`, `frontend/js/app.js`, `frontend/precache.js`, `frontend/i18n/en.json`; integrate sequentially.
+- #227 remains draft against main, 16 ahead / 0 behind. Its recorded CI #623 failed in AI Academy routing; Deployment Check #310 passed. Scope remains UI-only.
+- Audit of #229 found a duplicate asynchronous route render: `VIEWS.paths.render` returned a Promise assigned to `innerHTML`, and both route code and the module hashchange listener called `openPaths()`. Fixed on the PR branch in `2ff0cfc` and `ef1d18d`; added E2E coverage in `8a7ec94`. CI has not been observed for the new head yet.
+- Correction: the earlier reported extra closing `</span>` in Path detail markup was a false positive; the source markup is balanced. That finding is withdrawn.
+- Branch comparisons refreshed against current Beta: Academy port 11/52; AI Academy port 16/58; hardening-rebased 19/55; port-hardening 22/59; port-pld003 14/59; Programming Path port 18/52; programming-path-rebased 0/35 (ahead/behind). Preserve divergent branches pending file-level review; the last is ancestry-redundant.
+- The branch search for names beginning `beta/` returned 8 branches. Its search pagination did not expose additional results; this is not a complete inventory of all repository branches.
+- CI workflow inspected: push runs on main and Beta; PR runs; token permissions are `contents: read`; checkout uses `persist-credentials: false`; backend uses `pip-audit`, frontend uses `npm audit --audit-level=high`. Pages deployment workflow separately grants Pages write and OIDC.
+- No merges, main changes, branch deletions, force pushes, tags, releases or deployments performed.
