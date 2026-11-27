@@ -1,8 +1,8 @@
 # PLD Beta 0.1.0 — checklist de lanzamiento
 
-**Actualizado:** 2026-11-27 15:54 CET  
+**Actualizado:** 2026-11-27 19:27 CET  
 **Main:** `be801c5afa1c27ba6d5f24695236fe8ee67bdcee` (sin cambios)  
-**Beta audit snapshot:** `dee08c96ec3da7b79fa190612afc3b3116f1175b` (**85 ahead / 0 behind main**; CI #681 passed on this exact SHA). PR #237 head `8cbd010`; CI #684 is running (Backend, Cursos, E2E and WebKit); Deployment Check #338 passed. Previous head CI #683 passed on merge commit `7a320dc`. This checklist update triggers another CI run.  
+**Beta audit snapshot:** `dee08c96ec3da7b79fa190612afc3b3116f1175b` (**85 ahead / 0 behind main**; CI #681 passed on this exact SHA). PR #237 head `21a09dc` had CI #685 attempt 2 passed (Backend, Cursos, E2E and WebKit); first attempt failed WebKit, then the failed job was rerun successfully. Deployment Check #339 passed. PR remains Draft with no reviews. This checklist update triggers a new CI run.  
 **Demo:** https://marbi8891.github.io/python-learning-dashboard/
 
 ## Gate de publicación
@@ -37,7 +37,7 @@ No se investigaron los logs de todas las PR ni se integró ninguna de ellas.
 ## Seguridad y calidad
 - [x] CI workflow: `contents: read`, checkout `persist-credentials: false`, `pip-audit`, `npm audit --audit-level=high`, Ruff, cobertura backend 100 % y pruebas PostgreSQL de migraciones, rate-limit, concurrencia, versionado y backup/restore.
 - [x] Pages workflow separado: build y deploy en jobs distintos; checkout sin persistir credenciales.
-- [ ] Hardening Pages propuesto en PR #237: `contents: read` a nivel workflow/build y `pages: write`, `id-token: write` solo en `deploy`. CI #683 pasó en merge commit `7a320dc`; PR sigue Draft, sin review. La corrección no está en Beta.
+- [ ] Hardening Pages propuesto en PR #237: `contents: read` a nivel workflow/build y `pages: write`, `id-token: write` solo en `deploy`. CI #685 attempt 2 passed en head `21a09dc` (4/4 jobs); primera tentativa falló WebKit en recuperación de cuenta. Deployment Check #339 passed. Sigue Draft, sin reviews ni approvals. La corrección no está en Beta.
 - [ ] Revisar findings actuales de dependencias, secretos, configuración y privacidad del candidato.
 - [ ] Smoke test de Pages, responsive y accesibilidad manual.
 - [ ] Confirmar demo con datos sintéticos, sin progreso personal.
@@ -76,3 +76,5 @@ Academy es demo local sintética, no servicio multi-tenant. Learning Paths reuti
 - 2026-11-27 15:54: Base Beta `dee08c96` (85 ahead / 0 behind main). CI #681 passed exact SHA; main `be801c5` intact. Monitor #46012047656 passed (not full suite). PR #223: 17/69, CI green; #229: 32/37, 286/1 E2E; #227: 16/0 main, 571/1 unit gate. Inventory 107 branches and 28 open PRs. PR #237: CI #683 passed on prior merge SHA `7a320dc`; #684 in progress on head `8cbd010`, Deployment Check #338 passed. Branch protection for 107 branches not verified. This update triggers CI on the new checklist commit.
 - Checklist refrescado con el CI exacto #680 y comparaciones recalculadas. La descripción de PR y los checks de las candidatas se actualizarán en esta auditoría; no se repiten comentarios.
 - No merges adicionales, branch deletions, force-pushes, tags, releases ni deployments.
+
+- 2026-11-27 19:27 CET: PR #237 head `21a09dc` (5/0 contra Beta), CI #685 attempt 2 passed (Backend, Cursos, E2E, WebKit), Deployment Check #339 passed. La primera tentativa de CI falló WebKit en `e2e/account.spec.js:333` por el enlace de contacto de recuperación, el reintento pasó. Checklist actualizado; nuevo commit documental provoca CI adicional. No merge, release ni deployment.
