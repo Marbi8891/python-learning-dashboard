@@ -1,9 +1,9 @@
 # PLD Beta 0.1.0 — checklist de lanzamiento
 
-**Auditoría:** 2026-11-27 23:14 CET  
+**Auditoría:** 2026-11-27 23:54 CET
 **Main:** `be801c5afa1c27ba6d5f24695236fe8ee67bdcee` (sin cambios)  
 **Beta:** `dee08c96ec3da7b79fa190612afc3b3116f1175b` — 85 ahead / 0 behind main; CI #681 pasó en este SHA.  
-**PR #237:** head actual `db1a2066837837a64115dadf5e4f9fb98db13c85` — 10 ahead / 0 behind Beta; CI #690 (#46072044202) pasó 4/4 y Deployment Check #344 (#46072044260) pasó 3/3 en ese SHA. PR Draft, sin reviews; no merge ni deploy.  
+**PR #237 (head before this checklist refresh):** `08fb83a84573b737b98ef11f412052392907cdd0` — 11 ahead / 0 behind Beta; CI run [46075563491](https://github.com/Marbi8891/python-learning-dashboard/actions/runs/46075563491) passed 4/4 and Deployment Check [46075563479](https://github.com/Marbi8891/python-learning-dashboard/actions/runs/46075563479) passed 3/3 on this exact SHA. Draft, no reviews; no merge or production deployment. The checklist refresh creates a new head; its checks must be verified separately.
 **Demo:** https://marbi8891.github.io/python-learning-dashboard/
 
 ## Gate de publicación
@@ -89,3 +89,6 @@ Academy es demo local sintética, no servicio multi-tenant. Learning Paths reuti
 - 2026-11-27 22:40 CET: PR #237 head `f6ad6363` verificado; CI #689 y Deployment Check #343 pasaron 4/4 y 3/3 en ese SHA. La PR sigue Draft, sin reviews. Checklist actualizado y crea un nuevo commit; sus checks aún no se verifican. API de branches devuelve 107/107 `protected:false`; rulesets `[]`. Releases vacías y tag `v1.0.0` confirmado anotado sin firma. Se revalidaron estados de #223 (CI #648/DC #331 verde), #229 (CI #664 fallida 286/1; DC #335 verde) y #227 (CI #623 fallida 571/572; DC #310 verde). No hubo merge, borrado ni despliegue.
 
 - 2026-11-27 23:14 CET: #237 head `db1a2066` (10 ahead / 0 behind Beta). CI #690 pasó 4/4 y Deployment Check #344 pasó 3/3; jobs inspeccionados. PR sigue Draft, sin reviews. Se revalidaron #223 (CI #648/DC #331 verdes), #229 (CI #664 falla E2E; DC #335 verde) y #227 (CI #623 falla gate unitario; DC #310 verde). Branch inventory: 107 (100 + 7 + página vacía); comparaciones de ocho ramas portadas recalculadas. No cambios en main/Beta, merges, borrados, tags, releases ni deployments.
+
+
+- 2026-11-27 23:54 CET: refreshed the checklist based on verified PR head `08fb83a` (CI 4/4, Deployment Check 3/3); this documentation commit is branch-only and its own checks are pending. Branch inventory: 107, all API-marked unprotected; `main` and Beta `protected:false`, rulesets empty. Open PR count 28. Obsolete #207/#209/#101/#193/#203 closed unmerged; #224 merged. #223 current head checks green (historical head), #229 CI fails 286/1 E2E, #227 CI fails 571/572 unit gate. Beta checklist remains at the 15:11 snapshot; no merge, branch deletion, tag, release or deployment.
