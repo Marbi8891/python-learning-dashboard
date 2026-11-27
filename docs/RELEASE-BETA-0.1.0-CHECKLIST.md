@@ -89,8 +89,8 @@ Do not describe Academy as production multi-tenant, Pentest Lab as real scanning
 - CI #652 failed its E2E job; #653 on `9ac1866` and #654 on `6bc9bf8` subsequently passed all four jobs. No code fix was made between these runs; the #652 root cause is unconfirmed and should be treated as a possible flaky test, not as fixed.
 
 ### Current PR comparisons (against exact Beta head)
-- #223 Academy: head `9d674df`, 17 commits ahead / 47 behind; merge base `5182b1ce`. CI #648 and Deployment Check #331 passed. Draft, no reviews. Conflicts/overlap must be reviewed before rebasing.
-- #229 Learning Paths: head `2b97957`, 28 ahead / 15 behind; merge base `c31244a`. CI #646 and Deployment Check #330 passed. Draft, no reviews. It overlaps Academy in `frontend/index.html`, `frontend/js/app.js`, `frontend/precache.js`, and `frontend/i18n/en.json`; integrate sequentially.
+- #223 Academy: head `9d674df`, 17 commits ahead / 51 behind; merge base `5182b1ce`. CI #648 and Deployment Check #331 passed. Draft, no reviews. Conflicts/overlap must be reviewed before rebasing.
+- #229 Learning Paths: head `8a7ec94`, 31 ahead / 19 behind; merge base `c31244a`. CI #646 and Deployment Check #330 passed. Draft, no reviews. It overlaps Academy in `frontend/index.html`, `frontend/js/app.js`, `frontend/precache.js`, and `frontend/i18n/en.json`; integrate sequentially.
 - #227 Pentest Lab: head `67ca9b2`, 16 ahead / 0 behind main. CI #623 failed; Deployment Check #310 passed. Draft; scope decision remains pending. UI-only, no real Docker/scanning.
 - #224 Programming Path is merged into Beta at `1c104b38`.
 - Obsolete #207, #209, #101, #193 and #203 remain closed without merge.
@@ -108,8 +108,8 @@ Do not describe Academy as production multi-tenant, Pentest Lab as real scanning
 
 ## Audit follow-up — 2026-11-27 03:39 CET
 
-- Beta head is now `cc6d4b2`; compare confirms it is identical to that commit and remains 63 commits ahead of main, 0 behind. Main is unchanged at `be801c5`.
-- CI #655 passed all four jobs (backend, cursos, E2E, WebKit) on `63da4a4`. The latest documentation-only commit `cc6d4b2` has no status contexts returned yet; its CI result is not verified.
+- Beta head is now `f1a71c3`; compare confirms it is identical to that commit and remains 63 commits ahead of main, 0 behind. Main is unchanged at `be801c5`.
+- CI #655 passed all four jobs (backend, cursos, E2E, WebKit) on `63da4a4`. The latest documentation-only commit `f1a71c3` has no status contexts returned yet; its CI result is not verified.
 - Fresh PR comparisons: #223 is 17 ahead / 47 behind Beta (head `9d674df`); #229 is 28 ahead / 15 behind (head `2b97957`). Both are draft, have no reviews, and their last recorded CI + Deployment Check runs passed. Overlapping files include `frontend/index.html`, `frontend/js/app.js`, `frontend/precache.js`, `frontend/i18n/en.json`; integrate sequentially.
 - #227 remains draft against main, 16 ahead / 0 behind. Its recorded CI #623 failed in AI Academy routing; Deployment Check #310 passed. Scope remains UI-only.
 - Audit of #229 found a duplicate asynchronous route render: `VIEWS.paths.render` returned a Promise assigned to `innerHTML`, and both route code and the module hashchange listener called `openPaths()`. Fixed on the PR branch in `2ff0cfc` and `ef1d18d`; added E2E coverage in `8a7ec94`. CI has not been observed for the new head yet.
