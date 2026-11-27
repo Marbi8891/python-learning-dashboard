@@ -79,3 +79,28 @@ Do not describe Academy as production multi-tenant, Pentest Lab as real scanning
 - Beta head at start of update `6bc9bf8`; CI #652 failed with an intermittent E2E assertion, but #653 passed on `9ac1866` and #654 passed on this exact head. The only commit between #652 and #653 changed the checklist; no code fix was made. Root cause remains unknown.
 - This checklist update creates a new Beta commit; CI for the new exact head will be pending.
 - No merge, branch deletion, force-push, new tag, GitHub Release or production deployment performed.
+
+
+## Audit refresh — 2026-11-27 03:39 CET
+
+### Exact Beta head and CI
+- GitHub compare confirms `release/beta-0.1.0` is identical to commit `63da4a4a3a77f069f1ed03712864742c5fd4e69f`; it is 63 commits ahead of `main`, 0 behind. `main` remains `be801c5afa1c27ba6d5f24695236fe8ee67bdcee`.
+- CI #655 on `63da4a4` completed successfully: backend, cursos, E2E and WebKit all succeeded.
+- CI #652 failed its E2E job; #653 on `9ac1866` and #654 on `6bc9bf8` subsequently passed all four jobs. No code fix was made between these runs; the #652 root cause is unconfirmed and should be treated as a possible flaky test, not as fixed.
+
+### Current PR comparisons (against exact Beta head)
+- #223 Academy: head `9d674df`, 17 commits ahead / 47 behind; merge base `5182b1ce`. CI #648 and Deployment Check #331 passed. Draft, no reviews. Conflicts/overlap must be reviewed before rebasing.
+- #229 Learning Paths: head `2b97957`, 28 ahead / 15 behind; merge base `c31244a`. CI #646 and Deployment Check #330 passed. Draft, no reviews. It overlaps Academy in `frontend/index.html`, `frontend/js/app.js`, `frontend/precache.js`, and `frontend/i18n/en.json`; integrate sequentially.
+- #227 Pentest Lab: head `67ca9b2`, 16 ahead / 0 behind main. CI #623 failed; Deployment Check #310 passed. Draft; scope decision remains pending. UI-only, no real Docker/scanning.
+- #224 Programming Path is merged into Beta at `1c104b38`.
+- Obsolete #207, #209, #101, #193 and #203 remain closed without merge.
+
+### Review finding in #229 (not yet fixed)
+- `frontend/js/paths-app.js`, `detail()`: generated path-step markup contains an extra closing `</span>` after the title/source wrapper. Browser recovery may alter the DOM structure; correct the markup and add a rendered DOM assertion.
+- Routing also invokes `zones.paths.openPaths()` explicitly after `showPage("paths")`, while `VIEWS.paths.render` already calls `openPaths()`. This causes a duplicate render/progress fetch; remove one call and test navigation.
+- No code changes or merges were made in this audit.
+
+### Branch inventory and scope
+- Beta port branches currently listed: `beta/academy-institutional-port`, `beta/academy-institutional-rebased`, `beta/ai-academy-port`, `beta/hardening-rebased`, `beta/port-hardening`, `beta/port-pld003`, `beta/programming-path-port`, `beta/programming-path-rebased`. Only the programming-path-rebased branch was compared this run: 0 ahead / 34 behind; it is ancestry-redundant. Other branch ahead/behind figures from earlier audits are stale and need a fresh compare before deletion.
+- Branch search returned a cursor; the inventory is not exhaustive from this call.
+- No branch deletion, tag, release, deployment or main write performed.
