@@ -1,9 +1,9 @@
 # PLD Beta 0.1.0 — checklist de lanzamiento
 
-**Auditoría:** 2026-11-27 22:40 CET  
+**Auditoría:** 2026-11-27 23:14 CET  
 **Main:** `be801c5afa1c27ba6d5f24695236fe8ee67bdcee` (sin cambios)  
 **Beta:** `dee08c96ec3da7b79fa190612afc3b3116f1175b` — 85 ahead / 0 behind main; CI #681 pasó en este SHA.  
-**PR #237:** head verificado antes de esta actualización `f6ad6363b7b94d090a755a50189ee86f142fdbef` — 9 ahead / 0 behind Beta; CI #689 (#46062856041) pasó 4/4 y Deployment Check #343 (#46062855991) pasó 3/3 en ese SHA. La PR sigue Draft y sin reviews. Esta actualización documental crea un nuevo head; sus checks quedan pendientes.  
+**PR #237:** head actual `db1a2066837837a64115dadf5e4f9fb98db13c85` — 10 ahead / 0 behind Beta; CI #690 (#46072044202) pasó 4/4 y Deployment Check #344 (#46072044260) pasó 3/3 en ese SHA. PR Draft, sin reviews; no merge ni deploy.  
 **Demo:** https://marbi8891.github.io/python-learning-dashboard/
 
 ## Gate de publicación
@@ -19,11 +19,11 @@ No publicar Beta ni crear tag hasta validar el SHA candidato exacto, completar s
 
 ## CI y cambios
 - [x] CI #681 (#46014073048) pasó en el SHA exacto de Beta `dee08c96`: Backend, Cursos, E2E y WebKit.
-- [x] CI #689 (#46062856041) pasó 4/4 en el head de #237 `f6ad6363` (Backend, Cursos, E2E, WebKit).
-- [x] Deployment Check #343 (#46062855991) pasó 3/3 en `f6ad6363` (workflows, Docker health check y artefacto Pages).
+- [x] CI #689 (#46062856041) pasó 4/4 en el head previo de #237 `f6ad6363` (Backend, Cursos, E2E, WebKit).
+- [x] Deployment Check #343 (#46062855991) pasó 3/3 en el head previo `f6ad6363` (workflows, Docker health check y artefacto Pages).
 - [x] CI #687/#341 también pasaron en el head previo `301e191c`; son resultados históricos, no el head actual.
 - [x] #237 limita `contents: read` al build y `pages: write`/`id-token: write` al job deploy; checkout usa `persist-credentials: false`. No está integrado en Beta.
-- [ ] La actualización documental de esta auditoría crea un nuevo head; validar CI/Deployment Check sobre el SHA resultante antes de integrar.
+- [x] CI #690 (#46072044202) y Deployment Check #344 (#46072044260) pasaron en el head actual `db1a2066`; jobs verificados individualmente. No es un despliegue de Pages.
 - [ ] Los checks de #223/#229/#227 no validan integración actualizada sobre Beta.
 - [ ] Main: el último monitor conocido pasó, pero es un job `report`, no una suite completa; no revalidado en esta pasada.
 
@@ -54,7 +54,7 @@ Conservar ramas divergentes hasta revisar commits únicos.
 ## Seguridad y calidad
 - [x] CI Beta #681 incluye Ruff, pip-audit, npm audit (nivel high), cobertura backend 100 % y pruebas PostgreSQL de migraciones, rate-limit, concurrencia, versionado y backup/restore.
 - [x] Pages build/deploy separados; checkout sin persistir credenciales.
-- [x] Hardening de permisos propuesto en #237; CI #689 y Deployment Check #343 pasaron en el head `f6ad6363` (antes de esta actualización documental).
+- [x] Hardening de permisos propuesto en #237; CI #690 y Deployment Check #344 pasaron en el head actual `db1a2066`.
 - [ ] Revisión de findings de dependencias, secretos, configuración y privacidad sobre el candidato final.
 - [ ] Smoke test Pages, responsive y accesibilidad manual.
 - [ ] Verificar que la demo usa solo datos sintéticos.
@@ -87,3 +87,5 @@ Academy es demo local sintética, no servicio multi-tenant. Learning Paths reuti
 
 
 - 2026-11-27 22:40 CET: PR #237 head `f6ad6363` verificado; CI #689 y Deployment Check #343 pasaron 4/4 y 3/3 en ese SHA. La PR sigue Draft, sin reviews. Checklist actualizado y crea un nuevo commit; sus checks aún no se verifican. API de branches devuelve 107/107 `protected:false`; rulesets `[]`. Releases vacías y tag `v1.0.0` confirmado anotado sin firma. Se revalidaron estados de #223 (CI #648/DC #331 verde), #229 (CI #664 fallida 286/1; DC #335 verde) y #227 (CI #623 fallida 571/572; DC #310 verde). No hubo merge, borrado ni despliegue.
+
+- 2026-11-27 23:14 CET: #237 head `db1a2066` (10 ahead / 0 behind Beta). CI #690 pasó 4/4 y Deployment Check #344 pasó 3/3; jobs inspeccionados. PR sigue Draft, sin reviews. Se revalidaron #223 (CI #648/DC #331 verdes), #229 (CI #664 falla E2E; DC #335 verde) y #227 (CI #623 falla gate unitario; DC #310 verde). Branch inventory: 107 (100 + 7 + página vacía); comparaciones de ocho ramas portadas recalculadas. No cambios en main/Beta, merges, borrados, tags, releases ni deployments.
