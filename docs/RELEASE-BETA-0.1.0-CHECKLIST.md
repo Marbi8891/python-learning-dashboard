@@ -2,7 +2,7 @@
 
 **Actualizado:** 2026-11-27 14:45 CET  
 **Main:** `be801c5afa1c27ba6d5f24695236fe8ee67bdcee` (sin cambios)  
-**Beta:** `2f167517ed00d1b1de00a6534f17823f2fc1c615` (**82 ahead / 0 behind main**)  
+**Beta audit snapshot:** `715c8c7e0fa42557ca470d26d8a5da0ef4fe0650` (**83 ahead / 0 behind main**; doc-only audit commit after CI target `2f16751`)  
 **Demo:** https://marbi8891.github.io/python-learning-dashboard/
 
 ## Gate de publicación
@@ -10,13 +10,13 @@ No crear tag ni publicar Release hasta definir alcance, validar CI sobre el SHA 
 
 ## PR candidatas
 - [x] **#224 Programming Path:** merged en Beta; merge commit `1c104b3816f82a55bc883b18e8896a5b011c6597`. No pendiente.
-- [ ] **#223 Academy:** draft; head `9d674df`, **17 ahead / 66 behind** Beta (merge base `5182b1ce`). CI #45890668077 y Deployment Check #45890668052 passed en el head actual; no hay approvals. Se solapa con #229 en HTML, router, precache e i18n. Demo local/sintética; no usar datos reales. Faltan aislamiento multi-tenant, autenticación institucional, persistencia backend y enforcement de permisos. Mantener draft, actualizar sobre Beta y revisar conflictos antes de integración.
-- [ ] **#229 Learning Paths:** draft; head `88b9434`, **32 ahead / 34 behind** Beta (merge base `c31244a`). CI #45934058607 falla E2E (**286 pass / 1 fail**) tras reload: `#paths-view` queda vacío; esperaba “Mis Paths”. Revisé log y artifact #15178416458 en esta pasada. El fixture del head `88b9434` ya limpia localStorage solo una vez por tab con un marcador en sessionStorage, pero este run sigue fallando; causa de render/routing aún no aislada. Backend, cursos y WebKit pasaron; Deployment Check #45934058622 passed. Dos reviews COMMENTED, sin approval. Reutiliza progreso existente, sin store/XP paralelo. No integrar hasta corregir, actualizar sobre Beta y repetir CI.
+- [ ] **#223 Academy:** draft; head `9d674df`, **17 ahead / 67 behind** Beta (merge base `5182b1ce`). CI #45890668077 y Deployment Check #45890668052 passed en el head actual; no hay approvals. Se solapa con #229 en HTML, router, precache e i18n. Demo local/sintética; no usar datos reales. Faltan aislamiento multi-tenant, autenticación institucional, persistencia backend y enforcement de permisos. Mantener draft, actualizar sobre Beta y revisar conflictos antes de integración.
+- [ ] **#229 Learning Paths:** draft; head `88b9434`, **32 ahead / 35 behind** Beta (merge base `c31244a`). CI #45934058607 falla E2E (**286 pass / 1 fail**) tras reload: `#paths-view` queda vacío; esperaba “Mis Paths”. Revisé log y artifact #15178416458 en esta pasada. El fixture del head `88b9434` ya limpia localStorage solo una vez por tab con un marcador en sessionStorage, pero este run sigue fallando; causa de render/routing aún no aislada. Backend, cursos y WebKit pasaron; Deployment Check #45934058622 passed. Dos reviews COMMENTED, sin approval. Reutiliza progreso existente, sin store/XP paralelo. No integrar hasta corregir, actualizar sobre Beta y repetir CI.
 - [ ] **#227 Pentest Lab:** draft contra main; head `67ca9b2`, **16 ahead / 0 behind**. CI #45851158102 falla en tests unitarios (**571 pass / 1 fail**) en `tests/unit/ai-academy-routing.test.mjs`: espera loader de AI Academy ausente de main. Backend, cursos y WebKit passed; E2E se omitió. Deployment Check #45851158126 passed. Es UI de planificación; no ejecuta Docker, escaneos ni métricas reales. Decidir alcance y resolver baseline/test antes de integrarlo.
 - [x] PR obsoletas **#207, #209, #101, #193, #203**: cerradas sin merge.
 
 ## CI y main
-- [x] CI **#46002488588 (run #678)** passed en Beta SHA exacto `2f16751`: Backend, Cursos, E2E y WebKit. https://github.com/Marbi8891/python-learning-dashboard/actions/runs/46002488588
+- [x] CI **#46002488588 (run #678)** passed en SHA exacto `2f16751`: Backend, Cursos, E2E y WebKit. https://github.com/Marbi8891/python-learning-dashboard/actions/runs/46002488588. El commit documental `715c8c7` posterior no tiene CI push verificable con el conector disponible.
 - [x] Main sigue en `be801c5`. CI monitor #45991656306 passed; **no es una suite completa**.
 - [ ] Los checks de #223/#229/#227 no validan una integración actualizada sobre Beta.
 - [ ] CI de integración tras cualquier portado/rebase, en el SHA exacto antes de merge.
@@ -72,6 +72,6 @@ Conservar las ramas divergentes hasta revisar commits únicos.
 Academy es demo local sintética, no servicio multi-tenant. Learning Paths reutiliza progreso existente, sin XP/store paralelo. Pentest Lab es planificación, no scanner ni laboratorio operativo.
 
 ## Registro
-- 2026-11-27 14:45: Beta `2f16751`; CI #46002488588 (run #678) passed en SHA exacto. Main `be801c5` intacta; monitor #45991656306 passed.
+- 2026-11-27 14:45: Beta audit snapshot `715c8c7`; CI #46002488588 (run #678) passed en el código SHA `2f16751`. El commit `715c8c7` es documental y su CI push no se pudo verificar. Main `be801c5` intacta; monitor #45991656306 passed.
 - Checklist consolidado con cifras de divergencia actuales y checks revalidados. No se repiten comentarios; se refrescan las descripciones existentes de las PR candidatas.
 - No merges adicionales, branch deletions, force-pushes, tags, releases ni deployments.
