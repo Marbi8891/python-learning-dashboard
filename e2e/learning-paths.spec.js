@@ -1,7 +1,13 @@
 const { test, expect } = require("./fixtures");
 
 test("Learning Paths detail route loads once and renders progress", async ({ page }) => {
-  await page.addInitScript(() => localStorage.removeItem("pld:learning-paths:selected"));
+  await page.addInitScript(() => {
+    // Reset only on the first document: the marker survives reload and preserves
+    // the selection that this test is explicitly checking for persistence.
+    if (sessionStorage.getItem("__pld_paths_test_reset")) return;
+    localStorage.removeItem("pld:learning-paths:selected");
+    sessionStorage.setItem("__pld_paths_test_reset", "1");
+  });
   let learningRequests = 0;
   page.on("request", (request) => {
     if (new URL(request.url()).pathname.endsWith("/data/learning.json")) learningRequests += 1;
@@ -16,7 +22,12 @@ test("Learning Paths detail route loads once and renders progress", async ({ pag
 });
 
 test("Learning Paths selection is optional and persisted locally", async ({ page }) => {
-  await page.addInitScript(() => localStorage.removeItem("pld:learning-paths:selected"));
+  await page.addInitScript(() => {
+    // Clear the previous test's state only once; don't erase it on page.reload().
+    if (sessionStorage.getItem("__pld_paths_test_reset")) return;
+    localStorage.removeItem("pld:learning-paths:selected");
+    sessionStorage.setItem("__pld_paths_test_reset", "1");
+  });
   await page.goto("/#/paths");
 
   await expect(page.locator("#paths-title")).toHaveText("Learning Paths");
