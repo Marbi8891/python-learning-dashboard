@@ -76,6 +76,7 @@ const ZONE_LOADERS = {
       module.initCyber();
       return module;
     }),
+  paths: (load) => load("./paths-app.js").then((module) => { module.initPaths(); return module; }),
   plans: (load) =>
     load("./plans.js").then((module) => {
       module.initPlans();
@@ -141,6 +142,7 @@ const HOME_ROUTE = "#/inicio"; // portada del curso PCAP
 const LEARN_ROUTE = "#/aprender"; // página principal: ¿qué estudio ahora?
 const PROFILE_ROUTE = "#/perfil";
 const PLANS_ROUTE = "#/planes";
+const PATHS_ROUTE = "#/paths";
 const PCAP_ROUTE = "#/pcap";
 const CERTIFICATE_ROUTE = "#/certificado";
 const PRIVATE_ROUTE = "#/cuenta"; // antigua «Mi cuenta»: ahora es la sección «Mi perfil» del panel
@@ -482,6 +484,7 @@ const VIEWS = {
   learn: { element: "#learn-view", title: "Aprender · Python Learning Dashboard", focus: null, render: null },
   home: { element: "#home-view", title: "Curso PCAP · Python Learning Dashboard", focus: "#home-title", render: () => renderHome(content, defaultSlug()) },
   profile: { element: "#profile-view", title: "Mi aprendizaje · Python Learning Dashboard", focus: "#profile-title", render: () => renderProfile(content) },
+  paths: { element: "#paths-view", title: "Learning Paths · Python Learning Dashboard", focus: "#paths-title", render: () => "" },
   plans: { element: "#plans-view", title: "Planes y cuenta · Python Learning Dashboard", focus: "#plans-title", render: () => zones.plans.renderPlans() },
   // Panel del alumno. Reúne lo que antes era «Mi cuenta»
   private: { element: "#private-view", title: () => zones.panel.dashboardTitle(), focus: "#private-title", render: () => zones.panel.renderDashboard(content, apiEnabled) },
@@ -533,7 +536,7 @@ function updatePrivateNav() {
 }
 
 /** Entrada del menú que corresponde a la vista actual. */
-const NAV_OF_VIEW = { aiacademy: "ai-academy", plans: "planes", cyber: "cyber", home: "pcap-curso", lesson: "pcap-curso", certificate: "pcap-curso", pcap: "pcap", daw: "daw", excel: "excel", career: "carrera", profile: "progreso", private: "panel" };
+const NAV_OF_VIEW = { paths: "paths", aiacademy: "ai-academy", plans: "planes", cyber: "cyber", home: "pcap-curso", lesson: "pcap-curso", certificate: "pcap-curso", pcap: "pcap", daw: "daw", excel: "excel", career: "carrera", profile: "progreso", private: "panel" };
 
 function updateSiteNav() {
   const key = content.view === "learn" ? learnNavKey(location.hash) : NAV_OF_VIEW[content.view];
@@ -733,6 +736,12 @@ function navigate({ moveFocus = true } = {}) {
   }
   closeLanding();
 
+  if (location.hash === PATHS_ROUTE || location.hash.startsWith(`${PATHS_ROUTE}/`)) {
+    if (awaitZone("paths", moveFocus)) return;
+    showPage("paths", { moveFocus });
+    zones.paths.openPaths();
+    return;
+  }
   if (location.hash === PLANS_ROUTE) {
     if (awaitZone("plans", moveFocus)) return;
     showPage("plans", { moveFocus });
