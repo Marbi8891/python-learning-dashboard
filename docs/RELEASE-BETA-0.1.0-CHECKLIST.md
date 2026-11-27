@@ -2,7 +2,7 @@
 
 **Updated:** 2026-11-27 05:30 CET  
 **Main:** `be801c5afa1c27ba6d5f24695236fe8ee67bdcee`  
-**Beta head:** `e415c92586afddc09c4a8c5fd28854cd7798a7a2`  
+**Beta head before this document refresh:** `e415c92586afddc09c4a8c5fd28854cd7798a7a2`  
 **Demo:** https://marbi8891.github.io/python-learning-dashboard/
 
 ## Release gate
@@ -14,17 +14,17 @@ Do not tag or publish Beta until the included scope is approved, CI is green on 
 - [x] Beta is based on main: 70 commits ahead, 0 behind.
 - [x] PR #224 Programming Path merged to Beta at `1c104b3816f82a55bc883b18e8896a5b011c6597`.
 - [ ] PR #223 Academy: draft, head `9d674df`, 17 ahead / 54 behind Beta. CI #45890668077 and Deployment Check #45890668052 passed on this head. No approvals. Refresh against Beta, inspect overlap/conflicts, then rerun checks. Prototype is synthetic/localStorage only; no tenant isolation, institutional auth, server persistence or permissions.
-- [ ] PR #229 Learning Paths: draft, head `88b9434`, 32 ahead / 22 behind Beta (merge base `c31244a`). CI #45934058607 failed at E2E; backend, courses and WebKit jobs passed. Deployment Check #45934058622 passed. The Playwright report artifact exists, but the available connector cannot download it to inspect the failing assertion. A rerun of failed jobs was accepted; its result is pending. No approvals. Review read-only progress adapters and shared frontend files; update/integrate sequentially, not in parallel.
-- [ ] PR #227 Pentest Lab: draft against main, head `67ca9b2`, 16 ahead / 0 behind main. Latest CI #45851158102 failed in the frontend unit-test step; backend, courses and WebKit passed. Deployment Check #45851158126 passed. Failure detail is not available through the current connector. Rerun of failed jobs was accepted; pending. Decide scope; UI only, no Docker execution or real scans.
+- [ ] PR #229 Learning Paths: draft, head `88b9434`, 32 ahead / 22 behind Beta (merge base `c31244a`). CI #45934058607 failed at E2E; backend, courses and WebKit jobs passed. Deployment Check #45934058622 passed. Playwright report artifact exists, but the available connector cannot download it to inspect the failing assertion. Rerun of failed jobs is in progress; result pending. No approvals. Review read-only progress adapters and shared frontend files; update/integrate sequentially, not in parallel.
+- [ ] PR #227 Pentest Lab: draft against main, head `67ca9b2`, 16 ahead / 0 behind main. Latest CI #45851158102 failed in frontend unit tests (step 8); backend, courses and WebKit passed; E2E was skipped. Deployment Check #45851158126 passed. Rerun was attempted and failed at the same step; details are unavailable through the connector. Stop reruns until the failing assertion is inspected. Decide scope; UI only, no Docker execution or real scans.
 - [x] Obsolete PRs #207, #209, #101, #193 and #203 remain closed without merge.
 
 ## CI evidence
 
-- [x] Exact current Beta head `e415c925`: CI run #45934210432 passed all four jobs (backend, courses, E2E and WebKit). https://github.com/Marbi8891/python-learning-dashboard/actions/runs/45934210432
-- [ ] PR #229: run #45934058607 failed E2E; rerun requested, pending result. Deployment check passed.
+- [x] Exact Beta head `e415c925`: CI #45934210432 passed all four jobs (backend, courses, E2E and WebKit). https://github.com/Marbi8891/python-learning-dashboard/actions/runs/45934210432
+- [ ] PR #229: run #45934058607 failed E2E; rerun accepted and in progress, pending result. Deployment check passed.
 - [x] PR #223: run #45890668077 passed all four jobs; deployment check #45890668052 passed. This does not validate against current Beta.
-- [ ] PR #227: latest CI run #45851158102 failed frontend unit tests; rerun requested. Deployment check #45851158126 passed.
-- [ ] Main: last full CI recorded in the previous audit failed AI Academy routing (569/570 tests); not rechecked this run. Current CI-monitor runs on main are green but are not full-suite evidence.
+- [ ] PR #227: run #45851158102 failed frontend unit tests; rerun failed at the same step. Inspect output before another retry. Deployment check passed.
+- [ ] Main: last full CI recorded in previous audit failed AI Academy routing (569/570 tests); not rechecked this run. Current CI-monitor runs on main are green but are not full-suite evidence.
 - [ ] Fix/retest AI Academy routing failure on #227 and related hardening PR before considering those branches.
 - [ ] Verify Dependabot heads before merging. Latest known: #126, #127, #129–#133 had green checks; #128 had one green and one failed check (accessibility issue previously reported as serious `label-content-name-mismatch`). #185 runtime isolation also had one green and one failed check. #183, #184 and #186 had green checks in the last queried runs.
 
@@ -61,8 +61,8 @@ Academy is a local demo with synthetic data, not a production multi-tenant insti
 ## Audit record — 2026-11-27 05:30 CET
 
 - Main `be801c5` unchanged. Beta `e415c925` is 70 ahead / 0 behind main and its exact-head CI #45934210432 passed all four jobs.
-- #229 CI #45934058607 failed E2E on head `88b9434`; failure details could not be retrieved. Rerun of failed jobs accepted, pending. Deployment check passed.
-- #227 CI #45851158102 failed in frontend unit-test step; details not retrievable. Rerun accepted, pending. Deployment check passed.
+- #229 CI #45934058607 failed E2E on head `88b9434`; failure details could not be retrieved. Rerun accepted and is currently in progress. Deployment check passed.
+- #227 CI #45851158102 failed in frontend unit tests; rerun failed at the same step. The connector does not provide test output; no more retries until inspected. Deployment check passed.
 - #223 CI and deployment check passed on `9d674df`; it remains 17 ahead / 54 behind Beta, draft, without approval.
 - #224 is merged. No further integration.
 - PR reviews: #223/#227 none; #229 has COMMENTED reviews only, no approval.
