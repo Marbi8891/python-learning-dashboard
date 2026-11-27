@@ -484,7 +484,7 @@ const VIEWS = {
   learn: { element: "#learn-view", title: "Aprender · Python Learning Dashboard", focus: null, render: null },
   home: { element: "#home-view", title: "Curso PCAP · Python Learning Dashboard", focus: "#home-title", render: () => renderHome(content, defaultSlug()) },
   profile: { element: "#profile-view", title: "Mi aprendizaje · Python Learning Dashboard", focus: "#profile-title", render: () => renderProfile(content) },
-  paths: { element: "#paths-view", title: "Learning Paths · Python Learning Dashboard", focus: "#paths-title", render: () => zones.paths.openPaths() },
+  paths: { element: "#paths-view", title: "Learning Paths · Python Learning Dashboard", focus: "#paths-title", render: () => "" },
   plans: { element: "#plans-view", title: "Planes y cuenta · Python Learning Dashboard", focus: "#plans-title", render: () => zones.plans.renderPlans() },
   // Panel del alumno. Reúne lo que antes era «Mi cuenta»
   private: { element: "#private-view", title: () => zones.panel.dashboardTitle(), focus: "#private-title", render: () => zones.panel.renderDashboard(content, apiEnabled) },
