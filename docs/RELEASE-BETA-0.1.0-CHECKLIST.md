@@ -27,7 +27,7 @@ No publicar Beta ni crear tag hasta validar el SHA candidato exacto, completar s
 - [ ] Main: último monitor conocido pasó, pero es un job `report`, no suite completa; no revalidado en esta pasada.
 
 ## Backlog
-GitHub devuelve **27 PR abiertas**. Solo #237, #223, #229 y #227 se inspeccionaron en esta pasada; el resto no se revalidó individualmente.
+GitHub devuelve **28 PR abiertas**. Solo #237, #223, #229 y #227 se inspeccionaron en esta pasada; el resto no se revalidó individualmente.
 - #205 Tutor IA docs, #201 Roadmaps, #199 AI Academy, #196 DAW Coach móvil, #195 DAW Exam Coach, #185 Python runtime isolation y Dependabot #128 axe-core: última auditoría registró fallos; confirmar checks actuales antes de actuar.
 - Dependabot #126–#127 y #129–#133: último registro indicaba checks verdes; no revalidados ahora.
 No se cerraron ni integraron otras PR.
@@ -77,3 +77,5 @@ Academy es demo local sintética, no servicio multi-tenant. Learning Paths reuti
 - No merges adicionales, branch deletions, force-pushes, tags, releases ni deployments.
 
 - 2026-11-27 21:15 CET: se confirmó CI #687 (4/4) y Deployment Check #341 (3/3) en head #237 `301e191c`. PR abierta, Draft y sin reviews. Se recalcularon comparaciones de ramas, se confirmó 27 PR abiertas y 107 ramas; PR obsoletas #207/#209/#101/#193/#203 cerradas sin merge y #224 merged. Main intacta. Esta actualización documental crea un nuevo head; los checks de ese nuevo head quedan pendientes de verificación.
+
+- Corrección 21:15 CET: la búsqueda paginada actual devuelve 28 PR abiertas (no 27); el total anterior correspondía a una consulta incompleta/estado anterior.
