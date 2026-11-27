@@ -1,48 +1,51 @@
 # PLD Beta 0.1.0 — release checklist
 
-**Updated:** 2026-11-27 04:25 CET  
+**Updated:** 2026-11-27 05:30 CET  
 **Main:** `be801c5afa1c27ba6d5f24695236fe8ee67bdcee`  
-**Beta head before this checklist update:** `130073ff4a0164b1cc6d3869c8548eaa392bb427`  
+**Beta head:** `e415c92586afddc09c4a8c5fd28854cd7798a7a2`  
 **Demo:** https://marbi8891.github.io/python-learning-dashboard/
 
 ## Release gate
 
 Do not tag or publish Beta until the included scope is approved, CI is green on the exact candidate commit, and manual demo/accessibility checks are completed.
 
-## Integration and scope
+## Scope and PR status
 
-- [x] Beta is based on `main`: 69 commits ahead, 0 behind (before this document update).
+- [x] Beta is based on main: 70 commits ahead, 0 behind.
 - [x] PR #224 Programming Path merged to Beta at `1c104b3816f82a55bc883b18e8896a5b011c6597`.
-- [ ] PR #223 Academy: draft, head `9d674df`, 17 ahead / 53 behind Beta. CI #648 and Deployment Check #331 passed on that head; no reviews. Refresh against Beta, inspect overlap/conflicts, rerun CI before integration. Prototype uses synthetic localStorage data; no real tenant isolation, institutional auth, backend persistence or permissions.
-- [ ] PR #229 Learning Paths: draft, head now `88b9434`, 32 ahead / 21 behind Beta (merge base `c31244a`). CI #659 failed on its prior head `8a7ec94`; fix to test reset is in commit `88b9434`. CI #664 is in progress (courses passed; backend, E2E and WebKit running). Deployment Check #335 passed. No reviews. Review read-only progress adapters and overlap with Academy; integrate sequentially.
-- [ ] Decide scope of PR #227 Pentest Lab. Draft against main, head `67ca9b2`, 16 ahead / 0 behind main. CI #623 failed in the AI Academy routing test; Deployment Check #310 passed. UI only; no Docker execution, real scans or live infrastructure.
-- [x] Obsolete PRs #207, #209, #101, #193 and #203 remain closed without merge. Replacement work is tracked separately.
+- [ ] PR #223 Academy: draft, head `9d674df`, 17 ahead / 54 behind Beta. CI #45890668077 and Deployment Check #45890668052 passed on this head. No approvals. Refresh against Beta, inspect overlap/conflicts, then rerun checks. Prototype is synthetic/localStorage only; no tenant isolation, institutional auth, server persistence or permissions.
+- [ ] PR #229 Learning Paths: draft, head `88b9434`, 32 ahead / 22 behind Beta (merge base `c31244a`). CI #45934058607 failed at E2E; backend, courses and WebKit jobs passed. Deployment Check #45934058622 passed. The Playwright report artifact exists, but the available connector cannot download it to inspect the failing assertion. A rerun of failed jobs was accepted; its result is pending. No approvals. Review read-only progress adapters and shared frontend files; update/integrate sequentially, not in parallel.
+- [ ] PR #227 Pentest Lab: draft against main, head `67ca9b2`, 16 ahead / 0 behind main. Latest CI #45851158102 failed in the frontend unit-test step; backend, courses and WebKit passed. Deployment Check #45851158126 passed. Failure detail is not available through the current connector. Rerun of failed jobs was accepted; pending. Decide scope; UI only, no Docker execution or real scans.
+- [x] Obsolete PRs #207, #209, #101, #193 and #203 remain closed without merge.
 
-## Quality and security
+## CI evidence
 
-- [ ] CI on the exact current Beta head. CI #655 passed on `63da4a4` (backend, courses, E2E and WebKit); Beta was subsequently updated with documentation. The latest head `954478e` has no workflow run/status returned by the available connector, so it is not verified.
-- [ ] Resolve/retest the Learning Paths CI failure. CI #659 failed E2E: 286 passed, one failed. The persistence test's `addInitScript` cleared localStorage on reload, invalidating its own assertion. Corrected in #229 commit `88b9434` using a sessionStorage one-time marker. CI #664 is queued; wait for result. Do not weaken the assertion.
-- [x] CI #648 on Academy head passed (backend, courses, E2E, WebKit); Deployment Check #331 passed. This is not validation against current Beta.
-- [ ] Fix/retest the AI Academy routing failure on #227 and the related hardening PR before considering those branches.
-- [ ] Review current dependency findings. Dependabot #128 last recorded accessibility failure: serious `label-content-name-mismatch` on brand links. Other #126–#127 and #129–#133 had green checks in prior audit; verify current heads before merge.
-- [ ] Manual accessibility, responsive and public-demo smoke test.
+- [x] Exact current Beta head `e415c925`: CI run #45934210432 passed all four jobs (backend, courses, E2E and WebKit). https://github.com/Marbi8891/python-learning-dashboard/actions/runs/45934210432
+- [ ] PR #229: run #45934058607 failed E2E; rerun requested, pending result. Deployment check passed.
+- [x] PR #223: run #45890668077 passed all four jobs; deployment check #45890668052 passed. This does not validate against current Beta.
+- [ ] PR #227: latest CI run #45851158102 failed frontend unit tests; rerun requested. Deployment check #45851158126 passed.
+- [ ] Main: last full CI recorded in the previous audit failed AI Academy routing (569/570 tests); not rechecked this run. Current CI-monitor runs on main are green but are not full-suite evidence.
+- [ ] Fix/retest AI Academy routing failure on #227 and related hardening PR before considering those branches.
+- [ ] Verify Dependabot heads before merging. Latest known: #126, #127, #129–#133 had green checks; #128 had one green and one failed check (accessibility issue previously reported as serious `label-content-name-mismatch`). #185 runtime isolation also had one green and one failed check. #183, #184 and #186 had green checks in the last queried runs.
+
+## Security and release quality
+
 - [x] Workflow review from prior audit: CI uses read-only contents permissions, checkout with `persist-credentials: false`, backend `pip-audit`, frontend `npm audit --audit-level=high`. Recheck workflow changes before release.
-- [ ] Review secrets, debug settings, unsafe defaults and data/privacy notices on the release candidate.
+- [ ] Review current dependency findings, secrets, debug settings, unsafe defaults and privacy notices on release candidate.
+- [ ] Manual accessibility, responsive and public-demo smoke test.
+- [ ] Confirm that demo walkthrough does not touch real account/progress data.
 
 ## Main and branches
 
-- Main remains at `be801c5`; no writes made. The last full main CI evidence in the previous audit was run #528, E2E failed in AI Academy routing (569/570 passed). Not rechecked this run.
-- Main and Beta were last confirmed unprotected (`protected:false`); rulesets were empty. Detailed branch-protection endpoint returned 403 to the integration. Configure required PRs/reviews/checks and disallow force-push/deletion before release; not changed.
-- Current compare before this document update: Beta is 69 ahead / 0 behind main.
-- #223 is 17 ahead / 53 behind Beta; #229 is 32 ahead / 20 behind Beta. Their shared frontend files include app navigation, index, precache and English translations; review and integrate sequentially.
-- #229's earlier duplicate route rendering was corrected in `2ff0cfc` and `ef1d18d`; E2E coverage added in `8a7ec94`. The malformed-span report was false and withdrawn.
-- Branch search for `beta` returned the port branches `academy-institutional-port`, `academy-institutional-rebased`, `ai-academy-port`, `hardening-rebased`, `port-hardening`, `port-pld003`, `programming-path-port`, and `programming-path-rebased`. This search is not a complete repository branch inventory.
-- `beta/programming-path-rebased` compares 0 ahead / 39 behind Beta and has no unique commits in ancestry; it is redundant. Deletion was not performed.
-- Other port branches diverge; preserve until their unique commits/files are reviewed. No branch deletions or force-pushes performed.
+- Main remains at `be801c5`; no writes made.
+- Branch listing paginated: 106 branches (100 on page 1, 6 on page 2). All returned branches report `protected:false`; main and Beta are unprotected. Rulesets endpoint returned an empty list. Branch-protection detail endpoint is forbidden to the connector; no settings changed.
+- PR #223: 17 ahead / 54 behind Beta; PR #229: 32 ahead / 22 behind Beta. Both overlap on app navigation, index, precache and English translations; inspect conflicts and integrate sequentially.
+- `beta/programming-path-rebased` compares 0 ahead / 41 behind Beta, with no unique commits in ancestry; redundant candidate. No branch-deletion tool is available, so it was not deleted.
+- Other beta-port branches diverge and retain unique commits; preserve until their commits/files are reviewed. No branch deletions or force-pushes performed.
 
 ## Presentation and release
 
-- [ ] README, setup instructions and Changelog reflect final included scope.
+- [ ] README, setup instructions and changelog reflect the final included scope.
 - [ ] Screenshots are current and contain no personal data.
 - [ ] Spanish/English copy, legal and privacy notices reviewed.
 - [ ] Demo walkthrough works without touching real progress/account data.
@@ -53,12 +56,14 @@ Do not tag or publish Beta until the included scope is approved, CI is green on 
 
 ## Known limitations to disclose
 
-Academy is a local demo with synthetic data, not a production multi-tenant institution service. Learning Paths aggregates existing progress read-only; no duplicate lesson/XP store is intended. Pentest Lab is a planning dashboard, not a working scanner/lab. State which tests ran against the exact release candidate.
+Academy is a local demo with synthetic data, not a production multi-tenant institution service. Learning Paths aggregates existing progress read-only; no duplicate lesson/XP store is intended. Pentest Lab is a planning dashboard, not a working scanner/lab. State which checks ran against the exact release candidate.
 
-## Audit record — 2026-11-27 04:23 CET
+## Audit record — 2026-11-27 05:30 CET
 
-- Main remains unchanged at `be801c5`.
-- Beta head at start of this checklist update: `130073ff`, 69 ahead / 0 behind main. No CI status was returned for this exact commit.
-- #229 CI #659 failed its persistence-after-reload E2E assertion because the test fixture reset localStorage on each page load. Fix committed on the PR branch as `88b9434`. CI #664 is in progress (courses passed; backend, E2E and WebKit still running); Deployment Check #335 passed. No merge.
-- #223 and #227 remain draft. #224 is already merged to Beta.
-- No merge, deletion, force-push, tag, release or production deployment performed.
+- Main `be801c5` unchanged. Beta `e415c925` is 70 ahead / 0 behind main and its exact-head CI #45934210432 passed all four jobs.
+- #229 CI #45934058607 failed E2E on head `88b9434`; failure details could not be retrieved. Rerun of failed jobs accepted, pending. Deployment check passed.
+- #227 CI #45851158102 failed in frontend unit-test step; details not retrievable. Rerun accepted, pending. Deployment check passed.
+- #223 CI and deployment check passed on `9d674df`; it remains 17 ahead / 54 behind Beta, draft, without approval.
+- #224 is merged. No further integration.
+- PR reviews: #223/#227 none; #229 has COMMENTED reviews only, no approval.
+- No merge, branch deletion, force-push, tag, release or production deployment performed.
