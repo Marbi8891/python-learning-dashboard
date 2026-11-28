@@ -36,8 +36,8 @@ Los checks de CI y Deployment Check no realizan un despliegue real de Pages.
 ## PR abiertas y ramas
 
 - GitHub devuelve **28 PR abiertas**. Se revalidaron #237, #223, #224, #229, #227 y las cinco PR obsoletas; el resto del backlog no se auditó individualmente.
-- **107 ramas** (100 + 7; ambas páginas paginadas); la API marca `protected:false` en todas, incluidas `main` y Beta.
-- Rulesets: lista vacía. La lectura directa de los endpoints de rama devuelve `protected:false`, `protection.enabled:false` y checks obligatorios desactivados para `main` y Beta. El endpoint detallado de branch protection devuelve 403. Configurar desde GitHub Settings.
+- **107 ramas** (100 + 7, paginación completa). La búsqueda de ramas usada en esta pasada solo devuelve nombres y no expone el estado de protección.
+- Última comprobación directa a las 07:45 CET: `main` y Beta `protected:false`, rulesets vacíos y checks obligatorios desactivados; el endpoint detallado de protección devolvió 403. No revalidado ahora. Configurar desde GitHub Settings.
 - `beta/programming-path-rebased` comparada ahora: 0 commits ahead / 56 behind Beta; candidata redundante, no borrada. Las demás ramas de portado no se recalcularon.
 - No se cerraron ni fusionaron otras PR, ni se eliminaron ramas.
 
