@@ -1,9 +1,9 @@
 # PLD Beta 0.1.0 — checklist de lanzamiento
 
-**Auditoría:** 2026-11-27 23:54 CET
+**Auditoría:** 2026-11-28 01:09 CET
 **Main:** `be801c5afa1c27ba6d5f24695236fe8ee67bdcee` (sin cambios)  
 **Beta:** `dee08c96ec3da7b79fa190612afc3b3116f1175b` — 85 ahead / 0 behind main; CI #681 pasó en este SHA.  
-**PR #237 (head before this checklist refresh):** `08fb83a84573b737b98ef11f412052392907cdd0` — 11 ahead / 0 behind Beta; CI run [46075563491](https://github.com/Marbi8891/python-learning-dashboard/actions/runs/46075563491) passed 4/4 and Deployment Check [46075563479](https://github.com/Marbi8891/python-learning-dashboard/actions/runs/46075563479) passed 3/3 on this exact SHA. Draft, no reviews; no merge or production deployment. The checklist refresh creates a new head; its checks must be verified separately.
+**PR #237 current head:** `c945094d064af27d2490f7233409584fb9428e1e` — 12 ahead / 0 behind Beta; CI [46079576751](https://github.com/Marbi8891/python-learning-dashboard/actions/runs/46079576751) passed 4/4 and Deployment Check [46079576769](https://github.com/Marbi8891/python-learning-dashboard/actions/runs/46079576769) passed 3/3 on the exact SHA. Draft, no reviews; no merge or production deployment. This audit refreshes the checklist and creates another commit; verify checks for that new head separately.
 **Demo:** https://marbi8891.github.io/python-learning-dashboard/
 
 ## Gate de publicación
@@ -24,6 +24,7 @@ No publicar Beta ni crear tag hasta validar el SHA candidato exacto, completar s
 - [x] CI #687/#341 también pasaron en el head previo `301e191c`; son resultados históricos, no el head actual.
 - [x] #237 limita `contents: read` al build y `pages: write`/`id-token: write` al job deploy; checkout usa `persist-credentials: false`. No está integrado en Beta.
 - [x] CI #690 (#46072044202) y Deployment Check #344 (#46072044260) pasaron en el head actual `db1a2066`; jobs verificados individualmente. No es un despliegue de Pages.
+- [x] CI #46079576751 and Deployment Check #46079576769 passed on exact PR #237 head `c945094d`; 4/4 CI jobs and 3/3 deployment-check jobs verified individually.
 - [ ] Los checks de #223/#229/#227 no validan integración actualizada sobre Beta.
 - [ ] Main: el último monitor conocido pasó, pero es un job `report`, no una suite completa; no revalidado en esta pasada.
 
@@ -92,3 +93,6 @@ Academy es demo local sintética, no servicio multi-tenant. Learning Paths reuti
 
 
 - 2026-11-27 23:54 CET: refreshed the checklist based on verified PR head `08fb83a` (CI 4/4, Deployment Check 3/3); this documentation commit is branch-only and its own checks are pending. Branch inventory: 107, all API-marked unprotected; `main` and Beta `protected:false`, rulesets empty. Open PR count 28. Obsolete #207/#209/#101/#193/#203 closed unmerged; #224 merged. #223 current head checks green (historical head), #229 CI fails 286/1 E2E, #227 CI fails 571/572 unit gate. Beta checklist remains at the 15:11 snapshot; no merge, branch deletion, tag, release or deployment.
+
+
+- 2026-11-28 01:09 CET: Se revalidó el repositorio. `main` `be801c5afa1c27ba6d5f24695236fe8ee67bdcee` y Beta `dee08c96ec3da7b79fa190612afc3b3116f1175b` siguen intactas; comparación 85 ahead / 0 behind, merge base main. PR #237 head `c945094d064af27d2490f7233409584fb9428e1e`, 12/0 contra Beta; CI #46079576751 pasó 4/4 (Backend, Cursos, E2E, WebKit) y Deployment Check #46079576769 pasó 3/3 (workflows, Pages artifact, Docker health) en el SHA exacto. La PR sigue Draft, sin reviews/aprobaciones; no hay despliegue real. Este refresh documental crea un nuevo head; checks pendientes de verificación. PR abiertas 28, ramas 107. #224 merged; #207/#209/#101/#193/#203 cerradas sin merge. #223 sigue 17/69 y checks verdes en su head; #229 32/37 con E2E 286/1; #227 16/85 Beta con unit gate 571/572, E2E omitido. Branch API confirma `protected:false` y `protection.enabled:false` para main y Beta; rulesets vacíos. Releases vacías; tag v1.0.0 anotado sin firma, target fdf6409. No se fusionó, borró, etiquetó ni desplegó nada.
