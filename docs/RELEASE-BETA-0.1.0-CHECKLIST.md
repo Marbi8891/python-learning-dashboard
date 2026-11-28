@@ -1,9 +1,9 @@
 # PLD Beta 0.1.0 — checklist de lanzamiento
 
-**Auditoría:** 2026-11-28 07:45 CET  
+**Auditoría:** 2026-11-28 08:06 CET  
 **Main:** `be801c5afa1c27ba6d5f24695236fe8ee67bdcee` (sin cambios)  
 **Beta:** `dee08c96ec3da7b79fa190612afc3b3116f1175b` — 85 commits ahead / 0 behind main. CI #681 pasó 4/4 en este SHA.  
-**PR #237:** head `11124f225be7848178a23e192accbce87f960ed9`, 17 ahead / 0 behind Beta; CI #697 pasó 4/4 y Deployment Check #351 pasó 3/3 en este SHA. Draft, sin reviews ni aprobaciones. No se desplegó Pages.  
+**PR #237:** head `1fc3a508b6d9922b1d5b8211e39c586721e19b22`, 18 ahead / 0 behind Beta; CI #698 pasó 4/4 y Deployment Check #352 pasó 3/3 en este SHA. Draft, sin reviews ni aprobaciones. No se desplegó Pages.  
 **Demo:** https://marbi8891.github.io/python-learning-dashboard/
 
 ## Gate de publicación
@@ -27,8 +27,8 @@ Los checks de CI y Deployment Check no realizan un despliegue real de Pages.
 ## CI verificada
 
 - [x] **Beta CI #681:** 4/4 passed sobre `dee08c96` (Backend, Cursos, E2E, WebKit). [Run](https://github.com/Marbi8891/python-learning-dashboard/actions/runs/46014073048)
-- [x] **PR #237 CI #697:** 4/4 passed sobre `11124f22` (Backend, Cursos, E2E, WebKit). [Run](https://github.com/Marbi8891/python-learning-dashboard/actions/runs/46108580386)
-- [x] **PR #237 Deployment Check #351:** 3/3 passed en `11124f22` (workflows/configuración, artefacto Pages, Docker health). [Run](https://github.com/Marbi8891/python-learning-dashboard/actions/runs/46108580407)
+- [x] **PR #237 CI #698:** 4/4 passed sobre `1fc3a508`. (Backend, Cursos, E2E, WebKit). [Run](https://github.com/Marbi8891/python-learning-dashboard/actions/runs/46118164927)
+- [x] **PR #237 Deployment Check #352:** 3/3 passed en `1fc3a508` (workflows/configuración, artefacto Pages, Docker health). [Run](https://github.com/Marbi8891/python-learning-dashboard/actions/runs/46118164917)
 - [x] Los jobs de #237 fueron inspeccionados. Backend: Ruff, formato, pip-audit, cobertura SQLite 100 %, migraciones PostgreSQL, rate limits/concurrencia, versionado y backup/restore. E2E: tests unitarios frontend, npm audit high y Playwright Chromium. WebKit smoke pasó. Cursos pasó sus validaciones.
 - [x] **Main CI monitor #429:** éxito en `be801c5`; solo ejecutó el job `report`, no es suite completa. [Run](https://github.com/Marbi8891/python-learning-dashboard/actions/runs/46099434032)
 - [ ] Checks de #223/#229/#227 no corresponden a una integración actualizada sobre Beta.
@@ -73,4 +73,4 @@ Academy es una demo local con datos sintéticos, no una plataforma institucional
 - **2026-11-28 03:33 CET:** head #237 `5fe412f`, CI #694 4/4 y Deployment Check #348 3/3; el refresh anterior dejó checks pendientes para su nuevo head.
 - No se han hecho merges, branch deletions, force-pushes, tags, releases ni deployments en esta auditoría.
 
-- **2026-11-28 07:45 CET:** revalidado main `be801c5` y Beta `dee08c96` (85 ahead / 0 behind); PR #237 head `11124f22`, CI #697 passed 4/4 y Deployment Check #351 passed 3/3 en el SHA exacto; jobs inspeccionados. PR #237 continúa Draft, sin reviews, no deployment. PR #223 CI #648/DC #331 passed en head `9d674df`; #229 CI #664 failure (286/1) y DC #335 passed en head `88b9434`; #227 CI #623 failure (571/572) y DC #310 passed en head `67ca9b2`. Reviews de #223 y #227 vacías; #229 mantiene dos reviews COMMENTED. PR #224 sigue integrada. Inventario: 28 abiertas, 107 ramas; obsoletas #207/#209/#101/#193/#203 cerradas sin merge. Branch protection: `main` y Beta `protected:false`, rulesets vacíos. Release/tag no revalidable con el conector esta pasada; conservar la última evidencia de 06:35 como histórica. Checklist actualizado en esta rama de auditoría; checks del nuevo commit pendientes. Main y Beta sin cambios.
+- **2026-11-28 08:06 CET:** revalidado main `be801c5` y Beta `dee08c96` (85 ahead / 0 behind); Beta CI #681 pasó 4/4 en el SHA exacto. PR #237 head `1fc3a508`, CI #698 pasó 4/4 y Deployment Check #352 pasó 3/3 en ese SHA; jobs inspeccionados. PR #237 sigue Draft, sin reviews y no hubo Pages deployment. PR #223 CI #648/DC #331 passed en `9d674df`; #229 CI #664 failure (286/1) y DC #335 passed en `88b9434`; #227 CI #623 failure (571/572) y DC #310 passed en `67ca9b2`. #224 merged; #207/#209/#101/#193/#203 cerradas sin merge. Search paginado de ramas confirma 107 (100 + 7); la herramienta de ramas no expone protección en esta pasada, por lo que la última evidencia directa de 07:45 (`protected:false`, rulesets vacíos) queda como histórica, no revalidada. Release/tag tampoco revalidable hoy; última evidencia 06:35. Checklist refrescado en esta rama de auditoría; este nuevo commit documental inicia sus propios checks y no se atribuyen resultados del SHA anterior. Main y Beta sin cambios.
