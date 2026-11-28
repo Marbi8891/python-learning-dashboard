@@ -1,114 +1,74 @@
 # PLD Beta 0.1.0 — checklist de lanzamiento
 
-**Auditoría:** 2026-11-28 03:33 CET
-**Main:** `be801c5afa1c27ba6d5f24695236fe8ee67bdcee` (sin cambios)
-**Beta:** `dee08c96ec3da7b79fa190612afc3b3116f1175b` — 85 ahead / 0 behind main; CI #681 pasó 4/4 en el SHA exacto.
-**PR #237 head verificado:** `5fe412ffe280959cdd6d0a6fbbd96e4ed36221a0` — 14 ahead / 0 behind Beta; CI #694 (run 46093706537) pasó 4/4 y Deployment Check #348 (run 46093706616) pasó 3/3 en este SHA exacto. Draft, sin reviews ni merge; no hubo despliegue de Pages.
+**Auditoría:** 2026-11-28 05:37 CET  
+**Main:** `be801c5afa1c27ba6d5f24695236fe8ee67bdcee` (sin cambios)  
+**Beta:** `dee08c96ec3da7b79fa190612afc3b3116f1175b` — 85 commits ahead / 0 behind main. CI #681 pasó 4/4 en este SHA.  
+**PR #237:** head `1bed20e7c8c2ac698c7af67a603d118d1376f55a`, 15 ahead / 0 behind Beta; CI #695 pasó 4/4 y Deployment Check #349 pasó 3/3 en este SHA. Draft, sin reviews ni aprobaciones. No se desplegó Pages.  
 **Demo:** https://marbi8891.github.io/python-learning-dashboard/
 
 ## Gate de publicación
-No publicar Beta ni crear tag hasta validar el SHA candidato exacto, completar smoke test manual, responsive y accesibilidad, y decidir el alcance de las funcionalidades incluidas. CI y Deployment Check de #237 no realizan un despliegue real de Pages.
+
+No crear tag ni publicar Beta hasta:
+- validar CI en el SHA candidato exacto;
+- decidir alcance de las funciones candidatas;
+- completar smoke test de Pages, responsive y accesibilidad;
+- revisar privacidad, datos de demo, README, CHANGELOG y notas de versión.
+
+Los checks de CI y Deployment Check no realizan un despliegue real de Pages.
 
 ## PR candidatas
-- [x] **#224 Programming Path:** merged en Beta; merge commit `1c104b3816f82a55bc883b18e8896a5b011c6597`. No pendiente.
-- [ ] **#223 Academy:** Draft; 17 ahead / 69 behind Beta. CI #648 (#45890668077) pasó 4/4 y Deployment Check #331 (#45890668052) pasó 3/3 en el head `9d674df` (estados verificados). Se solapa con #229 en HTML, router, precache e i18n. Demo local con datos sintéticos; sin aislamiento multi-tenant, autenticación institucional, persistencia backend ni enforcement de permisos. Actualizar sobre Beta, resolver conflictos y revisar conjuntamente con #229.
-- [ ] **#229 Learning Paths:** Draft; 32 ahead / 37 behind Beta. CI #664 (#45934058607) falla (286 E2E pass / 1 fail tras reload); `#paths-view` queda vacío y no muestra “Mis Paths”. Deployment Check #335 (#45934058622) pasó 3/3. Dos reviews COMMENTED, sin approval. Reutiliza progreso existente; no crea store/XP paralelo. Causa raíz del reload no aislada; no integrar hasta corregir y validar el head actualizado.
-- [ ] **#227 Pentest Lab:** Draft contra `main`; 16 ahead / 0 behind main y 16 ahead / 85 behind Beta. CI #623 (#45851158102) falla el gate unitario (571/572); el test de AI Academy routing espera un loader ausente en main. E2E no se ejecutó tras el gate. Deployment Check #310 (#45851158126) pasó 3/3. Es una UI de planificación; no ejecuta Docker, escaneos ni métricas reales. Decidir alcance y corregir el baseline/test antes de integrar.
-- [x] PR obsoletas **#207, #209, #101, #193 y #203**: cerradas sin merge.
-- [x] #224 merged.
 
-## CI y cambios
-- [x] CI #681 (#46014073048) pasó en el SHA exacto de Beta `dee08c96`: Backend, Cursos, E2E y WebKit.
-- [x] CI #689 (#46062856041) pasó 4/4 en el head previo de #237 `f6ad6363` (Backend, Cursos, E2E, WebKit).
-- [x] Deployment Check #343 (#46062855991) pasó 3/3 en el head previo `f6ad6363` (workflows, Docker health check y artefacto Pages).
-- [x] CI #687/#341 también pasaron en el head previo `301e191c`; son resultados históricos, no el head actual.
-- [x] #237 limita `contents: read` al build y `pages: write`/`id-token: write` al job deploy; checkout usa `persist-credentials: false`. No está integrado en Beta.
-- [x] CI #690 (#46072044202) y Deployment Check #344 (#46072044260) pasaron en el head actual `db1a2066`; jobs verificados individualmente. No es un despliegue de Pages.
-- [x] CI #46079576751 and Deployment Check #46079576769 passed on exact PR #237 head `c945094d`; 4/4 CI jobs and 3/3 deployment-check jobs verified individually.
-- [ ] Los checks de #223/#229/#227 no validan integración actualizada sobre Beta.
-- [ ] Main: el último monitor conocido pasó, pero es un job `report`, no una suite completa; no revalidado en esta pasada.
+- [x] **#224 Programming Path:** fusionada en Beta. Merge commit `1c104b3816f82a55bc883b18e8896a5b011c6597`. El progreso y documentos existentes se reutilizan; no se crea un store paralelo.
+- [ ] **#223 Academy:** Draft; 17 ahead / 69 behind Beta (merge base `5182b1ce`). CI #648 y Deployment Check #331 pasaron 4/4 y 3/3 en el head `9d674df`. Sin approvals. Demo local con datos sintéticos; no incluye autenticación institucional, aislamiento multi-tenant, persistencia backend ni enforcement real de permisos. Se solapa con #229 en HTML, router, precache e i18n. Actualizar sobre Beta y resolver conflictos antes de considerar integración.
+- [ ] **#229 Learning Paths:** Draft; 32 ahead / 37 behind Beta (merge base `c31244a`). CI #664 falla: 286 E2E pasan y 1 falla al recargar; `#paths-view` queda vacío y no muestra “Mis Paths”. Deployment Check #335 pasó 3/3. Dos reviews COMMENTED, sin aprobación. Lee el progreso existente, sin store/XP paralelo. Causa raíz pendiente; no integrar hasta corregir, actualizar sobre Beta y repetir CI.
+- [ ] **#227 Pentest Lab:** Draft contra main; 16 ahead / 0 behind main, 16 ahead / 85 behind Beta. CI #623 falla 571/572 tests unitarios: el test de routing de AI Academy espera un loader ausente de main; Playwright no se ejecutó. Deployment Check #310 pasó 3/3. Es una UI de planificación, no ejecuta Docker ni escaneos. Decidir alcance y corregir el test/base antes de integrarlo.
+- [x] PR obsoletas #207, #209, #101, #193 y #203: cerradas sin merge.
 
+## CI verificada
 
-## Backlog
-GitHub devuelve **28 PR abiertas**. Solo #237, #223, #229 y #227 se inspeccionaron en esta pasada; el resto no se revalidó individualmente.
-- #205 Tutor IA docs, #201 Roadmaps, #199 AI Academy, #196 DAW Coach móvil, #195 DAW Exam Coach, #185 Python runtime isolation y Dependabot #128 axe-core: última auditoría registró fallos; confirmar checks actuales antes de actuar.
-- Dependabot #126–#127 y #129–#133: último registro indicaba checks verdes; no revalidados ahora.
-No se cerraron ni integraron otras PR.
+- [x] **Beta CI #681:** 4/4 passed sobre `dee08c96` (Backend, Cursos, E2E, WebKit). [Run](https://github.com/Marbi8891/python-learning-dashboard/actions/runs/46014073048)
+- [x] **PR #237 CI #695:** 4/4 passed sobre `1bed20e7` (Backend, Cursos, E2E, WebKit). [Run](https://github.com/Marbi8891/python-learning-dashboard/actions/runs/46098793354)
+- [x] **PR #237 Deployment Check #349:** 3/3 passed en el mismo SHA (workflows/configuración, artefacto Pages, Docker health). [Run](https://github.com/Marbi8891/python-learning-dashboard/actions/runs/46098793370)
+- [x] Los jobs de #237 fueron inspeccionados. Backend: Ruff, formato, pip-audit, cobertura SQLite 100 %, migraciones PostgreSQL, rate limits/concurrencia, versionado y backup/restore. E2E: tests unitarios frontend, npm audit high y Playwright Chromium. WebKit smoke pasó. Cursos pasó sus validaciones.
+- [x] **Main CI monitor #429:** éxito en `be801c5`; solo ejecutó el job `report`, no es suite completa. [Run](https://github.com/Marbi8891/python-learning-dashboard/actions/runs/46099434032)
+- [ ] Checks de #223/#229/#227 no corresponden a una integración actualizada sobre Beta.
 
-## Ramas y protección
-- Inventario paginado: **107 ramas (100 + 7)**; la API de branches marca `protected:false` en las 107, incluidas `main` y Beta.
-- Rulesets: lista vacía (verificada en esta pasada).
-- La API detallada de branch protection devuelve 403; no se pudo inspeccionar configuración adicional. La evidencia disponible indica que `main` y Beta no tienen protección activa.
-- `beta/programming-path-rebased`: 0 ahead / 56 behind Beta; sin commits únicos por delante, posible redundancia. No borrada.
-- Comparaciones verificadas contra Beta:
-  - `beta/academy-institutional-port`: 11/73
-  - `beta/academy-institutional-rebased`: 17/69
-  - `beta/ai-academy-port`: 16/79
-  - `beta/hardening-rebased`: 19/76
-  - `beta/port-hardening`: 22/80
-  - `beta/port-pld003`: 14/80
-  - `beta/programming-path-port`: 18/73
-  - `beta/programming-path-rebased`: 0/56
-Conservar ramas divergentes hasta revisar commits únicos.
+## PR abiertas y ramas
 
+- GitHub devuelve **28 PR abiertas**. En esta pasada se revalidaron #237, #223, #224, #229, #227 y las cinco PR obsoletas; el resto del backlog no se auditó individualmente.
+- **107 ramas** (100 en página 1 + 7 en página 2); la API marca `protected:false` en todas, incluidas main y Beta.
+- Rulesets: lista vacía. Endpoint detallado de branch protection devuelve 403 a esta integración. Evidencia disponible: main y Beta sin protección activa. Configurar desde GitHub Settings.
+- `beta/programming-path-rebased` fue comparada a las 03:33: 0 commits ahead / 56 behind Beta; candidata redundante, no borrada. Las otras ramas portadas no se recalcularon en esta pasada.
+- No se cerraron ni fusionaron otras PR, ni se eliminaron ramas.
 
-## Seguridad y calidad
-- [x] CI Beta #681 incluye Ruff, pip-audit, npm audit (nivel high), cobertura backend 100 % y pruebas PostgreSQL de migraciones, rate-limit, concurrencia, versionado y backup/restore.
-- [x] Pages build/deploy separados; checkout sin persistir credenciales.
-- [x] Hardening de permisos propuesto en #237; CI #690 y Deployment Check #344 pasaron en el head actual `db1a2066`.
-- [ ] Revisión de findings de dependencias, secretos, configuración y privacidad sobre el candidato final.
-- [ ] Smoke test Pages, responsive y accesibilidad manual.
-- [ ] Verificar que la demo usa solo datos sintéticos.
+## Seguridad y cambios de Pages
+
+- [x] #237 cambia solo `.github/workflows/pages.yml` y este checklist.
+- [x] Build con `contents: read`; deploy con `pages: write` y `id-token: write`. Checkout usa `persist-credentials: false`.
+- [x] Build y deploy separados. Checks validan configuración y artefacto, no una publicación real.
+- [ ] Revisar findings, secretos, privacidad y configuración en el SHA candidato final.
+- [ ] Smoke test manual, responsive y accesibilidad.
+
 ## Tags y Release
-- [x] Tag `v1.0.0` revalidado: tag anotado, sin firma (`verified:false`, reason `unsigned`), target `fdf64098556f0e835e08ad5ce58c230a21b5f591`. No mover ni reutilizar.
-- [x] GitHub Releases: `[]`, confirmado en esta pasada.
-- [ ] Elegir un tag nuevo solo sobre el SHA candidato validado y publicar Release con alcance, limitaciones y demo.
 
+- [x] GitHub Releases: lista vacía.
+- [x] `v1.0.0` existe como tag anotado, sin firma (`verified:false`, reason `unsigned`). Tag object `603274fb5a908260bea927d48de647883e2f948f`, target `fdf64098556f0e835e08ad5ce58c230a21b5f591`. No mover ni reutilizar.
+- [ ] Crear un tag nuevo solo sobre el SHA candidato validado y publicar Release con alcance, limitaciones y demo.
 
 ## Presentación
-- [ ] README, instrucciones y CHANGELOG ajustados al alcance de Beta.
-- [ ] Capturas sin datos personales; ES/EN, privacidad y avisos revisados.
+
+- [ ] README, instrucciones y CHANGELOG alineados con el alcance final.
+- [ ] Capturas sin datos personales; revisar ES/EN, privacidad y avisos.
 - [ ] Ensayar walkthrough.
 - [ ] Smoke test, responsive y accesibilidad.
 - [ ] Notas de versión y limitaciones.
 
-## Limitaciones a declarar
-Academy es demo local sintética, no servicio multi-tenant. Learning Paths reutiliza progreso existente. Pentest Lab es una interfaz de planificación, no un scanner ni un laboratorio operativo.
+## Limitaciones que deben declararse
 
+Academy es una demo local con datos sintéticos, no una plataforma institucional multi-tenant. Learning Paths reutiliza progreso existente. Pentest Lab es un panel de planificación, no un scanner ni un laboratorio operativo.
 
-## Registro
-- 2026-11-27 15:54: Base Beta `dee08c96` (85 ahead / 0 behind main). CI #681 passed exact SHA; main `be801c5` intact. Monitor passed (not full suite). PR #223: 17/69; #229: 32/37, 286/1 E2E; #227: 16/0 main, 571/1 unit gate. Inventory 107 branches and 28 open PRs. PR #237 had CI #683 passed on prior merge SHA, #684 in progress on `8cbd010`, Deployment Check #338 passed. Branch protection not verified.
-- 2026-11-27 19:27 CET: PR #237 head `21a09dc` (5/0 contra Beta), CI #685 attempt 2 passed (Backend, Cursos, E2E, WebKit), Deployment Check #339 passed. First attempt failed WebKit recovery-link test; retry passed.
-- 2026-11-27 20:14 CET: PR #237 head `8bbcf857` (6/0). CI #686 passed exact SHA (4/4); Deployment Check #340 passed exact SHA (3/3). Checklist actualizado en esta rama. PR sigue Draft, sin review; no merge ni deploy. Search devolvió 27 PR abiertas, inventario 107 ramas (100+7, última página vacía), rulesets vacíos; branch protection 403. Tag `v1.0.0` confirmado y Releases vacías.
-- No merges adicionales, branch deletions, force-pushes, tags, releases ni deployments.
+## Registro reciente
 
-- 2026-11-27 21:15 CET: se confirmó CI #687 (4/4) y Deployment Check #341 (3/3) en head #237 `301e191c`. PR abierta, Draft y sin reviews. Se recalcularon comparaciones de ramas, se confirmó 27 PR abiertas y 107 ramas; PR obsoletas #207/#209/#101/#193/#203 cerradas sin merge y #224 merged. Main intacta. Esta actualización documental crea un nuevo head; los checks de ese nuevo head quedan pendientes de verificación.
-
-- Corrección 21:15 CET: la búsqueda paginada actual devuelve 28 PR abiertas (no 27); el total anterior correspondía a una consulta incompleta/estado anterior.
-
-
-- 2026-11-27 22:40 CET: PR #237 head `f6ad6363` verificado; CI #689 y Deployment Check #343 pasaron 4/4 y 3/3 en ese SHA. La PR sigue Draft, sin reviews. Checklist actualizado y crea un nuevo commit; sus checks aún no se verifican. API de branches devuelve 107/107 `protected:false`; rulesets `[]`. Releases vacías y tag `v1.0.0` confirmado anotado sin firma. Se revalidaron estados de #223 (CI #648/DC #331 verde), #229 (CI #664 fallida 286/1; DC #335 verde) y #227 (CI #623 fallida 571/572; DC #310 verde). No hubo merge, borrado ni despliegue.
-
-- 2026-11-27 23:14 CET: #237 head `db1a2066` (10 ahead / 0 behind Beta). CI #690 pasó 4/4 y Deployment Check #344 pasó 3/3; jobs inspeccionados. PR sigue Draft, sin reviews. Se revalidaron #223 (CI #648/DC #331 verdes), #229 (CI #664 falla E2E; DC #335 verde) y #227 (CI #623 falla gate unitario; DC #310 verde). Branch inventory: 107 (100 + 7 + página vacía); comparaciones de ocho ramas portadas recalculadas. No cambios en main/Beta, merges, borrados, tags, releases ni deployments.
-
-
-- 2026-11-27 23:54 CET: refreshed the checklist based on verified PR head `08fb83a` (CI 4/4, Deployment Check 3/3); this documentation commit is branch-only and its own checks are pending. Branch inventory: 107, all API-marked unprotected; `main` and Beta `protected:false`, rulesets empty. Open PR count 28. Obsolete #207/#209/#101/#193/#203 closed unmerged; #224 merged. #223 current head checks green (historical head), #229 CI fails 286/1 E2E, #227 CI fails 571/572 unit gate. Beta checklist remains at the 15:11 snapshot; no merge, branch deletion, tag, release or deployment.
-
-
-- 2026-11-28 01:09 CET: Se revalidó el repositorio. `main` `be801c5afa1c27ba6d5f24695236fe8ee67bdcee` y Beta `dee08c96ec3da7b79fa190612afc3b3116f1175b` siguen intactas; comparación 85 ahead / 0 behind, merge base main. PR #237 head `c945094d064af27d2490f7233409584fb9428e1e`, 12/0 contra Beta; CI #46079576751 pasó 4/4 (Backend, Cursos, E2E, WebKit) y Deployment Check #46079576769 pasó 3/3 (workflows, Pages artifact, Docker health) en el SHA exacto. La PR sigue Draft, sin reviews/aprobaciones; no hay despliegue real. Este refresh documental crea un nuevo head; checks pendientes de verificación. PR abiertas 28, ramas 107. #224 merged; #207/#209/#101/#193/#203 cerradas sin merge. #223 sigue 17/69 y checks verdes en su head; #229 32/37 con E2E 286/1; #227 16/85 Beta con unit gate 571/572, E2E omitido. Branch API confirma `protected:false` y `protection.enabled:false` para main y Beta; rulesets vacíos. Releases vacías; tag v1.0.0 anotado sin firma, target fdf6409. No se fusionó, borró, etiquetó ni desplegó nada.
-## Audit — 2026-11-28 02:31 CET
-- PR #237 head verificado `b20d5cc`: 13 ahead / 0 behind Beta. CI #693 (run 46086549348) passed 4/4 (Backend, Cursos, E2E, WebKit); Deployment Check #347 (run 46086549385) passed 3/3 (workflow/config, Pages artifact, Docker image). Jobs were inspected. PR remains Draft with no reviews; changes are limited to `.github/workflows/pages.yml` and this checklist. No Pages production deployment. This update creates a new commit, whose checks are not yet verified.
-- `main` `be801c5` and Beta `dee08c96` remain unchanged; Beta is 85 ahead / 0 behind main. CI #681 passed 4/4 on the exact Beta SHA (run 46014073048).
-- Open PR count: 28; branch inventory: 107 (100 + 7). Obsolete #207/#209/#101/#193/#203 closed without merge; #224 merged.
-- #223 head `9d674df`: 17 ahead / 69 behind Beta; CI #648 and Deployment Check #331 completed successfully. #229 head `88b9434`: 32/37; CI #664 failed with 286 passing and 1 E2E failing on reload, `#paths-view` empty (log inspected); Deployment Check #335 previously passed. #227 head `67ca9b2`: 16 ahead / 0 behind main, 16/85 against Beta; CI #623 fails 571/572 unit tests, the AI Academy routing test, before Playwright; Deployment Check #310 previously passed. No candidate was integrated.
-- Branch protection was last confirmed inactive for main and Beta (`protected:false`, rulesets empty); not revalidated this run because the connector lacks a branch-protection read endpoint. Release/tag inventory also not revalidated; latest recorded state: Releases empty and `v1.0.0` annotated but unsigned. No merge, branch deletion, tag, release, force-push or deployment.
-
-
-## Audit — 2026-11-28 03:33 CET
-- PR #237 current head `5fe412ffe280959cdd6d0a6fbbd96e4ed36221a0`, 14 ahead / 0 behind Beta. CI #694 (run 46093706537) passed 4/4 and Deployment Check #348 (run 46093706616) passed 3/3 on this exact SHA; job steps inspected. CI includes Ruff, pip-audit, backend coverage, PostgreSQL concurrency/migration/version/backup tests, frontend unit tests, npm audit and E2E; WebKit smoke passed. Deployment check validated Pages artifact, workflow config and Docker health. No production Pages deployment.
-- PR remains Draft, open, mergeable, with no reviews. Diff is only `.github/workflows/pages.yml` and this checklist. This refresh creates a new commit; verify checks on its new SHA before claiming green.
-- Main `be801c5` and Beta `dee08c96` unchanged. Compare: Beta 85 ahead / 0 behind main; merge base `be801c5`. CI #681 remains verified on exact Beta SHA.
-- PR #223 remains 17/69 with previously green checks on its old head and no approvals; #229 remains 32/37 with the known E2E reload failure (286/1); #227 remains 16/85 against Beta with the AI Academy routing unit failure (571/572). No candidate integration.
-- PR #224 merged; obsolete #207/#209/#101/#193/#203 closed unmerged. Open PR count 28.
-- Beta's checklist is still the 2026-11-27 15:11 snapshot. Branch-protection state and tag/release inventory were not rechecked in this run; latest evidence shows main/Beta unprotected, rulesets empty, Releases empty, and unsigned annotated `v1.0.0` (do not reuse).
-- No merge, branch deletion, force-push, tag, release or deployment.
+- **2026-11-28 05:37 CET:** revalidado main `be801c5`, Beta `dee08c96` (85/0), 28 PR abiertas y 107 ramas. CI #681 y #695 pasan 4/4; Deployment Check #349 pasa 3/3. Main monitor #429 pasa, pero solo es `report`. PR #237 sigue Draft, sin reviews; el checklist de la rama Beta sigue en snapshot del 27/11 15:11 y está desactualizado (84 commits ahead y 27 PR abiertas en su texto). Este refresh es solo en la rama de auditoría; no se modifica Beta ni main. Los checks del nuevo commit documental quedan pendientes.
+- **2026-11-28 03:33 CET:** head #237 `5fe412f`, CI #694 4/4 y Deployment Check #348 3/3; el refresh anterior dejó checks pendientes para su nuevo head.
+- No se han hecho merges, branch deletions, force-pushes, tags, releases ni deployments en esta auditoría.
