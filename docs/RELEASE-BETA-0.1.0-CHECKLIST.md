@@ -1,9 +1,9 @@
 # PLD Beta 0.1.0 — checklist de lanzamiento
 
-**Auditoría:** 2026-11-28 01:09 CET
-**Main:** `be801c5afa1c27ba6d5f24695236fe8ee67bdcee` (sin cambios)  
-**Beta:** `dee08c96ec3da7b79fa190612afc3b3116f1175b` — 85 ahead / 0 behind main; CI #681 pasó en este SHA.  
-**PR #237 current head:** `c945094d064af27d2490f7233409584fb9428e1e` — 12 ahead / 0 behind Beta; CI [46079576751](https://github.com/Marbi8891/python-learning-dashboard/actions/runs/46079576751) passed 4/4 and Deployment Check [46079576769](https://github.com/Marbi8891/python-learning-dashboard/actions/runs/46079576769) passed 3/3 on the exact SHA. Draft, no reviews; no merge or production deployment. This audit refreshes the checklist and creates another commit; verify checks for that new head separately.
+**Auditoría:** 2026-11-28 02:31 CET
+**Main:** `be801c5afa1c27ba6d5f24695236fe8ee67bdcee` (sin cambios)
+**Beta:** `dee08c96ec3da7b79fa190612afc3b3116f1175b` — 85 ahead / 0 behind main; CI #681 verificada 4/4 en este SHA.
+**PR #237 head verificado antes de este refresh:** `b20d5cc778743538971dff9b67f16a82a2b37f21` — 13 ahead / 0 behind Beta; CI #693 [46086549348] passed 4/4 and Deployment Check #347 [46086549385] passed 3/3 on this exact SHA. Draft, no reviews; no merge or production deployment. This refresh creates a new commit; verify checks on the new head.
 **Demo:** https://marbi8891.github.io/python-learning-dashboard/
 
 ## Gate de publicación
@@ -96,3 +96,9 @@ Academy es demo local sintética, no servicio multi-tenant. Learning Paths reuti
 
 
 - 2026-11-28 01:09 CET: Se revalidó el repositorio. `main` `be801c5afa1c27ba6d5f24695236fe8ee67bdcee` y Beta `dee08c96ec3da7b79fa190612afc3b3116f1175b` siguen intactas; comparación 85 ahead / 0 behind, merge base main. PR #237 head `c945094d064af27d2490f7233409584fb9428e1e`, 12/0 contra Beta; CI #46079576751 pasó 4/4 (Backend, Cursos, E2E, WebKit) y Deployment Check #46079576769 pasó 3/3 (workflows, Pages artifact, Docker health) en el SHA exacto. La PR sigue Draft, sin reviews/aprobaciones; no hay despliegue real. Este refresh documental crea un nuevo head; checks pendientes de verificación. PR abiertas 28, ramas 107. #224 merged; #207/#209/#101/#193/#203 cerradas sin merge. #223 sigue 17/69 y checks verdes en su head; #229 32/37 con E2E 286/1; #227 16/85 Beta con unit gate 571/572, E2E omitido. Branch API confirma `protected:false` y `protection.enabled:false` para main y Beta; rulesets vacíos. Releases vacías; tag v1.0.0 anotado sin firma, target fdf6409. No se fusionó, borró, etiquetó ni desplegó nada.
+## Audit — 2026-11-28 02:31 CET
+- PR #237 head verificado `b20d5cc`: 13 ahead / 0 behind Beta. CI #693 (run 46086549348) passed 4/4 (Backend, Cursos, E2E, WebKit); Deployment Check #347 (run 46086549385) passed 3/3 (workflow/config, Pages artifact, Docker image). Jobs were inspected. PR remains Draft with no reviews; changes are limited to `.github/workflows/pages.yml` and this checklist. No Pages production deployment. This update creates a new commit, whose checks are not yet verified.
+- `main` `be801c5` and Beta `dee08c96` remain unchanged; Beta is 85 ahead / 0 behind main. CI #681 passed 4/4 on the exact Beta SHA (run 46014073048).
+- Open PR count: 28; branch inventory: 107 (100 + 7). Obsolete #207/#209/#101/#193/#203 closed without merge; #224 merged.
+- #223 head `9d674df`: 17 ahead / 69 behind Beta; CI #648 and Deployment Check #331 completed successfully. #229 head `88b9434`: 32/37; CI #664 failed with 286 passing and 1 E2E failing on reload, `#paths-view` empty (log inspected); Deployment Check #335 previously passed. #227 head `67ca9b2`: 16 ahead / 0 behind main, 16/85 against Beta; CI #623 fails 571/572 unit tests, the AI Academy routing test, before Playwright; Deployment Check #310 previously passed. No candidate was integrated.
+- Branch protection was last confirmed inactive for main and Beta (`protected:false`, rulesets empty); not revalidated this run because the connector lacks a branch-protection read endpoint. Release/tag inventory also not revalidated; latest recorded state: Releases empty and `v1.0.0` annotated but unsigned. No merge, branch deletion, tag, release, force-push or deployment.
