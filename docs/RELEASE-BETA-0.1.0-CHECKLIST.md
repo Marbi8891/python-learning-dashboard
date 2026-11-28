@@ -1,9 +1,9 @@
 # PLD Beta 0.1.0 — checklist de lanzamiento
 
-**Auditoría:** 2026-11-28 02:31 CET
+**Auditoría:** 2026-11-28 03:33 CET
 **Main:** `be801c5afa1c27ba6d5f24695236fe8ee67bdcee` (sin cambios)
-**Beta:** `dee08c96ec3da7b79fa190612afc3b3116f1175b` — 85 ahead / 0 behind main; CI #681 verificada 4/4 en este SHA.
-**PR #237 head verificado antes de este refresh:** `b20d5cc778743538971dff9b67f16a82a2b37f21` — 13 ahead / 0 behind Beta; CI #693 [46086549348] passed 4/4 and Deployment Check #347 [46086549385] passed 3/3 on this exact SHA. Draft, no reviews; no merge or production deployment. This refresh creates a new commit; verify checks on the new head.
+**Beta:** `dee08c96ec3da7b79fa190612afc3b3116f1175b` — 85 ahead / 0 behind main; CI #681 pasó 4/4 en el SHA exacto.
+**PR #237 head verificado:** `5fe412ffe280959cdd6d0a6fbbd96e4ed36221a0` — 14 ahead / 0 behind Beta; CI #694 (run 46093706537) pasó 4/4 y Deployment Check #348 (run 46093706616) pasó 3/3 en este SHA exacto. Draft, sin reviews ni merge; no hubo despliegue de Pages.
 **Demo:** https://marbi8891.github.io/python-learning-dashboard/
 
 ## Gate de publicación
@@ -102,3 +102,13 @@ Academy es demo local sintética, no servicio multi-tenant. Learning Paths reuti
 - Open PR count: 28; branch inventory: 107 (100 + 7). Obsolete #207/#209/#101/#193/#203 closed without merge; #224 merged.
 - #223 head `9d674df`: 17 ahead / 69 behind Beta; CI #648 and Deployment Check #331 completed successfully. #229 head `88b9434`: 32/37; CI #664 failed with 286 passing and 1 E2E failing on reload, `#paths-view` empty (log inspected); Deployment Check #335 previously passed. #227 head `67ca9b2`: 16 ahead / 0 behind main, 16/85 against Beta; CI #623 fails 571/572 unit tests, the AI Academy routing test, before Playwright; Deployment Check #310 previously passed. No candidate was integrated.
 - Branch protection was last confirmed inactive for main and Beta (`protected:false`, rulesets empty); not revalidated this run because the connector lacks a branch-protection read endpoint. Release/tag inventory also not revalidated; latest recorded state: Releases empty and `v1.0.0` annotated but unsigned. No merge, branch deletion, tag, release, force-push or deployment.
+
+
+## Audit — 2026-11-28 03:33 CET
+- PR #237 current head `5fe412ffe280959cdd6d0a6fbbd96e4ed36221a0`, 14 ahead / 0 behind Beta. CI #694 (run 46093706537) passed 4/4 and Deployment Check #348 (run 46093706616) passed 3/3 on this exact SHA; job steps inspected. CI includes Ruff, pip-audit, backend coverage, PostgreSQL concurrency/migration/version/backup tests, frontend unit tests, npm audit and E2E; WebKit smoke passed. Deployment check validated Pages artifact, workflow config and Docker health. No production Pages deployment.
+- PR remains Draft, open, mergeable, with no reviews. Diff is only `.github/workflows/pages.yml` and this checklist. This refresh creates a new commit; verify checks on its new SHA before claiming green.
+- Main `be801c5` and Beta `dee08c96` unchanged. Compare: Beta 85 ahead / 0 behind main; merge base `be801c5`. CI #681 remains verified on exact Beta SHA.
+- PR #223 remains 17/69 with previously green checks on its old head and no approvals; #229 remains 32/37 with the known E2E reload failure (286/1); #227 remains 16/85 against Beta with the AI Academy routing unit failure (571/572). No candidate integration.
+- PR #224 merged; obsolete #207/#209/#101/#193/#203 closed unmerged. Open PR count 28.
+- Beta's checklist is still the 2026-11-27 15:11 snapshot. Branch-protection state and tag/release inventory were not rechecked in this run; latest evidence shows main/Beta unprotected, rulesets empty, Releases empty, and unsigned annotated `v1.0.0` (do not reuse).
+- No merge, branch deletion, force-push, tag, release or deployment.
